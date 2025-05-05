@@ -23,7 +23,9 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import io.mockk.every
@@ -71,7 +73,7 @@ class P2ArtifactResolverTest : WordSpec({
                 listOf(project1, project2, project3, project4)
             )
 
-            repositories shouldContainExactlyInAnyOrder listOf(repositoryUrl1, repositoryUrl2, repositoryUrl3)
+            repositories should containExactlyInAnyOrder(repositoryUrl1, repositoryUrl2, repositoryUrl3)
         }
 
         "collect P2 repositories from target files" {

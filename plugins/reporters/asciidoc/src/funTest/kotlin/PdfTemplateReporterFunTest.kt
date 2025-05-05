@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.plugins.reporters.asciidoc
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeSingleton
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
@@ -72,7 +72,7 @@ class PdfTemplateReporterFunTest : StringSpec({
         )
 
         val reportFiles = reportFileResults.map { it.shouldBeSuccess() }
-        reportFiles.shouldContainExactlyInAnyOrder(
+        reportFiles should containExactlyInAnyOrder(
             outputDir.resolve("AsciiDoc_defect_report.pdf"),
             outputDir.resolve("AsciiDoc_disclosure_document.pdf"),
             outputDir.resolve("AsciiDoc_vulnerability_report.pdf")

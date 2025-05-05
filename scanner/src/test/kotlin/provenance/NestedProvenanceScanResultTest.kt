@@ -20,9 +20,10 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldNotContain
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.CopyrightFinding
@@ -44,7 +45,7 @@ class NestedProvenanceScanResultTest : WordSpec({
             val filteredResult = nestedProvenanceScanResult.filterByVcsPath("submodules/a")
             val repositories = filteredResult.nestedProvenance.getRepositoryUrls()
 
-            repositories shouldContainExactlyInAnyOrder listOf(
+            repositories should containExactlyInAnyOrder(
                 provenanceRoot.vcsInfo.url,
                 provenanceSubmoduleA.vcsInfo.url
             )
@@ -54,7 +55,7 @@ class NestedProvenanceScanResultTest : WordSpec({
             val filteredResult = nestedProvenanceScanResult.filterByVcsPath("submodules/a/dir")
             val repositories = filteredResult.nestedProvenance.getRepositoryUrls()
 
-            repositories shouldContainExactlyInAnyOrder listOf(
+            repositories should containExactlyInAnyOrder(
                 provenanceRoot.vcsInfo.url,
                 provenanceSubmoduleA.vcsInfo.url
             )
@@ -76,7 +77,7 @@ class NestedProvenanceScanResultTest : WordSpec({
                 with(filteredResult.scanResults.getValue(filteredResult.nestedProvenance.root).single()) {
                     summary.licenseFindings shouldNotContain LicenseFinding("Apache-2.0", TextLocation("file", 1))
 
-                    summary.licenseFindings shouldContainExactly listOf(
+                    summary.licenseFindings should containExactly(
                         LicenseFinding("Apache-2.0", TextLocation("submodules/file", 1))
                     )
                 }

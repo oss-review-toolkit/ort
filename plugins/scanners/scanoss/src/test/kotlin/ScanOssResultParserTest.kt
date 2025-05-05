@@ -22,11 +22,10 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 import com.scanoss.utils.JsonUtils
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 
 import java.io.File
@@ -109,8 +108,8 @@ class ScanOssResultParserTest : WordSpec({
                 score = 100.0f
             )
 
-            summary.snippetFindings shouldHaveSize (1)
-            summary.snippetFindings.shouldContainExactly(
+            summary.snippetFindings should haveSize(1)
+            summary.snippetFindings should containExactly(
                 SnippetFinding(
                     TextLocation("src/main/java/com/vdurmont/semver4j/Requirement.java", 1, 710),
                     setOf(

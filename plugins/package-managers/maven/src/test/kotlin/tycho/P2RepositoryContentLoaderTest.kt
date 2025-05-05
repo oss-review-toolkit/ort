@@ -28,8 +28,8 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeSingleton
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.result.shouldBeFailure
@@ -152,7 +152,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 .shouldBeSuccess { content ->
                     content.baseUrl shouldBe server.repositoryUrl()
                     content.artifacts.keys should beEmpty()
-                    content.childRepositories shouldContainExactlyInAnyOrder listOf(
+                    content.childRepositories should containExactlyInAnyOrder(
                         "https://p2.example.org/test/repository",
                         server.repositoryUrl("/child/repository")
                     )
@@ -172,7 +172,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 .shouldBeSuccess { content ->
                     content.baseUrl shouldBe server.repositoryUrl()
                     content.artifacts.keys should beEmpty()
-                    content.childRepositories shouldContainExactlyInAnyOrder listOf(
+                    content.childRepositories should containExactlyInAnyOrder(
                         "https://p2.example.org/test/repository",
                         server.repositoryUrl("/child/repository")
                     )
@@ -228,7 +228,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
 
             issues should beEmpty()
 
-            contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
+            contents.flatMap { it.artifacts.keys } should containExactlyInAnyOrder(
                 P2Identifier("org.apache.commons.io:2.8.0.v20210415-0900"),
                 P2Identifier("org.apache.commons.codec:1.14.0.v20200818-1422"),
                 P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
@@ -266,7 +266,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 listOf(server.repositoryUrl())
             )
 
-            contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
+            contents.flatMap { it.artifacts.keys } should containExactlyInAnyOrder(
                 P2Identifier("org.apache.commons.io:2.8.0.v20210415-0900"),
                 P2Identifier("org.apache.commons.codec:1.14.0.v20200818-1422"),
                 P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
@@ -297,7 +297,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 listOf(server.repositoryUrl(), server.repositoryUrl(basePath2))
             )
 
-            contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
+            contents.flatMap { it.artifacts.keys } should containExactlyInAnyOrder(
                 P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
                 P2Identifier(
                     bundleId = "org.eclipse.orbit.releng.recipes.feature.aggregation.source:1.0.0.v20211212-1642",
@@ -326,7 +326,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 listOf(server.repositoryUrl(), server.repositoryUrl(basePath2))
             )
 
-            contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
+            contents.flatMap { it.artifacts.keys } should containExactlyInAnyOrder(
                 P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
                 P2Identifier(
                     bundleId = "org.eclipse.orbit.releng.recipes.feature.aggregation.source:1.0.0.v20211212-1642",
@@ -377,8 +377,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
 
             issues should beEmpty()
 
-            contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
-
+            contents.flatMap { it.artifacts.keys } should containExactlyInAnyOrder(
                 P2Identifier("org.apache.commons.io:2.8.0.v20210415-0900"),
                 P2Identifier("org.apache.commons.codec:1.14.0.v20200818-1422"),
                 P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),

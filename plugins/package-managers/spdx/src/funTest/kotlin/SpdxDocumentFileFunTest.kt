@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.haveSize
@@ -263,11 +262,11 @@ class SpdxDocumentFileFunTest : WordSpec({
             val projectIds = projectResults.map { it.project.id }
             val packageIds = projectResults.flatMap { projResult -> projResult.packages.map { it.id } }
 
-            projectIds shouldContainExactlyInAnyOrder listOf(
+            projectIds should containExactlyInAnyOrder(
                 Identifier("SpdxDocumentFile::xyz:0.1.0"),
                 Identifier("SpdxDocumentFile::subproject-xyz:0.1.0")
             )
-            packageIds shouldContainExactlyInAnyOrder listOf(
+            packageIds should containExactlyInAnyOrder(
                 Identifier("SpdxDocumentFile::curl:7.70.0"),
                 Identifier("SpdxDocumentFile::my-lib:8.88.8"),
                 Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")

@@ -21,10 +21,11 @@ package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import io.mockk.every
@@ -112,7 +113,7 @@ class DependencyTreeParserTest : WordSpec({
                     scope shouldBe "compile"
                     classifier shouldBe ""
 
-                    children shouldContainExactlyInAnyOrder listOf(
+                    children should containExactlyInAnyOrder(
                         DependencyTreeMojoNode(
                             "org.apache.commons",
                             "commons-lang3",
@@ -388,7 +389,7 @@ class DependencyTreeParserTest : WordSpec({
             ).toList()
 
             projectDependencies.shouldBeSingleton { node ->
-                node.children.map { it.artifact.artifactId } shouldContainExactlyInAnyOrder listOf(
+                node.children.map { it.artifact.artifactId } should containExactlyInAnyOrder(
                     "commons-configuration2",
                     "org.objectweb.asm"
                 )
@@ -430,7 +431,7 @@ class DependencyTreeParserTest : WordSpec({
             ).toList()
 
             projectDependencies.shouldBeSingleton { node ->
-                node.children.map { it.artifact.artifactId } shouldContainExactlyInAnyOrder listOf(
+                node.children.map { it.artifact.artifactId } should containExactlyInAnyOrder(
                     "commons-configuration2",
                     "org.objectweb.asm.source"
                 )
@@ -481,7 +482,7 @@ class DependencyTreeParserTest : WordSpec({
             }.toList()
 
             projectDependencies.shouldBeSingleton { node ->
-                node.children.map { it.artifact.artifactId } shouldContainExactlyInAnyOrder listOf(
+                node.children.map { it.artifact.artifactId } should containExactlyInAnyOrder(
                     "commons-configuration2",
                     "org.objectweb.asm"
                 )

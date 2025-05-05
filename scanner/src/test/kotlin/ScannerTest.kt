@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.scanner
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -208,7 +208,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithVcs1, pkgWithVcs2, pkgWithVcs3), createContext())
 
-            storedScanResults shouldContainExactly listOf(packageScannerResult)
+            storedScanResults should containExactly(packageScannerResult)
         }
     }
 

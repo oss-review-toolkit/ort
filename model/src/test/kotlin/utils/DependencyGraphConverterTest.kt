@@ -24,7 +24,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -91,7 +90,7 @@ class DependencyGraphConverterTest : WordSpec({
             val convertedResult = DependencyGraphConverter.convert(analyzerResult, excludes)
 
             val allPackagesTypes = convertedResult.packages.mapTo(mutableSetOf()) { it.id.type }
-            allPackagesTypes shouldContainExactlyInAnyOrder listOf("Maven", "Go")
+            allPackagesTypes should containExactlyInAnyOrder("Maven", "Go")
         }
 
         "convert a result with a partial dependency graph" {

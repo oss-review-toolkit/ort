@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
@@ -59,7 +58,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
                 val summary = parseResult(resultFile).toScanSummary(preferFileLicense = true)
 
-                summary.licenseFindings.map { it.license.toString() }.shouldContainExactlyInAnyOrder(
+                summary.licenseFindings.map { it.license.toString() } should containExactlyInAnyOrder(
                     "LicenseRef-scancode-generic-cla AND MIT",
                     "MIT",
                     "MIT",

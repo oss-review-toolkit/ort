@@ -20,8 +20,9 @@
 package org.ossreviewtoolkit.analyzer
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeSingleton
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.VcsInfo
@@ -64,7 +65,7 @@ class PackageManagerTest : WordSpec({
         }
 
         "handle multiple authors per string" {
-            parseAuthorString("Paul Miller (http://paulmillr.com), Elan Shanker").shouldContainExactlyInAnyOrder(
+            parseAuthorString("Paul Miller (http://paulmillr.com), Elan Shanker") should containExactlyInAnyOrder(
                 AuthorInfo("Paul Miller", null, "http://paulmillr.com"),
                 AuthorInfo("Elan Shanker", null, null)
             )

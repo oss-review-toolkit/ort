@@ -22,10 +22,10 @@ package org.ossreviewtoolkit.model
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.should
@@ -368,7 +368,7 @@ class OrtResultTest : WordSpec({
 
             val ruleViolations = ortResult.getRuleViolations(omitResolved = false, minSeverity = Severity.entries.min())
 
-            ruleViolations.map { it.rule }.shouldContainExactly("rule id")
+            ruleViolations.map { it.rule } should containExactly("rule id")
         }
 
         "drop violations which are resolved or below minSeverity if omitResolved is true and minSeverity is WARNING" {
@@ -419,7 +419,7 @@ class OrtResultTest : WordSpec({
 
             val ruleViolations = ortResult.getRuleViolations(omitResolved = true, minSeverity = Severity.WARNING)
 
-            ruleViolations.map { it.rule }.shouldContainExactly("Rule violation without resolution")
+            ruleViolations.map { it.rule } should containExactly("Rule violation without resolution")
         }
     }
 })

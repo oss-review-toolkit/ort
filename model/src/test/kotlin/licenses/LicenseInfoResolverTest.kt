@@ -28,7 +28,6 @@ import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -175,7 +174,7 @@ class LicenseInfoResolverTest : WordSpec({
             result.licenses.find { it.license == "Apache-2.0 WITH LLVM-exception".toSpdx() } shouldNotBeNull {
                 originalExpressions.filter {
                     it.source == LicenseSource.DETECTED
-                }.map { it.expression } shouldContainExactlyInAnyOrder listOf(
+                }.map { it.expression } should containExactlyInAnyOrder(
                     "Apache-2.0 WITH LLVM-exception".toSpdx()
                 )
             }
@@ -426,7 +425,7 @@ class LicenseInfoResolverTest : WordSpec({
 
             result.licenses.flatMap { resolvedLicense ->
                 resolvedLicense.originalExpressions.filter { it.source == LicenseSource.DETECTED }
-            } shouldContainExactlyInAnyOrder listOf(
+            } should containExactlyInAnyOrder(
                 ResolvedOriginalExpression("Apache-2.0".toSpdx(), LicenseSource.DETECTED, false),
                 ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DETECTED, true)
             )
@@ -482,7 +481,7 @@ class LicenseInfoResolverTest : WordSpec({
             )
             result.licenses.flatMap { resolvedLicense ->
                 resolvedLicense.originalExpressions.map { it.expression }
-            } shouldContainExactlyInAnyOrder listOf("MIT".toSpdx())
+            } should containExactlyInAnyOrder("MIT".toSpdx())
         }
 
         "contain a list of the original license expressions" {

@@ -27,7 +27,6 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
-import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -133,7 +132,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
 
             processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
-            processedLicenses.mapped shouldContainExactly mapOf("https://domain/path/license.html" to "MIT".toSpdx())
+            processedLicenses.mapped should containExactlyEntries("https://domain/path/license.html" to "MIT".toSpdx())
             processedLicenses.unmapped should beEmpty()
         }
 
@@ -144,7 +143,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
 
             processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
-            processedLicenses.mapped shouldContainExactly mapOf(
+            processedLicenses.mapped should containExactlyEntries(
                 "Copyright (c) the authors." to SpdxConstants.NONE.toSpdx()
             )
             processedLicenses.unmapped should beEmpty()
