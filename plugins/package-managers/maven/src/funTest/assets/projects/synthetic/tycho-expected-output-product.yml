@@ -1,0 +1,388 @@
+---
+projects:
+- id: "Tycho:org.ossreviewtoolkit:org.ossreviewtoolkit.tycho.test.bundle:1.1.0-SNAPSHOT"
+  definition_file_path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.bundle/.tycho-consumer-pom.xml"
+  authors:
+  - "ACME"
+  - "ORT"
+  - "Sirius Cybernetics Corporation"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: "https://example.com/git/repository.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.bundle"
+  homepage_url: "http://maven.apache.org/org.ossreviewtoolkit.tycho.test.bundle"
+  scopes:
+  - name: "system"
+    dependencies:
+    - id: "Maven:p2.eclipse.plugin:org.apache.commons.collections4:4.4.0.v20200420-1700"
+- id: "Tycho:org.ossreviewtoolkit:org.ossreviewtoolkit.tycho.test.feature:1.0.0-SNAPSHOT"
+  definition_file_path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.feature/.tycho-consumer-pom.xml"
+  authors:
+  - "ACME"
+  - "ORT"
+  - "Sirius Cybernetics Corporation"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: "https://example.com/git/repository.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.feature"
+  homepage_url: "http://maven.apache.org/org.ossreviewtoolkit.tycho.test.feature"
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Tycho:org.ossreviewtoolkit:org.ossreviewtoolkit.tycho.test.bundle:1.1.0-SNAPSHOT"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:p2.eclipse.plugin:org.apache.commons.collections4:4.4.0.v20200420-1700"
+  - name: "system"
+    dependencies:
+    - id: "Maven:p2.eclipse.plugin:org.apache.commons.collections4:4.4.0.v20200420-1700"
+- id: "Tycho:org.ossreviewtoolkit:tycho-test-aggregator:1.0.0-SNAPSHOT"
+  definition_file_path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/pom.xml"
+  authors:
+  - "ACME"
+  - "Sirius Cybernetics Corporation"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: "https://example.com/git/repository.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product"
+  homepage_url: "http://maven.apache.org"
+  scopes: []
+- id: "Tycho:org.ossreviewtoolkit:tychoTestProduct:1.0.0-SNAPSHOT"
+  definition_file_path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.product/.polyglot.TestProduct.product"
+  authors:
+  - "ACME"
+  - "Sirius Cybernetics Corporation"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: "https://example.com/git/repository.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.product"
+  homepage_url: "http://maven.apache.org/tychoTestProduct"
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Maven:com.google.code.gson:gson:2.11.0"
+      dependencies:
+      - id: "Maven:com.google.errorprone:error_prone_annotations:2.27.0"
+    - id: "Maven:com.google.errorprone:error_prone_annotations:2.27.0"
+    - id: "Tycho:org.ossreviewtoolkit:org.ossreviewtoolkit.tycho.test.bundle:1.1.0-SNAPSHOT"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:p2.eclipse.plugin:org.apache.commons.collections4:4.4.0.v20200420-1700"
+    - id: "Tycho:org.ossreviewtoolkit:org.ossreviewtoolkit.tycho.test.feature:1.0.0-SNAPSHOT"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:p2.eclipse.plugin:org.apache.commons.collections4:4.4.0.v20200420-1700"
+      - id: "Tycho:org.ossreviewtoolkit:org.ossreviewtoolkit.tycho.test.bundle:1.1.0-SNAPSHOT"
+        linkage: "PROJECT_DYNAMIC"
+  - name: "system"
+    dependencies:
+    - id: "Maven:p2.eclipse.plugin:org.apache.commons.collections4:4.4.0.v20200420-1700"
+    - id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher:1.6.1000.v20250227-1734"
+    - id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher.cocoa.macosx.x86_64:1.2.1200.v20250212-0927"
+    - id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher.gtk.linux.x86_64:1.2.1300.v20250212-0927"
+    - id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher.win32.win32.x86_64:1.2.1200.v20250212-0927"
+    - id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:3.8.2800.v20250227-1734"
+      issues:
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Tycho"
+        message: "Could not get package information for dependency 'p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:3.8.2800.v20250227-1734':\
+          \ ProjectBuildingException: Error resolving project artifact: The following\
+          \ artifacts could not be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
+          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2) for project p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\n\
+          Caused by: ArtifactResolutionException: The following artifacts could not\
+          \ be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
+          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2)\n    Caused by: ArtifactNotFoundException:\
+          \ Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2)"
+        severity: "ERROR"
+    - id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:3.8.2800.v20250227-1734"
+      issues:
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Tycho"
+        message: "Could not get package information for dependency 'p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:3.8.2800.v20250227-1734':\
+          \ ProjectBuildingException: Error resolving project artifact: The following\
+          \ artifacts could not be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
+          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2) for project p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\n\
+          Caused by: ArtifactResolutionException: The following artifacts could not\
+          \ be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
+          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2)\n    Caused by: ArtifactNotFoundException:\
+          \ Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2)"
+        severity: "ERROR"
+    - id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:3.8.2800.v20250227-1734"
+      issues:
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Tycho"
+        message: "Could not get package information for dependency 'p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:3.8.2800.v20250227-1734':\
+          \ ProjectBuildingException: Error resolving project artifact: The following\
+          \ artifacts could not be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
+          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2) for project p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\n\
+          Caused by: ArtifactResolutionException: The following artifacts could not\
+          \ be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
+          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2)\n    Caused by: ArtifactNotFoundException:\
+          \ Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
+          \ in central (https://repo.maven.apache.org/maven2)"
+        severity: "ERROR"
+packages:
+- id: "Maven:com.google.code.gson:gson:2.11.0"
+  purl: "pkg:maven/com.google.code.gson/gson@2.11.0"
+  authors:
+  - "Google"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Gson JSON library"
+  homepage_url: "https://github.com/google/gson"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.11.0/gson-2.11.0.jar"
+    hash:
+      value: "527175ca6d81050b53bdd4c457a6d6e017626b0e"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.11.0/gson-2.11.0-sources.jar"
+    hash:
+      value: "bbd772a8634d3d6fea7ffea693535a4bd1c773c0"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/gson.git"
+    revision: "gson-parent-2.11.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/gson.git"
+    revision: "gson-parent-2.11.0"
+    path: ""
+- id: "Maven:com.google.errorprone:error_prone_annotations:2.27.0"
+  purl: "pkg:maven/com.google.errorprone/error_prone_annotations@2.27.0"
+  authors:
+  - "Eddie Aftandilian"
+  - "Google LLC"
+  declared_licenses:
+  - "Apache 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2.0: "Apache-2.0"
+  description: "Error Prone is a static analysis tool for Java that catches common\
+    \ programming mistakes at compile-time."
+  homepage_url: "https://errorprone.info/error_prone_annotations"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.27.0/error_prone_annotations-2.27.0.jar"
+    hash:
+      value: "91b2c29d8a6148b5e2e4930f070d4840e2e48e34"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.27.0/error_prone_annotations-2.27.0-sources.jar"
+    hash:
+      value: "ddd5b55fab865b04b0b1f0ce66eea0d07a16a4c8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/error-prone.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/error-prone.git"
+    revision: ""
+    path: ""
+- id: "Maven:p2.eclipse.plugin:org.apache.commons.collections4:4.4.0.v20200420-1700"
+  purl: "pkg:maven/p2.eclipse.plugin/org.apache.commons.collections4@4.4.0.v20200420-1700"
+  authors:
+  - "%bundleVendor"
+  declared_licenses:
+  - "https://www.apache.org/licenses/LICENSE-2.0.txt"
+  declared_licenses_processed:
+    unmapped:
+    - "https://www.apache.org/licenses/LICENSE-2.0.txt"
+  description: "The Apache Commons Collections package contains types that extend\
+    \ and augment the Java Collections Framework."
+  homepage_url: "https://commons.apache.org/proper/commons-collections/"
+  binary_artifact:
+    url: "https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository/plugins/org.apache.commons.collections4_4.4.0.v20200420-1700.jar"
+    hash:
+      value: "bd6d43638710c9f2e23a862671fe359ad593c5ca85295f18798babb5fc9a9cd1"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository/plugins/org.apache.commons.collections4.source_4.4.0.v20200420-1700.jar"
+    hash:
+      value: "e9f1077e456fc0483955d747835acf630412ced4154ec3bfa3a128d74a73ac2d"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher:1.6.1000.v20250227-1734"
+  purl: "pkg:maven/p2.eclipse.plugin/org.eclipse.equinox.launcher@1.6.1000.v20250227-1734"
+  authors:
+  - "%providerName"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://download.eclipse.org/releases/2025-03/202503121000/plugins/org.eclipse.equinox.launcher_1.6.1000.v20250227-1734.jar"
+    hash:
+      value: "bae719d6a26ec534de77bbb1db2037ad7f862afd769156075feaaae55f8f17c1cd69a1c3469d77bd533301a069389bb107264115f632c349858bf04cec03c810"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: "https://download.eclipse.org/releases/2025-03/202503121000/plugins/org.eclipse.equinox.launcher.source_1.6.1000.v20250227-1734.jar"
+    hash:
+      value: "9ceac312c3aa3737c216b0f230f500d4e60520bf3dd87bde6c12d63630cc4ad2e8442c1854a22225323a02cb0a2b58ce34f826b148b78d21c374f371ebf7052e"
+      algorithm: "SHA-512"
+  vcs:
+    type: "Git"
+    url: "https://github.com/eclipse-equinox/equinox.git"
+    revision: "I20250227-1250"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/eclipse-equinox/equinox.git"
+    revision: "I20250227-1250"
+    path: ""
+- id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher.cocoa.macosx.x86_64:1.2.1200.v20250212-0927"
+  purl: "pkg:maven/p2.eclipse.plugin/org.eclipse.equinox.launcher.cocoa.macosx.x86_64@1.2.1200.v20250212-0927"
+  authors:
+  - "%providerName"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://download.eclipse.org/releases/2025-03/202503121000/plugins/org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.2.1200.v20250212-0927.jar"
+    hash:
+      value: "3bdf0818f3da58cd3bb9fe7196defbef20e9a3791ee1f028bd3a37248dfc280b9b377277ad6b329409f6850f04f642748be3598432778d829d15e1c79bb58bf3"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/eclipse-equinox/equinox.git"
+    revision: "I20250212-0500"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/eclipse-equinox/equinox.git"
+    revision: "I20250212-0500"
+    path: ""
+- id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher.gtk.linux.x86_64:1.2.1300.v20250212-0927"
+  purl: "pkg:maven/p2.eclipse.plugin/org.eclipse.equinox.launcher.gtk.linux.x86_64@1.2.1300.v20250212-0927"
+  authors:
+  - "%providerName"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://download.eclipse.org/releases/2025-03/202503121000/plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.2.1300.v20250212-0927.jar"
+    hash:
+      value: "884050e613fe52bc5c55024d8bc961cb9b2a8ec07819fc5eb4a4bbd25c6f4290d8748e955eb3c610ee65672ea2629779509d904c9f02ab5a5a0b0a38702d2c66"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/eclipse-equinox/equinox.git"
+    revision: "I20250212-0500"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/eclipse-equinox/equinox.git"
+    revision: "I20250212-0500"
+    path: ""
+- id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher.win32.win32.x86_64:1.2.1200.v20250212-0927"
+  purl: "pkg:maven/p2.eclipse.plugin/org.eclipse.equinox.launcher.win32.win32.x86_64@1.2.1200.v20250212-0927"
+  authors:
+  - "%providerName"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://download.eclipse.org/releases/2025-03/202503121000/plugins/org.eclipse.equinox.launcher.win32.win32.x86_64_1.2.1200.v20250212-0927.jar"
+    hash:
+      value: "e3a84c7b878985389f29553421a435ffac82615ead43cdf0b449d140530da376531990891fa9f88e1b865a0782c4c59708455a9b602fd1448059e6ad174da068"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/eclipse-equinox/equinox.git"
+    revision: "I20250212-0500"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/eclipse-equinox/equinox.git"
+    revision: "I20250212-0500"
+    path: ""

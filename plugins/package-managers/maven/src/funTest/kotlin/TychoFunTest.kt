@@ -55,8 +55,8 @@ class TychoFunTest : StringSpec({
     }
 
     "Special Tycho packaging options are supported" {
-        val definitionFile = getAssetFile("projects/synthetic/tycho-feature/pom.xml")
-        val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output-feature.yml")
+        val definitionFile = getAssetFile("projects/synthetic/tycho-product/pom.xml")
+        val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output-product.yml")
 
         val result = analyze(definitionFile.parentFile, packageManagers = setOf(TychoFactory())).getAnalyzerResult()
 
