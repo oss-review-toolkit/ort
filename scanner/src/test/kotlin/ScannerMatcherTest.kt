@@ -20,7 +20,8 @@
 package org.ossreviewtoolkit.scanner
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.maps.shouldContainExactly
+import io.kotest.matchers.maps.containExactly
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -141,7 +142,7 @@ class ScannerMatcherTest : WordSpec({
                 "other" to "value"
             )
 
-            ScannerMatcherConfig.create(options).second shouldContainExactly mapOf("other" to "value")
+            ScannerMatcherConfig.create(options).second should containExactly("other" to "value")
         }
     }
 })

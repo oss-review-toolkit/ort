@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.evaluator
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -185,7 +185,7 @@ class EvaluatorTest : WordSpec({
 
             val result = Evaluator(incompatibleOrtResult).run(script)
 
-            result.violations.map { it.message } shouldContainExactlyInAnyOrder listOf(
+            result.violations.map { it.message } should containExactlyInAnyOrder(
                 "The outbound license AGPL-3.0-or-later of project 'Maven:group:project-foo:1' is incompatible " +
                     "with the inbound license AGPL-3.0-only of its dependency " +
                     "'Maven:group:package-foo-transitive:1'. Software under a copyleft license such as the " +

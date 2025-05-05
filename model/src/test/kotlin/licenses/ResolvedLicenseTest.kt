@@ -20,8 +20,9 @@
 package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.TextLocation
@@ -53,7 +54,7 @@ class ResolvedLicenseTest : WordSpec({
             resolvedCopyrights shouldHaveSize 1
             with(resolvedCopyrights.first()) {
                 statement shouldBe "Copyright (C) 2022 The ORT Project Authors"
-                findings.map { it.location.path }.shouldContainExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
+                findings.map { it.location.path } should containExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
             }
         }
 
@@ -83,7 +84,7 @@ class ResolvedLicenseTest : WordSpec({
             resolvedCopyrights shouldHaveSize 1
             with(resolvedCopyrights.first()) {
                 statement shouldBe "Copyright (C) 2022 The ORT Project Authors"
-                findings.map { it.location.path }.shouldContainExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
+                findings.map { it.location.path } should containExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
             }
         }
     }

@@ -23,7 +23,7 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -45,7 +45,7 @@ class TargetHandlerTest : WordSpec({
         "collect P2 repositories from target files" {
             val targetHandler = createTargetHandlerWithTargetFiles()
 
-            targetHandler.repositoryUrls shouldContainExactlyInAnyOrder listOf(
+            targetHandler.repositoryUrls should containExactlyInAnyOrder(
                 "https://p2.example.com/repo/download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0/",
                 "https://p2.example.org/repo/download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0/",
                 "https://p2.example.com/repository/download.eclipse.org/releases/2024-12",
@@ -85,7 +85,7 @@ class TargetHandlerTest : WordSpec({
         "collect feature IDs from target files" {
             val targetHandler = createTargetHandlerWithTargetFiles()
 
-            targetHandler.featureIds shouldContainExactlyInAnyOrder listOf(
+            targetHandler.featureIds should containExactlyInAnyOrder(
                 "maven.libraries.with.transitives",
                 "some.feature"
             )

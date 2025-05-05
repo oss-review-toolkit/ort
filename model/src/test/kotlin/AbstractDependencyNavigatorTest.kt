@@ -26,7 +26,6 @@ import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -193,7 +192,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                     "akka" in node.id.namespace
                 }
 
-                akkaDependencies.shouldContainExactlyInAnyOrder(
+                akkaDependencies should containExactlyInAnyOrder(
                     Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"),
                     Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
                 )

@@ -23,7 +23,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -266,7 +265,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             result should haveSize(2)
             with(result[0]) {
                 license.toString() shouldBe "MIT"
-                originalExpressions.map { it.expression.toString() } shouldContainExactlyInAnyOrder listOf(
+                originalExpressions.map { it.expression.toString() } should containExactlyInAnyOrder(
                     "MIT",
                     "GPL-2.0-only OR MIT"
                 )
@@ -367,7 +366,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             result should haveSize(1)
             with(result.first()) {
                 license.toString() shouldBe "MIT"
-                originalExpressions.map { it.expression.toString() } shouldContainExactlyInAnyOrder listOf(
+                originalExpressions.map { it.expression.toString() } should containExactlyInAnyOrder(
                     "GPL-2.0-only OR MIT OR Apache-2.0"
                 )
             }

@@ -23,8 +23,8 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
 import io.mockk.every
@@ -105,7 +105,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
                 )
             )
 
-            snippetFindings.shouldContainExactly(
+            snippetFindings should containExactly(
                 SnippetFinding(
                     TextLocation("utils/src/main/kotlin/ArchiveUtils.kt", 1, 240),
                     setOf(

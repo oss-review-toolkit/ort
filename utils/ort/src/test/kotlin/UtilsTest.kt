@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.utils.ort
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -256,7 +256,7 @@ class UtilsTest : WordSpec({
                 "v3.9.0.99"
             )
 
-            filterVersionNames("3.9.0.99", names).shouldContainExactly("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
+            filterVersionNames("3.9.0.99", names) should containExactly("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
         }
 
         "find names that match the version without an ignorable suffix" {
@@ -266,7 +266,7 @@ class UtilsTest : WordSpec({
                 "6.2.10"
             )
 
-            filterVersionNames("6.2.9.Final", names).shouldContainExactly("6.2.9")
+            filterVersionNames("6.2.9.Final", names) should containExactly("6.2.9")
         }
     }
 

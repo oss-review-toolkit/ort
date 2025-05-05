@@ -28,8 +28,8 @@ import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -157,7 +157,7 @@ class ExamplesFunTest : StringSpec({
 
         val result = evaluator.run(script)
 
-        result.violations.map { it.rule } shouldContainExactlyInAnyOrder listOf(
+        result.violations.map { it.rule } should containExactlyInAnyOrder(
             "COPYLEFT_LIMITED_IN_SOURCE",
             "DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML",
             "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE",

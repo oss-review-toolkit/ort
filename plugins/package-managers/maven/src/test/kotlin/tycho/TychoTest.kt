@@ -26,6 +26,7 @@ import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -101,7 +102,7 @@ class TychoTest : WordSpec({
             val tycho = Tycho()
             val mappedDefinitionFiles = tycho.mapDefinitionFiles(tempdir(), definitionFiles)
 
-            mappedDefinitionFiles shouldContainExactlyInAnyOrder listOf(tychoDefinitionFile1, tychoDefinitionFile2)
+            mappedDefinitionFiles should containExactlyInAnyOrder(tychoDefinitionFile1, tychoDefinitionFile2)
         }
     }
 
@@ -226,7 +227,7 @@ class TychoTest : WordSpec({
                 regExBuildProjectError.matchEntire(issue.message)?.groupValues?.get(1)
             }
 
-            projectIssues shouldContainExactlyInAnyOrder listOf(
+            projectIssues should containExactlyInAnyOrder(
                 subProject2.identifier("Tycho").toCoordinates(),
                 subProject3.identifier("Tycho").toCoordinates()
             )
@@ -363,13 +364,13 @@ class TychoTest : WordSpec({
                 sourceArtifact shouldBe RemoteArtifact.EMPTY
                 vcs shouldBe VcsInfo.EMPTY
                 vcsProcessed shouldBe VcsInfo.EMPTY
-                declaredLicenses shouldContainExactlyInAnyOrder listOf(bundleProperties["Bundle-License"])
+                declaredLicenses should containExactlyInAnyOrder(bundleProperties["Bundle-License"])
                 declaredLicensesProcessed shouldBe ProcessedDeclaredLicense(
                     spdxExpression = SpdxExpression.parse("Apache-2.0"),
                     mapped = mapOf("The Apache License" to SpdxExpression.parse("Apache-2.0"))
                 )
                 concludedLicense should beNull()
-                authors shouldContainExactlyInAnyOrder listOf(bundleProperties["Bundle-Vendor"])
+                authors should containExactlyInAnyOrder(bundleProperties["Bundle-Vendor"])
                 homepageUrl shouldBe "https://example.com/package"
             }
         }
@@ -390,7 +391,8 @@ class TychoTest : WordSpec({
                 }
 
                 node.artifact shouldBe mappedArtifact
-                node.repositories shouldContainExactlyInAnyOrder listOf(repo1, repo2)
+                node.repositories should containExactlyInAnyOrder(repo1, repo2)
+
                 pkg
             }
 

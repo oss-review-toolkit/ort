@@ -27,7 +27,7 @@ import io.kotest.engine.spec.tempfile
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly as containExactlyCollection
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
@@ -63,7 +63,7 @@ class ExtensionsTest : WordSpec({
         "return all duplicates" {
             val strings = listOf("foo", "bar", "baz", "foo", "bar", "bar")
 
-            strings.getDuplicates().shouldContainExactlyInAnyOrder("foo", "bar")
+            strings.getDuplicates() should containExactlyInAnyOrder("foo", "bar")
         }
 
         "return duplicates according to a selector" {

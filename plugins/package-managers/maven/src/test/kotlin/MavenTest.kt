@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.maven
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho.addTychoExtension
 
@@ -53,7 +54,7 @@ class MavenTest : WordSpec({
             val maven = Maven()
             val mappedDefinitionFiles = maven.mapDefinitionFiles(tempdir(), definitionFiles)
 
-            mappedDefinitionFiles shouldContainExactlyInAnyOrder listOf(mavenDefinitionFile, mavenSubModule)
+            mappedDefinitionFiles should containExactlyInAnyOrder(mavenDefinitionFile, mavenSubModule)
         }
     }
 })

@@ -26,7 +26,6 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -143,7 +142,7 @@ class GradleDependencyHandlerTest : WordSpec({
                 .packages()
                 .map { it.id }
 
-            packageIds shouldContainExactlyInAnyOrder setOf(dep1.toId(), dep2.toId())
+            packageIds should containExactlyInAnyOrder(dep1.toId(), dep2.toId())
         }
 
         "deal with transitive dependencies correctly" {
