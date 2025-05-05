@@ -38,8 +38,9 @@ internal data class PackageInfo(
     data class Children(
         @SerialName("Version")
         val version: String,
+        /** Can be null for virtual dependencies */
         @SerialName("Manifest")
-        val manifest: Manifest,
+        val manifest: Manifest? = null,
         @SerialName("Dependencies")
         val dependencies: List<Dependency> = emptyList()
     )
