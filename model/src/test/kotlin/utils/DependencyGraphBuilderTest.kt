@@ -24,7 +24,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
@@ -197,19 +196,32 @@ class DependencyGraphBuilderTest : WordSpec({
         }
 
         "deal with cycles in dependencies" {
-            val scope = "CyclicScope"
-            val depCyc1 = createDependency("org.cyclic", "cyclic", "77.7")
-            val depFoo = createDependency("org.foo", "foo", "1.2.0", dependencies = setOf(depCyc1))
-            val depCyc2 = createDependency("org.cyclic", "cyclic", "77.7", dependencies = setOf(depFoo))
+            // A simple map of indexed nodes with their dependencies.
+            @Suppress("NoMultipleSpaces")
+            val dependencies = mapOf(
+                1 to listOf(2, 3),
+                2 to listOf(4, 5),
+                3 to listOf(1), // Cycle: 1 -> 3 -> 1
+                5 to listOf(6),
+                6 to listOf(2)  // Cycle: 1 -> 2 -> 5 -> 6 -> 2
+            )
 
-            val graph = createGraphBuilder()
-                .addDependency(scope, depCyc2)
-                .build()
-            val scopes = graph.createScopes()
+            val handler = object : DependencyHandler<Int> {
+                override fun identifierFor(dependency: Int) = Identifier.EMPTY.copy(name = dependency.toString())
 
-            scopeDependencies(scopes, scope) shouldContainExactly listOf(depCyc2)
+                override fun dependenciesFor(dependency: Int) = dependencies[dependency].orEmpty()
 
-            graph.nodes shouldHaveSize 3
+                override fun linkageFor(dependency: Int) = PackageLinkage.DYNAMIC
+
+                override fun createPackage(dependency: Int, issues: MutableCollection<Issue>) = null
+            }
+
+            val graph = DependencyGraphBuilder(handler)
+                .addDependency("root", 1)
+                .build(checkReferences = false)
+
+            graph.nodes shouldHaveSize 6
+            graph.edges shouldHaveSize 7
         }
 
         "check for illegal references when building the graph" {
