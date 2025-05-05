@@ -157,6 +157,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
             "--all",
             "--recursive",
             "--manifest",
+            "--virtuals",
             "--json",
             workingDir = workingDir,
             environment = mapOf("YARN_NODE_LINKER" to "pnp")

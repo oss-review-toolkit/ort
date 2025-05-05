@@ -5,6 +5,15 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@react-native-community/netinfo@npm:11.2.1":
+  version: 11.2.1
+  resolution: "@react-native-community/netinfo@npm:11.2.1"
+  peerDependencies:
+    react-native: ">=0.59"
+  checksum: d54b75c6dc6d7a8cbb054d84ed9326e1715259137e333f26cd801c6b820996cacceb5a1cf3ee94b91866361c040b7a12eb78db3695b076e8f30c3403985f98d5
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 22.9.0
   resolution: "@types/node@npm:22.9.0"
@@ -362,6 +371,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "yarn2-package-with-lockfile@workspace:."
   dependencies:
+    "@react-native-community/netinfo": 11.2.1
     cheerio: 1.0.0-rc.1
     cson: ~4.1.0
     long: ^3.2.0

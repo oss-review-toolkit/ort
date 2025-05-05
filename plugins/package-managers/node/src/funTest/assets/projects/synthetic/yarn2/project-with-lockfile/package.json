@@ -10,6 +10,7 @@
   "author": "The Author <the.author@mail.example> (https://www.the.author.example/index.html)",
   "private": true,
   "dependencies": {
+    "@react-native-community/netinfo": "11.2.1",
     "cheerio": "1.0.0-rc.1",
     "long": "^3.2.0"
   },
