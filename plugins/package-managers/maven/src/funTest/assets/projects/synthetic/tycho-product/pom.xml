@@ -49,6 +49,7 @@
     <modules>
         <module>org.ossreviewtoolkit.tycho.bundle</module>
         <module>org.ossreviewtoolkit.tycho.feature</module>
+        <module>org.ossreviewtoolkit.tycho.product</module>
     </modules>
 
 </project>
