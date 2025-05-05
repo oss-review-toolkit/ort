@@ -76,6 +76,7 @@ project:
     - id: "NPM::promise:7.3.1"
       dependencies:
       - id: "NPM::asap:2.0.6"
+    - id: "NPM:@react-native-community:netinfo:11.2.1"
 packages:
 - id: "NPM::asap:2.0.6"
   purl: "pkg:npm/asap@2.0.6"
@@ -849,6 +850,36 @@ packages:
     type: "Git"
     url: "https://github.com/TooTallNate/util-deprecate.git"
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
+    path: ""
+- id: "NPM:@react-native-community:netinfo:11.2.1"
+  purl: "pkg:npm/%40react-native-community/netinfo@11.2.1"
+  authors:
+  - "Matt Oakes"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "React Native Network Info API for iOS & Android"
+  homepage_url: "https://github.com/react-native-netinfo/react-native-netinfo#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-11.2.1.tgz"
+    hash:
+      value: "177f5409f2ac41fd51ede6e4994307bb0edb2178"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/react-native-netinfo/react-native-netinfo.git"
+    revision: "736138c36eeebb0a320f8eccd263f909855f5c75"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/react-native-netinfo/react-native-netinfo.git"
+    revision: "736138c36eeebb0a320f8eccd263f909855f5c75"
     path: ""
 - id: "NPM:@types:node:22.9.0"
   purl: "pkg:npm/%40types/node@22.9.0"
