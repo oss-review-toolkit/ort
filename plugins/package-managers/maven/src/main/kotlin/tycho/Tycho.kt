@@ -427,7 +427,10 @@ private fun createPackageFromLocalArtifact(
     artifact: Artifact,
     repositoryHelper: LocalRepositoryHelper,
     resolver: P2ArtifactResolver
-): Package? = repositoryHelper.osgiManifest(artifact)?.let { createPackageFromManifest(artifact, it, resolver) }
+): Package? =
+    repositoryHelper.osgiManifest(artifact, resolver.isBinary(artifact))?.let {
+        createPackageFromManifest(artifact, it, resolver)
+    }
 
 /**
  * An enumeration that defines the properties to be extracted from a source reference manifest header.

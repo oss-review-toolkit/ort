@@ -130,53 +130,8 @@ projects:
     - id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher.gtk.linux.x86_64:1.2.1300.v20250212-0927"
     - id: "Maven:p2.eclipse.plugin:org.eclipse.equinox.launcher.win32.win32.x86_64:1.2.1200.v20250212-0927"
     - id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:3.8.2800.v20250227-1734"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Tycho"
-        message: "Could not get package information for dependency 'p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:3.8.2800.v20250227-1734':\
-          \ ProjectBuildingException: Error resolving project artifact: The following\
-          \ artifacts could not be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
-          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2) for project p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\n\
-          Caused by: ArtifactResolutionException: The following artifacts could not\
-          \ be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
-          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2)\n    Caused by: ArtifactNotFoundException:\
-          \ Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2)"
-        severity: "ERROR"
     - id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:3.8.2800.v20250227-1734"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Tycho"
-        message: "Could not get package information for dependency 'p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:3.8.2800.v20250227-1734':\
-          \ ProjectBuildingException: Error resolving project artifact: The following\
-          \ artifacts could not be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
-          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2) for project p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\n\
-          Caused by: ArtifactResolutionException: The following artifacts could not\
-          \ be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
-          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2)\n    Caused by: ArtifactNotFoundException:\
-          \ Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2)"
-        severity: "ERROR"
     - id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:3.8.2800.v20250227-1734"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Tycho"
-        message: "Could not get package information for dependency 'p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:3.8.2800.v20250227-1734':\
-          \ ProjectBuildingException: Error resolving project artifact: The following\
-          \ artifacts could not be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
-          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2) for project p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\n\
-          Caused by: ArtifactResolutionException: The following artifacts could not\
-          \ be resolved: p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
-          \ (absent): Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2)\n    Caused by: ArtifactNotFoundException:\
-          \ Could not find artifact p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:pom:3.8.2800.v20250227-1734\
-          \ in central (https://repo.maven.apache.org/maven2)"
-        severity: "ERROR"
 packages:
 - id: "Maven:com.google.code.gson:gson:2.11.0"
   purl: "pkg:maven/com.google.code.gson/gson@2.11.0"
@@ -385,4 +340,82 @@ packages:
     type: "Git"
     url: "https://github.com/eclipse-equinox/equinox.git"
     revision: "I20250212-0500"
+    path: ""
+- id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.cocoa.macosx.x86_64:3.8.2800.v20250227-1734"
+  purl: "pkg:maven/p2.p2.installable.unit/org.eclipse.equinox.executable_root.cocoa.macosx.x86_64@3.8.2800.v20250227-1734"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://download.eclipse.org/releases/2025-03/202503121000/binary/org.eclipse.equinox.executable_root.cocoa.macosx.x86_64_3.8.2800.v20250227-1734"
+    hash:
+      value: "46bc363d70fd2eeb962cad24dc5f8aa71e1ddfadfecf3f270b834798746b49707b99181b66eab35bd631a24cd470bbb093d0e8e61b19a91c950acd28fce1bd04"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.gtk.linux.x86_64:3.8.2800.v20250227-1734"
+  purl: "pkg:maven/p2.p2.installable.unit/org.eclipse.equinox.executable_root.gtk.linux.x86_64@3.8.2800.v20250227-1734"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://download.eclipse.org/releases/2025-03/202503121000/binary/org.eclipse.equinox.executable_root.gtk.linux.x86_64_3.8.2800.v20250227-1734"
+    hash:
+      value: "aab6977918f47bffc6c40574882cc5e6e8104452b6a6f9d6884be9602a886fc519625da44e325edd152311c27243b3c627912ba9344f0bb7e354c55492c5a2cd"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:p2.p2.installable.unit:org.eclipse.equinox.executable_root.win32.win32.x86_64:3.8.2800.v20250227-1734"
+  purl: "pkg:maven/p2.p2.installable.unit/org.eclipse.equinox.executable_root.win32.win32.x86_64@3.8.2800.v20250227-1734"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://download.eclipse.org/releases/2025-03/202503121000/binary/org.eclipse.equinox.executable_root.win32.win32.x86_64_3.8.2800.v20250227-1734"
+    hash:
+      value: "610e5e2b20d0ca1a6bdd8224a39ebe5defc28949ebea599d74732a4a6457155c039b8cd84e7dcb13146cb181e6244c2afc658c3f12bca7a77aafc609103861f8"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
     path: ""
