@@ -59,6 +59,9 @@ internal class P2ArtifactResolver private constructor(
         /** The classifier used for Tycho features. */
         private const val FEATURE_CLASSIFIER = "org.eclipse.update.feature"
 
+        /** The classifier used for Tycho binary artifacts. */
+        private const val BINARY_CLASSIFIER = "binary"
+
         /** A string indicating whether a group ID refers to a feature artifact. */
         private const val FEATURE_INDICATOR = "feature"
 
@@ -111,12 +114,6 @@ internal class P2ArtifactResolver private constructor(
             }
 
         /**
-         * Generate the URL of the OSGi [artifact] in the repository with the given [repositoryUrl].
-         */
-        private fun artifactUrl(artifact: Artifact, repositoryUrl: String): String =
-            "$repositoryUrl/plugins/${artifact.artifactId}_${artifact.version}.jar"
-
-        /**
          * Return an [Artifact] to represent the source code bundle of the given [artifact].
          */
         private fun mapToSourceArtifact(artifact: Artifact): Artifact =
@@ -167,10 +164,32 @@ internal class P2ArtifactResolver private constructor(
     fun isFeature(artifact: Artifact): Boolean = artifact.artifactId in targetFeatures || hasFeatureClassifier(artifact)
 
     /**
+     * Return a flag whether the given [artifact] represents a Tycho binary artifact. This is determined based on the
+     * classifiers that were found for this artifact in the P2 repositories. Binary artifacts require a special
+     * treatment; they are typically stored in different locations.
+     */
+    fun isBinary(artifact: Artifact): Boolean = BINARY_CLASSIFIER in classifiersFor(artifact)
+
+    /**
      * Check whether the given [artifact] represents a Tycho feature based on the classifiers assigned to it.
      */
     private fun hasFeatureClassifier(artifact: Artifact): Boolean {
-        val classifiers = artifactClassifiers[artifactKey(artifact)].orEmpty()
+        val classifiers = classifiersFor(artifact)
         return FEATURE_CLASSIFIER in classifiers && (classifiers.size == 1 || isFeatureGroupId(artifact.groupId))
     }
+
+    /**
+     * Return the classifiers assigned to the given [artifact] or an empty set for an unknown artifact.
+     */
+    private fun classifiersFor(artifact: Artifact): Set<String> = artifactClassifiers[artifactKey(artifact)].orEmpty()
+
+    /**
+     * Generate the URL of the OSGi [artifact] in the repository with the given [repositoryUrl].
+     */
+    private fun artifactUrl(artifact: Artifact, repositoryUrl: String): String =
+        if (isBinary(artifact)) {
+            "$repositoryUrl/binary/${artifact.artifactId}_${artifact.version}"
+        } else {
+            "$repositoryUrl/plugins/${artifact.artifactId}_${artifact.version}.jar"
+        }
 }
