@@ -47,7 +47,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
      * A map of project directories to the set of workspace patterns for the project. If a project directory does not
      * define a workspace, the list of patterns is empty.
      */
-    private val workspacePatterns: Map<File, List<PathMatcher>> by lazy {
+    private val workspacePatternsForProjectDir: Map<File, List<PathMatcher>> by lazy {
         definitionFiles.associate { file ->
             val projectDir = file.parentFile
             val patterns = NodePackageManagerType.entries.mapNotNull { it.getWorkspaces(projectDir) }.flatten()
@@ -63,7 +63,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
      * returned.
      */
     private fun getWorkspaceRoots(projectDir: File): Set<File> =
-        workspacePatterns.filter { (_, patterns) ->
+        workspacePatternsForProjectDir.filter { (_, patterns) ->
             patterns.any { it.matches(projectDir.toPath()) }
         }.keys
 
