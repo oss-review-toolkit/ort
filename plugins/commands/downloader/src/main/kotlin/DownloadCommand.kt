@@ -107,12 +107,11 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 
 @OrtPlugin(
-    id = "download",
-    displayName = "download command",
+    displayName = "Download",
     description = "Fetch source code from a remote location.",
     factory = OrtCommandFactory::class
 )
-class DownloaderCommand(descriptor: PluginDescriptor = DownloaderCommandFactory.descriptor) : OrtCommand(descriptor) {
+class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",

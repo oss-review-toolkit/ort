@@ -61,12 +61,11 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
-    id = "advise",
-    displayName = "advise command",
+    displayName = "Advise",
     description = "Check dependencies for security vulnerabilities.",
     factory = OrtCommandFactory::class
 )
-class AdvisorCommand(descriptor: PluginDescriptor = AdvisorCommandFactory.descriptor) : OrtCommand(descriptor) {
+class AdviseCommand(descriptor: PluginDescriptor = AdviseCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."

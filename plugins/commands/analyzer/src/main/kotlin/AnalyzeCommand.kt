@@ -66,12 +66,11 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
-    id = "analyze",
-    displayName = "analyze command",
+    displayName = "Analyze",
     description = "Determine dependencies of a software project.",
     factory = OrtCommandFactory::class
 )
-class AnalyzerCommand(descriptor: PluginDescriptor = AnalyzerCommandFactory.descriptor) : OrtCommand(descriptor) {
+class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val inputDir by option(
         "--input-dir", "-i",
         help = "The project directory to analyze. May point to a definition file if only a single package manager is " +

@@ -75,12 +75,11 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
-    id = "scan",
-    displayName = "scan command",
+    displayName = "Scan",
     description = "Run external license / copyright scanners.",
     factory = OrtCommandFactory::class
 )
-class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descriptor) : OrtCommand(descriptor) {
+class ScanCommand(descriptor: PluginDescriptor = ScanCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val input by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use. Source code is downloaded automatically if needed."

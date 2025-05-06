@@ -70,7 +70,6 @@ data class PipConfig(
  * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
  */
 @OrtPlugin(
-    id = "PIP",
     displayName = "PIP",
     description = "The PIP package manager for Python.",
     factory = PackageManagerFactory::class

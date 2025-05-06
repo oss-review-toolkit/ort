@@ -51,8 +51,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 @OrtPlugin(
-    id = "upload-result-to-postgres",
-    displayName = "upload-result-to-postgres command",
+    displayName = "Upload Result to Postgres",
     description = "Upload an ORT result to a PostgreSQL database.",
     factory = OrtCommandFactory::class
 )

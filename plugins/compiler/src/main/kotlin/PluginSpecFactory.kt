@@ -60,9 +60,8 @@ class PluginSpecFactory {
         }
 
         val pluginOptions = configClass?.getPluginOptions().orEmpty()
-
         val pluginId = ortPlugin.id.ifEmpty {
-            pluginClass.simpleName.asString().removeSuffix(pluginParentClass.simpleName.asString())
+            derivePluginId(pluginClass.simpleName.asString(), pluginParentClass.simpleName.asString())
         }
 
         return PluginSpec(
@@ -199,3 +198,10 @@ class PluginSpecFactory {
             }
         }
 }
+
+internal fun derivePluginId(pluginClassName: String, pluginParentClassName: String): String {
+    val pluginTypeName = pluginClassName.removeSuffix(pluginParentClassName.removePrefix("Ort"))
+    return pluginTypeName.replace(LOWER_UPPER_REGEX) { "${it.groupValues[1]}-${it.groupValues[2]}" }.lowercase()
+}
+
+private val LOWER_UPPER_REGEX = Regex("([a-z])([A-Z])")

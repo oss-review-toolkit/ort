@@ -78,7 +78,6 @@ data class NpmConfig(
  * The [Node package manager](https://www.npmjs.com/).
  */
 @OrtPlugin(
-    id = "NPM",
     displayName = "NPM",
     description = "The Node package manager for Node.js.",
     factory = PackageManagerFactory::class

@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
  * [1]: https://freemarker.apache.org
  */
 @OrtPlugin(
-    displayName = "Man Page Template Reporter",
+    displayName = "Man Page Template",
     description = "Generates manpages from AsciiDoc files from Apache Freemarker templates.",
     factory = ReporterFactory::class
 )

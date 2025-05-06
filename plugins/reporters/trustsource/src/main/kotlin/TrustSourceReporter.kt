@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 @OrtPlugin(
-    displayName = "TrustSource Reporter",
+    displayName = "TrustSource",
     description = "Generates a report in the TrustSource format.",
     factory = ReporterFactory::class
 )

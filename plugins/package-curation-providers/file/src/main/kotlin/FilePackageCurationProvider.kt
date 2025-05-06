@@ -50,7 +50,7 @@ data class FilePackageCurationProviderConfig(
 )
 
 @OrtPlugin(
-    displayName = "Default File Package Curation Provider",
+    displayName = "Default File",
     description = "A package curation provider that loads package curations from the default file.",
     factory = PackageCurationProviderFactory::class
 )
@@ -63,7 +63,7 @@ class DefaultFilePackageCurationProvider(descriptor: PluginDescriptor) : FilePac
 )
 
 @OrtPlugin(
-    displayName = "Default Dir Package Curation Provider",
+    displayName = "Default Directory",
     description = "A package curation provider that loads package curations from the default directory.",
     factory = PackageCurationProviderFactory::class
 )
@@ -80,7 +80,7 @@ class DefaultDirPackageCurationProvider(descriptor: PluginDescriptor) : FilePack
  * specified in [FileFormat].
  */
 @OrtPlugin(
-    displayName = "File Package Curation Provider",
+    displayName = "File",
     description = "A package curation provider that loads package curations from files.",
     factory = PackageCurationProviderFactory::class
 )

@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
  */
 private val pluginDescriptor = PluginDescriptor(
     id = "Simple",
-    displayName = "Simple Package Curation Provider",
+    displayName = "Simple",
     description = "A simple package curation provider, which provides a fixed set of package curations."
 )
 

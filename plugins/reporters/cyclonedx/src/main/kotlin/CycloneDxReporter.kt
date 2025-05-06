@@ -96,8 +96,7 @@ data class CycloneDxReporterConfig(
  * each [Project] contained in the ORT result a separate SBOM is created.
  */
 @OrtPlugin(
-    id = "CycloneDX",
-    displayName = "CycloneDX Reporter",
+    displayName = "CycloneDX SBOM",
     description = "Creates software bills of materials (SBOM) in the CycloneDX format.",
     factory = ReporterFactory::class
 )

@@ -54,7 +54,6 @@ internal object PnpmCommand : CommandLineTool {
  * The [PNPM package manager](https://pnpm.io/).
  */
 @OrtPlugin(
-    id = "PNPM",
     displayName = "PNPM",
     description = "The PNPM package manager for Node.js.",
     factory = PackageManagerFactory::class

@@ -64,7 +64,6 @@ internal object SwiftCommand : CommandLineTool {
  * The [Swift Package Manager](https://github.com/apple/swift-package-manager).
  */
 @OrtPlugin(
-    id = "SwiftPM",
     displayName = "Swift Package Manager",
     description = "The Swift Package Manager for Swift.",
     factory = PackageManagerFactory::class

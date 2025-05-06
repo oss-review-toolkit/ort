@@ -78,7 +78,7 @@ data class PdfTemplateReporterConfig(
  * [5]: https://docs.asciidoctor.org/pdf-converter/latest/theme/
  */
 @OrtPlugin(
-    displayName = "PDF Template Reporter",
+    displayName = "PDF Template",
     description = "Generates PDF from AsciiDoc files from Apache Freemarker templates.",
     factory = ReporterFactory::class
 )
