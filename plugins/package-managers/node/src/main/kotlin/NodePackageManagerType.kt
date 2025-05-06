@@ -30,10 +30,10 @@ import org.ossreviewtoolkit.utils.common.collectMessages
  * An enum of all supported Node package managers.
  */
 enum class NodePackageManagerType(
-    val projectType: String,
-    val lockfileName: String,
-    val markerFileName: String? = null,
-    val workspaceFileName: String = NodePackageManagerType.DEFINITION_FILE
+    internal val projectType: String,
+    internal val lockfileName: String,
+    internal val markerFileName: String? = null,
+    internal val workspaceFileName: String = NodePackageManagerType.DEFINITION_FILE
 ) {
     NPM(
         projectType = "NPM",
@@ -126,13 +126,13 @@ enum class NodePackageManagerType(
     /**
      * Return true if the [projectDir] contains a lockfile for this package manager, or return false otherwise.
      */
-    open fun hasLockfile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockfileName)
+    internal open fun hasLockfile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockfileName)
 
     /**
      * If the [projectDir] contains a workspace file for this package manager, return the list of package patterns, or
      * return null otherwise.
      */
-    open fun getWorkspaces(projectDir: File): List<String>? {
+    internal open fun getWorkspaces(projectDir: File): List<String>? {
         val workspaceFile = projectDir.resolve(workspaceFileName)
         if (!workspaceFile.isFile) return null
 
@@ -163,7 +163,7 @@ enum class NodePackageManagerType(
      * Return a score for the [projectDir] based on the presence of files specific to this package manager.
      * The higher the score, the more likely it is that the [projectDir] is managed by this package manager.
      */
-    fun getFileScore(projectDir: File): Int =
+    internal fun getFileScore(projectDir: File): Int =
         listOf(
             hasLockfile(projectDir),
             hasNonEmptyFile(projectDir, markerFileName),
