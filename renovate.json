@@ -34,11 +34,11 @@
         "software.amazon.awssdk:s3"
       ],
       "matchUpdateTypes": ["patch"],
-      "schedule": "after 9pm on sunday"
+      "schedule": "after 9pm on wednesday"
     },
     {
       "matchManagers": ["npm"],
-      "schedule": "after 9pm on sunday"
+      "schedule": "after 9pm on wednesday"
     }
   ],
   "nuget": {
