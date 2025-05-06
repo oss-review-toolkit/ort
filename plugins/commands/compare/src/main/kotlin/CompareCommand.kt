@@ -52,7 +52,6 @@ import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.ort.Environment
 
 @OrtPlugin(
-    id = "compare",
     displayName = "compare command",
     description = "Compare two ORT results with various methods.",
     factory = OrtCommandFactory::class
