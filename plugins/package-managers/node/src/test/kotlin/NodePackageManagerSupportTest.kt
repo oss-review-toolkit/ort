@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Repository
 
-class NpmSupportTest : WordSpec({
+class NodePackageManagerSupportTest : WordSpec({
     "expandNpmShortcutUrl()" should {
         "do nothing for empty URLs" {
             expandShortcutUrl("") shouldBe ""

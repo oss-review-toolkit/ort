@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2Factory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
-class NpmDetectionTest : WordSpec({
+class NodePackageManagerDetectionTest : WordSpec({
     val packageManagers = listOf(NpmFactory(), PnpmFactory(), YarnFactory(), Yarn2Factory())
         .map { it.create(PluginConfig.EMPTY) }
 
