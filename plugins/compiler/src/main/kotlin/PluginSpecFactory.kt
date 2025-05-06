@@ -40,12 +40,13 @@ import org.ossreviewtoolkit.plugins.api.PluginOptionType
  */
 class PluginSpecFactory {
     /**
-     * Create a [PluginSpec] for the given [ortPlugin] using the [pluginClass] and [pluginFactoryClass].
+     * Create a [PluginSpec] for the given [ortPlugin] using the [pluginClass] and [pluginFactoryClass]. The
+     * [pluginBaseClass] is used to derive the plugin ID if none is provided as part of [ortPlugin].
      */
     fun create(
         ortPlugin: OrtPlugin,
         pluginClass: KSClassDeclaration,
-        pluginParentClass: KSClassDeclaration,
+        pluginBaseClass: KSClassDeclaration,
         pluginFactoryClass: KSClassDeclaration
     ): PluginSpec {
         val pluginType = pluginClass.asType(emptyList()).toTypeName()
@@ -62,7 +63,7 @@ class PluginSpecFactory {
         val pluginOptions = configClass?.getPluginOptions().orEmpty()
 
         val pluginId = ortPlugin.id.ifEmpty {
-            pluginClass.simpleName.asString().removeSuffix(pluginParentClass.simpleName.asString())
+            pluginClass.simpleName.asString().removeSuffix(pluginBaseClass.simpleName.asString())
         }
 
         return PluginSpec(
