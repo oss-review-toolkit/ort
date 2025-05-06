@@ -48,6 +48,14 @@ class LocalRepositoryHelperTest : WordSpec({
             helper.folderForOsgiArtifact(testArtifact) shouldBe folder
         }
 
+        "resolve the folder for a binary artifact in the local Maven repository" {
+            val root = tempdir()
+            val folder = root.createRepositoryFolder(repoPath = "binary")
+
+            val helper = LocalRepositoryHelper(root)
+            helper.folderForOsgiArtifact(testArtifact, isBinary = true) shouldBe folder
+        }
+
         "return null if the artifact is not found in the local Maven repository" {
             val root = tempdir()
             val helper = LocalRepositoryHelper(root)
@@ -64,6 +72,15 @@ class LocalRepositoryHelperTest : WordSpec({
 
             val helper = LocalRepositoryHelper(root)
             helper.fileForOsgiArtifact(testArtifact) shouldBe jar
+        }
+
+        "resolve the artifact file for a binary artifact in the local Maven repository" {
+            val root = tempdir()
+            val folder = root.createRepositoryFolder(repoPath = "binary")
+            val jar = folder.createJar("$TEST_ARTIFACT_ID-$TEST_VERSION", null)
+
+            val helper = LocalRepositoryHelper(root)
+            helper.fileForOsgiArtifact(testArtifact, isBinary = true) shouldBe jar
         }
 
         "return null if the folder for the artifact does not exist" {
@@ -91,6 +108,20 @@ class LocalRepositoryHelperTest : WordSpec({
 
             val helper = LocalRepositoryHelper(root)
             val manifest = helper.osgiManifest(testArtifact)
+
+            manifestEntries.entries.forAll { e ->
+                manifest?.mainAttributes?.getValue(e.key) shouldBe e.value
+            }
+        }
+
+        "return the OSGi manifest for a binary artifact" {
+            val root = tempdir()
+            val folder = root.createRepositoryFolder(repoPath = "binary")
+            val manifestEntries = mapOf("Bundle-SymbolicName" to "test.bundle", "foo" to "bar")
+            folder.createJar("$TEST_ARTIFACT_ID-$TEST_VERSION", manifestEntries)
+
+            val helper = LocalRepositoryHelper(root)
+            val manifest = helper.osgiManifest(testArtifact, isBinary = true)
 
             manifestEntries.entries.forAll { e ->
                 manifest?.mainAttributes?.getValue(e.key) shouldBe e.value
@@ -133,10 +164,13 @@ private val testArtifact = DefaultArtifact("someGroup", TEST_ARTIFACT_ID, "jar",
 
 /**
  * Create the folder in which to store data for the given [artifactId] and [version] if this [File] was the root of
- * a local repository.
+ * a local repository. Optionally, support an alternative [repoPath] for special artifact types.
  */
-private fun File.createRepositoryFolder(artifactId: String = TEST_ARTIFACT_ID, version: String = TEST_VERSION): File =
-    resolve("p2/osgi/bundle/$artifactId/$version").apply { mkdirs() }
+private fun File.createRepositoryFolder(
+    artifactId: String = TEST_ARTIFACT_ID,
+    version: String = TEST_VERSION,
+    repoPath: String = "osgi/bundle"
+): File = resolve("p2/$repoPath/$artifactId/$version").apply { mkdirs() }
 
 /**
  * Generate a jar file with the given [name] and [attributes] for the manifest in this folder. If [attributes] is

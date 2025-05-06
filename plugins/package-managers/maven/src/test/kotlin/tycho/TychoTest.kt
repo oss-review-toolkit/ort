@@ -677,5 +677,6 @@ private fun createResolverMock(
     return mockk {
         every { getBinaryArtifactFor(testArtifact) } returns binaryArtifact
         every { getSourceArtifactFor(testArtifact) } returns sourceArtifact
+        every { isBinary(any()) } returns false
     }
 }

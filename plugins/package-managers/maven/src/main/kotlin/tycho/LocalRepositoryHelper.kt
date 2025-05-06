@@ -45,32 +45,39 @@ internal class LocalRepositoryHelper(
 
         /** The name of the folder that stores OSGi bundles. */
         private const val BUNDLE_ROOT = "osgi/bundle"
+
+        /** The name of the root folder under which binary artifacts are stored. */
+        private const val BINARY_ROOT = "binary"
     }
 
     /**
-     * Try to locate the folder for the given [artifact] (which is expected to reference an OSGi bundle) in the local
-     * Maven repository. Return *null* if this artifact is not found in the local repository.
+     * Try to locate the folder for the given [artifact] (which is expected to reference an OSGi bundle per default
+     * or can be a [binary][isBinary] artifact) in the local Maven repository. Return *null* if this artifact is not
+     * found in the local repository.
      */
-    fun folderForOsgiArtifact(artifact: Artifact): File? =
-        localRepositoryRoot.resolve("$P2_ROOT/$BUNDLE_ROOT")
+    fun folderForOsgiArtifact(artifact: Artifact, isBinary: Boolean = false): File? =
+        localRepositoryRoot.resolve(P2_ROOT)
+            .resolve(if (isBinary) BINARY_ROOT else BUNDLE_ROOT)
             .resolve(artifact.artifactId)
             .resolve(artifact.version)
             .takeIf { it.isDirectory }
 
     /**
-     * Try to locate the file for the given [artifact] (which is expected to reference an OSGi bundle) in the local
-     * Maven repository. Return *null* if the file could not be found.
+     * Try to locate the file for the given [artifact] (which is expected to reference an OSGi bundle per default
+     * or can be a [binary][isBinary] artifact) in the local Maven repository. Return *null* if the file could not be
+     * found.
      */
-    fun fileForOsgiArtifact(artifact: Artifact): File? =
-        folderForOsgiArtifact(artifact)
+    fun fileForOsgiArtifact(artifact: Artifact, isBinary: Boolean = false): File? =
+        folderForOsgiArtifact(artifact, isBinary)
             ?.resolve("${artifact.artifactId}-${artifact.version}.jar")
             ?.takeIf { it.isFile }
 
     /**
-     * Return the OSGi manifest for the given [artifact]. If the artifact cannot be resolved, return *null*.
+     * Return the OSGi manifest for the given [artifact] (which is expected to reference an OSGi bundle per default
+     * or can be a [binary][isBinary] artifact). If the artifact cannot be resolved, return *null*.
      */
-    fun osgiManifest(artifact: Artifact): Manifest? =
-        fileForOsgiArtifact(artifact)?.let { artifactFile ->
+    fun osgiManifest(artifact: Artifact, isBinary: Boolean = false): Manifest? =
+        fileForOsgiArtifact(artifact, isBinary)?.let { artifactFile ->
             logger.info {
                 "Reading metadata for '${artifact.identifier()}' from local repository '$artifactFile'."
             }
