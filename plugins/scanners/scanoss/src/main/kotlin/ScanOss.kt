@@ -20,11 +20,14 @@
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import com.scanoss.Scanner
+import com.scanoss.filters.FilterConfig
 import com.scanoss.utils.JsonUtils
 import com.scanoss.utils.PackageDetails
 
 import java.io.File
 import java.time.Instant
+
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -65,8 +68,27 @@ class ScanOss(
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
+        val filterConfig = FilterConfig.builder()
+            .customFilter { currentPath ->
+                // The "currentPath" variable contains a path object representing the file or directory being evaluated
+                // by the filter.
+                // This is provided by the Scanner and represents individual files/directories during traversal.
+                try {
+                    val relativePath = currentPath.toFile().toRelativeString(path)
+                    val isExcluded = context.excludes?.isPathExcluded(relativePath) ?: false
+                    logger.debug { "Path: $currentPath, relative: $relativePath, isExcluded: $isExcluded" }
+                    isExcluded
+                } catch (e: IllegalArgumentException) {
+                    logger.warn { "Error processing path $currentPath: ${e.message}" }
+                    false
+                }
+            }
+            .build()
+
         // Build the scanner at function level in case any path-specific settings or filters are needed later.
-        val scanoss = scanossBuilder.build()
+        val scanoss = scanossBuilder
+            .filterConfig(filterConfig)
+            .build()
 
         val rawResults = when {
             path.isFile -> listOf(scanoss.scanFile(path.toString()))
