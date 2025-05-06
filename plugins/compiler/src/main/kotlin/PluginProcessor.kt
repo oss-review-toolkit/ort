@@ -122,7 +122,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
     }
 
     /**
-     * Ensure that [factoryClass] extends [PluginFactory].
+     * Ensure that [factoryClass] extends [org.ossreviewtoolkit.plugins.api.PluginFactory].
      */
     private fun checkExtendsPluginFactory(factoryClass: KSClassDeclaration) =
         require(
