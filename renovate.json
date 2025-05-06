@@ -31,7 +31,7 @@
     },
     {
       "matchPackageNames": [
-        "software.amazon.awssdk:s3"
+        "software.amazon.awssdk:*"
       ],
       "matchUpdateTypes": ["patch"],
       "schedule": "after 9pm on wednesday"
