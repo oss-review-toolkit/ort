@@ -36,7 +36,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
      * A map of project directories to the set of package managers that are most likely responsible for the project. If
      * the set is empty, none of the package managers is responsible.
      */
-    private val projectDirManagers: Map<File, Set<NodePackageManagerType>> by lazy {
+    private val managerTypesForProjectDir: Map<File, Set<NodePackageManagerType>> by lazy {
         definitionFiles.associate { file ->
             val projectDir = file.parentFile
             projectDir to NodePackageManagerType.forDirectory(projectDir)
@@ -74,7 +74,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
         val projectDir = definitionFile.parentFile
 
         // Try to clearly determine the package manager from files specific to it.
-        val managersFromFiles = projectDirManagers[projectDir].orEmpty()
+        val managersFromFiles = managerTypesForProjectDir[projectDir].orEmpty()
         when {
             manager !in managersFromFiles -> return false
             managersFromFiles.size == 1 -> {
@@ -86,7 +86,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
         // There is ambiguity when only looking at the files, so also look at any workspaces to clearly determine
         // the package manager.
         val managersFromWorkspaces = getWorkspaceRoots(projectDir).mapNotNull {
-            projectDirManagers[it]
+            managerTypesForProjectDir[it]
         }.flatten()
 
         if (managersFromWorkspaces.isNotEmpty()) {
@@ -110,7 +110,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
     ): List<File> =
         definitionFiles.filter { file ->
             val projectDir = file.parentFile
-            val managersFromFiles = projectDirManagers[projectDir].orEmpty()
+            val managersFromFiles = managerTypesForProjectDir[projectDir].orEmpty()
 
             isApplicable(manager, file) ?: (manager == fallbackType).also {
                 if (it) {
