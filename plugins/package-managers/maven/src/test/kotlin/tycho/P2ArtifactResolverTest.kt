@@ -116,6 +116,21 @@ class P2ArtifactResolverTest : WordSpec({
             artifact.url shouldBe ARTIFACT_URL
             artifact.hash shouldBe TEST_HASH
         }
+
+        "return a correct RemoteArtifact for a Tycho binary artifact" {
+            val repositoryContent = P2RepositoryContent(
+                REPOSITORY_URL,
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY, "binary") to TEST_HASH),
+                emptySet()
+            )
+
+            val resolver = createResolver(listOf(repositoryContent))
+
+            val artifact = resolver.getBinaryArtifactFor(testArtifact)
+
+            artifact.url shouldBe "$REPOSITORY_URL/binary/${TEST_ARTIFACT_ID}_${TEST_ARTIFACT_VERSION}"
+            artifact.hash shouldBe TEST_HASH
+        }
     }
 
     "getSourceArtifactFor()" should {
@@ -270,6 +285,42 @@ class P2ArtifactResolverTest : WordSpec({
             val isFeature = resolver.isFeature(testArtifact)
 
             isFeature shouldBe true
+        }
+    }
+
+    "isBinary()" should {
+        "return false if the artifact cannot be resolved" {
+            val resolver = createResolver(emptyList())
+
+            val isBinary = resolver.isBinary(testArtifact)
+
+            isBinary shouldBe false
+        }
+
+        "return false if the artifact does not have the binary classifier" {
+            val repositoryContent = P2RepositoryContent(
+                REPOSITORY_URL,
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY, "org.eclipse.update.feature") to TEST_HASH),
+                emptySet()
+            )
+
+            val resolver = createResolver(listOf(repositoryContent))
+            val isBinary = resolver.isBinary(testArtifact)
+
+            isBinary shouldBe false
+        }
+
+        "return true if the artifact has the binary classifier" {
+            val repositoryContent = P2RepositoryContent(
+                REPOSITORY_URL,
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY, "binary") to TEST_HASH),
+                emptySet()
+            )
+
+            val resolver = createResolver(listOf(repositoryContent))
+            val isBinary = resolver.isBinary(testArtifact)
+
+            isBinary shouldBe true
         }
     }
 })
