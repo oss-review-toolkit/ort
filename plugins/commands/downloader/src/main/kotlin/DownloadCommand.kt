@@ -107,7 +107,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 
 @OrtPlugin(
-    id = "download",
     displayName = "download command",
     description = "Fetch source code from a remote location.",
     factory = OrtCommandFactory::class
