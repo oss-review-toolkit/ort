@@ -27,8 +27,11 @@ import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.endWith
+import io.kotest.matchers.string.startWith
 
 import java.io.File
+import java.io.IOException
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -111,17 +114,17 @@ class FilePackageCurationProviderTest : StringSpec() {
         "Provider throws an exception if the curations file is not de-serializable" {
             val curationsFile = File("src/test/assets/package-curations-not-deserializable.yml")
 
-            shouldThrow<Exception> {
+            shouldThrow<IOException> {
                 FilePackageCurationProvider(curationsFile)
-            }
+            }.message should startWith("Failed parsing package curation(s)")
         }
 
         "Provider throws an exception if the curations file does not exist" {
             val curationsFile = File("src/test/assets/package-curations-not-existing.yml")
 
-            shouldThrow<Exception> {
+            shouldThrow<IllegalArgumentException> {
                 FilePackageCurationProvider(curationsFile)
-            }
+            }.message should endWith("does not exist.")
         }
     }
 }
