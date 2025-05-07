@@ -340,12 +340,6 @@ class FreemarkerTemplateProcessor(
             snippetFindings.associateBy { it.sourceLocation }
 
         /**
-         * Return a flag if the given [sourceLocation] refers to the full source file.
-         */
-        @Suppress("unused") // This function is used in the templates.
-        fun isFullFileLocation(sourceLocation: TextLocation) = !sourceLocation.hasLineRange
-
-        /**
          * Collect all the licenses present in a collection of [SnippetFinding]s.
          */
         @Suppress("unused") // This function is used in the templates.

@@ -86,11 +86,11 @@ License(s):
 | Source Location | pURL | License | File | URL | Score | Release Date
 
 .${snippetCount*2}+|
-[#if helper.isFullFileLocation(sourceLocation)]
-Full match
-[#else]
+[#if sourceLocation.hasLineRange]
 Partial match +
 ${sourceLocation.startLine?c}-${sourceLocation.endLine?c}
+[#else]
+Full match
 [/#if]
 
 [#list snippetFinding.snippets as snippet ]
