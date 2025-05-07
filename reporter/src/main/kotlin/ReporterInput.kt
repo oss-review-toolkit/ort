@@ -78,6 +78,6 @@ data class ReporterInput(
     /**
      * Statistics for [ortResult].
      */
-    @Suppress("UNUSED") // This can be used from templates.
+    @Suppress("unused") // This can be used from templates.
     val statistics: Statistics by lazy { getStatistics(ortResult, licenseInfoResolver, ortConfig) }
 }

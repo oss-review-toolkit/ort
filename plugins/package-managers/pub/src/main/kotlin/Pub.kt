@@ -90,7 +90,7 @@ private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
 private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 
 internal class PubCommand(private val flutterAbsolutePath: File) : CommandLineTool {
-    @Suppress("Unused") // The no-arg constructor is required by the requirements command.
+    @Suppress("unused") // The no-arg constructor is required by the requirements command.
     constructor() : this(File(""))
 
     override fun getVersion(workingDir: File?): String {

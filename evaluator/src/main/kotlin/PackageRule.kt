@@ -57,7 +57,7 @@ open class PackageRule(
 ) : Rule(ruleSet, name) {
     private val licenseRules = mutableListOf<LicenseRule>()
 
-    @Suppress("UNUSED") // This is intended to be used by rule implementations.
+    @Suppress("unused") // This is intended to be used by rule implementations.
     val uncuratedPkg: Package by lazy {
         @Suppress("UnsafeCallOnNullableType")
         ruleSet.ortResult.getUncuratedPackageOrProject(pkg.metadata.id)!!

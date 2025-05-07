@@ -163,7 +163,7 @@ class FreemarkerTemplateProcessor(
         /**
          * The labels for the package.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         val labels: Map<String, String> by lazy { input.ortResult.getPackage(id)?.metadata?.labels.orEmpty() }
 
         /**
@@ -194,7 +194,7 @@ class FreemarkerTemplateProcessor(
          * license files. This is useful when the raw texts of the license files are included in the generated output
          * file and all licenses not contained in those files shall be listed separately.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         @JvmOverloads
         fun licensesNotInLicenseFiles(
             resolvedLicenses: List<ResolvedLicense> = license.licenses
@@ -212,7 +212,7 @@ class FreemarkerTemplateProcessor(
         /**
          * Return only those [packages] that are a dependency of at least one of the provided [projects][projectIds].
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun filterByProjects(
             packages: Collection<PackageModel>,
             projectIds: Collection<Identifier>
@@ -227,7 +227,7 @@ class FreemarkerTemplateProcessor(
          * Return only those [licenses] that are classified under the given [category], or that are not categorized at
          * all.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
                 input.licenseClassifications[resolvedLicense.license]?.contains(category) != false
@@ -283,7 +283,7 @@ class FreemarkerTemplateProcessor(
          * than the [threshold], or `false` otherwise.
          */
         @JvmOverloads
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun hasUnresolvedIssues(threshold: Severity = input.ortConfig.severeIssueThreshold) =
             input.ortResult.getOpenIssues(minSeverity = threshold).isNotEmpty()
 
@@ -291,7 +291,7 @@ class FreemarkerTemplateProcessor(
          * If there are any issue caused by reaching the snippets limit, return the text of the issue. Otherwise return
          * the empty string.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun getSnippetsLimitIssue() =
             input.ortResult.scanner?.scanResults?.flatMap { result ->
                 result.summary.issues
@@ -304,7 +304,7 @@ class FreemarkerTemplateProcessor(
          * greater than the [threshold], or `false` otherwise.
          */
         @JvmOverloads
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun hasUnresolvedRuleViolations(threshold: Severity = input.ortConfig.severeRuleViolationThreshold) =
             input.ortResult.getRuleViolations(omitResolved = true, minSeverity = threshold).any { violation ->
                 violation.pkg?.let { input.ortResult.isExcluded(it) } == true
@@ -313,21 +313,21 @@ class FreemarkerTemplateProcessor(
         /**
          * Return a list of [RuleViolation]s for which no [RuleViolationResolution] is provided.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun filterForUnresolvedRuleViolations(ruleViolation: List<RuleViolation>): List<RuleViolation> =
             ruleViolation.filterNot { input.ortResult.isResolved(it) }
 
         /**
          * Return a list of [Vulnerability]s for which no [VulnerabilityResolution] is provided.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
             vulnerabilities.filterNot { input.ortResult.isResolved(it) }
 
         /**
          * Return a list of [SnippetFinding]s grouped by the source file being matched by those snippets.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun groupSnippetsByFile(snippetFindings: Collection<SnippetFinding>): Map<String, List<SnippetFinding>> =
             snippetFindings.groupBy { it.sourceLocation.path }
 
@@ -335,21 +335,21 @@ class FreemarkerTemplateProcessor(
          * Return a list of [SnippetFinding]s grouped by the source file location ( line ranges) being matched by those
          * snippets.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun groupSnippetsBySourceLines(snippetFindings: Collection<SnippetFinding>): Map<TextLocation, SnippetFinding> =
             snippetFindings.associateBy { it.sourceLocation }
 
         /**
          * Return a flag if the given [sourceLocation] refers to the full source file.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun isFullFileLocation(sourceLocation: TextLocation) =
             sourceLocation.startLine == TextLocation.UNKNOWN_LINE && sourceLocation.endLine == TextLocation.UNKNOWN_LINE
 
         /**
          * Collect all the licenses present in a collection of [SnippetFinding]s.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun collectLicenses(snippetsFindings: Collection<SnippetFinding>): Set<String> =
             snippetsFindings.flatMap { findings -> findings.snippets }.map { snippet -> snippet.license.toString() }
                 .toSet()
@@ -407,7 +407,7 @@ class FreemarkerTemplateProcessor(
         /**
          * Return an [Identifier] constructed from the given [identifier] string.
          */
-        @Suppress("UNUSED") // This function is used in the templates.
+        @Suppress("unused") // This function is used in the templates.
         fun identifierFromString(identifier: String) = Identifier(identifier)
     }
 }
