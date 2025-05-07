@@ -180,7 +180,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     private fun requestAllPackageDetails(projectModuleInfo: ModuleInfo, scopes: Set<Scope>) {
         projectModuleInfo.getAllPackageNodeModuleIds(scopes).let { moduleIds ->
-            moduleInfoResolver.getPackageDetails(moduleIds)
+            moduleInfoResolver.getModuleInfos(moduleIds)
         }
     }
 }

@@ -47,9 +47,9 @@ internal class ModuleInfoResolver(
     lateinit var workingDir: File
     private val cache = mutableMapOf<String, PackageJson>()
 
-    fun getPackageDetails(moduleId: String): PackageJson? = getPackageDetails(setOf(moduleId)).firstOrNull()
+    fun getModuleInfo(moduleId: String): PackageJson? = getModuleInfos(setOf(moduleId)).firstOrNull()
 
-    fun getPackageDetails(moduleIds: Set<String>): Set<PackageJson> {
+    fun getModuleInfos(moduleIds: Set<String>): Set<PackageJson> {
         val cachedResults = moduleIds.mapNotNull { moduleId ->
             cache[moduleId]?.let { moduleId to it }
         }.toMap()
