@@ -242,6 +242,7 @@ class NodePackageManagerDetectionTest : WordSpec({
 
             filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath } should containExactlyInAnyOrder(
                 "yarn/babel/package.json",
+                "yarn/invalid-package-json/package.json",
                 "yarn/project-with-lockfile/package.json",
                 "yarn/workspaces/package.json"
             )

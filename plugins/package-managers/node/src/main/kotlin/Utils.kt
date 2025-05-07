@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import java.io.File
+import java.util.LinkedList
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.parseAuthorString
@@ -245,7 +246,37 @@ internal val PackageJson.moduleId: String get() =
 /**
  * Return the directories of all modules which have been installed in the 'node_modules' dir within [moduleDir].
  */
-internal fun getInstalledModulesDirs(moduleDir: File): Set<File> =
-    moduleDir.resolve("node_modules").walk().filter {
-        it.isFile && it.name == NodePackageManagerType.DEFINITION_FILE
-    }.mapTo(mutableSetOf()) { it.parentFile.realFile }
+internal fun getInstalledModulesDirs(projectDir: File): Set<File> {
+    val modulesDirsToProcess = LinkedList<File>().apply { add(projectDir.realFile) }
+    val discoveredModulesDirs = mutableSetOf<File>()
+
+    while (modulesDirsToProcess.isNotEmpty()) {
+        val currentModule = modulesDirsToProcess.removeFirst()
+        if (!discoveredModulesDirs.add(currentModule)) continue
+
+        modulesDirsToProcess += getChildModuleDirs(currentModule)
+    }
+
+    return discoveredModulesDirs
+}
+
+/**
+* Find all direct dependency module directories within the node_modules directory of the given [moduleDir].
+* This handles both regular modules and namespaced (@organization) modules.
+*/
+private fun getChildModuleDirs(moduleDir: File): Set<File> {
+    val nodeModulesDir = moduleDir.resolve("node_modules").takeIf { it.isDirectory } ?: return emptySet()
+
+    fun File.isModuleDir(): Boolean =
+        isDirectory && !isHidden && !name.startsWith("@") && resolve(NodePackageManagerType.DEFINITION_FILE).isFile
+
+    val nodeModulesDirFiles = nodeModulesDir.walk().maxDepth(1)
+    val childModuleDirsWithoutNamespace = nodeModulesDirFiles.filter { it.isModuleDir() }
+    val childModuleDirsWithNamespace = nodeModulesDirFiles.filter {
+        it.isDirectory && !it.isHidden && it.name.startsWith("@")
+    }.flatMap { namespaceDir ->
+        namespaceDir.walk().maxDepth(1).filter { it.isModuleDir() }
+    }
+
+    return (childModuleDirsWithoutNamespace + childModuleDirsWithNamespace).mapTo(mutableSetOf()) { it.realFile }
+}
