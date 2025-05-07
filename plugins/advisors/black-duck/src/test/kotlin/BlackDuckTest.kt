@@ -29,33 +29,33 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.test.matchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class BlackDuckTest : WordSpec({
     "toOrtVulnerability()" should {
         "parse a vulnerability with CVSS 3.1 and with duplicate links as expected" {
-            val expectedResultFile = getAssetFile("BDSA-2024-5272-parsed.yml")
+            val expectedResult = getAssetAsString("BDSA-2024-5272-parsed.yml")
             val vulnerabilityView = readVulnerabilityViewAssetFile("BDSA-2024-5272.json")
 
             val vulnerability = vulnerabilityView.toOrtVulnerability()
 
-            vulnerability.toYaml() shouldBe matchExpectedResult(expectedResultFile)
+            vulnerability.toYaml() shouldBe patchExpectedResult(expectedResult)
         }
 
         "parse a vulnerability with CVSS 2 (only) as expected" {
-            val expectedResultFile = getAssetFile("CVE-2015-3996-parsed.yml")
+            val expectedResult = getAssetAsString("CVE-2015-3996-parsed.yml")
             val vulnerabilityView = readVulnerabilityViewAssetFile("CVE-2015-3996.json")
 
             val vulnerability = vulnerabilityView.toOrtVulnerability()
 
-            vulnerability.toYaml() shouldBe matchExpectedResult(expectedResultFile)
+            vulnerability.toYaml() shouldBe patchExpectedResult(expectedResult)
         }
     }
 })
 
 private fun readVulnerabilityViewAssetFile(path: String): VulnerabilityView =
-    GSON.fromJson(getAssetFile(path).readText(), VulnerabilityView::class.java)
+    GSON.fromJson(getAssetAsString(path), VulnerabilityView::class.java)
 
 private val GSON by lazy { GsonBuilder().setPrettyPrinting().create() }
 
-private fun getAssetFile(path: String): File = File("src/test/assets", path).absoluteFile
+private fun getAssetAsString(path: String): String = File("src/test/assets", path).readText()
