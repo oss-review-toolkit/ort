@@ -79,7 +79,7 @@ class PackageManagerFunTest : WordSpec({
         definitionFiles.writeFiles(projectDir)
     }
 
-    "findManagedFiles" should {
+    "findManagedFiles()" should {
         "find all managed files" {
             val managedFiles = PackageManager.findManagedFiles(projectDir, packageManagers)
 
