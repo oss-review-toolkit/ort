@@ -114,8 +114,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
 
             ProjectAnalyzerResult(
                 project = project.copy(scopeNames = scopes.getNames()),
-                packages = emptySet(),
-                issues = emptyList()
+                packages = emptySet()
             )
         }
     }
