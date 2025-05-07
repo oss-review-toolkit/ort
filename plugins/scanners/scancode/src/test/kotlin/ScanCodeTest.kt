@@ -37,6 +37,8 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.extractResource
+import org.ossreviewtoolkit.utils.test.readResource
 
 class ScanCodeTest : WordSpec({
     val scanner = ScanCodeFactory.create()
@@ -86,9 +88,8 @@ class ScanCodeTest : WordSpec({
 
             val scannerSpy = spyk(scanner)
             every { scannerSpy.runScanCode(any(), any()) } answers {
-                val resultFile = File("src/test/assets/scancode-with-issues.json")
                 val targetFile = secondArg<File>()
-                resultFile.copyTo(targetFile)
+                extractResource("/scancode-with-issues.json", targetFile)
 
                 process
             }
@@ -126,8 +127,7 @@ class ScanCodeTest : WordSpec({
 
     "parseDetails()" should {
         "return details for a raw scan result" {
-            val resultFile = File("src/test/assets/scancode-with-issues.json")
-            val result = resultFile.readText()
+            val result = readResource("/scancode-with-issues.json")
 
             scanner.parseDetails(result) shouldBe ScannerDetails(
                 name = "ScanCode",
