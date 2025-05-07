@@ -88,7 +88,7 @@ class PackageManagerFunTest : WordSpec({
             managedFiles.keys.map { it.descriptor.id } shouldContainExactlyInAnyOrder
                 PackageManagerFactory.ALL.values.map { it.descriptor.id }.filterNot { it == "Unmanaged" }
 
-            val managedFilesById = managedFiles.groupById(projectDir)
+            val managedFilesById = managedFiles.groupById(projectDir).toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
             assertSoftly {
                 managedFilesById["Bazel"] should containExactly("bazel/MODULE.bazel")
@@ -138,12 +138,12 @@ class PackageManagerFunTest : WordSpec({
         "find only files for active package managers" {
             val managedFiles = PackageManager.findManagedFiles(
                 projectDir,
-                packageManagers.filter { it.descriptor.id in setOf("GradleInspector", "PIP", "SBT") }
+                packageManagers.filter { it.descriptor.id.uppercase() in setOf("GRADLEINSPECTOR", "PIP", "SBT") }
             )
 
             managedFiles shouldHaveSize 3
 
-            val managedFilesById = managedFiles.groupById(projectDir)
+            val managedFilesById = managedFiles.groupById(projectDir).toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
             managedFilesById["GradleInspector"] should containExactlyInAnyOrder(
                 "gradle-groovy/build.gradle",
@@ -173,7 +173,7 @@ class PackageManagerFunTest : WordSpec({
             val excludes = Excludes(paths = listOf(pathExclude))
 
             val managedFilesById = PackageManager.findManagedFiles(rootDir, packageManagers, excludes = excludes)
-                .groupById(rootDir)
+                .groupById(rootDir).toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
             managedFilesById["GradleInspector"] should containExactlyInAnyOrder(
                 "gradle-groovy/build.gradle",
