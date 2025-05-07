@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import java.io.File
+import java.util.LinkedList
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.parseAuthorString
@@ -245,7 +246,35 @@ internal val PackageJson.moduleId: String get() =
 /**
  * Return the directories of all modules which have been installed in the 'node_modules' dir within [moduleDir].
  */
-internal fun getInstalledModulesDirs(moduleDir: File): Set<File> =
-    moduleDir.resolve("node_modules").walk().filter {
-        it.isFile && it.name == NodePackageManagerType.DEFINITION_FILE
-    }.mapTo(mutableSetOf()) { it.parentFile.realFile }
+internal fun getInstalledModulesDirs(projectDir: File): Set<File> {
+    val queue = LinkedList<File>().apply { add(projectDir.realFile) }
+    val result = mutableSetOf<File>()
+
+    while (queue.isNotEmpty()) {
+        val moduleDir = queue.removeFirst()
+        if (moduleDir in result) continue
+
+        val childModuleDirs = getChildModuleDirs(moduleDir)
+
+        result += moduleDir
+        queue += childModuleDirs
+    }
+
+    return result
+}
+
+private fun getChildModuleDirs(moduleDir: File): Set<File> {
+    val nodeModulesDir = moduleDir.resolve("node_modules").takeIf { it.isDirectory } ?: return emptySet()
+
+    fun File.isModuleDir(): Boolean =
+        isDirectory && !isHidden && !name.startsWith("@") && resolve(NodePackageManagerType.DEFINITION_FILE).isFile
+
+    val childModuleDirsWithoutNamespace = nodeModulesDir.listFiles().filter { it.isModuleDir() }
+    val childModuleDirsWithNamespace = nodeModulesDir.listFiles().filter {
+        it.isDirectory && !it.isHidden && it.name.startsWith("@")
+    }.flatMap { namespaceDir ->
+        namespaceDir.listFiles().filter { it.isModuleDir() }
+    }
+
+    return (childModuleDirsWithoutNamespace + childModuleDirsWithNamespace).mapTo(mutableSetOf()) { it.realFile }
+}

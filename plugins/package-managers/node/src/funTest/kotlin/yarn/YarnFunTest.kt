@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.getAnalyzerResult
@@ -48,6 +49,16 @@ class YarnFunTest : StringSpec({
         val result = YarnFactory.create()
             .resolveSingleProject(definitionFile, excludedScopes = setOf("devDependencies"), resolveScopes = true)
 
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Resolve dependencies for a project with an invalid package.json file correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn/invalid-package-json/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/yarn/invalid-package-json-expected-output.yml")
+
+        val result = YarnFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.issues shouldBe emptyList()
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
