@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.versioncontrolsystems.subversion
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
@@ -30,16 +31,16 @@ import io.kotest.matchers.string.beEmpty
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
-import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class SubversionWorkingTreeFunTest : StringSpec({
     val svn = Subversion()
     val zipContentDir = tempdir()
 
     beforeSpec {
-        val zipFile = getAssetFile("docutils-2018-01-03-svn-trunk.zip")
+        val zipFile = extractResource("/docutils-2018-01-03-svn-trunk.zip", tempfile(suffix = ".zip"))
         zipFile.unpack(zipContentDir)
     }
 
