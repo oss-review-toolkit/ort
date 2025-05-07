@@ -138,8 +138,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
             ProjectAnalyzerResult(
                 project = project.copy(scopeNames = scopes.getNames()),
-                packages = emptySet(),
-                issues = emptyList()
+                packages = emptySet()
             )
         }
     }
