@@ -27,6 +27,7 @@ import com.blackduck.integration.blackduck.api.generated.view.VulnerabilityView
 import com.google.gson.GsonBuilder
 
 import java.io.File
+import java.net.URL
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -37,16 +38,20 @@ import java.util.concurrent.ConcurrentHashMap
  * as a fake [ComponentServiceClient].
  */
 internal class ResponseCachingComponentServiceClient(
-    private val overrideFile: File,
+    private val overrideUrl: URL?,
     private val serverUrl: String?,
     apiToken: String?
 ) : ComponentServiceClient {
     // The Black Duck library uses GSON to serialize its POJOs. So use GSON, too, because this is the simplest option.
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
-    private val overrideFileExisted = overrideFile.isFile
-    private val cache = if (overrideFileExisted) {
-        gson.fromJson(overrideFile.readText(), ResponseCache::class.java)
+    private val overrideExisted = overrideUrl != null &&
+        (overrideUrl.protocol != "file" || File(overrideUrl.path).isFile)
+
+    private val cache = if (overrideExisted) {
+        // Unfortunately, Kotlin's smart-cast does not understand that `overrideUrl` is non-null if `overrideExisted`
+        // is true.
+        gson.fromJson(checkNotNull(overrideUrl).readText(), ResponseCache::class.java)
     } else {
         ResponseCache()
     }
@@ -78,9 +83,9 @@ internal class ResponseCachingComponentServiceClient(
         }
 
     fun flush() {
-        if (!overrideFileExisted) {
+        if (!overrideExisted && overrideUrl?.protocol == "file") {
             val json = gson.toJson(cache).patchServerUrl(serverUrl)
-            overrideFile.writeText(json)
+            File(overrideUrl.path).writeText(json)
         }
     }
 }

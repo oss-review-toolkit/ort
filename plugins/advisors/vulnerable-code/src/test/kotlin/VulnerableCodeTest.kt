@@ -27,6 +27,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
@@ -37,7 +38,6 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
 import java.net.URI
 
 import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
@@ -47,17 +47,16 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.enumSetOf
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class VulnerableCodeTest : WordSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory(TEST_FILES_ROOT)
     )
 
     beforeSpec {
@@ -308,8 +307,6 @@ class VulnerableCodeTest : WordSpec({
 })
 
 private const val ADVISOR_NAME = "VulnerableCode"
-private const val TEST_FILES_ROOT = "src/test/assets"
-private const val TEST_RESULT_NAME = "ort-analyzer-result.yml"
 
 private val idLang = Identifier("Maven:org.apache.commons:commons-lang3:3.5")
 private val idText = Identifier("Maven:org.apache.commons:commons-text:1.1")
@@ -364,15 +361,10 @@ private fun createConfig(server: WireMockServer): VulnerableCodeConfiguration {
 private fun createVulnerableCode(server: WireMockServer): VulnerableCode = VulnerableCode(config = createConfig(server))
 
 /**
- * Return the test file with an analyzer result.
- */
-private fun resultFile(): File = File(TEST_FILES_ROOT, TEST_RESULT_NAME)
-
-/**
  * Return a list with [Package]s from the analyzer result file that serve as input for the [VulnerableCode] advisor.
  */
-private fun inputPackagesFromAnalyzerResult(): Set<Package> =
-    resultFile().readValue<OrtResult>().getPackages().mapTo(mutableSetOf()) { it.metadata }
+private fun TestConfiguration.inputPackagesFromAnalyzerResult(): Set<Package> =
+    readResourceValue<OrtResult>("/ort-analyzer-result.yml").getPackages().mapTo(mutableSetOf()) { it.metadata }
 
 /**
  * Return a set with [Package]s to be used as input for the [VulnerableCode] advisor derived from the given

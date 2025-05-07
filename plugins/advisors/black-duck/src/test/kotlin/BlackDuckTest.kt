@@ -23,19 +23,19 @@ import com.blackduck.integration.blackduck.api.generated.view.VulnerabilityView
 
 import com.google.gson.GsonBuilder
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.readResource
 
 class BlackDuckTest : WordSpec({
     "toOrtVulnerability()" should {
         "parse a vulnerability with CVSS 3.1 and with duplicate links as expected" {
-            val expectedResult = getAssetAsString("BDSA-2024-5272-parsed.yml")
-            val vulnerabilityView = readVulnerabilityViewAssetFile("BDSA-2024-5272.json")
+            val expectedResult = readResource("/BDSA-2024-5272-parsed.yml")
+            val vulnerabilityView = readVulnerabilityViewResource("/BDSA-2024-5272.json")
 
             val vulnerability = vulnerabilityView.toOrtVulnerability()
 
@@ -43,8 +43,8 @@ class BlackDuckTest : WordSpec({
         }
 
         "parse a vulnerability with CVSS 2 (only) as expected" {
-            val expectedResult = getAssetAsString("CVE-2015-3996-parsed.yml")
-            val vulnerabilityView = readVulnerabilityViewAssetFile("CVE-2015-3996.json")
+            val expectedResult = readResource("/CVE-2015-3996-parsed.yml")
+            val vulnerabilityView = readVulnerabilityViewResource("/CVE-2015-3996.json")
 
             val vulnerability = vulnerabilityView.toOrtVulnerability()
 
@@ -53,9 +53,7 @@ class BlackDuckTest : WordSpec({
     }
 })
 
-private fun readVulnerabilityViewAssetFile(path: String): VulnerabilityView =
-    GSON.fromJson(getAssetAsString(path), VulnerabilityView::class.java)
+private fun TestConfiguration.readVulnerabilityViewResource(name: String): VulnerabilityView =
+    GSON.fromJson(readResource(name), VulnerabilityView::class.java)
 
 private val GSON by lazy { GsonBuilder().setPrettyPrinting().create() }
-
-private fun getAssetAsString(path: String): String = File("src/test/assets", path).readText()
