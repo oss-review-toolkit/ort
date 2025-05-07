@@ -128,8 +128,6 @@ internal fun parseVcsInfo(packageJson: PackageJson): VcsInfo {
     )
 }
 
-typealias GetPackageDetailsFun = (packageName: String) -> PackageJson?
-
 /**
  * Construct a [Package] by parsing its [packageJsonFile] and - if applicable - querying additional content via
  * [moduleInfoResolver]. The result is a [Pair] with the raw identifier and the new package.
