@@ -1,0 +1,217 @@
+---
+project:
+  id: "Yarn::yarn-project-with-dep-with-invalid-package-json:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn/invalid-package-json/package.json"
+  authors:
+  - "The Author"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  description: "Yarn test project with yarn.lock."
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::resolve:1.22.2"
+      dependencies:
+      - id: "NPM::is-core-module:2.16.1"
+        dependencies:
+        - id: "NPM::hasown:2.0.2"
+          dependencies:
+          - id: "NPM::function-bind:1.1.2"
+      - id: "NPM::path-parse:1.0.7"
+      - id: "NPM::supports-preserve-symlinks-flag:1.0.0"
+packages:
+- id: "NPM::function-bind:1.1.2"
+  purl: "pkg:npm/function-bind@1.1.2"
+  authors:
+  - "Raynos"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Implementation of Function.prototype.bind"
+  homepage_url: "https://github.com/Raynos/function-bind"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
+    hash:
+      value: "2c02d864d97f3ea6c8830c464cbd11ab6eab7a1c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/Raynos/function-bind.git"
+    revision: "40197beb5f4cf89dd005f0b268256c1e4716ea81"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Raynos/function-bind.git"
+    revision: "40197beb5f4cf89dd005f0b268256c1e4716ea81"
+    path: ""
+- id: "NPM::hasown:2.0.2"
+  purl: "pkg:npm/hasown@2.0.2"
+  authors:
+  - "Jordan Harband"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A robust, ES3 compatible, \"has own property\" predicate."
+  homepage_url: "https://github.com/inspect-js/hasOwn#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/hasown/-/hasown-2.0.2.tgz"
+    hash:
+      value: "003eaf91be7adc372e84ec59dc37252cedb80003"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/inspect-js/hasOwn.git"
+    revision: "d00d35005baf16a33d691a13f8ad627f35040742"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/inspect-js/hasOwn.git"
+    revision: "d00d35005baf16a33d691a13f8ad627f35040742"
+    path: ""
+- id: "NPM::is-core-module:2.16.1"
+  purl: "pkg:npm/is-core-module@2.16.1"
+  authors:
+  - "Jordan Harband"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Is this specifier a node.js core module?"
+  homepage_url: "https://github.com/inspect-js/is-core-module"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-core-module/-/is-core-module-2.16.1.tgz"
+    hash:
+      value: "2a98801a849f43e2add644fbb6bc6229b19a4ef4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/inspect-js/is-core-module.git"
+    revision: "7c4284853357b2fcd49d42010d5a2b8a8420905f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/inspect-js/is-core-module.git"
+    revision: "7c4284853357b2fcd49d42010d5a2b8a8420905f"
+    path: ""
+- id: "NPM::path-parse:1.0.7"
+  purl: "pkg:npm/path-parse@1.0.7"
+  authors:
+  - "Javier Blanco <http://jbgutierrez.info>"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Node.js path.parse() ponyfill"
+  homepage_url: "https://github.com/jbgutierrez/path-parse#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/path-parse/-/path-parse-1.0.7.tgz"
+    hash:
+      value: "fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jbgutierrez/path-parse.git"
+    revision: "9f1db2802ffbc572e6b447f66126697e33b0055e"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jbgutierrez/path-parse.git"
+    revision: "9f1db2802ffbc572e6b447f66126697e33b0055e"
+    path: ""
+- id: "NPM::resolve:1.22.2"
+  purl: "pkg:npm/resolve@1.22.2"
+  authors:
+  - "James Halliday"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "resolve like require.resolve() on behalf of files asynchronously and\
+    \ synchronously"
+  homepage_url: "https://github.com/browserify/resolve#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/resolve/-/resolve-1.22.2.tgz"
+    hash:
+      value: "0ed0943d4e301867955766c9f3e1ae6d01c6845f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/browserify/resolve.git"
+    revision: "c2f9ce254f0157b5e2e53e9aee0403c510909f7d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/browserify/resolve.git"
+    revision: "c2f9ce254f0157b5e2e53e9aee0403c510909f7d"
+    path: ""
+- id: "NPM::supports-preserve-symlinks-flag:1.0.0"
+  purl: "pkg:npm/supports-preserve-symlinks-flag@1.0.0"
+  authors:
+  - "Jordan Harband"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Determine if the current node version supports the `--preserve-symlinks`\
+    \ flag."
+  homepage_url: "https://github.com/inspect-js/node-supports-preserve-symlinks-flag#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
+    hash:
+      value: "6eda4bd344a3c94aea376d4cc31bc77311039e09"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/inspect-js/node-supports-preserve-symlinks-flag.git"
+    revision: "1f7cac19c0c298cf40b3f2f3c735477ad579ac61"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/inspect-js/node-supports-preserve-symlinks-flag.git"
+    revision: "1f7cac19c0c298cf40b3f2f3c735477ad579ac61"
+    path: ""
