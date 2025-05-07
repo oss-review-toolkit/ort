@@ -65,6 +65,10 @@ data class TextLocation(
      */
     constructor(path: String, line: Int) : this(path, line, line)
 
+    /**
+     * Return a negative integer, zero, or a positive integer as this TextLocation comes before, is the same, or comes
+     * after the [other] TextLocation.
+     */
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
 
     /**
