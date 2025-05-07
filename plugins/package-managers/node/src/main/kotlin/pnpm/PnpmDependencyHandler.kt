@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.ModuleInfo.Depende
 import org.ossreviewtoolkit.utils.common.realFile
 
 internal class PnpmDependencyHandler(
-    private val projectType: String,
     private val getPackageDetails: GetPackageDetailsFun
 ) : DependencyHandler<Dependency> {
     private val workspaceModuleDirs = mutableSetOf<File>()
@@ -51,7 +50,7 @@ internal class PnpmDependencyHandler(
     }
 
     override fun identifierFor(dependency: Dependency): Identifier {
-        val type = if (dependency.isProject()) projectType else "NPM"
+        val type = if (dependency.isProject()) NodePackageManagerType.PNPM.projectType else "NPM"
         val namespace = dependency.from.substringBeforeLast("/", "")
         val name = dependency.from.substringAfterLast("/")
         val version = if (dependency.isProject()) {

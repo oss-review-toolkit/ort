@@ -66,7 +66,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
     private lateinit var stash: DirectoryStash
 
     private val pnpmInfoCache = mutableMapOf<String, PackageJson>()
-    private val handler = PnpmDependencyHandler(projectType, this::getRemotePackageDetails)
+    private val handler = PnpmDependencyHandler(this::getRemotePackageDetails)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 

@@ -35,13 +35,12 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNamespaceAndName
 import org.ossreviewtoolkit.utils.common.realFile
 
 internal class NpmDependencyHandler(
-    private val projectType: String,
     private val getPackageDetails: GetPackageDetailsFun
 ) : DependencyHandler<ModuleInfo> {
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
     override fun identifierFor(dependency: ModuleInfo): Identifier {
-        val type = if (dependency.isProject) projectType else "NPM"
+        val type = if (dependency.isProject) NodePackageManagerType.NPM.projectType else "NPM"
         val (namespace, name) = splitNamespaceAndName(dependency.name.orEmpty())
         val version = if (dependency.isProject) {
             val packageJson = packageJsonCache.getOrPut(dependency.packageJsonFile.realFile) {
