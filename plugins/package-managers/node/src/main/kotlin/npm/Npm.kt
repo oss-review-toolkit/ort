@@ -95,7 +95,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     private val handler = NpmDependencyHandler(moduleInfoResolver)
 
-    override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
+    override val graphBuilder = DependencyGraphBuilder(handler)
 
     override fun beforeResolution(
         analysisRoot: File,

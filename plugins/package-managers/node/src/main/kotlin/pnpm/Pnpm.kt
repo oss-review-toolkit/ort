@@ -78,7 +78,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
 
     private val handler = PnpmDependencyHandler(moduleInfoResolver)
 
-    override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
+    override val graphBuilder = DependencyGraphBuilder(handler)
 
     override fun beforeResolution(
         analysisRoot: File,
