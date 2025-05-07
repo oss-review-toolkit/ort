@@ -41,7 +41,7 @@ import org.semver4j.RangesListFactory
 private const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
 
 internal class Yarn2Command(private val corepackEnabled: Boolean?) : CommandLineTool {
-    @Suppress("Unused") // The no-arg constructor is required by the requirements command.
+    @Suppress("unused") // The no-arg constructor is required by the requirements command.
     constructor() : this(null)
 
     /**

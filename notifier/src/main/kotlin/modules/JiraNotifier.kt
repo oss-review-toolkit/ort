@@ -43,7 +43,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
     /**
      * Create a [comment] within the issue specified by the [issueKey].
      */
-    @Suppress("UNUSED") // This is intended to be used via scripting.
+    @Suppress("unused") // This is intended to be used via scripting.
     fun createComment(issueKey: String, comment: String) {
         val issue = restClient.issueClient.getIssue(issueKey).claim()
 

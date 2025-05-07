@@ -58,7 +58,7 @@ class MailNotifier(private val config: SendMailConfiguration) {
      * is set to false, a single-part plain-text email is sent. Otherwise, a multi-part HTML email with an additional
      * plain-text part as a fallback is sent. Throws a [MessagingException] if the email could not be sent.
      */
-    @Suppress("UNUSED") // This is intended to be used by notification script implementations.
+    @Suppress("unused") // This is intended to be used by notification script implementations.
     fun sendMail(
         subject: String,
         message: String,
