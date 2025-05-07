@@ -27,6 +27,7 @@ import kotlinx.coroutines.sync.withLock
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
@@ -55,10 +56,22 @@ interface WorkingTreeCache {
 
 class DefaultWorkingTreeCache : WorkingTreeCache {
     private val mutex = Mutex()
+    private val vcsPluginConfigs = mutableMapOf<String, PluginConfig>()
     private val workingTreeMutexes = mutableMapOf<String, Mutex>()
     private val workingTrees = mutableMapOf<String, WorkingTree>()
 
     private var terminated = false
+
+    /**
+     * Add [VCS plugin configurations][configs] that are applied when creating a [VersionControlSystem] instance
+     * for this working tree. Calling this function is optional.
+     */
+    @Suppress("unused") // Intended for use when this class is consumed externally as a library.
+    fun addVcsPluginConfigs(configs: Map<String, PluginConfig>): DefaultWorkingTreeCache {
+        logger.debug { "Using VCS plugin configs: $configs" }
+        vcsPluginConfigs += configs
+        return this
+    }
 
     override suspend fun <T> use(vcsInfo: VcsInfo, block: (VersionControlSystem, WorkingTree) -> T): T {
         val vcs = getVcs(vcsInfo)
@@ -75,8 +88,8 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
         }
 
     private fun getVcs(vcsInfo: VcsInfo) =
-        VersionControlSystem.forType(vcsInfo.type)
-            ?: VersionControlSystem.forUrl(vcsInfo.url)
+        VersionControlSystem.forType(vcsInfo.type, vcsPluginConfigs)
+            ?: VersionControlSystem.forUrl(vcsInfo.url, vcsPluginConfigs)
             ?: throw IOException("Could not determine VCS for type '${vcsInfo.type}' and URL ${vcsInfo.url}.")
 
     private fun getWorkingTree(vcsInfo: VcsInfo, vcs: VersionControlSystem) =
