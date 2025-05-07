@@ -76,8 +76,8 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
     private lateinit var stash: DirectoryStash
 
-    private val moduleInfoResolver = ModuleInfoResolver.create { _, moduleId ->
-        val process = YarnCommand.run("info", "--json", moduleId)
+    private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->
+        val process = YarnCommand.run(workingDir, "info", "--json", moduleId)
 
         parseYarnInfo(process.stdout, process.stderr)
     }

@@ -65,11 +65,11 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
 
     private lateinit var stash: DirectoryStash
 
-    private val moduleInfoResolver = ModuleInfoResolver.create { _, moduleId ->
+    private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->
         runCatching {
             // Note that pnpm does not actually implement the "info" subcommand itself, but just forwards to npm, see
             // https://github.com/pnpm/pnpm/issues/5935.
-            val process = PnpmCommand.run("info", "--json", moduleId).requireSuccess()
+            val process = PnpmCommand.run(workingDir, "info", "--json", moduleId).requireSuccess()
             parsePackageJson(process.stdout)
         }.onFailure { e ->
             logger.warn { "Error getting details for $moduleId: ${e.message.orEmpty()}" }
