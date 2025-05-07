@@ -89,7 +89,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
             val process = NpmCommand.run(workingDir, "info", "--json", moduleId).requireSuccess()
             parsePackageJson(process.stdout)
         }.onFailure { e ->
-            logger.warn { "Error getting details for $moduleId: ${e.message.orEmpty()}" }
+            logger.warn { "Error getting module info for $moduleId: ${e.message.orEmpty()}" }
         }.getOrNull()
     }
 
