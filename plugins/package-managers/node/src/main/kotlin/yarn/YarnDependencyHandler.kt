@@ -64,7 +64,7 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
 
     override fun identifierFor(dependency: YarnListNode): Identifier =
         Identifier(
-            type = if (dependency.isProject()) yarn.projectType else "NPM",
+            type = if (dependency.isProject()) NodePackageManagerType.YARN.projectType else "NPM",
             namespace = dependency.moduleName.substringBefore("/", ""),
             name = dependency.moduleName.substringAfter("/"),
             version = dependency.moduleVersion

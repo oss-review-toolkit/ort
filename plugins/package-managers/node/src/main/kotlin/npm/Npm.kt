@@ -91,7 +91,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
     private lateinit var stash: DirectoryStash
 
     private val npmInfoCache = mutableMapOf<String, PackageJson>()
-    private val handler = NpmDependencyHandler(projectType, this::getRemotePackageDetails)
+    private val handler = NpmDependencyHandler(this::getRemotePackageDetails)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
