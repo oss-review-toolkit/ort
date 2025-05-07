@@ -174,7 +174,7 @@ internal fun parsePackage(packageJson: PackageJson, moduleInfoResolver: ModuleIn
         || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
     if (hasIncompleteData) {
-        moduleInfoResolver.getPackageDetails("$rawName@$version")?.let { details ->
+        moduleInfoResolver.getModuleInfo("$rawName@$version")?.let { details ->
             if (description.isEmpty()) description = details.description.orEmpty()
             if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
 

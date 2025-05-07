@@ -123,7 +123,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
         // Warm-up the cache to speed-up processing.
         getAllModuleIds(moduleInfosForScope.values.flatten()).let { moduleIds ->
-            moduleInfoResolver.getPackageDetails(moduleIds)
+            moduleInfoResolver.getModuleInfos(moduleIds)
         }
 
         return workspaceModuleDirs.map { projectDir ->

@@ -196,7 +196,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
             if (info.isProject) null else info.moduleId
         }
 
-        moduleInfoResolver.getPackageDetails(moduleIds)
+        moduleInfoResolver.getModuleInfos(moduleIds)
     }
 }
 
