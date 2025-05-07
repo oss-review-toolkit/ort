@@ -44,7 +44,8 @@ internal class ResponseCachingComponentServiceClient(
     // The Black Duck library uses GSON to serialize its POJOs. So use GSON, too, because this is the simplest option.
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
-    private val cache = if (overrideFile.isFile) {
+    private val overrideFileExisted = overrideFile.isFile
+    private val cache = if (overrideFileExisted) {
         gson.fromJson(overrideFile.readText(), ResponseCache::class.java)
     } else {
         ResponseCache()
@@ -77,7 +78,7 @@ internal class ResponseCachingComponentServiceClient(
         }
 
     fun flush() {
-        if (delegate != null) {
+        if (!overrideFileExisted) {
             val json = gson.toJson(cache).patchServerUrl(serverUrl)
             overrideFile.writeText(json)
         }
