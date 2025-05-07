@@ -26,13 +26,16 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.moduleId
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 
-internal class Yarn2DependencyHandler(private val yarn2: Yarn2) : DependencyHandler<PackageInfo> {
+internal class Yarn2DependencyHandler(
+    private val moduleInfoResolver: ModuleInfoResolver
+) : DependencyHandler<PackageInfo> {
     private val packageJsonForModuleId = mutableMapOf<String, PackageJson>()
     private val moduleDirForModuleId = mutableMapOf<String, File>()
     private val packageInfoForLocator = mutableMapOf<String, PackageInfo>()
@@ -74,9 +77,7 @@ internal class Yarn2DependencyHandler(private val yarn2: Yarn2) : DependencyHand
         val packageJson = packageJsonForModuleId[dependency.moduleId]?.takeUnless { dependency.isProject }
             ?: return null
 
-        return parsePackage(packageJson) { packageName ->
-            yarn2.getRemotePackageDetails(workingDir, setOf(packageName)).single()
-        }
+        return parsePackage(packageJson, moduleInfoResolver)
     }
 }
 

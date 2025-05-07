@@ -22,11 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 import java.io.File
 import java.util.LinkedList
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withContext
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
@@ -40,9 +35,9 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
-import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
@@ -52,7 +47,6 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.runBlocking
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -90,8 +84,16 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     private lateinit var stash: DirectoryStash
 
-    private val npmInfoCache = mutableMapOf<String, PackageJson>()
-    private val handler = NpmDependencyHandler(this::getRemotePackageDetails)
+    private val moduleInfoResolver = ModuleInfoResolver.create { _, moduleId ->
+        runCatching {
+            val process = NpmCommand.run("info", "--json", moduleId).requireSuccess()
+            parsePackageJson(process.stdout)
+        }.onFailure { e ->
+            logger.warn { "Error getting details for $moduleId: ${e.message.orEmpty()}" }
+        }.getOrNull()
+    }
+
+    private val handler = NpmDependencyHandler(moduleInfoResolver)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
@@ -120,6 +122,8 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+        moduleInfoResolver.workingDir = workingDir
+
         val issues = installDependencies(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions).toMutableList()
 
         if (issues.any { it.severity == Severity.ERROR }) {
@@ -158,20 +162,6 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         return parseNpmList(listProcess.stdout)
     }
 
-    internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        npmInfoCache[packageName]?.also { return it }
-
-        return runCatching {
-            val process = NpmCommand.run("info", "--json", packageName).requireSuccess()
-
-            parsePackageJson(process.stdout)
-        }.onFailure { e ->
-            logger.warn { "Error getting details for $packageName: ${e.message.orEmpty()}" }
-        }.onSuccess {
-            npmInfoCache[packageName] = it
-        }.getOrNull()
-    }
-
     private fun installDependencies(analysisRoot: File, workingDir: File, allowDynamicVersions: Boolean): List<Issue> {
         requireLockfile(analysisRoot, workingDir, allowDynamicVersions) { managerType.hasLockfile(workingDir) }
 
@@ -189,12 +179,8 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
     }
 
     private fun requestAllPackageDetails(projectModuleInfo: ModuleInfo, scopes: Set<Scope>) {
-        runBlocking {
-            withContext(Dispatchers.IO.limitedParallelism(20)) {
-                projectModuleInfo.getAllPackageNodeModuleIds(scopes).map { packageName ->
-                    async { getRemotePackageDetails(packageName) }
-                }.awaitAll()
-            }
+        projectModuleInfo.getAllPackageNodeModuleIds(scopes).let { moduleIds ->
+            moduleInfoResolver.getPackageDetails(moduleIds)
         }
     }
 }

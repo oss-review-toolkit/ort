@@ -33,14 +33,13 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
-import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getDependenciesForScope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getInstalledModulesDirs
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
-import org.ossreviewtoolkit.plugins.packagemanagers.node.moduleId
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
 import org.ossreviewtoolkit.utils.common.realFile
@@ -81,9 +80,29 @@ data class Yarn2Config(
 class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor, private val config: Yarn2Config) :
     NodePackageManager(NodePackageManagerType.YARN2) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
-    private val yarnInfoCache = mutableMapOf<String, PackageJson>()
     internal val yarn2Command = Yarn2Command(config.corepackEnabled)
-    private val handler = Yarn2DependencyHandler(this)
+    private val moduleInfoResolver = ModuleInfoResolver { workingDir, moduleIds ->
+        runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+            moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE).map { chunk ->
+                async {
+                    val process = yarn2Command.run(
+                        "npm",
+                        "info",
+                        "--json",
+                        *chunk.toTypedArray(), // Not all Yarn Berry versions execute the `npm info` calls in parallel.
+                        workingDir = workingDir,
+                        environment = mapOf("NODE_TLS_REJECT_UNAUTHORIZED" to "0")
+                            .takeIf { config.disableRegistryCertificateVerification }
+                            .orEmpty()
+                    ).requireSuccess()
+
+                    parsePackageJsons(process.stdout)
+                }
+            }.awaitAll().flatten().toSet()
+        }
+    }
+
+    private val handler = Yarn2DependencyHandler(moduleInfoResolver)
     override val graphBuilder = DependencyGraphBuilder(handler)
 
     override fun beforeResolution(
@@ -106,6 +125,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+        moduleInfoResolver.workingDir = workingDir
         installDependencies(workingDir)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
@@ -113,7 +133,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         handler.setContext(workingDir, getInstalledModulesDirs(workingDir), packageInfoForLocator)
 
         // Warm-up the cache to speed-up processing.
-        requestAllPackageDetails(workingDir, packageInfoForLocator.values)
+        requestAllPackageDetails(packageInfoForLocator.values)
 
         val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
 
@@ -171,44 +191,12 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         }
     }
 
-    internal fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> {
-        val cachedResults = moduleIds.mapNotNull { moduleId ->
-            yarnInfoCache[moduleId]?.let { moduleId to it }
-        }.toMap()
-
-        val retrievedResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            (moduleIds - cachedResults.keys).chunked(YARN_NPM_INFO_CHUNK_SIZE).map { chunk ->
-                async {
-                    val process = yarn2Command.run(
-                        "npm",
-                        "info",
-                        "--json",
-                        *chunk.toTypedArray(), // Not all Yarn Berry versions execute the `npm info` calls in parallel.
-                        workingDir = workingDir,
-                        environment = mapOf("NODE_TLS_REJECT_UNAUTHORIZED" to "0")
-                            .takeIf { config.disableRegistryCertificateVerification }
-                            .orEmpty()
-                    ).requireSuccess()
-
-                    parsePackageJsons(process.stdout)
-                }
-            }.awaitAll().flatten().toSet()
-        }
-
-        retrievedResults.associateByTo(yarnInfoCache) { it.moduleId }
-
-        return buildSet {
-            addAll(cachedResults.values)
-            addAll(retrievedResults)
-        }
-    }
-
-    private fun requestAllPackageDetails(workingDir: File, packageInfos: Collection<PackageInfo>) {
+    private fun requestAllPackageDetails(packageInfos: Collection<PackageInfo>) {
         val moduleIds = packageInfos.mapNotNullTo(mutableSetOf()) { info ->
             if (info.isProject) null else info.moduleId
         }
 
-        getRemotePackageDetails(workingDir, moduleIds)
+        moduleInfoResolver.getPackageDetails(moduleIds)
     }
 }
 

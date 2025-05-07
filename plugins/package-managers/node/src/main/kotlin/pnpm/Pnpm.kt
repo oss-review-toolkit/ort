@@ -30,9 +30,9 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
-import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
@@ -65,8 +65,18 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
 
     private lateinit var stash: DirectoryStash
 
-    private val pnpmInfoCache = mutableMapOf<String, PackageJson>()
-    private val handler = PnpmDependencyHandler(this::getRemotePackageDetails)
+    private val moduleInfoResolver = ModuleInfoResolver.create { _, moduleId ->
+        runCatching {
+            // Note that pnpm does not actually implement the "info" subcommand itself, but just forwards to npm, see
+            // https://github.com/pnpm/pnpm/issues/5935.
+            val process = PnpmCommand.run("info", "--json", moduleId).requireSuccess()
+            parsePackageJson(process.stdout)
+        }.onFailure { e ->
+            logger.warn { "Error getting details for $moduleId: ${e.message.orEmpty()}" }
+        }.getOrNull()
+    }
+
+    private val handler = PnpmDependencyHandler(moduleInfoResolver)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
@@ -95,6 +105,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+        moduleInfoResolver.workingDir = workingDir
         installDependencies(workingDir)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
@@ -147,22 +158,6 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
             "--frozen-lockfile", // Use the existing lockfile instead of updating an outdated one.
             workingDir = workingDir
         ).requireSuccess()
-
-    internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        pnpmInfoCache[packageName]?.also { return it }
-
-        return runCatching {
-            // Note that pnpm does not actually implement the "info" subcommand itself, but just forwards to npm, see
-            // https://github.com/pnpm/pnpm/issues/5935.
-            val process = PnpmCommand.run("info", "--json", packageName).requireSuccess()
-
-            parsePackageJson(process.stdout)
-        }.onFailure { e ->
-            logger.warn { "Error getting details for $packageName: ${e.message.orEmpty()}" }
-        }.onSuccess {
-            pnpmInfoCache[packageName] = it
-        }.getOrNull()
-    }
 }
 
 private fun ModuleInfo.getScopeDependencies(scope: Scope) =

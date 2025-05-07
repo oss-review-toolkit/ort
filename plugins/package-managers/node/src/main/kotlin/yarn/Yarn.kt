@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
@@ -75,8 +76,13 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
     private lateinit var stash: DirectoryStash
 
-    private val yarnInfoCache = mutableMapOf<String, PackageJson>()
-    private val handler = YarnDependencyHandler(this)
+    private val moduleInfoResolver = ModuleInfoResolver.create { _, moduleId ->
+        val process = YarnCommand.run("info", "--json", moduleId)
+
+        parseYarnInfo(process.stdout, process.stderr)
+    }
+
+    private val handler = YarnDependencyHandler(moduleInfoResolver)
     override val graphBuilder = DependencyGraphBuilder(handler)
 
     override fun beforeResolution(
@@ -104,6 +110,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+        moduleInfoResolver.workingDir = workingDir
         installDependencies(workingDir)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
@@ -116,7 +123,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
         // Warm-up the cache to speed-up processing.
         getAllModuleIds(moduleInfosForScope.values.flatten()).let { moduleIds ->
-            handler.requestAllPackageDetails(moduleIds)
+            moduleInfoResolver.getPackageDetails(moduleIds)
         }
 
         return workspaceModuleDirs.map { projectDir ->
@@ -179,16 +186,6 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         val json = YarnCommand.run(workingDir, "list", "--json", scopeOption).requireSuccess().stdout
 
         return parseYarnList(json)
-    }
-
-    internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        yarnInfoCache[packageName]?.also { return it }
-
-        val process = YarnCommand.run("info", "--json", packageName)
-
-        return parseYarnInfo(process.stdout, process.stderr)?.also {
-            yarnInfoCache[packageName] = it
-        }
     }
 }
 
