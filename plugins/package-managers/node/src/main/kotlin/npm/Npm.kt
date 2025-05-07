@@ -84,9 +84,9 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     private lateinit var stash: DirectoryStash
 
-    private val moduleInfoResolver = ModuleInfoResolver.create { _, moduleId ->
+    private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->
         runCatching {
-            val process = NpmCommand.run("info", "--json", moduleId).requireSuccess()
+            val process = NpmCommand.run(workingDir, "info", "--json", moduleId).requireSuccess()
             parsePackageJson(process.stdout)
         }.onFailure { e ->
             logger.warn { "Error getting details for $moduleId: ${e.message.orEmpty()}" }
