@@ -132,18 +132,18 @@ typealias GetPackageDetailsFun = (packageName: String) -> PackageJson?
 
 /**
  * Construct a [Package] by parsing its [packageJsonFile] and - if applicable - querying additional content via
- * [getPackageDetails]. The result is a [Pair] with the raw identifier and the new package.
+ * [moduleInfoResolver]. The result is a [Pair] with the raw identifier and the new package.
  */
-internal fun parsePackage(packageJsonFile: File, getPackageDetails: GetPackageDetailsFun): Package {
+internal fun parsePackage(packageJsonFile: File, moduleInfoResolver: ModuleInfoResolver): Package {
     val packageJson = parsePackageJson(packageJsonFile)
-    return parsePackage(packageJson, getPackageDetails)
+    return parsePackage(packageJson, moduleInfoResolver)
 }
 
 /**
  * Construct a [Package] by parsing its [packageJson] and - if applicable - querying additional content via
- * [getPackageDetails]. The result is a [Pair] with the raw identifier and the new package.
+ * [moduleInfoResolver]. The result is a [Pair] with the raw identifier and the new package.
  */
-internal fun parsePackage(packageJson: PackageJson, getPackageDetails: GetPackageDetailsFun): Package {
+internal fun parsePackage(packageJson: PackageJson, moduleInfoResolver: ModuleInfoResolver): Package {
     // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
     // optional, see
     // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
@@ -176,7 +176,7 @@ internal fun parsePackage(packageJson: PackageJson, getPackageDetails: GetPackag
         || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
     if (hasIncompleteData) {
-        getPackageDetails("$rawName@$version")?.let { details ->
+        moduleInfoResolver.getPackageDetails("$rawName@$version")?.let { details ->
             if (description.isEmpty()) description = details.description.orEmpty()
             if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
 

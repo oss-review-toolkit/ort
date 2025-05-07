@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.plugins.packagemanagers.node.GetPackageDetailsFun
+import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNamespaceAndName
 import org.ossreviewtoolkit.utils.common.realFile
 
 internal class NpmDependencyHandler(
-    private val getPackageDetails: GetPackageDetailsFun
+    private val moduleInfoResolver: ModuleInfoResolver
 ) : DependencyHandler<ModuleInfo> {
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
@@ -63,7 +63,7 @@ internal class NpmDependencyHandler(
 
     override fun createPackage(dependency: ModuleInfo, issues: MutableCollection<Issue>): Package? =
         dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
-            parsePackage(it.packageJsonFile, getPackageDetails)
+            parsePackage(it.packageJsonFile, moduleInfoResolver)
         }
 }
 

@@ -21,24 +21,21 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn
 
 import java.io.File
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withContext
-
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.moduleId
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
-import org.ossreviewtoolkit.utils.ort.runBlocking
 
-internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler<YarnListNode> {
+internal class YarnDependencyHandler(
+    private val moduleInfoResolver: ModuleInfoResolver
+) : DependencyHandler<YarnListNode> {
     private val packageJsonForModuleId = mutableMapOf<String, PackageJson>()
     private val moduleDirForModuleId = mutableMapOf<String, File>()
     private val projectDirs = mutableSetOf<File>()
@@ -79,22 +76,10 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
     override fun createPackage(dependency: YarnListNode, issues: MutableCollection<Issue>): Package? {
         val packageJson = packageJsonForModuleId[dependency.name]?.takeUnless { dependency.isProject() } ?: return null
 
-        return parsePackage(packageJson, yarn::getRemotePackageDetails)
+        return parsePackage(packageJson, moduleInfoResolver)
     }
 
     private fun YarnListNode.isProject(): Boolean = isProject(name)
 
     private fun isProject(moduleId: String) = moduleDirForModuleId[moduleId] in projectDirs
-
-    fun requestAllPackageDetails(moduleIds: Set<String>) {
-        runBlocking {
-            withContext(Dispatchers.IO.limitedParallelism(20)) {
-                moduleIds.filterNot { moduleId ->
-                    isProject(moduleId)
-                }.map { moduleId ->
-                    async { yarn.getRemotePackageDetails(moduleId) }
-                }.awaitAll()
-            }
-        }
-    }
 }
