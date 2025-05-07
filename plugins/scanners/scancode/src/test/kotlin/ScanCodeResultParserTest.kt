@@ -28,7 +28,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
 
-import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.Issue
@@ -36,15 +35,16 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.utils.test.readResource
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class ScanCodeResultParserTest : FreeSpec({
     "generateSummary()" - {
         "for ScanCode 32.0.8 should" - {
             "get license mappings even without '--license-references'" {
-                val resultFile = getAssetFile("scancode-32.0.8_spdx-expression-parse_no-license-references.json")
+                val result = readResource("/scancode-32.0.8_spdx-expression-parse_no-license-references.json")
 
-                val summary = parseResult(resultFile).toScanSummary()
+                val summary = parseResult(result).toScanSummary()
 
                 with(summary.licenseFindings) {
                     shouldHaveSize(18)
@@ -54,9 +54,9 @@ class ScanCodeResultParserTest : FreeSpec({
             }
 
             "get file-level findings with the 'preferFileLicense' option" {
-                val resultFile = getAssetFile("scancode-32.0.8_spdx-expression-parse_no-license-references.json")
+                val result = readResource("/scancode-32.0.8_spdx-expression-parse_no-license-references.json")
 
-                val summary = parseResult(resultFile).toScanSummary(preferFileLicense = true)
+                val summary = parseResult(result).toScanSummary(preferFileLicense = true)
 
                 summary.licenseFindings.map { it.license.toString() } should containExactlyInAnyOrder(
                     "LicenseRef-scancode-generic-cla AND MIT",
@@ -70,9 +70,9 @@ class ScanCodeResultParserTest : FreeSpec({
 
         "for ScanCode 32.1.0 should" - {
             "contain findings that stem from referenced files" {
-                val resultFile = getAssetFile("scancode-32.1.0_from_file-reference.json")
+                val result = readResource("/scancode-32.1.0_from_file-reference.json")
 
-                val summary = parseResult(resultFile).toScanSummary()
+                val summary = parseResult(result).toScanSummary()
 
                 summary.licenseFindings should containExactlyInAnyOrder(
                     LicenseFinding(
@@ -150,7 +150,7 @@ class ScanCodeResultParserTest : FreeSpec({
         }
 
         for (version in 1..MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
-            val resultFile = getAssetFile("scancode-output-format-$version.0.0_mime-types-2.1.18.json")
+            val resultFile = readResource("/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
             val summary = parseResult(resultFile).toScanSummary()
 
             "for output format $version.0.0 should" - {
@@ -255,5 +255,3 @@ private fun containCopyrightsExactly(vararg copyrights: Pair<String, List<TextLo
         summary.copyrightFindings.groupBy { it.statement }.entries
             .map { (key, value) -> key to value.map { it.location } }
     }
-
-private fun getAssetFile(path: String): File = File("src/test/assets", path).absoluteFile

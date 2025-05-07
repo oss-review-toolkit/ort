@@ -21,18 +21,20 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import com.scanoss.Winnowing
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
+import org.ossreviewtoolkit.utils.test.getResource
 
 private val winnowing = Winnowing.builder().build()
 
-private fun calculate(file: File) = winnowing.wfpForFile(file.path, file.name)
+private fun TestConfiguration.wfpForResource(name: String, binFile: Boolean = false) =
+    winnowing.wfpForContents(name.substringAfterLast('/'), binFile, getResource(name).readBytes())
 
 class WinnowingTest : StringSpec({
     "The fingerprint should be calculated correctly for the Apache-2.0 license text" {
-        calculate(File("src/test/assets/wfp/Apache-2.0.license")) shouldBe """
+        wfpForResource("/wfp/Apache-2.0.license") shouldBe """
             file=e3fc50a88d0a364313df4b21ef20c29e,11357,Apache-2.0.license
             5=33193f1b,1716113f,0c557e09
             9=643a45ae,2ae8e84a,bacd17ac
@@ -181,7 +183,7 @@ class WinnowingTest : StringSpec({
     }
 
     "The fingerprint should be calculated correctly for the CC-BY-3.0 license text" {
-        calculate(File("src/test/assets/wfp/CC-BY-3.0.license")) shouldBe """
+        wfpForResource("/wfp/CC-BY-3.0.license") shouldBe """
             file=6dffb34dbf23fffe10cc646d9c030e14,19467,CC-BY-3.0.license
             5=996e9d8b,1a6dc238
             6=70a3753f,14d9bf35,0dbf4b11,d58971b7,86fbc9f3
@@ -439,7 +441,7 @@ class WinnowingTest : StringSpec({
 
     "The fingerprint should be calculated correctly for the Winnowing paper" {
         // Note that the ".pdf" file extension is hard-coded to be skipped for snippet calculation.
-        calculate(File("src/test/assets/wfp/sigmod03.pdf")) shouldBe """
+        wfpForResource("/wfp/sigmod03.pdf", binFile = true) shouldBe """
             file=232512a681d2488f61ade07516f899b5,155473,sigmod03.pdf
 
         """.trimIndent()

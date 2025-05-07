@@ -28,7 +28,6 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.should
 
-import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.CopyrightFinding
@@ -40,11 +39,12 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.test.readResource
 
 class ScanOssResultParserTest : WordSpec({
     "generateSummary()" should {
         "properly summarize JUnit 4.12 findings" {
-            val results = File("src/test/assets/scanoss-junit-4.12.json").readText().let {
+            val results = readResource("/scanoss-junit-4.12.json").let {
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
@@ -82,7 +82,7 @@ class ScanOssResultParserTest : WordSpec({
         }
 
         "properly summarize Semver4j 3.1.0 with snippet findings" {
-            val results = File("src/test/assets/scanoss-semver4j-3.1.0-with-snippet.json").readText().let {
+            val results = readResource("/scanoss-semver4j-3.1.0-with-snippet.json").let {
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 

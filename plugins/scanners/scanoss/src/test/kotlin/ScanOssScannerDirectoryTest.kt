@@ -23,16 +23,14 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
-import io.kotest.assertions.fail
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import io.mockk.spyk
-
-import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
@@ -47,11 +45,8 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-
-// Define separate directories for different test scenarios.
-private val TEST_DIRECTORY_TO_SCAN = File("src/test/assets/filesToScan")
-private val EXCLUSION_TEST_DIRECTORY = File("src/test/assets/exclusionTest")
 
 /**
  * A test for scanning a directory with the [ScanOss] scanner.
@@ -62,7 +57,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory("src/test/assets/scanMulti")
+            .usingFilesUnderClasspath("scanMulti")
     )
 
     beforeSpec {
@@ -79,8 +74,13 @@ class ScanOssScannerDirectoryTest : StringSpec({
     }
 
     "The scanner should scan a directory" {
+        val pathToDir = tempdir().apply {
+            extractResource("/filesToScan/random-data-05-06-11.kt", resolve("random-data-05-06-11.kt"))
+            extractResource("/filesToScan/random-data-05-07-04.kt", resolve("random-data-05-07-04.kt"))
+        }
+
         val summary = scanner.scanPath(
-            TEST_DIRECTORY_TO_SCAN,
+            pathToDir,
             ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
         )
 
@@ -128,16 +128,15 @@ class ScanOssScannerDirectoryTest : StringSpec({
             )
         )
 
-        // Verify our test file exists. This file should be included in the scan since it does not match the exclusion
-        // pattern (it is a .go file, not a .kt file).
-        val includedFile = File(EXCLUSION_TEST_DIRECTORY, "random-data-10-41-29.go")
-        if (!includedFile.isFile) {
-            fail("The file ${includedFile.absolutePath} does not exist - test environment may not be properly set up")
+        val pathToDir = tempdir().apply {
+            extractResource("/exclusionTest/random-data-05-04-43.kt", resolve("random-data-05-04-43.kt"))
+            extractResource("/exclusionTest/random-data-05-05-29.kt", resolve("random-data-05-05-29.kt"))
+            extractResource("/exclusionTest/random-data-10-41-29.go", resolve("random-data-10-41-29.go"))
         }
 
         // Run the scanner with our exclusion pattern. This will traverse the directory and should skip .kt files.
         scanner.scanPath(
-            EXCLUSION_TEST_DIRECTORY,
+            pathToDir,
             ScanContext(
                 labels = emptyMap(),
                 packageType = PackageType.PACKAGE,

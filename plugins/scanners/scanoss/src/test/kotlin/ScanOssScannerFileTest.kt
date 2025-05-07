@@ -23,20 +23,18 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
 import io.mockk.spyk
-
-import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.scanner.ScanContext
-
-private val TEST_FILE_TO_SCAN = File("src/test/assets/filesToScan/random-data-05-07-04.kt")
+import org.ossreviewtoolkit.utils.common.extractResource
 
 /**
  * A test for scanning a single file with the [ScanOss] scanner.
@@ -47,7 +45,7 @@ class ScanOssScannerFileTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory("src/test/assets/scanSingle")
+            .usingFilesUnderClasspath("scanSingle")
     )
 
     beforeSpec {
@@ -64,8 +62,9 @@ class ScanOssScannerFileTest : StringSpec({
     }
 
     "The scanner should scan a single file" {
+        val pathToFile = extractResource("/filesToScan/random-data-05-07-04.kt", tempfile())
         val summary = scanner.scanPath(
-            TEST_FILE_TO_SCAN,
+            pathToFile,
             ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
         )
 
