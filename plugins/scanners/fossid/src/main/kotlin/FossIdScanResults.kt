@@ -455,8 +455,8 @@ private fun urlToPackageType(url: String): PurlType =
     }
 
 internal fun TextLocation.prettyPrint(): String =
-    if (startLine == TextLocation.UNKNOWN_LINE && endLine == TextLocation.UNKNOWN_LINE) {
-        "$path#FULL"
-    } else {
+    if (hasLineRange) {
         "$path#$startLine-$endLine"
+    } else {
+        "$path#FULL"
     }
