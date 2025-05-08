@@ -104,7 +104,7 @@ internal fun Collection<String>.mapLicenses(): Set<String> =
     }
 
 /**
- * Parse information about the VCS from the [package.json][node] file of a module.
+ * Parse information about the VCS from the [packageJson] of a module.
  */
 internal fun parseVcsInfo(packageJson: PackageJson): VcsInfo {
     // See https://github.com/npm/read-package-json/issues/7 for some background info.
