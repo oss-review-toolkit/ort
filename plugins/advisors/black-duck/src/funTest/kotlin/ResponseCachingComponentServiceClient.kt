@@ -27,6 +27,7 @@ import com.blackduck.integration.blackduck.api.generated.view.VulnerabilityView
 import com.google.gson.GsonBuilder
 
 import java.io.File
+import java.net.URL
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -37,18 +38,19 @@ import java.util.concurrent.ConcurrentHashMap
  * as a fake [ComponentServiceClient].
  */
 internal class ResponseCachingComponentServiceClient(
-    private val overrideFile: File,
+    private val overrideUrl: URL?,
     private val serverUrl: String?,
     apiToken: String?
 ) : ComponentServiceClient {
     // The Black Duck library uses GSON to serialize its POJOs. So use GSON, too, because this is the simplest option.
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
-    private val cache = if (overrideFile.isFile) {
-        gson.fromJson(overrideFile.readText(), ResponseCache::class.java)
-    } else {
-        ResponseCache()
-    }
+    private val cache = runCatching {
+        // The URL may be null during development when the resource file was deleted in order to record responses anew.
+        requireNotNull(overrideUrl)
+
+        gson.fromJson(overrideUrl.readText(), ResponseCache::class.java)
+    }.getOrDefault(ResponseCache())
 
     private val delegate = if (serverUrl != null && apiToken != null) {
         ExtendedComponentService.create(serverUrl, apiToken)
@@ -77,6 +79,9 @@ internal class ResponseCachingComponentServiceClient(
         }
 
     fun flush() {
+        // Skip writing the override file if it is a resource embedded into a JAR.
+        val overrideFile = overrideUrl?.takeIf { it.protocol == "file" }?.let { File(it.path) } ?: return
+
         if (delegate != null) {
             val json = gson.toJson(cache).patchServerUrl(serverUrl)
             overrideFile.writeText(json)

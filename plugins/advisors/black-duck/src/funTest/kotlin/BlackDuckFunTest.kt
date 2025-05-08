@@ -32,11 +32,10 @@ import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.identifierToPackage
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class BlackDuckFunTest : WordSpec({
     /**
@@ -49,7 +48,7 @@ class BlackDuckFunTest : WordSpec({
     val serverUrl = Os.env["BLACK_DUCK_SERVER_URL"]
     val apiToken = Os.env["BLACK_DUCK_API_TOKEN"]
     val componentServiceClient = ResponseCachingComponentServiceClient(
-        overrideFile = getAssetFile("recorded-responses.json"),
+        overrideUrl = javaClass.getResource("/recorded-responses.json"),
         serverUrl = serverUrl,
         apiToken = apiToken
     )
@@ -107,8 +106,10 @@ class BlackDuckFunTest : WordSpec({
         }
 
         "return the expected result for the given package(s)" {
-            val expectedResult = getAssetFile("retrieve-package-findings-expected-result.yml")
-                .readValue<Map<Identifier, AdvisorResult>>()
+            val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
+                "/retrieve-package-findings-expected-result.yml"
+            )
+
             val packages = setOf(
                 // Package using CVSS 3.1 vector:
                 "Crate::sys-info:0.7.0",

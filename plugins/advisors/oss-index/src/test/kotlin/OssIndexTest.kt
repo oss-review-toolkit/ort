@@ -51,7 +51,6 @@ class OssIndexTest : WordSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory(TEST_FILES_ROOT)
     )
 
     beforeSpec {
@@ -137,8 +136,6 @@ class OssIndexTest : WordSpec({
 })
 
 private const val ADVISOR_NAME = "OSSIndex"
-
-private const val TEST_FILES_ROOT = "src/test/assets"
 
 private val PKG_HAMCREST = identifierToPackage("Maven:org.hamcrest:hamcrest-core:1.3")
 private val PKG_JUNIT = identifierToPackage("Maven:junit:junit:4.12")

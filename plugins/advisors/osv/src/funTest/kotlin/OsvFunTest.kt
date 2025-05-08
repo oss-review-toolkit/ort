@@ -31,9 +31,8 @@ import java.time.Instant
 import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.identifierToPackage
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class OsvFunTest : WordSpec({
     "retrievePackageFindings()" should {
@@ -64,8 +63,10 @@ class OsvFunTest : WordSpec({
         }
 
         "return the expected result for the given package(s)" {
-            val expectedResult = getAssetFile("retrieve-package-findings-expected-result.json")
-                .readValue<Map<Identifier, AdvisorResult>>()
+            val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
+                "/retrieve-package-findings-expected-result.json"
+            )
+
             val osv = createOsv()
             // The following packages have been chosen because they have only one vulnerability with the oldest possible
             // modified date from the current OSV database, in order to hopefully minimize the flakiness.
