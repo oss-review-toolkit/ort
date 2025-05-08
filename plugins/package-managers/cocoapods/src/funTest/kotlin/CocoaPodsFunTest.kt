@@ -22,9 +22,13 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withInvariantIssues
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.NpmFactory
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -73,6 +77,34 @@ class CocoaPodsFunTest : WordSpec({
             val result = CocoaPodsFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+
+        "determine dependencies from a project which is using React Native" {
+            // The NPM package manager is run first to initialize the node_modules directory, which is required to
+            // parse the Podfile successfully. Note that any Node manager can be used as CocoaPods just requires the
+            // 'node_modules' directory to be present.
+            val npmDefinitionFile = getAssetFile("projects/synthetic/react-native/package.json")
+            val definitionFile = getAssetFile("projects/synthetic/react-native/ios/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/react-native-expected-output.yml")
+
+            val result = analyze(
+                projectDir = npmDefinitionFile.parentFile,
+                allowDynamicVersions = true,
+                packageManagers = listOf(NpmFactory(), CocoaPodsFactory()),
+                packageManagerConfiguration = mapOf(
+                    "CocoaPods" to PackageManagerConfiguration(mustRunAfter = listOf("NPM"))
+                )
+            ).getAnalyzerResult()
+
+            // The NPM-related results are not relevant, because this test checks if the Pod packages can be filled with
+            // information coming from the podspec files present in the 'node_modules' directory.
+            val analyzerResult = result.copy(
+                projects = result.projects.filterTo(mutableSetOf()) { it.id.type == "CocoaPods" },
+                packages = result.packages.filterTo(mutableSetOf()) { it.id.type == "Pod" },
+                issues = emptyMap()
+            )
+
+            analyzerResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

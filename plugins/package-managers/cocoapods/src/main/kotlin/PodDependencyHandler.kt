@@ -22,6 +22,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 import java.io.File
 import java.io.IOException
 
+import kotlin.io.path.createTempFile
+import kotlin.io.path.pathString
+import kotlin.io.path.writeText
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
@@ -36,6 +40,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 
 internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
     private val podspecCache = mutableMapOf<String, Podspec>()
@@ -86,7 +91,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
                     path?.let { File(it) }?.takeIf { it.isFile }
                 }
 
-                podspecFile?.readText()?.parsePodspec() ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
+                podspecFile?.parsePodspecFile() ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
             }
 
             val vcs = podspec.source?.git?.let { url ->
@@ -109,6 +114,43 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
                 vcsProcessed = processPackageVcs(vcs, podspec.homepage)
             )
         }
+    }
+
+    private fun File.parsePodspecFile(): Podspec? {
+        val content = readText()
+
+        return if ("Pod::Spec.new" in content) {
+            convertRubyPodspecFile(content)
+        } else {
+            content
+        }?.parsePodspec()
+    }
+
+    private fun File.convertRubyPodspecFile(content: String): String? {
+        // The podspec is in Ruby format.
+        // Because it may depend on React Native functions, an extra require may have to be injected.
+        val rubyContent = parentFile.searchUpwardsForSubdirectory("node_modules")?.let { nodeModulesParentDir ->
+            val reactNativePath =
+                nodeModulesParentDir.resolve("node_modules/react-native/scripts/react_native_pods.rb")
+            if (reactNativePath.isFile) {
+                "require '$reactNativePath'\n$content"
+            } else {
+                null
+            }
+        } ?: content
+
+        val patchedPodspecFile = createTempFile("ruby_podspec", ".podspec").apply { writeText(rubyContent) }
+
+        return runCatching {
+            // Convert the Ruby podspec file to JSON.
+            CocoaPodsCommand.run(parentFile, "ipc", "spec", patchedPodspecFile.pathString)
+                .requireSuccess()
+                .stdout
+        }.onFailure { e ->
+            logger.warn {
+                "Failed to process the '.podspec' file in Ruby format at '$canonicalPath': ${e.message.orEmpty()}"
+            }
+        }.getOrNull()
     }
 
     private fun getPodspecPath(name: String, version: String): String? {

@@ -1,0 +1,138 @@
+---
+projects:
+- id: "CocoaPods::ios/Podfile:"
+  definition_file_path: "plugins/package-managers/cocoapods/src/funTest/assets/projects/synthetic/react-native/ios/Podfile"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Pod::React:0.75.4"
+      dependencies:
+      - id: "Pod::React-Core:0.75.4"
+        dependencies:
+        - id: "Pod::glog:0.3.5"
+    - id: "Pod::React-Core:0.75.4"
+      dependencies:
+      - id: "Pod::glog:0.3.5"
+    - id: "Pod::fmt:9.1.0"
+    - id: "Pod::glog:0.3.5"
+packages:
+- id: "Pod::React:0.75.4"
+  purl: "pkg:cocoapods/React@0.75.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Pod::React-Core:0.75.4"
+  purl: "pkg:cocoapods/React-Core@0.75.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Pod::fmt:9.1.0"
+  purl: "pkg:cocoapods/fmt@9.1.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "{fmt} is an open-source formatting library for C++. It can be used\
+    \ as a safe and fast alternative to (s)printf and iostreams."
+  homepage_url: "https://github.com/fmtlib/fmt"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/fmtlib/fmt.git"
+    revision: "9.1.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fmtlib/fmt.git"
+    revision: "9.1.0"
+    path: ""
+- id: "Pod::glog:0.3.5"
+  purl: "pkg:cocoapods/glog@0.3.5"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
