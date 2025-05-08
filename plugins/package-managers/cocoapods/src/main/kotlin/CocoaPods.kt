@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
 import java.io.File
 
+import kotlin.io.resolveSibling
+
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
@@ -131,8 +133,26 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
         if (lockfile.isFile) {
             val lockfileData = lockfile.readText().parseLockfile()
 
+            // Resolve paths of external sources relative to the lockfile.
+            val lockfileWithResolvedPaths = lockfileData.copy(
+                externalSources = lockfileData.externalSources.mapValues { entry ->
+                    Lockfile.ExternalSource(
+                        entry.value.path?.let { lockfile.resolveSibling(it).path },
+                        entry.value.podspec?.let { lockfile.resolveSibling(it).path }
+                    )
+                }
+            )
+
             // Convert direct dependencies with version constraints to pods with resolved versions.
-            val dependencies = lockfileData.dependencies.mapNotNull { it.resolvedPod }
+            val dependencies = lockfileData.dependencies.mapNotNull {
+                it.resolvedPod?.run {
+                    lockfileWithResolvedPaths.Pod(
+                        name,
+                        version,
+                        dependencies
+                    )
+                }
+            }
 
             graphBuilder.addDependencies(projectId, SCOPE_NAME, dependencies)
         } else {
