@@ -237,9 +237,9 @@ class FossId internal constructor(
     private suspend fun getProject(projectCode: String): Project? =
         service.getProject(config.user.value, config.apiKey.value, projectCode).run {
             when {
-                error == null && data != null -> {
+                error == null && data?.value != null -> {
                     logger.info { "Project '$projectCode' exists." }
-                    data
+                    data?.value
                 }
 
                 error == "Project does not exist" && status == 0 -> {
@@ -747,7 +747,7 @@ class FossId internal constructor(
             val response = service.checkDownloadStatus(config.user.value, config.apiKey.value, scanCode)
                 .checkResponse("check download status")
 
-            when (response.data) {
+            when (response.data?.value) {
                 DownloadStatus.FINISHED -> return@wait true
 
                 DownloadStatus.FAILED -> error("Could not download scan: ${response.message}.")
@@ -888,7 +888,7 @@ class FossId internal constructor(
                                     snippet.id
                                 ).checkResponse("list snippets matched lines")
 
-                                val lines = checkNotNull(matchedLinesResponse.data) {
+                                val lines = checkNotNull(matchedLinesResponse.data?.value) {
                                     "Matched lines could not be listed. Response was " +
                                         "${matchedLinesResponse.message}."
                                 }
