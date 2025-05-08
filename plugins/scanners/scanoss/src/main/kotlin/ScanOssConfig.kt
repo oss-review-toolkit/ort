@@ -49,12 +49,6 @@ data class ScanOssConfig(
     val maxVersion: String?,
 
     /**
-     * Whether to read scan results from the storage.
-     */
-    @OrtPluginOption(defaultValue = "true")
-    val readFromStorage: Boolean,
-
-    /**
      * Whether to write scan results to the storage.
      */
     @OrtPluginOption(defaultValue = "true")
