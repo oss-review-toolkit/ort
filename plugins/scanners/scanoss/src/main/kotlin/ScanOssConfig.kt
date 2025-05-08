@@ -34,21 +34,6 @@ data class ScanOssConfig(
     val apiKey: Secret,
 
     /**
-     * A regular expression to match the scanner name when looking up scan results in the storage.
-     */
-    val regScannerName: String?,
-
-    /**
-     * The minimum version of stored scan results to use.
-     */
-    val minVersion: String?,
-
-    /**
-     * The maximum version of stored scan results to use.
-     */
-    val maxVersion: String?,
-
-    /**
      * Whether to write scan results to the storage.
      */
     @OrtPluginOption(defaultValue = "true")

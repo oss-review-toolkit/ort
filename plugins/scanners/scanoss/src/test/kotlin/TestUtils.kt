@@ -42,19 +42,11 @@ internal fun createScanOss(config: ScanOssConfig): ScanOss = ScanOss(config = co
 internal fun createScanOssConfig(
     apiUrl: String = ScanApi.DEFAULT_BASE_URL,
     apiKey: Secret = Secret(""),
-    regScannerName: String? = null,
-    minVersion: String? = null,
-    maxVersion: String? = null,
-    readFromStorage: Boolean = true,
     writeToStorage: Boolean = true
 ): ScanOssConfig =
     ScanOssConfig(
         apiUrl = apiUrl,
         apiKey = apiKey,
-        regScannerName = regScannerName,
-        minVersion = minVersion,
-        maxVersion = maxVersion,
-        readFromStorage = readFromStorage,
         writeToStorage = writeToStorage
     )
 
