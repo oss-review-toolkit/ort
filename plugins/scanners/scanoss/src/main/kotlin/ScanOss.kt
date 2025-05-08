@@ -69,7 +69,7 @@ class ScanOss(
 
     override val matcher: ScannerMatcher? = null
 
-    override val readFromStorage = config.readFromStorage
+    override val readFromStorage = false
 
     override val writeToStorage = config.writeToStorage
 
