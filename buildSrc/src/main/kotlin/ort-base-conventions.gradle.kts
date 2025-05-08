@@ -58,7 +58,7 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://sig-repo.synopsys.com/bds-bdio-release")
+            maven("https://repo.blackduck.com/bds-bdio-release")
         }
 
         filter {
