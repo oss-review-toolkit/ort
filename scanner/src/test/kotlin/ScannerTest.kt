@@ -30,9 +30,12 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.verify
 
@@ -62,13 +65,16 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.test.createDefault
 
 @Suppress("LargeClass")
 class ScannerTest : WordSpec({
@@ -904,6 +910,74 @@ class ScannerTest : WordSpec({
         }
     }
 
+    "scanning with a binary license file" should {
+        "exclude basic binary license file" {
+            val binaryLicenseFile = File("src/test/resources/archiver-tests/BIN-LICENSE")
+
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+
+            mockkStatic(File::safeDeleteRecursively)
+            every { any<File>().safeDeleteRecursively(any()) } just Runs
+
+            val provenanceDownloader = mockk<ProvenanceDownloader> {
+                every { downloadRecursively(any()) } returns binaryLicenseFile
+            }
+
+            val scannerWrapper = FakePackageScannerWrapper()
+
+            val writer = spyk(FakeProvenanceBasedStorageWriter())
+
+            val archiver = spyk(FileArchiver.createDefault())
+
+            val scanner = createScanner(
+                provenanceDownloader = provenanceDownloader,
+                storageWriters = listOf(writer),
+                packageScannerWrappers = listOf(scannerWrapper),
+                archiver = archiver
+            )
+
+            scanner.scan(setOf(pkgWithArtifact), createContext())
+
+            verify(exactly = 0) {
+                archiver.archive(any(), any())
+            }
+        }
+
+        "include utf8 file with japanese chars" {
+            val binaryLicenseFile = File("src/test/resources/archiver-tests/UTF8-LICENSE")
+
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+
+            val scannerWrapper = FakePackageScannerWrapper()
+
+            val writer = spyk(FakeProvenanceBasedStorageWriter())
+
+            val archiver = spyk(FileArchiver.createDefault())
+
+            val provenanceDownloader = mockk<ProvenanceDownloader> {
+                every { downloadRecursively(any()) } returns binaryLicenseFile
+            }
+
+            val scanner = createScanner(
+                provenanceDownloader = provenanceDownloader,
+                storageWriters = listOf(writer),
+                packageScannerWrappers = listOf(scannerWrapper),
+                archiver = archiver
+            )
+
+            mockkStatic(File::safeDeleteRecursively)
+            every { any<File>().safeDeleteRecursively(any()) } just Runs
+
+            every { archiver.archive(any(), any()) } just Runs
+
+            scanner.scan(setOf(pkgWithArtifact), createContext())
+
+            verify(exactly = 1) {
+                archiver.archive(any(), any())
+            }
+        }
+    }
+
     // TODO: Add tests for combinations of different types of storage readers and writers.
     // TODO: Add tests for using multiple types of scanner wrappers at once.
     // TODO: Add tests for a complex example with multiple types of scanner wrappers and storages.
@@ -1044,6 +1118,7 @@ private class FakeProvenanceBasedStorageWriter : ProvenanceBasedScanStorageWrite
 private fun createContext(labels: Map<String, String> = emptyMap(), type: PackageType = PackageType.PACKAGE) =
     ScanContext(labels, type)
 
+@Suppress("LongParameterList")
 private fun createScanner(
     provenanceDownloader: ProvenanceDownloader = FakeProvenanceDownloader(),
     storageReaders: List<ScanStorageReader> = emptyList(),
@@ -1051,9 +1126,10 @@ private fun createScanner(
     packageProvenanceResolver: PackageProvenanceResolver = FakePackageProvenanceResolver(),
     nestedProvenanceResolver: NestedProvenanceResolver = FakeNestedProvenanceResolver(),
     packageScannerWrappers: List<ScannerWrapper> = emptyList(),
-    projectScannerWrappers: List<ScannerWrapper> = emptyList()
+    projectScannerWrappers: List<ScannerWrapper> = emptyList(),
+    archiver: FileArchiver? = null
 ) = Scanner(
-    ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false)),
+    ScannerConfiguration(archive = FileArchiverConfiguration(enabled = archiver != null)),
     DownloaderConfiguration(),
     provenanceDownloader,
     storageReaders,
@@ -1063,7 +1139,8 @@ private fun createScanner(
     mapOf(
         PackageType.PROJECT to projectScannerWrappers,
         PackageType.PACKAGE to packageScannerWrappers
-    )
+    ),
+    archiver = archiver
 )
 
 private fun Package.Companion.new(type: String = "", group: String = "", name: String = "", version: String = "") =

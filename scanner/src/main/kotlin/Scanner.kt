@@ -30,6 +30,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
+import org.apache.tika.Tika
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.FileList
@@ -103,6 +104,8 @@ class Scanner(
         storage = fileListStorage,
         provenanceDownloader = provenanceDownloader
     )
+
+    private val tika = Tika()
 
     suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean, labels: Map<String, String>): OrtResult {
         val startTime = Instant.now()
@@ -727,6 +730,7 @@ class Scanner(
 
         logger.info { "Creating file archives for ${provenancesWithMissingArchives.size} package(s)." }
 
+        var successfulArchives = 0
         val duration = measureTime {
             provenancesWithMissingArchives.forEach { (pkg, nestedProvenance) ->
                 var dir: File? = null
@@ -734,7 +738,12 @@ class Scanner(
                 // runCatching has a bug with smart-cast, see https://youtrack.jetbrains.com/issue/KT-62938.
                 try {
                     dir = provenanceDownloader.downloadRecursively(nestedProvenance)
-                    archiver.archive(dir, nestedProvenance.root)
+                    if (!dir.isValidTextFile()) {
+                        logger.warn { "$dir cannot be detected as text-based. The file will not be archived." }
+                    } else {
+                        archiver.archive(dir, nestedProvenance.root)
+                        successfulArchives++
+                    }
                 } catch (e: DownloadException) {
                     controller.addIssue(
                         pkg.id,
@@ -750,7 +759,18 @@ class Scanner(
             }
         }
 
-        logger.info { "Created file archives for ${provenancesWithMissingArchives.size} package(s) in $duration." }
+        logger.info { "Created file archives for $successfulArchives package(s) in $duration." }
+    }
+
+    internal fun File.isValidTextFile(): Boolean {
+        val detected = tika.detect(this)
+        val invalidTypes = listOf(
+            "application/octet-stream",
+            "application/x-executable",
+            "application/x-sharedlib",
+            "application/x-object"
+        )
+        return invalidTypes.none { detected.startsWith(it, ignoreCase = true) }
     }
 }
 
