@@ -41,7 +41,7 @@ class JiraClientTest : WordSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory("src/test/assets/clientTest")
+            .usingFilesUnderClasspath("clientTest")
     )
 
     lateinit var client: JiraRestClient

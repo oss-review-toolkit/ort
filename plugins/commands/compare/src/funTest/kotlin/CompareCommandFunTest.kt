@@ -23,18 +23,24 @@ import com.github.ajalt.clikt.testing.test
 
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.utils.common.extractResource
 
 class CompareCommandFunTest : WordSpec({
     "The text diff method" should {
         "ignore time and environment differences in an analyzer result" {
+            val a = extractResource("/semver4j-analyzer-result-linux.yml", tempfile(suffix = ".yml"))
+            val b = extractResource("/semver4j-analyzer-result-windows.yml", tempfile(suffix = ".yml"))
+
             val result = CompareCommand().test(
                 arrayOf(
                     "--method=TEXT_DIFF",
                     "--ignore-time",
                     "--ignore-environment",
-                    "src/funTest/assets/semver4j-analyzer-result-linux.yml",
-                    "src/funTest/assets/semver4j-analyzer-result-windows.yml"
+                    a.path,
+                    b.path
                 )
             )
 

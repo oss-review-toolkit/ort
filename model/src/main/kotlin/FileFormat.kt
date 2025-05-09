@@ -102,11 +102,12 @@ inline fun <reified T : Any> File.readValue(): T =
  */
 inline fun <reified T : Any> File.readValueOrNull(): T? {
     val mapper = mapper()
-    val parser = mapper.factory.createParser(this)
 
-    val values = mapper.readValues<T>(parser).readAll().also {
-        if (it.isEmpty()) return null
-        if (it.size > 1) throw IOException("Multiple top-level objects found in file '$this'.")
+    val values = mapper.factory.createParser(this).use { parser ->
+        mapper.readValues<T>(parser).readAll().also {
+            if (it.isEmpty()) return null
+            if (it.size > 1) throw IOException("Multiple top-level objects found in file '$this'.")
+        }
     }
 
     return values.first()

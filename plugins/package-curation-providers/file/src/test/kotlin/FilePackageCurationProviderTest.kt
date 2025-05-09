@@ -21,21 +21,30 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.file
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.endWith
+import io.kotest.matchers.string.startWith
 
-import java.io.File
+import java.io.IOException
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.utils.common.extractResource
 
 class FilePackageCurationProviderTest : StringSpec() {
-    private val curationsDir = File("src/test/assets/package-curations-dir")
-    private val curationsFile = File("src/test/assets/package-curations.yml")
+    private val curationsDir = tempdir().resolve("package-curations-dir").also {
+        extractResource("/package-curations-dir/curations-1.yml", it.resolve("1.yml"))
+        extractResource("/package-curations-dir/nested/curations-2.yml", it.resolve("nested/2.yml"))
+    }
+
+    private val curationsFile = extractResource("/package-curations.yml", tempfile(suffix = ".yml"))
 
     init {
         "Provider can read YAML file" {
@@ -109,19 +118,19 @@ class FilePackageCurationProviderTest : StringSpec() {
         }
 
         "Provider throws an exception if the curations file is not de-serializable" {
-            val curationsFile = File("src/test/assets/package-curations-not-deserializable.yml")
+            val curationsFile = extractResource("/package-curations-not-deserializable.yml", tempfile(suffix = ".yml"))
 
-            shouldThrow<Exception> {
+            shouldThrow<IOException> {
                 FilePackageCurationProvider(curationsFile)
-            }
+            }.message should startWith("Failed parsing package curation(s)")
         }
 
         "Provider throws an exception if the curations file does not exist" {
-            val curationsFile = File("src/test/assets/package-curations-not-existing.yml")
+            val curationsFile = tempdir().resolve("package-curations-not-existing.yml")
 
-            shouldThrow<Exception> {
+            shouldThrow<IllegalArgumentException> {
                 FilePackageCurationProvider(curationsFile)
-            }
+            }.message should endWith("does not exist.")
         }
     }
 }
