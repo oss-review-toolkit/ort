@@ -25,13 +25,14 @@ import javax.sql.DataSource
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.insertIgnoreAndGetId
 import org.jetbrains.exposed.sql.selectAll
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -132,7 +133,7 @@ class ProvenanceBasedPostgresStorage(
     // TODO: Override read(provenance, scannerMatcher) to make it more efficient by matching the scanner details in the
     //       query.
 
-    override fun write(scanResult: ScanResult) {
+    override fun write(scanResult: ScanResult): Boolean {
         val provenance = scanResult.provenance
 
         requireEmptyVcsPath(provenance)
@@ -141,9 +142,11 @@ class ProvenanceBasedPostgresStorage(
             throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
         }
 
+        var rowId: EntityID<Int>? = null
+
         try {
             database.transaction {
-                table.insert {
+                rowId = table.insertIgnoreAndGetId {
                     when (provenance) {
                         is ArtifactProvenance -> {
                             it[artifactUrl] = provenance.sourceArtifact.url
@@ -170,6 +173,15 @@ class ProvenanceBasedPostgresStorage(
 
             throw ScanStorageException(e)
         }
+
+        if (rowId == null) {
+            logger.debug {
+                "Not writing scan result because storage already contains a result for ${scanResult.provenance} and " +
+                    "${scanResult.scanner}."
+            }
+        }
+
+        return rowId != null
     }
 }
 

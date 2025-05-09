@@ -75,7 +75,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         }
     }
 
-    override fun write(scanResult: ScanResult) {
+    override fun write(scanResult: ScanResult): Boolean {
         val provenance = scanResult.provenance
 
         requireEmptyVcsPath(provenance)
@@ -87,9 +87,12 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         val existingScanResults = read(provenance)
 
         if (existingScanResults.any { it.matches(scanResult) }) {
-            throw ScanStorageException(
-                "Storage already contains a result for ${scanResult.provenance} and ${scanResult.scanner}."
-            )
+            logger.debug {
+                "Not writing scan result because storage already contains a result for ${scanResult.provenance} and " +
+                    "${scanResult.scanner}."
+            }
+
+            return false
         }
 
         val scanResults = existingScanResults + scanResult
@@ -101,6 +104,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         runCatching {
             backend.write(path, input)
             logger.debug { "Stored scan result for '$provenance' at path '$path'." }
+            return true
         }.onFailure {
             when (it) {
                 is IllegalArgumentException, is IOException -> {
@@ -114,6 +118,8 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                 else -> throw it
             }
         }
+
+        return false
     }
 }
 

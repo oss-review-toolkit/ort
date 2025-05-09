@@ -97,15 +97,15 @@ interface ProvenanceBasedScanStorageWriter : ScanStorageWriter {
     /**
      * Write the provided [scanResult] to the storage. The [scanResult] must have a [KnownProvenance], and if it has a
      * [RepositoryProvenance] the VCS path must be empty, because only scan results for complete repositories are
-     * stored.
+     * stored. If the storage already contains a result for the same storage key, the write operation is skipped
+     * and false is returned.
      *
      * A [ScanStorageException] is thrown if:
      * * An error occurs while writing to the storage.
-     * * The storage already contains a result for the same provenance and scanner.
      * * The provenance of the [scanResult] is [unknown][UnknownProvenance].
      * * The provenance of the [scanResult] is a [RepositoryProvenance] with a non-empty VCS path.
      */
-    fun write(scanResult: ScanResult)
+    fun write(scanResult: ScanResult): Boolean
 }
 
 /**
