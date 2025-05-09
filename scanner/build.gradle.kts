@@ -46,6 +46,8 @@ dependencies {
         }
     }
 
+    implementation(libs.tika)
+
     funTestApi(testFixtures(projects.scanner))
 
     funTestImplementation(platform(projects.plugins.scanners))
