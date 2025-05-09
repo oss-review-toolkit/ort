@@ -87,9 +87,11 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         val existingScanResults = read(provenance)
 
         if (existingScanResults.any { it.matches(scanResult) }) {
-            throw ScanStorageException(
+            logger.debug {
                 "Storage already contains a result for ${scanResult.provenance} and ${scanResult.scanner}."
-            )
+            }
+
+            return
         }
 
         val scanResults = existingScanResults + scanResult
