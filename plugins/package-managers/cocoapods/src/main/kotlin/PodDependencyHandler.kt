@@ -65,13 +65,13 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
     override fun createPackage(dependency: Lockfile.Pod, issues: MutableCollection<Issue>): Package {
         val id = identifierFor(dependency)
 
-        return if (dependency.checkoutOption != null) {
+        if (dependency.checkoutOption != null) {
             val (url, revision) = with(dependency.checkoutOption) {
                 val revision = commit ?: tag ?: branch
                 git.orEmpty() to revision.orEmpty()
             }
 
-            Package(
+            return Package(
                 id = id,
                 declaredLicenses = emptySet(),
                 description = "",
@@ -80,40 +80,40 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo(VcsType.GIT, url, revision)
             )
-        } else {
-            val basePodName = dependency.name.substringBefore('/')
-            val podspec = podspecCache.getOrPut(basePodName) {
-                // Lazily only call the pod CLI if the podspec is not available from the external source.
-                val podspecFile = sequence {
-                    yield(dependency.externalSource?.podspec)
-                    yield(getPodspecPath(basePodName, dependency.version))
-                }.firstNotNullOfOrNull { path ->
-                    path?.let { File(it) }?.takeIf { it.isFile }
-                }
+        }
 
-                podspecFile?.parsePodspecFile() ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
+        val basePodName = dependency.name.substringBefore('/')
+        val podspec = podspecCache.getOrPut(basePodName) {
+            // Lazily only call the pod CLI if the podspec is not available from the external source.
+            val podspecFile = sequence {
+                yield(dependency.externalSource?.podspec)
+                yield(getPodspecPath(basePodName, dependency.version))
+            }.firstNotNullOfOrNull { path ->
+                path?.let { File(it) }?.takeIf { it.isFile }
             }
 
-            val vcs = podspec.source?.git?.let { url ->
-                VcsInfo(
-                    type = VcsType.GIT,
-                    url = url,
-                    revision = podspec.source.tag.orEmpty()
-                )
-            }.orEmpty()
-
-            return Package(
-                id = id,
-                authors = emptySet(),
-                declaredLicenses = setOfNotNull(podspec.license.takeUnless { it.isEmpty() }),
-                description = podspec.summary,
-                homepageUrl = podspec.homepage,
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = podspec.source?.http?.let { RemoteArtifact(it, Hash.NONE) }.orEmpty(),
-                vcs = vcs,
-                vcsProcessed = processPackageVcs(vcs, podspec.homepage)
-            )
+            podspecFile?.parsePodspecFile() ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
         }
+
+        val vcs = podspec.source?.git?.let { url ->
+            VcsInfo(
+                type = VcsType.GIT,
+                url = url,
+                revision = podspec.source.tag.orEmpty()
+            )
+        }.orEmpty()
+
+        return Package(
+            id = id,
+            authors = emptySet(),
+            declaredLicenses = setOfNotNull(podspec.license.takeUnless { it.isEmpty() }),
+            description = podspec.summary,
+            homepageUrl = podspec.homepage,
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = podspec.source?.http?.let { RemoteArtifact(it, Hash.NONE) }.orEmpty(),
+            vcs = vcs,
+            vcsProcessed = processPackageVcs(vcs, podspec.homepage)
+        )
     }
 
     private fun File.parsePodspecFile(): Podspec? {
