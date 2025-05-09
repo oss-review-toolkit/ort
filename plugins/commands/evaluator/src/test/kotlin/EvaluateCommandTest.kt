@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class EvaluatorCommandTest : StringSpec({
+class EvaluateCommandTest : StringSpec({
     "If no rules are specified / exist at all, the status code should be 1" {
         val args = "--check-syntax".split(' ')
 
