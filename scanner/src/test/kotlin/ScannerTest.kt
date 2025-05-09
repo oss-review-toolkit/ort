@@ -196,8 +196,9 @@ class ScannerTest : WordSpec({
 
             val storedScanResults = mutableListOf<ScanResult>()
             val writer = object : ProvenanceBasedScanStorageWriter {
-                override fun write(scanResult: ScanResult) {
+                override fun write(scanResult: ScanResult): Boolean {
                     storedScanResults.add(scanResult)
+                    return true
                 }
             }
 
@@ -1038,7 +1039,7 @@ private class FakePackageBasedStorageWriter : PackageBasedScanStorageWriter {
 }
 
 private class FakeProvenanceBasedStorageWriter : ProvenanceBasedScanStorageWriter {
-    override fun write(scanResult: ScanResult) = Unit
+    override fun write(scanResult: ScanResult) = true
 }
 
 private fun createContext(labels: Map<String, String> = emptyMap(), type: PackageType = PackageType.PACKAGE) =

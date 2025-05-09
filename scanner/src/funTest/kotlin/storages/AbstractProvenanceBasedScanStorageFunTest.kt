@@ -25,6 +25,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
@@ -61,22 +62,25 @@ abstract class AbstractProvenanceBasedScanStorageFunTest(vararg listeners: TestL
             "succeed for a valid scan result" {
                 val scanResult = createScanResult()
 
-                storage.write(scanResult)
+                val writeResult = storage.write(scanResult)
                 val readResult = storage.read(scanResult.provenance as KnownProvenance)
 
+                writeResult shouldBe true
                 readResult should containExactly(scanResult)
+            }
+
+            "return false if a result for the same provenance and scanner is already stored" {
+                val scanResult = createScanResult()
+                storage.write(scanResult)
+
+                val writeResult = storage.write(scanResult)
+
+                writeResult shouldBe false
             }
 
             "fail if provenance information is missing" {
                 val scanResult = createScanResult(provenance = UnknownProvenance)
 
-                shouldThrow<ScanStorageException> { storage.write(scanResult) }
-            }
-
-            "fail if a result for the same provenance and scanner is already stored" {
-                val scanResult = createScanResult()
-
-                storage.write(scanResult)
                 shouldThrow<ScanStorageException> { storage.write(scanResult) }
             }
 
@@ -97,9 +101,11 @@ abstract class AbstractProvenanceBasedScanStorageFunTest(vararg listeners: TestL
                         vcsInfo = VcsInfo.valid().copy(revision = "another")
                     )
                 )
-
                 storage.write(scanResult1)
-                shouldThrow<ScanStorageException> { storage.write(scanResult2) }
+
+                val writeResult = storage.write(scanResult2)
+
+                writeResult shouldBe false
             }
         }
 
