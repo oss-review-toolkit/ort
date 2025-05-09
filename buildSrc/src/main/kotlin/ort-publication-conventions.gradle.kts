@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     // Apply third-party plugins.
     id("com.vanniktech.maven.publish")
@@ -28,7 +30,7 @@ fun getGroupId(parent: Project?): String =
 group = "org${getGroupId(parent)}"
 
 mavenPublishing {
-    publishToMavenCentral()
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
     pom {
         name = project.name
