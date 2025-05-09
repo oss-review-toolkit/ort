@@ -31,7 +31,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.insertIgnoreAndGetId
 import org.jetbrains.exposed.sql.selectAll
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -143,7 +143,7 @@ class ProvenanceBasedPostgresStorage(
 
         try {
             database.transaction {
-                table.insert {
+                val id = table.insertIgnoreAndGetId {
                     when (provenance) {
                         is ArtifactProvenance -> {
                             it[artifactUrl] = provenance.sourceArtifact.url
@@ -161,6 +161,12 @@ class ProvenanceBasedPostgresStorage(
                     it[scannerVersion] = scanResult.scanner.version
                     it[scannerConfiguration] = scanResult.scanner.configuration
                     it[scanSummary] = scanResult.summary
+                }
+
+                if (id == null) {
+                    logger.debug {
+                        "Storage already contains a result for ${scanResult.provenance} and ${scanResult.scanner}."
+                    }
                 }
             }
         } catch (e: SQLException) {
