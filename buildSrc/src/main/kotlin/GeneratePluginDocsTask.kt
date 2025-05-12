@@ -99,9 +99,8 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 // Write example configuration.
                 appendLine("### Example")
                 appendLine()
-                appendLine("```json")
-                appendLine("{")
-                appendLine("  \"${descriptor["id"]}\": {")
+                appendLine("```yaml")
+                appendLine("${descriptor["id"]}:")
 
                 fun appendOptions(options: List<Map<*, *>>) {
                     options.forEachIndexed { index, option ->
@@ -110,31 +109,24 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                         val isStringValue =
                             (type == "SECRET" || type == "STRING" || type == "STRING_LIST") && defaultValue != null
 
-                        append("      \"${option["name"]}\": ")
+                        append("    ${option["name"]}: ")
                         if (isStringValue) append("\"")
                         append(defaultValue)
                         if (isStringValue) append("\"")
-                        if (index < options.size - 1) append(",")
                         appendLine()
                     }
                 }
 
                 if (options.isNotEmpty()) {
-                    appendLine("    \"options\": {")
+                    appendLine("  options:")
                     appendOptions(options)
-                    append("    }")
-                    if (secrets.isNotEmpty()) append(",")
-                    appendLine()
                 }
 
                 if (secrets.isNotEmpty()) {
-                    appendLine("    \"secrets\": {")
+                    appendLine("  secrets:")
                     appendOptions(secrets)
-                    appendLine("    }")
                 }
 
-                appendLine("  }")
-                appendLine("}")
                 appendLine("```")
                 appendLine()
                 appendLine("### Options")
