@@ -23,6 +23,7 @@ import java.io.File
 import java.net.Authenticator
 import java.net.PasswordAuthentication
 import java.net.URI
+import java.net.URL
 
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -120,10 +121,10 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 }
 
 /**
- * Request a [PasswordAuthentication] object for the given [host], [port], and [scheme]. Install the [OrtAuthenticator]
- * and the [OrtProxySelector] beforehand to ensure they are active.
+ * Request a [PasswordAuthentication] object for the given [host], [port], [scheme], and optional [url]. Install the
+ * [OrtAuthenticator] and the [OrtProxySelector] beforehand to ensure they are active.
  */
-fun requestPasswordAuthentication(host: String, port: Int, scheme: String): PasswordAuthentication? {
+fun requestPasswordAuthentication(host: String, port: Int, scheme: String, url: URL? = null): PasswordAuthentication? {
     OrtAuthenticator.install()
     OrtProxySelector.install()
 
@@ -133,7 +134,9 @@ fun requestPasswordAuthentication(host: String, port: Int, scheme: String): Pass
         /* port = */ port,
         /* protocol = */ scheme,
         /* prompt = */ null,
-        /* scheme = */ null
+        /* scheme = */ null,
+        /* url = */ url,
+        /* reqType = */ Authenticator.RequestorType.SERVER
     )
 }
 
@@ -142,7 +145,7 @@ fun requestPasswordAuthentication(host: String, port: Int, scheme: String): Pass
  * [OrtProxySelector] beforehand to ensure they are active.
  */
 fun requestPasswordAuthentication(uri: URI): PasswordAuthentication? =
-    requestPasswordAuthentication(uri.host, uri.port, uri.scheme)
+    requestPasswordAuthentication(uri.host, uri.port, uri.scheme, uri.toURL())
 
 /**
  * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.

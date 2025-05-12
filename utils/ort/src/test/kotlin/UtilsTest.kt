@@ -444,10 +444,49 @@ class UtilsTest : WordSpec({
             val passwordAuth = mockk<PasswordAuthentication>()
 
             every {
-                Authenticator.requestPasswordAuthentication(host, null, port, scheme, null, null)
+                Authenticator.requestPasswordAuthentication(
+                    host,
+                    null,
+                    port,
+                    scheme,
+                    null,
+                    null,
+                    null,
+                    Authenticator.RequestorType.SERVER
+                )
             } returns passwordAuth
 
             requestPasswordAuthentication(host, port, scheme) shouldBe passwordAuth
+
+            verify {
+                OrtAuthenticator.install()
+                OrtProxySelector.install()
+            }
+        }
+
+        "return a correct authentication object for a URL" {
+            val url = URI.create("https://www.example.org:442/auth/test")
+
+            mockkObject(OrtAuthenticator)
+            mockkObject(OrtProxySelector)
+            mockkStatic(Authenticator::class)
+
+            val passwordAuth = mockk<PasswordAuthentication>()
+
+            every {
+                Authenticator.requestPasswordAuthentication(
+                    "www.example.org",
+                    null,
+                    442,
+                    "https",
+                    null,
+                    null,
+                    url.toURL(),
+                    Authenticator.RequestorType.SERVER
+                )
+            } returns passwordAuth
+
+            requestPasswordAuthentication(url) shouldBe passwordAuth
 
             verify {
                 OrtAuthenticator.install()
