@@ -241,6 +241,7 @@ class NodePackageManagerDetectionTest : WordSpec({
             val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(YARN)
 
             filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath } should containExactlyInAnyOrder(
+                "yarn/alias-use-for-transitive-deps/package.json",
                 "yarn/babel/package.json",
                 "yarn/invalid-package-json/package.json",
                 "yarn/project-with-lockfile/package.json",

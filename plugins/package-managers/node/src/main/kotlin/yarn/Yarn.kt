@@ -208,23 +208,46 @@ private fun getNonDeduplicatedModuleInfosForId(moduleInfos: Collection<YarnListN
     return result
 }
 
-internal val YarnListNode.moduleName: String get() = name.substringBeforeLast("@")
+private data class ModuleReference(
+    val alias: String?,
+    val name: String,
+    val version: String
+)
 
-internal val YarnListNode.moduleVersion: String get() = name.substringAfterLast("@")
+private val YarnListNode.moduleReference: ModuleReference get() {
+    val parts = name.split(Regex("@npm:"))
+    val (alias, nameAndVersion) = if (parts.size == 2) {
+        parts[0] to parts[1]
+    } else {
+        null to parts[0]
+    }
+
+    return ModuleReference(
+        alias = alias,
+        name = nameAndVersion.substringBeforeLast("@"),
+        version = nameAndVersion.substringAfterLast("@")
+    )
+}
+
+internal val YarnListNode.moduleAlias: String get() = moduleReference.alias ?: moduleName
+
+internal val YarnListNode.moduleName: String get() = moduleReference.name
+
+internal val YarnListNode.moduleVersion: String get() = moduleReference.version
 
 private fun List<YarnListNode>.resolveVersions(): List<YarnListNode> {
-    fun YarnListNode.resolveVersions(versionForName: Map<String, String> = emptyMap()): YarnListNode {
-        if (children == null) return copy(name = "$moduleName@${versionForName.getValue(moduleName)}")
+    fun YarnListNode.resolveVersions(versionForAlias: Map<String, String> = emptyMap()): YarnListNode {
+        if (children == null) return copy(name = "$moduleName@${versionForAlias.getValue(moduleAlias)}")
 
-        val childrenVersionForName = buildMap {
-            putAll(versionForName)
+        val childrenVersionForAlias = buildMap {
+            putAll(versionForAlias)
 
             children.forEach { node ->
-                if (node.children != null) put(node.moduleName, node.moduleVersion)
+                if (node.children != null) put(node.moduleAlias, node.moduleVersion)
             }
         }
 
-        return copy(children = children.map { it.resolveVersions(childrenVersionForName) })
+        return copy(children = children.map { it.resolveVersions(childrenVersionForAlias) })
     }
 
     return YarnListNode("", this).resolveVersions().children.orEmpty()

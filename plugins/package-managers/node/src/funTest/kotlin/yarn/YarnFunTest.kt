@@ -81,4 +81,15 @@ class YarnFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Resolve dependencies for a project which has dependency alias use for transitive dependencies" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn/alias-use-for-transitive-deps/package.json")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/yarn/alias-use-for-transitive-deps-expected-output.yml"
+        )
+
+        val result = YarnFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
