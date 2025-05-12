@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.scanner.ScanContext
 
-private val TEST_FILE_TO_SCAN = File("src/test/assets/filesToScan/ScannerFactory.kt")
+private val TEST_FILE_TO_SCAN = File("src/test/assets/filesToScan/random-data-05-07-04.kt")
 
 /**
  * A test for scanning a single file with the [ScanOss] scanner.
@@ -74,7 +74,7 @@ class ScanOssScannerFileTest : StringSpec({
                 LicenseFinding(
                     license = "Apache-2.0",
                     location = TextLocation(
-                        path = "scanner/src/main/kotlin/ScannerFactory.kt",
+                        path = "scanner/src/main/kotlin/random-data-05-07-04.kt",
                         line = TextLocation.UNKNOWN_LINE
                     ),
                     score = 100.0f

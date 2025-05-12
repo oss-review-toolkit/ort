@@ -89,7 +89,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
                 LicenseFinding(
                     license = "Apache-2.0",
                     location = TextLocation(
-                        path = "scanner/src/main/kotlin/ScannerFactory.kt",
+                        path = "scanner/src/main/kotlin/random-data-05-07-04.kt",
                         line = TextLocation.UNKNOWN_LINE
                     ),
                     score = 100.0f
@@ -98,7 +98,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
 
             snippetFindings should containExactly(
                 SnippetFinding(
-                    TextLocation("utils/src/main/kotlin/ArchiveUtils.kt", 1, 240),
+                    TextLocation("utils/src/main/kotlin/random-data-05-06-11.kt", 1, 240),
                     setOf(
                         Snippet(
                             99.0f,
@@ -130,7 +130,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
 
         // Verify our test file exists. This file should be included in the scan since it does not match the exclusion
         // pattern (it is a .go file, not a .kt file).
-        val includedFile = File(EXCLUSION_TEST_DIRECTORY, "server.go")
+        val includedFile = File(EXCLUSION_TEST_DIRECTORY, "random-data-10-41-29.go")
         if (!includedFile.isFile) {
             fail("The file ${includedFile.absolutePath} does not exist - test environment may not be properly set up")
         }
@@ -168,11 +168,11 @@ class ScanOssScannerDirectoryTest : StringSpec({
 
         // Verify that .kt files were excluded from the scan.
         // These assertions check that Kotlin files are not present in the API requests.
-        includedFiles.any { it.contains("ArchiveUtils.kt") } shouldBe false
-        includedFiles.any { it.contains("ScannerFactory.kt") } shouldBe false
+        includedFiles.any { it.contains("random-data-05-04-43.kt") } shouldBe false
+        includedFiles.any { it.contains("random-data-05-05-29.kt") } shouldBe false
 
         // Verify that non-.kt files were included in the scan.
         // This assertion checks that our Go file was sent to the API.
-        includedFiles.any { it.contains("server.go") } shouldBe true
+        includedFiles.any { it.contains("random-data-10-41-29.go") } shouldBe true
     }
 })
