@@ -47,6 +47,10 @@ import org.apache.logging.log4j.kotlin.CoroutineThreadContext
 import org.apache.logging.log4j.kotlin.withLoggingContext
 
 class UtilsTest : WordSpec({
+    afterEach {
+        unmockkAll()
+    }
+
     "filterVersionNames" should {
         "return an empty list for a blank version" {
             val names = listOf("dummy")
@@ -437,21 +441,17 @@ class UtilsTest : WordSpec({
             mockkObject(OrtProxySelector)
             mockkStatic(Authenticator::class)
 
-            try {
-                val passwordAuth = mockk<PasswordAuthentication>()
+            val passwordAuth = mockk<PasswordAuthentication>()
 
-                every {
-                    Authenticator.requestPasswordAuthentication(host, null, port, scheme, null, null)
-                } returns passwordAuth
+            every {
+                Authenticator.requestPasswordAuthentication(host, null, port, scheme, null, null)
+            } returns passwordAuth
 
-                requestPasswordAuthentication(host, port, scheme) shouldBe passwordAuth
+            requestPasswordAuthentication(host, port, scheme) shouldBe passwordAuth
 
-                verify {
-                    OrtAuthenticator.install()
-                    OrtProxySelector.install()
-                }
-            } finally {
-                unmockkAll()
+            verify {
+                OrtAuthenticator.install()
+                OrtProxySelector.install()
             }
         }
 
