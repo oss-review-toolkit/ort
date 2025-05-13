@@ -104,6 +104,12 @@ detekt {
 }
 
 java {
+    // Register functional tests as a feature of the main library, see
+    // https://docs.gradle.org/current/userguide/how_to_create_feature_variants_of_a_library.html.
+    registerFeature("funTest") {
+        usingSourceSet(sourceSets["funTest"])
+    }
+
     toolchain {
         // Note that Gradle currently matches the Java language version exactly and does not consider (backward)
         // compatibility between versions, see https://github.com/gradle/gradle/issues/16256.
