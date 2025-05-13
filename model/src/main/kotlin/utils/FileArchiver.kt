@@ -25,6 +25,8 @@ import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.kotlin.logger
+import org.apache.tika.Tika
+import org.apache.tika.mime.MimeTypes
 
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
@@ -72,10 +74,16 @@ class FileArchiver(
         logger.info { "Archiving files matching ${matcher.patterns} from '$directory'..." }
 
         val zipFile = createOrtTempFile(suffix = ".zip")
+        val tika = Tika()
 
         val zipDuration = measureTime {
             directory.packZip(zipFile, overwrite = true) { file ->
                 val relativePath = file.relativeTo(directory).invariantSeparatorsPath
+
+                if (tika.detect(file) != MimeTypes.PLAIN_TEXT) {
+                    logger.warn { "Not adding file '$relativePath' to archive because it is not a text file." }
+                    return@packZip false
+                }
 
                 matcher.matches(relativePath).also { result ->
                     logger.debug {
