@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
+import com.scanoss.dto.LicenseDetails
 import com.scanoss.utils.JsonUtils
 
 import io.kotest.core.spec.style.WordSpec
@@ -27,6 +28,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.time.Instant
@@ -39,9 +41,44 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
 class ScanOssResultParserTest : WordSpec({
+    "getUniqueLicenseDetails()" should {
+        "deduplicate complex license expressions" {
+            val uniqueLicenses = getUniqueLicenseExpression(
+                listOf(
+                    LicenseDetails.builder().name("MIT").build(),
+                    LicenseDetails.builder().name("MIT").build(),
+                    LicenseDetails.builder().name("GPL-2.0-only").build(),
+                    LicenseDetails.builder().name("GPL-2.0-only WITH Linux-syscall-note").build(),
+                    LicenseDetails.builder().name("GPL-2.0-only AND MIT").build()
+                )
+            )
+
+            val decomposed = uniqueLicenses.decompose().toList()
+
+            val expressionStrings = decomposed.map { it.toString() }
+
+            // Check that each license appears exactly once
+            expressionStrings.count { it == "MIT" } shouldBe 1
+            expressionStrings.count { it == "GPL-2.0-only" } shouldBe 1
+            expressionStrings.count { it == "GPL-2.0-only WITH Linux-syscall-note" } shouldBe 1
+
+            // Ensure no unexpected elements
+            expressionStrings.size shouldBe 3
+        }
+
+        "handle empty license list" {
+            val emptyLicenses = getUniqueLicenseExpression(listOf())
+
+            // Verify empty license list returns NOASSERTION
+            emptyLicenses shouldBe SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
+        }
+    }
+
     "generateSummary()" should {
         "properly summarize JUnit 4.12 findings" {
             val results = File("src/test/assets/scanoss-junit-4.12.json").readText().let {
@@ -125,11 +162,52 @@ class ScanOssResultParserTest : WordSpec({
                                 "."
                             ),
                             "pkg:github/vdurmont/semver4j",
-                            SpdxExpression.parse("CC-BY-SA-2.0")
+                            SpdxExpression.parse("CC-BY-SA-2.0"),
+                            additionalData = mapOf(
+                                "release_date" to "2019-09-13",
+                                "all_purls" to "pkg:github/vdurmont/semver4j"
+                            )
                         )
                     )
                 )
             )
+        }
+
+        "should handle multiple PURLs by selecting first as primary and preserving all in metadata" {
+            val results = File("src/test/assets/scanoss-multiple-purls.json").readText().let {
+                JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
+            }
+
+            val time = Instant.now()
+            val summary = generateSummary(time, time, results)
+
+            // Should have one finding per source location, not per PURL.
+            summary.snippetFindings should haveSize(2)
+
+            with(summary.snippetFindings.first()) {
+                // Check source location (local file).
+                sourceLocation shouldBe TextLocation("hung_task.c", 12, 150)
+
+                // Should use first PURL as primary identifier.
+                snippets should haveSize(1)
+                snippets.first().purl shouldBe "pkg:github/kdrag0n/proton_bluecross"
+
+                // Should preserve all PURLs in additionalData.
+                snippets.first().additionalData["all_purls"] shouldBe
+                    "pkg:github/kdrag0n/proton_bluecross pkg:github/fake/fake_repository"
+
+                // Check OSS location.
+                snippets.first().location shouldBe
+                    TextLocation("https://api.scanoss.com/file_contents/581734935cfbe570d280a1265aaa2a6b", 10, 148)
+            }
+
+            // Verify same behavior for second snippet.
+            with(summary.snippetFindings.last()) {
+                sourceLocation shouldBe TextLocation("hung_task.c", 540, 561)
+                snippets.first().purl shouldBe "pkg:github/kdrag0n/proton_bluecross"
+                snippets.first().location shouldBe
+                    TextLocation("https://api.scanoss.com/file_contents/581734935cfbe570d280a1265aaa2a6b", 86, 107)
+            }
         }
     }
 })
