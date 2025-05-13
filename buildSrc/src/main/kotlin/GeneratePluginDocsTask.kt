@@ -103,13 +103,13 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 appendLine("${descriptor["id"]}:")
 
                 fun appendOptions(options: List<Map<*, *>>) {
-                    options.forEachIndexed { index, option ->
-                        val defaultValue = option["default"]
-                        val type = option["type"]
+                    options.forEach {
+                        val defaultValue = it["default"]
+                        val type = it["type"]
                         val isStringValue =
                             (type == "SECRET" || type == "STRING" || type == "STRING_LIST") && defaultValue != null
 
-                        append("    ${option["name"]}: ")
+                        append("    ${it["name"]}: ")
                         if (isStringValue) append("\"")
                         append(defaultValue)
                         if (isStringValue) append("\"")
