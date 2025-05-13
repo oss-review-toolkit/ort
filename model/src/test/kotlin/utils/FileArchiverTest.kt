@@ -23,8 +23,10 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.file.aFile
+import io.kotest.matchers.file.containFile
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.file.shouldContainNFiles
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
@@ -64,6 +66,13 @@ class FileArchiverTest : StringSpec() {
         val file = workingDir.resolve(path)
         file.parentFile.safeMkdirs()
         file.writeText(path)
+    }
+
+    private fun createEmptyFile(path: String): File {
+        val file = workingDir.resolve(path)
+        file.parentFile.safeMkdirs()
+        file.createNewFile()
+        return file
     }
 
     /**
@@ -161,6 +170,28 @@ class FileArchiverTest : StringSpec() {
 
             archiver.unarchive(targetDir, PROVENANCE) shouldBe true
             targetDir shouldContainNFiles 0
+        }
+
+        "exclude basic binary license file" {
+            createEmptyFile("License").writeBytes(byteArrayOf(0xFF.toByte(), 0xD8.toByte()))
+
+            val archiver = FileArchiver.createDefault()
+            archiver.archive(workingDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
+
+            result shouldBe true
+            targetDir shouldNot containFile("License")
+        }
+
+        "include utf8 file with japanese chars" {
+            createEmptyFile("License").writeText("ぁあぃいぅうぇえぉおかが")
+
+            val archiver = FileArchiver.createDefault()
+            archiver.archive(workingDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
+
+            result shouldBe true
+            targetDir should containFile("License")
         }
     }
 }

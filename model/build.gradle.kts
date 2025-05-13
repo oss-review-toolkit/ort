@@ -35,6 +35,7 @@ dependencies {
     api(libs.jackson.dataformat.yaml)
     api(libs.log4j.api)
 
+    implementation(libs.tika)
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.hoplite)
     implementation(libs.hikari)
