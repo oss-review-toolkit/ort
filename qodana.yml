@@ -20,4 +20,5 @@ profile:
   name: qodana.recommended
 include:
   - name: CheckDependencyLicenses
+projectJDK: 24
 linter: jetbrains/qodana-jvm-community
