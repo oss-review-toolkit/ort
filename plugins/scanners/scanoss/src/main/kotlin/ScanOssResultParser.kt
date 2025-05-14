@@ -185,7 +185,7 @@ private fun createSnippetFindings(details: ScanFileDetails, localFilePath: Strin
 }
 
 /**
- * Split [lineRanges] returned by ScanOSS such as "32-105,117-199" into [TextLocation]s for the given [file].
+ * Split [lineRanges] returned by SCANOSS such as "32-105,117-199" into [TextLocation]s for the given [file].
  */
 private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
     lineRanges.split(',').map { lineRange ->
