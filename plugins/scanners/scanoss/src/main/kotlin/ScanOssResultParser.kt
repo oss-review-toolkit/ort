@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 import com.scanoss.dto.ScanFileDetails
 import com.scanoss.dto.ScanFileResult
 import com.scanoss.dto.enums.MatchType
+import com.scanoss.dto.enums.StatusType
 
 import java.lang.invoke.MethodHandles
 import java.time.Instant
@@ -62,22 +63,28 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 
                 MatchType.snippet -> {
                     val localFile = requireNotNull(result.filePath)
-                    val localLines = requireNotNull(details.lines)
-                    val sourceLocations = convertLines(localFile, localLines)
-                    val snippets = getSnippets(details)
+                    if (details.status == StatusType.pending) {
+                        val localLines = requireNotNull(details.lines)
+                        val sourceLocations = convertLines(localFile, localLines)
+                        val snippets = getSnippets(details)
 
-                    // The number of snippets should match the number of source locations.
-                    if (sourceLocations.size != snippets.size) {
-                        logger.warn {
-                            "Unexpected mismatch in '$localFile': " +
-                                "${sourceLocations.size} source locations vs ${snippets.size} snippets. " +
-                                "This indicates a potential issue with line range conversion."
+                        // The number of snippets should match the number of source locations.
+                        if (sourceLocations.size != snippets.size) {
+                            logger.warn {
+                                "Unexpected mismatch in '$localFile': " +
+                                    "${sourceLocations.size} source locations vs ${snippets.size} snippets. " +
+                                    "This indicates a potential issue with line range conversion."
+                            }
                         }
-                    }
 
-                    // Associate each source location with its corresponding snippet.
-                    sourceLocations.zip(snippets).forEach { (location, snippet) ->
-                        snippetFindings += SnippetFinding(location, setOf(snippet))
+                        // Associate each source location with its corresponding snippet.
+                        sourceLocations.zip(snippets).forEach { (location, snippet) ->
+                            snippetFindings += SnippetFinding(location, setOf(snippet))
+                        }
+                    } else {
+                        logger.warn { "File '$localFile' is identified, not including on snippet findings" }
+                        licenseFindings += getLicenseFindings(details)
+                        copyrightFindings += getCopyrightFindings(details)
                     }
                 }
 
