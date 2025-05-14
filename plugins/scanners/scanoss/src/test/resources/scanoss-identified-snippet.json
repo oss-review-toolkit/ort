@@ -1,0 +1,133 @@
+{
+  "main.c": [
+    {
+      "id": "snippet",
+      "lines": "14-22",
+      "oss_lines": "34-42",
+      "matched": "19%",
+      "file_hash": "4597ef1de00849bb96d42e78f2cfc3a7",
+      "source_hash": "f5aef06745de4d711838ea21198f2fc1",
+      "quality": [
+        {
+          "score": "4/5",
+          "source": "best_practices"
+        }
+      ],
+      "cryptography": [],
+      "purl": [
+        "pkg:sourceforge/check"
+      ],
+      "vendor": "check",
+      "component": "check",
+      "version": "0.8.1",
+      "latest": "0.8.1",
+      "url": "https://sourceforge.net/projects/check",
+      "status": "identified",
+      "release_date": "2002-03-02",
+      "file": "src/check_error.c",
+      "url_hash": "d81953e1dca4c498140c44f5d6fa92d6",
+      "licenses": [
+        {
+          "name": "LGPL-2.1-or-later",
+          "patent_hints": "yes",
+          "copyleft": "yes",
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/LGPL-2.1-or-later.txt",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, BSD-4.3TAHOE, ECL-2.0, FTL, IJG, LicenseRef-scancode-bsla-no-advert, Minpack, OpenSSL, PHP-3.01, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "osadl_updated": "2025-02-10T14:26:00+0000",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/LGPL-2.1-or-later.html"
+        },
+        {
+          "name": "LGPL-2.1-or-later",
+          "patent_hints": "yes",
+          "copyleft": "yes",
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/LGPL-2.1-or-later.txt",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, BSD-4.3TAHOE, ECL-2.0, FTL, IJG, LicenseRef-scancode-bsla-no-advert, Minpack, OpenSSL, PHP-3.01, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "osadl_updated": "2025-02-10T14:26:00+0000",
+          "source": "file_header",
+          "url": "https://spdx.org/licenses/LGPL-2.1-or-later.html"
+        }
+      ],
+      "url_stats": {},
+      "dependencies": [],
+      "copyrights": [
+        {
+          "name": "Copyright (C) 2001; 2002 Arien Malec",
+          "source": "file_header"
+        },
+        {
+          "name": "Copyright (c) 2001; 2002 Arien Malec",
+          "source": "scancode"
+        }
+      ],
+      "vulnerabilities": [],
+      "server": {
+        "version": "5.4.10",
+        "kb_version": {
+          "monthly": "25.04",
+          "daily": "25.05.07"
+        },
+        "hostname": "d2",
+        "flags": "16384",
+        "elapsed": "0.107563s"
+      }
+    }
+  ],
+  "hung_task.c": [
+    {
+      "component": "proton_bluecross",
+      "file": "kernel/hung_task.c",
+      "file_hash": "581734935cfbe570d280a1265aaa2a6b",
+      "file_url": "https://api.scanoss.com/file_contents/581734935cfbe570d280a1265aaa2a6b",
+      "id": "snippet",
+      "latest": "17",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/GPL-2.0-only.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, BSD-4.3TAHOE, ECL-2.0, FTL, IJG, LicenseRef-scancode-bsla-no-advert, Minpack, OpenSSL, PHP-3.01, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "GPL-2.0-only",
+          "osadl_updated": "2025-02-10T14:26:00+0000",
+          "patent_hints": "yes",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/GPL-2.0-only.html"
+        },
+        {
+          "name": "GPL-2.0-only WITH Linux-syscall-note",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/GPL-2.0-only WITH Linux-syscall-note.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/GPL-2.0-only.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, BSD-4.3TAHOE, ECL-2.0, FTL, IJG, LicenseRef-scancode-bsla-no-advert, Minpack, OpenSSL, PHP-3.01, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "GPL-2.0-only",
+          "osadl_updated": "2025-02-10T14:26:00+0000",
+          "patent_hints": "yes",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/GPL-2.0-only.html"
+        }
+      ],
+      "lines": "12-150",
+      "matched": "35%",
+      "oss_lines": "10-148",
+      "purl": [
+        "pkg:github/kdrag0n/proton_bluecross"
+      ],
+      "release_date": "2019-02-21",
+      "server": {
+        "kb_version": {
+          "daily": "25.03.27",
+          "monthly": "25.03"
+        },
+        "version": "5.4.10"
+      },
+      "source_hash": "45dd1e50621a8a32f88fbe0251a470ab",
+      "status": "pending",
+      "url": "https://github.com/kdrag0n/proton_bluecross",
+      "url_hash": "a9c1c67f0930dc42dbd40c29e565bcdd",
+      "vendor": "kdrag0n",
+      "version": "15"
+    }
+  ]
+}

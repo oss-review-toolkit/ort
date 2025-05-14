@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 import com.scanoss.dto.ScanFileDetails
 import com.scanoss.dto.ScanFileResult
 import com.scanoss.dto.enums.MatchType
+import com.scanoss.dto.enums.StatusType
 
 import java.lang.invoke.MethodHandles
 import java.time.Instant
@@ -63,7 +64,13 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 
                 MatchType.snippet -> {
                     val localFile = requireNotNull(result.filePath)
-                    snippetFindings += createSnippetFindings(details, localFile)
+                    if (details.status == StatusType.pending) {
+                        snippetFindings += createSnippetFindings(details, localFile)
+                    } else {
+                        logger.info { "File '$localFile' is identified, not including in snippet findings." }
+                        licenseFindings += getLicenseFindings(details, result.filePath)
+                        copyrightFindings += getCopyrightFindings(details, result.filePath)
+                    }
                 }
 
                 MatchType.none -> {
