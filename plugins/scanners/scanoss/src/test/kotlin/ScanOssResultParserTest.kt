@@ -224,5 +224,19 @@ class ScanOssResultParserTest : WordSpec({
                 sourceLocation.endLine shouldBe 24
             }
         }
+
+        "exclude identified snippets from snippet findings" {
+            // The scanoss-identified-snippet.json contains two snippets, but one is identified.
+            // Only unidentified snippets should be included in the SnippetFindings.
+            val results = readResource("/scanoss-identified-snippet.json").let {
+                JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
+            }
+
+            val time = Instant.now()
+            val summary = generateSummary(time, time, results)
+
+            // Should have only one finding because the identified snippet is excluded
+            summary.snippetFindings should haveSize(1)
+        }
     }
 })
