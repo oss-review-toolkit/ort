@@ -223,7 +223,7 @@ class DependencyGraphBuilderTest : WordSpec({
                     .build()
             }
 
-            exception.message shouldContain depNoPkg.id.toString()
+            exception.message shouldContain depNoPkg.id.toCoordinates()
         }
 
         "take issues into account when checking for illegal references" {
