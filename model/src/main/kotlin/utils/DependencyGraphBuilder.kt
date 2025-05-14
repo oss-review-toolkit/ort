@@ -202,8 +202,9 @@ class DependencyGraphBuilder<D>(
 
     private fun checkReferences() {
         require(resolvedPackages.keys.containsAll(validPackageDependencies)) {
+            val danglingIds = validPackageDependencies - resolvedPackages.keys
             "The following references do not actually refer to packages: " +
-                "${validPackageDependencies - resolvedPackages.keys}."
+                danglingIds.joinToString(postfix = ".") { "'${it.toCoordinates()}'" }
         }
 
         val packageReferencesKeysWithMultipleDistinctPackageReferences = references.groupBy { it.key }.filter {
