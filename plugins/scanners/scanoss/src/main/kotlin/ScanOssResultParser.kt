@@ -153,7 +153,7 @@ private fun getCopyrightFindings(details: ScanFileDetails): List<CopyrightFindin
 }
 
 /**
- * Get the snippet findings from the given [details]. If a snippet returned by ScanOSS contains several PURLs,
+ * Get the snippet findings from the given [details]. If a snippet returned by SCANOSS contains several PURLs,
  * the function extracts the first PURL as the primary identifier while storing the remaining PURLs in additionalData
  * to preserve the complete information.
  */
@@ -184,7 +184,7 @@ private fun getSnippets(details: ScanFileDetails): List<Snippet> {
 }
 
 /**
- * Split [lineRanges] returned by ScanOSS such as "32-105,117-199" into [TextLocation]s for the given [file].
+ * Split [lineRanges] returned by SCANOSS such as "32-105,117-199" into [TextLocation]s for the given [file].
  */
 private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
     lineRanges.split(',').map { lineRange ->

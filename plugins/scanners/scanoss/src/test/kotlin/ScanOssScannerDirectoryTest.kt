@@ -158,7 +158,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
         // [fingerprint data for the file]
         // --boundary--
 
-        // Extract included filenames using a regex pattern from the ScanOSS HTTP POST.
+        // Extract included filenames using a regex pattern from the SCANOSS HTTP POST.
         // The pattern matches lines starting with "file=" followed by hash and size, then captures the filename.
         val filenamePattern = "file=.*?,.*?,(.+)".toRegex(RegexOption.MULTILINE)
         val includedFiles = requestBodies.flatMap { body ->
