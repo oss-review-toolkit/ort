@@ -103,7 +103,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
                         Snippet(
                             99.0f,
                             TextLocation(
-                                "https://osskb.org/api/file_contents/871fb0c5188c2f620d9b997e225b0095",
+                                "utils/src/main/kotlin/random-data-05-06-11.kt", // This is the remote oss filepath
                                 128,
                                 367
                             ),

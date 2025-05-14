@@ -119,7 +119,7 @@ class ScanOssResultParserTest : WordSpec({
                         Snippet(
                             98.0f,
                             TextLocation(
-                                "https://osskb.org/api/file_contents/6ff2427335b985212c9b79dfa795799f",
+                                "src/main/java/com/vdurmont/semver4j/Requirement.java",
                                 1,
                                 710
                             ),
@@ -135,8 +135,47 @@ class ScanOssResultParserTest : WordSpec({
             )
         }
 
+        "handle multiple PURLs by extracting first as primary and storing remaining in additionalData" {
+            val results = readResource("/scanoss-multiple-purls.json").let {
+                JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
+            }
+
+            val time = Instant.now()
+            val summary = generateSummary(time, time, results)
+
+            // Verify we have one finding per source location, not per PURL.
+            summary.snippetFindings should haveSize(2)
+
+            with(summary.snippetFindings.first()) {
+                // Check source location (local file).
+                sourceLocation shouldBe TextLocation("hung_task.c", 12, 150)
+
+                // Verify first PURL is extracted as primary identifier.
+                snippets should haveSize(1)
+                snippets.first().purl shouldBe "pkg:github/kdrag0n/proton_bluecross"
+
+                // Verify remaining PURLs are stored in additionalData.
+                snippets.first().additionalData shouldBe
+                    mapOf(
+                        "pkg:github/fake/fake_repository" to ""
+                    )
+
+                // Check OSS location.
+                snippets.first().location shouldBe
+                    TextLocation("kernel/hung_task.c", 10, 148)
+            }
+
+            // Verify same behavior for second snippet.
+            with(summary.snippetFindings.last()) {
+                sourceLocation shouldBe TextLocation("hung_task.c", 540, 561)
+                snippets.first().purl shouldBe "pkg:github/kdrag0n/proton_bluecross"
+                snippets.first().location shouldBe
+                    TextLocation("kernel/hung_task.c", 86, 107)
+            }
+        }
+
         "combine the same license from different sources into a single expression" {
-            // When the same license appears in multiple sources (like scancode and file_header),
+            // When a license appears in multiple sources (like scancode and file_header),
             // combine them into a single expression rather than duplicating.
             val results = readResource("/scanoss-snippet-same-license-multiple-sources.json").let {
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
@@ -161,7 +200,7 @@ class ScanOssResultParserTest : WordSpec({
             }
         }
 
-        "handle empty license array with NOASSERTION" {
+        "handle empty license array in snippet findings with NOASSERTION" {
             // When a component has an empty licenses array, use NOASSERTION.
 
             val results = readResource("/scanoss-snippet-no-license-data.json").let {
