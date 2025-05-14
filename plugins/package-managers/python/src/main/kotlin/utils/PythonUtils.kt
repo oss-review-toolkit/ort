@@ -65,7 +65,7 @@ internal fun processDeclaredLicenses(id: Identifier, declaredLicenses: Set<Strin
             logger.debug { "Mapping '$GENERIC_BSD_LICENSE' to '$license' for '${id.toCoordinates()}'." }
 
             declaredLicensesProcessed = declaredLicensesProcessed.copy(
-                mapped = declaredLicensesProcessed.mapped + mapOf(GENERIC_BSD_LICENSE to license),
+                mapped = declaredLicensesProcessed.mapped + (GENERIC_BSD_LICENSE to license),
                 unmapped = declaredLicensesProcessed.unmapped - GENERIC_BSD_LICENSE
             )
         }
