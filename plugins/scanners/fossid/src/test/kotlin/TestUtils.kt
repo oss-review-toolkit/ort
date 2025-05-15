@@ -29,8 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger
 import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
-import org.ossreviewtoolkit.clients.fossid.MapResponseBody
 import org.ossreviewtoolkit.clients.fossid.PolymorphicData
+import org.ossreviewtoolkit.clients.fossid.PolymorphicDataResponseBody
 import org.ossreviewtoolkit.clients.fossid.PolymorphicInt
 import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 import org.ossreviewtoolkit.clients.fossid.PolymorphicResponseBody
@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.clients.fossid.listMatchedLines
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.listSnippets
+import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
@@ -548,7 +549,10 @@ internal fun FossIdServiceWithVersion.expectCreateScan(
 ): FossIdServiceWithVersion {
     coEvery {
         createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
-    } returns MapResponseBody(status = 1, data = mapOf("scan_id" to SCAN_ID.toString()))
+    } returns PolymorphicDataResponseBody(
+        status = 1,
+        data = PolymorphicData(CreateScanResponse(SCAN_ID.toString()))
+    )
     return this
 }
 

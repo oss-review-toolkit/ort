@@ -1,0 +1,26 @@
+{
+  "id" : "ae6669fb-7ca6-496a-9268-7e4eebb64007",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"create\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342\",\"project_code\":\"semver4j\",\"git_repo_url\":\"git_repo_url\",\"git_branch\":\"develop\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scans_create\",  \"status\":\"0\",  \"data\":[{\"code\": \"RequestData.Base.issue_with_executing_command\",    \"message\":\"Field git_repo_url: there was an issue executing command: timeout 200 git ls-remote 'ssh git repo' 2>&1. Exit status: 128. Output: Repository not found The requested repository does not exist, or you do not have permission to access it. fatal: Could not read from remote repository.  Please make sure you have the correct access rights and the repository exists.\",    \"message_parameters\":{\"fieldname\":\"git_repo_url\",      \"cmd\":\"timeout 200 git ls-remote 'ssh git repo' 2>&1\",      \"exitStatus\":128,      \"out\":\"Repository not found The requested repository does not exist, or you do not have permission to access it. fatal: Could not read from remote repository.  Please make sure you have the correct access rights and the repository exists.\"}  }],  \"error\":\"RequestData.Base.issues_while_parsing_request\",  \"message\":\"These issues were found while parsing the request:\",  \"message_parameters\":[]}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "ae6669fb-7ca6-496a-9268-7e4eebb64007",
+  "persistent" : true,
+  "insertionIndex" : 5
+}

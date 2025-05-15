@@ -679,7 +679,16 @@ class FossId internal constructor(
             .createScan(config.user.value, config.apiKey.value, projectCode, scanCode, url, revision, reference)
             .checkResponse("create scan")
 
-        val scanId = response.data?.get("scan_id")
+        val data = response.data?.value
+
+        if (data?.message != null) {
+            logger.warn {
+                "Create scan returned an error content as payload (see issue #8462)." +
+                    " Additional information: ${data.message}"
+            }
+        }
+
+        val scanId = data?.scanId
 
         requireNotNull(scanId) { "Scan could not be created. The response was: ${response.message}." }
 

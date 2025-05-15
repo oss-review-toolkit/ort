@@ -43,6 +43,7 @@ import okhttp3.ResponseBody
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
@@ -273,7 +274,7 @@ interface FossIdRestService {
     suspend fun createProject(@Body body: PostRequestBody): MapResponseBody<String>
 
     @POST("api.php")
-    suspend fun createScan(@Body body: PostRequestBody): MapResponseBody<String>
+    suspend fun createScan(@Body body: PostRequestBody): PolymorphicDataResponseBody<CreateScanResponse>
 
     @POST("api.php")
     suspend fun runScan(@Body body: PostRequestBody): EntityResponseBody<Nothing>
