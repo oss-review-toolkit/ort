@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionParser
 import org.ossreviewtoolkit.utils.spdx.parser.Token
 
 class SpdxSimpleLicenseMappingTest : WordSpec({
-    "The license map" should {
+    "The simple license mapping" should {
         "not contain any duplicate keys with respect to capitalization" {
             val keys = SpdxSimpleLicenseMapping.simpleLicenseMapping.keys.toMutableList()
             val uniqueKeys = SpdxSimpleLicenseMapping.simpleExpressionMapping.keys
@@ -59,7 +59,7 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
         }
     }
 
-    "The mapping" should {
+    "The simple expression mapping" should {
         "contain only single ID strings" {
             val ids = SpdxSimpleLicenseMapping.simpleExpressionMapping.keys +
                 SpdxSimpleLicenseMapping.deprecatedExpressionMapping.keys
