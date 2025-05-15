@@ -30,6 +30,7 @@ import okio.sink
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
@@ -149,7 +150,7 @@ suspend fun FossIdRestService.createScan(
     gitRepoUrl: String,
     gitBranch: String,
     comment: String = ""
-): MapResponseBody<String> =
+): PolymorphicDataResponseBody<CreateScanResponse> =
     createScan(
         PostRequestBody(
             "create",

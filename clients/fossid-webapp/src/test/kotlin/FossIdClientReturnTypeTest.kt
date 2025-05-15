@@ -24,6 +24,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.maps.shouldContainValue
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -253,6 +254,28 @@ class FossIdClientReturnTypeTest : StringSpec({
     "When the scan to delete does not exist, no exception is thrown" {
         service.deleteScan("", "", SCAN_CODE_1) shouldNotBeNull {
             error shouldBe "Classes.TableRepository.row_not_found"
+        }
+    }
+
+    "When create scan returns an error, no exception is thrown" {
+        service.createScan(
+            "",
+            "",
+            PROJECT_CODE_1,
+            SCAN_CODE_1,
+            "git_repo_url",
+            "develop"
+        ) shouldNotBeNull {
+            message shouldBe "These issues were found while parsing the request:"
+            data?.value?.message shouldBe "Field git_repo_url: there was an issue executing command: timeout 200 git " +
+                "ls-remote 'ssh git repo' 2>&1. Exit status: 128. Output: Repository not found The requested " +
+                "repository does not exist, or you do not have permission to access it. fatal: Could not read from " +
+                "remote repository.  Please make sure you have the correct access rights and the repository exists."
+            data?.value?.messageParameters?.shouldContainValue(
+                "Repository not found The requested repository does not exist, or you do not have permission " +
+                    "to access it. fatal: Could not read from remote repository.  Please make sure you have the " +
+                    "correct access rights and the repository exists."
+            )
         }
     }
 
