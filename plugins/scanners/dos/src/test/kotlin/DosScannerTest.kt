@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
+import org.ossreviewtoolkit.utils.test.readResource
 
 class DosScannerTest : StringSpec({
     lateinit var scanner: DosScanner
@@ -59,8 +60,6 @@ class DosScannerTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options().dynamicPort().notifier(ConsoleNotifier(false))
     )
-
-    fun getResourceAsString(resourceName: String): String = checkNotNull(javaClass.getResource(resourceName)).readText()
 
     beforeTest {
         server.start()
@@ -97,7 +96,7 @@ class DosScannerTest : StringSpec({
                 .willReturn(
                     aResponse()
                         .withStatus(200)
-                        .withBody(getResourceAsString("/no-results.json"))
+                        .withBody(readResource("/no-results.json"))
                 )
         )
 
@@ -120,7 +119,7 @@ class DosScannerTest : StringSpec({
                 .willReturn(
                     aResponse()
                         .withStatus(200)
-                        .withBody(getResourceAsString("/pending.json"))
+                        .withBody(readResource("/pending.json"))
                 )
         )
 
@@ -144,7 +143,7 @@ class DosScannerTest : StringSpec({
                 .willReturn(
                     aResponse()
                         .withStatus(200)
-                        .withBody(getResourceAsString("/ready.json"))
+                        .withBody(readResource("/ready.json"))
                 )
         )
 
@@ -159,7 +158,7 @@ class DosScannerTest : StringSpec({
         )
 
         val actualJson = JSON.encodeToString(response?.results)
-        val expectedJson = JSON.decodeFromString<ScanResultsResponseBody>(getResourceAsString("/ready.json")).let {
+        val expectedJson = JSON.decodeFromString<ScanResultsResponseBody>(readResource("/ready.json")).let {
             JSON.encodeToString(it.results)
         }
 
@@ -210,7 +209,7 @@ class DosScannerTest : StringSpec({
                 .willReturn(
                     aResponse()
                         .withStatus(200)
-                        .withBody(getResourceAsString("/ready.json"))
+                        .withBody(readResource("/ready.json"))
                 )
         )
 
@@ -252,7 +251,7 @@ class DosScannerTest : StringSpec({
                 .willReturn(
                     aResponse()
                         .withStatus(200)
-                        .withBody(getResourceAsString("/no-results.json"))
+                        .withBody(readResource("/no-results.json"))
                 )
         )
 

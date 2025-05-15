@@ -32,6 +32,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.utils.test.readResource
 
 abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
     // This is loosely based on the patterns from
@@ -49,7 +50,7 @@ abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()
         inputDir = tempdir()
 
         // Create variants of the Apache-2.0 license text in a temporary directory, so we have something to operate on.
-        val licenseText = javaClass.getResource("/LICENSE").readText()
+        val licenseText = readResource("/LICENSE")
         commonlyDetectedFiles.forEach {
             inputDir.resolve(it).writeText(licenseText.replace("license", it))
         }

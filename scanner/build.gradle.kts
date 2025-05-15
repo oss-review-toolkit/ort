@@ -59,6 +59,8 @@ dependencies {
     testImplementation(libs.retrofit.converter.kotlinxSerialization)
     testImplementation(libs.wiremock)
 
+    testFixturesImplementation(project(":utils:test-utils"))
+
     testFixturesImplementation(libs.kotest.assertions.core)
     testFixturesImplementation(libs.kotest.runner.junit5)
 }
