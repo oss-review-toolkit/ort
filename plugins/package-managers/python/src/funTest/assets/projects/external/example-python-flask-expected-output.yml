@@ -64,10 +64,9 @@ packages:
   - "BSD"
   - "BSD License"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
+    - "BSD License"
   description: "A microframework based on Werkzeug, Jinja2 and good intentions"
   homepage_url: "http://github.com/pallets/flask/"
   binary_artifact:
@@ -160,10 +159,9 @@ packages:
   - "BSD"
   - "BSD License"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
+    - "BSD License"
   description: "A small but fast and easy to use stand-alone template engine written\
     \ in pure python."
   homepage_url: "http://jinja.pocoo.org/"
