@@ -31,11 +31,12 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.ortResult
+import org.ossreviewtoolkit.utils.test.readResource
 
 class EvaluatorTest : WordSpec({
     "checkSyntax" should {
         "succeed if the script can be compiled" {
-            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
+            val script = readResource("/rules/osadl.rules.kts")
 
             val result = Evaluator(ortResult).checkSyntax(script)
 
@@ -147,7 +148,7 @@ class EvaluatorTest : WordSpec({
                 }
             }
 
-            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
+            val script = readResource("/rules/osadl.rules.kts")
 
             val result = Evaluator(compatibleOrtResult).run(script)
 
@@ -181,7 +182,7 @@ class EvaluatorTest : WordSpec({
                 }
             }
 
-            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
+            val script = readResource("/rules/osadl.rules.kts")
 
             val result = Evaluator(incompatibleOrtResult).run(script)
 
@@ -215,7 +216,7 @@ class EvaluatorTest : WordSpec({
                 }
             }
 
-            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
+            val script = readResource("/rules/osadl.rules.kts")
 
             val result = Evaluator(incompatibleOrtResult).run(script)
 
