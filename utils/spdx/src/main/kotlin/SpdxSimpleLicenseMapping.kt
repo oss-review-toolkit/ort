@@ -30,15 +30,15 @@ object SpdxSimpleLicenseMapping {
     /**
      * The map of simple license names associated with their corresponding [SPDX license][SpdxLicense].
      */
-    internal val simpleLicenseMapping by lazy {
+    internal val simpleLicenseMapping: Map<String, SpdxLicense> by lazy {
         val resource = checkNotNull(javaClass.getResource("/simple-license-mapping.yml"))
-        yamlMapper.readValue<Map<String, SpdxLicense>>(resource)
+        yamlMapper.readValue(resource)
     }
 
     /**
      * The map of simple license names associated with their corresponding [SPDX expression][SpdxLicenseIdExpression].
      */
-    val simpleExpressionMapping by lazy {
+    val simpleExpressionMapping: Map<String, SpdxLicenseIdExpression> by lazy {
         simpleLicenseMapping.mapValuesTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { (_, v) -> v.toExpression() }
     }
 
@@ -46,7 +46,7 @@ object SpdxSimpleLicenseMapping {
      * The map of deprecated SPDX license IDs associated with their current [SPDX expression]
      * [SpdxSingleLicenseExpression].
      */
-    val deprecatedExpressionMapping by lazy {
+    val deprecatedExpressionMapping: Map<String, SpdxSingleLicenseExpression> by lazy {
         val resource = checkNotNull(javaClass.getResource("/deprecated-license-mapping.yml"))
         val mapping = yamlMapper.readValue<Map<String, SpdxSingleLicenseExpression>>(resource)
         mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
