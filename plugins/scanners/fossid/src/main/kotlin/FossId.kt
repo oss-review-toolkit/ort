@@ -247,7 +247,11 @@ class FossId internal constructor(
                     null
                 }
 
-                else -> throw IOException("Could not get project. Additional information : $error")
+                else -> {
+                    val errorMessage = "Could not get project '$projectCode' for user '${config.user.value}: $error'"
+                    logger.error(errorMessage)
+                    throw IOException(errorMessage)
+                }
             }
         }
 
