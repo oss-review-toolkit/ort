@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import git.semver.plugin.gradle.PrintTask
+
 import org.eclipse.jgit.ignore.FastIgnoreRule
 
 import org.jetbrains.gradle.ext.Gradle
@@ -85,6 +87,15 @@ tasks.register("allDependencies") {
         b.mustRunAfter(a)
     }
 }
+
+open class OrtPrintTask : PrintTask({ "" }, "Prints the current project version") {
+    private val projectVersion = project.version.toString()
+
+    @TaskAction
+    fun printVersion() = println(projectVersion)
+}
+
+tasks.replace("printVersion", OrtPrintTask::class.java)
 
 val checkCopyrightsInNoticeFile by tasks.registering {
     val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
