@@ -88,17 +88,14 @@ data class ResolvedLicenseInfo(
             resolvedLicense.locations.map { it.location.path }
         }
 
-        val applicablePathsCache = mutableMapOf<String, Map<String, Set<String>>>()
         val detectedLicenses = filterTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.any {
                 val rootPath = (it.provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
 
-                val applicableLicensePaths = applicablePathsCache.getOrPut(rootPath) {
-                    matcher.getApplicableLicenseFilesForDirectories(
-                        licensePaths,
-                        listOf(rootPath)
-                    )
-                }
+                val applicableLicensePaths = matcher.getApplicableLicenseFilesForDirectories(
+                    licensePaths,
+                    listOf(rootPath)
+                )
 
                 val applicableLicenseFiles = applicableLicensePaths[rootPath].orEmpty()
 
