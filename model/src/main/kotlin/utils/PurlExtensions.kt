@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
@@ -101,7 +102,11 @@ fun Provenance.toPurlExtras(): PurlExtras =
             )
         }
 
-        is UnknownProvenance -> PurlExtras()
+        /**
+         * Purls refer to packages that have been published and thus always have a remove provenance. So just return
+         * empty extras in all other cases.
+         */
+        !is RemoteProvenance -> PurlExtras()
     }
 
 /**
