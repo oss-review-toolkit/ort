@@ -115,4 +115,4 @@ class PathLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFileP
 }
 
 private fun createFileMatcher(filenamePatterns: Collection<String>): FileMatcher =
-    FileMatcher(filenamePatterns.map { "/**/$it" }, true)
+    FileMatcher(filenamePatterns.map { "/**/$it" }, ignoreCase = true)
