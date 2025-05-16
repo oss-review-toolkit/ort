@@ -63,6 +63,7 @@ data class AnalyzerConfiguration(
         "SwiftPM",
         "Tycho",
         "Unmanaged",
+        "Uv",
         "Yarn",
         "Yarn2"
     ),
