@@ -249,7 +249,7 @@ class FossId internal constructor(
 
                 else -> {
                     val errorMessage = "Could not get project '$projectCode' for user '${config.user.value}: $error'"
-                    logger.error(errorMessage)
+                    logger.error { errorMessage }
                     throw IOException(errorMessage)
                 }
             }
