@@ -400,7 +400,7 @@ ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
 # debian packages from Ubuntu and Microsoft are incomplete
 
 RUN mkdir -p $DOTNET_HOME \
-    && echo $SWIFT_VERSION \
+    && echo $DOTNET_VERSION \
     && if [ "$(arch)" = "aarch64" ]; then \
     curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-arm64.tar.gz | tar -C $DOTNET_HOME -xz; \
     else \
