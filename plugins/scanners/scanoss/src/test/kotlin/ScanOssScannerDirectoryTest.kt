@@ -103,7 +103,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
                         Snippet(
                             99.0f,
                             TextLocation(
-                                "https://osskb.org/api/file_contents/871fb0c5188c2f620d9b997e225b0095",
+                                "utils/src/main/kotlin/random-data-05-06-11.kt", // This is the remote oss filepath
                                 128,
                                 367
                             ),
@@ -158,7 +158,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
         // [fingerprint data for the file]
         // --boundary--
 
-        // Extract included filenames using a regex pattern from the ScanOSS HTTP POST.
+        // Extract included filenames using a regex pattern from the SCANOSS HTTP POST.
         // The pattern matches lines starting with "file=" followed by hash and size, then captures the filename.
         val filenamePattern = "file=.*?,.*?,(.+)".toRegex(RegexOption.MULTILINE)
         val includedFiles = requestBodies.flatMap { body ->

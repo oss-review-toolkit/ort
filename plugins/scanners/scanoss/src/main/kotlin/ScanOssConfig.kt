@@ -25,11 +25,11 @@ import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.Secret
 
 data class ScanOssConfig(
-    /** The URL of the ScanOSS server. */
+    /** The URL of the SCANOSS server. */
     @OrtPluginOption(defaultValue = ScanApi.DEFAULT_BASE_URL)
     val apiUrl: String,
 
-    /** The API key used to authenticate with the ScanOSS server. */
+    /** The API key used to authenticate with the SCANOSS server. */
     @OrtPluginOption(defaultValue = "")
     val apiKey: Secret,
 
