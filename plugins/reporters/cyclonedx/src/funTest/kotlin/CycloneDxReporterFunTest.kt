@@ -36,6 +36,8 @@ import io.kotest.matchers.shouldNotBe
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS
@@ -82,6 +84,30 @@ class CycloneDxReporterFunTest : WordSpec({
                 singleBom = true,
                 outputFileFormats = listOf("xml")
             ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
+
+            bomFileResults.shouldBeSingleton {
+                it shouldBeSuccess { bomFile ->
+                    bomFile shouldBe aFile()
+                    bomFile shouldNotBe emptyFile()
+
+                    val actualBom = bomFile.readText().patchCycloneDxResult().normalizeLineBreaks()
+                    actualBom shouldBe expectedBom
+                }
+            }
+        }
+
+        "create the expected XML file with authors" {
+            val expectedBom = readResource("/cyclonedx-reporter-expected-result-with-authors.xml")
+
+            val ortResult = ORT_RESULT.withAuthors(
+                packageId = Identifier("NPM:@ort:license-file:1.0"),
+                authors = setOf("Author One", "Author Two")
+            )
+
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf("xml")
+            ).generateReport(ReporterInput(ortResult), outputDir)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -223,6 +249,26 @@ class CycloneDxReporterFunTest : WordSpec({
         }
     }
 })
+
+/**
+ * Add [authors] to the [package][packageId].
+ */
+private fun OrtResult.withAuthors(packageId: Identifier, authors: Set<String>): OrtResult =
+    analyzer?.let { analyzer ->
+        copy(
+            analyzer = analyzer.copy(
+                result = analyzer.result.copy(
+                    packages = analyzer.result.packages.map { pkg ->
+                        if (pkg.id == packageId) {
+                            pkg.copy(authors = authors)
+                        } else {
+                            pkg
+                        }
+                    }.toSet()
+                )
+            )
+        )
+    } ?: this
 
 private fun String.patchCycloneDxResult(): String =
     replaceFirst(
