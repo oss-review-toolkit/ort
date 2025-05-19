@@ -144,9 +144,9 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     val url = requireNotNull(details.url)
     val purls = requireNotNull(details.purls)
 
-    val licenses = details.licenseDetails.orEmpty().mapTo(mutableSetOf()) { license ->
-        SpdxExpression.parse(license.name)
-    }
+    val license = details.licenseDetails.orEmpty()
+        .map { license -> SpdxExpression.parse(license.name) }
+        .toExpression()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
 
     val score = matched.substringBeforeLast("%").toFloat()
     val locations = convertLines(fileUrl, ossLines)
@@ -157,8 +157,6 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     return buildSet {
         purls.forEach { purl ->
             locations.forEach { snippetLocation ->
-                val license = licenses.toExpression()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
-
                 add(Snippet(score, snippetLocation, provenance, purl, license))
             }
         }
