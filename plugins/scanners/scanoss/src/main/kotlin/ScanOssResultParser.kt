@@ -63,23 +63,7 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 
                 MatchType.snippet -> {
                     val localFile = requireNotNull(result.filePath)
-                    val localLines = requireNotNull(details.lines)
-                    val sourceLocations = convertLines(localFile, localLines)
-                    val snippets = getSnippets(details)
-
-                    // The number of snippets should match the number of source locations.
-                    if (sourceLocations.size != snippets.size) {
-                        logger.warn {
-                            "Unexpected mismatch in '$localFile': " +
-                                "${sourceLocations.size} source locations vs ${snippets.size} snippets. " +
-                                "This indicates a potential issue with line range conversion."
-                        }
-                    }
-
-                    // Associate each source location with its corresponding snippet.
-                    sourceLocations.zip(snippets).forEach { (location, snippet) ->
-                        snippetFindings += SnippetFinding(location, setOf(snippet))
-                    }
+                    snippetFindings += createSnippetFindings(details, localFile)
                 }
 
                 MatchType.none -> {
@@ -144,33 +128,52 @@ private fun getCopyrightFindings(details: ScanFileDetails, path: String): List<C
 }
 
 /**
- * Get the snippet findings from the given [details]. If a snippet returned by ScanOSS contains several PURLs,
- * the function extracts the first PURL as the primary identifier while storing the remaining PURLs in additionalData
- * to preserve the complete information.
+ * Create snippet findings from given [details] and [localFilePath]. If a snippet returned by ScanOSS contains several
+ * PURLs the function extracts the first PURL as the primary identifier while storing the remaining PURLs in
+ * additionalData to preserve the complete information.
  */
-private fun getSnippets(details: ScanFileDetails): List<Snippet> {
+private fun createSnippetFindings(details: ScanFileDetails, localFilePath: String): Set<SnippetFinding> {
     val matched = requireNotNull(details.matched)
     val ossFile = requireNotNull(details.file)
     val ossLines = requireNotNull(details.ossLines)
+    val localLines = requireNotNull(details.lines)
     val url = requireNotNull(details.url)
     val purls = requireNotNull(details.purls).toMutableList()
+
+    val score = matched.substringBeforeLast("%").toFloat()
     val primaryPurl = purls.removeFirstOrNull().orEmpty()
 
     val license = details.licenseDetails.orEmpty()
         .map { license -> SpdxExpression.parse(license.name) }
         .toExpression()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
 
-    val score = matched.substringBeforeLast("%").toFloat()
-    val ossLocations = convertLines(ossFile, ossLines)
     // TODO: No resolved revision is available. Should a ArtifactProvenance be created instead ?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
     val provenance = RepositoryProvenance(vcsInfo, ".")
 
     val additionalData = purls.associateWith { "" }
 
-    // Create one snippet per location, using the first PURL as the primary identifier.
-    return ossLocations.map { snippetLocation ->
-        Snippet(score, snippetLocation, provenance, primaryPurl, license, additionalData)
+    // Convert both local and OSS line ranges to source locations.
+    val sourceLocations = convertLines(localFilePath, localLines)
+    val ossLocations = convertLines(ossFile, ossLines)
+
+    // The number of source locations should match the number of oss locations.
+    if (sourceLocations.size != ossLocations.size) {
+        logger.warn {
+            "Unexpected mismatch in '$localFilePath': " +
+                "${sourceLocations.size} source locations vs ${ossLocations.size} oss locations. " +
+                "This indicates a potential issue with line range conversion."
+        }
+    }
+
+    // Directly pair source locations with their corresponding OSS locations and create a SnippetFinding.
+    return sourceLocations.zip(ossLocations).mapTo(mutableSetOf()) { (sourceLocation, ossLocation) ->
+        SnippetFinding(
+            sourceLocation,
+            setOf(
+                Snippet(score, ossLocation, provenance, primaryPurl, license, additionalData)
+            )
+        )
     }
 }
 
