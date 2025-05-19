@@ -24,6 +24,13 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
+runCatching {
+    components["java"] as AdhocComponentWithVariants
+}.onSuccess {
+    it.withVariantsFromConfiguration(configurations["funTestApiElements"]) { skip() }
+    it.withVariantsFromConfiguration(configurations["funTestRuntimeElements"]) { skip() }
+}
+
 fun getGroupId(parent: Project?): String =
     parent?.let { "${getGroupId(it.parent)}.${it.name.replace("-", "")}" }.orEmpty()
 
