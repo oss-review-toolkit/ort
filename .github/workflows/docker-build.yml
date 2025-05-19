@@ -30,7 +30,7 @@ jobs:
         uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
       - name: Get ORT version
         run: |
-          ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+          ORT_VERSION=$(./gradlew -q printVersion)
           echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3
