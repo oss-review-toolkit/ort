@@ -121,7 +121,7 @@ class ScanOssResultParserTest : WordSpec({
                         Snippet(
                             98.0f,
                             TextLocation(
-                                "https://osskb.org/api/file_contents/6ff2427335b985212c9b79dfa795799f",
+                                "src/main/java/com/vdurmont/semver4j/Requirement.java",
                                 1,
                                 710
                             ),
