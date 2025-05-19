@@ -51,15 +51,15 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
         result.fileDetails.forEach { details ->
             when (details.matchType) {
                 MatchType.file -> {
-                    val file = requireNotNull(result.filePath)
-                    licenseFindings += getLicenseFindings(details, file)
-                    copyrightFindings += getCopyrightFindings(details, file)
+                    val localFile = requireNotNull(result.filePath)
+                    licenseFindings += getLicenseFindings(details, localFile)
+                    copyrightFindings += getCopyrightFindings(details, localFile)
                 }
 
                 MatchType.snippet -> {
-                    val file = requireNotNull(result.filePath)
-                    val lines = requireNotNull(details.lines)
-                    val sourceLocations = convertLines(file, lines)
+                    val localFile = requireNotNull(result.filePath)
+                    val localLines = requireNotNull(details.lines)
+                    val sourceLocations = convertLines(localFile, localLines)
                     val snippets = getSnippets(details)
 
                     snippets.forEach { snippet ->
@@ -147,14 +147,14 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
         .toExpression()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
 
     val score = matched.substringBeforeLast("%").toFloat()
-    val locations = convertLines(ossFile, ossLines)
+    val ossLocations = convertLines(ossFile, ossLines)
     // TODO: No resolved revision is available. Should a ArtifactProvenance be created instead ?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
     val provenance = RepositoryProvenance(vcsInfo, ".")
 
     return buildSet {
         purls.forEach { purl ->
-            locations.forEach { snippetLocation ->
+            ossLocations.forEach { snippetLocation ->
                 add(Snippet(score, snippetLocation, provenance, purl, license))
             }
         }
