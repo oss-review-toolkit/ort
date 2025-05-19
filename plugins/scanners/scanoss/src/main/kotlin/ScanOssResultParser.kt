@@ -51,12 +51,13 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
         result.fileDetails.forEach { details ->
             when (details.matchType) {
                 MatchType.file -> {
-                    licenseFindings += getLicenseFindings(details)
-                    copyrightFindings += getCopyrightFindings(details)
+                    val file = requireNotNull(result.filePath)
+                    licenseFindings += getLicenseFindings(details, file)
+                    copyrightFindings += getCopyrightFindings(details, file)
                 }
 
                 MatchType.snippet -> {
-                    val file = requireNotNull(details.file)
+                    val file = requireNotNull(result.filePath)
                     val lines = requireNotNull(details.lines)
                     val sourceLocations = convertLines(file, lines)
                     val snippets = getSnippets(details)
@@ -90,8 +91,7 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 /**
  * Get the license findings from the given [details].
  */
-private fun getLicenseFindings(details: ScanFileDetails): List<LicenseFinding> {
-    val path = details.file ?: return emptyList()
+private fun getLicenseFindings(details: ScanFileDetails, path: String): List<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
 
     return details.licenseDetails.orEmpty().map { license ->
@@ -118,9 +118,7 @@ private fun getLicenseFindings(details: ScanFileDetails): List<LicenseFinding> {
 /**
  * Get the copyright findings from the given [details].
  */
-private fun getCopyrightFindings(details: ScanFileDetails): List<CopyrightFinding> {
-    val path = details.file ?: return emptyList()
-
+private fun getCopyrightFindings(details: ScanFileDetails, path: String): List<CopyrightFinding> {
     return details.copyrightDetails.orEmpty().map { copyright ->
         CopyrightFinding(
             statement = copyright.name,

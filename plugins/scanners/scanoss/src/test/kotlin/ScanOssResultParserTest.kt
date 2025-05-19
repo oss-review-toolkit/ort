@@ -66,7 +66,8 @@ class ScanOssResultParserTest : WordSpec({
             summary.licenseFindings shouldContain LicenseFinding(
                 license = "Apache-2.0",
                 location = TextLocation(
-                    path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
+                    path = "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/resources/" +
+                        "scripts/hopscotch-0.1.2.min.js",
                     startLine = TextLocation.UNKNOWN_LINE,
                     endLine = TextLocation.UNKNOWN_LINE
                 ),
@@ -77,7 +78,8 @@ class ScanOssResultParserTest : WordSpec({
             summary.copyrightFindings shouldContain CopyrightFinding(
                 statement = "Copyright 2013 LinkedIn Corp.",
                 location = TextLocation(
-                    path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
+                    path = "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/resources/" +
+                        "scripts/hopscotch-0.1.2.min.js",
                     startLine = TextLocation.UNKNOWN_LINE,
                     endLine = TextLocation.UNKNOWN_LINE
                 )
@@ -104,7 +106,7 @@ class ScanOssResultParserTest : WordSpec({
             summary.licenseFindings shouldContain LicenseFinding(
                 license = "Apache-2.0",
                 location = TextLocation(
-                    path = "com/vdurmont/semver4j/Range.java",
+                    path = "src/main/java/com/vdurmont/semver4j/Range.java",
                     startLine = TextLocation.UNKNOWN_LINE,
                     endLine = TextLocation.UNKNOWN_LINE
                 ),
