@@ -137,7 +137,7 @@ private fun getCopyrightFindings(details: ScanFileDetails, path: String): List<C
  */
 private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     val matched = requireNotNull(details.matched)
-    val fileUrl = requireNotNull(details.fileUrl)
+    val ossFile = requireNotNull(details.file)
     val ossLines = requireNotNull(details.ossLines)
     val url = requireNotNull(details.url)
     val purls = requireNotNull(details.purls)
@@ -147,7 +147,7 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
         .toExpression()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
 
     val score = matched.substringBeforeLast("%").toFloat()
-    val locations = convertLines(fileUrl, ossLines)
+    val locations = convertLines(ossFile, ossLines)
     // TODO: No resolved revision is available. Should a ArtifactProvenance be created instead ?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
     val provenance = RepositoryProvenance(vcsInfo, ".")
