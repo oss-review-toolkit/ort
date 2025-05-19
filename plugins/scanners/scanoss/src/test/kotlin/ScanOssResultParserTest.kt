@@ -27,6 +27,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import java.time.Instant
 
@@ -38,7 +39,9 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.readResource
 
 class ScanOssResultParserTest : WordSpec({
@@ -130,6 +133,55 @@ class ScanOssResultParserTest : WordSpec({
                     )
                 )
             )
+        }
+
+        "combine the same license from different sources into a single expression" {
+            // When the same license appears in multiple sources (like scancode and file_header),
+            // combine them into a single expression rather than duplicating.
+            val results = readResource("/scanoss-snippet-same-license-multiple-sources.json").let {
+                JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
+            }
+
+            val time = Instant.now()
+            val summary = generateSummary(time, time, results)
+
+            // Verify the snippet finding.
+            summary.snippetFindings should haveSize(1)
+            val snippet = summary.snippetFindings.first().snippets.first()
+
+            // Consolidate the license into a single expression
+            // even though it came from both "scancode" and "file_header" sources.
+            snippet.license shouldBe "LGPL-2.1-or-later".toSpdx()
+
+            // Preserve other snippet details correctly.
+            with(summary.snippetFindings.first()) {
+                sourceLocation.path shouldBe "src/check_error.c"
+                sourceLocation.startLine shouldBe 16
+                sourceLocation.endLine shouldBe 24
+            }
+        }
+
+        "handle empty license array with NOASSERTION" {
+            val results = readResource("/scanoss-snippet-no-license-data.json").let {
+                JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
+            }
+
+            val time = Instant.now()
+            val summary = generateSummary(time, time, results)
+
+            // Verify the snippet finding.
+            summary.snippetFindings should haveSize(1)
+            val snippet = summary.snippetFindings.first().snippets.first()
+
+            // Use NOASSERTION when no licenses are provided.
+            snippet.license shouldBe SpdxConstants.NOASSERTION.toSpdx()
+
+            // Preserve other snippet details correctly.
+            with(summary.snippetFindings.first()) {
+                sourceLocation.path shouldBe "fake_file.c"
+                sourceLocation.startLine shouldBe 16
+                sourceLocation.endLine shouldBe 24
+            }
         }
     }
 })
