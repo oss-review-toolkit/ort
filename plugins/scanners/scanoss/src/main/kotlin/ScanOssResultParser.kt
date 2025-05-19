@@ -23,7 +23,10 @@ import com.scanoss.dto.ScanFileDetails
 import com.scanoss.dto.ScanFileResult
 import com.scanoss.dto.enums.MatchType
 
+import java.lang.invoke.MethodHandles
 import java.time.Instant
+
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.CopyrightFinding
@@ -37,6 +40,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.toExpression
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
  * Generate a summary from the given SCANOSS [result], using [startTime], [endTime] as metadata. This variant can be
@@ -62,11 +67,18 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
                     val sourceLocations = convertLines(localFile, localLines)
                     val snippets = getSnippets(details)
 
-                    snippets.forEach { snippet ->
-                        sourceLocations.forEach { sourceLocation ->
-                            // TODO: Aggregate the snippet by source file location.
-                            snippetFindings += SnippetFinding(sourceLocation, setOf(snippet))
+                    // The number of snippets should match the number of source locations.
+                    if (sourceLocations.size != snippets.size) {
+                        logger.warn {
+                            "Unexpected mismatch in '$localFile': " +
+                                "${sourceLocations.size} source locations vs ${snippets.size} snippets. " +
+                                "This indicates a potential issue with line range conversion."
                         }
+                    }
+
+                    // Associate each source location with its corresponding snippet.
+                    sourceLocations.zip(snippets).forEach { (location, snippet) ->
+                        snippetFindings += SnippetFinding(location, setOf(snippet))
                     }
                 }
 
@@ -132,15 +144,17 @@ private fun getCopyrightFindings(details: ScanFileDetails, path: String): List<C
 }
 
 /**
- * Get the snippet findings from the given [details]. If a snippet returned by ScanOSS contains several Purls,
- * several snippets are created in ORT each containing a single Purl.
+ * Get the snippet findings from the given [details]. If a snippet returned by ScanOSS contains several PURLs,
+ * the function extracts the first PURL as the primary identifier while storing the remaining PURLs in additionalData
+ * to preserve the complete information.
  */
-private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
+private fun getSnippets(details: ScanFileDetails): List<Snippet> {
     val matched = requireNotNull(details.matched)
     val ossFile = requireNotNull(details.file)
     val ossLines = requireNotNull(details.ossLines)
     val url = requireNotNull(details.url)
-    val purls = requireNotNull(details.purls)
+    val purls = requireNotNull(details.purls).toMutableList()
+    val primaryPurl = purls.removeFirstOrNull().orEmpty()
 
     val license = details.licenseDetails.orEmpty()
         .map { license -> SpdxExpression.parse(license.name) }
@@ -152,12 +166,11 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
     val provenance = RepositoryProvenance(vcsInfo, ".")
 
-    return buildSet {
-        purls.forEach { purl ->
-            ossLocations.forEach { snippetLocation ->
-                add(Snippet(score, snippetLocation, provenance, purl, license))
-            }
-        }
+    val additionalData = purls.associateWith { "" }
+
+    // Create one snippet per location, using the first PURL as the primary identifier.
+    return ossLocations.map { snippetLocation ->
+        Snippet(score, snippetLocation, provenance, primaryPurl, license, additionalData)
     }
 }
 
