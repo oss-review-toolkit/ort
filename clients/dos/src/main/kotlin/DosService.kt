@@ -101,15 +101,15 @@ interface DosService {
     suspend fun uploadFile(@Url url: String, @Body file: RequestBody): Response<Unit>
 
     /**
-     * Add new scanner job for specified [purls][JobRequestBody.purls]. In case multiple purls are provided, it is
-     * assumed that they all refer to the same provenance (like a monorepo).
+     * Add new scanner job for specified [packages][JobRequestBody.packages]. In case multiple packages are provided, it
+     * is assumed that they all refer to the same provenance (like a monorepo).
      */
     @POST("job")
     suspend fun addScanJob(@Body body: JobRequestBody): Response<JobResponseBody>
 
     /**
-     * Get scan results for specified [purls][ScanResultsRequestBody.purls]. In case multiple purls are provided, it is
-     * assumed that they all refer to the same provenance (like a monorepo).
+     * Get scan results for specified [packages][ScanResultsRequestBody.packages]. In case multiple packages are
+     * provided, it is assumed that they all refer to the same provenance (like a monorepo).
      */
     @POST("scan-results")
     suspend fun getScanResults(@Body body: ScanResultsRequestBody): Response<ScanResultsResponseBody>
