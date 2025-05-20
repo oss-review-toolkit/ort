@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.toExpression
 
 /**
- * Generate a summary from the given SCANOSS [result], using [startTime], [endTime] as metadata. This variant can be
+ * Generate a summary from the given SCANOSS [results], using [startTime], [endTime] as metadata. This variant can be
  * used if the result is not read from a local file.
  */
 internal fun generateSummary(startTime: Instant, endTime: Instant, results: List<ScanFileResult>): ScanSummary {
