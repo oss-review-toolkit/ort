@@ -42,8 +42,7 @@ private fun String.decodeColon() = replace('\u0000', ':')
 
 /**
  * Return the list of enabled [PackageManager]s based on the [AnalyzerConfiguration.enabledPackageManagers] and
- * [AnalyzerConfiguration.disabledPackageManagers] configuration properties and the
- * [default][PackageManagerFactory.isEnabledByDefault] of the [PackageManager]s.
+ * [AnalyzerConfiguration.disabledPackageManagers] configuration properties.
  */
 fun AnalyzerConfiguration.determineEnabledPackageManagers(): Set<PackageManagerFactory> {
     val enabled = enabledPackageManagers.mapNotNull { name ->
