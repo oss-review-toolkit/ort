@@ -526,8 +526,7 @@ class Bazel(
             is GitRepositorySourceInfo -> VcsInfo(
                 type = VcsType.GIT,
                 url = remote,
-                revision = commit.orEmpty(),
-                path = ""
+                revision = commit.orEmpty()
             )
 
             is LocalRepositorySourceInfo -> vcs
@@ -652,8 +651,7 @@ private fun ModuleMetadata.toVcsInfo() =
     VcsInfo(
         type = VcsType.GIT,
         url = repository?.firstOrNull().orEmpty().expandRepositoryUrl(),
-        revision = "",
-        path = ""
+        revision = ""
     )
 
 private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? =
