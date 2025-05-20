@@ -56,7 +56,6 @@ import java.io.File
 import kotlin.time.measureTime
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -379,7 +378,6 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
 
         launch { progress.execute() }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         withContext(Dispatchers.IO.limitedParallelism(parallelDownloads)) {
             packageDownloadDirs.entries.mapIndexed { index, (pkg, dir) ->
                 async {
