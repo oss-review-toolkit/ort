@@ -91,7 +91,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
     description = "The Tycho package manager for Maven projects.",
     factory = PackageManagerFactory::class
 )
-class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.descriptor) : PackageManager("Tycho") {
+class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor) : PackageManager("Tycho") {
     override val globsForDefinitionFiles = listOf("pom.xml")
 
     /**
