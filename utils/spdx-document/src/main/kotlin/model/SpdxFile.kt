@@ -169,10 +169,6 @@ data class SpdxFile(
         VIDEO
     }
 
-    init {
-        validate()
-    }
-
     fun validate(): SpdxFile =
         apply {
             require(spdxId.startsWith(REF_PREFIX)) {

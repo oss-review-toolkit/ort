@@ -48,6 +48,11 @@ internal class SpdxDocumentCache {
         documentCache.getOrPut(file) {
             logger.info { "Loading SpdxDocument from '$file'." }
 
-            runCatching { SpdxModelMapper.read(file) }
+            runCatching {
+                SpdxModelMapper.read<SpdxDocument>(file).apply {
+                    packages.forEach { it.validate() }
+                    files.forEach { it.validate() }
+                }
+            }
         }
 }
