@@ -1,0 +1,23 @@
+{
+  "name": "ort",
+  "version": "1.0.0",
+  "description": "![OSS Review Toolkit Logo](./logos/ort.png)",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oss-review-toolkit/ort.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oss-review-toolkit/ort/issues"
+  },
+  "homepage": "https://github.com/oss-review-toolkit/ort#readme"
+}

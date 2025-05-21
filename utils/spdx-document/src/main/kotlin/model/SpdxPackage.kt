@@ -190,10 +190,6 @@ data class SpdxPackage(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val versionInfo: String = ""
 ) {
-    init {
-        validate()
-    }
-
     fun validate(): SpdxPackage =
         apply {
             require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
