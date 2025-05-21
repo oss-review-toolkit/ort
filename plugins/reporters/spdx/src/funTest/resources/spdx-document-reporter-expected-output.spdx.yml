@@ -150,7 +150,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "GPL-3.0-only"
+  licenseDeclared: "GPL-2.0-only WITH NOASSERTION"
   name: "seventh-package"
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1-source-artifact"
@@ -170,9 +170,9 @@ packages:
   - "SPDXRef-File-3"
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "GPL-3.0-only"
+  licenseDeclared: "GPL-2.0-only WITH NOASSERTION"
   licenseInfoFromFiles:
-  - "GPL-3.0-only"
+  - "GPL-2.0-only WITH NOASSERTION"
   name: "seventh-package"
   packageVerificationCode:
     packageVerificationCodeValue: "e14acc46fad3a38a1ef2830067619812b51cb4bc"
@@ -226,7 +226,7 @@ files:
   fileName: "LICENSE"
   licenseConcluded: "NOASSERTION"
   licenseInfoInFiles:
-  - "GPL-3.0-only"
+  - "GPL-2.0-only WITH NOASSERTION"
 - SPDXID: "SPDXRef-File-3"
   checksums:
   - algorithm: "SHA1"

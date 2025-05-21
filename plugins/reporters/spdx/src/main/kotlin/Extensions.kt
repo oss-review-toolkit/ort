@@ -23,6 +23,8 @@ package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import java.util.concurrent.atomic.AtomicInteger
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -197,7 +199,13 @@ internal fun Package.toSpdxPackage(
         packageVerificationCode = packageVerificationCode,
         supplier = authors.takeUnless { it.isEmpty() }?.joinToString(prefix = "${SpdxConstants.PERSON} "),
         versionInfo = id.version
-    )
+    ).also { spdxPackage ->
+        runCatching {
+            spdxPackage.validate()
+        }.onFailure {
+            logger.error { "Validation failed for '${spdxPackage.spdxId}': ${it.message}" }
+        }
+    }
 }
 
 private fun OrtResult.getVcsScanResult(id: Identifier): ScanResult? =
@@ -290,7 +298,13 @@ internal fun OrtResult.getSpdxFiles(
             licenseConcluded = SpdxConstants.NOASSERTION,
             licenseInfoInFiles = fileFindings.licenses.map { it.toString() }.ifEmpty { listOf(SpdxConstants.NONE) },
             copyrightText = fileFindings.copyrights.sorted().joinToString("\n").ifBlank { SpdxConstants.NONE }
-        )
+        ).also { spdxFile ->
+            runCatching {
+                spdxFile.validate()
+            }.onFailure {
+                logger.error { "Validation failed for '${spdxFile.spdxId}': ${it.message}" }
+            }
+        }
     }
 
 /**

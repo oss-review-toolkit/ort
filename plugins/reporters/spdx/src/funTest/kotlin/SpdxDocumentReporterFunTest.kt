@@ -396,7 +396,7 @@ private val ortResult = OrtResult(
                 summary = ScanSummary.EMPTY.copy(
                     licenseFindings = setOf(
                         LicenseFinding(
-                            license = "GPL-3.0-only",
+                            license = "GPL-2.0-only WITH NOASSERTION",
                             location = TextLocation("LICENSE", 1)
                         )
                     ),
