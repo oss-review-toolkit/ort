@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
+import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -85,38 +86,31 @@ data class ResolvedLicenseInfo(
      */
     fun mainLicense(): SpdxExpression? {
         val licenseFilePatterns = LicenseFilePatterns.getInstance()
-        val fileMatcher = FileMatcher(licenseFilePatterns.allLicenseFilenames, ignoreCase = true)
         val licenseMatcher = PathLicenseMatcher(licenseFilePatterns)
 
-        // Only keep those resolved licenses that can contribute to the main license as they match the configured
-        // license file patterns. This vastly reduces the search for applicable license files for scan results with a
-        // lot of detected license findings, like from file headers in a large code base.
-        val relevantResolvedLicenses = mapNotNull { resolvedLicense ->
-            val locations = resolvedLicense.locations.filterTo(mutableSetOf()) { fileMatcher.matches(it.location.path) }
-            if (locations.isNotEmpty()) resolvedLicense.copy(locations = locations) else null
-        }
+        val declaredLicenses = filter(LicenseView.ONLY_DECLARED, filterSources = true)
+        val detectedLicenses = filter(LicenseView.ONLY_DETECTED, filterSources = true)
 
-        val licensePaths = relevantResolvedLicenses.flatMap { resolvedLicense ->
+        val licensePaths = detectedLicenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.map { it.location.path }
         }
 
-        val detectedLicenses = relevantResolvedLicenses.filterTo(mutableSetOf()) { resolvedLicense ->
+        val packageRoot = detectedLicenses.firstOrNull()?.locations?.firstOrNull()?.provenance.vcsPath
+
+        val applicableLicensePaths = licenseMatcher.getApplicableLicenseFilesForDirectories(
+            licensePaths,
+            listOf(packageRoot)
+        )
+
+        val applicableLicenseFiles = applicableLicensePaths[packageRoot].orEmpty()
+
+        val relevantDetectedLicenses = detectedLicenses.filterTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.any {
-                val packageRoot = (it.provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
-
-                val applicableLicensePaths = licenseMatcher.getApplicableLicenseFilesForDirectories(
-                    licensePaths,
-                    listOf(packageRoot)
-                )
-
-                val applicableLicenseFiles = applicableLicensePaths[packageRoot].orEmpty()
-
                 it.location.path in applicableLicenseFiles
             }
         }
 
-        val declaredLicenses = filter(LicenseView.ONLY_DECLARED)
-        val mainLicenses = (detectedLicenses + declaredLicenses.licenses)
+        val mainLicenses = (declaredLicenses.licenses + relevantDetectedLicenses)
             .flatMap { it.originalExpressions }
             .map { it.expression }
 
