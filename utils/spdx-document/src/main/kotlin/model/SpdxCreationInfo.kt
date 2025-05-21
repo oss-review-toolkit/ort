@@ -56,10 +56,15 @@ data class SpdxCreationInfo(
 
 ) {
     init {
-        require(creators.isNotEmpty()) { "Creators must contain at least one entry, but was empty." }
-
-        require(licenseListVersion.isEmpty() || licenseListVersion.split('.').size == 2) {
-            "The license list version must contain exactly the major and minor parts."
-        }
+        validate()
     }
+
+    fun validate(): SpdxCreationInfo =
+        apply {
+            require(creators.isNotEmpty()) { "Creators must contain at least one entry, but was empty." }
+
+            require(licenseListVersion.isEmpty() || licenseListVersion.split('.').size == 2) {
+                "The license list version must contain exactly the major and minor parts."
+            }
+        }
 }

@@ -38,14 +38,19 @@ data class SpdxPackageVerificationCode(
     val packageVerificationCodeValue: String
 ) {
     init {
-        require(packageVerificationCodeValue.matches(SpdxChecksum.HEX_SYMBOLS_REGEX)) {
-            "The package verification code must only contain lower case hexadecimal digits but was " +
-                "'$packageVerificationCodeValue'."
-        }
-
-        require(SpdxChecksum.Algorithm.SHA1.checksumHexDigits == packageVerificationCodeValue.length) {
-            "Expected a checksum value with ${SpdxChecksum.Algorithm.SHA1.checksumHexDigits} hexadecimal digits, but " +
-                "found ${packageVerificationCodeValue.length}."
-        }
+        validate()
     }
+
+    fun validate(): SpdxPackageVerificationCode =
+        apply {
+            require(packageVerificationCodeValue.matches(SpdxChecksum.HEX_SYMBOLS_REGEX)) {
+                "The package verification code must only contain lower case hexadecimal digits but was " +
+                    "'$packageVerificationCodeValue'."
+            }
+
+            require(SpdxChecksum.Algorithm.SHA1.checksumHexDigits == packageVerificationCodeValue.length) {
+                "Expected a checksum value with ${SpdxChecksum.Algorithm.SHA1.checksumHexDigits} hexadecimal digits, " +
+                    "but found ${packageVerificationCodeValue.length}."
+            }
+        }
 }

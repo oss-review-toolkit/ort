@@ -133,43 +133,48 @@ data class SpdxDocument(
     val relationships: List<SpdxRelationship> = emptyList()
 ) {
     init {
-        require(spdxId.isNotBlank()) { "The SPDX-ID must not be blank." }
-
-        require(spdxVersion.isNotBlank()) { "The SPDX version must not be blank." }
-
-        require(name.isNotBlank()) { "The document name for SPDX-ID '$spdxId' must not be blank." }
-
-        require(dataLicense.isNotBlank()) { "The data license must not be blank." }
-
-        require(packages.isNotEmpty()) { "At least one package must be listed in packages" }
-
-        val duplicateExternalDocumentRefs = externalDocumentRefs.getDuplicates { it.externalDocumentId }
-        require(duplicateExternalDocumentRefs.isEmpty()) {
-            "The document must not contain duplicate external document references but has " +
-                "${duplicateExternalDocumentRefs.keys}."
-        }
-
-        require(documentNamespace.isNotBlank()) { "The document namespace must not be blank." }
-
-        val duplicatePackages = packages.getDuplicates { it.spdxId }
-        require(duplicatePackages.isEmpty()) {
-            "The document must not contain duplicate packages but has ${duplicatePackages.keys}."
-        }
-
-        val duplicateFiles = files.getDuplicates { it.spdxId }
-        require(duplicateFiles.isEmpty()) {
-            "The document must not contain duplicate files but has ${duplicateFiles.keys}."
-        }
-
-        val duplicateSnippets = snippets.getDuplicates { it.spdxId }
-        require(duplicateSnippets.isEmpty()) {
-            "The document must not contain duplicate snippets but has ${duplicateSnippets.keys}."
-        }
-
-        val hasDescribesRelationship = relationships.any { it.relationshipType == SpdxRelationship.Type.DESCRIBES }
-        require(hasDescribesRelationship || documentDescribes.isNotEmpty()) {
-            "The document must either have at least one relationship of type 'DESCRIBES' or contain the " +
-                "'documentDescribes' field."
-        }
+        validate()
     }
+
+    fun validate(): SpdxDocument =
+        apply {
+            require(spdxId.isNotBlank()) { "The SPDX-ID must not be blank." }
+
+            require(spdxVersion.isNotBlank()) { "The SPDX version must not be blank." }
+
+            require(name.isNotBlank()) { "The document name for SPDX-ID '$spdxId' must not be blank." }
+
+            require(dataLicense.isNotBlank()) { "The data license must not be blank." }
+
+            require(packages.isNotEmpty()) { "At least one package must be listed in packages" }
+
+            val duplicateExternalDocumentRefs = externalDocumentRefs.getDuplicates { it.externalDocumentId }
+            require(duplicateExternalDocumentRefs.isEmpty()) {
+                "The document must not contain duplicate external document references but has " +
+                    "${duplicateExternalDocumentRefs.keys}."
+            }
+
+            require(documentNamespace.isNotBlank()) { "The document namespace must not be blank." }
+
+            val duplicatePackages = packages.getDuplicates { it.spdxId }
+            require(duplicatePackages.isEmpty()) {
+                "The document must not contain duplicate packages but has ${duplicatePackages.keys}."
+            }
+
+            val duplicateFiles = files.getDuplicates { it.spdxId }
+            require(duplicateFiles.isEmpty()) {
+                "The document must not contain duplicate files but has ${duplicateFiles.keys}."
+            }
+
+            val duplicateSnippets = snippets.getDuplicates { it.spdxId }
+            require(duplicateSnippets.isEmpty()) {
+                "The document must not contain duplicate snippets but has ${duplicateSnippets.keys}."
+            }
+
+            val hasDescribesRelationship = relationships.any { it.relationshipType == SpdxRelationship.Type.DESCRIBES }
+            require(hasDescribesRelationship || documentDescribes.isNotEmpty()) {
+                "The document must either have at least one relationship of type 'DESCRIBES' or contain the " +
+                    "'documentDescribes' field."
+            }
+        }
 }

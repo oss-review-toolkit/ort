@@ -191,43 +191,48 @@ data class SpdxPackage(
     val versionInfo: String = ""
 ) {
     init {
-        require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
-            "The SPDX ID '$spdxId' has to start with '${SpdxConstants.REF_PREFIX}'."
-        }
-
-        require(spdxId.all { it.isLetterOrDigit() || it == '.' || it == '-' }) {
-            "The SPDX ID '$spdxId' is only allowed to contain letters, numbers, '.', and '-'."
-        }
-
-        require(copyrightText.isNotBlank()) { "The copyright text must not be blank." }
-
-        require(downloadLocation.isNotBlank()) { "The download location must not be blank." }
-
-        require(name.isNotBlank()) { "The package name for SPDX-ID '$spdxId' must not be blank." }
-
-        val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION)
-
-        if (originator != null) {
-            require(originator == SpdxConstants.NOASSERTION || validPrefixes.any { originator.startsWith(it) }) {
-                "If specified, the originator has to start with any of $validPrefixes or be set to 'NOASSERTION'."
-            }
-        }
-
-        if (supplier != null) {
-            require(supplier == SpdxConstants.NOASSERTION || validPrefixes.any { supplier.startsWith(it) }) {
-                "If specified, the supplier has to start with any of $validPrefixes or be set to 'NOASSERTION'."
-            }
-        }
-
-        // TODO: The check for [licenseInfoFromFiles] can be made more strict, but the SPDX specification is not exact
-        //       enough yet to do this safely.
-        licenseInfoFromFiles.filterNot {
-            it.isSpdxExpressionOrNotPresent(ALLOW_LICENSEREF_EXCEPTIONS)
-        }.let { nonSpdxLicenses ->
-            require(nonSpdxLicenses.isEmpty()) {
-                "The entries in 'licenseInfoFromFiles' must each be either an SPDX expression, 'NONE' or " +
-                    "'NOASSERTION', but found ${nonSpdxLicenses.joinToString { "'$it'" }}."
-            }
-        }
+        validate()
     }
+
+    fun validate(): SpdxPackage =
+        apply {
+            require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
+                "The SPDX ID '$spdxId' has to start with '${SpdxConstants.REF_PREFIX}'."
+            }
+
+            require(spdxId.all { it.isLetterOrDigit() || it == '.' || it == '-' }) {
+                "The SPDX ID '$spdxId' is only allowed to contain letters, numbers, '.', and '-'."
+            }
+
+            require(copyrightText.isNotBlank()) { "The copyright text must not be blank." }
+
+            require(downloadLocation.isNotBlank()) { "The download location must not be blank." }
+
+            require(name.isNotBlank()) { "The package name for SPDX-ID '$spdxId' must not be blank." }
+
+            val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION)
+
+            if (originator != null) {
+                require(originator == SpdxConstants.NOASSERTION || validPrefixes.any { originator.startsWith(it) }) {
+                    "If specified, the originator has to start with any of $validPrefixes or be set to 'NOASSERTION'."
+                }
+            }
+
+            if (supplier != null) {
+                require(supplier == SpdxConstants.NOASSERTION || validPrefixes.any { supplier.startsWith(it) }) {
+                    "If specified, the supplier has to start with any of $validPrefixes or be set to 'NOASSERTION'."
+                }
+            }
+
+            // TODO: The check for [licenseInfoFromFiles] can be made more strict, but the SPDX specification is not
+            //       exact enough yet to do this safely.
+            licenseInfoFromFiles.filterNot {
+                it.isSpdxExpressionOrNotPresent(ALLOW_LICENSEREF_EXCEPTIONS)
+            }.let { nonSpdxLicenses ->
+                require(nonSpdxLicenses.isEmpty()) {
+                    "The entries in 'licenseInfoFromFiles' must each be either an SPDX expression, 'NONE' or " +
+                        "'NOASSERTION', but found ${nonSpdxLicenses.joinToString { "'$it'" }}."
+                }
+            }
+        }
 }

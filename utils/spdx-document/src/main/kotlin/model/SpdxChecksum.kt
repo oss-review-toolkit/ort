@@ -51,15 +51,20 @@ data class SpdxChecksum(
     }
 
     init {
-        require(checksumValue.isNotBlank()) { "The checksum value must not be blank." }
-
-        require(checksumValue.matches(HEX_SYMBOLS_REGEX)) {
-            "The checksum value must only contain lower case hexadecimal symbols."
-        }
-
-        require(algorithm.checksumHexDigits == -1 || checksumValue.length == algorithm.checksumHexDigits) {
-            "Expected a checksum value with ${algorithm.checksumHexDigits} hexadecimal symbols, but found " +
-                "${checksumValue.length}."
-        }
+        validate()
     }
+
+    fun validate(): SpdxChecksum =
+        apply {
+            require(checksumValue.isNotBlank()) { "The checksum value must not be blank." }
+
+            require(checksumValue.matches(HEX_SYMBOLS_REGEX)) {
+                "The checksum value must only contain lower case hexadecimal symbols."
+            }
+
+            require(algorithm.checksumHexDigits == -1 || checksumValue.length == algorithm.checksumHexDigits) {
+                "Expected a checksum value with ${algorithm.checksumHexDigits} hexadecimal symbols, but found " +
+                    "${checksumValue.length}."
+            }
+        }
 }

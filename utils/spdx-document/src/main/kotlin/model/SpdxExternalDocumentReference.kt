@@ -42,16 +42,21 @@ data class SpdxExternalDocumentReference(
     val checksum: SpdxChecksum
 ) {
     init {
-        require(externalDocumentId.isNotBlank()) { "The external document ID must not be blank." }
-
-        require(externalDocumentId.startsWith(SpdxConstants.DOCUMENT_REF_PREFIX)) {
-            "The external document ID must start with '${SpdxConstants.DOCUMENT_REF_PREFIX}'."
-        }
-
-        require(spdxDocument.isNotEmpty()) { "The SPDX document must not be empty." }
-
-        require(spdxDocument.trim() == spdxDocument) {
-            "The SPDX document must not contain any leading or trailing whitespace."
-        }
+        validate()
     }
+
+    fun validate(): SpdxExternalDocumentReference =
+        apply {
+            require(externalDocumentId.isNotBlank()) { "The external document ID must not be blank." }
+
+            require(externalDocumentId.startsWith(SpdxConstants.DOCUMENT_REF_PREFIX)) {
+                "The external document ID must start with '${SpdxConstants.DOCUMENT_REF_PREFIX}'."
+            }
+
+            require(spdxDocument.isNotEmpty()) { "The SPDX document must not be empty." }
+
+            require(spdxDocument.trim() == spdxDocument) {
+                "The SPDX document must not contain any leading or trailing whitespace."
+            }
+        }
 }
