@@ -94,12 +94,7 @@ data class SpdxExternalReference(
     }
 
     init {
-        require(referenceLocator.isNotBlank()) { "The referenceLocator must not be blank." }
-
-        require(referenceType.category == Category.OTHER || referenceType.category == referenceCategory) {
-            "The category for '${referenceType.name}' must be '${referenceType.category}', but was " +
-                "'$referenceCategory'."
-        }
+        validate()
     }
 
     constructor(referenceType: Type, referenceLocator: String, comment: String = "") : this(
@@ -108,6 +103,16 @@ data class SpdxExternalReference(
         referenceType,
         referenceLocator
     )
+
+    fun validate(): SpdxExternalReference =
+        apply {
+            require(referenceLocator.isNotBlank()) { "The referenceLocator must not be blank." }
+
+            require(referenceType.category == Category.OTHER || referenceType.category == referenceCategory) {
+                "The category for '${referenceType.name}' must be '${referenceType.category}', but was " +
+                    "'$referenceCategory'."
+            }
+        }
 }
 
 private class ReferenceTypeDeserializer : StdDeserializer<SpdxExternalReference.Type>(

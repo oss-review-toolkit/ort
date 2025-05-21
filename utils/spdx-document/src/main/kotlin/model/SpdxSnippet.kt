@@ -102,13 +102,18 @@ data class SpdxSnippet(
         val endPointer: Pointer
     ) {
         init {
-            require(
-                (startPointer.lineNumber != null && endPointer.lineNumber != null) ||
-                    (startPointer.offset != null && endPointer.offset != null)
-            ) {
-                "Start and end pointers need to be of the same type (line number or byte offset)."
-            }
+            validate()
         }
+
+        fun validate(): Range =
+            apply {
+                require(
+                    (startPointer.lineNumber != null && endPointer.lineNumber != null) ||
+                        (startPointer.offset != null && endPointer.offset != null)
+                ) {
+                    "Start and end pointers need to be of the same type (line number or byte offset)."
+                }
+            }
     }
 
     data class Pointer(
@@ -124,43 +129,53 @@ data class SpdxSnippet(
         val offset: Int? = null
     ) {
         init {
-            require((lineNumber == null) xor (offset == null)) {
-                "The '$reference' pointer must either set the 'lineNumber' or the 'offset' property."
-            }
+            validate()
         }
+
+        fun validate(): Pointer =
+            apply {
+                require((lineNumber == null) xor (offset == null)) {
+                    "The '$reference' pointer must either set the 'lineNumber' or the 'offset' property."
+                }
+            }
     }
 
     init {
-        require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
-            "The SPDX ID '$spdxId' has to start with '${SpdxConstants.REF_PREFIX}'."
-        }
+        validate()
+    }
 
-        require(copyrightText.isNotBlank()) {
-            "The copyright text must not be blank."
-        }
+    fun validate(): SpdxSnippet =
+        apply {
+            require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
+                "The SPDX ID '$spdxId' has to start with '${SpdxConstants.REF_PREFIX}'."
+            }
 
-        require(licenseConcluded.isSpdxExpressionOrNotPresent()) {
-            "The license concluded must be either an SpdxExpression, 'NONE' or 'NOASSERTION', but was " +
-                "$licenseConcluded."
-        }
+            require(copyrightText.isNotBlank()) {
+                "The copyright text must not be blank."
+            }
 
-        // TODO: The check for [licenseInfoInSnippets] can be made more strict, but the SPDX specification is not exact
-        //       enough yet to do this safely.
-        licenseInfoInSnippets.filterNot {
-            it.isSpdxExpressionOrNotPresent(ALLOW_LICENSEREF_EXCEPTIONS)
-        }.let { nonSpdxLicenses ->
-            require(nonSpdxLicenses.isEmpty()) {
-                "The entries in 'licenseInfoInSnippets' must each be either an SPDX expression, 'NONE' or " +
-                    "'NOASSERTION', but found ${nonSpdxLicenses.joinToString { "'$it'" }}."
+            require(licenseConcluded.isSpdxExpressionOrNotPresent()) {
+                "The license concluded must be either an SpdxExpression, 'NONE' or 'NOASSERTION', but was " +
+                    "$licenseConcluded."
+            }
+
+            // TODO: The check for [licenseInfoInSnippets] can be made more strict, but the SPDX specification is not
+            //       exact enough yet to do this safely.
+            licenseInfoInSnippets.filterNot {
+                it.isSpdxExpressionOrNotPresent(ALLOW_LICENSEREF_EXCEPTIONS)
+            }.let { nonSpdxLicenses ->
+                require(nonSpdxLicenses.isEmpty()) {
+                    "The entries in 'licenseInfoInSnippets' must each be either an SPDX expression, 'NONE' or " +
+                        "'NOASSERTION', but found ${nonSpdxLicenses.joinToString { "'$it'" }}."
+                }
+            }
+
+            require(name.isNotBlank()) {
+                "The snippet name for SPDX-ID '$spdxId' must not be blank."
+            }
+
+            require(snippetFromFile.isNotBlank()) {
+                "The snippet from file must not be blank."
             }
         }
-
-        require(name.isNotBlank()) {
-            "The snippet name for SPDX-ID '$spdxId' must not be blank."
-        }
-
-        require(snippetFromFile.isNotBlank()) {
-            "The snippet from file must not be blank."
-        }
-    }
 }

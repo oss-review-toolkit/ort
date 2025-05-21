@@ -263,12 +263,17 @@ data class SpdxRelationship(
     }
 
     init {
-        require(spdxElementId.isNotBlank()) {
-            "The SPDX element ID must not be blank."
-        }
-
-        require(relatedSpdxElement.isNotBlank()) {
-            "The related SPDX element must not be blank."
-        }
+        validate()
     }
+
+    fun validate(): SpdxRelationship =
+        apply {
+            require(spdxElementId.isNotBlank()) {
+                "The SPDX element ID must not be blank."
+            }
+
+            require(relatedSpdxElement.isNotBlank()) {
+                "The related SPDX element must not be blank."
+            }
+        }
 }

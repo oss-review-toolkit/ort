@@ -67,10 +67,15 @@ data class SpdxAnnotation(
     }
 
     init {
-        val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION, SpdxConstants.TOOL)
-
-        require(validPrefixes.any { annotator.startsWith(it) }) {
-            "The annotator has to start with any of $validPrefixes."
-        }
+        validate()
     }
+
+    fun validate(): SpdxAnnotation =
+        apply {
+            val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION, SpdxConstants.TOOL)
+
+            require(validPrefixes.any { annotator.startsWith(it) }) {
+                "The annotator has to start with any of $validPrefixes."
+            }
+        }
 }
