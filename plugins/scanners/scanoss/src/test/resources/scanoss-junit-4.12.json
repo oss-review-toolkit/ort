@@ -1,5 +1,5 @@
 {
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/to-do.txt": [
+  "junit/4.12/to-do.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -27,7 +27,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/resources/junit/tests/runner/testRunSuccessResultCanBeSerialised": [
+  "junit/4.12/src/test/resources/junit/tests/runner/testRunSuccessResultCanBeSerialised": [
     {
       "id": "none",
       "status": "pending",
@@ -55,7 +55,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/resources/junit/tests/runner/testRunFailureResultCanBeSerialised": [
+  "junit/4.12/src/test/resources/junit/tests/runner/testRunFailureResultCanBeSerialised": [
     {
       "id": "none",
       "status": "pending",
@@ -83,7 +83,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/validator/PublicClassValidatorTest.java": [
+  "junit/4.12/src/test/java/org/junit/validator/PublicClassValidatorTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -141,7 +141,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/validator/AnnotationsValidatorTest.java": [
+  "junit/4.12/src/test/java/org/junit/validator/AnnotationsValidatorTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -199,7 +199,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/validator/AnnotationValidatorFactoryTest.java": [
+  "junit/4.12/src/test/java/org/junit/validator/AnnotationValidatorFactoryTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -268,7 +268,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/validation/anotherpackage/Super.java": [
+  "junit/4.12/src/test/java/org/junit/tests/validation/anotherpackage/Super.java": [
     {
       "id": "none",
       "status": "pending",
@@ -297,7 +297,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/validation/anotherpackage/Sub.java": [
+  "junit/4.12/src/test/java/org/junit/tests/validation/anotherpackage/Sub.java": [
     {
       "id": "none",
       "status": "pending",
@@ -325,7 +325,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/validation/ValidationTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/validation/ValidationTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -394,7 +394,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/validation/FailedConstructionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/validation/FailedConstructionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -452,7 +452,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/validation/BadlyFormedClassesTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/validation/BadlyFormedClassesTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -521,7 +521,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/methods/TimeoutTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/methods/TimeoutTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -579,7 +579,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/methods/TestMethodTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/methods/TestMethodTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -637,7 +637,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/methods/ParameterizedTestMethodTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/methods/ParameterizedTestMethodTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -695,7 +695,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/methods/InheritedTestTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/methods/InheritedTestTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -753,7 +753,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/methods/ExpectedTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/methods/ExpectedTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -822,7 +822,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/methods/AnnotationTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/methods/AnnotationTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -891,7 +891,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/core/SystemExitTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/core/SystemExitTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -949,7 +949,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/core/MainRunner.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/core/MainRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1018,7 +1018,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/core/JUnitCoreReturnsCorrectExitCodeTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/core/JUnitCoreReturnsCorrectExitCodeTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1076,7 +1076,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/core/CommandLineTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/core/CommandLineTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1134,7 +1134,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/UseSuiteAsASuperclassTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/UseSuiteAsASuperclassTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1192,7 +1192,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/SuiteTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/SuiteTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1261,7 +1261,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/RunWithTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/RunWithTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1319,7 +1319,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/ParentRunnerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/ParentRunnerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1388,7 +1388,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/ParentRunnerFilteringTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/ParentRunnerFilteringTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1446,7 +1446,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/ParameterizedTestTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/ParameterizedTestTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1515,7 +1515,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/IgnoreClassTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/IgnoreClassTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1573,7 +1573,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/EnclosedTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/EnclosedTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1615,7 +1615,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/ClassLevelMethodsWithIgnoredTestsTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/ClassLevelMethodsWithIgnoredTestsTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1673,7 +1673,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/running/classes/BlockJUnit4ClassRunnerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/running/classes/BlockJUnit4ClassRunnerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1742,7 +1742,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/package-info.java": [
+  "junit/4.12/src/test/java/org/junit/tests/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -1770,7 +1770,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/manipulation/SortableTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/manipulation/SortableTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1839,7 +1839,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/manipulation/SingleMethodTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/manipulation/SingleMethodTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1897,7 +1897,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/manipulation/FilterableTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/manipulation/FilterableTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -1955,7 +1955,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/manipulation/FilterTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/manipulation/FilterTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2013,7 +2013,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/listening/UserStopTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/listening/UserStopTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2071,7 +2071,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/listening/TextListenerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/listening/TextListenerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2129,7 +2129,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/listening/TestListenerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/listening/TestListenerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2187,7 +2187,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/listening/RunnerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/listening/RunnerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2245,7 +2245,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/listening/ListenerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/listening/ListenerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2303,7 +2303,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/SuiteMethodTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/SuiteMethodTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2361,7 +2361,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/OldTests.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/OldTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2419,7 +2419,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/OldTestClassAdaptingListenerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/OldTestClassAdaptingListenerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2477,7 +2477,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/JUnit38ClassRunnerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/JUnit38ClassRunnerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2535,7 +2535,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/InitializationErrorForwardCompatibilityTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/InitializationErrorForwardCompatibilityTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2593,7 +2593,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/ForwardCompatibilityTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/ForwardCompatibilityTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2651,7 +2651,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/ForwardCompatibilityPrintingTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/ForwardCompatibilityPrintingTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2709,7 +2709,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/ClassRequestTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/ClassRequestTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2767,7 +2767,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/junit3compatibility/AllTestsTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/junit3compatibility/AllTestsTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2825,7 +2825,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/internal/runners/statements/FailOnTimeoutTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/internal/runners/statements/FailOnTimeoutTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2894,7 +2894,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/internal/runners/ErrorReportingRunnerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/internal/runners/ErrorReportingRunnerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -2963,7 +2963,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithUnresolvedGenericTypeVariablesOnTheoryParms.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithUnresolvedGenericTypeVariablesOnTheoryParms.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3032,7 +3032,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithParameterSupplier.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithParameterSupplier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3074,7 +3074,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithOnlyTestAnnotations.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithOnlyTestAnnotations.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3132,7 +3132,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithNamedDataPoints.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithNamedDataPoints.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3174,7 +3174,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithExtendedParameterSources.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithExtendedParameterSources.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3216,7 +3216,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithDataPointMethod.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithDataPointMethod.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3258,7 +3258,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithAutoGeneratedDataPoints.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WithAutoGeneratedDataPoints.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3300,7 +3300,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WhenNoParametersMatch.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/WhenNoParametersMatch.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3358,7 +3358,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/UnsuccessfulWithDataPointFields.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/UnsuccessfulWithDataPointFields.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3400,7 +3400,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/TypeMatchingBetweenMultiDataPointsMethod.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/TypeMatchingBetweenMultiDataPointsMethod.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3458,7 +3458,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/TheoriesPerformanceTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/TheoriesPerformanceTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3516,7 +3516,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/SuccessfulWithDataPointFields.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/SuccessfulWithDataPointFields.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3574,7 +3574,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/FailingDataPointMethods.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/runner/FailingDataPointMethods.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3616,7 +3616,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/internal/SpecificDataPointsSupplierTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/internal/SpecificDataPointsSupplierTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3658,7 +3658,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/internal/ParameterizedAssertionErrorTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/internal/ParameterizedAssertionErrorTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3716,7 +3716,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/internal/AllMembersSupplierTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/internal/AllMembersSupplierTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3758,7 +3758,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/StubbedTheoriesTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/StubbedTheoriesTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3822,7 +3822,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/StubbedTheories.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/StubbedTheories.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3880,7 +3880,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/Stub.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/Stub.java": [
     {
       "id": "none",
       "status": "pending",
@@ -3908,7 +3908,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/StringableObject.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/StringableObject.java": [
     {
       "id": "file",
       "status": "pending",
@@ -3966,7 +3966,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/ReguessableValue.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/ReguessableValue.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4024,7 +4024,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/MethodCall.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/MethodCall.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4082,7 +4082,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/GuesserQueue.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/GuesserQueue.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4140,7 +4140,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/Guesser.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/Guesser.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4198,7 +4198,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/Correspondent.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/extendingwithstubs/Correspondent.java": [
     {
       "id": "none",
       "status": "pending",
@@ -4226,7 +4226,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/TheoryTestUtils.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/TheoryTestUtils.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4268,7 +4268,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/TestedOnSupplierTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/TestedOnSupplierTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4310,7 +4310,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/PotentialAssignmentTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/PotentialAssignmentTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4352,7 +4352,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/ParameterSignatureTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/ParameterSignatureTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4394,7 +4394,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/theories/AssumingInTheoriesTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/theories/AssumingInTheoriesTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4436,7 +4436,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/VerifierRuleTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/VerifierRuleTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4505,7 +4505,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/TimeoutRuleTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/TimeoutRuleTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4574,7 +4574,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/TestWatchmanTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/TestWatchmanTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4643,7 +4643,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/TestWatcherTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/TestWatcherTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4712,7 +4712,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/TestRuleTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/TestRuleTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4781,7 +4781,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/TemporaryFolderUsageTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/TemporaryFolderUsageTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4850,7 +4850,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/TempFolderRuleTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/TempFolderRuleTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4919,7 +4919,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/RuleMemberValidatorTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/RuleMemberValidatorTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -4988,7 +4988,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/RuleChainTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/RuleChainTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5057,7 +5057,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/NameRulesTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/NameRulesTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5126,7 +5126,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/MethodRulesTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/MethodRulesTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5195,7 +5195,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/LoggingTestWatcher.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/LoggingTestWatcher.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5264,7 +5264,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/ExternalResourceRuleTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/ExternalResourceRuleTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5333,7 +5333,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/ExpectedExceptionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/ExpectedExceptionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5402,7 +5402,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/EventCollector.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/EventCollector.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5471,7 +5471,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/ClassRulesTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/ClassRulesTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5540,7 +5540,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/rules/BlockJUnit4ClassRunnerOverrideTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/rules/BlockJUnit4ClassRunnerOverrideTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5609,7 +5609,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/results/ResultMatchersTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/results/ResultMatchersTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5678,7 +5678,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/results/PrintableResultTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/results/PrintableResultTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5736,7 +5736,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/parallel/ParallelMethodTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/parallel/ParallelMethodTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5794,7 +5794,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/parallel/ParallelClassTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/parallel/ParallelClassTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5852,7 +5852,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/max/MaxStarterTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/max/MaxStarterTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5921,7 +5921,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/max/JUnit38SortingTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/max/JUnit38SortingTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -5979,7 +5979,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/max/DescriptionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/max/DescriptionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6037,7 +6037,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/categories/MultiCategoryTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/categories/MultiCategoryTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6084,7 +6084,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/categories/JavadocTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/categories/JavadocTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6131,7 +6131,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/categories/CategoryValidatorTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/categories/CategoryValidatorTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6200,7 +6200,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/categories/CategoryTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/categories/CategoryTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6242,7 +6242,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/categories/CategoriesAndParameterizedTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/categories/CategoriesAndParameterizedTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6311,7 +6311,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/MatcherTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/MatcherTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6369,7 +6369,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/ExperimentalTests.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/ExperimentalTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6411,7 +6411,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/experimental/AssumptionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/experimental/AssumptionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6480,7 +6480,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/description/TestDescriptionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/description/TestDescriptionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6538,7 +6538,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/description/TestDescriptionMethodNameTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/description/TestDescriptionMethodNameTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6601,7 +6601,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/description/SuiteDescriptionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/description/SuiteDescriptionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6659,7 +6659,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/description/AnnotatedDescriptionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/description/AnnotatedDescriptionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6717,7 +6717,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/deprecated/JUnit4ClassRunnerTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/deprecated/JUnit4ClassRunnerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6775,7 +6775,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/assertion/MultipleFailureExceptionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/assertion/MultipleFailureExceptionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6844,7 +6844,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/assertion/ComparisonFailureTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/assertion/ComparisonFailureTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6886,7 +6886,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/assertion/AssertionTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/assertion/AssertionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6928,7 +6928,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/TestSystem.java": [
+  "junit/4.12/src/test/java/org/junit/tests/TestSystem.java": [
     {
       "id": "file",
       "status": "pending",
@@ -6986,7 +6986,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/ObjectContractTest.java": [
+  "junit/4.12/src/test/java/org/junit/tests/ObjectContractTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7044,7 +7044,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/tests/AllTests.java": [
+  "junit/4.12/src/test/java/org/junit/tests/AllTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7108,7 +7108,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/samples/package-info.java": [
+  "junit/4.12/src/test/java/org/junit/samples/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -7136,7 +7136,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/samples/money/package-info.java": [
+  "junit/4.12/src/test/java/org/junit/samples/money/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -7164,7 +7164,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/samples/money/MoneyTest.java": [
+  "junit/4.12/src/test/java/org/junit/samples/money/MoneyTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7222,7 +7222,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/samples/SimpleTest.java": [
+  "junit/4.12/src/test/java/org/junit/samples/SimpleTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7291,7 +7291,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/samples/ListTest.java": [
+  "junit/4.12/src/test/java/org/junit/samples/ListTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7349,7 +7349,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runners/parameterized/TestWithParametersTest.java": [
+  "junit/4.12/src/test/java/org/junit/runners/parameterized/TestWithParametersTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7407,7 +7407,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runners/parameterized/ParameterizedNamesTest.java": [
+  "junit/4.12/src/test/java/org/junit/runners/parameterized/ParameterizedNamesTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7481,7 +7481,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runners/model/TestClassTest.java": [
+  "junit/4.12/src/test/java/org/junit/runners/model/TestClassTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7550,7 +7550,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runners/model/RunnerBuilderStub.java": [
+  "junit/4.12/src/test/java/org/junit/runners/model/RunnerBuilderStub.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7608,7 +7608,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runners/model/FrameworkMethodTest.java": [
+  "junit/4.12/src/test/java/org/junit/runners/model/FrameworkMethodTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7666,7 +7666,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runners/model/FrameworkFieldTest.java": [
+  "junit/4.12/src/test/java/org/junit/runners/model/FrameworkFieldTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7724,7 +7724,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runner/notification/SynchronizedRunListenerTest.java": [
+  "junit/4.12/src/test/java/org/junit/runner/notification/SynchronizedRunListenerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7782,7 +7782,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runner/notification/RunNotifierTest.java": [
+  "junit/4.12/src/test/java/org/junit/runner/notification/RunNotifierTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7819,7 +7819,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runner/notification/ConcurrentRunNotifierTest.java": [
+  "junit/4.12/src/test/java/org/junit/runner/notification/ConcurrentRunNotifierTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7861,7 +7861,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runner/RunnerSpy.java": [
+  "junit/4.12/src/test/java/org/junit/runner/RunnerSpy.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7930,7 +7930,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runner/JUnitCoreTest.java": [
+  "junit/4.12/src/test/java/org/junit/runner/JUnitCoreTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -7972,7 +7972,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runner/JUnitCommandLineParseResultTest.java": [
+  "junit/4.12/src/test/java/org/junit/runner/JUnitCommandLineParseResultTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8030,7 +8030,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runner/FilterOptionIntegrationTest.java": [
+  "junit/4.12/src/test/java/org/junit/runner/FilterOptionIntegrationTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8072,7 +8072,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/runner/FilterFactoriesTest.java": [
+  "junit/4.12/src/test/java/org/junit/runner/FilterFactoriesTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8130,7 +8130,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/rules/StopwatchTest.java": [
+  "junit/4.12/src/test/java/org/junit/rules/StopwatchTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8199,7 +8199,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/rules/DisableOnDebugTest.java": [
+  "junit/4.12/src/test/java/org/junit/rules/DisableOnDebugTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8257,7 +8257,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/internal/matchers/ThrowableCauseMatcherTest.java": [
+  "junit/4.12/src/test/java/org/junit/internal/matchers/ThrowableCauseMatcherTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8315,7 +8315,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/internal/matchers/StacktracePrintingMatcherTest.java": [
+  "junit/4.12/src/test/java/org/junit/internal/matchers/StacktracePrintingMatcherTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8373,7 +8373,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/internal/builders/AnnotatedBuilderTest.java": [
+  "junit/4.12/src/test/java/org/junit/internal/builders/AnnotatedBuilderTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8442,7 +8442,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/internal/MethodSorterTest.java": [
+  "junit/4.12/src/test/java/org/junit/internal/MethodSorterTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8484,7 +8484,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/experimental/categories/CategoryFilterFactoryTest.java": [
+  "junit/4.12/src/test/java/org/junit/experimental/categories/CategoryFilterFactoryTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8542,7 +8542,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/org/junit/AssumptionViolatedExceptionTest.java": [
+  "junit/4.12/src/test/java/org/junit/AssumptionViolatedExceptionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8611,7 +8611,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/runner/package-info.java": [
+  "junit/4.12/src/test/java/junit/tests/runner/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -8639,7 +8639,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/runner/TextRunnerTest.java": [
+  "junit/4.12/src/test/java/junit/tests/runner/TextRunnerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8697,7 +8697,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/runner/TextRunnerSingleMethodTest.java": [
+  "junit/4.12/src/test/java/junit/tests/runner/TextRunnerSingleMethodTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8755,7 +8755,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/runner/TextFeedbackTest.java": [
+  "junit/4.12/src/test/java/junit/tests/runner/TextFeedbackTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8813,7 +8813,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/runner/StackFilterTest.java": [
+  "junit/4.12/src/test/java/junit/tests/runner/StackFilterTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8882,7 +8882,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/runner/ResultTest.java": [
+  "junit/4.12/src/test/java/junit/tests/runner/ResultTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -8951,7 +8951,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/runner/BaseTestRunnerTest.java": [
+  "junit/4.12/src/test/java/junit/tests/runner/BaseTestRunnerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9009,7 +9009,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/runner/AllTests.java": [
+  "junit/4.12/src/test/java/junit/tests/runner/AllTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9067,7 +9067,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/package-info.java": [
+  "junit/4.12/src/test/java/junit/tests/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9095,7 +9095,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/package-info.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9123,7 +9123,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/ThreeTestCases.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/ThreeTestCases.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9181,7 +9181,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/TestListenerTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/TestListenerTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9239,7 +9239,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/TestImplementorTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/TestImplementorTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9297,7 +9297,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/TestCaseTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/TestCaseTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9355,7 +9355,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/SuiteTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/SuiteTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9413,7 +9413,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/Success.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/Success.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9441,7 +9441,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/OverrideTestCase.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/OverrideTestCase.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9469,7 +9469,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/OneTestCase.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/OneTestCase.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9527,7 +9527,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/NotVoidTestCase.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/NotVoidTestCase.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9555,7 +9555,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/NotPublicTestCase.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/NotPublicTestCase.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9583,7 +9583,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/NoTestCases.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/NoTestCases.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9611,7 +9611,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/NoTestCaseClass.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/NoTestCaseClass.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9639,7 +9639,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/NoArgTestCaseTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/NoArgTestCaseTest.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9667,7 +9667,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/InheritedTestCase.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/InheritedTestCase.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9695,7 +9695,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/FloatAssertTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/FloatAssertTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9753,7 +9753,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/Failure.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/Failure.java": [
     {
       "id": "none",
       "status": "pending",
@@ -9781,7 +9781,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/DoublePrecisionAssertTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/DoublePrecisionAssertTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9839,7 +9839,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/ComparisonFailureTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/ComparisonFailureTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9897,7 +9897,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/ComparisonCompactorTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/ComparisonCompactorTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -9955,7 +9955,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/AssertionFailedErrorTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/AssertionFailedErrorTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10013,7 +10013,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/AssertTest.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/AssertTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10071,7 +10071,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/framework/AllTests.java": [
+  "junit/4.12/src/test/java/junit/tests/framework/AllTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10129,7 +10129,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/extensions/package-info.java": [
+  "junit/4.12/src/test/java/junit/tests/extensions/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -10157,7 +10157,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/extensions/RepeatedTestTest.java": [
+  "junit/4.12/src/test/java/junit/tests/extensions/RepeatedTestTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10215,7 +10215,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/extensions/ExtensionTest.java": [
+  "junit/4.12/src/test/java/junit/tests/extensions/ExtensionTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10284,7 +10284,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/extensions/AllTests.java": [
+  "junit/4.12/src/test/java/junit/tests/extensions/AllTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10342,7 +10342,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/extensions/ActiveTestTest.java": [
+  "junit/4.12/src/test/java/junit/tests/extensions/ActiveTestTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10400,7 +10400,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/WasRun.java": [
+  "junit/4.12/src/test/java/junit/tests/WasRun.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10458,7 +10458,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/tests/AllTests.java": [
+  "junit/4.12/src/test/java/junit/tests/AllTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10516,7 +10516,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/package-info.java": [
+  "junit/4.12/src/test/java/junit/samples/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -10544,7 +10544,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/money/package-info.java": [
+  "junit/4.12/src/test/java/junit/samples/money/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -10572,7 +10572,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/money/MoneyTest.java": [
+  "junit/4.12/src/test/java/junit/samples/money/MoneyTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10630,7 +10630,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/money/MoneyBag.java": [
+  "junit/4.12/src/test/java/junit/samples/money/MoneyBag.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10688,7 +10688,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/money/Money.java": [
+  "junit/4.12/src/test/java/junit/samples/money/Money.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10746,7 +10746,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/money/IMoney.java": [
+  "junit/4.12/src/test/java/junit/samples/money/IMoney.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10815,7 +10815,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/SimpleTest.java": [
+  "junit/4.12/src/test/java/junit/samples/SimpleTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10873,7 +10873,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/ListTest.java": [
+  "junit/4.12/src/test/java/junit/samples/ListTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -10942,7 +10942,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/test/java/junit/samples/AllTests.java": [
+  "junit/4.12/src/test/java/junit/samples/AllTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11000,7 +11000,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/xdoc/index.xml": [
+  "junit/4.12/src/site/xdoc/index.xml": [
     {
       "id": "none",
       "status": "pending",
@@ -11028,7 +11028,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/site.xml": [
+  "junit/4.12/src/site/site.xml": [
     {
       "id": "none",
       "status": "pending",
@@ -11056,7 +11056,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/resources/scripts/index.js": [
+  "junit/4.12/src/site/resources/scripts/index.js": [
     {
       "id": "file",
       "status": "pending",
@@ -11114,7 +11114,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/resources/scripts/hopscotch-0.1.2.min.js": [
+  "junit/4.12/src/site/resources/scripts/hopscotch-0.1.2.min.js": [
     {
       "id": "file",
       "status": "pending",
@@ -11187,7 +11187,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/resources/images/junit-logo.svg": [
+  "junit/4.12/src/site/resources/images/junit-logo.svg": [
     {
       "id": "none",
       "status": "pending",
@@ -11215,7 +11215,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/resources/images/junit-logo.png": [
+  "junit/4.12/src/site/resources/images/junit-logo.png": [
     {
       "id": "none",
       "status": "pending",
@@ -11243,7 +11243,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/resources/css/plain-links.css": [
+  "junit/4.12/src/site/resources/css/plain-links.css": [
     {
       "id": "none",
       "status": "pending",
@@ -11271,7 +11271,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/resources/css/hopscotch-0.1.2.min.css": [
+  "junit/4.12/src/site/resources/css/hopscotch-0.1.2.min.css": [
     {
       "id": "none",
       "status": "pending",
@@ -11299,7 +11299,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/markdown/cookbook.md": [
+  "junit/4.12/src/site/markdown/cookbook.md": [
     {
       "id": "none",
       "status": "pending",
@@ -11327,7 +11327,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/site/fml/faq.fml": [
+  "junit/4.12/src/site/fml/faq.fml": [
     {
       "id": "file",
       "status": "pending",
@@ -11407,7 +11407,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/resources/junit/runner/smalllogo.gif": [
+  "junit/4.12/src/main/resources/junit/runner/smalllogo.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -11435,7 +11435,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/resources/junit/runner/logo.gif": [
+  "junit/4.12/src/main/resources/junit/runner/logo.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -11463,7 +11463,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/javadoc/stylesheet.css": [
+  "junit/4.12/src/main/javadoc/stylesheet.css": [
     {
       "id": "none",
       "status": "pending",
@@ -11491,7 +11491,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/validator/ValidateWith.java": [
+  "junit/4.12/src/main/java/org/junit/validator/ValidateWith.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11533,7 +11533,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/validator/TestClassValidator.java": [
+  "junit/4.12/src/main/java/org/junit/validator/TestClassValidator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11575,7 +11575,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/validator/PublicClassValidator.java": [
+  "junit/4.12/src/main/java/org/junit/validator/PublicClassValidator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11617,7 +11617,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/validator/AnnotationsValidator.java": [
+  "junit/4.12/src/main/java/org/junit/validator/AnnotationsValidator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11659,7 +11659,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/validator/AnnotationValidatorFactory.java": [
+  "junit/4.12/src/main/java/org/junit/validator/AnnotationValidatorFactory.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11701,7 +11701,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/validator/AnnotationValidator.java": [
+  "junit/4.12/src/main/java/org/junit/validator/AnnotationValidator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11743,7 +11743,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/parameterized/TestWithParameters.java": [
+  "junit/4.12/src/main/java/org/junit/runners/parameterized/TestWithParameters.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11785,7 +11785,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/parameterized/ParametersRunnerFactory.java": [
+  "junit/4.12/src/main/java/org/junit/runners/parameterized/ParametersRunnerFactory.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11827,7 +11827,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/parameterized/BlockJUnit4ClassRunnerWithParametersFactory.java": [
+  "junit/4.12/src/main/java/org/junit/runners/parameterized/BlockJUnit4ClassRunnerWithParametersFactory.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11869,7 +11869,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/parameterized/BlockJUnit4ClassRunnerWithParameters.java": [
+  "junit/4.12/src/main/java/org/junit/runners/parameterized/BlockJUnit4ClassRunnerWithParameters.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11911,7 +11911,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/package-info.java": [
+  "junit/4.12/src/main/java/org/junit/runners/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -11939,7 +11939,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/TestTimedOutException.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/TestTimedOutException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -11981,7 +11981,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/TestClass.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/TestClass.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12023,7 +12023,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/Statement.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/Statement.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12081,7 +12081,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/RunnerScheduler.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/RunnerScheduler.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12139,7 +12139,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/RunnerBuilder.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/RunnerBuilder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12208,7 +12208,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/NoGenericTypeParametersValidator.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/NoGenericTypeParametersValidator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12250,7 +12250,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/MultipleFailureException.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/MultipleFailureException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12292,7 +12292,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/InitializationError.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/InitializationError.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12334,7 +12334,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/FrameworkMethod.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/FrameworkMethod.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12376,7 +12376,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/FrameworkMember.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/FrameworkMember.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12418,7 +12418,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/FrameworkField.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/FrameworkField.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12460,7 +12460,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/model/Annotatable.java": [
+  "junit/4.12/src/main/java/org/junit/runners/model/Annotatable.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12502,7 +12502,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/Suite.java": [
+  "junit/4.12/src/main/java/org/junit/runners/Suite.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12544,7 +12544,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/ParentRunner.java": [
+  "junit/4.12/src/main/java/org/junit/runners/ParentRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12586,7 +12586,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/Parameterized.java": [
+  "junit/4.12/src/main/java/org/junit/runners/Parameterized.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12628,7 +12628,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/MethodSorters.java": [
+  "junit/4.12/src/main/java/org/junit/runners/MethodSorters.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12670,7 +12670,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/JUnit4.java": [
+  "junit/4.12/src/main/java/org/junit/runners/JUnit4.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12739,7 +12739,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/BlockJUnit4ClassRunner.java": [
+  "junit/4.12/src/main/java/org/junit/runners/BlockJUnit4ClassRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12781,7 +12781,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runners/AllTests.java": [
+  "junit/4.12/src/main/java/org/junit/runners/AllTests.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12839,7 +12839,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/package-info.java": [
+  "junit/4.12/src/main/java/org/junit/runner/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -12867,7 +12867,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/notification/package-info.java": [
+  "junit/4.12/src/main/java/org/junit/runner/notification/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -12895,7 +12895,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/notification/SynchronizedRunListener.java": [
+  "junit/4.12/src/main/java/org/junit/runner/notification/SynchronizedRunListener.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12937,7 +12937,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/notification/StoppedByUserException.java": [
+  "junit/4.12/src/main/java/org/junit/runner/notification/StoppedByUserException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -12995,7 +12995,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/notification/RunNotifier.java": [
+  "junit/4.12/src/main/java/org/junit/runner/notification/RunNotifier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13037,7 +13037,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/notification/RunListener.java": [
+  "junit/4.12/src/main/java/org/junit/runner/notification/RunListener.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13079,7 +13079,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/notification/Failure.java": [
+  "junit/4.12/src/main/java/org/junit/runner/notification/Failure.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13121,7 +13121,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/manipulation/package-info.java": [
+  "junit/4.12/src/main/java/org/junit/runner/manipulation/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -13149,7 +13149,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/manipulation/Sorter.java": [
+  "junit/4.12/src/main/java/org/junit/runner/manipulation/Sorter.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13191,7 +13191,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/manipulation/Sortable.java": [
+  "junit/4.12/src/main/java/org/junit/runner/manipulation/Sortable.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13260,7 +13260,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/manipulation/NoTestsRemainException.java": [
+  "junit/4.12/src/main/java/org/junit/runner/manipulation/NoTestsRemainException.java": [
     {
       "id": "none",
       "status": "pending",
@@ -13288,7 +13288,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/manipulation/Filterable.java": [
+  "junit/4.12/src/main/java/org/junit/runner/manipulation/Filterable.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13346,7 +13346,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/manipulation/Filter.java": [
+  "junit/4.12/src/main/java/org/junit/runner/manipulation/Filter.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13388,7 +13388,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/Runner.java": [
+  "junit/4.12/src/main/java/org/junit/runner/Runner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13430,7 +13430,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/RunWith.java": [
+  "junit/4.12/src/main/java/org/junit/runner/RunWith.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13488,7 +13488,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/Result.java": [
+  "junit/4.12/src/main/java/org/junit/runner/Result.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13530,7 +13530,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/Request.java": [
+  "junit/4.12/src/main/java/org/junit/runner/Request.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13572,7 +13572,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/JUnitCore.java": [
+  "junit/4.12/src/main/java/org/junit/runner/JUnitCore.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13614,7 +13614,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/JUnitCommandLineParseResult.java": [
+  "junit/4.12/src/main/java/org/junit/runner/JUnitCommandLineParseResult.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13656,7 +13656,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/FilterFactoryParams.java": [
+  "junit/4.12/src/main/java/org/junit/runner/FilterFactoryParams.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13698,7 +13698,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/FilterFactory.java": [
+  "junit/4.12/src/main/java/org/junit/runner/FilterFactory.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13740,7 +13740,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/FilterFactories.java": [
+  "junit/4.12/src/main/java/org/junit/runner/FilterFactories.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13782,7 +13782,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/Description.java": [
+  "junit/4.12/src/main/java/org/junit/runner/Description.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13824,7 +13824,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/Describable.java": [
+  "junit/4.12/src/main/java/org/junit/runner/Describable.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13893,7 +13893,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/runner/Computer.java": [
+  "junit/4.12/src/main/java/org/junit/runner/Computer.java": [
     {
       "id": "file",
       "status": "pending",
@@ -13962,7 +13962,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/Verifier.java": [
+  "junit/4.12/src/main/java/org/junit/rules/Verifier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14004,7 +14004,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/Timeout.java": [
+  "junit/4.12/src/main/java/org/junit/rules/Timeout.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14073,7 +14073,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/TestWatchman.java": [
+  "junit/4.12/src/main/java/org/junit/rules/TestWatchman.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14115,7 +14115,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/TestWatcher.java": [
+  "junit/4.12/src/main/java/org/junit/rules/TestWatcher.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14157,7 +14157,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/TestRule.java": [
+  "junit/4.12/src/main/java/org/junit/rules/TestRule.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14215,7 +14215,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/TestName.java": [
+  "junit/4.12/src/main/java/org/junit/rules/TestName.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14257,7 +14257,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/TemporaryFolder.java": [
+  "junit/4.12/src/main/java/org/junit/rules/TemporaryFolder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14299,7 +14299,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/Stopwatch.java": [
+  "junit/4.12/src/main/java/org/junit/rules/Stopwatch.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14341,7 +14341,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/RunRules.java": [
+  "junit/4.12/src/main/java/org/junit/rules/RunRules.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14399,7 +14399,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/RuleChain.java": [
+  "junit/4.12/src/main/java/org/junit/rules/RuleChain.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14468,7 +14468,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/MethodRule.java": [
+  "junit/4.12/src/main/java/org/junit/rules/MethodRule.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14510,7 +14510,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/ExternalResource.java": [
+  "junit/4.12/src/main/java/org/junit/rules/ExternalResource.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14552,7 +14552,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/ExpectedExceptionMatcherBuilder.java": [
+  "junit/4.12/src/main/java/org/junit/rules/ExpectedExceptionMatcherBuilder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14594,7 +14594,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/ExpectedException.java": [
+  "junit/4.12/src/main/java/org/junit/rules/ExpectedException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14631,7 +14631,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/ErrorCollector.java": [
+  "junit/4.12/src/main/java/org/junit/rules/ErrorCollector.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14673,7 +14673,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/rules/DisableOnDebug.java": [
+  "junit/4.12/src/main/java/org/junit/rules/DisableOnDebug.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14742,7 +14742,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/package-info.java": [
+  "junit/4.12/src/main/java/org/junit/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -14770,7 +14770,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/matchers/package-info.java": [
+  "junit/4.12/src/main/java/org/junit/matchers/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -14798,7 +14798,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/matchers/JUnitMatchers.java": [
+  "junit/4.12/src/main/java/org/junit/matchers/JUnitMatchers.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14856,7 +14856,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/statements/RunBefores.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/statements/RunBefores.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14898,7 +14898,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/statements/RunAfters.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/statements/RunAfters.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14940,7 +14940,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/statements/InvokeMethod.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/statements/InvokeMethod.java": [
     {
       "id": "file",
       "status": "pending",
@@ -14982,7 +14982,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/statements/FailOnTimeout.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/statements/FailOnTimeout.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15051,7 +15051,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/statements/Fail.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/statements/Fail.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15093,7 +15093,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/statements/ExpectException.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/statements/ExpectException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15135,7 +15135,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/rules/ValidationError.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/rules/ValidationError.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15177,7 +15177,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/rules/RuleMemberValidator.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/rules/RuleMemberValidator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15219,7 +15219,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/package-info.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -15247,7 +15247,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/model/ReflectiveCallable.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/model/ReflectiveCallable.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15305,7 +15305,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/model/MultipleFailureException.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/model/MultipleFailureException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15363,7 +15363,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/model/EachTestNotifier.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/model/EachTestNotifier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15405,7 +15405,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/TestMethod.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/TestMethod.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15447,7 +15447,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/TestClass.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/TestClass.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15489,7 +15489,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/SuiteMethod.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/SuiteMethod.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15547,7 +15547,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/MethodValidator.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/MethodValidator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15589,7 +15589,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/MethodRoadie.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/MethodRoadie.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15631,7 +15631,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/JUnit4ClassRunner.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/JUnit4ClassRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15673,7 +15673,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/JUnit38ClassRunner.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/JUnit38ClassRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15715,7 +15715,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/InitializationError.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/InitializationError.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15757,7 +15757,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/FailedBefore.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/FailedBefore.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15799,7 +15799,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/ErrorReportingRunner.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/ErrorReportingRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15841,7 +15841,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/runners/ClassRoadie.java": [
+  "junit/4.12/src/main/java/org/junit/internal/runners/ClassRoadie.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15883,7 +15883,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/requests/package-info.java": [
+  "junit/4.12/src/main/java/org/junit/internal/requests/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -15911,7 +15911,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/requests/SortingRequest.java": [
+  "junit/4.12/src/main/java/org/junit/internal/requests/SortingRequest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15953,7 +15953,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/requests/FilterRequest.java": [
+  "junit/4.12/src/main/java/org/junit/internal/requests/FilterRequest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -15995,7 +15995,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/requests/ClassRequest.java": [
+  "junit/4.12/src/main/java/org/junit/internal/requests/ClassRequest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16037,7 +16037,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/matchers/TypeSafeMatcher.java": [
+  "junit/4.12/src/main/java/org/junit/internal/matchers/TypeSafeMatcher.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16111,7 +16111,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/matchers/ThrowableMessageMatcher.java": [
+  "junit/4.12/src/main/java/org/junit/internal/matchers/ThrowableMessageMatcher.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16153,7 +16153,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/matchers/ThrowableCauseMatcher.java": [
+  "junit/4.12/src/main/java/org/junit/internal/matchers/ThrowableCauseMatcher.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16195,7 +16195,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/matchers/StacktracePrintingMatcher.java": [
+  "junit/4.12/src/main/java/org/junit/internal/matchers/StacktracePrintingMatcher.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16237,7 +16237,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/builders/SuiteMethodBuilder.java": [
+  "junit/4.12/src/main/java/org/junit/internal/builders/SuiteMethodBuilder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16295,7 +16295,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/builders/NullBuilder.java": [
+  "junit/4.12/src/main/java/org/junit/internal/builders/NullBuilder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16353,7 +16353,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/builders/JUnit4Builder.java": [
+  "junit/4.12/src/main/java/org/junit/internal/builders/JUnit4Builder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16422,7 +16422,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/builders/JUnit3Builder.java": [
+  "junit/4.12/src/main/java/org/junit/internal/builders/JUnit3Builder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16480,7 +16480,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/builders/IgnoredClassRunner.java": [
+  "junit/4.12/src/main/java/org/junit/internal/builders/IgnoredClassRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16522,7 +16522,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/builders/IgnoredBuilder.java": [
+  "junit/4.12/src/main/java/org/junit/internal/builders/IgnoredBuilder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16580,7 +16580,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/builders/AnnotatedBuilder.java": [
+  "junit/4.12/src/main/java/org/junit/internal/builders/AnnotatedBuilder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16622,7 +16622,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/builders/AllDefaultPossibilitiesBuilder.java": [
+  "junit/4.12/src/main/java/org/junit/internal/builders/AllDefaultPossibilitiesBuilder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16664,7 +16664,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/Throwables.java": [
+  "junit/4.12/src/main/java/org/junit/internal/Throwables.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16706,7 +16706,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/TextListener.java": [
+  "junit/4.12/src/main/java/org/junit/internal/TextListener.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16748,7 +16748,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/RealSystem.java": [
+  "junit/4.12/src/main/java/org/junit/internal/RealSystem.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16790,7 +16790,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/MethodSorter.java": [
+  "junit/4.12/src/main/java/org/junit/internal/MethodSorter.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16832,7 +16832,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/JUnitSystem.java": [
+  "junit/4.12/src/main/java/org/junit/internal/JUnitSystem.java": [
     {
       "id": "none",
       "status": "pending",
@@ -16860,7 +16860,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/InexactComparisonCriteria.java": [
+  "junit/4.12/src/main/java/org/junit/internal/InexactComparisonCriteria.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16918,7 +16918,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/ExactComparisonCriteria.java": [
+  "junit/4.12/src/main/java/org/junit/internal/ExactComparisonCriteria.java": [
     {
       "id": "file",
       "status": "pending",
@@ -16976,7 +16976,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/ComparisonCriteria.java": [
+  "junit/4.12/src/main/java/org/junit/internal/ComparisonCriteria.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17018,7 +17018,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/Classes.java": [
+  "junit/4.12/src/main/java/org/junit/internal/Classes.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17060,7 +17060,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/AssumptionViolatedException.java": [
+  "junit/4.12/src/main/java/org/junit/internal/AssumptionViolatedException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17102,7 +17102,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/internal/ArrayComparisonFailure.java": [
+  "junit/4.12/src/main/java/org/junit/internal/ArrayComparisonFailure.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17144,7 +17144,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/suppliers/TestedOnSupplier.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/suppliers/TestedOnSupplier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17186,7 +17186,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/suppliers/TestedOn.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/suppliers/TestedOn.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17228,7 +17228,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/internal/SpecificDataPointsSupplier.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/internal/SpecificDataPointsSupplier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17270,7 +17270,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/internal/ParameterizedAssertionError.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/internal/ParameterizedAssertionError.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17312,7 +17312,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/internal/EnumSupplier.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/internal/EnumSupplier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17354,7 +17354,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/internal/BooleanSupplier.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/internal/BooleanSupplier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17396,7 +17396,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/internal/Assignments.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/internal/Assignments.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17438,7 +17438,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/internal/AllMembersSupplier.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/internal/AllMembersSupplier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17480,7 +17480,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/Theory.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/Theory.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17522,7 +17522,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/Theories.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/Theories.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17564,7 +17564,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/PotentialAssignment.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/PotentialAssignment.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17606,7 +17606,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/ParametersSuppliedBy.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/ParametersSuppliedBy.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17648,7 +17648,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/ParameterSupplier.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/ParameterSupplier.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17690,7 +17690,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/ParameterSignature.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/ParameterSignature.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17732,7 +17732,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/FromDataPoints.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/FromDataPoints.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17774,7 +17774,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/DataPoints.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/DataPoints.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17816,7 +17816,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/theories/DataPoint.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/theories/DataPoint.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17858,7 +17858,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/runners/Enclosed.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/runners/Enclosed.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17900,7 +17900,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/results/ResultMatchers.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/results/ResultMatchers.java": [
     {
       "id": "file",
       "status": "pending",
@@ -17969,7 +17969,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/results/PrintableResult.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/results/PrintableResult.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18038,7 +18038,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/results/FailureList.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/results/FailureList.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18096,7 +18096,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/max/MaxHistory.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/max/MaxHistory.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18138,7 +18138,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/max/MaxCore.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/max/MaxCore.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18180,7 +18180,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/max/CouldNotReadCoreException.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/max/CouldNotReadCoreException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18238,7 +18238,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/categories/IncludeCategories.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/categories/IncludeCategories.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18280,7 +18280,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/categories/ExcludeCategories.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/categories/ExcludeCategories.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18322,7 +18322,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/categories/CategoryValidator.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/categories/CategoryValidator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18364,7 +18364,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/categories/CategoryFilterFactory.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/categories/CategoryFilterFactory.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18410,7 +18410,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/categories/Category.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/categories/Category.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18452,7 +18452,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/categories/Categories.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/categories/Categories.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18494,7 +18494,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/experimental/ParallelComputer.java": [
+  "junit/4.12/src/main/java/org/junit/experimental/ParallelComputer.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18536,7 +18536,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/Test.java": [
+  "junit/4.12/src/main/java/org/junit/Test.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18578,7 +18578,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/Rule.java": [
+  "junit/4.12/src/main/java/org/junit/Rule.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18620,7 +18620,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/Ignore.java": [
+  "junit/4.12/src/main/java/org/junit/Ignore.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18662,7 +18662,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/FixMethodOrder.java": [
+  "junit/4.12/src/main/java/org/junit/FixMethodOrder.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18704,7 +18704,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/ComparisonFailure.java": [
+  "junit/4.12/src/main/java/org/junit/ComparisonFailure.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18746,7 +18746,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/ClassRule.java": [
+  "junit/4.12/src/main/java/org/junit/ClassRule.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18788,7 +18788,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/BeforeClass.java": [
+  "junit/4.12/src/main/java/org/junit/BeforeClass.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18830,7 +18830,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/Before.java": [
+  "junit/4.12/src/main/java/org/junit/Before.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18872,7 +18872,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/AssumptionViolatedException.java": [
+  "junit/4.12/src/main/java/org/junit/AssumptionViolatedException.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18914,7 +18914,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/Assume.java": [
+  "junit/4.12/src/main/java/org/junit/Assume.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18956,7 +18956,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/Assert.java": [
+  "junit/4.12/src/main/java/org/junit/Assert.java": [
     {
       "id": "file",
       "status": "pending",
@@ -18998,7 +18998,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/AfterClass.java": [
+  "junit/4.12/src/main/java/org/junit/AfterClass.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19040,7 +19040,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/org/junit/After.java": [
+  "junit/4.12/src/main/java/org/junit/After.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19082,7 +19082,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/textui/package-info.java": [
+  "junit/4.12/src/main/java/junit/textui/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -19110,7 +19110,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/textui/TestRunner.java": [
+  "junit/4.12/src/main/java/junit/textui/TestRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19152,7 +19152,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/textui/ResultPrinter.java": [
+  "junit/4.12/src/main/java/junit/textui/ResultPrinter.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19194,7 +19194,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/runner/package-info.java": [
+  "junit/4.12/src/main/java/junit/runner/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -19222,7 +19222,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/runner/Version.java.template": [
+  "junit/4.12/src/main/java/junit/runner/Version.java.template": [
     {
       "id": "none",
       "status": "pending",
@@ -19250,7 +19250,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/runner/Version.java": [
+  "junit/4.12/src/main/java/junit/runner/Version.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19292,7 +19292,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/runner/TestRunListener.java": [
+  "junit/4.12/src/main/java/junit/runner/TestRunListener.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19361,7 +19361,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/runner/BaseTestRunner.java": [
+  "junit/4.12/src/main/java/junit/runner/BaseTestRunner.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19403,7 +19403,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/package-info.java": [
+  "junit/4.12/src/main/java/junit/framework/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -19431,7 +19431,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/TestSuite.java": [
+  "junit/4.12/src/main/java/junit/framework/TestSuite.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19473,7 +19473,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/TestResult.java": [
+  "junit/4.12/src/main/java/junit/framework/TestResult.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19515,7 +19515,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/TestListener.java": [
+  "junit/4.12/src/main/java/junit/framework/TestListener.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19557,7 +19557,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/TestFailure.java": [
+  "junit/4.12/src/main/java/junit/framework/TestFailure.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19599,7 +19599,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/TestCase.java": [
+  "junit/4.12/src/main/java/junit/framework/TestCase.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19668,7 +19668,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/Test.java": [
+  "junit/4.12/src/main/java/junit/framework/Test.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19726,7 +19726,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/Protectable.java": [
+  "junit/4.12/src/main/java/junit/framework/Protectable.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19795,7 +19795,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/JUnit4TestCaseFacade.java": [
+  "junit/4.12/src/main/java/junit/framework/JUnit4TestCaseFacade.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19853,7 +19853,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/JUnit4TestAdapterCache.java": [
+  "junit/4.12/src/main/java/junit/framework/JUnit4TestAdapterCache.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19911,7 +19911,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/JUnit4TestAdapter.java": [
+  "junit/4.12/src/main/java/junit/framework/JUnit4TestAdapter.java": [
     {
       "id": "file",
       "status": "pending",
@@ -19980,7 +19980,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/ComparisonFailure.java": [
+  "junit/4.12/src/main/java/junit/framework/ComparisonFailure.java": [
     {
       "id": "file",
       "status": "pending",
@@ -20038,7 +20038,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/ComparisonCompactor.java": [
+  "junit/4.12/src/main/java/junit/framework/ComparisonCompactor.java": [
     {
       "id": "file",
       "status": "pending",
@@ -20107,7 +20107,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/AssertionFailedError.java": [
+  "junit/4.12/src/main/java/junit/framework/AssertionFailedError.java": [
     {
       "id": "file",
       "status": "pending",
@@ -20149,7 +20149,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/framework/Assert.java": [
+  "junit/4.12/src/main/java/junit/framework/Assert.java": [
     {
       "id": "file",
       "status": "pending",
@@ -20191,7 +20191,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/extensions/package-info.java": [
+  "junit/4.12/src/main/java/junit/extensions/package-info.java": [
     {
       "id": "none",
       "status": "pending",
@@ -20219,7 +20219,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/extensions/TestSetup.java": [
+  "junit/4.12/src/main/java/junit/extensions/TestSetup.java": [
     {
       "id": "file",
       "status": "pending",
@@ -20277,7 +20277,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/extensions/TestDecorator.java": [
+  "junit/4.12/src/main/java/junit/extensions/TestDecorator.java": [
     {
       "id": "file",
       "status": "pending",
@@ -20346,7 +20346,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/extensions/RepeatedTest.java": [
+  "junit/4.12/src/main/java/junit/extensions/RepeatedTest.java": [
     {
       "id": "file",
       "status": "pending",
@@ -20404,7 +20404,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/main/java/junit/extensions/ActiveTestSuite.java": [
+  "junit/4.12/src/main/java/junit/extensions/ActiveTestSuite.java": [
     {
       "id": "file",
       "status": "pending",
@@ -20462,7 +20462,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/src/changes/changes.xml": [
+  "junit/4.12/src/changes/changes.xml": [
     {
       "id": "none",
       "status": "pending",
@@ -20490,7 +20490,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/pom.xml": [
+  "junit/4.12/pom.xml": [
     {
       "id": "none",
       "status": "pending",
@@ -20518,7 +20518,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/lib/hamcrest-core-1.3.jar": [
+  "junit/4.12/lib/hamcrest-core-1.3.jar": [
     {
       "id": "none",
       "status": "pending",
@@ -20546,7 +20546,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/lib/hamcrest-core-1.3-sources.jar": [
+  "junit/4.12/lib/hamcrest-core-1.3-sources.jar": [
     {
       "id": "none",
       "status": "pending",
@@ -20574,7 +20574,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/epl-v10.html": [
+  "junit/4.12/epl-v10.html": [
     {
       "id": "none",
       "status": "pending",
@@ -20602,7 +20602,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/testinfected/testing.htm": [
+  "junit/4.12/doc/testinfected/testing.htm": [
     {
       "id": "none",
       "status": "pending",
@@ -20630,7 +20630,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/testinfected/logo.gif": [
+  "junit/4.12/doc/testinfected/logo.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -20658,7 +20658,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/testinfected/IMG00003.GIF": [
+  "junit/4.12/doc/testinfected/IMG00003.GIF": [
     {
       "id": "none",
       "status": "pending",
@@ -20686,7 +20686,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/testinfected/IMG00002.GIF": [
+  "junit/4.12/doc/testinfected/IMG00002.GIF": [
     {
       "id": "none",
       "status": "pending",
@@ -20714,7 +20714,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/testinfected/IMG00001.GIF": [
+  "junit/4.12/doc/testinfected/IMG00001.GIF": [
     {
       "id": "none",
       "status": "pending",
@@ -20742,7 +20742,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/markdown.sh": [
+  "junit/4.12/doc/markdown.sh": [
     {
       "id": "none",
       "status": "pending",
@@ -20770,7 +20770,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/index.htm": [
+  "junit/4.12/doc/index.htm": [
     {
       "id": "none",
       "status": "pending",
@@ -20798,7 +20798,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/homepage.html": [
+  "junit/4.12/doc/homepage.html": [
     {
       "id": "none",
       "status": "pending",
@@ -20826,7 +20826,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/cookstour/cookstour.htm": [
+  "junit/4.12/doc/cookstour/cookstour.htm": [
     {
       "id": "none",
       "status": "pending",
@@ -20854,7 +20854,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/cookstour/Image7.gif": [
+  "junit/4.12/doc/cookstour/Image7.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -20882,7 +20882,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/cookstour/Image6.gif": [
+  "junit/4.12/doc/cookstour/Image6.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -20910,7 +20910,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/cookstour/Image5.gif": [
+  "junit/4.12/doc/cookstour/Image5.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -20938,7 +20938,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/cookstour/Image4.gif": [
+  "junit/4.12/doc/cookstour/Image4.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -20966,7 +20966,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/cookstour/Image3.gif": [
+  "junit/4.12/doc/cookstour/Image3.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -20994,7 +20994,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/cookstour/Image2.gif": [
+  "junit/4.12/doc/cookstour/Image2.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -21022,7 +21022,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/cookstour/Image1.gif": [
+  "junit/4.12/doc/cookstour/Image1.gif": [
     {
       "id": "none",
       "status": "pending",
@@ -21050,7 +21050,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/building-junit.txt": [
+  "junit/4.12/doc/building-junit.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21078,7 +21078,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.9.txt": [
+  "junit/4.12/doc/ReleaseNotes4.9.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21106,7 +21106,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.9.md": [
+  "junit/4.12/doc/ReleaseNotes4.9.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21134,7 +21134,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.9.html": [
+  "junit/4.12/doc/ReleaseNotes4.9.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21162,7 +21162,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.9.1.txt": [
+  "junit/4.12/doc/ReleaseNotes4.9.1.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21190,7 +21190,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.9.1.md": [
+  "junit/4.12/doc/ReleaseNotes4.9.1.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21218,7 +21218,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.txt": [
+  "junit/4.12/doc/ReleaseNotes4.8.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21246,7 +21246,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.md": [
+  "junit/4.12/doc/ReleaseNotes4.8.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21274,7 +21274,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.html": [
+  "junit/4.12/doc/ReleaseNotes4.8.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21302,7 +21302,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.2.txt": [
+  "junit/4.12/doc/ReleaseNotes4.8.2.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21330,7 +21330,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.2.md": [
+  "junit/4.12/doc/ReleaseNotes4.8.2.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21358,7 +21358,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.2.html": [
+  "junit/4.12/doc/ReleaseNotes4.8.2.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21386,7 +21386,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.1.txt": [
+  "junit/4.12/doc/ReleaseNotes4.8.1.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21414,7 +21414,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.1.md": [
+  "junit/4.12/doc/ReleaseNotes4.8.1.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21442,7 +21442,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.8.1.html": [
+  "junit/4.12/doc/ReleaseNotes4.8.1.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21470,7 +21470,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.7.txt": [
+  "junit/4.12/doc/ReleaseNotes4.7.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21498,7 +21498,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.7.md": [
+  "junit/4.12/doc/ReleaseNotes4.7.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21526,7 +21526,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.7.html": [
+  "junit/4.12/doc/ReleaseNotes4.7.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21554,7 +21554,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.6.txt": [
+  "junit/4.12/doc/ReleaseNotes4.6.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21582,7 +21582,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.6.md": [
+  "junit/4.12/doc/ReleaseNotes4.6.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21610,7 +21610,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.6.html": [
+  "junit/4.12/doc/ReleaseNotes4.6.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21638,7 +21638,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.5.txt": [
+  "junit/4.12/doc/ReleaseNotes4.5.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21666,7 +21666,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.5.md": [
+  "junit/4.12/doc/ReleaseNotes4.5.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21694,7 +21694,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.5.html": [
+  "junit/4.12/doc/ReleaseNotes4.5.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21722,7 +21722,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.4.txt": [
+  "junit/4.12/doc/ReleaseNotes4.4.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21750,7 +21750,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.4.md": [
+  "junit/4.12/doc/ReleaseNotes4.4.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21778,7 +21778,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.4.html": [
+  "junit/4.12/doc/ReleaseNotes4.4.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21806,7 +21806,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.13.md": [
+  "junit/4.12/doc/ReleaseNotes4.13.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21834,7 +21834,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.12.md": [
+  "junit/4.12/doc/ReleaseNotes4.12.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21862,7 +21862,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.11.txt": [
+  "junit/4.12/doc/ReleaseNotes4.11.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21890,7 +21890,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.11.md": [
+  "junit/4.12/doc/ReleaseNotes4.11.md": [
     {
       "id": "none",
       "status": "pending",
@@ -21918,7 +21918,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.11.html": [
+  "junit/4.12/doc/ReleaseNotes4.11.html": [
     {
       "id": "none",
       "status": "pending",
@@ -21946,7 +21946,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.10.txt": [
+  "junit/4.12/doc/ReleaseNotes4.10.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -21974,7 +21974,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.10.md": [
+  "junit/4.12/doc/ReleaseNotes4.10.md": [
     {
       "id": "none",
       "status": "pending",
@@ -22002,7 +22002,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/doc/ReleaseNotes4.10.html": [
+  "junit/4.12/doc/ReleaseNotes4.10.html": [
     {
       "id": "none",
       "status": "pending",
@@ -22030,7 +22030,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/acknowledgements.txt": [
+  "junit/4.12/acknowledgements.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -22058,7 +22058,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/README.md": [
+  "junit/4.12/README.md": [
     {
       "id": "none",
       "status": "pending",
@@ -22086,7 +22086,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/NOTICE.txt": [
+  "junit/4.12/NOTICE.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -22114,7 +22114,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/LICENSE-junit.txt": [
+  "junit/4.12/LICENSE-junit.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -22142,7 +22142,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/LEGACY_CODING_STYLE.txt": [
+  "junit/4.12/LEGACY_CODING_STYLE.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -22170,7 +22170,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/CONTRIBUTING.md": [
+  "junit/4.12/CONTRIBUTING.md": [
     {
       "id": "none",
       "status": "pending",
@@ -22198,7 +22198,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/CODING_STYLE.txt": [
+  "junit/4.12/CODING_STYLE.txt": [
     {
       "id": "none",
       "status": "pending",
@@ -22226,7 +22226,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/BUILDING": [
+  "junit/4.12/BUILDING": [
     {
       "id": "file",
       "status": "pending",
@@ -22268,7 +22268,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.travis.yml": [
+  "junit/4.12/.travis.yml": [
     {
       "id": "none",
       "status": "pending",
@@ -22296,7 +22296,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.settings/org.eclipse.jdt.ui.prefs": [
+  "junit/4.12/.settings/org.eclipse.jdt.ui.prefs": [
     {
       "id": "none",
       "status": "pending",
@@ -22324,7 +22324,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.settings/org.eclipse.jdt.core.prefs": [
+  "junit/4.12/.settings/org.eclipse.jdt.core.prefs": [
     {
       "id": "none",
       "status": "pending",
@@ -22352,7 +22352,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.project": [
+  "junit/4.12/.project": [
     {
       "id": "none",
       "status": "pending",
@@ -22380,7 +22380,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.gitignore": [
+  "junit/4.12/.gitignore": [
     {
       "id": "none",
       "status": "pending",
@@ -22408,7 +22408,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.classpath": [
+  "junit/4.12/.classpath": [
     {
       "id": "none",
       "status": "pending",
@@ -22436,7 +22436,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/HEAD": [
+  "junit/4.12/.git/HEAD": [
     {
       "id": "none",
       "status": "pending",
@@ -22464,7 +22464,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/index": [
+  "junit/4.12/.git/index": [
     {
       "id": "none",
       "status": "pending",
@@ -22492,7 +22492,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/shallow": [
+  "junit/4.12/.git/shallow": [
     {
       "id": "none",
       "status": "pending",
@@ -22520,7 +22520,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/FETCH_HEAD": [
+  "junit/4.12/.git/FETCH_HEAD": [
     {
       "id": "none",
       "status": "pending",
@@ -22548,7 +22548,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/config": [
+  "junit/4.12/.git/config": [
     {
       "id": "none",
       "status": "pending",
@@ -22576,7 +22576,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/objects/pack/pack-f28d7230fe23fb2e23492d7b2164668d4f36c073.idx": [
+  "junit/4.12/.git/objects/pack/pack-f28d7230fe23fb2e23492d7b2164668d4f36c073.idx": [
     {
       "id": "none",
       "status": "pending",
@@ -22604,7 +22604,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/objects/pack/pack-f28d7230fe23fb2e23492d7b2164668d4f36c073.pack": [
+  "junit/4.12/.git/objects/pack/pack-f28d7230fe23fb2e23492d7b2164668d4f36c073.pack": [
     {
       "id": "none",
       "status": "pending",
@@ -22632,7 +22632,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/logs/HEAD": [
+  "junit/4.12/.git/logs/HEAD": [
     {
       "id": "none",
       "status": "pending",
@@ -22660,7 +22660,7 @@
     }
   ]
   ,
-  "/tmp/ort-ScanOss2759786101559527642/Maven/junit/junit/4.12/.git/refs/tags/r4.12": [
+  "junit/4.12/.git/refs/tags/r4.12": [
     {
       "id": "none",
       "status": "pending",
