@@ -803,7 +803,7 @@ private fun ScanController.getSubRepositories(id: Identifier): Map<String, VcsIn
 private fun ProvenanceResolutionResult.filterByVcsPath(): ProvenanceResolutionResult =
     copy(
         subRepositories = subRepositories.filter { (path, _) ->
-            File(path).startsWith(packageProvenance?.vcsPath.orEmpty())
+            File(path).startsWith(packageProvenance.vcsPath)
         }
     )
 
