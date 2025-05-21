@@ -41,7 +41,7 @@ fun TextLocation.prependPath(prefix: String): TextLocation =
 /**
  * Return the VCS path if this is a [RepositoryProvenance] or else an empty string.
  */
-val Provenance.vcsPath: String
+val Provenance?.vcsPath: String
     get() = (this as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
 
 /**

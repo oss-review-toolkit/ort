@@ -45,7 +45,7 @@ internal fun requireEmptyVcsPath(provenance: Provenance) {
 fun getVcsPathsForProvenances(provenances: Set<ProvenanceResolutionResult>) =
     buildMap<KnownProvenance, MutableSet<String>> {
         provenances.forEach { provenance ->
-            val packageVcsPath = provenance.packageProvenance?.vcsPath.orEmpty()
+            val packageVcsPath = provenance.packageProvenance.vcsPath
 
             provenance.getKnownProvenancesWithoutVcsPath().forEach { (repositoryPath, provenance) ->
                 getVcsPathForRepositoryOrNull(packageVcsPath, repositoryPath)?.let { vcsPath ->
