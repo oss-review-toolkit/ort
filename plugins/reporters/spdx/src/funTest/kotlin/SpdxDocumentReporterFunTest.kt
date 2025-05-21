@@ -97,7 +97,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             )
         }
 
-        "omit file information if corresponding option is disabled" {
+        "omit file information if the corresponding option is disabled" {
             val jsonSpdxDocument = generateReport(
                 ortResult,
                 FileFormat.JSON,
