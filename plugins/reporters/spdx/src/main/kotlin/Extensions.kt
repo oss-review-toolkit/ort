@@ -288,11 +288,8 @@ internal fun OrtResult.getSpdxFiles(
             ),
             filename = fileFindings.path,
             licenseConcluded = SpdxConstants.NOASSERTION,
-            licenseInfoInFiles = fileFindings.licenses.takeIf { it.isNotEmpty() }?.map { it.toString() }
-                ?: listOf(SpdxConstants.NONE),
-            copyrightText = fileFindings.copyrights.sorted().joinToString("\n").takeUnless {
-                it.isBlank()
-            } ?: SpdxConstants.NONE
+            licenseInfoInFiles = fileFindings.licenses.map { it.toString() }.ifEmpty { listOf(SpdxConstants.NONE) },
+            copyrightText = fileFindings.copyrights.sorted().joinToString("\n").ifBlank { SpdxConstants.NONE }
         )
     }
 
