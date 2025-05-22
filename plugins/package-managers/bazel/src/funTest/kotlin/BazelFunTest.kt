@@ -22,8 +22,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
+import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -133,5 +135,28 @@ class BazelFunTest : StringSpec({
             )
         ).resolveSingleProject(definitionFile)
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Bazel dependencies are detected even if the Conan package manager is disabled" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-conan-dependencies/MODULE.bazel")
+        val projectDir = getAssetFile("projects/synthetic/bazel-conan-dependencies/")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/bazel-expected-output-conan-package-manager-disabled.yml"
+        )
+
+        val result = analyze(
+            projectDir = projectDir,
+            allowDynamicVersions = true,
+            packageManagers = listOf(BazelFactory()),
+            packageManagerConfiguration = mapOf(
+                "Bazel" to PackageManagerConfiguration(
+                    options = mapOf(
+                        "bazelDependenciesOnly" to "true"
+                    )
+                )
+            )
+        )
+
+        result.analyzer?.result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })
