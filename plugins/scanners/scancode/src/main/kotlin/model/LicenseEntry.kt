@@ -31,6 +31,7 @@ import kotlinx.serialization.Serializable
  */
 sealed interface LicenseEntry {
     val licenseExpression: String
+    val licenseExpressionSpdx: String?
     val startLine: Int
     val endLine: Int
     val score: Float
@@ -47,6 +48,7 @@ sealed interface LicenseEntry {
         override val matchedText: String? = null
     ) : LicenseEntry {
         override val licenseExpression = matchedRule.licenseExpression
+        override val licenseExpressionSpdx = null
     }
 
     @Serializable
@@ -58,12 +60,14 @@ sealed interface LicenseEntry {
         override val endLine: Int,
         override val score: Float,
         override val matchedText: String? = null
-    ) : LicenseEntry
+    ) : LicenseEntry {
+        override val licenseExpressionSpdx = spdxLicenseExpression
+    }
 
     @Serializable
     data class Version4(
         override val licenseExpression: String,
-        val licenseExpressionSpdx: String? = null,
+        override val licenseExpressionSpdx: String? = null,
         val fromFile: String? = null,
         override val startLine: Int,
         override val endLine: Int,
