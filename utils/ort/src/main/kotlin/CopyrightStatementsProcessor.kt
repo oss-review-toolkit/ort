@@ -212,58 +212,6 @@ private fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, 
  * not necessary for implementing the needed functionality, but it is helpful for debugging.
  */
 private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
-    /**
-     * Replace the first year range in the [copyrightStatement] with the [YEAR_PLACEHOLDER] and return the resulting
-     * string paired to the set of years.
-     */
-    fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
-        @Suppress("UnsafeCallOnNullableType")
-        YEAR_RANGE_REGEX.findAll(copyrightStatement).forEach { matchResult ->
-            val fromGroup = matchResult.groups[1]!!
-            val separatorGroup = matchResult.groups[2]!!
-            val toGroup = matchResult.groups[3]!!
-
-            val fromYearString = fromGroup.value
-            val fromYear = fromGroup.value.toInt()
-
-            // Handle also the following cases: '2008 - 9' and '2001 - 10'.
-            val toYear = toGroup.value.let { fromYearRaw ->
-                "${fromYearString.substring(0, fromYearString.length - fromYearRaw.length)}$fromYearRaw".toInt()
-            }
-
-            if (fromYear <= toYear) {
-                return Pair(
-                    copyrightStatement
-                        .removeRange(toGroup.range)
-                        .removeRange(separatorGroup.range)
-                        .replaceRange(fromGroup.range, YEAR_PLACEHOLDER),
-                    (fromYear..toYear).toSet()
-                )
-            }
-        }
-
-        return Pair(copyrightStatement, emptySet())
-    }
-
-    /**
-     * Replace all year ranges in the [copyrightStatement] with the [YEAR_PLACEHOLDER] and return the resulting string
-     * paired to the set of years.
-     */
-    fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<Int>> {
-        val years = mutableSetOf<Int>()
-        var currentStatement = copyrightStatement
-
-        while (true) {
-            val replaceResult = replaceYearRange(currentStatement)
-            if (replaceResult.second.isEmpty()) {
-                return Pair(currentStatement, years)
-            }
-
-            years += replaceResult.second
-            currentStatement = replaceResult.first
-        }
-    }
-
     val resultYears = mutableSetOf<Int>()
 
     // Fix up strings containing e.g.: 'copyright u'2013'
@@ -298,6 +246,58 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
 
     currentStatement = currentStatement.replace("$YEAR_PLACEHOLDER $YEAR_PLACEHOLDER", YEAR_PLACEHOLDER)
     return Pair(currentStatement, resultYears)
+}
+
+/**
+ * Replace all year ranges in the [copyrightStatement] with the [YEAR_PLACEHOLDER] and return the resulting string
+ * paired to the set of years.
+ */
+private fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<Int>> {
+    val years = mutableSetOf<Int>()
+    var currentStatement = copyrightStatement
+
+    while (true) {
+        val replaceResult = replaceYearRange(currentStatement)
+        if (replaceResult.second.isEmpty()) {
+            return Pair(currentStatement, years)
+        }
+
+        years += replaceResult.second
+        currentStatement = replaceResult.first
+    }
+}
+
+/**
+ * Replace the first year range in the [copyrightStatement] with the [YEAR_PLACEHOLDER] and return the resulting
+ * string paired to the set of years.
+ */
+private fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
+    @Suppress("UnsafeCallOnNullableType")
+    YEAR_RANGE_REGEX.findAll(copyrightStatement).forEach { matchResult ->
+        val fromGroup = matchResult.groups[1]!!
+        val separatorGroup = matchResult.groups[2]!!
+        val toGroup = matchResult.groups[3]!!
+
+        val fromYearString = fromGroup.value
+        val fromYear = fromGroup.value.toInt()
+
+        // Handle also the following cases: '2008 - 9' and '2001 - 10'.
+        val toYear = toGroup.value.let { fromYearRaw ->
+            "${fromYearString.substring(0, fromYearString.length - fromYearRaw.length)}$fromYearRaw".toInt()
+        }
+
+        if (fromYear <= toYear) {
+            return Pair(
+                copyrightStatement
+                    .removeRange(toGroup.range)
+                    .removeRange(separatorGroup.range)
+                    .replaceRange(fromGroup.range, YEAR_PLACEHOLDER),
+                (fromYear..toYear).toSet()
+            )
+        }
+    }
+
+    return Pair(copyrightStatement, emptySet())
 }
 
 /**
