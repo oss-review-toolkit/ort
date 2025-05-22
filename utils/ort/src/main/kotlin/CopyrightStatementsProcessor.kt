@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 import org.ossreviewtoolkit.utils.common.prettyPrintRanges
-import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor.Parts
 
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
 private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') + INVALID_OWNER_START_CHARS
@@ -161,35 +160,6 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
  * TODO: Maybe treat URLs similar to years, e.g. entries which differ only in URLs and years can be merged.
  */
 object CopyrightStatementsProcessor {
-    data class Parts(
-        val prefix: String,
-        val years: Set<Int>,
-        val owner: String,
-        val originalStatements: List<String>
-    ) : Comparable<Parts> {
-        companion object {
-            private val COMPARATOR =
-                compareBy<Parts>({ it.owner }, { it.years.collapseToRanges().prettyPrintRanges() }, { it.prefix })
-        }
-
-        override fun compareTo(other: Parts) = COMPARATOR.compare(this, other)
-
-        override fun toString() =
-            buildString {
-                append(prefix)
-
-                if (years.isNotEmpty()) {
-                    append(" ")
-                    append(years.collapseToRanges().prettyPrintRanges())
-                }
-
-                if (owner.isNotEmpty()) {
-                    append(" ")
-                    append(owner)
-                }
-            }
-    }
-
     data class Result(
         /**
          * The copyright statements that were processed by the [CopyrightStatementsProcessor], mapped to the original
@@ -242,6 +212,35 @@ object CopyrightStatementsProcessor {
             unprocessedStatements = unprocessedStatements
         )
     }
+}
+
+private data class Parts(
+    val prefix: String,
+    val years: Set<Int>,
+    val owner: String,
+    val originalStatements: List<String>
+) : Comparable<Parts> {
+    companion object {
+        private val COMPARATOR =
+            compareBy<Parts>({ it.owner }, { it.years.collapseToRanges().prettyPrintRanges() }, { it.prefix })
+    }
+
+    override fun compareTo(other: Parts) = COMPARATOR.compare(this, other)
+
+    override fun toString() =
+        buildString {
+            append(prefix)
+
+            if (years.isNotEmpty()) {
+                append(" ")
+                append(years.collapseToRanges().prettyPrintRanges())
+            }
+
+            if (owner.isNotEmpty()) {
+                append(" ")
+                append(owner)
+            }
+        }
 }
 
 /**
