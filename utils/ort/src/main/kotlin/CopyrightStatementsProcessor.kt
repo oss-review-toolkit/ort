@@ -176,8 +176,7 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
     val map = mutableMapOf<String, Parts>()
 
     sorted().forEach { parts ->
-        val key = "${parts.prefix}:${parts.owner.toNormalizedOwnerKey()}"
-        map.merge(key, parts) { existing, other ->
+        map.merge(parts.key, parts) { existing, other ->
             Parts(
                 prefix = existing.prefix,
                 years = existing.years + other.years,
@@ -312,3 +311,8 @@ private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
  * Return a normalized Copyright owner to group statement parts by.
  */
 private fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
+
+/**
+ * Return a tuple of the copyright prefix and the normalized Copyright owner to group statement parts by.
+ */
+private val Parts.key: String get() = "$prefix:${owner.toNormalizedOwnerKey()}"
