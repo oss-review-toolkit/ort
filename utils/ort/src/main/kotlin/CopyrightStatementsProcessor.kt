@@ -223,11 +223,10 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
     // Replace comma separated years.
     var matchResult = COMMA_SEPARATED_YEARS_REGEX.find(currentStatement)
 
-    @Suppress("UnsafeCallOnNullableType")
     while (matchResult != null) {
-        currentStatement = currentStatement.removeRange(matchResult.groups[2]!!.range)
-        currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, "$YEAR_PLACEHOLDER ")
-        resultYears += matchResult.groups[1]!!.value.toInt()
+        currentStatement = currentStatement.removeRange(matchResult.getGroup(2).range)
+        currentStatement = currentStatement.replaceRange(matchResult.getGroup(1).range, "$YEAR_PLACEHOLDER ")
+        resultYears += matchResult.getGroup(1).value.toInt()
 
         matchResult = COMMA_SEPARATED_YEARS_REGEX.find(currentStatement)
     }
@@ -235,10 +234,9 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
     // Replace single years.
     matchResult = SINGLE_YEARS_REGEX.find(currentStatement)
 
-    @Suppress("UnsafeCallOnNullableType")
     while (matchResult != null) {
-        currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, YEAR_PLACEHOLDER)
-        resultYears += matchResult.groups[1]!!.value.toInt()
+        currentStatement = currentStatement.replaceRange(matchResult.getGroup(1).range, YEAR_PLACEHOLDER)
+        resultYears += matchResult.getGroup(1).value.toInt()
 
         matchResult = SINGLE_YEARS_REGEX.find(currentStatement)
     }
@@ -271,11 +269,10 @@ private fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<I
  * string paired to the set of years.
  */
 private fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
-    @Suppress("UnsafeCallOnNullableType")
     YEAR_RANGE_REGEX.findAll(copyrightStatement).forEach { matchResult ->
-        val fromGroup = matchResult.groups[1]!!
-        val separatorGroup = matchResult.groups[2]!!
-        val toGroup = matchResult.groups[3]!!
+        val fromGroup = matchResult.getGroup(1)
+        val separatorGroup = matchResult.getGroup(2)
+        val toGroup = matchResult.getGroup(3)
 
         val fromYearString = fromGroup.value
         val fromYear = fromGroup.value.toInt()
@@ -314,3 +311,6 @@ private val Parts.key: String get() {
     val normalizedOwnerKey = owner.filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
     return "$prefix:$normalizedOwnerKey"
 }
+
+@Suppress("UnsafeCallOnNullableType")
+private fun MatchResult.getGroup(index: Int): MatchGroup = groups[index]!!
