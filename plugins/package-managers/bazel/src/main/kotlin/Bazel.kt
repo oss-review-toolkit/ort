@@ -27,6 +27,7 @@ import kotlin.io.encoding.Base64
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.analyzer.withResolvedScopes
@@ -167,6 +168,24 @@ class Bazel(
                 logger.info { "Ignoring definition file '$file' as it is a module of a local registry." }
             }
         }
+
+    override fun findPackageManagerDependencies(
+        analysisRoot: File,
+        managedFiles: Map<PackageManager, List<File>>,
+        analyzerConfig: AnalyzerConfiguration
+    ): PackageManagerDependencyResult {
+        // If both Bazel and Conan are enabled, they should not run in parallel, because this may cause conflicts with
+        // the Conan HOME files (see https://github.com/oss-review-toolkit/ort/pull/10357). Therefore, Bazel is always
+        // run after Conan.
+        val conanFactory = analyzerConfig.getConanFactory()
+        val mustRunAfter = if (conanFactory != null) {
+            setOf(conanFactory.descriptor.id)
+        } else {
+            emptySet()
+        }
+
+        return PackageManagerDependencyResult(mustRunBefore = emptySet(), mustRunAfter = mustRunAfter)
+    }
 
     override fun resolveDependencies(
         analysisRoot: File,
