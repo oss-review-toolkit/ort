@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdxId
 sealed interface FileEntry {
     val path: String
     val type: String
+    val detectedLicenseExpressionSpdx: String?
     val licenses: List<LicenseEntry>
     val copyrights: List<CopyrightEntry>
     val scanErrors: List<String>
@@ -70,6 +71,8 @@ sealed interface FileEntry {
             }
         }
 
+        override val detectedLicenseExpressionSpdx = null
+
         override val scanCodeKeyToSpdxIdMappings by lazy {
             licenses.map { license ->
                 license.key to getSpdxId(license.spdxLicenseKey, license.key)
@@ -82,7 +85,7 @@ sealed interface FileEntry {
         override val path: String,
         override val type: String,
         val detectedLicenseExpression: String? = null, // This might be explicitly set to null in JSON.
-        val detectedLicenseExpressionSpdx: String? = null, // This might be explicitly set to null in JSON.
+        override val detectedLicenseExpressionSpdx: String? = null, // This might be explicitly set to null in JSON.
         val licenseDetections: List<LicenseDetection>,
         override val copyrights: List<CopyrightEntry>,
         override val scanErrors: List<String>
