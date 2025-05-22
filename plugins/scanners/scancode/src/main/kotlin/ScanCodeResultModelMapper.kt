@@ -117,21 +117,11 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
             )
         } else {
             licenses.mapTo(licenseFindings) { license ->
-                // ScanCode uses its own license keys as identifiers in license expressions.
-                val spdxLicenseExpression = when {
-                    license is LicenseEntry.Version3 && license.spdxLicenseExpression != null -> {
-                        license.spdxLicenseExpression
-                    }
-
-                    license is LicenseEntry.Version4 && license.licenseExpressionSpdx != null -> {
-                        license.licenseExpressionSpdx
-                    }
-
-                    else -> license.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
-                }
+                val licenseExpression = license.licenseExpressionSpdx
+                    ?: license.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
 
                 LicenseFinding(
-                    license = spdxLicenseExpression,
+                    license = licenseExpression,
                     location = TextLocation(
                         path = file.path,
                         startLine = license.startLine,
