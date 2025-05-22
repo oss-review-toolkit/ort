@@ -175,9 +175,9 @@ private fun determineParts(copyrightStatement: String): Parts? {
 private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
     val map = mutableMapOf<String, Parts>()
 
-    forEach { part ->
-        val key = "${part.prefix}:${part.owner.toNormalizedOwnerKey()}"
-        map.merge(key, part) { existing, other ->
+    forEach { parts ->
+        val key = "${parts.prefix}:${parts.owner.toNormalizedOwnerKey()}"
+        map.merge(key, parts) { existing, other ->
             Parts(
                 prefix = existing.prefix,
                 years = existing.years + other.years,
