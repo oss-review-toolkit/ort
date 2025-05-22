@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 import org.ossreviewtoolkit.utils.common.prettyPrintRanges
+import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor.Parts
 
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
 private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') + INVALID_OWNER_START_CHARS
@@ -210,80 +211,10 @@ object CopyrightStatementsProcessor {
     }
 
     /**
-     * Split the [copyrightStatement] into its [Parts], or return null if the [Parts] could not be determined.
-     */
-    fun determineParts(copyrightStatement: String): Parts? {
-        /**
-         * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of
-         * the copyright statement without the prefix and the prefix that was stripped from it.
-         */
-        fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
-            val copyrightStatementWithoutPrefix = KNOWN_PREFIX_REGEX.map { regex ->
-                copyrightStatement.replace(regex, "")
-            }.minByOrNull {
-                it.length
-            } ?: return Pair(first = copyrightStatement, second = "")
-
-            return Pair(
-                first = copyrightStatementWithoutPrefix,
-                second = copyrightStatement.removeSuffix(copyrightStatementWithoutPrefix)
-            )
-        }
-
-        /**
-         * Remove all years from the [copyrightStatement] and return the stripped string paired to the set of years.
-         */
-        fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
-            replaceYears(copyrightStatement).let {
-                it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
-            }
-
-        val prefixStripResult = stripKnownCopyrightPrefix(copyrightStatement)
-        if (prefixStripResult.second.isEmpty()) return null
-
-        val yearsStripResult = stripYears(prefixStripResult.first)
-        return Parts(
-            prefix = prefixStripResult.second,
-            years = yearsStripResult.second,
-            owner = yearsStripResult.first
-                .trimStart(*INVALID_OWNER_START_CHARS)
-                .collapseWhitespace(),
-            originalStatements = listOf(copyrightStatement)
-        )
-    }
-
-    /**
      * Try to process the [copyrightStatements] into a more condensed form grouped by owner / prefix and with years
      * collapsed. The returned [Result] contains successfully processed as well as unprocessed statements.
      */
     fun process(copyrightStatements: Collection<String>): Result {
-        /**
-         * Return a normalized Copyright owner to group statement parts by.
-         */
-        fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
-
-        /**
-         * Group this collection of [Parts] by prefix and owner and return a list of [Parts] with years and original
-         * statements merged accordingly.
-         */
-        fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
-            val map = mutableMapOf<String, Parts>()
-
-            forEach { part ->
-                val key = "${part.prefix}:${part.owner.toNormalizedOwnerKey()}"
-                map.merge(key, part) { existing, other ->
-                    Parts(
-                        prefix = existing.prefix,
-                        years = existing.years + other.years,
-                        owner = existing.owner,
-                        originalStatements = existing.originalStatements + other.originalStatements
-                    )
-                }
-            }
-
-            return map.values.toList()
-        }
-
         val unprocessedStatements = mutableSetOf<String>()
         val processableStatements = mutableListOf<Parts>()
 
@@ -312,3 +243,73 @@ object CopyrightStatementsProcessor {
         )
     }
 }
+
+/**
+ * Split the [copyrightStatement] into its [Parts], or return null if the [Parts] could not be determined.
+ */
+private fun determineParts(copyrightStatement: String): Parts? {
+    val prefixStripResult = stripKnownCopyrightPrefix(copyrightStatement)
+    if (prefixStripResult.second.isEmpty()) return null
+
+    val yearsStripResult = stripYears(prefixStripResult.first)
+    return Parts(
+        prefix = prefixStripResult.second,
+        years = yearsStripResult.second,
+        owner = yearsStripResult.first
+            .trimStart(*INVALID_OWNER_START_CHARS)
+            .collapseWhitespace(),
+        originalStatements = listOf(copyrightStatement)
+    )
+}
+
+/**
+ * Group this collection of [Parts] by prefix and owner and return a list of [Parts] with years and original
+ * statements merged accordingly.
+ */
+private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
+    val map = mutableMapOf<String, Parts>()
+
+    forEach { part ->
+        val key = "${part.prefix}:${part.owner.toNormalizedOwnerKey()}"
+        map.merge(key, part) { existing, other ->
+            Parts(
+                prefix = existing.prefix,
+                years = existing.years + other.years,
+                owner = existing.owner,
+                originalStatements = existing.originalStatements + other.originalStatements
+            )
+        }
+    }
+
+    return map.values.toList()
+}
+
+/**
+ * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of
+ * the copyright statement without the prefix and the prefix that was stripped from it.
+ */
+private fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
+    val copyrightStatementWithoutPrefix = KNOWN_PREFIX_REGEX.map { regex ->
+        copyrightStatement.replace(regex, "")
+    }.minByOrNull {
+        it.length
+    } ?: return Pair(first = copyrightStatement, second = "")
+
+    return Pair(
+        first = copyrightStatementWithoutPrefix,
+        second = copyrightStatement.removeSuffix(copyrightStatementWithoutPrefix)
+    )
+}
+
+/**
+ * Remove all years from the [copyrightStatement] and return the stripped string paired to the set of years.
+ */
+private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
+    replaceYears(copyrightStatement).let {
+        it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
+    }
+
+/**
+ * Return a normalized Copyright owner to group statement parts by.
+ */
+private fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
