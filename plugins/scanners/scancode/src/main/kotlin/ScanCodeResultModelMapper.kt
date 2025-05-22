@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
-import org.ossreviewtoolkit.plugins.scanners.scancode.model.FileEntry
 import org.ossreviewtoolkit.plugins.scanners.scancode.model.LicenseEntry
 import org.ossreviewtoolkit.plugins.scanners.scancode.model.ScanCodeResult
 
@@ -105,9 +104,10 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
             it.value.first()
         }
 
-        if (preferFileLicense && file is FileEntry.Version3 && file.detectedLicenseExpressionSpdx != null) {
+        val fileLicense = file.detectedLicenseExpressionSpdx
+        if (preferFileLicense && fileLicense != null) {
             licenseFindings += LicenseFinding(
-                license = file.detectedLicenseExpressionSpdx,
+                license = fileLicense,
                 location = TextLocation(
                     path = file.path,
                     startLine = licenses.minOf { it.startLine },
