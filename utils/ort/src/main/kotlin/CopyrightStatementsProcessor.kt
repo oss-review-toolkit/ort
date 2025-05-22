@@ -104,7 +104,7 @@ object CopyrightStatementsProcessor {
             }
         }
 
-        val mergedParts = processableStatements.sorted().groupByPrefixAndOwner()
+        val mergedParts = processableStatements.groupByPrefixAndOwner()
 
         val processedStatements = mutableMapOf<String, Set<String>>()
         mergedParts.forEach {
@@ -175,7 +175,7 @@ private fun determineParts(copyrightStatement: String): Parts? {
 private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
     val map = mutableMapOf<String, Parts>()
 
-    forEach { parts ->
+    sorted().forEach { parts ->
         val key = "${parts.prefix}:${parts.owner.toNormalizedOwnerKey()}"
         map.merge(key, parts) { existing, other ->
             Parts(
