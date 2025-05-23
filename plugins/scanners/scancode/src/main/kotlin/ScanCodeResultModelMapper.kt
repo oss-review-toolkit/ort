@@ -32,6 +32,9 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
+import org.ossreviewtoolkit.plugins.scanners.scancode.model.FileEntry
+import org.ossreviewtoolkit.plugins.scanners.scancode.model.LicenseEntry
+import org.ossreviewtoolkit.plugins.scanners.scancode.model.ScanCodeResult
 
 import org.semver4j.Semver
 

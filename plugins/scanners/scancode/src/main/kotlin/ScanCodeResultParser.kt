@@ -30,6 +30,11 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.modules.SerializersModule
 
+import org.ossreviewtoolkit.plugins.scanners.scancode.model.CopyrightEntry
+import org.ossreviewtoolkit.plugins.scanners.scancode.model.FileEntry
+import org.ossreviewtoolkit.plugins.scanners.scancode.model.LicenseEntry
+import org.ossreviewtoolkit.plugins.scanners.scancode.model.ScanCodeResult
+
 import org.semver4j.Semver
 
 fun parseResult(result: File) = parseResult(result.readText())
