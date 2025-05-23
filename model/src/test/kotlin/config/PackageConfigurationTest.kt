@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
@@ -26,6 +27,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -154,6 +156,69 @@ class PackageConfigurationTest : WordSpec({
                     resolvedRevision = "12345678"
                 )
             ) shouldBe true
+        }
+
+        "return true if vcs source code origin and identifier are equal" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name"),
+                    sourceCodeOrigin = SourceCodeOrigin.VCS
+                )
+
+            config.matches(
+                config.id,
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "ssh://git@host/repo.git",
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
+                )
+            ) shouldBe true
+        }
+
+        "return true if artifact source code origin and identifier are equal" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name"),
+                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+                )
+
+            config.matches(
+                config.id,
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                        url = "https://host/path/some-other-file.zip"
+                    )
+                )
+            ) shouldBe true
+        }
+
+        "return false if only source code origin is not equal" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name"),
+                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+                )
+
+            config.matches(
+                config.id,
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "ssh://git@host/repo.git",
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
+                )
+            ) shouldBe false
+        }
+
+        "fail if the package configuration has only an identifier" {
+            shouldThrow<IllegalArgumentException> {
+                PackageConfiguration(id = Identifier.EMPTY.copy(name = "some-name"))
+            }
         }
     }
 })
