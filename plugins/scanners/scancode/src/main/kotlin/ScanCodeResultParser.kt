@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
-import java.io.File
-
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNamingStrategy
@@ -36,8 +34,6 @@ import org.ossreviewtoolkit.plugins.scanners.scancode.model.LicenseEntry
 import org.ossreviewtoolkit.plugins.scanners.scancode.model.ScanCodeResult
 
 import org.semver4j.Semver
-
-fun parseResult(result: File) = parseResult(result.readText())
 
 fun parseResult(result: String) = parseResult(Json.parseToJsonElement(result))
 
