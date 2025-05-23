@@ -171,7 +171,7 @@ class Licensee(
             LicenseFinding(
                 license = it.matchedLicense,
                 location = TextLocation(it.filename, TextLocation.UNKNOWN_LINE),
-                score = it.matcher.confidence
+                score = it.matcher?.confidence ?: 0.0f
             )
         }
 

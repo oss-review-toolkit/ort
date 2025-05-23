@@ -29,7 +29,7 @@ data class LicenseeResult(
 @Serializable
 data class MatchedFile(
     val filename: String,
-    val matcher: MatcherInfo,
+    val matcher: MatcherInfo?, // May be `null` in case of "NOASSERTION".
     val matchedLicense: String
 )
 
