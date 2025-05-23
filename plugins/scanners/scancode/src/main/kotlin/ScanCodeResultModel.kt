@@ -66,6 +66,14 @@ data class HeaderEntry(
         }
 }
 
+/**
+ * An interface to be able to treat all versions of file entries the same.
+ *
+ * Note that the data class constructors of the individual version's implementation of this interface should contain
+ * only those properties which are actually present in the data, in the order used in the data, to exactly resemble that
+ * version's data model. Other properties required to implement the interface should be added to the body of the data
+ * class to clearly separate data model properties from "synthetic" interface properties.
+ */
 sealed interface FileEntry {
     val path: String
     val type: String
@@ -142,6 +150,14 @@ data class LicenseDetection(
     val matches: List<LicenseEntry>
 )
 
+/**
+ * An interface to be able to treat all versions of license entries the same.
+ *
+ * Note that the data class constructors of the individual version's implementation of this interface should contain
+ * only those properties which are actually present in the data, in the order used in the data, to exactly resemble that
+ * version's data model. Other properties required to implement the interface should be added to the body of the data
+ * class to clearly separate data model properties from "synthetic" interface properties.
+ */
 sealed interface LicenseEntry {
     val licenseExpression: String
     val startLine: Int
@@ -164,23 +180,23 @@ sealed interface LicenseEntry {
 
     @Serializable
     data class Version3(
-        override val score: Float,
-        override val startLine: Int,
-        override val endLine: Int,
         override val licenseExpression: String,
         val spdxLicenseExpression: String? = null,
         val fromFile: String? = null,
+        override val startLine: Int,
+        override val endLine: Int,
+        override val score: Float,
         override val matchedText: String? = null
     ) : LicenseEntry
 
     @Serializable
     data class Version4(
-        override val score: Float,
-        override val startLine: Int,
-        override val endLine: Int,
         override val licenseExpression: String,
         val licenseExpressionSpdx: String? = null,
         val fromFile: String? = null,
+        override val startLine: Int,
+        override val endLine: Int,
+        override val score: Float,
         override val matchedText: String? = null
     ) : LicenseEntry
 }
@@ -190,6 +206,14 @@ data class LicenseRule(
     val licenseExpression: String
 )
 
+/**
+ * An interface to be able to treat all versions of copyright entries the same.
+ *
+ * Note that the data class constructors of the individual version's implementation of this interface should contain
+ * only those properties which are actually present in the data, in the order used in the data, to exactly resemble that
+ * version's data model. Other properties required to implement the interface should be added to the body of the data
+ * class to clearly separate data model properties from "synthetic" interface properties.
+ */
 sealed interface CopyrightEntry {
     val statement: String
     val startLine: Int
