@@ -21,17 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import org.apache.logging.log4j.kotlin.logger
-
-import org.ossreviewtoolkit.utils.ort.showStackTrace
-
-import org.semver4j.RangesListFactory
-import org.semver4j.Semver
-
-/**
- * A list of Strings that are used to identify a version string as a version range in the [PackageCuration]'s version.
- */
-private val versionRangeIndicators = listOf(",", "~", "*", "+", ">", "<", "=", " - ", "^", ".x", "||")
+import org.ossreviewtoolkit.model.utils.isApplicableIvyVersion
 
 /**
  * Return true if this string equals the [other] string, or if either string is blank.
@@ -63,44 +53,13 @@ data class PackageCuration(
             && id.name.equalsOrIsBlank(pkgId.name)
 
     /**
-     * Return true if the version of this [PackageCuration] interpreted as an Ivy version matcher is applicable to the
-     * package with the given [identifier][pkgId].
-     */
-    private fun isApplicableIvyVersion(pkgId: Identifier) =
-        runCatching {
-            if (id.version == pkgId.version) return true
-
-            if (id.version.isVersionRange()) {
-                // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
-                // https://github.com/semver4j/semver4j/issues/132.
-                val range = RangesListFactory.create(id.version)
-                require(range.get().isNotEmpty()) {
-                    "'${id.version}' is not a valid version range."
-                }
-
-                return Semver.coerce(pkgId.version)?.satisfies(range) == true
-            }
-
-            return false
-        }.onFailure {
-            logger.warn {
-                "Failed to check if package curation version '${id.version}' is applicable to package version " +
-                    "'${pkgId.version}' of package '${pkgId.toCoordinates()}'."
-            }
-
-            it.showStackTrace()
-        }.getOrDefault(false)
-
-    private fun String.isVersionRange() = versionRangeIndicators.any { contains(it, ignoreCase = true) }
-
-    /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId]. The
      * curation's version may be an
      * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
      */
     fun isApplicable(pkgId: Identifier): Boolean =
         isApplicableDisregardingVersion(pkgId)
-            && (id.version.equalsOrIsBlank(pkgId.version) || isApplicableIvyVersion(pkgId))
+            && (id.version.equalsOrIsBlank(pkgId.version) || id.isApplicableIvyVersion(pkgId))
 
     /**
      * Apply the curation [data] to the provided [basePackage] by calling [PackageCurationData.apply], if applicable.
