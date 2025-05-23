@@ -206,9 +206,10 @@ class Bazel(
             archiveOverrides
         )
 
-        val conanExtension = mainModule.extensionUsages.find { "conan_deps_module_extension.bzl" in it.key }
-        val conanPackages = if (!config.bazelDependenciesOnly) {
-            conanExtension?.let { extension ->
+        val conanPackages = mainModule.extensionUsages
+            .find { "conan_deps_module_extension.bzl" in it.key }
+            .takeUnless { config.bazelDependenciesOnly }
+            ?.let { extension ->
                 val conanAnalyzerResults = resolveConanDependencies(
                     projectDir,
                     analysisRoot,
@@ -223,9 +224,6 @@ class Bazel(
                     conanAnalyzerResults
                 )
             }.orEmpty()
-        } else {
-            emptySet()
-        }
 
         // If no lockfile is present, getDependencyGraph() runs "bazel mod graph", which creates a "MODULE.bazel.lock"
         // file as a side effect. That file contains the URL of the Bazel module registry that was used for dependency
