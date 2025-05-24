@@ -17,58 +17,32 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.scanners.scancode
+package org.ossreviewtoolkit.plugins.scanners.scancode.model
 
-import java.io.File
+import kotlin.collections.flatMap
+import kotlin.collections.orEmpty
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.jsonPrimitive
 
+import org.ossreviewtoolkit.plugins.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
-@Serializable
-data class ScanCodeResult(
-    val headers: List<HeaderEntry>,
-    val files: List<FileEntry>,
-    val licenseReferences: List<LicenseReference>? = null // Available only with "--license-references".
-)
-
-@Serializable
-data class HeaderEntry(
-    val toolName: String,
-    val toolVersion: String,
-    val options: Map<String, JsonElement>,
-    val startTimestamp: String,
-    val endTimestamp: String,
-    val outputFormatVersion: String
-) {
-    fun getInput(): File {
-        val inputPath = when (val input = options.getValue("input")) {
-            is JsonPrimitive -> input.content
-            is JsonArray -> input.first().jsonPrimitive.content
-            else -> throw SerializationException("Unknown input element type.")
-        }
-
-        return File(inputPath)
-    }
-
-    fun getPrimitiveOptions(): List<Pair<String, String>> =
-        options.mapNotNull { entry ->
-            (entry.value as? JsonPrimitive)?.let { entry.key to it.content }
-        }
-}
-
+/**
+ * An interface to be able to treat all versions of file entries the same.
+ *
+ * Note that the data class constructors of the individual version's implementation of this interface should contain
+ * only those properties which are actually present in the data, in the order used in the data, to exactly resemble that
+ * version's data model. Other properties required to implement the interface should be added to the body of the data
+ * class to clearly separate data model properties from "synthetic" interface properties.
+ */
 sealed interface FileEntry {
     val path: String
     val type: String
+    val detectedLicenseExpressionSpdx: String?
     val licenses: List<LicenseEntry>
     val copyrights: List<CopyrightEntry>
     val scanErrors: List<String>
@@ -97,6 +71,8 @@ sealed interface FileEntry {
             }
         }
 
+        override val detectedLicenseExpressionSpdx = null
+
         override val scanCodeKeyToSpdxIdMappings by lazy {
             licenses.map { license ->
                 license.key to getSpdxId(license.spdxLicenseKey, license.key)
@@ -109,7 +85,7 @@ sealed interface FileEntry {
         override val path: String,
         override val type: String,
         val detectedLicenseExpression: String? = null, // This might be explicitly set to null in JSON.
-        val detectedLicenseExpressionSpdx: String? = null, // This might be explicitly set to null in JSON.
+        override val detectedLicenseExpressionSpdx: String? = null, // This might be explicitly set to null in JSON.
         val licenseDetections: List<LicenseDetection>,
         override val copyrights: List<CopyrightEntry>,
         override val scanErrors: List<String>
@@ -140,82 +116,4 @@ sealed interface FileEntry {
 @Serializable
 data class LicenseDetection(
     val matches: List<LicenseEntry>
-)
-
-sealed interface LicenseEntry {
-    val licenseExpression: String
-    val startLine: Int
-    val endLine: Int
-    val score: Float
-    val matchedText: String?
-
-    @Serializable
-    data class Version1(
-        val key: String,
-        override val score: Float,
-        val spdxLicenseKey: String? = null, // This might be explicitly set to null in JSON.
-        override val startLine: Int,
-        override val endLine: Int,
-        val matchedRule: LicenseRule,
-        override val matchedText: String? = null
-    ) : LicenseEntry {
-        override val licenseExpression = matchedRule.licenseExpression
-    }
-
-    @Serializable
-    data class Version3(
-        override val score: Float,
-        override val startLine: Int,
-        override val endLine: Int,
-        override val licenseExpression: String,
-        val spdxLicenseExpression: String? = null, // This might be missing in JSON.
-        val fromFile: String? = null, // This might be missing in JSON.
-        override val matchedText: String? = null
-    ) : LicenseEntry
-
-    @Serializable
-    data class Version4(
-        override val score: Float,
-        override val startLine: Int,
-        override val endLine: Int,
-        override val licenseExpression: String,
-        val licenseExpressionSpdx: String? = null, // This might be missing in JSON.
-        val fromFile: String? = null, // This might be missing in JSON.
-        override val matchedText: String? = null
-    ) : LicenseEntry
-}
-
-@Serializable
-data class LicenseRule(
-    val licenseExpression: String
-)
-
-sealed interface CopyrightEntry {
-    val statement: String
-    val startLine: Int
-    val endLine: Int
-
-    @Serializable
-    data class Version1(
-        val value: String,
-        override val startLine: Int,
-        override val endLine: Int
-    ) : CopyrightEntry {
-        override val statement = value
-    }
-
-    @Serializable
-    data class Version2(
-        val copyright: String,
-        override val startLine: Int,
-        override val endLine: Int
-    ) : CopyrightEntry {
-        override val statement = copyright
-    }
-}
-
-@Serializable
-data class LicenseReference(
-    val key: String,
-    val spdxLicenseKey: String
 )
