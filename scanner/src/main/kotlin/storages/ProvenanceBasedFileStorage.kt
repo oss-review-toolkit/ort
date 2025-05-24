@@ -29,6 +29,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
@@ -44,6 +45,10 @@ import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceBasedScanStorage {
     override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
         requireEmptyVcsPath(provenance)
+
+        if (provenance !is RemoteProvenance) {
+            throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
+        }
 
         val path = storagePath(provenance)
 
@@ -80,7 +85,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
 
         requireEmptyVcsPath(provenance)
 
-        if (provenance !is KnownProvenance) {
+        if (provenance !is RemoteProvenance) {
             throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
         }
 
@@ -123,7 +128,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
     }
 }
 
-private fun storagePath(provenance: KnownProvenance) =
+private fun storagePath(provenance: RemoteProvenance) =
     when (provenance) {
         is ArtifactProvenance -> "artifact/${provenance.sourceArtifact.url.fileSystemEncode()}/$SCAN_RESULTS_FILE_NAME"
         is RepositoryProvenance -> {
