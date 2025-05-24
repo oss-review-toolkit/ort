@@ -13,8 +13,11 @@ Use a package configuration file to:
 
 ## Package Configuration File Basics
 
-Each package configuration applies exactly to one *package id* and *provenance* which must be specified.
-The *provenance* can be specified as either a *source artifact* or a *VCS location* with an optional revision.
+Each package configuration applies exactly to one *package id* which must be specified.
+Additionally, a *provenance* can also be defined.
+This *provenance* can be specified as either a *source artifact* or a *VCS location* with an optional revision.
+Finally, a package configuration also support a *source code origin*, which enforces the provenance to be of a given
+type.
 
 Here is an example of a package configuration for `ansi-styles 4.2.1`, when the source artifact is (to be) scanned:
 

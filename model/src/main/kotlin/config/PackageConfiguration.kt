@@ -27,9 +27,11 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.utils.isApplicableIvyVersion
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
@@ -66,25 +68,55 @@ data class PackageConfiguration(
      * License finding curations.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList()
+    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList(),
+
+    /**
+     * The source code origin this configuration applies to.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val sourceCodeOrigin: SourceCodeOrigin? = null
 ) {
     init {
-        require((sourceArtifactUrl == null) xor (vcs == null)) {
-            "A package configuration must either set the 'sourceArtifactUrl' or the 'vcs' property."
+        val vcsOrSourceArtifact = (sourceArtifactUrl == null) xor (vcs == null)
+        require(
+            vcsOrSourceArtifact || (sourceCodeOrigin != null && vcs == null) ||
+                (sourceCodeOrigin == null && vcs == null && sourceArtifactUrl == null)
+        ) {
+            "A package configuration must either set the 'sourceArtifactUrl' or the 'vcs', or the 'sourceCodeOrigin' " +
+                "property, or none at all."
+        }
+    }
+
+    private fun Identifier.matches(otherId: Identifier, supportVersionRange: Boolean): Boolean {
+        val basePropertiesMatch = id.type.equals(
+            otherId.type, ignoreCase = true
+        ) && id.namespace == otherId.namespace && id.name == otherId.name
+
+        return basePropertiesMatch && if (supportVersionRange) {
+            isApplicableIvyVersion(otherId)
+        } else {
+            id.version == otherId.version
         }
     }
 
     fun matches(otherId: Identifier, provenance: Provenance): Boolean {
-        @Suppress("ComplexCondition")
-        if (!id.type.equals(otherId.type, ignoreCase = true) ||
-            id.namespace != otherId.namespace ||
-            id.name != otherId.name ||
-            id.version != otherId.version
-        ) {
-            return false
+        if (sourceCodeOrigin != null) {
+            return when (sourceCodeOrigin) {
+                SourceCodeOrigin.VCS -> {
+                    provenance is RepositoryProvenance && id.matches(otherId, true)
+                }
+
+                SourceCodeOrigin.ARTIFACT -> {
+                    provenance is ArtifactProvenance && id.matches(otherId, true)
+                }
+            }
         }
 
-        return when (provenance) {
+        if (vcs == null && sourceArtifactUrl == null) {
+            return id.matches(otherId, true)
+        }
+
+        return id.matches(otherId, false) && when (provenance) {
             is UnknownProvenance -> false
             is ArtifactProvenance -> sourceArtifactUrl != null && sourceArtifactUrl == provenance.sourceArtifact.url
             is RepositoryProvenance -> vcs != null && vcs.matches(provenance)

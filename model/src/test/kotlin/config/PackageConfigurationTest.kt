@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -154,6 +155,129 @@ class PackageConfigurationTest : WordSpec({
                     resolvedRevision = "12345678"
                 )
             ) shouldBe true
+        }
+
+        "return true if the version is in range and the vcs source origin match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]"),
+                    sourceCodeOrigin = SourceCodeOrigin.VCS
+                )
+
+            config.matches(
+                config.id.copy(version = "55"),
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "ssh://git@host/repo.git",
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
+                )
+            ) shouldBe true
+        }
+
+        "return false if the version is in range and the vcs source origin doesn't match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]"),
+                    sourceCodeOrigin = SourceCodeOrigin.VCS
+                )
+
+            config.matches(
+                config.id.copy(version = "55"),
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                        url = "https://host/path/some-other-file.zip"
+                    )
+                )
+            ) shouldBe false
+        }
+
+        "return true if the version is in range and the artifact source origin match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]"),
+                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+                )
+
+            config.matches(
+                config.id.copy(version = "55"),
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                        url = "https://host/path/some-other-file.zip"
+                    )
+                )
+            ) shouldBe true
+        }
+
+        "return false if the version is in range and the artifact source origin doesn't match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]"),
+                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+                )
+
+            config.matches(
+                config.id.copy(version = "55"),
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "ssh://git@host/repo.git",
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
+                )
+            ) shouldBe false
+        }
+
+        "return false if the version is not range and the source origin match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]"),
+                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+                )
+
+            config.matches(
+                config.id.copy(version = "61"),
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                        url = "https://host/path/some-other-file.zip"
+                    )
+                )
+            ) shouldBe false
+        }
+
+        "return true if the version is in range" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]")
+                )
+
+            config.matches(
+                config.id.copy(version = "55"),
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                        url = "https://host/path/some-other-file.zip"
+                    )
+                )
+            ) shouldBe true
+        }
+
+        "return true if the version is not range" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]")
+                )
+
+            config.matches(
+                config.id.copy(version = "6"),
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                        url = "https://host/path/some-other-file.zip"
+                    )
+                )
+            ) shouldBe false
         }
     }
 })
