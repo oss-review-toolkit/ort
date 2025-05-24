@@ -147,6 +147,7 @@ sealed interface LicenseEntry {
     val startLine: Int
     val endLine: Int
     val score: Float
+    val fromFile: String?
     val matchedText: String?
 
     @Serializable
@@ -157,6 +158,7 @@ sealed interface LicenseEntry {
         override val startLine: Int,
         override val endLine: Int,
         val matchedRule: LicenseRule,
+        override val fromFile: String? = null,
         override val matchedText: String? = null
     ) : LicenseEntry {
         override val licenseExpression = matchedRule.licenseExpression
@@ -169,7 +171,7 @@ sealed interface LicenseEntry {
         override val endLine: Int,
         override val licenseExpression: String,
         val spdxLicenseExpression: String? = null, // This might be missing in JSON.
-        val fromFile: String? = null, // This might be missing in JSON.
+        override val fromFile: String? = null, // This might be missing in JSON.
         override val matchedText: String? = null
     ) : LicenseEntry
 
@@ -180,7 +182,7 @@ sealed interface LicenseEntry {
         override val endLine: Int,
         override val licenseExpression: String,
         val licenseExpressionSpdx: String? = null, // This might be missing in JSON.
-        val fromFile: String? = null, // This might be missing in JSON.
+        override val fromFile: String? = null, // This might be missing in JSON.
         override val matchedText: String? = null
     ) : LicenseEntry
 }

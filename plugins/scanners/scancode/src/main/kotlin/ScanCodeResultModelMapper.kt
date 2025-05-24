@@ -85,12 +85,13 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
 
     filesOfTypeFile.forEach { file ->
         val licensesWithoutReferences = file.licenses.filter {
-            it !is LicenseEntry.Version3 || it.fromFile == null
+            val fromFile: String? = it.fromFile
+            fromFile == null
                 // Note that "fromFile" contains the name of the input directory, see
                 // https://github.com/aboutcode-org/scancode-toolkit/issues/3712.
-                || inputPath.resolveSibling(it.fromFile) == inputPath.resolve(file.path)
+                || inputPath.resolveSibling(fromFile) == inputPath.resolve(file.path)
                 // Check if input is a single file.
-                || it.fromFile == inputPath.name
+                || fromFile == inputPath.name
         }
 
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
