@@ -28,6 +28,7 @@
         "Stack",
         "SwiftPM",
         "Unmanaged",
+        "Uv",
         "Yarn",
         "Yarn2"
     ]
