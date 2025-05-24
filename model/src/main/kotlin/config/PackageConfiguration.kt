@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -66,15 +67,37 @@ data class PackageConfiguration(
      * License finding curations.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList()
+    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList(),
+
+    /**
+     * The source code origin this configuration applies to.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val sourceCodeOrigin: SourceCodeOrigin? = null
 ) {
     init {
-        require((sourceArtifactUrl == null) xor (vcs == null)) {
-            "A package configuration must either set the 'sourceArtifactUrl' or the 'vcs' property."
+        val vcsOrSourceArtifact = (sourceArtifactUrl == null) xor (vcs == null)
+        require(
+            vcsOrSourceArtifact || (sourceCodeOrigin != null && vcs == null) ||
+                (sourceCodeOrigin == null && vcs == null && sourceArtifactUrl == null)
+        ) {
+            "A package configuration must set at most one of 'sourceArtifactUrl', 'vcs' or 'sourceCodeOrigin'."
         }
     }
 
     fun matches(otherId: Identifier, provenance: Provenance): Boolean {
+        if (sourceCodeOrigin != null) {
+            return when (sourceCodeOrigin) {
+                SourceCodeOrigin.VCS -> {
+                    provenance is RepositoryProvenance
+                }
+
+                SourceCodeOrigin.ARTIFACT -> {
+                    provenance is ArtifactProvenance
+                }
+            }
+        }
+
         @Suppress("ComplexCondition")
         if (!id.type.equals(otherId.type, ignoreCase = true) ||
             id.namespace != otherId.namespace ||

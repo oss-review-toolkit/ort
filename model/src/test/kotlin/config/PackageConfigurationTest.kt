@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -154,6 +155,80 @@ class PackageConfigurationTest : WordSpec({
                     resolvedRevision = "12345678"
                 )
             ) shouldBe true
+        }
+
+        "return true if the vcs source origin match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name"),
+                    sourceCodeOrigin = SourceCodeOrigin.VCS
+                )
+
+            config.matches(
+                config.id,
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "ssh://git@host/repo.git",
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
+                )
+            ) shouldBe true
+        }
+
+        "return false if the vcs source origin doesn't match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name"),
+                    sourceCodeOrigin = SourceCodeOrigin.VCS
+                )
+
+            config.matches(
+                config.id,
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                        url = "https://host/path/some-other-file.zip"
+                    )
+                )
+            ) shouldBe false
+        }
+
+        "return true if the artifact source origin match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name"),
+                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+                )
+
+            config.matches(
+                config.id,
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                        url = "https://host/path/some-other-file.zip"
+                    )
+                )
+            ) shouldBe true
+        }
+
+        "return false if the artifact source origin doesn't match" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name"),
+                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+                )
+
+            config.matches(
+                config.id,
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "ssh://git@host/repo.git",
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
+                )
+            ) shouldBe false
         }
     }
 })
