@@ -30,9 +30,32 @@ const FeatureList = [
         link: 'docs/tools/analyzer',
         command: 'analyze',
         description: (
-            <>
-                Get the dependencies of your projects, supporting over a dozen different package managers.
-            </>
+          <>
+            <p>
+              The <b>Analyzer</b> is a Software Composition Analysis (SCA) tool that identifies the dependencies of your
+              projects, and gathers information about them, such as licenses, copyrights, and source code locations.
+            </p>
+            <ul>
+              <li>
+                Support for more than 20 package managers, including Bazel, Cargo, Gradle, Maven, npm, PIP, pnpm, Yarn,
+                and <Link to='docs/tools/analyzer'>many more</Link>.
+              </li>
+              <li>
+                Works out-of-the-box with most project setups, no need for configuration changes or custom plugins.
+              </li>
+              <li>
+                Support for package metadata curations, either{' '}
+                <Link to='docs/configuration/package-curations'>self-written</Link> or sourced from public repositories
+                like <Link to='https://clearlydefined.io/'>ClearlyDefined</Link>.
+              </li>
+              <li>
+                Dependencies are identified by scope to easily separate build, test, and runtime dependencies.
+              </li>
+            </ul>
+            <p>
+              The Analyzer is the first step in the ORT toolchain, and its output is used by all other tools.
+            </p>
+          </>
         ),
     },
     {
@@ -41,9 +64,24 @@ const FeatureList = [
         link: 'docs/tools/downloader',
         command: 'download',
         description: (
-            <>
-                Download the source code of your dependencies from version control systems or source artifacts.
-            </>
+          <>
+            <p>
+              The <b>Downloader</b> fetches the source code of your dependencies, so that it can be scanned for
+              licenses, copyrights, and snippets.
+            </p>
+            <ul>
+              <li>
+                Supports fetching source code from various sources, including Git, Mercurial, SVN, and Git-Repo
+                repositories, and source code artifacts.
+              </li>
+              <li>
+                Can be used to build source code bundles to archive the source code of your dependencies.
+              </li>
+              <li>
+                Supports recursive cloning of Git submodules.
+              </li>
+            </ul>
+          </>
         ),
     },
     {
@@ -52,9 +90,24 @@ const FeatureList = [
         link: 'docs/tools/scanner',
         command: 'scan',
         description: (
-            <>
-                Scan the source code using the supported license, copyright, and snippet scanners.
-            </>
+          <>
+            <p>
+              The <b>Scanner</b> integrates third-party{' '}
+              <Link to='docs/category/scanners'>source code scanners</Link> to gather information about licenses,
+              copyrights, and snippets in the source code of your projects and their dependencies.
+            </p>
+            <ul>
+              <li>
+                Automatically downloads the required source code, no need to run the <b>Downloader</b> manually.
+              </li>
+              <li>
+                Scan results can be stored for later reuse to avoid re-scanning the same source code.
+              </li>
+              <li>
+                Built-in and configurable mapping of arbitrary licenses to SPDX license IDs.
+              </li>
+            </ul>
+          </>
         ),
     },
     {
@@ -63,9 +116,22 @@ const FeatureList = [
         link: 'docs/tools/advisor',
         command: 'advise',
         description: (
-            <>
-                Get the vulnerabilities of your dependencies from different providers.
-            </>
+          <>
+            <p>
+              The <b>Advisor</b> integrates various vulnerability providers to gather information about known
+              vulnerabilities in your dependencies.
+            </p>
+            <ul>
+              <li>
+                Support for several <Link to='docs/category/advisors'>vulnerability providers</Link>, including OSV and
+                VulnerableCode.
+              </li>
+              <li>
+                Found vulnerabilities can be resolved if they do not apply to your project, to not clutter the
+                vulnerability report.
+              </li>
+            </ul>
+          </>
         ),
     },
     {
@@ -74,9 +140,26 @@ const FeatureList = [
         link: 'docs/tools/evaluator',
         command: 'evaluate',
         description: (
-            <>
-                Apply custom policy rules against the gathered data using Kotlin scripting.
-            </>
+          <>
+            <p>
+              The <b>Evaluator</b> provides a scriptable rule engine to evaluate the gathered data against custom
+              policy rules.
+            </p>
+            <ul>
+              <li>
+                Policy rules can use any data gathered by the ORT, including license, copyright, and vulnerability
+                information.
+              </li>
+              <li>
+                Provides an in-built rule set based on the{' '}
+                <Link to='https://www.osadl.org/OSADL-Open-Source-License-Checklists.oss-compliance-lists.0.html'>
+                  OSADL License Compatibility Matrix</Link>.
+              </li>
+              <li>
+                Rule sets are implemented in Kotlin.
+              </li>
+            </ul>
+          </>
         ),
     },
     {
@@ -85,9 +168,26 @@ const FeatureList = [
         link: 'docs/tools/reporter',
         command: 'report',
         description: (
-            <>
-                Generate visual reports, open source notices, SBOMs, and more.
-            </>
+          <>
+            <p>
+              The <b>Reporter</b> generates <Link to='docs/category/reporters'>various reports</Link> based on the data
+              gathered by the ORT toolchain.
+            </p>
+            <ul>
+              <li>
+                Generates CycloneDX and SPDX Software Bill of Materials (SBOM).
+              </li>
+              <li>
+                Provides a template reporter based on <Link to='https://freemarker.apache.org/'>Freemarker</Link> to
+                generate custom reports in various formats, including HTML, Markdown, or PDF. Templates for notice
+                files, disclosure documents, and vulnerability reports are included.
+              </li>
+              <li>
+                Can build a <Link to='docs/plugins/reporters/WebApp'>web application</Link> in a single HTML
+                file to visualize the gathered data.
+              </li>
+            </ul>
+          </>
         ),
     },
 ];
@@ -102,7 +202,7 @@ function Feature({Svg, title, link, command, description, reverse}) {
       </div>
       <div className={styles.featureContent}>
         <h1>{title}</h1>
-        <p>{description}</p>
+        {description}
         <CommandBox command={`docker run ghcr.io/oss-review-toolkit/ort ${command} --help`}/>
       </div>
     </div>
