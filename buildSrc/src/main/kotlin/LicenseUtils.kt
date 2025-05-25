@@ -69,7 +69,8 @@ object CopyrightableFiles {
         "md",
         "png",
         "svg",
-        "ttf"
+        "ttf",
+        "woff2"
     )
 
     fun filter(filesProvider: Provider<List<File>>): List<File> = filesProvider.get().filter { file ->
