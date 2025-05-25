@@ -43,6 +43,9 @@ function HomepageHeader() {
           <br/>
           Also available as a <Link to="https://eclipse-apoapsis.github.io/ort-server/">server</Link>.
         </p>
+        <iframe
+          src="https://ghbtns.com/github-btn.html?user=oss-review-toolkit&repo=ort&type=star&count=true&size=large"
+          frameBorder="0" scrolling="0" width="170" height="30" title="GitHub"/>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg margin-right--lg"
