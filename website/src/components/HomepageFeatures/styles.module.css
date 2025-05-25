@@ -1,8 +1,34 @@
 .features {
+  display: block;
+  width: 100%;
+}
+
+.feature {
   display: flex;
   align-items: center;
-  padding: 2rem 0;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 20%;
+  padding-right: 20%;
+  background: linear-gradient(to bottom, var(--ifm-background-color), var(--ifm-color-emphasis-100));
   width: 100%;
+  justify-content: space-between;
+}
+
+.featureReverse {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.featureContent {
+  flex: 3;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.featureSvgContainer {
+  flex: 1;
+  text-align: center;
 }
 
 .featureSvg {
