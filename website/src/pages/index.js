@@ -58,6 +58,15 @@ function HomepageHeader() {
             Getting Started
           </Link>
         </div>
+        <div className={clsx(styles.commandBox, 'shadow--tl')}>
+          <code>docker run ghcr.io/oss-review-toolkit/ort --help</code>
+          <button
+            className={styles.copyButton}
+            onClick={() => navigator.clipboard.writeText('docker run ghcr.io/oss-review-toolkit/ort --help')}
+          >
+            Copy
+          </button>
+        </div>
       </div>
     </header>
   );
