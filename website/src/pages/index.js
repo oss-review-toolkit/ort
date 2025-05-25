@@ -22,8 +22,8 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
+import CommandBox from "@site/src/components/CommandBox";
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
-
 import styles from './index.module.css';
 
 function HomepageHeader() {
@@ -58,15 +58,7 @@ function HomepageHeader() {
             Getting Started
           </Link>
         </div>
-        <div className={clsx(styles.commandBox, 'shadow--tl')}>
-          <code>docker run ghcr.io/oss-review-toolkit/ort --help</code>
-          <button
-            className={styles.copyButton}
-            onClick={() => navigator.clipboard.writeText('docker run ghcr.io/oss-review-toolkit/ort --help')}
-          >
-            Copy
-          </button>
-        </div>
+        <CommandBox command="docker run ghcr.io/oss-review-toolkit/ort --help"/>
       </div>
     </header>
   );
