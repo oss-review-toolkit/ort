@@ -4,8 +4,26 @@
  * work well for content-centric websites.
  */
 
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('/fonts/FiraSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('/fonts/FiraCode-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* You can override the default Infima variables here. */
 :root {
+  --ifm-font-family-base: 'Fira Sans', sans-serif;
+  --ifm-font-family-monospace: 'Fira Code', monospace;
   --ifm-color-primary: #26a5a1;
   --ifm-color-primary-dark: #229794;
   --ifm-color-primary-darker: #208c89;

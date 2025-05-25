@@ -194,3 +194,13 @@ SPDX-License-Identifier = "CC0-1.0"
 path = "utils/spdx/src/test/resources/spdx-spec-examples/**"
 SPDX-FileCopyrightText = "2010-2020 Linux Foundation and its Contributors"
 SPDX-License-Identifier = "CC-BY-3.0"
+
+[[annotations]]
+path = "website/static/fonts/FiraCode-Regular.woff2"
+SPDX-FileCopyrightText = "2014-2020 The Fira Code Project Authors (https://github.com/tonsky/FiraCode)"
+SPDX-License-Identifier = "OFL-1.1"
+
+[[annotations]]
+path = "website/static/fonts/FiraSans-Regular.woff2"
+SPDX-FileCopyrightText = "2012-2015 The Mozilla Foundation and Telefonica S.A."
+SPDX-License-Identifier = "OFL-1.1"
