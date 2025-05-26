@@ -20,8 +20,6 @@
 package org.ossreviewtoolkit.scanner
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.maps.containExactly
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -113,36 +111,6 @@ class ScannerMatcherTest : WordSpec({
             val matcher = matchingCriteria.copy(configuration = null)
 
             matcher.matches(testDetails) shouldBe true
-        }
-    }
-
-    "ScannerMatcherConfig.create()" should {
-        "obtain values from the options" {
-            val options = mapOf(
-                ScannerMatcherConfig.PROP_CRITERIA_NAME to "foo",
-                ScannerMatcherConfig.PROP_CRITERIA_MIN_VERSION to "1.2.3",
-                ScannerMatcherConfig.PROP_CRITERIA_MAX_VERSION to "4.5.6",
-                ScannerMatcherConfig.PROP_CRITERIA_CONFIGURATION to "config"
-            )
-
-            with(ScannerMatcherConfig.create(options).first) {
-                regScannerName shouldBe "foo"
-                minVersion shouldBe "1.2.3"
-                maxVersion shouldBe "4.5.6"
-                configuration shouldBe "config"
-            }
-        }
-
-        "filter matcher properties from the options" {
-            val options = mapOf(
-                ScannerMatcherConfig.PROP_CRITERIA_NAME to "foo",
-                ScannerMatcherConfig.PROP_CRITERIA_MIN_VERSION to "1.2.3",
-                ScannerMatcherConfig.PROP_CRITERIA_MAX_VERSION to "4.5.6",
-                ScannerMatcherConfig.PROP_CRITERIA_CONFIGURATION to "config",
-                "other" to "value"
-            )
-
-            ScannerMatcherConfig.create(options).second should containExactly("other" to "value")
         }
     }
 })

@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.utils.common.Options
 
 import org.semver4j.Semver
 
@@ -111,50 +110,5 @@ data class ScannerMatcherConfig(
 ) {
     companion object {
         val EMPTY = ScannerMatcherConfig(null, null, null, null)
-
-        /**
-         * The name of the property defining the regular expression for the scanner name as part of [ScannerMatcher].
-         * The [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
-         */
-        internal const val PROP_CRITERIA_NAME = "regScannerName"
-
-        /**
-         * The name of the property defining the minimum version of the scanner as part of [ScannerMatcher]. The
-         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
-         */
-        internal const val PROP_CRITERIA_MIN_VERSION = "minVersion"
-
-        /**
-         * The name of the property defining the maximum version of the scanner as part of [ScannerMatcher]. The
-         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
-         */
-        internal const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
-
-        /**
-         * The name of the property defining the configuration of the scanner as part of [ScannerMatcher]. The
-         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
-         */
-        internal const val PROP_CRITERIA_CONFIGURATION = "configuration"
-
-        private val properties = listOf(
-            PROP_CRITERIA_NAME, PROP_CRITERIA_MIN_VERSION, PROP_CRITERIA_MAX_VERSION, PROP_CRITERIA_CONFIGURATION
-        )
-
-        /**
-         * Create a [ScannerMatcherConfig] from the provided options. Return the created config and the options without
-         * the properties that are used to configure the matcher.
-         */
-        fun create(options: Options): Pair<ScannerMatcherConfig, Options> {
-            val filteredOptions = options.filterKeys { it !in properties }
-
-            val matcherConfig = ScannerMatcherConfig(
-                regScannerName = options[PROP_CRITERIA_NAME],
-                minVersion = options[PROP_CRITERIA_MIN_VERSION],
-                maxVersion = options[PROP_CRITERIA_MAX_VERSION],
-                configuration = options[PROP_CRITERIA_CONFIGURATION]
-            )
-
-            return matcherConfig to filteredOptions
-        }
     }
 }
