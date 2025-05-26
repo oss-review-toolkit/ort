@@ -24,6 +24,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import CommandBox from "@site/src/components/CommandBox";
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import Toolchain from '@site/src/components/Toolchain';
 import styles from './index.module.css';
 
 function HomepageHeader() {
@@ -72,6 +73,7 @@ export default function Home() {
       description={`${siteConfig.tagline}`}>
       <HomepageHeader />
       <main>
+        <Toolchain />
         <HomepageFeatures />
       </main>
     </Layout>
