@@ -52,7 +52,7 @@ abstract class AbstractProvenanceBasedScanStorageFunTest(vararg listeners: TestL
     protected abstract fun createStorage(): ProvenanceBasedScanStorage
 
     init {
-        register(*listeners)
+        register(listeners.asList())
 
         beforeEach {
             storage = createStorage()
