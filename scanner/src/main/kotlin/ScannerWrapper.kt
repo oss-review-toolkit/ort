@@ -47,7 +47,7 @@ sealed interface ScannerWrapper : Plugin {
     val configuration: String
 
     /**
-     * The details of the scanner.
+     * A convenience property to access all scanner details at once.
      */
     val details: ScannerDetails
         get() = ScannerDetails(descriptor.id, version, configuration)
