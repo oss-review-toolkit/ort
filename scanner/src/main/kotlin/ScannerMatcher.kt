@@ -78,7 +78,7 @@ data class ScannerMatcher(
     }
 
     /** The regular expression to match for the scanner name. */
-    private val nameRegex: Regex by lazy { Regex(regScannerName) }
+    private val nameRegex by lazy { Regex(regScannerName) }
 
     init {
         require(minVersion < maxVersion) {
