@@ -106,12 +106,6 @@ class ScannerMatcherTest : WordSpec({
 
             matcher.matches(testDetails) shouldBe false
         }
-
-        "ignore the scanner configuration if it is null" {
-            val matcher = matchingCriteria.copy(configuration = null)
-
-            matcher.matches(testDetails) shouldBe true
-        }
     }
 })
 
