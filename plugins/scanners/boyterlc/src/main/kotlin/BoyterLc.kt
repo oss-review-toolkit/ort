@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
-import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -56,41 +55,6 @@ object BoyterLcCommand : CommandLineTool {
         // licensechecker version 1.1.1
         output.removePrefix("licensechecker version ")
 }
-
-data class BoyterLcConfig(
-    /**
-     * A regular expression to match the scanner name when looking up scan results in the storage.
-     */
-    val regScannerName: String?,
-
-    /**
-     * The minimum version of stored scan results to use.
-     */
-    val minVersion: String?,
-
-    /**
-     * The maximum version of stored scan results to use.
-     */
-    val maxVersion: String?,
-
-    /**
-     * The configuration to use for the scanner. Only scan results with the same configuration are used when looking up
-     * scan results in the storage.
-     */
-    val configuration: String?,
-
-    /**
-     * Whether to read scan results from the storage.
-     */
-    @OrtPluginOption(defaultValue = "true")
-    val readFromStorage: Boolean,
-
-    /**
-     * Whether to write scan results to the storage.
-     */
-    @OrtPluginOption(defaultValue = "true")
-    val writeToStorage: Boolean
-)
 
 @OrtPlugin(
     displayName = "BoyterLc",
