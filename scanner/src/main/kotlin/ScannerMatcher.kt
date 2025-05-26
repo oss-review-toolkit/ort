@@ -55,10 +55,9 @@ data class ScannerMatcher(
     val maxVersion: Semver,
 
     /**
-     * Criterion to match the [configuration][ScannerDetails.configuration] of the scanner. If `null`, all
-     * configurations are matched.
+     * Criterion to match the [configuration][ScannerDetails.configuration] of the scanner.
      */
-    val configuration: String?
+    val configuration: String
 ) {
     companion object {
         /**
@@ -94,8 +93,7 @@ data class ScannerMatcher(
         if (!nameRegex.matches(details.name)) return false
 
         val version = Semver(details.version)
-        return version in minVersion..<maxVersion &&
-            (configuration == null || configuration == details.configuration)
+        return version in minVersion..<maxVersion && configuration == details.configuration
     }
 }
 
