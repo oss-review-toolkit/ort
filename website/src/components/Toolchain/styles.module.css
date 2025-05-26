@@ -1,0 +1,69 @@
+.toolchain {
+    display: block;
+    width: 100%;
+    background: linear-gradient(to bottom, var(--ifm-background-color), var(--ifm-color-emphasis-100));
+}
+
+.content {
+    align-items: center;
+    text-align: center;
+    padding: 5rem 20%;
+    width: 100%;
+}
+
+.content h1 {
+    font-size: 2.5em;
+    margin-bottom: 2rem;
+}
+
+.content p {
+    font-size: 1.2em;
+}
+
+.tools {
+    display: flex;
+    padding-left: 20%;
+    padding-right: 20%;
+    gap: 1rem;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.tool {
+    border: 2px solid var(--ifm-color-primary);
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+    margin: auto;
+    flex: 1 1 auto;
+    width: 10rem;
+    max-width: 10rem;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, var(--ifm-color-primary-lightest), var(--ifm-color-primary));
+    color: var(--ifm-hero-text-color);
+}
+
+.tool p {
+    font-size: 0.8em;
+    padding: 0;
+    margin: 0;
+}
+
+.toolSvg {
+    width: 4rem;
+    height: 4rem;
+    margin: auto;
+    display: block;
+}
+
+.arrow {
+    font-size: 2rem;
+    color: var(--ifm-color-primary);
+    align-self: center;
+    margin: 0;
+}
+
