@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
-import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
@@ -77,9 +76,9 @@ data class PackageConfiguration(
 ) {
     init {
         require(
-            listOfNotNull(sourceArtifactUrl, vcs, sourceCodeOrigin).size == 1
+            listOfNotNull(sourceArtifactUrl, vcs, sourceCodeOrigin).size <= 1
         ) {
-            "A package configuration must set exactly one of 'sourceArtifactUrl', 'vcs' or 'sourceCodeOrigin'."
+            "A package configuration must contain at most one of 'sourceArtifactUrl', 'vcs' or 'sourceCodeOrigin'."
         }
     }
 
@@ -100,11 +99,15 @@ data class PackageConfiguration(
             }
         }
 
-        return when (provenance) {
-            is UnknownProvenance -> false
-            is ArtifactProvenance -> sourceArtifactUrl != null && sourceArtifactUrl == provenance.sourceArtifact.url
-            is RepositoryProvenance -> vcs != null && vcs.matches(provenance)
+        if (sourceArtifactUrl != null) {
+            return provenance is ArtifactProvenance && sourceArtifactUrl == provenance.sourceArtifact.url
         }
+
+        if (vcs != null) {
+            return provenance is RepositoryProvenance && vcs.matches(provenance)
+        }
+
+        return true
     }
 }
 

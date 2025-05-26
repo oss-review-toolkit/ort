@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
@@ -215,10 +214,16 @@ class PackageConfigurationTest : WordSpec({
             ) shouldBe false
         }
 
-        "fail if the package configuration has only an identifier" {
-            shouldThrow<IllegalArgumentException> {
-                PackageConfiguration(id = Identifier.EMPTY.copy(name = "some-name"))
-            }
+        "return true if the package configuration contains only the identifier and the latter matches" {
+            val config = PackageConfiguration(id = Identifier.EMPTY.copy(name = "some-name"))
+
+            config.matches(
+                config.id,
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo.EMPTY,
+                    resolvedRevision = "12345678"
+                )
+            ) shouldBe true
         }
     }
 })
