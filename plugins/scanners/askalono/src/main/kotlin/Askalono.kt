@@ -131,7 +131,7 @@ class Askalono(
     override fun runScanner(path: File, context: ScanContext): String {
         val process = AskalonoCommand.run(
             "--format", "json",
-            "crawl", path.absolutePath
+            "crawl", "--glob", "*", path.absolutePath
         )
 
         return with(process) {
