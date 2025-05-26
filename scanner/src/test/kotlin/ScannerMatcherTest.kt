@@ -38,12 +38,12 @@ class ScannerMatcherTest : WordSpec({
         }
 
         "obtain values from the configuration" {
-            val config = ScannerMatcherConfig(
-                regScannerName = "foo",
-                minVersion = "1.2.3",
-                maxVersion = "4.5.6",
-                configuration = "config"
-            )
+            val config = object : ScannerMatcherCriteria {
+                override val regScannerName = "foo"
+                override val minVersion = "1.2.3"
+                override val maxVersion = "4.5.6"
+                override val configuration = "config"
+            }
 
             val matcher = ScannerMatcher.create(testDetails, config)
 
@@ -54,10 +54,12 @@ class ScannerMatcherTest : WordSpec({
         }
 
         "parse versions in a lenient way" {
-            val config = ScannerMatcherConfig(
-                minVersion = "1",
-                maxVersion = "3.7"
-            )
+            val config = object : ScannerMatcherCriteria {
+                override val regScannerName = null
+                override val minVersion = "1"
+                override val maxVersion = "3.7"
+                override val configuration = null
+            }
 
             val matcher = ScannerMatcher.create(testDetails, config)
 

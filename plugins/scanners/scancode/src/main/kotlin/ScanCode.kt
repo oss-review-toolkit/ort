@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -115,17 +114,7 @@ class ScanCode(
         }.joinToString(" ")
     }
 
-    override val matcher by lazy {
-        ScannerMatcher.create(
-            details,
-            ScannerMatcherConfig(
-                config.regScannerName,
-                config.minVersion,
-                config.maxVersion,
-                config.configuration
-            )
-        )
-    }
+    override val matcher by lazy { ScannerMatcher.create(details, config) }
 
     override val version by lazy {
         require(ScanCodeCommand.isInPath()) {
