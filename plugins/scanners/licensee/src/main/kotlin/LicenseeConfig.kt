@@ -20,28 +20,29 @@
 package org.ossreviewtoolkit.plugins.scanners.licensee
 
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.scanner.ScannerMatcherCriteria
 
 data class LicenseeConfig(
     /**
      * A regular expression to match the scanner name when looking up scan results in the storage.
      */
-    val regScannerName: String?,
+    override val regScannerName: String?,
 
     /**
      * The minimum version of stored scan results to use.
      */
-    val minVersion: String?,
+    override val minVersion: String?,
 
     /**
      * The maximum version of stored scan results to use.
      */
-    val maxVersion: String?,
+    override val maxVersion: String?,
 
     /**
      * The configuration to use for the scanner. Only scan results with the same configuration are used when looking up
      * scan results in the storage.
      */
-    val configuration: String?,
+    override val configuration: String?,
 
     /**
      * Whether to read scan results from the storage.
@@ -54,4 +55,4 @@ data class LicenseeConfig(
      */
     @OrtPluginOption(defaultValue = "true")
     val writeToStorage: Boolean
-)
+) : ScannerMatcherCriteria

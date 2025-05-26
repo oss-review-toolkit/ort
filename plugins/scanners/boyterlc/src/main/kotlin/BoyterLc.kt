@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -72,18 +71,7 @@ class BoyterLc(
     }
 
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
-
-    override val matcher by lazy {
-        ScannerMatcher.create(
-            details,
-            ScannerMatcherConfig(
-                config.regScannerName,
-                config.minVersion,
-                config.maxVersion,
-                config.configuration
-            )
-        )
-    }
+    override val matcher by lazy { ScannerMatcher.create(details, config) }
 
     override val version by lazy {
         require(BoyterLcCommand.isInPath()) {

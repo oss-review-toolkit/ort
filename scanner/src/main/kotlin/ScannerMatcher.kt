@@ -63,14 +63,14 @@ data class ScannerMatcher(
         /**
          * Return a [ScannerMatcher] instance that is to be used when looking up existing scan results from a
          * [ScanStorageReader]. By default, the properties of this instance are initialized to match the scanner
-         * [details]. These defaults can be overridden by the provided [config].
+         * [details]. These defaults can be overridden by the provided [criteria].
          */
-        fun create(details: ScannerDetails, config: ScannerMatcherConfig = ScannerMatcherConfig.EMPTY): ScannerMatcher {
+        fun create(details: ScannerDetails, criteria: ScannerMatcherCriteria? = null): ScannerMatcher {
             val scannerVersion = checkNotNull(Semver.coerce(details.version))
-            val minVersion = Semver.coerce(config.minVersion) ?: scannerVersion
-            val maxVersion = Semver.coerce(config.maxVersion) ?: minVersion.nextMajor()
-            val name = config.regScannerName ?: details.name
-            val configuration = config.configuration ?: details.configuration
+            val minVersion = Semver.coerce(criteria?.minVersion) ?: scannerVersion
+            val maxVersion = Semver.coerce(criteria?.maxVersion) ?: minVersion.nextMajor()
+            val name = criteria?.regScannerName ?: details.name
+            val configuration = criteria?.configuration ?: details.configuration
 
             return ScannerMatcher(name, minVersion, maxVersion, configuration)
         }
@@ -94,19 +94,5 @@ data class ScannerMatcher(
 
         val version = Semver(details.version)
         return version in minVersion..<maxVersion && configuration == details.configuration
-    }
-}
-
-/**
- * A holder class for the [ScannerMatcher] configuration.
- */
-data class ScannerMatcherConfig(
-    val regScannerName: String? = null,
-    val minVersion: String? = null,
-    val maxVersion: String? = null,
-    val configuration: String? = null
-) {
-    companion object {
-        val EMPTY = ScannerMatcherConfig(null, null, null, null)
     }
 }
