@@ -30,6 +30,21 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
+private val ARTIFACT_PROVENANCE = ArtifactProvenance(
+    sourceArtifact = RemoteArtifact.EMPTY.copy(
+        url = "https://host/path/file.zip"
+    )
+)
+
+private val REPOSITORY_PROVENANCE = RepositoryProvenance(
+    vcsInfo = VcsInfo(
+        type = VcsType.GIT,
+        url = "ssh://git@host/repo.git",
+        revision = ""
+    ),
+    resolvedRevision = "12345678"
+)
+
 private fun vcsPackageConfig(name: String, revision: String, url: String) =
     PackageConfiguration(
         id = Identifier.EMPTY.copy(name = name),
@@ -53,14 +68,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "ssh://git@host/repo.git",
-                        revision = ""
-                    ),
-                    resolvedRevision = "12345678"
-                )
+                REPOSITORY_PROVENANCE
             ) shouldBe true
         }
 
@@ -69,14 +77,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 Identifier.EMPTY.copy(name = "some-other-name"),
-                RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "ssh://git@host/repo.git",
-                        revision = ""
-                    ),
-                    resolvedRevision = "12345678"
-                )
+                REPOSITORY_PROVENANCE
             ) shouldBe false
         }
 
@@ -85,15 +86,8 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "ssh://host/repo.git",
-                        revision = ""
-                    ),
-                    resolvedRevision = "12345678"
-                )
-            ) shouldBe true
+                REPOSITORY_PROVENANCE.copy(vcsInfo = REPOSITORY_PROVENANCE.vcsInfo.copy(url = "ssh://host/repo.git"))
+            )
         }
 
         "return false if only resolved revision is not equal to the matcher's revision" {
@@ -101,14 +95,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "ssh://git@host/repo.git",
-                        revision = "12345678"
-                    ),
-                    resolvedRevision = "12"
-                )
+                REPOSITORY_PROVENANCE.copy(resolvedRevision = "12")
             ) shouldBe false
         }
 
@@ -117,11 +104,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                ArtifactProvenance(
-                    sourceArtifact = RemoteArtifact.EMPTY.copy(
-                        url = "https://host/path/file.zip"
-                    )
-                )
+                ARTIFACT_PROVENANCE
             ) shouldBe true
         }
 
@@ -130,8 +113,8 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                ArtifactProvenance(
-                    sourceArtifact = RemoteArtifact.EMPTY.copy(
+                ARTIFACT_PROVENANCE.copy(
+                    sourceArtifact = ARTIFACT_PROVENANCE.sourceArtifact.copy(
                         url = "https://host/path/some-other-file.zip"
                     )
                 )
@@ -146,14 +129,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id.copy(type = "gradle"),
-                RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "ssh://git@host/repo.git",
-                        revision = ""
-                    ),
-                    resolvedRevision = "12345678"
-                )
+                REPOSITORY_PROVENANCE
             ) shouldBe true
         }
 
@@ -166,14 +142,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "ssh://git@host/repo.git",
-                        revision = ""
-                    ),
-                    resolvedRevision = "12345678"
-                )
+                REPOSITORY_PROVENANCE
             ) shouldBe true
         }
 
@@ -186,11 +155,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                ArtifactProvenance(
-                    sourceArtifact = RemoteArtifact.EMPTY.copy(
-                        url = "https://host/path/some-other-file.zip"
-                    )
-                )
+                ARTIFACT_PROVENANCE
             ) shouldBe true
         }
 
@@ -203,14 +168,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "ssh://git@host/repo.git",
-                        revision = ""
-                    ),
-                    resolvedRevision = "12345678"
-                )
+                REPOSITORY_PROVENANCE
             ) shouldBe false
         }
 
@@ -219,10 +177,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                RepositoryProvenance(
-                    vcsInfo = VcsInfo.EMPTY,
-                    resolvedRevision = "12345678"
-                )
+                REPOSITORY_PROVENANCE
             ) shouldBe true
         }
     }
