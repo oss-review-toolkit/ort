@@ -37,7 +37,7 @@
     } ],
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "description" : "A package with all supported attributes set, with a VCS URL containing a user name, and with two scan results for the VCS containing copyright findings matched to a license finding.",
-    "downloadLocation" : "https://some-host.com/first-package.jar",
+    "downloadLocation" : "https://example.com/first-package.jar",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
       "referenceType" : "purl",
@@ -78,7 +78,7 @@
     } ],
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "description" : "A package with all supported attributes set, with a VCS URL containing a user name, and with two scan results for the VCS containing copyright findings matched to a license finding.",
-    "downloadLocation" : "https://some-host.com/first-package-sources.jar",
+    "downloadLocation" : "https://example.com/first-package-sources.jar",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
       "referenceType" : "purl",
@@ -146,7 +146,7 @@
     } ],
     "copyrightText" : "Copyright 2020 Some copyright holder in source artifact",
     "description" : "A package with a source artifact scan result.",
-    "downloadLocation" : "https://some-host.com/seventh-package-sources.jar",
+    "downloadLocation" : "https://example.com/seventh-package-sources.jar",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
       "referenceType" : "purl",
