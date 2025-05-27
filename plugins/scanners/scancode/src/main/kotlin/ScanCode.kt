@@ -79,8 +79,6 @@ class ScanCode(
     private val config: ScanCodeConfig
 ) : LocalPathScannerWrapper() {
     companion object {
-        const val SCANNER_NAME = "ScanCode"
-
         private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"
         private const val OUTPUT_FORMAT_OPTION = "--json"
     }

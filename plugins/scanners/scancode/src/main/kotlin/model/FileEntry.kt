@@ -24,7 +24,6 @@ import kotlin.collections.orEmpty
 
 import kotlinx.serialization.Serializable
 
-import org.ossreviewtoolkit.plugins.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
@@ -59,8 +58,7 @@ sealed interface FileEntry {
         override val scanErrors: List<String>
     ) : FileEntry {
         companion object {
-            private val LICENSE_REF_PREFIX_SCAN_CODE = SpdxConstants.LICENSE_REF_PREFIX +
-                "${ScanCode.SCANNER_NAME.lowercase()}-"
+            private val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}scancode-"
 
             private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
                 val spdxId = spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
