@@ -37,5 +37,12 @@ data class ScanOssConfig(
      * Whether to write scan results to the storage.
      */
     @OrtPluginOption(defaultValue = "true")
-    val writeToStorage: Boolean
+    val writeToStorage: Boolean,
+
+    /**
+     * Whether to enable path obfuscation when sending file paths to the SCANOSS server.
+     * When enabled, the actual file paths will be obfuscated in the requests to protect sensitive information.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val enablePathObfuscation: Boolean
 )
