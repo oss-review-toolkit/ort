@@ -34,7 +34,7 @@ data class ScannerDetails(
     val version: String,
 
     /**
-     * The configuration of the scanner, could be command line arguments for example.
+     * The configuration of the scanner, like the options passed to a command line scanner.
      */
     val configuration: String
 ) {
