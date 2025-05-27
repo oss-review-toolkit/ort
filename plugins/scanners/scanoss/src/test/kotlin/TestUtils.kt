@@ -42,12 +42,14 @@ internal fun createScanOss(config: ScanOssConfig): ScanOss = ScanOss(config = co
 internal fun createScanOssConfig(
     apiUrl: String = ScanApi.DEFAULT_BASE_URL,
     apiKey: Secret = Secret(""),
-    writeToStorage: Boolean = true
+    writeToStorage: Boolean = true,
+    enablePathObfuscation: Boolean = false
 ): ScanOssConfig =
     ScanOssConfig(
         apiUrl = apiUrl,
         apiKey = apiKey,
-        writeToStorage = writeToStorage
+        writeToStorage = writeToStorage,
+        enablePathObfuscation = enablePathObfuscation
     )
 
 /**

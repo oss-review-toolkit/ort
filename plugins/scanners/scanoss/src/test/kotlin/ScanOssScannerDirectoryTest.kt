@@ -174,4 +174,75 @@ class ScanOssScannerDirectoryTest : StringSpec({
         // This assertion checks that our Go file was sent to the API.
         includedFiles.any { it.contains("random-data-10-41-29.go") } shouldBe true
     }
+
+    "Scanner should obfuscate file paths when path obfuscation is enabled" {
+        val scannerWithObfuscation = spyk(
+            ScanOssFactory.create(
+                apiUrl = "http://localhost:${server.port()}",
+                apiKey = Secret(""),
+                enablePathObfuscation = true
+            )
+        )
+
+        val pathToDir = tempdir().apply {
+            extractResource("/filesToScan/random-data-05-06-11.kt", resolve("random-data-05-06-11.kt"))
+            extractResource("/filesToScan/random-data-05-07-04.kt", resolve("random-data-05-07-04.kt"))
+        }
+
+        // Run the scanner with path obfuscation enabled.
+        scannerWithObfuscation.scanPath(
+            pathToDir,
+            ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
+        )
+
+        // Retrieve all HTTP POST requests captured by WireMock during the scan.
+        val requests = server.findAll(WireMock.postRequestedFor(WireMock.anyUrl()))
+        val requestBodies = requests.map { it.bodyAsString }
+
+        // Extract included filenames using a regex pattern from the SCANOSS HTTP POST.
+        val filenamePattern = "^file=.*?,.*?,(.+)$".toRegex(RegexOption.MULTILINE)
+        val includedFiles = requestBodies.flatMap { body ->
+            filenamePattern.findAll(body).map { it.groupValues[1] }.toList()
+        }
+
+        // When path obfuscation is enabled, the filenames should be obfuscated (not contain original file names).
+        includedFiles.any { it.contains("random-data-05-06-11.kt") } shouldBe false
+        includedFiles.any { it.contains("random-data-05-07-04.kt") } shouldBe false
+
+        // The requests should still contain some files (obfuscated names).
+        includedFiles.isNotEmpty() shouldBe true
+    }
+
+    "Scanner should return original file paths in results when path obfuscation is enabled" {
+        val scannerWithObfuscation = spyk(
+            ScanOssFactory.create(
+                apiUrl = "http://localhost:${server.port()}",
+                apiKey = Secret(""),
+                enablePathObfuscation = true
+            )
+        )
+
+        val pathToDir = tempdir().apply {
+            extractResource("/filesToScan/random-data-05-06-11.kt", resolve("random-data-05-06-11.kt"))
+            extractResource("/filesToScan/random-data-05-07-04.kt", resolve("random-data-05-07-04.kt"))
+        }
+
+        val summary = scannerWithObfuscation.scanPath(
+            pathToDir,
+            ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
+        )
+
+        // Even with path obfuscation enabled for server requests, the results should contain original paths.
+        with(summary) {
+            // Verify that license findings contain the original file paths.
+            licenseFindings.any { finding ->
+                finding.location.path == "scanner/src/main/kotlin/random-data-05-07-04.kt"
+            } shouldBe true
+
+            // Verify that snippet findings contain the original file paths.
+            snippetFindings.any { finding ->
+                finding.sourceLocation.path == "utils/src/main/kotlin/random-data-05-06-11.kt"
+            } shouldBe true
+        }
+    }
 })
