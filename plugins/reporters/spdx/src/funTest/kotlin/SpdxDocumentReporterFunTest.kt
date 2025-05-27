@@ -242,7 +242,7 @@ private val ortResult = OrtResult(
                 Package(
                     id = Identifier("Maven:first-package-group:first-package:0.0.1"),
                     binaryArtifact = RemoteArtifact(
-                        url = "https://some-host/first-package.jar",
+                        url = "https://some-host.com/first-package.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     ),
                     concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
@@ -252,7 +252,7 @@ private val ortResult = OrtResult(
                         "license finding.",
                     homepageUrl = "first package's homepage URL",
                     sourceArtifact = RemoteArtifact(
-                        url = "https://some-host/first-package-sources.jar",
+                        url = "https://some-host.com/first-package-sources.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     ),
                     vcs = VcsInfo(
@@ -317,7 +317,7 @@ private val ortResult = OrtResult(
                     description = "A package with a source artifact scan result.",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact(
-                        url = "https://some-host/seventh-package-sources.jar",
+                        url = "https://some-host.com/seventh-package-sources.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     ),
                     vcs = VcsInfo.EMPTY
@@ -388,7 +388,7 @@ private val ortResult = OrtResult(
             ScanResult(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
-                        url = "https://some-host/seventh-package-sources.jar",
+                        url = "https://some-host.com/seventh-package-sources.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     )
                 ),
