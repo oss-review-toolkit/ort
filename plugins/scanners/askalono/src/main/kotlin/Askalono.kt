@@ -45,8 +45,6 @@ import org.ossreviewtoolkit.utils.common.Os
 
 private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for any known license"
 
-private val JSON = Json { ignoreUnknownKeys = true }
-
 object AskalonoCommand : CommandLineTool {
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
@@ -107,7 +105,7 @@ class Askalono(
     }
 
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
-        val results = result.byteInputStream().use { JSON.decodeToSequence<AskalonoResult>(it) }
+        val results = result.byteInputStream().use { Json.decodeToSequence<AskalonoResult>(it) }
 
         val licenseFindings = mutableSetOf<LicenseFinding>()
 
