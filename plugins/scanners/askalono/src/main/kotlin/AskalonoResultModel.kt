@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.plugins.scanners.askalono
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonIgnoreUnknownKeys
 
+// See https://github.com/jpeddicord/askalono/blob/0.5.0/cli/src/formats.rs#L12-L23.
 @Serializable
 data class AskalonoResult(
     val path: String,
@@ -28,13 +30,17 @@ data class AskalonoResult(
     val error: String? = null
 )
 
+// See https://github.com/jpeddicord/askalono/blob/0.5.0/cli/src/formats.rs#L25-L30.
 @Serializable
+@JsonIgnoreUnknownKeys
 data class PathResult(
     val score: Float,
     val license: LicenseResult
 )
 
+// See https://github.com/jpeddicord/askalono/blob/0.5.0/cli/src/formats.rs#L32-L37.
 @Serializable
+@JsonIgnoreUnknownKeys
 data class LicenseResult(
     val name: String,
     val aliases: Set<String>

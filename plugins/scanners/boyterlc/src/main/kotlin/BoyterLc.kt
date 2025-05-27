@@ -44,8 +44,6 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
-private val JSON = Json { ignoreUnknownKeys = true }
-
 object BoyterLcCommand : CommandLineTool {
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
@@ -115,7 +113,7 @@ class BoyterLc(
     }
 
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
-        val results = JSON.decodeFromString<List<BoyterLcResult>>(result)
+        val results = Json.decodeFromString<List<BoyterLcResult>>(result)
 
         val licenseFindings = results.flatMapTo(mutableSetOf()) {
             val filePath = File(it.directory, it.filename)

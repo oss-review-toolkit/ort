@@ -21,14 +21,18 @@ package org.ossreviewtoolkit.plugins.scanners.boyterlc
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonIgnoreUnknownKeys
 
+// See https://github.com/boyter/lc/blob/7a7c5750857efde2f1d50b1c3b62c07943587421/parsers/structs.go#L20-L31.
 @Serializable
+@JsonIgnoreUnknownKeys
 class BoyterLcResult(
     @SerialName("Directory") val directory: String,
     @SerialName("Filename") val filename: String,
     @SerialName("LicenseGuesses") val licenseGuesses: List<LicenseGuess>
 )
 
+// See https://github.com/boyter/lc/blob/v1.3.1/parsers/structs.go#L15-L18.
 @Serializable
 data class LicenseGuess(
     @SerialName("LicenseId") val licenseId: String,
