@@ -30,7 +30,7 @@ import org.semver4j.RangesListFactory
 import org.semver4j.Semver
 
 /**
- * A list of Strings that are used to identify a version string as a version range in the [PackageCuration]'s version.
+ * A list of Strings that are used by Ivy-style version ranges.
  */
 private val versionRangeIndicators = listOf(",", "~", "*", "+", ">", "<", "=", " - ", "^", ".x", "||")
 
