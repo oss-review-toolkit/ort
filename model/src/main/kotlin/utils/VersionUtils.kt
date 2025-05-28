@@ -35,7 +35,7 @@ import org.semver4j.Semver
 private val versionRangeIndicators = listOf(",", "~", "*", "+", ">", "<", "=", " - ", "^", ".x", "||")
 
 /**
- * Return true if the version of this [PackageCuration] interpreted as an Ivy version matcher is applicable to the
+ * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
  * package with the given [identifier][pkgId].
  */
 internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
@@ -56,7 +56,7 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
         return false
     }.onFailure {
         logger.warn {
-            "Failed to check if package curation version '$version' is applicable to package version " +
+            "Failed to check if identifier version '$version' is applicable to package version " +
                 "'${pkgId.version}' of package '${pkgId.toCoordinates()}'."
         }
 
