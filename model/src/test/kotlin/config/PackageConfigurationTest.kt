@@ -67,19 +67,14 @@ class PackageConfigurationTest : WordSpec({
         "return true if vcs info and identifier are equal" {
             val config = vcsPackageConfig(name = "some-name", revision = "12345678", url = "ssh://git@host/repo.git")
 
-            config.matches(
-                config.id,
-                REPOSITORY_PROVENANCE
-            ) shouldBe true
+            config.matches(config.id, REPOSITORY_PROVENANCE) shouldBe true
         }
 
         "return false if only identifiers are not equal" {
             val config = vcsPackageConfig(name = "some-name", revision = "12345678", url = "ssh://git@host/repo.git")
+            val otherId = Identifier.EMPTY.copy(name = "some-other-name")
 
-            config.matches(
-                Identifier.EMPTY.copy(name = "some-other-name"),
-                REPOSITORY_PROVENANCE
-            ) shouldBe false
+            config.matches(otherId, REPOSITORY_PROVENANCE) shouldBe false
         }
 
         "return true if only the VCS URL credentials differ" {
@@ -94,19 +89,13 @@ class PackageConfigurationTest : WordSpec({
         "return false if only resolved revision is not equal to the matcher's revision" {
             val config = vcsPackageConfig(name = "some-name", revision = "12345678", url = "ssh://git@host/repo.git")
 
-            config.matches(
-                config.id,
-                REPOSITORY_PROVENANCE.copy(resolvedRevision = "12")
-            ) shouldBe false
+            config.matches(config.id, REPOSITORY_PROVENANCE.copy(resolvedRevision = "12")) shouldBe false
         }
 
         "return true if source artifact URL and identifier are equal" {
             val config = sourceArtifactConfig(name = "some-name", url = "https://host/path/file.zip")
 
-            config.matches(
-                config.id,
-                ARTIFACT_PROVENANCE
-            ) shouldBe true
+            config.matches(config.id, ARTIFACT_PROVENANCE) shouldBe true
         }
 
         "return false if only the source artifact URL is not equal" {
@@ -123,135 +112,99 @@ class PackageConfigurationTest : WordSpec({
         }
 
         "return true if the identifier type is equal ignoring case" {
-            val config =
-                vcsPackageConfig(name = "some-name", revision = "12345678", url = "ssh://git@host/repo.git").let {
-                    it.copy(id = it.id.copy(type = "Gradle"))
-                }
+            val config = vcsPackageConfig(name = "some-name", revision = "12345678", url = "ssh://git@host/repo.git")
+                .let { it.copy(id = it.id.copy(type = "Gradle")) }
 
-            config.matches(
-                config.id.copy(type = "gradle"),
-                REPOSITORY_PROVENANCE
-            ) shouldBe true
+            config.matches(config.id.copy(type = "gradle"), REPOSITORY_PROVENANCE) shouldBe true
         }
 
         "return true if vcs source code origin and identifier are equal" {
-            val config =
-                PackageConfiguration(
-                    id = Identifier.EMPTY.copy(name = "some-name"),
-                    sourceCodeOrigin = SourceCodeOrigin.VCS
-                )
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name"),
+                sourceCodeOrigin = SourceCodeOrigin.VCS
+            )
 
-            config.matches(
-                config.id,
-                REPOSITORY_PROVENANCE
-            ) shouldBe true
+            config.matches(config.id, REPOSITORY_PROVENANCE) shouldBe true
         }
 
         "return true if artifact source code origin and identifier are equal" {
-            val config =
-                PackageConfiguration(
-                    id = Identifier.EMPTY.copy(name = "some-name"),
-                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
-                )
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name"),
+                sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+            )
 
-            config.matches(
-                config.id,
-                ARTIFACT_PROVENANCE
-            ) shouldBe true
+            config.matches(config.id, ARTIFACT_PROVENANCE) shouldBe true
         }
 
         "return true if source code origin is equal and identifier matches with version is in range" {
-            val config =
-                PackageConfiguration(
-                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]"),
-                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
-                )
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]"),
+                sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+            )
 
-            config.matches(
-                config.id.copy(version = "55"),
-                ARTIFACT_PROVENANCE
-            ) shouldBe true
+            config.matches(config.id.copy(version = "55"), ARTIFACT_PROVENANCE) shouldBe true
         }
 
         "return false if only source code origin is not equal" {
-            val config =
-                PackageConfiguration(
-                    id = Identifier.EMPTY.copy(name = "some-name"),
-                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
-                )
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name"),
+                sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+            )
 
-            config.matches(
-                config.id,
-                REPOSITORY_PROVENANCE
-            ) shouldBe false
+            config.matches(config.id, REPOSITORY_PROVENANCE) shouldBe false
         }
 
         "return true if the package configuration contains only the identifier and the latter matches" {
             val config = PackageConfiguration(id = Identifier.EMPTY.copy(name = "some-name"))
 
-            config.matches(
-                config.id,
-                REPOSITORY_PROVENANCE
-            ) shouldBe true
+            config.matches(config.id, REPOSITORY_PROVENANCE) shouldBe true
         }
 
         "return false if only the source code origin is not equal" {
-            val config =
-                PackageConfiguration(
-                    id = Identifier.EMPTY.copy(name = "some-name"),
-                    sourceCodeOrigin = SourceCodeOrigin.VCS
-                )
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name"),
+                sourceCodeOrigin = SourceCodeOrigin.VCS
+            )
 
-            config.matches(
-                config.id,
-                ARTIFACT_PROVENANCE
-            ) shouldBe false
+            config.matches(config.id, ARTIFACT_PROVENANCE) shouldBe false
         }
 
         "return true if only matched by id with a matching version range" {
-            val config =
-                PackageConfiguration(
-                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]")
-                )
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]")
+            )
 
-            config.matches(
-                config.id.copy(version = "55"),
-                ARTIFACT_PROVENANCE
-            ) shouldBe true
+            config.matches(config.id.copy(version = "55"), ARTIFACT_PROVENANCE) shouldBe true
         }
 
         "return false if only matched by id with a non-matching version range" {
-            val config =
-                PackageConfiguration(
-                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]")
-                )
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]")
+            )
 
-            config.matches(
-                config.id.copy(version = "6"),
-                ARTIFACT_PROVENANCE
-            ) shouldBe false
+            config.matches(config.id.copy(version = "6"), ARTIFACT_PROVENANCE) shouldBe false
         }
     }
 
     "init()" should {
         "throw an exception if a version range is given while having a vcs" {
-            val baseConfig = vcsPackageConfig(
-                name = "some-name",
-                revision = "12345678",
-                url = "ssh://git@host/repo.git"
-            )
             shouldThrow<IllegalArgumentException> {
-                baseConfig.copy(
-                    id = baseConfig.id.copy(version = "[51.0.0,60.0.0]")
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(version = "[51.0.0,60.0.0]"),
+                    vcs = VcsMatcher(
+                        type = VcsType.GIT,
+                        revision = "12345678",
+                        url = "ssh://git@host/repo.git"
+                    )
                 )
             }
         }
 
         "throw an exception if a version range is given while having a source artifact URL" {
-            val baseConfig = sourceArtifactConfig(name = "some-name", url = "https://host/path/file.zip")
             shouldThrow<IllegalArgumentException> {
-                baseConfig.copy(
-                    id = baseConfig.id.copy(version = "[51.0.0,60.0.0]")
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(version = "[51.0.0,60.0.0]"),
+                    sourceArtifactUrl = "https://host/path/file.zip"
                 )
             }
         }

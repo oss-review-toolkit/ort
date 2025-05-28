@@ -42,7 +42,10 @@ import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
  */
 data class PackageConfiguration(
     /**
-     * The identifier of the package this configuration applies to.
+     * The [Identifier] which must match with the identifier of the package in order for this package curation to apply.
+     * The [version][Identifier.version] can be either a plain version string matched for equality, or an
+     * [Ivy-style version matchers](https://ant.apache.org/ivy/history/2.5.0/settings/version-matchers.html).
+     * The other components of the [identifier][id] are matched by equality.
      */
     val id: Identifier,
 
@@ -59,6 +62,12 @@ data class PackageConfiguration(
     val vcs: VcsMatcher? = null,
 
     /**
+     * The source code origin this configuration applies to.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val sourceCodeOrigin: SourceCodeOrigin? = null,
+
+    /**
      * Path excludes.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -68,13 +77,7 @@ data class PackageConfiguration(
      * License finding curations.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList(),
-
-    /**
-     * The source code origin this configuration applies to.
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val sourceCodeOrigin: SourceCodeOrigin? = null
+    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList()
 ) {
     init {
         require(
