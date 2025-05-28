@@ -36,7 +36,7 @@ packages:
   copyrightText: "NONE"
   downloadLocation: "https://github.com/path/first-project.git"
   filesAnalyzed: false
-  homepage: "first project's homepage"
+  homepage: "https://example.com/first-project/homepage"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "MIT"
   name: "first-project-name"
@@ -57,7 +57,7 @@ packages:
     referenceType: "purl"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
   filesAnalyzed: false
-  homepage: "first package's homepage URL"
+  homepage: "https://example.com/first-package/homepage"
   licenseConcluded: "BSD-2-Clause AND BSD-3-Clause AND MIT"
   licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
     \ OR MIT) AND MIT"
@@ -78,7 +78,7 @@ packages:
   filesAnalyzed: true
   hasFiles:
   - "SPDXRef-File-1"
-  homepage: "first package's homepage URL"
+  homepage: "https://example.com/first-package/homepage"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
     \ OR MIT) AND MIT"
@@ -105,7 +105,7 @@ packages:
     referenceType: "purl"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
   filesAnalyzed: false
-  homepage: "first package's homepage URL"
+  homepage: "https://example.com/first-package/homepage"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
     \ OR MIT) AND MIT"
