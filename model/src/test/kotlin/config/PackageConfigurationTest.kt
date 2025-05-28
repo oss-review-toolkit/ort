@@ -188,23 +188,23 @@ class PackageConfigurationTest : WordSpec({
 
     "init()" should {
         "throw an exception if a version range is given while having a vcs" {
-            val baseConfig = vcsPackageConfig(
-                name = "some-name",
-                revision = "12345678",
-                url = "ssh://git@host/repo.git"
-            )
             shouldThrow<IllegalArgumentException> {
-                baseConfig.copy(
-                    id = baseConfig.id.copy(version = "[51.0.0,60.0.0]")
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(version = "[51.0.0,60.0.0]"),
+                    vcs = VcsMatcher(
+                        type = VcsType.GIT,
+                        revision = "12345678",
+                        url = "ssh://git@host/repo.git"
+                    )
                 )
             }
         }
 
         "throw an exception if a version range is given while having a source artifact URL" {
-            val baseConfig = sourceArtifactConfig(name = "some-name", url = "https://host/path/file.zip")
             shouldThrow<IllegalArgumentException> {
-                baseConfig.copy(
-                    id = baseConfig.id.copy(version = "[51.0.0,60.0.0]")
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(version = "[51.0.0,60.0.0]"),
+                    sourceArtifactUrl = "https://host/path/file.zip"
                 )
             }
         }
