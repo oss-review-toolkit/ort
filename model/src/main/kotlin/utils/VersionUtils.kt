@@ -23,7 +23,6 @@ import kotlin.collections.isNotEmpty
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.RangesListFactory
@@ -32,7 +31,7 @@ import org.semver4j.Semver
 /**
  * A list of Strings that are used by Ivy-style version ranges.
  */
-private val versionRangeIndicators = listOf(",", "~", "*", "+", ">", "<", "=", " - ", "^", ".x", "||")
+private val IVY_VERSION_RANGE_INDICATORS = listOf(",", "~", "*", "+", ">", "<", "=", " - ", "^", ".x", "||")
 
 /**
  * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
@@ -63,4 +62,4 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
         it.showStackTrace()
     }.getOrDefault(false)
 
-internal fun Identifier.isVersionRange() = versionRangeIndicators.any { version.contains(it, ignoreCase = true) }
+internal fun Identifier.isVersionRange() = IVY_VERSION_RANGE_INDICATORS.any { version.contains(it, ignoreCase = true) }
