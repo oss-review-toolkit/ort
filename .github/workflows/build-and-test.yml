@@ -28,7 +28,7 @@ jobs:
         distribution: temurin
         java-version: 21
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
+      uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
     - name: Build all classes
       run: ./gradlew classes
   codeql-analysis:
@@ -45,7 +45,7 @@ jobs:
       with:
         languages: java
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
+      uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
     - name: Build all classes
       run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g --no-build-cache classes
     - name: Perform CodeQL Analysis
@@ -65,7 +65,7 @@ jobs:
         distribution: temurin
         java-version: 21
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
+      uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
     - name: Run unit tests
       run: ./gradlew --scan test jacocoTestReport
     - name: Create Test Summary
@@ -114,7 +114,7 @@ jobs:
           curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
           pipx install --pip-args="--no-cache-dir --constraint requirements.txt" scancode-toolkit==$SCANCODE_VERSION
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
+      uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
     - name: Run functional tests that do not require external tools
       run: ./gradlew --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
     - name: Create Test Summary
@@ -147,7 +147,7 @@ jobs:
         target: all-tools
         cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
+      uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
     - name: Run functional tests that do require external tools
       run: |
         # Run the functional tests in the Docker container.
