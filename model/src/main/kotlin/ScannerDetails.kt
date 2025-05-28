@@ -34,7 +34,8 @@ data class ScannerDetails(
     val version: String,
 
     /**
-     * The configuration of the scanner, like the options passed to a command line scanner.
+     * The configuration that ensures reproducible results for the scanner. In case of a command line scanner, this
+     * should include those command line options that are significant for the scan results.
      */
     val configuration: String
 ) {
