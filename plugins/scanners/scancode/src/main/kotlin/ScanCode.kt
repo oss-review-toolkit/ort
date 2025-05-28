@@ -88,9 +88,9 @@ class ScanCode(
     internal fun getCommandLineOptions(version: String) =
         buildList {
             addAll(config.commandLine)
-            config.commandLineNonConfig?.let { addAll(it) }
+            addAll(config.commandLineNonConfig)
 
-            if ("--processes" !in config.commandLineNonConfig.orEmpty()) {
+            if ("--processes" !in config.commandLineNonConfig) {
                 val maxProcesses = max(1, Runtime.getRuntime().availableProcessors() - 1)
                 add("--processes")
                 add(maxProcesses.toString())

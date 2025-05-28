@@ -37,7 +37,8 @@ data class ScanCodeConfig(
      * like "--processes". If this does not contain "--processes", it is added with a value of one less than the number
      * of available processors.
      */
-    val commandLineNonConfig: List<String>?,
+    @OrtPluginOption(defaultValue = "")
+    val commandLineNonConfig: List<String>,
 
     /**
      * A flag to indicate whether the "high-level" per-file license reported by ScanCode starting with version 32 should
