@@ -201,7 +201,7 @@ private val ortResult = OrtResult(
                     id = Identifier("Maven:first-project-group:first-project-name:0.0.1"),
                     declaredLicenses = setOf("MIT"),
                     definitionFilePath = "",
-                    homepageUrl = "first project's homepage",
+                    homepageUrl = "https://example.com/first-project/homepage",
                     scopeDependencies = setOf(
                         Scope(
                             name = "compile",
@@ -250,7 +250,7 @@ private val ortResult = OrtResult(
                     description = "A package with all supported attributes set, with a VCS URL containing a user " +
                         "name, and with two scan results for the VCS containing copyright findings matched to a " +
                         "license finding.",
-                    homepageUrl = "first package's homepage URL",
+                    homepageUrl = "https://example.com/first-package/homepage",
                     sourceArtifact = RemoteArtifact(
                         url = "https://example.com/first-package-sources.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
