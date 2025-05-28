@@ -168,13 +168,17 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                         PluginOptionType.SECRET -> add(" ?: %T(%S)", Secret::class, defaultValue)
                         PluginOptionType.STRING -> add(" ?: %S", defaultValue)
                         PluginOptionType.STRING_LIST -> {
-                            add(" ?: listOf(")
+                            if (defaultValue.isEmpty()) {
+                                add(" ?: emptyList()")
+                            } else {
+                                add(" ?: listOf(")
 
-                            defaultValue.split(',').forEach { value ->
-                                add("%S,", value.trim())
+                                defaultValue.split(',').forEach { value ->
+                                    add("%S,", value.trim())
+                                }
+
+                                add(")")
                             }
-
-                            add(")")
                         }
                     }
                 }
@@ -215,13 +219,17 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                         PluginOptionType.SECRET -> add("%T(%S)", Secret::class, defaultValue)
                         PluginOptionType.STRING -> add("%S", defaultValue)
                         PluginOptionType.STRING_LIST -> {
-                            add("listOf(")
+                            if (defaultValue.isEmpty()) {
+                                add("emptyList()")
+                            } else {
+                                add("listOf(")
 
-                            defaultValue.split(',').forEach { value ->
-                                add("%S,", value.trim())
+                                defaultValue.split(',').forEach { value ->
+                                    add("%S,", value.trim())
+                                }
+
+                                add(")")
                             }
-
-                            add(")")
                         }
                     }
                 }.build()
