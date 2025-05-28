@@ -327,6 +327,7 @@ interface FossIdRestService {
     suspend fun createIgnoreRule(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @POST("api.php")
+    @Headers("$READ_TIMEOUT_HEADER:${5 * 60 * 1000}")
     suspend fun generateReport(@Body body: PostRequestBody): Response<ResponseBody>
 
     @POST("api.php")
