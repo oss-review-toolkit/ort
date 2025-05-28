@@ -59,6 +59,12 @@ data class PackageConfiguration(
     val vcs: VcsMatcher? = null,
 
     /**
+     * The source code origin this configuration applies to.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val sourceCodeOrigin: SourceCodeOrigin? = null,
+
+    /**
      * Path excludes.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -68,13 +74,7 @@ data class PackageConfiguration(
      * License finding curations.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList(),
-
-    /**
-     * The source code origin this configuration applies to.
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val sourceCodeOrigin: SourceCodeOrigin? = null
+    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList()
 ) {
     init {
         require(
