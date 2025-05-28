@@ -63,4 +63,4 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
         it.showStackTrace()
     }.getOrDefault(false)
 
-private fun Identifier.isVersionRange() = versionRangeIndicators.any { version.contains(it, ignoreCase = true) }
+internal fun Identifier.isVersionRange() = versionRangeIndicators.any { version.contains(it, ignoreCase = true) }

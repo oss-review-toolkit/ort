@@ -13,24 +13,38 @@ Use a package configuration file to:
 
 ## Package Configuration File Basics
 
-Each package configuration applies exactly to one *package id* and *provenance* which must be specified.
-The *provenance* can be specified as either a *source artifact* or a *VCS location* with an optional revision.
+A package configuration applies to the packages it matches with.
+It contains the mandatory `id` matcher, for matching package IDs, which allows for using [Ivy-style version matchers](https://ant.apache.org/ivy/history/2.5.0/settings/version-matchers.html).
+In addition to the `id`, at most one of the matchers `vcs`, `sourceArtifactUrl` or `sourceCodeOrigin` may additionally
+be specified, which targets the repository provenance, the source artifact provenance or just the source code origin of
+the package's scan result(s).
 
-Here is an example of a package configuration for `ansi-styles 4.2.1`, when the source artifact is (to be) scanned:
+The following example illustrates a package configuration for `ansi-styles 4.2.1`, utilizing the available options:
 
 ```yaml
+# Apply only specified source artifact by its URL.
 id: "NPM::ansi-styles:4.2.1"
 source_artifact_url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.2.1.tgz"
-```
 
-If the source repository is (to be) scanned, then use the package configuration below:
-
-```yaml
+# Apply only to specific code repository URL with optionally a hash.
 id: "NPM::ansi-styles:4.2.1"
 vcs:
   type: "Git"
   url: "https://github.com/chalk/ansi-styles.git"
   revision: "74d421cf32342ac6ec7b507bd903a9e1105f74d7"
+
+# Apply to all versions lower than 4.2.1 where a code repository was scanned.
+id: "NPM::ansi-styles:(,4.2.1]"
+source_code_origin: VCS
+
+# Apply to versions all versions greater or equal to 4.0 
+# and lower or equal to 4.2.1 where a source artifact was scanned.
+id: "NPM::ansi-styles:[4.0,4.2.1]"
+source_code_origin: SOURCE_ARTIFACT
+
+# Apply only to version 4.2.1, regardless whether
+# code repository or source artifact was scanned.
+id: "NPM::ansi-styles:4.2.1"
 ```
 
 ## Defining Path Excludes and License Finding Curations

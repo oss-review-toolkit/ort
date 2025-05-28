@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
@@ -159,6 +160,19 @@ class PackageConfigurationTest : WordSpec({
             ) shouldBe true
         }
 
+        "return true if source code origin is equal and identifier matches with version is in range" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]"),
+                    sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+                )
+
+            config.matches(
+                config.id.copy(version = "55"),
+                ARTIFACT_PROVENANCE
+            ) shouldBe true
+        }
+
         "return false if only source code origin is not equal" {
             val config =
                 PackageConfiguration(
@@ -192,6 +206,54 @@ class PackageConfigurationTest : WordSpec({
                 config.id,
                 ARTIFACT_PROVENANCE
             ) shouldBe false
+        }
+
+        "return true if only matched by id with a matching version range" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]")
+                )
+
+            config.matches(
+                config.id.copy(version = "55"),
+                ARTIFACT_PROVENANCE
+            ) shouldBe true
+        }
+
+        "return false if only matched by id with a non-matching version range" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name", version = "[51.0.0,60.0.0]")
+                )
+
+            config.matches(
+                config.id.copy(version = "6"),
+                ARTIFACT_PROVENANCE
+            ) shouldBe false
+        }
+    }
+
+    "init()" should {
+        "throw an exception if a version range is given while having a vcs" {
+            val baseConfig = vcsPackageConfig(
+                name = "some-name",
+                revision = "12345678",
+                url = "ssh://git@host/repo.git"
+            )
+            shouldThrow<IllegalArgumentException> {
+                baseConfig.copy(
+                    id = baseConfig.id.copy(version = "[51.0.0,60.0.0]")
+                )
+            }
+        }
+
+        "throw an exception if a version range is given while having a source artifact URL" {
+            val baseConfig = sourceArtifactConfig(name = "some-name", url = "https://host/path/file.zip")
+            shouldThrow<IllegalArgumentException> {
+                baseConfig.copy(
+                    id = baseConfig.id.copy(version = "[51.0.0,60.0.0]")
+                )
+            }
         }
     }
 })
