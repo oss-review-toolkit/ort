@@ -180,5 +180,18 @@ class PackageConfigurationTest : WordSpec({
                 REPOSITORY_PROVENANCE
             ) shouldBe true
         }
+
+        "return false if only the source code origin is not equal" {
+            val config =
+                PackageConfiguration(
+                    id = Identifier.EMPTY.copy(name = "some-name"),
+                    sourceCodeOrigin = SourceCodeOrigin.VCS
+                )
+
+            config.matches(
+                config.id,
+                ARTIFACT_PROVENANCE
+            ) shouldBe false
+        }
     }
 })
