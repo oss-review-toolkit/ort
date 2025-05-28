@@ -42,7 +42,7 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
     runCatching {
         if (version == pkgId.version) return true
 
-        if (version.isVersionRange()) {
+        if (isVersionRange()) {
             // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
             // https://github.com/semver4j/semver4j/issues/132.
             val range = RangesListFactory.create(version)
@@ -63,4 +63,4 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
         it.showStackTrace()
     }.getOrDefault(false)
 
-private fun String.isVersionRange() = versionRangeIndicators.any { contains(it, ignoreCase = true) }
+private fun Identifier.isVersionRange() = versionRangeIndicators.any { version.contains(it, ignoreCase = true) }
