@@ -91,6 +91,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
                 // Note that "fromFile" contains the name of the input directory, see
                 // https://github.com/aboutcode-org/scancode-toolkit/issues/3712.
                 || inputPath.resolveSibling(it.fromFile) == inputPath.resolve(file.path)
+                || (inputPath.path == "." && fromFile.substringAfter('/') == file.path)
                 // Check if input is a single file.
                 || it.fromFile == inputPath.name
         }
