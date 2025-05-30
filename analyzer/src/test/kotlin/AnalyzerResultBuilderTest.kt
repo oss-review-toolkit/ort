@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotContain
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -242,7 +243,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 val resolvedResult = analyzerResult.withResolvedScopes()
 
-                resolvedResult.dependencyGraphs.isEmpty() shouldBe true
+                resolvedResult.dependencyGraphs should beEmptyMap()
 
                 resolvedResult.projects.find { it.id == p1.id } shouldNotBeNull {
                     scopes shouldHaveSize 1

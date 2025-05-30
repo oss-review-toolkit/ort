@@ -25,10 +25,12 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import io.mockk.spyk
 
@@ -210,7 +212,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
         includedFiles.any { it.contains("random-data-05-07-04.kt") } shouldBe false
 
         // The requests should still contain some files (obfuscated names).
-        includedFiles.isNotEmpty() shouldBe true
+        includedFiles shouldNot beEmpty()
     }
 
     "Scanner should return original file paths in results when path obfuscation is enabled" {

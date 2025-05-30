@@ -20,8 +20,9 @@
 package org.ossreviewtoolkit.model.config
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import java.io.File
 
@@ -33,7 +34,7 @@ class ReporterConfigurationTest : WordSpec({
     "Reporter secrets" should {
         "not be serialized as they contain sensitive information" {
             rereadReporterConfig(loadReporterConfig()).config?.get("FossId") shouldNotBeNull {
-                secrets shouldBe emptyMap()
+                secrets should beEmpty()
             }
         }
     }
