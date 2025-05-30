@@ -31,6 +31,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.maps.haveKey
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -457,7 +458,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "work for URIs without query parameters" {
-            URI("https://oss-review-toolkit.org").getQueryParameters() shouldBe emptyMap()
+            URI("https://oss-review-toolkit.org").getQueryParameters() should beEmptyMap()
         }
 
         "work with empty values" {
