@@ -174,8 +174,7 @@ private fun SpdxDocument.getCustomReplacements() =
 private val analyzedVcs = VcsInfo(
     type = VcsType.GIT,
     revision = "master",
-    url = "https://github.com/path/first-project.git",
-    path = ""
+    url = "https://github.com/path/first-project.git"
 )
 
 private val ortResult = OrtResult(
