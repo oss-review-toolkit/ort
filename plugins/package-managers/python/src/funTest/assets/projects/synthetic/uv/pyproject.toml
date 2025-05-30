@@ -1,0 +1,49 @@
+[project]
+name = "lixo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "graphviz>=0.20.3",
+    "jinja2>=3.1.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "ruff>=0.9.10",
+]
+
+[tool.ruff]
+fix = true
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = [
+    "E",   # pycodestyle error
+    "W",   # pycodestyle warning
+    "F",   # pyflakes
+    "A",   # flakes8-builtins
+    "COM", # flakes8-commas
+    "C4",  # flake8-comprehensions
+    "Q",   # flake8-quotes
+    "SIM", # flake8-simplify
+    "PTH", # flake8-use-pathlib
+    "I",   # isort
+    "N",   # pep8 naming
+    "UP",  # pyupgrade
+    "S",   # bandit
+]
+ignore = [
+    'N802',   # function name should be lowercase
+    'SIM105', # Suggest contextlib instead of try/except with pass
+    'COM812', # missing-trailing-comma from flake8-commas
+]
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+flake8-tidy-imports.ban-relative-imports = "all"
+isort.required-imports = ["from __future__ import annotations"]
+# Unlike Flake8, default to a complexity level of 10.
+mccabe.max-complexity = 10
+per-file-ignores = {}
