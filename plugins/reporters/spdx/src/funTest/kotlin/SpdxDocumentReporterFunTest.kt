@@ -80,7 +80,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
                 .build()
                 .getSchema(getResource("/spdx-schema.json").toURI())
 
-            val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
+            val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
             val errors = schema.validate(FileFormat.JSON.mapper.readTree(jsonSpdxDocument))
 
             errors should beEmpty()
@@ -89,7 +89,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
         "create the expected document" {
             val expectedResult = readResource("/spdx-document-reporter-expected-output.spdx.json")
 
-            val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
+            val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
 
             jsonSpdxDocument shouldBe patchExpectedResult(
                 expectedResult,
@@ -99,7 +99,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
         "omit file information if the corresponding option is disabled" {
             val jsonSpdxDocument = generateReport(
-                ortResult,
+                ORT_RESULT,
                 FileFormat.JSON,
                 defaultConfig.copy(fileInformationEnabled = false)
             )
@@ -114,7 +114,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
         "create the expected document for a synthetic ORT result" {
             val expectedResult = readResource("/spdx-document-reporter-expected-output.spdx.yml")
 
-            val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
+            val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML)
 
             yamlSpdxDocument shouldBe patchExpectedResult(
                 expectedResult,
@@ -171,13 +171,13 @@ private fun SpdxDocument.getCustomReplacements() =
         "<REPLACE_DOCUMENT_NAMESPACE>" to documentNamespace
     )
 
-private val analyzedVcs = VcsInfo(
+private val ANALYZED_VCS = VcsInfo(
     type = VcsType.GIT,
     revision = "master",
     url = "https://github.com/path/first-project.git"
 )
 
-private val ortResult = OrtResult(
+private val ORT_RESULT = OrtResult(
     repository = Repository(
         config = RepositoryConfiguration(
             excludes = Excludes(
@@ -190,8 +190,8 @@ private val ortResult = OrtResult(
                 )
             )
         ),
-        vcs = analyzedVcs,
-        vcsProcessed = analyzedVcs
+        vcs = ANALYZED_VCS,
+        vcsProcessed = ANALYZED_VCS
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
@@ -234,7 +234,7 @@ private val ortResult = OrtResult(
                             )
                         )
                     ),
-                    vcs = analyzedVcs
+                    vcs = ANALYZED_VCS
                 )
             ),
             packages = setOf(
