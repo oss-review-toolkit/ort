@@ -23,7 +23,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import CommandBox from "@site/src/components/CommandBox";
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import Features from '@site/src/components/Features';
 import Toolchain from '@site/src/components/Toolchain';
 import styles from './index.module.css';
 
@@ -74,7 +74,7 @@ export default function Home() {
       <HomepageHeader />
       <main>
         <Toolchain />
-        <HomepageFeatures />
+        <Features />
       </main>
     </Layout>
   );
