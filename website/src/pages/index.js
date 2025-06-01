@@ -49,7 +49,7 @@ function HomepageHeader() {
           frameBorder="0" scrolling="0" width="170" height="30" title="GitHub"/>
         <div className={styles.buttons}>
           <Link
-            className="button button--secondary button--lg margin-right--lg"
+            className="button button--secondary button--lg"
             to="/docs/intro">
             Introduction
           </Link>

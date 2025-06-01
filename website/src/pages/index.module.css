@@ -28,3 +28,17 @@
   justify-content: center;
   margin: 1rem;
 }
+
+.buttons a {
+  margin: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .buttons {
+    flex-direction: column;
+  }
+
+  .buttons a {
+    margin: 0.5rem 0;
+  }
+}
