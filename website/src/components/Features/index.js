@@ -209,7 +209,7 @@ function Feature({Svg, title, link, command, description, reverse}) {
   );
 }
 
-export default function HomepageFeatures() {
+export default function Features() {
   return (
     <section className={styles.features}>
       <div className="row">
