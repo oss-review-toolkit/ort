@@ -67,3 +67,17 @@
     margin: 0;
 }
 
+@media (max-width: 768px) {
+    .content {
+        padding: 3rem 5%;
+    }
+
+    .tools {
+        flex-direction: column;
+    }
+
+    .arrow {
+        transform: rotate(90deg);
+    }
+}
+
