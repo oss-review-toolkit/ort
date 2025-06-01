@@ -49,3 +49,23 @@
 .featureSvg {
   height: 200px;
 }
+
+@media (max-width: 768px) {
+  .feature {
+    flex-direction: column;
+    padding: 2rem 5%;
+  }
+
+  .featureReverse {
+    flex-direction: column;
+  }
+
+  .featureSvgContainer {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .featureContent ul {
+    width: 100%;
+  }
+}
