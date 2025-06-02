@@ -77,6 +77,8 @@ import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
 private const val BAZEL_FALLBACK_VERSION = "7.0.1"
+private const val BAZEL_RC_FILE = ".bazelrc"
+private const val BAZEL_RC_REGISTRY_PATTERN = "common --registry="
 private const val LOCKFILE_NAME = "MODULE.bazel.lock"
 private const val BUILDOZER_MISSING_VALUE = "(missing)"
 private const val CONAN_REQUIRES_SCOPE_NAME = "conan_requires"
@@ -360,7 +362,19 @@ class Bazel(
 
         // Bazel version >= 7.2.0.
         if (lockfile.registryFileHashes != null) {
-            return CompositeBazelModuleRegistryService.create(lockfile.registryFileHashes.keys, projectDir)
+            // Bazel >= 7.2 lockfiles do not contain anymore the local registry URLs in the 'registryFileHashes'
+            // property, so the .bazelrc file is parsed instead.
+            val localRegistryServices = projectDir.resolve(BAZEL_RC_FILE).takeIf { it.isFile }?.readLines()
+                ?.mapNotNull { it.withoutPrefix(BAZEL_RC_REGISTRY_PATTERN) }
+                ?.filter { it.startsWith("file://") }
+                ?.mapNotNull { LocalBazelModuleRegistryService.create(it, projectDir) }.orEmpty()
+
+            return MultiBazelModuleRegistryService(
+                localRegistryServices + CompositeBazelModuleRegistryService.create(
+                    lockfile.registryFileHashes.keys,
+                    projectDir
+                )
+            )
         }
 
         return null

@@ -1,0 +1,2 @@
+bazel_dep(name = "test_module", version = "0.0.1")
+bazel_dep(name = "glog", version = "0.5.0", repo_name = "com_github_google_glog")
