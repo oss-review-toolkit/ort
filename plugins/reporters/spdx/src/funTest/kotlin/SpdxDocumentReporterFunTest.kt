@@ -60,7 +60,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             errors should beEmpty()
         }
 
-        "create the expected document" {
+        "create the expected document for a synthetic ORT result" {
             val expectedResult = readResource("/spdx-document-reporter-expected-output.spdx.json")
 
             val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
