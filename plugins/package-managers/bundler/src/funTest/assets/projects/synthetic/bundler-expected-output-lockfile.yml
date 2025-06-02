@@ -227,7 +227,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "BDD for Ruby"
-  homepage_url: "http://github.com/rspec"
+  homepage_url: "https://rspec.info"
   binary_artifact:
     url: ""
     hash:
@@ -260,7 +260,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "BDD for Ruby. RSpec runner and example groups."
-  homepage_url: "https://github.com/rspec/rspec-core"
+  homepage_url: "https://rspec.info"
   binary_artifact:
     url: ""
     hash:
@@ -293,7 +293,7 @@ packages:
     spdx_expression: "MIT"
   description: "rspec-expectations provides a simple, readable API to express expected\
     \ outcomes of a code example."
-  homepage_url: "https://github.com/rspec/rspec-expectations"
+  homepage_url: "https://rspec.info"
   binary_artifact:
     url: ""
     hash:
@@ -325,7 +325,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "RSpec's 'test double' framework, with support for stubbing and mocking"
-  homepage_url: "https://github.com/rspec/rspec-mocks"
+  homepage_url: "https://rspec.info"
   binary_artifact:
     url: ""
     hash:
@@ -360,7 +360,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Support utilities for RSpec gems"
-  homepage_url: "https://github.com/rspec/rspec-support"
+  homepage_url: "https://rspec.info"
   binary_artifact:
     url: ""
     hash:
@@ -372,12 +372,12 @@ packages:
       value: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
       algorithm: "SHA-256"
   vcs:
-    type: "Git"
-    url: "https://github.com/rspec/rspec-support.git"
+    type: ""
+    url: "https://rspec.info"
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
-    url: "https://github.com/rspec/rspec-support.git"
+    type: ""
+    url: "https://rspec.info"
     revision: ""
     path: ""
