@@ -34,6 +34,9 @@ import org.ossreviewtoolkit.clients.bazelmoduleregistry.RemoteBazelModuleRegistr
  * delegates the package lookup to the corresponding registry. The first registry that contains the package is used.
  * [packagesPerRegistry] is a map of [BazelModuleRegistryService] instances to the list of packages they are
  * responsible for.
+ * The [MultiBazelModuleRegistryService] is used to work directly on registry URLs extracted from Bazel < 7.2.0
+ * lockfile, whereas the [CompositeBazelModuleRegistryService] is used to work on registry URLs containing the package
+ * names, extracted from Bazel >= 7.2.0 lockfile.
  */
 internal class CompositeBazelModuleRegistryService(
     private val packagesPerRegistry: Map<BazelModuleRegistryService, Set<String>>
