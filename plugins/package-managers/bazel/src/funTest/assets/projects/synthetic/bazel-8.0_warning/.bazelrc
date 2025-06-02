@@ -1,0 +1,1 @@
+common --disk_cache=/non-existing-dir

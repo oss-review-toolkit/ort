@@ -202,10 +202,12 @@ class Bazel(
         val moduleMetadata = Parser(definitionFile.readText()).parse()
         val depDirectives = moduleMetadata.dependencies.associateBy { "${it.name}@${it.version}" }
         val archiveOverrides = getArchiveOverrides(projectDir)
+        val issues = mutableListOf<Issue>()
         val (mainModule, scopes) = getDependencyGraph(
             projectDir,
             depDirectives,
-            archiveOverrides
+            archiveOverrides,
+            issues
         )
 
         val conanPackages = mainModule.extensionUsages
@@ -230,7 +232,6 @@ class Bazel(
         // If no lockfile is present, getDependencyGraph() runs "bazel mod graph", which creates a "MODULE.bazel.lock"
         // file as a side effect. That file contains the URL of the Bazel module registry that was used for dependency
         // resolution.
-        val issues = mutableListOf<Issue>()
         val registry = determineRegistry(parseLockfile(lockfile), projectDir)
 
         val packages = if (registry != null) {
@@ -490,7 +491,8 @@ class Bazel(
     private fun getDependencyGraph(
         projectDir: File,
         depDirectives: Map<String, BazelDepDirective>,
-        archiveOverrides: Map<String, ArchiveOverride>
+        archiveOverrides: Map<String, ArchiveOverride>,
+        issues: MutableList<Issue>
     ): Pair<BazelModule, MutableSet<Scope>> {
         val process = BazelCommand.run(
             "mod",
@@ -502,6 +504,12 @@ class Bazel(
             "--extension_info=all",
             workingDir = projectDir
         ).requireSuccess()
+
+        if (process.stderr.isNotEmpty()) {
+            process.stderr.lines()
+                .filter { it.startsWith("WARNING") && "Please update the version in your MODULE.bazel" in it }
+                .forEach { issues += createAndLogIssue(it) }
+        }
 
         val mainModule = process.stdout.parseBazelModule()
         val (mainDeps, devDeps) = mainModule.dependencies.map { module ->
@@ -516,7 +524,14 @@ class Bazel(
                 module
             }
         }.partition {
-            depDirectives[it.key]?.devDependency != true
+            val depDirective = depDirectives[it.key]
+
+            if (depDirective == null) {
+                logger.warn { "No dependency directive found for '${it.key}'. Assuming it is a main dependency." }
+                true
+            } else {
+                !depDirective.devDependency
+            }
         }
 
         return mainModule to mutableSetOf(
