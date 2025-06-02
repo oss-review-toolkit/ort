@@ -50,6 +50,15 @@ class BazelFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Dependencies are detected correctly for a project with a local registries and Bazel >= 8.0.0" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry-bazel8/MODULE.bazel")
+        val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-local-registry-bazel8.yml")
+
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Dependencies are detected correctly with Bazel 7.2.0" {
         val definitionFile = getAssetFile("projects/synthetic/bazel-7.2/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-7.2-expected-output.yml")
@@ -90,6 +99,17 @@ class BazelFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry-with-local-path/MODULE.bazel")
         val expectedResultFile = getAssetFile(
             "projects/synthetic/bazel-expected-output-local-registry-with-local-path.yml"
+        )
+
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Source artifact of a dependency with a 'local_path' type and Bazel >= 8.0.0 is resolved correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry-with-local-path-bazel8/MODULE.bazel")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/bazel-expected-output-local-registry-with-local-path-bazel8.yml"
         )
 
         val result = BazelFactory.create().resolveSingleProject(definitionFile)

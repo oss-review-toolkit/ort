@@ -1,0 +1,108 @@
+---
+project:
+  id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-local-registry-bazel8/MODULE.bazel:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dev"
+    dependencies: []
+  - name: "main"
+    dependencies:
+    - id: "Bazel::glog:0.5.0"
+      linkage: "STATIC"
+      dependencies:
+      - id: "Bazel::gflags:2.2.2"
+        linkage: "STATIC"
+    - id: "Bazel::test_module:0.0.1"
+      linkage: "STATIC"
+packages:
+- id: "Bazel::gflags:2.2.2"
+  purl: "pkg:bazel/gflags@2.2.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://gflags.github.io/gflags/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/gflags/gflags/archive/refs/tags/v2.2.2.tar.gz"
+    hash:
+      value: "34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/gflags/gflags"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/gflags/gflags.git"
+    revision: ""
+    path: ""
+- id: "Bazel::glog:0.5.0"
+  purl: "pkg:bazel/glog@0.5.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/google/glog"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/google/glog/archive/refs/tags/v0.5.0.tar.gz"
+    hash:
+      value: "eede71f28371bf39aa69b45de23b329d37214016e2055269b3b5e7cfd40b59f5"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/glog"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/glog.git"
+    revision: ""
+    path: ""
+- id: "Bazel::test_module:0.0.1"
+  purl: "pkg:bazel/test_module@0.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://example.com/test_module-0.0.1.zip"
+    hash:
+      value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
