@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.create
@@ -66,6 +68,22 @@ class BazelFunTest : StringSpec({
         val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "An issue is created when the MODULE.bazel contains a different package version than the dependency graph" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-8.0_warning/MODULE.bazel")
+
+        // The warning seems outputted only once when a Bazel local server is running. Therefore, the server has to be
+        // shut down before running the test.
+        BazelCommand.run("shutdown", "--disk_cache=", workingDir = definitionFile.parentFile).requireSuccess()
+
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
+
+        result.issues shouldHaveSize 1
+        result.issues.first().message shouldBe
+            "WARNING: For repository 'com_google_googletest', the root module requires module version " +
+            "googletest@1.14.0, but got googletest@1.14.0.bcr.1 in the resolved dependency graph. Please update the " +
+            "version in your MODULE.bazel or set --check_direct_dependencies=off"
     }
 
     "Dependencies are detected correctly for a project with a local path override" {
