@@ -24,6 +24,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldContainValue
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -348,6 +349,15 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.getProject("", "", "semver4j_2_20201203_090342") shouldNotBeNull {
             error shouldBe "Classes.FossID.user_not_found_or_api_key_is_not_correct"
             message shouldBe "User is not found or API key is incorrect"
+        }
+    }
+
+    "Projects can be listed" {
+        service.listProjects("", "") shouldNotBeNull {
+            data shouldNotBeNull {
+                this shouldHaveSize 2
+                first().projectName shouldBe "TestProject1"
+            }
         }
     }
 })

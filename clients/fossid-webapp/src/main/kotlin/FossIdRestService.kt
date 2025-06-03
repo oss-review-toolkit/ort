@@ -265,6 +265,9 @@ interface FossIdRestService {
     suspend fun getProject(@Body body: PostRequestBody): PolymorphicDataResponseBody<Project>
 
     @POST("api.php")
+    suspend fun listProjects(@Body body: PostRequestBody): PolymorphicResponseBody<Project>
+
+    @POST("api.php")
     suspend fun getScan(@Body body: PostRequestBody): PolymorphicDataResponseBody<Scan>
 
     @POST("api.php")

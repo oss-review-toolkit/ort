@@ -1,0 +1,26 @@
+{
+  "id" : "d235bf75-7318-44bd-8801-27359f923e32",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"list_projects\",\"group\":\"projects\",\"data\":{\"username\":\"\",\"key\":\"\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"projects_list_projects\",\"status\":\"1\",\"data\": [ {      \"id\": \"404\",      \"creator\": \"23\",      \"project_code\": \"project_1\",      \"project_name\": \"TestProject1\",      \"limit_date\": null,      \"product_code\": \"\",      \"product_name\": \"TestProduct1\",      \"description\": \"A test project\",      \"comment\": \"\",      \"is_archived\": \"0\",      \"jira_project_key\": \"\",      \"created\": \"2023-01-24 15:52:35\",      \"updated\": \"2024-03-24 17:36:58\",      \"scans\": null,      \"policy_rules\": null,      \"warnings\": null    },    {      \"id\": \"426\",      \"creator\": \"226\",      \"project_code\": \"test_semver4j\",      \"project_name\": \"test_semver4j\",      \"limit_date\": null,      \"product_code\": \"\",      \"product_name\": \"\",      \"description\": \"\",      \"comment\": \"Created by ORT\",      \"is_archived\": \"0\",      \"jira_project_key\": \"\",      \"created\": \"2022-03-09 15:51:31\",      \"updated\": null,      \"scans\": \"2\",      \"policy_rules\": null,      \"warnings\": null    }]}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "d235bf75-7318-44bd-8801-27359f923e32",
+  "persistent" : true,
+  "insertionIndex" : 1
+}
