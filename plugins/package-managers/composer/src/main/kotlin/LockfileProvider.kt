@@ -42,7 +42,7 @@ class LockfileProvider(private val definitionFile: File) {
             block(lockfile)
         } finally {
             lockfile.delete()
-            definitionFileBackup?.also { it.toPath().moveTo(definitionFile.toPath(), overwrite = true) }
+            definitionFileBackup?.toPath()?.moveTo(definitionFile.toPath(), overwrite = true)
         }
     }
 
