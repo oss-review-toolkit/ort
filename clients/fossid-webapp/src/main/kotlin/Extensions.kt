@@ -93,6 +93,16 @@ suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCo
     )
 
 /**
+ * Get all projects available in this instance.
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.listProjects(user: String, apiKey: String) =
+    listProjects(
+        PostRequestBody("list_projects", PROJECT_GROUP, user, apiKey, emptyMap())
+    )
+
+/**
  * Get the scan for the given [scanCode].
  *
  * The HTTP request is sent with [user] and [apiKey] as credentials.

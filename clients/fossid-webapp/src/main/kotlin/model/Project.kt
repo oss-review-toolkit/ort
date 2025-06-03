@@ -45,6 +45,6 @@ data class Project(
     val isArchived: Boolean?,
 
     val jiraProjectKey: String?,
-    val creationDate: String,
+    val creationDate: String?,
     val dateLimitDate: String?
 )
