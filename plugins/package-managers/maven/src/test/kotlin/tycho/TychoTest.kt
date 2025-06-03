@@ -79,15 +79,15 @@ class TychoTest : WordSpec({
         "select only Tycho root projects" {
             val tychoProjectDir1 = tempdir()
             tychoProjectDir1.addTychoExtension()
-            val tychoDefinitionFile1 = tychoProjectDir1.resolve("pom.xml").also { it.writeText("pom-tycho1") }
+            val tychoDefinitionFile1 = tychoProjectDir1.resolve("pom.xml").apply { writeText("pom-tycho1") }
             val tychoSubProjectDir = tychoProjectDir1.resolve("subproject")
             val tychoSubModule = tychoSubProjectDir.resolve("pom.xml")
             val tychoProjectDir2 = tempdir()
             tychoProjectDir2.addTychoExtension()
-            val tychoDefinitionFile2 = tychoProjectDir2.resolve("pom.xml").also { it.writeText("pom-tycho2") }
+            val tychoDefinitionFile2 = tychoProjectDir2.resolve("pom.xml").apply { writeText("pom-tycho2") }
 
             val mavenProjectDir = tempdir()
-            val mavenDefinitionFile = mavenProjectDir.resolve("pom.xml").also { it.writeText("pom-maven") }
+            val mavenDefinitionFile = mavenProjectDir.resolve("pom.xml").apply { writeText("pom-maven") }
             val mavenSubProjectDir = mavenProjectDir.resolve("subproject")
             val mavenSubModule = mavenSubProjectDir.resolve("pom.xml")
 

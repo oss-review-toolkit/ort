@@ -101,9 +101,9 @@ private fun TestConfiguration.createTargetHandlerWithTargetFiles(): TargetHandle
     val root = tempdir()
     val targetFile1 = File("src/test/assets/tycho.target")
     val targetFile2 = File("src/test/assets/tycho.other.target")
-    val module1 = root.resolve("module1").also { it.mkdirs() }
-    val module2 = root.resolve("module2").also { it.mkdirs() }
-    val subModule = module2.resolve("subModule.target").also { it.mkdirs() }
+    val module1 = root.resolve("module1").apply { mkdirs() }
+    val module2 = root.resolve("module2").apply { mkdirs() }
+    val subModule = module2.resolve("subModule.target").apply { mkdirs() }
     targetFile1.copyTo(module1.resolve("tycho.target"))
     targetFile2.copyTo(subModule.resolve("tycho.other.target"))
 
