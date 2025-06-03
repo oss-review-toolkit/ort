@@ -82,22 +82,28 @@ val ORT_RESULT = OrtResult(
                             name = "compile",
                             dependencies = setOf(
                                 PackageReference(
-                                    id = Identifier("Maven:first-package-group:first-package:0.0.1")
+                                    id = Identifier("Maven:first-package-group:first-package:0.0.1"),
+                                    dependencies = setOf(
+                                        PackageReference(
+                                            id = Identifier("Maven:second-package-group:second-package:0.0.1")
+                                        ),
+                                        PackageReference(
+                                            id = Identifier("Maven:third-package-group:third-package:0.0.1"),
+                                            dependencies = setOf(
+                                                PackageReference(
+                                                    id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1")
+                                                )
+                                            )
+                                        )
+                                    )
                                 ),
                                 PackageReference(
-                                    id = Identifier("Maven:second-package-group:second-package:0.0.1")
-                                ),
-                                PackageReference(
-                                    id = Identifier("Maven:third-package-group:third-package:0.0.1")
-                                ),
-                                PackageReference(
-                                    id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1")
-                                ),
-                                PackageReference(
-                                    id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1")
-                                ),
-                                PackageReference(
-                                    id = Identifier("Maven:seventh-package-group:seventh-package:0.0.1")
+                                    id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
+                                    dependencies = setOf(
+                                        PackageReference(
+                                            id = Identifier("Maven:seventh-package-group:seventh-package:0.0.1")
+                                        )
+                                    )
                                 )
                             )
                         ),
