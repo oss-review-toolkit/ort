@@ -65,17 +65,8 @@ data class ScanResultsRequestBody(
      * refer to the same provenance (like a monorepo). If only some of the packages exist in the DOS database, new purl
      * bookmarks will be added for the missing packages (hence the need for the declared license here).
      */
-    val packages: List<PackageInfo>,
-
-    /** Options fort requesting scan results. */
-    val options: ReqOptions? = null
-) {
-    @Serializable
-    data class ReqOptions(
-        /** An option to fetch the concluded licenses along with the scan results. Defaults to "false". */
-        val fetchConcluded: Boolean? = false
-    )
-}
+    val packages: List<PackageInfo>
+)
 
 @Serializable
 data class ScanResultsResponseBody(

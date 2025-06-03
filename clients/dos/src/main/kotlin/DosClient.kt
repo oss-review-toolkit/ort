@@ -122,20 +122,18 @@ class DosClient(private val service: DosService) {
 
     /**
      * Get scan results for a list of [packages]. In case multiple packages are provided, it is assumed that they all
-     * refer to the same provenance (like a monorepo). If [fetchConcluded] is true, return concluded licenses instead of
-     * detected licenses. Return either existing results, a "pending" message if the package is currently being scanned,
-     * a "no-results" message if a scan yielded no results, or null on error. If only some of the packages exist in DOS
-     * database (identified by purl), new bookmarks for the remaining packages are made (hence the need to provide the
-     * declared licenses for these packages in this request).
+     * refer to the same provenance (like a monorepo). Return either existing results, a "pending" message if the
+     * package is currently being scanned, a "no-results" message if a scan yielded no results, or null on error. If
+     * only some of the packages exist in DOS database (identified by purl), new bookmarks for the remaining packages
+     * are made (hence the need to provide the declared licenses for these packages in this request).
      */
-    suspend fun getScanResults(packages: List<PackageInfo>, fetchConcluded: Boolean): ScanResultsResponseBody? {
+    suspend fun getScanResults(packages: List<PackageInfo>): ScanResultsResponseBody? {
         if (packages.isEmpty()) {
             logger.error { "The list of PURLs to get scan results for must not be empty." }
             return null
         }
 
-        val options = ScanResultsRequestBody.ReqOptions(fetchConcluded)
-        val requestBody = ScanResultsRequestBody(packages, options)
+        val requestBody = ScanResultsRequestBody(packages)
         val response = service.getScanResults(requestBody)
         val responseBody = response.body()
 
@@ -146,10 +144,6 @@ class DosClient(private val service: DosService) {
                 "pending" -> logger.info { "Scan pending for $purls." }
                 "ready" -> {
                     logger.info { "Scan results ready for $purls." }
-
-                    if (fetchConcluded) {
-                        logger.info { "Returning concluded licenses instead of detected licenses." }
-                    }
                 }
             }
 
