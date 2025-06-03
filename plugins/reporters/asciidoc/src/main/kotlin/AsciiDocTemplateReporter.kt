@@ -67,6 +67,8 @@ abstract class AsciiDocTemplateReporter(private val config: AsciiDocTemplateRepo
         private const val DISCLOSURE_TEMPLATE_ID = "disclosure_document"
         private const val VULNERABILITY_TEMPLATE_ID = "vulnerability_report"
         private const val DEFECT_TEMPLATE_ID = "defect_report"
+
+        internal val ASCIIDOCTOR by lazy { Asciidoctor.Factory.create() }
     }
 
     protected abstract val backend: String
@@ -76,8 +78,6 @@ abstract class AsciiDocTemplateReporter(private val config: AsciiDocTemplateRepo
         ASCII_DOC_FILE_PREFIX,
         ASCII_DOC_FILE_EXTENSION
     )
-
-    internal val asciidoctor by lazy { Asciidoctor.Factory.create() }
 
     /**
      * Subclasses can override this function to add additional AsciiDoc attributes. By default, no attributes are added.
@@ -142,7 +142,7 @@ abstract class AsciiDocTemplateReporter(private val config: AsciiDocTemplateRepo
             fileResult.mapCatching { file ->
                 outputDir.resolve("${file.nameWithoutExtension}.$backend").also { outputFile ->
                     val options = optionsBuilder.toFile(outputFile).build()
-                    asciidoctor.convertFile(file, options)
+                    ASCIIDOCTOR.convertFile(file, options)
                 }
             }
         }

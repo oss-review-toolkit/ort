@@ -42,7 +42,7 @@ class ManPageTemplateReporterFunTest : StringSpec({
             expectedResult,
             custom = mapOf(
                 "<REPLACE_DATE>" to "${LocalDate.now()}",
-                "<REPLACE_ASCIIDOCTOR_VERSION>" to reporter.asciidoctor.asciidoctorVersion()
+                "<REPLACE_ASCIIDOCTOR_VERSION>" to AsciiDocTemplateReporter.ASCIIDOCTOR.asciidoctorVersion()
             )
         )
     }
