@@ -26,6 +26,7 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 
 abstract class GeneratePluginDocsTask : DefaultTask() {
     init {
@@ -50,21 +51,24 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
 
         logger.lifecycle("Generating plugin documentation.")
 
-        generatePluginDocs("advisors")
+        generatePluginDocs("advisors", "advisor")
         generatePluginDocs("package-configuration-providers")
         generatePluginDocs("package-curation-providers")
-        generatePluginDocs("package-managers")
-        generatePluginDocs("reporters")
-        generatePluginDocs("scanners")
+        generatePluginDocs("package-managers", "analyzer")
+        generatePluginDocs("reporters", "reporter")
+        generatePluginDocs("scanners", "scanner")
 
         logger.lifecycle("Found a total of ${inputFiles.count()} plugins.")
     }
 
-    private fun generatePluginDocs(pluginType: String) {
+    private fun generatePluginDocs(pluginType: String, tool: String? = null) {
         val plugins = inputFiles.filter { "plugins/$pluginType" in it.invariantSeparatorsPath }
         val dir = outputDirectory.resolve(pluginType).apply { mkdirs() }
 
-        logger.lifecycle("Found ${plugins.count()} ${pluginType.replace('-', ' ')}:")
+        val pluginTypeParts = pluginType.split('-')
+        val pluginTypeCamelCase = pluginTypeParts.joinToString("") { it.replaceFirstChar(Char::uppercase) }
+            .replaceFirstChar(Char::lowercase)
+        logger.lifecycle("Found ${plugins.count()} ${pluginTypeParts.joinToString(" ")}:")
 
         plugins.sorted().forEach { file ->
             val json = checkNotNull(jsonSlurper.parse(file) as? Map<*, *>)
@@ -99,8 +103,22 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 // Write example configuration.
                 appendLine("### Example")
                 appendLine()
+                appendLine("Use the following syntax to configure this plugin globally as part of `config.yml`:")
+                appendLine()
                 appendLine("```yaml")
-                appendLine("${descriptor["id"]}:")
+                appendLine("ort:")
+
+                val indent = if (tool != null) {
+                    appendLine("  $tool:")
+                    4
+                } else {
+                    2
+                }
+
+                val i = " ".repeat(indent)
+
+                appendLine("$i$pluginTypeCamelCase:")
+                appendLine("$i  ${descriptor["id"]}:")
 
                 fun appendOptions(options: List<Map<*, *>>) {
                     options.forEach {
@@ -109,7 +127,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                         val isStringValue =
                             (type == "SECRET" || type == "STRING" || type == "STRING_LIST") && defaultValue != null
 
-                        append("    ${it["name"]}: ")
+                        append("$i      ${it["name"]}: ")
                         if (isStringValue) append("\"")
                         append(defaultValue)
                         if (isStringValue) append("\"")
@@ -118,12 +136,12 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 }
 
                 if (options.isNotEmpty()) {
-                    appendLine("  options:")
+                    appendLine("$i    options:")
                     appendOptions(options)
                 }
 
                 if (secrets.isNotEmpty()) {
-                    appendLine("  secrets:")
+                    appendLine("$i    secrets:")
                     appendOptions(secrets)
                 }
 
