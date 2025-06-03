@@ -723,9 +723,7 @@ private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? =
 private fun AnalyzerConfiguration.getConanFactory() =
     determineEnabledPackageManagers().find { it.descriptor.id.startsWith("Conan") }
 
-private fun getRegistryUrlsFromBazelRcFile(projectDir: File): Set<String> =
-    projectDir.resolve(BAZEL_RC_FILE)
-        .takeIf { it.isFile }
-        ?.readLines()
-        ?.mapNotNullTo(mutableSetOf()) { it.withoutPrefix(BAZEL_RC_REGISTRY_PATTERN) }
-        .orEmpty()
+private fun getRegistryUrlsFromBazelRcFile(projectDir: File): Set<String> {
+    val bazelRcFile = projectDir.resolve(BAZEL_RC_FILE).takeIf { it.isFile } ?: return emptySet()
+    return bazelRcFile.readLines().mapNotNullTo(mutableSetOf()) { it.withoutPrefix(BAZEL_RC_REGISTRY_PATTERN) }
+}
