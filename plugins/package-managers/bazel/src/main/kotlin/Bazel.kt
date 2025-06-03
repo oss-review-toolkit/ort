@@ -367,7 +367,6 @@ class Bazel(
             // property, so the .bazelrc file is parsed instead.
             val localRegistryServices = projectDir.resolve(BAZEL_RC_FILE).takeIf { it.isFile }?.readLines()
                 ?.mapNotNull { it.withoutPrefix(BAZEL_RC_REGISTRY_PATTERN) }
-                ?.filter { it.startsWith("file://") }
                 ?.mapNotNull { LocalBazelModuleRegistryService.create(it, projectDir) }.orEmpty()
 
             return MultiBazelModuleRegistryService(
