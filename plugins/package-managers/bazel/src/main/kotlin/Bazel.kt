@@ -365,9 +365,9 @@ class Bazel(
         if (lockfile.registryFileHashes != null) {
             // Bazel >= 7.2 lockfiles do not contain anymore the local registry URLs in the 'registryFileHashes'
             // property, so the .bazelrc file is parsed instead.
-            val localRegistryServices = projectDir.resolve(BAZEL_RC_FILE).takeIf { it.isFile }?.readLines()
-                ?.mapNotNull { it.withoutPrefix(BAZEL_RC_REGISTRY_PATTERN) }
-                ?.mapNotNull { LocalBazelModuleRegistryService.create(it, projectDir) }.orEmpty()
+            val localRegistryServices = getRegistryUrlsFromBazelRcFile(projectDir).mapNotNull { url ->
+                LocalBazelModuleRegistryService.create(url, projectDir)
+            }
 
             return MultiBazelModuleRegistryService(
                 localRegistryServices + CompositeBazelModuleRegistryService.create(
@@ -722,3 +722,10 @@ private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? =
 
 private fun AnalyzerConfiguration.getConanFactory() =
     determineEnabledPackageManagers().find { it.descriptor.id.startsWith("Conan") }
+
+private fun getRegistryUrlsFromBazelRcFile(projectDir: File): Set<String> =
+    projectDir.resolve(BAZEL_RC_FILE)
+        .takeIf { it.isFile }
+        ?.readLines()
+        ?.mapNotNullTo(mutableSetOf()) { it.withoutPrefix(BAZEL_RC_REGISTRY_PATTERN) }
+        .orEmpty()
