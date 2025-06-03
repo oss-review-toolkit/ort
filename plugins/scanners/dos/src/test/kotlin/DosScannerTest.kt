@@ -69,7 +69,6 @@ class DosScannerTest : StringSpec({
             token = Secret(""),
             timeout = 60L,
             pollInterval = 5L,
-            fetchConcluded = false,
             frontendUrl = "http://localhost:3000"
         )
     }
@@ -87,7 +86,7 @@ class DosScannerTest : StringSpec({
                 )
         )
 
-        scanner.client.getScanResults(emptyList(), false) shouldBe null
+        scanner.client.getScanResults(emptyList()) shouldBe null
     }
 
     "getScanResults() should return 'no-results' when no results in db" {
@@ -106,8 +105,7 @@ class DosScannerTest : StringSpec({
                     purl = "purl",
                     declaredLicenseExpressionSPDX = null
                 )
-            ),
-            false
+            )
         )?.state?.status
 
         status shouldBe "no-results"
@@ -129,8 +127,7 @@ class DosScannerTest : StringSpec({
                     purl = "purl",
                     declaredLicenseExpressionSPDX = null
                 )
-            ),
-            false
+            )
         )
 
         response?.state?.status shouldBe "pending"
@@ -153,8 +150,7 @@ class DosScannerTest : StringSpec({
                     purl = "purl",
                     declaredLicenseExpressionSPDX = null
                 )
-            ),
-            false
+            )
         )
 
         val actualJson = JSON.encodeToString(response?.results)

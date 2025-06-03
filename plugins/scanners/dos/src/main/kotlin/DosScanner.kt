@@ -115,7 +115,7 @@ class DosScanner(
 
             // Ask for scan results from DOS API
             val existingScanResults = runCatching {
-                client.getScanResults(packages, config.fetchConcluded)
+                client.getScanResults(packages)
             }.onFailure {
                 issues += createAndLogIssue(it.collectMessages())
             }.onSuccess {
@@ -232,7 +232,7 @@ class DosScanner(
             when (jobState.state.status) {
                 "completed" -> {
                     logger.info { "Scan completed for job with ID '$jobId'." }
-                    return client.getScanResults(listOf(pkg), config.fetchConcluded)
+                    return client.getScanResults(listOf(pkg))
                 }
 
                 "failed" -> {
