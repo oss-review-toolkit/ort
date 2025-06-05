@@ -187,7 +187,7 @@ class PackageConfigurationTest : WordSpec({
     }
 
     "init()" should {
-        "throw an exception if a version range is given while having a vcs" {
+        "throw if a version range is given while having a vcs" {
             shouldThrow<IllegalArgumentException> {
                 PackageConfiguration(
                     id = Identifier.EMPTY.copy(version = "[51.0.0,60.0.0]"),
@@ -200,7 +200,7 @@ class PackageConfigurationTest : WordSpec({
             }
         }
 
-        "throw an exception if a version range is given while having a source artifact URL" {
+        "throw if a version range is given while having a source artifact URL" {
             shouldThrow<IllegalArgumentException> {
                 PackageConfiguration(
                     id = Identifier.EMPTY.copy(version = "[51.0.0,60.0.0]"),
