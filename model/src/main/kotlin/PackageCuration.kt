@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import org.ossreviewtoolkit.model.utils.isApplicableIvyVersion
+import org.ossreviewtoolkit.model.utils.isApplicableVersionRangeFor
 
 /**
  * Return true if this string equals the [other] string, or if either string is blank.
@@ -59,7 +59,7 @@ data class PackageCuration(
      */
     fun isApplicable(pkgId: Identifier): Boolean =
         isApplicableDisregardingVersion(pkgId)
-            && (id.version.equalsOrIsBlank(pkgId.version) || id.isApplicableIvyVersion(pkgId))
+            && (id.version.equalsOrIsBlank(pkgId.version) || id.isApplicableVersionRangeFor(pkgId))
 
     /**
      * Apply the curation [data] to the provided [basePackage] by calling [PackageCurationData.apply], if applicable.

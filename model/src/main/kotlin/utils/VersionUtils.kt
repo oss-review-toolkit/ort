@@ -31,7 +31,7 @@ import org.semver4j.Semver
  * Return true if the version of this [Identifier] interpreted as an Ivy, NPM or CocoaPods version range is applicable
  * to the package with the given [identifier][pkgId].
  */
-internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
+internal fun Identifier.isApplicableVersionRangeFor(pkgId: Identifier) =
     runCatching {
         if (version == pkgId.version) return true
 
