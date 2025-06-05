@@ -18,13 +18,12 @@
  */
 package org.ossreviewtoolkit.model.utils
 
-import kotlin.collections.isNotEmpty
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
+import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 import org.semver4j.Semver
 
@@ -41,18 +40,11 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
     runCatching {
         if (version == pkgId.version) return true
 
-        if (isVersionRange()) {
-            // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
-            // https://github.com/semver4j/semver4j/issues/132.
-            val range = RangesListFactory.create(version)
-            require(range.get().isNotEmpty()) {
-                "'$version' is not a valid version range."
-            }
+        // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
+        // https://github.com/semver4j/semver4j/issues/132.
+        val range = getVersionRange() ?: return false
 
-            return Semver.coerce(pkgId.version)?.satisfies(range) == true
-        }
-
-        return false
+        return Semver.coerce(pkgId.version)?.satisfies(range) == true
     }.onFailure {
         logger.warn {
             "Failed to check if identifier version '$version' is applicable to package version " +
@@ -63,3 +55,11 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
     }.getOrDefault(false)
 
 internal fun Identifier.isVersionRange() = IVY_VERSION_RANGE_INDICATORS.any { version.contains(it, ignoreCase = true) }
+
+private fun Identifier.getVersionRange(): RangesList? {
+    if (IVY_VERSION_RANGE_INDICATORS.none { version.contains(it, ignoreCase = true) }) return null
+
+    return runCatching {
+        RangesListFactory.create(version).takeUnless { it.get().isEmpty() }
+    }.getOrNull()
+}
