@@ -42,9 +42,9 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
 
         // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
         // https://github.com/semver4j/semver4j/issues/132.
-        val rangesList = getVersionRange() ?: return false
+        val ranges = getVersionRanges() ?: return false
 
-        return Semver.coerce(pkgId.version)?.satisfies(rangesList) == true
+        return Semver.coerce(pkgId.version)?.satisfies(ranges) == true
     }.onFailure {
         logger.warn {
             "Failed to check if identifier version '$version' is applicable to package version " +
@@ -55,7 +55,7 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
     }.getOrDefault(false)
 
 internal fun Identifier.isVersionRange(): Boolean {
-    val ranges = getVersionRange()?.get()?.flatten() ?: return false
+    val ranges = getVersionRanges()?.get()?.flatten() ?: return false
     val rangeVersions = ranges.mapTo(mutableSetOf()) { it.rangeVersion }
     val isSingleVersion = rangeVersions.size <= 1 && ranges.all { range ->
         // Determine whether the non-accessible `Range.rangeOperator` is `RangeOperator.EQUALS`.
@@ -65,7 +65,7 @@ internal fun Identifier.isVersionRange(): Boolean {
     return !isSingleVersion
 }
 
-private fun Identifier.getVersionRange(): RangesList? {
+private fun Identifier.getVersionRanges(): RangesList? {
     if (IVY_VERSION_RANGE_INDICATORS.none { version.contains(it, ignoreCase = true) }) return null
 
     return runCatching {
