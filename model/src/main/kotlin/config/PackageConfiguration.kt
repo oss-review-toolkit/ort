@@ -44,7 +44,7 @@ data class PackageConfiguration(
     /**
      * The [Identifier] which must match with the identifier of the package in order for this package curation to apply.
      * The [version][Identifier.version] can be either a plain version string matched for equality, or an
-     * [Ivy-style version matchers](https://ant.apache.org/ivy/history/2.5.0/settings/version-matchers.html).
+     * [Ivy, NPM, or CocoaPods version range](https://github.com/semver4j/semver4j?tab=readme-ov-file#external).
      * The other components of the [identifier][id] are matched by equality.
      */
     val id: Identifier,

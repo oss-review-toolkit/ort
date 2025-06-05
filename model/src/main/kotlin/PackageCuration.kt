@@ -55,7 +55,7 @@ data class PackageCuration(
     /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId]. The
      * curation's version may be an
-     * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
+     * [Ivy, NPM, or CocoaPods version range](https://github.com/semver4j/semver4j?tab=readme-ov-file#external).
      */
     fun isApplicable(pkgId: Identifier): Boolean =
         isApplicableDisregardingVersion(pkgId)
