@@ -55,8 +55,7 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
     }.getOrDefault(false)
 
 internal fun Identifier.isVersionRange(): Boolean {
-    val rangesList = getVersionRange() ?: return false
-    val ranges = rangesList.get().flatten()
+    val ranges = getVersionRange()?.get()?.flatten() ?: return false
     val rangeVersions = ranges.mapTo(mutableSetOf()) { it.rangeVersion }
     val isSingleVersion = rangeVersions.size <= 1 && ranges.all { range ->
         // Determine whether the non-accessible `Range.rangeOperator` is `RangeOperator.EQUALS`.
