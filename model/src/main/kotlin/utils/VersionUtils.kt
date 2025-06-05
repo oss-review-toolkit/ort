@@ -54,7 +54,17 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
         it.showStackTrace()
     }.getOrDefault(false)
 
-internal fun Identifier.isVersionRange() = IVY_VERSION_RANGE_INDICATORS.any { version.contains(it, ignoreCase = true) }
+internal fun Identifier.isVersionRange(): Boolean {
+    val rangesList = getVersionRange() ?: return false
+    val ranges = rangesList.get().flatten()
+    val rangeVersions = ranges.mapTo(mutableSetOf()) { it.rangeVersion }
+    val isSingleVersion = rangeVersions.size <= 1 && ranges.all { range ->
+        // Determine whether the non-accessible `Range.rangeOperator` is `RangeOperator.EQUALS`.
+        range.toString().startsWith("=")
+    }
+
+    return !isSingleVersion
+}
 
 private fun Identifier.getVersionRange(): RangesList? {
     if (IVY_VERSION_RANGE_INDICATORS.none { version.contains(it, ignoreCase = true) }) return null

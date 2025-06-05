@@ -208,5 +208,12 @@ class PackageConfigurationTest : WordSpec({
                 )
             }
         }
+
+        "not throw if a version range with a range indicator is given while having a source artifact URL" {
+            PackageConfiguration(
+                id = Identifier.EMPTY.copy(version = "0.13.3+wasi-0.2.2"),
+                sourceArtifactUrl = "https://host/path/file.zip"
+            )
+        }
     }
 })
