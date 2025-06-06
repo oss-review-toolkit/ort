@@ -52,6 +52,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libffi-dev \
     libgmp-dev \
     libmagic1 \
+    libyaml-dev \
     libz-dev \
     locales \
     lzma \
