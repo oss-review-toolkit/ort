@@ -64,9 +64,9 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
         val plugins = inputFiles.filter { "plugins/$pluginType" in it.invariantSeparatorsPath }
         val dir = outputDirectory.resolve(pluginType).apply { mkdirs() }
 
-        logger.lifecycle("Found ${plugins.count()} ${pluginType.replace('-', ' ')}.")
+        logger.lifecycle("Found ${plugins.count()} ${pluginType.replace('-', ' ')}:")
 
-        plugins.forEach { file ->
+        plugins.sorted().forEach { file ->
             val json = checkNotNull(jsonSlurper.parse(file) as? Map<*, *>)
             val descriptor = checkNotNull(json["descriptor"] as? Map<*, *>)
 
