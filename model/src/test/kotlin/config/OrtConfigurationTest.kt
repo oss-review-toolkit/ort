@@ -127,7 +127,7 @@ class OrtConfigurationTest : WordSpec({
             }
 
             with(ortConfig.advisor) {
-                config shouldNotBeNull {
+                advisors shouldNotBeNull {
                     get("OssIndex") shouldNotBeNull {
                         options should containExactlyEntries(
                             "serverUrl" to "https://ossindex.sonatype.org/"
@@ -224,7 +224,7 @@ class OrtConfigurationTest : WordSpec({
                     }
                 }
 
-                config shouldNotBeNull {
+                scanners shouldNotBeNull {
                     get("ScanCode") shouldNotBeNull {
                         options should containExactlyEntries(
                             "commandLine" to "--copyright,--license,--info,--strip-root,--timeout,300",
@@ -357,7 +357,7 @@ class OrtConfigurationTest : WordSpec({
             }
 
             with(ortConfig.reporter) {
-                config shouldNotBeNull {
+                reporters shouldNotBeNull {
                     keys should containExactlyInAnyOrder("CycloneDx", "FossId", "CtrlXAutomation")
 
                     get("CycloneDx") shouldNotBeNull {

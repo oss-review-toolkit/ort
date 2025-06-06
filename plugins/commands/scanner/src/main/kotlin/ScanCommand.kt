@@ -180,14 +180,14 @@ class ScanCommand(descriptor: PluginDescriptor = ScanCommandFactory.descriptor) 
         val packageScannerWrappers = scannerWrapperFactories
             .takeIf { PackageType.PACKAGE in packageTypes }.orEmpty()
             .map {
-                val config = ortConfig.scanner.config?.get(it.descriptor.id)
+                val config = ortConfig.scanner.scanners?.get(it.descriptor.id)
                 it.create(config.orEmpty())
             }
 
         val projectScannerWrappers = projectScannerWrapperFactories
             .takeIf { PackageType.PROJECT in packageTypes }.orEmpty()
             .map {
-                val config = ortConfig.scanner.config?.get(it.descriptor.id)
+                val config = ortConfig.scanner.scanners?.get(it.descriptor.id)
                 it.create(PluginConfig(config?.options.orEmpty(), config?.secrets.orEmpty()))
             }
 

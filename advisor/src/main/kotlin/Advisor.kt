@@ -80,7 +80,7 @@ class Advisor(
                 logger.info { "There are no packages to give advice for." }
             } else {
                 val providers = providerFactories.map {
-                    val providerConfig = config.config?.get(it.descriptor.id)
+                    val providerConfig = config.advisors?.get(it.descriptor.id)
                     it.create(providerConfig.orEmpty())
                 }
 
