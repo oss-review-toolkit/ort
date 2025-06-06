@@ -61,7 +61,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
     }
 
     private fun generatePluginDocs(pluginType: String) {
-        val plugins = inputFiles.filter { it.invariantSeparatorsPath.contains("plugins/$pluginType") }
+        val plugins = inputFiles.filter { "plugins/$pluginType" in it.invariantSeparatorsPath }
         val dir = outputDirectory.resolve(pluginType).apply { mkdirs() }
 
         logger.lifecycle("Found ${plugins.count()} ${pluginType.replace('-', ' ')}.")

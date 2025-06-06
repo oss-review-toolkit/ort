@@ -169,12 +169,12 @@ class ScanOssScannerDirectoryTest : StringSpec({
 
         // Verify that .kt files were excluded from the scan.
         // These assertions check that Kotlin files are not present in the API requests.
-        includedFiles.any { it.contains("random-data-05-04-43.kt") } shouldBe false
-        includedFiles.any { it.contains("random-data-05-05-29.kt") } shouldBe false
+        includedFiles.any { "random-data-05-04-43.kt" in it } shouldBe false
+        includedFiles.any { "random-data-05-05-29.kt" in it } shouldBe false
 
         // Verify that non-.kt files were included in the scan.
         // This assertion checks that our Go file was sent to the API.
-        includedFiles.any { it.contains("random-data-10-41-29.go") } shouldBe true
+        includedFiles.any { "random-data-10-41-29.go" in it } shouldBe true
     }
 
     "Scanner should obfuscate file paths when path obfuscation is enabled" {
@@ -208,8 +208,8 @@ class ScanOssScannerDirectoryTest : StringSpec({
         }
 
         // When path obfuscation is enabled, the filenames should be obfuscated (not contain original file names).
-        includedFiles.any { it.contains("random-data-05-06-11.kt") } shouldBe false
-        includedFiles.any { it.contains("random-data-05-07-04.kt") } shouldBe false
+        includedFiles.any { "random-data-05-06-11.kt" in it } shouldBe false
+        includedFiles.any { "random-data-05-07-04.kt" in it } shouldBe false
 
         // The requests should still contain some files (obfuscated names).
         includedFiles shouldNot beEmpty()
