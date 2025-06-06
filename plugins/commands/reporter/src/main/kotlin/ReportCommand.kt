@@ -279,7 +279,7 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
         val reportConfigMap = sortedMapOf<String, PluginConfig>(String.CASE_INSENSITIVE_ORDER)
 
         // Obtain reporter-specific options defined in ORT's configuration.
-        ortConfig.reporter.config?.forEach { (reporterName, config) ->
+        ortConfig.reporter.reporters?.forEach { (reporterName, config) ->
             reportConfigMap[reporterName] = config
         }
 

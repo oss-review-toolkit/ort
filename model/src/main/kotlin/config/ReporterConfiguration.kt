@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonAlias
+
+import com.sksamuel.hoplite.ConfigAlias
+
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 /**
@@ -30,5 +34,7 @@ data class ReporterConfiguration(
      * Reporter-specific configuration options. The key needs to match the ID of the reporter plugin, e.g. "FossId" for
      * the "FossIdReporter" class. See the documentation of the reporter for available options.
      */
-    val config: Map<String, PluginConfig>? = null
+    @ConfigAlias("config")
+    @JsonAlias("config")
+    val reporters: Map<String, PluginConfig>? = null
 )

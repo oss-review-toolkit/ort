@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.utils.common.zip
@@ -60,6 +61,7 @@ data class RepositoryAnalyzerConfiguration(
      *
      * If set to null, the global configuration from [AnalyzerConfiguration.packageManagers] will be used.
      */
+    @JsonAlias("analyzers")
     val packageManagers: Map<String, PackageManagerConfiguration>? = null,
 
     /**
