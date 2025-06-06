@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.model.config
 
+/**
+ * The configuration model of the notifier. This class is (de-)serialized in the following places:
+ * - Deserialized from "config.yml" as part of [OrtConfiguration] (via Hoplite).
+ */
 data class NotifierConfiguration(
     val mail: SendMailConfiguration? = null,
     val jira: JiraConfiguration? = null

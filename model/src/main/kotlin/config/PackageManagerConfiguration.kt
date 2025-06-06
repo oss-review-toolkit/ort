@@ -24,7 +24,10 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.utils.common.Options
 
 /**
- * The configuration for a package manager.
+ * The configuration model for a package manager. This class is (de-)serialized in the following places:
+ * - Deserialized from "config.yml" as part of [OrtConfiguration] (via Hoplite).
+ * - Deserialized from ".ort.yml" as part of [RepositoryAnalyzerConfiguration] (via Jackson)
+ * - (De-)Serialized as part of [org.ossreviewtoolkit.model.OrtResult] (via Jackson).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class PackageManagerConfiguration(

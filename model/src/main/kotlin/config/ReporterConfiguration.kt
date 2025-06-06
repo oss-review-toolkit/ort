@@ -24,7 +24,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 /**
- * The base configuration model of the reporter.
+ * The configuration model of the reporter. This class is (de-)serialized in the following places:
+ * - Deserialized from "config.yml" as part of [OrtConfiguration] (via Hoplite).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ReporterConfiguration(

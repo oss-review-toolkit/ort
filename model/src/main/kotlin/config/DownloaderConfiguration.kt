@@ -23,6 +23,10 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
 import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
 
+/**
+ * The configuration model of the downloader. This class is (de-)serialized in the following places:
+ * - Deserialized from "config.yml" as part of [OrtConfiguration] (via Hoplite).
+ */
 data class DownloaderConfiguration(
     /**
      * Toggle whether to allow downloads using symbolic names that point to moving revisions, like Git branches.
