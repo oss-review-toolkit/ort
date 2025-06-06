@@ -296,7 +296,7 @@ class FreemarkerTemplateProcessor(
             input.ortResult.scanner?.scanResults?.flatMap { result ->
                 result.summary.issues
             }?.firstOrNull {
-                it.message.contains("snippets limit")
+                "snippets limit" in it.message
             }?.message.orEmpty()
 
         /**

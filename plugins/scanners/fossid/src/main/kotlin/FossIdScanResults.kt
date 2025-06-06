@@ -97,7 +97,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 
         if (summarizable is MarkedAsIdentifiedFile) {
             summarizable.comments.values.firstOrNull {
-                it.comment.contains(ORT_NAME)
+                ORT_NAME in it.comment
             }?.also {
                 runCatching {
                     fileComment = jsonMapper.readValue(it.comment, OrtComment::class.java)
@@ -399,7 +399,7 @@ internal fun listUnmatchedSnippetChoices(
         }
 
         val comment = markedAsIdentifiedFile.comments.values.firstOrNull {
-            it.comment.contains(ORT_NAME)
+            ORT_NAME in it.comment
         }?.runCatching {
             jsonMapper.readValue(this.comment, OrtComment::class.java)
         }?.onFailure {

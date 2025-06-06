@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldMatch
@@ -98,7 +97,7 @@ class ScanCodeTest : WordSpec({
 
             with(summary) {
                 licenseFindings shouldNot beEmpty()
-                issues.find { it.message.contains("Unexpected EOF") } shouldNot beNull()
+                issues.any { "Unexpected EOF" in it.message } shouldBe true
             }
         }
     }

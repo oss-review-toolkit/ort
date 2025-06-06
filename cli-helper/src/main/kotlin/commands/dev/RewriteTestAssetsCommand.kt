@@ -132,7 +132,7 @@ private val IGNORE_PATHS_FOR_TARGET_CLASSES = mapOf(
 
 private fun findCandidateFiles(dir: File): List<File> =
     FileFormat.findFilesWithKnownExtensions(dir).filter {
-        it.absolutePath.contains("/src/funTest/assets/") || it.absolutePath.contains("/src/test/assets/")
+        "/src/funTest/assets/" in it.absolutePath || "/src/test/assets/" in it.absolutePath
     }
 
 private fun patchAll(candidateFiles: Collection<File>): Map<String, List<File>> =
