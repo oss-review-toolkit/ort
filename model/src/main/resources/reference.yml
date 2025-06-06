@@ -136,15 +136,6 @@ ort:
         secrets:
           apiToken: 'token'
 
-      GitHubDefects:
-        options:
-          endpointUrl: 'https://api.github.com/graphql'
-          labelFilter: '!duplicate, !enhancement, !invalid, !question, !documentation, *'
-          maxNumberOfIssuesPerRepository: 50
-          parallelRequests: 5
-        secrets:
-          token: githubAccessToken
-
       OssIndex:
         options:
           serverUrl: 'https://ossindex.sonatype.org/'
