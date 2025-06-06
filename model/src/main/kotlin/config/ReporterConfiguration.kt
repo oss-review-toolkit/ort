@@ -19,15 +19,12 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 /**
  * The configuration model of the reporter. This class is (de-)serialized in the following places:
  * - Deserialized from "config.yml" as part of [OrtConfiguration] (via Hoplite).
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 data class ReporterConfiguration(
     /**
      * Reporter-specific configuration options. The key needs to match the ID of the reporter plugin, e.g. "FossId" for
