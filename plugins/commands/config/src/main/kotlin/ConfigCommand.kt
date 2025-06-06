@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.commands.config
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
@@ -68,6 +69,7 @@ class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descript
 
     private val configWriter = YAMLMapper()
         .registerKotlinModule()
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .writerFor(OrtConfiguration::class.java)
         .withRootName("ort")
 
