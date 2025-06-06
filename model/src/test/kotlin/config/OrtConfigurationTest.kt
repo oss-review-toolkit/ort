@@ -128,19 +128,6 @@ class OrtConfigurationTest : WordSpec({
 
             with(ortConfig.advisor) {
                 config shouldNotBeNull {
-                    get("GitHubDefects") shouldNotBeNull {
-                        options should containExactlyEntries(
-                            "endpointUrl" to "https://api.github.com/graphql",
-                            "labelFilter" to "!duplicate, !enhancement, !invalid, !question, !documentation, *",
-                            "maxNumberOfIssuesPerRepository" to "50",
-                            "parallelRequests" to "5"
-                        )
-
-                        secrets should containExactlyEntries(
-                            "token" to "githubAccessToken"
-                        )
-                    }
-
                     get("OssIndex") shouldNotBeNull {
                         options should containExactlyEntries(
                             "serverUrl" to "https://ossindex.sonatype.org/"
