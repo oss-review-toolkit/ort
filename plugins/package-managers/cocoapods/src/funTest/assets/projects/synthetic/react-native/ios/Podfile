@@ -3,4 +3,5 @@ target 'example' do
     pod 'glog'
     pod 'React'
     pod 'React-Core'
+    pod 'React-RCTActionSheet'
 end
