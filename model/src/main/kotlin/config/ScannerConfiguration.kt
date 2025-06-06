@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
@@ -94,7 +93,6 @@ data class ScannerConfiguration(
      * Scanner-specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */
-    @JsonAlias("options")
     val config: Map<String, PluginConfig>? = null,
 
     /**
