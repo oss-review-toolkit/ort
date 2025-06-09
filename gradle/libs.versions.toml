@@ -9,7 +9,7 @@ graalVmNativeImagePlugin = "0.10.6"
 ideaExtPlugin = "1.1.10"
 jakartaMigrationPlugin = "0.24.0"
 kotlinPlugin = "2.1.21"
-ksp = "2.1.21-2.0.1"
+ksp = "2.1.21-2.0.2"
 mavenPublishPlugin = "0.32.0"
 reproducibleBuildsPlugin = "1.0"
 
