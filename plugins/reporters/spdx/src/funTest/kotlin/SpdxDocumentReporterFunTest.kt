@@ -53,7 +53,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             jsonSpdxDocument shouldMatchSchema schema
         }
 
-        "create the expected document for a synthetic ORT result" {
+        "create the expected document for a synthetic scan result" {
             val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.json")
 
             val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
@@ -78,7 +78,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
     }
 
     "Reporting to YAML" should {
-        "create the expected document for a synthetic ORT result" {
+        "create the expected document for a synthetic scan result" {
             val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML)
@@ -89,7 +89,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             )
         }
 
-        "create the expected document for the ORT result of a Go project" {
+        "create the expected document for the disclosure CLI Go project scan result" {
             val ortResultForGoProject = readOrtResult("/disclosure-cli-scan-result.yml")
             val expectedResult = readResource("/disclosure-cli-expected-output.spdx.yml")
 
