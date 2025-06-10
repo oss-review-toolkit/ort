@@ -144,7 +144,12 @@ tasks.named<BuildNativeImageTask>("nativeCompile") {
     }
 }
 
-val appJar = tasks.named<Jar>("jar")
+val appJar = tasks.named<Jar>("jar") {
+    manifest {
+        // Work around https://github.com/gradle/gradle/issues/32263.
+        attributes["Main-Class"] = application.mainClass
+    }
+}
 
 val pathingJar by tasks.registering(Jar::class) {
     archiveClassifier = "pathing"
