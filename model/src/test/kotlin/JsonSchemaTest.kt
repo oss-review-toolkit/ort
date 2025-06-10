@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model
 import com.networknt.schema.InputFormat
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
-import com.networknt.schema.serialization.JsonNodeReader
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
@@ -43,22 +42,21 @@ import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class JsonSchemaTest : StringSpec({
     "ORT's own repository configuration file validates successfully" {
-        val repositoryConfiguration = File("../$ORT_REPO_CONFIG_FILENAME").toJsonNode()
+        val repositoryConfiguration = File("../$ORT_REPO_CONFIG_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
+        val errors = schemaV7.getSchema(repositoryConfigurationSchema)
+            .validate(repositoryConfiguration, InputFormat.YAML)
 
         errors should beEmpty()
     }
 
     "The example ORT repository configuration file validates successfully" {
         val examplesDir = File("../examples")
-        val exampleFiles =
+        val repositoryConfiguration =
             examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.name.endsWith(ORT_REPO_CONFIG_FILENAME) }
 
-        exampleFiles.forAll {
-            val repositoryConfiguration = it.toJsonNode()
-
-            val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
+        repositoryConfiguration.forAll {
+            val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(it.readText(), InputFormat.YAML)
 
             errors should beEmpty()
         }
@@ -88,45 +86,46 @@ class JsonSchemaTest : StringSpec({
 
     "The example package curations file validates successfully" {
         val curationsSchema = File("../integrations/schemas/curations-schema.json").toURI()
-        val curationsExample = File("../examples/$ORT_PACKAGE_CURATIONS_FILENAME").toJsonNode()
+        val curationsExample = File("../examples/$ORT_PACKAGE_CURATIONS_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(curationsSchema).validate(curationsExample)
+        val errors = schemaV7.getSchema(curationsSchema).validate(curationsExample, InputFormat.YAML)
 
         errors should beEmpty()
     }
 
     "The example package configuration file validates successfully" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val packageConfiguration = File("../examples/$ORT_PACKAGE_CONFIGURATION_FILENAME").toJsonNode()
+        val packageConfiguration = File("../examples/$ORT_PACKAGE_CONFIGURATION_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(packageConfigurationSchema).validate(packageConfiguration)
+        val errors = schemaV7.getSchema(packageConfigurationSchema).validate(packageConfiguration, InputFormat.YAML)
 
         errors should beEmpty()
     }
 
     "The example resolutions file validates successfully" {
         val resolutionsSchema = File("../integrations/schemas/resolutions-schema.json").toURI()
-        val resolutionsExample = File("../examples/$ORT_RESOLUTIONS_FILENAME").toJsonNode()
+        val resolutionsExample = File("../examples/$ORT_RESOLUTIONS_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(resolutionsSchema).validate(resolutionsExample)
+        val errors = schemaV7.getSchema(resolutionsSchema).validate(resolutionsExample, InputFormat.YAML)
 
         errors should beEmpty()
     }
 
     "The embedded reference configuration validates successfully" {
         val ortConfigurationSchema = File("../integrations/schemas/ort-configuration-schema.json").toURI()
-        val referenceConfigFile = File("src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME").toJsonNode()
+        val referenceConfigFile = File("src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(ortConfigurationSchema).validate(referenceConfigFile)
+        val errors = schemaV7.getSchema(ortConfigurationSchema).validate(referenceConfigFile, InputFormat.YAML)
 
         errors should beEmpty()
     }
 
     "The example license classifications file validates successfully" {
         val licenseClassificationsSchema = File("../integrations/schemas/license-classifications-schema.json").toURI()
-        val licenseClassificationsExample = File("../examples/$ORT_LICENSE_CLASSIFICATIONS_FILENAME").toJsonNode()
+        val licenseClassificationsExample = File("../examples/$ORT_LICENSE_CLASSIFICATIONS_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(licenseClassificationsSchema).validate(licenseClassificationsExample)
+        val errors = schemaV7.getSchema(licenseClassificationsSchema)
+            .validate(licenseClassificationsExample, InputFormat.YAML)
 
         errors should beEmpty()
     }
@@ -141,12 +140,7 @@ class JsonSchemaTest : StringSpec({
     }
 })
 
-private val nodeReader = JsonNodeReader.builder().yamlMapper(yamlMapper).build()
-
-private val schemaV7 = JsonSchemaFactory
-    .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
-    .jsonNodeReader(nodeReader)
-    .build()
+private val schemaV7 = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
 
 private val repositoryConfigurationSchema =
     File("../integrations/schemas/repository-configuration-schema.json").toURI()
@@ -156,5 +150,3 @@ private val repositoryConfigurationAnalyzerConfiguration =
 
 private val repositoryConfigurationPackageManagerConfiguration =
     File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").toURI()
-
-private fun File.toJsonNode() = yamlMapper.readTree(inputStream())
