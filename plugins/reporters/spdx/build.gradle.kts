@@ -39,7 +39,7 @@ dependencies {
     implementation(libs.jackson.databind)
 
     funTestImplementation(testFixtures(projects.plugins.reporters.spdxReporter))
-    funTestImplementation(libs.jsonSchemaValidator)
+    funTestImplementation(libs.kotest.assertions.json)
 
     testFixturesImplementation(projects.utils.testUtils)
 }
