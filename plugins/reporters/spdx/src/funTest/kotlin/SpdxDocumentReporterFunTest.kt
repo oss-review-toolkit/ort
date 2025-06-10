@@ -46,7 +46,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
     "Reporting to JSON" should {
         @OptIn(ExperimentalKotest::class)
         "create a valid document" {
-            val schema = parseSchema(readResource("/spdx-schema.json"))
+            val schema = parseSchema(readResource("/spdx-v2.2.2-schema.json"))
 
             val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
 
