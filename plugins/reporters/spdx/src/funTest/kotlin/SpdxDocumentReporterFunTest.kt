@@ -54,7 +54,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
 
         "create the expected document for a synthetic ORT result" {
-            val expectedResult = readResource("/spdx-document-reporter-expected-output.spdx.json")
+            val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.json")
 
             val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
 
@@ -79,7 +79,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
     "Reporting to YAML" should {
         "create the expected document for a synthetic ORT result" {
-            val expectedResult = readResource("/spdx-document-reporter-expected-output.spdx.yml")
+            val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML)
 
