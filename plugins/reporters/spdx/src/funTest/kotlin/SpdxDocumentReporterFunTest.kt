@@ -19,10 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.reporters.spdx
 
-import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
-import com.networknt.schema.serialization.JsonNodeReader
-
+import io.kotest.assertions.json.schema.parseSchema
+import io.kotest.assertions.json.schema.shouldMatchSchema
+import io.kotest.common.ExperimentalKotest
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
@@ -39,25 +38,19 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
-import org.ossreviewtoolkit.utils.test.getResource
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 import org.ossreviewtoolkit.utils.test.readResource
 
 class SpdxDocumentReporterFunTest : WordSpec({
     "Reporting to JSON" should {
+        @OptIn(ExperimentalKotest::class)
         "create a valid document" {
-            val nodeReader = JsonNodeReader.builder().jsonMapper(FileFormat.JSON.mapper).build()
-            val schema = JsonSchemaFactory
-                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
-                .jsonNodeReader(nodeReader)
-                .build()
-                .getSchema(getResource("/spdx-schema.json").toURI())
+            val schema = parseSchema(readResource("/spdx-schema.json"))
 
             val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
-            val errors = schema.validate(FileFormat.JSON.mapper.readTree(jsonSpdxDocument))
 
-            errors should beEmpty()
+            jsonSpdxDocument shouldMatchSchema schema
         }
 
         "create the expected document for a synthetic ORT result" {
