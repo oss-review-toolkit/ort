@@ -90,7 +90,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
 
         "create the expected document for the ORT result of a Go project" {
-            val ortResultForGoProject = readOrtResult("/disclosure-cli-analyzer-and-scanner-result.yml")
+            val ortResultForGoProject = readOrtResult("/disclosure-cli-scan-result.yml")
             val expectedResult = readResource("/disclosure-cli-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ortResultForGoProject, FileFormat.YAML)
