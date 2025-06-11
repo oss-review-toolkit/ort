@@ -195,6 +195,10 @@ resolutions:
   - message: "Does not have X.*"
     reason: "BUILD_TOOL_ISSUE"
     comment: "Error caused by a known issue for which a fix is being implemented, see https://github.com/..."
+  
+  - message: "NOTICE_DEFAULT"
+    reason: "BUILD_TOOL_ISSUE"
+    comment: "This is expected when no third-party license data is collected and a default notice file is still generated."
 ```
 
 ### Resolving Policy Rule Violations
