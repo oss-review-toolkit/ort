@@ -34,11 +34,11 @@ import org.cyclonedx.generators.BomGeneratorFactory
 import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
 import org.cyclonedx.model.Dependency
-import org.cyclonedx.model.ExtensibleType
 import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.OrganizationalContact
 import org.cyclonedx.model.OrganizationalEntity
+import org.cyclonedx.model.Property
 import org.cyclonedx.model.vulnerability.Vulnerability.Rating.Method
 
 import org.ossreviewtoolkit.model.Identifier
@@ -97,7 +97,7 @@ internal fun Bom.addExternalReference(type: ExternalReference.Type, url: String,
 
 /**
  * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metadata from
- * [input]. The [dependencyType] is added as an [ExtensibleType] to indicate "direct" vs "transitive" dependencies.
+ * [input]. The [dependencyType] is added as a [Property] to indicate "direct" vs "transitive" dependencies.
  */
 internal fun Bom.addComponent(input: ReporterInput, pkg: Package, dependencyType: String) {
     val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
@@ -161,7 +161,7 @@ internal fun Bom.addComponent(input: ReporterInput, pkg: Package, dependencyType
         purl = pkg.purl + purlQualifier
         isModified = pkg.isModified
 
-        extensibleTypes = listOf(ExtensibleType(ORT_NAME, "dependencyType", dependencyType))
+        addProperty(Property("$ORT_NAME:dependencyType", dependencyType))
     }
 
     component.addExternalReference(ExternalReference.Type.WEBSITE, pkg.homepageUrl)
@@ -235,28 +235,7 @@ internal fun Bom.addVulnerabilities(advisorVulnerabilities: Map<Identifier, List
 internal fun Bom.createFormat(schemaVersion: Version, format: Format): String =
     when (format) {
         Format.XML -> BomGeneratorFactory.createXml(schemaVersion, this).toXmlString()
-        Format.JSON -> {
-            // JSON output cannot handle extensible types (see [1]), so simply remove them. As JSON output is guaranteed
-            // to be the last format serialized, it is okay to modify the BOM here without doing a deep copy first.
-            //
-            // [1] https://github.com/CycloneDX/cyclonedx-core-java/issues/99.
-            components.forEach { component ->
-                // Clear the "dependencyType".
-                component.extensibleTypes = null
-
-                if (component.licenses?.licenses != null) {
-                    component.licenses.licenses.forEach { license ->
-                        // Clear the "origin".
-                        license.extensibleTypes = null
-                    }
-
-                    // Remove duplicates that may occur due to clearing the distinguishing extensive type.
-                    component.licenses.licenses = component.licenses.licenses.distinct()
-                }
-            }
-
-            BomGeneratorFactory.createJson(schemaVersion, this).toJsonString()
-        }
+        Format.JSON -> BomGeneratorFactory.createJson(schemaVersion, this).toJsonString()
     }
 
 /**

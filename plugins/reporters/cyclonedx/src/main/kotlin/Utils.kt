@@ -25,9 +25,9 @@ import kotlin.collections.filter
 
 import org.cyclonedx.Format
 import org.cyclonedx.model.AttachmentText
-import org.cyclonedx.model.ExtensibleType
 import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
+import org.cyclonedx.model.Property
 
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
@@ -48,7 +48,8 @@ internal fun Collection<String>.mapNamesToLicenses(origin: String, input: Report
         License().apply {
             id = spdxId
             name = licenseName.takeIf { spdxId == null }
-            extensibleTypes = listOf(ExtensibleType(ORT_NAME, "origin", origin))
+
+            addProperty(Property("$ORT_NAME:origin", origin))
 
             if (licenseText != null) {
                 setLicenseText(
