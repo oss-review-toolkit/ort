@@ -48,10 +48,16 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">concluded license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">concluded license</property>
+          </properties>
         </license>
         <license>
-          <name>MIT WITH Libtool-exception</name><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">concluded license</ort:origin>
+          <name>MIT WITH Libtool-exception</name>
+          <properties>
+            <property name="ort:origin">concluded license</property>
+          </properties>
         </license>
         <license>
           <id>BSD-3-Clause</id>
@@ -79,7 +85,10 @@ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">declared license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">declared license</property>
+          </properties>
         </license>
         <license>
           <id>BSD-2-Clause</id>
@@ -103,7 +112,10 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">detected license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
         </license>
         <license>
           <id>MIT</id>
@@ -125,7 +137,10 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">detected license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
         </license>
       </licenses>
       <copyright>Copyright 1, Copyright 2</copyright>
@@ -135,7 +150,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
         </reference>
-      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      </externalReferences>
+      <properties>
+        <property name="ort:dependencyType">direct</property>
+      </properties>
     </component>
     <component type="library" bom-ref="NPM:@ort:declared-license:1.0">
       <group>@ort</group>
@@ -166,7 +184,10 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">declared license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">declared license</property>
+          </properties>
         </license>
         <license>
           <id>BSD-3-Clause</id>
@@ -194,7 +215,10 @@ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">detected license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
         </license>
       </licenses>
       <copyright>Copyright 1</copyright>
@@ -204,7 +228,10 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
         </reference>
-      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      </externalReferences>
+      <properties>
+        <property name="ort:dependencyType">direct</property>
+      </properties>
     </component>
     <component type="library" bom-ref="NPM:@ort:license-file:1.0">
       <group>@ort</group>
@@ -235,7 +262,10 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">detected license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
         </license>
       </licenses>
       <copyright>Copyright 1, Copyright 2</copyright>
@@ -245,7 +275,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
         </reference>
-      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      </externalReferences>
+      <properties>
+        <property name="ort:dependencyType">direct</property>
+      </properties>
     </component>
     <component type="library" bom-ref="NPM:@ort:license-file-and-additional-licenses:1.0">
       <group>@ort</group>
@@ -282,7 +315,10 @@ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">detected license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
         </license>
         <license>
           <id>MIT</id>
@@ -304,7 +340,10 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">detected license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
         </license>
       </licenses>
       <copyright>Copyright 1, Copyright 2, Copyright 3</copyright>
@@ -314,7 +353,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
         </reference>
-      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      </externalReferences>
+      <properties>
+        <property name="ort:dependencyType">direct</property>
+      </properties>
     </component>
     <component type="library" bom-ref="NPM:@ort:no-license-file:1.0">
       <group>@ort</group>
@@ -342,7 +384,10 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-</text><ort:origin xmlns:ort="http://www.w3.org/1999/xhtml">detected license</ort:origin>
+</text>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
         </license>
       </licenses>
       <copyright>Copyright 1</copyright>
@@ -352,7 +397,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
         </reference>
-      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      </externalReferences>
+      <properties>
+        <property name="ort:dependencyType">direct</property>
+      </properties>
     </component>
   </components>
   <externalReferences>
