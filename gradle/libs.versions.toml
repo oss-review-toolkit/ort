@@ -69,7 +69,7 @@ svnkit = "1.10.12"
 sw360Client = "19.0.0"
 tika = "3.2.0"
 wagonHttp = "3.5.3"
-wiremock = "3.13.0"
+wiremock = "3.13.1"
 xmlutil = "0.91.1"
 xz = "1.10"
 
