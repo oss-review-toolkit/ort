@@ -73,7 +73,7 @@ export JAVA_OPTS="$JAVA_OPTS -Xmx8g"
 ```
 
 If ORT requires external tools to analyze a project, these tools are listed by the `ort requirements` command.
-If a package manager is not list listed there, support for it is integrated directly into ORT and does not require any external tools to be installed.
+If a package manager is not listed there, support for it is integrated directly into ORT and does not require any external tools to be installed.
 
 ## From binaries
 
