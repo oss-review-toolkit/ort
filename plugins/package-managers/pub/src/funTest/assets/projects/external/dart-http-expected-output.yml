@@ -127,7 +127,7 @@ project:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
           - id: "Pub::term_glyph:1.2.2"
-        - id: "Pub::watcher:1.1.1"
+        - id: "Pub::watcher:1.1.2"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -644,7 +644,7 @@ project:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.2"
-          - id: "Pub::watcher:1.1.1"
+          - id: "Pub::watcher:1.1.2"
             dependencies:
             - id: "Pub::async:2.11.0"
               dependencies:
@@ -2008,8 +2008,8 @@ packages:
     url: "https://github.com/dart-lang/sdk.git"
     revision: ""
     path: "pkg/vm_service"
-- id: "Pub::watcher:1.1.1"
-  purl: "pkg:pub/watcher@1.1.1"
+- id: "Pub::watcher:1.1.2"
+  purl: "pkg:pub/watcher@1.1.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A file system watcher. It monitors changes to contents of directories\
@@ -2021,9 +2021,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/watcher/versions/1.1.1.tar.gz"
+    url: "https://pub.dev/packages/watcher/versions/1.1.2.tar.gz"
     hash:
-      value: "69da27e49efa56a15f8afe8f4438c4ec02eff0a117df1b22ea4aad194fe1c104"
+      value: "0b7fd4a0bbc4b92641dbf20adfd7e3fd1398fe17102d94b674234563e110088a"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
