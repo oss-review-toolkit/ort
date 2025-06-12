@@ -87,6 +87,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
             // Lazily only call the pod CLI if the podspec is not available from the external source.
             val podspecFile = sequence {
                 yield(dependency.externalSource?.podspec)
+                yield(dependency.externalSource?.path?.let { "$it/$basePodName.podspec" })
                 yield(getPodspecPath(basePodName, dependency.version))
             }.firstNotNullOfOrNull { path ->
                 path?.let { File(it) }?.takeIf { it.isFile }
@@ -133,7 +134,14 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
             val reactNativePath =
                 nodeModulesParentDir.resolve("node_modules/react-native/scripts/react_native_pods.rb")
             if (reactNativePath.isFile) {
-                "require '$reactNativePath'\n$content"
+                // In Ruby, __dir__ is a built-in method that returns the absolute path of the current file.
+                // See: https://ruby-doc.org/3.4.1/Kernel.html#method-i-__dir__
+                //
+                // React Native's podspecs use __dir__ to locate project files like package.json. This works only
+                // when the podspec file is run from its original location inside the node_modules directory.
+                // When relocating the podspec file to a temporary location, replace __dir__ with the actual parent path
+                // of the original podspec file to preserve correct resolution of paths.
+                "require '$reactNativePath'\n$content".replace("__dir__", "'$parent'")
             } else {
                 null
             }
