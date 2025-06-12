@@ -887,29 +887,27 @@ class FossId internal constructor(
 
                 val filteredSnippets = snippets.filterTo(mutableSetOf()) { it.matchType.isValidType() }
 
-                if (config.fetchSnippetMatchedLines) {
-                    logger.info { "Listing snippet matched lines for $file..." }
+                logger.info { "Listing snippet matched lines for $file..." }
 
-                    coroutineScope {
-                        filteredSnippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
-                            async {
-                                val matchedLinesResponse = service.listMatchedLines(
-                                    config.user.value,
-                                    config.apiKey.value,
-                                    scanCode,
-                                    file,
-                                    snippet.id
-                                ).checkResponse("list snippets matched lines")
+                coroutineScope {
+                    filteredSnippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
+                        async {
+                            val matchedLinesResponse = service.listMatchedLines(
+                                config.user.value,
+                                config.apiKey.value,
+                                scanCode,
+                                file,
+                                snippet.id
+                            ).checkResponse("list snippets matched lines")
 
-                                val lines = checkNotNull(matchedLinesResponse.data?.value) {
-                                    "Matched lines could not be listed. Response was " +
-                                        "${matchedLinesResponse.message}."
-                                }
-
-                                matchedLines[snippet.id] = lines
+                            val lines = checkNotNull(matchedLinesResponse.data?.value) {
+                                "Matched lines could not be listed. Response was " +
+                                    "${matchedLinesResponse.message}."
                             }
-                        }.awaitAll()
-                    }
+
+                            matchedLines[snippet.id] = lines
+                        }
+                    }.awaitAll()
                 }
 
                 emit(file to filteredSnippets.toSet())

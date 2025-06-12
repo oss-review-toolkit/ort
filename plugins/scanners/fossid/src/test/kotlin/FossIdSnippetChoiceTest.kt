@@ -105,7 +105,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "not report a snippet that has been chosen" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -150,7 +150,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "not report a snippet when there is a chosen snippet for its location" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -197,7 +197,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "not report a snippet when there are false positives for its location" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -246,7 +246,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "mark a file with all snippets chosen as identified" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -314,7 +314,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "mark a file with only non relevant snippets for a given snippet location as identified" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -360,7 +360,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "not mark a file with some non relevant snippets for a given snippet location as identified" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -415,7 +415,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "mark a file with only chosen and non relevant snippets for a given snippet location as identified" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -460,7 +460,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "add the license of a chosen snippet to the license findings" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -505,7 +505,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "create an issue if the chosen snippet is not in the snippet results" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -549,7 +549,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "add the license of already marked as identified file with a snippet choice to the license findings" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -590,7 +590,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "add the license of marked as identified files that have been manually marked in the UI (legacy behavior)" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -625,7 +625,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "put a marked as identified file back to pending if it has no snippet choice" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -686,7 +686,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "put a marked as identified file back to pending if some of its snippet choices have been deleted" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -748,7 +748,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "respect the snippet limit when listing snippets (single snippet per finding)" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
+            val config = createConfig(deltaScans = false, snippetsLimit = 2)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -793,7 +793,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "respect the snippet limit when listing snippets (multiple snippets per finding)" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
+            val config = createConfig(deltaScans = false, snippetsLimit = 2)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -838,7 +838,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "list all the snippets of a file even if if goes over the snippets limit" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
+            val config = createConfig(deltaScans = false, snippetsLimit = 2)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
@@ -881,7 +881,7 @@ class FossIdSnippetChoiceTest : WordSpec({
         "not count the chosen snippet when enforcing the snippet limits" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
+            val config = createConfig(deltaScans = false, snippetsLimit = 2)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)

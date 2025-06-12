@@ -124,7 +124,6 @@ internal fun createConfig(
     waitForResult: Boolean = true,
     deltaScans: Boolean = true,
     deltaScanLimit: Int = Int.MAX_VALUE,
-    fetchSnippetMatchedLines: Boolean = false,
     snippetsLimit: Int = Int.MAX_VALUE
 ): FossIdConfig {
     val config = FossIdConfig(
@@ -140,7 +139,6 @@ internal fun createConfig(
         detectLicenseDeclarations = false,
         detectCopyrightStatements = false,
         timeout = 60,
-        fetchSnippetMatchedLines = fetchSnippetMatchedLines,
         snippetsLimit = snippetsLimit,
         sensitivity = 10,
         urlMappings = null,

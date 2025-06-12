@@ -365,7 +365,7 @@ class FossIdTest : WordSpec({
         "list matched lines of snippets" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
-            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)

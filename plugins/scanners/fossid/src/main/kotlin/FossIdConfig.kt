@@ -79,10 +79,6 @@ data class FossIdConfig(
     @OrtPluginOption(defaultValue = "60")
     val timeout: Int,
 
-    /** Whether matched lines of snippets are to be fetched. */
-    @OrtPluginOption(defaultValue = "false")
-    val fetchSnippetMatchedLines: Boolean,
-
     /** A limit on the amount of snippets to fetch. **/
     @OrtPluginOption(defaultValue = "500")
     val snippetsLimit: Int,
