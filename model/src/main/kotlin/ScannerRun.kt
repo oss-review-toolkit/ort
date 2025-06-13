@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.io.File
@@ -39,6 +41,7 @@ import org.ossreviewtoolkit.model.utils.mergeScanResultsByScanner
 import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.utils.common.getDuplicates
+import org.ossreviewtoolkit.utils.common.zipWithSets
 import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
@@ -78,6 +81,14 @@ data class ScannerRun(
     val scanResults: Set<ScanResult>,
 
     /**
+     * A map of [Identifier]s associated with a set of [Issue]s that occurred during a scan besides the issues created
+     * by the scanners themselves as part of the [ScanSummary].
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyOrder(alphabetic = true)
+    val issues: Map<Identifier, Set<Issue>> = emptyMap(),
+
+    /**
      * The names of the scanners which have been used to scan the package.
      */
     @JsonSerialize(converter = ScannersMapConverter::class)
@@ -101,6 +112,7 @@ data class ScannerRun(
             config = ScannerConfiguration(),
             provenances = emptySet(),
             scanResults = emptySet(),
+            issues = emptyMap(),
             files = emptySet(),
             scanners = emptyMap()
         )
@@ -260,7 +272,7 @@ data class ScannerRun(
     fun getAllIssues(): Map<Identifier, Set<Issue>> =
         scanResultsById.mapValues { (_, scanResults) ->
             scanResults.flatMapTo(mutableSetOf()) { it.summary.issues }
-        }
+        }.zipWithSets(issues)
 }
 
 private fun scanResultForProvenanceResolutionIssues(packageProvenance: KnownProvenance?, issues: List<Issue>) =
