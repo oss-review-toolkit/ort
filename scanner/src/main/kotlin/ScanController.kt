@@ -65,10 +65,10 @@ internal class ScanController(
     private val nestedProvenanceResolutionIssues = mutableMapOf<Identifier, Issue>()
 
     /**
-     * A map of [Identifier]s associated with a list of [Issue]s that occurred during a scan besides the issues
+     * A map of [Identifier]s associated with a set of [Issue]s that occurred during a scan besides the issues
      * created by the scanners themselves as part of the [ScanSummary].
      */
-    private val issues = mutableMapOf<Identifier, MutableList<Issue>>()
+    private val issues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
     /**
      * A map of [KnownProvenance]s to their resolved [NestedProvenance]s.
@@ -124,7 +124,7 @@ internal class ScanController(
     fun getAllFileLists(): Map<KnownProvenance, FileList> = fileLists
 
     fun addIssue(id: Identifier, issue: Issue) {
-        issues.getOrPut(id) { mutableListOf() } += issue
+        issues.getOrPut(id) { mutableSetOf() } += issue
     }
 
     /**
@@ -196,6 +196,11 @@ internal class ScanController(
      * Return the nested provenance resolution issues associated with the given [provenance].
      */
     fun getNestedProvenanceResolutionIssue(id: Identifier): Issue? = nestedProvenanceResolutionIssues[id]
+
+    /**
+     * Get issues that are not part of the scan summaries.
+     */
+    fun getIssues(): Map<Identifier, Set<Issue>> = issues
 
     /**
      * Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available.
