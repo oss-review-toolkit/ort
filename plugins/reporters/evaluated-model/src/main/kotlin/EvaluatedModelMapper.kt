@@ -280,6 +280,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         issues += addAnalyzerIssues(project.id, evaluatedPackage)
 
+        // Add scanner issues that are not part of the scan summaries.
+        issues += addScannerIssues(project.id, evaluatedPackage)
+
         scanResults += convertScanResultsForPackage(evaluatedPackage, findings)
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
@@ -343,6 +346,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         issues += addAnalyzerIssues(pkg.id, evaluatedPackage)
 
+        // Add scanner issues that are not part of the scan summaries.
+        issues += addScannerIssues(pkg.id, evaluatedPackage)
+
         scanResults += convertScanResultsForPackage(evaluatedPackage, findings)
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
@@ -359,6 +365,18 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         input.ortResult.analyzer?.result?.issues?.get(id)?.let { analyzerIssues ->
             result += addIssues(analyzerIssues, EvaluatedIssueType.ANALYZER, pkg, null, null)
+        }
+
+        return result
+    }
+
+    /**
+     * Add issues from scanner that are not part of the scan summaries.
+     */
+    private fun addScannerIssues(id: Identifier, pkg: EvaluatedPackage): List<EvaluatedIssue> {
+        val result = mutableListOf<EvaluatedIssue>()
+        input.ortResult.scanner?.issues?.get(id)?.let { scannerIssues ->
+            result += addIssues(scannerIssues, type = EvaluatedIssueType.SCANNER, pkg, null, null)
         }
 
         return result
@@ -591,7 +609,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addIssues(
-        issues: List<Issue>,
+        issues: Collection<Issue>,
         type: EvaluatedIssueType,
         pkg: EvaluatedPackage,
         scanResult: EvaluatedScanResult?,

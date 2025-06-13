@@ -262,6 +262,15 @@
     "how_to_fix" : "Some how to fix text."
   }, {
     "_id" : 16,
+    "timestamp" : "2025-06-13T09:11:24.891480005Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example error for issue that isn't in the scan summaries.",
+    "severity" : "ERROR",
+    "pkg" : 2,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 17,
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "ADVISOR",
     "source" : "VulnerableCode",
@@ -271,7 +280,7 @@
     "pkg" : 2,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 17,
+    "_id" : 18,
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "ADVISOR",
     "source" : "VulnerableCode",
@@ -280,7 +289,7 @@
     "pkg" : 2,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 18,
+    "_id" : 19,
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "ADVISOR",
     "source" : "VulnerableCode",
@@ -289,7 +298,7 @@
     "pkg" : 2,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 19,
+    "_id" : 20,
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "ADVISOR",
     "source" : "VulnerableCode",
@@ -298,7 +307,7 @@
     "pkg" : 2,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 20,
+    "_id" : 21,
     "timestamp" : "2024-04-25T07:44:20.725613974Z",
     "type" : "ANALYZER",
     "source" : "Gradle",
@@ -308,7 +317,7 @@
     "path" : 0,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 21,
+    "_id" : 22,
     "timestamp" : "2024-04-25T07:44:20.725613974Z",
     "type" : "ANALYZER",
     "source" : "Gradle",
@@ -671,7 +680,8 @@
     "levels" : [ 0, 1 ],
     "scopes" : [ 0, 1 ],
     "scan_results" : [ 5 ],
-    "is_excluded" : false
+    "is_excluded" : false,
+    "issues" : [ 16 ]
   }, {
     "_id" : 3,
     "id" : "Ant:junit:junit:4.12",
@@ -1076,7 +1086,7 @@
         "key" : 3,
         "linkage" : "DYNAMIC",
         "pkg" : 2,
-        "issues" : [ 20 ],
+        "issues" : [ 21 ],
         "children" : [ {
           "key" : 4,
           "linkage" : "DYNAMIC",
@@ -1105,7 +1115,7 @@
         "key" : 9,
         "linkage" : "DYNAMIC",
         "pkg" : 3,
-        "issues" : [ 21 ],
+        "issues" : [ 22 ],
         "children" : [ {
           "key" : 10,
           "linkage" : "DYNAMIC",
@@ -1198,10 +1208,10 @@
       "vulnerability_resolutions" : 0
     },
     "open_issues" : {
-      "errors" : 5,
+      "errors" : 6,
       "warnings" : 4,
       "hints" : 3,
-      "severe" : 9
+      "severe" : 10
     },
     "open_rule_violations" : {
       "errors" : 1,
