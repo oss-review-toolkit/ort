@@ -23,12 +23,15 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
+import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.shouldContain
 
 import io.mockk.coEvery
 import io.mockk.every
@@ -39,6 +42,7 @@ import io.mockk.verify
 import java.io.File
 import java.io.IOException
 
+import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -349,6 +353,84 @@ class ScannerTest : WordSpec({
 
             verify(exactly = 1) {
                 provenanceDownloader.download(any())
+            }
+        }
+
+        "return an issue and no scan result if source download fails" {
+            val pkg = Package.new(name = "repository").copy(
+                vcsProcessed = VcsInfo.valid()
+            )
+
+            val scannerWrapper = FakePathScannerWrapper()
+            val provenanceDownloader = spyk(FakeProvenanceDownloader())
+
+            every { provenanceDownloader.download(any()) } throws DownloadException("Test download error")
+
+            val scanner = createScanner(
+                provenanceDownloader = provenanceDownloader,
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            val run = scanner.scan(setOf(pkg), createContext())
+
+            run.scanResults should beEmpty()
+            run.issues should haveSize(1)
+            run.issues[pkg.id].shouldNotBeNull().shouldHaveSize(1)
+
+            run.issues[pkg.id]?.first().shouldNotBeNull {
+                source shouldBe "Downloader"
+                message shouldContain "Test download error"
+            }
+        }
+
+        "return an issue and no scan result if scanning path fails" {
+            val pkg = Package.new(name = "repository").copy(
+                vcsProcessed = VcsInfo.valid()
+            )
+
+            val scannerWrapper = spyk(FakePathScannerWrapper())
+            val provenanceDownloader = FakeProvenanceDownloader()
+
+            every { scannerWrapper.scanPath(any(), any()) } throws Exception("Test scan failure")
+
+            val scanner = createScanner(
+                provenanceDownloader = provenanceDownloader,
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            val run = scanner.scan(setOf(pkg), createContext())
+
+            run.scanResults should beEmpty()
+            run.issues should haveSize(1)
+            run.issues[pkg.id].shouldNotBeNull().shouldHaveSize(1)
+
+            run.issues[pkg.id]?.first().shouldNotBeNull {
+                source shouldBe "fake"
+                message shouldContain "Test scan failure"
+            }
+        }
+
+        "not write any scan results to storage if a scan fails" {
+            val pkg = Package.new(name = "repository").copy(
+                vcsProcessed = VcsInfo.valid()
+            )
+
+            val storageWriter = spyk(FakeProvenanceBasedStorageWriter())
+            val scannerWrapper = spyk(FakePathScannerWrapper())
+            val provenanceDownloader = FakeProvenanceDownloader()
+
+            every { scannerWrapper.scanPath(any(), any()) } throws Exception("Test scan failure")
+
+            val scanner = createScanner(
+                provenanceDownloader = provenanceDownloader,
+                packageScannerWrappers = listOf(scannerWrapper),
+                storageWriters = listOf(storageWriter)
+            )
+
+            scanner.scan(setOf(pkg), createContext())
+
+            verify(exactly = 0) {
+                storageWriter.write(any())
             }
         }
     }
