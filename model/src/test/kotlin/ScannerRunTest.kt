@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.FileList.Entry
 import org.ossreviewtoolkit.model.utils.alignRevisions
@@ -96,6 +97,71 @@ class ScannerRunTest : WordSpec({
                     Entry("vcs/path/sub/repository/some/dir/file4.txt", "4444444444444444444444444444444444444444")
                 )
             }
+        }
+    }
+
+    "getAllIssues()" should {
+        "combine issues from scan results and issues map" {
+            val provenance1 = RepositoryProvenance(
+                VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/example.git",
+                    revision = "revision"
+                ),
+                "revision"
+            )
+
+            val issue1 = Issue(
+                source = "Scanner",
+                message = "Issue 1"
+            )
+
+            val issue2 = Issue(
+                source = "Scanner",
+                message = "Issue 2"
+            )
+
+            val run = ScannerRun.EMPTY.copy(
+                provenances = setOf(
+                    ProvenanceResolutionResult(
+                        id = Identifier("maven::example:1.0"),
+                        packageProvenance = provenance1
+                    ),
+                    ProvenanceResolutionResult(
+                        id = Identifier("maven::example2:1.0"),
+                        packageProvenance = RepositoryProvenance(
+                            VcsInfo(
+                                type = VcsType.GIT,
+                                url = "https://github.com/example2.git",
+                                revision = "revision"
+                            ),
+                            "revision"
+                        )
+                    )
+                ),
+                scanResults = setOf(
+                    ScanResult(
+                        provenance1,
+                        ScannerDetails(
+                            "scanner",
+                            "1.0.0",
+                            "configuration"
+                        ),
+                        ScanSummary.EMPTY.copy(
+                            issues = listOf(issue1)
+                        )
+                    )
+                ),
+                issues = mapOf(Identifier("maven::example2:1.0") to listOf(issue2)),
+                scanners = mapOf(Identifier("maven::example:1.0") to setOf("scanner"))
+            )
+
+            run.getAllIssues().shouldBe(
+                mapOf(
+                    Identifier("maven::example:1.0") to setOf(issue1),
+                    Identifier("maven::example2:1.0") to setOf(issue2)
+                )
+            )
         }
     }
 })
