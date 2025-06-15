@@ -198,6 +198,11 @@ internal class ScanController(
     fun getNestedProvenanceResolutionIssue(id: Identifier): Issue? = nestedProvenanceResolutionIssues[id]
 
     /**
+     * Get issues that are not part of the scan summaries.
+     */
+    fun getIssues(): Map<Identifier, List<Issue>> = issues
+
+    /**
      * Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available.
      */
     fun getNestedProvenance(id: Identifier): NestedProvenance? =

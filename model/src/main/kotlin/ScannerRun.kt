@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.io.File
@@ -78,6 +80,14 @@ data class ScannerRun(
     val scanResults: Set<ScanResult>,
 
     /**
+     * A map of [Identifier]s associated with a list of [Issue]s that occurred during a scan besides the issues created
+     * by the scanners themselves as part of the [ScanSummary].
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyOrder(alphabetic = true)
+    val issues: Map<Identifier, List<Issue>> = emptyMap(),
+
+    /**
      * The names of the scanners which have been used to scan the package.
      */
     @JsonSerialize(converter = ScannersMapConverter::class)
@@ -101,6 +111,7 @@ data class ScannerRun(
             config = ScannerConfiguration(),
             provenances = emptySet(),
             scanResults = emptySet(),
+            issues = emptyMap(),
             files = emptySet(),
             scanners = emptyMap()
         )
@@ -257,10 +268,23 @@ data class ScannerRun(
     fun getFileList(id: Identifier): FileList? = fileListById[id]
 
     @JsonIgnore
-    fun getAllIssues(): Map<Identifier, Set<Issue>> =
-        scanResultsById.mapValues { (_, scanResults) ->
-            scanResults.flatMapTo(mutableSetOf()) { it.summary.issues }
+    fun getAllIssues(): Map<Identifier, Set<Issue>> {
+        val combined = mutableMapOf<Identifier, MutableSet<Issue>>()
+
+        for ((id, scanResults) in scanResultsById) {
+            val issuesForId = combined.getOrPut(id) { mutableSetOf() }
+            for (result in scanResults) {
+                issuesForId += result.summary.issues
+            }
         }
+
+        for ((id, newIssues) in issues) {
+            val issuesForId = combined.getOrPut(id) { mutableSetOf() }
+            issuesForId += newIssues
+        }
+
+        return combined.mapValues { it.value.toSet() }
+    }
 }
 
 private fun scanResultForProvenanceResolutionIssues(packageProvenance: KnownProvenance?, issues: List<Issue>) =
