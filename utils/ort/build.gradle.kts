@@ -20,9 +20,6 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
-
-    // Apply third-party plugins.
-    alias(libs.plugins.buildConfig)
 }
 
 buildConfig {

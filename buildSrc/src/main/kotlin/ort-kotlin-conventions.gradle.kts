@@ -46,6 +46,7 @@ plugins {
 
     // Apply third-party plugins.
     id("com.autonomousapps.dependency-analysis")
+    id("com.github.gmazzo.buildconfig")
     id("dev.adamko.dokkatoo")
     id("io.gitlab.arturbosch.detekt")
 

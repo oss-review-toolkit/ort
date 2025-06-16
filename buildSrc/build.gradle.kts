@@ -31,6 +31,7 @@ dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 
     implementation(libs.jgit)
+    implementation(libs.plugin.buildConfig)
     implementation(libs.plugin.dependencyAnalysis)
     implementation(libs.plugin.detekt)
     implementation(libs.plugin.dokkatoo)
