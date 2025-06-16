@@ -20,19 +20,26 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withInvariantIssues
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.getResource
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class SwiftPmFunTest : WordSpec({
     "Analyzing a lockfile with file format version 1" should {
         "return the correct result" {
-            val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v1/Package.resolved")
-            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v1.yml")
+            val workingDir = tempdir()
+            val definitionFile = extractResource(
+                "/projects/synthetic/only-lockfile-v1/Package.resolved",
+                workingDir.resolve("Package.resolved")
+            )
+            val expectedResultFile = getResource("/projects/synthetic/expected-output-only-lockfile-v1.yml")
 
             val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
 
