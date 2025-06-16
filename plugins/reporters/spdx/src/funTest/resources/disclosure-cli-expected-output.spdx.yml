@@ -41,7 +41,7 @@ packages:
   copyrightText: "Copyright (c) 2013 TOML authors\nCopyright 2010 The Go Authors"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/BurntSushi/toml@1.4.0"
   filesAnalyzed: false
@@ -54,7 +54,7 @@ packages:
   copyrightText: "Copyright (c) 2013 TOML authors\nCopyright 2010 The Go Authors"
   downloadLocation: "git+https://github.com/BurntSushi/toml.git@1e2c053f442c0ac99df1f5b56bae3feab98caa4f"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/BurntSushi/toml@1.4.0"
   filesAnalyzed: false
@@ -67,7 +67,7 @@ packages:
   copyrightText: "Copyright (c) 2012-2016 Dave Collins <dave@davec.name>"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/davecgh/go-spew@1.1.1"
   filesAnalyzed: false
@@ -80,7 +80,7 @@ packages:
   copyrightText: "Copyright (c) 2012-2016 Dave Collins <dave@davec.name>"
   downloadLocation: "git+https://github.com/davecgh/go-spew.git@8991bc29aa16c548c550c7ff78260e27b9ab7c73"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/davecgh/go-spew@1.1.1"
   filesAnalyzed: false
@@ -93,7 +93,7 @@ packages:
   copyrightText: "Copyright 2022 Alan Shreve"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/inconshreveable/mousetrap@1.1.0"
   filesAnalyzed: false
@@ -106,7 +106,7 @@ packages:
   copyrightText: "Copyright 2022 Alan Shreve"
   downloadLocation: "git+https://github.com/inconshreveable/mousetrap.git@4e8053ee7ef85a6bd26368364a6d27f1641c1d21"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/inconshreveable/mousetrap@1.1.0"
   filesAnalyzed: false
@@ -119,7 +119,7 @@ packages:
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/jinzhu/configor@1.2.2"
   filesAnalyzed: false
@@ -132,7 +132,7 @@ packages:
   copyrightText: "NONE"
   downloadLocation: "git+https://github.com/jinzhu/configor.git@f7a0fc7c9fc697269b1749c1cc472d49baa8d33c"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/jinzhu/configor@1.2.2"
   filesAnalyzed: false
@@ -145,7 +145,7 @@ packages:
   copyrightText: "Copyright (c) 2013 Patrick Mezard"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/pmezard/go-difflib@1.0.0"
   filesAnalyzed: false
@@ -158,7 +158,7 @@ packages:
   copyrightText: "Copyright (c) 2013 Patrick Mezard"
   downloadLocation: "git+https://github.com/pmezard/go-difflib.git@792786c7400a136282c1664665ae0a8db921c6c2"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/pmezard/go-difflib@1.0.0"
   filesAnalyzed: false
@@ -171,7 +171,7 @@ packages:
   copyrightText: "Copyright 2013-2023 The Cobra Authors"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/spf13/cobra@1.8.1"
   filesAnalyzed: false
@@ -184,7 +184,7 @@ packages:
   copyrightText: "Copyright 2013-2023 The Cobra Authors"
   downloadLocation: "git+https://github.com/spf13/cobra.git@e94f6d0dd9a5e5738dca6bce03c4b1207ffbc0ec"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/spf13/cobra@1.8.1"
   filesAnalyzed: false
@@ -198,7 +198,7 @@ packages:
     Copyright 2009-2010, 2012 The Go Authors"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/spf13/pflag@1.0.5"
   filesAnalyzed: false
@@ -212,7 +212,7 @@ packages:
     Copyright 2009-2010, 2012 The Go Authors"
   downloadLocation: "git+https://github.com/spf13/pflag.git@2e9d26c8c37aae03e3f9d4e90b7116f5accb7cab"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/spf13/pflag@1.0.5"
   filesAnalyzed: false
@@ -225,7 +225,7 @@ packages:
   copyrightText: "Copyright (c) 2012-2020 Mat Ryer, Tyler Bunnell and contributors"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/stretchr/testify@1.8.2"
   filesAnalyzed: false
@@ -238,7 +238,7 @@ packages:
   copyrightText: "Copyright (c) 2012-2020 Mat Ryer, Tyler Bunnell and contributors"
   downloadLocation: "git+https://github.com/stretchr/testify.git@f36bfe3c337aa95c86f04c721acdbafb5ffb1611"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/github.com/stretchr/testify@1.8.2"
   filesAnalyzed: false
@@ -252,7 +252,7 @@ packages:
     \ Canonical Ltd\nCopyright 2011-2016 Canonical Ltd."
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/gopkg.in/yaml.v3@3.0.1"
   filesAnalyzed: false
@@ -266,7 +266,7 @@ packages:
     \ Canonical Ltd\nCopyright 2011-2016 Canonical Ltd."
   downloadLocation: "git+https://gopkg.in/yaml.v3@f6f7691b1fdeb513f56608cd2c32c51f8194bf51"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:golang/gopkg.in/yaml.v3@3.0.1"
   filesAnalyzed: false

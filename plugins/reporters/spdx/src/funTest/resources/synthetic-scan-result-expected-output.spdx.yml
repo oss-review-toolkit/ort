@@ -53,7 +53,7 @@ packages:
     \ matched to a license finding."
   downloadLocation: "https://example.com/first-package.jar"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
   filesAnalyzed: false
@@ -72,7 +72,7 @@ packages:
     \ matched to a license finding."
   downloadLocation: "git+ssh://github.com/path/first-package-repo.git@deadbeef#project-path"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
   filesAnalyzed: true
@@ -101,7 +101,7 @@ packages:
     \ matched to a license finding."
   downloadLocation: "https://example.com/first-package-sources.jar"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
   filesAnalyzed: false
@@ -116,7 +116,7 @@ packages:
   description: "A package with partially mapped declared license."
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/fourth-package-group/fourth-package@0.0.1"
   filesAnalyzed: false
@@ -130,7 +130,7 @@ packages:
   description: "A package with minimal attributes set."
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/second-package-group/second-package@0.0.1"
   filesAnalyzed: false
@@ -144,7 +144,7 @@ packages:
   description: "A package with a source artifact scan result."
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/seventh-package-group/seventh-package@0.0.1"
   filesAnalyzed: false
@@ -161,7 +161,7 @@ packages:
   description: "A package with a source artifact scan result."
   downloadLocation: "https://example.com/seventh-package-sources.jar"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/seventh-package-group/seventh-package@0.0.1"
   filesAnalyzed: true
@@ -183,7 +183,7 @@ packages:
     \ license."
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/sixth-package-group/sixth-package@0.0.1"
   filesAnalyzed: false
@@ -197,7 +197,7 @@ packages:
   description: "A package with only unmapped declared license."
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE_MANAGER"
+  - referenceCategory: "PACKAGE-MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/third-package-group/third-package@0.0.1"
   filesAnalyzed: false
