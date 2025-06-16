@@ -124,13 +124,16 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                     options.forEach {
                         val defaultValue = it["default"]
                         val type = it["type"]
-                        val isStringValue =
-                            (type == "SECRET" || type == "STRING" || type == "STRING_LIST") && defaultValue != null
+                        val isStringValue = type == "SECRET" || type == "STRING" || type == "STRING_LIST"
 
                         append("$i      ${it["name"]}: ")
-                        if (isStringValue) append("\"")
-                        append(defaultValue)
-                        if (isStringValue) append("\"")
+                        if (defaultValue != null) {
+                            if (isStringValue) append("\"")
+                            append(defaultValue)
+                            if (isStringValue) append("\"")
+                        } else {
+                            append("<optional>")
+                        }
                         appendLine()
                     }
                 }
