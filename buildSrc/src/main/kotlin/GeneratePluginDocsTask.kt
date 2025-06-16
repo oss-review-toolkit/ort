@@ -132,7 +132,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                             append(defaultValue)
                             if (isStringValue) append("\"")
                         } else {
-                            append("<optional>")
+                            append("<OPTIONAL_$type>")
                         }
                         appendLine()
                     }
