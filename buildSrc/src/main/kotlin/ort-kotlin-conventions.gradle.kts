@@ -53,6 +53,20 @@ plugins {
     kotlin("jvm")
 }
 
+buildConfig.forClass("ResourcesConstants") {
+    val funTestExpectedResults = sourceSets.findByName("funTest")
+        ?.resources
+        ?.filter { it.isFile && "expected-" in it.path }
+        ?.map { it.relativeTo(rootDir) }
+
+    val nonWordRegex = "\\W".toRegex()
+
+    funTestExpectedResults?.forEach {
+        val name = it.path.uppercase().replace(nonWordRegex, "_")
+        buildConfigField(name, File(it.path))
+    }
+}
+
 testing {
     suites {
         withType<JvmTestSuite>().configureEach {
