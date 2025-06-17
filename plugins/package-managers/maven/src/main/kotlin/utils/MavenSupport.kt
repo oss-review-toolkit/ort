@@ -82,7 +82,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.gibibytes
-import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.searchUpwardFor
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 import org.ossreviewtoolkit.utils.ort.downloadText
@@ -518,7 +518,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
             // TODO: Once SBT is implemented independently of Maven we can completely remove the "localProjects"
             //       parameter to this function as no other caller is actually using it.
             if (sbtMode) {
-                it.searchUpwardsForSubdirectory("target") ?: it
+                it.searchUpwardFor(dirPath = "target") ?: it
             } else {
                 it
             }

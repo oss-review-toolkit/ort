@@ -34,6 +34,7 @@ import io.kotest.matchers.file.exist
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.maps.haveKey
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -213,13 +214,27 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "File.searchUpwardsForSubdirectory()" should {
+    "File.searchUpwardFor()" should {
         "find the root Git directory" {
-            val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
+            val dir = File(".").searchUpwardFor(dirPath = ".git")
 
-            gitRoot shouldNotBeNull {
+            dir shouldNotBeNull {
                 this shouldBe File("../..").absoluteFile.normalize()
             }
+        }
+
+        "find the root LICENSE file" {
+            val dir = File(".").searchUpwardFor(filePath = "LICENSE")
+
+            dir shouldNotBeNull {
+                this shouldBe File("../..").absoluteFile.normalize()
+            }
+        }
+
+        "find nothing for a file receiver" {
+            val file = tempfile()
+
+            file.searchUpwardFor(filePath = file.name) should beNull()
         }
     }
 
