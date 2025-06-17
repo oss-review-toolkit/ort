@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
-import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.searchUpwardFor
 import org.ossreviewtoolkit.utils.common.suppressInput
 import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -287,7 +287,7 @@ private val DEFAULT_SBT_OPTIONS = listOfNotNull(
 }
 
 private fun moveGeneratedPom(pomFile: File): Result<File> {
-    val targetDirParent = pomFile.parentFile.searchUpwardsForSubdirectory("target")
+    val targetDirParent = pomFile.parentFile.searchUpwardFor(dirPath = "target")
         ?: return Result.failure(IllegalArgumentException("No target subdirectory found for '$pomFile'."))
     val targetFilename = pomFile.relativeTo(targetDirParent).invariantSeparatorsPath.replace('/', '-')
     val targetFile = targetDirParent.resolve(targetFilename)

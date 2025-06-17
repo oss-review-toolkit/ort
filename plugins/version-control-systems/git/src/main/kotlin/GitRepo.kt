@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
-import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.searchUpwardFor
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -109,7 +109,7 @@ class GitRepo(
     }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
-        val repoRoot = vcsDirectory.searchUpwardsForSubdirectory(".repo")
+        val repoRoot = vcsDirectory.searchUpwardFor(dirPath = ".repo")
 
         return if (repoRoot == null) {
             object : GitWorkingTree(vcsDirectory, type) {

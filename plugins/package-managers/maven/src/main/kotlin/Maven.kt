@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.createIssuesForA
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.isTychoProject
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.toOrtProject
-import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.searchUpwardFor
 
 /**
  * The [Maven](https://maven.apache.org/) package manager for Java.
@@ -118,7 +118,7 @@ class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor,
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
         // project directory is the parent directory of this.
         val projectDir = if (sbtMode) {
-            workingDir.searchUpwardsForSubdirectory("target") ?: workingDir
+            workingDir.searchUpwardFor(dirPath = "target") ?: workingDir
         } else {
             workingDir
         }

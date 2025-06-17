@@ -150,19 +150,18 @@ fun File.safeMkdirs(): File {
 }
 
 /**
- * Search [this] directory upwards towards the root until a contained subdirectory called [searchDirName] is found and
- * return the parent of [searchDirName], or return null if no such directory is found.
+ * Search [this] directory upward towards the root until either a directory at [dirPath] or a file at [filePath] is
+ * found. Return the parent of a finding, or return null if nothing was found.
  */
-fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
-    if (!isDirectory) return null
+fun File.searchUpwardFor(dirPath: String? = null, filePath: String? = null): File? {
+    if (!isDirectory || (dirPath == null && filePath == null)) return null
 
-    var currentDir: File? = absoluteFile
+    return generateSequence(absoluteFile) { it.parentFile }.find {
+        val hasDir = dirPath != null && it.resolve(dirPath).isDirectory
+        val hasFile = filePath != null && it.resolve(filePath).isFile
 
-    while (currentDir != null && !currentDir.resolve(searchDirName).isDirectory) {
-        currentDir = currentDir.parentFile
+        hasDir || hasFile
     }
-
-    return currentDir
 }
 
 /**
