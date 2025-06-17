@@ -81,6 +81,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         val podspec = podspecCache.getOrPut(basePodName) {
             // Lazily only call the pod CLI if the podspec is not available from the external source.
             val podspecFile = sequence {
+                yield(dependency.externalSource?.path?.let { "$it/$basePodName.podspec" })
                 yield(dependency.externalSource?.podspec)
                 yield(getPodspecPath(basePodName, dependency.version))
             }.firstNotNullOfOrNull { path ->
