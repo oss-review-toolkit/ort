@@ -130,7 +130,7 @@ class Conan(
     override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
     private val handler by lazy {
-        if (command.getVersion().startsWith("1.")) {
+        if (command.getVersion().startsWith("Conan version 1.")) {
             ConanV1Handler(this)
         } else {
             ConanV2Handler(this)
