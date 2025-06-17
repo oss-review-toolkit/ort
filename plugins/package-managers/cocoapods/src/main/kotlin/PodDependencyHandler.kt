@@ -22,10 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 import java.io.File
 import java.io.IOException
 
-import kotlin.io.path.createTempFile
-import kotlin.io.path.pathString
-import kotlin.io.path.writeText
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
@@ -139,11 +135,11 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
             }
         } ?: content
 
-        val patchedPodspecFile = createTempFile("ruby_podspec", ".podspec").apply { writeText(rubyContent) }
+        val patchedPodspecFile = resolveSibling("ort_$name").apply { writeText(rubyContent) }
 
         return runCatching {
             // Convert the Ruby podspec file to JSON.
-            CocoaPodsCommand.run(parentFile, "ipc", "spec", patchedPodspecFile.pathString)
+            CocoaPodsCommand.run(parentFile, "ipc", "spec", patchedPodspecFile.absolutePath)
                 .requireSuccess()
                 .stdout
         }.onFailure { e ->
