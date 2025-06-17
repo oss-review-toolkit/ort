@@ -26,6 +26,7 @@ projects:
     - id: "Pod::React-Core:0.75.4"
       dependencies:
       - id: "Pod::glog:0.3.5"
+    - id: "Pod::React-RCTActionSheet:0.79.3"
     - id: "Pod::fmt:9.1.0"
     - id: "Pod::glog:0.3.5"
 packages:
@@ -80,6 +81,34 @@ packages:
     type: ""
     url: ""
     revision: ""
+    path: ""
+- id: "Pod::React-RCTActionSheet:0.79.3"
+  purl: "pkg:cocoapods/React-RCTActionSheet@0.79.3"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "An API for displaying iOS action sheets and share sheets."
+  homepage_url: "https://reactnative.dev/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/facebook/react-native.git"
+    revision: "v0.75.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/facebook/react-native.git"
+    revision: "v0.75.4"
     path: ""
 - id: "Pod::fmt:9.1.0"
   purl: "pkg:cocoapods/fmt@9.1.0"
