@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 
 internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
     private val podspecCache = mutableMapOf<String, Podspec>()
@@ -125,15 +124,12 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
     private fun File.convertRubyPodspecFile(content: String): String? {
         // The podspec is in Ruby format.
         // Because it may depend on React Native functions, an extra require may have to be injected.
-        val rubyContent = parentFile.searchUpwardsForSubdirectory("node_modules")?.let { nodeModulesParentDir ->
-            val reactNativePath =
-                nodeModulesParentDir.resolve("node_modules/react-native/scripts/react_native_pods.rb")
-            if (reactNativePath.isFile) {
+        val rubyContent = generateSequence(parentFile) { it.parentFile }
+            .map { it.resolve("node_modules/react-native/scripts/react_native_pods.rb") }
+            .find { it.isFile }
+            ?.let { reactNativePath ->
                 "require '$reactNativePath'\n$content"
-            } else {
-                null
-            }
-        } ?: content
+            } ?: content
 
         val patchedPodspecFile = resolveSibling("ort_$name").apply { writeText(rubyContent) }
 
