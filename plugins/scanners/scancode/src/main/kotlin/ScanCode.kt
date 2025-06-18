@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -130,10 +131,13 @@ class ScanCode(
         val process = runScanCode(path, resultFile)
 
         return with(process) {
+            if (stderr.isNotBlank()) logger.debug { stderr }
+
             // Do not throw yet if the process exited with an error as some errors might turn out to be tolerable during
             // parsing.
             if (isError && stdout.isNotBlank()) logger.debug { stdout }
-            if (stderr.isNotBlank()) logger.debug { stderr }
+
+            if (!resultFile.isFile) throw ScanException(errorMessage)
 
             resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively() }
         }
