@@ -94,7 +94,7 @@ class BoyterLc(
 
         return with(process) {
             if (stderr.isNotBlank()) logger.debug { stderr }
-            if (isError) throw ScanException(errorMessage)
+            if (isError || !resultFile.isFile) throw ScanException(errorMessage)
 
             resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively() }
         }
