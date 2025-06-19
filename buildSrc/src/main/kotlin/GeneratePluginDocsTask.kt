@@ -164,6 +164,11 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
 
                     appendLine("```")
                     appendLine()
+                    appendLine(
+                        "If the plugin is configured in both locations, the configurations are merged, with options " +
+                            "from `.ort.yml` taking precedence over those from `config.yml`."
+                    )
+                    appendLine()
                 }
 
                 appendLine("### Options")
