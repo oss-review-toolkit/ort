@@ -273,6 +273,53 @@ data class ScannerRun(
         scanResultsById.mapValues { (_, scanResults) ->
             scanResults.flatMapTo(mutableSetOf()) { it.summary.issues }
         }.zipWithSets(issues)
+
+    /**
+     * Merge this [ScannerRun] with the given [other] [ScannerRun].
+     *
+     * Both [ScannerRun]s must have the same [environment] and [config], otherwise an [IllegalArgumentException] is
+     * thrown.
+     *
+     * files and scanResults are merged by their [KnownProvenance]s, while issues and scanners are merged by their
+     * names.
+     *
+     * The [startTime] and [endTime] are widened to the earliest and latest values of both [ScannerRun]s.
+     */
+    operator fun plus(other: ScannerRun): ScannerRun {
+        val mergedFiles = (files + other.files)
+            .groupBy { it.provenance }
+            .values
+            .mapTo(mutableSetOf()) { fileLists ->
+                fileLists.reduce { acc, next -> acc + next }
+            }
+
+        val mergedScanResults = (scanResults + other.scanResults)
+            .groupBy { it.provenance to it.scanner }
+            .values
+            .mapTo(mutableSetOf()) { scanResults ->
+                scanResults.reduce { acc, next -> acc + next }
+            }
+
+        return ScannerRun(
+            startTime = minOf(startTime, other.startTime),
+            endTime = maxOf(endTime, other.endTime),
+            environment = environment.also {
+                require(it == other.environment) {
+                    "Cannot merge ScannerRuns with different environments: $it != ${other.environment}."
+                }
+            },
+            config = config.also {
+                require(it == other.config) {
+                    "Cannot merge ScannerRuns with different configurations: $it != ${other.config}."
+                }
+            },
+            provenances = provenances + other.provenances,
+            scanResults = mergedScanResults,
+            issues = issues.zipWithSets(other.issues),
+            scanners = scanners.zipWithSets(other.scanners),
+            files = mergedFiles
+        )
+    }
 }
 
 private fun scanResultForProvenanceResolutionIssues(packageProvenance: KnownProvenance?, issues: List<Issue>) =
