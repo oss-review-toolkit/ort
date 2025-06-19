@@ -19,15 +19,21 @@
 
 package org.ossreviewtoolkit.model
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
+import java.time.Instant
 
 import org.ossreviewtoolkit.model.FileList.Entry
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.alignRevisions
 import org.ossreviewtoolkit.model.utils.clearVcsPath
+import org.ossreviewtoolkit.utils.ort.Environment
 
 class ScannerRunTest : WordSpec({
     "getFileList()" should {
@@ -142,6 +148,320 @@ class ScannerRunTest : WordSpec({
             run.getAllIssues() should containExactly(
                 Identifier("maven::example:1.0") to setOf(issue1, issue3),
                 Identifier("maven::example2:1.0") to setOf(issue2)
+            )
+        }
+    }
+
+    "+" should {
+        "not merge runs with different config" {
+            val config1 = ScannerConfiguration(skipConcluded = true)
+            val config2 = ScannerConfiguration(skipConcluded = false)
+
+            val run1 = ScannerRun.EMPTY.copy(
+                config = config1
+            )
+
+            val run2 = ScannerRun.EMPTY.copy(
+                config = config2
+            )
+
+            shouldThrow<IllegalArgumentException> {
+                run1 + run2
+            }.message shouldBe "Cannot merge ScannerRuns with different configurations: $config1 != $config2."
+        }
+
+        "not merge runs with different environments" {
+            val env1 = Environment("1.0.0", "x86_64")
+            val env2 = Environment("2.0.0", "x86_64")
+
+            val run1 = ScannerRun.EMPTY.copy(
+                environment = env1
+            )
+
+            val run2 = ScannerRun.EMPTY.copy(
+                environment = env2
+            )
+
+            shouldThrow<IllegalArgumentException> {
+                run1 + run2
+            }.message shouldBe "Cannot merge ScannerRuns with different environments: $env1 != $env2."
+        }
+
+        "combine start and end time" {
+            val run1 = ScannerRun.EMPTY.copy(
+                startTime = Instant.parse("2023-01-01T00:00:00Z"),
+                endTime = Instant.parse("2023-01-01T01:00:00Z")
+            )
+
+            val run2 = ScannerRun.EMPTY.copy(
+                startTime = Instant.parse("2023-01-01T00:30:00Z"),
+                endTime = Instant.parse("2023-01-01T02:00:00Z")
+            )
+
+            val mergedRun = run1 + run2
+
+            mergedRun.startTime shouldBe Instant.parse("2023-01-01T00:00:00Z")
+            mergedRun.endTime shouldBe Instant.parse("2023-01-01T02:00:00Z")
+        }
+
+        "combine provenances" {
+            val provenance = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "revision"),
+                "revision"
+            )
+            val provenanceResult1 = ProvenanceResolutionResult(
+                id = Identifier("maven::example:1.0"),
+                packageProvenance = provenance
+            )
+            val provenanceResult2 = ProvenanceResolutionResult(
+                id = Identifier("maven::example2:1.0"),
+                packageProvenance = provenance
+            )
+
+            val run1 = ScannerRun.EMPTY.copy(
+                provenances = setOf(provenanceResult1)
+            )
+            val run2 = ScannerRun.EMPTY.copy(
+                provenances = setOf(provenanceResult2)
+            )
+
+            val mergedRun = run1 + run2
+
+            mergedRun.provenances should containExactlyInAnyOrder(
+                ProvenanceResolutionResult(
+                    id = Identifier("maven::example:1.0"),
+                    packageProvenance = provenance
+                ),
+                ProvenanceResolutionResult(
+                    id = Identifier("maven::example2:1.0"),
+                    packageProvenance = provenance
+                )
+            )
+        }
+
+        "combine issues" {
+            val issue1 = Issue(
+                source = "Scanner",
+                message = "Issue 1"
+            )
+            val issue2 = Issue(
+                source = "Scanner",
+                message = "Issue 2"
+            )
+            val issue3 = Issue(
+                source = "Scanner",
+                message = "Issue 3"
+            )
+
+            val issues1 = mapOf(
+                Identifier("maven::example:1.0") to setOf(issue1),
+                Identifier("maven::example2:1.0") to setOf(issue2)
+            )
+            val issues2 = mapOf(
+                Identifier("maven::example:1.0") to setOf(issue3),
+                Identifier("maven::example2:1.0") to setOf(issue2)
+            )
+
+            val run1 = ScannerRun.EMPTY.copy(
+                issues = issues1
+            )
+            val run2 = ScannerRun.EMPTY.copy(
+                issues = issues2
+            )
+
+            val mergedRun = run1 + run2
+
+            mergedRun.issues should containExactly(
+                Identifier("maven::example:1.0") to setOf(issue1, issue3),
+                Identifier("maven::example2:1.0") to setOf(issue2)
+            )
+        }
+
+        "combine scanners" {
+            val scanners1 = mapOf(
+                Identifier("maven::example:1.0") to setOf("scanner1"),
+                Identifier("maven::example2:1.0") to setOf("scanner2")
+            )
+            val scanners2 = mapOf(
+                Identifier("maven::example:1.0") to setOf("scanner3"),
+                Identifier("maven::example2:1.0") to setOf("scanner2")
+            )
+
+            val run1 = ScannerRun.EMPTY.copy(
+                scanners = scanners1
+            )
+            val run2 = ScannerRun.EMPTY.copy(
+                scanners = scanners2
+            )
+
+            val mergedRun = run1 + run2
+
+            mergedRun.scanners should containExactly(
+                Identifier("maven::example:1.0") to setOf("scanner1", "scanner3"),
+                Identifier("maven::example2:1.0") to setOf("scanner2")
+            )
+        }
+
+        "combine file lists" {
+            val provenance1 = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "revision"),
+                "revision"
+            )
+            val provenance2 = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "other_revision"),
+                "other_revision"
+            )
+
+            val provenances = setOf(
+                ProvenanceResolutionResult(
+                    id = Identifier("maven::example:1.0"),
+                    packageProvenance = provenance1
+                ),
+                ProvenanceResolutionResult(
+                    id = Identifier("maven::other_example:1.0"),
+                    packageProvenance = provenance2
+                )
+            )
+
+            val fileList1 = FileList(
+                provenance = provenance1,
+                files = setOf(
+                    Entry(
+                        path = "vcs/path/file1.txt",
+                        sha1 = "1111111111111111111111111111111111111111"
+                    )
+                )
+            )
+            val fileList2 = FileList(
+                provenance = provenance2,
+                files = setOf(
+                    Entry(
+                        path = "some/dir/file2.txt",
+                        sha1 = "2222222222222222222222222222222222222222"
+                    )
+                )
+            )
+            val fileList3 = FileList(
+                provenance = provenance1,
+                files = setOf(
+                    Entry(
+                        path = "some/dir/file3.txt",
+                        sha1 = "3333333333333333333333333333333333333333"
+                    )
+                )
+            )
+
+            val run1 = ScannerRun.EMPTY.copy(
+                provenances = provenances,
+                files = setOf(fileList1, fileList2)
+            )
+            val run2 = ScannerRun.EMPTY.copy(
+                provenances = provenances,
+                files = setOf(fileList2, fileList3)
+            )
+
+            val mergedRun = run1 + run2
+
+            mergedRun.files should containExactlyInAnyOrder(
+                FileList(
+                    provenance = provenance1,
+                    files = setOf(
+                        Entry("vcs/path/file1.txt", "1111111111111111111111111111111111111111"),
+                        Entry("some/dir/file3.txt", "3333333333333333333333333333333333333333")
+                    )
+                ),
+                FileList(
+                    provenance = provenance2,
+                    files = setOf(
+                        Entry("some/dir/file2.txt", "2222222222222222222222222222222222222222")
+                    )
+                )
+            )
+        }
+
+        "combine scan results" {
+            val provenance1 = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "revision"),
+                "revision"
+            )
+            val provenance2 = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "other_revision"),
+                "other_revision"
+            )
+
+            val provenances = setOf(
+                ProvenanceResolutionResult(
+                    id = Identifier("maven::example:1.0"),
+                    packageProvenance = provenance1
+                ),
+                ProvenanceResolutionResult(
+                    id = Identifier("maven::other_example:1.0"),
+                    packageProvenance = provenance2
+                )
+            )
+
+            val scanner1 = ScannerDetails("scanner1", "1.0.0", "configuration")
+            val scanner2 = ScannerDetails("scanner2", "1.0.0", "configuration")
+
+            val scanResult1 = ScanResult(
+                provenance = provenance1,
+                scanner = scanner1,
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding("MIT", TextLocation("file1.txt", 1, 1))
+                    )
+                )
+            )
+            val scanResult2 = ScanResult(
+                provenance = provenance2,
+                scanner = scanner2,
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding("Apache-2.0", TextLocation("file2.txt", 1, 1))
+                    )
+                )
+            )
+            val scanResult3 = ScanResult(
+                provenance = provenance1,
+                scanner = scanner1,
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding("GPL-3.0", TextLocation("file3.txt", 1, 1))
+                    )
+                )
+            )
+
+            val run1 = ScannerRun.EMPTY.copy(
+                provenances = provenances,
+                scanResults = setOf(scanResult1, scanResult2)
+            )
+            val run2 = ScannerRun.EMPTY.copy(
+                provenances = provenances,
+                scanResults = setOf(scanResult2, scanResult3)
+            )
+
+            val mergedRun = run1 + run2
+
+            mergedRun.scanResults should containExactlyInAnyOrder(
+                ScanResult(
+                    provenance = provenance1,
+                    scanner = scanner1,
+                    summary = ScanSummary.EMPTY.copy(
+                        licenseFindings = setOf(
+                            LicenseFinding("MIT", TextLocation("file1.txt", 1, 1)),
+                            LicenseFinding("GPL-3.0", TextLocation("file3.txt", 1, 1))
+                        )
+                    )
+                ),
+                ScanResult(
+                    provenance = provenance2,
+                    scanner = scanner2,
+                    summary = ScanSummary.EMPTY.copy(
+                        licenseFindings = setOf(
+                            LicenseFinding("Apache-2.0", TextLocation("file2.txt", 1, 1))
+                        )
+                    )
+                )
             )
         }
     }

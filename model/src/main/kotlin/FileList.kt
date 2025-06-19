@@ -64,4 +64,19 @@ data class FileList(
             }
         }
     }
+
+    /**
+     * Merge this [FileList] with the given [other] [FileList].
+     *
+     * Both [FileList]s must have the same [provenance], otherwise an [IllegalArgumentException] is thrown.
+     */
+    operator fun plus(other: FileList) =
+        FileList(
+            provenance = provenance.also {
+                require(it == other.provenance) {
+                    "Cannot merge FileLists with different provenance: $it != ${other.provenance}."
+                }
+            },
+            files = files + other.files
+        )
 }
