@@ -73,8 +73,9 @@ internal class ConanCommand(private val useConan2: Boolean = false) : CommandLin
 
     override fun transformVersion(output: String) =
         // Conan could report version strings like:
-        // Conan version 1.18.0
-        output.removePrefix("Conan version ")
+        // \033[0;32mConan version 1.18.0\033[0;m
+        // Conan version 2.18.0
+        output.substringAfter("Conan version ")
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.44.0 <3.0")
 
