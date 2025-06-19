@@ -26,7 +26,6 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 
 abstract class GeneratePluginDocsTask : DefaultTask() {
     init {
