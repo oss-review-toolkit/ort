@@ -102,53 +102,57 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 // Write example configuration.
                 appendLine("### Example")
                 appendLine()
+
+                fun appendOptionsAndSecrets() {
+                    val indent = if (tool != null) {
+                        appendLine("  $tool:")
+                        4
+                    } else {
+                        2
+                    }
+
+                    val i = " ".repeat(indent)
+
+                    appendLine("$i$pluginTypeCamelCase:")
+                    appendLine("$i  ${descriptor["id"]}:")
+
+                    fun appendOptions(options: List<Map<*, *>>) {
+                        options.forEach {
+                            val defaultValue = it["default"]
+                            val type = it["type"]
+                            val isStringValue = type == "SECRET" || type == "STRING" || type == "STRING_LIST"
+
+                            append("$i      ${it["name"]}: ")
+                            if (defaultValue != null) {
+                                if (isStringValue) append("\"")
+                                append(defaultValue)
+                                if (isStringValue) append("\"")
+                            } else {
+                                append("<OPTIONAL_$type>")
+                            }
+                            appendLine()
+                        }
+                    }
+
+                    if (options.isNotEmpty()) {
+                        appendLine("$i    options:")
+                        appendOptions(options)
+                    }
+
+                    if (secrets.isNotEmpty()) {
+                        appendLine("$i    secrets:")
+                        appendOptions(secrets)
+                    }
+                }
+
                 appendLine("Use the following syntax to configure this plugin globally as part of `config.yml`:")
                 appendLine()
                 appendLine("```yaml")
                 appendLine("ort:")
-
-                val indent = if (tool != null) {
-                    appendLine("  $tool:")
-                    4
-                } else {
-                    2
-                }
-
-                val i = " ".repeat(indent)
-
-                appendLine("$i$pluginTypeCamelCase:")
-                appendLine("$i  ${descriptor["id"]}:")
-
-                fun appendOptions(options: List<Map<*, *>>) {
-                    options.forEach {
-                        val defaultValue = it["default"]
-                        val type = it["type"]
-                        val isStringValue = type == "SECRET" || type == "STRING" || type == "STRING_LIST"
-
-                        append("$i      ${it["name"]}: ")
-                        if (defaultValue != null) {
-                            if (isStringValue) append("\"")
-                            append(defaultValue)
-                            if (isStringValue) append("\"")
-                        } else {
-                            append("<OPTIONAL_$type>")
-                        }
-                        appendLine()
-                    }
-                }
-
-                if (options.isNotEmpty()) {
-                    appendLine("$i    options:")
-                    appendOptions(options)
-                }
-
-                if (secrets.isNotEmpty()) {
-                    appendLine("$i    secrets:")
-                    appendOptions(secrets)
-                }
-
+                appendOptionsAndSecrets()
                 appendLine("```")
                 appendLine()
+
                 appendLine("### Options")
                 appendLine()
 
