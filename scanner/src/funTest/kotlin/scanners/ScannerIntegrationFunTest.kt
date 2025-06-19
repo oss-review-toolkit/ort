@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -34,6 +35,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
@@ -100,6 +102,15 @@ class ScannerIntegrationFunTest : WordSpec({
                 patchExpectedResult(expectedResult)
         }
     }
+
+    "Scanning a project with the same provenance as packages" should {
+        "not have duplicated scan results" {
+            val analyzerResult = createAnalyzerResultWithProject(project0, pkg0)
+            val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
+
+            ortResult.getScanResultsForId(project0.id) shouldHaveSize 1
+        }
+    }
 })
 
 internal fun createScanner(scannerWrappers: Map<PackageType, List<ScannerWrapper>>? = null): Scanner {
@@ -128,25 +139,38 @@ internal fun createScanner(scannerWrappers: Map<PackageType, List<ScannerWrapper
 }
 
 private fun createAnalyzerResult(vararg packages: Package): OrtResult {
+    val project = Project.EMPTY.copy(
+        id = createId("project")
+    )
+
+    return createAnalyzerResultWithProject(project, *packages)
+}
+
+private fun createAnalyzerResultWithProject(project: Project, vararg packages: Package): OrtResult {
     val scope = Scope(
         name = "deps",
         dependencies = packages.mapTo(mutableSetOf()) { PackageReference(it.id) }
     )
 
-    val project = Project.EMPTY.copy(
-        id = createId("project"),
+    val projectWithScope = project.copy(
         scopeDependencies = setOf(scope)
     )
 
     val analyzerRun = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult.EMPTY.copy(
-            projects = setOf(project),
+            projects = setOf(projectWithScope),
             packages = packages.toSet()
         ),
         config = AnalyzerConfiguration(enabledPackageManagers = emptyList())
     )
 
-    return OrtResult.EMPTY.copy(analyzer = analyzerRun)
+    return OrtResult.EMPTY.copy(
+        analyzer = analyzerRun,
+        repository = Repository.EMPTY.copy(
+            vcsProcessed = projectWithScope.vcsProcessed,
+            vcs = projectWithScope.vcs
+        )
+    )
 }
 
 private fun createId(name: String): Identifier = Identifier("Dummy::$name:1.0.0")
@@ -157,6 +181,23 @@ private fun createPackage(name: String, vcs: VcsInfo): Package =
         vcs = vcs,
         vcsProcessed = vcs.normalize()
     )
+
+private fun createProject(name: String, vcs: VcsInfo): Project =
+    Project.EMPTY.copy(
+        id = createId(name),
+        vcs = vcs,
+        vcsProcessed = vcs.normalize()
+    )
+
+private val project0 = createProject(
+    name = "project",
+    vcs = VcsInfo(
+        type = VcsType.GIT,
+        url = "https://github.com/oss-review-toolkit/ort-test-data-scanner.git",
+        revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec",
+        path = ""
+    )
+)
 
 // A package with an empty VCS path.
 private val pkg0 = createPackage(
