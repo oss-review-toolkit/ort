@@ -85,7 +85,11 @@ interface CommandLineTool {
      * Get the version of the command by parsing its output.
      */
     fun getVersion(workingDir: File? = null): String {
-        val version = run(workingDir, *getVersionArguments().splitOnWhitespace().toTypedArray()).requireSuccess()
+        val version = run(
+            *getVersionArguments().splitOnWhitespace().toTypedArray(),
+            workingDir = workingDir,
+            environment = mapOf("NO_COLOR" to "1")
+        ).requireSuccess()
 
         // Some tools actually report the version to stderr, so try that as a fallback.
         val versionString = sequenceOf(version.stdout, version.stderr).map {
