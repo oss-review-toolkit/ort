@@ -73,4 +73,19 @@ data class ScanResult(
      */
     fun filterByIgnorePatterns(ignorePatterns: Collection<String>): ScanResult =
         copy(summary = summary.filterByIgnorePatterns(ignorePatterns))
+
+    operator fun plus(other: ScanResult): ScanResult {
+        require(provenance == other.provenance) {
+            "Cannot merge ScanResults with different provenance: $provenance != ${other.provenance}."
+        }
+
+        require(scanner == other.scanner) {
+            "Cannot merge ScanResults with different scanners: $scanner != ${other.scanner}."
+        }
+
+        return copy(
+            summary = summary + other.summary,
+            additionalData = additionalData + other.additionalData
+        )
+    }
 }
