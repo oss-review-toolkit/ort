@@ -244,7 +244,7 @@ fun associateLicensesWithExceptions(
         val exception = i.next()
 
         // Determine all licenses the exception is applicable to.
-        val applicableLicenses = SpdxLicenseException.mapping[exception.license.toString()].orEmpty().map { it.id }
+        val applicableLicenses = SpdxLicenseException.association[exception.license.toString()].orEmpty().map { it.id }
 
         // Determine applicable license findings from the same path.
         val applicableLicenseFindings = licenses.filter {
@@ -312,7 +312,7 @@ fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpression {
                 val licenseId = childLicense.toString()
 
                 val validLicenseExceptionCombinations = standAloneExceptionIds.mapNotNull { exceptionId ->
-                    val applicableLicenseIds = SpdxLicenseException.mapping[exceptionId].orEmpty().map { it.id }
+                    val applicableLicenseIds = SpdxLicenseException.association[exceptionId].orEmpty().map { it.id }
 
                     if (licenseId in applicableLicenseIds) {
                         SpdxLicenseWithExceptionExpression(childLicense, exceptionId)
