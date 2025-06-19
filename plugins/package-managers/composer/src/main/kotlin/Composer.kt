@@ -71,8 +71,6 @@ internal object ComposerCommand : CommandLineTool {
             }
         }
 
-    override fun getVersionArguments() = "--no-ansi --version"
-
     override fun transformVersion(output: String) =
         // The version string can be something like:
         // Composer version 1.5.1 2017-08-09 16:07:22
