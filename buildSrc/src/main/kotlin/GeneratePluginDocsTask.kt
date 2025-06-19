@@ -103,17 +103,18 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 appendLine("### Example")
                 appendLine()
 
-                fun appendOptionsAndSecrets() {
+                fun appendOptionsAndSecrets(startIndent: Int, pluginType: String) {
                     val indent = if (tool != null) {
-                        appendLine("  $tool:")
-                        4
+                        append(" ".repeat(startIndent))
+                        appendLine("$tool:")
+                        startIndent + 2
                     } else {
-                        2
+                        startIndent
                     }
 
                     val i = " ".repeat(indent)
 
-                    appendLine("$i$pluginTypeCamelCase:")
+                    appendLine("$i$pluginType:")
                     appendLine("$i  ${descriptor["id"]}:")
 
                     fun appendOptions(options: List<Map<*, *>>) {
@@ -149,7 +150,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 appendLine()
                 appendLine("```yaml")
                 appendLine("ort:")
-                appendOptionsAndSecrets()
+                appendOptionsAndSecrets(2, pluginTypeCamelCase)
                 appendLine("```")
                 appendLine()
 
