@@ -1,14 +1,14 @@
 ---
 repository:
   vcs:
-    type: ""
-    url: ""
-    revision: ""
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+    revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+    revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     path: ""
   config: {}
 analyzer:
@@ -34,14 +34,14 @@ analyzer:
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
-        type: ""
-        url: ""
-        revision: ""
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: ""
       vcs_processed:
-        type: ""
-        url: ""
-        revision: ""
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: ""
       homepage_url: ""
       scopes:
@@ -289,12 +289,24 @@ scanner:
         revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
         path: ""
   - id: "Dummy::project:1.0.0"
-    package_provenance_resolution_issue:
-      timestamp: "1970-01-01T00:00:00Z"
-      source: "Scanner"
-      message: "IOException: Could not resolve provenance for package 'Dummy::project:1.0.0'\
-        \ for source code origins [VCS, ARTIFACT]."
-      severity: "ERROR"
+    package_provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    sub_repositories:
+      pkg3/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
+        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      pkg4/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+        path: ""
   scan_results:
   - provenance:
       vcs_info:
