@@ -104,8 +104,6 @@ class Scanner(
     )
 
     suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean, labels: Map<String, String>): OrtResult {
-        val startTime = Instant.now()
-
         val projectPackages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() }
         val projectResults = scan(
             projectPackages,
@@ -131,8 +129,6 @@ class Scanner(
             )
         )
 
-        val endTime = Instant.now()
-
         val toolVersions = mutableMapOf<String, String>()
 
         scannerWrappers.values.flatten().forEach { scanner ->
@@ -141,22 +137,23 @@ class Scanner(
             }
         }
 
-        val scannerRun = ScannerRun(
-            startTime = startTime,
-            endTime = endTime,
+        val scannerRun = (projectResults + packageResults).copy(
             environment = Environment(toolVersions = toolVersions),
-            config = scannerConfig,
-            provenances = projectResults.provenances + packageResults.provenances,
-            scanResults = projectResults.scanResults + packageResults.scanResults,
-            issues = projectResults.issues + packageResults.issues,
-            files = projectResults.files + packageResults.files,
-            scanners = projectResults.scanners + packageResults.scanners
+            config = scannerConfig
         )
 
-        return ortResult.copy(scanner = scannerRun)
+        val paddedScannerRun = if (scannerConfig.includeFilesWithoutFindings) {
+            scannerRun.padNoneLicenseFindings()
+        } else {
+            scannerRun
+        }
+
+        return ortResult.copy(scanner = paddedScannerRun)
     }
 
     suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun {
+        val startTime = Instant.now()
+
         val scannerWrappers = scannerWrappers[context.packageType]
         if (scannerWrappers.isNullOrEmpty()) {
             logger.info { "Skipping ${context.packageType} scan as no according scanner is configured." }
@@ -213,7 +210,10 @@ class Scanner(
 
         val issues = controller.getIssues()
 
+        val endTime = Instant.now()
         val scannerRun = ScannerRun.EMPTY.copy(
+            startTime = startTime,
+            endTime = endTime,
             config = scannerConfig,
             provenances = provenances,
             scanResults = scanResults,
@@ -222,8 +222,7 @@ class Scanner(
             issues = issues
         )
 
-        return scannerRun.takeUnless { scannerConfig.includeFilesWithoutFindings }
-            ?: scannerRun.padNoneLicenseFindings()
+        return scannerRun
     }
 
     private suspend fun resolvePackageProvenances(controller: ScanController) {
