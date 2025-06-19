@@ -163,7 +163,7 @@ curations:
     reason: "DATA_OF"
     comment: >-
       This file defines official SPDX.org exceptions so they can be used in OSS Review Toolkit.
-  - path: "utils/spdx/src/main/resources/{declared-license-mapping.yml,deprecated-license-mapping.yml,exception-mapping.yml,simple-license-mapping.yml}"
+  - path: "utils/spdx/src/main/resources/{declared-license-mapping.yml,deprecated-license-mapping.yml,exception-association.yml,simple-license-mapping.yml}"
     concluded_license: "Apache-2.0"
     reason: "DATA_OF"
     comment: >-
