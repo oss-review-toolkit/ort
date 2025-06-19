@@ -154,6 +154,18 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 appendLine("```")
                 appendLine()
 
+                if (tool == "analyzer") {
+                    appendLine("Use the following syntax to configure this plugin in a repository's `.ort.yml`:")
+                    appendLine()
+                    appendLine("```yaml")
+
+                    // See https://github.com/oss-review-toolkit/ort/issues/5715.
+                    appendOptionsAndSecrets(0, pluginTypeParts.joinToString("_"))
+
+                    appendLine("```")
+                    appendLine()
+                }
+
                 appendLine("### Options")
                 appendLine()
 
