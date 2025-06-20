@@ -18,8 +18,12 @@
  */
 
 import com.vanniktech.maven.publish.SonatypeHost
+import com.vanniktech.maven.publish.VersionCatalog
 
 plugins {
+    // Apply core plugins.
+    `version-catalog`
+
     // Apply third-party plugins.
     id("com.vanniktech.maven.publish")
 }
@@ -36,7 +40,15 @@ fun getGroupId(parent: Project?): String =
 
 group = "org${getGroupId(parent)}"
 
+catalog {
+    // declare the aliases, bundles and versions in this block
+    versionCatalog {
+        library(name, "$group:$name:$version")
+    }
+}
+
 mavenPublishing {
+    configure(VersionCatalog())
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
     pom {
