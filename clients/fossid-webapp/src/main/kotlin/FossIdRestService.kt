@@ -357,6 +357,9 @@ interface FossIdRestService {
     @POST("api.php")
     suspend fun addFileComment(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
+    @POST("api.php")
+    suspend fun extractArchives(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
 }
