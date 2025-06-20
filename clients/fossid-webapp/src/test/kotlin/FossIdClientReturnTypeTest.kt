@@ -360,4 +360,10 @@ class FossIdClientReturnTypeTest : StringSpec({
             }
         }
     }
+
+    "Uploaded archives can be extracted" {
+        service.extractArchives("", "", SCAN_CODE_1, "test.zip") shouldNotBeNull {
+            checkResponse("extract archives")
+        }
+    }
 })
