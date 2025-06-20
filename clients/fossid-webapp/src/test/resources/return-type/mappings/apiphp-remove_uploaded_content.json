@@ -1,0 +1,26 @@
+{
+  "id" : "20183b20-0ff8-4b43-a859-5a074539ba29",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"remove_uploaded_content\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342\",\"filename\":\"test.zip\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scans_remove_uploaded_content\",\"status\":\"1\",\"data\":true}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 05 Dec 2021 11:54:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "20183b20-0ff8-4b43-a859-5a074539ba29",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

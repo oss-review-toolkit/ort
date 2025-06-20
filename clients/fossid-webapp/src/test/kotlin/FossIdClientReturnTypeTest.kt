@@ -366,4 +366,17 @@ class FossIdClientReturnTypeTest : StringSpec({
             checkResponse("extract archives")
         }
     }
+
+    "Content can be removed" {
+        service.removeUploadedContent("", "", SCAN_CODE_1, "test.zip") shouldNotBeNull {
+            checkResponse("remove uploaded content", true)
+            data?.value?.value shouldBe true
+        }
+    }
+
+    "Error is handled when content can't be removed" {
+        service.removeUploadedContent("", "", SCAN_CODE_2, "missing.zip") shouldNotBeNull {
+            data?.value?.message shouldBe "The filename is not valid"
+        }
+    }
 })
