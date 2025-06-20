@@ -618,6 +618,46 @@ suspend fun FossIdRestService.addFileComment(
 }
 
 /**
+ * Check uploaded files for archives and decompress them. If [fileName] is specified, only this file is extracted.
+ * If [recursivelyExtractArchives] is specified, also extract archives inside the extracted files.
+ * If [jarFileExtraction] is specified, also extract JAR files.
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.extractArchives(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    fileName: String? = null,
+    recursivelyExtractArchives: Boolean = false,
+    extractToDirectory: Boolean = true,
+    jarFileExtraction: Boolean = false
+): EntityResponseBody<Nothing> {
+    val recursivelyExtractArchivesFlag = if (recursivelyExtractArchives) "1" else "0"
+    val extractToDirectoryFlag = if (extractToDirectory) "1" else "0"
+    val jarFileExtractionFlag = if (jarFileExtraction) "1" else "0"
+    val baseOptions = mapOf(
+        "scan_code" to scanCode,
+        "recursively_extract_archives" to recursivelyExtractArchivesFlag,
+        "extract_to_directory" to extractToDirectoryFlag,
+        "jar_file_extraction" to jarFileExtractionFlag
+    )
+    return extractArchives(
+        PostRequestBody(
+            "extract_archives",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            if (fileName == null) {
+                baseOptions
+            } else {
+                baseOptions + mapOf("filename" to fileName)
+            }
+        )
+    )
+}
+
+/**
  * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
  */
 fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { null }): String? =
