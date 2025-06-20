@@ -45,6 +45,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
 import org.ossreviewtoolkit.clients.fossid.model.Project
+import org.ossreviewtoolkit.clients.fossid.model.RemoveUploadContentResponse
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
@@ -359,6 +360,11 @@ interface FossIdRestService {
 
     @POST("api.php")
     suspend fun extractArchives(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
+    @POST("api.php")
+    suspend fun removeUploadedContent(
+        @Body body: PostRequestBody
+    ): PolymorphicDataResponseBody<RemoveUploadContentResponse>
 
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
