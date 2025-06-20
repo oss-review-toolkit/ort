@@ -31,6 +31,7 @@ import okio.sink
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
+import org.ossreviewtoolkit.clients.fossid.model.RemoveUploadContentResponse
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
@@ -645,6 +646,33 @@ suspend fun FossIdRestService.extractArchives(
     return extractArchives(
         PostRequestBody(
             "extract_archives",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            if (fileName == null) {
+                baseOptions
+            } else {
+                baseOptions + mapOf("filename" to fileName)
+            }
+        )
+    )
+}
+
+/**
+ * Remove uploaded content for the given [scanCode]. If [fileName] is specified, only this file is removed.
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.removeUploadedContent(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    fileName: String? = null
+): PolymorphicDataResponseBody<RemoveUploadContentResponse> {
+    val baseOptions = mapOf("scan_code" to scanCode)
+    return removeUploadedContent(
+        PostRequestBody(
+            "remove_uploaded_content",
             SCAN_GROUP,
             user,
             apiKey,
