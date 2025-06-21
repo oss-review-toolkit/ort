@@ -575,6 +575,16 @@ COPY --from=ruby-build --chown=$USER:$USER $RUBY_ROOT $RUBY_ROOT
 
 COPY --from=python-build --chown=$USER:$USER /opt/scancode-license-data /opt/scancode-license-data
 
+#FOSSology-nomossa
+ARG FOSSOLOGY_NOMOSSA_VERSION
+
+RUN mkdir -p /opt/FOSSology-nomossa/bin && \
+    curl -sSL https://github.com/fossology/fossology/releases/download/$FOSSOLOGY_NOMOSSA_VERSION/FOSSology-nomossa \
+    -o /opt/FOSSology-nomossa/bin/FOSSology-nomossa \
+    && chmod +x /opt/FOSSology-nomossa/bin/FOSSology-nomossa
+
+ENV PATH=$PATH:/opt/FOSSology-nomossa/bin
+
 #------------------------------------------------------------------------
 # Container with all supported package managers.
 FROM minimal-tools AS all-tools
