@@ -516,6 +516,16 @@ COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
 
 COPY --from=scancode-license-data --chown=$USER:$USER /opt/scancode-license-data /opt/scancode-license-data
 
+#FOSSology-nomossa
+ARG FOSSOLOGY_NOMOSSA_VERSION
+
+RUN mkdir -p /opt/FOSSology-nomossa/bin && \
+    wget -q https://github.com/fossology/fossology/releases/download/$FOSSOLOGY_NOMOSSA_VERSION/FOSSology-nomossa \
+    -O /opt/FOSSology-nomossa/bin/FOSSology-nomossa \
+    && chmod +x /opt/FOSSology-nomossa/bin/FOSSology-nomossa
+
+ENV PATH=$PATH:/opt/FOSSology-nomossa/bin
+
 #------------------------------------------------------------------------
 # Container with all supported package managers.
 FROM minimal-tools AS all-tools
