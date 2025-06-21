@@ -68,6 +68,12 @@ coreutils = {
 
 # Scanners
 "gem:licensee" = "{{ env.LICENSEE_VERSION }}"
+
+"github:fossology/fossology" = {
+    version = "{{ env.FOSSOLOGY_NOMOSSA_VERSION }}",
+    asset_pattern = "FOSSology-nomossa"
+}
+
 "github:getprovenant/provenant" = "{{ env.PROVENANT_VERSION }}"
 "pipx:scancode-toolkit" = "{{ env.SCANCODE_VERSION }}"
 
