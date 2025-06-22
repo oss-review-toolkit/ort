@@ -10,7 +10,7 @@ ideaExtPlugin = "1.1.10"
 jakartaMigrationPlugin = "0.24.0"
 kotlinPlugin = "2.1.21"
 ksp = "2.1.21-2.0.2"
-mavenPublishPlugin = "0.32.0"
+mavenPublishPlugin = "0.33.0"
 reproducibleBuildsPlugin = "1.0"
 
 aeSecurity = "0.139.0"
