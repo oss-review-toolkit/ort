@@ -48,13 +48,11 @@ rootProject.plugins.withType<YarnPlugin>().configureEach {
 
 val kotlinYarnSetup by rootProject.tasks.existing(YarnSetupTask::class)
 
-@Suppress("DEPRECATION") // Cannot use `destinationProvider` as it is internal.
-val nodeDir = kotlinNodeJsSetup.get().destination
+val nodeDir = kotlinNodeJsSetup.get().destinationProvider.asFile.get()
 val nodeBinDir = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeDir else nodeDir.resolve("bin")
 val nodeExecutable = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeBinDir.resolve("node.exe") else nodeBinDir.resolve("node")
 
-@Suppress("DEPRECATION") // Cannot use `destinationProvider` as it is internal.
-val yarnDir = kotlinYarnSetup.get().destination
+val yarnDir = kotlinYarnSetup.get().destinationProvider.asFile.get()
 val yarnJs = yarnDir.resolve("bin/yarn.js")
 
 tasks.addRule("Pattern: yarn<Command>") {

@@ -188,7 +188,12 @@ tasks.withType<KotlinCompile>().configureEach {
 
     compilerOptions {
         allWarningsAsErrors = true
-        freeCompilerArgs = listOf("-Xconsistent-data-class-copy-visibility")
+        freeCompilerArgs = listOf(
+            "-Xannotation-default-target=param-property",
+            "-Xconsistent-data-class-copy-visibility",
+            // Work-around for https://youtrack.jetbrains.com/issue/KT-78352.
+            "-Xwarning-level=IDENTITY_SENSITIVE_OPERATIONS_WITH_VALUE_TYPE:disabled"
+        )
         jvmTarget = maxKotlinJvmTarget
         optIn = optInRequirements
     }
