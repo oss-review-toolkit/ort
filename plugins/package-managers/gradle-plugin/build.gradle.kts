@@ -58,8 +58,8 @@ tasks.named<KotlinCompile>("compileKotlin") {
 
         // See https://docs.gradle.org/current/userguide/compatibility.html#kotlin.
         freeCompilerArgs = listOf("-Xsuppress-version-warnings")
-        languageVersion = @Suppress("DEPRECATION") KotlinVersion.KOTLIN_1_7
-        apiVersion = @Suppress("DEPRECATION") KotlinVersion.KOTLIN_1_7
+        languageVersion = @Suppress("DEPRECATION") KotlinVersion.KOTLIN_1_8
+        apiVersion = @Suppress("DEPRECATION") KotlinVersion.KOTLIN_1_8
     }
 }
 
