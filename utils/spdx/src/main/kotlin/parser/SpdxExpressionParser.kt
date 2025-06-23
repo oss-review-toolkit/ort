@@ -98,7 +98,7 @@ class SpdxExpressionParser(
         val children = mutableListOf(parseAndExpression())
 
         while (next is Token.OR) {
-            consume<Token.OR>()
+            next = iterator.nextOrNull()
             children.add(parseAndExpression())
         }
 
@@ -112,7 +112,7 @@ class SpdxExpressionParser(
         val children = mutableListOf(parsePrimary())
 
         while (next is Token.AND) {
-            consume<Token.AND>()
+            next = iterator.nextOrNull()
             children.add(parsePrimary())
         }
 
@@ -124,7 +124,7 @@ class SpdxExpressionParser(
      */
     private fun parsePrimary(): SpdxExpression {
         if (next is Token.OPEN) {
-            consume<Token.OPEN>()
+            next = iterator.nextOrNull()
             val expression = parseOrExpression()
             consume<Token.CLOSE>()
             return expression
@@ -143,7 +143,7 @@ class SpdxExpressionParser(
                 val identifier = consume<Token.IDENTIFIER>()
 
                 val orLaterVersion = next is Token.PLUS || identifier.value.endsWith("-or-later")
-                if (next is Token.PLUS) consume<Token.PLUS>()
+                if (next is Token.PLUS) next = iterator.nextOrNull()
 
                 SpdxLicenseIdExpression(identifier.value, orLaterVersion).apply { validate(strictness) }
             }
@@ -167,7 +167,7 @@ class SpdxExpressionParser(
         }
 
         if (next is Token.WITH) {
-            consume<Token.WITH>()
+            next = iterator.nextOrNull()
             val exception = when (next) {
                 is Token.IDENTIFIER -> consume<Token.IDENTIFIER>().value
                 is Token.LICENSEREF -> consume<Token.LICENSEREF>().value
