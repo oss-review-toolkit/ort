@@ -49,6 +49,7 @@ include(":utils:scripting")
 include(":utils:spdx")
 include(":utils:spdx-document")
 include(":utils:test")
+include(":version-catalog")
 
 project(":clients:bazel-module-registry").name = "bazel-module-registry-client"
 project(":clients:clearly-defined").name = "clearly-defined-client"
