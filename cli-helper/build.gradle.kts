@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.jslt)
     implementation(libs.log4j.api)
     implementation(libs.slf4j)
+    implementation(libs.xz)
 
     "pluginClasspath"(platform(projects.plugins.versionControlSystems))
 }
