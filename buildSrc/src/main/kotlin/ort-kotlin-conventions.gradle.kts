@@ -75,22 +75,22 @@ kotlin.target.compilations.apply {
     getByName("funTest").associateWith(getByName(KotlinCompilation.MAIN_COMPILATION_NAME))
 }
 
-configurations.all {
-    resolutionStrategy {
-        // Ensure all transitive JRuby versions match ORT's version to avoid Psych YAML library issues.
-        force(libs.jruby)
-
-        // Ensure that all transitive versions of Kotlin libraries match ORT's version of Kotlin.
-        force("org.jetbrains.kotlin:kotlin-reflect:${libs.versions.kotlinPlugin.get()}")
-    }
-}
-
 dependencies {
     detektPlugins(project(":detekt-rules"))
 
     detektPlugins(libs.plugin.detekt.formatting)
 
     implementation(libs.log4j.api.kotlin)
+
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-reflect:${libs.versions.kotlinPlugin.get()}") {
+            because("All transitive versions of Kotlin reflect need to match ORT's version of Kotlin.")
+        }
+
+        implementation(libs.jruby) {
+            because("JRuby used by Bundler directly and by AsciidoctorJ transitively must match.")
+        }
+    }
 }
 
 detekt {
