@@ -30,7 +30,6 @@ dependencies {
     implementation(projects.clients.fossidWebappClient)
     implementation(projects.model)
     implementation(projects.plugins.reporters.asciidocReporter)
-    implementation(projects.plugins.reporters.freemarkerReporter)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
