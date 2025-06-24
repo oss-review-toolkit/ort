@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.test.readResource
  * specification and impossible to implement.
  */
 class SpdxDocumentTest : WordSpec({
-    "The official YAML example from the SPDX specification version 2.2" should {
+    "The official YAML example from the SPDX specification version 2.2.2" should {
         "be deserializable" {
             val yaml = readResource("/spdx-spec-examples/SPDXYAMLExample-2.2.spdx.yaml")
 
@@ -48,7 +48,7 @@ class SpdxDocumentTest : WordSpec({
         }
     }
 
-    "The official YAML example without ranges from the SPDX specification version 2.2" should {
+    "The official YAML example without ranges from the SPDX specification version 2.2.2" should {
         "have idempotent (de)-serialization" {
             val yaml = readResource("/spdx-spec-examples/SPDXYAMLExample-2.2-no-ranges.spdx.yaml")
 
@@ -60,7 +60,7 @@ class SpdxDocumentTest : WordSpec({
         }
     }
 
-    "The official JSON example from the SPDX specification version 2.2" should {
+    "The official JSON example from the SPDX specification version 2.2.2" should {
         "be deserializable" {
             val json = readResource("/spdx-spec-examples/SPDXJSONExample-v2.2.spdx.json")
 
@@ -68,7 +68,7 @@ class SpdxDocumentTest : WordSpec({
         }
     }
 
-    "The official JSON example without ranges from the SPDX specification version 2.2" should {
+    "The official JSON example without ranges from the SPDX specification version 2.2.2" should {
         "have idempotent (de-)serialization" {
             val json = readResource("/spdx-spec-examples/SPDXJSONExample-v2.2-no-ranges.spdx.json")
 
