@@ -19,23 +19,26 @@
     "spdxDocument" : "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"
   } ],
   "hasExtractedLicensingInfos" : [ {
-    "extractedText" : "\"THE BEER-WARE LICENSE\" (Revision 42):\nphk@FreeBSD.ORG wrote this file. As long as you retain this notice you\ncan do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp  </\nLicenseName: Beer-Ware License (Version 42)\nLicenseCrossReference:  http://people.freebsd.org/~phk/\nLicenseComment: \nThe beerware license has a couple of other standard variants.",
-    "licenseId" : "LicenseRef-Beerware-4.2"
+    "licenseId" : "LicenseRef-1",
+    "extractedText" : "/*\n * (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP\n * All rights reserved.\n *\n * Redistribution and use in source and binary forms, with or without\n * modification, are permitted provided that the following conditions\n * are met:\n * 1. Redistributions of source code must retain the above copyright\n *    notice, this list of conditions and the following disclaimer.\n * 2. Redistributions in binary form must reproduce the above copyright\n *    notice, this list of conditions and the following disclaimer in the\n *    documentation and/or other materials provided with the distribution.\n * 3. The name of the author may not be used to endorse or promote products\n *    derived from this software without specific prior written permission.\n *\n * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\n * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n*/"
   }, {
-    "extractedText" : "/*\n * (c) Copyright 2009 University of Bristol\n * All rights reserved.\n *\n * Redistribution and use in source and binary forms, with or without\n * modification, are permitted provided that the following conditions\n * are met:\n * 1. Redistributions of source code must retain the above copyright\n *    notice, this list of conditions and the following disclaimer.\n * 2. Redistributions in binary form must reproduce the above copyright\n *    notice, this list of conditions and the following disclaimer in the\n *    documentation and/or other materials provided with the distribution.\n * 3. The name of the author may not be used to endorse or promote products\n *    derived from this software without specific prior written permission.\n *\n * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\n * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n*/",
-    "licenseId" : "LicenseRef-4"
+    "licenseId" : "LicenseRef-2",
+    "extractedText" : "This package includes the GRDDL parser developed by Hewlett Packard under the following license:\n� Copyright 2007 Hewlett-Packard Development Company, LP\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: \n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. \nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. \nThe name of the author may not be used to endorse or promote products derived from this software without specific prior written permission. \nTHIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
   }, {
+    "licenseId" : "LicenseRef-4",
+    "extractedText" : "/*\n * (c) Copyright 2009 University of Bristol\n * All rights reserved.\n *\n * Redistribution and use in source and binary forms, with or without\n * modification, are permitted provided that the following conditions\n * are met:\n * 1. Redistributions of source code must retain the above copyright\n *    notice, this list of conditions and the following disclaimer.\n * 2. Redistributions in binary form must reproduce the above copyright\n *    notice, this list of conditions and the following disclaimer in the\n *    documentation and/or other materials provided with the distribution.\n * 3. The name of the author may not be used to endorse or promote products\n *    derived from this software without specific prior written permission.\n *\n * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\n * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n*/"
+  }, {
+    "licenseId" : "LicenseRef-Beerware-4.2",
+    "comment" : "The beerware license has a couple of other standard variants.",
+    "extractedText" : "\"THE BEER-WARE LICENSE\" (Revision 42):\nphk@FreeBSD.ORG wrote this file. As long as you retain this notice you\ncan do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp",
+    "name" : "Beer-Ware License (Version 42)",
+    "seeAlsos" : [ "http://people.freebsd.org/~phk/" ]
+  }, {
+    "licenseId" : "LicenseRef-3",
     "comment" : "This is tye CyperNeko License",
     "extractedText" : "The CyberNeko Software License, Version 1.0\n\n \n(C) Copyright 2002-2005, Andy Clark.  All rights reserved.\n \nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions\nare met:\n\n1. Redistributions of source code must retain the above copyright\n   notice, this list of conditions and the following disclaimer. \n\n2. Redistributions in binary form must reproduce the above copyright\n   notice, this list of conditions and the following disclaimer in\n   the documentation and/or other materials provided with the\n   distribution.\n\n3. The end-user documentation included with the redistribution,\n   if any, must include the following acknowledgment:  \n     \"This product includes software developed by Andy Clark.\"\n   Alternately, this acknowledgment may appear in the software itself,\n   if and wherever such third-party acknowledgments normally appear.\n\n4. The names \"CyberNeko\" and \"NekoHTML\" must not be used to endorse\n   or promote products derived from this software without prior \n   written permission. For written permission, please contact \n   andyc@cyberneko.net.\n\n5. Products derived from this software may not be called \"CyberNeko\",\n   nor may \"CyberNeko\" appear in their name, without prior written\n   permission of the author.\n\nTHIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED\nWARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\nOF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR OTHER CONTRIBUTORS\nBE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, \nOR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT \nOF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR \nBUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, \nWHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE \nOR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, \nEVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.",
-    "licenseId" : "LicenseRef-3",
     "name" : "CyberNeko License",
     "seeAlsos" : [ "http://people.apache.org/~andyc/neko/LICENSE", "http://justasample.url.com" ]
-  }, {
-    "extractedText" : "This package includes the GRDDL parser developed by Hewlett Packard under the following license:\n� Copyright 2007 Hewlett-Packard Development Company, LP\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: \n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. \nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. \nThe name of the author may not be used to endorse or promote products derived from this software without specific prior written permission. \nTHIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.",
-    "licenseId" : "LicenseRef-2"
-  }, {
-    "extractedText" : "/*\n * (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP\n * All rights reserved.\n *\n * Redistribution and use in source and binary forms, with or without\n * modification, are permitted provided that the following conditions\n * are met:\n * 1. Redistributions of source code must retain the above copyright\n *    notice, this list of conditions and the following disclaimer.\n * 2. Redistributions in binary form must reproduce the above copyright\n *    notice, this list of conditions and the following disclaimer in the\n *    documentation and/or other materials provided with the distribution.\n * 3. The name of the author may not be used to endorse or promote products\n *    derived from this software without specific prior written permission.\n *\n * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\n * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n*/",
-    "licenseId" : "LicenseRef-1"
   } ],
   "annotations" : [ {
     "annotationDate" : "2010-01-29T18:30:22Z",
@@ -43,15 +46,15 @@
     "annotator" : "Person: Jane Doe ()",
     "comment" : "Document level annotation"
   }, {
-    "annotationDate" : "2011-03-13T00:00:00Z",
-    "annotationType" : "REVIEW",
-    "annotator" : "Person: Suzanne Reviewer",
-    "comment" : "Another example reviewer."
-  }, {
     "annotationDate" : "2010-02-10T00:00:00Z",
     "annotationType" : "REVIEW",
     "annotator" : "Person: Joe Reviewer",
     "comment" : "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses"
+  }, {
+    "annotationDate" : "2011-03-13T00:00:00Z",
+    "annotationType" : "REVIEW",
+    "annotator" : "Person: Suzanne Reviewer",
+    "comment" : "Another example reviewer."
   } ],
   "documentNamespace" : "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
   "documentDescribes" : [ "SPDXRef-File", "SPDXRef-Package" ],
@@ -65,11 +68,11 @@
     } ],
     "attributionTexts" : [ "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually." ],
     "checksums" : [ {
-      "algorithm" : "SHA1",
-      "checksumValue" : "85ed0817af83a24ad8da68c2b5094de69833983c"
-    }, {
       "algorithm" : "MD5",
       "checksumValue" : "624c1abb3664f4b35547e7c73864ad24"
+    }, {
+      "algorithm" : "SHA1",
+      "checksumValue" : "85ed0817af83a24ad8da68c2b5094de69833983c"
     }, {
       "algorithm" : "SHA256",
       "checksumValue" : "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"
@@ -78,17 +81,17 @@
     "description" : "The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.",
     "downloadLocation" : "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
     "externalRefs" : [ {
+      "referenceCategory" : "SECURITY",
+      "referenceLocator" : "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
+      "referenceType" : "cpe23Type"
+    }, {
       "comment" : "This is the external ref for Acme",
       "referenceCategory" : "OTHER",
       "referenceLocator" : "acmecorp/acmenator/4.1.3-alpha",
       "referenceType" : "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LocationRef-acmeforge"
-    }, {
-      "referenceCategory" : "SECURITY",
-      "referenceLocator" : "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
-      "referenceType" : "http://spdx.org/rdf/references/cpe23Type"
     } ],
     "filesAnalyzed" : true,
-    "hasFiles" : [ "SPDXRef-JenaLib", "SPDXRef-DoapSource", "SPDXRef-CommonsLangSrc" ],
+    "hasFiles" : [ "SPDXRef-CommonsLangSrc", "SPDXRef-JenaLib", "SPDXRef-DoapSource" ],
     "homepage" : "http://ftp.gnu.org/gnu/glibc",
     "licenseComments" : "The license for this project changed with the release of version x.y.  The version of the project included here post-dates the license change.",
     "licenseConcluded" : "(LGPL-2.0-only OR LicenseRef-3)",
@@ -107,7 +110,6 @@
     "versionInfo" : "2.11.1"
   }, {
     "SPDXID" : "SPDXRef-fromDoap-1",
-    "comment" : "This package was converted from a DOAP Project by the same name",
     "copyrightText" : "NOASSERTION",
     "downloadLocation" : "NOASSERTION",
     "filesAnalyzed" : false,
@@ -117,14 +119,19 @@
     "name" : "Apache Commons Lang"
   }, {
     "SPDXID" : "SPDXRef-fromDoap-0",
-    "comment" : "This package was converted from a DOAP Project by the same name",
     "copyrightText" : "NOASSERTION",
-    "downloadLocation" : "NOASSERTION",
+    "downloadLocation" : "https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz",
+    "externalRefs" : [ {
+      "referenceCategory" : "PACKAGE_MANAGER",
+      "referenceLocator" : "pkg:maven/org.apache.jena/apache-jena@3.12.0",
+      "referenceType" : "purl"
+    } ],
     "filesAnalyzed" : false,
     "homepage" : "http://www.openjena.org/",
     "licenseConcluded" : "NOASSERTION",
     "licenseDeclared" : "NOASSERTION",
-    "name" : "Jena"
+    "name" : "Jena",
+    "versionInfo" : "3.12.0"
   }, {
     "SPDXID" : "SPDXRef-Saxon",
     "checksums" : [ {
@@ -151,7 +158,6 @@
     } ],
     "copyrightText" : "Copyright 2010, 2011 Source Auditor Inc.",
     "fileContributors" : [ "Protecode Inc.", "SPDX Technical Team Members", "Open Logic Inc.", "Source Auditor Inc.", "Black Duck Software In.c" ],
-    "fileDependencies" : [ "SPDXRef-JenaLib", "SPDXRef-CommonsLangSrc" ],
     "fileName" : "./src/org/spdx/parser/DOAPProject.java",
     "fileTypes" : [ "SOURCE" ],
     "licenseConcluded" : "Apache-2.0",
@@ -179,7 +185,6 @@
     "comment" : "This file belongs to Jena",
     "copyrightText" : "(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP",
     "fileContributors" : [ "Apache Software Foundation", "Hewlett Packard Inc." ],
-    "fileDependencies" : [ "SPDXRef-CommonsLangSrc" ],
     "fileName" : "./lib-source/jena-2.6.3-sources.jar",
     "fileTypes" : [ "ARCHIVE" ],
     "licenseComments" : "This license is used by Jena",
@@ -194,11 +199,11 @@
       "comment" : "File level annotation"
     } ],
     "checksums" : [ {
-      "algorithm" : "MD5",
-      "checksumValue" : "624c1abb3664f4b35547e7c73864ad24"
-    }, {
       "algorithm" : "SHA1",
       "checksumValue" : "d6a770ba38583ed4bb4525bd96e50461655d2758"
+    }, {
+      "algorithm" : "MD5",
+      "checksumValue" : "624c1abb3664f4b35547e7c73864ad24"
     } ],
     "comment" : "The concluded license was taken from the package level that the file was included in.\nThis information was found in the COPYING.txt file in the xyz directory.",
     "copyrightText" : "Copyright 2008-2010 John Smith",
@@ -220,20 +225,20 @@
     "name" : "from linux kernel",
     "ranges" : [ {
       "endPointer" : {
-        "lineNumber" : 23,
-        "reference" : "SPDXRef-DoapSource"
-      },
-      "startPointer" : {
-        "lineNumber" : 5,
-        "reference" : "SPDXRef-DoapSource"
-      }
-    }, {
-      "endPointer" : {
         "offset" : 420,
         "reference" : "SPDXRef-DoapSource"
       },
       "startPointer" : {
         "offset" : 310,
+        "reference" : "SPDXRef-DoapSource"
+      }
+    }, {
+      "endPointer" : {
+        "lineNumber" : 23,
+        "reference" : "SPDXRef-DoapSource"
+      },
+      "startPointer" : {
+        "lineNumber" : 5,
         "reference" : "SPDXRef-DoapSource"
       }
     } ],
@@ -245,24 +250,24 @@
     "relationshipType" : "CONTAINS"
   }, {
     "spdxElementId" : "SPDXRef-DOCUMENT",
-    "relatedSpdxElement" : "SPDXRef-File",
-    "relationshipType" : "DESCRIBES"
-  }, {
-    "spdxElementId" : "SPDXRef-DOCUMENT",
     "relatedSpdxElement" : "DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement",
     "relationshipType" : "COPY_OF"
+  }, {
+    "spdxElementId" : "SPDXRef-DOCUMENT",
+    "relatedSpdxElement" : "SPDXRef-File",
+    "relationshipType" : "DESCRIBES"
   }, {
     "spdxElementId" : "SPDXRef-DOCUMENT",
     "relatedSpdxElement" : "SPDXRef-Package",
     "relationshipType" : "DESCRIBES"
   }, {
     "spdxElementId" : "SPDXRef-Package",
-    "relatedSpdxElement" : "SPDXRef-Saxon",
-    "relationshipType" : "DYNAMIC_LINK"
-  }, {
-    "spdxElementId" : "SPDXRef-Package",
     "relatedSpdxElement" : "SPDXRef-JenaLib",
     "relationshipType" : "CONTAINS"
+  }, {
+    "spdxElementId" : "SPDXRef-Package",
+    "relatedSpdxElement" : "SPDXRef-Saxon",
+    "relationshipType" : "DYNAMIC_LINK"
   }, {
     "spdxElementId" : "SPDXRef-CommonsLangSrc",
     "relatedSpdxElement" : "NOASSERTION",
