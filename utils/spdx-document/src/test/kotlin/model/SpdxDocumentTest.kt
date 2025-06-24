@@ -38,6 +38,8 @@ import org.ossreviewtoolkit.utils.test.readResource
  *
  * The "*-no-ranges.spdx.*" resource files have the "ranges" property removed, which is actually broken in the
  * specification and impossible to implement.
+ *
+ * Note: The examples files of v2.2.2, v2.2.1 and also v2.2.1-ISO-final are identical.
  */
 class SpdxDocumentTest : WordSpec({
     "The official YAML example from the SPDX specification version 2.2.2" should {
