@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import org.gradle.kotlin.dsl.support.uppercaseFirstChar
+
 plugins {
     // Apply core plugins.
     `version-catalog`
@@ -30,6 +32,7 @@ gradle.projectsEvaluated {
     catalog {
         versionCatalog {
             val hyphenRegex = Regex("([a-z])-([a-z])")
+            val reservedPrefixes = setOf("bundles", "plugins", "versions")
 
             rootProject.subprojects.filter { subproject ->
                 subproject.pluginManager.hasPlugin("ort-publication-conventions")
@@ -40,8 +43,15 @@ gradle.projectsEvaluated {
                     }
                     .replace(File.separatorChar, '-')
 
+                val safeAlias = if (reservedPrefixes.any { alias.startsWith("$it-") }) {
+                    // Add a prefix to work around reserved words e.g. for ORT's own plugins.
+                    "ort${alias.uppercaseFirstChar()}"
+                } else {
+                    alias
+                }
+
                 with(subproject) {
-                    library("ort-$alias", "$group:$name:$version")
+                    library(safeAlias, "$group:$name:$version")
                 }
             }
         }
