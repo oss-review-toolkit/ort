@@ -19,16 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.reporters.aosd
 
-import com.networknt.schema.InputFormat
-import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
-
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
@@ -37,18 +32,16 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getResource
+import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.readResource
 
 class Aosd21ReporterFunTest : WordSpec({
     "The example JSON report" should {
         "be valid according to the schema" {
-            val schemaResource = getResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")
-            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaResource.toURI())
-
+            val schemaJson = readResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")
             val example = readResource("/aosd21/AOSD2.1_Example_Json_Import_File_V2.1.0.json")
-            val errors = schema.validate(example, InputFormat.JSON)
 
-            errors should beEmpty()
+            example should matchJsonSchema(schemaJson)
         }
 
         "deserialize correctly" {
@@ -69,13 +62,11 @@ class Aosd21ReporterFunTest : WordSpec({
         val reportFiles = Aosd21Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
         "be valid according to the schema" {
-            val schemaResource = getResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")
-            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaResource.toURI())
+            val schemaJson = readResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")
 
             reportFiles.forAll {
                 it shouldBeSuccess { reportFile ->
-                    val errors = schema.validate(reportFile.readText(), InputFormat.JSON)
-                    errors should beEmpty()
+                    reportFile.readText() should matchJsonSchema(schemaJson)
                 }
             }
         }

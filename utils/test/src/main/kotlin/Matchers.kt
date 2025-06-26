@@ -22,6 +22,10 @@ package org.ossreviewtoolkit.utils.test
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 
+import com.networknt.schema.InputFormat
+import com.networknt.schema.JsonSchemaFactory
+import com.networknt.schema.SpecVersion
+
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.collections.beEmpty
@@ -119,3 +123,15 @@ fun matchExpectedResult(
         )
     }
 }
+
+fun matchJsonSchema(schemaJson: String): Matcher<String> =
+    Matcher { actual ->
+        val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaJson)
+        val violations = schema.validate(actual, InputFormat.JSON)
+
+        MatcherResult(
+            violations.isEmpty(),
+            { violations.joinToString(separator = "\n") { "${it.evaluationPath} => ${it.message}" } },
+            { "Expected some violation against JSON schema, but everything matched" }
+        )
+    }
