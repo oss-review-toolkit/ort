@@ -27,6 +27,7 @@ import com.sksamuel.hoplite.PropertySource
 import com.sksamuel.hoplite.addEnvironmentSource
 import com.sksamuel.hoplite.fp.getOrElse
 import com.sksamuel.hoplite.indent
+import com.sksamuel.hoplite.internal.DecodeMode
 import com.sksamuel.hoplite.resolver.context.ContextResolverMode
 
 import java.io.File
@@ -165,9 +166,13 @@ data class OrtConfiguration(
          * 2. [Configuration file][file]
          *
          * The configuration file is optional and does not have to exist. However, if it exists, but does not
-         * contain a valid configuration, an [IllegalArgumentException] is thrown.
+         * contain a valid configuration according to [mode], an [IllegalArgumentException] is thrown.
          */
-        fun load(args: Map<String, String>? = null, file: File? = null): OrtConfiguration {
+        fun load(
+            args: Map<String, String>? = null,
+            file: File? = null,
+            mode: DecodeMode = DecodeMode.Lenient
+        ): OrtConfiguration {
             val sources = listOfNotNull(
                 args?.filterKeys { it.startsWith("ort.") }?.takeUnless { it.isEmpty() }?.let {
                     logger.info {
@@ -188,6 +193,7 @@ data class OrtConfiguration(
                 .addEnvironmentSource()
                 .addPropertySources(sources)
                 .withContextResolverMode(ContextResolverMode.SkipUnresolved)
+                .withDecodeMode(mode)
                 .build()
 
             val configResult = loader.loadConfig<OrtConfiguration>(prefix = "ort")
