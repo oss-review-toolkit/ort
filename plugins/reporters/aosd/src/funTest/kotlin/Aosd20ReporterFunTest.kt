@@ -54,8 +54,7 @@ class Aosd20ReporterFunTest : WordSpec({
     }
 
     "The generated report" should {
-        val outputDir = tempdir()
-        val reportFiles = Aosd20Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
+        val reportFiles = Aosd20Reporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
 
         "be valid according to the schema" {
             val schemaJson = readResource("/aosd20/aosd.schema.json")
