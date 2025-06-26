@@ -30,6 +30,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.mordant.rendering.Theme
 
+import com.sksamuel.hoplite.internal.DecodeMode
+
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
@@ -100,7 +102,7 @@ class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descript
 
         checkSyntax?.run {
             runCatching {
-                OrtConfiguration.load(file = this)
+                OrtConfiguration.load(file = this, mode = DecodeMode.Strict)
             }.onSuccess {
                 echo(Theme.Default.success("The file '$canonicalPath' contains valid global ORT configuration."))
             }.recoverCatching {
