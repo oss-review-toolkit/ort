@@ -39,6 +39,5 @@ dependencies {
 
     funTestImplementation(testFixtures(projects.reporter))
 
-    funTestImplementation(libs.jsonSchemaValidator)
     funTestImplementation(libs.kotest.assertions.json)
 }

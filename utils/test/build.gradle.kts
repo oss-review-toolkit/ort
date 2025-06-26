@@ -37,6 +37,7 @@ dependencies {
 
     implementation(libs.diffUtils)
     implementation(libs.jackson.module.kotlin)
+    implementation(libs.jsonSchemaValidator)
     implementation(libs.kotest.extensions.junitXml)
     implementation(libs.kotest.framework.engine)
     implementation(libs.postgresEmbedded)

@@ -19,16 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.reporters.aosd
 
-import com.networknt.schema.InputFormat
-import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
-
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
@@ -36,18 +31,16 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getResource
+import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.readResource
 
 class Aosd20ReporterFunTest : WordSpec({
     "The example JSON report" should {
         "be valid according to the schema" {
-            val schemaResource = getResource("/aosd20/aosd.schema.json")
-            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaResource.toURI())
-
+            val schemaJson = readResource("/aosd20/aosd.schema.json")
             val example = readResource("/aosd20/aosd.example.json")
-            val errors = schema.validate(example, InputFormat.JSON)
 
-            errors should beEmpty()
+            example should matchJsonSchema(schemaJson)
         }
 
         "deserialize correctly" {
@@ -65,13 +58,11 @@ class Aosd20ReporterFunTest : WordSpec({
         val reportFiles = Aosd20Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
         "be valid according to the schema" {
-            val schemaResource = getResource("/aosd20/aosd.schema.json")
-            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaResource.toURI())
+            val schemaJson = readResource("/aosd20/aosd.schema.json")
 
             reportFiles.forAll {
                 it shouldBeSuccess { reportFile ->
-                    val errors = schema.validate(reportFile.readText(), InputFormat.JSON)
-                    errors should beEmpty()
+                    reportFile.readText() should matchJsonSchema(schemaJson)
                 }
             }
         }
