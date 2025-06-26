@@ -31,8 +31,8 @@ class SpdxExternalReferenceTest : WordSpec({
             SpdxModelMapper.toJson(SpdxExternalReference.Category.entries) shouldEqualJson """
                 [
                   "SECURITY",
-                  "PACKAGE_MANAGER",
-                  "PERSISTENT_ID",
+                  "PACKAGE-MANAGER",
+                  "PERSISTENT-ID",
                   "OTHER"
                 ]
             """.trimIndent()

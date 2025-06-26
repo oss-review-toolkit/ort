@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.spdxdocument.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -65,10 +66,12 @@ data class SpdxExternalReference(
     enum class Category {
         SECURITY,
 
-        @JsonAlias("PACKAGE-MANAGER")
+        @JsonProperty("PACKAGE-MANAGER")
+        @JsonAlias("PACKAGE_MANAGER")
         PACKAGE_MANAGER,
 
-        @JsonAlias("PERSISTENT-ID")
+        @JsonProperty("PERSISTENT-ID")
+        @JsonAlias("PERSISTENT_ID")
         PERSISTENT_ID,
 
         OTHER
