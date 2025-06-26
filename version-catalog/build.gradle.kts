@@ -54,6 +54,15 @@ gradle.projectsEvaluated {
                     library(safeAlias, "$group:$name:$version")
                 }
             }
+
+            bundle(
+                "scriptDefinitions",
+                listOf(
+                    "evaluator", // Contains the script definition for "*.rules.kts" files.
+                    "notifier",  // Contains the script definition for "*.notifications.kts" files.
+                    "reporter"   // Contains the script definition for "*.how-to-fix-text-provider.kts" files.
+                )
+            )
         }
     }
 }
