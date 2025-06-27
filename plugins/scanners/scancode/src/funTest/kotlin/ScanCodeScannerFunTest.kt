@@ -39,7 +39,7 @@ class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest() {
 
     override val expectedDirectoryLicenses = listOf(
         LicenseFinding("Apache-2.0", TextLocation("COPYING", 1, 201), 99.43f),
-        LicenseFinding("Apache-2.0", TextLocation("LICENCE", 1, 201), 99.43f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENCE", 1, 201), 100.0f),
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 201), 100.0f)
     )
 
