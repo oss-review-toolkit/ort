@@ -170,8 +170,6 @@ class Gradle(
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
-        val gradleProperties = mutableListOf<Pair<String, String>>()
-
         val projectDir = definitionFile.parentFile
         val isRootProject = GRADLE_SETTINGS_FILES.any { projectDir.resolve(it).isFile }
 
@@ -181,17 +179,6 @@ class Gradle(
 
         // Do not reset the root project directory for subprojects.
         if (isRootProject || isIndependentProject) rootProjectDir = projectDir
-
-        val userPropertiesFile = GRADLE_USER_HOME.resolve("gradle.properties")
-        if (userPropertiesFile.isFile) {
-            userPropertiesFile.inputStream().use {
-                val properties = Properties().apply { load(it) }
-
-                properties.mapNotNullTo(gradleProperties) { (key, value) ->
-                    ((key as String) to (value as String)).takeUnless { key.startsWith("systemProp.") }
-                }
-            }
-        }
 
         val gradleConnector = GradleConnector.newConnector()
 
@@ -208,7 +195,7 @@ class Gradle(
         // Gradle's default maximum heap is 512 MiB which is too low for bigger projects,
         // see https://docs.gradle.org/current/userguide/build_environment.html#sec:configuring_jvm_memory.
         // Set the value to empirically determined 8 GiB if no value is set in "~/.gradle/gradle.properties".
-        val jvmArgs = gradleProperties.toMap().get("org.gradle.jvmargs").orEmpty()
+        val jvmArgs = getGradleProperties()["org.gradle.jvmargs"].orEmpty()
             .replace("MaxPermSize", "MaxMetaspaceSize") // Replace a deprecated JVM argument.
             .splitOnWhitespace()
             .mapTo(mutableListOf()) { it.unquote() }
@@ -329,3 +316,14 @@ class Gradle(
         mavenSupport.close()
     }
 }
+
+private fun getGradleProperties(): Map<String, String> =
+    GRADLE_USER_HOME.resolve("gradle.properties")
+        .takeIf { it.isFile }
+        ?.inputStream()
+        ?.use { Properties().apply { load(it) } }
+        ?.mapNotNull { (key, value) ->
+            key.toString().takeUnless { it.startsWith("systemProp.") }?.let { it to value.toString() }
+        }
+        ?.toMap()
+        .orEmpty()
