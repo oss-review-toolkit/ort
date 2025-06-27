@@ -73,12 +73,26 @@ class SwiftPmFunTest : WordSpec({
         }
     }
 
-    "Analyzing a lockfile with a dependency loaded over SPM registry instead of source control" should {
+    @Suppress("MaxLineLength")
+    "Analyzing a lockfile with a dependency loaded over SPM registry instead of source control with no registry config present" should {
         "return the correct result" {
             val definitionFile =
                 getAssetFile("projects/synthetic/only-lockfile-v3-with-SPM-registry-dependency/Package.resolved")
             val expectedResultFile =
                 getAssetFile("projects/synthetic/expected-output-only-lockfile-v3-with-SPM-registry-dependency.yml")
+
+            val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
+
+            result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+    }
+
+    "Analyzing a lockfile with a dependency loaded over SPM registry with registry configuration" should {
+        "return the correct result" {
+            val definitionFile =
+                getAssetFile("projects/synthetic/lockfile-v3-with-SPM-registry-configuration/Package.resolved")
+            val expectedResultFile =
+                getAssetFile("projects/synthetic/expected-lockfile-v3-with-SPM-registry-configuration.yml")
 
             val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
 
@@ -120,6 +134,17 @@ class SwiftPmFunTest : WordSpec({
                 .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+    }
+
+    "readSwiftPackageRegistryConfiguration()" should {
+        "parse a valid 'registries.json' file correctly" {
+            val registriesFile = getAssetFile("projects/synthetic/registry-configuration/registries.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-registry-configuration.yml")
+
+            val result = readSwiftPackageRegistryConfiguration(registriesFile)
+
+            result.toYaml() should matchExpectedResult(expectedResultFile, registriesFile)
         }
     }
 })

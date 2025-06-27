@@ -1,0 +1,5 @@
+---
+version: 1
+registries:
+  some-scope:
+    url: "https://some.artifactory.url/artifactory/api/swift/swift"

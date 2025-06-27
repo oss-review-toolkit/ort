@@ -1,0 +1,13 @@
+{
+  "pins" : [
+    {
+      "identity" : "alamofire.alamofire",
+      "kind" : "registry",
+      "location" : "",
+      "state" : {
+        "version" : "5.4.4"
+      }
+    }
+  ],
+  "version" : 3
+}
