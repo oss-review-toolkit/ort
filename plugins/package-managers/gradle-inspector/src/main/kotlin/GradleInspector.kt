@@ -271,13 +271,12 @@ private fun readGradleProperties(projectDir: File): Map<String, String> {
         val propertiesFile = currentDir?.resolve("gradle.properties")
 
         if (propertiesFile?.isFile == true) {
-            propertiesFile.inputStream().use {
-                val properties = Properties().apply { load(it) }
-
-                properties.mapNotNullTo(gradleProperties) { (key, value) ->
+            propertiesFile
+                .inputStream()
+                .use { Properties().apply { load(it) } }
+                .mapNotNullTo(gradleProperties) { (key, value) ->
                     ((key as String) to (value as String)).takeUnless { key.startsWith("systemProp.") }
                 }
-            }
 
             break
         }
