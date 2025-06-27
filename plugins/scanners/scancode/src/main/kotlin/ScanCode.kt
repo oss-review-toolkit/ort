@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 import java.io.File
 import java.time.Instant
 
-import kotlin.math.max
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
@@ -90,12 +88,6 @@ class ScanCode(
         buildList {
             addAll(config.commandLine)
             addAll(config.commandLineNonConfig)
-
-            if ("--processes" !in config.commandLineNonConfig) {
-                val maxProcesses = max(1, Runtime.getRuntime().availableProcessors() - 1)
-                add("--processes")
-                add(maxProcesses.toString())
-            }
 
             if (Semver(version).isGreaterThanOrEqualTo(LICENSE_REFERENCES_OPTION_VERSION)) {
                 // Required to be able to map ScanCode license keys to SPDX IDs.
