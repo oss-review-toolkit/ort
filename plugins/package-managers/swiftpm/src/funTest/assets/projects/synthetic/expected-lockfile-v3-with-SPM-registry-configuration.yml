@@ -1,0 +1,48 @@
+---
+project:
+  id: "SwiftPM::src/funTest/assets/projects/synthetic/lockfile-v3-with-SPM-registry-configuration/Package.resolved:<REPLACE_REVISION>"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Swift::alamofire.alamofire:5.4.4"
+packages:
+- id: "Swift::alamofire.alamofire:5.4.4"
+  purl: "pkg:swift/alamofire.alamofire@5.4.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://some.other.artifactory.url/artifactory/api/swift/swift/alamofire/alamofire/alamofire-5.4.4.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""

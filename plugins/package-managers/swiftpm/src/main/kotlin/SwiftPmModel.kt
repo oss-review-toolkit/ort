@@ -21,13 +21,20 @@ package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import java.io.File
 import java.io.IOException
+import java.lang.invoke.MethodHandles
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+
+import org.apache.logging.log4j.kotlin.loggerOf
+
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 
 private val json = Json { ignoreUnknownKeys = true }
 
@@ -85,6 +92,20 @@ private data class PinV1(
     @SerialName("repositoryURL") val repositoryUrl: String
 )
 
+/**
+ * See https://github.com/swiftlang/swift-package-manager/blob/cdb56746f0658b79aebb4b198e6cd7defe18a3c1/Sources/PackageRegistry/RegistryConfiguration.swift#L403
+ */
+@Serializable
+internal data class SwiftPackageRegistryConfiguration(
+    val version: Int,
+    val registries: Map<String, Registry> = emptyMap() // Map contains the mapping SCOPE <-> Registry
+) {
+    @Serializable
+    data class Registry(
+        val url: String
+    )
+}
+
 internal fun parseLockfile(packageResolvedFile: File): Result<Set<PinV2>> =
     runCatching {
         val root = json.parseToJsonElement(packageResolvedFile.readText()).jsonObject
@@ -128,3 +149,27 @@ private fun PinV1.toPinV2(projectDir: File): PinV2 =
             PinV2.Kind.REMOTE_SOURCE_CONTROL
         }
     )
+
+internal fun readSwiftPackageRegistryConfiguration(registriesFile: File): SwiftPackageRegistryConfiguration? =
+    if (!registriesFile.isFile) {
+        null
+    } else {
+        runCatching {
+            json.decodeFromStream<SwiftPackageRegistryConfiguration>(registriesFile.inputStream())
+        }.onFailure { e ->
+            val logger = loggerOf(MethodHandles.lookup().lookupClass())
+            if (e is IllegalArgumentException) {
+                logger.error(e) { "Failed to parse SwiftPackageRegistryConfiguration from: '$registriesFile'" }
+            } else {
+                logger.error(e) { "Failed to read SwiftPackageRegistryConfiguration from: '$registriesFile'" }
+            }
+        }.getOrNull()
+    }
+
+private const val REGISTRY_CONFIGURATION_PATH = ".swiftpm/configuration/registries.json"
+
+internal fun readLocalSwiftPackageRegistryConfiguration(projectRoot: File): SwiftPackageRegistryConfiguration? =
+    readSwiftPackageRegistryConfiguration(projectRoot / REGISTRY_CONFIGURATION_PATH)
+
+internal fun readUserLevelSwiftPackageRegistryConfiguration(): SwiftPackageRegistryConfiguration? =
+    readSwiftPackageRegistryConfiguration(Os.userHomeDirectory / REGISTRY_CONFIGURATION_PATH)

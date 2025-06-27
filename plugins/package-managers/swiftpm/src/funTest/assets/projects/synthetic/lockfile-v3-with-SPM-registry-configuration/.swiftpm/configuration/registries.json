@@ -1,0 +1,10 @@
+{
+  "authentication" : {},
+  "registries" : {
+    "alamofire" : {
+      "supportsAvailability" : false,
+      "url" : "https://some.other.artifactory.url/artifactory/api/swift/swift"
+    }
+  },
+  "version" : 1
+}
