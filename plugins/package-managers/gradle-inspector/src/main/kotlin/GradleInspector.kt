@@ -275,7 +275,7 @@ private fun readGradleProperties(projectDir: File): Map<String, String> {
                 .inputStream()
                 .use { Properties().apply { load(it) } }
                 .mapNotNullTo(gradleProperties) { (key, value) ->
-                    ((key as String) to (value as String)).takeUnless { key.startsWith("systemProp.") }
+                    key.toString().takeUnless { it.startsWith("systemProp.") }?.let { it to value.toString() }
                 }
 
             break
