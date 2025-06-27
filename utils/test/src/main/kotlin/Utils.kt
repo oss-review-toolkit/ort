@@ -190,14 +190,9 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
 
     return ScannerRun.EMPTY.copy(
         provenances = pkgScanResultsWithKnownProvenance.mapTo(mutableSetOf()) { (id, scanResultsForId) ->
-            val packageProvenance = scanResultsForId.firstOrNull()?.provenance as KnownProvenance
-
             ProvenanceResolutionResult(
                 id = id,
-                packageProvenance = packageProvenance,
-                subRepositories = emptyMap(),
-                packageProvenanceResolutionIssue = null,
-                nestedProvenanceResolutionIssue = null
+                packageProvenance = scanResultsForId.firstOrNull()?.provenance as KnownProvenance
             )
         },
         scanResults = scanResults,
