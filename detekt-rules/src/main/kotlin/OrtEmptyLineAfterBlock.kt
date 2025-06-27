@@ -90,4 +90,4 @@ private fun KtExpression.hasNewLine(count: Int = 1): Boolean =
 
 private fun PsiElement.isNewLine(count: Int = 1): Boolean = this is PsiWhiteSpace && "\n".repeat(count) in text
 
-private val allowedElements = setOf(KtTokens.DOT, KtTokens.RBRACE, KtTokens.RPAR)
+private val allowedElements = setOf(KtTokens.DOT, KtTokens.RBRACE, KtTokens.RPAR, KtTokens.SAFE_ACCESS)
