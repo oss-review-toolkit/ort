@@ -83,5 +83,3 @@ fun Any?.toJson(prettyPrint: Boolean = true): String {
 
     return writer.writeValueAsString(this)
 }
-
-fun String.readJsonTree(): JsonNode = jsonMapper.readTree(this)
