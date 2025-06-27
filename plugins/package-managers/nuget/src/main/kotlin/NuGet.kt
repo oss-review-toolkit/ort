@@ -51,7 +51,7 @@ data class NuGetConfig(
     description = "The NuGet package manager for .NET.",
     factory = PackageManagerFactory::class
 )
-class NuGet(override val descriptor: PluginDescriptor = NuGetFactory.descriptor, private val config: NuGetConfig) :
+class NuGet(override val descriptor: PluginDescriptor = NuGetFactory.descriptor, config: NuGetConfig) :
     PackageManager("NuGet") {
     override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj", "packages.config")
 
