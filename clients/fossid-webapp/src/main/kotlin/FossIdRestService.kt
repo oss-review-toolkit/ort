@@ -39,12 +39,14 @@ import java.util.concurrent.TimeUnit
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
 import org.ossreviewtoolkit.clients.fossid.model.Project
+import org.ossreviewtoolkit.clients.fossid.model.RemoveUploadContentResponse
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
@@ -62,6 +64,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -347,6 +350,24 @@ interface FossIdRestService {
 
     @POST("api.php")
     suspend fun addFileComment(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
+    @POST("api.php")
+    suspend fun extractArchives(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
+    @POST("api.php")
+    suspend fun removeUploadedContent(
+        @Body body: PostRequestBody
+    ): PolymorphicDataResponseBody<RemoveUploadContentResponse>
+
+    @POST("api.php")
+    @Headers("Content-Type: application/octet-stream")
+    suspend fun uploadFile(
+        @Header("FOSSID-SCAN-CODE") scanCodeB64: String,
+        @Header("FOSSID-FILE-NAME") fileNameB64: String,
+        @Header("Authorization") authorization: String,
+        @Header("Transfer-Encoding") transferEncoding: String,
+        @Body payload: RequestBody
+    ): EntityResponseBody<Nothing>
 
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
