@@ -19,9 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid.events
 
+import kotlin.time.Duration.Companion.minutes
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
+import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
@@ -30,14 +33,20 @@ import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
+import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.GIT_FETCH_DONE_REGEX
+import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.WAIT_DELAY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdConfig
 import org.ossreviewtoolkit.plugins.scanners.fossid.convertRules
 import org.ossreviewtoolkit.plugins.scanners.fossid.filterLegacyRules
+import org.ossreviewtoolkit.plugins.scanners.fossid.wait
 import org.ossreviewtoolkit.scanner.ScanContext
+
+import org.semver4j.Semver
 
 /**
  * An event handler when FossID clones a repository itself.
@@ -98,6 +107,10 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
         }
     }
 
+    override suspend fun beforeCheckScan(scanCode: String) {
+        waitDownloadComplete(scanCode)
+    }
+
     private suspend fun createIgnoreRules(
         scanCode: String,
         excludes: Excludes?,
@@ -132,5 +145,45 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
         }
 
         return excludeRuleIssues + legacyRuleIssues
+    }
+
+    /**
+     * Wait until the repository of a scan with [scanCode] has been downloaded.
+     */
+    private suspend fun waitDownloadComplete(scanCode: String) {
+        val result = wait(config.timeout.minutes, WAIT_DELAY) {
+            logger.info { "Checking download status for scan '$scanCode'." }
+
+            val response = service.checkDownloadStatus(config.user.value, config.apiKey.value, scanCode)
+                .checkResponse("check download status")
+
+            when (response.data?.value) {
+                DownloadStatus.FINISHED -> return@wait true
+
+                DownloadStatus.FAILED -> error("Could not download scan: ${response.message}.")
+
+                else -> {
+                    // There is a bug in FossID server version < 20.2: Sometimes the download is complete, but it stays
+                    // in "NOT FINISHED" state. Therefore, check the output of the Git fetch command to find out whether
+                    // the download has actually finished.
+                    val message = response.message
+                    val currentVersion = checkNotNull(Semver.coerce(service.version))
+                    val minVersion = checkNotNull(Semver.coerce("20.2"))
+                    if (currentVersion >= minVersion || message == null
+                        || !GIT_FETCH_DONE_REGEX.containsMatchIn(message)
+                    ) {
+                        return@wait false
+                    }
+
+                    logger.warn { "The download is not finished but Git Fetch has completed. Carrying on..." }
+
+                    return@wait true
+                }
+            }
+        }
+
+        requireNotNull(result) { "Timeout while waiting for the download to complete" }
+
+        logger.info { "Data download has been completed." }
     }
 }

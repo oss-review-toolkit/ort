@@ -41,7 +41,6 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.addComponentIdentification
 import org.ossreviewtoolkit.clients.fossid.addFileComment
-import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
@@ -59,7 +58,6 @@ import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
-import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.clients.fossid.unmarkAsIdentified
@@ -119,7 +117,7 @@ class FossId internal constructor(
         private val REPOSITORY_NAME_REGEX = Regex("""^.*/([\w.\-]+?)(?:\.git)?$""")
 
         @JvmStatic
-        private val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD(?: Already up to date.)*$")
+        internal val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD(?: Already up to date.)*$")
 
         /**
          * A regular expression to extract the artifact and version from a purl returned by FossID.
@@ -128,7 +126,7 @@ class FossId internal constructor(
         private val SNIPPET_PURL_REGEX = Regex("^.*/(?<artifact>[^@]+)@(?<version>.+)")
 
         @JvmStatic
-        private val WAIT_DELAY = 10.seconds
+        internal val WAIT_DELAY = 10.seconds
 
         @JvmStatic
         internal val SCAN_CODE_KEY = "scancode"
@@ -484,7 +482,9 @@ class FossId internal constructor(
             FossIdResult(existingScanCode, existingScan.id.toString())
         }
 
-        if (config.waitForResult) checkScan(result.scanCode)
+        // TODO: In the case of an already existing scan, the handler should be specific to this scan, not to the
+        //       configuration of the scanner.
+        if (config.waitForResult) checkScan(handler, result.scanCode)
 
         return result
     }
@@ -557,7 +557,7 @@ class FossId internal constructor(
         handler.afterScanCreation(scanCode, existingScan, issues, context)
 
         if (existingScan == null) {
-            if (config.waitForResult) checkScan(scanCode)
+            if (config.waitForResult) checkScan(handler, scanCode)
         } else {
             val existingScanCode = requireNotNull(existingScan.code) {
                 "The code for an existing scan must not be null."
@@ -571,7 +571,7 @@ class FossId internal constructor(
                 logger.info { "Ignoring unset 'waitForResult' because delta scans are requested." }
             }
 
-            checkScan(scanCode, *deltaScanRunParameters(existingScanCode))
+            checkScan(handler, scanCode, *deltaScanRunParameters(existingScanCode))
 
             enforceDeltaScanLimit(recentScans)
         }
@@ -641,8 +641,8 @@ class FossId internal constructor(
     /**
      * Check the repository has been downloaded and the scan has completed. The latter will be triggered if needed.
      */
-    private suspend fun checkScan(scanCode: String, vararg runOptions: Pair<String, String>) {
-        waitDownloadComplete(scanCode)
+    private suspend fun checkScan(handler: EventHandler, scanCode: String, vararg runOptions: Pair<String, String>) {
+        handler.beforeCheckScan(scanCode)
 
         val response = service.checkScanStatus(config.user.value, config.apiKey.value, scanCode)
             .checkResponse("check scan status", false)
@@ -673,57 +673,6 @@ class FossId internal constructor(
 
             waitScanComplete(scanCode)
         }
-    }
-
-    /**
-     * Loop for the lambda [condition] to return true, with the given [delay] between loop iterations. If the [timeout]
-     * has been reached, return in any case.
-     */
-    private suspend fun wait(timeout: Duration, delay: Duration, condition: suspend () -> Boolean) =
-        withTimeoutOrNull(timeout) {
-            while (!condition()) {
-                delay(delay)
-            }
-        }
-
-    /**
-     * Wait until the repository of a scan with [scanCode] has been downloaded.
-     */
-    private suspend fun waitDownloadComplete(scanCode: String) {
-        val result = wait(config.timeout.minutes, WAIT_DELAY) {
-            logger.info { "Checking download status for scan '$scanCode'." }
-
-            val response = service.checkDownloadStatus(config.user.value, config.apiKey.value, scanCode)
-                .checkResponse("check download status")
-
-            when (response.data?.value) {
-                DownloadStatus.FINISHED -> return@wait true
-
-                DownloadStatus.FAILED -> error("Could not download scan: ${response.message}.")
-
-                else -> {
-                    // There is a bug in FossID server version < 20.2: Sometimes the download is complete, but it stays
-                    // in "NOT FINISHED" state. Therefore, check the output of the Git fetch command to find out whether
-                    // the download has actually finished.
-                    val message = response.message
-                    val currentVersion = checkNotNull(Semver.coerce(version))
-                    val minVersion = checkNotNull(Semver.coerce("20.2"))
-                    if (currentVersion >= minVersion || message == null
-                        || !GIT_FETCH_DONE_REGEX.containsMatchIn(message)
-                    ) {
-                        return@wait false
-                    }
-
-                    logger.warn { "The download is not finished but Git Fetch has completed. Carrying on..." }
-
-                    return@wait true
-                }
-            }
-        }
-
-        requireNotNull(result) { "Timeout while waiting for the download to complete" }
-
-        logger.info { "Data download has been completed." }
     }
 
     /**
@@ -1052,3 +1001,14 @@ private data class FossIdResult(
     val scanId: String,
     val issues: List<Issue> = emptyList()
 )
+
+/**
+ * Loop for the lambda [condition] to return true, with the given [delay] between loop iterations. If the [timeout]
+ * has been reached, return in any case.
+ */
+internal suspend fun wait(timeout: Duration, delay: Duration, condition: suspend () -> Boolean) =
+    withTimeoutOrNull(timeout) {
+        while (!condition()) {
+            delay(delay)
+        }
+    }
