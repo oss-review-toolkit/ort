@@ -58,8 +58,8 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 // Replace prefixes of Git submodule repository URLs.
 private val REPOSITORY_URL_PREFIX_REPLACEMENTS = listOf(
@@ -72,7 +72,7 @@ object GitCommand : CommandLineTool {
     override fun command(workingDir: File?) = "git"
 
     // Require at least Git 2.29 on the client side as it has protocol "v2" enabled by default.
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.29")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=2.29")
 
     override fun transformVersion(output: String): String =
         versionRegex.matchEntire(output.lineSequence().first())?.let { match ->

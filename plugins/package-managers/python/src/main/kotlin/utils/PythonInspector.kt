@@ -31,8 +31,8 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 private val json = Json {
     ignoreUnknownKeys = true
@@ -44,7 +44,7 @@ internal object PythonInspector : CommandLineTool {
 
     override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[0.9.2,)")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create("[0.9.2,)")
 
     fun inspect(
         workingDir: File,

@@ -73,8 +73,8 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 private const val BAZEL_FALLBACK_VERSION = "7.0.1"
 private const val BAZEL_RC_FILE = ".bazelrc"
@@ -123,7 +123,7 @@ internal object BazelCommand : CommandLineTool {
     // Bazel 6.0 already supports bzlmod but it is not enabled by default.
     // Supporting it would require adding the flag "--enable_bzlmod=true" at the correct position of all bazel
     // invocations.
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=7.0")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=7.0")
 }
 
 internal object BuildozerCommand : CommandLineTool {

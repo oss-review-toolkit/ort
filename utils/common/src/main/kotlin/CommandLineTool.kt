@@ -23,9 +23,9 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
 import org.semver4j.Semver
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 /**
  * An interface to implement by classes that are backed by a command line tool.
@@ -35,7 +35,7 @@ interface CommandLineTool {
         /**
          * A convenience property to require any version.
          */
-        val ANY_VERSION: RangesList = RangesListFactory.create("*")
+        val ANY_VERSION: RangeList = RangeListFactory.create("*")
     }
 
     /**

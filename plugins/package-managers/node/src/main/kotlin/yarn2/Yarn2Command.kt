@@ -32,8 +32,8 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 /**
  * The name of Yarn 2+ resource file.
@@ -68,7 +68,7 @@ internal class Yarn2Command(private val corepackEnabled: Boolean?) : CommandLine
         // TODO: An alternative would be to collate the versions of all tools in `yarn2CommandsByPath`.
         if (workingDir == null) "" else super.getVersion(workingDir)
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.0.0")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=2.0.0")
 
     private fun isCorepackEnabled(workingDir: File): Boolean =
         corepackEnabled ?: isCorepackEnabledInManifest(workingDir)

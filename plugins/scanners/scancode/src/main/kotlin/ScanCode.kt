@@ -40,9 +40,9 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
 import org.semver4j.Semver
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 object ScanCodeCommand : CommandLineTool {
     override fun command(workingDir: File?): String {
@@ -57,7 +57,7 @@ object ScanCodeCommand : CommandLineTool {
         return listOfNotNull(workingDir, executable).joinToString(File.separator)
     }
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=30.0.0")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=30.0.0")
 
     override fun transformVersion(output: String): String =
         output.lineSequence().firstNotNullOfOrNull { line ->
