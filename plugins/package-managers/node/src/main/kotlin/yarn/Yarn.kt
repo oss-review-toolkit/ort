@@ -53,13 +53,13 @@ import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 internal object YarnCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("1.3.* - 1.22.*")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create("1.3.* - 1.22.*")
 }
 
 /**

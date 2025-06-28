@@ -23,9 +23,9 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
 import org.semver4j.Semver
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 /**
  * A list of Strings that are used by Ivy-style version ranges.
@@ -65,10 +65,10 @@ internal fun Identifier.isVersionRange(): Boolean {
     return !isSingleVersion
 }
 
-private fun Identifier.getVersionRanges(): RangesList? {
+private fun Identifier.getVersionRanges(): RangeList? {
     if (IVY_VERSION_RANGE_INDICATORS.none { version.contains(it, ignoreCase = true) }) return null
 
     return runCatching {
-        RangesListFactory.create(version).takeUnless { it.get().isEmpty() }
+        RangeListFactory.create(version).takeUnless { it.get().isEmpty() }
     }.getOrNull()
 }

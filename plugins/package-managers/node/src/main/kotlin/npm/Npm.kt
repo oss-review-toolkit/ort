@@ -48,13 +48,13 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 internal object NpmCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("6.* - 10.*")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create("6.* - 10.*")
 }
 
 data class NpmConfig(

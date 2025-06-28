@@ -43,8 +43,8 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
-import org.semver4j.RangesListFactory
 import org.semver4j.Semver
+import org.semver4j.range.RangeListFactory
 
 internal object PoetryCommand : CommandLineTool {
     override fun command(workingDir: File?) = "poetry"
@@ -162,7 +162,7 @@ internal fun parseScopeNamesFromPyproject(pyprojectFile: File): Set<String> {
 
 internal fun getPythonVersion(constraint: String): String? {
     val rangeLists = constraint.split(',')
-        .map { RangesListFactory.create(it) }
+        .map { RangeListFactory.create(it) }
         .takeIf { it.isNotEmpty() } ?: return null
 
     return PYTHON_VERSIONS.lastOrNull { version ->

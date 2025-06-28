@@ -65,8 +65,8 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 internal class ConanCommand(private val useConan2: Boolean = false) : CommandLineTool {
     override fun command(workingDir: File?) = if (useConan2) "conan2" else "conan"
@@ -76,7 +76,7 @@ internal class ConanCommand(private val useConan2: Boolean = false) : CommandLin
         // Conan version 1.18.0
         output.removePrefix("Conan version ")
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.44.0 <3.0")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=1.44.0 <3.0")
 
     override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
         super.run(args = args, workingDir, environment + ("CONAN_NON_INTERACTIVE" to "1"))

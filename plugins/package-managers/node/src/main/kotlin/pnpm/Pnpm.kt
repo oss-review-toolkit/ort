@@ -41,13 +41,13 @@ import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.nextOrNull
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 internal object PnpmCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("5.* - 9.*")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create("5.* - 9.*")
 }
 
 /**

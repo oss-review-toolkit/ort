@@ -52,8 +52,8 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 private const val EXTERNAL_SCOPE_NAME = "external"
 private const val TEST_SCOPE_NAME = "test"
@@ -66,7 +66,7 @@ internal object StackCommand : CommandLineTool {
     override fun transformVersion(output: String) =
         output.removePrefix("Version ").substringBefore(',').substringBefore(' ')
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.1.1")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=2.1.1")
 
     override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture {
         // Delete any left-overs from interrupted stack runs.

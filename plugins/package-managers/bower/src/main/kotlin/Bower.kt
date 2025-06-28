@@ -35,13 +35,13 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 internal object BowerCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.8.8")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=1.8.8")
 }
 
 /**

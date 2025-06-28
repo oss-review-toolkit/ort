@@ -77,8 +77,8 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
@@ -99,7 +99,7 @@ internal class PubCommand(private val flutterAbsolutePath: File) : CommandLineTo
         return transformVersion(result.stdout)
     }
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.10,)")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create("[2.10,)")
 
     override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
 

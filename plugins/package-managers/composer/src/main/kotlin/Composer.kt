@@ -51,8 +51,8 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 private const val COMPOSER_PHAR_BINARY = "composer.phar"
 private const val SCOPE_NAME_REQUIRE = "require"
@@ -77,7 +77,7 @@ internal object ComposerCommand : CommandLineTool {
         // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
         output.splitOnWhitespace().dropLast(2).last().removeSurrounding("(", ")")
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.5")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=1.5")
 }
 
 /**

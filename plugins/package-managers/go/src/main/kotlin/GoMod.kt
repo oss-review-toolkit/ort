@@ -54,8 +54,8 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
-import org.semver4j.RangesList
-import org.semver4j.RangesListFactory
+import org.semver4j.range.RangeList
+import org.semver4j.range.RangeListFactory
 
 internal object GoCommand : CommandLineTool {
     private val goPath by lazy { createOrtTempDir() }
@@ -74,7 +74,7 @@ internal object GoCommand : CommandLineTool {
 
     override fun transformVersion(output: String) = output.removePrefix("go version go").substringBefore(' ')
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.21.1")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=1.21.1")
 
     override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
         super.run(args = args, workingDir, environment + goEnvironment)
