@@ -43,14 +43,11 @@ import org.ossreviewtoolkit.clients.fossid.addComponentIdentification
 import org.ossreviewtoolkit.clients.fossid.addFileComment
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
-import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
-import org.ossreviewtoolkit.clients.fossid.downloadFromGit
 import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
-import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listMatchedLines
@@ -62,9 +59,6 @@ import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
-import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
-import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
-import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
@@ -79,8 +73,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.UnknownProvenance
-import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
@@ -88,6 +80,8 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.scanners.fossid.events.CloneRepositoryHandler
+import org.ossreviewtoolkit.plugins.scanners.fossid.events.EventHandler
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -215,7 +209,6 @@ class FossId internal constructor(
     }
 
     private val namingProvider = config.createNamingProvider()
-    private val urlProvider = config.createUrlProvider()
 
     // A list of all scans created in an ORT run, to be able to delete them in case of error.
     // The reasoning is that either all these scans are successful, either none is created at all (clean slate).
@@ -266,6 +259,8 @@ class FossId internal constructor(
     override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val startTime = Instant.now()
 
+        val handler = CloneRepositoryHandler(config, service)
+
         // FossID actually never uses the provenance determined by the scanner, but determines the source code to
         // download itself based on the passed VCS URL and revision, disregarding any VCS path.
         val pkg = context.coveredPackages.first()
@@ -273,9 +268,7 @@ class FossId internal constructor(
             ?.let { RepositoryProvenance(pkg.vcsProcessed, it) } ?: UnknownProvenance
 
         val issueMessage = when {
-            pkg.vcsProcessed.type != VcsType.GIT ->
-                "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but only " +
-                    "${VcsType.GIT} is supported."
+            !handler.isPackageValid(pkg) -> handler.getPackageInvalidErrorMessage(pkg)
 
             pkg.vcsProcessed.revision.isEmpty() ->
                 "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned."
@@ -309,9 +302,9 @@ class FossId internal constructor(
                 checkNotNull(scans)
 
                 val result = if (config.deltaScans) {
-                    checkAndCreateDeltaScan(scans, url, revision, projectCode, repositoryName, context)
+                    checkAndCreateDeltaScan(handler, scans, url, revision, projectCode, repositoryName, context)
                 } else {
-                    checkAndCreateScan(scans, url, revision, projectCode, repositoryName, context)
+                    checkAndCreateScan(handler, scans, url, revision, projectCode, repositoryName, context)
                 }
 
                 if (config.waitForResult && provenance is RepositoryProvenance) {
@@ -460,6 +453,7 @@ class FossId internal constructor(
      * Call FossID service, initiate a scan and return scan data: Scan Code and Scan Id
      */
     private suspend fun checkAndCreateScan(
+        handler: EventHandler,
         scans: List<Scan>,
         url: String,
         revision: String,
@@ -473,14 +467,11 @@ class FossId internal constructor(
             logger.info { "No scan found for $url and revision $revision. Creating scan..." }
 
             val scanCode = namingProvider.createScanCode(repositoryName = projectName, branch = revision)
-            val newUrl = urlProvider.getUrl(url)
+            val newUrl = handler.transformURL(url)
             val scanId = createScan(projectCode, scanCode, newUrl, revision)
 
-            logger.info { "Initiating the download..." }
-            service.downloadFromGit(config.user.value, config.apiKey.value, scanCode)
-                .checkResponse("download data from Git", false)
-
-            val issues = createIgnoreRules(scanCode, context.excludes)
+            val issues = mutableListOf<Issue>()
+            handler.afterScanCreation(scanCode, null, issues, context)
 
             FossIdResult(scanCode, scanId, issues)
         } else {
@@ -502,6 +493,7 @@ class FossId internal constructor(
      * Call FossID service, initiate a delta scan and return scan data: Scan Code and Scan Id
      */
     private suspend fun checkAndCreateDeltaScan(
+        handler: EventHandler,
         scans: List<Scan>,
         url: String,
         revision: String,
@@ -529,7 +521,7 @@ class FossId internal constructor(
             }
         }
 
-        val mappedUrl = urlProvider.getUrl(urlWithoutCredentials)
+        val mappedUrl = handler.transformURL(urlWithoutCredentials)
         val mappedUrlWithoutCredentials = mappedUrl.replaceCredentialsInUri()
 
         // Ignore the revision for delta scans.
@@ -560,37 +552,15 @@ class FossId internal constructor(
 
         val scanId = createScan(projectCode, scanCode, mappedUrl, revision, projectRevision.orEmpty())
 
-        logger.info { "Initiating the download..." }
-        service.downloadFromGit(config.user.value, config.apiKey.value, scanCode)
-            .checkResponse("download data from Git", false)
-
         val issues = mutableListOf<Issue>()
 
-        if (existingScan == null) {
-            issues += createIgnoreRules(scanCode, context.excludes)
+        handler.afterScanCreation(scanCode, existingScan, issues, context)
 
+        if (existingScan == null) {
             if (config.waitForResult) checkScan(scanCode)
         } else {
             val existingScanCode = requireNotNull(existingScan.code) {
                 "The code for an existing scan must not be null."
-            }
-
-            logger.info { "Loading ignore rules from '$existingScanCode'." }
-
-            // TODO: This is the old way of carrying the rules to the new delta scan, by querying the previous scan.
-            //       With the introduction of support for the ORT excludes, this old behavior can be dropped.
-            val ignoreRules = service.listIgnoreRules(config.user.value, config.apiKey.value, existingScanCode)
-                .checkResponse("list ignore rules")
-            ignoreRules.data?.let { rules ->
-                logger.info { "${rules.size} ignore rule(s) have been found." }
-
-                // When a scan is created with the optional property 'git_repo_url', the server automatically creates
-                // an 'ignore rule' to exclude the '.git' directory.
-                // Therefore, this rule will be created automatically and does not need to be carried from the old scan.
-                val exclusions = setOf(".git", "^\\.git")
-                val filteredRules = rules.filterNot { it.type == RuleType.DIRECTORY && it.value in exclusions }
-
-                issues += createIgnoreRules(scanCode, context.excludes, filteredRules)
             }
 
             logger.info { "Reusing identifications from scan '$existingScanCode'." }
@@ -631,42 +601,6 @@ class FossId internal constructor(
                     deleteScan(code)
                 }
             }
-    }
-
-    private suspend fun createIgnoreRules(
-        scanCode: String,
-        excludes: Excludes?,
-        existingRules: List<IgnoreRule> = emptyList()
-    ): List<Issue> {
-        val (excludesRules, excludeRuleIssues) = (excludes ?: Excludes.EMPTY).let {
-            convertRules(it).also { (rules, _) ->
-                logger.info { "${rules.size} rules from ORT excludes have been found." }
-            }
-        }
-
-        // Create an issue for each legacy rule.
-        val (legacyRules, legacyRuleIssues) = existingRules.filterLegacyRules(excludesRules)
-        if (legacyRules.isNotEmpty()) {
-            logger.warn { "${legacyRules.size} legacy rules have been found." }
-        }
-
-        val allRules = excludesRules + legacyRules
-        allRules.forEach {
-            service.createIgnoreRule(
-                config.user.value,
-                config.apiKey.value,
-                scanCode,
-                it.type,
-                it.value,
-                RuleScope.SCAN
-            ).checkResponse("create ignore rules", false)
-
-            logger.info {
-                "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
-            }
-        }
-
-        return excludeRuleIssues + legacyRuleIssues
     }
 
     /**
