@@ -134,9 +134,8 @@ class SpdxDocumentReporter(
         return outputFileFormats.map { fileFormat ->
             runCatching {
                 outputDir.resolve("$REPORT_BASE_FILENAME.${fileFormat.fileExtension}").apply {
-                    bufferedWriter().use { writer ->
-                        fileFormat.mapper.writeValue(writer, spdxDocument)
-                    }
+                    val spdxString = fileFormat.mapper.writeValueAsString(spdxDocument)
+                    writeText(spdxString.patchSpdx23To22())
                 }
             }
         }
@@ -167,3 +166,12 @@ private fun SpdxExpression.getLicenseRefExceptions(result: MutableSet<String>) {
         else -> {}
     }
 }
+
+private fun String.patchSpdx23To22() =
+    replace(spdxVersion22Regex, "$1SPDX-2.2$2")
+        .replace("PACKAGE-MANAGER", "PACKAGE_MANAGER")
+        .replace("PERSISTENT-ID", "PERSISTENT_ID")
+
+// JSON: "spdxVersion" : "SPDX-2.3",
+// YAML: spdxVersion: "SPDX-2.3"
+private val spdxVersion22Regex = """( *"?spdxVersion"? ?: ?")SPDX-2\.3(",?)""".toRegex()

@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 
 /**
  * Information about a file used in an [SpdxDocument].
- * See https://spdx.github.io/spdx-spec/v2.2.2/file-information/.
+ * See https://spdx.github.io/spdx-spec/v2.3/file-information/.
  */
 @JsonIgnoreProperties("ranges") // TODO: Implement ranges which is broken in the specification examples.
 data class SpdxFile(

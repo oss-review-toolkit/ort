@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
  * A relationship between two [SpdxDocument]s, [SpdxPackage]s or [SpdxFile]s.
- * See https://spdx.github.io/spdx-spec/v2.2.2/relationships-between-SPDX-elements/.
+ * See https://spdx.github.io/spdx-spec/v2.3/relationships-between-SPDX-elements/.
  */
 data class SpdxRelationship(
     /**
@@ -227,9 +227,19 @@ data class SpdxRelationship(
         PROVIDED_DEPENDENCY_OF,
 
         /**
+         * Is to be used when SPDXRef-A describes, illustrates, or specifies a requirement statement for SPDXRef-B.
+         */
+        REQUIREMENT_DESCRIPTION_FOR,
+
+        /**
          * Is to be used when SPDXRef-A is a dependency required for the execution of SPDXRef-B.
          */
         RUNTIME_DEPENDENCY_OF,
+
+        /**
+         * Is to be used when SPDXRef-A describes, illustrates, or defines a design specification for SPDXRef-B.
+         */
+        SPECIFICATION_FOR,
 
         /**
          * Is to be used when SPDXRef-A statically links to SPDXRef-B.

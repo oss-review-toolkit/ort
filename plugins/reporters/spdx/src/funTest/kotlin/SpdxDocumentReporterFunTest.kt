@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.reporters.spdx
 
-import io.kotest.common.ExperimentalKotest
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
@@ -43,7 +42,6 @@ import org.ossreviewtoolkit.utils.test.readResource
 
 class SpdxDocumentReporterFunTest : WordSpec({
     "Reporting to JSON" should {
-        @OptIn(ExperimentalKotest::class)
         "create a valid document" {
             val schemaJson = readResource("/spdx-v2.2.2-schema.json")
 
