@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid.events
 
+import org.ossreviewtoolkit.clients.fossid.PolymorphicDataResponseBody
+import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -44,6 +46,18 @@ interface EventHandler {
      * Transform the given VCS [url] if required.
      */
     fun transformURL(url: String): String = url
+
+    /**
+     * Create a scan in FossID with the given [projectCode], [scanCode], [url], [revision] and [reference]. Return the
+     * response from FossID or null if the scan could not be created.
+     */
+    suspend fun createScan(
+        projectCode: String,
+        scanCode: String,
+        url: String,
+        revision: String,
+        reference: String
+    ): PolymorphicDataResponseBody<CreateScanResponse>
 
     /**
      * Event handler that is called after a scan has been created.

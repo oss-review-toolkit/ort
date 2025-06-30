@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.clients.fossid.addComponentIdentification
 import org.ossreviewtoolkit.clients.fossid.addFileComment
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.createProject
-import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
@@ -466,7 +465,7 @@ class FossId internal constructor(
 
             val scanCode = namingProvider.createScanCode(repositoryName = projectName, branch = revision)
             val newUrl = handler.transformURL(url)
-            val scanId = createScan(projectCode, scanCode, newUrl, revision)
+            val scanId = createScan(handler, projectCode, scanCode, newUrl, revision)
 
             val issues = mutableListOf<Issue>()
             handler.afterScanCreation(scanCode, null, issues, context)
@@ -550,7 +549,7 @@ class FossId internal constructor(
             namingProvider.createScanCode(projectName, DeltaTag.DELTA, revision)
         }
 
-        val scanId = createScan(projectCode, scanCode, mappedUrl, revision, projectRevision.orEmpty())
+        val scanId = createScan(handler, projectCode, scanCode, mappedUrl, revision, projectRevision.orEmpty())
 
         val issues = mutableListOf<Issue>()
 
@@ -607,6 +606,7 @@ class FossId internal constructor(
      * Create a new scan in the FossID server and return the scan id.
      */
     private suspend fun createScan(
+        handler: EventHandler,
         projectCode: String,
         scanCode: String,
         url: String,
@@ -615,9 +615,7 @@ class FossId internal constructor(
     ): String {
         logger.info { "Creating scan '$scanCode'..." }
 
-        val response = service
-            .createScan(config.user.value, config.apiKey.value, projectCode, scanCode, url, revision, reference)
-            .checkResponse("create scan")
+        val response = handler.createScan(projectCode, scanCode, url, revision, reference)
 
         val data = response.data?.value
 
