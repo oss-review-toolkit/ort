@@ -167,26 +167,27 @@ suspend fun FossIdRestService.createScan(
     apiKey: String,
     projectCode: String,
     scanCode: String,
-    gitRepoUrl: String,
-    gitBranch: String,
+    gitRepoUrl: String? = null,
+    gitBranch: String? = null,
     comment: String = ""
-): PolymorphicDataResponseBody<CreateScanResponse> =
-    createScan(
+): PolymorphicDataResponseBody<CreateScanResponse> {
+    val options = buildMap {
+        put("project_code", projectCode)
+        put("scan_code", scanCode)
+        put("scan_name", scanCode)
+        put("comment", comment)
+
+        if (gitRepoUrl != null) put("git_repo_url", gitRepoUrl)
+
+        if (gitBranch != null) put("git_branch", gitBranch)
+    }
+
+    return createScan(
         PostRequestBody(
-            "create",
-            SCAN_GROUP,
-            user,
-            apiKey,
-            mapOf(
-                "project_code" to projectCode,
-                "scan_code" to scanCode,
-                "scan_name" to scanCode,
-                "git_repo_url" to gitRepoUrl,
-                "git_branch" to gitBranch,
-                "comment" to comment
-            )
+            "create", SCAN_GROUP, user, apiKey, options
         )
     )
+}
 
 /**
  * Trigger a scan with the given [scanCode]. Additional [options] can be passed to FossID.
