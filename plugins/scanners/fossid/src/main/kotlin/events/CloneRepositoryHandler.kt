@@ -24,11 +24,14 @@ import kotlin.time.Duration.Companion.minutes
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
+import org.ossreviewtoolkit.clients.fossid.PolymorphicDataResponseBody
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
+import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
 import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
+import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
@@ -61,6 +64,17 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
     }
 
     override fun transformURL(url: String): String = urlProvider.getUrl(url)
+
+    override suspend fun createScan(
+        projectCode: String,
+        scanCode: String,
+        url: String,
+        revision: String,
+        reference: String
+    ): PolymorphicDataResponseBody<CreateScanResponse> =
+        service
+            .createScan(config.user.value, config.apiKey.value, projectCode, scanCode, url, revision, reference)
+            .checkResponse("create scan")
 
     override suspend fun afterScanCreation(
         scanCode: String,
