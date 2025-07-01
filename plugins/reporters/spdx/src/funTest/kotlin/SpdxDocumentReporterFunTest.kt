@@ -101,6 +101,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 })
 
 private val defaultConfig = SpdxDocumentReporterConfig(
+    spdxVersion = "SPDX-2.2",
     creationInfoComment = "some creation info comment",
     creationInfoPerson = "some creation info person",
     creationInfoOrganization = "some creation info organization",

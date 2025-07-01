@@ -40,6 +40,12 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 
 data class SpdxDocumentReporterConfig(
     /**
+     * The SPDX version to use. Only accepts "SPDX-2.2" or "SPDX-2.3".
+     */
+    @OrtPluginOption(defaultValue = "SPDX-2.2")
+    val spdxVersion: String,
+
+    /**
      * The comment to add to the [SpdxDocument.creationInfo].
      */
     @OrtPluginOption(aliases = ["creationInfo.comment"])
