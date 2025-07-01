@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -66,10 +67,13 @@ import org.ossreviewtoolkit.utils.test.scannerRunOf
 // TODO: Create a way to reduce the code required to prepare an OrtResult for testing.
 val ORT_RESULT = OrtResult(
     repository = Repository(
-        vcs = VcsInfo(
-            type = VcsType.GIT,
-            url = "https://github.com/oss-review-toolkit/ort.git",
-            revision = "main"
+        provenance = RepositoryProvenance(
+            vcsInfo = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/oss-review-toolkit/ort.git",
+                revision = "main"
+            ),
+            resolvedRevision = "main"
         ),
         config = RepositoryConfiguration(
             excludes = Excludes(
