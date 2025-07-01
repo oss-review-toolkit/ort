@@ -28,15 +28,10 @@ import org.semver4j.RangesListFactory
 import org.semver4j.Semver
 
 /**
- * A list of Strings that are used by Ivy-style version ranges.
+ * Return true if the version of this [Identifier] interpreted as an Ivy, NPM or CocoaPods version range is applicable
+ * to the package with the given [identifier][pkgId].
  */
-private val IVY_VERSION_RANGE_INDICATORS = listOf(",", "~", "*", "+", ">", "<", "=", " - ", "^", ".x", "||")
-
-/**
- * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
- * package with the given [identifier][pkgId].
- */
-internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
+internal fun Identifier.isApplicableVersionRangeFor(pkgId: Identifier) =
     runCatching {
         if (version == pkgId.version) return true
 
@@ -66,7 +61,7 @@ internal fun Identifier.isVersionRange(): Boolean {
 }
 
 private fun Identifier.getVersionRanges(): RangesList? {
-    if (IVY_VERSION_RANGE_INDICATORS.none { version.contains(it, ignoreCase = true) }) return null
+    if (version.isEmpty()) return null
 
     return runCatching {
         RangesListFactory.create(version).takeUnless { it.get().isEmpty() }
