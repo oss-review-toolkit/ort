@@ -54,6 +54,12 @@ internal object SpdxDocumentModelMapper {
         val relationships = mutableListOf<SpdxRelationship>()
         val files = mutableListOf<SpdxFile>()
 
+        val wantSpdx23 = when (config.spdxVersion) {
+            "SPDX-2.2" -> false
+            "SPDX-2.3" -> true
+            else -> throw IllegalArgumentException("Unsupported SPDX version '${config.spdxVersion}'.")
+        }
+
         val projects = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).sortedBy { it.id }
         val projectPackages = projects.map { project ->
             val filesForProject = if (config.fileInformationEnabled) {
@@ -64,6 +70,7 @@ internal object SpdxDocumentModelMapper {
 
             val spdxProjectPackage = project.toPackage().toSpdxPackage(
                 SpdxPackageType.PROJECT,
+                wantSpdx23,
                 licenseInfoResolver,
                 ortResult
             ).copy(hasFiles = filesForProject.map { it.spdxId })
@@ -88,6 +95,7 @@ internal object SpdxDocumentModelMapper {
             val pkg = curatedPackage.metadata
             val binaryPackage = pkg.toSpdxPackage(
                 SpdxPackageType.BINARY_PACKAGE,
+                wantSpdx23,
                 licenseInfoResolver,
                 ortResult
             )
@@ -116,6 +124,7 @@ internal object SpdxDocumentModelMapper {
                 // TODO: The copyright text contains copyrights from all scan results.
                 val vcsPackage = pkg.toSpdxPackage(
                     SpdxPackageType.VCS_PACKAGE,
+                    wantSpdx23,
                     licenseInfoResolver,
                     ortResult
                 ).copy(hasFiles = filesForPackage.map { it.spdxId })
@@ -141,6 +150,7 @@ internal object SpdxDocumentModelMapper {
                 // TODO: The copyright text contains copyrights from all scan results.
                 val sourceArtifactPackage = pkg.toSpdxPackage(
                     SpdxPackageType.SOURCE_PACKAGE,
+                    wantSpdx23,
                     licenseInfoResolver,
                     ortResult
                 ).copy(hasFiles = filesForPackage.map { it.spdxId })
