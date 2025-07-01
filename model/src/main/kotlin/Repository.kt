@@ -29,9 +29,14 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
  */
 data class Repository(
     /**
+     * Provenance wrapper for original VCS information, if present.
+     */
+    val provenance: RepositoryProvenance,
+
+    /**
      * Original VCS-related information from the working tree containing the analyzer root.
      */
-    val vcs: VcsInfo,
+    val vcs: VcsInfo = provenance.vcsInfo,
 
     /**
      * Processed VCS-related information from the working tree containing the analyzer root that has e.g. common
@@ -57,6 +62,7 @@ data class Repository(
          */
         @JvmField
         val EMPTY = Repository(
+            provenance = RepositoryProvenance(VcsInfo.EMPTY, VcsInfo.EMPTY.revision),
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
             nestedRepositories = emptyMap(),

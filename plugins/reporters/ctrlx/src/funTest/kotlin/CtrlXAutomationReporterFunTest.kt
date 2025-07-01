@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
@@ -142,6 +143,8 @@ private fun createReporterInput(): ReporterInput {
         path = "sub/path"
     )
 
+    val analyzedProvenance = RepositoryProvenance(analyzedVcs, analyzedVcs.revision)
+
     val package1 = Package.EMPTY.copy(
         id = Identifier("Maven:ns:package1:1.0"),
         declaredLicenses = setOf("LicenseRef-scancode-broadcom-commercial"),
@@ -164,8 +167,7 @@ private fun createReporterInput(): ReporterInput {
     return ReporterInput(
         OrtResult(
             repository = Repository(
-                vcs = analyzedVcs,
-                vcsProcessed = analyzedVcs
+                provenance = analyzedProvenance
             ),
             analyzer = AnalyzerRun.EMPTY.copy(
                 result = AnalyzerResult(
