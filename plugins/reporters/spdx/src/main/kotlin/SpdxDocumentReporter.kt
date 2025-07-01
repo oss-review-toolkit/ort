@@ -107,20 +107,11 @@ class SpdxDocumentReporter(
         val outputFileFormats = config.outputFileFormats
             .mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
 
-        val params = SpdxDocumentModelMapper.SpdxDocumentParams(
-            documentName = config.documentName,
-            documentComment = config.documentComment.orEmpty(),
-            creationInfoComment = config.creationInfoComment.orEmpty(),
-            creationInfoPerson = config.creationInfoPerson.orEmpty(),
-            creationInfoOrganization = config.creationInfoOrganization.orEmpty(),
-            fileInformationEnabled = config.fileInformationEnabled
-        )
-
         val spdxDocument = SpdxDocumentModelMapper.map(
             input.ortResult,
             input.licenseInfoResolver,
             input.licenseTextProvider,
-            params
+            config
         )
 
         val licenseRefExceptions = spdxDocument.getLicenseRefExceptions()

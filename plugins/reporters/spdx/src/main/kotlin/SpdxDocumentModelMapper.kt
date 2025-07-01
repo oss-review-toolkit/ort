@@ -43,20 +43,11 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
  * A class for mapping [OrtResult]s to [SpdxDocument]s.
  */
 internal object SpdxDocumentModelMapper {
-    data class SpdxDocumentParams(
-        val documentName: String,
-        val documentComment: String,
-        val creationInfoComment: String,
-        val creationInfoPerson: String,
-        val creationInfoOrganization: String,
-        val fileInformationEnabled: Boolean
-    )
-
     fun map(
         ortResult: OrtResult,
         licenseInfoResolver: LicenseInfoResolver,
         licenseTextProvider: LicenseTextProvider,
-        params: SpdxDocumentParams
+        config: SpdxDocumentReporterConfig
     ): SpdxDocument {
         val nextFileIndex = AtomicInteger(1)
         val packages = mutableListOf<SpdxPackage>()
@@ -65,7 +56,7 @@ internal object SpdxDocumentModelMapper {
 
         val projects = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).sortedBy { it.id }
         val projectPackages = projects.map { project ->
-            val filesForProject = if (params.fileInformationEnabled) {
+            val filesForProject = if (config.fileInformationEnabled) {
                 ortResult.getSpdxFiles(project.id, licenseInfoResolver, VCS, nextFileIndex)
             } else {
                 emptyList()
@@ -116,7 +107,7 @@ internal object SpdxDocumentModelMapper {
             packages += binaryPackage
 
             if (pkg.vcsProcessed.url.isNotBlank()) {
-                val filesForPackage = if (params.fileInformationEnabled) {
+                val filesForPackage = if (config.fileInformationEnabled) {
                     ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, VCS, nextFileIndex)
                 } else {
                     emptyList()
@@ -141,7 +132,7 @@ internal object SpdxDocumentModelMapper {
             }
 
             if (pkg.sourceArtifact.url.isNotBlank()) {
-                val filesForPackage = if (params.fileInformationEnabled) {
+                val filesForPackage = if (config.fileInformationEnabled) {
                     ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, ARTIFACT, nextFileIndex)
                 } else {
                     emptyList()
@@ -167,22 +158,22 @@ internal object SpdxDocumentModelMapper {
         }
 
         val creators = listOfNotNull(
-            params.creationInfoPerson.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.PERSON} $it" },
-            params.creationInfoOrganization.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.ORGANIZATION} $it" },
+            config.creationInfoPerson?.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.PERSON} $it" },
+            config.creationInfoOrganization?.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.ORGANIZATION} $it" },
             "${SpdxConstants.TOOL} $ORT_NAME-$ORT_VERSION"
         )
 
         return SpdxDocument(
-            comment = params.documentComment,
+            comment = config.documentComment.orEmpty(),
             creationInfo = SpdxCreationInfo(
-                comment = params.creationInfoComment,
+                comment = config.creationInfoComment.orEmpty(),
                 created = Instant.now().truncatedTo(ChronoUnit.SECONDS),
                 creators = creators,
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.split('.').take(2).joinToString(".")
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
             documentDescribes = projectPackages.map { it.spdxId },
-            name = params.documentName,
+            name = config.documentName,
             packages = projectPackages + packages,
             relationships = relationships.sortedBy { it.spdxElementId },
             files = files
