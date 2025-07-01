@@ -244,8 +244,10 @@ private fun createOrtResult(): OrtResult {
 
     return OrtResult(
         repository = Repository(
-            vcs = analyzedVcs,
-            vcsProcessed = analyzedVcs
+            provenance = RepositoryProvenance(
+                vcsInfo = analyzedVcs,
+                resolvedRevision = analyzedVcs.revision
+            )
         ),
         analyzer = AnalyzerRun.EMPTY.copy(
             config = AnalyzerConfiguration(allowDynamicVersions = true),

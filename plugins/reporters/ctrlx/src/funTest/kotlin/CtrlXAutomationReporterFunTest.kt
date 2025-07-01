@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
@@ -165,8 +166,10 @@ private fun createReporterInput(): ReporterInput {
     return ReporterInput(
         OrtResult(
             repository = Repository(
-                vcs = analyzedVcs,
-                vcsProcessed = analyzedVcs
+                provenance = RepositoryProvenance(
+                    vcsInfo = analyzedVcs,
+                    resolvedRevision = analyzedVcs.revision
+                )
             ),
             analyzer = AnalyzerRun.EMPTY.copy(
                 result = AnalyzerResult(
