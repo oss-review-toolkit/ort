@@ -102,7 +102,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
     }
 })
 
-private val defaultConfig = SpdxDocumentReporterConfig(
+private val DEFAULT_CONFIG = SpdxDocumentReporterConfig(
     spdxVersion = SPDX_VERSION_2_2,
     creationInfoComment = "some creation info comment",
     creationInfoPerson = "some creation info person",
@@ -123,7 +123,7 @@ private fun TestConfiguration.generateReport(
 
     val outputDir = tempdir()
 
-    val config = defaultConfig.copy(
+    val config = DEFAULT_CONFIG.copy(
         fileInformationEnabled = fileInformationEnabled,
         outputFileFormats = listOf(format.name),
         spdxVersion = spdxVersion
