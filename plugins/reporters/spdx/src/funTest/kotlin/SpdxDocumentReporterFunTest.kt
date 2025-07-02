@@ -42,11 +42,11 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 import org.ossreviewtoolkit.utils.test.readResource
 
 class SpdxDocumentReporterFunTest : WordSpec({
-    "Reporting to JSON" should {
+    "Reporting SPDX-2.2 to JSON" should {
         "create a valid document" {
             val schemaJson = readResource("/spdx-v2.2.2-schema.json")
 
-            val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
+            val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON, SPDX_VERSION_2_2)
 
             jsonSpdxDocument should matchJsonSchema(schemaJson)
         }
@@ -54,7 +54,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
         "create the expected document for a synthetic scan result" {
             val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.json")
 
-            val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON)
+            val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON, SPDX_VERSION_2_2)
 
             jsonSpdxDocument shouldBe patchExpectedResult(
                 expectedResult,
@@ -66,6 +66,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             val jsonSpdxDocument = generateReport(
                 ORT_RESULT,
                 FileFormat.JSON,
+                SPDX_VERSION_2_2,
                 fileInformationEnabled = false
             )
 
@@ -75,11 +76,11 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
     }
 
-    "Reporting to YAML" should {
+    "Reporting SPDX-2.2 to YAML" should {
         "create the expected document for a synthetic scan result" {
             val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.yml")
 
-            val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML)
+            val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML, SPDX_VERSION_2_2)
 
             yamlSpdxDocument shouldBe patchExpectedResult(
                 expectedResult,
@@ -91,7 +92,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             val ortResultForGoProject = readOrtResult("/disclosure-cli-scan-result.yml")
             val expectedResult = readResource("/disclosure-cli-expected-output.spdx.yml")
 
-            val yamlSpdxDocument = generateReport(ortResultForGoProject, FileFormat.YAML)
+            val yamlSpdxDocument = generateReport(ortResultForGoProject, FileFormat.YAML, SPDX_VERSION_2_2)
 
             yamlSpdxDocument shouldBe patchExpectedResult(
                 expectedResult,
@@ -115,6 +116,7 @@ private val defaultConfig = SpdxDocumentReporterConfig(
 private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
     format: FileFormat,
+    spdxVersion: String,
     fileInformationEnabled: Boolean = true
 ): String {
     val input = ReporterInput(ortResult)
@@ -123,7 +125,8 @@ private fun TestConfiguration.generateReport(
 
     val config = defaultConfig.copy(
         fileInformationEnabled = fileInformationEnabled,
-        outputFileFormats = listOf(format.name)
+        outputFileFormats = listOf(format.name),
+        spdxVersion = spdxVersion
     )
 
     return SpdxDocumentReporter(config = config)
