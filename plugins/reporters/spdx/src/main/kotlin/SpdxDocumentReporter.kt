@@ -173,9 +173,7 @@ private fun ObjectNode.patchSpdx23To22(): ObjectNode {
     val packages = get("packages") ?: return this
 
     packages.forEach { pkg ->
-        val extRefs = pkg.get("externalRefs") ?: return@forEach
-
-        extRefs.forEach { ref ->
+        pkg.get("externalRefs")?.forEach { ref ->
             val refCatText = ref.get("referenceCategory")?.textValue() ?: return@forEach
 
             if ("-" in refCatText) {
