@@ -33,8 +33,6 @@ import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
-import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_3
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxCreationInfo
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxFile
@@ -55,12 +53,6 @@ internal object SpdxDocumentModelMapper {
         val packages = mutableListOf<SpdxPackage>()
         val relationships = mutableListOf<SpdxRelationship>()
         val files = mutableListOf<SpdxFile>()
-
-        val wantSpdx23 = when (config.spdxVersion) {
-            SPDX_VERSION_2_2 -> false
-            SPDX_VERSION_2_3 -> true
-            else -> throw IllegalArgumentException("Unsupported SPDX version '${config.spdxVersion}'.")
-        }
 
         val projects = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).sortedBy { it.id }
         val projectPackages = projects.map { project ->
@@ -186,7 +178,7 @@ internal object SpdxDocumentModelMapper {
             relationships = relationships.sortedBy { it.spdxElementId },
             files = files
         ).addExtractedLicenseInfo(licenseTextProvider)
-            .filterChecksums(wantSpdx23)
+            .filterChecksums(config.wantSpdx23)
     }
 }
 
