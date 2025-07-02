@@ -157,7 +157,7 @@ RUN ARCH=$(arch | sed s/aarch64/arm64/) \
     pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
     else \
     curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
+    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     rm requirements.txt; \
     fi
 

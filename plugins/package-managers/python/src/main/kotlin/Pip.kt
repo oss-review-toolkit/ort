@@ -57,7 +57,7 @@ data class PipConfig(
 
     /**
      * The Python version to resolve dependencies for. If not set, the version is detected from the environment and if
-     * that fails, the default version 3.11 is used.
+     * that fails, the default version is used.
      */
     val pythonVersion: String?
 )
