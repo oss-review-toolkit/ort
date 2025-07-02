@@ -72,7 +72,6 @@ internal object SpdxDocumentModelMapper {
 
             val spdxProjectPackage = project.toPackage().toSpdxPackage(
                 SpdxPackageType.PROJECT,
-                wantSpdx23,
                 licenseInfoResolver,
                 ortResult
             ).copy(hasFiles = filesForProject.map { it.spdxId })
@@ -97,7 +96,6 @@ internal object SpdxDocumentModelMapper {
             val pkg = curatedPackage.metadata
             val binaryPackage = pkg.toSpdxPackage(
                 SpdxPackageType.BINARY_PACKAGE,
-                wantSpdx23,
                 licenseInfoResolver,
                 ortResult
             )
@@ -126,7 +124,6 @@ internal object SpdxDocumentModelMapper {
                 // TODO: The copyright text contains copyrights from all scan results.
                 val vcsPackage = pkg.toSpdxPackage(
                     SpdxPackageType.VCS_PACKAGE,
-                    wantSpdx23,
                     licenseInfoResolver,
                     ortResult
                 ).copy(hasFiles = filesForPackage.map { it.spdxId })
@@ -152,7 +149,6 @@ internal object SpdxDocumentModelMapper {
                 // TODO: The copyright text contains copyrights from all scan results.
                 val sourceArtifactPackage = pkg.toSpdxPackage(
                     SpdxPackageType.SOURCE_PACKAGE,
-                    wantSpdx23,
                     licenseInfoResolver,
                     ortResult
                 ).copy(hasFiles = filesForPackage.map { it.spdxId })
@@ -190,5 +186,12 @@ internal object SpdxDocumentModelMapper {
             relationships = relationships.sortedBy { it.spdxElementId },
             files = files
         ).addExtractedLicenseInfo(licenseTextProvider)
+            .filterChecksums(wantSpdx23)
     }
 }
+
+private fun SpdxDocument.filterChecksums(wantSpdx23: Boolean): SpdxDocument =
+    takeIf { wantSpdx23 } ?: copy(packages = packages.map { it.filterChecksums(wantSpdx23) })
+
+private fun SpdxPackage.filterChecksums(wantSpdx23: Boolean): SpdxPackage =
+    takeIf { wantSpdx23 } ?: copy(checksums = checksums.filterNot { it.algorithm.isSpdx23 })
