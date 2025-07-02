@@ -176,10 +176,9 @@ private fun ObjectNode.patchSpdx23To22(): ObjectNode {
         val extRefs = pkg.get("externalRefs") ?: return@forEach
 
         extRefs.forEach { ref ->
-            val refCat = ref.get("referenceCategory") ?: return@forEach
+            val refCatText = ref.get("referenceCategory")?.textValue() ?: return@forEach
 
-            val refCatText = refCat.textValue()
-            if (refCatText != null && "-" in refCatText) {
+            if ("-" in refCatText) {
                 (ref as ObjectNode).put("referenceCategory", refCatText.replace("-", "_"))
             }
         }
