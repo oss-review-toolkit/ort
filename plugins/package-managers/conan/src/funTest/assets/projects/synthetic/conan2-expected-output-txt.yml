@@ -28,7 +28,7 @@ project:
     dependencies:
     - id: "Conan::libcurl:7.85.0"
       dependencies:
-      - id: "Conan::openssl:3.5.0"
+      - id: "Conan::openssl:3.5.1"
         dependencies:
         - id: "Conan::zlib:1.2.13"
       - id: "Conan::zlib:1.2.13"
@@ -76,7 +76,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://ftp.gnu.org/gnu/libiconv/libiconv-1.17.tar.gz"
+    url: "https://ftpmirror.gnu.org/gnu/libiconv/libiconv-1.17.tar.gz"
     hash:
       value: "8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313"
       algorithm: "SHA-256"
@@ -90,6 +90,7 @@ packages:
     url: ""
     revision: ""
     path: ""
+  is_modified: true
 - id: "Conan::libtool:2.4.7"
   purl: "pkg:conan/libtool@2.4.7"
   declared_licenses:
@@ -178,8 +179,8 @@ packages:
     revision: ""
     path: ""
   is_modified: true
-- id: "Conan::openssl:3.5.0"
-  purl: "pkg:conan/openssl@3.5.0"
+- id: "Conan::openssl:3.5.1"
+  purl: "pkg:conan/openssl@3.5.1"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -193,9 +194,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://github.com/openssl/openssl/releases/download/openssl-3.5.0/openssl-3.5.0.tar.gz"
+    url: "https://github.com/openssl/openssl/releases/download/openssl-3.5.1/openssl-3.5.1.tar.gz"
     hash:
-      value: "344d0a79f1a9b08029b0744e2cc401a43f9c90acd1044d09a530b4885a8e9fc0"
+      value: "529043b15cffa5f36077a4d0af83f3de399807181d607441d734196d889b641f"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
