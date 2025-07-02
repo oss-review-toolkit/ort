@@ -125,13 +125,13 @@ data class SpdxPackage(
      * The concluded license for the package as SPDX expression. To represent a not present value [SpdxConstants.NONE]
      * or [SpdxConstants.NOASSERTION] must be used.
      */
-    val licenseConcluded: String,
+    val licenseConcluded: String = SpdxConstants.NOASSERTION,
 
     /**
      * The declared license for the package as SPDX expression. To represent a not present value [SpdxConstants.NONE] or
      * [SpdxConstants.NOASSERTION] must be used.
      */
-    val licenseDeclared: String,
+    val licenseDeclared: String = SpdxConstants.NOASSERTION,
 
     /**
      * A list of all licenses found in the package. These are simply license ID strings, no SPDX license expressions,
