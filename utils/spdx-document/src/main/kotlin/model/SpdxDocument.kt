@@ -27,8 +27,10 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
+const val SPDX_VERSION_2_2 = "SPDX-2.2"
+const val SPDX_VERSION_2_3 = "SPDX-2.3"
+
 private const val SPDX_ID = "${REF_PREFIX}DOCUMENT"
-private const val SPDX_VERSION_MAJOR_MINOR = "SPDX-2.3"
 
 private val DATA_LICENSE = SpdxLicense.CC0_1_0.id
 
@@ -48,7 +50,7 @@ data class SpdxDocument(
     /**
      * The SPDX version of this document, must equal [SPDX_VERSION_MAJOR_MINOR].
      */
-    val spdxVersion: String = SPDX_VERSION_MAJOR_MINOR,
+    val spdxVersion: String = SPDX_VERSION_2_3,
 
     /**
      * Information about the creation of this document.

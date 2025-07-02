@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
+import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -101,7 +102,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 })
 
 private val defaultConfig = SpdxDocumentReporterConfig(
-    spdxVersion = "SPDX-2.2",
+    spdxVersion = SPDX_VERSION_2_2,
     creationInfoComment = "some creation info comment",
     creationInfoPerson = "some creation info person",
     creationInfoOrganization = "some creation info organization",
