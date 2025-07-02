@@ -135,8 +135,10 @@ class SpdxDocumentReporter(
         return outputFileFormats.map { fileFormat ->
             runCatching {
                 outputDir.resolve("$REPORT_BASE_FILENAME.${fileFormat.fileExtension}").apply {
-                    val spdxNode = fileFormat.mapper.valueToTree<ObjectNode>(spdxDocument)
-                    fileFormat.mapper.writeValue(this, spdxNode.patchSpdx23To22())
+                    val spdx23Node = fileFormat.mapper.valueToTree<ObjectNode>(spdxDocument)
+                    val spdxNode = spdx23Node.takeIf { config.wantSpdx23 } ?: spdx23Node.patchSpdx23To22()
+
+                    fileFormat.mapper.writeValue(this, spdxNode)
                 }
             }
         }
