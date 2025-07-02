@@ -114,6 +114,13 @@ internal fun SpdxPackage.extractScopeFromExternalReferences(): String? =
         }
 
 /**
+ * Return the declared license to be used in ORT's data model, which expects a not present value to be an empty set
+ * instead of NONE or NOASSERTION.
+ */
+private fun SpdxPackage.getDeclaredLicense(): Set<String> =
+    setOfNotNull(licenseDeclared.takeIf { SpdxConstants.isPresent(it) })
+
+/**
  * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
  * of NONE or NOASSERTION.
  */
@@ -319,7 +326,7 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
             purl = purl,
             cpe = locateCpe(),
             authors = originator.wrapPresentInSet(),
-            declaredLicenses = setOf(licenseDeclared),
+            declaredLicenses = getDeclaredLicense(),
             concludedLicense = getConcludedLicense(),
             description = packageDescription,
             homepageUrl = homepage.mapNotPresentToEmpty(),
