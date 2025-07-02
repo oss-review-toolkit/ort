@@ -61,12 +61,10 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackageVerificationCode
 
 /**
- * Convert an ORT [Hash] to an [SpdxChecksum], or return null if a conversion is not possible. Depending on
- * [wantSpdx23], algorithms introduced in SPDX 2.3 are allowed to be used or not.
+ * Convert an ORT [Hash] to an [SpdxChecksum], or return null if a conversion is not possible.
  */
-private fun Hash.toSpdxChecksum(wantSpdx23: Boolean): SpdxChecksum? =
+private fun Hash.toSpdxChecksum(): SpdxChecksum? =
     SpdxChecksum.Algorithm.entries
-        .filter { !it.isSpdx23 || wantSpdx23 }
         // The SPDX checksum algorithm names are simple and assumed to be part of ORT's HashAlgorithm aliases.
         .find { it.name in algorithm.aliases }
         ?.let {
@@ -144,13 +142,10 @@ internal enum class SpdxPackageType(val infix: String, val suffix: String = "") 
 /**
  * Convert this ORT package to an SPDX package. As an ORT package can hold more metadata about its associated artifacts
  * and origin than an SPDX package, the [type] is used to specify which kind of SPDX package should be created from the
- * respective ORT package metadata. [wantSpdx23] indicates whether SPDX-2.3-specific properties should be used.
- * [licenseInfoResolver] is used to obtain license and copyright information and [ortResult] is used to obtain data
- * which is not contained in this [Package] instance.
+ * respective ORT package metadata.
  */
 internal fun Package.toSpdxPackage(
     type: SpdxPackageType,
-    wantSpdx23: Boolean,
     licenseInfoResolver: LicenseInfoResolver,
     ortResult: OrtResult
 ): SpdxPackage {
@@ -165,8 +160,8 @@ internal fun Package.toSpdxPackage(
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
         checksums = when (type) {
-            SpdxPackageType.BINARY_PACKAGE -> listOfNotNull(binaryArtifact.hash.toSpdxChecksum(wantSpdx23))
-            SpdxPackageType.SOURCE_PACKAGE -> listOfNotNull(sourceArtifact.hash.toSpdxChecksum(wantSpdx23))
+            SpdxPackageType.BINARY_PACKAGE -> listOfNotNull(binaryArtifact.hash.toSpdxChecksum())
+            SpdxPackageType.SOURCE_PACKAGE -> listOfNotNull(sourceArtifact.hash.toSpdxChecksum())
             else -> emptyList()
         },
         copyrightText = licenseInfoResolver.getSpdxCopyrightText(id),
