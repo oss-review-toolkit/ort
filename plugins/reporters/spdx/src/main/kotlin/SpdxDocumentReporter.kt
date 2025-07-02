@@ -36,13 +36,15 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
+import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
+import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_3
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 
 data class SpdxDocumentReporterConfig(
     /**
-     * The SPDX version to use. Only accepts "SPDX-2.2" or "SPDX-2.3".
+     * The SPDX version to use. Only accepts [SPDX_VERSION_2_2] or [SPDX_VERSION_2_3]".
      */
-    @OrtPluginOption(defaultValue = "SPDX-2.2")
+    @OrtPluginOption(defaultValue = SPDX_VERSION_2_2)
     val spdxVersion: String,
 
     /**

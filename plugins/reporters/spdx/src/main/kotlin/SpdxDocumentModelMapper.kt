@@ -33,6 +33,8 @@ import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
+import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_3
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxCreationInfo
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxFile
@@ -55,8 +57,8 @@ internal object SpdxDocumentModelMapper {
         val files = mutableListOf<SpdxFile>()
 
         val wantSpdx23 = when (config.spdxVersion) {
-            "SPDX-2.2" -> false
-            "SPDX-2.3" -> true
+            SPDX_VERSION_2_2 -> false
+            SPDX_VERSION_2_3 -> true
             else -> throw IllegalArgumentException("Unsupported SPDX version '${config.spdxVersion}'.")
         }
 
