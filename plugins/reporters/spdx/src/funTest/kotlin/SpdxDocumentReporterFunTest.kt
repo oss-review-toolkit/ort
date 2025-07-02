@@ -65,7 +65,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             val jsonSpdxDocument = generateReport(
                 ORT_RESULT,
                 FileFormat.JSON,
-                defaultConfig.copy(fileInformationEnabled = false)
+                fileInformationEnabled = false
             )
 
             val document = fromJson<SpdxDocument>(jsonSpdxDocument)
@@ -114,13 +114,18 @@ private val defaultConfig = SpdxDocumentReporterConfig(
 private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
     format: FileFormat,
-    config: SpdxDocumentReporterConfig = defaultConfig
+    fileInformationEnabled: Boolean = true
 ): String {
     val input = ReporterInput(ortResult)
 
     val outputDir = tempdir()
 
-    return SpdxDocumentReporter(config = config.copy(outputFileFormats = listOf(format.name)))
+    val config = defaultConfig.copy(
+        fileInformationEnabled = fileInformationEnabled,
+        outputFileFormats = listOf(format.name)
+    )
+
+    return SpdxDocumentReporter(config = config)
         .generateReport(input, outputDir)
         .single()
         .getOrThrow()
