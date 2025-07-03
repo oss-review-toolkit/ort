@@ -100,11 +100,12 @@ class FossIdUrlProvider private constructor(
          * known for this host, strip the credentials part from [replaced].
          */
         private fun insertCredentials(replaced: String): String {
-            // In order to have a valid URL, the variables must be replaced by some credentials first.
-            val replacedUrl = replaced.insertCredentials(UNKNOWN_CREDENTIALS)
+            // In order to have a valid URL from which credentials can be stripped, the variables must be replaced by
+            // some credentials first.
+            val replacedUrl = replaced.insertCredentials(UNKNOWN_CREDENTIALS).replaceCredentialsInUri()
 
             return queryAuthenticator(replacedUrl)?.let { replaced.insertCredentials(it) }
-                ?: replacedUrl.replaceCredentialsInUri()
+                ?: replacedUrl
         }
 
         /**
