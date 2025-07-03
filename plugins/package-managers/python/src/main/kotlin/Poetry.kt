@@ -182,8 +182,9 @@ internal fun getPythonVersionConstraint(pyprojectTomlFile: File): String? {
     if (!pyprojectTomlFile.isFile) return null
 
     val config = runCatching { Toml.parseToTomlTable(pyprojectTomlFile.reader()) }.getOrElse { return null }
-    val content = config.getTableOrNull("tool")?.getTableOrNull("poetry")?.getTableOrNull("dependencies")
-        ?: return null
+    val requiresPython = config.getTableOrNull("project")?.getStringOrNull("requires-python")
+    val toolPython = config.getTableOrNull("tool")?.getTableOrNull("poetry")?.getTableOrNull("dependencies")
+        ?.getStringOrNull("python")
 
-    return content.getStringOrNull("python")
+    return requiresPython ?: toolPython
 }
