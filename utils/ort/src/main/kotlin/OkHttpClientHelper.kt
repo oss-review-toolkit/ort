@@ -221,14 +221,12 @@ fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<P
 
         execute(request)
     }.mapCatching { response ->
-        val body = response.body
-
-        if (!response.isSuccessful || body == null) {
-            body?.close()
+        if (!response.isSuccessful) {
+            response.body.close()
             throw HttpDownloadError(response.code, response.message)
         }
 
-        response to body
+        response to response.body
     }
 
 /**
