@@ -77,6 +77,22 @@ class PoetryTest : WordSpec({
     }
 
     "getPythonVersionConstraint()" should {
+        "return a global Python version constraint with precedence" {
+            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+
+            pyprojectFile.writeText(
+                """
+                    [project]
+                    requires-python = "~3.11"
+
+                    [tool.poetry.dependencies]
+                    python = ">=3.8,<4.0"
+                """.trimIndent()
+            )
+
+            getPythonVersionConstraint(pyprojectFile) shouldBe "~3.11"
+        }
+
         "return the tool Python version constraint" {
             val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
 
