@@ -121,11 +121,10 @@ private fun SpdxPackage.getDeclaredLicense(): Set<String> =
     setOfNotNull(licenseDeclared.takeIf { SpdxConstants.isPresent(it) })
 
 /**
- * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
- * of NONE or NOASSERTION.
+ * Return the concluded license to be used in ORT's data model, which uses null instead of NOASSERTION.
  */
 private fun SpdxPackage.getConcludedLicense(): SpdxExpression? =
-    licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
+    licenseConcluded.takeUnless { it == SpdxConstants.NOASSERTION }?.toSpdx()
 
 /**
  * Return a [RemoteArtifact] for the artifact that the [downloadLocation][SpdxPackage.downloadLocation] points to. If
