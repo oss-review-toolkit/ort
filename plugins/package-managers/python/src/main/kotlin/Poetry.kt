@@ -21,6 +21,11 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 
 import java.io.File
 
+import net.peanuuutz.tomlkt.Toml
+import net.peanuuutz.tomlkt.getStringOrNull
+import net.peanuuutz.tomlkt.getTableOrNull
+import net.peanuuutz.tomlkt.parseToTomlTable
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -174,20 +179,11 @@ internal fun getPythonVersion(constraint: String): String? {
 }
 
 internal fun getPythonVersionConstraint(pyprojectTomlFile: File): String? {
-    val dependenciesSection = getTomlSectionContent(pyprojectTomlFile, "tool.poetry.dependencies")
+    if (!pyprojectTomlFile.isFile) return null
+
+    val config = runCatching { Toml.parseToTomlTable(pyprojectTomlFile.reader()) }.getOrElse { return null }
+    val content = config.getTableOrNull("tool")?.getTableOrNull("poetry")?.getTableOrNull("dependencies")
         ?: return null
 
-    return dependenciesSection.split('\n').firstNotNullOfOrNull {
-        it.trim().withoutPrefix("python = ")
-    }?.removeSurrounding("\"")
-}
-
-private fun getTomlSectionContent(tomlFile: File, sectionName: String): String? {
-    val lines = tomlFile.takeIf { it.isFile }?.readLines() ?: return null
-
-    val sectionHeaderIndex = lines.indexOfFirst { it.trim() == "[$sectionName]" }
-    if (sectionHeaderIndex == -1) return null
-
-    val sectionLines = lines.subList(sectionHeaderIndex + 1, lines.size).takeWhile { !it.trim().startsWith('[') }
-    return sectionLines.joinToString("\n")
+    return content.getStringOrNull("python")
 }
