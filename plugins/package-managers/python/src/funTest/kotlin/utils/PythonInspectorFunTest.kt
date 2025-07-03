@@ -31,7 +31,9 @@ class PythonInspectorFunTest : StringSpec({
     val projectsDir = getAssetFile("projects")
 
     "python-inspector can be queried for its supported Python versions" {
-        PythonInspector.getSupportedPythonVersions() should containAll("2.7", "3.6", "3.7", "3.8", "3.9", "3.10")
+        PythonInspector.getSupportedPythonVersions() should containAll(
+            "2.7", "3.6", "3.7", "3.8", "3.9", "3.10", DEFAULT_PYTHON_VERSION
+        )
     }
 
     "python-inspector output can be deserialized" {
