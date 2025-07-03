@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.utils.test
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 
-import com.networknt.schema.InputFormat
+import com.networknt.schema.InputFormat as NetworkNtInputFormat
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
 
@@ -124,10 +124,19 @@ fun matchExpectedResult(
     }
 }
 
-fun matchJsonSchema(schemaJson: String): Matcher<String> =
+/**
+ * This enum wraps the upstream one to avoid the need for callers of `matchJsonSchema()` to depend on the
+ * 'json-schema-validator' library directly.
+ */
+enum class InputFormat(internal val networkNtInputformat: NetworkNtInputFormat) {
+    JSON(NetworkNtInputFormat.JSON),
+    YAML(NetworkNtInputFormat.YAML)
+}
+
+fun matchJsonSchema(schemaJson: String, inputFormat: InputFormat = InputFormat.JSON): Matcher<String> =
     Matcher { actual ->
         val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaJson)
-        val violations = schema.validate(actual, InputFormat.JSON)
+        val violations = schema.validate(actual, inputFormat.networkNtInputformat)
 
         MatcherResult(
             violations.isEmpty(),

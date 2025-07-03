@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.test.InputFormat
 import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
@@ -77,6 +78,14 @@ class SpdxDocumentReporterFunTest : WordSpec({
     }
 
     "Reporting SPDX-2.2 to YAML" should {
+        "create a valid document" {
+            val schemaJson = readResource("/spdx-v2.2.2-schema.json")
+
+            val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON, SPDX_VERSION_2_2)
+
+            yamlSpdxDocument should matchJsonSchema(schemaJson, InputFormat.YAML)
+        }
+
         "create the expected document for a synthetic scan result" {
             val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.yml")
 
