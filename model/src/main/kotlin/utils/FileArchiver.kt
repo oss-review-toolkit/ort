@@ -89,7 +89,7 @@ class FileArchiver(
                 }
 
                 if (tika.detect(file) != MimeTypes.PLAIN_TEXT) {
-                    logger.warn { "Not adding file '$relativePath' to archive because it is not a text file." }
+                    logger.info { "Not adding file '$relativePath' to archive because it is not a text file." }
                     return@packZip false
                 }
 
