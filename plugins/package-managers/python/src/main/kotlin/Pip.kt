@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.DEFAULT_PYTHON_VERSION
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtProject
@@ -39,9 +40,6 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private val OPERATING_SYSTEMS = listOf("linux", "macos", "windows")
-
-private const val OPTION_PYTHON_VERSION_DEFAULT = "3.11"
-internal val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
 
 data class PipConfig(
     /**
@@ -90,11 +88,6 @@ class Pip internal constructor(
             val acceptedValues = OPERATING_SYSTEMS.joinToString { "'$it'" }
             "The 'operatingSystem' option must be one of $acceptedValues, but was '${config.operatingSystem}'."
         }
-
-        require(config.pythonVersion == null || config.pythonVersion in PYTHON_VERSIONS) {
-            val acceptedValues = PYTHON_VERSIONS.joinToString { "'$it'" }
-            "The 'pythonVersion' option must be one of $acceptedValues, but was '${config.pythonVersion}'."
-        }
     }
 
     override fun resolveDependencies(
@@ -116,7 +109,7 @@ class Pip internal constructor(
         definitionFile: File,
         detectPythonVersion: () -> String? = { null }
     ): PythonInspector.Result {
-        val pythonVersion = config.pythonVersion ?: detectPythonVersion() ?: OPTION_PYTHON_VERSION_DEFAULT
+        val pythonVersion = config.pythonVersion ?: detectPythonVersion() ?: DEFAULT_PYTHON_VERSION
         val workingDir = definitionFile.parentFile
 
         logger.info {

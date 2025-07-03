@@ -62,20 +62,6 @@ class PoetryTest : WordSpec({
         }
     }
 
-    "getPythonVersion()" should {
-        "return the expected python version" {
-            getPythonVersion("~3.10") shouldBe "3.10"
-            getPythonVersion("^3.10,<3.11") shouldBe "3.10"
-            getPythonVersion("^3.10") shouldBe "3.11"
-            getPythonVersion("^3.11,<4.0") shouldBe "3.11"
-            getPythonVersion("^3.10,<4.0") shouldBe "3.11"
-        }
-
-        "return null if constraint cannot be satisfied" {
-            getPythonVersion("^3.10,<3.10") shouldBe null
-        }
-    }
-
     "getPythonVersionConstraint()" should {
         "return a global Python version constraint with precedence" {
             val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)

@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
@@ -28,6 +29,20 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class PoetryFunTest : WordSpec({
+    "getPythonVersion()" should {
+        "return the expected python version" {
+            getPythonVersion("~3.10") shouldBe "3.10"
+            getPythonVersion("^3.10,<3.11") shouldBe "3.10"
+            getPythonVersion("^3.10") shouldBe "3.13"
+            getPythonVersion("^3.11,<4.0") shouldBe "3.13"
+            getPythonVersion("^3.10,<4.0") shouldBe "3.13"
+        }
+
+        "return null if constraint cannot be satisfied" {
+            getPythonVersion("^3.10,<3.10") shouldBe null
+        }
+    }
+
     "Python 3" should {
         "resolve dependencies correctly" {
             val definitionFile = getAssetFile("projects/synthetic/poetry/poetry.lock")
