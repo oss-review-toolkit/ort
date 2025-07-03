@@ -77,7 +77,7 @@ class PoetryTest : WordSpec({
     }
 
     "getPythonVersionConstraint()" should {
-        "return the Python version constraint from the pyproject.toml" {
+        "return the tool Python version constraint" {
             val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
 
             pyprojectFile.writeText(
@@ -92,7 +92,7 @@ class PoetryTest : WordSpec({
             getPythonVersionConstraint(pyprojectFile) shouldBe "~3.10"
         }
 
-        "return null if there is no such constraint in pyproject.toml" {
+        "return null if there is no Python constraint" {
             val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
 
             pyprojectFile.writeText(
