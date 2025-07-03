@@ -80,20 +80,21 @@ class FileArchiver(
             directory.packZip(zipFile, overwrite = true) { file ->
                 val relativePath = file.relativeTo(directory).invariantSeparatorsPath
 
+                if (!matcher.matches(relativePath)) {
+                    logger.debug {
+                        "Not adding '$relativePath' to archive because it does not match the configured patterns."
+                    }
+
+                    return@packZip false
+                }
+
                 if (tika.detect(file) != MimeTypes.PLAIN_TEXT) {
                     logger.warn { "Not adding file '$relativePath' to archive because it is not a text file." }
                     return@packZip false
                 }
 
-                matcher.matches(relativePath).also { result ->
-                    logger.debug {
-                        if (result) {
-                            "Adding '$relativePath' to archive."
-                        } else {
-                            "Not adding '$relativePath' to archive."
-                        }
-                    }
-                }
+                logger.debug { "Adding '$relativePath' to archive." }
+                true
             }
         }
 
