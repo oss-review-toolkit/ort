@@ -144,7 +144,8 @@ internal fun createConfig(
         snippetsLimit = snippetsLimit,
         sensitivity = 10,
         urlMappings = null,
-        writeToStorage = false
+        writeToStorage = false,
+        logRequests = false
     )
 
     val namingProvider = createNamingProviderMock()

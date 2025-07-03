@@ -223,7 +223,9 @@ class FossId internal constructor(
     // package is wanted.
     private val createdScans = mutableSetOf<String>()
 
-    private val service by lazy { runBlocking { FossIdRestService.create(config.serverUrl) } }
+    private val service by lazy {
+        runBlocking { FossIdRestService.create(config.serverUrl, logRequests = config.logRequests) }
+    }
 
     override val version by lazy { service.version }
     override val configuration = ""

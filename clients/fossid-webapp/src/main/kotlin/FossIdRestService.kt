@@ -225,11 +225,20 @@ interface FossIdRestService {
          * Create the [FossIdServiceWithVersion] to interact with the FossID instance running at the given [url],
          * optionally using a pre-built OkHttp [client].
          */
-        suspend fun create(url: String, client: OkHttpClient? = null): FossIdServiceWithVersion {
+        suspend fun create(
+            url: String,
+            client: OkHttpClient? = null,
+            logRequests: Boolean = false
+        ): FossIdServiceWithVersion {
             logger.info { "The FossID server URL is $url." }
 
+            val builder = client?.newBuilder() ?: OkHttpClient.Builder()
+            if (logRequests) {
+                builder.addInterceptor(LoggingInterceptor)
+            }
+
             val retrofit = Retrofit.Builder()
-                .client((client?.newBuilder() ?: OkHttpClient.Builder()).addInterceptor(TimeoutInterceptor).build())
+                .client(builder.addInterceptor(TimeoutInterceptor).build())
                 .baseUrl(url)
                 .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()

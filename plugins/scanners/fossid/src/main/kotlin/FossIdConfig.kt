@@ -92,6 +92,13 @@ data class FossIdConfig(
     val sensitivity: Int,
 
     /**
+     * If true, the FossID scanner will log all requests and responses, omitting sensitive information such as
+     * credentials. This is useful for debugging mapping errors.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val logRequests: Boolean,
+
+    /**
      * A comma-separated list of URL mappings that allow transforming the VCS URLs of repositories before they are
      * passed to the FossID service. This may be necessary if FossID uses a different mechanism to clone a repository,
      * e.g., via SSH instead of HTTP. Their values define the mapping to be applied consisting of two parts separated by
