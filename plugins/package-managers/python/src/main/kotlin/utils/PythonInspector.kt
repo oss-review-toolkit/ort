@@ -39,6 +39,8 @@ private val json = Json {
     namingStrategy = JsonNamingStrategy.SnakeCase
 }
 
+internal const val DEFAULT_PYTHON_VERSION = "3.11"
+
 internal object PythonInspector : CommandLineTool {
     override fun command(workingDir: File?) = "python-inspector"
 

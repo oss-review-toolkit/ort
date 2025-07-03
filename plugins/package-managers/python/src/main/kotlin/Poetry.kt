@@ -170,7 +170,7 @@ internal fun getPythonVersion(constraint: String): String? {
         .map { RangeListFactory.create(it) }
         .takeIf { it.isNotEmpty() } ?: return null
 
-    return PYTHON_VERSIONS.lastOrNull { version ->
+    return PythonInspector.getSupportedPythonVersions().lastOrNull { version ->
         rangeLists.all { rangeList ->
             val semver = Semver.coerce(version)
             semver != null && rangeList.isSatisfiedBy(semver)
