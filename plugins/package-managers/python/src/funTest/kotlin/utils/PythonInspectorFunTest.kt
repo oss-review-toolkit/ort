@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 
@@ -28,6 +29,10 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class PythonInspectorFunTest : StringSpec({
     val projectsDir = getAssetFile("projects")
+
+    "python-inspector can be queried for its supported Python versions" {
+        PythonInspector.getSupportedPythonVersions() should containAll("2.7", "3.6", "3.7", "3.8", "3.9", "3.10")
+    }
 
     "python-inspector output can be deserialized" {
         val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
