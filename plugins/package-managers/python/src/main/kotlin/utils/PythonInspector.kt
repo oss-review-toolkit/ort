@@ -46,6 +46,14 @@ internal object PythonInspector : CommandLineTool {
 
     override fun getVersionRequirement(): RangeList = RangeListFactory.create("[0.9.2,)")
 
+    fun getSupportedPythonVersions(): List<String> {
+        val stderr = run("--python-version", "x").stderr
+        val versions = stderr.substringAfter("'x' is not one of ").substringBeforeLast('.')
+        return versions.split(',', ' ').mapNotNull { version ->
+            version.takeIf { "." in it }?.removeSurrounding("'")
+        }
+    }
+
     fun inspect(
         workingDir: File,
         definitionFile: File,
