@@ -30,8 +30,12 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
 /**
- * This test class performs tests with both Conan 1 and Conan 2. For it to be successful, it needs both a "conan"
- * command for Conan 1 and a "conan2" command for Conan 2 in the PATH environment variable (as in ORT Docker image).
+ * This test class performs tests with both Conan 1 and Conan 2. To be able to run it locally, it needs to have access
+ * to some Conan installations as it is done in the ORT Docker image:
+ * - prerequisites: bash, pyenv, pyenv virtualenv.
+ * - a directory ~/bin/ort-conan containing the file 'setup_conan.sh' renamed 'conan' and made executable.
+ * - two pyenv venvs 'conan' and 'conan2' containing respectively the conan 1 and conan 2 installations.
+ * Then the test can be run with PATH set to ~/bin/ort-conan:$PATH (and the PATH of the pyenv installation).
  *
  * A word of caution about Conan 2 tests: If there is no lockfile, when Conan resolves the dependencies it read its
  * cache and relies on the package name, ignoring the version. This means, for instance, that if a test reported
