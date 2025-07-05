@@ -1,0 +1,327 @@
+---
+repository:
+  vcs:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+    revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+    revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    path: ""
+  config: {}
+analyzer:
+  start_time: "1970-01-01T00:00:00Z"
+  end_time: "1970-01-01T00:00:00Z"
+  environment:
+    ort_version: "HEAD"
+    build_jdk: "<REPLACE_JDK>"
+    java_version: "<REPLACE_JAVA>"
+    os: "<REPLACE_OS>"
+    processors: "<REPLACE_PROCESSORS>"
+    max_memory: "<REPLACE_MAX_MEMORY>"
+    variables: {}
+    tool_versions: {}
+  config:
+    allow_dynamic_versions: false
+    enabled_package_managers: []
+    skip_excluded: false
+  result:
+    projects:
+    - id: "Dummy::project:1.0.0"
+      definition_file_path: ""
+      declared_licenses: []
+      declared_licenses_processed: {}
+      vcs:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      homepage_url: ""
+      scopes:
+      - name: "deps"
+        dependencies:
+        - id: "Dummy::pkg0:1.0.0"
+    packages:
+    - id: "Dummy::pkg0:1.0.0"
+      purl: ""
+      declared_licenses: []
+      declared_licenses_processed: {}
+      description: ""
+      homepage_url: ""
+      binary_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      source_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      vcs:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+scanner:
+  start_time: "1970-01-01T00:00:00Z"
+  end_time: "1970-01-01T00:00:00Z"
+  environment:
+    ort_version: "HEAD"
+    build_jdk: "<REPLACE_JDK>"
+    java_version: "<REPLACE_JAVA>"
+    os: "<REPLACE_OS>"
+    processors: "<REPLACE_PROCESSORS>"
+    max_memory: "<REPLACE_MAX_MEMORY>"
+    variables: {}
+    tool_versions: {}
+  config:
+    skip_concluded: false
+    skip_excluded: false
+    include_files_without_findings: false
+    detected_license_mapping:
+      LicenseRef-scancode-agpl-generic-additional-terms: "NOASSERTION"
+      LicenseRef-scancode-free-unknown: "NOASSERTION"
+      LicenseRef-scancode-generic-cla: "NOASSERTION"
+      LicenseRef-scancode-generic-exception: "NOASSERTION"
+      LicenseRef-scancode-generic-export-compliance: "NOASSERTION"
+      LicenseRef-scancode-generic-tos: "NOASSERTION"
+      LicenseRef-scancode-generic-trademark: "NOASSERTION"
+      LicenseRef-scancode-gpl-generic-additional-terms: "NOASSERTION"
+      LicenseRef-scancode-other-copyleft: "NOASSERTION"
+      LicenseRef-scancode-other-permissive: "NOASSERTION"
+      LicenseRef-scancode-patent-disclaimer: "NOASSERTION"
+      LicenseRef-scancode-unknown: "NOASSERTION"
+      LicenseRef-scancode-unknown-license-reference: "NOASSERTION"
+      LicenseRef-scancode-unknown-spdx: "NOASSERTION"
+      LicenseRef-scancode-warranty-disclaimer: "NOASSERTION"
+    ignore_patterns:
+    - "**/*.ort.yml"
+    - "**/*.spdx.yml"
+    - "**/*.spdx.yaml"
+    - "**/*.spdx.json"
+    - "**/META-INF/DEPENDENCIES"
+    - "**/META-INF/DEPENDENCIES.txt"
+    - "**/META-INF/NOTICE"
+    - "**/META-INF/NOTICE.txt"
+  provenances:
+  - id: "Dummy::pkg0:1.0.0"
+    package_provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    sub_repositories:
+      pkg3/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
+        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      pkg4/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+        path: ""
+  - id: "Dummy::project:1.0.0"
+    package_provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    sub_repositories:
+      pkg3/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
+        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      pkg4/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+        path: ""
+  scan_results:
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
+        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      resolved_revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+    scanner:
+      name: "Dummy"
+      version: "1.0.0"
+      configuration: ""
+    summary:
+      start_time: "1970-01-01T00:00:00Z"
+      end_time: "1970-01-01T00:00:00Z"
+      licenses:
+      - license: "NOASSERTION"
+        location:
+          path: "LICENSE"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "README"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "pkg-s1/pkg-s1.txt"
+          start_line: -1
+          end_line: -1
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+        path: ""
+      resolved_revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+    scanner:
+      name: "Dummy"
+      version: "1.0.0"
+      configuration: ""
+    summary:
+      start_time: "1970-01-01T00:00:00Z"
+      end_time: "1970-01-01T00:00:00Z"
+      licenses:
+      - license: "NOASSERTION"
+        location:
+          path: "LICENSE"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "README"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "pkg-s2/pkg-s2.txt"
+          start_line: -1
+          end_line: -1
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    scanner:
+      name: "Dummy"
+      version: "1.0.0"
+      configuration: ""
+    summary:
+      start_time: "1970-01-01T00:00:00Z"
+      end_time: "1970-01-01T00:00:00Z"
+      licenses:
+      - license: "NOASSERTION"
+        location:
+          path: ".gitmodules"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "LICENSE"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "README"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "pkg1/pkg1.txt"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "pkg2/pkg2.txt"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "pkg3/pkg3.txt"
+          start_line: -1
+          end_line: -1
+      - license: "NOASSERTION"
+        location:
+          path: "pkg4/pkg4.txt"
+          start_line: -1
+          end_line: -1
+  scanners:
+    Dummy::pkg0:1.0.0:
+    - "Dummy"
+    Dummy::project:1.0.0:
+    - "Dummy"
+  files:
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
+        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      resolved_revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+    files:
+    - path: "LICENSE"
+      sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+    - path: "README"
+      sha1: "ae8044f7fce7ee914a853c30c3085895e9be8b9c"
+    - path: "pkg-s1/pkg-s1.txt"
+      sha1: "e5fb17f8f4f4ef0748bb5ba137fd0e091dd5a1f6"
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+        path: ""
+      resolved_revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+    files:
+    - path: "LICENSE"
+      sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+    - path: "README"
+      sha1: "ae8044f7fce7ee914a853c30c3085895e9be8b9c"
+    - path: "pkg-s2/pkg-s2.txt"
+      sha1: "37996d13eceb6b29db43a381ce8df375b5eee8e9"
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    files:
+    - path: ".gitmodules"
+      sha1: "d7f070ddbe0b6dd8a173714d565a1240dd96eacd"
+    - path: "LICENSE"
+      sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+    - path: "README"
+      sha1: "82cfc115138054ce5b5e6839f38687c9d7186710"
+    - path: "pkg1/pkg1.txt"
+      sha1: "22eb73bd30d47540a4e05781f0f6e07640857cae"
+    - path: "pkg2/pkg2.txt"
+      sha1: "cc8f97cebe1dc0ed889a31f504bcf491d5241aaa"
+    - path: "pkg3/pkg3.txt"
+      sha1: "859d66be2d153968cdaa8ec7265270c241eea024"
+    - path: "pkg4/pkg4.txt"
+      sha1: "3cba29011be2b9d59f6204d6fa0a386b1b2dbd90"
+advisor: null
+evaluator: null
+resolved_configuration: {}
