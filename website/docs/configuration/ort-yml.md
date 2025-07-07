@@ -4,6 +4,7 @@ The items below can be configured by adding an `.ort.yml` file to the root of th
 All configurations in this file apply only to this Project's context.
 Usually, the global context is preferred for an increased degree of automation, and local configurations should only be done if there are good reasons.
 
+* [includes](#includes) - Mark [files, directories](#including-paths) as included in released artifacts.
 * [excludes](#excludes) - Mark [files, directories](#excluding-paths) or [package manager scopes](#excluding-scopes) as not included in released artifacts.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
 * [curations](#curations) - Overwrite package metadata, set a concluded license, or correct license findings in the project.
@@ -13,6 +14,60 @@ Usually, the global context is preferred for an increased degree of automation, 
 The sections below explain each in further detail.
 Prefer to learn by example?
 See the [.ort.yml](https://github.com/oss-review-toolkit/ort/blob/main/.ort.yml) for the OSS Review Toolkit itself.
+
+## Includes
+
+### When to Use Includes
+
+Includes are used to define which OSS is distributed to third parties and which code is only used internally.
+
+Inclusions apply to paths (files/directories) only.
+Examples of currently supported inclusions:
+
+* all dependencies defined in `./src/pom.xml` in Maven-based projects.
+
+### Includes Basics
+
+ORT's default philosophy is to analyze and scan everything it can find to build a complete picture of a repository and its dependencies.
+
+However, in some cases, only a subset of the repository is relevant for the analysis, for example, if the repository is a monorepo containing multiple projects.
+While [excludes](#excludes) could be used to ignore the irrelevant parts, it is often more convenient to explicitly include only the relevant parts.
+
+To be able to show why a part is included, each include must have an explanation.
+The explanation consists of:
+
+* `reason` -- must be selected from a predefined list of options.
+* `comment` -- free text that provides an optional explanation.
+
+### Including Paths
+
+Path includes are used to mark a complete path as included.
+
+The code below shows the structure of a path include in the `.ort.yml` file:
+
+```yaml
+includes:
+  paths:
+  - pattern: "A glob pattern matching files or paths."
+    reason: "One of PathIncludeReason e.g. SOURCE_OF."
+    comment: "A comment further explaining why the path is included."
+```
+
+Where the list of available options for `reason` is defined in [PathIncludeReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/PathIncludeReason.kt).
+For how to write a glob pattern, please see the [AntPathMatcher documentation](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html).
+
+The path include below has the following effects:
+
+* All projects found below the `src` directory are marked as included.
+* License findings in files below the `src` directory are marked as included.
+
+```yaml
+excludes:
+  paths:
+  - pattern: "src/**"
+    reason: "SOURCE_OF"
+    comment: "This directory contains the source code of binaries that are distributed."
+```
 
 ## Excludes
 
@@ -148,6 +203,14 @@ import Yarn from '!!raw-loader!@site/../examples/yarn.ort.yml'
 <CodeBlock language="yml" title="Stack">{Stack}</CodeBlock>
 <CodeBlock language="yml" title="Yarn">{Yarn}</CodeBlock>
 ```
+
+## Interaction between Includes and Excludes
+
+There is no priority when using both includes and excludes.
+The includes control what is included and excludes everything else.
+Excludes add extra exclusions.
+If includes and excludes overlap, excludes are stronger.
+This means that if a file is matched by both includes and excludes, it will be excluded.
 
 ## Resolutions
 
