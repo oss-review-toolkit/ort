@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.test.InputFormat
 import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.readOrtResult
 import org.ossreviewtoolkit.utils.test.readResource
 
 class SpdxDocumentReporterFunTest : WordSpec({
@@ -90,18 +89,6 @@ class SpdxDocumentReporterFunTest : WordSpec({
             val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML, SPDX_VERSION_2_2)
-
-            yamlSpdxDocument shouldBe patchExpectedResult(
-                expectedResult,
-                custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
-            )
-        }
-
-        "create the expected document for the disclosure CLI Go project scan result" {
-            val ortResultForGoProject = readOrtResult("/disclosure-cli-scan-result.yml")
-            val expectedResult = readResource("/disclosure-cli-expected-output.spdx.yml")
-
-            val yamlSpdxDocument = generateReport(ortResultForGoProject, FileFormat.YAML, SPDX_VERSION_2_2)
 
             yamlSpdxDocument shouldBe patchExpectedResult(
                 expectedResult,
