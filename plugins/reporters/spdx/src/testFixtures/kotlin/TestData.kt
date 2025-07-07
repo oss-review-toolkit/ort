@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.utils.test.scannerRunOf
 private val ANALYZED_VCS = VcsInfo(
     type = VcsType.GIT,
     revision = "master",
-    url = "https://github.com/path/first-project.git"
+    url = "https://github.com/path/proj1-repo.git"
 )
 
 val ORT_RESULT = OrtResult(
@@ -73,35 +73,35 @@ val ORT_RESULT = OrtResult(
         result = AnalyzerResult(
             projects = setOf(
                 Project(
-                    id = Identifier("Maven:first-project-group:first-project-name:0.0.1"),
+                    id = Identifier("Maven:proj1-grp:proj1:0.0.1"),
                     declaredLicenses = setOf("MIT"),
                     definitionFilePath = "",
-                    homepageUrl = "https://example.com/first-project/homepage",
+                    homepageUrl = "https://example.com/proj1/homepage",
                     scopeDependencies = setOf(
                         Scope(
                             name = "compile",
                             dependencies = setOf(
                                 PackageReference(
-                                    id = Identifier("Maven:first-package-group:first-package:0.0.1"),
+                                    id = Identifier("Maven:pkg1-grp:pkg1:0.0.1"),
                                     dependencies = setOf(
                                         PackageReference(
-                                            id = Identifier("Maven:second-package-group:second-package:0.0.1")
+                                            id = Identifier("Maven:pkg2-grp:pkg2:0.0.1")
                                         ),
                                         PackageReference(
-                                            id = Identifier("Maven:third-package-group:third-package:0.0.1"),
+                                            id = Identifier("Maven:pkg3-grp:pkg3:0.0.1"),
                                             dependencies = setOf(
                                                 PackageReference(
-                                                    id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1")
+                                                    id = Identifier("Maven:pkg6-grp:pkg6:0.0.1")
                                                 )
                                             )
                                         )
                                     )
                                 ),
                                 PackageReference(
-                                    id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
+                                    id = Identifier("Maven:pkg4-grp:pkg4:0.0.1"),
                                     dependencies = setOf(
                                         PackageReference(
-                                            id = Identifier("Maven:seventh-package-group:seventh-package:0.0.1")
+                                            id = Identifier("Maven:pkg7-grp:pkg7:0.0.1")
                                         )
                                     )
                                 )
@@ -111,7 +111,7 @@ val ORT_RESULT = OrtResult(
                             name = "test",
                             dependencies = setOf(
                                 PackageReference(
-                                    id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1")
+                                    id = Identifier("Maven:pkg-grp:pkg5:0.0.1")
                                 )
                             )
                         )
@@ -121,9 +121,9 @@ val ORT_RESULT = OrtResult(
             ),
             packages = setOf(
                 Package(
-                    id = Identifier("Maven:first-package-group:first-package:0.0.1"),
+                    id = Identifier("Maven:pkg1-grp:pkg1:0.0.1"),
                     binaryArtifact = RemoteArtifact(
-                        url = "https://example.com/first-package.jar",
+                        url = "https://example.com/pkg1.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     ),
                     concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
@@ -131,20 +131,20 @@ val ORT_RESULT = OrtResult(
                     description = "A package with all supported attributes set, with a VCS URL containing a user " +
                         "name, and with two scan results for the VCS containing copyright findings matched to a " +
                         "license finding.",
-                    homepageUrl = "https://example.com/first-package/homepage",
+                    homepageUrl = "https://example.com/pkg1/homepage",
                     sourceArtifact = RemoteArtifact(
-                        url = "https://example.com/first-package-sources.jar",
+                        url = "https://example.com/pkg1-sources.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     ),
                     vcs = VcsInfo(
                         type = VcsType.GIT,
                         revision = "master",
-                        url = "ssh://git@github.com/path/first-package-repo.git",
+                        url = "ssh://git@github.com/path/pkg1-repo.git",
                         path = "project-path"
                     )
                 ),
                 Package(
-                    id = Identifier("Maven:second-package-group:second-package:0.0.1"),
+                    id = Identifier("Maven:pkg2-grp:pkg2:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = emptySet(),
                     description = "A package with minimal attributes set.",
@@ -153,7 +153,7 @@ val ORT_RESULT = OrtResult(
                     vcs = VcsInfo.EMPTY
                 ),
                 Package(
-                    id = Identifier("Maven:third-package-group:third-package:0.0.1"),
+                    id = Identifier("Maven:pkg3-grp:pkg3:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf("unmappable license"),
                     description = "A package with only unmapped declared license.",
@@ -162,7 +162,7 @@ val ORT_RESULT = OrtResult(
                     vcs = VcsInfo.EMPTY
                 ),
                 Package(
-                    id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
+                    id = Identifier("Maven:pkg4-grp:pkg4:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf("unmappable license", "MIT"),
                     description = "A package with partially mapped declared license.",
@@ -171,7 +171,7 @@ val ORT_RESULT = OrtResult(
                     vcs = VcsInfo.EMPTY
                 ),
                 Package(
-                    id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
+                    id = Identifier("Maven:pkg5-grp:pkg5:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
                     concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
@@ -182,7 +182,7 @@ val ORT_RESULT = OrtResult(
                     vcs = VcsInfo.EMPTY
                 ),
                 Package(
-                    id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
+                    id = Identifier("Maven:pkg6-grp:pkg6:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf("LicenseRef-scancode-asmus"),
                     concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
@@ -192,13 +192,13 @@ val ORT_RESULT = OrtResult(
                     vcs = VcsInfo.EMPTY
                 ),
                 Package(
-                    id = Identifier("Maven:seventh-package-group:seventh-package:0.0.1"),
+                    id = Identifier("Maven:pkg7-grp:pkg7:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf(),
                     description = "A package with a source artifact scan result.",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact(
-                        url = "https://example.com/seventh-package-sources.jar",
+                        url = "https://example.com/pkg7-sources.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     ),
                     vcs = VcsInfo.EMPTY
@@ -207,13 +207,13 @@ val ORT_RESULT = OrtResult(
         )
     ),
     scanner = scannerRunOf(
-        Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
+        Identifier("Maven:pkg1-grp:pkg1:0.0.1") to listOf(
             ScanResult(
                 provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         revision = "master",
-                        url = "ssh://git@github.com/path/first-package-repo.git",
+                        url = "ssh://git@github.com/path/pkg1-repo.git",
                         path = "project-path"
                     ),
                     resolvedRevision = "deadbeef"
@@ -243,7 +243,7 @@ val ORT_RESULT = OrtResult(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         revision = "master",
-                        url = "ssh://git@github.com/path/first-package-repo.git",
+                        url = "ssh://git@github.com/path/pkg1-repo.git",
                         path = "project-path"
                     ),
                     resolvedRevision = "deadbeef"
@@ -265,11 +265,11 @@ val ORT_RESULT = OrtResult(
                 )
             )
         ),
-        Identifier("Maven:seventh-package-group:seventh-package:0.0.1") to listOf(
+        Identifier("Maven:pkg7-grp:pkg7:0.0.1") to listOf(
             ScanResult(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
-                        url = "https://example.com/seventh-package-sources.jar",
+                        url = "https://example.com/pkg7-sources.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     )
                 ),
