@@ -208,6 +208,13 @@ abstract class PackageManager(val projectType: String) : Plugin {
             isPathExcluded(root.relativize(path).invariantSeparatorsPathString)
 
         /**
+         * Check whether the given [path] interpreted relatively against [root] is matched by a path include in this
+         * [Includes] object.
+         */
+        private fun Includes.isPathIncluded(root: Path, path: Path): Boolean =
+            isPathIncluded(root.relativize(path).invariantSeparatorsPathString)
+
+        /**
          * Get a fallback project name from the [definitionFile] path relative to the [analysisRoot]. This function
          * should be used if the project name cannot be determined from the project's metadata.
          */
