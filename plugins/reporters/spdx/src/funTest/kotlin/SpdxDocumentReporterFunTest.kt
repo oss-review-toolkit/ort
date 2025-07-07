@@ -42,10 +42,10 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readResource
 
 class SpdxDocumentReporterFunTest : WordSpec({
-    val schemaJson by lazy { readResource("/spdx-v2.2.2-schema.json") }
+    "Reporting to SPDX-2.2" should {
+        val schemaJson by lazy { readResource("/spdx-v2.2.2-schema.json") }
 
-    "Reporting SPDX-2.2 to JSON" should {
-        "create the expected document for a synthetic scan result" {
+        "create the expected JSON document for a synthetic scan result" {
             val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.json")
 
             val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON, SPDX_VERSION_2_2)
@@ -54,6 +54,18 @@ class SpdxDocumentReporterFunTest : WordSpec({
             jsonSpdxDocument shouldBe patchExpectedResult(
                 expectedResult,
                 custom = fromJson<SpdxDocument>(jsonSpdxDocument).getCustomReplacements()
+            )
+        }
+
+        "create the expected YAML document for a synthetic scan result" {
+            val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.yml")
+
+            val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML, SPDX_VERSION_2_2)
+
+            yamlSpdxDocument should matchJsonSchema(schemaJson, InputFormat.YAML)
+            yamlSpdxDocument shouldBe patchExpectedResult(
+                expectedResult,
+                custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
             )
         }
 
@@ -68,20 +80,6 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
             jsonSpdxDocument should matchJsonSchema(schemaJson)
             document.files should beEmpty()
-        }
-    }
-
-    "Reporting SPDX-2.2 to YAML" should {
-        "create the expected document for a synthetic scan result" {
-            val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.yml")
-
-            val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML, SPDX_VERSION_2_2)
-
-            yamlSpdxDocument should matchJsonSchema(schemaJson, InputFormat.YAML)
-            yamlSpdxDocument shouldBe patchExpectedResult(
-                expectedResult,
-                custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
-            )
         }
     }
 })
