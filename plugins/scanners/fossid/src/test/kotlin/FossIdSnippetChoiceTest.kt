@@ -307,7 +307,8 @@ class FossIdSnippetChoiceTest : WordSpec({
             }
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 0 file(s) pending identification in FossID."
+                it.message shouldBe "This scan has 0 file(s) pending identification in FossID. " +
+                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
             }
         }
 
@@ -353,7 +354,8 @@ class FossIdSnippetChoiceTest : WordSpec({
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 0 file(s) pending identification in FossID."
+                it.message shouldBe "This scan has 0 file(s) pending identification in FossID. " +
+                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
             }
         }
 
@@ -408,7 +410,8 @@ class FossIdSnippetChoiceTest : WordSpec({
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
+                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
             }
         }
 
@@ -661,7 +664,8 @@ class FossIdSnippetChoiceTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = emptyList()).summary
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
+                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
@@ -726,7 +730,8 @@ class FossIdSnippetChoiceTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
+                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()

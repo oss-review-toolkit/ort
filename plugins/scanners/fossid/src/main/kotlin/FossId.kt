@@ -963,11 +963,14 @@ class FossId internal constructor(
 
         val pendingFilesCount = (rawResults.listPendingFiles - newlyMarkedFiles.toSet()).size
 
+        val fossIdScanUrl = buildFossIdScanUrl(config.serverUrl, result.scanId)
+
         issues.add(
             0,
             Issue(
                 source = descriptor.id,
-                message = "This scan has $pendingFilesCount file(s) pending identification in FossID.",
+                message = "This scan has $pendingFilesCount file(s) pending identification in FossID. " +
+                    "Please review and resolve them at: $fossIdScanUrl",
                 severity = Severity.HINT
             )
         )
@@ -1105,6 +1108,9 @@ class FossId internal constructor(
 
         return result
     }
+
+    private fun buildFossIdScanUrl(serverUrl: String, scanId: String) =
+        "${if (serverUrl.endsWith("/")) serverUrl else "$serverUrl/"}index.html?action=scanview&sid=$scanId"
 }
 
 private data class FossIdResult(
