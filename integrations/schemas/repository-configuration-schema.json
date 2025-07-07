@@ -8,6 +8,34 @@
     "analyzer": {
       "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/repository-configurations/analyzer-configuration-schema.json"
     },
+    "includes": {
+      "type": "object",
+      "description": "Defines which parts of a repository should be included.",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "description": "A glob to match the path of the project definition file, relative to the root of the repository.",
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/pathIncludeReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pattern",
+              "reason"
+            ]
+          }
+        }
+      }
+    },
     "excludes": {
       "type": "object",
       "description": "Defines which parts of a repository should be excluded.",
@@ -254,6 +282,11 @@
         "path",
         "concluded_license",
         "reason"
+      ]
+    },
+    "pathIncludeReason": {
+      "enum": [
+        "SOURCE_OF"
       ]
     },
     "pathExcludeReason": {

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.CurationsFilter
 import org.ossreviewtoolkit.model.utils.ExcludesFilter
+import org.ossreviewtoolkit.model.utils.IncludesFilter
 import org.ossreviewtoolkit.model.utils.LicenseChoicesFilter
 import org.ossreviewtoolkit.model.utils.ResolutionsFilter
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
@@ -44,6 +45,12 @@ data class RepositoryConfiguration(
      */
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = ExcludesFilter::class)
     val excludes: Excludes = Excludes(),
+
+    /**
+     * Defines which parts of the repository will be included.
+     */
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = IncludesFilter::class)
+    val includes: Includes = Includes.EMPTY,
 
     /**
      * Defines resolutions for issues with this repository.

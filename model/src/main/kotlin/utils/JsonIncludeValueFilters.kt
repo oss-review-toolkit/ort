@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.Resolutions
 
@@ -34,6 +35,11 @@ internal class CurationsFilter {
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
 internal class ExcludesFilter {
     override fun equals(other: Any?): Boolean = other is Excludes && other.paths.isEmpty() && other.scopes.isEmpty()
+}
+
+@Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+internal class IncludesFilter {
+    override fun equals(other: Any?): Boolean = other is Includes && other.paths.isEmpty()
 }
 
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
