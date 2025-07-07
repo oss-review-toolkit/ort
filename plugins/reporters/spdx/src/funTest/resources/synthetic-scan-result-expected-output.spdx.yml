@@ -48,9 +48,7 @@ packages:
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
-  description: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with two scan results for the VCS containing copyright findings\
-    \ matched to a license finding."
+  description: "Description of pkg1."
   downloadLocation: "https://example.com/pkg1.jar"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"
@@ -67,9 +65,7 @@ packages:
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
-  description: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with two scan results for the VCS containing copyright findings\
-    \ matched to a license finding."
+  description: "Description of pkg1."
   downloadLocation: "git+ssh://github.com/path/pkg1-repo.git@deadbeef#project-path"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"
@@ -96,9 +92,7 @@ packages:
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
-  description: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with two scan results for the VCS containing copyright findings\
-    \ matched to a license finding."
+  description: "Description of pkg1."
   downloadLocation: "https://example.com/pkg1-sources.jar"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"
@@ -113,7 +107,6 @@ packages:
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-pkg2-grp-pkg2-0.0.1"
   copyrightText: "NONE"
-  description: "A package with minimal attributes set."
   downloadLocation: "NONE"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"
@@ -127,7 +120,6 @@ packages:
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-pkg3-grp-pkg3-0.0.1"
   copyrightText: "NONE"
-  description: "A package with only unmapped declared license."
   downloadLocation: "NONE"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"
@@ -141,7 +133,6 @@ packages:
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-pkg4-grp-pkg4-0.0.1"
   copyrightText: "NONE"
-  description: "A package with partially mapped declared license."
   downloadLocation: "NONE"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"
@@ -155,8 +146,6 @@ packages:
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-pkg6-grp-pkg6-0.0.1"
   copyrightText: "NONE"
-  description: "A package with non-SPDX license IDs in the declared and concluded\
-    \ license."
   downloadLocation: "NONE"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"
@@ -170,7 +159,6 @@ packages:
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1"
   copyrightText: "Copyright 2020 Some copyright holder in source artifact"
-  description: "A package with a source artifact scan result."
   downloadLocation: "NONE"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"
@@ -187,7 +175,6 @@ packages:
   - algorithm: "SHA1"
     checksumValue: "0000000000000000000000000000000000000000"
   copyrightText: "Copyright 2020 Some copyright holder in source artifact"
-  description: "A package with a source artifact scan result."
   downloadLocation: "https://example.com/pkg7-sources.jar"
   externalRefs:
   - referenceCategory: "PACKAGE_MANAGER"

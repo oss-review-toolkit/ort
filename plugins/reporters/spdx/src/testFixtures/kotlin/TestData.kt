@@ -120,6 +120,8 @@ val ORT_RESULT = OrtResult(
                 )
             ),
             packages = setOf(
+                // A package with all supported attributes set, with a VCS URL containing a user name, and with two scan
+                // results for the VCS containing copyright findings matched to a license finding.
                 Package(
                     id = Identifier("Maven:pkg1-grp:pkg1:0.0.1"),
                     binaryArtifact = RemoteArtifact(
@@ -128,9 +130,7 @@ val ORT_RESULT = OrtResult(
                     ),
                     concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
                     declaredLicenses = setOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
-                    description = "A package with all supported attributes set, with a VCS URL containing a user " +
-                        "name, and with two scan results for the VCS containing copyright findings matched to a " +
-                        "license finding.",
+                    description = "Description of pkg1.",
                     homepageUrl = "https://example.com/pkg1/homepage",
                     sourceArtifact = RemoteArtifact(
                         url = "https://example.com/pkg1-sources.jar",
@@ -143,59 +143,65 @@ val ORT_RESULT = OrtResult(
                         path = "project-path"
                     )
                 ),
+                // A package with minimal attributes set.
                 Package(
                     id = Identifier("Maven:pkg2-grp:pkg2:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = emptySet(),
-                    description = "A package with minimal attributes set.",
+                    description = "",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
                 ),
+                // A package with only unmapped declared license.
                 Package(
                     id = Identifier("Maven:pkg3-grp:pkg3:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf("unmappable license"),
-                    description = "A package with only unmapped declared license.",
+                    description = "",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
                 ),
+                // A package with partially mapped declared license.
                 Package(
                     id = Identifier("Maven:pkg4-grp:pkg4:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf("unmappable license", "MIT"),
-                    description = "A package with partially mapped declared license.",
+                    description = "",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
                 ),
+                // A package used only from the excluded 'test' scope, with non-SPDX license IDs in the declared and
+                // concluded license.
                 Package(
                     id = Identifier("Maven:pkg5-grp:pkg5:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
                     concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
-                    description = "A package used only from the excluded 'test' scope, with non-SPDX license IDs in " +
-                        "the declared and concluded license.",
+                    description = "",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
                 ),
+                // A package with non-SPDX license IDs in the declared and concluded license.
                 Package(
                     id = Identifier("Maven:pkg6-grp:pkg6:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf("LicenseRef-scancode-asmus"),
                     concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
-                    description = "A package with non-SPDX license IDs in the declared and concluded license.",
+                    description = "",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
                 ),
+                // A package with a source artifact scan result.
                 Package(
                     id = Identifier("Maven:pkg7-grp:pkg7:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
                     declaredLicenses = setOf(),
-                    description = "A package with a source artifact scan result.",
+                    description = "",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact(
                         url = "https://example.com/pkg7-sources.jar",
