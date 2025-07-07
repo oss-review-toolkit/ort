@@ -41,6 +41,40 @@ packages:
   licenseDeclared: "MIT"
   name: "proj1"
   versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1"
+  copyrightText: "Copyright (c) 2006-2010 Kirill Simonov"
+  downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE_MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:golang/gopkg.in/yaml.v3@3.0.1"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND MIT"
+  name: "gopkg.in/yaml.v3"
+  versionInfo: "3.0.1"
+- SPDXID: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1-vcs"
+  copyrightText: "Copyright (c) 2006-2010 Kirill Simonov"
+  downloadLocation: "git+https://gopkg.in/yaml.v3@f6f7691b1fdeb513f56608cd2c32c51f8194bf51"
+  externalRefs:
+  - referenceCategory: "PACKAGE_MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:golang/gopkg.in/yaml.v3@3.0.1"
+  filesAnalyzed: true
+  hasFiles:
+  - "SPDXRef-File-1"
+  - "SPDXRef-File-2"
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND MIT"
+  licenseInfoFromFiles:
+  - "Apache-2.0"
+  - "MIT"
+  name: "gopkg.in/yaml.v3"
+  packageVerificationCode:
+    packageVerificationCodeValue: "1ee5bcb5fe279ad210bd57c8bc9bcfe5ae99729f"
+  versionInfo: "3.0.1"
 - SPDXID: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
   checksums:
   - algorithm: "SHA1"
@@ -73,7 +107,7 @@ packages:
     referenceLocator: "pkg:maven/pkg1-grp/pkg1@0.0.1"
   filesAnalyzed: true
   hasFiles:
-  - "SPDXRef-File-1"
+  - "SPDXRef-File-3"
   homepage: "https://example.com/pkg1/homepage"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
@@ -182,8 +216,8 @@ packages:
     referenceLocator: "pkg:maven/pkg7-grp/pkg7@0.0.1"
   filesAnalyzed: true
   hasFiles:
-  - "SPDXRef-File-2"
-  - "SPDXRef-File-3"
+  - "SPDXRef-File-4"
+  - "SPDXRef-File-5"
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "GPL-2.0-only WITH NOASSERTION"
@@ -197,6 +231,25 @@ files:
 - SPDXID: "SPDXRef-File-1"
   checksums:
   - algorithm: "SHA1"
+    checksumValue: "0398ccd0f49298b10a3d76a47800d2ebecd49859"
+  copyrightText: "NONE"
+  fileName: "LICENSE"
+  licenseConcluded: "NOASSERTION"
+  licenseInfoInFiles:
+  - "Apache-2.0"
+  - "MIT"
+- SPDXID: "SPDXRef-File-2"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "b8f428421b06957fe3859ebc30df70d16fc537d4"
+  copyrightText: "Copyright (c) 2006-2010 Kirill Simonov"
+  fileName: "readerc.go"
+  licenseConcluded: "NOASSERTION"
+  licenseInfoInFiles:
+  - "NONE"
+- SPDXID: "SPDXRef-File-3"
+  checksums:
+  - algorithm: "SHA1"
     checksumValue: "8c38f605503f2a48ef7b6220ad06aa0f3387484b"
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
@@ -205,7 +258,7 @@ files:
   licenseConcluded: "NOASSERTION"
   licenseInfoInFiles:
   - "NONE"
-- SPDXID: "SPDXRef-File-2"
+- SPDXID: "SPDXRef-File-4"
   checksums:
   - algorithm: "SHA1"
     checksumValue: "0398ccd0f49298b10a3d76a47800d2ebecd49859"
@@ -214,7 +267,7 @@ files:
   licenseConcluded: "NOASSERTION"
   licenseInfoInFiles:
   - "GPL-2.0-only WITH NOASSERTION"
-- SPDXID: "SPDXRef-File-3"
+- SPDXID: "SPDXRef-File-5"
   checksums:
   - algorithm: "SHA1"
     checksumValue: "4552f707bdf537911c9943cec56a0bf11bd8468d"
@@ -224,6 +277,9 @@ files:
   licenseInfoInFiles:
   - "NONE"
 relationships:
+- spdxElementId: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1"
+  relationshipType: "GENERATED_FROM"
+  relatedSpdxElement: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1-vcs"
 - spdxElementId: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
   relationshipType: "GENERATED_FROM"
   relatedSpdxElement: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1-source-artifact"
@@ -245,6 +301,9 @@ relationships:
 - spdxElementId: "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1"
   relationshipType: "GENERATED_FROM"
   relatedSpdxElement: "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1-source-artifact"
+- spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1"
 - spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
   relationshipType: "DEPENDS_ON"
   relatedSpdxElement: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
