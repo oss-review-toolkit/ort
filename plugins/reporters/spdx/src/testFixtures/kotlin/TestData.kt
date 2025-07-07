@@ -104,6 +104,9 @@ val ORT_RESULT = OrtResult(
                                             id = Identifier("Maven:pkg7-grp:pkg7:0.0.1")
                                         )
                                     )
+                                ),
+                                PackageReference(
+                                    id = Identifier("Go::gopkg.in/yaml.v3:3.0.1")
                                 )
                             )
                         ),
@@ -208,6 +211,23 @@ val ORT_RESULT = OrtResult(
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     ),
                     vcs = VcsInfo.EMPTY
+                ),
+                // A package without a declared license, but with license findings in file matching the license file
+                // patterns, which targets testing the inclusion of the main license in the output. This covers
+                // the standard use case in the Go ecosystem where packages do not have a declared license.
+                Package(
+                    id = Identifier("Go::gopkg.in/yaml.v3:3.0.1"),
+                    purl = "pkg:golang/gopkg.in/yaml.v3@3.0.1",
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://gopkg.in/yaml.v3",
+                        revision = "f6f7691b1fdeb513f56608cd2c32c51f8194bf51"
+                    )
                 )
             )
         )
@@ -291,6 +311,41 @@ val ORT_RESULT = OrtResult(
                         CopyrightFinding(
                             statement = "Copyright 2020 Some copyright holder in source artifact",
                             location = TextLocation("some/file", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("Go::gopkg.in/yaml.v3:3.0.1") to listOf(
+            ScanResult(
+                provenance = RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://gopkg.in/yaml.v3",
+                        revision = "f6f7691b1fdeb513f56608cd2c32c51f8194bf51"
+                    ),
+                    resolvedRevision = "f6f7691b1fdeb513f56608cd2c32c51f8194bf51"
+                ),
+                scanner = ScannerDetails.EMPTY,
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "Apache-2.0",
+                            location = TextLocation("LICENSE", 34)
+                        ),
+                        LicenseFinding(
+                            license = "Apache-2.0",
+                            location = TextLocation("LICENSE", 36)
+                        ),
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("LICENSE", 38)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright (c) 2006-2010 Kirill Simonov",
+                            location = TextLocation("readerc.go", 1)
                         )
                     )
                 )
