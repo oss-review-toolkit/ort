@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
+import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_3
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.test.InputFormat
 import org.ossreviewtoolkit.utils.test.matchJsonSchema
@@ -74,6 +75,47 @@ class SpdxDocumentReporterFunTest : WordSpec({
                 ORT_RESULT,
                 FileFormat.JSON,
                 SPDX_VERSION_2_2,
+                fileInformationEnabled = false
+            )
+            val document = fromJson<SpdxDocument>(jsonSpdxDocument)
+
+            jsonSpdxDocument should matchJsonSchema(schemaJson)
+            document.files should beEmpty()
+        }
+    }
+
+    "Reporting to SPDX-2.3" should {
+        val schemaJson = readResource("/v2.3/spdx-schema.json")
+
+        "create the expected JSON document for a synthetic scan result" {
+            val expectedResult = readResource("/v2.3/synthetic-scan-result-expected-output.spdx.json")
+
+            val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON, SPDX_VERSION_2_3)
+
+            jsonSpdxDocument should matchJsonSchema(schemaJson)
+            jsonSpdxDocument shouldBe patchExpectedResult(
+                expectedResult,
+                custom = fromJson<SpdxDocument>(jsonSpdxDocument).getCustomReplacements()
+            )
+        }
+
+        "create the expected YAML document for a synthetic scan result" {
+            val expectedResult = readResource("/v2.3/synthetic-scan-result-expected-output.spdx.yml")
+
+            val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML, SPDX_VERSION_2_3)
+
+            yamlSpdxDocument should matchJsonSchema(schemaJson, InputFormat.YAML)
+            yamlSpdxDocument shouldBe patchExpectedResult(
+                expectedResult,
+                custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
+            )
+        }
+
+        "omit file information if the corresponding option is disabled" {
+            val jsonSpdxDocument = generateReport(
+                ORT_RESULT,
+                FileFormat.JSON,
+                SPDX_VERSION_2_3,
                 fileInformationEnabled = false
             )
             val document = fromJson<SpdxDocument>(jsonSpdxDocument)
