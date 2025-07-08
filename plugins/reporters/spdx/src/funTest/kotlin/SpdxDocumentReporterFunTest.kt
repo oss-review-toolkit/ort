@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
+import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_3
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.test.InputFormat
 import org.ossreviewtoolkit.utils.test.matchJsonSchema
@@ -42,44 +43,49 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readResource
 
 class SpdxDocumentReporterFunTest : WordSpec({
-    "Reporting to SPDX-2.2" should {
-        val schemaJson by lazy { readResource("/v2.2.2/spdx-schema.json") }
+    "generateReport()" should {
+        listOf(
+            SPDX_VERSION_2_2 to "v2.2.2",
+            SPDX_VERSION_2_3 to "v2.3"
+        ).forEach { (spdxVersion, versionDir) ->
+            val schemaJson = readResource("/$versionDir/spdx-schema.json")
 
-        "create the expected JSON document for a synthetic scan result" {
-            val expectedResult = readResource("/v2.2.2/synthetic-scan-result-expected-output.spdx.json")
+            "create the expected $spdxVersion JSON document for a synthetic scan result" {
+                val expectedResult = readResource("/$versionDir/synthetic-scan-result-expected-output.spdx.json")
 
-            val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON, SPDX_VERSION_2_2)
+                val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON, spdxVersion)
 
-            jsonSpdxDocument should matchJsonSchema(schemaJson)
-            jsonSpdxDocument shouldBe patchExpectedResult(
-                expectedResult,
-                custom = fromJson<SpdxDocument>(jsonSpdxDocument).getCustomReplacements()
-            )
-        }
+                jsonSpdxDocument should matchJsonSchema(schemaJson)
+                jsonSpdxDocument shouldBe patchExpectedResult(
+                    expectedResult,
+                    custom = fromJson<SpdxDocument>(jsonSpdxDocument).getCustomReplacements()
+                )
+            }
 
-        "create the expected YAML document for a synthetic scan result" {
-            val expectedResult = readResource("/v2.2.2/synthetic-scan-result-expected-output.spdx.yml")
+            "create the expected $spdxVersion YAML document for a synthetic scan result" {
+                val expectedResult = readResource("/$versionDir/synthetic-scan-result-expected-output.spdx.yml")
 
-            val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML, SPDX_VERSION_2_2)
+                val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML, spdxVersion)
 
-            yamlSpdxDocument should matchJsonSchema(schemaJson, InputFormat.YAML)
-            yamlSpdxDocument shouldBe patchExpectedResult(
-                expectedResult,
-                custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
-            )
-        }
+                yamlSpdxDocument should matchJsonSchema(schemaJson, InputFormat.YAML)
+                yamlSpdxDocument shouldBe patchExpectedResult(
+                    expectedResult,
+                    custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
+                )
+            }
 
-        "omit file information if the corresponding option is disabled" {
-            val jsonSpdxDocument = generateReport(
-                ORT_RESULT,
-                FileFormat.JSON,
-                SPDX_VERSION_2_2,
-                fileInformationEnabled = false
-            )
-            val document = fromJson<SpdxDocument>(jsonSpdxDocument)
+            "create a $spdxVersion document without file information if the corresponding option is disabled" {
+                val jsonSpdxDocument = generateReport(
+                    ORT_RESULT,
+                    FileFormat.JSON,
+                    spdxVersion,
+                    fileInformationEnabled = false
+                )
+                val document = fromJson<SpdxDocument>(jsonSpdxDocument)
 
-            jsonSpdxDocument should matchJsonSchema(schemaJson)
-            document.files should beEmpty()
+                jsonSpdxDocument should matchJsonSchema(schemaJson)
+                document.files should beEmpty()
+            }
         }
     }
 })

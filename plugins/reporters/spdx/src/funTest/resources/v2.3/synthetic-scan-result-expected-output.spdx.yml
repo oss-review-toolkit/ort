@@ -1,0 +1,312 @@
+---
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.3"
+creationInfo:
+  comment: "some creation info comment"
+  created: "<REPLACE_CREATION_DATE_AND_TIME>"
+  creators:
+  - "Person: some creation info person"
+  - "Organization: some creation info organization"
+  - "Tool: ort-<REPLACE_ORT_VERSION>"
+  licenseListVersion: "<REPLACE_LICENSE_LIST_VERSION>"
+name: "some document name"
+dataLicense: "CC0-1.0"
+comment: "some document comment"
+hasExtractedLicensingInfos:
+- extractedText: "ASMUS License\n\nDisclaimer and legal rights\n---------------------------\n\
+    \nThis file contains bugs. All representations to the contrary are void.\n\nSource\
+    \ code in this file and the accompanying headers and included \nfiles may be distributed\
+    \ free of charge by anyone, as long as full \ncredit is given and any and all\
+    \ liabilities are assumed by the \nrecipient."
+  licenseId: "LicenseRef-scancode-asmus"
+- extractedText: "To anyone who acknowledges that the file \"sRGB Color Space Profile.icm\"\
+    \ \nis provided \"AS IS\" WITH NO EXPRESS OR IMPLIED WARRANTY:\npermission to\
+    \ use, copy and distribute this file for any purpose is hereby \ngranted without\
+    \ fee, provided that the file is not changed including the HP \ncopyright notice\
+    \ tag, and that the name of Hewlett-Packard Company not be \nused in advertising\
+    \ or publicity pertaining to distribution of the software \nwithout specific,\
+    \ written prior permission. Hewlett-Packard Company makes \nno representations\
+    \ about the suitability of this software for any purpose."
+  licenseId: "LicenseRef-scancode-srgb"
+documentNamespace: "<REPLACE_DOCUMENT_NAMESPACE>"
+documentDescribes:
+- "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
+packages:
+- SPDXID: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
+  copyrightText: "NONE"
+  downloadLocation: "https://github.com/path/proj1-repo.git"
+  filesAnalyzed: false
+  homepage: "https://example.com/proj1/homepage"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "MIT"
+  name: "proj1"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1"
+  copyrightText: "Copyright (c) 2006-2010 Kirill Simonov"
+  downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:golang/gopkg.in/yaml.v3@3.0.1"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND MIT"
+  name: "gopkg.in/yaml.v3"
+  versionInfo: "3.0.1"
+- SPDXID: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1-vcs"
+  copyrightText: "Copyright (c) 2006-2010 Kirill Simonov"
+  downloadLocation: "git+https://gopkg.in/yaml.v3@f6f7691b1fdeb513f56608cd2c32c51f8194bf51"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:golang/gopkg.in/yaml.v3@3.0.1"
+  filesAnalyzed: true
+  hasFiles:
+  - "SPDXRef-File-1"
+  - "SPDXRef-File-2"
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND MIT"
+  licenseInfoFromFiles:
+  - "Apache-2.0"
+  - "MIT"
+  name: "gopkg.in/yaml.v3"
+  packageVerificationCode:
+    packageVerificationCodeValue: "1ee5bcb5fe279ad210bd57c8bc9bcfe5ae99729f"
+  versionInfo: "3.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "0000000000000000000000000000000000000000"
+  copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
+    \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
+    \ in source artifact"
+  description: "Description of pkg1."
+  downloadLocation: "https://example.com/pkg1.jar"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg1-grp/pkg1@0.0.1"
+  filesAnalyzed: false
+  homepage: "https://example.com/pkg1/homepage"
+  licenseConcluded: "BSD-2-Clause AND BSD-3-Clause AND MIT"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
+    \ OR MIT) AND MIT"
+  name: "pkg1"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1-vcs"
+  copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
+    \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
+    \ in source artifact"
+  description: "Description of pkg1."
+  downloadLocation: "git+ssh://github.com/path/pkg1-repo.git@deadbeef#project-path"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg1-grp/pkg1@0.0.1"
+  filesAnalyzed: true
+  hasFiles:
+  - "SPDXRef-File-3"
+  homepage: "https://example.com/pkg1/homepage"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
+    \ OR MIT) AND MIT"
+  licenseInfoFromFiles:
+  - "Apache-2.0"
+  - "BSD-2-Clause"
+  name: "pkg1"
+  packageVerificationCode:
+    packageVerificationCodeValue: "3700a1e8575c082653af662ac024337faf78990f"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1-source-artifact"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "0000000000000000000000000000000000000000"
+  copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
+    \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
+    \ in source artifact"
+  description: "Description of pkg1."
+  downloadLocation: "https://example.com/pkg1-sources.jar"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg1-grp/pkg1@0.0.1"
+  filesAnalyzed: false
+  homepage: "https://example.com/pkg1/homepage"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
+    \ OR MIT) AND MIT"
+  name: "pkg1"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg2-grp-pkg2-0.0.1"
+  copyrightText: "NONE"
+  downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg2-grp/pkg2@0.0.1"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "NONE"
+  name: "pkg2"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg3-grp-pkg3-0.0.1"
+  copyrightText: "NONE"
+  downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg3-grp/pkg3@0.0.1"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "NONE"
+  name: "pkg3"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg4-grp-pkg4-0.0.1"
+  copyrightText: "NONE"
+  downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg4-grp/pkg4@0.0.1"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "MIT"
+  name: "pkg4"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg6-grp-pkg6-0.0.1"
+  copyrightText: "NONE"
+  downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg6-grp/pkg6@0.0.1"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseConcluded: "LicenseRef-scancode-srgb"
+  licenseDeclared: "LicenseRef-scancode-asmus"
+  name: "pkg6"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1"
+  copyrightText: "Copyright 2020 Some copyright holder in source artifact"
+  downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg7-grp/pkg7@0.0.1"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "GPL-2.0-only WITH NOASSERTION"
+  name: "pkg7"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1-source-artifact"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "0000000000000000000000000000000000000000"
+  copyrightText: "Copyright 2020 Some copyright holder in source artifact"
+  downloadLocation: "https://example.com/pkg7-sources.jar"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg7-grp/pkg7@0.0.1"
+  filesAnalyzed: true
+  hasFiles:
+  - "SPDXRef-File-4"
+  - "SPDXRef-File-5"
+  homepage: "NONE"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "GPL-2.0-only WITH NOASSERTION"
+  licenseInfoFromFiles:
+  - "GPL-2.0-only WITH NOASSERTION"
+  name: "pkg7"
+  packageVerificationCode:
+    packageVerificationCodeValue: "e14acc46fad3a38a1ef2830067619812b51cb4bc"
+  versionInfo: "0.0.1"
+files:
+- SPDXID: "SPDXRef-File-1"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "0398ccd0f49298b10a3d76a47800d2ebecd49859"
+  copyrightText: "NONE"
+  fileName: "LICENSE"
+  licenseConcluded: "NOASSERTION"
+  licenseInfoInFiles:
+  - "Apache-2.0"
+  - "MIT"
+- SPDXID: "SPDXRef-File-2"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "b8f428421b06957fe3859ebc30df70d16fc537d4"
+  copyrightText: "Copyright (c) 2006-2010 Kirill Simonov"
+  fileName: "readerc.go"
+  licenseConcluded: "NOASSERTION"
+  licenseInfoInFiles:
+  - "NONE"
+- SPDXID: "SPDXRef-File-3"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "8c38f605503f2a48ef7b6220ad06aa0f3387484b"
+  copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
+    \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
+    \ in source artifact"
+  fileName: "project-path/some/file"
+  licenseConcluded: "NOASSERTION"
+  licenseInfoInFiles:
+  - "NONE"
+- SPDXID: "SPDXRef-File-4"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "0398ccd0f49298b10a3d76a47800d2ebecd49859"
+  copyrightText: "NONE"
+  fileName: "LICENSE"
+  licenseConcluded: "NOASSERTION"
+  licenseInfoInFiles:
+  - "GPL-2.0-only WITH NOASSERTION"
+- SPDXID: "SPDXRef-File-5"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "4552f707bdf537911c9943cec56a0bf11bd8468d"
+  copyrightText: "Copyright 2020 Some copyright holder in source artifact"
+  fileName: "some/file"
+  licenseConcluded: "NOASSERTION"
+  licenseInfoInFiles:
+  - "NONE"
+relationships:
+- spdxElementId: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1"
+  relationshipType: "GENERATED_FROM"
+  relatedSpdxElement: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1-vcs"
+- spdxElementId: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
+  relationshipType: "GENERATED_FROM"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1-source-artifact"
+- spdxElementId: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
+  relationshipType: "GENERATED_FROM"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1-vcs"
+- spdxElementId: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg2-grp-pkg2-0.0.1"
+- spdxElementId: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg3-grp-pkg3-0.0.1"
+- spdxElementId: "SPDXRef-Package-Maven-pkg3-grp-pkg3-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg6-grp-pkg6-0.0.1"
+- spdxElementId: "SPDXRef-Package-Maven-pkg4-grp-pkg4-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1"
+- spdxElementId: "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1"
+  relationshipType: "GENERATED_FROM"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1-source-artifact"
+- spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg4-grp-pkg4-0.0.1"
