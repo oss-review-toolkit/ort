@@ -126,17 +126,6 @@ class SpdxDocumentReporterFunTest : WordSpec({
     }
 })
 
-private val DEFAULT_CONFIG = SpdxDocumentReporterConfig(
-    spdxVersion = SPDX_VERSION_2_2,
-    creationInfoComment = "some creation info comment",
-    creationInfoPerson = "some creation info person",
-    creationInfoOrganization = "some creation info organization",
-    documentComment = "some document comment",
-    documentName = "some document name",
-    fileInformationEnabled = true,
-    outputFileFormats = emptyList()
-)
-
 private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
     format: FileFormat,
@@ -147,10 +136,15 @@ private fun TestConfiguration.generateReport(
 
     val outputDir = tempdir()
 
-    val config = DEFAULT_CONFIG.copy(
+    val config = SpdxDocumentReporterConfig(
+        spdxVersion = spdxVersion,
+        creationInfoComment = "some creation info comment",
+        creationInfoPerson = "some creation info person",
+        creationInfoOrganization = "some creation info organization",
+        documentComment = "some document comment",
+        documentName = "some document name",
         fileInformationEnabled = fileInformationEnabled,
-        outputFileFormats = listOf(format.name),
-        spdxVersion = spdxVersion
+        outputFileFormats = listOf(format.name)
     )
 
     return SpdxDocumentReporter(config = config)
