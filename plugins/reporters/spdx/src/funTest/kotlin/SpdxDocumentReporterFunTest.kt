@@ -43,10 +43,10 @@ import org.ossreviewtoolkit.utils.test.readResource
 
 class SpdxDocumentReporterFunTest : WordSpec({
     "Reporting to SPDX-2.2" should {
-        val schemaJson by lazy { readResource("/spdx-v2.2.2-schema.json") }
+        val schemaJson by lazy { readResource("/v2.2.2/spdx-schema.json") }
 
         "create the expected JSON document for a synthetic scan result" {
-            val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.json")
+            val expectedResult = readResource("/v2.2.2/synthetic-scan-result-expected-output.spdx.json")
 
             val jsonSpdxDocument = generateReport(ORT_RESULT, FileFormat.JSON, SPDX_VERSION_2_2)
 
@@ -58,7 +58,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
 
         "create the expected YAML document for a synthetic scan result" {
-            val expectedResult = readResource("/synthetic-scan-result-expected-output.spdx.yml")
+            val expectedResult = readResource("/v2.2.2/synthetic-scan-result-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ORT_RESULT, FileFormat.YAML, SPDX_VERSION_2_2)
 
