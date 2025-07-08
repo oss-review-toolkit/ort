@@ -166,6 +166,11 @@ SPDX-FileCopyrightText = "2020-2022 Linux Foundation and its Contributors"
 SPDX-License-Identifier = "CC-BY-3.0"
 
 [[annotations]]
+path = "plugins/reporters/spdx/src/funTest/resources/v2.3/spdx-schema.json"
+SPDX-FileCopyrightText = "2020-2022 Linux Foundation and its Contributors"
+SPDX-License-Identifier = "CC-BY-3.0"
+
+[[annotations]]
 path = "plugins/reporters/ctrlx/src/funTest/resources/sample.fossinfo.json"
 SPDX-FileCopyrightText = "2020-2021 Bosch Rexroth AG"
 SPDX-License-Identifier = "MIT"
