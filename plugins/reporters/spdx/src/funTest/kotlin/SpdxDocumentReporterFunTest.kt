@@ -132,10 +132,6 @@ private fun TestConfiguration.generateReport(
     spdxVersion: String,
     fileInformationEnabled: Boolean = true
 ): String {
-    val input = ReporterInput(ortResult)
-
-    val outputDir = tempdir()
-
     val config = SpdxDocumentReporterConfig(
         spdxVersion = spdxVersion,
         creationInfoComment = "some creation info comment",
@@ -148,7 +144,7 @@ private fun TestConfiguration.generateReport(
     )
 
     return SpdxDocumentReporter(config = config)
-        .generateReport(input, outputDir)
+        .generateReport(input = ReporterInput(ortResult), outputDir = tempdir())
         .single()
         .getOrThrow()
         .readText()
