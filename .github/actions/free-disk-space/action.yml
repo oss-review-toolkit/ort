@@ -40,8 +40,11 @@ runs:
       run: |
         sudo rm -rf /usr/lib/dotnet
         sudo rm -rf /usr/lib/firefox
+        sudo rm -rf /usr/lib/google-cloud-sdk
+        sudo rm -rf /usr/lib/llvm*
         sudo rm -rf /usr/local/aws-cli
         sudo rm -rf /usr/local/aws-sam-cli
+        sudo rm -rf /usr/local/julia1.11.5
         sudo rm -rf /usr/local/lib/android
         sudo rm -rf /usr/local/lib/node_modules
         sudo rm -rf /usr/local/share/chromium
