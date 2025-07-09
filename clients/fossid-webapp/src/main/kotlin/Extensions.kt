@@ -22,15 +22,22 @@
 package org.ossreviewtoolkit.clients.fossid
 
 import java.io.File
+import java.nio.ByteBuffer
 
 import kotlin.io.encoding.Base64
 
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+
+import okio.BufferedSink
 import okio.buffer
 import okio.sink
 
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
+import org.ossreviewtoolkit.clients.fossid.model.RemoveUploadContentResponse
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
@@ -42,6 +49,9 @@ import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 internal const val SCAN_GROUP = "scans"
 private const val FILES_AND_FOLDERS_GROUP = "files_and_folders"
 private const val PROJECT_GROUP = "projects"
+private val APPLICATION_OCTET_STREAM_MEDIA_TYPE = "application/octet-stream".toMediaType()
+private const val UPLOAD_MAX_FILE_SIZE = 8 * 1024 * 1024 // Default max file size defined in the FossID Workbench agent.
+private const val UPLOAD_CHUNK_SIZE = 5 * 1024 * 1024 // Default chunk size defined in the FossID Workbench agent.
 
 /**
  * Verify that a request for the given [operation] was successful. [operation] is a free label describing the operation.
@@ -615,6 +625,153 @@ suspend fun FossIdRestService.addFileComment(
             )
         )
     )
+}
+
+/**
+ * Check uploaded files for archives and decompress them. If [fileName] is specified, only this file is extracted.
+ * If [recursivelyExtractArchives] is specified, also extract archives inside the extracted files.
+ * If [jarFileExtraction] is specified, also extract JAR files.
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.extractArchives(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    fileName: String? = null,
+    recursivelyExtractArchives: Boolean = false,
+    extractToDirectory: Boolean = true,
+    jarFileExtraction: Boolean = false
+): EntityResponseBody<Nothing> {
+    val recursivelyExtractArchivesFlag = if (recursivelyExtractArchives) "1" else "0"
+    val extractToDirectoryFlag = if (extractToDirectory) "1" else "0"
+    val jarFileExtractionFlag = if (jarFileExtraction) "1" else "0"
+    val baseOptions = mapOf(
+        "scan_code" to scanCode,
+        "recursively_extract_archives" to recursivelyExtractArchivesFlag,
+        "extract_to_directory" to extractToDirectoryFlag,
+        "jar_file_extraction" to jarFileExtractionFlag
+    )
+    return extractArchives(
+        PostRequestBody(
+            "extract_archives",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            if (fileName == null) {
+                baseOptions
+            } else {
+                baseOptions + mapOf("filename" to fileName)
+            }
+        )
+    )
+}
+
+/**
+ * Remove uploaded content for the given [scanCode]. If [fileName] is specified, only this file is removed.
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.removeUploadedContent(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    fileName: String? = null
+): PolymorphicDataResponseBody<RemoveUploadContentResponse> {
+    val baseOptions = mapOf("scan_code" to scanCode)
+    return removeUploadedContent(
+        PostRequestBody(
+            "remove_uploaded_content",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            if (fileName == null) {
+                baseOptions
+            } else {
+                baseOptions + mapOf("filename" to fileName)
+            }
+        )
+    )
+}
+
+/**
+ * Upload a file to the given [scanCode] on the FossID server. If the file is bigger than [UPLOAD_MAX_FILE_SIZE] bytes
+ * or if [forceChunkedUpload] is true, the file is uploaded in chunks of [chunkSize] bytes.
+ *
+ * When a chunk of the file is uploaded, the server expects a Transfer-Encoding header with the value "chunked". Please
+ * note that this is not the transfer encoding defined by RFC 9112 §7.1: The body of the request doesn't contain the
+ * chunk size nor the chunk delimiter, but only the raw bytes of the file chunk (see
+ * https://en.wikipedia.org/wiki/Chunked_transfer_encoding).
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.uploadFile(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    file: File,
+    chunkSize: Int = UPLOAD_CHUNK_SIZE,
+    forceChunkedUpload: Boolean = false
+): EntityResponseBody<Nothing> {
+    require(file.isFile) { "The file '$file' does not exist or is not a regular file." }
+
+    val scanCodeB64 = Base64.encode(scanCode.toByteArray())
+    val fileName = Base64.encode(file.name.toByteArray())
+    val basicAuthHeaderValue = Base64.encode("$user:$apiKey".toByteArray())
+    return if (file.length() > UPLOAD_MAX_FILE_SIZE || forceChunkedUpload) {
+        // Chunked upload mode
+        val buffer = ByteBuffer.allocate(chunkSize)
+        var chunkCount = 0
+
+        file.inputStream().use {
+            var read = it.channel.read(buffer)
+
+            while (read != -1) {
+                val array = ByteArray(read)
+                buffer.flip().get(array)
+
+                logger.info {
+                    "Uploading chunk #${chunkCount++} of file ${file.absolutePath}..."
+                }
+
+                // Here, array.toRequestBody(contentType) should be used to create the request body, but when a request
+                // body has a content length different of -1, OkHttp removes the chunked transfer encoding header and
+                // set the content length header instead. Therefore, a special RequestBody has to be created instead.
+                // See https://github.com/square/retrofit/issues/1315.
+                val requestBody = object : RequestBody() {
+                    override fun contentType() = APPLICATION_OCTET_STREAM_MEDIA_TYPE
+
+                    override fun contentLength() = -1L
+
+                    override fun writeTo(sink: BufferedSink) {
+                        sink.write(array, 0, array.size)
+                    }
+                }
+
+                val response = uploadFile(
+                    scanCodeB64,
+                    fileName,
+                    "Basic $basicAuthHeaderValue",
+                    "chunked",
+                    requestBody
+                )
+
+                response.checkResponse("upload file chunk", withDataCheck = false)
+                buffer.clear()
+                read = it.channel.read(buffer)
+            }
+        }
+
+        EntityResponseBody(status = 1)
+    } else {
+        uploadFile(
+            scanCodeB64,
+            fileName,
+            "Basic $basicAuthHeaderValue",
+            "",
+            file.readBytes().toRequestBody(APPLICATION_OCTET_STREAM_MEDIA_TYPE)
+        )
+    }
 }
 
 /**

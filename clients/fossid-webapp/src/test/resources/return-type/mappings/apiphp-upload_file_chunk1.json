@@ -1,0 +1,38 @@
+{
+  "id" : "9d55b105-a516-4a20-a358-ae78cdcc6ef0",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "headers": {
+      "Content-Type": {
+        "equalTo": "application/octet-stream"
+      },
+      "FOSSID-SCAN-CODE": {
+        "equalTo": "c2VtdmVyNGpfMl8yMDIwMTIwM18wOTAzNDI="
+      },
+      "Authorization": {
+        "equalTo": "Basic Og=="
+      },
+      "Transfer-Encoding": {
+        "equalTo": "chunked"
+      }
+    },
+    "bodyPatterns" : [ {
+      "equalTo" : "Hello Worl"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"Upload_apiUpload\",\"status\":1,\"data\":null}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 05 Dec 2021 11:54:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "9d55b105-a516-4a20-a358-ae78cdcc6ef0",
+  "persistent" : true,
+  "insertionIndex" : 1
+}
