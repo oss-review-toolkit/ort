@@ -5,6 +5,11 @@ excludes:
     reason: "TEST_OF"
     comment: >-
       Licenses contained in this directory are used for testing and do not apply to the OSS Review Toolkit.
+  - pattern: "evaluator/src/main/resources/rules/matrixseqexpl.json"
+    reason: "DATA_FILE_OF"
+    comment: >-
+      This file contains the OSADL license compatibility matrix used by the Evaluator.
+      It does not apply to the OSS Review Toolkit.
   - pattern: "examples/**"
     reason: "EXAMPLE_OF"
     comment: >-
