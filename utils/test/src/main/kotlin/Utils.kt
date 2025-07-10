@@ -66,11 +66,6 @@ fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>): Advisor
     )
 
 /**
- * Return the content of the fun test asset file located under [path] relative to the 'assets' directory as text.
- */
-fun getAssetAsString(path: String): String = getAssetFile(path).readText()
-
-/**
  * Return the absolute file for the functional test assets at the given [path].
  */
 fun getAssetFile(path: String): File = File("src/funTest/assets", path).absoluteFile
