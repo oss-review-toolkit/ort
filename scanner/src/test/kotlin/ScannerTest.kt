@@ -23,6 +23,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
@@ -44,6 +45,7 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -52,11 +54,13 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
@@ -73,6 +77,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 @Suppress("LargeClass")
 class ScannerTest : WordSpec({
@@ -984,6 +989,57 @@ class ScannerTest : WordSpec({
                 reader.read(any())
                 reader.read(any(), any())
             }
+        }
+    }
+
+    "ScannerRun.padNoneLicenseFindings()" should {
+        "add NONE license findings for files without findings" {
+            val provenance = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "revision"),
+                "revision"
+            )
+
+            val run = ScannerRun.EMPTY.copy(
+                provenances = setOf(
+                    ProvenanceResolutionResult(
+                        id = Identifier("maven::example:1.0"),
+                        packageProvenance = provenance
+                    )
+                ),
+                scanResults = setOf(
+                    ScanResult(
+                        provenance = provenance,
+                        scanner = ScannerDetails.EMPTY,
+                        summary = ScanSummary.EMPTY.copy(
+                            licenseFindings = setOf(
+                                LicenseFinding("MIT", TextLocation("file1.txt", 1, 1))
+                            )
+                        )
+                    )
+                ),
+                files = setOf(
+                    FileList(
+                        provenance = provenance,
+                        files = setOf(
+                            FileList.Entry(
+                                path = "file1.txt",
+                                sha1 = "1111111111111111111111111111111111111111"
+                            ),
+                            FileList.Entry(
+                                path = "file2.txt",
+                                sha1 = "2222222222222222222222222222222222222222"
+                            )
+                        )
+                    )
+                )
+            )
+
+            val paddedRun = run.padNoneLicenseFindings()
+
+            paddedRun.scanResults.single().summary.licenseFindings should containExactlyInAnyOrder(
+                LicenseFinding("MIT", TextLocation("file1.txt", 1, 1)),
+                LicenseFinding(SpdxConstants.NONE, TextLocation("file2.txt", TextLocation.UNKNOWN_LINE))
+            )
         }
     }
 
