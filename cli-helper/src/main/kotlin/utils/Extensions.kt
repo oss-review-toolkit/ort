@@ -393,7 +393,7 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
 
     forEach { (repositoryUrl, curations) ->
         curations.forEach { curation ->
-            merge(repositoryUrl, curation, false)
+            merge(repositoryUrl, curation)
         }
     }
 
@@ -441,7 +441,7 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
 
     forEach { (repositoryUrl, pathExcludes) ->
         pathExcludes.forEach { pathExclude ->
-            merge(repositoryUrl, pathExclude, false)
+            merge(repositoryUrl, pathExclude)
         }
     }
 
