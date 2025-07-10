@@ -156,7 +156,7 @@ class Scanner(
         return ortResult.copy(scanner = scannerRun)
     }
 
-    suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun {
+    internal suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun {
         val scannerWrappers = scannerWrappers[context.packageType]
         if (scannerWrappers.isNullOrEmpty()) {
             logger.info { "Skipping ${context.packageType} scan as no according scanner is configured." }
