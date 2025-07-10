@@ -211,6 +211,9 @@ signing {
 }
 
 tasks.named<JavaExec>("run") {
+    // Work around https://github.com/graalvm/native-build-tools/issues/743.
+    doNotTrackState("The 'run' task is never supposed to be UP-TO-DATE.")
+
     System.getenv("TERM")?.also {
         val mode = it.substringAfter('-', "16color")
         environment("FORCE_COLOR" to mode)
