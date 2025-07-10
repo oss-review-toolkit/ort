@@ -106,10 +106,7 @@ data class LicenseDetection(
 
 private const val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}scancode-"
 
-private fun LicenseEntry.Version1.getSpdxId(): String {
-    val spdxId = spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
-    if (spdxId != null) return spdxId
-
+private fun LicenseEntry.Version1.getSpdxId(): String =
     // Fall back to building an ID based on the ScanCode-specific "key".
-    return "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
-}
+    spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
+        ?: "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
