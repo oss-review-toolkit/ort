@@ -193,7 +193,7 @@ class Scanner(
 
         val vcsPathsForProvenances = getVcsPathsForProvenances(provenances)
 
-        val filteredScanResults = filterScanResultsByVcsPaths(controller.getAllScanResults(), vcsPathsForProvenances)
+        val scanResults = filterScanResultsByVcsPaths(controller.getAllScanResults(), vcsPathsForProvenances)
 
         val files = controller.getAllFileLists().mapTo(mutableSetOf()) { (provenance, fileList) ->
             FileList(
@@ -208,35 +208,12 @@ class Scanner(
             }
         }
 
-        val scanResults = if (scannerConfig.includeFilesWithoutFindings) {
-            filteredScanResults.mapTo(mutableSetOf()) { scanResult ->
-                val allPaths = controller.getAllFileLists()[scanResult.provenance]?.files?.mapTo(mutableSetOf()) {
-                    it.path
-                }.orEmpty()
-
-                val pathsWithFindings = scanResult.summary.licenseFindings.mapTo(mutableSetOf()) { it.location.path }
-                val pathsWithoutFindings = allPaths - pathsWithFindings
-
-                val findingsThatAreNone = pathsWithoutFindings.mapTo(mutableSetOf()) {
-                    LicenseFinding(SpdxConstants.NONE, TextLocation(it, TextLocation.UNKNOWN_LINE))
-                }
-
-                scanResult.copy(
-                    summary = scanResult.summary.copy(
-                        licenseFindings = scanResult.summary.licenseFindings + findingsThatAreNone
-                    )
-                )
-            }
-        } else {
-            filteredScanResults
-        }
-
         val scannerIds = scannerWrappers.mapTo(mutableSetOf()) { it.descriptor.id }
         val scanners = packages.associateBy({ it.id }) { scannerIds }
 
         val issues = controller.getIssues()
 
-        return ScannerRun.EMPTY.copy(
+        val scannerRun = ScannerRun.EMPTY.copy(
             config = scannerConfig,
             provenances = provenances,
             scanResults = scanResults,
@@ -244,6 +221,9 @@ class Scanner(
             scanners = scanners,
             issues = issues
         )
+
+        return scannerRun.takeUnless { scannerConfig.includeFilesWithoutFindings }
+            ?: scannerRun.padNoneLicenseFindings()
     }
 
     private suspend fun resolvePackageProvenances(controller: ScanController) {
@@ -819,3 +799,32 @@ private fun FileList.filterByVcsPaths(paths: Collection<String>): FileList =
             }
         )
     }
+
+internal fun ScannerRun.padNoneLicenseFindings(): ScannerRun {
+    val fileListByProvenance = files.associateBy { it.provenance }
+
+    val paddedScanResults = scanResults.mapTo(mutableSetOf()) { scanResult ->
+        val allPaths = fileListByProvenance[scanResult.provenance]?.files?.mapTo(mutableSetOf()) {
+            it.path
+        }.orEmpty()
+
+        scanResult.padNoneLicenseFindings(allPaths)
+    }
+
+    return copy(scanResults = paddedScanResults)
+}
+
+internal fun ScanResult.padNoneLicenseFindings(paths: Set<String>): ScanResult {
+    val pathsWithFindings = summary.licenseFindings.mapTo(mutableSetOf()) { it.location.path }
+    val pathsWithoutFindings = paths - pathsWithFindings
+
+    val findingsThatAreNone = pathsWithoutFindings.mapTo(mutableSetOf()) {
+        LicenseFinding(SpdxConstants.NONE, TextLocation(it, TextLocation.UNKNOWN_LINE))
+    }
+
+    return copy(
+        summary = summary.copy(
+            licenseFindings = summary.licenseFindings + findingsThatAreNone
+        )
+    )
+}
