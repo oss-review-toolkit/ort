@@ -58,7 +58,7 @@ sealed interface FileEntry {
         override val scanErrors: List<String>
     ) : FileEntry {
         companion object {
-            private val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}scancode-"
+            private const val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}scancode-"
 
             private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
                 val spdxId = spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
