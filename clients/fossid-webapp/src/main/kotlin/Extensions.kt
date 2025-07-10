@@ -70,7 +70,7 @@ fun <B : EntityResponseBody<T>, T> B?.checkResponse(operation: String, withDataC
  */
 suspend fun FossIdRestService.getFossIdVersion(): String? {
     // TODO: replace with an API call when FossID provides a function (starting at version 2021.2).
-    val regex = Regex("^.*fossid.css\\?v=([0-9.]+).*\$")
+    val regex = Regex("^.*fossid.css\\?v=([0-9.]+).*$")
 
     getLoginPage().charStream().buffered().useLines { lines ->
         lines.forEach { line ->
