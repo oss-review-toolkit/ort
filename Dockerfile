@@ -196,9 +196,6 @@ FROM base AS nodejsbuild
 
 ARG BOWER_VERSION
 ARG NODEJS_VERSION
-ARG NPM_VERSION
-ARG PNPM_VERSION
-ARG YARN_VERSION
 
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
@@ -208,7 +205,8 @@ RUN . $NVM_DIR/nvm.sh \
     && nvm install "$NODEJS_VERSION" \
     && nvm alias default "$NODEJS_VERSION" \
     && nvm use default \
-    && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
+    && npm install --global bower@$BOWER_VERSION corepack@latest \
+    && corepack enable
 
 FROM scratch AS nodejs
 COPY --from=nodejsbuild /opt/nvm /opt/nvm
