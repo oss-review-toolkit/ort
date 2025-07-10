@@ -21,6 +21,11 @@ package org.ossreviewtoolkit.plugins.scanners.scancode.model
 
 import kotlinx.serialization.Serializable
 
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.toSpdxId
+
+private const val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}scancode-"
+
 /**
  * An interface to be able to treat all versions of license entries the same.
  *
@@ -51,6 +56,14 @@ sealed interface LicenseEntry {
         override val licenseExpression = matchedRule.licenseExpression
         override val licenseExpressionSpdx = null
         override val fromFile = null
+
+        internal fun getSpdxId(): String {
+            val spdxId = spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
+            if (spdxId != null) return spdxId
+
+            // Fall back to building an ID based on the ScanCode-specific "key".
+            return "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
+        }
     }
 
     @Serializable

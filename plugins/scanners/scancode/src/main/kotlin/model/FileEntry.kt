@@ -24,11 +24,9 @@ import kotlin.collections.orEmpty
 
 import kotlinx.serialization.Serializable
 
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 /**
  * An interface to be able to treat all versions of file entries the same.
@@ -57,23 +55,11 @@ sealed interface FileEntry {
         override val copyrights: List<CopyrightEntry>,
         override val scanErrors: List<String>
     ) : FileEntry {
-        companion object {
-            private const val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}scancode-"
-
-            private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
-                val spdxId = spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
-                if (spdxId != null) return spdxId
-
-                // Fall back to building an ID based on the ScanCode-specific "key".
-                return "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
-            }
-        }
-
         override val detectedLicenseExpressionSpdx = null
 
         override val scanCodeKeyToSpdxIdMappings by lazy {
             licenses.map { license ->
-                license.key to getSpdxId(license.spdxLicenseKey, license.key)
+                license.key to license.getSpdxId()
             }
         }
     }
