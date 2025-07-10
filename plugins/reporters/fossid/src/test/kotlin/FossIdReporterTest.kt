@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -238,6 +239,7 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
         url = "https://github.com/path/first-project.git",
         path = "sub/path"
     )
+    val analyzedProvenance = RepositoryProvenance(analyzedVcs, analyzedVcs.revision)
 
     val results = scanCodes.associateByTo(
         destination = sortedMapOf(),
@@ -266,8 +268,7 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
                         )
                     )
                 ),
-                vcs = analyzedVcs,
-                vcsProcessed = analyzedVcs
+                provenance = analyzedProvenance
             ),
             scanner = scannerRunOf(*results.toList().toTypedArray())
         )

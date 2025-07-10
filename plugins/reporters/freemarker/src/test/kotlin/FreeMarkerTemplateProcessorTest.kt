@@ -94,6 +94,10 @@ private val PROJECT_VCS_INFO = VcsInfo(
     url = "ssh://git@host/manifests/repo?manifest=path/to/manifest.xml",
     revision = "deadbeaf44444444333333332222222211111111"
 )
+private val PROJECT_PROVENANCE = RepositoryProvenance(
+    PROJECT_VCS_INFO,
+    PROJECT_VCS_INFO.revision
+)
 private val NESTED_VCS_INFO = VcsInfo(
     type = VcsType.GIT,
     url = "ssh://git@host/project/repo",
@@ -107,7 +111,7 @@ private val idNestedProject = Identifier("SpdxDocumentFile:@ort:project-in-neste
 
 private val ORT_RESULT = OrtResult(
     repository = Repository(
-        vcs = PROJECT_VCS_INFO,
+        provenance = PROJECT_PROVENANCE,
         config = RepositoryConfiguration(),
         nestedRepositories = mapOf("nested-vcs-dir" to NESTED_VCS_INFO)
     ),
