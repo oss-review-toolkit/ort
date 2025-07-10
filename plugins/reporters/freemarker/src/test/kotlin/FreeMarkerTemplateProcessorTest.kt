@@ -89,10 +89,13 @@ private fun scanResults(vcsInfo: VcsInfo, findingsPaths: Collection<String>): Li
     )
 }
 
-private val PROJECT_VCS_INFO = VcsInfo(
+private val PROJECT_ROOT_VCS_INFO = VcsInfo(
     type = VcsType.GIT_REPO,
     url = "ssh://git@host/manifests/repo?manifest=path/to/manifest.xml",
     revision = "deadbeaf44444444333333332222222211111111"
+)
+private val PROJECT_SUB_VCS_INFO = PROJECT_ROOT_VCS_INFO.copy(
+    path = "sub-dir"
 )
 private val NESTED_VCS_INFO = VcsInfo(
     type = VcsType.GIT,
@@ -107,7 +110,7 @@ private val idNestedProject = Identifier("SpdxDocumentFile:@ort:project-in-neste
 
 private val ORT_RESULT = OrtResult(
     repository = Repository(
-        vcs = PROJECT_VCS_INFO,
+        vcs = PROJECT_ROOT_VCS_INFO,
         config = RepositoryConfiguration(),
         nestedRepositories = mapOf("nested-vcs-dir" to NESTED_VCS_INFO)
     ),
@@ -117,12 +120,12 @@ private val ORT_RESULT = OrtResult(
                 Project.EMPTY.copy(
                     id = idRootProject,
                     definitionFilePath = "package.json",
-                    vcsProcessed = PROJECT_VCS_INFO
+                    vcsProcessed = PROJECT_ROOT_VCS_INFO
                 ),
                 Project.EMPTY.copy(
                     id = idSubProject,
                     definitionFilePath = "sub-dir/project.spdx.yml",
-                    vcsProcessed = PROJECT_VCS_INFO
+                    vcsProcessed = PROJECT_ROOT_VCS_INFO
                 ),
                 Project.EMPTY.copy(
                     id = idNestedProject,
@@ -134,7 +137,7 @@ private val ORT_RESULT = OrtResult(
     ),
     scanner = scannerRunOf(
         idRootProject to scanResults(
-            vcsInfo = PROJECT_VCS_INFO,
+            vcsInfo = PROJECT_ROOT_VCS_INFO,
             findingsPaths = listOf(
                 "src/main.js",
                 "sub-dir/src/main.cpp",
@@ -142,7 +145,7 @@ private val ORT_RESULT = OrtResult(
             )
         ),
         idSubProject to scanResults(
-            vcsInfo = PROJECT_VCS_INFO,
+            vcsInfo = PROJECT_SUB_VCS_INFO,
             findingsPaths = listOf(
                 "sub-dir/src/main.cpp"
             )

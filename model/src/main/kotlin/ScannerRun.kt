@@ -135,6 +135,20 @@ data class ScannerRun(
             }
         }
 
+        scanResults.getDuplicates { it.provenance to it.scanner }.keys.also { duplicates ->
+            require(duplicates.isEmpty()) {
+                val (dupProvenance, dupScanner) = duplicates.first()
+
+                buildString {
+                    appendLine("Found multiple scan results for the same provenance and scanner.")
+                    appendLine("Scanner:")
+                    appendLine(dupScanner.toYaml())
+                    appendLine("Provenance:")
+                    append(dupProvenance.toYaml())
+                }
+            }
+        }
+
         provenances.getDuplicates { it.id }.keys.also { idsForDuplicateProvenanceResolutionResults ->
             require(idsForDuplicateProvenanceResolutionResults.isEmpty()) {
                 "Found multiple provenance resolution results for the following ids: " +
@@ -171,6 +185,13 @@ data class ScannerRun(
                 require(it.vcsInfo.revision == it.resolvedRevision) {
                     "The revision and resolved revision of a file list are not equal, which is not allowed."
                 }
+            }
+        }
+
+        files.getDuplicates { it.provenance }.keys.also { duplicateProvenances ->
+            require(duplicateProvenances.isEmpty()) {
+                "Found multiple file lists for the same provenance:\n" +
+                    duplicateProvenances.first().toYaml()
             }
         }
     }

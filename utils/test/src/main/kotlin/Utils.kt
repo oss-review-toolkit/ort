@@ -151,12 +151,18 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
         }
     }
 
-    val scanResults = pkgScanResultsWithKnownProvenance.values.flatten().mapTo(mutableSetOf()) { scanResult ->
-        scanResult.copy(
-            provenance = (scanResult.provenance as? RepositoryProvenance)?.clearVcsPath()?.alignRevisions()
-                ?: scanResult.provenance
-        )
-    }
+    val scanResults = pkgScanResultsWithKnownProvenance.values.flatten()
+        .map { scanResult ->
+            scanResult.copy(
+                provenance = (scanResult.provenance as? RepositoryProvenance)?.clearVcsPath()?.alignRevisions()
+                    ?: scanResult.provenance
+            )
+        }
+        .groupBy { it.provenance to it.scanner }
+        .values
+        .mapTo(mutableSetOf()) { scanResults ->
+            scanResults.reduce { acc, next -> acc + next }
+        }
 
     val filePathsByProvenance = scanResults.mapNotNull { scanResult ->
         val provenance = scanResult.provenance as? KnownProvenance ?: return@mapNotNull null

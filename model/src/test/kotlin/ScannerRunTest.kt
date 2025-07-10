@@ -36,6 +36,154 @@ import org.ossreviewtoolkit.model.utils.clearVcsPath
 import org.ossreviewtoolkit.utils.ort.Environment
 
 class ScannerRunTest : WordSpec({
+    "init" should {
+        "error on duplicate provenance and scanner scan results" {
+            val provenance = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "revision"),
+                "revision"
+            )
+            val otherProvenance = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "other_revision"),
+                "other_revision"
+            )
+            val provenances = setOf(
+                ProvenanceResolutionResult(
+                    id = Identifier("maven::example:1.0"),
+                    packageProvenance = provenance
+                ),
+                ProvenanceResolutionResult(
+                    id = Identifier("maven::other_example:1.0"),
+                    packageProvenance = otherProvenance
+                )
+            )
+
+            val scanner = ScannerDetails("scanner", "1.0.0", "configuration")
+            val otherScanner = ScannerDetails("other-scanner", "1.0.0", "configuration")
+
+            // Shared provenance and scanner.
+            shouldThrow<IllegalArgumentException> {
+                ScannerRun.EMPTY.copy(
+                    provenances = provenances,
+                    scanResults = setOf(
+                        ScanResult(
+                            provenance = provenance,
+                            scanner = scanner,
+                            summary = ScanSummary.EMPTY.copy(
+                                licenseFindings = setOf(
+                                    LicenseFinding("MIT", TextLocation("file1.txt", 1, 1))
+                                )
+                            )
+                        ),
+                        ScanResult(
+                            provenance = provenance,
+                            scanner = scanner,
+                            summary = ScanSummary.EMPTY.copy(
+                                licenseFindings = setOf(
+                                    LicenseFinding("MIT", TextLocation("file2.txt", 1, 1))
+                                )
+                            )
+                        )
+                    )
+                )
+            }.message shouldBe buildString {
+                appendLine("Found multiple scan results for the same provenance and scanner.")
+                appendLine("Scanner:")
+                appendLine(scanner.toYaml())
+                appendLine("Provenance:")
+                append(provenance.toYaml())
+            }
+
+            // Shared provenance and different scanners.
+            ScannerRun.EMPTY.copy(
+                provenances = provenances,
+                scanResults = setOf(
+                    ScanResult(
+                        provenance = provenance,
+                        scanner = scanner,
+                        summary = ScanSummary.EMPTY.copy(
+                            licenseFindings = setOf(
+                                LicenseFinding("MIT", TextLocation("file1.txt", 1, 1))
+                            )
+                        )
+                    ),
+                    ScanResult(
+                        provenance = provenance,
+                        scanner = otherScanner,
+                        summary = ScanSummary.EMPTY.copy(
+                            licenseFindings = setOf(
+                                LicenseFinding("MIT", TextLocation("file2.txt", 1, 1))
+                            )
+                        )
+                    )
+                )
+            )
+
+            // Different provenance and shared scanner.
+            ScannerRun.EMPTY.copy(
+                provenances = provenances,
+                scanResults = setOf(
+                    ScanResult(
+                        provenance = provenance,
+                        scanner = scanner,
+                        summary = ScanSummary.EMPTY.copy(
+                            licenseFindings = setOf(
+                                LicenseFinding("MIT", TextLocation("file1.txt", 1, 1))
+                            )
+                        )
+                    ),
+                    ScanResult(
+                        provenance = otherProvenance,
+                        scanner = scanner,
+                        summary = ScanSummary.EMPTY.copy(
+                            licenseFindings = setOf(
+                                LicenseFinding("MIT", TextLocation("file2.txt", 1, 1))
+                            )
+                        )
+                    )
+                )
+            )
+        }
+
+        "error on duplicate provenance file lists" {
+            val provenance = RepositoryProvenance(
+                VcsInfo(type = VcsType.GIT, url = "https://github.com/example.git", revision = "revision"),
+                "revision"
+            )
+
+            shouldThrow<IllegalArgumentException> {
+                ScannerRun.EMPTY.copy(
+                    provenances = setOf(
+                        ProvenanceResolutionResult(
+                            id = Identifier("maven::other_example:1.0"),
+                            packageProvenance = provenance
+                        )
+                    ),
+                    files = setOf(
+                        FileList(
+                            provenance = provenance,
+                            files = setOf(
+                                Entry(
+                                    path = "vcs/path/file1.txt",
+                                    sha1 = "1111111111111111111111111111111111111111"
+                                )
+                            )
+                        ),
+                        FileList(
+                            provenance = provenance,
+                            files = setOf(
+                                Entry(
+                                    path = "some/dir/file2.txt",
+                                    sha1 = "2222222222222222222222222222222222222222"
+                                )
+                            )
+                        )
+                    )
+                )
+            }.message shouldBe "Found multiple file lists for the same provenance:\n" +
+                provenance.toYaml()
+        }
+    }
+
     "getFileList()" should {
         "filter by VCS path and merge sub-repository lists as expected" {
             val id = Identifier("a:b:c:1.0.0")
