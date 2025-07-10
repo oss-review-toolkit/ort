@@ -20,6 +20,8 @@
 import org.gradle.internal.logging.text.StyledTextOutput
 import org.gradle.internal.logging.text.StyledTextOutputFactory
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
@@ -46,7 +48,7 @@ interface StyledTextOutputProvider {
     val out: StyledTextOutputFactory
 }
 
-tasks.named<Jar>("jar") {
+tasks.named<KotlinCompile>("compileKotlin") {
     // Resolve objects at configuration time to be compatible with the configuration cache.
     val objects = objects
 
