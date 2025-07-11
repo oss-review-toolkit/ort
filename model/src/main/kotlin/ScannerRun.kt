@@ -273,6 +273,50 @@ data class ScannerRun(
         scanResultsById.mapValues { (_, scanResults) ->
             scanResults.flatMapTo(mutableSetOf()) { it.summary.issues }
         }.zipWithSets(issues)
+
+    operator fun plus(other: ScannerRun): ScannerRun {
+        require(environment == other.environment) {
+            "Cannot merge ScannerRuns with different environments: $environment != ${other.environment}."
+        }
+
+        require(config == other.config) {
+            "Cannot merge ScannerRuns with different configurations: $config != ${other.config}."
+        }
+
+        val mergedFiles = (files.toList() + other.files.toList())
+            .groupBy { it.provenance }
+            .values
+            .map { fileLists ->
+                fileLists.reduce { acc, next -> acc + next }
+            }
+            .toSet()
+
+        val mergedScanResults = (scanResults + other.scanResults)
+            .groupBy { it.provenance to it.scanner }
+            .values
+            .map { scanResults ->
+                scanResults.reduce { acc, next -> acc + next }
+            }
+            .toSet()
+
+        val mergedIssues = (issues.keys union other.issues.keys).associateWith { key ->
+            issues[key].orEmpty() union other.issues[key].orEmpty()
+        }
+
+        val mergedScanners = (scanners.keys union other.scanners.keys).associateWith { key ->
+            scanners[key].orEmpty() union other.scanners[key].orEmpty()
+        }
+
+        return copy(
+            startTime = minOf(startTime, other.startTime),
+            endTime = maxOf(endTime, other.endTime),
+            provenances = provenances + other.provenances,
+            scanResults = mergedScanResults,
+            issues = mergedIssues,
+            scanners = mergedScanners,
+            files = mergedFiles
+        )
+    }
 }
 
 private fun scanResultForProvenanceResolutionIssues(packageProvenance: KnownProvenance?, issues: List<Issue>) =
