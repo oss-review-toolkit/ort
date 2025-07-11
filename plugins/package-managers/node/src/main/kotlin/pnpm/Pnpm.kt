@@ -47,7 +47,7 @@ import org.semver4j.range.RangeListFactory
 internal object PnpmCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
 
-    override fun getVersionRequirement(): RangeList = RangeListFactory.create("5.* - 9.*")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create("5.* - 10.*")
 }
 
 /**
