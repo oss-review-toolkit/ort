@@ -106,13 +106,9 @@ object CopyrightStatementsProcessor {
 
         val mergedParts = processableStatements.groupByPrefixAndOwner()
 
-        val processedStatements = mutableMapOf<String, Set<String>>()
-        mergedParts.forEach {
-            if (it.owner.isNotEmpty()) {
-                val statement = it.toString()
-                processedStatements[statement] = it.originalStatements.toSet()
-            }
-        }
+        val processedStatements = mergedParts
+            .filterNot { it.owner.isEmpty() }
+            .associate { it.toString() to it.originalStatements.toSet() }
 
         return Result(
             processedStatements = processedStatements,
