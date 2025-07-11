@@ -168,22 +168,19 @@ private fun determineParts(copyrightStatement: String): Parts? {
  * Group this collection of [Parts] by prefix and owner and return a list of [Parts] with years and original
  * statements merged accordingly.
  */
-private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
-    val map = mutableMapOf<String, Parts>()
-
-    sorted().forEach { parts ->
-        map.merge(parts.key, parts) { existing, other ->
-            Parts(
-                prefix = existing.prefix,
-                years = existing.years + other.years,
-                owner = existing.owner,
-                originalStatements = existing.originalStatements + other.originalStatements
-            )
+private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> =
+    buildMap {
+        sorted().forEach { parts ->
+            merge(parts.key, parts) { existing, other ->
+                Parts(
+                    prefix = existing.prefix,
+                    years = existing.years + other.years,
+                    owner = existing.owner,
+                    originalStatements = existing.originalStatements + other.originalStatements
+                )
+            }
         }
-    }
-
-    return map.values.toList()
-}
+    }.values.toList()
 
 /**
  * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of
