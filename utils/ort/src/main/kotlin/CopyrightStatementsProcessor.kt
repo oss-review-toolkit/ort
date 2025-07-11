@@ -293,8 +293,8 @@ private fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>>
  * Remove all years from the [copyrightStatement] and return the stripped string paired to the set of years.
  */
 private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
-    replaceYears(copyrightStatement).let {
-        it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
+    replaceYears(copyrightStatement).let { (statement, years) ->
+        statement.replace(YEAR_PLACEHOLDER, "") to years
     }
 
 /**
