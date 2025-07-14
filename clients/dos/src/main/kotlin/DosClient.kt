@@ -28,6 +28,8 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.utils.common.formatSizeInMib
 
+import retrofit2.HttpException
+
 /**
  * A client implementation on top of the DOS service.
  */
@@ -41,17 +43,18 @@ class DosClient(private val service: DosService) {
             return null
         }
 
-        val requestBody = PackageConfigurationRequestBody(purl)
-        val response = service.getPackageConfiguration(requestBody)
-        val responseBody = response.body()
+        return runCatching {
+            val request = PackageConfigurationRequestBody(purl)
+            service.getPackageConfiguration(request)
+        }.onFailure {
+            when (it) {
+                is HttpException -> logger.error {
+                    "Error getting the package configuration for purl $purl: ${it.response()?.errorBody()?.string()}"
+                }
 
-        return if (response.isSuccessful && responseBody != null) {
-            responseBody
-        } else {
-            logger.error { "Error getting the package configuration for purl $purl: ${response.errorBody()?.string()}" }
-
-            null
-        }
+                else -> throw it
+            }
+        }.getOrNull()
     }
 
     /**
@@ -64,16 +67,20 @@ class DosClient(private val service: DosService) {
             return null
         }
 
-        val requestBody = UploadUrlRequestBody(key)
-        val response = service.getUploadUrl(requestBody)
-        val responseBody = response.body()
+        return runCatching {
+            val request = UploadUrlRequestBody(key)
+            service.getUploadUrl(request)
+        }.map {
+            it.presignedUrl
+        }.onFailure {
+            when (it) {
+                is HttpException -> logger.error {
+                    "Unable to get a pre-signed URL for $key: ${it.response()?.errorBody()?.string()}"
+                }
 
-        return if (response.isSuccessful && responseBody != null && responseBody.success) {
-            response.body()?.presignedUrl
-        } else {
-            logger.error { "Unable to get a pre-signed URL for $key: ${response.errorBody()?.string()}" }
-            null
-        }
+                else -> throw it
+            }
+        }.getOrNull()
     }
 
     /**
@@ -83,16 +90,20 @@ class DosClient(private val service: DosService) {
     suspend fun uploadFile(file: File, presignedUrl: String): Boolean {
         logger.info { "Uploading file $file of size ${file.formatSizeInMib} to S3..." }
 
-        val contentType = "application/zip".toMediaType()
-        val response = service.uploadFile(presignedUrl, file.asRequestBody(contentType))
-
-        return if (response.isSuccessful) {
+        return runCatching {
+            val contentType = "application/zip".toMediaType()
+            service.uploadFile(presignedUrl, file.asRequestBody(contentType))
+        }.onSuccess {
             logger.info { "Successfully uploaded $file to S3." }
-            true
-        } else {
-            logger.error { "Failed to upload $file to S3: ${response.errorBody()?.string()}" }
-            false
-        }
+        }.onFailure {
+            when (it) {
+                is HttpException -> logger.error {
+                    "Failed to upload $file to S3: ${it.response()?.errorBody()?.string()}"
+                }
+
+                else -> throw it
+            }
+        }.isSuccess
     }
 
     /**
@@ -104,20 +115,19 @@ class DosClient(private val service: DosService) {
             return null
         }
 
-        val requestBody = JobRequestBody(zipFileKey, packages)
-        val response = service.addScanJob(requestBody)
-        val responseBody = response.body()
+        return runCatching {
+            val request = JobRequestBody(zipFileKey, packages)
+            service.addScanJob(request)
+        }.onFailure {
+            when (it) {
+                is HttpException -> logger.error {
+                    val purls = packages.map { pkg -> pkg.purl }
+                    "Error adding a new scan job for $zipFileKey and $purls: ${it.response()?.errorBody()?.string()}"
+                }
 
-        return if (response.isSuccessful && responseBody != null) {
-            responseBody
-        } else {
-            logger.error {
-                "Error adding a new scan job for $zipFileKey and ${packages.map { it.purl }}: " +
-                    "${response.errorBody()?.string()}"
+                else -> throw it
             }
-
-            null
-        }
+        }.getOrNull()
     }
 
     /**
@@ -133,26 +143,26 @@ class DosClient(private val service: DosService) {
             return null
         }
 
-        val requestBody = ScanResultsRequestBody(packages)
-        val response = service.getScanResults(requestBody)
-        val responseBody = response.body()
-
-        return if (response.isSuccessful && responseBody != null) {
+        return runCatching {
+            val request = ScanResultsRequestBody(packages)
+            service.getScanResults(request)
+        }.onSuccess { response ->
             val purls = packages.map { it.purl }
-            when (responseBody.state.status) {
+
+            when (response.state.status) {
                 "no-results" -> logger.info { "No scan results found for $purls." }
                 "pending" -> logger.info { "Scan pending for $purls." }
-                "ready" -> {
-                    logger.info { "Scan results ready for $purls." }
-                }
+                "ready" -> logger.info { "Scan results ready for $purls." }
             }
+        }.onFailure {
+            when (it) {
+                is HttpException -> logger.error {
+                    "Error getting scan results: ${it.response()?.errorBody()?.string()}"
+                }
 
-            responseBody
-        } else {
-            logger.error { "Error getting scan results: ${response.errorBody()?.string()}" }
-
-            null
-        }
+                else -> throw it
+            }
+        }.getOrNull()
     }
 
     /**
@@ -165,15 +175,16 @@ class DosClient(private val service: DosService) {
             return null
         }
 
-        val response = service.getScanJobState(id)
-        val responseBody = response.body()
+        return runCatching {
+            service.getScanJobState(id)
+        }.onFailure {
+            when (it) {
+                is HttpException -> logger.error {
+                    "Error getting the scan state for job $id: ${it.response()?.errorBody()?.string()}"
+                }
 
-        return if (response.isSuccessful && responseBody != null) {
-            responseBody
-        } else {
-            logger.error { "Error getting the scan state for job $id: ${response.errorBody()?.string()}" }
-
-            null
-        }
+                else -> throw it
+            }
+        }.getOrNull()
     }
 }
