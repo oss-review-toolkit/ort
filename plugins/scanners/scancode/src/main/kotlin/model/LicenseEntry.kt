@@ -57,13 +57,10 @@ sealed interface LicenseEntry {
         override val licenseExpressionSpdx = null
         override val fromFile = null
 
-        internal fun getSpdxId(): String {
-            val spdxId = spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
-            if (spdxId != null) return spdxId
-
+        internal fun getSpdxId(): String =
             // Fall back to building an ID based on the ScanCode-specific "key".
-            return "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
-        }
+            spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
+                ?: "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
     }
 
     @Serializable
