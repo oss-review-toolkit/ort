@@ -44,9 +44,9 @@ data class Environment(
     val javaVersion: String = JAVA_VERSION,
 
     /**
-     * Name of the operating system, defaults to [Os.name].
+     * Name of the operating system, defaults to [Os.Name].
      */
-    val os: String = Os.name,
+    val os: String = Os.Name(),
 
     /**
      * The number of logical processors available.

@@ -221,18 +221,15 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
 
         logger.info { "Bootstrapping Flutter as it was not found." }
 
-        val archive = when {
-            Os.isWindows -> "windows/flutter_windows_$flutterVersion.zip"
-            Os.isLinux -> "linux/flutter_linux_$flutterVersion.tar.xz"
-            Os.isMac -> {
-                when (val arch = System.getProperty("os.arch")) {
-                    "x86_64" -> "macos/flutter_macos_$flutterVersion.zip"
-                    "aarch64" -> "macos/flutter_macos_arm64_$flutterVersion.zip"
-                    else -> throw IllegalArgumentException("Unsupported macOS architecture '$arch'.")
-                }
+        val archive = when (Os.Name.current) {
+            Os.Name.WINDOWS -> "windows/flutter_windows_$flutterVersion.zip"
+            Os.Name.LINUX -> "linux/flutter_linux_$flutterVersion.tar.xz"
+            Os.Name.MAC -> when (val arch = System.getProperty("os.arch")) {
+                "x86_64" -> "macos/flutter_macos_$flutterVersion.zip"
+                "aarch64" -> "macos/flutter_macos_arm64_$flutterVersion.zip"
+                else -> throw IllegalArgumentException("Unsupported macOS architecture '$arch'.")
             }
-
-            else -> throw IllegalArgumentException("Unsupported operating system.")
+            else -> throw IllegalArgumentException("Unsupported operating system '${Os.Name.current}'.")
         }
 
         val url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/$archive"
