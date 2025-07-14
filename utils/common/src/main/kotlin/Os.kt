@@ -25,30 +25,35 @@ import java.io.File
  * Operating-System-specific utility functions.
  */
 object Os {
-    /**
-     * The operating system name.
-     */
-    val name = System.getProperty("os.name").orEmpty()
+    enum class Name(private val substring: String) {
+        LINUX("linux"), MAC("mac"), WINDOWS("windows"), UNKNOWN("");
+
+        companion object {
+            /**
+             * The current operating system's name.
+             */
+            val current = fromString(this())
+
+            operator fun invoke() = System.getProperty("os.name").orEmpty()
+
+            fun fromString(name: String) = entries.first { name.contains(it.substring, ignoreCase = true) }
+        }
+    }
 
     /**
-     * The operating system name in lower case, for private use.
+     * A convenience property to indicate whether the operating system is Linux or not.
      */
-    private val nameLowerCase = name.lowercase()
+    val isLinux = Name.current == Name.LINUX
 
     /**
-     * Whether the operating system is Linux or not.
+     * A convenience property to indicate whether the operating system is macOS or not.
      */
-    val isLinux = "linux" in nameLowerCase
+    val isMac = Name.current == Name.MAC
 
     /**
-     * Whether the operating system is macOS or not.
+     * A convenience property to indicate whether the operating system is Windows or not.
      */
-    val isMac = "mac" in nameLowerCase
-
-    /**
-     * Whether the operating system is Windows or not.
-     */
-    val isWindows = "windows" in nameLowerCase
+    val isWindows = Name.current == Name.WINDOWS
 
     /**
      * The currently set environment variables. Keys are case-insensitive on Windows.
