@@ -20,15 +20,15 @@
 package org.ossreviewtoolkit.clients.osv
 
 import java.io.IOException
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.atomic.AtomicReference
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 
 import okhttp3.OkHttpClient
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.HttpException
 
 /**
  * This class wraps the OSV service to make its use simpler and less error-prone.
@@ -42,28 +42,23 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
     fun getVulnerabilityIdsForPackages(requests: List<VulnerabilitiesForPackageRequest>): Result<List<List<String>>> {
         if (requests.isEmpty()) return Result.success(emptyList())
 
-        val result = mutableListOf<MutableList<String>>()
-
-        requests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE).forEach { requestsChunk ->
-            val batchRequest = VulnerabilitiesForPackageBatchRequest(requestsChunk)
-            val response = service.getVulnerabilityIdsForPackages(batchRequest).execute()
-            val body = response.body()
-
-            if (!response.isSuccessful || body == null) {
-                val errorMessage = response.errorBody()?.string()?.let {
-                    val errorResponse = OsvService.JSON.decodeFromString<ErrorResponse>(it)
-                    "Error code ${errorResponse.code}: ${errorResponse.message}"
-                } ?: with(response) { "HTTP code ${code()}: ${message()}" }
-
-                return Result.failure(IOException(errorMessage))
-            }
-
-            result += body.results.map { batchResponse ->
-                batchResponse.vulnerabilities.mapTo(mutableListOf()) { it.id }
-            }
+        @Suppress("ForbiddenMethodCall")
+        return runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+            runCatching {
+                requests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE).map { requestsChunk ->
+                    async {
+                        val batchRequest = VulnerabilitiesForPackageBatchRequest(requestsChunk)
+                        service.getVulnerabilityIdsForPackages(batchRequest)
+                    }
+                }.awaitAll()
+            }.map {
+                it.flatMap { batchResponse ->
+                    batchResponse.results.map { idList ->
+                        idList.vulnerabilities.mapTo(mutableListOf()) { it.id }
+                    }
+                }
+            }.handleHttpException()
         }
-
-        return Result.success(result)
     }
 
     /**
@@ -73,29 +68,30 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
      * It's been considered to add a batch API in the future, see
      * https://github.com/google/osv.dev/issues/466#issuecomment-1163337495.
      */
-    fun getVulnerabilitiesForIds(ids: Set<String>): Result<List<Vulnerability>> {
-        val result = ConcurrentLinkedQueue<Vulnerability>()
-        val failureThrowable = AtomicReference<Throwable?>(null)
-        val latch = CountDownLatch(ids.size)
+    fun getVulnerabilitiesForIds(ids: Set<String>): Result<List<Vulnerability>> =
+        @Suppress("ForbiddenMethodCall")
+        runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+            runCatching {
+                ids.map { id ->
+                    async { service.getVulnerabilityForId(id) }
+                }.awaitAll()
+            }.handleHttpException()
+        }
+}
 
-        ids.forEach { id ->
-            service.getVulnerabilityForId(id).enqueue(object : Callback<Vulnerability> {
-                override fun onResponse(call: Call<Vulnerability>, response: Response<Vulnerability>) {
-                    response.body()?.let { result += it }
-                    latch.countDown()
-                }
+private fun <T> Result<T>.handleHttpException() =
+    recoverCatching { e ->
+        if (e is HttpException) {
+            val response = e.response()
+            if (response != null) {
+                val errorMessage = response.errorBody()?.string()?.let {
+                    val errorResponse = OsvService.JSON.decodeFromString<ErrorResponse>(it)
+                    "Error code ${errorResponse.code}: ${errorResponse.message}"
+                } ?: with(response) { "HTTP code ${code()}: ${message()}" }
 
-                override fun onFailure(call: Call<Vulnerability>, t: Throwable) {
-                    val exception = IOException("Could not get vulnerability information for '$id'.", t)
-                    failureThrowable.set(exception)
-                    latch.countDown()
-                }
-            })
+                throw IOException(errorMessage)
+            }
         }
 
-        latch.await()
-
-        return failureThrowable.get()?.let { Result.failure(it) }
-            ?: Result.success(result.toList())
+        throw e
     }
-}
