@@ -69,28 +69,6 @@ private fun List<Vulnerability>.patch() = map { it.patch() }
 private fun Vulnerability.patch() = patchIgnorableFields().normalizeUrls()
 
 class OsvServiceWrapperFunTest : WordSpec({
-    "getVulnerabilitiesForPackage()" should {
-        val expectedVulnerability = OsvService.JSON.decodeFromString<Vulnerability>(
-            readResource("/vulnerabilities-for-package-expected-vulnerability.json")
-        )
-
-        "return the expected vulnerability when queried by commit" {
-            val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
-
-            result shouldBeSuccess { actualData ->
-                actualData.patch() shouldContain expectedVulnerability.patch()
-            }
-        }
-
-        "return the expected vulnerability when queried by name and version" {
-            val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
-
-            result shouldBeSuccess { actualData ->
-                actualData.patch() shouldContain expectedVulnerability.patch()
-            }
-        }
-    }
-
     "getVulnerabilityIdsForPackages()" should {
         "return the vulnerability IDs for the given batch request" {
             val requests = listOf(

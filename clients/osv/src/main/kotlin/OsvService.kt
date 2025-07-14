@@ -68,14 +68,6 @@ interface OsvService {
     }
 
     /**
-     * Get the vulnerabilities for the package matched by the given [request].
-     */
-    @POST("v1/query")
-    fun getVulnerabilitiesForPackage(
-        @Body request: VulnerabilitiesForPackageRequest
-    ): Call<VulnerabilitiesForPackageResponse>
-
-    /**
      * Get the identifiers of the vulnerabilities for the packages matched by the respective given [request].
      * The amount of requests contained in the give [batch request][request] must not exceed [BATCH_REQUEST_MAX_SIZE].
      */
@@ -97,12 +89,6 @@ class VulnerabilitiesForPackageRequest(
     @SerialName("package")
     val pkg: Package? = null,
     val version: String? = null
-)
-
-@Serializable
-data class VulnerabilitiesForPackageResponse(
-    @SerialName("vulns")
-    val vulnerabilities: List<Vulnerability>
 )
 
 @Serializable
