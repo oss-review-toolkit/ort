@@ -224,10 +224,10 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         val archive = when (Os.Name.current) {
             Os.Name.WINDOWS -> "windows/flutter_windows_$flutterVersion.zip"
             Os.Name.LINUX -> "linux/flutter_linux_$flutterVersion.tar.xz"
-            Os.Name.MAC -> when (val arch = System.getProperty("os.arch")) {
-                "x86_64" -> "macos/flutter_macos_$flutterVersion.zip"
-                "aarch64" -> "macos/flutter_macos_arm64_$flutterVersion.zip"
-                else -> throw IllegalArgumentException("Unsupported macOS architecture '$arch'.")
+            Os.Name.MAC -> when (Os.Arch.current) {
+                Os.Arch.X86_64 -> "macos/flutter_macos_$flutterVersion.zip"
+                Os.Arch.AARCH64 -> "macos/flutter_macos_arm64_$flutterVersion.zip"
+                else -> throw IllegalArgumentException("Unsupported macOS architecture '${Os.Arch.current}'.")
             }
             else -> throw IllegalArgumentException("Unsupported operating system '${Os.Name.current}'.")
         }

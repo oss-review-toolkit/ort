@@ -55,6 +55,24 @@ object Os {
      */
     val isWindows = Name.current == Name.WINDOWS
 
+    enum class Arch(private vararg val aliases: String) {
+        X86_64("x86_64", "amd64", "x64"), AARCH64("aarch64", "arm64"), UNKNOWN("");
+
+        companion object {
+            /**
+             * The current operating system's architecture.
+             */
+            val current = fromString(this())
+
+            operator fun invoke() = System.getProperty("os.arch").orEmpty()
+
+            fun fromString(name: String) =
+                name.lowercase().let { lowercaseName ->
+                    entries.first { it.aliases.any { alias -> alias in lowercaseName } }
+                }
+        }
+    }
+
     /**
      * The currently set environment variables. Keys are case-insensitive on Windows.
      */
