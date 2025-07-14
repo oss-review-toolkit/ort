@@ -19,18 +19,6 @@
 
 package org.ossreviewtoolkit.utils.ort
 
-import eu.hansolo.jdktools.ArchiveType
-import eu.hansolo.jdktools.Latest
-import eu.hansolo.jdktools.LibCType
-import eu.hansolo.jdktools.Match
-import eu.hansolo.jdktools.OperatingSystem
-import eu.hansolo.jdktools.PackageType
-import eu.hansolo.jdktools.TermOfSupport
-import eu.hansolo.jdktools.util.Helper
-
-import io.foojay.api.discoclient.DiscoClient
-import io.foojay.api.discoclient.pkg.Scope
-
 import java.io.File
 
 import kotlin.time.measureTime
@@ -38,14 +26,24 @@ import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.clients.foojay.Architecture
+import org.ossreviewtoolkit.clients.foojay.ArchiveType
+import org.ossreviewtoolkit.clients.foojay.DiscoService
+import org.ossreviewtoolkit.clients.foojay.Distribution
+import org.ossreviewtoolkit.clients.foojay.Latest
+import org.ossreviewtoolkit.clients.foojay.LibCType
+import org.ossreviewtoolkit.clients.foojay.OperatingSystem
+import org.ossreviewtoolkit.clients.foojay.PackageType
+import org.ossreviewtoolkit.clients.foojay.ReleaseStatus
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 
 import org.semver4j.Semver
 
 object JavaBootstrapper {
-    private val discoClient by lazy { DiscoClient(ORT_USER_AGENT) }
+    private val discoService = DiscoService.create()
 
     /**
      * Return the single top-level directory contained in this directory, if any, or return this directory otherwise.
@@ -71,57 +69,66 @@ object JavaBootstrapper {
      * success, or an exception on failure.
      */
     fun installJdk(distributionName: String, version: String): Result<File> {
-        val versionResult = eu.hansolo.jdktools.versioning.Semver.fromText(version)
-        if (versionResult.error1 != null) return Result.failure(versionResult.error1)
-
-        val semVer = versionResult.semver1
-
-        logger.info { "Setting up JDK '$distributionName' in version '$semVer'..." }
-
-        val operatingSystem = Helper.getOperatingSystem()
-        val architecture = Helper.getArchitecture()
-
-        val libcType = when (operatingSystem) {
-            OperatingSystem.LINUX -> LibCType.GLIBC
-            OperatingSystem.LINUX_MUSL, OperatingSystem.ALPINE_LINUX -> LibCType.MUSL
-            else -> LibCType.NONE
+        val distro = runCatching {
+            Distribution.valueOf(distributionName.uppercase())
+        }.getOrElse {
+            return Result.failure(
+                IllegalArgumentException("No JDK package for unsupported distribution '$distributionName' found.")
+            )
         }
 
-        val pkgs = discoClient.getPkgs(
-            /* distributions = */ null,
-            semVer.versionNumber,
-            Latest.AVAILABLE,
-            operatingSystem,
-            libcType,
-            architecture,
-            architecture.bitness,
-            if (operatingSystem == OperatingSystem.WINDOWS) ArchiveType.ZIP else ArchiveType.TAR_GZ,
-            PackageType.JDK,
-            /* javafxBundled = */ false,
-            /* directlyDownloadable = */ true,
-            listOf(semVer.releaseStatus),
-            TermOfSupport.NONE,
-            listOf(Scope.PUBLIC),
-            Match.ANY
+        val os = when (Os.Name.current) {
+            Os.Name.LINUX -> OperatingSystem.LINUX
+            Os.Name.MAC -> OperatingSystem.MACOS
+            Os.Name.WINDOWS -> OperatingSystem.WINDOWS
+            else -> return Result.failure(
+                IllegalArgumentException("No JDK package for unsupported operating system '${Os.Name.current}' found.")
+            )
+        }
+
+        val arch = when (Os.Arch.current) {
+            Os.Arch.X86_64 -> Architecture.X86_64
+            Os.Arch.AARCH64 -> Architecture.AARCH64
+            else -> Architecture.X86
+        }
+
+        logger.info { "Setting up JDK '$distributionName' in version $version..." }
+
+        val packages = runCatching {
+            runBlocking {
+                discoService.getPackages(
+                    version,
+                    enumSetOf(distro),
+                    enumSetOf(arch),
+                    enumSetOf(ArchiveType.TAR, ArchiveType.TAR_GZ, ArchiveType.TGZ, ArchiveType.ZIP),
+                    enumSetOf(PackageType.JDK),
+                    enumSetOf(os),
+                    if (os == OperatingSystem.LINUX) enumSetOf(LibCType.GLIBC) else enumSetOf(),
+                    enumSetOf(ReleaseStatus.GENERAL_AVAILABILITY),
+                    directlyDownloadable = true,
+                    Latest.AVAILABLE,
+                    freeToUseInProduction = true
+                )
+            }
+        }.getOrElse {
+            return Result.failure(it)
+        }
+
+        val pkg = packages.result.firstOrNull() ?: return Result.failure(
+            IllegalArgumentException("No JDK package for distribution '$distributionName' and version $version found.")
         )
 
-        val pkg = pkgs.sortedBy { it.id }.find { it.distribution?.name == distributionName }
-            ?: return Result.failure(
-                IllegalArgumentException(
-                    "No JDK package for distribution '$distributionName' in version '$version' found for bootstrapping."
-                )
-            )
+        val installDir = ortToolsDirectory.resolve("jdks").resolve(pkg.distribution).resolve(pkg.distributionVersion)
+            .apply {
+                if (isDirectory) {
+                    logger.info { "Not downloading the JDK again as the directory '$this' already exists." }
+                    return Result.success(singleContainedDirectoryOrThis())
+                }
 
-        val installDir = ortToolsDirectory.resolve("jdks").resolve(pkg.id).apply {
-            if (isDirectory) {
-                logger.info { "Not downloading the JDK again as the directory '$this' already exists." }
-                return Result.success(singleContainedDirectoryOrThis())
+                safeMkdirs()
             }
 
-            safeMkdirs()
-        }
-
-        val url = discoClient.getPkgDirectDownloadUri(pkg.id)
+        val url = pkg.links.pkgDownloadRedirect
         logger.info { "Downloading the JDK package from $url..." }
 
         val (archive, downloadDuration) = measureTimedValue {
