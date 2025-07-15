@@ -155,11 +155,18 @@ internal data class PackageV2(
     val packageType: PackageType
 )
 
+/**
+ * See https://docs.conan.io/2/reference/conanfile/attributes.html#package-type.
+ */
 @Serializable
 internal enum class PackageType {
     @SerialName("application") APPLICATION,
-    @SerialName("build-scripts") BUILD_SCRIPTS,
+    @SerialName("library") LIBRARY,
+    @SerialName("shared-library") SHARED_LIBRARY,
     @SerialName("static-library") STATIC_LIBRARY,
+    @SerialName("header-library") HEADER_LIBRARY,
+    @SerialName("build-scripts") BUILD_SCRIPTS,
+    @SerialName("python-require") PYTHON_REQUIRE,
     @SerialName("unknown") UNKNOWN
 }
 
