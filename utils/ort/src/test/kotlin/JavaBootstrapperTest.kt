@@ -20,10 +20,22 @@
 package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.utils.common.Os
 
 class JavaBootstrapperTest : StringSpec({
     "The Java version running the test should be detected as a JDK" {
         JavaBootstrapper.isRunningOnJdk(Environment.JAVA_VERSION) shouldBe true
+    }
+
+    "A JDK for Temurin 21 can be found" {
+        JavaBootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
+            it.distribution shouldBe "temurin"
+            it.jdkVersion shouldBe 21
+            Os.Name.fromString(it.operatingSystem) shouldBe Os.Name.current
+            Os.Arch.fromString(it.architecture) shouldBe Os.Arch.current
+        }
     }
 })

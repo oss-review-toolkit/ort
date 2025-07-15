@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.clients.foojay.Distribution
 import org.ossreviewtoolkit.clients.foojay.Latest
 import org.ossreviewtoolkit.clients.foojay.LibCType
 import org.ossreviewtoolkit.clients.foojay.OperatingSystem
+import org.ossreviewtoolkit.clients.foojay.Package
 import org.ossreviewtoolkit.clients.foojay.PackageType
 import org.ossreviewtoolkit.clients.foojay.ReleaseStatus
 import org.ossreviewtoolkit.utils.common.Os
@@ -65,10 +66,9 @@ object JavaBootstrapper {
     }
 
     /**
-     * Install a JDK matching [distributionName] and [version] below [ortToolsDirectory] and return its directory on
-     * success, or an exception on failure.
+     * Find a JDK package matching [distributionName] and [version]. Return it on success, or an exception on failure.
      */
-    fun installJdk(distributionName: String, version: String): Result<File> {
+    internal fun findJdkPackage(distributionName: String, version: String): Result<Package> {
         val distro = runCatching {
             Distribution.valueOf(distributionName.uppercase())
         }.getOrElse {
@@ -117,6 +117,18 @@ object JavaBootstrapper {
         val pkg = packages.result.firstOrNull() ?: return Result.failure(
             IllegalArgumentException("No JDK package for distribution '$distributionName' and version $version found.")
         )
+
+        return Result.success(pkg)
+    }
+
+    /**
+     * Install a JDK matching [distributionName] and [version] below [ortToolsDirectory] and return its directory on
+     * success, or an exception on failure.
+     */
+    fun installJdk(distributionName: String, version: String): Result<File> {
+        val pkg = findJdkPackage(distributionName, version).getOrElse {
+            return Result.failure(it)
+        }
 
         val installDir = ortToolsDirectory.resolve("jdks").resolve(pkg.distribution).resolve(pkg.distributionVersion)
             .apply {
