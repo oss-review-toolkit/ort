@@ -127,7 +127,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
         populator.populateFromSettings(request, settings)
         populator.populateDefaults(request)
-        repositorySystemSession.injectProxy(request)
+        repositorySystemSession.initializeRequest(request)
 
         return request
     }
@@ -163,14 +163,18 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     }
 
     /**
-     * Makes sure that the [MavenExecutionRequest] is correctly configured with the current proxy.
+     * Make sure that the passed in [request] is correctly configured.
      *
-     * This is necessary in the special case that in the Maven environment no repositories are
-     * defined, and hence Maven Central is used as default. Then, for the Maven Central repository
-     * no proxy is set.
+     * This function injects several configuration options set in the current Maven environment into the remote
+     * repositories associated with the [request], such as proxy settings or the mirror configuration. This is
+     * obviously not done automatically, so that builds could fail in environments where such settings are required.
      */
-    private fun RepositorySystemSession.injectProxy(request: MavenExecutionRequest) {
-        containerLookup<MavenRepositorySystem>().injectProxy(this, request.remoteRepositories)
+    private fun RepositorySystemSession.initializeRequest(request: MavenExecutionRequest) {
+        with(containerLookup<MavenRepositorySystem>()) {
+            injectProxy(this@initializeRequest, request.remoteRepositories)
+            injectMirror(this@initializeRequest, request.remoteRepositories)
+            injectAuthentication(this@initializeRequest, request.remoteRepositories)
+        }
     }
 
     /**
