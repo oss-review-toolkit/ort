@@ -642,7 +642,7 @@ suspend fun FossIdRestService.extractArchives(
     recursivelyExtractArchives: Boolean = false,
     extractToDirectory: Boolean = true,
     jarFileExtraction: Boolean = false
-): EntityResponseBody<Nothing> {
+): EntityResponseBody<Boolean> {
     val recursivelyExtractArchivesFlag = if (recursivelyExtractArchives) "1" else "0"
     val extractToDirectoryFlag = if (extractToDirectory) "1" else "0"
     val jarFileExtractionFlag = if (jarFileExtraction) "1" else "0"
