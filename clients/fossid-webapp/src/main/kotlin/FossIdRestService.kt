@@ -361,7 +361,7 @@ interface FossIdRestService {
     suspend fun addFileComment(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @POST("api.php")
-    suspend fun extractArchives(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+    suspend fun extractArchives(@Body body: PostRequestBody): EntityResponseBody<Boolean>
 
     @POST("api.php")
     suspend fun removeUploadedContent(
