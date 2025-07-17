@@ -40,6 +40,13 @@ data class FossIdConfig(
     val namingScanPattern: String?,
 
     /**
+     * If true, the repository to scan will be cloned by ORT and an archive will be sent to FossID for scanning. In this
+     * mode, no credentials are passed to FossID, and FossID does not access the repository directly.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val isArchiveMode: Boolean,
+
+    /**
      * When set to false, ORT does not wait for repositories to be downloaded nor scans to be completed. As a
      * consequence, scan results won't be available in the ORT result.
      */

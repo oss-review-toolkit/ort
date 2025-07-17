@@ -52,11 +52,14 @@ import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
+import org.ossreviewtoolkit.clients.fossid.extractArchives
 import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
+import org.ossreviewtoolkit.clients.fossid.removeUploadedContent
 import org.ossreviewtoolkit.clients.fossid.runScan
+import org.ossreviewtoolkit.clients.fossid.uploadFile
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Issue
@@ -170,6 +173,39 @@ class FossIdTest : WordSpec({
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
+            }
+
+            coVerify(exactly = 0) {
+                service.createProject(any())
+            }
+        }
+
+        "create a new scan for an existing project by uploading an archive" {
+            val projectCode = PROJECT
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, isArchiveMode = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, null, "")
+                .expectRemoveUploadedContent(scanCode)
+                .expectUploadFile(scanCode)
+                .expectExtractArchives(scanCode)
+                .mockFiles(scanCode)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
+
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, null, null, "")
+                service.removeUploadedContent(USER, API_KEY, scanCode)
+                service.uploadFile(USER, API_KEY, scanCode, any())
+                service.extractArchives(USER, API_KEY, scanCode, any())
             }
 
             coVerify(exactly = 0) {
