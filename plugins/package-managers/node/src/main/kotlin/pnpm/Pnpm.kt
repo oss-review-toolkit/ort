@@ -106,12 +106,13 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         moduleInfoResolver.workingDir = workingDir
-        installDependencies(workingDir)
+        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
+
+        installDependencies(workingDir, scopes)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
         handler.setWorkspaceModuleDirs(workspaceModuleDirs)
 
-        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
         val moduleInfosForScope = scopes.associateWith { scope -> listModules(workingDir, scope) }
 
         return workspaceModuleDirs.map { projectDir ->
@@ -150,14 +151,17 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         return parsePnpmList(json).flatten().toList()
     }
 
-    private fun installDependencies(workingDir: File) =
-        PnpmCommand.run(
+    private fun installDependencies(workingDir: File, scopes: Collection<Scope>) {
+        val args = listOfNotNull(
             "install",
             "--ignore-pnpmfile",
             "--ignore-scripts",
             "--frozen-lockfile", // Use the existing lockfile instead of updating an outdated one.
-            workingDir = workingDir
-        ).requireSuccess()
+            "--prod".takeUnless { Scope.DEV_DEPENDENCIES in scopes }
+        )
+
+        PnpmCommand.run(args = args.toTypedArray(), workingDir = workingDir).requireSuccess()
+    }
 }
 
 private fun ModuleInfo.getScopeDependencies(scope: Scope) =
