@@ -77,7 +77,6 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-import org.ossreviewtoolkit.plugins.scanners.fossid.events.CloneRepositoryHandler
 import org.ossreviewtoolkit.plugins.scanners.fossid.events.EventHandler
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
@@ -256,13 +255,13 @@ class FossId internal constructor(
     override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val startTime = Instant.now()
 
-        val handler = CloneRepositoryHandler(config, service)
-
         // FossID actually never uses the provenance determined by the scanner, but determines the source code to
         // download itself based on the passed VCS URL and revision, disregarding any VCS path.
         val pkg = context.coveredPackages.first()
         val provenance = pkg.vcsProcessed.revision.takeUnless { it.isBlank() }
             ?.let { RepositoryProvenance(pkg.vcsProcessed, it) } ?: UnknownProvenance
+
+        val handler = EventHandler.getHandler(config, nestedProvenance, service)
 
         val issueMessage = when {
             !handler.isPackageValid(pkg) -> handler.getPackageInvalidErrorMessage(pkg)
@@ -301,7 +300,16 @@ class FossId internal constructor(
                 val result = if (config.deltaScans) {
                     checkAndCreateDeltaScan(handler, scans, url, revision, projectCode, repositoryName, context)
                 } else {
-                    checkAndCreateScan(handler, scans, url, revision, projectCode, repositoryName, context)
+                    checkAndCreateScan(
+                        handler,
+                        scans,
+                        url,
+                        revision,
+                        projectCode,
+                        repositoryName,
+                        nestedProvenance,
+                        context
+                    )
                 }
 
                 if (config.waitForResult && provenance is RepositoryProvenance) {
@@ -449,6 +457,7 @@ class FossId internal constructor(
     /**
      * Call FossID service, initiate a scan and return scan data: Scan Code and Scan Id
      */
+    @Suppress("LongParameterList")
     private suspend fun checkAndCreateScan(
         handler: EventHandler,
         scans: List<Scan>,
@@ -456,6 +465,7 @@ class FossId internal constructor(
         revision: String,
         projectCode: String,
         projectName: String,
+        nestedProvenance: NestedProvenance?,
         context: ScanContext
     ): FossIdResult {
         val existingScan = scans.recentScansForRepository(url, revision = revision).findLatestPendingOrFinishedScan()
@@ -470,6 +480,8 @@ class FossId internal constructor(
             val issues = mutableListOf<Issue>()
             handler.afterScanCreation(scanCode, null, issues, context)
 
+            if (config.waitForResult) checkScan(handler, scanCode)
+
             FossIdResult(scanCode, scanId, issues)
         } else {
             logger.info { "Scan '${existingScan.code}' found for $url and revision $revision." }
@@ -478,12 +490,13 @@ class FossId internal constructor(
                 "The code for an existing scan must not be null."
             }
 
+            // Create a specific handler for the existing scan.
+            val handlerForExistingScan = EventHandler.getHandler(existingScan, config, nestedProvenance, service)
+
+            if (config.waitForResult) checkScan(handlerForExistingScan, existingScan.code.orEmpty())
+
             FossIdResult(existingScanCode, existingScan.id.toString())
         }
-
-        // TODO: In the case of an already existing scan, the handler should be specific to this scan, not to the
-        //       configuration of the scanner.
-        if (config.waitForResult) checkScan(handler, result.scanCode)
 
         return result
     }
@@ -671,6 +684,8 @@ class FossId internal constructor(
 
             waitScanComplete(scanCode)
         }
+
+        handler.afterCheckScan(scanCode)
     }
 
     /**

@@ -39,4 +39,5 @@
     <logger name="org.ossreviewtoolkit.plugins.scanners.fossid.FossIdConfig" level="INFO" />
     <logger name="org.ossreviewtoolkit.plugins.scanners.fossid.FossIdUrlProvider" level="INFO" />
     <logger name="org.ossreviewtoolkit.plugins.scanners.fossid.events.CloneRepositoryHandler" level="INFO" />
+    <logger name="org.ossreviewtoolkit.plugins.scanners.fossid.events.UploadArchiveHandler" level="INFO" />
 </configuration>

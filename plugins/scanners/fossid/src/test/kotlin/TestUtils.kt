@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
+import org.ossreviewtoolkit.clients.fossid.extractArchives
 import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
@@ -67,6 +68,8 @@ import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
+import org.ossreviewtoolkit.clients.fossid.removeUploadedContent
+import org.ossreviewtoolkit.clients.fossid.uploadFile
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
@@ -125,7 +128,8 @@ internal fun createConfig(
     deltaScans: Boolean = true,
     deltaScanLimit: Int = Int.MAX_VALUE,
     fetchSnippetMatchedLines: Boolean = false,
-    snippetsLimit: Int = Int.MAX_VALUE
+    snippetsLimit: Int = Int.MAX_VALUE,
+    isArchiveMode: Boolean = false
 ): FossIdConfig {
     val config = FossIdConfig(
         serverUrl = "https://www.example.org/fossid",
@@ -145,7 +149,8 @@ internal fun createConfig(
         sensitivity = 10,
         urlMappings = null,
         writeToStorage = false,
-        logRequests = false
+        logRequests = false,
+        isArchiveMode = isArchiveMode
     )
 
     val namingProvider = createNamingProviderMock()
@@ -527,6 +532,38 @@ internal fun FossIdServiceWithVersion.expectCreateIgnoreRule(
 }
 
 /**
+ * Prepare this service mock to expect a request to remove uploaded content for the given [scanCode].
+ */
+internal fun FossIdServiceWithVersion.expectRemoveUploadedContent(scanCode: String): FossIdServiceWithVersion {
+    coEvery {
+        removeUploadedContent(USER, API_KEY, scanCode)
+    } returns EntityResponseBody(status = 1)
+    return this
+}
+
+/**
+ * Prepare this service mock to expect a request to upload a file for the given [scanCode]. The file nane is not
+ * required as the FossID scanner generates a unique name for each file.
+ */
+internal fun FossIdServiceWithVersion.expectUploadFile(scanCode: String): FossIdServiceWithVersion {
+    coEvery {
+        uploadFile(USER, API_KEY, scanCode, any())
+    } returns EntityResponseBody()
+    return this
+}
+
+/**
+ * Prepare this service mock to expect a request to extract archives for the given [scanCode]. The file nane is not
+ * required as the FossID scanner generates a unique name for each file.
+ */
+internal fun FossIdServiceWithVersion.expectExtractArchives(scanCode: String): FossIdServiceWithVersion {
+    coEvery {
+        extractArchives(USER, API_KEY, scanCode, any())
+    } returns EntityResponseBody(data = true)
+    return this
+}
+
+/**
  * Prepare this service mock to expect a download trigger for the given [scanCode] and later on to report that the
  * download has finished.
  */
@@ -545,11 +582,11 @@ internal fun FossIdServiceWithVersion.expectDownload(scanCode: String): FossIdSe
 internal fun FossIdServiceWithVersion.expectCreateScan(
     projectCode: String,
     scanCode: String,
-    vcsInfo: VcsInfo,
+    vcsInfo: VcsInfo? = null,
     comment: String = "master"
 ): FossIdServiceWithVersion {
     coEvery {
-        createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
+        createScan(USER, API_KEY, projectCode, scanCode, vcsInfo?.url, vcsInfo?.revision, comment)
     } returns PolymorphicDataResponseBody(
         status = 1,
         data = PolymorphicData(CreateScanResponse(SCAN_ID.toString()))
