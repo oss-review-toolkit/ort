@@ -118,7 +118,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
         val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
         val moduleInfosForScope = scopes.associateWith { scope ->
-            listModules(workingDir, scope).resolveVersions().undoDeduplication()
+            listModules(workingDir, scope).removeDanglingLinks(workingDir).resolveVersions().undoDeduplication()
         }
 
         // Warm-up the cache to speed-up processing.
@@ -211,10 +211,20 @@ private fun getNonDeduplicatedModuleInfosForId(moduleInfos: Collection<YarnListN
 private data class ModuleReference(
     val alias: String?,
     val name: String,
-    val version: String
+    val version: String,
+    val linkPath: String?
 )
 
 private val YarnListNode.moduleReference: ModuleReference get() {
+    if ("@link:" in name) {
+        return ModuleReference(
+            alias = null,
+            name = name.substringBefore("@link:"),
+            version = "",
+            linkPath = name.substringAfter("@link:")
+        )
+    }
+
     val parts = name.split(Regex("@npm:"))
     val (alias, nameAndVersion) = if (parts.size == 2) {
         parts[0] to parts[1]
@@ -225,7 +235,8 @@ private val YarnListNode.moduleReference: ModuleReference get() {
     return ModuleReference(
         alias = alias,
         name = nameAndVersion.substringBeforeLast("@"),
-        version = nameAndVersion.substringAfterLast("@")
+        version = nameAndVersion.substringAfterLast("@"),
+        linkPath = null
     )
 }
 
@@ -234,6 +245,15 @@ internal val YarnListNode.moduleAlias: String get() = moduleReference.alias ?: m
 internal val YarnListNode.moduleName: String get() = moduleReference.name
 
 internal val YarnListNode.moduleVersion: String get() = moduleReference.version
+
+internal val YarnListNode.linkPath: String? get() = moduleReference.linkPath
+
+private fun List<YarnListNode>.removeDanglingLinks(workingDir: File): List<YarnListNode> =
+    map {
+        it.copy(children = it.children?.removeDanglingLinks(workingDir))
+    }.filterNot { node ->
+        node.linkPath?.let { workingDir.resolve(it).isDirectory } ?: false
+    }
 
 private fun List<YarnListNode>.resolveVersions(): List<YarnListNode> {
     fun YarnListNode.resolveVersions(versionForAlias: Map<String, String> = emptyMap()): YarnListNode {

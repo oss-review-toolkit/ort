@@ -92,4 +92,15 @@ class YarnFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Resolve dependencies with dangling linked dependency references" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn/dangling-linked-references/package.json")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/yarn/dangling-linked-references-expected-output.yml"
+        )
+
+        val result = YarnFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
