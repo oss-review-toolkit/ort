@@ -561,12 +561,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/bazelbuild/rules_fuzzing"
+    url: "https://github.com/bazel-contrib/rules_fuzzing"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/bazelbuild/rules_fuzzing.git"
+    url: "https://github.com/bazel-contrib/rules_fuzzing.git"
     revision: ""
     path: ""
 - id: "Bazel::rules_java:8.6.1"
