@@ -38,3 +38,5 @@ dependencies {
     implementation(libs.okhttp.loggingInterceptor)
     implementation(libs.retrofit.converter.kotlinxSerialization)
 }
+
+description = "A client to communicate with the API of a Double Open Server instance."

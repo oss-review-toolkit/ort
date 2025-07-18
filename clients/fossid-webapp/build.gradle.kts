@@ -33,3 +33,5 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
 }
+
+description = "A client to communicate with the API of a FOSSID instance."
