@@ -95,8 +95,6 @@ internal object PythonInspector : CommandLineTool {
                     add(setupFile.absolutePath)
                 }
             }
-
-            add("--verbose")
         }
 
         return try {
