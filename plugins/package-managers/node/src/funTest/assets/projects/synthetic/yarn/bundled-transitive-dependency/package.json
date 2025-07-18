@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@vector-im/matrix-wysiwyg": "^2.38.5"
+  },
+  "name": "matrix-wysiwyg",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT"
+}

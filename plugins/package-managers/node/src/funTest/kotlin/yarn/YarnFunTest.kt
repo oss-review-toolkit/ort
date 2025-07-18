@@ -92,4 +92,15 @@ class YarnFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Resolve bundled dependencies" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn/bundled-transitive-dependency/package.json")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/yarn/bundled-transitive-dependency-expected-output.yml"
+        )
+
+        val result = YarnFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
