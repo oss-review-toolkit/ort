@@ -39,7 +39,10 @@ mavenPublishing {
 
     pom {
         name = project.name
-        description = "Part of the OSS Review Toolkit (ORT), a suite to automate software compliance checks."
+        description = provider {
+            project.description
+                ?: "Part of the OSS Review Toolkit (ORT), a suite to automate software compliance checks."
+        }
         url = "https://oss-review-toolkit.org/"
 
         developers {

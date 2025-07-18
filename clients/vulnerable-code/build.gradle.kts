@@ -33,3 +33,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.converter.kotlinxSerialization)
 }
+
+description = "A client to communicate with the API of a VulnerableCode instance."

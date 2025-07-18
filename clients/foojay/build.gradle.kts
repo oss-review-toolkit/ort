@@ -33,3 +33,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.converter.kotlinxSerialization)
 }
+
+description = "A client to communicate with Foojay's Disco(very) API for JDKs / JREs."

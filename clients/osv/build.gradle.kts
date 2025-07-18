@@ -37,3 +37,5 @@ dependencies {
 
     testImplementation(libs.kotest.assertions.json)
 }
+
+description = "A client to communicate with the Google OSV API."

@@ -36,3 +36,5 @@ dependencies {
     implementation(libs.retrofit.converter.kotlinxSerialization)
     implementation(libs.retrofit.converter.scalars)
 }
+
+description = "A client to communicate with the API of the ClearlyDefined service."
