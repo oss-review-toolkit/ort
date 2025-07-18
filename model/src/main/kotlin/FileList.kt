@@ -64,4 +64,12 @@ data class FileList(
             }
         }
     }
+
+    operator fun plus(other: FileList): FileList {
+        require(provenance == other.provenance) {
+            "Cannot merge FileLists with different provenance: $provenance != ${other.provenance}."
+        }
+
+        return copy(files = files + other.files)
+    }
 }

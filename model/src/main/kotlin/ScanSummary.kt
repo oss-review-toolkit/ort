@@ -146,6 +146,17 @@ data class ScanSummary(
             issues = issues.filter { it.affectedPath == null || !matcher.matches(it.affectedPath) }
         )
     }
+
+    operator fun plus(other: ScanSummary): ScanSummary {
+        return copy(
+            startTime = minOf(startTime, other.startTime),
+            endTime = maxOf(endTime, other.endTime),
+            licenseFindings = licenseFindings + other.licenseFindings,
+            copyrightFindings = copyrightFindings + other.copyrightFindings,
+            snippetFindings = snippetFindings + other.snippetFindings,
+            issues = issues + other.issues
+        )
+    }
 }
 
 /**
