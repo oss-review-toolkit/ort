@@ -1,0 +1,54 @@
+---
+project:
+  id: "Yarn::matrix-wysiwyg:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn/dangling-linked-references/package.json"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM:@vector-im:matrix-wysiwyg:2.38.5"
+packages:
+- id: "NPM:@vector-im:matrix-wysiwyg:2.38.5"
+  purl: "pkg:npm/%40vector-im/matrix-wysiwyg@2.38.5"
+  authors:
+  - "New Vector Ltd."
+  declared_licenses:
+  - "NOASSERTION"
+  declared_licenses_processed:
+    spdx_expression: "NOASSERTION"
+  description: "Wysiwyg composer for Element Web using React"
+  homepage_url: "https://github.com/element-hq/matrix-rich-text-editor#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.5.tgz"
+    hash:
+      value: "fac9e56abdea0ce9d9ce0f3bc67f1de02ca637a7"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/element-hq/matrix-rich-text-editor"
+    revision: "7ceaef6aab63b7dbb407572459f44597b6dfaf0a"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/element-hq/matrix-rich-text-editor.git"
+    revision: "7ceaef6aab63b7dbb407572459f44597b6dfaf0a"
+    path: ""
