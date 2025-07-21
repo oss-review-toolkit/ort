@@ -32,7 +32,12 @@ import org.apache.logging.log4j.kotlin.logger
  * A caching authenticator that chains other authenticators. For proxy authentication, the [OrtProxySelector] is
  * required to also be installed.
  */
-open class OrtAuthenticator(private val original: Authenticator? = null) : Authenticator() {
+open class OrtAuthenticator(
+    private val original: Authenticator? = null,
+
+    /** A flag whether resolved authentication credentials should be cached. */
+    private val cacheAuthentication: Boolean = true
+) : Authenticator() {
     companion object {
         /**
          * Install this authenticator as the global default.
@@ -106,7 +111,10 @@ open class OrtAuthenticator(private val original: Authenticator? = null) : Authe
                         requestingURL,
                         requestorType
                     )?.let {
-                        serverAuthentication[requestingHost] = it
+                        if (cacheAuthentication) {
+                            serverAuthentication[requestingHost] = it
+                        }
+
                         return it
                     }
                 }
