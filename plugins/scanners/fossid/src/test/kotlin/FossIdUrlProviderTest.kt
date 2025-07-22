@@ -137,7 +137,7 @@ private fun mockAuthenticator(
     port: Int = PORT,
     authentication: PasswordAuthentication? = AUTHENTICATION
 ) {
-    mockkStatic("org.ossreviewtoolkit.utils.ort.UtilsKt")
+    mockkStatic("org.ossreviewtoolkit.utils.ort.AuthenticationUtilsKt")
     every { requestPasswordAuthentication(any()) } answers {
         val uri = firstArg<URI>()
         authentication.takeIf { uri.host == host && uri.port == port && uri.scheme == "https" && uri.userInfo == null }

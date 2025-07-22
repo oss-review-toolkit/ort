@@ -185,7 +185,7 @@ private val testUriAsUrl = URI.create(testUri.toString()).toURL()
  * Mocks the utility function to query password authentication for the test URI. Return the [result] provided.
  */
 private fun mockAuthentication(result: PasswordAuthentication?) {
-    mockkStatic("org.ossreviewtoolkit.utils.ort.UtilsKt")
+    mockkStatic("org.ossreviewtoolkit.utils.ort.AuthenticationUtilsKt")
 
     every {
         requestPasswordAuthentication(testUri.host, testUri.port, testUri.scheme, testUriAsUrl)
