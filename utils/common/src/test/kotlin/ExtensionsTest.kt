@@ -50,12 +50,6 @@ import java.util.Locale
 import java.util.SortedMap
 
 class ExtensionsTest : WordSpec({
-    "ByteArray.toHexString()" should {
-        "correctly convert a byte array to a string of hexadecimal digits" {
-            byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte()).toHexString() shouldBe "deadbeef"
-        }
-    }
-
     "Collection.getDuplicates()" should {
         "return no duplicates if there are none" {
             emptyList<String>().getDuplicates() should beEmpty()
