@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -352,9 +353,11 @@ internal object AuthenticatorCredentialsProvider : CredentialsProvider() {
         }
 
     override fun get(uri: URIish, vararg items: CredentialItem): Boolean {
-        logger.debug { "JGit queries credentials ${items.map { it.javaClass.simpleName }} for '${uri.host}'." }
+        logger.debug { "JGit queries credentials ${items.map { it.javaClass.simpleName }} for '$uri'." }
 
-        val auth = requestPasswordAuthentication(uri.host, uri.port, uri.scheme) ?: return false
+        val url = uri.toString().toUri { it.toURL() }.getOrNull()
+        val auth = requestPasswordAuthentication(uri.host.orEmpty(), uri.port, uri.scheme.orEmpty(), url)
+            ?: return false
 
         logger.debug { "Passing credentials for '${uri.host}' to JGit." }
 

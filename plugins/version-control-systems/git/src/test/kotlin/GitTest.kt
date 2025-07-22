@@ -115,7 +115,31 @@ class GitTest : WordSpec({
 
             val credentialProvider = CredentialsProvider.getDefault()
 
-            credentialProvider.get(TestUri, userCredential, passwordCredential) shouldBe true
+            credentialProvider.get(testUri, userCredential, passwordCredential) shouldBe true
+
+            verify {
+                userCredential.value = user
+                passwordCredential.value = password
+            }
+        }
+
+        "handle an invalid URL" {
+            val user = "scott"
+            val password = "tiger".toCharArray()
+            val userCredential = mockk<CredentialItem.Username>()
+            val passwordCredential = mockk<CredentialItem.Password>()
+            val invalidUri = URIish("foo")
+
+            every { userCredential.value = any() } just runs
+            every { passwordCredential.value = any() } just runs
+            mockAuthentication(null)
+            every {
+                requestPasswordAuthentication("", invalidUri.port, "", null)
+            } returns PasswordAuthentication(user, password)
+
+            val credentialProvider = CredentialsProvider.getDefault()
+
+            credentialProvider.get(invalidUri, userCredential, passwordCredential) shouldBe true
 
             verify {
                 userCredential.value = user
@@ -131,7 +155,7 @@ class GitTest : WordSpec({
 
             val credentialProvider = CredentialsProvider.getDefault()
 
-            credentialProvider.get(TestUri, userCredential, passwordCredential) shouldBe false
+            credentialProvider.get(testUri, userCredential, passwordCredential) shouldBe false
         }
 
         "throw for unsupported credential types" {
@@ -142,7 +166,7 @@ class GitTest : WordSpec({
             val credentialProvider = CredentialsProvider.getDefault()
 
             shouldThrow<UnsupportedCredentialItem> {
-                credentialProvider.get(TestUri, otherCredential)
+                credentialProvider.get(testUri, otherCredential)
             }
         }
 
@@ -154,7 +178,8 @@ class GitTest : WordSpec({
     }
 })
 
-private val TestUri = URIish(URI("https://www.example.org:8080/foo").toURL())
+private val testUri = URIish(URI("https://www.example.org:8080/foo").toURL())
+private val testUriAsUrl = URI.create(testUri.toString()).toURL()
 
 /**
  * Mocks the utility function to query password authentication for the test URI. Return the [result] provided.
@@ -162,5 +187,7 @@ private val TestUri = URIish(URI("https://www.example.org:8080/foo").toURL())
 private fun mockAuthentication(result: PasswordAuthentication?) {
     mockkStatic("org.ossreviewtoolkit.utils.ort.UtilsKt")
 
-    every { requestPasswordAuthentication(TestUri.host, TestUri.port, TestUri.scheme) } returns result
+    every {
+        requestPasswordAuthentication(testUri.host, testUri.port, testUri.scheme, testUriAsUrl)
+    } returns result
 }
