@@ -39,6 +39,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.test.withEnvironment
@@ -58,6 +59,13 @@ class OrtConfigurationTest : WordSpec({
             ortConfig.enableRepositoryPackageCurations shouldBe true
 
             ortConfig.forceOverwrite shouldBe true
+
+            ortConfig.licenseFactProviders should containExactlyEntries(
+                "spdx" to PluginConfig.EMPTY,
+                "scancode" to PluginConfig(mapOf("scanCodeLicenseTextDir" to "/path/to/scancode/license/text/dir")),
+                "defaultdir" to PluginConfig.EMPTY,
+                "dir" to PluginConfig(mapOf("licenseTextDir" to "/path/to/license/text/dir"))
+            )
 
             with(ortConfig.licenseFilePatterns) {
                 licenseFilenames should containExactly("license*")
