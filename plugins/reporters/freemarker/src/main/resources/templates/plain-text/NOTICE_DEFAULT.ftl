@@ -36,7 +36,7 @@
 [#assign filteredLicenses = helper.filterForCategory(mergedLicenses, noticeCategoryName)]
 [#list filteredLicenses as resolvedLicense]
     [#assign licenseName = resolvedLicense.license.simpleLicense()]
-    [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
+    [#assign licenseText = licenseFactProvider.getLicenseText(licenseName)!]
     [#if !licenseText?has_content][#continue][/#if]
     [#if !hasNoticeProjectLicenses]
 This software includes external packages and source code.
@@ -54,7 +54,7 @@ The applicable license information is listed below:
 ${copyrights?join("\n", "", "\n")}
 ${licenseText}
     [#assign exceptionName = resolvedLicense.license.exception()!]
-    [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
+    [#assign exceptionText = licenseFactProvider.getLicenseText(exceptionName)!]
     [#if exceptionText?has_content]
 ${exceptionText}
     [/#if]
@@ -105,7 +105,7 @@ ${copyrights?join("\n", "")}
     [#assign isFirst = true]
     [#list resolvedLicenses as resolvedLicense]
         [#assign licenseName = resolvedLicense.license.simpleLicense()]
-        [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
+        [#assign licenseText = licenseFactProvider.getLicenseText(licenseName)!]
         [#if !licenseText?has_content][#continue][/#if]
         [#if isFirst]
             [#if !hasNoticePackageLicenses]
@@ -127,7 +127,7 @@ The following copyrights and licenses were found in the source code of this pack
 ${copyrights?join("\n", "", "\n")}
 ${licenseText}
         [#assign exceptionName = resolvedLicense.license.exception()!]
-        [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
+        [#assign exceptionText = licenseFactProvider.getLicenseText(exceptionName)!]
         [#if exceptionText?has_content]
 ${exceptionText}
         [/#if]

@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -33,8 +34,13 @@ class HtmlTemplateReporterFunTest : StringSpec({
         val expectedResult = readResource("/html-template-reporter-expected-result.html")
 
         val reporter = HtmlTemplateReporterFactory.create()
-        val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir())
-            .single().getOrThrow().readText()
+        val reportContent = reporter.generateReport(
+            ReporterInput(
+                ORT_RESULT,
+                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+            ),
+            tempdir()
+        ).single().getOrThrow().readText()
 
         reportContent.patchAsciiDocTemplateResult() shouldBe patchExpectedResult(
             expectedResult,

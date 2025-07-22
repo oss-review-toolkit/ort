@@ -29,6 +29,7 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getResource
@@ -58,7 +59,13 @@ class Aosd21ReporterFunTest : WordSpec({
     }
 
     "The generated report" should {
-        val reportFiles = Aosd21Reporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
+        val reportFiles = Aosd21Reporter().generateReport(
+            ReporterInput(
+                ORT_RESULT,
+                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+            ),
+            tempdir()
+        )
 
         "be valid according to the schema" {
             val schemaJson = readResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")

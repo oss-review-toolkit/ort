@@ -63,10 +63,11 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
-import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -77,13 +78,11 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.config.setPackageConfigurations
 import org.ossreviewtoolkit.utils.config.setResolutions
 import org.ossreviewtoolkit.utils.ort.ORT_COPYRIGHT_GARBAGE_FILENAME
-import org.ossreviewtoolkit.utils.ort.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 
 @OrtPlugin(
     displayName = "Report",
@@ -125,17 +124,6 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory / ORT_COPYRIGHT_GARBAGE_FILENAME)
-        .configurationGroup()
-
-    private val customLicenseTextsDir by option(
-        "--custom-license-texts-dir",
-        help = "A directory which maps custom license IDs to license texts. It should contain one text file per " +
-            "license with the license ID as the filename. A custom license text is used only if its ID has a " +
-            "'$LICENSE_REF_PREFIX' prefix and if the respective license text is not known by ORT."
-    ).convert { it.expandTilde() }
-        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory / ORT_CUSTOM_LICENSE_TEXTS_DIRNAME)
         .configurationGroup()
 
     private val howToFixTextProviderScript by option(
@@ -220,8 +208,6 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
             ortResult = ortResult.setResolutions(resolutionProvider)
         }
 
-        val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
-
         val resolvedPackageConfigurations = ortResult.resolvedConfiguration.packageConfigurations
         val packageConfigurationProvider = when {
             resolvedPackageConfigurations != null && packageConfigurationsDir == null -> {
@@ -265,12 +251,20 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
             HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult)
         } ?: HowToFixTextProvider.NONE
 
+        val licenseFactProviders = ortConfig.licenseFactProviders.map { (id, config) ->
+            requireNotNull(LicenseFactProviderFactory.ALL[id]) {
+                "License fact provider '$id' is not available in the classpath."
+            }.create(config)
+        }
+
+        val licenseFactProvider = CompositeLicenseFactProvider(licenseFactProviders)
+
         outputDir.safeMkdirs()
 
         val input = ReporterInput(
             ortResult,
             ortConfig,
-            DefaultLicenseTextProvider(licenseTextDirectories),
+            licenseFactProvider,
             copyrightGarbage,
             licenseInfoResolver,
             licenseClassifications,

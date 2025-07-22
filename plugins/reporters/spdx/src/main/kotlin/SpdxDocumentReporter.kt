@@ -118,7 +118,7 @@ class SpdxDocumentReporter(
         val spdxDocument = SpdxDocumentModelMapper.map(
             input.ortResult,
             input.licenseInfoResolver,
-            input.licenseTextProvider,
+            input.licenseFactProvider,
             config
         )
 
