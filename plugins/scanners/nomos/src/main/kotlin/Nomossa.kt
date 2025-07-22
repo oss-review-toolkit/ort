@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2025 Prakash Mishra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,8 @@ object NomossaCommand : CommandLineTool {
  * and mapping its output to ORT's scan result format.
  */
 @OrtPlugin(
-    displayName = "Nomossa",
+    id = "FOSSology-Nomossa",
+    displayName = "FOSSology-Nomossa",
     description = "A wrapper for [Nomossa](https://github.com/fossology/fossology).",
     factory = ScannerWrapperFactory::class
 )
