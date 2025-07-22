@@ -34,6 +34,7 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
@@ -80,6 +81,15 @@ data class OrtConfiguration(
      * Force overwriting of any existing output files.
      */
     val forceOverwrite: Boolean = false,
+
+    /**
+     * The license fact providers to use in the order of their priority. Defaults to the providers for bundled SPDX
+     * license texts and license texts from a local ScanCode installation.
+     */
+    val licenseFactProviders: LinkedHashMap<String, PluginConfig> = linkedMapOf(
+        "SPDX" to PluginConfig.EMPTY,
+        "ScanCode" to PluginConfig.EMPTY
+    ),
 
     /**
      * The license file patterns.
