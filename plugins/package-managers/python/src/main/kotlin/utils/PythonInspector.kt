@@ -98,12 +98,20 @@ internal object PythonInspector : CommandLineTool {
         }
 
         return try {
-            run(workingDir, *commandLineOptions.toTypedArray()).requireSuccess()
+            run(
+                *commandLineOptions.toTypedArray(),
+                workingDir = workingDir,
+                environment = mapOf("LC_ALL" to "en_US.UTF-8")
+            ).requireSuccess()
             val binaryResult = outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
 
             // TODO: Avoid this terrible hack to run once more with `--prefer-source` to work around
             //       https://github.com/aboutcode-org/python-inspector/issues/229.
-            run(workingDir, *(commandLineOptions + "--prefer-source").toTypedArray()).requireSuccess()
+            run(
+                *(commandLineOptions + "--prefer-source").toTypedArray(),
+                workingDir = workingDir,
+                environment = mapOf("LC_ALL" to "en_US.UTF-8")
+            ).requireSuccess()
             val sourceResult = outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
 
             binaryResult.copy(packages = binaryResult.packages + sourceResult.packages)
