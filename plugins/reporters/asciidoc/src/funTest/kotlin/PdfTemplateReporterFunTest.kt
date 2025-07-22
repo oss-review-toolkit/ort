@@ -29,6 +29,7 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -36,7 +37,13 @@ import org.ossreviewtoolkit.utils.common.div
 
 class PdfTemplateReporterFunTest : StringSpec({
     "The report is created successfully from an existing result and default template" {
-        val reportFileResults = PdfTemplateReporterFactory.create().generateReport(ReporterInput(ORT_RESULT), tempdir())
+        val reportFileResults = PdfTemplateReporterFactory.create().generateReport(
+            ReporterInput(
+                ORT_RESULT,
+                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+            ),
+            tempdir()
+        )
 
         reportFileResults.shouldBeSingleton {
             it shouldBeSuccess { reportFile ->

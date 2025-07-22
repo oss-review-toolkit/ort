@@ -130,7 +130,7 @@ class OpossumReporter(
             addBaseUrl("/", input.ortResult.repository.vcs)
 
             SpdxLicense.entries.forEach {
-                val licenseText = input.licenseTextProvider.getLicenseText(it.id)
+                val licenseText = input.licenseFactProvider.getLicenseText(it.id)
                 frequentLicenses += OpossumFrequentLicense(it.id, it.fullName, licenseText)
             }
 

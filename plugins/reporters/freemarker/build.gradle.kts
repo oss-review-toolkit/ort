@@ -36,5 +36,7 @@ dependencies {
 
     funTestImplementation(testFixtures(projects.reporter))
 
+    funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
+
     testImplementation(libs.mockk)
 }

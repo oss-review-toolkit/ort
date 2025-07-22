@@ -4,7 +4,7 @@
 [#-- @ftlvariable name="projects" type="kotlin.collections.Set<org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.PackageModel>" --]
 [#-- @ftlvariable name="packages" type="kotlin.collections.Set<org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.PackageModel>" --]
 [#-- @ftlvariable name="ortResult" type="org.ossreviewtoolkit.model.OrtResult" --]
-[#-- @ftlvariable name="licenseTextProvider" type="org.ossreviewtoolkit.reporter.LicenseTextProvider" --]
+[#-- @ftlvariable name="licenseFactProvider" type="org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider" --]
 [#-- @ftlvariable name="LicenseView" type="org.ossreviewtoolkit.model.licenses.LicenseView" --]
 [#-- @ftlvariable name="helper" type="org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.TemplateHelper" --]
 [#-- @ftlvariable name="projectsAsPackages" type="kotlin.collections.Set<org.ossreviewtoolkit.model.Identifier>" --]

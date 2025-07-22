@@ -25,6 +25,7 @@ import io.kotest.matchers.shouldBe
 
 import java.time.LocalDate
 
+import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -35,8 +36,13 @@ class ManPageTemplateReporterFunTest : StringSpec({
         val expectedResult = readResource("/manpage-template-reporter-expected-result.1")
         val reporter = ManPageTemplateReporterFactory.create()
 
-        val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir())
-            .single().getOrThrow().readText()
+        val reportContent = reporter.generateReport(
+            ReporterInput(
+                ORT_RESULT,
+                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+            ),
+            tempdir()
+        ).single().getOrThrow().readText()
 
         reportContent shouldBe patchExpectedResult(
             expectedResult,

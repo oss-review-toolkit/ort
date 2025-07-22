@@ -27,6 +27,8 @@ import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 
 /**
@@ -46,7 +48,7 @@ data class ReporterInput(
     /**
      * A [LicenseTextProvider], can be used to integrate licenses texts into reports.
      */
-    val licenseTextProvider: LicenseTextProvider = DefaultLicenseTextProvider(),
+    val licenseFactProvider: LicenseFactProvider = CompositeLicenseFactProvider(emptyList()),
 
     /**
      * A [CopyrightGarbage] container, can be used to clean up copyrights used in reports.

@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.prependedPath
-import org.ossreviewtoolkit.reporter.LicenseTextProvider
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -230,7 +230,7 @@ private fun OrtResult.getPackageVerificationCode(id: Identifier, type: SpdxPacka
 /**
  * Use [licenseTextProvider] to add the license texts for all packages to the [SpdxDocument].
  */
-internal fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTextProvider): SpdxDocument {
+internal fun SpdxDocument.addExtractedLicenseInfo(licenseFactProvider: LicenseFactProvider): SpdxDocument {
     val allLicenses = buildSet {
         packages.forEach {
             add(it.licenseConcluded)
@@ -242,7 +242,7 @@ internal fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTe
     val nonSpdxLicenses = allLicenses.filter { SpdxConstants.isPresent(it) && SpdxLicense.forId(it) == null }
 
     val extractedLicenseInfo = nonSpdxLicenses.sorted().mapNotNull { license ->
-        licenseTextProvider.getLicenseText(license)?.let { text ->
+        licenseFactProvider.getLicenseText(license)?.let { text ->
             SpdxExtractedLicenseInfo(
                 licenseId = license,
                 extractedText = text

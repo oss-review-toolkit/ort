@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
+import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.div
@@ -96,7 +97,8 @@ private fun TestConfiguration.generateReport(
     val input = ReporterInput(
         ortResult,
         ortConfig,
-        licenseClassifications = createLicenseClassifications()
+        licenseClassifications = createLicenseClassifications(),
+        licenseFactProvider = SpdxLicenseFactProviderFactory.create()
     )
 
     val outputDir = tempdir()
