@@ -8,4 +8,4 @@
 [#-- @ftlvariable name="LicenseView" type="org.ossreviewtoolkit.model.licenses.LicenseView" --]
 [#-- @ftlvariable name="helper" type="org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.TemplateHelper" --]
 [#-- @ftlvariable name="projectsAsPackages" type="kotlin.collections.Set<org.ossreviewtoolkit.model.Identifier>" --]
-[#-- @ftlvariable name="vulnerabilityReference" type="org.ossreviewtoolkit.model.VulnerabilityReference" --]
+[#-- @ftlvariable name="vulnerabilityReference" type="org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference" --]
