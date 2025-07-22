@@ -34,6 +34,17 @@ ort:
   # Force overwriting of any existing output files.
   forceOverwrite: true
 
+  # License fact providers, ordered from highest to lowest priority.
+  licenseFactProviders:
+    SPDX: {}
+    ScanCode:
+      options:
+        scanCodeLicenseTextDir: '/path/to/scancode/license/text/dir'
+    DefaultDir: {}
+    Dir:
+      options:
+        licenseTextDir: '/path/to/license/text/dir'
+
   licenseFilePatterns:
     licenseFilenames: ['license*']
     patentFilenames: ['patents']
