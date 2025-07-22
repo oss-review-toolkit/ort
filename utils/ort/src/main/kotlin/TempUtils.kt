@@ -48,8 +48,3 @@ fun createOrtTempFile(prefix: String? = null, suffix: String? = null): File =
  */
 fun Any.createOrtTempFile(prefix: String? = null, suffix: String? = null): File =
     kotlin.io.path.createTempFile(createOrtTempDir().toPath(), prefix, suffix).toFile()
-
-/**
- * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
- */
-fun Throwable.showStackTrace(): Unit = run { if (printStackTrace) printStackTrace() }
