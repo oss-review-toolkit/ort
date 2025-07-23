@@ -96,7 +96,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             PackageManager.findManagedFiles(
                 absoluteProjectPath,
                 distinctPackageManagers,
-                config.excludes(repositoryConfiguration)
+                config.excludes(repositoryConfiguration),
+                repositoryConfiguration.includes
             )
         }.mapNotNull { (manager, files) ->
             val mappedFiles = manager.mapDefinitionFiles(absoluteProjectPath, files, config)
@@ -175,6 +176,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         val excludes = config.excludes(info.repositoryConfiguration)
 
         runBlocking {
+            // The excludes are passed to allow the package managers to take in account the scopes excludes. Since there
+            // is no scope include, the includes are not passed to the package managers.
             info.managedFiles.entries.map { (manager, files) ->
                 PackageManagerRunner(
                     manager = manager,
