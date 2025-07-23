@@ -21,8 +21,10 @@ package org.ossreviewtoolkit.helper.commands
 
 import com.github.ajalt.clikt.testing.test
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -39,7 +41,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
@@ -77,8 +78,8 @@ private val PACKAGE_CURATION = PackageCuration(
     )
 )
 
-private fun createOrtConfig(): File {
-    val packageCurationsFile = createOrtTempFile(suffix = ".yml").apply {
+private fun TestConfiguration.createOrtConfig(): File {
+    val packageCurationsFile = tempfile(prefix = "curations", suffix = ".yml").apply {
         writeText(listOf(PACKAGE_CURATION).toYaml())
     }
 
@@ -94,7 +95,7 @@ private fun createOrtConfig(): File {
         )
     )
 
-    val ortConfigFile = createOrtTempFile(suffix = "config.yml").apply {
+    val ortConfigFile = tempfile(prefix = "config", suffix = ".yml").apply {
         writeText(mapOf("ort" to config).toYaml())
     }
 
