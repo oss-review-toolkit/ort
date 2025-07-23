@@ -114,6 +114,7 @@ class Scanner(
                 ortResult.labels + labels,
                 PackageType.PROJECT,
                 ortResult.repository.config.excludes,
+                ortResult.repository.config.includes,
                 scannerConfig.detectedLicenseMapping,
                 snippetChoices = ortResult.repository.config.snippetChoices
             )
@@ -127,6 +128,7 @@ class Scanner(
                 ortResult.labels,
                 PackageType.PACKAGE,
                 ortResult.repository.config.excludes,
+                ortResult.repository.config.includes,
                 scannerConfig.detectedLicenseMapping,
                 snippetChoices = ortResult.repository.config.snippetChoices
             )
@@ -332,8 +334,9 @@ class Scanner(
                 val nestedProvenance = controller.getNestedProvenance(referencePackage.id) ?: return@scanner
 
                 val adjustedContext = context.copy(
-                    // Hide excludes from scanners with a scanner matcher.
+                    // Hide includes and excludes from scanners with a scanner matcher.
                     excludes = context.excludes.takeUnless { scanner.matcher != null },
+                    includes = context.includes.takeUnless { scanner.matcher != null },
                     // Tell scanners also about the non-reference packages.
                     coveredPackages = packagesWithIncompleteScanResult
                 )
@@ -399,8 +402,13 @@ class Scanner(
                         "'${scanner.descriptor.displayName}'."
                 }
 
-                // Filter the scan context to hide the excludes from scanner with scan matcher.
-                val filteredContext = if (scanner.matcher == null) context else context.copy(excludes = null)
+                // Filter the scan context to hide the includes and excludes from scanner with scan matcher.
+                val filteredContext = if (scanner.matcher == null) {
+                    context
+                } else {
+                    context.copy(excludes = null, includes = null)
+                }
+
                 val scanResult = scanner.scanProvenance(provenance, filteredContext)
 
                 val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
@@ -581,8 +589,12 @@ class Scanner(
         val results = scanners.mapNotNull { scanner ->
             logger.info { "Scan of $provenance with path scanner '${scanner.descriptor.displayName}' started." }
 
-            // Filter the scan context to hide the excludes from scanner with scan matcher.
-            val filteredContext = if (scanner.matcher == null) context else context.copy(excludes = null)
+            // Filter the scan context to hide the includes and excludes from scanner with scan matcher.
+            val filteredContext = if (scanner.matcher == null) {
+                context
+            } else {
+                context.copy(excludes = null, includes = null)
+            }
 
             val summary = runCatching {
                 scanner.scanPath(downloadDir, filteredContext)
