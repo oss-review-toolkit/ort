@@ -34,6 +34,7 @@ import io.kotest.matchers.string.shouldMatch
 import io.kotest.matchers.types.beInstanceOf
 
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -42,6 +43,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
+import org.ossreviewtoolkit.model.config.config.PathInclude
+import org.ossreviewtoolkit.model.config.config.PathIncludeReason
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OrtResultTest : WordSpec({
@@ -235,6 +238,80 @@ class OrtResultTest : WordSpec({
                         issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:excluded:1.0") to
                                 listOf(Issue(message = "Excluded issue", source = "")),
+                            Identifier("Maven:org.oss-review-toolkit:included:1.0") to
+                                listOf(Issue(message = "Included issue", source = ""))
+                        )
+                    )
+                )
+            )
+
+            val openIssues = ortResult.getOpenIssues()
+
+            openIssues.map { it.message } shouldHaveSingleElement "Included issue"
+        }
+
+        "omit issues of non-included projects" {
+            val ortResult = OrtResult.EMPTY.copy(
+                repository = Repository.EMPTY.copy(
+                    config = RepositoryConfiguration(
+                        includes = Includes(
+                            paths = listOf(
+                                PathInclude(
+                                    pattern = "included/pom.xml",
+                                    reason = PathIncludeReason.SOURCE_OF
+                                )
+                            )
+                        )
+                    )
+                ),
+                analyzer = AnalyzerRun.EMPTY.copy(
+                    result = AnalyzerResult.EMPTY.copy(
+                        projects = setOf(
+                            Project.EMPTY.copy(
+                                id = Identifier("Maven:org.oss-review-toolkit:excluded:1.0"),
+                                definitionFilePath = "excluded/pom.xml",
+                                declaredLicenses = emptySet()
+                            )
+                        ),
+                        issues = mapOf(
+                            Identifier("Maven:org.oss-review-toolkit:excluded:1.0") to
+                                listOf(Issue(message = "Excluded issue", source = "")),
+                            Identifier("Maven:org.oss-review-toolkit:included:1.0") to
+                                listOf(Issue(message = "Included issue", source = ""))
+                        )
+                    )
+                )
+            )
+
+            val openIssues = ortResult.getOpenIssues()
+
+            openIssues.map { it.message } shouldHaveSingleElement "Included issue"
+        }
+
+        "include issues of included projects" {
+            val ortResult = OrtResult.EMPTY.copy(
+                repository = Repository.EMPTY.copy(
+                    config = RepositoryConfiguration(
+                        includes = Includes(
+                            paths = listOf(
+                                PathInclude(
+                                    pattern = "included/pom.xml",
+                                    reason = PathIncludeReason.SOURCE_OF
+                                )
+                            )
+                        )
+                    )
+                ),
+                analyzer = AnalyzerRun.EMPTY.copy(
+                    result = AnalyzerResult.EMPTY.copy(
+                        projects = setOf(
+                            Project.EMPTY.copy(
+                                id = Identifier("Maven:org.oss-review-toolkit:included:1.0"),
+                                definitionFilePath = "included/pom.xml",
+                                declaredLicenses = emptySet()
+                            )
+                        ),
+                        issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:included:1.0") to
                                 listOf(Issue(message = "Included issue", source = ""))
                         )
