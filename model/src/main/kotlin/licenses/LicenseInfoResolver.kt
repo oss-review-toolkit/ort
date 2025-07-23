@@ -247,13 +247,10 @@ class LicenseInfoResolver(
 
         licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.map { it.provenance }
-        }.forEach { provenance ->
+        }.filterIsInstance<KnownProvenance>().forEach { provenance ->
             val archiveDir = createOrtTempDir("archive").apply { deleteOnExit() }
 
-            when (provenance) {
-                is UnknownProvenance -> return@forEach
-                is KnownProvenance -> if (!archiver.unarchive(archiveDir, provenance)) return@forEach
-            }
+            if (!archiver.unarchive(archiveDir, provenance)) return@forEach
 
             val directory = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
             val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
