@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependedPath
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
@@ -248,9 +249,15 @@ class LicenseInfoResolver(
         licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.map { it.provenance }
         }.filterIsInstance<KnownProvenance>().forEach { provenance ->
-            val archiveDir = createOrtTempDir("archive").apply { deleteOnExit() }
+            val archiveDir = createOrtTempDir("archive")
 
-            if (!archiver.unarchive(archiveDir, provenance)) return@forEach
+            if (!archiver.unarchive(archiveDir, provenance)) {
+                archiveDir.safeDeleteRecursively()
+                return@forEach
+            }
+
+            // Register the (empty) `archiveDir` for deletion on JVM exit.
+            archiveDir.deleteOnExit()
 
             val directory = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
             val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
@@ -261,11 +268,15 @@ class LicenseInfoResolver(
             ).getValue(directory)
 
             licenseFiles += rootLicenseFiles.map { relativePath ->
+                // Register files in `archiveDir` for deletion. Because files are deleted in reverse order than
+                // registered, this will leave `archiveDir` empty to get properly deleted by the registration above.
+                val file = archiveDir.resolve(relativePath).apply { deleteOnExit() }
+
                 ResolvedLicenseFile(
                     provenance = provenance,
                     licenseInfo.filter(provenance, relativePath),
                     relativePath,
-                    archiveDir.resolve(relativePath)
+                    file
                 )
             }
         }
