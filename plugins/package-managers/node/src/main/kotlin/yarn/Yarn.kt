@@ -252,7 +252,7 @@ private fun List<YarnListNode>.removeDanglingLinks(workingDir: File): List<YarnL
     map {
         it.copy(children = it.children?.removeDanglingLinks(workingDir))
     }.filterNot { node ->
-        node.linkPath?.let { workingDir.resolve(it).isDirectory } ?: false
+        node.linkPath?.let { workingDir.resolve(it) }?.isDirectory ?: false
     }
 
 private fun List<YarnListNode>.resolveVersions(): List<YarnListNode> {
