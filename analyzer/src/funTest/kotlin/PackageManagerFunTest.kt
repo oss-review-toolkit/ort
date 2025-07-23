@@ -33,8 +33,11 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.model.config.config.PathInclude
+import org.ossreviewtoolkit.model.config.config.PathIncludeReason
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.div
 
@@ -184,6 +187,26 @@ class PackageManagerFunTest : WordSpec({
             managedFilesById["SBT"] should containExactly("sbt/build.sbt")
         }
 
+        "take path includes into account" {
+            val tempDir = "test/"
+            val definitionFilesWithExcludes = definitionFiles +
+                listOf("pom.xml", "build.gradle", "build.sbt").map { "$tempDir$it" }
+            val rootDir = tempdir()
+            definitionFilesWithExcludes.writeFiles(rootDir)
+
+            val pathInclude = PathInclude("$tempDir**", PathIncludeReason.SOURCE_OF)
+            val includes = Includes(paths = listOf(pathInclude))
+
+            val managedFilesById = PackageManager.findManagedFiles(rootDir, packageManagers, includes = includes)
+                .groupById(rootDir).toSortedMap(String.CASE_INSENSITIVE_ORDER)
+
+            managedFilesById["GradleInspector"] should containExactly(
+                "test/build.gradle"
+            )
+            managedFilesById["Maven"] should containExactly("test/pom.xml")
+            managedFilesById["SBT"] should containExactly("test/build.sbt")
+        }
+
         "handle specific excluded definition files" {
             val pathExclude = PathExclude("gradle-groovy/build.gradle", PathExcludeReason.OTHER)
             val excludes = Excludes(paths = listOf(pathExclude))
@@ -193,6 +216,18 @@ class PackageManagerFunTest : WordSpec({
 
             managedFilesById["GradleInspector"] should containExactly(
                 "gradle-kotlin/build.gradle.kts"
+            )
+        }
+
+        "handle specific included definition files" {
+            val pathInclude = PathInclude("gradle-groovy/build.gradle", PathIncludeReason.SOURCE_OF)
+            val includes = Includes(paths = listOf(pathInclude))
+
+            val managedFiles = PackageManager.findManagedFiles(projectDir, packageManagers, includes = includes)
+            val managedFilesById = managedFiles.groupById(projectDir)
+
+            managedFilesById["GradleInspector"] should containExactly(
+                "gradle-groovy/build.gradle"
             )
         }
 

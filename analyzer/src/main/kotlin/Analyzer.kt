@@ -36,6 +36,7 @@ import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.excludes
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.includes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -96,7 +97,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             PackageManager.findManagedFiles(
                 absoluteProjectPath,
                 distinctPackageManagers,
-                config.excludes(repositoryConfiguration)
+                config.excludes(repositoryConfiguration),
+                config.includes(repositoryConfiguration)
             )
         }.mapNotNull { (manager, files) ->
             val mappedFiles = manager.mapDefinitionFiles(absoluteProjectPath, files, config)
@@ -175,6 +177,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         val excludes = config.excludes(info.repositoryConfiguration)
 
         runBlocking {
+            // The excludes are passed to allow the package managers to take in account the scope excludes. Since there
+            // is no scope includes, the includes are not passed to the package managers.
             info.managedFiles.entries.map { (manager, files) ->
                 PackageManagerRunner(
                     manager = manager,
