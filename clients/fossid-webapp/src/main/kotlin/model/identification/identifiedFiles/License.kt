@@ -19,9 +19,12 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.LicenseCategory
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class License(
     val fileLicenseMatchType: LicenseMatchType,
 
