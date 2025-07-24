@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
@@ -58,6 +59,7 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
+import org.ossreviewtoolkit.model.config.config.PathInclude
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
@@ -572,6 +574,25 @@ internal fun Collection<PathExclude>.mergePathExcludes(
 }
 
 /**
+ * Merge the given [PathInclude]s replacing entries with equal [PathInclude.pattern].
+ * If the given [updateOnlyExisting] is true then only entries with matching [PathInclude.pattern] are merged.
+ */
+internal fun Collection<PathInclude>.mergePathIncludes(
+    other: Collection<PathInclude>,
+    updateOnlyExisting: Boolean = false
+): List<PathInclude> {
+    val result = mutableMapOf<String, PathInclude>()
+
+    associateByTo(result) { it.pattern }
+
+    other.forEach {
+        if (!updateOnlyExisting || it.pattern in result) result[it.pattern] = it
+    }
+
+    return result.values.toList()
+}
+
+/**
  * Return a copy with the [PathExclude]s sorted.
  */
 internal fun Collection<PathExclude>.sortPathExcludes(): List<PathExclude> =
@@ -622,6 +643,9 @@ internal fun Collection<VulnerabilityResolution>.mergeVulnerabilityResolutions(
  */
 internal fun RepositoryConfiguration.merge(other: RepositoryConfiguration): RepositoryConfiguration =
     RepositoryConfiguration(
+        includes = Includes(
+            paths = includes.paths.mergePathIncludes(other.includes.paths)
+        ),
         excludes = Excludes(
             paths = excludes.paths.mergePathExcludes(other.excludes.paths),
             scopes = excludes.scopes.mergeScopeExcludes(other.excludes.scopes)
