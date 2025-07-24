@@ -241,11 +241,14 @@ private fun createOrtResult(): OrtResult {
         url = "https://github.com/path/first-project.git",
         path = "sub/path"
     )
+    val analyzedProvenance = RepositoryProvenance(
+        analyzedVcs,
+        analyzedVcs.revision
+    )
 
     return OrtResult(
         repository = Repository(
-            vcs = analyzedVcs,
-            vcsProcessed = analyzedVcs
+            provenance = analyzedProvenance
         ),
         analyzer = AnalyzerRun.EMPTY.copy(
             config = AnalyzerConfiguration(allowDynamicVersions = true),
