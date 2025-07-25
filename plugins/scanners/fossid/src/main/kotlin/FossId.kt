@@ -431,28 +431,62 @@ class FossId internal constructor(
         projectRevision: String? = null,
         defaultBranch: String? = null
     ): List<Scan> {
+        val scanIdToComments = associate { it.id to extractDeltaScanInformationFromScan(it) }
+
         val scans = filter {
+            val scanComment = scanIdToComments[it.id]
+                ?: error("Scan with ID ${it.id} does not have a valid comment to extract scan information from.")
             val isArchived = it.isArchived == true
             // The scans in the server contain the URL with credentials, so these have to be removed for the comparison.
-            // Otherwise scans would not be matched if the password changed.
-            val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
+            // Otherwise, scans would not be matched if the password changed.
+            val urlWithoutCredentials = scanComment.ort.repositoryURL.replaceCredentialsInUri()
             !isArchived && urlWithoutCredentials == url
         }.sortedByDescending { it.id }
 
-        return scans.filter { scan -> projectRevision == scan.comment }.ifEmpty {
+        return scans.filter { scan ->
+            val scanComment = scanIdToComments[scan.id]
+                ?: error("Scan with ID ${scan.id} does not have a valid comment to extract scan information from.")
+
+            projectRevision == scanComment.ort.projectRevision
+        }.ifEmpty {
             logger.warn {
                 "No recent scan found for project revision $projectRevision. Falling back to default branch scans."
             }
 
             scans.filter { scan ->
-                defaultBranch?.let { scan.comment == defaultBranch } == true
+                val scanComment = scanIdToComments[scan.id]
+                    ?: error("Scan with ID ${scan.id} does not have a valid comment to extract scan information from.")
+
+                scanComment.ort.projectRevision == defaultBranch
             }.ifEmpty {
                 logger.warn { "No recent default branch scan found. Falling back to old behavior." }
 
-                scans.filter { revision == null || it.gitBranch == revision }
+                scans.filter {
+                    val scanComment = scanIdToComments[it.id] ?: error(
+                        "Scan with ID ${it.id} does not have a valid comment to extract scan information from."
+                    )
+
+                    revision == null || scanComment.ort.revision == revision
+                }
             }
         }
     }
+
+    /**
+     * Extract the information needed for creating a delta scan from the given [scan], which could be a legacy scan.
+     * Scans S1 created by FossID cloning the repository have always the properties "gitRepoUrl" and "gitBranch" set.
+     * Scans S2 created by uploading an archive have those two properties set to null.
+     * Old legacy scans, which are all in S1, have the projectRevision in the "comment" property.
+     * New scans for S1 and S2 have a JSON structure in the "comment" property, which contains the Git repository URL,
+     * the Git revision and the project revision.
+     */
+    private fun extractDeltaScanInformationFromScan(scan: Scan): OrtScanComment =
+        if ('{' in scan.comment.orEmpty()) {
+            jsonMapper.readValue(scan.comment, OrtScanComment::class.java)
+        } else {
+            // This is a legacy scan.
+            createOrtScanComment(scan.gitRepoUrl.orEmpty(), scan.gitBranch.orEmpty(), scan.comment.orEmpty())
+        }
 
     /**
      * Call FossID service, initiate a scan and return scan data: Scan Code and Scan Id
@@ -628,7 +662,8 @@ class FossId internal constructor(
     ): String {
         logger.info { "Creating scan '$scanCode'..." }
 
-        val response = handler.createScan(projectCode, scanCode, url, revision, reference)
+        val comment = createOrtScanComment(url, revision, reference)
+        val response = handler.createScan(projectCode, scanCode, comment)
 
         val data = response.data?.value
 

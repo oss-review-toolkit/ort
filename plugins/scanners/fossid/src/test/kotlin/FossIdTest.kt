@@ -169,8 +169,9 @@ class FossIdTest : WordSpec({
 
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "").asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
             }
@@ -191,7 +192,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, null, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "", true)
                 .expectRemoveUploadedContent(scanCode)
                 .expectUploadFile(scanCode)
                 .expectExtractArchives(scanCode)
@@ -201,8 +202,9 @@ class FossIdTest : WordSpec({
 
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "").asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, null, null, "")
+                service.createScan(USER, API_KEY, projectCode, scanCode, null, null, comment)
                 service.removeUploadedContent(USER, API_KEY, scanCode)
                 service.uploadFile(USER, API_KEY, scanCode, any())
                 service.extractArchives(USER, API_KEY, scanCode, any())
@@ -235,8 +237,9 @@ class FossIdTest : WordSpec({
             val fossId = createFossId(config)
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "").asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.downloadFromGit(USER, API_KEY, scanCode)
@@ -678,8 +681,54 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to "master")
             )
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "master").asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "master")
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode),
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
+                    )
+                )
+            }
+        }
+
+        "create a delta scan for an existing scan with a legacy comment" {
+            val projectCode = PROJECT
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig()
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode, legacyComment = true)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectDownload(scanCode)
+                .expectListIgnoreRules(originCode, emptyList())
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to "master")
+            )
+
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "master").asJsonString()
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(
@@ -727,8 +776,9 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
             )
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, branchName)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(
@@ -776,8 +826,9 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
             )
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, branchName)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(
@@ -825,8 +876,9 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
             )
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, branchName)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(
@@ -870,8 +922,9 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to "master")
             )
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "master").asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "master")
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(
@@ -925,8 +978,9 @@ class FossIdTest : WordSpec({
                 Excludes(listOf(PathExclude("*.docx", PathExcludeReason.OTHER)))
             )
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "master").asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "master")
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(
@@ -971,8 +1025,9 @@ class FossIdTest : WordSpec({
 
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "").asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
             }
@@ -983,6 +1038,96 @@ class FossIdTest : WordSpec({
                     API_KEY,
                     scanCode,
                     mapOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
+                    )
+                )
+            }
+        }
+
+        "create a delta scan in archive mode for an existing scan not created in archive mode (legacy scan)" {
+            val projectCode = PROJECT
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig(isArchiveMode = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "master", true)
+                .expectRemoveUploadedContent(scanCode)
+                .expectUploadFile(scanCode)
+                .expectExtractArchives(scanCode)
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to "master")
+            )
+
+            coVerify {
+                service.removeUploadedContent(USER, API_KEY, scanCode)
+                service.uploadFile(USER, API_KEY, scanCode, any())
+                service.extractArchives(USER, API_KEY, scanCode, any())
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode),
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
+                    )
+                )
+            }
+        }
+
+        "create a delta scan in archive mode for an existing scan created in archive mode" {
+            val projectCode = PROJECT
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig(isArchiveMode = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScanWithUploadedContent(vcsInfo.url, vcsInfo.revision, originCode)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "master", true)
+                .expectRemoveUploadedContent(scanCode)
+                .expectUploadFile(scanCode)
+                .expectExtractArchives(scanCode)
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to "master")
+            )
+
+            coVerify {
+                service.removeUploadedContent(USER, API_KEY, scanCode)
+                service.uploadFile(USER, API_KEY, scanCode, any())
+                service.extractArchives(USER, API_KEY, scanCode, any())
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode),
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0",
                         "sensitivity" to "10"
@@ -1016,8 +1161,9 @@ class FossIdTest : WordSpec({
                 Excludes(listOf(PathExclude("*.docx", PathExcludeReason.OTHER)))
             )
 
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "").asJsonString()
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.createIgnoreRule(

@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.GIT_FETCH_DONE_REGEX
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.WAIT_DELAY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdConfig
+import org.ossreviewtoolkit.plugins.scanners.fossid.OrtScanComment
 import org.ossreviewtoolkit.plugins.scanners.fossid.convertRules
 import org.ossreviewtoolkit.plugins.scanners.fossid.filterLegacyRules
 import org.ossreviewtoolkit.plugins.scanners.fossid.wait
@@ -68,12 +69,18 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
     override suspend fun createScan(
         projectCode: String,
         scanCode: String,
-        url: String,
-        revision: String,
-        reference: String
+        comment: OrtScanComment
     ): PolymorphicDataResponseBody<CreateScanResponse> =
         service
-            .createScan(config.user.value, config.apiKey.value, projectCode, scanCode, url, revision, reference)
+            .createScan(
+                config.user.value,
+                config.apiKey.value,
+                projectCode,
+                scanCode,
+                comment.ort.repositoryURL,
+                comment.ort.revision,
+                comment.asJsonString()
+            )
             .checkResponse("create scan")
 
     override suspend fun afterScanCreation(

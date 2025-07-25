@@ -86,6 +86,8 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.SnippetChoices
 import org.ossreviewtoolkit.plugins.api.Secret
+import org.ossreviewtoolkit.plugins.scanners.fossid.events.CloneRepositoryHandler
+import org.ossreviewtoolkit.plugins.scanners.fossid.events.UploadArchiveHandler
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -216,14 +218,15 @@ private fun createScanDescription(state: ScanStatus): UnversionedScanDescription
 }
 
 /**
- * Create a mock [Scan] with the given properties.
+ * Create a mock [Scan] as if created by the [CloneRepositoryHandler] with the given properties.
  */
 internal fun createScan(
     url: String,
     revision: String,
     scanCode: String,
     scanId: Int = SCAN_ID,
-    comment: String = "master"
+    comment: String = "master",
+    legacyComment: Boolean = false
 ): Scan {
     val scan = mockk<Scan>()
     every { scan.gitRepoUrl } returns url
@@ -231,7 +234,33 @@ internal fun createScan(
     every { scan.code } returns scanCode
     every { scan.id } returns scanId
     every { scan.isArchived } returns null
-    every { scan.comment } returns comment
+    if (legacyComment) {
+        every { scan.comment } returns comment
+    } else {
+        every { scan.comment } returns createOrtScanComment(url, revision, comment).asJsonString()
+    }
+
+    return scan
+}
+
+/**
+ * Create a mock [Scan] as if created by the [UploadArchiveHandler] with the given properties.
+ */
+internal fun createScanWithUploadedContent(
+    url: String,
+    revision: String,
+    scanCode: String,
+    scanId: Int = SCAN_ID,
+    comment: String = "master"
+): Scan {
+    val scan = mockk<Scan>()
+    every { scan.gitRepoUrl } returns null
+    every { scan.gitBranch } returns null
+    every { scan.code } returns scanCode
+    every { scan.id } returns scanId
+    every { scan.isArchived } returns null
+    every { scan.comment } returns createOrtScanComment(url, revision, comment).asJsonString()
+
     return scan
 }
 
@@ -577,20 +606,32 @@ internal fun FossIdServiceWithVersion.expectDownload(scanCode: String): FossIdSe
 
 /**
  * Prepare this service mock to expect a request to create a scan for the given [projectCode], [scanCode], and
- * [vcsInfo].
+ * [vcsInfo] and [projectRevision]. With the [isArchiveMode] flag, scans can be mocked as if created by the
+ * [UploadArchiveHandler].
  */
 internal fun FossIdServiceWithVersion.expectCreateScan(
     projectCode: String,
     scanCode: String,
-    vcsInfo: VcsInfo? = null,
-    comment: String = "master"
+    vcsInfo: VcsInfo,
+    projectRevision: String = "master",
+    isArchiveMode: Boolean = false
 ): FossIdServiceWithVersion {
-    coEvery {
-        createScan(USER, API_KEY, projectCode, scanCode, vcsInfo?.url, vcsInfo?.revision, comment)
-    } returns PolymorphicDataResponseBody(
-        status = 1,
-        data = PolymorphicData(CreateScanResponse(SCAN_ID.toString()))
-    )
+    val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, projectRevision).asJsonString()
+
+    if (isArchiveMode) {
+        coEvery {
+            createScan(USER, API_KEY, projectCode, scanCode, null, null, comment)
+        } returns PolymorphicDataResponseBody(
+            status = 1, data = PolymorphicData(CreateScanResponse(SCAN_ID.toString()))
+        )
+    } else {
+        coEvery {
+            createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
+        } returns PolymorphicDataResponseBody(
+            status = 1, data = PolymorphicData(CreateScanResponse(SCAN_ID.toString()))
+        )
+    }
+
     return this
 }
 

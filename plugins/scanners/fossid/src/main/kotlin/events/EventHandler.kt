@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdConfig
+import org.ossreviewtoolkit.plugins.scanners.fossid.OrtScanComment
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 
@@ -100,15 +101,13 @@ interface EventHandler {
     fun transformURL(url: String): String = url
 
     /**
-     * Create a scan in FossID with the given [projectCode], [scanCode], [url], [revision] and [reference]. Return the
-     * response from FossID or null if the scan could not be created.
+     * Create a scan in FossID with the given [projectCode], [scanCode], and url, revision and reference contained in
+     * the [comment]. Return the response from FossID or null if the scan could not be created.
      */
     suspend fun createScan(
         projectCode: String,
         scanCode: String,
-        url: String,
-        revision: String,
-        reference: String
+        comment: OrtScanComment
     ): PolymorphicDataResponseBody<CreateScanResponse>
 
     /**
