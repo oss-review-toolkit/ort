@@ -1,0 +1,92 @@
+# Copyright (C) 2026 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+# License-Filename: LICENSE
+
+[env]
+_.file = ".env.versions"
+
+[tools]
+# Runtimes
+java = "{{ env.JAVA_VERSION }}"
+python = "{{ env.PYTHON_VERSION }}"
+ruby = "{{ env.RUBY_VERSION }}"
+
+# Gradle Wrapper
+coreutils = {
+    version = "latest",
+    postinstall = """
+        cd $(dirname $(which coreutils))
+
+        # Create links for all tools built into coreutils.
+        ./coreutils --list | xargs -i ln -s coreutils {}
+
+        # Create links to the "host" for tools not available via mise.
+        ln -s /usr/bin/bash bash
+        ln -s /usr/bin/bash sh
+        ln -s /usr/bin/xargs xargs
+        ln -s /usr/bin/sed sed
+        ln -s /usr/bin/grep grep
+        ln -s /usr/bin/git git
+    """
+}
+
+# Scanners
+"github:jpeddicord/askalono" = "{{ env.ASKALONO_VERSION }}"
+"gem:licensee" = "{{ env.LICENSEE_VERSION }}"
+"github:mstykow/provenant" = "{{ env.PROVENANT_VERSION }}"
+"pipx:scancode-toolkit" = "{{ env.SCANCODE_VERSION }}"
+
+# Version Control Systems
+"http:git-repo" = { version ="0", url = "https://storage.googleapis.com/git-repo-downloads/repo" }
+"pipx:mercurial" = "latest"
+
+[tasks.isolate]
+alias = "isolated"
+
+description = "Run a command in isolation from the host with only mise tools available."
+usage = "arg '<command>' help = 'The command to run.'"
+
+# Deny inheriting most environment variables.
+deny_env = true
+
+# Strip everything but mise install directories from the path environment.
+env.PATH_MINIMAL = """
+{% set_global minimal_paths = [] %}
+
+{% for path in env.PATH | split(pat=":") %}
+    {% if "/mise/installs/" in path %}
+        {% set_global minimal_paths = minimal_paths | concat(with=path) %}
+    {% endif %}
+{% endfor %}
+
+{{ minimal_paths | join(sep=":") }}
+"""
+
+env.PATH = "{{ env.PATH_MINIMAL | trim }}"
+run = "{{ usage.command }}"
+
+[tasks.ort]
+description = "Run an ORT command in isolation from the host."
+usage = "arg '<command>' help = 'The ORT command to run.'"
+run = """
+    mise run isolated "$MISE_PROJECT_ROOT/gradlew -q :cli:run --args='{{ usage.command }}'"
+"""
+
+[tasks.test]
+description = "Run ORT (functional) tests in isolation from the host."
+run = """
+    mise run isolated "$MISE_PROJECT_ROOT/gradlew -q :cli-test-launcher:run"
+"""
