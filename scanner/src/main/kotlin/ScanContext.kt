@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.SnippetChoices
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -46,6 +47,11 @@ data class ScanContext(
      * The [Excludes] of the project to scan.
      */
     val excludes: Excludes? = null,
+
+    /**
+     * The [Includes] of the project to scan.
+     */
+    val includes: Includes? = null,
 
     /**
      * The detected license mappings configured in the

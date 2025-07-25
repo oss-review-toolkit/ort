@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -84,7 +85,8 @@ abstract class PackageManager(val projectType: String) : Plugin {
         fun findManagedFiles(
             directory: File,
             packageManagers: Collection<PackageManager>,
-            excludes: Excludes = Excludes.EMPTY
+            excludes: Excludes = Excludes.EMPTY,
+            includes: Includes = Includes.EMPTY
         ): ManagedProjectFiles {
             require(directory.isDirectory) {
                 "The provided path is not a directory: ${directory.absolutePath}"
@@ -96,6 +98,8 @@ abstract class PackageManager(val projectType: String) : Plugin {
             val rootPath = directory.toPath()
             val distinctPackageManagers = packageManagers.distinct()
 
+            // Note: Even if the directory is not included and other includes are defined, it has to be walked as
+            // subdirectories or files may be included.
             directory.walk().onEnter { dir ->
                 val dirAsPath = dir.toPath()
 
@@ -119,7 +123,8 @@ abstract class PackageManager(val projectType: String) : Plugin {
                 }
             }.filter { it.isDirectory }.forEach { dir ->
                 val filesInCurrentDir = dir.walk().maxDepth(1).filterTo(mutableListOf()) {
-                    it.isFile && !excludes.isPathExcluded(rootPath, it.toPath())
+                    val isIncluded = includes.isPathIncluded(rootPath, it.toPath()) || includes == Includes.EMPTY
+                    it.isFile && !excludes.isPathExcluded(rootPath, it.toPath()) && isIncluded
                 }
 
                 distinctPackageManagers.forEach { manager ->
@@ -206,6 +211,13 @@ abstract class PackageManager(val projectType: String) : Plugin {
          */
         private fun Excludes.isPathExcluded(root: Path, path: Path): Boolean =
             isPathExcluded(root.relativize(path).invariantSeparatorsPathString)
+
+        /**
+         * Check whether the given [path] interpreted relatively against [root] is matched by a path include in this
+         * [Includes] object.
+         */
+        private fun Includes.isPathIncluded(root: Path, path: Path): Boolean =
+            isPathIncluded(root.relativize(path).invariantSeparatorsPathString)
 
         /**
          * Get a fallback project name from the [definitionFile] path relative to the [analysisRoot]. This function

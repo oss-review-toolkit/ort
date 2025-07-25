@@ -30,6 +30,7 @@ import org.apache.logging.log4j.kotlin.loggerOf
 import org.ossreviewtoolkit.model.DependencyNavigator.Companion.MATCH_SUB_PROJECTS
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
@@ -189,9 +190,19 @@ data class OrtResult(
             { project -> project.id },
             { project ->
                 val pathExcludes = getExcludes().findPathExcludes(project, this)
+                val pathIncludes = getIncludes().findPathIncludes(project, this)
+
+                val isExcluded = if (getIncludes() == Includes.EMPTY) {
+                    // No includes are defined. It is excluded if it has path excludes.
+                    pathExcludes.isNotEmpty()
+                } else {
+                    // Some includes are defined. It is excluded if it has no path includes or has path excludes.
+                    pathIncludes.isEmpty() || pathExcludes.isNotEmpty()
+                }
+
                 ProjectEntry(
                     project = project,
-                    isExcluded = pathExcludes.isNotEmpty()
+                    isExcluded = isExcluded
                 )
             }
         )
@@ -245,6 +256,9 @@ data class OrtResult(
 
         return dependencies
     }
+
+    @JsonIgnore
+    fun getIncludes(): Includes = repository.config.includes
 
     @JsonIgnore
     fun getExcludes(): Excludes = repository.config.excludes
