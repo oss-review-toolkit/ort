@@ -56,6 +56,26 @@ import org.semver4j.Semver
  * An event handler when FossID clones a repository itself.
  */
 class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServiceWithVersion) : EventHandler {
+
+    companion object {
+        // Deduplicates and normalizes ignore rules by removing duplicate directory and file rules,
+        // and by stripping the trailing '/*' from directory rule values.
+        fun deduplicateAndNormalizeIgnoreRules(allRules: List<IgnoreRule>): List<IgnoreRule> {
+            val normalizedIgnoredDirs = allRules
+                .filter { it.type == RuleType.DIRECTORY }
+                .map { it.copy(value = it.value.removeSuffix("/*")) }
+                .distinctBy { it.value }
+
+            val normalizedIgnoredFiles = allRules
+                .filter { it.type == RuleType.FILE }
+                .distinctBy { it.value }
+
+            val normalizedRules = normalizedIgnoredDirs + normalizedIgnoredFiles
+
+            return normalizedRules
+        }
+    }
+
     private val urlProvider = config.createUrlProvider()
 
     override fun getPackageInvalidErrorMessage(pkg: Package): String? {
@@ -150,7 +170,10 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
         }
 
         val allRules = excludesRules + legacyRules
-        allRules.forEach {
+
+        val normalizedRules = deduplicateAndNormalizeIgnoreRules(allRules)
+
+        normalizedRules.forEach {
             service.createIgnoreRule(
                 config.user.value,
                 config.apiKey.value,
