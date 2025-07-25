@@ -13,3 +13,7 @@ Dockerfile.custom
 
 # Mac
 .DS_Store
+
+# mise local configuration files
+mise.local.toml
+mise.*.local.toml
