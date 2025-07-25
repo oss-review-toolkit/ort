@@ -150,7 +150,9 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
         }
 
         val allRules = excludesRules + legacyRules
-        allRules.forEach {
+
+        val normalizedRules = deduplicateAndNormalizeIgnoreRules(allRules)
+        normalizedRules.forEach {
             service.createIgnoreRule(
                 config.user.value,
                 config.apiKey.value,
@@ -207,4 +209,27 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
 
         logger.info { "Data download has been completed." }
     }
+}
+
+/**
+ * Deduplicate and normalize ignore rules [allRules] by removing duplicate directory, file and extension rules,
+ * and by stripping the trailing slash and asterisk from directory rule values.
+ */
+internal fun deduplicateAndNormalizeIgnoreRules(allRules: List<IgnoreRule>): List<IgnoreRule> {
+    val normalizedIgnoredDirs = allRules
+        .filter { it.type == RuleType.DIRECTORY }
+        .map { it.copy(value = it.value.removeSuffix("/*")) }
+        .distinctBy { it.value }
+
+    val normalizedIgnoredFiles = allRules
+        .filter { it.type == RuleType.FILE }
+        .distinctBy { it.value }
+
+    val normalizedIgnoredExtensions = allRules
+        .filter { it.type == RuleType.EXTENSION }
+        .distinctBy { it.value }
+
+    val normalizedRules = normalizedIgnoredDirs + normalizedIgnoredFiles + normalizedIgnoredExtensions
+
+    return normalizedRules
 }
