@@ -433,7 +433,7 @@ private fun createDataModel(input: ReporterInput): Map<String, Any> {
         "projects" to projects,
         "packages" to packages,
         "ortResult" to input.ortResult,
-        "licenseTextProvider" to input.licenseTextProvider,
+        "licenseFactProvider" to input.licenseFactProvider,
         "LicenseView" to LicenseView,
         "helper" to FreemarkerTemplateProcessor.TemplateHelper(input),
         "statistics" to input.statistics,

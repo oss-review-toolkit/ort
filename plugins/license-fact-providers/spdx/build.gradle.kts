@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2025 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,28 +18,14 @@
  */
 
 plugins {
-    // Apply core plugins.
-    `java-test-fixtures`
-
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
-    api(projects.model)
-    api(projects.plugins.api)
     api(projects.plugins.licenseFactProviders.licenseFactProviderApi)
 
-    implementation(projects.utils.scriptingUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
-
-    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
-    funTestImplementation(testFixtures(project))
-
-    funTestImplementation(libs.kotest.assertions.json)
-
-    testFixturesImplementation(projects.utils.testUtils)
+    ksp(projects.plugins.licenseFactProviders.licenseFactProviderApi)
 }

@@ -49,6 +49,7 @@ dependencies {
     } else {
         "pluginClasspath"(platform(projects.plugins.advisors))
         "pluginClasspath"(platform(projects.plugins.commands))
+        "pluginClasspath"(platform(projects.plugins.licenseFactProviders))
         "pluginClasspath"(platform(projects.plugins.packageConfigurationProviders))
         "pluginClasspath"(platform(projects.plugins.packageCurationProviders))
         "pluginClasspath"(platform(projects.plugins.packageManagers))

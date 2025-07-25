@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.SourceCodeOrigin.ARTIFACT
 import org.ossreviewtoolkit.model.SourceCodeOrigin.VCS
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
-import org.ossreviewtoolkit.reporter.LicenseTextProvider
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -46,7 +46,7 @@ internal object SpdxDocumentModelMapper {
     fun map(
         ortResult: OrtResult,
         licenseInfoResolver: LicenseInfoResolver,
-        licenseTextProvider: LicenseTextProvider,
+        licenseFactProvider: LicenseFactProvider,
         config: SpdxDocumentReporterConfig
     ): SpdxDocument {
         val nextFileIndex = AtomicInteger(1)
@@ -177,7 +177,7 @@ internal object SpdxDocumentModelMapper {
             packages = projectPackages + packages,
             relationships = relationships.sortedBy { it.spdxElementId },
             files = files
-        ).addExtractedLicenseInfo(licenseTextProvider)
+        ).addExtractedLicenseInfo(licenseFactProvider)
             .filterChecksums(config.wantSpdx23)
     }
 }
