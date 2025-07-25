@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdConfig
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdFactory
+import org.ossreviewtoolkit.plugins.scanners.fossid.OrtScanComment
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
@@ -56,12 +57,16 @@ class UploadArchiveHandler(
     override suspend fun createScan(
         projectCode: String,
         scanCode: String,
-        url: String,
-        revision: String,
-        reference: String
+        comment: OrtScanComment
     ): PolymorphicDataResponseBody<CreateScanResponse> =
         service
-            .createScan(config.user.value, config.apiKey.value, projectCode, scanCode, comment = reference)
+            .createScan(
+                config.user.value,
+                config.apiKey.value,
+                projectCode,
+                scanCode,
+                comment = comment.asJsonString()
+            )
             .checkResponse("create scan")
 
     override suspend fun afterScanCreation(
