@@ -72,7 +72,7 @@ private fun Hash.toSpdxChecksum(): SpdxChecksum? =
         ?.let {
             SpdxChecksum(
                 algorithm = it,
-                checksumValue = value
+                checksumValue = value.lowercase()
             )
         }
 
