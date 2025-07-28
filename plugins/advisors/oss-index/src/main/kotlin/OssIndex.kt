@@ -22,6 +22,11 @@ package org.ossreviewtoolkit.plugins.advisors.ossindex
 import java.net.URI
 import java.time.Instant
 
+import kotlin.coroutines.cancellation.CancellationException
+
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.advisor.AdviceProvider
@@ -97,6 +102,8 @@ class OssIndex(
 
                 componentReports += results.filterValues { it.vulnerabilities.isNotEmpty() }
             }.onFailure {
+                if (it is CancellationException) currentCoroutineContext().ensureActive()
+
                 // Create dummy reports for all components in the chunk as the current data model does not allow to
                 // return issues that are not associated to any package.
                 componentReports += chunk.associateWith { purl ->
