@@ -69,7 +69,7 @@ sw360Client = "19.0.0"
 tika = "3.2.1"
 wagonHttp = "3.5.3"
 wiremock = "3.13.1"
-xmlutil = "0.91.1"
+xmlutil = "0.91.2"
 xz = "1.10"
 
 [plugins]
