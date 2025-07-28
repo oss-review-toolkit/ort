@@ -141,13 +141,23 @@ internal object PythonInspector : CommandLineTool {
         val description: String?,
         val parties: List<Party>,
         val homepageUrl: String?,
-        val declaredLicense: DeclaredLicense?
+        val declaredLicense: DeclaredLicense?,
+        val dependencies: List<Dependency>
     )
 
     @Serializable
     internal data class DeclaredLicense(
         val license: String? = null,
         val classifiers: List<String> = emptyList()
+    )
+
+    @Serializable
+    internal data class Dependency(
+        val purl: String,
+        val scope: String,
+        val isRuntime: Boolean,
+        val isOptional: Boolean,
+        val isResolved: Boolean
     )
 
     @Serializable
