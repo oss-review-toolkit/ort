@@ -27,6 +27,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import kotlinx.serialization.json.decodeFromStream
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
@@ -104,6 +106,25 @@ internal object PythonInspector : CommandLineTool {
                 environment = mapOf("LC_ALL" to "en_US.UTF-8")
             ).requireSuccess()
             val binaryResult = outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
+
+            // Do a consistency check on the binary packages.
+            val packagePurls = mutableSetOf<String>()
+            binaryResult.projects.forEach { project ->
+                project.packageData.forEach { data ->
+                    data.dependencies.mapTo(packagePurls) { it.purl }
+                }
+            }
+
+            if (packagePurls.size != binaryResult.packages.size) {
+                logger.warn {
+                    "The number of unique dependencies (${packagePurls.size}) does not match the number of packages " +
+                        "(${binaryResult.packages.size}), which might indicate a bug in python-inspector."
+                }
+
+                val resultsPurls = binaryResult.packages.mapTo(mutableSetOf()) { it.purl }
+                logger.warn { "Packages that are not contained as dependencies: ${packagePurls - resultsPurls}" }
+                logger.warn { "Dependencies that are not contained as packages: ${resultsPurls - packagePurls}" }
+            }
 
             // TODO: Avoid this terrible hack to run once more with `--prefer-source` to work around
             //       https://github.com/aboutcode-org/python-inspector/issues/229.
