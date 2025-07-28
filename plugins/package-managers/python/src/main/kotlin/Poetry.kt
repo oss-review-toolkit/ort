@@ -117,7 +117,7 @@ class Poetry(
      */
     private fun inspectLockfile(lockfile: File, dependencyGroupName: String): PythonInspector.Result {
         val workingDir = lockfile.parentFile
-        val requirementsFile = createOrtTempFile("requirements.txt")
+        val requirementsFile = createOrtTempFile("requirements", ".txt")
 
         logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
