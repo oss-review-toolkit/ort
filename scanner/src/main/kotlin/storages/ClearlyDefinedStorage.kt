@@ -23,7 +23,11 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import java.time.Instant
 
+import kotlin.coroutines.cancellation.CancellationException
+
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 
 import okhttp3.OkHttpClient
 
@@ -57,7 +61,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.runBlocking
-import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import retrofit2.HttpException
 
@@ -149,7 +152,7 @@ class ClearlyDefinedStorage(
                 }
             }
         }.recoverCatching { e ->
-            e.showStackTrace()
+            if (e is CancellationException) currentCoroutineContext().ensureActive()
 
             val message = "Error when reading results for '${pkg.id.toCoordinates()}' from ClearlyDefined: " +
                 e.collectMessages()

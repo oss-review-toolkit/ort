@@ -22,6 +22,11 @@ package org.ossreviewtoolkit.scanner.provenance
 import java.io.IOException
 import java.net.HttpURLConnection
 
+import kotlin.coroutines.cancellation.CancellationException
+
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+
 import okhttp3.Request
 
 import org.apache.logging.log4j.kotlin.logger
@@ -38,7 +43,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.await
 import org.ossreviewtoolkit.utils.ort.okHttpClient
-import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * The [PackageProvenanceResolver] provides a function to resolve the [Provenance] of a [Package].
@@ -90,7 +94,8 @@ class DefaultPackageProvenanceResolver(
                     }
                 }
             }.onFailure {
-                it.showStackTrace()
+                if (it is CancellationException) currentCoroutineContext().ensureActive()
+
                 errors[sourceCodeOrigin] = it
 
                 logger.info {

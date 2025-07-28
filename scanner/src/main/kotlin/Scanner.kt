@@ -22,11 +22,14 @@ package org.ossreviewtoolkit.scanner
 import java.io.File
 import java.time.Instant
 
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.measureTime
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
@@ -235,6 +238,8 @@ class Scanner(
                     async {
                         pkg to runCatching {
                             packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins)
+                        }.onFailure {
+                            if (it is CancellationException) currentCoroutineContext().ensureActive()
                         }
                     }
                 }.awaitAll()
@@ -262,6 +267,8 @@ class Scanner(
                     async {
                         provenance to runCatching {
                             nestedProvenanceResolver.resolveNestedProvenance(provenance)
+                        }.onFailure {
+                            if (it is CancellationException) currentCoroutineContext().ensureActive()
                         }
                     }
                 }.awaitAll()

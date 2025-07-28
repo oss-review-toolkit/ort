@@ -23,6 +23,11 @@ import java.net.URI
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
+import kotlin.coroutines.cancellation.CancellationException
+
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.advisor.AdviceProvider
@@ -96,6 +101,8 @@ class VulnerableCode(
 
                 allVulnerabilities += chunkVulnerabilities.associate { it.purl to it.affectedByVulnerabilities }
             }.onFailure {
+                if (it is CancellationException) currentCoroutineContext().ensureActive()
+
                 // Create dummy entries for all packages in the chunk as the current data model does not allow to return
                 // issues that are not associated to any package.
                 allVulnerabilities += chunk.associateWith { emptyList() }

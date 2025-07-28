@@ -21,6 +21,11 @@ package org.ossreviewtoolkit.clients.dos
 
 import java.io.File
 
+import kotlin.coroutines.cancellation.CancellationException
+
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.asRequestBody
 
@@ -48,6 +53,7 @@ class DosClient(private val service: DosService) {
             service.getPackageConfiguration(request)
         }.onFailure {
             when (it) {
+                is CancellationException -> currentCoroutineContext().ensureActive()
                 is HttpException -> logger.error {
                     "Error getting the package configuration for purl $purl: ${it.response()?.errorBody()?.string()}"
                 }
@@ -74,6 +80,7 @@ class DosClient(private val service: DosService) {
             it.presignedUrl
         }.onFailure {
             when (it) {
+                is CancellationException -> currentCoroutineContext().ensureActive()
                 is HttpException -> logger.error {
                     "Unable to get a pre-signed URL for $key: ${it.response()?.errorBody()?.string()}"
                 }
@@ -97,6 +104,7 @@ class DosClient(private val service: DosService) {
             logger.info { "Successfully uploaded $file to S3." }
         }.onFailure {
             when (it) {
+                is CancellationException -> currentCoroutineContext().ensureActive()
                 is HttpException -> logger.error {
                     "Failed to upload $file to S3: ${it.response()?.errorBody()?.string()}"
                 }
@@ -120,6 +128,7 @@ class DosClient(private val service: DosService) {
             service.addScanJob(request)
         }.onFailure {
             when (it) {
+                is CancellationException -> currentCoroutineContext().ensureActive()
                 is HttpException -> logger.error {
                     val purls = packages.map { pkg -> pkg.purl }
                     "Error adding a new scan job for $zipFileKey and $purls: ${it.response()?.errorBody()?.string()}"
@@ -156,6 +165,7 @@ class DosClient(private val service: DosService) {
             }
         }.onFailure {
             when (it) {
+                is CancellationException -> currentCoroutineContext().ensureActive()
                 is HttpException -> logger.error {
                     "Error getting scan results: ${it.response()?.errorBody()?.string()}"
                 }
@@ -179,6 +189,7 @@ class DosClient(private val service: DosService) {
             service.getScanJobState(id)
         }.onFailure {
             when (it) {
+                is CancellationException -> currentCoroutineContext().ensureActive()
                 is HttpException -> logger.error {
                     "Error getting the scan state for job $id: ${it.response()?.errorBody()?.string()}"
                 }
