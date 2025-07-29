@@ -46,12 +46,12 @@ fun Iterable<Int>.collapseToRanges(): List<Pair<Int, Int>> {
  * Return a map that associates duplicates as identified by [keySelector] with belonging lists of entries.
  */
 fun <T, K> Iterable<T>.getDuplicates(keySelector: (T) -> K): Map<K, List<T>> =
-    if (this is Set) emptyMap() else groupBy(keySelector).filter { it.value.size > 1 }
+    groupBy(keySelector).filter { it.value.size > 1 }
 
 /**
  * Return a set of duplicate entries in this [Iterable].
  */
-fun <T> Iterable<T>.getDuplicates(): Set<T> = getDuplicates { it }.keys
+fun <T> Iterable<T>.getDuplicates(): Set<T> = if (this is Set) emptySet() else getDuplicates { it }.keys
 
 /**
  * Return the next value in the iteration, or null if there is no next value.
