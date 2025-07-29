@@ -182,3 +182,13 @@ fun String.expandTilde(): String =
     } else {
         this
     }
+
+/**
+ * A convenience operator to resolve [relativePath] against this file.
+ */
+operator fun File.div(relativePath: File): File = resolve(relativePath)
+
+/**
+ * A convenience operator to resolve [relativePath] against this file.
+ */
+operator fun File.div(relativePath: String): File = resolve(relativePath)
