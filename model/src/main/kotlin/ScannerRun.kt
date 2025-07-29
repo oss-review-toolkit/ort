@@ -124,7 +124,7 @@ data class ScannerRun(
                 "Found a scan result with an unknown provenance, which is not allowed."
             }
 
-            (scanResult.provenance as? RepositoryProvenance)?.let { repositoryProvenance ->
+            (scanResult.provenance as? RepositoryProvenance)?.also { repositoryProvenance ->
                 require(repositoryProvenance.vcsInfo.path.isEmpty()) {
                     "Found a scan result with a non-empty VCS path, which is not allowed."
                 }
@@ -135,7 +135,7 @@ data class ScannerRun(
             }
         }
 
-        provenances.getDuplicates { it.id }.keys.let { idsForDuplicateProvenanceResolutionResults ->
+        provenances.getDuplicates { it.id }.keys.also { idsForDuplicateProvenanceResolutionResults ->
             require(idsForDuplicateProvenanceResolutionResults.isEmpty()) {
                 "Found multiple provenance resolution results for the following ids: " +
                     "${idsForDuplicateProvenanceResolutionResults.joinToString { it.toCoordinates() }}."
@@ -147,7 +147,7 @@ data class ScannerRun(
             it.getKnownProvenancesWithoutVcsPath().values
         }
 
-        (scannedProvenances - resolvedProvenances).let {
+        (scannedProvenances - resolvedProvenances).also {
             require(it.isEmpty()) {
                 "Found scan results which do not correspond to any resolved provenances, which is not allowed: \n" +
                     it.toYaml()
@@ -155,7 +155,7 @@ data class ScannerRun(
         }
 
         val fileListProvenances = files.mapTo(mutableSetOf()) { it.provenance }
-        (fileListProvenances - resolvedProvenances).let {
+        (fileListProvenances - resolvedProvenances).also {
             require(it.isEmpty()) {
                 "Found a file lists which do not correspond to any resolved provenances, which is not allowed: \n" +
                     it.toYaml()
@@ -163,7 +163,7 @@ data class ScannerRun(
         }
 
         files.forEach { fileList ->
-            (fileList.provenance as? RepositoryProvenance)?.let {
+            (fileList.provenance as? RepositoryProvenance)?.also {
                 require(it.vcsInfo.path.isEmpty()) {
                     "Found a file list with a non-empty VCS path, which is not allowed."
                 }
