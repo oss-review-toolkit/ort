@@ -49,7 +49,7 @@ class CloneRepositoryHandlerTest : WordSpec({
             )
 
             deduplicatedAndNormalizedIgnoreRules shouldContainExactlyInAnyOrder
-                (expectedIgnoredDirectories + expectedIgnoredFiles)
+                expectedIgnoredDirectories + expectedIgnoredFiles
         }
     }
 })
