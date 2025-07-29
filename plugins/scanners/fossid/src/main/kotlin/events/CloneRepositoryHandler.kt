@@ -149,10 +149,7 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
             logger.warn { "${legacyRules.size} legacy rules have been found." }
         }
 
-        val allRules = excludesRules + legacyRules
-
-        val normalizedRules = deduplicateAndNormalizeIgnoreRules(allRules)
-        normalizedRules.forEach {
+        deduplicateAndNormalizeIgnoreRules(excludesRules + legacyRules).forEach {
             service.createIgnoreRule(
                 config.user.value,
                 config.apiKey.value,
@@ -229,7 +226,5 @@ internal fun deduplicateAndNormalizeIgnoreRules(allRules: List<IgnoreRule>): Lis
         .filter { it.type == RuleType.EXTENSION }
         .distinctBy { it.value }
 
-    val normalizedRules = normalizedIgnoredDirs + normalizedIgnoredFiles + normalizedIgnoredExtensions
-
-    return normalizedRules
+    return normalizedIgnoredDirs + normalizedIgnoredFiles + normalizedIgnoredExtensions
 }
