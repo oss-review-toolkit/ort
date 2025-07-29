@@ -35,6 +35,8 @@ import org.eclipse.jgit.submodule.SubmoduleWalk
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.toUri
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 private fun findGitOrSubmoduleDir(workingDirOrFile: File): Repository {
     val workingDir = (workingDirOrFile.takeIf { it.isDirectory } ?: workingDirOrFile.parentFile).absoluteFile
@@ -109,7 +111,7 @@ internal open class GitWorkingTree(workingDir: File, vcsType: VcsType) : Working
 
                 val firstRemote = remote?.urIs?.firstOrNull()
                 when {
-                    firstRemote == null -> ""
+                    firstRemote == null -> normalizeVcsUrl(remoteForCurrentBranch).toUri { it.toString() }.getOrThrow()
                     firstRemote.isRemote -> firstRemote.toString()
                     else -> File(firstRemote.path).invariantSeparatorsPath
                 }
