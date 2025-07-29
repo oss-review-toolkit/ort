@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
@@ -63,7 +64,7 @@ class FileArchiverTest : StringSpec() {
     }
 
     private fun createFile(path: String, write: File.() -> Unit = { writeText(path) }) {
-        val file = workingDir.resolve(path)
+        val file = workingDir / path
         file.parentFile.safeMkdirs()
         file.write()
     }
@@ -128,7 +129,7 @@ class FileArchiverTest : StringSpec() {
             targetDir.shouldContainFileWithContent("d/a")
 
             fun shouldNotContainFile(path: String) {
-                val file = storageDir.resolve("save/$path")
+                val file = storageDir / "save" / path
                 file shouldNot exist()
             }
 

@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
+import org.ossreviewtoolkit.utils.common.div
 
 private const val REPO_URL = "https://svn.code.sf.net/p/sendmessage/code"
 private const val REPO_REV = "115"
@@ -137,7 +138,7 @@ class SubversionDownloadFunTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val pathForVersion = workingTree.getRootPath().resolve(REPO_PATH_FOR_VERSION)
+            val pathForVersion = workingTree.getRootPath() / REPO_PATH_FOR_VERSION
             val actualFiles = pathForVersion.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
                 it.toRelativeString(pathForVersion).ifEmpty { null }
             }.sorted()

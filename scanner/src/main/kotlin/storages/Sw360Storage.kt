@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
@@ -166,6 +167,4 @@ private fun createAttachmentOfScanResult(release: SW360Release, cachedScanResult
         .addAttachment(cachedScanResult, SW360AttachmentType.SCAN_RESULT_REPORT)
         .build()
 
-private fun createTempFileForUpload(id: Identifier) =
-    createOrtTempDir(id.toCoordinates())
-        .resolve(SCAN_RESULTS_FILE_NAME)
+private fun createTempFileForUpload(id: Identifier) = createOrtTempDir(id.toCoordinates()) / SCAN_RESULTS_FILE_NAME

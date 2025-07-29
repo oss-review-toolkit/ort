@@ -60,8 +60,8 @@ class ArchiveUtilsFunTest : WordSpec() {
 
                     archive.unpack(outputDir)
 
-                    val fileA = outputDir.resolve("a")
-                    val fileB = outputDir.resolve("dir/b")
+                    val fileA = outputDir / "a"
+                    val fileB = outputDir / "dir" / "b"
 
                     fileA shouldBe aFile()
                     fileA.readText() shouldBe "a\n"
@@ -74,8 +74,8 @@ class ArchiveUtilsFunTest : WordSpec() {
 
                     archive.unpack(outputDir, filter = A_FILTER)
 
-                    val fileA = outputDir.resolve("a")
-                    val fileB = outputDir.resolve("dir/b")
+                    val fileA = outputDir / "a"
+                    val fileB = outputDir / "dir" / "b"
 
                     fileA shouldBe aFile()
                     fileB shouldNotBe aFile()

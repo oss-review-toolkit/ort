@@ -35,6 +35,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 class LocalFileStorageFunTest : WordSpec({
@@ -53,7 +54,7 @@ class LocalFileStorageFunTest : WordSpec({
 
         "succeed if the directory does not exist and must be created" {
             val directory = tempdir()
-            val storageDirectory = directory.resolve("create/storage")
+            val storageDirectory = directory / "create" / "storage"
 
             LocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())
 
@@ -88,7 +89,7 @@ class LocalFileStorageFunTest : WordSpec({
     "read()" should {
         "succeed if the file exists" {
             storage { storage, directory ->
-                val file = directory.resolve("existing-file")
+                val file = directory / "existing-file"
                 file.writeText("content")
 
                 val content = storage.read("existing-file").bufferedReader().use(BufferedReader::readText)
@@ -119,7 +120,7 @@ class LocalFileStorageFunTest : WordSpec({
             storage { storage, directory ->
                 storage.write("target/file", "content".byteInputStream())
 
-                val file = directory.resolve("target/file")
+                val file = directory / "target" / "file"
 
                 file shouldBe aFile()
                 file.readText() shouldBe "content"
@@ -128,7 +129,7 @@ class LocalFileStorageFunTest : WordSpec({
 
         "succeed if the file does exist" {
             storage { storage, directory ->
-                val file = directory.resolve("file")
+                val file = directory / "file"
                 file.writeText("old content")
 
                 storage.write("file", "content".byteInputStream())
@@ -144,7 +145,7 @@ class LocalFileStorageFunTest : WordSpec({
                     storage.write("../file", "content".byteInputStream())
                 }
 
-                val file = directory.resolve("../file")
+                val file = directory / ".." / "file"
 
                 file shouldNot exist()
             }
@@ -166,7 +167,7 @@ class LocalFileStorageFunTest : WordSpec({
     "delete()" should {
         "return true if the file exists" {
             storage { storage, directory ->
-                val file = directory.resolve("file")
+                val file = directory / "file"
                 file.writeText("content")
 
                 storage.delete("file") shouldBe true

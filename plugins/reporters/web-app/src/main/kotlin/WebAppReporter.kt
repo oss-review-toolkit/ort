@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.plugins.reporters.evaluatedmodel.EvaluatedModel
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.div
 
 private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
 
@@ -70,7 +71,7 @@ class WebAppReporter(
         val suffix = template.substring(index + PLACEHOLDER.length, template.length)
 
         val reportFileResult = runCatching {
-            val outputFile = outputDir.resolve(reportFilename)
+            val outputFile = outputDir / reportFilename
 
             outputFile.writeText(prefix)
 

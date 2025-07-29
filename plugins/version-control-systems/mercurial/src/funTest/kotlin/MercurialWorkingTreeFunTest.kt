@@ -30,6 +30,7 @@ import io.kotest.matchers.string.beEmpty
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
@@ -70,7 +71,7 @@ class MercurialWorkingTreeFunTest : StringSpec({
         )
         workingTree.getNested() should beEmptyMap()
         workingTree.getRootPath() shouldBe zipContentDir
-        workingTree.getPathToRoot(zipContentDir.resolve("tests")) shouldBe "tests"
+        workingTree.getPathToRoot(zipContentDir / "tests") shouldBe "tests"
     }
 
     // TODO: Find an alternative to Bitbucket that hosts public Mercurial repositories.

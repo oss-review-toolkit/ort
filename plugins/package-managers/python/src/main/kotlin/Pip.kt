@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtProject
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -142,7 +143,7 @@ class Pip internal constructor(
     private fun detectPythonVersion(workingDir: File): String? {
         // While there seems to be no formal specification, a `.python-version` file seems to be supposed to just
         // contain the plain version, see e.g. https://github.com/pyenv/pyenv/blob/21c2a3d/test/version.bats#L28.
-        val pythonVersionFile = workingDir.resolve(".python-version")
+        val pythonVersionFile = workingDir / ".python-version"
         if (!pythonVersionFile.isFile) return null
         return pythonVersionFile.readLines().firstOrNull()?.takeIf { it.firstOrNull()?.isDigit() == true }
     }

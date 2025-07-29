@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -362,7 +363,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             if (sourceArchive.extension == "gem") {
                 // Unpack the nested data archive for Ruby Gems.
                 val gemDirectory = createOrtTempDir("gem")
-                val dataFile = gemDirectory.resolve("data.tar.gz")
+                val dataFile = gemDirectory / "data.tar.gz"
 
                 try {
                     sourceArchive.unpack(gemDirectory)

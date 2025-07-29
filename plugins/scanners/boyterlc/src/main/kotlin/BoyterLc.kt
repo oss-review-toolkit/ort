@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
@@ -85,7 +86,7 @@ class BoyterLc(
     override val writeToStorage = config.writeToStorage
 
     override fun runScanner(path: File, context: ScanContext): String {
-        val resultFile = createOrtTempDir().resolve("result.json")
+        val resultFile = createOrtTempDir() / "result.json"
         val process = BoyterLcCommand.run(
             *CONFIGURATION_OPTIONS.toTypedArray(),
             "--output", resultFile.absolutePath,

@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.SpdxDocumentFileFactory
 import org.ossreviewtoolkit.utils.common.calculateHash
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
@@ -604,7 +605,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
             externalDocumentRefs = references
         )
 
-        val file = tempDir.resolve("external$index.spdx.yml")
+        val file = tempDir / "external$index.spdx.yml"
         SpdxModelMapper.write(file, document)
         return file
     }

@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.readResource
 
@@ -56,7 +57,7 @@ class CycloneDxReporterFunTest : WordSpec({
             ).generateReport(ReporterInput(ORT_RESULT), outputDir)
 
             bomFileResults.shouldBeSingleton {
-                it shouldBeSuccess outputDir.resolve("$REPORT_BASE_FILENAME.json")
+                it shouldBeSuccess outputDir / "$REPORT_BASE_FILENAME.json"
             }
         }
 

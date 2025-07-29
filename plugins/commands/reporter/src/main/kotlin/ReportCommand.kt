@@ -71,6 +71,7 @@ import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.config.setPackageConfigurations
@@ -123,7 +124,7 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_COPYRIGHT_GARBAGE_FILENAME))
+        .default(ortConfigDirectory / ORT_COPYRIGHT_GARBAGE_FILENAME)
         .configurationGroup()
 
     private val customLicenseTextsDir by option(
@@ -134,7 +135,7 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_CUSTOM_LICENSE_TEXTS_DIRNAME))
+        .default(ortConfigDirectory / ORT_CUSTOM_LICENSE_TEXTS_DIRNAME)
         .configurationGroup()
 
     private val howToFixTextProviderScript by option(

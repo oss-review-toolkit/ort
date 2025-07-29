@@ -30,6 +30,7 @@ import io.kotest.matchers.shouldNot
 
 import java.io.FileNotFoundException
 
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -38,7 +39,7 @@ class EvaluateCommandTest : StringSpec({
     "If no rules are specified / exist at all, the status code should be 1" {
         val args = "--check-syntax".split(' ')
 
-        ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME) shouldNot exist()
+        ortConfigDirectory / ORT_EVALUATOR_RULES_FILENAME shouldNot exist()
         EvaluateCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path)).statusCode shouldBe 1
     }
 

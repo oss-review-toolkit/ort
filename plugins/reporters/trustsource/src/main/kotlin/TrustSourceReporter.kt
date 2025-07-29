@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.div
 
 @OrtPlugin(
     displayName = "TrustSource",
@@ -46,7 +47,7 @@ class TrustSourceReporter(override val descriptor: PluginDescriptor = TrustSourc
     private val reportFilename = "trustsource-report.json"
 
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
-        val outputFile = outputDir.resolve(reportFilename)
+        val outputFile = outputDir / reportFilename
 
         val nav = input.ortResult.dependencyNavigator
         val scans = input.ortResult.getProjects().map { project ->

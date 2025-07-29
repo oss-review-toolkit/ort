@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.utils.common.div
 
 class PackageManagerFunTest : WordSpec({
     val definitionFiles = listOf(
@@ -197,7 +198,7 @@ class PackageManagerFunTest : WordSpec({
 
         "fail if the provided file is not a directory" {
             shouldThrow<IllegalArgumentException> {
-                PackageManager.findManagedFiles(projectDir.resolve("pom.xml"), packageManagers)
+                PackageManager.findManagedFiles(projectDir / "pom.xml", packageManagers)
             }
         }
     }

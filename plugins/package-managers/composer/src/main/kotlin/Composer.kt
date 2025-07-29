@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -143,7 +144,7 @@ class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descr
             return listOf(result)
         }
 
-        val lockfile = stashDirectories(workingDir.resolve("vendor")).use { _ ->
+        val lockfile = stashDirectories(workingDir / "vendor").use { _ ->
             val lockfileProvider = LockfileProvider(definitionFile)
 
             requireLockfile(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions) {

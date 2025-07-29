@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.MaskedString
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
@@ -90,7 +91,7 @@ class OrtMain : CliktCommand(ORT_NAME) {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .default(ortConfigDirectory.resolve(ORT_CONFIG_FILENAME))
+        .default(ortConfigDirectory / ORT_CONFIG_FILENAME)
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--error" to Level.ERROR,

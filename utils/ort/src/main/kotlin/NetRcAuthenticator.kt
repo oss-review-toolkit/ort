@@ -27,6 +27,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.nextOrNull
 
 /**
@@ -39,7 +40,7 @@ class NetRcAuthenticator : Authenticator() {
 
     override fun getPasswordAuthentication(): PasswordAuthentication? {
         netrcFileNames.forEach { name ->
-            val netrcFile = Os.userHomeDirectory.resolve(name)
+            val netrcFile = Os.userHomeDirectory / name
             if (netrcFile.isFile) {
                 logger.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
 

@@ -73,6 +73,7 @@ import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePack
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.config.setPackageConfigurations
@@ -131,7 +132,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_COPYRIGHT_GARBAGE_FILENAME))
+        .default(ortConfigDirectory / ORT_COPYRIGHT_GARBAGE_FILENAME)
         .configurationGroup()
 
     private val licenseClassificationsFile by option(
@@ -140,7 +141,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_LICENSE_CLASSIFICATIONS_FILENAME))
+        .default(ortConfigDirectory / ORT_LICENSE_CLASSIFICATIONS_FILENAME)
         .configurationGroup()
 
     private val packageConfigurationsDir by option(
@@ -187,7 +188,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .default(ortConfigDirectory / ORT_RESOLUTIONS_FILENAME)
         .configurationGroup()
 
     private val labels by option(
@@ -208,7 +209,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
         rulesResource.mapTo(scriptUris) { javaClass.getResource(it).toURI() }
 
         if (scriptUris.isEmpty()) {
-            val defaultRulesFile = ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME)
+            val defaultRulesFile = ortConfigDirectory / ORT_EVALUATOR_RULES_FILENAME
 
             if (defaultRulesFile.isFile) {
                 scriptUris += defaultRulesFile.toURI()
@@ -242,7 +243,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
 
         outputDir?.let { absoluteOutputDir ->
             outputFormats.mapTo(outputFiles) { format ->
-                absoluteOutputDir.resolve("evaluation-result.${format.fileExtension}")
+                absoluteOutputDir / "evaluation-result.${format.fileExtension}"
             }
 
             validateOutputFiles(outputFiles)

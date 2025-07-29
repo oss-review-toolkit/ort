@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.getInstalledModulesDirs
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -138,7 +139,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
 
         return workspaceModuleDirs.map { projectDir ->
-            val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
+            val packageJsonFile = projectDir / NodePackageManagerType.DEFINITION_FILE
             val packageJson = parsePackageJson(packageJsonFile)
             val project = parseProject(packageJsonFile, analysisRoot)
             val packageInfo = packageInfoForLocator.values.single { it.getProjectDir(workingDir) == projectDir }

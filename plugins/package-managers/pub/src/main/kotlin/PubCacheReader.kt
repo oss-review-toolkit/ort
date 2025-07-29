@@ -26,6 +26,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 
 /**
@@ -40,7 +41,7 @@ internal class PubCacheReader(flutterHome: File? = null) {
         if (Os.isWindows) {
             File(Os.env["LOCALAPPDATA"], "Pub/Cache")
         } else {
-            Os.userHomeDirectory.resolve(".pub-cache")
+            Os.userHomeDirectory / ".pub-cache"
         }
     }
 
@@ -51,7 +52,7 @@ internal class PubCacheReader(flutterHome: File? = null) {
     fun findFile(packageInfo: PackageInfo, workingDir: File, filename: String): File? {
         val artifactRootDir = findProjectRoot(packageInfo, workingDir) ?: return null
         // Try to locate the file directly.
-        val file = artifactRootDir.resolve(filename)
+        val file = artifactRootDir / filename
         if (file.isFile) return file
 
         // Search the directory tree for the file.

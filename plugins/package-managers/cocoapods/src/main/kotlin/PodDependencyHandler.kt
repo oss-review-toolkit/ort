@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 
 internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
@@ -129,7 +130,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         val reactNativePodsFilePath = "node_modules/react-native/scripts/react_native_pods.rb"
         val rubyContent = parentFile.searchUpwardFor(filePath = reactNativePodsFilePath)
             ?.let {
-                "require '${it.resolve(reactNativePodsFilePath)}'\n$content"
+                "require '${it / reactNativePodsFilePath}'\n$content"
             } ?: content
 
         val patchedPodspecFile = resolveSibling("ort_$name").apply { writeText(rubyContent) }

@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.temporaryProperties
@@ -118,12 +119,10 @@ class Gradle(
      */
     private class GradleCacheReader : WorkspaceReader {
         private val workspaceRepository = WorkspaceRepository("gradle/remote-artifacts")
-        private val gradleCacheRoot = GRADLE_USER_HOME.resolve("caches/modules-2/files-2.1")
+        private val gradleCacheRoot = GRADLE_USER_HOME / "caches" / "modules-2" / "files-2.1"
 
         override fun findArtifact(artifact: Artifact): File? {
-            val artifactRootDir = gradleCacheRoot.resolve(
-                "${artifact.groupId}/${artifact.artifactId}/${artifact.version}"
-            )
+            val artifactRootDir = gradleCacheRoot / artifact.groupId / artifact.artifactId / artifact.version
 
             val artifactFiles = artifactRootDir.walk().filter {
                 val classifier = if (artifact.classifier.isNullOrBlank()) "" else "${artifact.classifier}-"

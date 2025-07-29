@@ -50,6 +50,7 @@ import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.gibibytes
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -95,7 +96,7 @@ val okHttpClient: OkHttpClient by lazy {
     OrtAuthenticator.install()
     OrtProxySelector.install()
 
-    val cacheDirectory = ortDataDirectory.resolve(CACHE_DIRECTORY)
+    val cacheDirectory = ortDataDirectory / CACHE_DIRECTORY
     val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
     val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
 
@@ -147,7 +148,7 @@ fun OkHttpClient.Builder.addBasicAuthorization(username: String, password: Strin
 fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
     if (url.startsWith("file:/")) {
         val source = File(URI(url))
-        val target = directory.resolve(source.name)
+        val target = directory / source.name
         return runCatching { source.copyTo(target) }
     }
 
@@ -184,7 +185,7 @@ fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
             ArchiveType.getType(it) != ArchiveType.NONE
         } ?: candidateNames.first()
 
-        val file = directory.resolve(filename)
+        val file = directory / filename
 
         file.sink().buffer().use { target ->
             body.use { target.writeAll(it.source()) }

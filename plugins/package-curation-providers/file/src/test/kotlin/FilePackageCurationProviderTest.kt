@@ -36,12 +36,13 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
 
 class FilePackageCurationProviderTest : StringSpec() {
     private val curationsDir = tempdir().resolve("package-curations-dir").also {
-        extractResource("/package-curations-dir/curations-1.yml", it.resolve("1.yml"))
-        extractResource("/package-curations-dir/nested/curations-2.yml", it.resolve("nested/2.yml"))
+        extractResource("/package-curations-dir/curations-1.yml", it / "1.yml")
+        extractResource("/package-curations-dir/nested/curations-2.yml", it / "nested" / "2.yml")
     }
 
     private val curationsFile = extractResource("/package-curations.yml", tempfile(suffix = ".yml"))
@@ -126,7 +127,7 @@ class FilePackageCurationProviderTest : StringSpec() {
         }
 
         "Provider throws an exception if the curations file does not exist" {
-            val curationsFile = tempdir().resolve("package-curations-not-existing.yml")
+            val curationsFile = tempdir() / "package-curations-not-existing.yml"
 
             shouldThrow<IllegalArgumentException> {
                 FilePackageCurationProvider(curationsFile)

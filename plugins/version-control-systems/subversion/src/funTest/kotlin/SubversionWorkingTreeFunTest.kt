@@ -31,6 +31,7 @@ import io.kotest.matchers.string.beEmpty
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
@@ -71,7 +72,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
         )
         workingTree.getNested() should beEmptyMap()
         workingTree.getRootPath() shouldBe zipContentDir
-        workingTree.getPathToRoot(zipContentDir.resolve("docutils")) shouldBe "docutils"
+        workingTree.getPathToRoot(zipContentDir / "docutils") shouldBe "docutils"
     }
 
     "Subversion correctly lists remote branches" {

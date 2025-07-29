@@ -36,6 +36,7 @@ import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
 import kotlin.script.experimental.jvm.jvm
 import kotlin.script.experimental.jvmhost.CompiledScriptJarsCache
 
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
@@ -58,7 +59,7 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
                 compilationCache(
                     CompiledScriptJarsCache { script, configuration ->
                         val cacheKey = generateUniqueName(script, configuration)
-                        scriptCacheDir.resolve("$cacheKey.jar")
+                        scriptCacheDir / "$cacheKey.jar"
                     }
                 )
             }

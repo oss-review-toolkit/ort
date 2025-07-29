@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -178,7 +179,7 @@ class DosScanner(
 
         val tmpDir = createOrtTempDir()
         val zipName = "${sourceDir.name}.zip"
-        val zipFile = tmpDir.resolve(zipName)
+        val zipFile = tmpDir / zipName
 
         sourceDir.packZip(zipFile)
         sourceDir.safeDeleteRecursively()

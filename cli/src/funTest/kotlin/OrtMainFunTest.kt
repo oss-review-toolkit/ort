@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 
@@ -55,7 +56,7 @@ class OrtMainFunTest : StringSpec() {
     override suspend fun beforeSpec(spec: Spec) {
         configFile = tempfile(suffix = ".yml")
 
-        val curationsFile = tempdir().resolve("gradle-curations.yml")
+        val curationsFile = tempdir() / "gradle-curations.yml"
         extractResource("/gradle-curations.yml", curationsFile)
 
         val writer = configFile.mapper().writerFor(OrtConfiguration::class.java).withRootName("ort")

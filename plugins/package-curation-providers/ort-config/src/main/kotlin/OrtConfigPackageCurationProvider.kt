@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.encodeOr
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
@@ -66,7 +67,7 @@ open class OrtConfigPackageCurationProvider(
 
     private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         // The ORT config repository follows path layout conventions, so curations can be looked up directly.
-        val packageCurationsFile = curationsDir.resolve("curations").resolve(pkgId.toCurationPath())
+        val packageCurationsFile = curationsDir / "curations" / pkgId.toCurationPath()
 
         // Also consider curations for all packages in a namespace.
         val namespaceCurationsFile = packageCurationsFile.resolveSibling("_.yml")

@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 class DownloaderFunTest : WordSpec({
@@ -75,7 +76,7 @@ class DownloaderFunTest : WordSpec({
             )
 
             val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
-            val tslibDir = outputDir.resolve("tslib-1.10.0")
+            val tslibDir = outputDir / "tslib-1.10.0"
 
             provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
                 sourceArtifact.url shouldBe pkg.sourceArtifact.url
@@ -107,7 +108,7 @@ class DownloaderFunTest : WordSpec({
             )
 
             val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
-            val tyrexDir = outputDir.resolve("tyrex-1.0.1")
+            val tyrexDir = outputDir / "tyrex-1.0.1"
 
             provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
                 sourceArtifact.url shouldBe pkg.sourceArtifact.url
@@ -138,7 +139,7 @@ class DownloaderFunTest : WordSpec({
             )
 
             val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
-            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+            val licenseFile = outputDir / "LICENSE-junit.txt"
 
             provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
                 sourceArtifact.url shouldBe pkg.sourceArtifact.url
@@ -214,7 +215,7 @@ class DownloaderFunTest : WordSpec({
             )
 
             val provenance = Downloader(downloaderConfiguration).download(pkg, outputDir)
-            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+            val licenseFile = outputDir / "LICENSE-junit.txt"
 
             provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
                 sourceArtifact.url shouldBe pkg.sourceArtifact.url
@@ -263,7 +264,7 @@ class DownloaderFunTest : WordSpec({
 
             val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
             val workingTree = VersionControlSystem.forDirectory(outputDir)
-            val babelCliDir = outputDir.resolve("packages/babel-cli")
+            val babelCliDir = outputDir / "packages" / "babel-cli"
 
             provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
                 vcsInfo.type shouldBe pkg.vcsProcessed.type
@@ -345,7 +346,7 @@ class DownloaderFunTest : WordSpec({
             )
 
             val provenance = Downloader(downloaderConfiguration).download(pkg, outputDir)
-            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+            val licenseFile = outputDir / "LICENSE-junit.txt"
 
             provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
                 vcsInfo.url shouldBe pkg.vcs.url
