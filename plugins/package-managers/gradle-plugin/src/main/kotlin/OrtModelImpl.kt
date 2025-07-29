@@ -23,6 +23,7 @@ import OrtConfiguration
 import OrtDependency
 import OrtDependencyTreeModel
 import OrtMavenModel
+import OrtRepository
 import OrtVcsModel
 
 import java.io.Serializable
@@ -33,7 +34,7 @@ internal class OrtDependencyTreeModelImpl(
     override val name: String,
     override val version: String,
     override val configurations: List<OrtConfiguration>,
-    override val repositories: List<String>,
+    override val repositories: List<OrtRepository>,
     override val errors: List<String>,
     override val warnings: List<String>
 ) : OrtDependencyTreeModel, Serializable
@@ -74,3 +75,10 @@ internal class OrtVcsModelImpl(
     override val tag: String,
     override val browsableUrl: String
 ) : OrtVcsModel, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtRepositoryImpl(
+    override val url: String,
+    override val username: String?,
+    override val password: String?
+) : OrtRepository, Serializable

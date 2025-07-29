@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
 import OrtDependency
 import OrtDependencyTreeModel
+import OrtRepository
 
 import org.apache.maven.model.building.FileModelSource
 import org.apache.maven.model.building.ModelBuildingResult
@@ -48,7 +49,7 @@ import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.util.GradleVersion
 
 internal class OrtModelBuilder : ToolingModelBuilder {
-    private val repositories = mutableMapOf<String, String?>()
+    private val repositories = mutableMapOf<String, OrtRepository?>()
 
     private val platformCategories = setOf("platform", "enforced-platform")
 
@@ -186,10 +187,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                     if (it == "26c913274550a0b2221f47a0fe2d2358") "MavenRepo" else it
                                 }.getOrNull()
 
-                                repositories[repositoryId]?.let { repositoryUrl ->
+                                repositories[repositoryId]?.let { repository ->
                                     // Note: Only Maven-style layout is supported for now.
                                     buildString {
-                                        append(repositoryUrl.removeSuffix("/"))
+                                        append(repository.url.removeSuffix("/"))
                                         append('/')
                                         append(id.group.replace('.', '/'))
                                         append('/')

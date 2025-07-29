@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
 import OrtDependencyTreeModel
+import OrtRepository
 
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -32,6 +33,7 @@ import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.repository.WorkspaceRepository
+import org.eclipse.aether.util.repository.AuthenticationBuilder
 
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.events.ProgressListener
@@ -263,10 +265,7 @@ class Gradle(
 
                 initScriptFile.parentFile.safeDeleteRecursively()
 
-                val repositories = dependencyTreeModel.repositories.map {
-                    // TODO: Also handle authentication and snapshot policy.
-                    RemoteRepository.Builder(it, "default", it).build()
-                }
+                val repositories = dependencyTreeModel.repositories.map { it.toRemoteRepository() }
 
                 dependencyHandler.repositories = repositories
 
@@ -327,3 +326,19 @@ private fun getGradleProperties(): Map<String, String> =
         }
         ?.toMap()
         .orEmpty()
+
+/**
+ * Convert this [OrtRepository] to a [RemoteRepository] taking the known properties into account.
+ * TODO: Also handle snapshot policy.
+ */
+private fun OrtRepository.toRemoteRepository(): RemoteRepository =
+    RemoteRepository.Builder(url, "default", url).apply {
+        if (username != null) {
+            setAuthentication(
+                AuthenticationBuilder().apply {
+                    addUsername(username)
+                    password?.also(::addPassword)
+                }.build()
+            )
+        }
+    }.build()
