@@ -170,7 +170,7 @@ class ScannerRunTest : WordSpec({
             }.message shouldBe "Cannot merge ScannerRuns with different configurations: $config1 != $config2."
         }
 
-        "not merge runs with different environments" {
+        "not merge runs with conflicting environments" {
             val env1 = Environment("1.0.0", "x86_64")
             val env2 = Environment("2.0.0", "x86_64")
 
@@ -184,7 +184,8 @@ class ScannerRunTest : WordSpec({
 
             shouldThrow<IllegalArgumentException> {
                 run1 + run2
-            }.message shouldBe "Cannot merge ScannerRuns with different environments: $env1 != $env2."
+            }.message shouldBe
+                "Cannot merge Environments with different ORT versions: '${env1.ortVersion}' != '${env2.ortVersion}'."
         }
 
         "combine start and end time" {

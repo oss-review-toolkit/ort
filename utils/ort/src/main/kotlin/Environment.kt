@@ -112,6 +112,64 @@ data class Environment(
             "GOPATH"
         )
     }
+
+    /**
+     * Merge this [Environment] with the given [other] [Environment].
+     *
+     * Both [Environment]s must have the same properties except for [variables] and [toolVersions], otherwise an
+     * [IllegalArgumentException] is thrown.
+     */
+    operator fun plus(other: Environment) =
+        Environment(
+            ortVersion = ortVersion.also {
+                require(it == other.ortVersion) {
+                    "Cannot merge Environments with different ORT versions: '$ortVersion' != '${other.ortVersion}'."
+                }
+            },
+            buildJdk = buildJdk.also {
+                require(it == other.buildJdk) {
+                    "Cannot merge Environments with different build JDKs: '$buildJdk' != '${other.buildJdk}'."
+                }
+            },
+            javaVersion = javaVersion.also {
+                require(it == other.javaVersion) {
+                    "Cannot merge Environments with different Java versions: '$javaVersion' != '${other.javaVersion}'."
+                }
+            },
+            os = os.also {
+                require(it == other.os) {
+                    "Cannot merge Environments with different operating systems: '$os' != '${other.os}'."
+                }
+            },
+            processors = processors.also {
+                require(it == other.processors) {
+                    "Cannot merge Environments with different processor counts: '$processors' != '${other.processors}'."
+                }
+            },
+            maxMemory = maxMemory.also {
+                require(it == other.maxMemory) {
+                    "Cannot merge Environments with different memory amounts: '$maxMemory' != '${other.maxMemory}'."
+                }
+            },
+            variables = run {
+                val keyIntersection by lazy { variables.keys.intersect(other.variables.keys) }
+
+                require(variables == other.variables || keyIntersection.isEmpty()) {
+                    "Cannot merge Environments with conflicting variable keys: $keyIntersection"
+                }
+
+                variables + other.variables
+            },
+            toolVersions = run {
+                val keyIntersection by lazy { toolVersions.keys.intersect(other.toolVersions.keys) }
+
+                require(toolVersions == other.toolVersions || keyIntersection.isEmpty()) {
+                    "Cannot merge Environments with conflicting tool versions keys: $keyIntersection"
+                }
+
+                toolVersions + other.toolVersions
+            }
+        )
 }
 
 /**

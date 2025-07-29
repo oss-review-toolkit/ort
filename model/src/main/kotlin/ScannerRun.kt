@@ -277,8 +277,8 @@ data class ScannerRun(
     /**
      * Merge this [ScannerRun] with the given [other] [ScannerRun].
      *
-     * Both [ScannerRun]s must have the same [environment] and [config], otherwise an [IllegalArgumentException] is
-     * thrown.
+     * Both [ScannerRun]s must have the same [config] and non-conflicting [environment], otherwise an
+     * [IllegalArgumentException] is thrown.
      *
      * files and scanResults are merged by their [KnownProvenance]s, while issues and scanners are merged by their
      * names.
@@ -303,11 +303,7 @@ data class ScannerRun(
         return ScannerRun(
             startTime = minOf(startTime, other.startTime),
             endTime = maxOf(endTime, other.endTime),
-            environment = environment.also {
-                require(it == other.environment) {
-                    "Cannot merge ScannerRuns with different environments: $it != ${other.environment}."
-                }
-            },
+            environment = environment + other.environment,
             config = config.also {
                 require(it == other.config) {
                     "Cannot merge ScannerRuns with different configurations: $it != ${other.config}."
