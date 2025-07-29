@@ -95,6 +95,16 @@ class IterableUtilsTest : WordSpec({
                 "b" to listOf("a" to "b", "b" to "b"),
                 "z" to listOf("a" to "z", "o" to "z")
             )
+
+            val strings = setOf(
+                "aaa",
+                "bbb",
+                "cc"
+            )
+
+            strings.getDuplicates { it.length } shouldBe mapOf(
+                3 to listOf("aaa", "bbb")
+            )
         }
     }
 })
