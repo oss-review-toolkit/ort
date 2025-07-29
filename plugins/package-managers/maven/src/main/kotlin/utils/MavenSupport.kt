@@ -81,6 +81,7 @@ import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.gibibytes
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
@@ -101,7 +102,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
 
     private val remoteArtifactCache = DiskCache(
-        directory = ortDataDirectory.resolve("cache/analyzer/${workspaceReader.repository.contentType}"),
+        directory = ortDataDirectory / "cache" / "analyzer" / workspaceReader.repository.contentType,
         maxCacheSizeInBytes = 1.gibibytes,
         maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
     )

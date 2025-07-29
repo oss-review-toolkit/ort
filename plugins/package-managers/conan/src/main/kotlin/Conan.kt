@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.alsoIfNull
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.masked
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
@@ -201,7 +202,7 @@ class Conan(
 
         // TODO: Support customizing the "conan_config" directory name, and also support getting the config from a URL.
         //       These options should be retrieved from package manager specific analyzer configuration in ".ort.yml".
-        val conanConfig = sequenceOf(workingDir, analysisRoot).map { it.resolve("conan_config") }
+        val conanConfig = sequenceOf(workingDir, analysisRoot).map { it / "conan_config" }
             .find { it.isDirectory }
 
         val directoryToStash = conanConfig?.let { handler.getConanHome() } ?: conanStoragePath
@@ -292,7 +293,7 @@ class Conan(
         val results = pkgInspectResults.getOrPut(pkgName) {
             // Note: While Conan 2 supports inspect output to stdout, Conan 1 does not and a temporary file is required,
             // see https://github.com/conan-io/conan/issues/6972.
-            val jsonFile = createOrtTempDir().resolve("inspect.json")
+            val jsonFile = createOrtTempDir() / "inspect.json"
 
             handler.runInspectCommand(workingDir, pkgName, jsonFile)
 

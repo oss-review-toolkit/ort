@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.common.withoutSuffix
@@ -139,7 +140,7 @@ class Poetry(
     }
 
     private fun detectPythonVersion(workingDir: File): String? {
-        val pyprojectFile = workingDir.resolve(PYPROJECT_FILENAME)
+        val pyprojectFile = workingDir / PYPROJECT_FILENAME
         val constraint = getPythonVersionConstraint(pyprojectFile) ?: return null
         return getPythonVersion(constraint)?.also {
             logger.info { "Detected Python version '$it' from '$constraint'." }

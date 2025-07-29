@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
@@ -119,11 +120,11 @@ class GitRepo(
             // GitRepo is special in that the workingDir points to the Git working tree of the manifest files, yet
             // the root path is the directory containing the ".repo" directory. This way Git operations work on a valid
             // Git repository, but path operations work relative to the path GitRepo was initialized in.
-            object : GitWorkingTree(repoRoot.resolve(".repo/manifests"), type) {
+            object : GitWorkingTree(repoRoot / ".repo" / "manifests", type) {
                 // Return the path to the manifest as part of the VCS information, as that is required to recreate the
                 // working tree.
                 override fun getInfo(): VcsInfo {
-                    val manifestWrapper = getRootPath().resolve(".repo/manifest.xml")
+                    val manifestWrapper = getRootPath() / ".repo" / "manifest.xml"
 
                     val manifestFile = if (manifestWrapper.isSymbolicLink) {
                         manifestWrapper.realFile
@@ -132,7 +133,7 @@ class GitRepo(
                         // symbolic link, see https://gerrit-review.googlesource.com/c/git-repo/+/256313.
                         val manifestText = manifestWrapper.readText()
                         val manifest = XML().decodeFromString<Manifest>(manifestText)
-                        workingDir.resolve(manifest.include.name)
+                        workingDir / manifest.include.name
                     }
 
                     val manifestPath = manifestFile.relativeTo(workingDir).invariantSeparatorsPath
@@ -145,7 +146,7 @@ class GitRepo(
 
                     paths.forEach { path ->
                         // Add the nested Repo project.
-                        val workingTree = Git(config = config).getWorkingTree(getRootPath().resolve(path))
+                        val workingTree = Git(config = config).getWorkingTree(getRootPath() / path)
                         nested[path] = workingTree.getInfo()
 
                         // Add the Git submodules of the nested Repo project.

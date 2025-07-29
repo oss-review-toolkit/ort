@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
@@ -115,7 +116,7 @@ class FreemarkerTemplateProcessor(
         val reportFileResults = mutableListOf<Result<File>>()
 
         templateIds.mapTo(reportFileResults) { id ->
-            val outputFile = outputDir.resolve("$filePrefix$id$fileExtensionWithDot")
+            val outputFile = outputDir / "$filePrefix$id$fileExtensionWithDot"
 
             logger.info { "Generating file '$outputFile' using template id '$id'." }
 
@@ -129,7 +130,7 @@ class FreemarkerTemplateProcessor(
         }
 
         templateFiles.mapTo(reportFileResults) { file ->
-            val outputFile = outputDir.resolve("$filePrefix${file.nameWithoutExtension}$fileExtensionWithDot")
+            val outputFile = outputDir / "$filePrefix${file.nameWithoutExtension}$fileExtensionWithDot"
 
             logger.info { "Generating file '$outputFile' using template file '${file.absolutePath}'." }
 

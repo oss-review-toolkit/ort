@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocument
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
@@ -74,7 +75,7 @@ private val pkgForVcs = SpdxPackage(
 
 private fun createSpdxDocument(filename: String): SpdxDocument {
     val projectDir = File("src/funTest/assets/projects/synthetic").absoluteFile
-    val definitionFile = projectDir.resolve(filename)
+    val definitionFile = projectDir / filename
     return SpdxModelMapper.read(definitionFile)
 }
 

@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.plugins.scanners.scancode.model.ScanCodeResult
+import org.ossreviewtoolkit.utils.common.div
 
 import org.semver4j.Semver
 
@@ -90,7 +91,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
             fromFile == null
                 // Note that "fromFile" contains the name of the input directory, see
                 // https://github.com/aboutcode-org/scancode-toolkit/issues/3712.
-                || inputPath.resolveSibling(fromFile) == inputPath.resolve(file.path)
+                || inputPath.resolveSibling(fromFile) == inputPath / file.path
                 || (inputPath.path == "." && fromFile.substringAfter('/') == file.path)
                 // Check if input is a single file.
                 || fromFile == inputPath.name

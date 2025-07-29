@@ -41,10 +41,10 @@ class DirectoryStashFunTest : StringSpec() {
 
     override suspend fun beforeTest(testCase: TestCase) {
         sandboxDir = tempdir()
-        a = sandboxDir.resolve("a")
-        a1 = a.resolve("a1")
-        b = sandboxDir.resolve("b")
-        b1 = b.resolve("b1")
+        a = sandboxDir / "a"
+        a1 = a / "a1"
+        b = sandboxDir / "b"
+        b1 = b / "b1"
 
         check(a1.mkdirs())
         check(b1.mkdirs())

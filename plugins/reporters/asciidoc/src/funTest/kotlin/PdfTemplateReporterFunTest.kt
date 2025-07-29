@@ -32,6 +32,7 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.div
 
 class PdfTemplateReporterFunTest : StringSpec({
     "The report is created successfully from an existing result and default template" {
@@ -73,9 +74,9 @@ class PdfTemplateReporterFunTest : StringSpec({
 
         val reportFiles = reportFileResults.map { it.shouldBeSuccess() }
         reportFiles should containExactlyInAnyOrder(
-            outputDir.resolve("AsciiDoc_defect_report.pdf"),
-            outputDir.resolve("AsciiDoc_disclosure_document.pdf"),
-            outputDir.resolve("AsciiDoc_vulnerability_report.pdf")
+            outputDir / "AsciiDoc_defect_report.pdf",
+            outputDir / "AsciiDoc_disclosure_document.pdf",
+            outputDir / "AsciiDoc_vulnerability_report.pdf"
         )
     }
 })

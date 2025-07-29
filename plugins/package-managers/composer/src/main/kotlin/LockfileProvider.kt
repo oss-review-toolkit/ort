@@ -23,6 +23,8 @@ import java.io.File
 
 import kotlin.io.path.moveTo
 
+import org.ossreviewtoolkit.utils.common.div
+
 import org.semver4j.Semver
 
 private const val COMPOSER_LOCK_FILE = "composer.lock"
@@ -30,7 +32,7 @@ private const val COMPOSER_LOCK_FILE = "composer.lock"
 class LockfileProvider(private val definitionFile: File) {
     private val workingDir = definitionFile.parentFile
 
-    val lockfile = workingDir.resolve(COMPOSER_LOCK_FILE)
+    val lockfile = workingDir / COMPOSER_LOCK_FILE
 
     fun <T> ensureLockfile(block: (File) -> T): T {
         if (lockfile.isFile) return block(lockfile)

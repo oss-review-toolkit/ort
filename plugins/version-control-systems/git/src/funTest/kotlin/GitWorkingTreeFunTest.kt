@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.utils.common.div
 
 class GitWorkingTreeFunTest : StringSpec({
     val git = GitFactory().create(PluginConfig.EMPTY)
@@ -59,7 +60,7 @@ class GitWorkingTreeFunTest : StringSpec({
         workingTree.getInfo() shouldBe vcsInfo.copy(revision = "6f09f276c4426c387c6663f54bbd45aea8d81dac")
         workingTree.getNested() should beEmpty()
         workingTree.getRootPath() shouldBe repoDir
-        workingTree.getPathToRoot(repoDir.resolve("README.md")) shouldBe "README.md"
+        workingTree.getPathToRoot(repoDir / "README.md") shouldBe "README.md"
     }
 
     "Git correctly lists remote branches" {

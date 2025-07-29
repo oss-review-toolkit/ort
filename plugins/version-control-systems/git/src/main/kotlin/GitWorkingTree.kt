@@ -35,6 +35,7 @@ import org.eclipse.jgit.submodule.SubmoduleWalk
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
@@ -91,7 +92,7 @@ internal open class GitWorkingTree(workingDir: File, vcsType: VcsType) : Working
     override fun getNested(): Map<String, VcsInfo> =
         useRepo {
             listSubmodulePaths(this).associateWith { path ->
-                GitWorkingTree(workTree.resolve(path), vcsType).getInfo()
+                GitWorkingTree(workTree / path, vcsType).getInfo()
             }
         }
 

@@ -34,6 +34,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
 
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 class XZCompressedLocalFileStorageFunTest : WordSpec({
@@ -52,7 +53,7 @@ class XZCompressedLocalFileStorageFunTest : WordSpec({
 
         "succeed if the directory does not exist and must be created" {
             val directory = tempdir()
-            val storageDirectory = directory.resolve("create/storage")
+            val storageDirectory = directory / "create" / "storage"
 
             XZCompressedLocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())
 
@@ -118,7 +119,7 @@ class XZCompressedLocalFileStorageFunTest : WordSpec({
             storage { storage, directory ->
                 storage.write("target/file", "content".byteInputStream())
 
-                val file = directory.resolve(storage.transformPath("target/file"))
+                val file = directory / storage.transformPath("target/file")
 
                 file shouldBe aFile()
                 storage.read("target/file").bufferedReader().use(BufferedReader::readText) shouldBe "content"
@@ -127,7 +128,7 @@ class XZCompressedLocalFileStorageFunTest : WordSpec({
 
         "succeed if the file does exist" {
             storage { storage, directory ->
-                val file = directory.resolve("file")
+                val file = directory / "file"
                 file.writeText("old content")
 
                 storage.write("file", "content".byteInputStream())
@@ -143,7 +144,7 @@ class XZCompressedLocalFileStorageFunTest : WordSpec({
                     storage.write("../file", "content".byteInputStream())
                 }
 
-                val file = directory.resolve("../file")
+                val file = directory / ".." / "file"
 
                 file shouldNot exist()
             }
@@ -165,7 +166,7 @@ class XZCompressedLocalFileStorageFunTest : WordSpec({
     "delete()" should {
         "return true if the file exists" {
             storage { storage, directory ->
-                val file = directory.resolve(storage.transformPath("file"))
+                val file = directory / storage.transformPath("file")
                 file.writeText("content")
 
                 storage.delete("file") shouldBe true

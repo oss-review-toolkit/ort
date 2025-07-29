@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.Graph
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -117,7 +118,7 @@ class GoMod(override val descriptor: PluginDescriptor = GoModFactory.descriptor)
     ): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
 
-        stashDirectories(projectDir.resolve("vendor")).use { _ ->
+        stashDirectories(projectDir / "vendor").use { _ ->
             val moduleInfoForModuleName = getModuleInfos(projectDir, "all").associateBy { it.path }
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val packages = graph.nodes.mapNotNullTo(mutableSetOf()) {

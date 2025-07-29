@@ -25,6 +25,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 
 /**
  * An enum of all supported Node package managers.
@@ -50,7 +51,7 @@ enum class NodePackageManagerType(
         workspaceFileName = "pnpm-workspace.yaml"
     ) {
         override fun getWorkspaces(projectDir: File): List<String>? {
-            val workspaceFile = projectDir.resolve(workspaceFileName)
+            val workspaceFile = projectDir / workspaceFileName
             if (!workspaceFile.isFile) return null
 
             val packages = runCatching {
@@ -70,7 +71,7 @@ enum class NodePackageManagerType(
         private val lockfileMarker = "# yarn lockfile v1"
 
         override fun hasLockfile(projectDir: File): Boolean {
-            val lockfile = projectDir.resolve(lockfileName)
+            val lockfile = projectDir / lockfileName
             if (!lockfile.isFile) return false
 
             return lockfile.useLines { lines ->

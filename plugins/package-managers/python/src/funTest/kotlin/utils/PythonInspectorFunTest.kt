@@ -24,6 +24,7 @@ import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
@@ -37,7 +38,7 @@ class PythonInspectorFunTest : StringSpec({
     }
 
     "python-inspector output can be deserialized" {
-        val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
+        val definitionFile = projectsDir / "synthetic" / "pip" / "requirements.txt"
         val workingDir = definitionFile.parentFile
 
         val result = try {
@@ -58,7 +59,7 @@ class PythonInspectorFunTest : StringSpec({
     }
 
     "python-inspector can be run without setup.py file analysis" {
-        val definitionFile = projectsDir.resolve("synthetic/python-inspector-no-analyze-setup-py/requirements.txt")
+        val definitionFile = projectsDir / "synthetic" / "python-inspector-no-analyze-setup-py" / "requirements.txt"
         val workingDir = definitionFile.parentFile
 
         val result = try {

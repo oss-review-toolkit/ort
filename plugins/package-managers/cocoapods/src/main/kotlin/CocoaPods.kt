@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.stashDirectories
 
 import org.semver4j.range.RangeList
@@ -91,7 +92,7 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> =
-        stashDirectories(Os.userHomeDirectory.resolve(".cocoapods/repos")).use {
+        stashDirectories(Os.userHomeDirectory / ".cocoapods" / "repos").use {
             // Ensure to use the CDN instead of the monolithic specs repo.
             CocoaPodsCommand.run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root")
                 .requireSuccess()
@@ -109,7 +110,7 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
 
     private fun resolveDependenciesInternal(analysisRoot: File, definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val lockfile = workingDir.resolve(LOCKFILE_FILENAME)
+        val lockfile = workingDir / LOCKFILE_FILENAME
         val issues = mutableListOf<Issue>()
 
         val projectId = Identifier(

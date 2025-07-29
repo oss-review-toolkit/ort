@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 import org.ossreviewtoolkit.utils.common.suppressInput
@@ -163,7 +164,7 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
         }
 
         if (pomFiles.isEmpty()) {
-            val targetDir = workingDir.resolve("target")
+            val targetDir = workingDir / "target"
 
             logger.info {
                 "No POM locations found in the output of SBT's 'makePom' command. Falling back to look for POMs in " +
@@ -236,7 +237,7 @@ private fun moveGeneratedPom(pomFile: File): Result<File> {
     val targetDirParent = pomFile.parentFile.searchUpwardFor(dirPath = "target")
         ?: return Result.failure(IllegalArgumentException("No target subdirectory found for '$pomFile'."))
     val targetFilename = pomFile.relativeTo(targetDirParent).invariantSeparatorsPath.replace('/', '-')
-    val targetFile = targetDirParent.resolve(targetFilename)
+    val targetFile = targetDirParent / targetFilename
 
     return runCatching { pomFile.toPath().moveTo(targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE).toFile() }
 }

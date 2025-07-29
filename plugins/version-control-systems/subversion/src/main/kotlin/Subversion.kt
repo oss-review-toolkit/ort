@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
@@ -112,7 +113,7 @@ class Subversion(override val descriptor: PluginDescriptor = SubversionFactory.d
     }
 
     private fun deepenWorkingTreePath(workingTree: WorkingTree, path: String, revision: SVNRevision): Long {
-        val finalPath = workingTree.workingDir.resolve(path)
+        val finalPath = workingTree.workingDir / path
         var currentPath = workingTree.workingDir
 
         // Avoid the "None of the targets are working copies" error by deepening one path at a time.

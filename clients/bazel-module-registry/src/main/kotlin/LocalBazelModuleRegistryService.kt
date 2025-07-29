@@ -27,6 +27,7 @@ import kotlinx.serialization.json.decodeFromStream
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.utils.common.div
 
 private const val BAZEL_MODULES_DIR = "modules"
 const val METADATA_JSON = "metadata.json"
@@ -62,7 +63,7 @@ class LocalBazelModuleRegistryService(url: String, directory: File) : BazelModul
     private val bazelRegistry: BazelRegistry
 
     init {
-        val registryFile = directory.resolve("bazel_registry.json")
+        val registryFile = directory / "bazel_registry.json"
 
         require(registryFile.isFile) {
             "The Bazel registry file bazel_registry.json does not exist in '${directory.canonicalPath}'."
@@ -78,7 +79,7 @@ class LocalBazelModuleRegistryService(url: String, directory: File) : BazelModul
     override val urls: List<String> = listOf(url)
 
     override suspend fun getModuleMetadata(name: String): ModuleMetadata {
-        val metadataJson = moduleDirectory.resolve(name).resolve(METADATA_JSON)
+        val metadataJson = moduleDirectory / name / METADATA_JSON
         require(metadataJson.isFile)
         return metadataJson.inputStream().use {
             JSON.decodeFromStream<ModuleMetadata>(it)
@@ -86,7 +87,7 @@ class LocalBazelModuleRegistryService(url: String, directory: File) : BazelModul
     }
 
     override suspend fun getModuleSourceInfo(name: String, version: String): ModuleSourceInfo {
-        val sourceJson = moduleDirectory.resolve(name).resolve(version).resolve(SOURCE_JSON)
+        val sourceJson = moduleDirectory / name / version / SOURCE_JSON
         require(sourceJson.isFile)
         val sourceInfo = sourceJson.inputStream().use {
             JSON.decodeFromStream<ModuleSourceInfo>(it)
@@ -110,7 +111,7 @@ class LocalBazelModuleRegistryService(url: String, directory: File) : BazelModul
                     // According to the specification, if path and module_base_path are both relative paths, the path
                     // to the module source is <registry_path>/<module_base_path>/<path>.
                     val registryPath = moduleDirectory.parentFile
-                    val modulePath = registryPath.resolve(moduleBasePathAsFile).resolve(pathAsFile)
+                    val modulePath = registryPath / moduleBasePathAsFile / pathAsFile
                     VersionControlSystem.getPathInfo(modulePath)
                     sourceInfo.vcs = VersionControlSystem.getPathInfo(modulePath)
                 }

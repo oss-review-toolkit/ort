@@ -23,6 +23,7 @@ import java.io.File
 import java.util.jar.JarFile
 
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 
 /**
  * A description of the environment that ORT was executed in.
@@ -122,7 +123,7 @@ val ortDataDirectory by lazy {
         it.isEmpty()
     }?.let {
         File(it)
-    } ?: Os.userHomeDirectory.resolve(".ort")
+    } ?: Os.userHomeDirectory / ".ort"
 }
 
 /**
@@ -133,7 +134,7 @@ val ortConfigDirectory by lazy {
         it.isEmpty()
     }?.let {
         File(it)
-    } ?: ortDataDirectory.resolve("config")
+    } ?: ortDataDirectory / "config"
 }
 
 /**
@@ -144,5 +145,5 @@ val ortToolsDirectory by lazy {
         it.isEmpty()
     }?.let {
         File(it)
-    } ?: ortDataDirectory.resolve("tools")
+    } ?: ortDataDirectory / "tools"
 }

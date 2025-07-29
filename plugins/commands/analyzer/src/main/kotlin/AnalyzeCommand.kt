@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
@@ -102,7 +103,7 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .defaultLazy { (inputDir.takeUnless { it.isFile } ?: inputDir.parentFile).resolve(ORT_REPO_CONFIG_FILENAME) }
+        .defaultLazy { (inputDir.takeUnless { it.isFile } ?: inputDir.parentFile) / ORT_REPO_CONFIG_FILENAME }
         .configurationGroup()
 
     private val resolutionsFile by option(
@@ -111,7 +112,7 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .default(ortConfigDirectory / ORT_RESOLUTIONS_FILENAME)
         .configurationGroup()
 
     private val labels by option(
@@ -127,7 +128,7 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
-            outputDir.resolve("analyzer-result.${format.fileExtension}")
+            outputDir / "analyzer-result.${format.fileExtension}"
         }
 
         validateOutputFiles(outputFiles)

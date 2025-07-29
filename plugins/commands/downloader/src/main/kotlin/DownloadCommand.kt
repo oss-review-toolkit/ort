@@ -95,6 +95,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.encodeOrUnknown
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.packZip
@@ -157,7 +158,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_LICENSE_CLASSIFICATIONS_FILENAME))
+        .default(ortConfigDirectory / ORT_LICENSE_CLASSIFICATIONS_FILENAME)
         .configurationGroup()
 
     private val outputDir by option(
@@ -331,12 +332,12 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
 
         echo("$verb ${packages.size} project(s) / package(s) in total.")
 
-        val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
+        val packageDownloadDirs = packages.associateWith { outputDir / it.id.toPath() }
 
         downloadAllPackages(packageDownloadDirs, failureMessages, maxParallelDownloads)
 
         if (archiveMode == ArchiveMode.BUNDLE && !dryRun) {
-            val zipFile = outputDir.resolve("archive.zip")
+            val zipFile = outputDir / "archive.zip"
 
             logger.info { "Archiving directory '$outputDir' to '$zipFile'." }
             val result = runCatching { outputDir.packZip(zipFile) }
@@ -398,7 +399,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
             Downloader(ortConfig.downloader).download(pkg, dir, dryRun)
 
             if (archiveMode == ArchiveMode.ENTITY && !dryRun) {
-                val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
+                val zipFile = outputDir / "${pkg.id.toPath("-")}.zip"
 
                 logger.info { "Archiving directory '$dir' to '$zipFile'." }
                 val result = runCatching {

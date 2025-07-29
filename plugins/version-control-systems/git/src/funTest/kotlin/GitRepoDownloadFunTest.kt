@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.utils.common.div
 
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
@@ -50,7 +51,7 @@ class GitRepoDownloadFunTest : StringSpec() {
 
     init {
         "GitRepo can download a given revision" {
-            val spdxDir = outputDir.resolve("spdx-tools")
+            val spdxDir = outputDir / "spdx-tools"
             val expectedSpdxFiles = listOf(
                 ".git",
                 "Examples",
@@ -67,7 +68,7 @@ class GitRepoDownloadFunTest : StringSpec() {
                 it.name
             }.sorted()
 
-            val submodulesDir = outputDir.resolve("submodules")
+            val submodulesDir = outputDir / "submodules"
             val expectedSubmodulesFiles = listOf(
                 ".git",
                 "commons-text",
@@ -83,8 +84,8 @@ class GitRepoDownloadFunTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getInfo() shouldBe vcs
 
-            workingTree.getPathToRoot(outputDir.resolve("grpc/README.md")) shouldBe "grpc/README.md"
-            workingTree.getPathToRoot(outputDir.resolve("spdx-tools/TODO")) shouldBe "spdx-tools/TODO"
+            workingTree.getPathToRoot(outputDir / "grpc" / "README.md") shouldBe "grpc/README.md"
+            workingTree.getPathToRoot(outputDir / "spdx-tools" / "TODO") shouldBe "spdx-tools/TODO"
 
             actualSpdxFiles.joinToString("\n") shouldBe expectedSpdxFiles.joinToString("\n")
             actualSubmodulesFiles.joinToString("\n") shouldBe expectedSubmodulesFiles.joinToString("\n")
@@ -98,7 +99,7 @@ class GitRepoDownloadFunTest : StringSpec() {
                 "submodules/test-data-npm",
                 "submodules/test-data-npm/isarray",
                 "submodules/test-data-npm/long.js"
-            ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
+            ).associateWith { VersionControlSystem.getPathInfo(outputDir / it) }
 
             val workingTree = GitRepoFactory().create(PluginConfig.EMPTY).getWorkingTree(outputDir)
             workingTree.getNested() shouldBe expectedSubmodules

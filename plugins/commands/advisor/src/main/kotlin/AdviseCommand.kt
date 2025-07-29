@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
@@ -100,7 +101,7 @@ class AdviseCommand(descriptor: PluginDescriptor = AdviseCommandFactory.descript
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .default(ortConfigDirectory / ORT_RESOLUTIONS_FILENAME)
         .configurationGroup()
 
     private val providerFactories by option(

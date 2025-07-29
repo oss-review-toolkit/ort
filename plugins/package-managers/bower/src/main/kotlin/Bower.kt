@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.stashDirectories
 
 import org.semver4j.range.RangeList
@@ -72,7 +73,7 @@ class Bower(override val descriptor: PluginDescriptor = BowerFactory.descriptor)
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        stashDirectories(workingDir.resolve("bower_components")).use { _ ->
+        stashDirectories(workingDir / "bower_components").use { _ ->
             val projectPackageInfo = getProjectPackageInfo(workingDir)
             val packageInfoForName = projectPackageInfo
                 .getTransitiveDependencies()

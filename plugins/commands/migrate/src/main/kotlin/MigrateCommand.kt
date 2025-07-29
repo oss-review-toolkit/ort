@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.packagecurationproviders.ortconfig.toCurationPath
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.getIdentifierWithNamespace
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -139,7 +140,7 @@ class MigrateCommand(descriptor: PluginDescriptor = MigrateCommandFactory.descri
             if (curationsWithFixedIds != curations) {
                 val oldPath = file.relativeTo(curationsDir).path
                 val newPath = curationsWithFixedIds.first().id.toCurationPath()
-                val newFile = curationsDir.resolve(newPath)
+                val newFile = curationsDir / newPath
 
                 // TODO: Maybe make this optional to support layouts that do not follow ort-config conventions.
                 if (newPath != oldPath) {
@@ -159,7 +160,7 @@ class MigrateCommand(descriptor: PluginDescriptor = MigrateCommandFactory.descri
                 val oldPath = file.relativeTo(configsDir).path
                 val newName = if (configWithFixedId.sourceArtifactUrl != null) "source-artifact" else "vcs"
                 val newPath = "${configWithFixedId.id.toPath(emptyValue = "_")}/$newName.yml"
-                val newFile = configsDir.resolve(newPath)
+                val newFile = configsDir / newPath
 
                 // TODO: Maybe make this optional to support layouts that do not follow ort-config conventions.
                 if (newPath != oldPath) {

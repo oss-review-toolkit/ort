@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitFactory
+import org.ossreviewtoolkit.utils.common.div
 
 class VersionControlSystemTest : WordSpec({
     val vcsRoot = File("..").absoluteFile.normalize()
@@ -50,8 +51,8 @@ class VersionControlSystemTest : WordSpec({
 
         "work if given absolute paths" {
             absVcsDir.getPathToRoot(vcsRoot) shouldBe ""
-            absVcsDir.getPathToRoot(vcsRoot.resolve("downloader/src")) shouldBe "downloader/src"
-            absVcsDir.getPathToRoot(absProjDir.resolve("kotlin")) shouldBe "downloader/src/test/kotlin"
+            absVcsDir.getPathToRoot(vcsRoot / "downloader" / "src") shouldBe "downloader/src"
+            absVcsDir.getPathToRoot(absProjDir / "kotlin") shouldBe "downloader/src/test/kotlin"
         }
 
         "work if given relative paths" {
@@ -66,8 +67,8 @@ class VersionControlSystemTest : WordSpec({
 
         "work if given absolute paths" {
             relVcsDir.getPathToRoot(vcsRoot) shouldBe ""
-            relVcsDir.getPathToRoot(vcsRoot.resolve("downloader/src")) shouldBe "downloader/src"
-            relVcsDir.getPathToRoot(absProjDir.resolve("kotlin")) shouldBe "downloader/src/test/kotlin"
+            relVcsDir.getPathToRoot(vcsRoot / "downloader" / "src") shouldBe "downloader/src"
+            relVcsDir.getPathToRoot(absProjDir / "kotlin") shouldBe "downloader/src/test/kotlin"
         }
 
         "work if given relative paths" {

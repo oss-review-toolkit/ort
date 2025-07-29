@@ -26,18 +26,19 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 import org.ossreviewtoolkit.plugins.packagemanagers.python.Poetry.Companion.PYPROJECT_FILENAME
+import org.ossreviewtoolkit.utils.common.div
 
 class PoetryTest : WordSpec({
     "parseScopeNamesFromPyProject()" should {
         "return the 'main' scope even for a non-existing file" {
-            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir() / PYPROJECT_FILENAME
 
             pyprojectFile shouldNotBe aFile()
             parseScopeNamesFromPyproject(pyprojectFile) shouldBe setOf("main")
         }
 
         "parse scope names with different syntax" {
-            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir() / PYPROJECT_FILENAME
 
             pyprojectFile.writeText(
                 """
@@ -50,7 +51,7 @@ class PoetryTest : WordSpec({
         }
 
         "not return empty scope names" {
-            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir() / PYPROJECT_FILENAME
 
             pyprojectFile.writeText(
                 """
@@ -64,7 +65,7 @@ class PoetryTest : WordSpec({
 
     "getPythonVersionConstraint()" should {
         "return a global Python version constraint with precedence" {
-            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir() / PYPROJECT_FILENAME
 
             pyprojectFile.writeText(
                 """
@@ -80,7 +81,7 @@ class PoetryTest : WordSpec({
         }
 
         "return the tool Python version constraint" {
-            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir() / PYPROJECT_FILENAME
 
             pyprojectFile.writeText(
                 """
@@ -95,7 +96,7 @@ class PoetryTest : WordSpec({
         }
 
         "return null if there is no Python constraint" {
-            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir() / PYPROJECT_FILENAME
 
             pyprojectFile.writeText(
                 """

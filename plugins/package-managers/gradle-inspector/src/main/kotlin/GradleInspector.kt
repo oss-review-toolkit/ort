@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -118,12 +119,12 @@ class GradleInspector(
 
     private fun extractInitScript(): File {
         val toolsDir = ortToolsDirectory.resolve(descriptor.id).apply { safeMkdirs() }
-        val pluginJar = extractResource("/gradle-plugin.jar", toolsDir.resolve("gradle-plugin.jar"))
+        val pluginJar = extractResource("/gradle-plugin.jar", toolsDir / "gradle-plugin.jar")
 
         val initScriptText = javaClass.getResource("/template.init.gradle").readText()
             .replace("<REPLACE_PLUGIN_JAR>", pluginJar.invariantSeparatorsPath)
 
-        val initScript = toolsDir.resolve("init.gradle")
+        val initScript = toolsDir / "init.gradle"
 
         logger.debug { "Extracting Gradle init script to '$initScript'..." }
 

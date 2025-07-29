@@ -68,6 +68,7 @@ import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
@@ -137,12 +138,12 @@ class ScanCommand(descriptor: PluginDescriptor = ScanCommandFactory.descriptor) 
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .default(ortConfigDirectory / ORT_RESOLUTIONS_FILENAME)
         .configurationGroup()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
-            outputDir.resolve("scan-result.${format.fileExtension}")
+            outputDir / "scan-result.${format.fileExtension}"
         }
 
         validateOutputFiles(outputFiles)

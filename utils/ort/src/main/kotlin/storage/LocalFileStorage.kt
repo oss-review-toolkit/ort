@@ -23,6 +23,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 /**
@@ -45,7 +46,7 @@ open class LocalFileStorage(
 
     @Synchronized
     override fun read(path: String): InputStream {
-        val file = directory.resolve(transformPath(path))
+        val file = directory / transformPath(path)
 
         require(file.canonicalFile.startsWith(directory.canonicalFile)) {
             "Path '$path' is not in directory '${directory.invariantSeparatorsPath}'."
@@ -59,7 +60,7 @@ open class LocalFileStorage(
      * output stream for writing to the file.
      */
     protected open fun safeOutputStream(path: String): OutputStream {
-        val file = directory.resolve(transformPath(path))
+        val file = directory / transformPath(path)
 
         require(file.canonicalFile.startsWith(directory.canonicalFile)) {
             "Path '$path' is not in directory '${directory.invariantSeparatorsPath}'."

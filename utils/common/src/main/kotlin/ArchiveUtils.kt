@@ -136,7 +136,7 @@ fun File.unpack7Zip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = {
                 continue
             }
 
-            val target = targetDirectory.resolve(entry.name)
+            val target = targetDirectory / entry.name
 
             if (!target.canonicalFile.startsWith(canonicalTargetDirectory)) {
                 logger.warn {
@@ -180,7 +180,7 @@ private fun ZipFile.unpack(targetDirectory: File, filter: (ArchiveEntry) -> Bool
                 continue
             }
 
-            val target = targetDirectory.resolve(entry.name)
+            val target = targetDirectory / entry.name
 
             if (!target.canonicalFile.startsWith(canonicalTargetDirectory)) {
                 logger.warn {
@@ -225,7 +225,7 @@ fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { 
         DEB_NESTED_ARCHIVES.forEach { name ->
             val subDirectoryName = name.substringBefore('.')
             val subDirectory = targetDirectory.resolve(subDirectoryName).safeMkdirs()
-            val file = tempDir.resolve(name)
+            val file = tempDir / name
             file.unpack(subDirectory, filter = filter)
         }
     } finally {
@@ -273,7 +273,7 @@ private fun <E : ArchiveEntry> ArchiveInputStream<E>.unpack(
 
         if (shouldSkip(entry)) continue
 
-        val target = targetDirectory.resolve(entry.name)
+        val target = targetDirectory / entry.name
 
         if (!target.canonicalFile.startsWith(canonicalTargetDirectory)) {
             logger.warn {

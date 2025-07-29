@@ -31,6 +31,7 @@ import org.apache.tika.mime.MimeTypes
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.unpackZip
@@ -54,7 +55,7 @@ class FileArchiver(
     private val storage: ProvenanceFileStorage
 ) {
     companion object {
-        val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
+        val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory / "scanner" / "archive" }
     }
 
     private val matcher = FileMatcher(

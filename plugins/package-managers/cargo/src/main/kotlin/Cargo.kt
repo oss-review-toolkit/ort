@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -83,7 +84,7 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
      */
     private fun resolveLockfile(analysisRoot: File, metadata: CargoMetadata, allowDynamicVersions: Boolean): File {
         val workspaceRoot = File(metadata.workspaceRoot)
-        val lockfile = workspaceRoot.resolve("Cargo.lock")
+        val lockfile = workspaceRoot / "Cargo.lock"
 
         requireLockfile(analysisRoot, workspaceRoot, allowDynamicVersions) { lockfile.isFile }
 

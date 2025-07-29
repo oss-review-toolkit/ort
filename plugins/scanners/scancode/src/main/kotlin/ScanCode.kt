@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -119,7 +120,7 @@ class ScanCode(
     override val writeToStorage = config.writeToStorage
 
     override fun runScanner(path: File, context: ScanContext): String {
-        val resultFile = createOrtTempDir().resolve("result.json")
+        val resultFile = createOrtTempDir() / "result.json"
         val process = runScanCode(path, resultFile)
 
         return with(process) {

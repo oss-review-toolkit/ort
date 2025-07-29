@@ -67,6 +67,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -167,14 +168,14 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
     override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 
     private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: config.flutterVersion
-    private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
+    private val flutterInstallDir = ortToolsDirectory / "flutter-$flutterVersion"
 
     private val flutterHome by lazy {
         Os.getPathFromEnvironment(flutterCommand)?.realFile?.parentFile?.parentFile
-            ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: flutterInstallDir.resolve("flutter")
+            ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: flutterInstallDir / "flutter"
     }
 
-    private val flutterAbsolutePath = flutterHome.resolve("bin")
+    private val flutterAbsolutePath = flutterHome / "bin"
 
     private data class ParsePackagesResult(
         val packages: Map<Identifier, Package>,
@@ -337,7 +338,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
 
             logger.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
 
-            val lockfile = parseLockfile(workingDir.resolve(PUB_LOCK_FILE))
+            val lockfile = parseLockfile(workingDir / PUB_LOCK_FILE)
 
             logger.info { "Successfully read lockfile." }
 
@@ -515,8 +516,8 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         if (packageName.isEmpty()) return emptyList()
 
         val projectRoot = reader.findProjectRoot(packageInfo, workingDir) ?: return emptyList()
-        val androidDir = projectRoot.resolve("android")
-        val definitionFile = androidDir.resolve("build.gradle")
+        val androidDir = projectRoot / "android"
+        val definitionFile = androidDir / "build.gradle"
 
         // Check for build.gradle failed, no Gradle scan required.
         val gradleFactory = analyzerConfig.getGradleFactory()
@@ -548,8 +549,8 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         if (packageName.isEmpty()) return null
 
         val projectRoot = reader.findProjectRoot(packageInfo, workingDir) ?: return null
-        val iosDir = projectRoot.resolve("ios")
-        val definitionFile = iosDir.resolve("$packageName.podspec")
+        val iosDir = projectRoot / "ios"
+        val definitionFile = iosDir / "$packageName.podspec"
 
         // Check for build.gradle failed, no Gradle scan required.
         if (!definitionFile.isFile) return null
@@ -614,7 +615,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                     source == "path" -> {
                         rawName = packageName
                         val path = packageInfo.description.path.orEmpty()
-                        vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
+                        vcs = VersionControlSystem.forDirectory(workingDir / path)?.getInfo() ?: run {
                             logger.warn {
                                 "Invalid path of package $rawName: " +
                                     "'$path' is outside of the project root '$workingDir'."
@@ -783,7 +784,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
      * Check the [PUBSPEC_YAML] within [workingDir] if the project contains the Flutter SDK.
      */
     private fun containsFlutterSdk(workingDir: File): Boolean {
-        val dependencies = parsePubspec(workingDir.resolve(PUBSPEC_YAML)).dependencies ?: return false
+        val dependencies = parsePubspec(workingDir / PUBSPEC_YAML).dependencies ?: return false
         return dependencies.values.filterIsInstance<SdkDependency>().any { it.sdk == "flutter" }
     }
 

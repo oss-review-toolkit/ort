@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.clients.foojay.Package
 import org.ossreviewtoolkit.clients.foojay.PackageType
 import org.ossreviewtoolkit.clients.foojay.ReleaseStatus
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
@@ -61,7 +62,7 @@ object JavaBootstrapper {
         if (requestedVersion != runningVersion) return false
 
         val javaHome = System.getProperty("java.home") ?: return false
-        val javac = File(javaHome).resolve("bin").resolve("javac")
+        val javac = File(javaHome) / "bin" / "javac"
         return Os.resolveExecutable(javac) != null
     }
 
@@ -130,7 +131,7 @@ object JavaBootstrapper {
             return Result.failure(it)
         }
 
-        val installDir = ortToolsDirectory.resolve("jdks").resolve(pkg.distribution).resolve(pkg.distributionVersion)
+        val installDir = (ortToolsDirectory / "jdks" / pkg.distribution / pkg.distributionVersion)
             .apply {
                 if (isDirectory) {
                     logger.info { "Not downloading the JDK again as the directory '$this' already exists." }

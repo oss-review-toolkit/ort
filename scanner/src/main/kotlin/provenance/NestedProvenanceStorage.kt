@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner.provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
@@ -46,7 +47,7 @@ interface NestedProvenanceStorage {
             }
 
             return FileBasedNestedProvenanceStorage(
-                LocalFileStorage(ortDataDirectory.resolve("scanner/nested_provenance"))
+                LocalFileStorage(ortDataDirectory / "scanner" / "nested_provenance")
             )
         }
     }

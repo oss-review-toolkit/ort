@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
@@ -61,7 +62,7 @@ class OrtConfigPackageConfigurationProvider(
     }
 
     private val provider by lazy {
-        DirPackageConfigurationProvider(configurationsDir.resolve(PACKAGE_CONFIGURATIONS_DIR))
+        DirPackageConfigurationProvider(configurationsDir / PACKAGE_CONFIGURATIONS_DIR)
     }
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance) =

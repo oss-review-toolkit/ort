@@ -69,6 +69,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -197,7 +198,7 @@ class Bazel(
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
-        val lockfile = projectDir.resolve(LOCKFILE_NAME)
+        val lockfile = projectDir / LOCKFILE_NAME
         val projectVcs = processProjectVcs(projectDir)
         val moduleMetadata = Parser(definitionFile.readText()).parse()
         val depDirectives = moduleMetadata.dependencies.associateBy { "${it.name}@${it.version}" }

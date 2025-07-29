@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.plugins.reporters.opossum.OpossumSignalFlat.OpossumS
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
@@ -106,7 +107,7 @@ class OpossumReporter(
         OpossumInputCreator().create(input, maxDepth)
 
     private fun writeReport(outputFile: File, opossumInput: OpossumInput) {
-        val inputJson = createOrtTempDir().resolve("input.json")
+        val inputJson = createOrtTempDir() / "input.json"
 
         inputJson.writeReport(opossumInput)
 

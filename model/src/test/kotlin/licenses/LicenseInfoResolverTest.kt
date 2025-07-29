@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.declaredLicenses
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
@@ -656,8 +657,8 @@ class LicenseInfoResolverTest : WordSpec({
                 )
             )
 
-            val archiveDir = tempdir().resolve("archive")
-            extractResource("/archive.zip", archiveDir.resolve("88dce74b694866af2a5e380206b119f5e38aad5f/archive.zip"))
+            val archiveDir = tempdir() / "archive"
+            extractResource("/archive.zip", archiveDir / "88dce74b694866af2a5e380206b119f5e38aad5f" / "archive.zip")
             val archiver = FileArchiver(
                 patterns = LicenseFilePatterns.DEFAULT.licenseFilenames,
                 storage = FileProvenanceFileStorage(

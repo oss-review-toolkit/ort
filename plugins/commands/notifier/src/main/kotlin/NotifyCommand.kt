@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_NOTIFIER_SCRIPT_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
@@ -71,7 +72,7 @@ class NotifyCommand(descriptor: PluginDescriptor = NotifyCommandFactory.descript
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .default(ortConfigDirectory / ORT_RESOLUTIONS_FILENAME)
         .configurationGroup()
 
     private val labels by option(
@@ -96,7 +97,7 @@ class NotifyCommand(descriptor: PluginDescriptor = NotifyCommandFactory.descript
     }
 
     private fun readDefaultNotificationsFile(): String {
-        val notificationsFile = ortConfigDirectory.resolve(ORT_NOTIFIER_SCRIPT_FILENAME)
+        val notificationsFile = ortConfigDirectory / ORT_NOTIFIER_SCRIPT_FILENAME
 
         if (!notificationsFile.isFile) {
             throw UsageError(

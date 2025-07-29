@@ -24,6 +24,7 @@ import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho.addTychoExtension
+import org.ossreviewtoolkit.utils.common.div
 
 class MavenSupportTest : WordSpec({
     "isTychoProject()" should {
@@ -53,7 +54,7 @@ class MavenSupportTest : WordSpec({
 
         "return false if there is no extension file" {
             val projectDir = tempdir()
-            val mvnDir = projectDir.resolve(".mvn")
+            val mvnDir = projectDir / ".mvn"
             mvnDir.mkdirs()
 
             isTychoProject(projectDir) shouldBe false
@@ -69,7 +70,7 @@ class MavenSupportTest : WordSpec({
             val projectDir = tempdir()
             projectDir.addTychoExtension()
 
-            val pomFile = projectDir.resolve("pom.xml")
+            val pomFile = projectDir / "pom.xml"
 
             isTychoProject(pomFile) shouldBe true
         }
