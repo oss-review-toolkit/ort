@@ -19,8 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
+import OrtRepository
+
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.dsl.RepositoryHandler
+import org.gradle.api.artifacts.repositories.ArtifactRepository
+import org.gradle.api.artifacts.repositories.AuthenticationSupported
 import org.gradle.api.artifacts.repositories.UrlArtifactRepository
 import org.gradle.api.attributes.AttributeContainer
 import org.gradle.internal.deprecation.DeprecatableConfiguration
@@ -58,7 +62,21 @@ internal fun Configuration.isRelevant(): Boolean {
 }
 
 /**
- * Return a map that associates names of artifact repositories to their URLs.
+ * Return a map that associates names of artifact repositories to their model representations.
  */
-internal fun RepositoryHandler.associateNamesWithUrlsTo(repositories: MutableMap<String, String?>) =
-    associateTo(repositories) { it.name to (it as? UrlArtifactRepository)?.url?.toString() }
+internal fun RepositoryHandler.associateNamesWithUrlsTo(repositories: MutableMap<String, OrtRepository?>) =
+    associateTo(repositories) { it.name to it.toOrtRepository() }
+
+/**
+ * Convert this [ArtifactRepository] to an [OrtRepository] if it possesses the relevant properties. Return *null* for
+ * an unsupported repository type.
+ */
+private fun ArtifactRepository.toOrtRepository(): OrtRepository? =
+    (this as? UrlArtifactRepository)?.let { urlRepository ->
+        val credentials = (urlRepository as? AuthenticationSupported)?.credentials
+        OrtRepositoryImpl(
+            url = urlRepository.url.toString(),
+            username = credentials?.username,
+            password = credentials?.password
+        )
+    }
