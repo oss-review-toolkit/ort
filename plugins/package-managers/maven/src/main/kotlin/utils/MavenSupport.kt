@@ -302,11 +302,12 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
         val remoteRepositories = allRepositories.filterNot {
             // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
             it.url.startsWith("file:/")
-        }.map { repository ->
-            val proxy = repositorySystemSession.proxySelector.getProxy(repository)
-            val authentication = repositorySystemSession.authenticationSelector.getAuthentication(repository)
-            RemoteRepository.Builder(repository).setAuthentication(authentication).setProxy(proxy).build()
-        }.toSet()
+        }.mapTo(mutableSetOf()) { repository ->
+            RemoteRepository.Builder(repository).apply {
+                repositorySystemSession.proxySelector.getProxy(repository)?.also(::setProxy)
+                repositorySystemSession.authenticationSelector.getAuthentication(repository)?.also(::setAuthentication)
+            }.build()
+        }
 
         if (allRepositories.size > remoteRepositories.size) {
             logger.debug { "Ignoring local repositories ${allRepositories - remoteRepositories}." }
