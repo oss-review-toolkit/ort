@@ -66,7 +66,6 @@ import org.ossreviewtoolkit.scanner.utils.FileListResolver
 import org.ossreviewtoolkit.scanner.utils.alignRevisions
 import org.ossreviewtoolkit.scanner.utils.filterScanResultsByVcsPaths
 import org.ossreviewtoolkit.scanner.utils.getVcsPathsForProvenances
-import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -134,17 +133,7 @@ class Scanner(
             )
         )
 
-        val toolVersions = mutableMapOf<String, String>()
-
-        scannerWrappers.values.flatten().forEach { scanner ->
-            if (scanner is CommandLineTool) {
-                toolVersions[scanner.descriptor.id] = scanner.getVersion()
-            }
-        }
-
-        val scannerRun = (projectResults + packageResults).copy(
-            environment = Environment(toolVersions = toolVersions)
-        )
+        val scannerRun = projectResults + packageResults
 
         val paddedScannerRun = scannerRun.takeUnless { scannerConfig.includeFilesWithoutFindings }
             ?: scannerRun.padNoneLicenseFindings()
@@ -178,6 +167,10 @@ class Scanner(
         createMissingArchives(controller)
 
         val endTime = Instant.now()
+
+        val toolVersions = scannerWrappers.associate { scanner ->
+            scanner.descriptor.id to scanner.version
+        }
 
         val provenances = packages.mapTo(mutableSetOf()) { pkg ->
             val packageProvenance = controller.getPackageProvenance(pkg.id)
@@ -216,7 +209,7 @@ class Scanner(
         return ScannerRun(
             startTime = startTime,
             endTime = endTime,
-            environment = Environment(),
+            environment = Environment(toolVersions = toolVersions),
             config = scannerConfig,
             provenances = provenances,
             scanResults = scanResults,
