@@ -123,7 +123,7 @@ val ortDataDirectory by lazy {
         it.isEmpty()
     }?.let {
         File(it)
-    } ?: Os.userHomeDirectory / ".ort"
+    } ?: (Os.userHomeDirectory / ".ort")
 }
 
 /**
@@ -134,7 +134,7 @@ val ortConfigDirectory by lazy {
         it.isEmpty()
     }?.let {
         File(it)
-    } ?: ortDataDirectory / "config"
+    } ?: (ortDataDirectory / "config")
 }
 
 /**
@@ -145,5 +145,5 @@ val ortToolsDirectory by lazy {
         it.isEmpty()
     }?.let {
         File(it)
-    } ?: ortDataDirectory / "tools"
+    } ?: (ortDataDirectory / "tools")
 }

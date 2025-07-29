@@ -172,7 +172,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
 
     private val flutterHome by lazy {
         Os.getPathFromEnvironment(flutterCommand)?.realFile?.parentFile?.parentFile
-            ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: flutterInstallDir / "flutter"
+            ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: (flutterInstallDir / "flutter")
     }
 
     private val flutterAbsolutePath = flutterHome / "bin"
