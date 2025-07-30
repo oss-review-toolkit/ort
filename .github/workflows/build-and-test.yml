@@ -91,9 +91,6 @@ jobs:
       run: sed "s/^ARG //" docker/versions.dockerfile >> $GITHUB_ENV
     - name: Install required tools
       run: |
-          # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.
-          sudo apt-get -qq remove mono-devel
-
           # Install git-repo.
           mkdir -p $HOME/.local/bin
           curl https://storage.googleapis.com/git-repo-downloads/repo -o $HOME/.local/bin/repo
@@ -102,10 +99,6 @@ jobs:
           # Install Askalono for functional tests.
           curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip
           unzip askalono-Linux.zip -d $HOME/.local/bin
-
-          # Install Boyter Lc for functional tests.
-          curl -LOs https://github.com/boyter/lc/releases/download/v$BOYTERLC_VERSION/lc-$BOYTERLC_VERSION-x86_64-unknown-linux.zip
-          unzip lc-$BOYTERLC_VERSION-x86_64-unknown-linux.zip -d $HOME/.local/bin
 
           # Install Licensee for functional tests.
           echo "gem: --bindir $HOME/.local/bin" > $HOME/.gemrc

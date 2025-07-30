@@ -15,7 +15,6 @@ We recommend using ORT with any of the following scanners as their integrations 
 Additionally, the following reference implementations exist (in alphabetical order):
 
 * [Askalono](https://github.com/jpeddicord/askalono)
-* [lc](https://github.com/boyter/lc)
 * [Licensee](https://github.com/licensee/licensee)
 * [SCANOSS](https://www.scanoss.com/) (snippet scanner)
 
