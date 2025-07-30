@@ -151,17 +151,22 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
 
         val allRules = excludesRules + legacyRules
         allRules.forEach {
-            service.createIgnoreRule(
+            val response = service.createIgnoreRule(
                 config.user.value,
                 config.apiKey.value,
                 scanCode,
                 it.type,
                 it.value,
                 RuleScope.SCAN
-            ).checkResponse("create ignore rules", false)
+            )
+            // It could be that global rules are automatically added to a scan. Therefore, a failure in creation
+            // because of duplication should be ignored.
+            if (response.error != "Rule already exists") {
+                response.checkResponse("create ignore rules", false)
 
-            logger.info {
-                "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
+                logger.info {
+                    "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
+                }
             }
         }
 

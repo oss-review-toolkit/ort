@@ -55,6 +55,8 @@ import org.ossreviewtoolkit.clients.fossid.downloadFromGit
 import org.ossreviewtoolkit.clients.fossid.extractArchives
 import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
+import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.removeUploadedContent
@@ -671,6 +673,60 @@ class FossIdTest : WordSpec({
                 .expectCreateScan(projectCode, scanCode, vcsInfo)
                 .expectDownload(scanCode)
                 .expectListIgnoreRules(originCode, emptyList())
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to "master")
+            )
+
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "master").asJsonString()
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode),
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
+                    )
+                )
+            }
+        }
+
+        "should not fail when trying to create a legacy rule if it already exist" {
+            val projectCode = PROJECT
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig()
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode)
+
+            val existingRule = IgnoreRule(
+                SCAN_ID,
+                RuleType.DIRECTORY,
+                "*.git",
+                SCAN_ID,
+                "Global rule for .git directories"
+            )
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectDownload(scanCode)
+                .expectListIgnoreRules(originCode, listOf(existingRule))
+                .expectCreateIgnoreRule(scanCode, existingRule.type, existingRule.value, error = true)
                 .mockFiles(scanCode)
             coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
 

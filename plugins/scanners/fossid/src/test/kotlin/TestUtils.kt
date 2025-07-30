@@ -545,6 +545,26 @@ internal fun FossIdServiceWithVersion.expectListIgnoreRules(
 }
 
 /**
+ * Prepare this service mock to return the list of [rules] for the given [scanCode].
+ */
+internal fun FossIdServiceWithVersion.expectCreateIgnoreRule(
+    scanCode: String,
+    type: RuleType,
+    value: String,
+    scope: RuleScope = RuleScope.SCAN,
+    error: Boolean = false
+): FossIdServiceWithVersion {
+    if (error) {
+        coEvery { createIgnoreRule(USER, API_KEY, scanCode, type, value, scope) } returns
+            EntityResponseBody("create ignore rules", error = "Rule already exists")
+    } else {
+        coEvery { createIgnoreRule(USER, API_KEY, scanCode, type, value, scope) } returns EntityResponseBody()
+    }
+
+    return this
+}
+
+/**
  * Prepare this service mock to expect a request to create an 'ignore rule' for the given [scanCode], [ruleType],
  * [value] and [scope].
  */
