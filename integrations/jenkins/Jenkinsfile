@@ -216,7 +216,7 @@ pipeline {
         choice(
             name: 'PROJECT_SCANNER',
             description: 'The built-in scanner to use for project source code.',
-            choices: ['ScanCode', 'DOS', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
+            choices: ['ScanCode', 'DOS', 'Askalono', 'Licensee', 'ScanOSS', '<NONE>']
         )
 
         string(
@@ -228,7 +228,7 @@ pipeline {
         choice(
             name: 'PACKAGE_SCANNER',
             description: 'The scanner to use for package source code.',
-            choices: ['ScanCode', 'DOS', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
+            choices: ['ScanCode', 'DOS', 'Askalono', 'Licensee', 'ScanOSS', '<NONE>']
         )
 
         string(
