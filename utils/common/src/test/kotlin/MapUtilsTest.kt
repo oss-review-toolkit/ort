@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.maps.haveKey
 import io.kotest.matchers.should
@@ -30,6 +32,23 @@ import io.kotest.matchers.types.beInstanceOf
 import java.util.SortedMap
 
 class MapUtilsTest : WordSpec({
+    "getConflictingKeys()" should {
+        "return an empty set for equals maps" {
+            val foo = mapOf("a" to "b")
+            val bar = mapOf("a" to "b")
+
+            foo.getConflictingKeys(foo) should beEmpty()
+            foo.getConflictingKeys(bar) should beEmpty()
+        }
+
+        "return only keys with different values" {
+            val foo = mapOf("a" to "a", "b" to "b")
+            val bar = mapOf("a" to "a", "b" to "c")
+
+            foo.getConflictingKeys(bar) should containExactly("b")
+        }
+    }
+
     "zip()" should {
         val operation = { left: Int?, right: Int? -> (left ?: 0) + (right ?: 0) }
 
