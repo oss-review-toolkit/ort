@@ -154,8 +154,12 @@ data class OrtResult(
         }
     }
 
-    private val packageConfigurationsById: Map<Identifier, List<PackageConfiguration>> by lazy {
-        resolvedConfiguration.packageConfigurations.orEmpty().groupBy { it.id }
+    /**
+     * Store all resolve package configurations by their ID for faster lookup. The version is ignored because it could
+     * be a version range.
+     */
+    private val packageConfigurationsByIdWithoutVersion: Map<Identifier, List<PackageConfiguration>> by lazy {
+        resolvedConfiguration.packageConfigurations.orEmpty().groupBy { it.id.copy(version = "") }
     }
 
     private val issuesWithExcludedAffectedPathById: Map<Identifier, Set<Issue>> by lazy {
@@ -382,7 +386,8 @@ data class OrtResult(
      * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
      */
     fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
-        packageConfigurationsById[packageId].orEmpty().filter { it.matches(packageId, provenance) }
+        packageConfigurationsByIdWithoutVersion[packageId.copy(version = "")].orEmpty()
+            .filter { it.matches(packageId, provenance) }
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
