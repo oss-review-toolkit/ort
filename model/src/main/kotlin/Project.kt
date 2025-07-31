@@ -58,7 +58,7 @@ data class Project(
     /**
      * The set of authors declared for this project.
      */
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val authors: Set<String> = emptySet(),
 

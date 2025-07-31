@@ -30,7 +30,7 @@ import java.time.Instant
  * Instances of this class are created by advisor implementations that retrieve information about known defects in
  * packages.
  */
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class Defect(
     /**
      * The (external) ID of this defect. This is a string used by a concrete issue tracker system to reference this

@@ -32,8 +32,7 @@ import org.ossreviewtoolkit.model.utils.PackageReferenceSortedSetConverter
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package
  * references that are dependencies of the package.
  */
-// Do not serialize default values to reduce the size of the result file.
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class PackageReference(
     /**
      * The identifier of the package.

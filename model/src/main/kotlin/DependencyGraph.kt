@@ -72,7 +72,7 @@ typealias NodeDependencies = Map<DependencyGraphNode, List<DependencyGraphNode>>
  * Then, by following the *edges* starting from these *nodes*, the set of transitive dependencies can be determined.
  * The numeric indices can be resolved via the *packages* list.
  */
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class DependencyGraph(
     /**
      * A list with the identifiers of the packages that appear in the dependency graph. This list is used to resolve
