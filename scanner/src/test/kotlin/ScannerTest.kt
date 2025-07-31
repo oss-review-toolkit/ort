@@ -91,7 +91,7 @@ class ScannerTest : WordSpec({
     }
 
     "Scanning with different scanners for projects and packages" should {
-        "Use the correct scanners for each data entity" {
+        "use the correct scanners for each data entity" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val packageScannerWrapper = FakePackageScannerWrapper(id = "package scanner")
             val projectScannerWrapper = FakePackageScannerWrapper(id = "project scanner")
@@ -116,7 +116,7 @@ class ScannerTest : WordSpec({
             }
         }
 
-        "Not scan projects if no scanner wrapper for projects is configured" {
+        "not scan projects if no scanner wrapper for projects is configured" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = FakePackageScannerWrapper()
             val scanner = createScanner(
@@ -128,7 +128,7 @@ class ScannerTest : WordSpec({
             scanner.scan(setOf(pkgWithArtifact), context).getAllScanResults() should beEmptyMap()
         }
 
-        "Not scan packages if no scanner wrapper for packages is configured" {
+        "not scan packages if no scanner wrapper for packages is configured" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = FakePackageScannerWrapper()
             val scanner = createScanner(
