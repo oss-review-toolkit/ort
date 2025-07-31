@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 class ReporterConfigurationTest : WordSpec({
     "Reporter secrets" should {
         "not be serialized as they contain sensitive information" {
-            rereadReporterConfig(loadReporterConfig()).reporters?.get("FossId") shouldNotBeNull {
+            rereadReporterConfig(loadReporterConfig()).reporters["FossId"] shouldNotBeNull {
                 secrets should beEmpty()
             }
         }

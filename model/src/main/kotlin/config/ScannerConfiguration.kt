@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
  * - Deserialized from "config.yml" as part of [OrtConfiguration] (via Hoplite).
  * - (De-)Serialized as part of [org.ossreviewtoolkit.model.OrtResult] (via Jackson).
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ScannerConfiguration(
     /**
      * A flag to indicate whether packages that have a concluded license and authors set (to derive copyrights from)
@@ -98,26 +98,26 @@ data class ScannerConfiguration(
      */
     @ConfigAlias("config")
     @JsonAlias("config")
-    val scanners: Map<String, PluginConfig>? = null,
+    val scanners: Map<String, PluginConfig> = emptyMap(),
 
     /**
      * A map with the configurations of the scan result storages available. Based on this information the actual
      * storages are created. Storages can be configured as readers or writers of scan results. Having this map
      * makes it possible for storage instances to act in both roles without having to duplicate configuration.
      */
-    val storages: Map<String, ScanStorageConfiguration>? = null,
+    val storages: Map<String, ScanStorageConfiguration> = emptyMap(),
 
     /**
      * A list with the IDs of scan storages that are queried for existing scan results. The strings in this list
      * must match keys in the [storages] map.
      */
-    val storageReaders: List<String>? = null,
+    val storageReaders: List<String> = emptyList(),
 
     /**
      * A list with the IDs of scan storages that are called to persist scan results. The strings in this list
      * must match keys in the [storages] map.
      */
-    val storageWriters: List<String>? = null,
+    val storageWriters: List<String> = emptyList(),
 
     /**
      * A list of glob expressions that match file paths which are to be excluded from scan results.

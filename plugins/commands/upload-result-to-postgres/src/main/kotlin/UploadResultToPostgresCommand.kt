@@ -85,7 +85,7 @@ class UploadResultToPostgresCommand(
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
-        val postgresConfig = ortConfig.scanner.storages?.values
+        val postgresConfig = ortConfig.scanner.storages.values
             ?.filterIsInstance<PostgresStorageConfiguration>()?.let { configs ->
                 if (configs.size > 1) {
                     val config = configs.first()
