@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid.events
 
+import java.io.File
+
 import kotlin.io.path.createTempFile
 
 import org.apache.logging.log4j.kotlin.logger
@@ -36,6 +38,8 @@ import org.ossreviewtoolkit.downloader.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdConfig
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdFactory
@@ -86,6 +90,8 @@ class UploadArchiveHandler(
             issues += createAndLogIssue(FossIdFactory.descriptor.displayName, it.collectMessages(), Severity.WARNING)
         }.getOrThrow()
 
+        deleteExcludedFiles(path, context.includes, context.excludes)
+
         val sourceArchive = createTempFile("fossid-source-archive", ".zip")
         logger.info {
             "Creating archive ${sourceArchive.toFile().absolutePath}..."
@@ -125,4 +131,18 @@ class UploadArchiveHandler(
         service.removeUploadedContent(config.user.value, config.apiKey.value, scanCode)
             .checkResponse("remove previously uploaded content 2", false)
     }
+
+    internal fun deleteExcludedFiles(path: File, includes: Includes?, excludes: Excludes?) {
+        path.walkBottomUp()
+            .filter { it != path }
+            .forEach { file ->
+                val relativePath = file.toRelativeString(path)
+                if (shouldDeleteFile(relativePath, includes, excludes)) {
+                    file.delete()
+                }
+            }
+    }
+
+    private fun shouldDeleteFile(relativePath: String, includes: Includes?, excludes: Excludes?): Boolean =
+        includes?.isPathIncluded(relativePath) == false || excludes?.isPathExcluded(relativePath) == true
 }
