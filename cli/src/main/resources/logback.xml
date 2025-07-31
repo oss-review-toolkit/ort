@@ -32,6 +32,7 @@
     <logger name="org.apache.http.wire" level="ERROR" />
     <logger name="org.eclipse.jgit.internal.storage.file.FileSnapshot" level="ERROR" />
     <logger name="org.ossreviewtoolkit.analyzer.managers.Yarn2" level="INFO" />
+    <logger name="org.ossreviewtoolkit.clients.fossid.LoggingInterceptor" level="INFO" />
     <logger name="org.ossreviewtoolkit.clients.fossid.FossIdRestService" level="INFO" />
     <logger name="org.ossreviewtoolkit.plugins.reporters.fossid.FossIdReporter" level="INFO" />
     <logger name="org.ossreviewtoolkit.plugins.reporters.fossid.FossIdSnippetReporter" level="INFO" />
