@@ -437,10 +437,7 @@ class FossId internal constructor(
             val scanComment = scanIdToComments[it.id]
                 ?: error("Scan with ID ${it.id} does not have a valid comment to extract scan information from.")
             val isArchived = it.isArchived == true
-            // The scans in the server contain the URL with credentials, so these have to be removed for the comparison.
-            // Otherwise, scans would not be matched if the password changed.
-            val urlWithoutCredentials = scanComment.ort.repositoryURL.replaceCredentialsInUri()
-            !isArchived && urlWithoutCredentials == url
+            !isArchived && scanComment.ort.repositoryURL == url
         }.sortedByDescending { it.id }
 
         return scans.filter { scan ->
@@ -482,10 +479,16 @@ class FossId internal constructor(
      */
     private fun extractDeltaScanInformationFromScan(scan: Scan): OrtScanComment =
         if ('{' in scan.comment.orEmpty()) {
-            jsonMapper.readValue(scan.comment, OrtScanComment::class.java)
+            val comment = jsonMapper.readValue(scan.comment, OrtScanComment::class.java)
+            // Even if the scan is not a legacy scan, it can wrongly contain credentials in the URL property if it was
+            // created after https://github.com/oss-review-toolkit/ort/pull/10656 was merged but before this fix.
+            comment.copy(ort = comment.ort.copy(repositoryURL = comment.ort.repositoryURL.replaceCredentialsInUri()))
         } else {
             // This is a legacy scan.
-            createOrtScanComment(scan.gitRepoUrl.orEmpty(), scan.gitBranch.orEmpty(), scan.comment.orEmpty())
+            // The scans in the server contain the URL with credentials, so these have to be removed for the comparison.
+            // Otherwise, scans would not be matched if the password changed.
+            val urlWithoutCredentials = scan.gitRepoUrl.orEmpty().replaceCredentialsInUri()
+            createOrtScanComment(urlWithoutCredentials, scan.gitBranch.orEmpty(), scan.comment.orEmpty())
         }
 
     /**
@@ -589,8 +592,9 @@ class FossId internal constructor(
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN, revision)
         } else {
             logger.info { "Scan '${existingScan.code}' found for $mappedUrlWithoutCredentials and revision $revision." }
+            val comment = extractDeltaScanInformationFromScan(existingScan)
             logger.info {
-                "Existing scan has for reference(s): ${existingScan.comment.orEmpty()}. Creating delta scan..."
+                "Existing scan has for reference(s): $comment. Creating delta scan..."
             }
 
             namingProvider.createScanCode(projectName, DeltaTag.DELTA, revision)
@@ -662,7 +666,8 @@ class FossId internal constructor(
     ): String {
         logger.info { "Creating scan '$scanCode'..." }
 
-        val comment = createOrtScanComment(url, revision, reference)
+        val urlWithoutCredentials = url.replaceCredentialsInUri()
+        val comment = createOrtScanComment(urlWithoutCredentials, revision, reference)
         val response = handler.createScan(projectCode, scanCode, comment)
 
         val data = response.data?.value
