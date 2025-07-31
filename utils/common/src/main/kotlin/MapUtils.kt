@@ -22,6 +22,14 @@ package org.ossreviewtoolkit.utils.common
 import java.util.SortedMap
 
 /**
+ * Return the set of keys that have different values in this and the [other] map.
+ */
+fun <K, V> Map<K, V>.getConflictingKeys(other: Map<K, V>): Set<K> {
+    if (this == other) return emptySet()
+    return keys.intersect(other.keys).filterTo(mutableSetOf()) { this[it] != other[it] }
+}
+
+/**
  * Merge two maps by iterating over the combined key set of both maps and calling [operation] with any conflicting
  * values for the same key. In case of a [SortedMap] the iteration order is maintained.
  */

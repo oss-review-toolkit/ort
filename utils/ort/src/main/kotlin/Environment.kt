@@ -24,6 +24,7 @@ import java.util.jar.JarFile
 
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.div
+import org.ossreviewtoolkit.utils.common.getConflictingKeys
 
 /**
  * A description of the environment that ORT was executed in.
@@ -151,20 +152,16 @@ data class Environment(
                     "Cannot merge Environments with different memory amounts: '$maxMemory' != '${other.maxMemory}'."
                 }
             },
-            variables = run {
-                val keyIntersection by lazy { variables.keys.intersect(other.variables.keys) }
-
-                require(variables == other.variables || keyIntersection.isEmpty()) {
-                    "Cannot merge Environments with conflicting variable keys: $keyIntersection"
+            variables = variables.getConflictingKeys(other.variables).let { conflictingKeys ->
+                require(conflictingKeys.isEmpty()) {
+                    "Cannot merge Environments with conflicting variable keys: $conflictingKeys"
                 }
 
                 variables + other.variables
             },
-            toolVersions = run {
-                val keyIntersection by lazy { toolVersions.keys.intersect(other.toolVersions.keys) }
-
-                require(toolVersions == other.toolVersions || keyIntersection.isEmpty()) {
-                    "Cannot merge Environments with conflicting tool versions keys: $keyIntersection"
+            toolVersions = toolVersions.getConflictingKeys(other.toolVersions).let { conflictingKeys ->
+                require(conflictingKeys.isEmpty()) {
+                    "Cannot merge Environments with conflicting tool versions keys: $conflictingKeys"
                 }
 
                 toolVersions + other.toolVersions
