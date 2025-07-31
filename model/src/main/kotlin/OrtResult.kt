@@ -155,7 +155,7 @@ data class OrtResult(
     }
 
     private val packageConfigurationsById: Map<Identifier, List<PackageConfiguration>> by lazy {
-        resolvedConfiguration.packageConfigurations.orEmpty().groupBy { it.id }
+        resolvedConfiguration.packageConfigurations.groupBy { it.id }
     }
 
     private val issuesWithExcludedAffectedPathById: Map<Identifier, Set<Issue>> by lazy {

@@ -127,34 +127,32 @@ class OrtConfigurationTest : WordSpec({
             }
 
             with(ortConfig.advisor) {
-                advisors shouldNotBeNull {
-                    get("OssIndex") shouldNotBeNull {
-                        options should containExactlyEntries(
-                            "serverUrl" to "https://ossindex.sonatype.org/"
-                        )
+                advisors["OssIndex"] shouldNotBeNull {
+                    options should containExactlyEntries(
+                        "serverUrl" to "https://ossindex.sonatype.org/"
+                    )
 
-                        secrets should containExactlyEntries(
-                            "username" to "username",
-                            "password" to "password"
-                        )
-                    }
+                    secrets should containExactlyEntries(
+                        "username" to "username",
+                        "password" to "password"
+                    )
+                }
 
-                    get("OSV") shouldNotBeNull {
-                        options should containExactlyEntries(
-                            "serverUrl" to "https://api.osv.dev"
-                        )
-                    }
+                advisors["OSV"] shouldNotBeNull {
+                    options should containExactlyEntries(
+                        "serverUrl" to "https://api.osv.dev"
+                    )
+                }
 
-                    get("VulnerableCode") shouldNotBeNull {
-                        options should containExactlyEntries(
-                            "serverUrl" to "http://localhost:8000",
-                            "readTimeout" to "40"
-                        )
+                advisors["VulnerableCode"] shouldNotBeNull {
+                    options should containExactlyEntries(
+                        "serverUrl" to "http://localhost:8000",
+                        "readTimeout" to "40"
+                    )
 
-                        secrets should containExactlyEntries(
-                            "apiKey" to "0123456789012345678901234567890123456789"
-                        )
-                    }
+                    secrets should containExactlyEntries(
+                        "apiKey" to "0123456789012345678901234567890123456789"
+                    )
                 }
             }
 
@@ -224,49 +222,47 @@ class OrtConfigurationTest : WordSpec({
                     }
                 }
 
-                scanners shouldNotBeNull {
-                    get("ScanCode") shouldNotBeNull {
-                        options should containExactlyEntries(
-                            "commandLine" to "--copyright,--license,--info,--strip-root,--timeout,300",
-                            "commandLineNonConfig" to "--processes,4",
-                            "preferFileLicense" to "false",
-                            "minVersion" to "3.2.1-rc2",
-                            "maxVersion" to "32.0.0"
-                        )
-                    }
-
-                    get("FossId") shouldNotBeNull {
-                        val urlMapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
-                            "ssh://my-mapped-repo.example.org\${repoPath}"
-
-                        options should containExactlyEntries(
-                            "serverUrl" to "https://fossid.example.com/instance/",
-                            "projectName" to "My Project",
-                            "namingScanPattern" to "#projectName_#repositoryName_#currentTimestamp_#deltaTag_#branch",
-                            "waitForResult" to "false",
-                            "keepFailedScans" to "false",
-                            "deltaScans" to "true",
-                            "deltaScanLimit" to "10",
-                            "detectLicenseDeclarations" to "true",
-                            "detectCopyrightStatements" to "true",
-                            "timeout" to "60",
-                            "urlMappings" to urlMapping,
-                            "sensitivity" to "10"
-                        )
-
-                        secrets should containExactlyEntries(
-                            "user" to "user",
-                            "apiKey" to "XYZ"
-                        )
-                    }
-
-                    get("SCANOSS") shouldNotBeNull {
-                        options should containExactlyEntries("apiUrl" to "https://api.osskb.org/")
-                        secrets should containExactlyEntries("apiKey" to "your API key")
-                    }
+                scanners["ScanCode"] shouldNotBeNull {
+                    options should containExactlyEntries(
+                        "commandLine" to "--copyright,--license,--info,--strip-root,--timeout,300",
+                        "commandLineNonConfig" to "--processes,4",
+                        "preferFileLicense" to "false",
+                        "minVersion" to "3.2.1-rc2",
+                        "maxVersion" to "32.0.0"
+                    )
                 }
 
-                storages shouldNotBeNull {
+                scanners["FossId"] shouldNotBeNull {
+                    val urlMapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
+                        "ssh://my-mapped-repo.example.org\${repoPath}"
+
+                    options should containExactlyEntries(
+                        "serverUrl" to "https://fossid.example.com/instance/",
+                        "projectName" to "My Project",
+                        "namingScanPattern" to "#projectName_#repositoryName_#currentTimestamp_#deltaTag_#branch",
+                        "waitForResult" to "false",
+                        "keepFailedScans" to "false",
+                        "deltaScans" to "true",
+                        "deltaScanLimit" to "10",
+                        "detectLicenseDeclarations" to "true",
+                        "detectCopyrightStatements" to "true",
+                        "timeout" to "60",
+                        "urlMappings" to urlMapping,
+                        "sensitivity" to "10"
+                    )
+
+                    secrets should containExactlyEntries(
+                        "user" to "user",
+                        "apiKey" to "XYZ"
+                    )
+                }
+
+                scanners["SCANOSS"] shouldNotBeNull {
+                    options should containExactlyEntries("apiUrl" to "https://api.osskb.org/")
+                    secrets should containExactlyEntries("apiKey" to "your API key")
+                }
+
+                 with(storages) {
                     keys should containExactlyInAnyOrder(
                         "local", "http", "aws", "clearlyDefined", "postgres", "sw360Configuration"
                     )
@@ -357,32 +353,30 @@ class OrtConfigurationTest : WordSpec({
             }
 
             with(ortConfig.reporter) {
-                reporters shouldNotBeNull {
-                    keys should containExactlyInAnyOrder("CycloneDx", "FossId", "CtrlXAutomation")
+                reporters.keys should containExactlyInAnyOrder("CycloneDx", "FossId", "CtrlXAutomation")
 
-                    get("CycloneDx") shouldNotBeNull {
-                        options should containExactlyEntries(
-                            "schema.version" to "1.6"
-                        )
-                        secrets should beEmpty()
-                    }
+                reporters["CycloneDx"] shouldNotBeNull {
+                    options should containExactlyEntries(
+                        "schema.version" to "1.6"
+                    )
+                    secrets should beEmpty()
+                }
 
-                    get("FossId") shouldNotBeNull {
-                        options should containExactlyEntries(
-                            "serverUrl" to "https://fossid.example.com/instance/"
-                        )
-                        secrets should containExactlyEntries(
-                            "user" to "user",
-                            "apiKey" to "XYZ"
-                        )
-                    }
+                reporters["FossId"] shouldNotBeNull {
+                    options should containExactlyEntries(
+                        "serverUrl" to "https://fossid.example.com/instance/"
+                    )
+                    secrets should containExactlyEntries(
+                        "user" to "user",
+                        "apiKey" to "XYZ"
+                    )
+                }
 
-                    get("CtrlXAutomation") shouldNotBeNull {
-                        options should containExactlyEntries(
-                            "licenseCategoriesToInclude" to "include-in-disclosure-document"
-                        )
-                        secrets should beEmpty()
-                    }
+                reporters["CtrlXAutomation"] shouldNotBeNull {
+                    options should containExactlyEntries(
+                        "licenseCategoriesToInclude" to "include-in-disclosure-document"
+                    )
+                    secrets should beEmpty()
                 }
             }
 
@@ -441,7 +435,7 @@ class OrtConfigurationTest : WordSpec({
                     file = configFile
                 )
 
-                config.scanner.storages shouldNotBeNull {
+                with(config.scanner.storages) {
                     val postgresStorage = this["postgres"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     with(postgresStorage.connection) {
@@ -517,7 +511,7 @@ class OrtConfigurationTest : WordSpec({
             withEnvironment(env) {
                 val config = OrtConfiguration.load(file = configFile)
 
-                config.scanner.storages shouldNotBeNull {
+                with(config.scanner.storages) {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     with(postgresStorage.connection) {
@@ -543,7 +537,7 @@ class OrtConfigurationTest : WordSpec({
             withEnvironment(env) {
                 val config = OrtConfiguration.load(file = File("dummyPath"))
 
-                config.scanner.storages shouldNotBeNull {
+                with(config.scanner.storages) {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     with(postgresStorage.connection) {

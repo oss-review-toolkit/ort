@@ -43,9 +43,9 @@ class ScannerConfigurationTest : WordSpec({
             }
 
             val actualScannerConfig = rereadOrtConfig.scanner
-            val actualStorages = actualScannerConfig.storages.orEmpty()
+            val actualStorages = actualScannerConfig.storages
             val expectedScannerConfig = ortConfig.scanner
-            val expectedStorages = expectedScannerConfig.storages.orEmpty()
+            val expectedStorages = expectedScannerConfig.storages
 
             // Note: loadedConfig cannot be directly compared to the original one, as there have been some changes:
             // Relative paths have been normalized, passwords do not get serialized, etc.

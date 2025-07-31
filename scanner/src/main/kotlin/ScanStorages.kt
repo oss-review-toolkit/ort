@@ -61,7 +61,7 @@ class ScanStorages(
          * [XZCompressedLocalFileStorage] is created.
          */
         fun createFromConfig(config: ScannerConfiguration): ScanStorages {
-            val storages = config.storages.orEmpty().mapValues { createStorage(it.value) }
+            val storages = config.storages.mapValues { createStorage(it.value) }
 
             fun resolve(name: String): ScanStorage =
                 requireNotNull(storages[name]) {
@@ -70,8 +70,8 @@ class ScanStorages(
 
             val defaultStorage by lazy { createDefaultStorage() }
 
-            val readers = config.storageReaders.orEmpty().map { resolve(it) }.ifEmpty { listOf(defaultStorage) }
-            val writers = config.storageWriters.orEmpty().map { resolve(it) }.ifEmpty { listOf(defaultStorage) }
+            val readers = config.storageReaders.map { resolve(it) }.ifEmpty { listOf(defaultStorage) }
+            val writers = config.storageWriters.map { resolve(it) }.ifEmpty { listOf(defaultStorage) }
 
             val packageProvenanceStorage = PackageProvenanceStorage.createFromConfig(config)
             val nestedProvenanceStorage = NestedProvenanceStorage.createFromConfig(config)

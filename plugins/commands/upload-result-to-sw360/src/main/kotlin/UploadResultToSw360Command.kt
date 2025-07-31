@@ -82,7 +82,7 @@ class UploadResultToSw360Command(
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
-        val sw360Config = ortConfig.scanner.storages?.values
+        val sw360Config = ortConfig.scanner.storages.values
             ?.filterIsInstance<Sw360StorageConfiguration>()?.singleOrNull()
 
         requireNotNull(sw360Config) {

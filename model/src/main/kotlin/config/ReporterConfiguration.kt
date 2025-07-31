@@ -36,5 +36,5 @@ data class ReporterConfiguration(
      */
     @ConfigAlias("config")
     @JsonAlias("config")
-    val reporters: Map<String, PluginConfig>? = null
+    val reporters: Map<String, PluginConfig> = emptyMap()
 )

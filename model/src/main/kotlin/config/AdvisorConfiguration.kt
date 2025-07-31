@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
  * - Deserialized from "config.yml" as part of [OrtConfiguration] (via Hoplite).
  * - (De-)Serialized as part of [org.ossreviewtoolkit.model.OrtResult] (via Jackson).
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class AdvisorConfiguration(
     /**
      * A flag to control whether excluded scopes and paths should be skipped when giving the advice.
@@ -44,5 +44,5 @@ data class AdvisorConfiguration(
      */
     @ConfigAlias("config")
     @JsonAlias("config")
-    val advisors: Map<String, PluginConfig>? = null
+    val advisors: Map<String, PluginConfig> = emptyMap()
 )
