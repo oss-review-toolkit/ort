@@ -59,14 +59,15 @@ object LoggingInterceptor : Interceptor {
                 val contentType = requestBody.contentType()
                 val charset = contentType?.charset(StandardCharsets.UTF_8) ?: StandardCharsets.UTF_8
 
-                if (request.header("Content-Type") != "application/octet-stream") {
-                    val requestContent = buffer.readString(charset)
-                    append(requestContent.sanitizeForLogging())
-                    append("--> END ${request.method} (${requestBody.contentLength()}-byte body)")
-                } else {
+                val requestContentType = listOfNotNull(request.header("Content-Type"), contentType?.toString())
+                if ("application/octet-stream" in requestContentType) {
                     append(
                         "--> END ${request.method} (binary ${requestBody.contentLength()}-byte body omitted)"
                     )
+                } else {
+                    val requestContent = buffer.readString(charset)
+                    append(requestContent.sanitizeForLogging())
+                    append("--> END ${request.method} (${requestBody.contentLength()}-byte body)")
                 }
             }
         }
