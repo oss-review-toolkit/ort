@@ -45,7 +45,7 @@ data class PackageReference(
      * package managers / languages only support dynamic linking or at least default to it, also use that as the
      * default value here to not blow up ORT result files.
      */
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
+    @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
     override val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
     /**
