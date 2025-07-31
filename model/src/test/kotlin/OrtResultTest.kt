@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -60,6 +61,47 @@ class OrtResultTest : WordSpec({
                 "Maven:com.typesafe:ssl-config-core_2.12:0.2.2",
                 "Maven:org.reactivestreams:reactive-streams:1.0.1"
             )
+        }
+    }
+
+    "getPackageConfigurations()" should {
+        val id = Identifier("Maven:org.ossreviewtoolkit:model:1.0.0")
+        val provenance = ArtifactProvenance(
+            sourceArtifact = RemoteArtifact(url = "https://example.org/artifact.zip", hash = Hash.NONE)
+        )
+
+        "return package configurations exactly matching the identifier" {
+            val packageConfig1 = PackageConfiguration(id = id, sourceCodeOrigin = SourceCodeOrigin.ARTIFACT)
+            val packageConfig2 = PackageConfiguration(id = id, sourceArtifactUrl = provenance.sourceArtifact.url)
+            val packageConfig3 =
+                PackageConfiguration(id = id.copy(version = "2.0.0"), sourceCodeOrigin = SourceCodeOrigin.ARTIFACT)
+
+            val ortResult = OrtResult.EMPTY.copy(
+                resolvedConfiguration = ResolvedConfiguration(
+                    packageConfigurations = listOf(packageConfig1, packageConfig2, packageConfig3)
+                )
+            )
+
+            ortResult.getPackageConfigurations(id, provenance) should
+                containExactlyInAnyOrder(packageConfig1, packageConfig2)
+        }
+
+        "return package configurations with matching version ranges" {
+            val packageConfig1 =
+                PackageConfiguration(id = id.copy(version = "[1.0,2.0)"), sourceCodeOrigin = SourceCodeOrigin.ARTIFACT)
+            val packageConfig2 =
+                PackageConfiguration(id = id.copy(version = "[0.1,)"), sourceCodeOrigin = SourceCodeOrigin.ARTIFACT)
+            val packageConfig3 =
+                PackageConfiguration(id = id.copy(version = "]1.0.0,)"), sourceCodeOrigin = SourceCodeOrigin.ARTIFACT)
+
+            val ortResult = OrtResult.EMPTY.copy(
+                resolvedConfiguration = ResolvedConfiguration(
+                    packageConfigurations = listOf(packageConfig1, packageConfig2, packageConfig3)
+                )
+            )
+
+            ortResult.getPackageConfigurations(id, provenance) should
+                containExactlyInAnyOrder(packageConfig1, packageConfig2)
         }
     }
 
