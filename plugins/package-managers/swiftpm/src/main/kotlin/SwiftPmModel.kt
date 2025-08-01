@@ -152,11 +152,7 @@ internal fun readSwiftPackageRegistryConfiguration(registriesFile: File): SwiftP
     } else {
         runCatching {
             registriesFile.inputStream().use { json.decodeFromStream<SwiftPackageRegistryConfiguration>(it) }
-        }.onFailure { e ->
-            if (e is IllegalArgumentException) {
-                logger.error(e) { "Failed to parse SwiftPackageRegistryConfiguration from: '$registriesFile'" }
-            } else {
-                logger.error(e) { "Failed to read SwiftPackageRegistryConfiguration from: '$registriesFile'" }
-            }
+        }.onFailure {
+            logger.error(it) { "Failed to read SwiftPackageRegistryConfiguration from '$registriesFile'." }
         }.getOrNull()
     }
