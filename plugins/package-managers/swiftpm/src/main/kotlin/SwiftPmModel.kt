@@ -144,6 +144,8 @@ private fun PinV1.toPinV2(projectDir: File): PinV2 =
         }
     )
 
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
 internal fun readSwiftPackageRegistryConfiguration(registriesFile: File): SwiftPackageRegistryConfiguration? =
     if (!registriesFile.isFile) {
         null
@@ -151,7 +153,6 @@ internal fun readSwiftPackageRegistryConfiguration(registriesFile: File): SwiftP
         runCatching {
             registriesFile.inputStream().use { json.decodeFromStream<SwiftPackageRegistryConfiguration>(it) }
         }.onFailure { e ->
-            val logger = loggerOf(MethodHandles.lookup().lookupClass())
             if (e is IllegalArgumentException) {
                 logger.error(e) { "Failed to parse SwiftPackageRegistryConfiguration from: '$registriesFile'" }
             } else {
