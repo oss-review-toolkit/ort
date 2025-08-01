@@ -294,6 +294,34 @@ class ScannerTest : WordSpec({
 
             verify(exactly = 0) { provenanceDownloader.download(any()) }
         }
+
+        "catch exception and save an issue" {
+            val scannerWrapper = spyk(FakeProvenanceScannerWrapper()) {
+                every {
+                    scanProvenance(any(), any())
+                } throws ScanException("Scan error")
+            }
+
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+            val pkgWithVcs = Package.new(name = "repository").withValidVcs()
+
+            val scanner = createScanner(packageScannerWrappers = listOf(scannerWrapper))
+
+            val result = scanner.scan(setOf(pkgWithArtifact, pkgWithVcs), createContext())
+
+            result.scanResults should beEmpty()
+
+            result.issues shouldHaveSize 2
+            result.issues[pkgWithArtifact.id]?.firstOrNull() shouldNotBeNull {
+                source shouldBe "fake"
+                message shouldContain "Scan error"
+            }
+
+            result.issues[pkgWithVcs.id]?.firstOrNull() shouldNotBeNull {
+                source shouldBe "fake"
+                message shouldContain "Scan error"
+            }
+        }
     }
 
     "scanning with a path scanner" should {
