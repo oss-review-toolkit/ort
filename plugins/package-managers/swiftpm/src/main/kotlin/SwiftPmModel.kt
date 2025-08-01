@@ -149,7 +149,7 @@ internal fun readSwiftPackageRegistryConfiguration(registriesFile: File): SwiftP
         null
     } else {
         runCatching {
-            json.decodeFromStream<SwiftPackageRegistryConfiguration>(registriesFile.inputStream())
+            registriesFile.inputStream().use { json.decodeFromStream<SwiftPackageRegistryConfiguration>(it) }
         }.onFailure { e ->
             val logger = loggerOf(MethodHandles.lookup().lookupClass())
             if (e is IllegalArgumentException) {
