@@ -26,14 +26,13 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldStartWith
 
 import java.time.Instant
 
@@ -41,16 +40,15 @@ import org.ossreviewtoolkit.clients.dos.JSON
 import org.ossreviewtoolkit.clients.dos.PackageInfo
 import org.ossreviewtoolkit.clients.dos.ScanResultsResponseBody
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.test.readResource
 
@@ -163,7 +161,7 @@ class DosScannerTest : StringSpec({
         actualJson shouldBe expectedJson
     }
 
-    "runBackendScan() with failing upload URL retrieval should abort and log an issue" {
+    "runBackendScan() with failing upload URL retrieval should throw a ScanException" {
         server.stubFor(
             post(urlEqualTo("/api/upload-url"))
                 .willReturn(
@@ -176,26 +174,18 @@ class DosScannerTest : StringSpec({
             id = Identifier("Maven:org.apache.commons:commons-lang3:3.9"),
             binaryArtifact = RemoteArtifact.EMPTY.copy(url = "https://www.apache.org/dist/commons/commons-lang3/3.9/")
         )
-        val issues = mutableListOf<Issue>()
 
-        val result = scanner.runBackendScan(
-            packages = listOf(
-                PackageInfo(
-                    purl = pkg.purl,
-                    declaredLicenseExpressionSPDX = null
-                )
-            ),
-            sourceDir = tempdir(),
-            startTime = Instant.now(),
-            issues = issues
-        )
-
-        result should beNull()
-        issues shouldHaveSize 1
-
-        with(issues.first()) {
-            message shouldStartWith "Unable to get an upload URL for "
-            severity shouldBe Severity.ERROR
+        shouldThrow<ScanException> {
+            scanner.runBackendScan(
+                packages = listOf(
+                    PackageInfo(
+                        purl = pkg.purl,
+                        declaredLicenseExpressionSPDX = null
+                    )
+                ),
+                sourceDir = tempdir(),
+                startTime = Instant.now()
+            )
         }
     }
 
@@ -241,7 +231,7 @@ class DosScannerTest : StringSpec({
         }
     }
 
-    "scanPackage() should abort and log an issue when fetching presigned URL fails" {
+    "scanPackage() should throw a ScanException when fetching presigned URL fails" {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
@@ -269,31 +259,21 @@ class DosScannerTest : StringSpec({
             )
         )
 
-        val scanResult = scanner.scanPackage(
-            NestedProvenance(
-                root = RepositoryProvenance(
-                    vcsInfo = pkg.vcsProcessed,
-                    resolvedRevision = pkg.vcsProcessed.revision
+        shouldThrow<ScanException> {
+            scanner.scanPackage(
+                NestedProvenance(
+                    root = RepositoryProvenance(
+                        vcsInfo = pkg.vcsProcessed,
+                        resolvedRevision = pkg.vcsProcessed.revision
+                    ),
+                    subRepositories = emptyMap()
                 ),
-                subRepositories = emptyMap()
-            ),
-            ScanContext(
-                labels = emptyMap(),
-                packageType = PackageType.PROJECT,
-                coveredPackages = listOf(pkg)
+                ScanContext(
+                    labels = emptyMap(),
+                    packageType = PackageType.PROJECT,
+                    coveredPackages = listOf(pkg)
+                )
             )
-        )
-
-        with(scanResult.summary) {
-            licenseFindings should beEmpty()
-            copyrightFindings should beEmpty()
-
-            issues shouldHaveSize 1
-
-            with(issues.first()) {
-                message shouldStartWith "Unable to get an upload URL for "
-                severity shouldBe Severity.ERROR
-            }
         }
     }
 })
