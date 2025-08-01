@@ -453,7 +453,7 @@ RUN --mount=type=cache,target=/var/tmp/gradle \
     export GRADLE_USER_HOME=/var/tmp/gradle \
     && sudo chown -R "$USER". $HOME/src/ort /var/tmp/gradle \
     && scripts/set_gradle_proxy.sh \
-    && ./gradlew --no-daemon --stacktrace \
+    && ./gradlew --no-daemon --stacktrace --warning-mode all \
     -Pversion=$ORT_VERSION \
     :cli:installDist \
     :cli-helper:startScripts \
