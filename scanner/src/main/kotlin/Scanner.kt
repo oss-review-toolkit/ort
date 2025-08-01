@@ -416,16 +416,30 @@ class Scanner(
                     context.copy(excludes = null, includes = null)
                 }
 
-                val scanResult = scanner.scanProvenance(provenance, filteredContext)
+                runCatching {
+                    scanner.scanProvenance(provenance, filteredContext)
+                }.onSuccess { scanResult ->
+                    val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
 
-                val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
+                    controller.addScanResults(scanner, provenance, listOf(scanResult))
 
-                controller.addScanResults(scanner, provenance, listOf(scanResult))
+                    storeProvenanceScanResult(provenance, scanResult)
 
-                storeProvenanceScanResult(provenance, scanResult)
+                    completedPackages.forEach { pkg ->
+                        controller.getNestedScanResult(pkg.id)?.let { storePackageScanResult(pkg, it) }
+                    }
+                }.onFailure { e ->
+                    val issue = scanner.createAndLogIssue(
+                        "Failed to scan $provenance with provenance scanner '${scanner.descriptor.displayName}': " +
+                            e.collectMessages()
+                    )
 
-                completedPackages.forEach { pkg ->
-                    controller.getNestedScanResult(pkg.id)?.let { storePackageScanResult(pkg, it) }
+                    controller.getIdsByProvenance().getValue(provenance).forEach { id ->
+                        controller.addIssue(
+                            id,
+                            issue
+                        )
+                    }
                 }
             }
         }
