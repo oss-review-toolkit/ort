@@ -194,14 +194,14 @@ class ScanCommand(descriptor: PluginDescriptor = ScanCommandFactory.descriptor) 
 
         if (projectScannerWrappers.isNotEmpty()) {
             echo("Scanning projects with:")
-            echo(projectScannerWrappers.joinToString { "\t${it.descriptor.displayName} (version ${it.version})" })
+            projectScannerWrappers.forEach { echo("\t${it.descriptor.displayName} (version ${it.version})") }
         } else {
             echo("Projects will not be scanned.")
         }
 
         if (packageScannerWrappers.isNotEmpty()) {
             echo("Scanning packages with:")
-            echo(packageScannerWrappers.joinToString { "\t${it.descriptor.displayName} (version ${it.version})" })
+            packageScannerWrappers.forEach { echo("\t${it.descriptor.displayName} (version ${it.version})") }
         } else {
             echo("Packages will not be scanned.")
         }
