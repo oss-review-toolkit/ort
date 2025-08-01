@@ -62,12 +62,9 @@ internal data class PinV2(
     val kind: Kind
 ) {
     enum class Kind {
-        @SerialName("localSourceControl")
-        LOCAL_SOURCE_CONTROL,
-        @SerialName("registry")
-        REGISTRY,
-        @SerialName("remoteSourceControl")
-        REMOTE_SOURCE_CONTROL
+        @SerialName("localSourceControl") LOCAL_SOURCE_CONTROL,
+        @SerialName("registry") REGISTRY,
+        @SerialName("remoteSourceControl") REMOTE_SOURCE_CONTROL
     }
 }
 
