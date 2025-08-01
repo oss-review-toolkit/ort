@@ -41,7 +41,7 @@ plugins/reporters/web-app-template/node_modules/
 logos/
 
 # Ignore test directories as we do not need them to run ORT.
-**/*[Tt]est/
+**/src/*[Tt]est/
 
 # Ignore macOS-specific files.
 .DS_Store
