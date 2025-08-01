@@ -28,6 +28,8 @@ import java.nio.file.attribute.BasicFileAttributes
 
 import kotlin.io.path.deleteRecursively
 
+import org.ossreviewtoolkit.utils.common.Os.fixupUserHomeProperty
+
 /**
  * A comparator that sorts parent paths before child paths.
  */
@@ -177,11 +179,9 @@ fun File.toSafeUri(): URI {
  * directory, otherwise return the string unchanged.
  */
 fun String.expandTilde(): String =
-    if (Os.env["SHELL"] != null) {
-        replace(Regex("^~"), Regex.escapeReplacement(System.getProperty("user.home")))
-    } else {
-        this
-    }
+    Os.env["SHELL"]?.let {
+        withoutPrefix("~")?.let { suffix -> fixupUserHomeProperty() + suffix }
+    } ?: this
 
 /**
  * A convenience operator to resolve [relativePath] against this file.

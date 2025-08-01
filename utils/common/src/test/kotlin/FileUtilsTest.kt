@@ -46,6 +46,10 @@ class FileUtilsTest : WordSpec({
         "make the path absolute if the SHELL environment variable is unset".config(enabled = Os.env["SHELL"] == null) {
             File("~/Desktop").expandTilde() shouldBe File("~/Desktop").absoluteFile
         }
+
+        "not modify the path if it does not start with a tilde" {
+            File("/home/user~name").expandTilde() shouldBe File("/home/user~name").absoluteFile
+        }
     }
 
     "getAllAncestorDirectories" should {
