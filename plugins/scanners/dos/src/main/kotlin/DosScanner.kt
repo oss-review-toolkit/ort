@@ -35,15 +35,12 @@ import org.ossreviewtoolkit.clients.dos.DosService
 import org.ossreviewtoolkit.clients.dos.PackageInfo
 import org.ossreviewtoolkit.clients.dos.ScanResultsResponseBody
 import org.ossreviewtoolkit.downloader.DefaultWorkingTreeCache
-import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.utils.toPurlExtras
@@ -51,11 +48,11 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
-import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -96,8 +93,6 @@ class DosScanner(
     override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val startTime = Instant.now()
 
-        val issues = mutableListOf<Issue>()
-
         val scanResults = runBlocking {
             nestedProvenance?.root ?: run {
                 logger.warn {
@@ -117,11 +112,9 @@ class DosScanner(
             // Ask for scan results from DOS API
             val existingScanResults = runCatching {
                 client.getScanResults(packages)
-            }.onFailure {
-                issues += createAndLogIssue(it.collectMessages())
             }.onSuccess {
-                if (it == null) issues += createAndLogIssue("Missing scan results response body.")
-            }.getOrNull()
+                if (it == null) throw ScanException("Missing scan results response body.")
+            }.getOrThrow()
 
             when (existingScanResults?.state?.status) {
                 "no-results" -> {
@@ -130,10 +123,8 @@ class DosScanner(
                     runCatching {
                         downloader.downloadRecursively(nestedProvenance)
                     }.mapCatching { sourceDir ->
-                        runBackendScan(packages, sourceDir, startTime, issues)
-                    }.onFailure {
-                        issues += createAndLogIssue(it.collectMessages())
-                    }.getOrNull()
+                        runBackendScan(packages, sourceDir, startTime)
+                    }.getOrThrow()
                 }
 
                 "pending" -> {
@@ -141,7 +132,7 @@ class DosScanner(
                         "The job ID must not be null for 'pending' status."
                     }
 
-                    pollForCompletion(packages.first(), jobId, "Pending scan", startTime, issues)
+                    pollForCompletion(packages.first(), jobId, "Pending scan", startTime)
                 }
 
                 "ready" -> existingScanResults
@@ -154,10 +145,9 @@ class DosScanner(
 
         val scanResultsJson = scanResults?.results
         val summary = if (scanResultsJson != null) {
-            val parsedSummary = generateSummary(startTime, endTime, scanResultsJson)
-            parsedSummary.copy(issues = parsedSummary.issues + issues)
+            generateSummary(startTime, endTime, scanResultsJson)
         } else {
-            ScanSummary.EMPTY.copy(startTime = startTime, endTime = endTime, issues = issues)
+            throw ScanException("Result from DOS is null.")
         }
 
         return ScanResult(
@@ -170,8 +160,7 @@ class DosScanner(
     internal suspend fun runBackendScan(
         packages: List<PackageInfo>,
         sourceDir: File,
-        startTime: Instant,
-        issues: MutableList<Issue>
+        startTime: Instant
     ): ScanResultsResponseBody? {
         logger.info {
             "Initiating a backend scan for the following packages:\n${packages.joinToString("\n") { it.purl }}"
@@ -186,25 +175,22 @@ class DosScanner(
 
         val uploadUrl = client.getUploadUrl(zipName)
         if (uploadUrl == null) {
-            issues += createAndLogIssue("Unable to get an upload URL for '$zipName'.")
             zipFile.delete()
-            return null
+            throw ScanException("Unable to get an upload URL for '$zipName'.")
         }
 
         val uploadSuccessful = client.uploadFile(zipFile, uploadUrl).also { zipFile.delete() }
         if (!uploadSuccessful) {
-            issues += createAndLogIssue("Uploading '$zipFile' to $uploadUrl failed.")
-            return null
+            throw ScanException("Uploading '$zipFile' to $uploadUrl failed.")
         }
 
         val jobResponse = client.addScanJob(zipName, packages)
         val id = jobResponse?.scannerJobId
 
         if (id == null) {
-            issues += createAndLogIssue(
+            throw ScanException(
                 "Failed to add scan job for the following packages:\n${packages.joinToString("\n") { it.purl }}"
             )
-            return null
         }
 
         logger.info { "Scan job added with ID '$id'." }
@@ -212,15 +198,14 @@ class DosScanner(
         // In case of multiple PURLs, they all point to packages with the same provenance. So if one package scan is
         // complete, all package scans are complete, which is why it is enough to arbitrarily pool for the first
         // package here.
-        return pollForCompletion(packages.first(), id, "New scan", startTime, issues)
+        return pollForCompletion(packages.first(), id, "New scan", startTime)
     }
 
     private suspend fun pollForCompletion(
         pkg: PackageInfo,
         jobId: String,
         logMessagePrefix: String,
-        startTime: Instant,
-        issues: MutableList<Issue>
+        startTime: Instant
     ): ScanResultsResponseBody? {
         while (true) {
             val jobState = client.getScanJobState(jobId) ?: return null
@@ -237,8 +222,7 @@ class DosScanner(
                 }
 
                 "failed" -> {
-                    issues += createAndLogIssue("Scan failed for job with ID '$jobId': ${jobState.state.message}")
-                    return null
+                    throw ScanException("Scan failed for job with ID '$jobId': ${jobState.state.message}")
                 }
 
                 else -> delay(config.pollInterval.seconds)
