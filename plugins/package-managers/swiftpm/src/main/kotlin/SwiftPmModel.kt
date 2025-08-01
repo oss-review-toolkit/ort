@@ -33,9 +33,6 @@ import kotlinx.serialization.json.jsonPrimitive
 
 import org.apache.logging.log4j.kotlin.loggerOf
 
-import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.div
-
 private val json = Json { ignoreUnknownKeys = true }
 
 /**
@@ -162,11 +159,3 @@ internal fun readSwiftPackageRegistryConfiguration(registriesFile: File): SwiftP
             }
         }.getOrNull()
     }
-
-private const val REGISTRY_CONFIGURATION_PATH = ".swiftpm/configuration/registries.json"
-
-internal fun readLocalSwiftPackageRegistryConfiguration(projectRoot: File): SwiftPackageRegistryConfiguration? =
-    readSwiftPackageRegistryConfiguration(projectRoot / REGISTRY_CONFIGURATION_PATH)
-
-internal fun readUserLevelSwiftPackageRegistryConfiguration(): SwiftPackageRegistryConfiguration? =
-    readSwiftPackageRegistryConfiguration(Os.userHomeDirectory / REGISTRY_CONFIGURATION_PATH)

@@ -49,11 +49,13 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 private const val PACKAGE_SWIFT_NAME = "Package.swift"
 private const val PACKAGE_RESOLVED_NAME = "Package.resolved"
+private const val REGISTRY_CONFIGURATION_PATH = ".swiftpm/configuration/registries.json"
 
 private const val PACKAGE_TYPE = "Swift"
 
@@ -99,8 +101,8 @@ class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descrip
         }
 
         val localSwiftPackageRegistryConfiguration =
-            readLocalSwiftPackageRegistryConfiguration(definitionFile.parentFile)
-                ?: readLocalSwiftPackageRegistryConfiguration(analysisRoot)
+            readSwiftPackageRegistryConfiguration(definitionFile.parentFile / REGISTRY_CONFIGURATION_PATH)
+                ?: readSwiftPackageRegistryConfiguration(analysisRoot / REGISTRY_CONFIGURATION_PATH)
 
         return when (definitionFile.name) {
             PACKAGE_SWIFT_NAME -> resolveDefinitionFileDependencies(
@@ -338,7 +340,8 @@ private fun PinV2.sourceArtifact(
     localSwiftPackageRegistryConfiguration: SwiftPackageRegistryConfiguration?
 ): RemoteArtifact =
     if (kind == PinV2.Kind.REGISTRY) {
-        val userLevelSwiftPackageRegistryConfiguration = readUserLevelSwiftPackageRegistryConfiguration()
+        val userLevelSwiftPackageRegistryConfiguration =
+            readSwiftPackageRegistryConfiguration(Os.userHomeDirectory / REGISTRY_CONFIGURATION_PATH)
 
         // Identifier for registry entries have the following format: <SCOPE>.<NAME>.
         val (scope, name) = identity.split('.', limit = 2)
