@@ -28,6 +28,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.maps.haveSize
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -219,6 +220,33 @@ class ScannerTest : WordSpec({
             scanner.scan(setOf(pkgWithVcs1, pkgWithVcs2, pkgWithVcs3), createContext())
 
             storedScanResults should containExactly(packageScannerResult)
+        }
+
+        "catch an exception and save an issue" {
+            val scannerWrapper = spyk(FakePackageScannerWrapper()) {
+                every {
+                    scanPackage(any(), any())
+                } throws ScanException("Scan error")
+            }
+
+            val pkg = Package.new(name = "project1").withValidVcs()
+            val pkg2 = Package.new(name = "project2").withValidVcs()
+            val scanner = createScanner(packageScannerWrappers = listOf(scannerWrapper))
+
+            val result = scanner.scan(setOf(pkg, pkg2), createContext())
+
+            result.scanResults should beEmpty()
+
+            result.issues shouldHaveSize 2
+            result.issues[pkg.id]?.firstOrNull() shouldNotBeNull {
+                source shouldBe "fake"
+                message shouldContain "Scan error"
+            }
+
+            result.issues[pkg2.id]?.firstOrNull() shouldNotBeNull {
+                source shouldBe "fake"
+                message shouldContain "Scan error"
+            }
         }
     }
 

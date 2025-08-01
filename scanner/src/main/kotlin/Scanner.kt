@@ -340,33 +340,47 @@ class Scanner(
                         "'${scanner.descriptor.displayName}' which covers the following packages: $coveredCoordinates"
                 }
 
-                val scanResult = scanner.scanPackage(nestedProvenance, adjustedContext)
+                runCatching {
+                    scanner.scanPackage(nestedProvenance, adjustedContext)
+                }.onSuccess { scanResult ->
+                    logger.info {
+                        "Finished scan of ${nestedProvenance.root} with package scanner " +
+                            "'${scanner.descriptor.displayName}'."
+                    }
 
-                logger.info {
-                    "Finished scan of ${nestedProvenance.root} with package scanner " +
-                        "'${scanner.descriptor.displayName}'."
-                }
+                    val provenanceScanResultsToStore = mutableSetOf<Pair<KnownProvenance, ScanResult>>()
+                    packagesWithIncompleteScanResult.forEach { pkg ->
+                        val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
+                        controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
 
-                val provenanceScanResultsToStore = mutableSetOf<Pair<KnownProvenance, ScanResult>>()
-                packagesWithIncompleteScanResult.forEach { pkg ->
-                    val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
-                    controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
+                        // TODO: Run in coroutine.
+                        if (scanner.writeToStorage) {
+                            storePackageScanResult(pkg, nestedProvenanceScanResult)
 
-                    // TODO: Run in coroutine.
-                    if (scanner.writeToStorage) {
-                        storePackageScanResult(pkg, nestedProvenanceScanResult)
-
-                        nestedProvenanceScanResult.scanResults.forEach { (provenance, scanResults) ->
-                            scanResults.forEach { scanResult ->
-                                provenanceScanResultsToStore += provenance to scanResult
+                            nestedProvenanceScanResult.scanResults.forEach { (provenance, scanResults) ->
+                                scanResults.forEach { scanResult ->
+                                    provenanceScanResultsToStore += provenance to scanResult
+                                }
                             }
                         }
                     }
-                }
 
-                // Store only deduplicated provenance scan results.
-                provenanceScanResultsToStore.forEach { (provenance, scanResult) ->
-                    storeProvenanceScanResult(provenance, scanResult)
+                    // Store only deduplicated provenance scan results.
+                    provenanceScanResultsToStore.forEach { (provenance, scanResult) ->
+                        storeProvenanceScanResult(provenance, scanResult)
+                    }
+                }.onFailure { e ->
+                    val issue = scanner.createAndLogIssue(
+                        "Failed to scan $provenance with package scanner '${scanner.descriptor.displayName}': " +
+                            e.collectMessages()
+                    )
+
+                    controller.getIdsByProvenance().getValue(provenance).forEach { id ->
+                        controller.addIssue(
+                            id,
+                            issue
+                        )
+                    }
                 }
             }
         }
