@@ -17,11 +17,6 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply third-party plugins.
-    id("org.gradlex.reproducible-builds")
-}
-
 repositories {
     mavenCentral()
 
