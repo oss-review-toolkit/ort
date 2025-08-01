@@ -451,7 +451,7 @@ WORKDIR $HOME/src/ort
 RUN --mount=type=cache,target=/var/tmp/gradle \
     --mount=type=bind,target=$HOME/src/ort,rw \
     export GRADLE_USER_HOME=/var/tmp/gradle \
-    && sudo chown -R "$USER". $HOME/src/ort /var/tmp/gradle \
+    && sudo chown -R $USER $HOME/src/ort /var/tmp/gradle \
     && scripts/set_gradle_proxy.sh \
     && ./gradlew --no-daemon --stacktrace \
     -Pversion=$ORT_VERSION \
