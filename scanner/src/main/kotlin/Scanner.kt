@@ -133,7 +133,7 @@ class Scanner(
             )
         )
 
-        val scannerRun = projectResults + packageResults
+        val scannerRun = listOfNotNull(projectResults, packageResults).reduce { a, b -> a + b }
 
         val paddedScannerRun = scannerRun.takeUnless { scannerConfig.includeFilesWithoutFindings }
             ?: scannerRun.padNoneLicenseFindings()
@@ -141,11 +141,11 @@ class Scanner(
         return ortResult.copy(scanner = paddedScannerRun)
     }
 
-    internal suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun {
+    internal suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun? {
         val scannerWrappers = scannerWrappers[context.packageType]
         if (scannerWrappers.isNullOrEmpty()) {
             logger.info { "Skipping ${context.packageType} scan as no according scanner is configured." }
-            return ScannerRun.EMPTY
+            return null
         }
 
         logger.info { "Scanning ${packages.size} ${context.packageType}(s) with ${scannerWrappers.size} scanner(s)." }
