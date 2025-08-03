@@ -22,13 +22,7 @@ package org.ossreviewtoolkit.utils.spdx
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.spec.tempdir
-import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
-import io.kotest.matchers.string.beBlank
-import io.kotest.matchers.string.endWith
-import io.kotest.matchers.string.startWith
 
 import java.io.File
 
@@ -130,123 +124,6 @@ class UtilsTest : WordSpec() {
 
                 calculatePackageVerificationCode(tempDir) shouldBe
                     "81e250a78cc6386afc25fa57ad6eaee31394019b"
-            }
-        }
-
-        "getLicenseText" should {
-            "return the full license text for a valid SPDX license id" {
-                val text = getLicenseText("Apache-2.0")?.trim()
-
-                text should startWith("Apache License")
-                text should endWith("limitations under the License.")
-            }
-
-            "return the full license text for a valid SPDX license id with the '+' operator" {
-                val text = getLicenseText("Apache-2.0+")?.trim()
-
-                text should startWith("Apache License")
-                text should endWith("limitations under the License.")
-            }
-
-            "return null for an invalid SPDX license id" {
-                getLicenseText("FooBar-1.0") should beNull()
-            }
-
-            "return the exception text for an SPDX exception id if handling exceptions is enabled" {
-                val text = getLicenseText("Autoconf-exception-3.0", true)?.trim()
-
-                text should startWith("AUTOCONF CONFIGURE SCRIPT EXCEPTION")
-                text should endWith("the copyleft requirements of the license of Autoconf.")
-            }
-
-            "return null for an SPDX exception id if handling exceptions is disabled" {
-                getLicenseText("Autoconf-exception-3.0", false) should beNull()
-            }
-
-            "return a non-blank string for all SPDX ids" {
-                SpdxLicense.entries.forEach {
-                    getLicenseText(it.id) shouldNot beBlank()
-                }
-            }
-
-            "return null for an unknown SPDX LicenseRef" {
-                getLicenseText("LicenseRef-foo-bar") should beNull()
-            }
-
-            "return the full license text for a LicenseRef-ort license" {
-                val text = getLicenseText("LicenseRef-ort-oracle-futc")?.trim()
-
-                text should startWith("Oracle Free Use Terms and Conditions")
-                text should endWith("Last updated: 9 October 2018")
-            }
-        }
-
-        "getLicenseText provided a custom dir" should {
-            "return the custom license text for a license ID not known by ort but in custom dir" {
-                val id = "LicenseRef-ort-abc"
-                val text = "a\nb\nc"
-
-                setupTempFile(id, text)
-
-                getLicenseText(id, handleExceptions = true, listOf(tempDir)) shouldBe text
-            }
-
-            "return null if license text is not known by ort and also not in custom dir" {
-                setupTempFile("LicenseRef-ort-abc", "abc")
-
-                getLicenseText("LicenseRef-not-present", handleExceptions = true, listOf(tempDir)) should beNull()
-            }
-        }
-
-        "removeYamlFrontMatter" should {
-            "remove a YAML front matter" {
-                val text = """
-                    ---
-                    key: alasir
-                    short_name: Alasir Licence
-                    name: The Alasir Licence
-                    category: Proprietary Free
-                    owner: Alasir
-                    homepage_url: http://alasir.com/licence/TAL.txt
-                    spdx_license_key: LicenseRef-scancode-alasir
-                    ---
-
-                    The Alasir Licence
-
-                        This is a free software. It's provided as-is and carries absolutely no
-                    warranty or responsibility by the author and the contributors, neither in
-                    general nor in particular. No matter if this software is able or unable to
-                    cause any damage to your or third party's computer hardware, software, or any
-                    other asset available, neither the author nor a separate contributor may be
-                    found liable for any harm or its consequences resulting from either proper or
-                    improper use of the software, even if advised of the possibility of certain
-                    injury as such and so forth.
-                """.trimIndent()
-
-                text.removeYamlFrontMatter() shouldBe """
-                    The Alasir Licence
-
-                        This is a free software. It's provided as-is and carries absolutely no
-                    warranty or responsibility by the author and the contributors, neither in
-                    general nor in particular. No matter if this software is able or unable to
-                    cause any damage to your or third party's computer hardware, software, or any
-                    other asset available, neither the author nor a separate contributor may be
-                    found liable for any harm or its consequences resulting from either proper or
-                    improper use of the software, even if advised of the possibility of certain
-                    injury as such and so forth.
-                """.trimIndent()
-            }
-
-            "remove trailing whitespace" {
-                "last sentence\n".removeYamlFrontMatter() shouldBe "last sentence"
-            }
-
-            "remove leading empty lines" {
-                "\nfirst sentence".removeYamlFrontMatter() shouldBe "first sentence"
-            }
-
-            "keep leading whitespace" {
-                "    indented title".removeYamlFrontMatter() shouldBe "    indented title"
             }
         }
     }

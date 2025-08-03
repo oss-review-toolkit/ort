@@ -61,8 +61,8 @@ import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.transformingCollectionEmptyMatcher
@@ -676,7 +676,7 @@ class LicenseInfoResolverTest : WordSpec({
             val file = result.files.first()
             file.provenance shouldBe provenance
             file.path shouldBe "LICENSE"
-            file.file.readText() shouldBe "Copyright 2020 Holder\n\n${getLicenseText("MIT")}"
+            file.file.readText() shouldBe "Copyright 2020 Holder\n\n${SpdxLicense.MIT.text}"
             file.licenses should containLicensesExactly("MIT")
             file.licenses should containLocationForLicense(
                 license = "MIT",
