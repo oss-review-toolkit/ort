@@ -51,6 +51,7 @@ object CopyrightableFiles {
         "website/docs/guides/_category_.yml",
         "website/docs/plugins/_category_.yml",
         "website/docs/plugins/advisors/_category_.yml",
+        "website/docs/plugins/license-fact-providers/_category_.yml",
         "website/docs/plugins/package-configuration-providers/_category_.yml",
         "website/docs/plugins/package-curation-providers/_category_.yml",
         "website/docs/plugins/package-managers/_category_.yml",
