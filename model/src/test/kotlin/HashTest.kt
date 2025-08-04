@@ -32,11 +32,11 @@ class HashTest : WordSpec({
         }
 
         "create an UNKNOWN hash from the 'UNKOWN' value" {
-            Hash.create("UNKNOWN").algorithm shouldBe HashAlgorithm.UNKNOWN
+            Hash.create("UNKNOWN") shouldBe Hash("UNKNOWN", HashAlgorithm.UNKNOWN)
         }
 
         "create an UNKNOWN hash from a value that matches no other hash" {
-            Hash.create("0123456789").algorithm shouldBe HashAlgorithm.UNKNOWN
+            Hash.create("0123456789") shouldBe Hash("0123456789", HashAlgorithm.UNKNOWN)
         }
 
         "create a SHA1 hash from a SHA-1 value" {
