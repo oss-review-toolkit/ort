@@ -67,7 +67,7 @@ data class Hash(
     }
 
     init {
-        require(value.length == algorithm.size || algorithm == HashAlgorithm.UNKNOWN) {
+        require(!algorithm.isVerifiable || (algorithm.size == value.length && value.all { it.isLetterOrDigit() })) {
             "'$value' is not a $algorithm hash."
         }
     }
