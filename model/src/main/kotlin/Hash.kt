@@ -93,10 +93,16 @@ data class Hash(
         return algorithm.calculate(file).equals(value, ignoreCase = true)
     }
 
-    /**
-     * Verify that the provided [hash] matches this hash.
-     */
-    fun verify(hash: Hash): Boolean = algorithm == hash.algorithm && value.equals(hash.value, ignoreCase = true)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Hash) return false
+        return algorithm == other.algorithm && value.equals(other.value, ignoreCase = true)
+    }
+
+    override fun hashCode() =
+        value.foldIndexed(algorithm.hashCode()) { index, acc, c ->
+            acc + 31 * (index + (c.digitToIntOrNull() ?: 0))
+        }
 }
 
 private class StringLowercaseConverter : StdConverter<String, String>() {
