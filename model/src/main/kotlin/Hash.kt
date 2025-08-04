@@ -61,7 +61,7 @@ data class Hash(
                     algorithm = HashAlgorithm.fromString(splitValue.first())
                 )
             } else {
-                Hash(value.lowercase(), HashAlgorithm.create(value))
+                Hash(value, HashAlgorithm.create(value))
             }
         }
     }
