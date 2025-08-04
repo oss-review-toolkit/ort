@@ -671,5 +671,5 @@ private fun isArtifactModified(artifact: Artifact, remoteArtifact: RemoteArtifac
         }
 
         val checksum = okHttpClient.downloadText(mavenCentralUrl).getOrElse { return false }
-        !hash.verify(parseChecksum(checksum, hash.algorithm.name))
+        hash != parseChecksum(checksum, hash.algorithm.name)
     }
