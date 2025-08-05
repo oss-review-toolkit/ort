@@ -20,14 +20,6 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
-
-    // Apply third-party plugins.
-    alias(libs.plugins.jakartaMigration)
-}
-
-jakartaeeMigration {
-    includeTransform("com.atlassian.jira:jira-rest-java-client-core")
-    configurations.filterNot { it.isCanBeDeclared }.forEach(::transform)
 }
 
 dependencies {
