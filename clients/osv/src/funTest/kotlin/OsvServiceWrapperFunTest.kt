@@ -22,18 +22,10 @@ package org.ossreviewtoolkit.clients.osv
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containAll
-import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
-
-import java.time.Instant
-
-import kotlinx.serialization.json.JsonObject
-
-import org.ossreviewtoolkit.utils.test.readResource
 
 private val VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0f"
@@ -48,25 +40,6 @@ private val VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION = VulnerabilitiesForPa
 private val VULNERABILITY_FOR_PACKAGE_BY_INVALID_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0c"
 )
-
-private val EMPTY_JSON_OBJECT = JsonObject(emptyMap())
-
-private fun Vulnerability.patchIgnorableFields() =
-    copy(
-        modified = Instant.EPOCH,
-        databaseSpecific = EMPTY_JSON_OBJECT.takeIf { databaseSpecific != null },
-        affected = affected.mapTo(mutableSetOf()) { affected ->
-            affected.copy(ecosystemSpecific = EMPTY_JSON_OBJECT.takeIf { affected.ecosystemSpecific != null })
-        }
-    )
-
-private fun Vulnerability.normalizeUrls(): Vulnerability {
-    val references = references.mapTo(mutableSetOf()) { it.copy(url = it.url.removeSuffix("/")) }
-    return copy(references = references)
-}
-
-private fun List<Vulnerability>.patch() = map { it.patch() }
-private fun Vulnerability.patch() = patchIgnorableFields().normalizeUrls()
 
 class OsvServiceWrapperFunTest : WordSpec({
     "getVulnerabilityIdsForPackages()" should {
@@ -98,19 +71,6 @@ class OsvServiceWrapperFunTest : WordSpec({
                     "OSV-2018-97",
                     "OSV-2020-484"
                 )
-            }
-        }
-    }
-
-    "getVulnerabilityForId()" should {
-        "return the expected vulnerability for the given ID" {
-            val expectedResult = readResource("/vulnerability-by-id-expected-result.json")
-
-            val result = OsvServiceWrapper().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
-
-            result shouldBeSuccess { actualData ->
-                val expectedData = OsvService.JSON.decodeFromString<Vulnerability>(expectedResult)
-                actualData.patchIgnorableFields() shouldBe expectedData.patchIgnorableFields()
             }
         }
     }

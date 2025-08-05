@@ -67,20 +67,6 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
     }
 
     /**
-     * Return the vulnerability denoted by the given [id].
-     */
-    fun getVulnerabilityForId(id: String): Result<Vulnerability> {
-        val response = service.getVulnerabilityForId(id).execute()
-        val body = response.body()
-
-        return if (response.isSuccessful && body != null) {
-            Result.success(body)
-        } else {
-            Result.failure(IOException(response.message()))
-        }
-    }
-
-    /**
      * Return the vulnerabilities denoted by the given [ids].
      *
      * This executes a separate request for each given identifier since a batch request is not available.
