@@ -24,7 +24,6 @@ import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withContext
 
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
@@ -34,12 +33,10 @@ internal class ModuleInfoResolver(
     companion object {
         fun create(fetchModuleInfo: (workingDir: File, moduleId: String) -> PackageJson?): ModuleInfoResolver =
             ModuleInfoResolver { workingDir, moduleIds ->
-                runBlocking {
-                    withContext(Dispatchers.IO.limitedParallelism(20)) {
-                        moduleIds.map {
-                            async { fetchModuleInfo(workingDir, it) }
-                        }.awaitAll()
-                    }
+                runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+                    moduleIds.map {
+                        async { fetchModuleInfo(workingDir, it) }
+                    }.awaitAll()
                 }.filterNotNullTo(mutableSetOf())
             }
     }
