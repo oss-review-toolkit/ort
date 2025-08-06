@@ -210,7 +210,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
                             val modelBuildingResult = poms[id.toString()]
                             if (modelBuildingResult == null) {
-                                val message = "No POM found for $id."
+                                val message = "No POM found for component '$id'."
                                 logger.warn(message)
                                 warnings += message
                             }
