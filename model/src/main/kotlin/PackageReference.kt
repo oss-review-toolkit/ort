@@ -73,7 +73,7 @@ data class PackageReference(
 
         val queue: Deque<Pair<PackageReference, Int>> = LinkedList()
         fun enqueue(packages: Collection<PackageReference>, level: Int) {
-            if (maxDepth < 0 || level <= maxDepth) {
+            if (maxDepth !in 0..<level) {
                 packages.forEach { queue += Pair(it, level) }
             }
         }
