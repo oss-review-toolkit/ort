@@ -53,6 +53,8 @@ private val ANALYZED_VCS = VcsInfo(
     url = "https://github.com/path/proj1-repo.git"
 )
 
+private val ANALYZED_PROVENANCE = RepositoryProvenance(ANALYZED_VCS, ANALYZED_VCS.revision)
+
 val ORT_RESULT = OrtResult(
     repository = Repository(
         config = RepositoryConfiguration(
@@ -66,7 +68,7 @@ val ORT_RESULT = OrtResult(
                 )
             )
         ),
-        vcs = ANALYZED_VCS,
+        provenance = ANALYZED_PROVENANCE,
         vcsProcessed = ANALYZED_VCS
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
