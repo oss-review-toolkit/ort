@@ -67,6 +67,7 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
     override fun transformURL(url: String): String = urlProvider.getUrl(url)
 
     override suspend fun createScan(
+        repositoryUrl: String,
         projectCode: String,
         scanCode: String,
         comment: OrtScanComment
@@ -77,7 +78,7 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
                 config.apiKey.value,
                 projectCode,
                 scanCode,
-                comment.ort.repositoryURL,
+                repositoryUrl,
                 comment.ort.revision,
                 comment.asJsonString()
             )

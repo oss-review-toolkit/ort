@@ -668,7 +668,7 @@ class FossId internal constructor(
 
         val urlWithoutCredentials = url.replaceCredentialsInUri()
         val comment = createOrtScanComment(urlWithoutCredentials, revision, reference)
-        val response = handler.createScan(projectCode, scanCode, comment)
+        val response = handler.createScan(url, projectCode, scanCode, comment)
 
         val data = response.data?.value
 

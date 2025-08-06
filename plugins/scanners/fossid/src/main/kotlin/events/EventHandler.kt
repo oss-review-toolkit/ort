@@ -101,10 +101,12 @@ interface EventHandler {
     fun transformURL(url: String): String = url
 
     /**
-     * Create a scan in FossID with the given [projectCode], [scanCode], and url, revision and reference contained in
-     * the [comment]. Return the response from FossID or null if the scan could not be created.
+     * Create a scan in FossID with the given [repositoryUrl], [projectCode], [scanCode], and revision and reference
+     * contained in the [comment]. Return the response from FossID or null if the scan could not be created. Note that
+     * the [repositoryUrl] may contain the credentials for cloning the repository.
      */
     suspend fun createScan(
+        repositoryUrl: String,
         projectCode: String,
         scanCode: String,
         comment: OrtScanComment
