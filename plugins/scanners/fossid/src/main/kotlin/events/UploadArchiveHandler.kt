@@ -59,6 +59,7 @@ class UploadArchiveHandler(
     val provenance: NestedProvenance
 ) : EventHandler {
     override suspend fun createScan(
+        repositoryUrl: String,
         projectCode: String,
         scanCode: String,
         comment: OrtScanComment
