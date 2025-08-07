@@ -64,19 +64,17 @@ internal fun Configuration.isRelevant(): Boolean {
 /**
  * Return a map that associates names of artifact repositories to their model representations.
  */
-internal fun RepositoryHandler.associateNamesWithUrlsTo(repositories: MutableMap<String, OrtRepository?>) =
-    associateTo(repositories) { it.name to it.toOrtRepository() }
+internal fun RepositoryHandler.associateNamesWithUrlsTo(repositories: MutableMap<String, UrlArtifactRepository>) =
+    filterIsInstance<UrlArtifactRepository>().associateByTo(repositories) { (it as ArtifactRepository).name }
 
 /**
- * Convert this [ArtifactRepository] to an [OrtRepository] if it possesses the relevant properties. Return *null* for
- * an unsupported repository type.
+ * Convert this [UrlArtifactRepository] to an [OrtRepository] by extracting the relevant properties.
  */
-private fun ArtifactRepository.toOrtRepository(): OrtRepository? =
-    (this as? UrlArtifactRepository)?.let { urlRepository ->
-        val credentials = (urlRepository as? AuthenticationSupported)?.credentials
-        OrtRepositoryImpl(
-            url = urlRepository.url.toString(),
-            username = credentials?.username,
-            password = credentials?.password
-        )
-    }
+internal fun UrlArtifactRepository.toOrtRepository(): OrtRepository {
+    val credentials = (this as? AuthenticationSupported)?.credentials
+    return OrtRepositoryImpl(
+        url = url.toString(),
+        username = credentials?.username,
+        password = credentials?.password
+    )
+}

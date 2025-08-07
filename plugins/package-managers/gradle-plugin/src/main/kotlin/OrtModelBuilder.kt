@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
 import OrtDependency
 import OrtDependencyTreeModel
-import OrtRepository
 
 import org.apache.maven.model.building.FileModelSource
 import org.apache.maven.model.building.ModelBuildingResult
@@ -32,6 +31,7 @@ import org.gradle.api.artifacts.component.ComponentIdentifier
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentSelector
+import org.gradle.api.artifacts.repositories.UrlArtifactRepository
 import org.gradle.api.artifacts.result.DependencyResult
 import org.gradle.api.artifacts.result.ResolvedArtifactResult
 import org.gradle.api.artifacts.result.ResolvedComponentResult
@@ -49,7 +49,7 @@ import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.util.GradleVersion
 
 internal class OrtModelBuilder : ToolingModelBuilder {
-    private val repositories = mutableMapOf<String, OrtRepository?>()
+    private val repositories = mutableMapOf<String, UrlArtifactRepository>()
 
     private val platformCategories = setOf("platform", "enforced-platform")
 
@@ -99,7 +99,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             name = project.name,
             version = project.version.toString().takeUnless { it == "unspecified" }.orEmpty(),
             configurations = ortConfigurations,
-            repositories = repositories.values.filterNotNull(),
+            repositories = repositories.values.map { it.toOrtRepository() },
             errors = errors,
             warnings = warnings
         )
@@ -190,7 +190,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 repositories[repositoryId]?.let { repository ->
                                     // Note: Only Maven-style layout is supported for now.
                                     buildString {
-                                        append(repository.url.removeSuffix("/"))
+                                        append(repository.url.toString().removeSuffix("/"))
                                         append('/')
                                         append(id.group.replace('.', '/'))
                                         append('/')
