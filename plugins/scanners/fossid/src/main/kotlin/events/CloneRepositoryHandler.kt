@@ -162,7 +162,7 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
             )
             // It could be that global rules are automatically added to a scan. Therefore, a failure in creation
             // because of duplication should be ignored.
-            if (response.error != "Rule already exists") {
+            if (response.error != "Rule already exists.") {
                 response.checkResponse("create ignore rules", false)
 
                 logger.info {

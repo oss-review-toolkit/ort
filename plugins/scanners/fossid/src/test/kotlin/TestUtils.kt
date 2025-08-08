@@ -556,7 +556,7 @@ internal fun FossIdServiceWithVersion.expectCreateIgnoreRule(
 ): FossIdServiceWithVersion {
     if (error) {
         coEvery { createIgnoreRule(USER, API_KEY, scanCode, type, value, scope) } returns
-            EntityResponseBody("create ignore rules", error = "Rule already exists")
+            EntityResponseBody("create ignore rules", error = "Rule already exists.")
     } else {
         coEvery { createIgnoreRule(USER, API_KEY, scanCode, type, value, scope) } returns EntityResponseBody()
     }
