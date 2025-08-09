@@ -125,6 +125,12 @@ internal class GradleDependencyHandler(
             isMetadataOnly = hasNoArtifacts
         )
     }
+
+    /*
+     * In case of Gradle, the costly deep comparison can be skipped, because if the direct dependencies are the same,
+     * their children are also the same.
+     */
+    override fun requiresDeepDependencyTreeComparison() = false
 }
 
 // See http://maven.apache.org/pom.html#SCM.
