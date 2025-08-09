@@ -1,0 +1,6 @@
+dirs:
+  - .
+useGitIgnore: true
+# Exclude the website because Docusaurus validates links itself.
+excludedDirs:
+  - website

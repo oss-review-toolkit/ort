@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.enumSetOf
-import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
 import org.reflections.Reflections
 import org.reflections.scanners.Scanners
@@ -79,13 +78,6 @@ class RequirementsCommand(
         echo("${DANGER_PREFIX}The tool was not found in the PATH environment.")
         echo("${WARNING_PREFIX}The tool was found in the PATH environment, but not in the required version.")
         echo("${SUCCESS_PREFIX}The tool was found in the PATH environment in the required version.")
-
-        echo()
-        if (scanCodeLicenseTextDir != null) {
-            echo(Theme.Default.info("ScanCode license texts found in '$scanCodeLicenseTextDir'."))
-        } else {
-            echo(Theme.Default.warning("ScanCode license texts not found."))
-        }
 
         if (status.singleOrNull() != VersionStatus.SATISFIED) {
             echo()

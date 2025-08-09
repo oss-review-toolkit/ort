@@ -36,6 +36,7 @@ import io.kotest.matchers.shouldNotBe
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
+import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS
@@ -82,7 +83,13 @@ class CycloneDxReporterFunTest : WordSpec({
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf("xml")
-            ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
+            ).generateReport(
+                ReporterInput(
+                    ORT_RESULT_WITH_VULNERABILITIES,
+                    licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                ),
+                outputDir
+            )
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -130,7 +137,13 @@ class CycloneDxReporterFunTest : WordSpec({
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf("json")
-            ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
+            ).generateReport(
+                ReporterInput(
+                    ORT_RESULT_WITH_VULNERABILITIES,
+                    licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                ),
+                outputDir
+            )
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -204,9 +217,13 @@ class CycloneDxReporterFunTest : WordSpec({
                 CycloneDxReporterFactory.create(
                     singleBom = false,
                     outputFileFormats = listOf("json")
-                ).generateReport(ReporterInput(ORT_RESULT), outputDir).also {
-                    it shouldHaveSize 2
-                }
+                ).generateReport(
+                    ReporterInput(
+                        ORT_RESULT,
+                        licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                    ),
+                    outputDir
+                ).also { it shouldHaveSize 2 }
 
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
                 val expectedBom = readResource("/cyclonedx-reporter-expected-result-with-findings.json")

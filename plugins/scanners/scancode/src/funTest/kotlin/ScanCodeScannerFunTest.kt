@@ -19,16 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
-import io.kotest.engine.spec.tempdir
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.endWith
-import io.kotest.matchers.string.startWith
-
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
-import org.ossreviewtoolkit.utils.spdx.getLicenseText
 
 class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = ScanCodeFactory.create()
@@ -42,29 +35,4 @@ class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest() {
         LicenseFinding("Apache-2.0", TextLocation("LICENCE", 1, 201), 100.0f),
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 201), 100.0f)
     )
-
-    init {
-        "return the full license text for the HERE proprietary license" {
-            val text = getLicenseText("LicenseRef-scancode-here-proprietary")?.trim()
-
-            text should startWith("This software and other materials contain proprietary information")
-            text should endWith("allowed.")
-        }
-
-        "return the full license text for a known SPDX LicenseRef" {
-            val text = getLicenseText("LicenseRef-scancode-indiana-extreme")?.trim()
-
-            text should startWith("Indiana University Extreme! Lab Software License Version 1.1.1")
-            text should endWith("EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.")
-        }
-
-        "return the ort license text for a license ID known by ort and also in custom dir" {
-            val id = "LicenseRef-scancode-here-proprietary"
-            val text = "x\ny\n"
-
-            val outputDir = tempdir().apply { resolve(id).writeText(text) }
-
-            getLicenseText(id, true, listOf(outputDir)) shouldBe getLicenseText(id, true)
-        }
-    }
 }

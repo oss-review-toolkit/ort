@@ -51,6 +51,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
         logger.lifecycle("Generating plugin documentation.")
 
         generatePluginDocs("advisors", "advisor")
+        generatePluginDocs("license-fact-providers")
         generatePluginDocs("package-configuration-providers")
         generatePluginDocs("package-curation-providers")
         generatePluginDocs("package-managers", "analyzer")

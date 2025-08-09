@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2025 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter
-
-import java.io.File
-
-import org.ossreviewtoolkit.utils.spdx.getLicenseTextReader
-
-class DefaultLicenseTextProvider(private val licenseTextDirectories: List<File> = emptyList()) : LicenseTextProvider {
-    override fun getLicenseTextReader(licenseId: String): (() -> String)? =
-        getLicenseTextReader(
-            id = licenseId,
-            handleExceptions = true,
-            licenseTextDirectories = licenseTextDirectories
-        )
+plugins {
+    // Apply precompiled plugins.
+    id("ort-plugin-parent-conventions")
 }
