@@ -111,7 +111,7 @@ internal object PythonInspector : CommandLineTool {
             val packagePurls = mutableSetOf<String>()
             binaryResult.projects.forEach { project ->
                 project.packageData.forEach { data ->
-                    data.dependencies.mapTo(packagePurls) { it.purl }
+                    data.dependencies.mapNotNullTo(packagePurls) { it.purl }
                 }
             }
 
@@ -121,7 +121,7 @@ internal object PythonInspector : CommandLineTool {
                         "(${binaryResult.packages.size}), which might indicate a bug in python-inspector."
                 }
 
-                val resultsPurls = binaryResult.packages.mapTo(mutableSetOf()) { it.purl }
+                val resultsPurls = binaryResult.packages.mapNotNullTo(mutableSetOf()) { it.purl }
                 logger.warn { "Packages that are not contained as dependencies: ${packagePurls - resultsPurls}" }
                 logger.warn { "Dependencies that are not contained as packages: ${resultsPurls - packagePurls}" }
             }
@@ -174,7 +174,7 @@ internal object PythonInspector : CommandLineTool {
 
     @Serializable
     internal data class Dependency(
-        val purl: String,
+        val purl: String?,
         val scope: String,
         val isRuntime: Boolean,
         val isOptional: Boolean,
@@ -213,7 +213,7 @@ internal object PythonInspector : CommandLineTool {
         val repositoryHomepageUrl: String?,
         val repositoryDownloadUrl: String?,
         val apiDataUrl: String,
-        val purl: String
+        val purl: String?
     )
 
     @Serializable
