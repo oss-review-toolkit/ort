@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.utils.toPurl
 
 private const val TYPE = "PyPI"
 
@@ -142,7 +143,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
             // The package has a namespace property which is currently always empty. Deliberately set the namespace to
             // an empty string here to be consistent with the resolved packages which do not have a namespace property.
             id = id,
-            purl = pkg.purl,
+            purl = pkg.purl ?: id.toPurl(),
             authors = pkg.parties.toAuthors(),
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
