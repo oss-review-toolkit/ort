@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.config.PathInclude
 
-class Includes(
+data class Includes(
     /**
      * Path includes.
      */
