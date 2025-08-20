@@ -1,6 +1,6 @@
 # Package Configurations
 
-A package configuration file allows you to define path excludes and license finding curations for a specific package (dependency) and provenance.
+A package configuration file allows you to define path includes, path excludes and license finding curations for a specific package (dependency) and provenance.
 Conceptually, the file is similar to [.ort.yml](ort-yml.md), but it is used only for packages included via a package manager as project dependencies, and not for the project's own source code repository to be scanned.
 
 ## When To Use
@@ -47,12 +47,14 @@ source_code_origin: ARTIFACT
 id: "NPM::ansi-styles:4.2.1"
 ```
 
-## Defining Path Excludes and License Finding Curations
+## Defining Path Includes, Path Excludes and License Finding Curations
 
+Path includes define which files and directories are part of the distributed release artifact(s) for a package, for example source code files.
+When defining includes, all the non-matching paths are considered as excluded by default.
 Path excludes define which code is not part of the distributed release artifact(s) for a package, for example, code found in the source repository but only used for building, documenting or testing the code.
 License finding curations are used to fix incorrect scan results, for example, if a wrong license was detected, or if a finding is a false positive.
 
-The entries for path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file, see [excluding paths](ort-yml.md#excluding-paths) and [curating license findings](ort-yml.md#curating-project-license-findings) for details.
+The entries for path includes, path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file, see [including paths](ort-yml.md#including-paths), [excluding paths](ort-yml.md#excluding-paths) and [curating license findings](ort-yml.md#curating-project-license-findings) for details.
 
 ```yaml
 id: "Pip::example-package:0.0.1"
@@ -61,6 +63,10 @@ path_excludes:
 - pattern: "docs/**"
   reason: "DOCUMENTATION_OF"
   comment: "This directory contains documentation which is not distributed."
+path_includes:
+- pattern: "src/**"
+  reason: "SOURCE_OF"
+  comment: "This directory contains source code of distributed application."
 license_finding_curations:
 - path: "src/**/*.cpp"
   start_lines: "3"

@@ -74,6 +74,12 @@ data class PackageConfiguration(
     val pathExcludes: List<PathExclude> = emptyList(),
 
     /**
+     * Path includes.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val pathIncludes: List<PathInclude> = emptyList(),
+
+    /**
      * License finding curations.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
