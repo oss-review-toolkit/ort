@@ -80,6 +80,10 @@ class WebAppOrtResult {
 
     #pathExcludes = [];
 
+    #pathIncludes = [];
+
+    #pathIncludeReasons;
+
     #paths = [];
 
     #projects = [];
@@ -177,6 +181,14 @@ class WebAppOrtResult {
 
                 for (let i = 0, len = pathExcludes.length; i < len; i++) {
                     this.#pathExcludes.push(new WebAppPathExclude(pathExcludes[i]));
+                }
+            }
+
+            if (obj.path_includes || obj.pathIncludes) {
+                const pathIncludes = obj.path_includes || obj.pathIncludes;
+
+                for (let i = 0, len = pathIncludes.length; i < len; i++) {
+                    this.#pathIncludes.push(new WebAppPathExclude(pathIncludes[i]));
                 }
             }
 
@@ -445,6 +457,22 @@ class WebAppOrtResult {
 
     get pathExcludes() {
         return this.#pathExcludes;
+    }
+
+    get pathIncludes() {
+        return this.#pathIncludes;
+    }
+
+    get pathIncludeReasons() {
+        if (!this.#pathIncludeReasons) {
+            if (Array.isArray(this.#pathIncludes) && this.#pathIncludes.length > 0) {
+                this.#pathIncludeReasons = new Set(this.#pathIncludes.map((value) => value.reason))
+            } else {
+                this.#pathIncludeReasons = new Set();
+            }
+        }
+
+        return this.#pathIncludeReasons;
     }
 
     get paths() {

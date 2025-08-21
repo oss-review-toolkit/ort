@@ -52,6 +52,7 @@ const PackageFindingsTable = ({ webAppPackage }) => {
                         key: finding.key,
                         path: finding.path,
                         pathExcludes: finding.pathExcludes,
+                        isExcludedByPathIncludes: finding.isExcludedByPathIncludes,
                         pathExcludeReasonsText: Array.from(finding.pathExcludeReasons).join(', '),
                         startLine: finding.startLine,
                         value: finding.value
@@ -124,7 +125,7 @@ const PackageFindingsTable = ({ webAppPackage }) => {
                         <span className="ort-excludes">
                             <Tooltip
                                 placement="right"
-                                title={record.pathExcludeReasonsText}
+                                title={record.isExcludedByPathIncludes? Array.from(webAppPackage.pathIncludeReasons).join(', ') : record.pathExcludeReasonsText}
                             >
                                 <FileExcelOutlined className="ort-excluded" />
                             </Tooltip>
@@ -138,11 +139,19 @@ const PackageFindingsTable = ({ webAppPackage }) => {
         });
 
         expandable = {
-            expandedRowRender: (webAppFinding) => (
-                <PathExcludesTable
-                    excludes={webAppFinding.pathExcludes}
-                />
-            ),
+            expandedRowRender: (webAppFinding) => {
+                if (webAppFinding.isExcludedByPathIncludes) {
+                    return (<PathExcludesTable
+                        excludes={webAppPackage.pathIncludes}
+                        isIncludes={true}
+                    />)
+                } else {
+                    return (<PathExcludesTable
+                        excludes={webAppFinding.pathExcludes}
+                    />)
+                }
+
+            },
             expandIcon: (obj) => {
                 const { expanded, onExpand, record } = obj;
 

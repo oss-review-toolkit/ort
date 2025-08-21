@@ -411,6 +411,10 @@ class WebAppPackage {
         return new Set([...pathExcludeReasons, ...scopeExcludeReasons]);
     }
 
+    get pathIncludeReasons() {
+        return this.#webAppOrtResult.pathIncludeReasons
+    }
+
     get excludedFindings() {
         if (!this.#excludedFindings) {
             this.#excludedFindings = [];
@@ -475,6 +479,10 @@ class WebAppPackage {
         }
 
         return this.#pathExcludes;
+    }
+
+    get pathIncludes() {
+        return this.#webAppOrtResult.pathIncludes;
     }
 
     get pathExcludeIndexes() {

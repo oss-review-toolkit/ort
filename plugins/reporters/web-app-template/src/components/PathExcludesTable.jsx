@@ -20,12 +20,18 @@
 import { Table } from 'antd';
 
 // Generates the HTML to display webAppPathExclude(s) as a table
-const PathExcludesTable = ({ excludes }) => {
+const PathExcludesTable = ({ excludes, isIncludes = false }) => {
     const columns = [
         {
             dataIndex: 'reason',
             key: 'reason',
-            title: 'Reason'
+            title: 'Reason',
+
+            render: (text) => (
+                <>
+                    {text} {isIncludes && <i>(includes)</i>}
+                </>
+            )
         },
         {
             dataIndex: 'pattern',
