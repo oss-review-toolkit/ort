@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathInclude
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
@@ -123,9 +124,16 @@ class LicenseInfoResolver(
             ).mapNotNull { curationResult ->
                 val licenseFinding = curationResult.curatedFinding ?: return@mapNotNull null
 
-                licenseFinding.license to findings.pathExcludes.any { pathExclude ->
+                val isExcludedByPathIncludes = licenseFinding.location.isExcludedByPathIncludes(
+                    findings.pathIncludes,
+                    findings.relativeFindingsPath
+                )
+
+                val isMatchedByPathExcludes = findings.pathExcludes.any { pathExclude ->
                     pathExclude.matches(licenseFinding.location.prependedPath(findings.relativeFindingsPath))
                 }
+
+                licenseFinding.license to (isMatchedByPathExcludes || isExcludedByPathIncludes)
             }
         }.groupBy(keySelector = { it.first }, valueTransform = { it.second }).mapValues { (_, excluded) ->
             excluded.all { it }
@@ -190,6 +198,7 @@ class LicenseInfoResolver(
                 val resolvedCopyrightFindings = resolveCopyrights(
                     copyrightFindings,
                     findings.pathExcludes,
+                    findings.pathIncludes,
                     findings.relativeFindingsPath
                 )
 
@@ -204,12 +213,18 @@ class LicenseInfoResolver(
                     it.matches(licenseFinding.location.prependedPath(findings.relativeFindingsPath))
                 }
 
+                val isExcludedByPathIncludes = licenseFinding.location.isExcludedByPathIncludes(
+                    findings.pathIncludes,
+                    findings.relativeFindingsPath
+                )
+
                 licenseFinding.license.decompose().forEach { singleLicense ->
                     resolvedLocations.getOrPut(singleLicense) { mutableSetOf() } += ResolvedLicenseLocation(
                         findings.provenance,
                         licenseFinding.location,
                         appliedCuration = appliedCuration,
                         matchingPathExcludes = matchingPathExcludes,
+                        isExcludedByPathIncludes = isExcludedByPathIncludes,
                         copyrights = resolvedCopyrightFindings
                     )
                 }
@@ -218,6 +233,7 @@ class LicenseInfoResolver(
             unmatchedCopyrights.getOrPut(findings.provenance) { mutableSetOf() } += resolveCopyrights(
                 copyrightFindings = matchResult.unmatchedCopyrights,
                 pathExcludes = findings.pathExcludes,
+                pathIncludes = findings.pathIncludes,
                 relativeFindingsPath = findings.relativeFindingsPath
             )
         }
@@ -228,6 +244,7 @@ class LicenseInfoResolver(
     private fun resolveCopyrights(
         copyrightFindings: Set<CopyrightFinding>,
         pathExcludes: List<PathExclude>,
+        pathIncludes: List<PathInclude>,
         relativeFindingsPath: String
     ): Set<ResolvedCopyrightFinding> =
         copyrightFindings.mapTo(mutableSetOf()) { finding ->
@@ -235,7 +252,17 @@ class LicenseInfoResolver(
                 it.matches(finding.location.prependedPath(relativeFindingsPath))
             }
 
-            ResolvedCopyrightFinding(finding.statement, finding.location, matchingPathExcludes)
+            val isExcludedByPathIncludes = finding.location.isExcludedByPathIncludes(
+                pathIncludes,
+                relativeFindingsPath
+            )
+
+            ResolvedCopyrightFinding(
+                finding.statement,
+                finding.location,
+                matchingPathExcludes,
+                isExcludedByPathIncludes
+            )
         }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
@@ -290,6 +317,7 @@ class LicenseInfoResolver(
             location = UNDEFINED_TEXT_LOCATION,
             appliedCuration = null,
             matchingPathExcludes = emptyList(),
+            isExcludedByPathIncludes = false,
             copyrights = authors.mapTo(mutableSetOf()) { author ->
                 val statement = "Copyright (C) $author".takeUnless {
                     author.contains("Copyright", ignoreCase = true)
@@ -298,10 +326,23 @@ class LicenseInfoResolver(
                 ResolvedCopyrightFinding(
                     statement = statement,
                     location = UNDEFINED_TEXT_LOCATION,
-                    matchingPathExcludes = emptyList()
+                    matchingPathExcludes = emptyList(),
+                    isExcludedByPathIncludes = false
                 )
             }
         )
+
+    /**
+     * Return true if the [TextLocation] is excluded because some path includes are defined and none of them matches
+     * this [TextLocation] prepended with the [relativeFindingsPath].
+     */
+    private fun TextLocation.isExcludedByPathIncludes(pathIncludes: List<PathInclude>, relativeFindingsPath: String) =
+        when {
+            pathIncludes.isEmpty() -> false
+            else -> pathIncludes.none {
+                it.matches(prependedPath(relativeFindingsPath))
+            }
+        }
 }
 
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {

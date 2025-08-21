@@ -37,7 +37,8 @@ class ResolvedLicenseTest : WordSpec({
                         path = "/path/to/file/A",
                         line = 2
                     ),
-                    matchingPathExcludes = emptyList()
+                    matchingPathExcludes = emptyList(),
+                    isExcludedByPathIncludes = false
                 ),
                 ResolvedCopyrightFinding(
                     statement = "Copyright (C) 2022 The ORT Project Authors",
@@ -45,7 +46,8 @@ class ResolvedLicenseTest : WordSpec({
                         path = "/path/to/file/B",
                         line = 2
                     ),
-                    matchingPathExcludes = emptyList()
+                    matchingPathExcludes = emptyList(),
+                    isExcludedByPathIncludes = false
                 )
             )
 
@@ -66,7 +68,8 @@ class ResolvedLicenseTest : WordSpec({
                         path = "/path/to/file/A",
                         line = 2
                     ),
-                    matchingPathExcludes = emptyList()
+                    matchingPathExcludes = emptyList(),
+                    isExcludedByPathIncludes = false
                 ),
                 ResolvedCopyrightFinding(
                     // Note the "." at the end.
@@ -75,7 +78,8 @@ class ResolvedLicenseTest : WordSpec({
                         path = "/path/to/file/B",
                         line = 2
                     ),
-                    matchingPathExcludes = emptyList()
+                    matchingPathExcludes = emptyList(),
+                    isExcludedByPathIncludes = false
                 )
             )
 

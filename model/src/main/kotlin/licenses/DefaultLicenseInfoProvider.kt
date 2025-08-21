@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathInclude
 import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 
@@ -92,6 +93,7 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
                 copyrights = it.summary.copyrightFindings,
                 licenseFindingCurations = config.licenseFindingCurations,
                 pathExcludes = config.pathExcludes,
+                pathIncludes = config.pathIncludes,
                 relativeFindingsPath = config.relativeFindingsPath
             )
         }
@@ -104,12 +106,14 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
             Configuration(
                 ortResult.repository.config.curations.licenseFindings,
                 ortResult.repository.config.excludes.paths,
+                ortResult.repository.config.includes.paths,
                 ortResult.repository.getRelativePath(project.vcsProcessed).orEmpty()
             )
         } ?: ortResult.getPackageConfigurations(id, provenance).let { packageConfigurations ->
             Configuration(
                 packageConfigurations.flatMap { it.licenseFindingCurations },
                 packageConfigurations.flatMap { it.pathExcludes },
+                packageConfigurations.flatMap { it.pathIncludes },
                 ""
             )
         }
@@ -118,5 +122,6 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
 private data class Configuration(
     val licenseFindingCurations: List<LicenseFindingCuration>,
     val pathExcludes: List<PathExclude>,
+    val pathIncludes: List<PathInclude>,
     val relativeFindingsPath: String
 )

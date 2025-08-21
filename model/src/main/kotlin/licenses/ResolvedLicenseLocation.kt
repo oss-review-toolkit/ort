@@ -49,6 +49,11 @@ data class ResolvedLicenseLocation(
     val matchingPathExcludes: List<PathExclude>,
 
     /**
+     * If true, some includes are defines and are not matching this [location].
+     */
+    val isExcludedByPathIncludes: Boolean,
+
+    /**
      * All copyright findings associated to this license location, excluding copyright garbage.
      */
     val copyrights: Set<ResolvedCopyrightFinding>

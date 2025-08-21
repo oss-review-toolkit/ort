@@ -53,6 +53,8 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.model.config.PathInclude
+import org.ossreviewtoolkit.model.config.PathIncludeReason
 import org.ossreviewtoolkit.model.declaredLicenses
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
@@ -68,6 +70,9 @@ import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.transformingCollectionEmptyMatcher
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
+const val COPYRIGHT = "(c) 2010 Holder"
+
+@Suppress("LargeClass")
 class LicenseInfoResolverTest : WordSpec({
     val pkgId = Identifier("Gradle:org.ossreviewtoolkit:ort:1.0.0")
     val vcsInfo = VcsInfo(
@@ -122,6 +127,7 @@ class LicenseInfoResolverTest : WordSpec({
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = emptyList(),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         )
                     )
@@ -144,7 +150,8 @@ class LicenseInfoResolverTest : WordSpec({
                     ResolvedCopyrightFinding(
                         statement = "Copyright Apache-2.0",
                         location = TextLocation("LICENSE", 1),
-                        matchingPathExcludes = emptyList()
+                        matchingPathExcludes = emptyList(),
+                        isExcludedByPathIncludes = false
                     )
                 )
             )
@@ -162,7 +169,8 @@ class LicenseInfoResolverTest : WordSpec({
                     ResolvedCopyrightFinding(
                         statement = "Copyright MIT",
                         location = TextLocation("LICENSE", 31),
-                        matchingPathExcludes = emptyList()
+                        matchingPathExcludes = emptyList(),
+                        isExcludedByPathIncludes = false
                     )
                 )
             )
@@ -218,6 +226,7 @@ class LicenseInfoResolverTest : WordSpec({
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = emptyList(),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         )
                     )
@@ -251,12 +260,13 @@ class LicenseInfoResolverTest : WordSpec({
                             ).toFindingsSet(),
                             copyrights = setOf(
                                 CopyrightFinding("(c) 2009 Holder", TextLocation("LICENSE", 1)),
-                                CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 2)),
+                                CopyrightFinding(COPYRIGHT, TextLocation("LICENSE", 2)),
                                 CopyrightFinding("(c) 2011 Holder", TextLocation("LICENSE", 50)),
                                 CopyrightFinding("(c) 2012 Holder", TextLocation("LICENSE", 51))
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = emptyList(),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         )
                     )
@@ -270,7 +280,7 @@ class LicenseInfoResolverTest : WordSpec({
             result should containCopyrightStatementsForLicenseExactly(
                 "Apache-2.0",
                 "(c) 2009 Holder",
-                "(c) 2010 Holder"
+                COPYRIGHT
             )
             result should containCopyrightStatementsForLicenseExactly(
                 "MIT",
@@ -311,6 +321,7 @@ class LicenseInfoResolverTest : WordSpec({
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = emptyList(),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         )
                     )
@@ -367,11 +378,12 @@ class LicenseInfoResolverTest : WordSpec({
                                 )
                             ).toFindingsSet(),
                             copyrights = setOf(
-                                CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 1)),
-                                CopyrightFinding("(c) 2010 Holder", TextLocation("a/b", 1))
+                                CopyrightFinding(COPYRIGHT, TextLocation("LICENSE", 1)),
+                                CopyrightFinding(COPYRIGHT, TextLocation("a/b", 1))
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = listOf(vcsPathExclude),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         ),
                         Findings(
@@ -383,11 +395,12 @@ class LicenseInfoResolverTest : WordSpec({
                                 )
                             ).toFindingsSet(),
                             copyrights = setOf(
-                                CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 1)),
-                                CopyrightFinding("(c) 2010 Holder", TextLocation("a/b", 1))
+                                CopyrightFinding(COPYRIGHT, TextLocation("LICENSE", 1)),
+                                CopyrightFinding(COPYRIGHT, TextLocation("a/b", 1))
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = listOf(sourceArtifactPathExclude),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         )
                     )
@@ -412,17 +425,153 @@ class LicenseInfoResolverTest : WordSpec({
             ) should beEmpty()
 
             result.pathExcludesForCopyright(
-                "(c) 2010 Holder", provenance, TextLocation("LICENSE", 1)
+                COPYRIGHT, provenance, TextLocation("LICENSE", 1)
             ) should beEmpty()
             result.pathExcludesForCopyright(
-                "(c) 2010 Holder", provenance, TextLocation("a/b", 1)
+                COPYRIGHT, provenance, TextLocation("a/b", 1)
             ) should containExactly(vcsPathExclude)
             result.pathExcludesForCopyright(
-                "(c) 2010 Holder", sourceArtifactProvenance, TextLocation("LICENSE", 1)
+                COPYRIGHT, sourceArtifactProvenance, TextLocation("LICENSE", 1)
             ) should containExactly(sourceArtifactPathExclude)
             result.pathExcludesForCopyright(
-                "(c) 2010 Holder", sourceArtifactProvenance, TextLocation("a/b", 1)
+                COPYRIGHT, sourceArtifactProvenance, TextLocation("a/b", 1)
             ) should beEmpty()
+
+            result.licenses.flatMap { resolvedLicense ->
+                resolvedLicense.originalExpressions.filter { it.source == LicenseSource.DETECTED }
+            } should containExactlyInAnyOrder(
+                ResolvedOriginalExpression("Apache-2.0".toSpdx(), LicenseSource.DETECTED, false),
+                ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DETECTED, true)
+            )
+        }
+
+        "apply path includes" {
+            val sourceArtifact = RemoteArtifact(
+                url = "https://example.com/",
+                hash = Hash.NONE
+            )
+            val sourceArtifactProvenance = ArtifactProvenance(
+                sourceArtifact = sourceArtifact
+            )
+            val sourceArtifactPathInclude = PathInclude(
+                pattern = "LICENSE",
+                reason = PathIncludeReason.SOURCE_OF
+            )
+            val vcsPathInclude = PathInclude(
+                pattern = "a/b",
+                reason = PathIncludeReason.SOURCE_OF
+            )
+
+            val licenseInfos = listOf(
+                createLicenseInfo(
+                    id = pkgId,
+                    detectedLicenses = listOf(
+                        Findings(
+                            provenance = provenance,
+                            licenses = mapOf(
+                                "Apache-2.0" to listOf(
+                                    TextLocation("LICENSE", 1),
+                                    TextLocation("a/b", 1)
+                                ),
+                                "MIT" to listOf(
+                                    TextLocation("c/d", 4)
+                                )
+                            ).toFindingsSet(),
+                            copyrights = setOf(
+                                CopyrightFinding(COPYRIGHT, TextLocation("LICENSE", 1)),
+                                CopyrightFinding(COPYRIGHT, TextLocation("a/b", 1))
+                            ),
+                            licenseFindingCurations = emptyList(),
+                            pathExcludes = emptyList(),
+                            pathIncludes = listOf(vcsPathInclude),
+                            relativeFindingsPath = ""
+                        ),
+                        Findings(
+                            provenance = sourceArtifactProvenance,
+                            licenses = mapOf(
+                                "Apache-2.0" to listOf(
+                                    TextLocation("LICENSE", 1),
+                                    TextLocation("a/b", 1)
+                                ),
+                                "MIT" to listOf(
+                                    TextLocation("c/d", 4)
+                                )
+                            ).toFindingsSet(),
+                            copyrights = setOf(
+                                CopyrightFinding(COPYRIGHT, TextLocation("LICENSE", 1)),
+                                CopyrightFinding(COPYRIGHT, TextLocation("a/b", 1))
+                            ),
+                            licenseFindingCurations = emptyList(),
+                            pathExcludes = emptyList(),
+                            pathIncludes = listOf(sourceArtifactPathInclude),
+                            relativeFindingsPath = ""
+                        )
+                    )
+                )
+            )
+
+            val resolver = createResolver(licenseInfos)
+
+            val result = resolver.resolveLicenseInfo(pkgId)
+
+            result.isExcludedByPathIncludesForLicense(
+                "MIT",
+                provenance,
+                TextLocation("c/d", 4)
+            ) shouldBe true
+            result.isExcludedByPathIncludesForLicense(
+                "MIT",
+                sourceArtifactProvenance,
+                TextLocation("c/d", 4)
+            ) shouldBe true
+
+            result.isExcludedByPathIncludesForLicense(
+                "Apache-2.0",
+                provenance,
+                TextLocation("LICENSE", 1)
+            ) shouldBe true
+
+            result.isExcludedByPathIncludesForLicense(
+                "Apache-2.0",
+                provenance,
+                TextLocation("a/b", 1)
+            ) shouldBe false
+
+            result.isExcludedByPathIncludesForLicense(
+                "Apache-2.0",
+                sourceArtifactProvenance,
+                TextLocation("LICENSE", 1)
+            ) shouldBe false
+
+            result.isExcludedByPathIncludesForLicense(
+                "Apache-2.0",
+                sourceArtifactProvenance,
+                TextLocation("a/b", 1)
+            ) shouldBe true
+
+            result.isExcludedByPathIncludesForCopyright(
+                COPYRIGHT,
+                provenance,
+                TextLocation("LICENSE", 1)
+            ) shouldBe true
+
+            result.isExcludedByPathIncludesForCopyright(
+                COPYRIGHT,
+                provenance,
+                TextLocation("a/b", 1)
+            ) shouldBe false
+
+            result.isExcludedByPathIncludesForCopyright(
+                COPYRIGHT,
+                sourceArtifactProvenance,
+                TextLocation("LICENSE", 1)
+            ) shouldBe false
+
+            result.isExcludedByPathIncludesForCopyright(
+                COPYRIGHT,
+                sourceArtifactProvenance,
+                TextLocation("a/b", 1)
+            ) shouldBe true
 
             result.licenses.flatMap { resolvedLicense ->
                 resolvedLicense.originalExpressions.filter { it.source == LicenseSource.DETECTED }
@@ -456,6 +605,7 @@ class LicenseInfoResolverTest : WordSpec({
                             ),
                             licenseFindingCurations = listOf(curation),
                             pathExcludes = emptyList(),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         )
                     )
@@ -476,7 +626,8 @@ class LicenseInfoResolverTest : WordSpec({
                     ResolvedCopyrightFinding(
                         statement = "(c) 2010 Holder 1",
                         location = TextLocation("LICENSE", 1),
-                        matchingPathExcludes = emptyList()
+                        matchingPathExcludes = emptyList(),
+                        isExcludedByPathIncludes = false
                     )
                 )
             )
@@ -517,6 +668,7 @@ class LicenseInfoResolverTest : WordSpec({
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = emptyList(),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         )
                     ),
@@ -651,6 +803,7 @@ class LicenseInfoResolverTest : WordSpec({
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = emptyList(),
+                            pathIncludes = emptyList(),
                             relativeFindingsPath = ""
                         )
                     )
@@ -686,7 +839,8 @@ class LicenseInfoResolverTest : WordSpec({
                     ResolvedCopyrightFinding(
                         statement = "Copyright 2020 Holder",
                         location = TextLocation("LICENSE", 1),
-                        matchingPathExcludes = emptyList()
+                        matchingPathExcludes = emptyList(),
+                        isExcludedByPathIncludes = false
                     )
                 )
             )
@@ -825,6 +979,7 @@ private fun containLocationForLicense(
     location: TextLocation,
     appliedCuration: LicenseFindingCuration? = null,
     matchingPathExcludes: List<PathExclude> = emptyList(),
+    isExcludedByPathIncludes: Boolean = false,
     copyrights: Set<ResolvedCopyrightFinding> = emptySet()
 ): Matcher<Iterable<ResolvedLicense>?> =
     neverNullMatcher { value ->
@@ -834,6 +989,7 @@ private fun containLocationForLicense(
                 location,
                 appliedCuration,
                 matchingPathExcludes,
+                isExcludedByPathIncludes,
                 copyrights
             )
 
@@ -861,3 +1017,21 @@ private fun ResolvedLicenseInfo.pathExcludesForCopyright(
     .find { it.statement == copyright && it.location == location }
     ?.matchingPathExcludes
     ?.toSet().orEmpty()
+
+private fun ResolvedLicenseInfo.isExcludedByPathIncludesForLicense(
+    license: String,
+    provenance: Provenance,
+    location: TextLocation
+) = find { it.license == SpdxSingleLicenseExpression.parse(license) }
+    ?.locations
+    ?.find { it.provenance == provenance && it.location == location }
+    ?.isExcludedByPathIncludes
+
+private fun ResolvedLicenseInfo.isExcludedByPathIncludesForCopyright(
+    copyright: String,
+    provenance: Provenance,
+    location: TextLocation
+) = flatMap { license -> license.locations.filter { it.provenance == provenance } }
+    .flatMap { it.copyrights }
+    .find { it.statement == copyright && it.location == location }
+    ?.isExcludedByPathIncludes

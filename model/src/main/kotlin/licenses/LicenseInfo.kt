@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathInclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -135,6 +136,11 @@ data class Findings(
      * The list of all path excludes that apply to this [provenance].
      */
     val pathExcludes: List<PathExclude>,
+
+    /**
+     * The list of all path includes that apply to this [provenance].
+     */
+    val pathIncludes: List<PathInclude>,
 
     /**
      * The root path of the locations of the [licenses] and [copyrights] relative to the paths used in the
