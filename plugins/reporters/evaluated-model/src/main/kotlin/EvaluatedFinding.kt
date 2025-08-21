@@ -38,5 +38,9 @@ data class EvaluatedFinding(
     val endLine: Int,
     val scanResult: EvaluatedScanResult,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val pathExcludes: List<PathExclude>
+    val pathExcludes: List<PathExclude>,
+
+    // If the finding is excluded by the presence of a [PathInclude], this property is true.
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val isExcludedByPathIncludes: Boolean
 )

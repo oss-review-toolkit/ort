@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
+import org.ossreviewtoolkit.model.config.PathInclude
 import org.ossreviewtoolkit.model.mapperConfig
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -91,6 +92,7 @@ import org.ossreviewtoolkit.reporter.Statistics
  */
 data class EvaluatedModel(
     val pathExcludes: List<PathExclude>,
+    val pathIncludes: List<PathInclude>,
     val scopeExcludes: List<ScopeExclude>,
     val copyrights: List<CopyrightStatement>,
     val licenses: List<LicenseId>,
