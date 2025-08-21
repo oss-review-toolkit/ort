@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.config.config.PathInclude
 
 data class Includes(
     /**

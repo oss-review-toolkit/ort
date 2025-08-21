@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model.config.config
+package org.ossreviewtoolkit.model.config
 
 enum class PathIncludeReason {
     /**
