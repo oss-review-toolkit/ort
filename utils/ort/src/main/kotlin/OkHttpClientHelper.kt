@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.utils.ort
 import java.io.File
 import java.io.IOException
 import java.lang.invoke.MethodHandles
+import java.net.HttpURLConnection
 import java.net.URI
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
@@ -41,6 +42,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody
+import okhttp3.Route
 
 import okio.buffer
 import okio.sink
@@ -88,6 +90,7 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 private const val CACHE_DIRECTORY = "cache/http"
 private val MAX_CACHE_SIZE_IN_BYTES = 1.gibibytes
 private const val READ_TIMEOUT_IN_SECONDS = 30L
+private const val AUTHORIZATION_HEADER = "Authorization"
 
 /**
  * The default [OkHttpClient] for ORT to use.
@@ -124,7 +127,7 @@ val okHttpClient: OkHttpClient by lazy {
         .cache(cache)
         .connectionSpecs(specs)
         .readTimeout(Duration.ofSeconds(READ_TIMEOUT_IN_SECONDS))
-        .authenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
+        .authenticator(JavaNetAuthenticatorWrapper())
         .proxyAuthenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
         .build()
 }
@@ -276,3 +279,42 @@ suspend fun Call.await(): Response =
             }
         })
     }
+
+/**
+ * A wrapper implementation around OkHttp's [Authenticator.JAVA_NET_AUTHENTICATOR] that is less strict about querying
+ * credentials for requests from the global Java authenticator.
+ *
+ * OkHttp already has a built-in [Authenticator] that uses the global Java authenticator; however, this implementation
+ * is rather picky about the requests for which it delegates to the Java authenticator. It only kicks in for responses
+ * containing a challenge with the "Basic" scheme. This excludes a number of servers that could be handled by the Java
+ * authenticator. For instance, the GitHub package registry does not send any challenges, but it can be accessed with a
+ * token provided by the Java authenticator.
+ *
+ * This implementation handles default authentication request by always querying the Java authenticator for credentials,
+ * no matter which challenges are sent by the server. Only in special cases, such as unexpected response codes, it
+ * delegates to the default OkHttp authenticator.
+ */
+internal class JavaNetAuthenticatorWrapper(
+    private val wrappedAuthenticator: Authenticator = Authenticator.JAVA_NET_AUTHENTICATOR
+) : Authenticator {
+    override fun authenticate(route: Route?, response: Response): Request? {
+        if (response.code != HttpURLConnection.HTTP_UNAUTHORIZED) {
+            return wrappedAuthenticator.authenticate(route, response)
+        }
+
+        // The request already had an Authorization header; so obviously the credentials are not valid.
+        if (response.request.header(AUTHORIZATION_HEADER) != null) return null
+
+        val requestUri = response.request.url.toUri()
+        return requestPasswordAuthentication(requestUri)?.let { authentication ->
+            response.request.newBuilder()
+                .header(
+                    AUTHORIZATION_HEADER,
+                    Credentials.basic(
+                        authentication.userName,
+                        String(authentication.password)
+                    )
+                ).build()
+        }
+    }
+}
