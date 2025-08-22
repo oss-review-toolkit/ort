@@ -20,10 +20,9 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.carthage
 
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.Tuple2
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.shouldBe
 
 import io.mockk.every
@@ -41,7 +40,7 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 class CarthageTest : WordSpec() {
     private val carthage = CarthageFactory.create()
 
-    override fun afterTest(f: suspend (Tuple2<TestCase, TestResult>) -> Unit) {
+    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
         unmockkAll()
     }
 
