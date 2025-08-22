@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.sequences.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.instanceOf
 
@@ -125,7 +126,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
 
                 val navigator = CompatibilityDependencyNavigator(graphNavigator, treeNavigator)
 
-                navigator.directDependencies(treeProject, scopeName) shouldBe dependencies
+                navigator.directDependencies(treeProject, scopeName) shouldContainExactly dependencies
             }
 
             "return the dependencies of a dependency graph project" {
@@ -137,7 +138,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
 
                 val navigator = CompatibilityDependencyNavigator(graphNavigator, treeNavigator)
 
-                navigator.directDependencies(graphProject, scopeName) shouldBe dependencies
+                navigator.directDependencies(graphProject, scopeName) shouldContainExactly dependencies
             }
         }
 
