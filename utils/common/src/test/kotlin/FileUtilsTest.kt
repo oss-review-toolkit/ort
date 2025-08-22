@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.common
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
@@ -38,6 +39,8 @@ import java.io.File
 import java.io.IOException
 
 class FileUtilsTest : WordSpec({
+    isolationMode = IsolationMode.SingleInstance
+
     "expandTilde()" should {
         "expand the path if the SHELL environment variable is set".config(enabled = Os.env["SHELL"] != null) {
             File("~/Desktop").expandTilde() shouldBe Os.userHomeDirectory.resolve("Desktop")

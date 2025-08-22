@@ -34,7 +34,7 @@ abstract class AbstractNestedProvenanceStorageFunTest(vararg listeners: TestList
     protected abstract fun createStorage(): NestedProvenanceStorage
 
     init {
-        register(listeners.asList())
+        extensions(listeners.asList())
 
         beforeEach {
             storage = createStorage()

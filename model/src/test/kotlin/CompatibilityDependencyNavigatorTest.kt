@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
-import io.kotest.assertions.fail
+import io.kotest.assertions.AssertionErrorBuilder
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.sequences.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -65,7 +65,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
                         navigator.graphNavigator shouldBe instanceOf<DependencyGraphNavigator>()
                     }
 
-                    else -> fail("Unexpected dependency navigator: $navigator.")
+                    else -> AssertionErrorBuilder.fail("Unexpected dependency navigator: $navigator.")
                 }
             }
 
