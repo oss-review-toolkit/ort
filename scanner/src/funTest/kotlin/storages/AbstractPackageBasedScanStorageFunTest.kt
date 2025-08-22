@@ -104,7 +104,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
     abstract fun createStorage(): AbstractPackageBasedScanStorage
 
     init {
-        register(listeners.asList())
+        extensions(listeners.asList())
 
         beforeEach {
             storage = createStorage()

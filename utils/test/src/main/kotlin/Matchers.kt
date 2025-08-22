@@ -26,10 +26,10 @@ import com.networknt.schema.InputFormat as NetworkNtInputFormat
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
 
+import io.kotest.assertions.eq.EqMatcher
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.equalityMatcher
 import io.kotest.matchers.neverNullMatcher
 
 import java.io.File
@@ -58,7 +58,7 @@ fun <T, U> transformingCollectionEmptyMatcher(transform: (T) -> Collection<U>): 
 /**
  * A matcher for comparing to expected result files, in particular serialized [ProjectAnalyzerResult]s and [OrtResult]s,
  * that displays a unified diff with the given [contextSize] if the results do not match. If the Kotest system property
- * named "kotest.assertions.multi-line-diff" is set to "simple", this just falls back to [equalityMatcher].
+ * named "kotest.assertions.multi-line-diff" is set to "simple", this just falls back to [EqMatcher].
  */
 fun matchExpectedResult(
     expectedResultUrl: URL,
@@ -78,7 +78,7 @@ fun matchExpectedResult(
 /**
  * A matcher for comparing to expected result files, in particular serialized [ProjectAnalyzerResult]s and [OrtResult]s,
  * that displays a unified diff with the given [contextSize] if the results do not match. If the Kotest system property
- * named "kotest.assertions.multi-line-diff" is set to "simple", this just falls back to [equalityMatcher].
+ * named "kotest.assertions.multi-line-diff" is set to "simple", this just falls back to [EqMatcher].
  */
 fun matchExpectedResult(
     expectedResultFile: File,
@@ -89,7 +89,7 @@ fun matchExpectedResult(
     val expected = patchExpectedResult(expectedResultFile.readText(), definitionFile, custom)
 
     val multiLineDiff = System.getProperty("kotest.assertions.multi-line-diff")
-    if (multiLineDiff != "unified") return equalityMatcher(expected)
+    if (multiLineDiff != "unified") return EqMatcher(expected)
 
     return Matcher { actual ->
         val vcsDir = VersionControlSystem.forDirectory(expectedResultFile)!!
