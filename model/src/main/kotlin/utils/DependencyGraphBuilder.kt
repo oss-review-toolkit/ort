@@ -329,7 +329,14 @@ class DependencyGraphBuilder<D>(
 
         val dependencies1 = ref.dependencies.mapTo(mutableSetOf()) { dependencyIds[it.pkg] }
         val dependencies2 = dependencies.associateBy { dependencyHandler.identifierFor(it) }
-        if (dependencies1 != dependencies2.keys) return false
+
+        if (dependencies1 == dependencies2.keys) {
+            if (!dependencyHandler.requiresDeepDependencyTreeComparison()) {
+                return true
+            }
+        } else {
+            return false
+        }
 
         return ref.dependencies.all { refDep ->
             dependencies2[dependencyIds[refDep.pkg]]?.let { dependencyTreeEquals(refDep, it) } == true
