@@ -37,6 +37,8 @@ dependencies {
     }
 
     api(libs.jackson.databind)
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
