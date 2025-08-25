@@ -49,7 +49,7 @@ class PostgresProvenanceFileStorageFunTest : WordSpec({
     val postgresListener = PostgresListener()
     lateinit var storage: PostgresProvenanceFileStorage
 
-    register(postgresListener)
+    extension(postgresListener)
 
     beforeEach {
         storage = PostgresProvenanceFileStorage(postgresListener.dataSource, FileArchiverConfiguration.TABLE_NAME)

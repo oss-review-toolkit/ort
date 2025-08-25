@@ -44,7 +44,7 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
 
     testImplementation(libs.kotest.assertions.json)
-    testImplementation(libs.kotest.framework.datatest)
+    testImplementation(libs.kotest.framework.engine)
     testImplementation(projects.model)
 }
 

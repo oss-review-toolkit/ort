@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import io.kotest.assertions.fail
+import io.kotest.assertions.AssertionErrorBuilder
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
@@ -226,5 +226,5 @@ private fun Project.createResult(): ProjectAnalyzerResult {
  */
 private fun AnalyzerResult.getProject(id: Identifier): Project {
     val project = projects.find { it.id == id }
-    return project ?: fail("Could not find project with ID $id.")
+    return project ?: AssertionErrorBuilder.fail("Could not find project with ID $id.")
 }

@@ -27,7 +27,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.shouldBe
 
 import java.io.IOException
