@@ -94,7 +94,7 @@ class CtrlXAutomationReporter(
             var licenses = effectiveLicense?.decompose()?.map {
                 val name = it.toString()
                 val spdxId = SpdxLicense.forId(name)?.id
-                val text = input.licenseTextProvider.getLicenseText(name)
+                val text = input.licenseFactProvider.getLicenseText(name)
                 License(name = name, spdx = spdxId, text = text.orEmpty())
             }
 

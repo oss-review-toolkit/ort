@@ -147,7 +147,7 @@ The following licenses and copyrights were found in the source code of this pack
 === ${resolvedLicense.license}
 
 ++++
-[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
+[#assign licenseText = licenseFactProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
 [#if licenseText?has_content]
 
 [#assign copyrights = resolvedLicense.getCopyrights(true)]
@@ -157,7 +157,7 @@ ${copyright}
 
 ${licenseText}
 
-[#assign exceptionText = licenseTextProvider.getLicenseText(resolvedLicense.license.exception()!"")!""]
+[#assign exceptionText = licenseFactProvider.getLicenseText(resolvedLicense.license.exception()!"")!""]
 [#if exceptionText?has_content]
 
 ${exceptionText}

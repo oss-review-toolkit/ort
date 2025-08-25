@@ -28,6 +28,7 @@ plugins {
 dependencies {
     api(projects.model)
     api(projects.plugins.api)
+    api(projects.plugins.licenseFactProviders.licenseFactProviderApi)
 
     implementation(projects.utils.scriptingUtils)
     implementation(projects.utils.spdxUtils)
