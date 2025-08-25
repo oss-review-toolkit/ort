@@ -32,9 +32,12 @@ class WebAppFinding {
 
     #pathExcludes;
 
+    #isExcludedByPathIncludes;
+
     #pathExcludeIndexes = new Set();
 
     #pathExcludeReasons;
+    #pathIncludeReasons;
 
     #startLine;
 
@@ -63,8 +66,15 @@ class WebAppFinding {
             }
 
             const pathExcludes = obj.path_excludes || obj.pathExcludes;
+
             if (Array.isArray(pathExcludes) && pathExcludes.length > 0) {
                 this.#pathExcludeIndexes = new Set(pathExcludes);
+                this.#isExcluded = true;
+            }
+
+            const isExcludedByPathIncludes = obj.isExcludedByPathIncludes || obj.is_excluded_by_path_includes;
+            if (isExcludedByPathIncludes) {
+                this.#isExcludedByPathIncludes = true;
                 this.#isExcluded = true;
             }
 
@@ -153,6 +163,10 @@ class WebAppFinding {
         }
 
         return this.#pathExcludeReasons;
+    }
+
+    get isExcludedByPathIncludes() {
+        return this.#isExcludedByPathIncludes;
     }
 
     get startLine() {
