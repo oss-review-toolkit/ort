@@ -259,20 +259,29 @@ class LicenseInfoResolver(
             // Register the (empty) `archiveDir` for deletion on JVM exit.
             archiveDir.deleteOnExit()
 
-            val directory = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
-            val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
-                relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
-                    it.relativeTo(archiveDir).invariantSeparatorsPath
-                },
-                directories = listOf(directory)
-            ).getValue(directory)
+            val allFiles = archiveDir.walk().filter { it.isFile }.map {
+                it.relativeTo(archiveDir).invariantSeparatorsPath
+            }.toSet()
 
-            licenseFiles += rootLicenseFiles.map { relativePath ->
+            // Collect all unique directories that contain files
+            val allDirectories = allFiles.map { filePath ->
+                val parentPath = filePath.substringBeforeLast('/', "")
+                parentPath
+            }.toSet()
+
+            // Search for license files in all directories, not just the root
+            val allLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
+                relativeFilePaths = allFiles,
+                directories = allDirectories.toList()
+            )
+
+            // Collect license files from all directories, but avoid duplicates
+            allLicenseFiles.values.flatten().toSet().forEach { relativePath ->
                 // Register files in `archiveDir` for deletion. Because files are deleted in reverse order than
                 // registered, this will leave `archiveDir` empty to get properly deleted by the registration above.
                 val file = archiveDir.resolve(relativePath).apply { deleteOnExit() }
 
-                ResolvedLicenseFile(
+                licenseFiles += ResolvedLicenseFile(
                     provenance = provenance,
                     licenseInfo.filter(provenance, relativePath),
                     relativePath,

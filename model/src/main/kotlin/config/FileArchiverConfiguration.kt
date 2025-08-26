@@ -89,7 +89,7 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
         )
     }
 
-    val patterns = LicenseFilePatterns.getInstance().allLicenseFilenames
+    val patterns = LicenseFilePatterns.getInstance().allLicenseFilenames.map { "/**/$it" }
 
     return FileArchiver(patterns, storage)
 }

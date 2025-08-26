@@ -691,6 +691,104 @@ class LicenseInfoResolverTest : WordSpec({
                 )
             )
         }
+
+        "find license files in subdirectories" {
+            val licenseInfos = listOf(
+                createLicenseInfo(
+                    id = pkgId,
+                    detectedLicenses = listOf(
+                        Findings(
+                            provenance = provenance,
+                            licenses = mapOf(
+                                "MIT" to listOf(
+                                    TextLocation("LICENSE", 1)
+                                ),
+                                "Apache-2.0" to listOf(
+                                    TextLocation("third-party/LICENSE.txt", 1)
+                                ),
+                                "BSD-2-Clause" to listOf(
+                                    TextLocation("vendor/lib/LICENSE.txt", 1)
+                                )
+                            ).toFindingsSet(),
+                            copyrights = setOf(
+                                CopyrightFinding("Copyright 2020 Root", TextLocation("LICENSE", 1)),
+                                CopyrightFinding("Copyright 2020 ThirdParty", TextLocation("third-party/LICENSE.txt", 1)),
+                                CopyrightFinding("Copyright 2020 Vendor", TextLocation("vendor/lib/LICENSE.txt", 1))
+                            ),
+                            licenseFindingCurations = emptyList(),
+                            pathExcludes = emptyList(),
+                            relativeFindingsPath = ""
+                        )
+                    )
+                )
+            )
+
+            val archiveDir = tempdir() / "archive-subdirs"
+            extractResource("/archive-with-subdirs.zip", archiveDir / "88dce74b694866af2a5e380206b119f5e38aad5f" / "archive.zip")
+            val archiver = FileArchiver(
+                patterns = LicenseFilePatterns.DEFAULT.licenseFilenames.map { "/**/$it" },
+                storage = FileProvenanceFileStorage(
+                    LocalFileStorage(archiveDir),
+                    FileArchiverConfiguration.ARCHIVE_FILENAME
+                )
+            )
+            val resolver = createResolver(licenseInfos, archiver = archiver)
+
+            val result = resolver.resolveLicenseFiles(pkgId)
+
+            result.id shouldBe pkgId
+            result.files should haveSize(3)
+
+            val licenseFiles = result.files.associateBy { it.path }
+
+            licenseFiles["LICENSE"] shouldNotBeNull {
+                licenses should containLicensesExactly("MIT")
+                licenses should containLocationForLicense(
+                    license = "MIT",
+                    provenance = provenance,
+                    location = TextLocation("LICENSE", 1),
+                    copyrights = setOf(
+                        ResolvedCopyrightFinding(
+                            statement = "Copyright 2020 Root",
+                            location = TextLocation("LICENSE", 1),
+                            matchingPathExcludes = emptyList()
+                        )
+                    )
+                )
+            }
+
+            licenseFiles["third-party/LICENSE.txt"] shouldNotBeNull {
+                licenses should containLicensesExactly("Apache-2.0")
+                licenses should containLocationForLicense(
+                    license = "Apache-2.0",
+                    provenance = provenance,
+                    location = TextLocation("third-party/LICENSE.txt", 1),
+                    copyrights = setOf(
+                        ResolvedCopyrightFinding(
+                            statement = "Copyright 2020 ThirdParty",
+                            location = TextLocation("third-party/LICENSE.txt", 1),
+                            matchingPathExcludes = emptyList()
+                        )
+                    )
+                )
+            }
+
+            licenseFiles["vendor/lib/LICENSE.txt"] shouldNotBeNull {
+                licenses should containLicensesExactly("BSD-2-Clause")
+                licenses should containLocationForLicense(
+                    license = "BSD-2-Clause",
+                    provenance = provenance,
+                    location = TextLocation("vendor/lib/LICENSE.txt", 1),
+                    copyrights = setOf(
+                        ResolvedCopyrightFinding(
+                            statement = "Copyright 2020 Vendor",
+                            location = TextLocation("vendor/lib/LICENSE.txt", 1),
+                            matchingPathExcludes = emptyList()
+                        )
+                    )
+                )
+            }
+        }
     }
 })
 
