@@ -39,6 +39,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.bouncyCastle)
+
     ksp(projects.analyzer)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
