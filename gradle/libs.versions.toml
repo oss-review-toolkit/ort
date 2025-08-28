@@ -16,6 +16,7 @@ asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.19"
 blackduckCommon = "67.0.19"
 blackduckCommonApi = "2023.10.0.7"
+bouncyCastle = "1.81"
 clikt = "5.0.3"
 commonsCompress = "1.28.0"
 cyclonedx = "10.2.1"
@@ -94,6 +95,7 @@ asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = 
 awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
 blackduck-common = { module = "com.blackduck.integration:blackduck-common", version.ref = "blackduckCommon" }
 blackduck-common-api = { module = "com.blackduck.integration:blackduck-common-api", version.ref = "blackduckCommonApi" }
+bouncyCastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncyCastle" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
