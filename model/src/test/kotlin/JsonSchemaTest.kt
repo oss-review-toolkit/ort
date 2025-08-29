@@ -27,6 +27,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldNot
 
 import java.io.File
 
@@ -137,6 +138,130 @@ class JsonSchemaTest : StringSpec({
             .validate(repositoryConfiguration, InputFormat.YAML)
 
         errors should beEmpty()
+    }
+
+    "Package configuration with no matchers validates successfully" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val schema = schemaV7.getSchema(packageConfigurationSchema)
+
+        val configWithNoMatchers = """
+            id: "Pip::example-package:0.0.1"
+        """.trimIndent()
+
+        val errors = schema.validate(configWithNoMatchers, InputFormat.YAML)
+
+        errors should beEmpty()
+    }
+
+    "Package configuration with only vcs validates successfully" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val schema = schemaV7.getSchema(packageConfigurationSchema)
+
+        val configWithVcs = """
+            id: "Pip::example-package:0.0.1"
+            vcs:
+              type: "Git"
+              url: "https://github.com/example/repo.git"
+        """.trimIndent()
+
+        val errors = schema.validate(configWithVcs, InputFormat.YAML)
+
+        errors should beEmpty()
+    }
+
+    "Package configuration with only source_artifact_url validates successfully" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val schema = schemaV7.getSchema(packageConfigurationSchema)
+
+        val configWithSourceArtifact = """
+            id: "Pip::example-package:0.0.1"
+            source_artifact_url: "https://example.com/package.tar.gz"
+        """.trimIndent()
+
+        val errors = schema.validate(configWithSourceArtifact, InputFormat.YAML)
+
+        errors should beEmpty()
+    }
+
+    "Package configuration with only source_code_origin validates successfully" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val schema = schemaV7.getSchema(packageConfigurationSchema)
+
+        val configWithSourceCodeOrigin = """
+            id: "Pip::example-package:0.0.1"
+            source_code_origin: "VCS"
+        """.trimIndent()
+
+        val errors = schema.validate(configWithSourceCodeOrigin, InputFormat.YAML)
+
+        errors should beEmpty()
+    }
+
+    "Package configuration with vcs and source_artifact_url fails validation" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val schema = schemaV7.getSchema(packageConfigurationSchema)
+
+        val configWithVcsAndSourceArtifact = """
+            id: "Pip::example-package:0.0.1"
+            vcs:
+              type: "Git"
+              url: "https://github.com/example/repo.git"
+            source_artifact_url: "https://example.com/package.tar.gz"
+        """.trimIndent()
+
+        val errors = schema.validate(configWithVcsAndSourceArtifact, InputFormat.YAML)
+
+        errors shouldNot beEmpty()
+    }
+
+    "Package configuration with vcs and source_code_origin fails validation" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val schema = schemaV7.getSchema(packageConfigurationSchema)
+
+        val configWithVcsAndSourceCodeOrigin = """
+            id: "Pip::example-package:0.0.1"
+            vcs:
+              type: "Git"
+              url: "https://github.com/example/repo.git"
+            source_code_origin: "VCS"
+        """.trimIndent()
+
+        val errors = schema.validate(configWithVcsAndSourceCodeOrigin, InputFormat.YAML)
+
+        errors shouldNot beEmpty()
+    }
+
+    "Package configuration with source_artifact_url and source_code_origin fails validation" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val schema = schemaV7.getSchema(packageConfigurationSchema)
+
+        val configWithSourceArtifactAndSourceCodeOrigin = """
+            id: "Pip::example-package:0.0.1"
+            source_artifact_url: "https://example.com/package.tar.gz"
+            source_code_origin: "ARTIFACT"
+        """.trimIndent()
+
+        val errors = schema.validate(configWithSourceArtifactAndSourceCodeOrigin, InputFormat.YAML)
+
+        errors shouldNot beEmpty()
+    }
+
+    "Package configuration with all three matchers fails validation" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val schema = schemaV7.getSchema(packageConfigurationSchema)
+
+        val configWithAllMatchers = """
+            id: "Pip::example-package:0.0.1"
+            vcs:
+              type: "Git"
+              url: "https://github.com/example/repo.git"
+            source_artifact_url: "https://example.com/package.tar.gz"
+            source_code_origin: "VCS"
+        """.trimIndent()
+
+        val errors = schema.validate(configWithAllMatchers, InputFormat.YAML)
+
+        errors shouldNot beEmpty()
     }
 })
 
