@@ -81,7 +81,7 @@ SPDX-FileCopyrightText = "2021 The ORT Project Authors (see <https://github.com/
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
-path = "docker/versions.dockerfile"
+path = ".env.versions"
 SPDX-FileCopyrightText = "2024 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
 SPDX-License-Identifier = "Apache-2.0"
 

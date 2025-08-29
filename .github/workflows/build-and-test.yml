@@ -88,7 +88,7 @@ jobs:
       with:
         submodules: recursive
     - name: Set tool version environment variables
-      run: sed "s/^ARG //" docker/versions.dockerfile >> $GITHUB_ENV
+      run: cat .env.versions >> $GITHUB_ENV
     - name: Install required tools
       run: |
           # Install git-repo.
