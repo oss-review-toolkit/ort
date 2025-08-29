@@ -20,7 +20,8 @@
   "packageRules": [
     {
       "matchManagers": ["gradle"],
-      "commitMessageTopic": "{{depName}}"
+      "commitMessageTopic": "{{depName}}",
+      "recreateWhen": "never"
     },
     {
       "matchPackageNames": [
