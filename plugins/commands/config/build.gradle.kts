@@ -30,8 +30,8 @@ dependencies {
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
 
+    implementation(jacksonLibs.jacksonDatabind)
+    implementation(jacksonLibs.jacksonDataformatYaml)
+    implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.clikt)
-    implementation(libs.jackson.databind)
-    implementation(libs.jackson.dataformat.yaml)
-    implementation(libs.jackson.module.kotlin)
 }

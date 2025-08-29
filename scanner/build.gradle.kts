@@ -33,8 +33,8 @@ dependencies {
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
 
+    implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.bundles.exposed)
-    implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.postgres)
     implementation(libs.sw360Client) {

@@ -35,7 +35,7 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation(libs.diffUtils)
-    implementation(libs.jackson.module.kotlin)
+    implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.jsonSchemaValidator)
     implementation(libs.kotest.extensions.junitXml)
     implementation(libs.kotest.framework.engine)

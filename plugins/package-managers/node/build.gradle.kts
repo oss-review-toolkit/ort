@@ -36,7 +36,7 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    api(libs.jackson.databind)
+    api(jacksonLibs.jacksonDatabind)
 
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)

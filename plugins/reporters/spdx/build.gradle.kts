@@ -36,7 +36,7 @@ dependencies {
     implementation(projects.utils.spdxDocument)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jackson.databind)
+    implementation(jacksonLibs.jacksonDatabind)
 
     funTestImplementation(testFixtures(projects.plugins.reporters.spdxReporter))
 

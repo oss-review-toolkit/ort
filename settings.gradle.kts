@@ -17,6 +17,9 @@
  * License-Filename: LICENSE
  */
 
+import dev.aga.gradle.versioncatalogs.Generator.generate
+import dev.aga.gradle.versioncatalogs.GeneratorConfig
+
 // Enable type-safe project accessors, see:
 // https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:type-safe-project-accessors
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -99,5 +102,19 @@ pluginManagement {
 
 plugins {
     // Gradle cannot access the version catalog from here, so hard-code the dependency.
+    id("dev.aga.gradle.version-catalog-generator").version("3.2.2")
     id("org.gradle.toolchains.foojay-resolver-convention").version("1.0.0")
+}
+
+dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage")
+    repositories {
+        mavenCentral()
+    }
+
+    generate("jacksonLibs") {
+        fromToml("jackson-bom") {
+            aliasPrefixGenerator = GeneratorConfig.NO_PREFIX
+        }
+    }
 }

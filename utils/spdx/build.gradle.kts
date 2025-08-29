@@ -36,12 +36,12 @@ plugins {
 }
 
 dependencies {
-    api(libs.jackson.databind)
+    api(jacksonLibs.jacksonDatabind)
 
     implementation(projects.utils.commonUtils)
 
-    implementation(libs.jackson.dataformat.yaml)
-    implementation(libs.jackson.module.kotlin)
+    implementation(jacksonLibs.jacksonDataformatYaml)
+    implementation(jacksonLibs.jacksonModuleKotlin)
 
     testImplementation(libs.kotest.assertions.json)
     testImplementation(libs.kotest.framework.engine)
