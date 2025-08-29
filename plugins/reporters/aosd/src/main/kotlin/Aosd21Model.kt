@@ -108,7 +108,7 @@ internal data class AOSD21(
         fun validate(): Component =
             apply {
                 require(id >= 0L) {
-                    "A component's ID must not be negative."
+                    "A component's ID must not be negative, but it is $id."
                 }
 
                 require(componentName.isNotEmpty()) {
@@ -116,19 +116,22 @@ internal data class AOSD21(
                 }
 
                 require(componentVersion.length in 1..50) {
-                    "A component's version length must be in range 1..50."
+                    "A component's version length must be in range 1..50, but '$componentVersion' has a length of " +
+                        "${componentVersion.length}."
                 }
 
                 require(scmUrl.length >= 5) {
-                    "The SCM or homepage URL must have a length of at least 5."
+                    "The SCM or homepage URL must have a length of at least 5, but '$scmUrl' has a length of " +
+                        "${scmUrl.length}."
                 }
 
                 require(subcomponents.isNotEmpty()) {
                     "A component must have at least one subcomponent."
                 }
 
-                require(subcomponents.first().subcomponentName == FIRST_SUBCOMPONENT_NAME) {
-                    "The first subcomponent must be named 'main'."
+                val firstSubcomponentName = subcomponents.first().subcomponentName
+                require(firstSubcomponentName == FIRST_SUBCOMPONENT_NAME) {
+                    "The first subcomponent must be named 'main', but is it named '$firstSubcomponentName'."
                 }
             }
     }
@@ -184,7 +187,8 @@ internal data class AOSD21(
                 }
 
                 require(licenseText.length >= 20) {
-                    "A subcomponent's license text must have a length of at least 20."
+                    "A subcomponent's license text must have a length of at least 20, but '$licenseText' has a " +
+                        "length of ${licenseText.length}."
                 }
 
                 require(selectedLicense.isEmpty() || spdxId.toSpdx().isValidChoice(selectedLicense.toSpdx())) {
