@@ -11,7 +11,7 @@ kotlinPlugin = "2.2.10"
 ksp = "2.2.10-2.0.2"
 mavenPublishPlugin = "0.34.0"
 
-aeSecurity = "0.142.0"
+aeSecurity = "0.143.0"
 asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.19"
 blackduckCommon = "67.0.19"
