@@ -711,12 +711,18 @@ class LicenseInfoResolverTest : WordSpec({
                                 )
                             ).toFindingsSet(),
                             copyrights = setOf(
-                                CopyrightFinding("Copyright 2020 Root",
-                                    TextLocation("LICENSE", 1)),
-                                CopyrightFinding("Copyright 2020 ThirdParty",
-                                    TextLocation("third-party/LICENSE.txt", 1)),
-                                CopyrightFinding("Copyright 2020 Vendor",
-                                    TextLocation("vendor/lib/LICENSE.txt", 1))
+                                CopyrightFinding(
+                                    "Copyright 2020 Root",
+                                    TextLocation("LICENSE", 1)
+                                ),
+                                CopyrightFinding(
+                                    "Copyright 2020 ThirdParty",
+                                    TextLocation("third-party/LICENSE.txt", 1)
+                                ),
+                                CopyrightFinding(
+                                    "Copyright 2020 Vendor",
+                                    TextLocation("vendor/lib/LICENSE.txt", 1)
+                                )
                             ),
                             licenseFindingCurations = emptyList(),
                             pathExcludes = emptyList(),
@@ -727,8 +733,10 @@ class LicenseInfoResolverTest : WordSpec({
             )
 
             val archiveDir = tempdir() / "archive-subdirs"
-            extractResource("/archive-with-subdirs.zip",
-                archiveDir / "88dce74b694866af2a5e380206b119f5e38aad5f" / "archive.zip")
+            extractResource(
+                "/archive-with-subdirs.zip",
+                archiveDir / "88dce74b694866af2a5e380206b119f5e38aad5f" / "archive.zip"
+            )
             val archiver = FileArchiver(
                 patterns = LicenseFilePatterns.DEFAULT.licenseFilenames.map { "/**/$it" },
                 storage = FileProvenanceFileStorage(
