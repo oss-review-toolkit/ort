@@ -26,7 +26,7 @@ dependencies {
     api(libs.okhttp)
     api(libs.retrofit)
 
-    implementation(libs.jackson.module.kotlin)
+    implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.retrofit.converter.jackson)
 

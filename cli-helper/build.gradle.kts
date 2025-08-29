@@ -42,9 +42,9 @@ dependencies {
     implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
 
+    implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.clikt)
     implementation(libs.commonsCompress)
-    implementation(libs.jackson.module.kotlin)
     implementation(libs.jslt)
     implementation(libs.log4j.api)
     implementation(libs.slf4j)

@@ -27,15 +27,15 @@ dependencies {
     api(projects.reporter)
     api(projects.utils.spdxUtils)
 
-    api(libs.jackson.annotations)
-    api(libs.jackson.databind)
+    api(jacksonLibs.jacksonAnnotations)
+    api(jacksonLibs.jacksonDatabind)
 
     ksp(projects.reporter)
 
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.jackson.core)
-    implementation(libs.jackson.dataformat.yaml)
+    implementation(jacksonLibs.jacksonCore)
+    implementation(jacksonLibs.jacksonDataformatYaml)
 
     funTestImplementation(testFixtures(projects.reporter))
 }

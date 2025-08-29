@@ -32,8 +32,8 @@ dependencies {
     implementation(projects.utils.spdxDocument)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jackson.core)
-    implementation(libs.jackson.databind)
+    implementation(jacksonLibs.jacksonCore)
+    implementation(jacksonLibs.jacksonDatabind)
     implementation(libs.okhttp)
 
     ksp(projects.analyzer)

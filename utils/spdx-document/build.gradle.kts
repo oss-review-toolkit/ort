@@ -23,16 +23,16 @@ plugins {
 }
 
 dependencies {
-    api(libs.jackson.annotations)
-    api(libs.jackson.databind)
+    api(jacksonLibs.jacksonAnnotations)
+    api(jacksonLibs.jacksonDatabind)
 
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jackson.core)
-    implementation(libs.jackson.dataformat.yaml)
-    implementation(libs.jackson.datatype.jsr310)
-    implementation(libs.jackson.module.kotlin)
+    implementation(jacksonLibs.jacksonCore)
+    implementation(jacksonLibs.jacksonDataformatYaml)
+    implementation(jacksonLibs.jacksonDatatypeJsr310)
+    implementation(jacksonLibs.jacksonModuleKotlin)
 
     testImplementation(libs.kotest.assertions.json)
 }

@@ -31,6 +31,6 @@ dependencies {
     implementation(projects.plugins.packageManagers.nugetPackageManager)
     implementation(projects.utils.commonUtils)
 
+    implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.clikt)
-    implementation(libs.jackson.module.kotlin)
 }
