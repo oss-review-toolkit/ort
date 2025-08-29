@@ -69,7 +69,7 @@ class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descript
 
     private val configWriter = YAMLMapper()
         .registerKotlinModule()
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
         .writerFor(OrtConfiguration::class.java)
         .withRootName("ort")
 
