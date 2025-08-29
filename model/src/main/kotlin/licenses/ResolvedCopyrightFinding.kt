@@ -39,5 +39,10 @@ data class ResolvedCopyrightFinding(
     /**
      * All [PathExclude]s matching this [location].
      */
-    val matchingPathExcludes: List<PathExclude>
+    val matchingPathExcludes: List<PathExclude>,
+
+    /**
+     * If true, some includes are defines and are not matching this [location].
+     */
+    val isExcludedByPathIncludes: Boolean
 )
