@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-INCLUDE docker/versions.dockerfile
+INCLUDE_ARGS .env.versions
 
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
 FROM eclipse-temurin:$JAVA_VERSION-jdk-$UBUNTU_VERSION AS base
