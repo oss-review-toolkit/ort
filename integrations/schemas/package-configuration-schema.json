@@ -40,6 +40,12 @@
     },
     "source_artifact_url": {
       "type": "string"
+    },
+    "source_code_origin": {
+      "enum": [
+        "VCS",
+        "ARTIFACT"
+      ]
     }
   },
   "definitions": {
@@ -143,16 +149,27 @@
   "required": [
     "id"
   ],
-  "oneOf": [
-    {
-      "required": [
-        "vcs"
-      ]
-    },
-    {
-      "required": [
-        "source_artifact_url"
-      ]
-    }
-  ]
+  "not": {
+    "description": "A package configuration must contain at most one of 'vcs', 'source_artifact_url', or 'source_code_origin'.",
+    "anyOf": [
+      {
+        "allOf": [
+          { "required": ["vcs"] },
+          { "required": ["source_artifact_url"] }
+        ]
+      },
+      {
+        "allOf": [
+          { "required": ["vcs"] },
+          { "required": ["source_code_origin"] }
+        ]
+      },
+      {
+        "allOf": [
+          { "required": ["source_artifact_url"] },
+          { "required": ["source_code_origin"] }
+        ]
+      }
+    ]
+  }
 }
