@@ -1,4 +1,4 @@
-# syntax=devthefuture/dockerfile-x:v1.4.2
+# syntax=devthefuture/dockerfile-x:v1.5.0
 # The above opts-in for an extended syntax that supports e.g. "INCLUDE" statements, see
 # https://codeberg.org/devthefuture/dockerfile-x
 
@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-INCLUDE docker/versions.dockerfile
+INCLUDE_ARGS .env.versions
 
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
 FROM eclipse-temurin:$JAVA_VERSION-jdk-$UBUNTU_VERSION AS base
