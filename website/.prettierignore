@@ -1,0 +1,16 @@
+# Ignore markdown files (formatted by another tool)
+*.md
+*.mdx
+
+# Ignore build output
+build/
+.docusaurus/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore lock files
+package-lock.json
+
+# Ignore static assets
+static/
