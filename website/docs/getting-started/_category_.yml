@@ -1,6 +1,6 @@
 position: 2
-label: "Getting Started"
+label: 'Getting Started'
 link:
-  type: "generated-index"
-  title: "Getting Started"
-  description: "How to get started with using ORT."
+  type: 'generated-index'
+  title: 'Getting Started'
+  description: 'How to get started with using ORT.'

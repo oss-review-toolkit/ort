@@ -1,6 +1,6 @@
 position: 3
-label: "Tools"
+label: 'Tools'
 link:
-  type: "generated-index"
-  title: "Tools"
-  description: "Details about the ORT tools."
+  type: 'generated-index'
+  title: 'Tools'
+  description: 'Details about the ORT tools.'

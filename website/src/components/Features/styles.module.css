@@ -7,7 +7,11 @@
   display: flex;
   align-items: center;
   padding: 5rem 20%;
-  background: linear-gradient(to bottom, var(--ifm-background-color), var(--ifm-color-emphasis-100));
+  background: linear-gradient(
+    to bottom,
+    var(--ifm-background-color),
+    var(--ifm-color-emphasis-100)
+  );
   width: 100%;
   justify-content: space-between;
 }

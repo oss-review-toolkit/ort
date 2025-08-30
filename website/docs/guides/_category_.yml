@@ -1,5 +1,5 @@
 position: 5
-label: "Guides"
+label: 'Guides'
 link:
-  type: "generated-index"
-  title: "Guides"
+  type: 'generated-index'
+  title: 'Guides'

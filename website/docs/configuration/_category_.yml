@@ -1,6 +1,6 @@
 position: 4
-label: "Configuration"
+label: 'Configuration'
 link:
-  type: "generated-index"
-  title: "Configuration"
-  description: "The ORT configuration options."
+  type: 'generated-index'
+  title: 'Configuration'
+  description: 'The ORT configuration options.'

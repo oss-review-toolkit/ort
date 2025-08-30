@@ -8,7 +8,11 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: radial-gradient(circle at center, var(--ifm-color-primary-lighter), var(--ifm-color-primary-dark));
+  background: radial-gradient(
+    circle at center,
+    var(--ifm-color-primary-lighter),
+    var(--ifm-color-primary-dark)
+  );
 }
 
 .heroBanner a {
