@@ -96,6 +96,22 @@ jobs:
         run: |
           npm install -g markdownlint-rule-max-one-sentence-per-line@0.0.2
           npx markdownlint-cli2
+  prettier-website:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+        working-directory: website
+      - name: Run Prettier
+        run: npm run format:check
+        working-directory: website
   qodana-scan:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-24.04
