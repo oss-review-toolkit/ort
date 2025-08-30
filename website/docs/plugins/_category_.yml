@@ -1,5 +1,5 @@
 position: 6
-label: "Plugins"
+label: 'Plugins'
 link:
-  type: "generated-index"
-  title: "Plugins"
+  type: 'generated-index'
+  title: 'Plugins'
