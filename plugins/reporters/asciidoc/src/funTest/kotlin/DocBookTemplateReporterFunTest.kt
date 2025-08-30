@@ -25,6 +25,7 @@ import io.kotest.matchers.shouldBe
 
 import java.time.LocalDate
 
+import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -34,9 +35,13 @@ class DocBookTemplateReporterFunTest : StringSpec({
     "DocBook report is created from default template" {
         val expectedResult = readResource("/docbook-template-reporter-expected-result.xml")
 
-        val reportContent = DocBookTemplateReporterFactory.create()
-            .generateReport(ReporterInput(ORT_RESULT), tempdir())
-            .single().getOrThrow().readText()
+        val reportContent = DocBookTemplateReporterFactory.create().generateReport(
+            ReporterInput(
+                ORT_RESULT,
+                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+            ),
+            tempdir()
+        ).single().getOrThrow().readText()
 
         reportContent shouldBe patchExpectedResult(
             expectedResult,
