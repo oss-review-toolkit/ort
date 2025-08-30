@@ -28,11 +28,27 @@ import ReporterSvg from '@site/static/img/reporter.svg';
 import ScannerSvg from '@site/static/img/scanner.svg';
 
 function Tool({title, Svg, description}) {
+  const targetId = title.toLowerCase();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+
+    // Update the URL manually to support back button navigation.
+    window.history.pushState(null, '', `#${targetId}`);
+
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className={clsx(styles.tool, 'shadow--tl')}>
-      <h3>{title}</h3>
-      <Svg className={styles.toolSvg} role="img"/>
-      <p>{description}</p>
+      <a href={`#${targetId}`} onClick={handleClick} className={styles.toolLink}>
+          <h3>{title}</h3>
+          <Svg className={styles.toolSvg} role="img"/>
+          <p>{description}</p>
+      </a>
     </div>
   );
 }
