@@ -193,8 +193,11 @@ const FeatureList = [
 ];
 
 function Feature({Svg, title, link, command, description, reverse}) {
+  // Create an ID based on the tool title for linking.
+  const toolId = title.toLowerCase();
+
   return (
-    <div className={clsx(styles.feature, reverse && styles.featureReverse)}>
+    <div id={toolId} className={clsx(styles.feature, reverse && styles.featureReverse)}>
       <div className={styles.featureSvgContainer}>
         <Link to={link}>
           <Svg className={styles.featureSvg} role="img" />

@@ -32,7 +32,7 @@
 
 .tool {
     border: 2px solid var(--ifm-color-primary);
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 0.5rem;
     text-align: center;
     margin: auto;
@@ -45,12 +45,43 @@
     justify-content: space-between;
     background: linear-gradient(to bottom, var(--ifm-color-primary-lightest), var(--ifm-color-primary));
     color: var(--ifm-hero-text-color);
+    transition: all 0.3s ease;
+}
+
+.tool:hover {
+    transform: translateX(-2px) translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    border-color: var(--ifm-color-primary-darker);
+}
+
+.toolLink {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    text-decoration: none;
+    color: var(--ifm-hero-text-color);
+    padding: 0.5rem;
+}
+
+.toolLink:hover {
+    color: var(--ifm-hero-text-color);
+    text-decoration: none;
+}
+
+.toolLink h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ifm-hero-text-color);
 }
 
 .tool p {
     font-size: 0.8em;
     padding: 0;
     margin: 0;
+    color: var(--ifm-hero-text-color);
+    opacity: 0.9;
 }
 
 .toolSvg {
@@ -58,6 +89,7 @@
     height: 4rem;
     margin: auto;
     display: block;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
 .arrow {
@@ -65,6 +97,7 @@
     color: var(--ifm-color-primary);
     align-self: center;
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -80,4 +113,3 @@
         transform: rotate(90deg);
     }
 }
-
