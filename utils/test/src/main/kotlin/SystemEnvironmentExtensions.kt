@@ -23,7 +23,48 @@
 
 package org.ossreviewtoolkit.utils.test
 
+import io.kotest.extensions.system.OverrideMode
+import io.kotest.extensions.system.OverrideMode.SetOrError
+
 import java.lang.reflect.Field
+
+/**
+ * Modifies System Environment with chosen key and value
+ *
+ * This is a helper function for code that uses Environment Variables. It changes the specific [key] from [System.getenv]
+ * with the specified [value], only during the execution of [block].
+ *
+ * To do this, this function uses a trick that makes the System Environment editable, and changes [key]. Any previous
+ * environment (anything not overridden) will also be in the environment. If the chosen key is in the environment,
+ * it will be changed according to [mode]. If the chosen key is not in the environment, it will be included.
+ *
+ * After the execution of [block], the environment is set to what it was before.
+ *
+ * **ATTENTION**: This code is susceptible to race conditions. If you attempt to change the environment while it was
+ * already changed, the result is inconsistent, as the System Environment Map is a single map.
+ */
+inline fun <T> withEnvironment(key: String, value: String?, mode: OverrideMode = SetOrError, block: () -> T): T {
+    return withEnvironment(key to value, mode, block)
+}
+
+/**
+ * Modifies System Environment with chosen key and value
+ *
+ * This is a helper function for code that uses Environment Variables. It changes the specific key from [System.getenv]
+ * with the specified value, only during the execution of [block].
+ *
+ * To do this, this function uses a trick that makes the System Environment editable, and changes key. Any previous
+ * environment (anything not overridden) will also be in the environment. If the chosen key is in the environment,
+ * it will be changed according to [mode]. If the chosen key is not in the environment, it will be included.
+ *
+ * After the execution of [block], the environment is set to what it was before.
+ *
+ * **ATTENTION**: This code is susceptible to race conditions. If you attempt to change the environment while it was
+ * already changed, the result is inconsistent, as the System Environment Map is a single map.
+ */
+inline fun <T> withEnvironment(environment: Pair<String, String?>, mode: OverrideMode = SetOrError, block: () -> T): T {
+    return withEnvironment(mapOf(environment), mode, block)
+}
 
 /**
  * Modifies System Environment with chosen keys and values
@@ -33,14 +74,14 @@ import java.lang.reflect.Field
  *
  * To do this, this function uses a trick that makes the System Environment editable, and changes key. Any previous
  * environment (anything not overridden) will also be in the environment. If the chosen key is in the environment,
- * it will be overridden. If the chosen key is not in the environment, it will be included.
+ * it will be changed according to [mode]. If the chosen key is not in the environment, it will be included.
  *
  * After the execution of [block], the environment is set to what it was before.
  *
  * **ATTENTION**: This code is susceptible to race conditions. If you attempt to change the environment while it was
  * already changed, the result is inconsistent, as the System Environment Map is a single map.
  */
-inline fun <T> withEnvironment(environment: Map<String, String?>, block: () -> T): T {
+inline fun <T> withEnvironment(environment: Map<String, String?>, mode: OverrideMode = SetOrError, block: () -> T): T {
     val isWindows = "windows" in System.getProperty("os.name").orEmpty().lowercase()
     val originalEnvironment = if (isWindows) {
         System.getenv().toSortedMap(String.CASE_INSENSITIVE_ORDER)
@@ -48,7 +89,7 @@ inline fun <T> withEnvironment(environment: Map<String, String?>, block: () -> T
         System.getenv().toMap()
     }
 
-    setEnvironmentMap(setOrOverride(originalEnvironment, environment))
+    setEnvironmentMap(mode.override(originalEnvironment, environment))
 
     try {
         return block()
@@ -103,6 +144,3 @@ private fun MutableMap<String, String>.putReplacingNulls(map: Map<String, String
         if (value == null) remove(key) else put(key, value)
     }
 }
-
-fun setOrOverride(originalValues: Map<String, String>, newValues: Map<String, String?>) =
-    originalValues.toMutableMap().apply { putReplacingNulls(newValues) }
