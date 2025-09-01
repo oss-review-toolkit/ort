@@ -27,6 +27,7 @@ dependencies {
     api(projects.plugins.versionControlSystems.gitVersionControlSystem)
 
     api(libs.kotest.assertions.core)
+    api(libs.kotest.extensions)
     api(libs.logbackClassic) {
         because("Transitively export this to consumers so they do not have to declare a logger implementation.")
     }
