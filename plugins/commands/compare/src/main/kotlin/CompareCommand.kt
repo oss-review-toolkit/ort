@@ -42,6 +42,7 @@ import com.github.difflib.UnifiedDiffUtils
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -93,6 +94,11 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
         help = "Ignore environment differences."
     ).flag()
 
+    private val ignoreToolVersions by option(
+        "--ignore-tool-versions", "-v",
+        help = "Ignore tool version differences."
+    ).flag()
+
     private val ignoreTmpDir by option(
         "--ignore-tmp-dir", "-d",
         help = "Ignore temporary directory differences."
@@ -115,6 +121,7 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
                 // TODO: Find a way to also ignore temporary directories (when diffing semantically).
                 if (ignoreTime) addDeserializer(Instant::class.java, EpochInstantDeserializer())
                 if (ignoreEnvironment) addDeserializer(Environment::class.java, DefaultEnvironmentDeserializer())
+                if (ignoreToolVersions) addDeserializer(ScannerDetails::class.java, EmptyScannerVersionDeserializer())
             }
         )
 
@@ -195,6 +202,13 @@ private class DefaultEnvironmentDeserializer : StdDeserializer<Environment>(Envi
             // Just consume the JSON object node without actually using it.
             parser.codec.readTree<JsonNode>(parser)
         }
+}
+
+private class EmptyScannerVersionDeserializer : StdDeserializer<ScannerDetails>(ScannerDetails::class.java) {
+    override fun deserialize(parser: JsonParser, context: DeserializationContext): ScannerDetails {
+        val node = parser.codec.readTree<JsonNode>(parser)
+        return ScannerDetails(node["name"].textValue(), "", node["configuration"].textValue())
+    }
 }
 
 private fun Map<Regex, String>.replaceIn(text: String) =

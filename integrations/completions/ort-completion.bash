@@ -435,6 +435,11 @@ _ort_compare() {
           in_param=''
           continue
           ;;
+        --ignore-tool-versions|-v)
+          __skip_opt_eq
+          in_param=''
+          continue
+          ;;
         --ignore-tmp-dir|-d)
           __skip_opt_eq
           in_param=''
@@ -457,7 +462,7 @@ _ort_compare() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--method -m --context-size -C --ignore-time -t --ignore-environment -e --ignore-tmp-dir -d -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--method -m --context-size -C --ignore-time -t --ignore-environment -e --ignore-tool-versions -v --ignore-tmp-dir -d -h --help' -- "${word}"))
     return
   fi
 
@@ -475,6 +480,8 @@ _ort_compare() {
     "--ignore-time")
       ;;
     "--ignore-environment")
+      ;;
+    "--ignore-tool-versions")
       ;;
     "--ignore-tmp-dir")
       ;;
