@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
-import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -152,15 +151,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         val endTime = Instant.now()
 
-        val toolVersions = mutableMapOf<String, String>()
-
-        info.managedFiles.keys.forEach { manager ->
-            if (manager is CommandLineTool) {
-                toolVersions[manager.descriptor.id] = manager.getVersion()
-            }
-        }
-
-        val run = AnalyzerRun(startTime, endTime, Environment(toolVersions = toolVersions), config, analyzerResult)
+        val run = AnalyzerRun(startTime, endTime, Environment(), config, analyzerResult)
 
         return OrtResult(repository = repository, analyzer = run).setPackageCurations(packageCurationProviders)
     }

@@ -22,7 +22,6 @@ analyzer:
     processors: "<REPLACE_PROCESSORS>"
     max_memory: "<REPLACE_MAX_MEMORY>"
     variables: {}
-    tool_versions: {}
   config:
     allow_dynamic_versions: false
     enabled_package_managers: []
@@ -194,7 +193,6 @@ scanner:
     processors: "<REPLACE_PROCESSORS>"
     max_memory: "<REPLACE_MAX_MEMORY>"
     variables: {}
-    tool_versions: {}
   config:
     skip_concluded: false
     skip_excluded: false

@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.ort
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import java.io.File
 import java.util.jar.JarFile
 
@@ -29,6 +31,7 @@ import org.ossreviewtoolkit.utils.common.getConflictingKeys
 /**
  * A description of the environment that ORT was executed in.
  */
+@JsonIgnoreProperties("tool_versions")
 data class Environment(
     /**
      * The version of the OSS Review Toolkit as a string.
@@ -65,12 +68,7 @@ data class Environment(
      */
     val variables: Map<String, String> = RELEVANT_VARIABLES.mapNotNull { key ->
         Os.env[key]?.let { value -> key to value }
-    }.toMap(),
-
-    /**
-     * Map of used tools and their installed versions, defaults to an empty map.
-     */
-    val toolVersions: Map<String, String> = emptyMap()
+    }.toMap()
 ) {
     companion object {
         /**
@@ -117,8 +115,8 @@ data class Environment(
     /**
      * Merge this [Environment] with the given [other] [Environment].
      *
-     * Both [Environment]s must have the same properties except for [variables] and [toolVersions], otherwise an
-     * [IllegalArgumentException] is thrown.
+     * Both [Environment]s must have the same properties except for [variables], otherwise an [IllegalArgumentException]
+     * is thrown.
      */
     operator fun plus(other: Environment) =
         Environment(
@@ -158,13 +156,6 @@ data class Environment(
                 }
 
                 variables + other.variables
-            },
-            toolVersions = toolVersions.getConflictingKeys(other.toolVersions).let { conflictingKeys ->
-                require(conflictingKeys.isEmpty()) {
-                    "Cannot merge Environments with conflicting tool versions keys: $conflictingKeys"
-                }
-
-                toolVersions + other.toolVersions
             }
         )
 }

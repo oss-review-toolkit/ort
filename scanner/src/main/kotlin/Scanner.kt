@@ -168,10 +168,6 @@ class Scanner(
 
         val endTime = Instant.now()
 
-        val toolVersions = scannerWrappers.associate { scanner ->
-            scanner.descriptor.id to scanner.version
-        }
-
         val provenances = packages.mapTo(mutableSetOf()) { pkg ->
             val packageProvenance = controller.getPackageProvenance(pkg.id)
 
@@ -209,7 +205,7 @@ class Scanner(
         return ScannerRun(
             startTime = startTime,
             endTime = endTime,
-            environment = Environment(toolVersions = toolVersions),
+            environment = Environment(),
             config = scannerConfig,
             provenances = provenances,
             scanResults = scanResults,
