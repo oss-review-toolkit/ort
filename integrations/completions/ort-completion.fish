@@ -52,6 +52,7 @@ complete -c ort -n "__fish_seen_subcommand_from compare" -l method -s m -r -fa "
 complete -c ort -n "__fish_seen_subcommand_from compare" -l context-size -s C -r -d 'The number of unmodified lines to display in the context of a modified line. Only applies to unified diff output.'
 complete -c ort -n "__fish_seen_subcommand_from compare" -l ignore-time -s t -d 'Ignore time differences.'
 complete -c ort -n "__fish_seen_subcommand_from compare" -l ignore-environment -s e -d 'Ignore environment differences.'
+complete -c ort -n "__fish_seen_subcommand_from compare" -l ignore-tool-versions -s v -d 'Ignore tool version differences.'
 complete -c ort -n "__fish_seen_subcommand_from compare" -l ignore-tmp-dir -s d -d 'Ignore temporary directory differences.'
 complete -c ort -n "__fish_seen_subcommand_from compare" -s h -l help -d 'Show this message and exit'
 
