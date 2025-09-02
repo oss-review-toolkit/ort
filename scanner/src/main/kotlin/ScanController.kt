@@ -245,8 +245,8 @@ internal class ScanController(
      * 'components/conanfile.txt'. This is because scanner interfaces receive packages as input, and this aims at
      * providing a deterministic ordering when choosing a reference package for packages with the same provenance.
      */
-    fun getPackagesConsolidatedByProvenance(): Map<KnownProvenance, List<Package>> {
-        val packagesByProvenance = mutableMapOf<KnownProvenance, MutableSet<Package>>()
+    fun getPackagesConsolidatedByProvenance(): Map<RemoteProvenance, List<Package>> {
+        val packagesByProvenance = mutableMapOf<RemoteProvenance, MutableSet<Package>>()
         val comparator = compareBy<Package, String>(PATH_STRING_COMPARATOR) { it.id.name }.thenBy { it.id }
 
         packages.forEach { pkg ->
