@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
@@ -41,8 +40,6 @@ class FindingCurationMatcherTest : WordSpec() {
     private val matcher = FindingCurationMatcher()
     private lateinit var finding: LicenseFinding
     private lateinit var curation: LicenseFindingCuration
-
-    override fun isolationMode() = IsolationMode.InstancePerLeaf
 
     private fun setupFinding(license: String, path: String, startLine: Int, endLine: Int) {
         finding = LicenseFinding(

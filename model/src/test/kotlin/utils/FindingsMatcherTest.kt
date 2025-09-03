@@ -51,7 +51,8 @@ class FindingsMatcherTest : WordSpec() {
     private val licenseFindings = mutableSetOf<LicenseFinding>()
     private val copyrightFindings = mutableSetOf<CopyrightFinding>()
 
-    override fun isolationMode() = IsolationMode.InstancePerLeaf
+    // Use InstancePerRoot to work around https://github.com/kotest/kotest/issues/5021.
+    override fun isolationMode() = IsolationMode.InstancePerRoot
 
     private fun setupLicenseFinding(license: String, path: String, line: Int = 1) {
         licenseFindings += LicenseFinding(
