@@ -907,7 +907,7 @@ class FossId internal constructor(
                 source = descriptor.id,
                 message = "This scan has $pendingFilesCount file(s) pending identification in FossID. " +
                     "Please review and resolve them at: $fossIdScanUrl",
-                severity = Severity.HINT
+                severity = if (config.treatPendingIdentificationsAsError) Severity.ERROR else Severity.HINT
             )
         )
 

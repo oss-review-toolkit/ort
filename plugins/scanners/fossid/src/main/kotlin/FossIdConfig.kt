@@ -131,7 +131,11 @@ data class FossIdConfig(
 
     /** Whether to write scan results to the storage. */
     @OrtPluginOption(defaultValue = "true")
-    val writeToStorage: Boolean
+    val writeToStorage: Boolean,
+
+    /** Treat pending identifications as errors instead of hints. */
+    @OrtPluginOption(defaultValue = "false")
+    val treatPendingIdentificationsAsError: Boolean
 ) {
     init {
         require(deltaScanLimit > 0) {
