@@ -259,7 +259,8 @@ class OrtConfigurationTest : WordSpec({
                             "detectCopyrightStatements" to "true",
                             "timeout" to "60",
                             "urlMappings" to urlMapping,
-                            "sensitivity" to "10"
+                            "sensitivity" to "10",
+                            "treatPendingIdentificationsAsError" to "false"
                         )
 
                         secrets should containExactlyEntries(

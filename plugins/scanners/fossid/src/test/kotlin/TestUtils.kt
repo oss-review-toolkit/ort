@@ -152,7 +152,8 @@ internal fun createConfig(
         urlMappings = null,
         writeToStorage = false,
         logRequests = false,
-        isArchiveMode = isArchiveMode
+        isArchiveMode = isArchiveMode,
+        treatPendingIdentificationsAsError = false
     )
 
     val namingProvider = createNamingProviderMock()

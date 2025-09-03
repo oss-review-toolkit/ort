@@ -277,6 +277,8 @@ ort:
 
           sensitivity: 10
 
+          treatPendingIdentificationsAsError: false
+
         secrets:
           user: user
           apiKey: XYZ
