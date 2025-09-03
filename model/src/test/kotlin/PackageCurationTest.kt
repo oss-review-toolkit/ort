@@ -270,6 +270,21 @@ class PackageCurationTest : WordSpec({
             curation.isApplicable(pkgVersionInsideRange.id) shouldBe true
             curation.isApplicable(pkgVersionOutsideRange.id) shouldBe false
         }
+
+        "work with URLs as keys for declared license mappings" {
+            val licenseUrl = "https://www.nuget.org/packages/CommandLineParser/2.9.1/license"
+
+            val pkg = Package.EMPTY.copy(declaredLicenses = setOf(licenseUrl))
+
+            val curation = PackageCuration(
+                id = pkg.id,
+                data = PackageCurationData(declaredLicenseMapping = mapOf(licenseUrl to "MIT".toSpdx()))
+            )
+
+            val curatedPkg = curation.apply(pkg.toCuratedPackage())
+
+            curatedPkg.metadata.declaredLicensesProcessed.allLicenses.shouldContainExactly("MIT")
+        }
     }
 
     "Applying multiple curations" should {

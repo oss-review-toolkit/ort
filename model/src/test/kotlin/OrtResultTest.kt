@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.should
@@ -46,9 +47,44 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OrtResultTest : WordSpec({
+    "applyPackageCurations()" should {
+        "apply a single package curation with a declared license mapping" {
+            val licenseUrl = "https://www.nuget.org/packages/CommandLineParser/2.9.1/license"
+
+            val pkg = Package.EMPTY.copy(
+                declaredLicenses = setOf(licenseUrl)
+            )
+
+            val curation = PackageCuration(
+                id = pkg.id,
+                data = PackageCurationData(
+                    declaredLicenseMapping = mapOf(
+                        licenseUrl to "MIT".toSpdx()
+                    )
+                )
+            )
+
+            applyPackageCurations(setOf(pkg), listOf(curation)).shouldContainExactly(
+                CuratedPackage(
+                    metadata = Package.EMPTY.copy(
+                        declaredLicenses = setOf(licenseUrl),
+                        declaredLicensesProcessed = ProcessedDeclaredLicense(
+                            spdxExpression = "MIT".toSpdx(),
+                            mapped = mapOf(licenseUrl to "MIT".toSpdx()),
+                            unmapped = emptySet()
+                        )
+                    ),
+                    curations = listOf(curation.data)
+                )
+            )
+        }
+    }
+
     "getDependencies()" should {
         "be able to get all direct dependencies of a package" {
             val ortResult = readOrtResult("/sbt-multi-project-example-expected-output.yml")
