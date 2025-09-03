@@ -699,14 +699,9 @@ internal fun applyPackageCurations(
     packages: Collection<Package>,
     curations: List<PackageCuration>
 ): Set<CuratedPackage> {
-    val curationsForId = packages.associateBy(
-        keySelector = { pkg -> pkg.id },
-        valueTransform = { pkg ->
-            curations.filter { curation ->
-                curation.isApplicable(pkg.id)
-            }
-        }
-    )
+    val curationsForId = packages.associate { pkg ->
+        pkg.id to curations.filter { it.isApplicable(pkg.id) }
+    }
 
     return packages.mapTo(mutableSetOf()) { pkg ->
         curationsForId[pkg.id].orEmpty().asReversed().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
