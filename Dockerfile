@@ -607,4 +607,7 @@ WORKDIR $HOME
 # Ensure that these directories exist in the container to be able to mount directories from the host into them with correct permissions.
 RUN mkdir -p "$HOME/.ort" "$HOME/.gradle"
 
+# Install cargo-credential-netrc late in the build to prevent an error accessing /opt/rust/cargo/registry/.
+RUN $CARGO_HOME/bin/cargo install cargo-credential-netrc
+
 ENTRYPOINT ["/opt/ort/bin/ort"]
