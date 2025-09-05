@@ -113,7 +113,12 @@ class ScanOssScannerDirectoryTest : StringSpec({
                                 VcsInfo(VcsType.GIT, "https://github.com/scanoss/ort.git", ""), "."
                             ),
                             "pkg:github/scanoss/ort",
-                            SpdxExpression.parse("Apache-2.0")
+                            SpdxExpression.parse("Apache-2.0"),
+                            mapOf(
+                                "file_hash" to "871fb0c5188c2f620d9b997e225b0095",
+                                "file_url" to "https://osskb.org/api/file_contents/871fb0c5188c2f620d9b997e225b0095",
+                                "source_hash" to "2e91edbe430c4eb195a977d326d6d6c0"
+                            )
                         )
                     )
                 )
