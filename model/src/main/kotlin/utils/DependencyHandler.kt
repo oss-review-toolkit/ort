@@ -65,4 +65,11 @@ interface DependencyHandler<D> {
      * implementation returns an empty collection.
      */
     fun issuesForDependency(dependency: D): List<Issue> = emptyList()
+
+    /**
+     * Does node comparison require a deep comparison of the whole dependency subtree or not? If the underlying
+     * dependency management system, gives the guarantee for the latter, a costly comparison can be avoided and
+     * speed up the analysis process.
+     */
+    fun requiresDeepDependencyTreeComparison() = true
 }
