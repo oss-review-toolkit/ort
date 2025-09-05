@@ -279,6 +279,8 @@ ort:
 
           treatPendingIdentificationsAsError: false
 
+          deleteUploadedArchiveAfterScan: true
+
         secrets:
           user: user
           apiKey: XYZ

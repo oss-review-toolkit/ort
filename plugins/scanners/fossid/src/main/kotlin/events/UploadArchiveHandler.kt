@@ -129,8 +129,10 @@ class UploadArchiveHandler(
     }
 
     override suspend fun afterCheckScan(scanCode: String) {
-        service.removeUploadedContent(config.user.value, config.apiKey.value, scanCode)
-            .checkResponse("remove previously uploaded content 2", false)
+        if (config.deleteUploadedArchiveAfterScan) {
+            service.removeUploadedContent(config.user.value, config.apiKey.value, scanCode)
+                .checkResponse("remove previously uploaded content 2", false)
+        }
     }
 
     internal fun deleteExcludedFiles(path: File, includes: Includes?, excludes: Excludes?) {
