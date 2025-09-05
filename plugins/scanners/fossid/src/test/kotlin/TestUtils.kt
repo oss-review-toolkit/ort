@@ -153,7 +153,8 @@ internal fun createConfig(
         writeToStorage = false,
         logRequests = false,
         isArchiveMode = isArchiveMode,
-        treatPendingIdentificationsAsError = false
+        treatPendingIdentificationsAsError = false,
+        deleteUploadedArchiveAfterScan = true
     )
 
     val namingProvider = createNamingProviderMock()

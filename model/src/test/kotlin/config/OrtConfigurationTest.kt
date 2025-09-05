@@ -260,7 +260,8 @@ class OrtConfigurationTest : WordSpec({
                             "timeout" to "60",
                             "urlMappings" to urlMapping,
                             "sensitivity" to "10",
-                            "treatPendingIdentificationsAsError" to "false"
+                            "treatPendingIdentificationsAsError" to "false",
+                            "deleteUploadedArchiveAfterScan" to "true"
                         )
 
                         secrets should containExactlyEntries(

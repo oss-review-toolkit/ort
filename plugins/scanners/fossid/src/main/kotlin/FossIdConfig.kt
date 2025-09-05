@@ -135,7 +135,14 @@ data class FossIdConfig(
 
     /** Treat pending identifications as errors instead of hints. */
     @OrtPluginOption(defaultValue = "false")
-    val treatPendingIdentificationsAsError: Boolean
+    val treatPendingIdentificationsAsError: Boolean,
+
+    /**
+     * Whether to delete uploaded content after scan completion. When set to false, archives remain on the
+     * FossID server, which can help diagnose archive upload issues.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val deleteUploadedArchiveAfterScan: Boolean
 ) {
     init {
         require(deltaScanLimit > 0) {
