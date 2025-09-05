@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.plugins.licensefactproviders.dir
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
@@ -59,8 +61,8 @@ open class DirLicenseFactProvider(
     private val config: DirLicenseFactProviderConfig
 ) : LicenseFactProvider {
     private val licenseTextDir = File(config.licenseTextDir).also {
-        require(it.isDirectory) {
-            "The license text directory '${it.absolutePath}' does not exist or is not a directory."
+        if (!it.isDirectory) {
+            logger.warn { "The license text directory '${it.absolutePath}' does not exist or is not a directory." }
         }
     }
 
