@@ -154,10 +154,10 @@ class ScanOssResultParserTest : WordSpec({
                 snippets should haveSize(1)
                 snippets.first().purl shouldBe "pkg:github/kdrag0n/proton_bluecross"
 
-                // Verify remaining PURLs are stored in additionalData.
+                // Verify related PURLs to be stored as additional data.
                 snippets.first().additionalData shouldBe
                     mapOf(
-                        "pkg:github/fake/fake_repository" to ""
+                        "related_purls" to "pkg:github/fake/fake_repository"
                     )
 
                 // Check OSS location.
