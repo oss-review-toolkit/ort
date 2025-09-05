@@ -46,7 +46,7 @@ data class ReporterInput(
     val ortConfig: OrtConfiguration = OrtConfiguration(),
 
     /**
-     * A [LicenseTextProvider], can be used to integrate licenses texts into reports.
+     * A [LicenseFactProvider], can be used to integrate licenses facts like license texts into reports.
      */
     val licenseFactProvider: LicenseFactProvider = CompositeLicenseFactProvider(emptyList()),
 
