@@ -128,7 +128,12 @@ class ScanOssResultParserTest : WordSpec({
                                 "."
                             ),
                             "pkg:github/vdurmont/semver4j",
-                            SpdxExpression.parse("CC-BY-SA-2.0")
+                            SpdxExpression.parse("CC-BY-SA-2.0"),
+                            mapOf(
+                                "file_hash" to "6ff2427335b985212c9b79dfa795799f",
+                                "file_url" to "https://osskb.org/api/file_contents/6ff2427335b985212c9b79dfa795799f",
+                                "source_hash" to "bd4bff27f540f4f2c9de012acc4b48a3"
+                            )
                         )
                     )
                 )
@@ -154,9 +159,12 @@ class ScanOssResultParserTest : WordSpec({
                 snippets should haveSize(1)
                 snippets.first().purl shouldBe "pkg:github/kdrag0n/proton_bluecross"
 
-                // Verify remaining PURLs are stored in additionalData.
+                // Verify if related PURLs are stored in additionalData as CSV.
                 snippets.first().additionalData shouldBe
                     mapOf(
+                        "file_hash" to "581734935cfbe570d280a1265aaa2a6b",
+                        "file_url" to "https://api.scanoss.com/file_contents/581734935cfbe570d280a1265aaa2a6b",
+                        "source_hash" to "45dd1e50621a8a32f88fbe0251a470ab",
                         "related_purls" to "pkg:github/fake/fake_repository"
                     )
 
