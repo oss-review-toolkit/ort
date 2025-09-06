@@ -158,7 +158,14 @@ private fun createSnippetFindings(details: ScanFileDetails, localFilePath: Strin
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
     val provenance = RepositoryProvenance(vcsInfo, ".")
 
-    val additionalData = purls.associateWith { "" }
+    val additionalData = buildMap {
+        put("file_hash", details.fileHash)
+        put("file_url", details.fileUrl)
+        put("source_hash", details.sourceHash)
+        // Purls can be empty if only one entry is provided
+        // and already taken by primaryPurl
+        if (purls.isNotEmpty()) put("related_purls", purls.joinToString(",") { it.trim() })
+    }
 
     // Convert both local and OSS line ranges to source locations.
     val sourceLocations = convertLines(localFilePath, localLines)
