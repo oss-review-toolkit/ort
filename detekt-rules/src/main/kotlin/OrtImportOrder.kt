@@ -32,6 +32,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPsiFactory
@@ -94,7 +95,10 @@ class OrtImportOrder(config: Config) : Rule(config) {
         importList.allChildren.toList().forEach { it.delete() }
         expectedImportOrder.forEach { importPath ->
             if (importPath.isNotEmpty()) {
-                val importDirective = factory.createImportDirective(ImportPath(FqName(importPath), false))
+                val import = importPath.substringBefore(" as ").trim()
+                val alias = importPath.substringAfter(" as ", "")
+                    .takeIf { it.isNotBlank() }?.let { Name.identifier(it.trim()) }
+                val importDirective = factory.createImportDirective(ImportPath(FqName(import), false, alias))
                 importList.add(importDirective)
                 importList.addNewLine()
             } else {
