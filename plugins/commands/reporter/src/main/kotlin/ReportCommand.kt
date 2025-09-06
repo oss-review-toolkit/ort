@@ -64,7 +64,9 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
+import org.ossreviewtoolkit.plugins.licensefactproviders.dir.DirLicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
@@ -124,6 +126,16 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory / ORT_COPYRIGHT_GARBAGE_FILENAME)
+        .configurationGroup()
+
+    private val customLicenseTextsDir by option(
+        "--custom-license-texts-dir",
+        help = "A directory which contains custom license texts. It must contain one text file per license with the " +
+            "license ID as the filename. The license texts from this directory will take priority over the license " +
+            "texts provided by the license fact providers configured in the config.yml."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .configurationGroup()
 
     private val howToFixTextProviderScript by option(
@@ -251,7 +263,13 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
             HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult)
         } ?: HowToFixTextProvider.NONE
 
-        val licenseFactProviders = ortConfig.licenseFactProviders.map { (id, config) ->
+        val licenseFactProviders = mutableListOf<LicenseFactProvider>()
+
+        customLicenseTextsDir?.let {
+            licenseFactProviders += DirLicenseFactProviderFactory.create(it.absolutePath)
+        }
+
+        ortConfig.licenseFactProviders.mapTo(licenseFactProviders) { (id, config) ->
             requireNotNull(LicenseFactProviderFactory.ALL[id]) {
                 "License fact provider '$id' is not available in the classpath."
             }.create(config)

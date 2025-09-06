@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 
     // TODO: Get rid of these hard-coded dependencies on plugins.
+    implementation(projects.plugins.licenseFactProviders.dirLicenseFactProvider)
     implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
 
     implementation(projects.model)
