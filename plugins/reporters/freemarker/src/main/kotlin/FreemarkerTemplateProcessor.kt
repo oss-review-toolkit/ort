@@ -235,6 +235,15 @@ class FreemarkerTemplateProcessor(
             }
 
         /**
+         * Return only those [licenses] that are classified.
+         */
+        @Suppress("unused") // This function is used in the templates.
+        fun filterForClassified(licenses: Collection<ResolvedLicense>): List<ResolvedLicense> =
+            licenses.filter { resolvedLicense ->
+                input.licenseClassifications[resolvedLicense.license]?.isNotEmpty() == true
+            }
+
+        /**
          * Merge the [ResolvedLicense]s of multiple [models] and filter them using [licenseView] and
          * [PackageModel.licenseChoices]. [Omits][omitExcluded] excluded packages, licenses, and copyrights by default.
          * [Undefined][omitNotPresent] licenses can be filtered out optionally. [LicenseChoices][skipLicenseChoices] are
