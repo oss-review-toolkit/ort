@@ -20,10 +20,9 @@
 package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-
-import org.ossreviewtoolkit.utils.test.withEnvironment
 
 class ProcessCaptureFunTest : StringSpec({
     "Environment variables should be passed correctly" {
