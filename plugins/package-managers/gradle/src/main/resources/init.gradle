@@ -72,6 +72,7 @@ interface OrtDependency {
     String getVersion()
     String getClassifier()
     String getExtension()
+    Set<String> getVariants()
     List<OrtDependency> getDependencies()
     String getError()
     String getWarning()
@@ -112,6 +113,7 @@ class OrtDependencyImpl implements OrtDependency, Serializable {
     String version = ''
     String classifier = ''
     String extension = ''
+    Set<String> variants = []
     List<OrtDependency> dependencies = []
     String error
     String warning
@@ -382,7 +384,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                     def classifier = artifact?.classifier ?: ''
                     def extension = artifact?.extension ?: ''
 
-                    return new OrtDependencyImpl(id.group, id.module, id.version, classifier, extension, dependencies,
+                    return new OrtDependencyImpl(id.group, id.module, id.version, classifier, extension, [] as Set, dependencies,
                             error, warning, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     if (id.build.isCurrentBuild() || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
