@@ -30,6 +30,7 @@ dependencies:
       url: "https://example.org/example-dependency-two.zip"
     concludedLicense: "MIT-Festival"
     description: "Package description."
+    homepageUrl: "https://example.com/example-dependency-two"
     isExcluded: false
     isDynamicallyLinked: false
     labels:
