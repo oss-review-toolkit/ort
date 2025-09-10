@@ -89,7 +89,7 @@ analyzer:
       declared_licenses: []
       declared_licenses_processed: {}
       concluded_license: "MIT-Festival"
-      description: ""
+      description: "Package description."
       homepage_url: ""
       binary_artifact:
         url: ""

@@ -29,6 +29,7 @@ dependencies:
     sourceArtifact:
       url: "https://example.org/example-dependency-two.zip"
     concludedLicense: "MIT-Festival"
+    description: "Package description."
     isExcluded: false
     isDynamicallyLinked: false
     labels:
