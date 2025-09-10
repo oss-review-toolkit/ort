@@ -90,7 +90,7 @@ analyzer:
       declared_licenses_processed: {}
       concluded_license: "MIT-Festival"
       description: "Package description."
-      homepage_url: ""
+      homepage_url: "https://example.com/example-dependency-two"
       binary_artifact:
         url: ""
         hash:
