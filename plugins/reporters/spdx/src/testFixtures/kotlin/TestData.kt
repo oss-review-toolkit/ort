@@ -71,8 +71,7 @@ val ORT_RESULT = OrtResult(
                 )
             )
         ),
-        provenance = ANALYZED_PROVENANCE,
-        vcsProcessed = ANALYZED_VCS
+        provenance = ANALYZED_PROVENANCE
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(

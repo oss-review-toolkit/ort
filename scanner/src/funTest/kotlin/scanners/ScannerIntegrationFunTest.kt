@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
@@ -167,8 +168,10 @@ private fun createAnalyzerResultWithProject(project: Project, vararg packages: P
     return OrtResult.EMPTY.copy(
         analyzer = analyzerRun,
         repository = Repository.EMPTY.copy(
-            vcsProcessed = projectWithScope.vcsProcessed,
-            vcs = projectWithScope.vcs
+            provenance = RepositoryProvenance(
+                vcsInfo = projectWithScope.vcs,
+                resolvedRevision = projectWithScope.vcs.revision
+            )
         )
     )
 }

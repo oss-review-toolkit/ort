@@ -154,7 +154,7 @@ class CycloneDxReporter(
                         // There is no component type for repositories.
                         type = Component.Type.FILE
 
-                        with(input.ortResult.repository.vcsProcessed) {
+                        with(input.ortResult.repository.provenance.vcsInfo.normalize()) {
                             bomRef = "$url@$revision"
 
                             name = url
@@ -178,7 +178,7 @@ class CycloneDxReporter(
             // distributable), just create a single BOM for all projects in that case for now. As there also is no
             // single correct project to pick for adding external references in that case, simply only use the global
             // repository VCS information here.
-            val vcs = input.ortResult.repository.vcsProcessed
+            val vcs = input.ortResult.repository.provenance.vcsInfo.normalize()
             bom.addExternalReference(
                 ExternalReference.Type.VCS,
                 vcs.url,

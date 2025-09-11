@@ -415,8 +415,10 @@ class OrtResultTest : WordSpec({
 
             val ortResult = OrtResult.EMPTY.copy(
                 repository = Repository.EMPTY.copy(
-                    vcs = vcs,
-                    vcsProcessed = vcs,
+                    provenance = RepositoryProvenance(
+                        vcsInfo = vcs,
+                        resolvedRevision = vcs.revision
+                    ),
                     config = RepositoryConfiguration(
                         excludes = Excludes(
                             paths = listOf(
