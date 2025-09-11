@@ -70,9 +70,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "Python Lex & Yacc"
   homepage_url: "http://www.dabeaz.com/ply/"
   binary_artifact:
