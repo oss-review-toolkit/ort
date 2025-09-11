@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 internal fun Collection<String>.mapNamesToLicenses(origin: String, input: ReporterInput): List<License> =
     map { licenseName ->
         val spdxId = SpdxLicense.forId(licenseName)?.id
-        val licenseText = input.licenseFactProvider.getLicenseText(licenseName)
+        val licenseText = input.licenseFactProvider.getLicenseText(licenseName)?.text
 
         // Prefer to set the id in case of an SPDX "core" license and only use the name as a fallback, also
         // see https://github.com/CycloneDX/cyclonedx-core-java/issues/8.

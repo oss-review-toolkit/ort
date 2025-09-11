@@ -242,7 +242,7 @@ internal fun SpdxDocument.addExtractedLicenseInfo(licenseFactProvider: LicenseFa
     val nonSpdxLicenses = allLicenses.filter { SpdxConstants.isPresent(it) && SpdxLicense.forId(it) == null }
 
     val extractedLicenseInfo = nonSpdxLicenses.sorted().mapNotNull { license ->
-        licenseFactProvider.getLicenseText(license)?.takeIf { it.isNotBlank() }?.let { text ->
+        licenseFactProvider.getLicenseText(license)?.text?.let { text ->
             SpdxExtractedLicenseInfo(
                 licenseId = license,
                 extractedText = text

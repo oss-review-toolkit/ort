@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.realFile
 
@@ -116,11 +117,11 @@ class ScanCodeLicenseFactProvider(
             "${licenseId.removePrefix("LicenseRef-scancode-").lowercase()}.LICENSE"
         }
 
-        return scanCodeLicenseTextDir.resolve(filename).takeIf { it.isFile }
+        return scanCodeLicenseTextDir.resolve(filename).takeIf { it.isFile && it.containsNonWhitespace() }
     }
 
-    override fun getLicenseText(licenseId: String): String? =
-        getLicenseTextFile(licenseId)?.readText()?.removeYamlFrontMatter()
+    override fun getLicenseText(licenseId: String) =
+        getLicenseTextFile(licenseId)?.readText()?.removeYamlFrontMatter()?.let { LicenseText(it) }
 
     override fun hasLicenseText(licenseId: String): Boolean = getLicenseTextFile(licenseId) != null
 }
@@ -133,4 +134,29 @@ internal fun String.removeYamlFrontMatter(): String {
         ?: lines.drop(1).dropWhile { it != "---" }.drop(1)
 
     return licenseLines.dropWhile { it.isEmpty() }.joinToString("\n").trimEnd()
+}
+
+/** Check if this [File] contains any non-whitespace character, ignoring any YAML front matter. */
+private fun File.containsNonWhitespace(): Boolean {
+    useLines { lines ->
+        var inFrontMatter = false
+
+        lines.forEachIndexed { index, line ->
+            if (index == 0 && line == "---") {
+                inFrontMatter = true
+                return@forEachIndexed
+            }
+
+            if (inFrontMatter) {
+                if (line == "---") {
+                    inFrontMatter = false
+                }
+                return@forEachIndexed
+            }
+
+            if (line.any { !it.isWhitespace() }) return true
+        }
+
+        return false
+    }
 }

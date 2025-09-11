@@ -33,13 +33,22 @@ class DirLicenseFactProviderTest : WordSpec({
 
             val provider = DirLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
 
-            provider.getLicenseText("LicenseRef-custom-license") shouldBe "custom license text"
+            provider.getLicenseText("LicenseRef-custom-license")?.text shouldBe "custom license text"
         }
 
         "return null if no license text is found" {
             val provider = DirLicenseFactProviderFactory.create(licenseTextDir = tempdir().absolutePath)
 
             provider.getLicenseText("LicenseRef-non-existing-license") should beNull()
+        }
+
+        "return null if the license text file is blank" {
+            val licenseDir = tempdir()
+            licenseDir.resolve("LicenseRef-blank-license").writeText("   \n   ")
+
+            val provider = DirLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
+
+            provider.getLicenseText("LicenseRef-blank-license") should beNull()
         }
     }
 
@@ -57,6 +66,15 @@ class DirLicenseFactProviderTest : WordSpec({
             val provider = DirLicenseFactProviderFactory.create(licenseTextDir = tempdir().absolutePath)
 
             provider.hasLicenseText("LicenseRef-non-existing-license") shouldBe false
+        }
+
+        "return false if the license text file is blank" {
+            val licenseDir = tempdir()
+            licenseDir.resolve("LicenseRef-blank-license").writeText("   \n   ")
+
+            val provider = DirLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
+
+            provider.hasLicenseText("LicenseRef-blank-license") shouldBe false
         }
     }
 })
