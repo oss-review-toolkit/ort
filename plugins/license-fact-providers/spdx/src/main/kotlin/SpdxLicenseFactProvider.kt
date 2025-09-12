@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.licensefactproviders.spdx
 
+import java.net.URL
+
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
@@ -37,6 +39,8 @@ class SpdxLicenseFactProvider(
 
     override fun hasLicenseText(licenseId: String) = getLicenseTextResource(licenseId) != null
 
-    private fun getLicenseTextResource(licenseId: String) =
-        javaClass.getResource("/licenses/$licenseId") ?: javaClass.getResource("/exceptions/$licenseId")
+    private fun getLicenseTextResource(licenseId: String): URL? =
+        licenseId.ifEmpty { null }?.let {
+            javaClass.getResource("/licenses/$it") ?: javaClass.getResource("/exceptions/$it")
+        }
 }
