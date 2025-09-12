@@ -74,7 +74,7 @@ class ScanCodeLicenseFactProvider(
         if (scanCodeExeDir == null) {
             logger.debug { "Could not locate the ScanCode executable directory." }
         } else {
-            logger.debug { "Located ScanCode executable directory: ${scanCodeExeDir.absolutePath}" }
+            logger.debug { "Located ScanCode executable directory: $scanCodeExeDir" }
         }
 
         val pythonBinDir = listOf("bin", "Scripts")
@@ -83,7 +83,7 @@ class ScanCodeLicenseFactProvider(
         if (scanCodeBaseDir == null) {
             logger.debug { "Could not locate the ScanCode base directory." }
         } else {
-            logger.debug { "Located ScanCode base directory: ${scanCodeBaseDir.absolutePath}" }
+            logger.debug { "Located ScanCode base directory: $scanCodeBaseDir" }
         }
 
         val licenseDir = scanCodeBaseDir?.walk()?.find { it.isDirectory && it.endsWith("licensedcode/data/licenses") }
@@ -91,7 +91,7 @@ class ScanCodeLicenseFactProvider(
         if (licenseDir == null) {
             logger.debug { "Could not locate the ScanCode license text directory." }
         } else {
-            logger.debug { "Located ScanCode license text directory: ${licenseDir.absolutePath}" }
+            logger.debug { "Located ScanCode license text directory: $licenseDir" }
             return@lazy licenseDir
         }
 
@@ -99,7 +99,7 @@ class ScanCodeLicenseFactProvider(
             if (it == null) {
                 logger.debug { "Could not locate fallback directory: $FALLBACK_DIR" }
             } else {
-                logger.debug { "Located fallback ScanCode license text directory: ${it.absolutePath}" }
+                logger.debug { "Located fallback ScanCode license text directory: $it" }
                 return@lazy it
             }
         }
