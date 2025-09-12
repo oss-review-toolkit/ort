@@ -40,7 +40,9 @@ class SpdxLicenseFactProvider(
     override fun hasLicenseText(licenseId: String) = getLicenseTextResource(licenseId) != null
 
     private fun getLicenseTextResource(licenseId: String): URL? =
-        licenseId.ifEmpty { null }?.let {
-            javaClass.getResource("/licenses/$it") ?: javaClass.getResource("/exceptions/$it")
+        if (licenseId.isNotEmpty()) {
+            javaClass.getResource("/licenses/$licenseId") ?: javaClass.getResource("/exceptions/$licenseId")
+        } else {
+            null
         }
 }
