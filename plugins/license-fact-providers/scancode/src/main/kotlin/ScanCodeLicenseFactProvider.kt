@@ -89,7 +89,7 @@ class ScanCodeLicenseFactProvider(
         val licenseDir = scanCodeBaseDir?.walk()?.find { it.isDirectory && it.endsWith("licensedcode/data/licenses") }
 
         if (licenseDir == null) {
-            logger.debug { "Could not locate the ScanCode license text directory." }
+            logger.debug { "Could not locate the ScanCode 'licenses' text directory." }
         } else {
             logger.debug { "Located ScanCode license text directory: $licenseDir" }
             return@lazy licenseDir
@@ -104,7 +104,7 @@ class ScanCodeLicenseFactProvider(
             }
         }
 
-        error("Could not locate the ScanCode license text directory.")
+        error("Could not locate any ScanCode license text directory.")
     }
 
     private fun getLicenseTextFile(licenseId: String): File? {
