@@ -55,7 +55,7 @@ class ScanCodeLicenseFactProvider(
      * The directory that contains the ScanCode license texts. This is located using a heuristic based on the path of
      * the ScanCode binary.
      */
-    private val scanCodeLicenseTextDir: File by lazy {
+    private val scanCodeLicenseTextDir: File? by lazy {
         if (config.scanCodeLicenseTextDir != null) {
             return@lazy File(config.scanCodeLicenseTextDir).also {
                 require(it.isDirectory) {
@@ -104,7 +104,9 @@ class ScanCodeLicenseFactProvider(
             }
         }
 
-        error("Could not locate any ScanCode license text directory.")
+        logger.warn { "Could not locate any ScanCode license text directory." }
+
+        null
     }
 
     private fun getLicenseTextFile(licenseId: String): File? {
@@ -116,7 +118,7 @@ class ScanCodeLicenseFactProvider(
             "${licenseId.removePrefix("LicenseRef-scancode-").lowercase()}.LICENSE"
         }
 
-        return scanCodeLicenseTextDir.resolve(filename).takeIf { it.isFile }
+        return scanCodeLicenseTextDir?.resolve(filename)?.takeIf { it.isFile }
     }
 
     override fun getLicenseText(licenseId: String): String? =
