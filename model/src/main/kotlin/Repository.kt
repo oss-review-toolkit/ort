@@ -29,15 +29,9 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
  */
 data class Repository(
     /**
-     * Original VCS-related information from the working tree containing the analyzer root.
+     * Provenance wrapper for original VCS information, if present.
      */
-    val vcs: VcsInfo,
-
-    /**
-     * Processed VCS-related information from the working tree containing the analyzer root that has e.g. common
-     * mistakes corrected.
-     */
-    val vcsProcessed: VcsInfo = vcs.normalize(),
+    val provenance: RepositoryProvenance,
 
     /**
      * A map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
@@ -57,8 +51,10 @@ data class Repository(
          */
         @JvmField
         val EMPTY = Repository(
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo.EMPTY,
+            provenance = RepositoryProvenance(
+                vcsInfo = VcsInfo.EMPTY,
+                resolvedRevision = HashAlgorithm.SHA1.emptyValue
+            ),
             nestedRepositories = emptyMap(),
             config = RepositoryConfiguration()
         )
@@ -73,7 +69,7 @@ data class Repository(
 
         val normalizedVcs = vcs.normalize()
 
-        if (vcsProcessed.matches(normalizedVcs)) return ""
+        if (provenance.vcsInfo.normalize().matches(normalizedVcs)) return ""
 
         return nestedRepositories.entries.find { (_, nestedVcs) -> nestedVcs.normalize().matches(normalizedVcs) }?.key
     }

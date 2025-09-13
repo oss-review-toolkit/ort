@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
@@ -36,6 +37,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -179,7 +181,10 @@ val allProjects = setOf(
 
 val ortResult = OrtResult(
     repository = Repository(
-        vcs = VcsInfo.EMPTY,
+        provenance = RepositoryProvenance(
+            vcsInfo = VcsInfo.EMPTY,
+            resolvedRevision = HashAlgorithm.SHA1.emptyValue
+        ),
         config = RepositoryConfiguration(
             excludes = Excludes(
                 paths = listOf(
