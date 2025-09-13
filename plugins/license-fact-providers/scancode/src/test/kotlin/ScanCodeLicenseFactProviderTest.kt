@@ -20,10 +20,11 @@
 package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 class ScanCodeLicenseFactProviderTest : WordSpec({
-    "removeYamlFrontMatter" should {
+    "removeYamlFrontMatter()" should {
         "remove a YAML front matter" {
             val text = """
                 ---

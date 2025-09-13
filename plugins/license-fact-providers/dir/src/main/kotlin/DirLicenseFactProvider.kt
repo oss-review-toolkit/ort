@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 import org.ossreviewtoolkit.utils.ort.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
@@ -66,9 +67,13 @@ open class DirLicenseFactProvider(
         }
     }
 
-    override fun getLicenseText(licenseId: String) = getLicenseTextFile(licenseId)?.readText()
+    override fun getLicenseText(licenseId: String) = getLicenseTextFile(licenseId)?.readText()?.let { LicenseText(it) }
 
     override fun hasLicenseText(licenseId: String) = getLicenseTextFile(licenseId) != null
 
-    private fun getLicenseTextFile(licenseId: String) = licenseTextDir.resolve(licenseId).takeIf { it.isFile }
+    private fun getLicenseTextFile(licenseId: String) =
+        licenseTextDir.resolve(licenseId).takeIf { it.isFile && it.containsNonWhitespace() }
 }
+
+/** Check if this [File] contains any non-whitespace character. */
+private fun File.containsNonWhitespace() = useLines { lines -> lines.any { line -> line.any { !it.isWhitespace() } } }
