@@ -138,7 +138,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         }
 
         val project = parseProject(definitionFile, analysisRoot)
-        val projectModuleInfo = listModules(workingDir, issues).undoDeduplication()
+        val projectModuleInfo = listModules(workingDir, issues).undoDeduplication().filterInstalled()
         val scopes = Scope.entries.filterNotTo(mutableSetOf()) { scope -> scope.isExcluded(excludes) }
 
         // Warm-up the cache to speed-up processing.
@@ -222,6 +222,8 @@ private fun ModuleInfo.undoDeduplication(): ModuleInfo {
 
     return undoDeduplicationRec()
 }
+
+private fun ModuleInfo.filterInstalled(): ModuleInfo = copy(dependencies = dependencies.filter { it.value.isInstalled })
 
 private fun ModuleInfo.getNonDeduplicatedModuleInfosForId(): Map<String, ModuleInfo> {
     val queue = LinkedList<ModuleInfo>().apply { add(this@getNonDeduplicatedModuleInfosForId) }
