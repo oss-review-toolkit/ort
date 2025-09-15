@@ -187,5 +187,16 @@ class FileArchiverTest : StringSpec() {
             result shouldBe true
             targetDir should containFile("License")
         }
+
+        "include files with mime type text/x-web-markdown" {
+            createFile("License.md") { writeText("# Heading level 1") }
+
+            val archiver = FileArchiver.createDefault()
+            archiver.archive(workingDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
+
+            result shouldBe true
+            targetDir should containFile("License.md")
+        }
     }
 }
