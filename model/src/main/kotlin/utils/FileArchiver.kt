@@ -26,7 +26,6 @@ import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.tika.Tika
-import org.apache.tika.mime.MimeTypes
 
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
@@ -89,7 +88,7 @@ class FileArchiver(
                     return@packZip false
                 }
 
-                if (tika.detect(file) != MimeTypes.PLAIN_TEXT) {
+                if (!tika.detect(file).startsWith("text/")) {
                     logger.info { "Not adding file '$relativePath' to archive because it is not a text file." }
                     return@packZip false
                 }
