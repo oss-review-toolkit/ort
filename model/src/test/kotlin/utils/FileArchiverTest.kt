@@ -119,7 +119,7 @@ class FileArchiverTest : StringSpec() {
             createFile("d/a")
             createFile("d/b")
 
-            val archiver = FileArchiver(listOf("a", "**/a"), storage)
+            val archiver = FileArchiver(setOf("a", "**/a"), storage)
 
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
@@ -143,7 +143,7 @@ class FileArchiverTest : StringSpec() {
             createFile("c/a")
             createFile("c/b")
 
-            val archiver = FileArchiver(listOf("**"), storage)
+            val archiver = FileArchiver(setOf("**"), storage)
             archiver.archive(workingDir, PROVENANCE)
 
             val result = archiver.unarchive(targetDir, PROVENANCE)
