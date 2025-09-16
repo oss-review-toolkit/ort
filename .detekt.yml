@@ -56,8 +56,6 @@ formatting:
     useTrailingCommaOnDeclarationSite: false
 
 naming:
-  ConstructorParameterNaming:
-    excludes: ["**/clients/github-graphql/build/generated/**"]
   InvalidPackageDeclaration:
     active: false
 
