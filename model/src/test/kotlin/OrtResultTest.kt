@@ -127,7 +127,7 @@ class OrtResultTest : WordSpec({
     "getDefinitionFilePathRelativeToAnalyzerRoot()" should {
         "use the correct vcs" {
             val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
-            val provenance = RepositoryProvenance(vcsInfo = vcs, resolvedRevision = vcs.revision)
+            val provenance = RepositoryProvenance(vcsInfo = vcs, resolvedRevision = HashAlgorithm.SHA1.emptyValue)
             val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
             val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
             val project1 = Project.EMPTY.copy(
@@ -168,7 +168,7 @@ class OrtResultTest : WordSpec({
 
         "fail if no vcs matches" {
             val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
-            val provenance = RepositoryProvenance(vcsInfo = vcs, resolvedRevision = vcs.revision)
+            val provenance = RepositoryProvenance(vcsInfo = vcs, resolvedRevision = HashAlgorithm.SHA1.emptyValue)
             val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
             val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
             val project = Project.EMPTY.copy(
