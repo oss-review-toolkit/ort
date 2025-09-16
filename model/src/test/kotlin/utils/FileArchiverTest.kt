@@ -36,10 +36,10 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createDefault
 
 private val PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
@@ -83,7 +83,7 @@ class FileArchiverTest : StringSpec() {
             createFile("LICENSE")
             createFile("path/LICENSE")
 
-            val archiver = FileArchiver.createDefault()
+            val archiver = createFileArchiver()
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -100,7 +100,7 @@ class FileArchiverTest : StringSpec() {
             createFile("c/license")
             createFile("d/LiCeNsE")
 
-            val archiver = FileArchiver.createDefault()
+            val archiver = createFileArchiver()
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -158,7 +158,7 @@ class FileArchiverTest : StringSpec() {
         }
 
         "Empty archives can be handled" {
-            val archiver = FileArchiver.createDefault()
+            val archiver = createFileArchiver()
 
             archiver.archive(workingDir, PROVENANCE)
 
@@ -169,7 +169,7 @@ class FileArchiverTest : StringSpec() {
         "exclude basic binary license file" {
             createFile("License") { writeBytes(byteArrayOf(0xFF.toByte(), 0xD8.toByte())) }
 
-            val archiver = FileArchiver.createDefault()
+            val archiver = createFileArchiver()
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -180,7 +180,7 @@ class FileArchiverTest : StringSpec() {
         "include utf8 file with japanese chars" {
             createFile("License") { writeText("ぁあぃいぅうぇえぉおかが") }
 
-            val archiver = FileArchiver.createDefault()
+            val archiver = createFileArchiver()
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -191,7 +191,7 @@ class FileArchiverTest : StringSpec() {
         "include files with mime type text/x-web-markdown" {
             createFile("License.md") { writeText("# Heading level 1") }
 
-            val archiver = FileArchiver.createDefault()
+            val archiver = createFileArchiver()
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -200,3 +200,12 @@ class FileArchiverTest : StringSpec() {
         }
     }
 }
+
+private fun createFileArchiver() =
+    FileArchiver(
+        patterns = LicenseFilePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
+        storage = FileProvenanceFileStorage(
+            LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR),
+            FileArchiverConfiguration.ARCHIVE_FILENAME
+        )
+    )
