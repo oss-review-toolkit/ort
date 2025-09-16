@@ -27,7 +27,10 @@ import kotlin.time.measureTimedValue
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.tika.Tika
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
@@ -68,35 +71,40 @@ class FileArchiver(
     fun hasArchive(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
 
     /**
-     * Archive all files in [directory] matching any of the configured patterns in the [storage].
+     * Archive the files matching [patterns] inside [rootDirectory] and put them to the [storage]. The archive is
+     * associated with the given [provenance] and [id].
      */
-    fun archive(directory: File, provenance: KnownProvenance) {
-        logger.info { "Archiving files matching ${matcher.patterns} from '$directory'..." }
+    fun archive(rootDirectory: File, provenance: KnownProvenance, id: Identifier) {
+        val subdirectory = getSubdirectoryForProvenance(provenance, id)
+        val directories = setOf(rootDirectory, rootDirectory / subdirectory)
+
+        logger.info { "Archiving files matching ${matcher.patterns} from '$rootDirectory'..." }
 
         val zipFile = createOrtTempFile(suffix = ".zip")
         val tika = Tika()
 
         val zipDuration = measureTime {
-            directory.packZip(zipFile, overwrite = true) { file ->
-                val relativePath = file.relativeTo(directory).invariantSeparatorsPath
-
-                if (!matcher.matches(relativePath)) return@packZip false
+            rootDirectory.packZip(zipFile, overwrite = true) { file ->
+                val matchingFile = directories.find {
+                    val relativePath = file.relativeTo(it).invariantSeparatorsPath
+                    matcher.matches(relativePath)
+                } ?: return@packZip false
 
                 if (!tika.detect(file).startsWith("text/")) {
-                    logger.info { "Not adding file '$relativePath' to archive because it is not a text file." }
+                    logger.info { "Not adding file '$matchingFile' to archive because it is not a text file." }
                     return@packZip false
                 }
 
-                logger.debug { "Adding '$relativePath' to archive." }
+                logger.debug { "Adding '$matchingFile' to archive." }
                 true
             }
         }
 
-        logger.info { "Archived directory '$directory' in $zipDuration." }
+        logger.info { "Archived directory '$rootDirectory' in $zipDuration." }
 
         val writeDuration = measureTime { storage.putData(provenance, zipFile.inputStream(), zipFile.length()) }
 
-        logger.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
+        logger.info { "Wrote archive of directory '$rootDirectory' to storage in $writeDuration." }
 
         zipFile.parentFile.safeDeleteRecursively()
     }
@@ -129,3 +137,21 @@ class FileArchiver(
         }.isSuccess
     }
 }
+
+/**
+ * Get the (potentially [id]-type specific) nested path directory for the given [provenance].
+ */
+fun getSubdirectoryForProvenance(provenance: KnownProvenance, id: Identifier): String =
+    when (provenance) {
+        // In case of a repository, match paths relative to the VCS path.
+        is RepositoryProvenance -> provenance.vcsInfo.path
+
+        // In case of a source artifact, match paths relative to the archive root or a type-specific directory.
+        is ArtifactProvenance -> {
+            // Java Archives (JARs) by convention (see e.g. the Apache Release Policy) often contain licensing
+            // information as part of the "META-INF" directory.
+            if (id.type == "Maven") "META-INF" else ""
+
+            // TODO: Check if more types need special handling.
+        }
+    }
