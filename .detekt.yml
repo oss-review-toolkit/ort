@@ -40,8 +40,6 @@ formatting:
     active: false
   MaximumLineLength:
     active: false
-  NoUnusedImports:
-    active: false
   NoWildcardImports:
     active: false
   ParameterListWrapping:
@@ -85,8 +83,6 @@ style:
     active: true
   ThrowsCount:
     max: 5
-  UnusedImports:
-    active: true
   WildcardImport:
     excludes: ''
     excludeImports:
