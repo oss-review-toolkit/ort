@@ -64,7 +64,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.transformingCollectionEmptyMatcher
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
@@ -698,7 +697,7 @@ private fun createResolver(
     data: List<LicenseInfo>,
     copyrightGarbage: Set<String> = emptySet(),
     addAuthorsToCopyrights: Boolean = false,
-    archiver: FileArchiver = FileArchiver.createDefault()
+    archiver: FileArchiver? = null
 ) = LicenseInfoResolver(
     provider = SimpleLicenseInfoProvider(data),
     copyrightGarbage = CopyrightGarbage(copyrightGarbage),
