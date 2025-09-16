@@ -212,10 +212,16 @@ signing {
     }
 }
 
-tasks.named<JavaExec>("run") {
-    // Work around https://github.com/graalvm/native-build-tools/issues/743.
-    doNotTrackState("The 'run' task is never supposed to be UP-TO-DATE.")
+tasks.withType<JavaExec>().configureEach {
+    val normalizedName = name.trimEnd { !it.isLetter() }.lowercase()
 
+    // Work around https://youtrack.jetbrains.com/issue/KTIJ-34755.
+    if (normalizedName.endsWith("main") || normalizedName.endsWith("run")) {
+        doNotTrackState("Interactive Java execution tasks are never supposed to be UP-TO-DATE.")
+    }
+}
+
+tasks.named<JavaExec>("run") {
     System.getenv("TERM")?.also {
         val mode = it.substringAfter('-', "16color")
         environment("FORCE_COLOR" to mode)
