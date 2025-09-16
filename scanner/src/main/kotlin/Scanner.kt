@@ -745,7 +745,7 @@ class Scanner(
                 // runCatching has a bug with smart-cast, see https://youtrack.jetbrains.com/issue/KT-27748.
                 try {
                     dir = provenanceDownloader.downloadRecursively(nestedProvenance)
-                    archiver.archive(dir, nestedProvenance.root)
+                    archiver.archive(dir, nestedProvenance.root, pkg.id)
                 } catch (e: DownloadException) {
                     controller.addIssue(
                         pkg.id,

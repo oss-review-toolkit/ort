@@ -26,7 +26,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
@@ -36,6 +35,7 @@ import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
+import org.ossreviewtoolkit.model.utils.getSubdirectoryForProvenance
 import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -259,7 +259,7 @@ class LicenseInfoResolver(
             // Register the (empty) `archiveDir` for deletion on JVM exit.
             archiveDir.deleteOnExit()
 
-            val directory = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
+            val directory = getSubdirectoryForProvenance(provenance, id)
             val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
                 relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
                     it.relativeTo(archiveDir).invariantSeparatorsPath
