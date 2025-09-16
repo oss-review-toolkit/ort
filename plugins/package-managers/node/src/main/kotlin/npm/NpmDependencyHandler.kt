@@ -67,14 +67,13 @@ internal class NpmDependencyHandler(
         }
 }
 
-internal val ModuleInfo.isInstalled: Boolean get() = path != null
+internal val ModuleInfo.isInstalled: Boolean get() =
+    // For non-installed modules NPM 10 returns a null path, while NPM 11 returns a non-existent non-null path.
+    path != null && File(path).isDirectory
 
 internal val ModuleInfo.isProject: Boolean get() = resolved == null
 
-private val ModuleInfo.packageJsonFile: File get() =
-    File(
-        checkNotNull(path) {
-            "The path to '${NodePackageManagerType.DEFINITION_FILE}' is null in $this."
-        },
-        NodePackageManagerType.DEFINITION_FILE
-    )
+private val ModuleInfo.packageJsonFile: File get() {
+    check(isInstalled) { "The module directory '$path' is null or does not exist." }
+    return File(path, NodePackageManagerType.DEFINITION_FILE)
+}
