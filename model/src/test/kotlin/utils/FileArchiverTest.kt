@@ -83,7 +83,7 @@ class FileArchiverTest : StringSpec() {
             createFile("LICENSE")
             createFile("path/LICENSE")
 
-            val archiver = createFileArchiver()
+            val archiver = FileArchiver(setOf("**/LICENSE"), storage)
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -100,7 +100,7 @@ class FileArchiverTest : StringSpec() {
             createFile("c/license")
             createFile("d/LiCeNsE")
 
-            val archiver = createFileArchiver()
+            val archiver = FileArchiver(setOf("**/LICENSE"), storage)
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -158,7 +158,7 @@ class FileArchiverTest : StringSpec() {
         }
 
         "Empty archives can be handled" {
-            val archiver = createFileArchiver()
+            val archiver = FileArchiver(LicenseFilePatterns.DEFAULT.allLicenseFilenames, storage)
 
             archiver.archive(workingDir, PROVENANCE)
 
@@ -169,7 +169,7 @@ class FileArchiverTest : StringSpec() {
         "exclude basic binary license file" {
             createFile("License") { writeBytes(byteArrayOf(0xFF.toByte(), 0xD8.toByte())) }
 
-            val archiver = createFileArchiver()
+            val archiver = FileArchiver(LicenseFilePatterns.DEFAULT.allLicenseFilenames, storage)
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -180,7 +180,7 @@ class FileArchiverTest : StringSpec() {
         "include utf8 file with japanese chars" {
             createFile("License") { writeText("ぁあぃいぅうぇえぉおかが") }
 
-            val archiver = createFileArchiver()
+            val archiver = FileArchiver(LicenseFilePatterns.DEFAULT.allLicenseFilenames, storage)
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -191,7 +191,7 @@ class FileArchiverTest : StringSpec() {
         "include files with mime type text/x-web-markdown" {
             createFile("License.md") { writeText("# Heading level 1") }
 
-            val archiver = createFileArchiver()
+            val archiver = FileArchiver(LicenseFilePatterns.DEFAULT.allLicenseFilenames, storage)
             archiver.archive(workingDir, PROVENANCE)
             val result = archiver.unarchive(targetDir, PROVENANCE)
 
@@ -200,12 +200,3 @@ class FileArchiverTest : StringSpec() {
         }
     }
 }
-
-private fun createFileArchiver() =
-    FileArchiver(
-        patterns = LicenseFilePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
-        storage = FileProvenanceFileStorage(
-            LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR),
-            FileArchiverConfiguration.ARCHIVE_FILENAME
-        )
-    )
