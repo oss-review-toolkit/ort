@@ -20,6 +20,12 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.module.kotlin.treeToValue
 
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
@@ -27,6 +33,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 /**
  * A description of the source code repository that was used as input for ORT.
  */
+@JsonDeserialize(using = RepositoryDeserializer::class)
 data class Repository(
     /**
      * Provenance wrapper for original VCS information, if present.
@@ -72,5 +79,40 @@ data class Repository(
         if (provenance.vcsInfo.normalize().matches(normalizedVcs)) return ""
 
         return nestedRepositories.entries.find { (_, nestedVcs) -> nestedVcs.normalize().matches(normalizedVcs) }?.key
+    }
+}
+
+/**
+ * A custom deserializer for [Repository] to support the legacy [vcs] and [vcsProcessed] attributes.
+ */
+private class RepositoryDeserializer : StdDeserializer<Repository>(Repository::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Repository {
+        val node = p.codec.readTree<JsonNode>(p)
+        val parsedProvenance = when {
+            node.has("vcs") -> {
+                // Parse [vcs] and [vcsProcessed] attributes
+                val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs"])
+                val vcsProcess = jsonMapper.treeToValue<VcsInfo>(node["vcs_processed"])
+
+                // Get the [vcs]'s revision
+                val resolvedRevision = if (vcsInfo.revision != "") {
+                    vcsInfo.revision
+                } else if (vcsProcess.revision != "") {
+                    // Fall back to [vcsProcessed], if [vcs] has empty revision
+                    vcsProcess.revision
+                } else {
+                    HashAlgorithm.SHA1.emptyValue
+                }
+
+                // Build a RepositoryProvenance from the parsed VcsInfo fields
+                RepositoryProvenance(vcsInfo, resolvedRevision)
+            }
+
+            else -> {
+                // Parse the [provenance], if no legacy fields are present
+                jsonMapper.treeToValue<RepositoryProvenance>(node["provenance"])
+            }
+        }
+        return Repository(provenance = parsedProvenance)
     }
 }
