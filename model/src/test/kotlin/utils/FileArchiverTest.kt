@@ -79,7 +79,7 @@ class FileArchiverTest : StringSpec() {
     }
 
     init {
-        "LICENSE files are archived by default, independently of the directory" {
+        "LICENSE files are archived independently of the directory" {
             createFile("LICENSE")
             createFile("path/LICENSE")
 
