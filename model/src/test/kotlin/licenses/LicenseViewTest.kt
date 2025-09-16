@@ -37,9 +37,7 @@ import org.ossreviewtoolkit.model.packageWithDeclaredAndDetectedLicense
 import org.ossreviewtoolkit.model.packageWithDeclaredLicense
 import org.ossreviewtoolkit.model.packageWithDetectedLicense
 import org.ossreviewtoolkit.model.packageWithoutLicense
-import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class LicenseViewTest : WordSpec() {
@@ -47,7 +45,7 @@ class LicenseViewTest : WordSpec() {
         provider = DefaultLicenseInfoProvider(ortResult),
         copyrightGarbage = CopyrightGarbage(),
         addAuthorsToCopyrights = false,
-        archiver = FileArchiver.createDefault()
+        archiver = null
     )
 
     private fun LicenseView.getLicensesWithSources(
