@@ -742,7 +742,7 @@ class Scanner(
             provenancesWithMissingArchives.forEach { (pkg, nestedProvenance) ->
                 var dir: File? = null
 
-                // runCatching has a bug with smart-cast, see https://youtrack.jetbrains.com/issue/KT-62938.
+                // runCatching has a bug with smart-cast, see https://youtrack.jetbrains.com/issue/KT-27748.
                 try {
                     dir = provenanceDownloader.downloadRecursively(nestedProvenance)
                     archiver.archive(dir, nestedProvenance.root)
