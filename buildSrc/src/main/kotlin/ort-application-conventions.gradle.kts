@@ -212,15 +212,6 @@ signing {
     }
 }
 
-tasks.withType<JavaExec>().configureEach {
-    val normalizedName = name.trimEnd { !it.isLetter() }.lowercase()
-
-    // Work around https://youtrack.jetbrains.com/issue/KTIJ-34755.
-    if (normalizedName.endsWith("main") || normalizedName.endsWith("run")) {
-        doNotTrackState("Interactive Java execution tasks are never supposed to be UP-TO-DATE.")
-    }
-}
-
 tasks.named<JavaExec>("run") {
     System.getenv("TERM")?.also {
         val mode = it.substringAfter('-', "16color")

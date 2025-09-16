@@ -117,6 +117,15 @@ java {
     }
 }
 
+tasks.withType<JavaExec>().configureEach {
+    val normalizedName = name.trimEnd { !it.isLetter() }.lowercase()
+
+    // Work around https://youtrack.jetbrains.com/issue/KTIJ-34755.
+    if (normalizedName.endsWith("main") || normalizedName.endsWith("run")) {
+        doNotTrackState("Interactive Java execution tasks are never supposed to be UP-TO-DATE.")
+    }
+}
+
 tasks.withType<Jar>().configureEach {
     manifest {
         attributes["Build-Jdk"] = javaToolchains.compilerFor(java.toolchain).map { it.metadata.jvmVersion }
