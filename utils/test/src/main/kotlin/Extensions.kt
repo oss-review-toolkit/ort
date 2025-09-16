@@ -25,20 +25,6 @@ import io.kotest.core.TestConfiguration
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
-import org.ossreviewtoolkit.model.config.LicenseFilePatterns
-import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
-import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-
-fun FileArchiver.Companion.createDefault() =
-    FileArchiver(
-        patterns = LicenseFilePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
-        storage = FileProvenanceFileStorage(
-            LocalFileStorage(DEFAULT_ARCHIVE_DIR),
-            FileArchiverConfiguration.ARCHIVE_FILENAME
-        )
-    )
 
 fun TestConfiguration.getResource(name: String) = checkNotNull(javaClass.getResource(name))
 
