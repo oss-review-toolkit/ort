@@ -114,8 +114,17 @@ private class RepositoryDeserializer : StdDeserializer<Repository>(Repository::c
             }
         }
 
-        val nestedRepositories = jsonMapper.treeToValue<Map<String, VcsInfo>>(node["nested_repositories"])
-        val config = jsonMapper.treeToValue<RepositoryConfiguration>(node["config"])
+        val nestedRepositories = if (node.has("nested_repositories")) {
+            jsonMapper.treeToValue<Map<String, VcsInfo>>(node["nested_repositories"])
+        } else {
+            emptyMap()
+        }
+
+        val config = if (node.has("config")) {
+            jsonMapper.treeToValue<RepositoryConfiguration>(node["config"])
+        } else {
+            RepositoryConfiguration()
+        }
 
         return Repository(provenance = parsedProvenance, nestedRepositories, config)
     }
