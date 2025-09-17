@@ -58,7 +58,7 @@ class DefaultDirLicenseFactProvider(descriptor: PluginDescriptor = DefaultDirLic
 )
 open class DirLicenseFactProvider(
     override val descriptor: PluginDescriptor = DirLicenseFactProviderFactory.descriptor,
-    private val config: DirLicenseFactProviderConfig
+    config: DirLicenseFactProviderConfig
 ) : LicenseFactProvider {
     private val licenseTextDir = File(config.licenseTextDir).also {
         if (!it.isDirectory) {
