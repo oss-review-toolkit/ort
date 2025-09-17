@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 import org.ossreviewtoolkit.utils.ort.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
@@ -59,16 +60,20 @@ class DefaultDirLicenseFactProvider(descriptor: PluginDescriptor = DefaultDirLic
 open class DirLicenseFactProvider(
     override val descriptor: PluginDescriptor = DirLicenseFactProviderFactory.descriptor,
     config: DirLicenseFactProviderConfig
-) : LicenseFactProvider {
+) : LicenseFactProvider() {
     private val licenseTextDir = File(config.licenseTextDir).also {
         if (!it.isDirectory) {
             logger.warn { "The license text directory '${it.absolutePath}' does not exist or is not a directory." }
         }
     }
 
-    override fun getLicenseText(licenseId: String) = getLicenseTextFile(licenseId)?.readText()
+    override fun getLicenseText(licenseId: String) = getLicenseTextFile(licenseId)?.readText()?.let { LicenseText(it) }
 
     override fun hasLicenseText(licenseId: String) = getLicenseTextFile(licenseId) != null
 
-    private fun getLicenseTextFile(licenseId: String) = licenseTextDir.resolve(licenseId).takeIf { it.isFile }
+    private fun getLicenseTextFile(licenseId: String) =
+        licenseTextDir.resolve(licenseId).takeIf { it.isFile && it.isNotBlank }
 }
+
+private val File.isNotBlank: Boolean
+    get() = useLines { lines -> lines.any { line -> line.any { !it.isWhitespace() } } }
