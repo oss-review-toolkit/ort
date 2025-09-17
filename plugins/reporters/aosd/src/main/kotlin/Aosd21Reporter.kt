@@ -94,7 +94,7 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
             ?.takeUnless { it.offersChoice() }
 
         val licenseTexts = licenseExpression?.licenses().orEmpty().mapNotNullTo(mutableSetOf()) { license ->
-            input.licenseFactProvider.getLicenseText(license)
+            input.licenseFactProvider.getLicenseText(license)?.text
         }.joinToString("\n--\n") { it.trimEnd() }
 
         with(pkg.metadata) {

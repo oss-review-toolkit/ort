@@ -37,7 +37,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
 
             val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = licenseDir.absolutePath)
 
-            provider.getLicenseText("test") shouldBe "custom license text"
+            provider.getLicenseText("test")?.text shouldBe "custom license text"
         }
 
         "remove YAML front matter from the license text" {
@@ -54,14 +54,14 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
 
             val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = licenseDir.absolutePath)
 
-            provider.getLicenseText("test") shouldBe "custom license text"
+            provider.getLicenseText("test")?.text shouldBe "custom license text"
         }
 
         "read license texts from the detected ScanCode license directory" {
             val provider = ScanCodeLicenseFactProviderFactory.create()
 
             provider.getLicenseText("MIT") shouldNotBeNull {
-                this should startWith("Permission is hereby granted, free of charge, to any person obtaining")
+                text should startWith("Permission is hereby granted, free of charge, to any person obtaining")
             }
         }
 
@@ -69,6 +69,22 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
             val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = tempdir().absolutePath)
 
             provider.getLicenseText("UnknownLicense") should beNull()
+        }
+
+        "return null if the license file contains only YAML front matter" {
+            val licenseDir = tempdir()
+            (licenseDir / "test.LICENSE").writeText(
+                """
+                |---
+                |key: value
+                |---
+                |
+                """.trimMargin()
+            )
+
+            val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = licenseDir.absolutePath)
+
+            provider.getLicenseText("test") should beNull()
         }
     }
 
@@ -83,6 +99,22 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
             val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = tempdir().absolutePath)
 
             provider.hasLicenseText("UnknownLicense") shouldBe false
+        }
+
+        "return false if the license file contains only YAML front matter" {
+            val licenseDir = tempdir()
+            (licenseDir / "test.LICENSE").writeText(
+                """
+                |---
+                |key: value
+                |---
+                |
+                """.trimMargin()
+            )
+
+            val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = licenseDir.absolutePath)
+
+            provider.hasLicenseText("test") shouldBe false
         }
     }
 })

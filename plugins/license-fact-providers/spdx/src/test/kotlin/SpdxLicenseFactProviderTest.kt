@@ -37,20 +37,20 @@ class SpdxLicenseFactProviderTest : WordSpec({
 
     "getLicenseText()" should {
         "return the license text for Apache-2.0" {
-            val text = provider.getLicenseText(SpdxLicense.APACHE_2_0.id)
-            text should contain("Apache License")
-            text should haveLength(11357)
+            val license = provider.getLicenseText(SpdxLicense.APACHE_2_0.id)
+            license?.text should contain("Apache License")
+            license?.text should haveLength(11357)
         }
 
         "return the license text for all SPDX licenses" {
             enumValues<SpdxLicense>().forAll {
-                provider.getLicenseText(it.id) shouldNot beEmpty()
+                provider.getLicenseText(it.id)?.text shouldNot beEmpty()
             }
         }
 
         "return the license text for all SPDX exceptions" {
             enumValues<SpdxLicenseException>().forAll {
-                provider.getLicenseText(it.id) shouldNot beEmpty()
+                provider.getLicenseText(it.id)?.text shouldNot beEmpty()
             }
         }
 

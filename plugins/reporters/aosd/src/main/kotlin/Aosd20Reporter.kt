@@ -106,7 +106,7 @@ private fun Package.toLicenses(input: ReporterInput): List<AOSD20.License> {
 
         return effectiveLicense?.decompose()?.map { licenseExpression ->
             val name = licenseExpression.toString()
-            val text = input.licenseFactProvider.getLicenseText(name)
+            val text = input.licenseFactProvider.getLicenseText(name)?.text
 
             AOSD20.License(
                 name = name,

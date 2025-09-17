@@ -23,8 +23,8 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 class ScanCodeLicenseFactProviderTest : WordSpec({
-    "removeYamlFrontMatter" should {
-        "remove a YAML front matter" {
+    "skipYamlFrontMatter()" should {
+        "skip a YAML front matter" {
             val text = """
                 ---
                 key: alasir
@@ -62,10 +62,6 @@ class ScanCodeLicenseFactProviderTest : WordSpec({
             """.trimIndent()
         }
 
-        "remove trailing whitespace" {
-            "last sentence\n".removeYamlFrontMatter() shouldBe "last sentence"
-        }
-
         "remove leading empty lines" {
             "\nfirst sentence".removeYamlFrontMatter() shouldBe "first sentence"
         }
@@ -75,3 +71,5 @@ class ScanCodeLicenseFactProviderTest : WordSpec({
         }
     }
 })
+
+private fun String.removeYamlFrontMatter() = lineSequence().skipYamlFrontMatter().joinToString("\n")

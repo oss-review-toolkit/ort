@@ -19,18 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.licensefactproviders.api
 
-import org.ossreviewtoolkit.plugins.api.Plugin
-
-/** A provider for license facts. */
-abstract class LicenseFactProvider : Plugin {
-    /** Return the [LicenseText] for the given [licenseId], or `null` if no valid text is available. */
-    abstract fun getLicenseText(licenseId: String): LicenseText?
-
-    /** Return a non-blank license text for the given [licenseId], or `null` if no valid text is available. */
-    @Deprecated("Java-only API", level = DeprecationLevel.HIDDEN)
-    @JvmName("getLicenseText")
-    fun getNonBlankLicenseText(licenseId: String): String? = getLicenseText(licenseId)?.text
-
-    /** Return `true´ if this provider has a license text for the given [licenseId]. */
-    abstract fun hasLicenseText(licenseId: String): Boolean
+/** A value class to represent a valid license text. It guarantees that the text is not blank. */
+@JvmInline
+value class LicenseText(val text: String) {
+    init {
+        require(text.isNotBlank()) { "The license text must not be blank." }
+    }
 }

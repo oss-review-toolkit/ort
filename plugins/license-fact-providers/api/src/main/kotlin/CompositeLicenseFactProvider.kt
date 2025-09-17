@@ -30,7 +30,7 @@ class CompositeLicenseFactProvider(
      *  providers: the first provider in the list that has a fact for a given license ID will be used.
      */
     private val providers: List<LicenseFactProvider>
-) : LicenseFactProvider {
+) : LicenseFactProvider() {
     override val descriptor = PluginDescriptor(
         id = "Composite",
         displayName = "Composite License Fact Provider",
