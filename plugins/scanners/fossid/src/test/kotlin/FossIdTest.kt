@@ -153,6 +153,8 @@ class FossIdTest : WordSpec({
         }
 
         "create a new scan for an existing project" {
+            val branchName = "aTestBranch"
+
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
@@ -163,15 +165,21 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName)
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
 
             val fossId = createFossId(config)
 
-            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
+            fossId.scan(
+                createPackage(
+                    createIdentifier(index = 1),
+                    vcsInfo
+                ),
+                mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
+            )
 
-            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "").asJsonString()
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
             coVerify {
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
                 service.downloadFromGit(USER, API_KEY, scanCode)
@@ -184,6 +192,8 @@ class FossIdTest : WordSpec({
         }
 
         "create a new scan for an existing project by uploading an archive" {
+            val branchName = "aTestBranch"
+
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false, isArchiveMode = true)
@@ -194,7 +204,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "", true)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName, true)
                 .expectRemoveUploadedContent(scanCode)
                 .expectUploadFile(scanCode)
                 .expectExtractArchives(scanCode)
@@ -202,9 +212,12 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
+            )
 
-            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, "").asJsonString()
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
             coVerify {
                 service.createScan(USER, API_KEY, projectCode, scanCode, null, null, comment)
                 service.removeUploadedContent(USER, API_KEY, scanCode)
