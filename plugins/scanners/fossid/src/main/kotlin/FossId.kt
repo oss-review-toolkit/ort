@@ -505,14 +505,26 @@ class FossId internal constructor(
         nestedProvenance: NestedProvenance?,
         context: ScanContext
     ): FossIdResult {
-        val existingScan = scans.recentScansForRepository(url, revision = revision).findLatestPendingOrFinishedScan()
+        val projectRevision = context.labels[PROJECT_REVISION_LABEL]
+
+        if (projectRevision == null) {
+            logger.warn { "No project revision has been given." }
+        } else {
+            logger.info { "Project revision is '$projectRevision'." }
+        }
+
+        val existingScan = scans.recentScansForRepository(
+            url,
+            revision = revision,
+            projectRevision = projectRevision
+        ).findLatestPendingOrFinishedScan()
 
         val result = if (existingScan == null) {
             logger.info { "No scan found for $url and revision $revision. Creating scan..." }
 
             val scanCode = namingProvider.createScanCode(repositoryName = projectName, branch = revision)
             val newUrl = handler.transformURL(url)
-            val scanId = createScan(handler, projectCode, scanCode, newUrl, revision)
+            val scanId = createScan(handler, projectCode, scanCode, newUrl, revision, projectRevision.orEmpty())
 
             val issues = mutableListOf<Issue>()
             handler.afterScanCreation(scanCode, null, issues, context)
