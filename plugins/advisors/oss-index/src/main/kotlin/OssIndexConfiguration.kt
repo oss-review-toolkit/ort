@@ -34,14 +34,12 @@ data class OssIndexConfiguration(
     val serverUrl: String,
 
     /**
-     * The username to use for authentication. If not both [username] and [password] are provided, authentication is
-     * disabled.
+     * The username to use for authentication towards the API.
      */
-    val username: Secret?,
+    val username: String,
 
     /**
-     * The password to use for authentication. If not both [username] and [password] are provided, authentication is
-     * disabled.
+     * The token to use for authentication towards the API.
      */
-    val password: Secret?
+    val token: Secret
 )
