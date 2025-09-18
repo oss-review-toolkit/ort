@@ -91,12 +91,15 @@ private class RepositoryDeserializer : StdDeserializer<Repository>(Repository::c
         val parsedProvenance = when {
             node.has("vcs") -> {
                 // Parse [vcs] and [vcsProcessed] attributes
-                val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs"])
+                val vcs = jsonMapper.treeToValue<VcsInfo>(node["vcs"])
                 val vcsProcess = jsonMapper.treeToValue<VcsInfo>(node["vcs_processed"])
 
+                // Fall back to [vcsProcessed], if [vcs] is empty
+                val vcsInfo = if (vcs != VcsInfo.EMPTY) vcs else vcsProcess
+
                 // Get the [vcs]'s revision
-                val resolvedRevision = if (vcsInfo.revision != "") {
-                    vcsInfo.revision
+                val resolvedRevision = if (vcs.revision != "") {
+                    vcs.revision
                 } else if (vcsProcess.revision != "") {
                     // Fall back to [vcsProcessed], if [vcs] has empty revision
                     vcsProcess.revision
