@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
+import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.identifierToPackage
 
@@ -68,7 +69,9 @@ class OssIndexTest : WordSpec({
     "OssIndex" should {
         "return vulnerability information" {
             server.stubComponentsRequest("response_components.json")
-            val ossIndex = OssIndex(config = OssIndexConfiguration("http://localhost:${server.port()}", null, null))
+            val ossIndex = OssIndex(
+                config = OssIndexConfiguration("http://localhost:${server.port()}", "username", Secret("token"))
+            )
 
             val result = ossIndex.retrievePackageFindings(PACKAGES).mapKeys { it.key.id }
 
@@ -113,7 +116,9 @@ class OssIndexTest : WordSpec({
                         aResponse().withStatus(500)
                     )
             )
-            val ossIndex = OssIndex(config = OssIndexConfiguration("http://localhost:${server.port()}", null, null))
+            val ossIndex = OssIndex(
+                config = OssIndexConfiguration("http://localhost:${server.port()}", "username", Secret("token"))
+            )
 
             val result = ossIndex.retrievePackageFindings(PACKAGES).mapKeys { it.key.id.toCoordinates() }
 
@@ -128,7 +133,9 @@ class OssIndexTest : WordSpec({
         }
 
         "provide correct details" {
-            val ossIndex = OssIndex(config = OssIndexConfiguration("http://localhost:${server.port()}", null, null))
+            val ossIndex = OssIndex(
+                config = OssIndexConfiguration("http://localhost:${server.port()}", "username", Secret("token"))
+            )
 
             ossIndex.details shouldBe AdvisorDetails(ADVISOR_NAME, enumSetOf(AdvisorCapability.VULNERABILITIES))
         }
@@ -139,7 +146,7 @@ private const val ADVISOR_NAME = "OSSIndex"
 
 private val PKG_HAMCREST = identifierToPackage("Maven:org.hamcrest:hamcrest-core:1.3")
 private val PKG_JUNIT = identifierToPackage("Maven:junit:junit:4.12")
-private const val COMPONENTS_REQUEST_URL = "/api/v3/component-report"
+private const val COMPONENTS_REQUEST_URL = "/api/v3/authorized/component-report"
 private val PACKAGES = setOf(PKG_HAMCREST, PKG_JUNIT)
 
 private val COMPONENTS_REQUEST_JSON =

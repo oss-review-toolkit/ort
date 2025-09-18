@@ -72,15 +72,10 @@ class OssIndex(
     private val service by lazy {
         OssIndexService.create(
             config.serverUrl,
-            config.username?.value,
-            config.password?.value,
+            config.username,
+            config.token.value,
             OkHttpClientHelper.buildClient()
         )
-    }
-
-    private val getComponentReport by lazy {
-        val hasCredentials = config.username != null && config.password != null
-        if (hasCredentials) service::getAuthorizedComponentReport else service::getComponentReport
     }
 
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
@@ -96,7 +91,7 @@ class OssIndex(
             logger.debug { "Getting report for ${chunk.size} components (chunk ${index + 1} of ${chunks.size})." }
 
             runCatching {
-                val results = getComponentReport(ComponentReportRequest(chunk)).associateBy {
+                val results = service.getAuthorizedComponentReport(ComponentReportRequest(chunk)).associateBy {
                     it.coordinates
                 }
 
