@@ -204,6 +204,7 @@ open class PackageRule(
      */
     fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
         resolvedLicenseInfo.filter(licenseView, filterSources = true)
+            .filterExcluded() // Filter excluded licenses before applying choices
             .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.metadata.id), licenseView)
             .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView).forEach { resolvedLicense ->
                 resolvedLicense.sources.forEach { licenseSource ->
