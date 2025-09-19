@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.DUMMY_COMPILER_SETTINGS
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEPENDENCIES
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEV_DEPENDENCIES
 import org.ossreviewtoolkit.utils.common.Os
@@ -43,6 +42,12 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  */
 internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
     override fun getConanHome(): File = Os.userHomeDirectory.resolve(".conan")
+
+    override fun createConanProfileIfNeeded() {
+        if (!getConanHome().resolve("profiles/ort-default").isFile) {
+            conan.command.run("profile", "new", "ort-default", "--detect").requireSuccess()
+        }
+    }
 
     override fun getConanStoragePath(): File = getConanHome().resolve("data")
 
@@ -64,7 +69,8 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
                 definitionFile.name,
                 "--json",
                 jsonFile.absolutePath,
-                *DUMMY_COMPILER_SETTINGS
+                "--profile",
+                "ort-default"
             ).requireSuccess()
         }
 
