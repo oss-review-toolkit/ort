@@ -231,11 +231,10 @@ class VersionUtilsTest : WordSpec({
         "find names that use an abbreviated SHA1 as the suffix" {
             val names = listOf(
                 "3.9.0.99-a3d9827",
-                "sdk-3.9.0.99",
-                "v3.9.0.99"
+                "sdk-3.9.0.99"
             )
 
-            filterVersionNames("3.9.0.99", names) should containExactly("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
+            filterVersionNames("3.9.0.99", names) should containExactly("3.9.0.99-a3d9827", "sdk-3.9.0.99")
         }
 
         "find names that match the version without an ignorable suffix" {
@@ -246,6 +245,24 @@ class VersionUtilsTest : WordSpec({
             )
 
             filterVersionNames("6.2.9.Final", names) should containExactly("6.2.9")
+        }
+
+        "treat exact matches higher than near exact matches" {
+            val names = listOf(
+                "1.0.0",
+                "v1.0.0"
+            )
+
+            filterVersionNames("1.0.0", names) shouldHaveSingleElement "1.0.0"
+        }
+
+        "treat near exact matches higher than others" {
+            val names = listOf(
+                "v2.2.20",
+                "2.2.20-dev-123"
+            )
+
+            filterVersionNames("2.2.20", names) shouldHaveSingleElement "v2.2.20"
         }
     }
 })
