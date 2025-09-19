@@ -41,6 +41,9 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     val fullMatches = names.filter { it.equals(version, ignoreCase = true) }
     if (fullMatches.isNotEmpty()) return fullMatches
 
+    val nearExactMatches = names.filter { it.equals("v$version", ignoreCase = true) }
+    if (nearExactMatches.isNotEmpty()) return nearExactMatches
+
     // Create variants of the version string to recognize.
     data class VersionVariant(val name: String, val separators: List<Char>)
 
