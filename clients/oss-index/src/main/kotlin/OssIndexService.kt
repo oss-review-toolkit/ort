@@ -138,12 +138,6 @@ interface OssIndexService {
     )
 
     /**
-     * Request vulnerability reports for [components] (does not require authentication; rate limits apply).
-     */
-    @POST("api/v3/component-report")
-    suspend fun getComponentReport(@Body components: ComponentReportRequest): List<ComponentReport>
-
-    /**
      * Request vulnerability reports for [components] (requires basic authentication; rate limits are relaxed).
      */
     @POST("api/v3/authorized/component-report")
