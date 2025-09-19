@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -73,19 +74,19 @@ internal class ScanController(
     /**
      * A map of [KnownProvenance]s to their resolved [NestedProvenance]s.
      */
-    private val nestedProvenances = mutableMapOf<KnownProvenance, NestedProvenance>()
+    private val nestedProvenances = mutableMapOf<RemoteProvenance, NestedProvenance>()
 
     /**
      * A map of package [Identifier]s to their resolved [KnownProvenance]s. These provenances are used to filter the
      * scan results for a package based on the VCS path.
      */
-    private val packageProvenances = mutableMapOf<Identifier, KnownProvenance>()
+    private val packageProvenances = mutableMapOf<Identifier, RemoteProvenance>()
 
     /**
      * A map of package [Identifier]s to their resolved [KnownProvenance]s with the VCS path removed. These provenances
      * are used during scanning to make sure that always the full repositories are scanned.
      */
-    private val packageProvenancesWithoutVcsPath = mutableMapOf<Identifier, KnownProvenance>()
+    private val packageProvenancesWithoutVcsPath = mutableMapOf<Identifier, RemoteProvenance>()
 
     /**
      * The [ScanResult]s for each [KnownProvenance] and [ScannerWrapper].
@@ -130,7 +131,7 @@ internal class ScanController(
     /**
      * Set the [provenance] for the package denoted by [id], overwriting any existing values.
      */
-    fun putPackageProvenance(id: Identifier, provenance: KnownProvenance) {
+    fun putPackageProvenance(id: Identifier, provenance: RemoteProvenance) {
         packageProvenances[id] = provenance
         packageProvenancesWithoutVcsPath[id] = when (provenance) {
             is RepositoryProvenance -> provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = ""))
@@ -142,7 +143,7 @@ internal class ScanController(
      * Set the [nestedProvenance] corresponding to the given [package provenance][root], overwriting any existing
      * values.
      */
-    fun putNestedProvenance(root: KnownProvenance, nestedProvenance: NestedProvenance) {
+    fun putNestedProvenance(root: RemoteProvenance, nestedProvenance: NestedProvenance) {
         nestedProvenances[root] = nestedProvenance
     }
 
@@ -165,7 +166,7 @@ internal class ScanController(
     /**
      * Return all [KnownProvenance]s contained in [nestedProvenances].
      */
-    fun getAllProvenances(): Set<KnownProvenance> =
+    fun getAllProvenances(): Set<RemoteProvenance> =
         nestedProvenances.values.flatMapTo(mutableSetOf()) { it.allProvenances }
 
     /**
@@ -177,7 +178,7 @@ internal class ScanController(
     /**
      * Return all provenances including sub-repositories associated with the identifiers of the packages they belong to.
      */
-    fun getIdsByProvenance(): Map<KnownProvenance, Set<Identifier>> =
+    fun getIdsByProvenance(): Map<RemoteProvenance, Set<Identifier>> =
         buildMap<_, MutableSet<Identifier>> {
             getNestedProvenancesByPackage().forEach { (pkg, nestedProvenance) ->
                 nestedProvenance.allProvenances.forEach { provenance ->
@@ -244,8 +245,8 @@ internal class ScanController(
      * 'components/conanfile.txt'. This is because scanner interfaces receive packages as input, and this aims at
      * providing a deterministic ordering when choosing a reference package for packages with the same provenance.
      */
-    fun getPackagesConsolidatedByProvenance(): Map<KnownProvenance, List<Package>> {
-        val packagesByProvenance = mutableMapOf<KnownProvenance, MutableSet<Package>>()
+    fun getPackagesConsolidatedByProvenance(): Map<RemoteProvenance, List<Package>> {
+        val packagesByProvenance = mutableMapOf<RemoteProvenance, MutableSet<Package>>()
         val comparator = compareBy<Package, String>(PATH_STRING_COMPARATOR) { it.id.name }.thenBy { it.id }
 
         packages.forEach { pkg ->
@@ -267,7 +268,7 @@ internal class ScanController(
     fun getPackagesForProvenanceWithoutVcsPath(provenance: KnownProvenance): Set<Identifier> =
         packageProvenancesWithoutVcsPath.filter { (_, packageProvenance) -> packageProvenance == provenance }.keys
 
-    fun getPackageProvenance(id: Identifier): KnownProvenance? = packageProvenances[id]
+    fun getPackageProvenance(id: Identifier): RemoteProvenance? = packageProvenances[id]
 
     /**
      * Return the package provenanceResolutionIssue associated with the given [id].
@@ -277,7 +278,7 @@ internal class ScanController(
     /**
      * Return all [KnownProvenance]s for the [packages] with the VCS path removed.
      */
-    fun getPackageProvenancesWithoutVcsPath(): Set<KnownProvenance> = packageProvenancesWithoutVcsPath.values.toSet()
+    fun getPackageProvenancesWithoutVcsPath(): Set<RemoteProvenance> = packageProvenancesWithoutVcsPath.values.toSet()
 
     /**
      * Return all [PackageScannerWrapper]s.
