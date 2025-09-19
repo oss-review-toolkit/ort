@@ -93,7 +93,7 @@ open class ProjectSourceRule(
     /**
      * Return the [VcsType] of the project's code repository.
      */
-    fun projectSourceGetVcsType(): VcsType = ortResult.repository.vcsProcessed.type
+    fun projectSourceGetVcsType(): VcsType = ortResult.repository.provenance.vcsInfo.normalize().type
 
     /**
      * Return the file paths matching any of the given [glob expressions][patterns] with its file content matching

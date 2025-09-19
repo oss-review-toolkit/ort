@@ -97,6 +97,10 @@ private val PROJECT_ROOT_VCS_INFO = VcsInfo(
 private val PROJECT_SUB_VCS_INFO = PROJECT_ROOT_VCS_INFO.copy(
     path = "sub-dir"
 )
+private val PROJECT_PROVENANCE = RepositoryProvenance(
+    vcsInfo = PROJECT_ROOT_VCS_INFO,
+    resolvedRevision = PROJECT_ROOT_VCS_INFO.revision
+)
 private val NESTED_VCS_INFO = VcsInfo(
     type = VcsType.GIT,
     url = "ssh://git@host/project/repo",
@@ -110,7 +114,7 @@ private val idNestedProject = Identifier("SpdxDocumentFile:@ort:project-in-neste
 
 private val ORT_RESULT = OrtResult(
     repository = Repository(
-        vcs = PROJECT_ROOT_VCS_INFO,
+        provenance = PROJECT_PROVENANCE,
         config = RepositoryConfiguration(),
         nestedRepositories = mapOf("nested-vcs-dir" to NESTED_VCS_INFO)
     ),

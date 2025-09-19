@@ -716,7 +716,7 @@ internal fun OrtResult.getScanResultFor(packageConfiguration: PackageConfigurati
  * tree.
  */
 internal fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
-    val result = mutableMapOf(repository.vcsProcessed.url to mutableSetOf(""))
+    val result = mutableMapOf(repository.provenance.vcsInfo.normalize().url to mutableSetOf(""))
 
     repository.nestedRepositories.mapValues { (path, vcsInfo) ->
         result.getOrPut(vcsInfo.url) { mutableSetOf() } += path

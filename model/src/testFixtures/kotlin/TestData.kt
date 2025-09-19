@@ -136,7 +136,10 @@ val scanResults = listOf(
 
 val ortResult = OrtResult(
     repository = Repository(
-        vcs = VcsInfo.EMPTY,
+        provenance = RepositoryProvenance(
+            vcsInfo = VcsInfo.EMPTY,
+            resolvedRevision = HashAlgorithm.SHA1.emptyValue
+        ),
         config = RepositoryConfiguration(
             excludes = Excludes(
                 paths = listOf(

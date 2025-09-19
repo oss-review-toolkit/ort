@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -266,8 +267,10 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
                         )
                     )
                 ),
-                vcs = analyzedVcs,
-                vcsProcessed = analyzedVcs
+                provenance = RepositoryProvenance(
+                    vcsInfo = analyzedVcs,
+                    resolvedRevision = analyzedVcs.revision
+                )
             ),
             scanner = scannerRunOf(*results.toList().toTypedArray())
         )
