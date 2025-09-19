@@ -25,6 +25,16 @@ plugins {
 repositories {
     // Allow to resolve external plugins from precompiled script plugins.
     gradlePluginPortal()
+
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.eclipse.org/content/groups/releases")
+        }
+
+        filter {
+            includeGroup("org.eclipse.jgit")
+        }
+    }
 }
 
 dependencies {
