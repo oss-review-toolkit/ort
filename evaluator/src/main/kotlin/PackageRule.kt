@@ -201,6 +201,15 @@ open class PackageRule(
 
     /**
      * A DSL function to configure a [LicenseRule] and add it to this rule.
+     * 
+     * The licenses are processed in the following order to ensure correct evaluation:
+     * 1. Filter by [licenseView] and license sources
+     * 2. Filter excluded licenses (due to path excludes) - this must happen before applying choices
+     * 3. Apply package-specific license choices
+     * 4. Apply repository-wide license choices
+     * 
+     * This order matches the behavior of reporters and ensures that excluded licenses are not 
+     * considered when applying license choices, fixing issue #10867.
      */
     fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
         resolvedLicenseInfo.filter(licenseView, filterSources = true)
