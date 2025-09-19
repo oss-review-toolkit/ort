@@ -37,9 +37,9 @@ private val ignorablePrefixSuffixRegex = Regex(
 fun filterVersionNames(version: String, names: List<String>, project: String? = null): List<String> {
     if (version.isBlank() || names.isEmpty()) return emptyList()
 
-    // If there are full matches, return them right away.
-    val fullMatches = names.filter { it.equals(version, ignoreCase = true) }
-    if (fullMatches.isNotEmpty()) return fullMatches
+    // If there are exact matches, return them right away.
+    val exactMatches = names.filter { it.equals(version, ignoreCase = true) }
+    if (exactMatches.isNotEmpty()) return exactMatches
 
     val nearExactMatches = names.filter { it.equals("v$version", ignoreCase = true) }
     if (nearExactMatches.isNotEmpty()) return nearExactMatches
