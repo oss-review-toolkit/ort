@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.licenses
 
 import java.util.concurrent.ConcurrentHashMap
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -259,7 +260,15 @@ class LicenseInfoResolver(
             // Register the (empty) `archiveDir` for deletion on JVM exit.
             archiveDir.deleteOnExit()
 
-            val directory = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
+            val directory = when (provenance) {
+                // In case of a repository, match paths relative to the VCS path.
+                is RepositoryProvenance -> provenance.vcsInfo.path
+
+                // In case of a source artifact, match paths relative to the archive root or a type-specific directory.
+                // TODO: Check if more types need special handling.
+                is ArtifactProvenance -> if (id.type == "Maven") "META-INF" else ""
+            }
+
             val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
                 relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
                     it.relativeTo(archiveDir).invariantSeparatorsPath
