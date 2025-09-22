@@ -19,76 +19,138 @@
 
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
+
+import kotlin.time.Duration.Companion.milliseconds
+
+import kotlinx.coroutines.delay
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.div
 
-class GitWorkingTreeFunTest : StringSpec({
+class GitWorkingTreeFunTest : WordSpec({
     val git = GitFactory().create(PluginConfig.EMPTY)
-    val repoDir = tempdir()
     val vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort-test-data-git.git",
         revision = "main"
     )
 
+    lateinit var repoDir: File
     lateinit var workingTree: WorkingTree
 
-    beforeSpec {
+    beforeEach {
+        repoDir = tempdir()
         workingTree = git.initWorkingTree(repoDir, vcsInfo)
-        git.updateWorkingTree(workingTree, "main")
     }
 
-    "Git detects non-working-trees" {
-        git.getWorkingTree(tempdir()).isValid() shouldBe false
+    afterEach {
+        // This delay is required to successfully let Kotest delete the temporary directories on Windows.
+        if (Os.isWindows) delay(100.milliseconds)
     }
 
-    "Detected Git working tree information is correct" {
-        workingTree.isValid() shouldBe true
-        workingTree.getInfo() shouldBe vcsInfo.copy(revision = "6f09f276c4426c387c6663f54bbd45aea8d81dac")
-        workingTree.getNested() should beEmpty()
-        workingTree.getRootPath() shouldBe repoDir
-        workingTree.getPathToRoot(repoDir / "README.md") shouldBe "README.md"
+    "The working tree" should {
+        "be invalid for an empty directory" {
+            git.getWorkingTree(tempdir()).isValid() shouldBe false
+        }
+
+        "return correct information" {
+            git.updateWorkingTree(workingTree, "main")
+
+            workingTree.isValid() shouldBe true
+            workingTree.getInfo() shouldBe vcsInfo.copy(revision = "6f09f276c4426c387c6663f54bbd45aea8d81dac")
+            workingTree.getNested() should beEmpty()
+            workingTree.getRootPath() shouldBe repoDir
+            workingTree.getPathToRoot(repoDir / "README.md") shouldBe "README.md"
+        }
+
+        "correctly lists remote branches" {
+            workingTree.listRemoteBranches() should containExactlyInAnyOrder(
+                "main",
+                "branch1",
+                "branch2",
+                "branch3"
+            )
+        }
+
+        "correctly lists remote tags" {
+            workingTree.listRemoteTags() should containExactlyInAnyOrder(
+                "tag1",
+                "tag2",
+                "tag3"
+            )
+        }
+
+        "correctly lists submodules" {
+            val expectedSubmodules = listOf(
+                "plugins/package-managers/pub/src/funTest/assets/projects/external/dart-http",
+                "plugins/package-managers/python/src/funTest/assets/projects/external/example-python-flask",
+                "plugins/package-managers/python/src/funTest/assets/projects/external/spdx-tools-python",
+                "plugins/package-managers/sbt/src/funTest/assets/projects/external/multi-project",
+                "plugins/package-managers/stack/src/funTest/assets/projects/external/quickcheck-state-machine"
+            ).associateWith { VersionControlSystem.getPathInfo(File("../../../$it")) }
+
+            git.getWorkingTree(File("..")).getNested() shouldBe expectedSubmodules
+        }
     }
 
-    "Git correctly lists remote branches" {
-        workingTree.listRemoteBranches() should containExactlyInAnyOrder(
-            "main",
-            "branch1",
-            "branch2",
-            "branch3"
+    "updateWorkingTree()" should {
+        val branches = mapOf(
+            "main" to "6f09f276c4426c387c6663f54bbd45aea8d81dac",
+            "branch1" to "0c58ea81d5c8112affab7a9cd6308deb4bc51589",
+            "branch2" to "7a05ad3ad30b4ddbfac22e0b768fb91383f16d8d",
+            "branch3" to "b798693a551e4d0e96d09409948327178a9abbce"
         )
-    }
 
-    "Git correctly lists remote tags" {
-        workingTree.listRemoteTags() should containExactlyInAnyOrder(
-            "tag1",
-            "tag2",
-            "tag3"
+        val tags = mapOf(
+            "tag1" to "0c58ea81d5c8112affab7a9cd6308deb4bc51589",
+            "tag2" to "7a05ad3ad30b4ddbfac22e0b768fb91383f16d8d",
+            "tag3" to "b798693a551e4d0e96d09409948327178a9abbce"
         )
-    }
 
-    "Git correctly lists submodules" {
-        val expectedSubmodules = listOf(
-            "plugins/package-managers/pub/src/funTest/assets/projects/external/dart-http",
-            "plugins/package-managers/python/src/funTest/assets/projects/external/example-python-flask",
-            "plugins/package-managers/python/src/funTest/assets/projects/external/spdx-tools-python",
-            "plugins/package-managers/sbt/src/funTest/assets/projects/external/multi-project",
-            "plugins/package-managers/stack/src/funTest/assets/projects/external/quickcheck-state-machine"
-        ).associateWith { VersionControlSystem.getPathInfo(File("../../../$it")) }
+        "update the working tree to the correct revision" {
+            branches.values.forEach { revision ->
+                git.updateWorkingTree(workingTree, revision) shouldBeSuccess revision
+                workingTree.getRevision() shouldBe revision
+            }
+        }
 
-        git.getWorkingTree(File("..")).getNested() shouldBe expectedSubmodules
+        "update the working tree to the correct tag" {
+            tags.forEach { (tag, revision) ->
+                git.updateWorkingTree(workingTree, tag) shouldBeSuccess tag
+                workingTree.getRevision() shouldBe revision
+            }
+        }
+
+        "update the working tree to the correct branch" {
+            branches.forEach { (branch, revision) ->
+                git.updateWorkingTree(workingTree, branch) shouldBeSuccess branch
+                workingTree.getRevision() shouldBe revision
+            }
+        }
+
+        "update an outdated local branch" {
+            val branch = "branch1"
+            val revision = branches.getValue(branch)
+
+            git.updateWorkingTree(workingTree, branch)
+            GitCommand.run("reset", "--hard", "HEAD~1", workingDir = repoDir).requireSuccess()
+
+            git.updateWorkingTree(workingTree, branch) shouldBeSuccess branch
+            workingTree.getRevision() shouldBe revision
+        }
     }
 })
