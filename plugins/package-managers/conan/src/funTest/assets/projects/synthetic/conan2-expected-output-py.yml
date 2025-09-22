@@ -22,7 +22,7 @@ project:
     dependencies: []
   - name: "requires"
     dependencies:
-    - id: "Conan::expat:2.7.1"
+    - id: "Conan::expat:2.7.2"
     - id: "Conan::libmysqlclient:8.1.0"
       dependencies:
       - id: "Conan::lz4:1.9.4"
@@ -72,8 +72,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "Conan::expat:2.7.1"
-  purl: "pkg:conan/expat@2.7.1"
+- id: "Conan::expat:2.7.2"
+  purl: "pkg:conan/expat@2.7.2"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -86,9 +86,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://github.com/libexpat/libexpat/releases/download/R_2_7_1/expat-2.7.1.tar.xz"
+    url: "https://github.com/libexpat/libexpat/releases/download/R_2_7_2/expat-2.7.2.tar.xz"
     hash:
-      value: "354552544b8f99012e5062f7d570ec77f14b412a3ff5c7d8d0dae62c0d217c30"
+      value: "21b778b34ec837c2ac285aef340f9fb5fa063a811b21ea4d2412a9702c88995c"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
