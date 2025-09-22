@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagecurationproviders.ortconfig
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
@@ -27,6 +28,7 @@ import io.kotest.matchers.shouldNot
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 
+@Tags("RequiresExternalTool")
 class OrtConfigPackageCurationProviderFunTest : StringSpec({
     fun createProvider() = OrtConfigPackageCurationProviderFactory.create()
 

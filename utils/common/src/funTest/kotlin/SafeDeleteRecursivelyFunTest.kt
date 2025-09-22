@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.common
 
 import io.kotest.assertions.throwables.shouldNotThrow
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
@@ -32,6 +33,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitFactory
 
+@Tags("RequiresExternalTool")
 class SafeDeleteRecursivelyFunTest : WordSpec({
     "File.safeDeleteRecursively()" should {
         "be able to delete files that are not writable" {

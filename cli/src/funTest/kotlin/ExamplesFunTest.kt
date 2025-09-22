@@ -25,6 +25,7 @@ import com.icegreen.greenmail.util.ServerSetup
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.withClue
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
@@ -69,6 +70,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
+@Tags("RequiresExternalTool")
 class ExamplesFunTest : StringSpec({
     val examplesDir = File("../examples")
     val exampleFiles = examplesDir.walk().maxDepth(1).filterTo(mutableListOf()) {

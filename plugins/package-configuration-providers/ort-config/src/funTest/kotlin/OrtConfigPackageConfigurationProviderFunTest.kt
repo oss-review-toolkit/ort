@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packageconfigurationproviders.ortconfig
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
@@ -29,6 +30,7 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 
+@Tags("RequiresExternalTool")
 class OrtConfigPackageConfigurationProviderFunTest : StringSpec({
     "provider can load package-configurations from the ort-config repository" {
         val id = Identifier("Maven:net.java.dev.jna:jna-platform:5.8.0")

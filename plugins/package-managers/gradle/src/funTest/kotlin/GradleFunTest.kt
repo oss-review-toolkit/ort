@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
@@ -38,6 +39,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
+@Tags("RequiresExternalTool")
 class GradleFunTest : StringSpec() {
     private val projectDir = getAssetFile("projects/synthetic/gradle")
     private val isJava9OrAbove = Environment.JAVA_VERSION.split('.').first().toInt() >= 9

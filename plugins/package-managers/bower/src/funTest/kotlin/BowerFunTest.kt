@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bower
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
@@ -27,6 +28,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class BowerFunTest : StringSpec({
     "Project dependencies are detected correctly" {
         val definitionFile = getAssetFile("projects/synthetic/bower/bower.json")

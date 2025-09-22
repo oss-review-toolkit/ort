@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.scanner
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -47,6 +48,7 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readResource
 
+@Tags("RequiresExternalTool")
 class ScannerIntegrationFunTest : WordSpec({
     val workingTreeCache = DefaultWorkingTreeCache()
     val scannerWrapper = DummyPathScannerWrapper()

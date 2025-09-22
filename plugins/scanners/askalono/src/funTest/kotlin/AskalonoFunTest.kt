@@ -19,10 +19,13 @@
 
 package org.ossreviewtoolkit.plugins.scanners.askalono
 
+import io.kotest.core.annotation.Tags
+
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
 
+@Tags("RequiresExternalTool")
 class AskalonoFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = AskalonoFactory.create()
 

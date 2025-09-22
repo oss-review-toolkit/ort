@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.conan
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
@@ -40,6 +41,7 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
  * several times (CI checks are not impacted because they always start with an empty cache). A workaround is to delete
  * the Conan cache before executing the tests, i.e. rm -Rf ~/.conan2/p/.
  */
+@Tags("RequiresExternalTool")
 class ConanFunTest : StringSpec({
     "Project dependencies are detected correctly for conanfile.txt" {
         val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")

@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.mercurial
 
 import io.kotest.assertions.throwables.shouldNotThrow
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
@@ -43,6 +44,7 @@ private const val REPO_PATH = "test"
 private const val REPO_REV_FOR_VERSION = "a766fe47501b185bc46cffc210735304e28f2189"
 private const val REPO_PATH_FOR_VERSION = "build"
 
+@Tags("RequiresExternalTool")
 class MercurialFunTest : WordSpec({
     val hg = Mercurial()
     lateinit var outputDir: File

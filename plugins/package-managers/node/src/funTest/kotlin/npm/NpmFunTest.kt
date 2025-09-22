@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
@@ -42,6 +43,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
+@Tags("RequiresExternalTool")
 class NpmFunTest : StringSpec({
     "Resolve dependencies for a project with a 'shrinkwrap.json' correctly" {
         val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")

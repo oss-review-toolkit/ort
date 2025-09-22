@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.nulls.beNull
@@ -29,6 +30,7 @@ import io.kotest.matchers.string.startWith
 
 import org.ossreviewtoolkit.utils.common.div
 
+@Tags("RequiresExternalTool")
 class ScanCodeLicenseFactProviderFunTest : WordSpec({
     "getLicenseText()" should {
         "read license texts from the configured directory" {

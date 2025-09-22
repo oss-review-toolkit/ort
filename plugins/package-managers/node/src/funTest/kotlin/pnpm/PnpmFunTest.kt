@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
@@ -30,6 +31,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
+@Tags("RequiresExternalTool")
 class PnpmFunTest : StringSpec({
     "Resolve dependencies for a project with lockfile correctly" {
         val definitionFile = getAssetFile("projects/synthetic/pnpm/project-with-lockfile/package.json")
