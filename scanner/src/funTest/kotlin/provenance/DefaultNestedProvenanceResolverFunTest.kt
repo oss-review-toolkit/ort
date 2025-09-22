@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 @Tags("RequiresExternalTool")
 class DefaultNestedProvenanceResolverFunTest : WordSpec() {
@@ -207,7 +206,9 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 }
             }
 
-            "work for Subversion tags".config(tags = setOf(ExpensiveTag)) {
+            // Currently disabled due to a bug in the Subversion implementation that causes too much being cloned, see
+            // https://github.com/oss-review-toolkit/ort/issues/2392.
+            "work for Subversion tags".config(enabled = false) {
                 val provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.SUBVERSION,
