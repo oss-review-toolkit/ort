@@ -133,6 +133,7 @@ kotest-extensions = { module = "io.kotest:kotest-extensions", version.ref = "kot
 kotest-extensions-junitXml = { module = "io.kotest:kotest-extensions-junitxml", version.ref = "kotest" }
 kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinPoet"}
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinPoet"}
