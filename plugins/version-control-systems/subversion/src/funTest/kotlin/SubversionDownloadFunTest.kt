@@ -19,8 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.subversion
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.core.test.TestCase
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
@@ -42,16 +41,16 @@ private const val REPO_VERSION = "1.0.1"
 private const val REPO_REV_FOR_VERSION = "30"
 private const val REPO_PATH_FOR_VERSION = "src/resources"
 
-class SubversionDownloadFunTest : StringSpec() {
-    private val svn = Subversion()
-    private lateinit var outputDir: File
+class SubversionDownloadFunTest : WordSpec({
+    val svn = Subversion()
+    lateinit var outputDir: File
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    beforeEach {
         outputDir = tempdir()
     }
 
-    init {
-        "Subversion can download a given revision" {
+    "download()" should {
+        "get the given revision" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".svn",
@@ -71,7 +70,7 @@ class SubversionDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "Subversion can download only a single path" {
+        "get only the given path" {
             val pkg = Package.EMPTY.copy(
                 vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, REPO_REV, path = REPO_PATH)
             )
@@ -92,7 +91,7 @@ class SubversionDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "Subversion can download a given tag" {
+        "get only the given tag" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, REPO_TAG))
             val expectedFiles = listOf(
                 ".svn",
@@ -113,7 +112,7 @@ class SubversionDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "Subversion can download based on a version" {
+        "work based on a package version" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$REPO_VERSION"),
                 vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, "")
@@ -125,7 +124,7 @@ class SubversionDownloadFunTest : StringSpec() {
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
         }
 
-        "Subversion can download only a single path based on a version" {
+        "get only the given path based on a package version" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$REPO_VERSION"),
                 vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
@@ -148,4 +147,4 @@ class SubversionDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
     }
-}
+})

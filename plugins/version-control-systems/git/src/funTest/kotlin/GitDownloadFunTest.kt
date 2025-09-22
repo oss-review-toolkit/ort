@@ -20,8 +20,7 @@
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.core.test.TestCase
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
@@ -43,16 +42,16 @@ private const val REPO_PATH = "lib"
 private const val REPO_REV_FOR_VERSION = "371b23f37da064687518bace268d607a92ecbe8f"
 private const val REPO_PATH_FOR_VERSION = "specs"
 
-class GitDownloadFunTest : StringSpec() {
-    private val git = GitFactory().create(PluginConfig.EMPTY)
-    private lateinit var outputDir: File
+class GitDownloadFunTest : WordSpec({
+    val git = GitFactory().create(PluginConfig.EMPTY)
+    lateinit var outputDir: File
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    beforeEach {
         outputDir = tempdir()
     }
 
-    init {
-        "Git does not prompt for credentials for non-existing repositories" {
+    "download()" should {
+        "not prompt for credentials for non-existing repositories" {
             val url = "https://github.com/oss-review-toolkit/foobar.git"
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, url, "master"))
 
@@ -63,7 +62,7 @@ class GitDownloadFunTest : StringSpec() {
             exception.message shouldBe "Git failed to get revisions from URL $url."
         }
 
-        "Git can download a given revision" {
+        "get the given revision" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".git",
@@ -86,7 +85,7 @@ class GitDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "Git can download only a single path" {
+        "get only the given path" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                 File("LICENSE"),
@@ -108,7 +107,7 @@ class GitDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "Git can download based on a version" {
+        "work based on a package version" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$PKG_VERSION"),
 
@@ -122,7 +121,7 @@ class GitDownloadFunTest : StringSpec() {
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
         }
 
-        "Git can download only a single path based on a version" {
+        "get only the given path based on a package version" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$PKG_VERSION"),
 
@@ -148,4 +147,4 @@ class GitDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
     }
-}
+})
