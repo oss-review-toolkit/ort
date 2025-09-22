@@ -26,6 +26,9 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.file
+import io.kotest.property.arbitrary.single
 
 import java.io.File
 
@@ -39,7 +42,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 class ComposerFunTest : StringSpec({
     "Project files from vendor directories are ignored" {
         val projectFiles = ComposerFactory.create().mapDefinitionFiles(
-            File("."),
+            Arb.file().single(),
             listOf(
                 "projectA/composer.json",
                 "projectA/vendor/dependency1/composer.json",
