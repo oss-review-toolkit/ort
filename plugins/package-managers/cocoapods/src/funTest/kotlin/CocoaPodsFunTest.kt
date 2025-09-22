@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
@@ -32,6 +33,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.NpmFactory
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class CocoaPodsFunTest : WordSpec({
     "resolveSingleProject()" should {
         "determine dependencies from a Podfile without a dependency tree" {

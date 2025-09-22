@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -49,6 +50,7 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class SpdxDocumentFileFunTest : WordSpec({
     "resolveDependencies()" should {
         "succeed if a project with inline packages is provided" {

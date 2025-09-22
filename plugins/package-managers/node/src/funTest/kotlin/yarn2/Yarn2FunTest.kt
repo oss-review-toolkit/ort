@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
@@ -29,6 +30,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class Yarn2FunTest : StringSpec({
     "Resolve dependencies for a project with lockfile correctly" {
         val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile/package.json")

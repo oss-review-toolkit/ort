@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
@@ -28,6 +29,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class SwiftPmFunTest : WordSpec({
     "Analyzing a lockfile with file format version 1" should {
         "return the correct result" {

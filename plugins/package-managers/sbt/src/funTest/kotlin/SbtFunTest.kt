@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.sbt
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -31,6 +32,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
+@Tags("RequiresExternalTool")
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'multi-project' should be detected correctly" {
         val definitionFile = getAssetFile("projects/external/multi-project/build.sbt")

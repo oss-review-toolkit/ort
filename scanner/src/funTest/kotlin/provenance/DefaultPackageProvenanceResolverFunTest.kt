@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
@@ -39,6 +40,7 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
+@Tags("RequiresExternalTool")
 class DefaultPackageProvenanceResolverFunTest : WordSpec() {
     private val workingTreeCache = DefaultWorkingTreeCache()
     private val resolver = DefaultPackageProvenanceResolver(DummyProvenanceStorage(), workingTreeCache)

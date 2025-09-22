@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.mercurial
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
@@ -35,6 +36,7 @@ import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
+@Tags("RequiresExternalTool")
 class MercurialWorkingTreeFunTest : StringSpec({
     val hg = Mercurial()
     val zipContentDir = tempdir()

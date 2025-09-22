@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
@@ -33,6 +34,7 @@ import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class BazelFunTest : StringSpec({
     "Dependencies are detected correctly" {
         val definitionFile = getAssetFile("projects/synthetic/bazel/MODULE.bazel")

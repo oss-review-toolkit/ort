@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import io.kotest.core.TestConfiguration
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
@@ -43,6 +44,7 @@ import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readResource
 
+@Tags("RequiresExternalTool")
 class SpdxDocumentReporterFunTest : WordSpec({
     "Reporting to SPDX-2.2" should {
         val schemaJson = readResource("/v2.2.2/spdx-schema.json")

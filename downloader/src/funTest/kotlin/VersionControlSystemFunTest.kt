@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.downloader
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -30,6 +31,7 @@ import io.kotest.matchers.shouldNotBe
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 
+@Tags("RequiresExternalTool")
 class VersionControlSystemFunTest : WordSpec({
     "forUrl()" should {
         "return null for an unsupported repository URL" {

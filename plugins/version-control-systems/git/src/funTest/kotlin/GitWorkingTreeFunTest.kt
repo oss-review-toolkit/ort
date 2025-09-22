@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -40,6 +41,7 @@ import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.div
 
+@Tags("RequiresExternalTool")
 class GitWorkingTreeFunTest : WordSpec({
     val git = GitFactory().create(PluginConfig.EMPTY)
     val vcsInfo = VcsInfo(

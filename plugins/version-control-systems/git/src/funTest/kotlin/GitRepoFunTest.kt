@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
 import io.kotest.assertions.throwables.shouldNotThrow
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.maps.shouldContainExactly
@@ -41,6 +42,7 @@ import org.semver4j.SemverException
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 
+@Tags("RequiresExternalTool")
 class GitRepoFunTest : WordSpec({
     val gitRepo = GitRepoFactory().create(PluginConfig.EMPTY)
     val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV)

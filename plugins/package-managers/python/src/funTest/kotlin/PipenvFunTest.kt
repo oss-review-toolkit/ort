@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.python
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
@@ -27,6 +28,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class PipenvFunTest : WordSpec({
     "Python 2" should {
         "resolve dependencies correctly" {

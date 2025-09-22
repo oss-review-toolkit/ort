@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.maps.containExactly
@@ -38,6 +39,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
+@Tags("RequiresExternalTool")
 class DefaultNestedProvenanceResolverFunTest : WordSpec() {
     private val workingTreeCache = DefaultWorkingTreeCache()
     private val resolver = DefaultNestedProvenanceResolver(DummyNestedProvenanceStorage(), workingTreeCache)

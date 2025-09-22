@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
@@ -46,6 +47,7 @@ private const val REPO_PATH = "lib"
 private const val REPO_REV_FOR_VERSION = "371b23f37da064687518bace268d607a92ecbe8f"
 private const val REPO_PATH_FOR_VERSION = "specs"
 
+@Tags("RequiresExternalTool")
 class GitFunTest : WordSpec({
     val git = GitFactory().create(PluginConfig.EMPTY)
     lateinit var outputDir: File

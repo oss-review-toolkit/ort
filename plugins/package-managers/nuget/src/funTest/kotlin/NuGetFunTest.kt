@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.nuget
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
@@ -28,6 +29,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class NuGetFunTest : StringSpec({
     "DotNet project dependencies are detected correctly".config(enabled = false) {
         val definitionFile = getAssetFile("dotnet/subProjectTest/test.csproj")

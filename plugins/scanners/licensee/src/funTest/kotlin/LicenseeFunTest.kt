@@ -19,10 +19,13 @@
 
 package org.ossreviewtoolkit.plugins.scanners.licensee
 
+import io.kotest.core.annotation.Tags
+
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
 
+@Tags("RequiresExternalTool")
 class LicenseeFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = LicenseeFactory.create()
 

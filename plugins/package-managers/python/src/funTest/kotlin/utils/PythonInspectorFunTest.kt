@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.haveSize
@@ -28,6 +29,7 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
+@Tags("RequiresExternalTool")
 class PythonInspectorFunTest : StringSpec({
     val projectsDir = getAssetFile("projects")
 
