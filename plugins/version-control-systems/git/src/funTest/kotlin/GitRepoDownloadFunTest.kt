@@ -101,7 +101,6 @@ class GitRepoDownloadFunTest : StringSpec() {
                 "submodules/test-data-npm/long.js"
             ).associateWith { VersionControlSystem.getPathInfo(outputDir / it) }
 
-            val workingTree = GitRepoFactory().create(PluginConfig.EMPTY).getWorkingTree(outputDir)
             workingTree.getNested() shouldBe expectedSubmodules
         }
     }
