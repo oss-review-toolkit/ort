@@ -61,6 +61,7 @@ testing {
                 implementation(project(":utils:test-utils"))
 
                 implementation(libs.kotest.assertions.core)
+                implementation(libs.kotest.property)
                 implementation(libs.kotest.runner.junit5)
             }
         }
