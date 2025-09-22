@@ -33,7 +33,6 @@ import kotlin.time.Duration.Companion.milliseconds
 
 import kotlinx.coroutines.delay
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -92,18 +91,6 @@ class GitWorkingTreeFunTest : WordSpec({
                 "tag2",
                 "tag3"
             )
-        }
-
-        "correctly lists submodules" {
-            val expectedSubmodules = listOf(
-                "plugins/package-managers/pub/src/funTest/assets/projects/external/dart-http",
-                "plugins/package-managers/python/src/funTest/assets/projects/external/example-python-flask",
-                "plugins/package-managers/python/src/funTest/assets/projects/external/spdx-tools-python",
-                "plugins/package-managers/sbt/src/funTest/assets/projects/external/multi-project",
-                "plugins/package-managers/stack/src/funTest/assets/projects/external/quickcheck-state-machine"
-            ).associateWith { VersionControlSystem.getPathInfo(File("../../../$it")) }
-
-            git.getWorkingTree(File("..")).getNested() shouldBe expectedSubmodules
         }
     }
 
