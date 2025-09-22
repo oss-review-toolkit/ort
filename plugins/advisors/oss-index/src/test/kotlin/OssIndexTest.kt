@@ -75,7 +75,7 @@ class OssIndexTest : WordSpec({
         server.resetAll()
     }
 
-    "OssIndex" should {
+    "retrievePackageFindings()" should {
         "return vulnerability information" {
             server.stubComponentsRequest("response_components.json")
             val ossIndex = createOssIndex()
@@ -136,8 +136,10 @@ class OssIndexTest : WordSpec({
                 }
             }
         }
+    }
 
-        "provide correct details" {
+    "details" should {
+        "be correct" {
             val ossIndex = createOssIndex()
 
             ossIndex.details shouldBe AdvisorDetails(ADVISOR_NAME, enumSetOf(AdvisorCapability.VULNERABILITIES))
