@@ -54,6 +54,15 @@ class OssIndexTest : WordSpec({
             .dynamicPort()
     )
 
+    fun createOssIndex() =
+        OssIndex(
+            config = OssIndexConfiguration(
+                serverUrl = "http://localhost:${server.port()}",
+                username = "username",
+                token = Secret("token")
+            )
+        )
+
     beforeSpec {
         server.start()
     }
@@ -69,9 +78,7 @@ class OssIndexTest : WordSpec({
     "OssIndex" should {
         "return vulnerability information" {
             server.stubComponentsRequest("response_components.json")
-            val ossIndex = OssIndex(
-                config = OssIndexConfiguration("http://localhost:${server.port()}", "username", Secret("token"))
-            )
+            val ossIndex = createOssIndex()
 
             val result = ossIndex.retrievePackageFindings(PACKAGES).mapKeys { it.key.id }
 
@@ -116,9 +123,7 @@ class OssIndexTest : WordSpec({
                         aResponse().withStatus(500)
                     )
             )
-            val ossIndex = OssIndex(
-                config = OssIndexConfiguration("http://localhost:${server.port()}", "username", Secret("token"))
-            )
+            val ossIndex = createOssIndex()
 
             val result = ossIndex.retrievePackageFindings(PACKAGES).mapKeys { it.key.id.toCoordinates() }
 
@@ -133,9 +138,7 @@ class OssIndexTest : WordSpec({
         }
 
         "provide correct details" {
-            val ossIndex = OssIndex(
-                config = OssIndexConfiguration("http://localhost:${server.port()}", "username", Secret("token"))
-            )
+            val ossIndex = createOssIndex()
 
             ossIndex.details shouldBe AdvisorDetails(ADVISOR_NAME, enumSetOf(AdvisorCapability.VULNERABILITIES))
         }
