@@ -92,7 +92,7 @@ data class ConanConfig(
 
     /**
      * If true, the Conan package manager will call a command called "conan2" instead of "conan". This is required to
-     * be able to support both Conan major versions in a given environment e.g., the ORT Docker image or a local
+     * be able to support both Conan major versions in a given environment, e.g. the ORT Docker image or a local
      * development environment.
      */
     @OrtPluginOption(defaultValue = "false")

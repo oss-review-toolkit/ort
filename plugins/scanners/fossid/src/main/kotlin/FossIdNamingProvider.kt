@@ -28,7 +28,7 @@ import org.apache.logging.log4j.kotlin.logger
  * This class provides names for scans when the FossID scanner creates them, based on the provided [namingScanPattern].
  * If the pattern is null, a default pattern is used.
  *
- * The pattern can include built-in variables which are prefixed in the pattern with `#`, e.g., `#projectName_#branch`.
+ * The pattern can include built-in variables which are prefixed in the pattern with `#`, e.g. `#projectName_#branch`.
  *
  * The following built-in variables are available:
  * * **projectName**: The project name, if configured in the scanner options.

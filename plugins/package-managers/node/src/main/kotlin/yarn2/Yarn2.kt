@@ -55,7 +55,7 @@ private const val YARN_NPM_INFO_CHUNK_SIZE = 1000
 data class Yarn2Config(
     /**
      * If true, the `yarn npm info` commands called by this package manager will not verify the server certificate of
-     * the HTTPS connection to the NPM registry. This allows replacing the latter by a local one, e.g., for intercepting
+     * the HTTPS connection to the NPM registry. This allows replacing the latter by a local one, e.g. for intercepting
      * the requests or replaying them.
      */
     @OrtPluginOption(defaultValue = "false")

@@ -127,8 +127,8 @@ data class Package(
     val isMetadataOnly: Boolean = false,
 
     /**
-     * Indicates whether the source code of the package has been modified compared to the original source code,
-     * e.g., in case of a fork of an upstream Open Source project.
+     * Indicates whether the source code of the package has been modified compared to the original source code, e.g. in
+     * case of a fork of an upstream Open Source project.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val isModified: Boolean = false,

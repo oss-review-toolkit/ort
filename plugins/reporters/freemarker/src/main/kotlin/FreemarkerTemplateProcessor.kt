@@ -59,7 +59,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 
 /**
  * A class to process [Apache Freemarker][1] templates, intended to be called by a [Reporter] that uses the generated
- * files in a postprocessing step, e.g., generating a PDF.
+ * files in a postprocessing step, e.g. generating a PDF.
  *
  * [1]: https://freemarker.apache.org
  */

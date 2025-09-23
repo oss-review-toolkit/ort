@@ -54,7 +54,7 @@ class DefaultDirLicenseFactProvider(descriptor: PluginDescriptor = DefaultDirLic
     id = "Dir",
     displayName = "Directory License Fact Provider",
     description = "A license fact provider that reads license information from a local directory. The files must be " +
-        "named after the SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.",
+        "named after the SPDX-conform license IDs, e.g. 'Apache-2.0' or 'LicenseRef-custom-license'.",
     factory = LicenseFactProviderFactory::class
 )
 open class DirLicenseFactProvider(

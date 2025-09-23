@@ -108,7 +108,7 @@ data class FossIdConfig(
     /**
      * A comma-separated list of URL mappings that allow transforming the VCS URLs of repositories before they are
      * passed to the FossID service. This may be necessary if FossID uses a different mechanism to clone a repository,
-     * e.g., via SSH instead of HTTP. Their values define the mapping to be applied consisting of two parts separated by
+     * e.g. via SSH instead of HTTP. Their values define the mapping to be applied consisting of two parts separated by
      * the string " -> ":
      * * A regular expression to match the repository URL.
      * * The replacement to be used for this repository URL. It can access the capture groups defined by the regular
