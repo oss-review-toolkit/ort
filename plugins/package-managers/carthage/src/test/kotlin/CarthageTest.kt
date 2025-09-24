@@ -35,7 +35,6 @@ import java.net.URI
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.utils.test.USER_DIR
 
 class CarthageTest : WordSpec() {
     private val carthage = CarthageFactory.create()
@@ -128,4 +127,4 @@ class CarthageTest : WordSpec() {
 }
 
 private fun Carthage.resolveDependencies(definitionFile: File) =
-    resolveDependencies(USER_DIR, definitionFile, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+    resolveDependencies(definitionFile.parentFile, definitionFile, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())

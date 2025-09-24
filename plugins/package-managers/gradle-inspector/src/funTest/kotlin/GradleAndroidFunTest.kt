@@ -26,7 +26,6 @@ import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -68,8 +67,13 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
-        val result = GradleInspectorFactory.create(javaVersion = "17")
-            .resolveDependencies(USER_DIR, listOf(definitionFile), Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+        val result = GradleInspectorFactory.create(javaVersion = "17").resolveDependencies(
+            analysisRoot = definitionFile.parentFile,
+            definitionFiles = listOf(definitionFile),
+            excludes = Excludes.EMPTY,
+            analyzerConfig = AnalyzerConfiguration(),
+            labels = emptyMap()
+        )
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

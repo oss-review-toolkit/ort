@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Bundler::src/funTest/assets/projects/synthetic/lockfile/Gemfile:"
+  id: "Bundler::Gemfile:"
   definition_file_path: "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/lockfile/Gemfile"
   declared_licenses: []
   declared_licenses_processed: {}

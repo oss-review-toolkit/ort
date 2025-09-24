@@ -48,8 +48,7 @@ class BundlerFunTest : WordSpec({
             val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
 
             with(actualResult) {
-                project.id shouldBe
-                    Identifier("Bundler::src/funTest/assets/projects/synthetic/no-lockfile/Gemfile:")
+                project.id shouldBe Identifier("Bundler::Gemfile:")
                 project.definitionFilePath shouldBe
                     "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
                 packages should beEmpty()

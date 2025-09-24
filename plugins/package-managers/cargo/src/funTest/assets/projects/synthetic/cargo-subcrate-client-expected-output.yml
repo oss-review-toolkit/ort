@@ -21,7 +21,7 @@ project:
   - name: "dependencies"
     dependencies:
     - id: "Crate::lib:0.1.0"
-      linkage: "PROJECT_STATIC"
+      linkage: "STATIC"
       dependencies:
       - id: "Crate::cfg-if:0.1.9"
         linkage: "STATIC"
@@ -59,3 +59,32 @@ packages:
     url: "https://github.com/alexcrichton/cfg-if.git"
     revision: ""
     path: ""
+- id: "Crate::lib:0.1.0"
+  purl: "pkg:cargo/lib@0.1.0"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 OR MIT"
+  description: ""
+  homepage_url: "https://example.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/cargo/src/funTest/assets/projects/synthetic/cargo-subcrate"
