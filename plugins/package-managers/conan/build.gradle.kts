@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.yaml)
     implementation(libs.semver4j)
     implementation(projects.downloader)
+    implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 

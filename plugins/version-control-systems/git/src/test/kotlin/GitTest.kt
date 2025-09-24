@@ -41,7 +41,7 @@ import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.URIish
 
 import org.ossreviewtoolkit.plugins.api.PluginConfig
-import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
+import org.ossreviewtoolkit.utils.authentication.requestPasswordAuthentication
 
 class GitTest : WordSpec({
     var originalCredentialsProvider: CredentialsProvider? = null
@@ -176,7 +176,7 @@ private val testUriAsUrl = URI.create(testUri.toString()).toURL()
  * Mocks the utility function to query password authentication for the test URI. Return the [result] provided.
  */
 private fun mockAuthentication(result: PasswordAuthentication?) {
-    mockkStatic("org.ossreviewtoolkit.utils.ort.AuthenticationUtilsKt")
+    mockkStatic("org.ossreviewtoolkit.utils.authentication.AuthenticationUtilsKt")
 
     every {
         requestPasswordAuthentication(testUri.host, testUri.port, testUri.scheme, testUriAsUrl)

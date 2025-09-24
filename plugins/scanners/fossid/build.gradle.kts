@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.packageurl)
     implementation(projects.downloader)
+    implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)

@@ -33,6 +33,7 @@ dependencies {
             .because("it is included in JGit's sshd-osgi dependency")
     }
 
+    implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 

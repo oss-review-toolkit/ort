@@ -54,6 +54,8 @@ import okhttp3.Route
 
 import okio.BufferedSource
 
+import org.ossreviewtoolkit.utils.authentication.requestPasswordAuthentication
+
 class OkHttpClientHelperTest : WordSpec({
     afterTest {
         unmockkAll()
