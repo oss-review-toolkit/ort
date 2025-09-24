@@ -56,8 +56,9 @@ class MavenFunTest : StringSpec({
         // resolution of transitive dependencies would not work.
         val managerResult = with(MavenFactory.create()) {
             val definitionFiles = listOf(definitionFileApp, definitionFileLib)
-            beforeResolution(USER_DIR, definitionFiles, AnalyzerConfiguration())
-            resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap()).also {
+            val config = AnalyzerConfiguration()
+            beforeResolution(USER_DIR, definitionFiles, config)
+            resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, config, emptyMap()).also {
                 afterResolution(USER_DIR, definitionFiles)
             }
         }
