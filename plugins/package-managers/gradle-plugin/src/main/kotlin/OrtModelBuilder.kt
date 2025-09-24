@@ -284,7 +284,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                         // Ignore unresolved project dependencies. For example for complex Android projects, Gradle's
                         // own "dependencies" task runs into "AmbiguousConfigurationSelectionException", but the project
                         // still builds fine, probably due to some Android plugin magic. Omitting a project dependency
-                        // is uncritical in terms of resovling dependencies, as the for the project itself dependencies
+                        // is uncritical in terms of resolving dependencies, as the for the project itself dependencies
                         // will still get resolved.
                         return@mapNotNull null
                     }
