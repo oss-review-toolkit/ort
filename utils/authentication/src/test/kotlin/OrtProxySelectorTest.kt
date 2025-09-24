@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.ort
+package org.ossreviewtoolkit.utils.authentication
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe

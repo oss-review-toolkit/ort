@@ -34,11 +34,11 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.utils.authentication.OrtAuthenticator
+import org.ossreviewtoolkit.utils.authentication.OrtProxySelector
+import org.ossreviewtoolkit.utils.authentication.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
-import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
-import org.ossreviewtoolkit.utils.ort.OrtProxySelector
-import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.tmatesoft.svn.core.SVNDepth

@@ -29,8 +29,8 @@ import io.mockk.unmockkAll
 import java.net.PasswordAuthentication
 import java.net.URI
 
+import org.ossreviewtoolkit.utils.authentication.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
-import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class FossIdUrlProviderTest : StringSpec({
     afterTest {
@@ -137,7 +137,7 @@ private fun mockAuthenticator(
     port: Int = PORT,
     authentication: PasswordAuthentication? = AUTHENTICATION
 ) {
-    mockkStatic("org.ossreviewtoolkit.utils.ort.AuthenticationUtilsKt")
+    mockkStatic("org.ossreviewtoolkit.utils.authentication.AuthenticationUtilsKt")
     every { requestPasswordAuthentication(any()) } answers {
         val uri = firstArg<URI>()
         authentication.takeIf { uri.host == host && uri.port == port && uri.scheme == "https" && uri.userInfo == null }

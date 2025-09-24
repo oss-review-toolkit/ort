@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.ort
+package org.ossreviewtoolkit.utils.authentication
 
 import java.net.Authenticator
 import java.net.PasswordAuthentication

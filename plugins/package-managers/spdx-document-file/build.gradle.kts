@@ -30,6 +30,7 @@ dependencies {
     implementation(jacksonLibs.jacksonDatabind)
     implementation(libs.okhttp)
     implementation(projects.downloader)
+    implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxDocumentUtils)

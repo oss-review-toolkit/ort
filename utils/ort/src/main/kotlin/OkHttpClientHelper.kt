@@ -50,6 +50,9 @@ import okio.sink
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf
 
+import org.ossreviewtoolkit.utils.authentication.OrtAuthenticator
+import org.ossreviewtoolkit.utils.authentication.OrtProxySelector
+import org.ossreviewtoolkit.utils.authentication.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div

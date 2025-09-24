@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.maven.embedder)
     implementation(projects.downloader)
+    implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
 
     funTestImplementation(testFixtures(projects.analyzer))

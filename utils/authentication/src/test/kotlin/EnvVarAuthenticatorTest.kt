@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.ort
+package org.ossreviewtoolkit.utils.authentication
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.beNull
@@ -25,8 +25,8 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.utils.ort.EnvVarAuthenticator.Companion.ORT_HTTP_PASSWORD_ENV_NAME
-import org.ossreviewtoolkit.utils.ort.EnvVarAuthenticator.Companion.ORT_HTTP_USERNAME_ENV_NAME
+import org.ossreviewtoolkit.utils.authentication.EnvVarAuthenticator.Companion.ORT_HTTP_PASSWORD_ENV_NAME
+import org.ossreviewtoolkit.utils.authentication.EnvVarAuthenticator.Companion.ORT_HTTP_USERNAME_ENV_NAME
 
 class EnvVarAuthenticatorTest : StringSpec({
     "Setting the username alone does not return authentication" {

@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.awsS3)
     implementation(libs.xz)
     implementation(projects.clients.foojayClient)
+    implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)
 

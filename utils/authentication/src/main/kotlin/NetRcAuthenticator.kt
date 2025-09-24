@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.ort
+package org.ossreviewtoolkit.utils.authentication
 
 import java.io.File
 import java.lang.invoke.MethodHandles

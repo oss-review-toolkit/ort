@@ -24,10 +24,10 @@ import java.net.PasswordAuthentication
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.utils.authentication.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 /**
  * An internal helper class that generates the URLs used by [FossId] to check out the repositories to be scanned.
