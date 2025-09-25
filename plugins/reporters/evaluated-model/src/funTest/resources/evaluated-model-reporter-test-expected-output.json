@@ -1268,7 +1268,7 @@
         "revision" : "master",
         "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
       },
-      "resolved_revision" : "master"
+      "resolved_revision" : "3dcca3e6ee0dea120922f90495bf04b4e09ae455"
     },
     "nested_repositories" : {
       "sub/module" : {
