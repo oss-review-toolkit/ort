@@ -145,18 +145,19 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         val workingTree = VersionControlSystem.forDirectory(info.absoluteProjectPath)
         val vcs = workingTree?.getInfo().orEmpty()
+        val resolvedRevision = workingTree?.getRevision().orEmpty()
         val nestedVcs = workingTree?.getNested()?.filter { (path, _) ->
             // Only include nested VCS if they are part of the analyzed directory.
             workingTree.getRootPath().resolve(path).startsWith(info.absoluteProjectPath)
         }.orEmpty()
 
-        val repository = if (vcs == VcsInfo.EMPTY) {
+        val repository = if (vcs == VcsInfo.EMPTY || resolvedRevision.isEmpty()) {
             Repository.EMPTY
         } else {
             Repository(
                 provenance = RepositoryProvenance(
                     vcsInfo = vcs.normalize(),
-                    resolvedRevision = vcs.revision
+                    resolvedRevision = resolvedRevision
                 ),
                 nestedRepositories = nestedVcs,
                 config = info.repositoryConfiguration
