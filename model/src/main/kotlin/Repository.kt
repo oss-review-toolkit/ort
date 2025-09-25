@@ -68,8 +68,8 @@ data class Repository(
     }
 
     /**
-     * Return the path of [vcs] relative to [Repository.vcs], or null if [vcs] is neither [Repository.vcs] nor contained
-     * in [nestedRepositories].
+     * Return the path of [vcs] relative to [Repository.provenance], or null if [vcs] is neither [Repository.provenance]
+     * nor contained in [nestedRepositories].
      */
     fun getRelativePath(vcs: VcsInfo): String? {
         fun VcsInfo.matches(other: VcsInfo) = type == other.type && url == other.url && revision == other.revision
