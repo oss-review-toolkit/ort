@@ -102,6 +102,12 @@
                         "type": "string"
                     }
                 },
+                "noticeFilenames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "patentFilenames": {
                     "type": "array",
                     "items": {
