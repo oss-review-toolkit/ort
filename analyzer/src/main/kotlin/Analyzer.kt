@@ -155,7 +155,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         } else {
             Repository(
                 provenance = RepositoryProvenance(
-                    vcsInfo = vcs,
+                    vcsInfo = vcs.normalize(),
                     resolvedRevision = vcs.revision
                 ),
                 nestedRepositories = nestedVcs,

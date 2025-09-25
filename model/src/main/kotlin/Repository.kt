@@ -76,7 +76,7 @@ data class Repository(
 
         val normalizedVcs = vcs.normalize()
 
-        if (provenance.vcsInfo.normalize().matches(normalizedVcs)) return ""
+        if (provenance.vcsInfo.matches(normalizedVcs)) return ""
 
         return nestedRepositories.entries.find { (_, nestedVcs) -> nestedVcs.normalize().matches(normalizedVcs) }?.key
     }
@@ -95,7 +95,7 @@ private class RepositoryDeserializer : StdDeserializer<Repository>(Repository::c
                 val vcsProcess = jsonMapper.treeToValue<VcsInfo>(node["vcs_processed"])
 
                 // Fall back to [vcsProcessed], if [vcs] is empty.
-                val vcsInfo = if (vcs != VcsInfo.EMPTY) vcs else vcsProcess
+                val vcsInfo = vcsProcess
 
                 // Get the [vcs]'s revision.
                 // Fall back to [vcsProcessed], if [vcs] has empty revision.
