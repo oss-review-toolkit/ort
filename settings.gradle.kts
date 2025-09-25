@@ -102,7 +102,7 @@ pluginManagement {
 
 plugins {
     // Gradle cannot access the version catalog from here, so hard-code the dependency.
-    id("dev.aga.gradle.version-catalog-generator").version("3.3.0")
+    id("dev.aga.gradle.version-catalog-generator").version("3.3.1")
     id("org.gradle.toolchains.foojay-resolver-convention").version("1.0.0")
 }
 
