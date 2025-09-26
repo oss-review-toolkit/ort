@@ -628,7 +628,7 @@ class FossId internal constructor(
             logger.info { "Reusing identifications from scan '$existingScanCode'." }
 
             // TODO: Change the logic of 'waitForResult' to wait for download results but not for scan results.
-            //  Hence we could trigger 'runScan' even when 'waitForResult' is set to false.
+            //       Hence we could trigger 'runScan' even when 'waitForResult' is set to false.
             if (!config.waitForResult) {
                 logger.info { "Ignoring unset 'waitForResult' because delta scans are requested." }
             }
