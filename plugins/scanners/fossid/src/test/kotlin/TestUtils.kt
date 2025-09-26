@@ -186,7 +186,7 @@ private fun createNamingProviderMock(): FossIdNamingProvider {
 internal fun createServiceMock(): FossIdServiceWithVersion {
     val service = mockk<FossIdServiceWithVersion>()
 
-    coEvery { service.version } returns FOSSID_VERSION
+    every { service.version } returns FOSSID_VERSION
 
     return service
 }
@@ -198,7 +198,7 @@ internal fun createServiceMock(): FossIdServiceWithVersion {
 internal fun createVersionControlSystemMock(): VersionControlSystem {
     val vcs = mockk<VersionControlSystem>()
 
-    coEvery { vcs.getDefaultBranchName(any()) } returns "master"
+    every { vcs.getDefaultBranchName(any()) } returns "master"
 
     return vcs
 }
