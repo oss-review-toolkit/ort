@@ -72,9 +72,7 @@ class ComposerFunTest : StringSpec({
         val result = ComposerFactory.create().resolveSingleProject(definitionFile)
 
         with(result) {
-            project.id shouldBe Identifier(
-                "Composer::src/funTest/assets/projects/synthetic/no-lockfile/composer.json:"
-            )
+            project.id shouldBe Identifier("Composer::composer.json:")
             project.definitionFilePath shouldBe "plugins/package-managers/composer/src/funTest/assets/projects/" +
                 "synthetic/no-lockfile/composer.json"
             packages should beEmpty()

@@ -44,8 +44,6 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
-val USER_DIR = File(System.getProperty("user.dir"))
-
 private val ORT_VERSION_REGEX = Regex("(ort_version): \".*\"")
 private val JAVA_VERSION_REGEX = Regex("(java_version): \".*\"")
 private val ENV_VAR_REGEX = Regex("(\\s{4}variables:)\\n(?:\\s{6}.+)+")

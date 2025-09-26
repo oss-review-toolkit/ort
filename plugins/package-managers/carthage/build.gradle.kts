@@ -38,5 +38,7 @@ dependencies {
 
     funTestImplementation(testFixtures(projects.analyzer))
 
+    testImplementation(testFixtures(projects.analyzer))
+
     testImplementation(libs.mockk)
 }

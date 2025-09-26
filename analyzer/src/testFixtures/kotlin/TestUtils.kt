@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.plugins.api.PluginConfig
-import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.common.getCommonParentFile
 
 fun PackageManager.resolveSingleProject(
     definitionFile: File,
@@ -49,14 +49,15 @@ fun PackageManager.resolveSingleProject(
     resolveScopes: Boolean = false
 ): ProjectAnalyzerResult {
     val definitionFiles = listOf(definitionFile)
+    val analyzerRoot = getCommonParentFile(definitionFiles)
     val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = allowDynamicVersions)
 
-    beforeResolution(USER_DIR, definitionFiles, analyzerConfig)
+    beforeResolution(analyzerRoot, definitionFiles, analyzerConfig)
 
     val excludes = Excludes(scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) })
-    val managerResult = resolveDependencies(USER_DIR, definitionFiles, excludes, analyzerConfig, emptyMap())
+    val managerResult = resolveDependencies(analyzerRoot, definitionFiles, excludes, analyzerConfig, emptyMap())
 
-    afterResolution(USER_DIR, definitionFiles)
+    afterResolution(analyzerRoot, definitionFiles)
 
     val resultList = managerResult.projectResults[definitionFile]
     resultList.shouldNotBeNull()
