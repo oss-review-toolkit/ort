@@ -71,6 +71,7 @@ import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescripti
 import org.ossreviewtoolkit.clients.fossid.removeUploadedContent
 import org.ossreviewtoolkit.clients.fossid.uploadFile
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -196,9 +197,16 @@ internal fun createServiceMock(): FossIdServiceWithVersion {
  * name.
  */
 internal fun createVersionControlSystemMock(): VersionControlSystem {
-    val vcs = mockk<VersionControlSystem>()
+    val wt = mockk<WorkingTree> {
+        every { getRootPath() } returns java.io.File(".")
+        every { getNested() } returns emptyMap()
+    }
 
-    every { vcs.getDefaultBranchName(any()) } returns "master"
+    val vcs = mockk<VersionControlSystem> {
+        every { getDefaultBranchName(any()) } returns "master"
+        every { initWorkingTree(any(), any()) } returns wt
+        every { updateWorkingTree(any(), any()) } returns Result.success("master")
+    }
 
     return vcs
 }
