@@ -86,7 +86,7 @@ class FossIdTest : WordSpec({
     }
 
     beforeTest {
-        // Here a static function of the companion object is mocked therefore `mockkobject` needs to be used.
+        // Here a static function of the companion object is mocked therefore `mockkObject` needs to be used.
         // See https://lifesaver.codes/answer/cannot-mockkstatic-for-kotlin-companion-object-static-method-136
         mockkObject(FossIdRestService)
         mockkObject(VersionControlSystem)
