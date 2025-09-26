@@ -171,26 +171,21 @@ internal fun createConfig(
  */
 private fun createNamingProviderMock(): FossIdNamingProvider {
     val counter = AtomicInteger()
-    val provider = mockk<FossIdNamingProvider>()
-
-    every { provider.createScanCode(any(), any(), any()) } answers {
-        scanCode(firstArg(), secondArg(), index = counter.incrementAndGet())
+    return mockk<FossIdNamingProvider> {
+        every { createScanCode(any(), any(), any()) } answers {
+            scanCode(firstArg(), secondArg(), index = counter.incrementAndGet())
+        }
     }
-
-    return provider
 }
 
 /**
  * Create a mock for the [FossIdRestService]. The mock is prepared to return its version. (This is queried directly
  * in the constructor of [FossId].)
  */
-internal fun createServiceMock(): FossIdServiceWithVersion {
-    val service = mockk<FossIdServiceWithVersion>()
-
-    every { service.version } returns FOSSID_VERSION
-
-    return service
-}
+internal fun createServiceMock(): FossIdServiceWithVersion =
+    mockk<FossIdServiceWithVersion> {
+        every { version } returns FOSSID_VERSION
+    }
 
 /**
  * Create a mock for the [VersionControlSystem]. The mock is prepared to always return 'master' for the default branch
@@ -220,12 +215,11 @@ internal fun scanCode(name: String, tag: FossId.DeltaTag? = null, index: Int = 1
 /**
  * Create a mock [UnversionedScanDescription] that returns the given [state].
  */
-private fun createScanDescription(state: ScanStatus): UnversionedScanDescription {
-    val description = mockk<UnversionedScanDescription>()
-    every { description.status } returns state
-    every { description.comment } returns "status$state"
-    return description
-}
+private fun createScanDescription(state: ScanStatus): UnversionedScanDescription =
+    mockk<UnversionedScanDescription> {
+        every { status } returns state
+        every { comment } returns "status$state"
+    }
 
 /**
  * Create a mock [Scan] as if created by the [CloneRepositoryHandler] with the given properties.
@@ -237,21 +231,19 @@ internal fun createScan(
     scanId: Int = SCAN_ID,
     comment: String = "master",
     legacyComment: Boolean = false
-): Scan {
-    val scan = mockk<Scan>()
-    every { scan.gitRepoUrl } returns url
-    every { scan.gitBranch } returns revision
-    every { scan.code } returns scanCode
-    every { scan.id } returns scanId
-    every { scan.isArchived } returns null
-    if (legacyComment) {
-        every { scan.comment } returns comment
-    } else {
-        every { scan.comment } returns createOrtScanComment(url, revision, comment).asJsonString()
+): Scan =
+    mockk<Scan> {
+        every { gitRepoUrl } returns url
+        every { gitBranch } returns revision
+        every { code } returns scanCode
+        every { id } returns scanId
+        every { isArchived } returns null
+        every { this@mockk.comment } returns if (legacyComment) {
+            comment
+        } else {
+            createOrtScanComment(url, revision, comment).asJsonString()
+        }
     }
-
-    return scan
-}
 
 /**
  * Create a mock [Scan] as if created by the [UploadArchiveHandler] with the given properties.
@@ -262,17 +254,15 @@ internal fun createScanWithUploadedContent(
     scanCode: String,
     scanId: Int = SCAN_ID,
     comment: String = "master"
-): Scan {
-    val scan = mockk<Scan>()
-    every { scan.gitRepoUrl } returns null
-    every { scan.gitBranch } returns null
-    every { scan.code } returns scanCode
-    every { scan.id } returns scanId
-    every { scan.isArchived } returns null
-    every { scan.comment } returns createOrtScanComment(url, revision, comment).asJsonString()
-
-    return scan
-}
+): Scan =
+    mockk<Scan> {
+        every { gitRepoUrl } returns null
+        every { gitBranch } returns null
+        every { code } returns scanCode
+        every { id } returns scanId
+        every { isArchived } returns null
+        every { this@mockk.comment } returns createOrtScanComment(url, revision, comment).asJsonString()
+    }
 
 /**
  * Create a [VcsInfo] object for a project with the given [name][projectName] and the optional parameters for [type],
