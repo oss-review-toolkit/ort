@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
@@ -179,7 +178,7 @@ val allProjects = setOf(
 
 val ortResult = OrtResult(
     repository = Repository(
-        vcs = VcsInfo.EMPTY,
+        provenance = Repository.EMPTY.provenance,
         config = RepositoryConfiguration(
             excludes = Excludes(
                 paths = listOf(

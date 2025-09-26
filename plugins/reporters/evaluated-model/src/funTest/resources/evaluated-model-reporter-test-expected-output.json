@@ -1261,17 +1261,14 @@
     "execution_duration_in_seconds" : 3125
   },
   "repository" : {
-    "vcs" : {
-      "type" : "",
-      "url" : "",
-      "revision" : "",
-      "path" : ""
-    },
-    "vcs_processed" : {
-      "type" : "Git",
-      "url" : "https://github.com/oss-review-toolkit/ort.git",
-      "revision" : "master",
-      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+    "provenance" : {
+      "vcs_info" : {
+        "type" : "Git",
+        "url" : "https://github.com/oss-review-toolkit/ort.git",
+        "revision" : "master",
+        "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+      },
+      "resolved_revision" : "3dcca3e6ee0dea120922f90495bf04b4e09ae455"
     },
     "nested_repositories" : {
       "sub/module" : {

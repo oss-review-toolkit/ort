@@ -20,6 +20,12 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.module.kotlin.treeToValue
 
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
@@ -27,17 +33,12 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 /**
  * A description of the source code repository that was used as input for ORT.
  */
+@JsonDeserialize(using = RepositoryDeserializer::class)
 data class Repository(
     /**
-     * Original VCS-related information from the working tree containing the analyzer root.
+     * Provenance wrapper for original VCS information, if present.
      */
-    val vcs: VcsInfo,
-
-    /**
-     * Processed VCS-related information from the working tree containing the analyzer root that has e.g. common
-     * mistakes corrected.
-     */
-    val vcsProcessed: VcsInfo = vcs.normalize(),
+    val provenance: RepositoryProvenance,
 
     /**
      * A map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
@@ -57,24 +58,75 @@ data class Repository(
          */
         @JvmField
         val EMPTY = Repository(
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo.EMPTY,
+            provenance = RepositoryProvenance(
+                vcsInfo = VcsInfo.EMPTY,
+                resolvedRevision = HashAlgorithm.SHA1.emptyValue
+            ),
             nestedRepositories = emptyMap(),
             config = RepositoryConfiguration()
         )
     }
 
     /**
-     * Return the path of [vcs] relative to [Repository.vcs], or null if [vcs] is neither [Repository.vcs] nor contained
-     * in [nestedRepositories].
+     * Return the path of [vcs] relative to [Repository.provenance], or null if [vcs] is neither [Repository.provenance]
+     * nor contained in [nestedRepositories].
      */
     fun getRelativePath(vcs: VcsInfo): String? {
         fun VcsInfo.matches(other: VcsInfo) = type == other.type && url == other.url && revision == other.revision
 
         val normalizedVcs = vcs.normalize()
 
-        if (vcsProcessed.matches(normalizedVcs)) return ""
+        if (provenance.vcsInfo.matches(normalizedVcs)) return ""
 
         return nestedRepositories.entries.find { (_, nestedVcs) -> nestedVcs.normalize().matches(normalizedVcs) }?.key
+    }
+}
+
+/**
+ * A custom deserializer for [Repository] to support the legacy "vcs" and "vcsProcessed" attributes.
+ */
+private class RepositoryDeserializer : StdDeserializer<Repository>(Repository::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Repository {
+        val node = p.codec.readTree<JsonNode>(p)
+        val parsedProvenance = when {
+            node.has("vcs") -> {
+                // Parse [vcs] and [vcsProcessed] attributes.
+                val vcs = jsonMapper.treeToValue<VcsInfo>(node["vcs"])
+                val vcsProcess = jsonMapper.treeToValue<VcsInfo>(node["vcs_processed"])
+
+                // Fall back to [vcsProcessed], if [vcs] is empty.
+                val vcsInfo = vcsProcess
+
+                // Get the [vcs]'s revision.
+                // Fall back to [vcsProcessed], if [vcs] has empty revision.
+                val resolvedRevision = vcs.revision.ifEmpty {
+                    vcsProcess.revision.ifEmpty {
+                        HashAlgorithm.SHA1.emptyValue
+                    }
+                }
+
+                // Build a RepositoryProvenance from the parsed VcsInfo fields.
+                RepositoryProvenance(vcsInfo, resolvedRevision)
+            }
+
+            else -> {
+                // Parse the [provenance], if no legacy fields are present.
+                jsonMapper.treeToValue<RepositoryProvenance>(node["provenance"])
+            }
+        }
+
+        val nestedRepositories = if (node.has("nested_repositories")) {
+            jsonMapper.treeToValue<Map<String, VcsInfo>>(node["nested_repositories"])
+        } else {
+            emptyMap()
+        }
+
+        val config = if (node.has("config")) {
+            jsonMapper.treeToValue<RepositoryConfiguration>(node["config"])
+        } else {
+            RepositoryConfiguration()
+        }
+
+        return Repository(provenance = parsedProvenance, nestedRepositories, config)
     }
 }
