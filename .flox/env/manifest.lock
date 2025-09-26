@@ -1,0 +1,160 @@
+{
+  "lockfile-version": 1,
+  "manifest": {
+    "version": 1,
+    "install": {
+      "coreutils": {
+        "pkg-path": "coreutils"
+      },
+      "findutils": {
+        "pkg-path": "findutils"
+      },
+      "gnused": {
+        "pkg-path": "gnused"
+      },
+      "jdk21": {
+        "pkg-path": "jdk21"
+      }
+    },
+    "vars": {
+      "FLOX_DISABLE_METRICS": "true"
+    },
+    "options": {
+      "systems": [
+        "x86_64-linux"
+      ],
+      "cuda-detection": false,
+      "activate": {
+        "mode": "run"
+      }
+    }
+  },
+  "packages": [
+    {
+      "attr_path": "coreutils",
+      "broken": false,
+      "derivation": "/nix/store/mapdfbh230kblpdhxrg77zramjaj9nmk-coreutils-9.5.drv",
+      "description": "GNU Core Utilities",
+      "install_id": "coreutils",
+      "license": "GPL-3.0-or-later",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=9f4128e00b0ae8ec65918efeba59db998750ead6",
+      "name": "coreutils-9.5",
+      "pname": "coreutils",
+      "rev": "9f4128e00b0ae8ec65918efeba59db998750ead6",
+      "rev_count": 647193,
+      "rev_date": "2024-07-03T18:27:49Z",
+      "scrape_date": "2024-07-05T00:14:29Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "9.5",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/8467bx2i423s8d2dnl0529q9q8mpr9h2-coreutils-9.5-debug",
+        "info": "/nix/store/d33w475g5g30crnr2in1w3b9ifpm46h5-coreutils-9.5-info",
+        "out": "/nix/store/i7qhgc0bs725qw3wdanznfkdna4z2ns2-coreutils-9.5"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "findutils",
+      "broken": false,
+      "derivation": "/nix/store/1kl0ncwffim3yihd319n153dzf4cs0y8-findutils-4.9.0.drv",
+      "description": "GNU Find Utilities, the basic directory searching utilities of the GNU operating system",
+      "install_id": "findutils",
+      "license": "GPL-3.0-or-later",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=9f4128e00b0ae8ec65918efeba59db998750ead6",
+      "name": "findutils-4.9.0",
+      "pname": "findutils",
+      "rev": "9f4128e00b0ae8ec65918efeba59db998750ead6",
+      "rev_count": 647193,
+      "rev_date": "2024-07-03T18:27:49Z",
+      "scrape_date": "2024-07-05T00:14:29Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.9.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "info": "/nix/store/qn4dsjr6kgrf05ihhjlpjrcb0bwkjv7d-findutils-4.9.0-info",
+        "locate": "/nix/store/rgpwyrh67rk79s6lyn8qixjmkw5vvgzk-findutils-4.9.0-locate",
+        "out": "/nix/store/rr1yixvn0z63mgq9s04ig9j9qlz23s2g-findutils-4.9.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gnused",
+      "broken": false,
+      "derivation": "/nix/store/m3spvz5g4x85db76x6vlqpjm85gjada5-gnused-4.9.drv",
+      "description": "GNU sed, a batch stream editor",
+      "install_id": "gnused",
+      "license": "GPL-3.0-or-later",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=9f4128e00b0ae8ec65918efeba59db998750ead6",
+      "name": "gnused-4.9",
+      "pname": "gnused",
+      "rev": "9f4128e00b0ae8ec65918efeba59db998750ead6",
+      "rev_count": 647193,
+      "rev_date": "2024-07-03T18:27:49Z",
+      "scrape_date": "2024-07-05T00:14:29Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.9",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "info": "/nix/store/i5siv2j9ccda8h9na76xgn510xpxmqma-gnused-4.9-info",
+        "out": "/nix/store/ks6c62g0m3gqrs5i7m0cv6d6aqhdvirn-gnused-4.9"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "jdk21",
+      "broken": false,
+      "derivation": "/nix/store/gc5wp59mjvmpp1q85jghvdb7as3djali-openjdk-21+35.drv",
+      "description": "Open-source Java Development Kit",
+      "install_id": "jdk21",
+      "license": "GPL-2.0-only",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=9f4128e00b0ae8ec65918efeba59db998750ead6",
+      "name": "openjdk-21+35",
+      "pname": "jdk21",
+      "rev": "9f4128e00b0ae8ec65918efeba59db998750ead6",
+      "rev_count": 647193,
+      "rev_date": "2024-07-03T18:27:49Z",
+      "scrape_date": "2024-07-05T00:14:29Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "21+35",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/2h6zm6qy04amw9mvir8n5fifn99dzg16-openjdk-21+35-debug",
+        "out": "/nix/store/bk3x3ia7gxqic1jgr3dz05gwi8zw671y-openjdk-21+35"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    }
+  ]
+}

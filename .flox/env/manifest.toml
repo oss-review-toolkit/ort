@@ -1,0 +1,18 @@
+# Flox manifest version managed by Flox CLI
+version = 1
+
+[vars]
+FLOX_DISABLE_METRICS = "true"
+
+[options]
+activate.mode = "run"
+cuda-detection = false
+systems = ["x86_64-linux"]
+
+[install]
+jdk21.pkg-path = "jdk21"
+
+# Required to run the Gradle wrapper:
+coreutils.pkg-path = "coreutils"
+findutils.pkg-path = "findutils"
+gnused.pkg-path = "gnused"
