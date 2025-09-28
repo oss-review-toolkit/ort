@@ -24,10 +24,10 @@ project:
       - id: "PyPI::itsdangerous:2.2.0"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
-        - id: "PyPI::markupsafe:3.0.2"
+        - id: "PyPI::markupsafe:3.0.3"
       - id: "PyPI::werkzeug:3.1.3"
         dependencies:
-        - id: "PyPI::markupsafe:3.0.2"
+        - id: "PyPI::markupsafe:3.0.3"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
 - id: "PyPI::click:8.3.0"
@@ -187,24 +187,21 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::markupsafe:3.0.2"
-  purl: "pkg:pypi/markupsafe@3.0.2"
-  declared_licenses:
-  - "BSD License"
-  declared_licenses_processed:
-    unmapped:
-    - "BSD License"
+- id: "PyPI::markupsafe:3.0.3"
+  purl: "pkg:pypi/markupsafe@3.0.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
   description: "Safely add untrusted strings to HTML/XML markup."
   homepage_url: ""
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/bd/6e/61ebf08d8940553afff20d1fb1ba7294b6f8d279df9fd0c0db911b4bbcfd/MarkupSafe-3.0.2-cp310-cp310-musllinux_1_2_x86_64.whl"
+    url: "https://files.pythonhosted.org/packages/af/cd/ce6e848bbf2c32314c9b237839119c5a564a59725b53157c856e90937b7a/markupsafe-3.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
     hash:
-      value: "b424c77b206d63d500bcb69fa55ed8d0e6a3774056bdc4839fc9298a7edca171"
+      value: "f42d0984e947b8adf7dd6dde396e720934d12c506ce84eea8476409563607591"
       algorithm: "SHA-256"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/b2/97/5d42485e71dfc078108a86d6de8fa46db44a1a9295e89c5d6d4a06e23a62/markupsafe-3.0.2.tar.gz"
+    url: "https://files.pythonhosted.org/packages/7e/99/7690b6d4034fffd95959cbe0c02de8deb3098cc577c67bb6a24fe5d7caa7/markupsafe-3.0.3.tar.gz"
     hash:
-      value: "ee55d3edf80167e48ea11a923c7386f4669df67d7994554387f84e7d8b0a2bf0"
+      value: "722695808f4b6457b320fdc131280796bdceb04ab50fe1795cd540799ebe1698"
       algorithm: "SHA-256"
   vcs:
     type: ""
