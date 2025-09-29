@@ -34,7 +34,7 @@ No screenshots of plain text please, to keep text searchable.
 
 ### Environment
 
-Output of the `ort requirements` command:
+Output of the `ort requirements` command (ensure to remove any sensitive information manually):
 
 ```
 <copy & paste console output to here; no screenshots please>
