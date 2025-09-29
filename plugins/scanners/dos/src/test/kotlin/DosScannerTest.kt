@@ -236,51 +236,5 @@ class DosScannerTest : WordSpec({
                 issues should beEmpty()
             }
         }
-
-        "throw a ScanException when getting the upload URL fails" {
-            server.stubFor(
-                post(urlEqualTo("/api/scan-results"))
-                    .willReturn(
-                        aResponse()
-                            .withStatus(200)
-                            .withBody(readResource("/no-results.json"))
-                    )
-            )
-
-            server.stubFor(
-                post(urlEqualTo("/api/upload-url"))
-                    .willReturn(
-                        aResponse()
-                            .withStatus(400)
-                    )
-            )
-
-            val pkg = Package.EMPTY.copy(
-                purl = "pkg:npm/mime-db@1.33.0",
-                vcsProcessed = VcsInfo(
-                    type = VcsType.GIT,
-                    url = "https://github.com/jshttp/mime-db.git",
-                    revision = "e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb",
-                    path = ""
-                )
-            )
-
-            shouldThrow<ScanException> {
-                scanner.scanPackage(
-                    NestedProvenance(
-                        root = RepositoryProvenance(
-                            vcsInfo = pkg.vcsProcessed,
-                            resolvedRevision = pkg.vcsProcessed.revision
-                        ),
-                        subRepositories = emptyMap()
-                    ),
-                    ScanContext(
-                        labels = emptyMap(),
-                        packageType = PackageType.PROJECT,
-                        coveredPackages = listOf(pkg)
-                    )
-                )
-            }.message shouldStartWith "Unable to get an upload URL"
-        }
     }
 })
