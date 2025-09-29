@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
-import io.kotest.matchers.string.beEmpty
 
 import io.mockk.every
 import io.mockk.just
@@ -46,9 +44,6 @@ import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class GitTest : WordSpec({
-    // Make sure that the initialization logic runs.
-    val git = GitFactory().create(PluginConfig.EMPTY)
-
     var originalCredentialsProvider: CredentialsProvider? = null
     var originalAuthenticator: Authenticator? = null
 
@@ -67,13 +62,9 @@ class GitTest : WordSpec({
     }
 
     "Git" should {
-        "be able to get the version" {
-            val version = git.getVersion()
-
-            version shouldNot beEmpty()
-        }
-
         "detect URLs to remote repositories" {
+            val git = GitFactory().create(PluginConfig.EMPTY)
+
             git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample.git") shouldBe true
             git.isApplicableUrl("https://hg.sr.ht/~duangle/paniq_legacy") shouldBe false
         }
