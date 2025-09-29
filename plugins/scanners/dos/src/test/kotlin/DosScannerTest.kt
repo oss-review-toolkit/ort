@@ -27,7 +27,7 @@ import com.github.tomakehurst.wiremock.common.ConsoleNotifier
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.test.readResource
 
-class DosScannerTest : StringSpec({
+class DosScannerTest : WordSpec({
     lateinit var scanner: DosScanner
 
     val server = WireMockServer(
@@ -75,192 +75,146 @@ class DosScannerTest : StringSpec({
         server.stop()
     }
 
-    "getScanResults() should return null when service unavailable" {
-        server.stubFor(
-            post(urlEqualTo("/api/scan-results"))
-                .willReturn(
-                    aResponse()
-                        .withStatus(400)
-                )
-        )
+    "runBackendScan()" should {
+        "throw a ScanException when getting the upload URL fails" {
+            server.stubFor(
+                post(urlEqualTo("/api/upload-url"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(400)
+                    )
+            )
 
-        scanner.client.getScanResults(emptyList()) shouldBe null
-    }
-
-    "getScanResults() should return 'no-results' when no results in db" {
-        server.stubFor(
-            post(urlEqualTo("/api/scan-results"))
-                .willReturn(
-                    aResponse()
-                        .withStatus(200)
-                        .withBody(readResource("/no-results.json"))
-                )
-        )
-
-        val status = scanner.client.getScanResults(
-            listOf(
-                PackageInfo(
-                    purl = "purl",
-                    declaredLicenseExpressionSPDX = null
+            val pkg = Package.EMPTY.copy(
+                id = Identifier("Maven:org.apache.commons:commons-lang3:3.9"),
+                binaryArtifact = RemoteArtifact.EMPTY.copy(
+                    url = "https://www.apache.org/dist/commons/commons-lang3/3.9/"
                 )
             )
-        )?.state?.status
 
-        status shouldBe "no-results"
+            shouldThrow<ScanException> {
+                scanner.runBackendScan(
+                    packages = listOf(
+                        PackageInfo(
+                            purl = pkg.purl,
+                            declaredLicenseExpressionSPDX = null
+                        )
+                    ),
+                    sourceDir = tempdir(),
+                    startTime = Instant.now()
+                )
+            }
+        }
     }
 
-    "getScanResults() should return 'pending' when scan ongoing" {
-        server.stubFor(
-            post(urlEqualTo("/api/scan-results"))
-                .willReturn(
-                    aResponse()
-                        .withStatus(200)
-                        .withBody(readResource("/pending.json"))
-                )
-        )
-
-        val response = scanner.client.getScanResults(
-            listOf(
-                PackageInfo(
-                    purl = "purl",
-                    declaredLicenseExpressionSPDX = null
-                )
+    "getScanResults()" should {
+        "return null when service unavailable" {
+            server.stubFor(
+                post(urlEqualTo("/api/scan-results"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(400)
+                    )
             )
-        )
 
-        response?.state?.status shouldBe "pending"
-        response?.state?.jobId shouldBe "dj34eh4h65"
-    }
-
-    "getScanResults() should return 'ready' plus the results when results in db" {
-        server.stubFor(
-            post(urlEqualTo("/api/scan-results"))
-                .willReturn(
-                    aResponse()
-                        .withStatus(200)
-                        .withBody(readResource("/ready.json"))
-                )
-        )
-
-        val response = scanner.client.getScanResults(
-            listOf(
-                PackageInfo(
-                    purl = "purl",
-                    declaredLicenseExpressionSPDX = null
-                )
-            )
-        )
-
-        val actualJson = JSON.encodeToString(response?.results)
-        val expectedJson = JSON.decodeFromString<ScanResultsResponseBody>(readResource("/ready.json")).let {
-            JSON.encodeToString(it.results)
+            scanner.client.getScanResults(emptyList()) shouldBe null
         }
 
-        response?.state?.status shouldBe "ready"
-        response?.state?.jobId shouldBe null
-        actualJson shouldBe expectedJson
-    }
+        "return 'no-results' when no results in db" {
+            server.stubFor(
+                post(urlEqualTo("/api/scan-results"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(200)
+                            .withBody(readResource("/no-results.json"))
+                    )
+            )
 
-    "runBackendScan() with failing upload URL retrieval should throw a ScanException" {
-        server.stubFor(
-            post(urlEqualTo("/api/upload-url"))
-                .willReturn(
-                    aResponse()
-                        .withStatus(400)
-                )
-        )
-
-        val pkg = Package.EMPTY.copy(
-            id = Identifier("Maven:org.apache.commons:commons-lang3:3.9"),
-            binaryArtifact = RemoteArtifact.EMPTY.copy(url = "https://www.apache.org/dist/commons/commons-lang3/3.9/")
-        )
-
-        shouldThrow<ScanException> {
-            scanner.runBackendScan(
-                packages = listOf(
+            val status = scanner.client.getScanResults(
+                listOf(
                     PackageInfo(
-                        purl = pkg.purl,
+                        purl = "purl",
                         declaredLicenseExpressionSPDX = null
                     )
-                ),
-                sourceDir = tempdir(),
-                startTime = Instant.now()
-            )
+                )
+            )?.state?.status
+
+            status shouldBe "no-results"
         }
-    }
 
-    "scanPackage() should return existing results" {
-        server.stubFor(
-            post(urlEqualTo("/api/scan-results"))
-                .willReturn(
-                    aResponse()
-                        .withStatus(200)
-                        .withBody(readResource("/ready.json"))
+        "return 'pending' when scan ongoing" {
+            server.stubFor(
+                post(urlEqualTo("/api/scan-results"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(200)
+                            .withBody(readResource("/pending.json"))
+                    )
+            )
+
+            val response = scanner.client.getScanResults(
+                listOf(
+                    PackageInfo(
+                        purl = "purl",
+                        declaredLicenseExpressionSPDX = null
+                    )
                 )
-        )
-
-        val pkg = Package.EMPTY.copy(
-            purl = "pkg:npm/mime-db@1.33.0",
-            vcsProcessed = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://github.com/jshttp/mime-db.git",
-                revision = "e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb",
-                path = ""
             )
-        )
 
-        val scanResult = scanner.scanPackage(
-            NestedProvenance(
-                root = RepositoryProvenance(
-                    vcsInfo = pkg.vcsProcessed,
-                    resolvedRevision = pkg.vcsProcessed.revision
-                ),
-                subRepositories = emptyMap()
-            ),
-            ScanContext(
-                labels = emptyMap(),
-                packageType = PackageType.PROJECT,
-                coveredPackages = listOf(pkg)
-            )
-        )
-
-        with(scanResult.summary) {
-            licenseFindings shouldHaveSize 3
-            copyrightFindings shouldHaveSize 2
-            issues should beEmpty()
+            response?.state?.status shouldBe "pending"
+            response?.state?.jobId shouldBe "dj34eh4h65"
         }
-    }
 
-    "scanPackage() should throw a ScanException when fetching presigned URL fails" {
-        server.stubFor(
-            post(urlEqualTo("/api/scan-results"))
-                .willReturn(
-                    aResponse()
-                        .withStatus(200)
-                        .withBody(readResource("/no-results.json"))
-                )
-        )
-
-        server.stubFor(
-            post(urlEqualTo("/api/upload-url"))
-                .willReturn(
-                    aResponse()
-                        .withStatus(400)
-                )
-        )
-
-        val pkg = Package.EMPTY.copy(
-            purl = "pkg:npm/mime-db@1.33.0",
-            vcsProcessed = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://github.com/jshttp/mime-db.git",
-                revision = "e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb",
-                path = ""
+        "return 'ready' plus the results when results in db" {
+            server.stubFor(
+                post(urlEqualTo("/api/scan-results"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(200)
+                            .withBody(readResource("/ready.json"))
+                    )
             )
-        )
 
-        shouldThrow<ScanException> {
-            scanner.scanPackage(
+            val response = scanner.client.getScanResults(
+                listOf(
+                    PackageInfo(
+                        purl = "purl",
+                        declaredLicenseExpressionSPDX = null
+                    )
+                )
+            )
+
+            val actualJson = JSON.encodeToString(response?.results)
+            val expectedJson = JSON.decodeFromString<ScanResultsResponseBody>(readResource("/ready.json")).let {
+                JSON.encodeToString(it.results)
+            }
+
+            response?.state?.status shouldBe "ready"
+            response?.state?.jobId shouldBe null
+            actualJson shouldBe expectedJson
+        }
+
+        "return existing results" {
+            server.stubFor(
+                post(urlEqualTo("/api/scan-results"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(200)
+                            .withBody(readResource("/ready.json"))
+                    )
+            )
+
+            val pkg = Package.EMPTY.copy(
+                purl = "pkg:npm/mime-db@1.33.0",
+                vcsProcessed = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/jshttp/mime-db.git",
+                    revision = "e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb",
+                    path = ""
+                )
+            )
+
+            val scanResult = scanner.scanPackage(
                 NestedProvenance(
                     root = RepositoryProvenance(
                         vcsInfo = pkg.vcsProcessed,
@@ -274,6 +228,58 @@ class DosScannerTest : StringSpec({
                     coveredPackages = listOf(pkg)
                 )
             )
+
+            with(scanResult.summary) {
+                licenseFindings shouldHaveSize 3
+                copyrightFindings shouldHaveSize 2
+                issues should beEmpty()
+            }
+        }
+
+        "throw a ScanException when getting the upload URL fails" {
+            server.stubFor(
+                post(urlEqualTo("/api/scan-results"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(200)
+                            .withBody(readResource("/no-results.json"))
+                    )
+            )
+
+            server.stubFor(
+                post(urlEqualTo("/api/upload-url"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(400)
+                    )
+            )
+
+            val pkg = Package.EMPTY.copy(
+                purl = "pkg:npm/mime-db@1.33.0",
+                vcsProcessed = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/jshttp/mime-db.git",
+                    revision = "e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb",
+                    path = ""
+                )
+            )
+
+            shouldThrow<ScanException> {
+                scanner.scanPackage(
+                    NestedProvenance(
+                        root = RepositoryProvenance(
+                            vcsInfo = pkg.vcsProcessed,
+                            resolvedRevision = pkg.vcsProcessed.revision
+                        ),
+                        subRepositories = emptyMap()
+                    ),
+                    ScanContext(
+                        labels = emptyMap(),
+                        packageType = PackageType.PROJECT,
+                        coveredPackages = listOf(pkg)
+                    )
+                )
+            }
         }
     }
 })
