@@ -33,6 +33,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldStartWith
 
 import java.time.Instant
 
@@ -103,7 +104,7 @@ class DosScannerTest : WordSpec({
                     sourceDir = tempdir(),
                     startTime = Instant.now()
                 )
-            }
+            }.message shouldStartWith "Unable to get an upload URL"
         }
     }
 
@@ -279,7 +280,7 @@ class DosScannerTest : WordSpec({
                         coveredPackages = listOf(pkg)
                     )
                 )
-            }
+            }.message shouldStartWith "Unable to get an upload URL"
         }
     }
 })
