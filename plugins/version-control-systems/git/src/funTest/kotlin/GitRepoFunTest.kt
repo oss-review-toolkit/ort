@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.common.div
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 
-class GitRepoDownloadFunTest : WordSpec({
+class GitRepoFunTest : WordSpec({
     val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV)
     val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 

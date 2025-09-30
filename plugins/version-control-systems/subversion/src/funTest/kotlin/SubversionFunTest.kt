@@ -41,7 +41,7 @@ private const val REPO_VERSION = "1.0.1"
 private const val REPO_REV_FOR_VERSION = "30"
 private const val REPO_PATH_FOR_VERSION = "src/resources"
 
-class SubversionDownloadFunTest : WordSpec({
+class SubversionFunTest : WordSpec({
     val svn = Subversion()
     lateinit var outputDir: File
 
