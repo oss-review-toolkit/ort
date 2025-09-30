@@ -28,7 +28,7 @@ project:
     dependencies:
     - id: "Conan::libcurl:7.85.0"
       dependencies:
-      - id: "Conan::openssl:3.5.2"
+      - id: "Conan::openssl:3.5.3"
         dependencies:
         - id: "Conan::zlib:1.2.13"
       - id: "Conan::zlib:1.2.13"
@@ -179,8 +179,8 @@ packages:
     revision: ""
     path: ""
   is_modified: true
-- id: "Conan::openssl:3.5.2"
-  purl: "pkg:conan/openssl@3.5.2"
+- id: "Conan::openssl:3.5.3"
+  purl: "pkg:conan/openssl@3.5.3"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -194,9 +194,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz"
+    url: "https://github.com/openssl/openssl/releases/download/openssl-3.5.3/openssl-3.5.3.tar.gz"
     hash:
-      value: "c53a47e5e441c930c3928cf7bf6fb00e5d129b630e0aa873b08258656e7345ec"
+      value: "c9489d2abcf943cdc8329a57092331c598a402938054dc3a22218aea8a8ec3bf"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
