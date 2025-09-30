@@ -184,15 +184,6 @@ RUN pip install --no-cache-dir -U \
 #     find /opt/scancode-license-data -type f -not -name "*.LICENSE" -exec rm -f {} + \; \
 #     fi
 
-# # Extract ScanCode license texts to a directory.
-# RUN ARCH=$(arch | sed s/aarch64/arm64/) \
-#     if [ "$ARCH" == "arm64" ]; then \
-#     echo "Not av ailable for Arm due distutils problem";
-# else \
-#     scancode-license-data --path /opt/scancode-license-data; \
-#     find /opt/scancode-license-data -type f -not -name "*.LICENSE" -exec rm -f {} + \; \
-#     fi
-
 RUN mkdir -p $PYTHON_INSTALL_ROOT/conan2 \
     && curl -L https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz | tar -C $PYTHON_INSTALL_ROOT/conan2 -zvx bin \
     # Rename the Conan 2 executable to "conan2" to be able to call both Conan version from the package manager.
@@ -200,9 +191,6 @@ RUN mkdir -p $PYTHON_INSTALL_ROOT/conan2 \
 
 FROM scratch AS python
 COPY --from=python_install /opt/python /opt/python
-
-FROM scratch AS scancode-license-data
-COPY --from=python_install /opt/scancode-license-data /opt/scancode-license-data
 
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
@@ -524,8 +512,6 @@ ENV RBENV_ROOT=/opt/rbenv
 ENV GEM_HOME=/var/tmp/gem
 ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
 COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
-
-COPY --from=scancode-license-data --chown=$USER:$USER /opt/scancode-license-data /opt/scancode-license-data
 
 #------------------------------------------------------------------------
 # Container with all supported package managers.
