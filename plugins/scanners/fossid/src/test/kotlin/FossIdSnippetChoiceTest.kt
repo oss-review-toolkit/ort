@@ -41,6 +41,8 @@ import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 import org.ossreviewtoolkit.clients.fossid.PolymorphicResponseBody
 import org.ossreviewtoolkit.clients.fossid.addComponentIdentification
 import org.ossreviewtoolkit.clients.fossid.addFileComment
+import org.ossreviewtoolkit.clients.fossid.createScan
+import org.ossreviewtoolkit.clients.fossid.extractArchives
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
@@ -53,7 +55,9 @@ import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
+import org.ossreviewtoolkit.clients.fossid.removeUploadedContent
 import org.ossreviewtoolkit.clients.fossid.unmarkAsIdentified
+import org.ossreviewtoolkit.clients.fossid.uploadFile
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
@@ -70,6 +74,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 /** Sample files in the results. **/
 private const val FILE_1 = "a.java"
 private const val FILE_2 = "b.java"
+private const val FILE_1_ARCHIVE_MODE = "fossid-source-archive832364312005325574.zip/a.java"
 
 /** A sample purl in the results. **/
 private const val PURL_1 = "pkg:github/fakeuser/fakepackage1@1.0.0"
@@ -301,6 +306,89 @@ class FossIdSnippetChoiceTest : WordSpec({
                     scanCode = scanCode,
                     path = FILE_1,
                     comment = comment,
+                    isImportant = false,
+                    includeInReport = false
+                )
+            }
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "This scan has 0 file(s) pending identification in FossID. " +
+                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
+            }
+        }
+
+        "mark a file with all snippets chosen as identified when the scan has been created in archive mode" {
+            val branchName = "aTestBranch"
+            val projectCode = PROJECT
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, isArchiveMode = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName, isArchiveMode = true)
+                .expectRemoveUploadedContent(scanCode)
+                .expectUploadFile(scanCode)
+                .expectExtractArchives(scanCode)
+                .mockFiles(
+                    scanCode,
+                    pendingFiles = listOf(FILE_1_ARCHIVE_MODE),
+                    snippets = listOf(
+                        createSnippet(0, FILE_1, PURL_1)
+                    ),
+                    matchedLines = mapOf(
+                        0 to MatchedLines.create((10..20).toList(), (10..20).toList())
+                    )
+                )
+                // The mark as identified call is made on the real snippet path.
+                .expectMarkAsIdentified(scanCode, FILE_1_ARCHIVE_MODE)
+
+            // The snippet choice is make on the truncated snippet path.
+            val choiceLocation = TextLocation(FILE_1, 10, 20)
+            val snippetChoices = createSnippetChoices(
+                vcsInfo.url,
+                createSnippetChoice(choiceLocation, PURL_1, comment = "")
+            )
+            val fossId = createFossId(config)
+
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
+            val summary = fossId.scan(
+                createPackage(pkgId, vcsInfo),
+                snippetChoices = snippetChoices,
+                labels = mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
+            ).summary
+
+            summary.snippetFindings should beEmpty()
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, null, null, comment)
+                service.removeUploadedContent(USER, API_KEY, scanCode)
+                service.uploadFile(USER, API_KEY, scanCode, any())
+                service.extractArchives(USER, API_KEY, scanCode, any())
+                service.markAsIdentified(USER, API_KEY, scanCode, FILE_1_ARCHIVE_MODE, any())
+                service.addComponentIdentification(
+                    user = USER,
+                    apiKey = API_KEY,
+                    scanCode = scanCode,
+                    path = FILE_1_ARCHIVE_MODE,
+                    componentName = "fakepackage1",
+                    componentVersion = "1.0.0",
+                    isDirectory = false,
+                    preserveExistingIdentifications = true
+                )
+
+                val payload = OrtCommentPayload(mapOf("MIT" to listOf(choiceLocation)), 1, 0)
+                val jsonComment = jsonMapper.writeValueAsString(OrtComment(payload))
+
+                service.addFileComment(
+                    user = USER,
+                    apiKey = API_KEY,
+                    scanCode = scanCode,
+                    path = FILE_1_ARCHIVE_MODE,
+                    comment = jsonComment,
                     isImportant = false,
                     includeInReport = false
                 )
@@ -952,7 +1040,7 @@ private fun createSnippetChoice(location: TextLocation, purl: String? = null, co
         )
     )
 
-fun FossIdServiceWithVersion.mockFiles(
+internal fun FossIdServiceWithVersion.mockFiles(
     scanCode: String,
     markedFiles: List<MarkedAsIdentifiedFile> = emptyList(),
     pendingFiles: List<String> = emptyList(),

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import io.kotest.assertions.async.shouldTimeout
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.comparables.shouldBeGreaterThanOrEqualTo
 import io.kotest.matchers.comparables.shouldBeLessThanOrEqualTo
@@ -63,10 +64,15 @@ import org.ossreviewtoolkit.clients.fossid.removeUploadedContent
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.clients.fossid.uploadFile
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.Snippet
+import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
@@ -76,6 +82,7 @@ import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_CODE_K
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_ID_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.extractRepositoryName
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 import org.semver4j.Semver
 
@@ -228,6 +235,71 @@ class FossIdTest : WordSpec({
             coVerify(exactly = 0) {
                 service.createProject(any())
             }
+        }
+
+        "rewrite the snippet results paths for a scan created by uploading an archive" {
+            val file1ArchiveMode = "fossid-source-archive832364312005325574.zip/a.java"
+            val file1 = "a.java"
+
+            /** A sample purl in the results. **/
+            val purl1 = "pkg:github/fakeuser/fakepackage1@1.0.0"
+
+            val branchName = "aTestBranch"
+
+            val projectCode = PROJECT
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, isArchiveMode = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName, true)
+                .expectRemoveUploadedContent(scanCode)
+                .expectUploadFile(scanCode)
+                .expectExtractArchives(scanCode)
+                .mockFiles(
+                    scanCode,
+                    pendingFiles = listOf(file1ArchiveMode),
+                    // Note that FossId does not include the prefix when listing snippets.
+                    snippets = listOf(createSnippet(0, file1, purl1))
+                )
+
+            val fossId = createFossId(config)
+
+            val result = fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
+            )
+
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, null, null, comment)
+                service.removeUploadedContent(USER, API_KEY, scanCode)
+                service.uploadFile(USER, API_KEY, scanCode, any())
+                service.extractArchives(USER, API_KEY, scanCode, any())
+            }
+
+            coVerify(exactly = 0) {
+                service.createProject(any())
+            }
+
+            val location = TextLocation(file1, TextLocation.UNKNOWN_LINE)
+            result.summary.snippetFindings shouldHaveSingleElement SnippetFinding(
+                location,
+                setOf(
+                    Snippet(
+                        0.0f,
+                        location,
+                        ArtifactProvenance(RemoteArtifact("url0", Hash.NONE)),
+                        purl1,
+                        "MIT".toSpdx(),
+                        mapOf("id" to "0", "matchType" to "PARTIAL", "releaseDate" to "releaseDate0")
+                    )
+                )
+            )
         }
 
         "throw an exception if the scan download failed" {
