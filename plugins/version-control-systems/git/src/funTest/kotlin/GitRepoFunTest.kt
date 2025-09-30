@@ -21,12 +21,13 @@ package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.maps.shouldContainExactly
+import io.kotest.matchers.sequences.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -37,21 +38,43 @@ private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-dat
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 
 class GitRepoFunTest : WordSpec({
+    val gitRepo = GitRepoFactory().create(PluginConfig.EMPTY)
     val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV)
     val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
     lateinit var outputDir: File
-    lateinit var workingTree: WorkingTree
 
     beforeEach {
         outputDir = tempdir()
-        workingTree = GitRepoFactory().create(PluginConfig.EMPTY).download(pkg, outputDir)
     }
 
     "download()" should {
         "get the given revision" {
             val spdxDir = outputDir / "spdx-tools"
-            val expectedSpdxFiles = listOf(
+
+            val actualSpdxFiles = spdxDir.walk().maxDepth(1).filter {
+                it.isDirectory && it != spdxDir
+            }.map {
+                it.name
+            }.sorted()
+
+            val submodulesDir = outputDir / "submodules"
+
+            val actualSubmodulesFiles = submodulesDir.walk().maxDepth(1).filter {
+                it.isDirectory && it != submodulesDir
+            }.map {
+                it.name
+            }.sorted()
+
+            val workingTree = gitRepo.download(pkg, outputDir)
+
+            workingTree.isValid() shouldBe true
+            workingTree.getInfo() shouldBe vcs
+
+            workingTree.getPathToRoot(outputDir / "grpc" / "README.md") shouldBe "grpc/README.md"
+            workingTree.getPathToRoot(outputDir / "spdx-tools" / "TODO") shouldBe "spdx-tools/TODO"
+
+            actualSpdxFiles.shouldContainExactly(
                 ".git",
                 "Examples",
                 "Test",
@@ -61,46 +84,26 @@ class GitRepoFunTest : WordSpec({
                 "src"
             )
 
-            val actualSpdxFiles = spdxDir.walk().maxDepth(1).filter {
-                it.isDirectory && it != spdxDir
-            }.map {
-                it.name
-            }.sorted()
-
-            val submodulesDir = outputDir / "submodules"
-            val expectedSubmodulesFiles = listOf(
+            actualSubmodulesFiles.shouldContainExactly(
                 ".git",
                 "commons-text",
                 "test-data-npm"
             )
-
-            val actualSubmodulesFiles = submodulesDir.walk().maxDepth(1).filter {
-                it.isDirectory && it != submodulesDir
-            }.map {
-                it.name
-            }.sorted()
-
-            workingTree.isValid() shouldBe true
-            workingTree.getInfo() shouldBe vcs
-
-            workingTree.getPathToRoot(outputDir / "grpc" / "README.md") shouldBe "grpc/README.md"
-            workingTree.getPathToRoot(outputDir / "spdx-tools" / "TODO") shouldBe "spdx-tools/TODO"
-
-            actualSpdxFiles.joinToString("\n") shouldBe expectedSpdxFiles.joinToString("\n")
-            actualSubmodulesFiles.joinToString("\n") shouldBe expectedSubmodulesFiles.joinToString("\n")
         }
 
         "get nested submodules" {
-            val expectedSubmodules = listOf(
+            val workingTree = gitRepo.download(pkg, outputDir)
+
+            workingTree.getNested() shouldContainExactly listOf(
                 "spdx-tools",
                 "submodules",
                 "submodules/commons-text",
                 "submodules/test-data-npm",
                 "submodules/test-data-npm/isarray",
                 "submodules/test-data-npm/long.js"
-            ).associateWith { VersionControlSystem.getPathInfo(outputDir / it) }
-
-            workingTree.getNested() shouldBe expectedSubmodules
+            ).associateWith {
+                VersionControlSystem.getPathInfo(outputDir / it)
+            }
         }
     }
 })
