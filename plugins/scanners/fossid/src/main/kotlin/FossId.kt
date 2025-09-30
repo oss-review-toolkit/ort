@@ -39,6 +39,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
+import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 import org.ossreviewtoolkit.clients.fossid.addComponentIdentification
 import org.ossreviewtoolkit.clients.fossid.addFileComment
 import org.ossreviewtoolkit.clients.fossid.checkResponse
@@ -55,6 +56,9 @@ import org.ossreviewtoolkit.clients.fossid.listSnippets
 import org.ossreviewtoolkit.clients.fossid.markAsIdentified
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
+import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
@@ -820,10 +824,16 @@ class FossId internal constructor(
             }
         }
 
+        // Here the search for the archive prefix cannot be conditioned to config.isArchiveUploadMode because the
+        // current run could be configured in clone repository mode but the scan is a previous scan created in archive
+        // upload mode.
+        val archivePrefix = getArchivePrefix(pendingFiles, identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles)
+
         val matchedLines = mutableMapOf<Int, MatchedLines>()
         val pendingFilesIterator = pendingFiles.iterator()
         val snippets = flow {
             while (pendingFilesIterator.hasNext()) {
+                // Here the pending files still have their prefix as it is required to list the snippets.
                 val file = pendingFilesIterator.next()
                 logger.info { "Listing snippet for $file..." }
 
@@ -862,19 +872,49 @@ class FossId internal constructor(
                     }
                 }
 
-                emit(file to filteredSnippets.toSet())
+                val fileWithoutPrefix = archivePrefix?.let { file.removePrefix(it) } ?: file
+
+                emit(fileWithoutPrefix to filteredSnippets.toSet())
             }
         }
 
-        return RawResults(
+        return RawResults.createAndRemovePrefix(
             identifiedFiles,
             markedAsIdentifiedFiles,
             listIgnoredFiles,
             pendingFiles,
             snippets,
-            matchedLines
+            matchedLines,
+            archivePrefix
         )
     }
+
+    /**
+     * When the scan is created in Archive upload mode, all the file paths are prefixed with the archive name e.g.
+     * fossid-source-archive832364312005325574.zip/test.txt. This function searches this prefix in the list of pending
+     * files or in the list of identified files. If no such prefix is found, null is returned.
+     */
+    internal fun getArchivePrefix(
+        pendingFiles: List<String>,
+        identifiedFiles: List<IdentifiedFile>,
+        markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
+        listIgnoredFiles: PolymorphicList<IgnoredFile>
+    ): String? {
+        val prefix = pendingFiles.findPrefix { it }
+            ?: identifiedFiles.findPrefix { it.file.path }
+            ?: markedAsIdentifiedFiles.findPrefix { it.file.path }
+            ?: listIgnoredFiles.findPrefix { it.path }
+
+        return prefix?.let {
+            logger.info { "Found archive prefix '$prefix' from snippets." }
+            "$prefix/"
+        }
+    }
+
+    private fun <T> List<T>.findPrefix(selector: (T) -> String?): String? =
+        firstOrNull()
+            ?.takeIf { selector(it)?.startsWith("fossid-source-archive") == true }
+            ?.let { selector(it)?.substringBefore("/") }
 
     /**
      * Construct the [ScanSummary] for this FossID scan.
@@ -906,7 +946,8 @@ class FossId internal constructor(
             snippetChoices,
             snippetFindings,
             rawResults.listPendingFiles,
-            snippetLicenseFindings
+            snippetLicenseFindings,
+            rawResults.archivePrefix
         )
 
         val pendingFilesCount = (rawResults.listPendingFiles - newlyMarkedFiles.toSet()).size
@@ -948,7 +989,9 @@ class FossId internal constructor(
 
     /**
      * Mark all the files in [snippetChoices] as identified, only after searching in [snippetFindings] that they have no
-     * non-chosen source location remaining. Only files in [listPendingFiles] are marked.
+     * non-chosen source location remaining. Only files in [listPendingFiles] are marked. Prefix [archivePrefix]
+     * prepended to the files paths when the scan is done in archive upload mode needs to be prepended when sending
+     * requests that affect a specific file.
      * Files marked as identified have a license identification and a source location (stored in a comment), using
      * [licenseFindings] as reference.
      * Returns the list of files that have been marked as identified.
@@ -958,7 +1001,8 @@ class FossId internal constructor(
         snippetChoices: List<SnippetChoice> = emptyList(),
         snippetFindings: Set<SnippetFinding>,
         pendingFiles: List<String>,
-        licenseFindings: Set<LicenseFinding>
+        licenseFindings: Set<LicenseFinding>,
+        archivePrefix: String?
     ): List<String> {
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
         val result = mutableListOf<String>()
@@ -982,8 +1026,15 @@ class FossId internal constructor(
                                 "findings. The used reasons are: ${reasons.joinToString()}"
                         }
 
+                        val pathForRequest = archivePrefix?.let { "$it$path" } ?: path
                         requests += async {
-                            service.markAsIdentified(config.user.value, config.apiKey.value, scanCode, path, false)
+                            service.markAsIdentified(
+                                config.user.value,
+                                config.apiKey.value,
+                                scanCode,
+                                pathForRequest,
+                                false
+                            )
                             result += path
                         }
 
@@ -1012,7 +1063,7 @@ class FossId internal constructor(
                                         config.user.value,
                                         config.apiKey.value,
                                         scanCode,
-                                        path,
+                                        pathForRequest,
                                         artifact,
                                         version,
                                         false
@@ -1045,7 +1096,13 @@ class FossId internal constructor(
                                     "relevant count $notRelevantChoicesCount."
                             }
 
-                            service.addFileComment(config.user.value, config.apiKey.value, scanCode, path, jsonComment)
+                            service.addFileComment(
+                                config.user.value,
+                                config.apiKey.value,
+                                scanCode,
+                                pathForRequest,
+                                jsonComment
+                            )
                         }
                     }
                 }

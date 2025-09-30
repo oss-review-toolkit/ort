@@ -21,6 +21,9 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 
 import java.lang.invoke.MethodHandles
 
+import kotlin.collections.map
+import kotlin.text.removePrefix
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transformWhile
 
@@ -68,8 +71,56 @@ internal data class RawResults(
     val listIgnoredFiles: List<IgnoredFile>,
     val listPendingFiles: List<String>,
     val listSnippets: Flow<Pair<String, Set<Snippet>>>,
-    val snippetMatchedLines: Map<Int, MatchedLines> = emptyMap()
-)
+    val snippetMatchedLines: Map<Int, MatchedLines> = emptyMap(),
+
+    /**
+     * If the scan was done in archive upload mode, this is the prefix FossId uses before each file path, e.g.
+     * fossid-source-archive832364312005325574.zip/.
+     */
+    val archivePrefix: String? = null
+) {
+    companion object {
+        @Suppress("LongParameterList")
+        fun createAndRemovePrefix(
+            identifiedFiles: List<IdentifiedFile>,
+            markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
+            listIgnoredFiles: List<IgnoredFile>,
+            listPendingFiles: List<String>,
+            listSnippets: Flow<Pair<String, Set<Snippet>>>,
+            snippetMatchedLines: Map<Int, MatchedLines> = emptyMap(),
+            archivePrefix: String?
+        ): RawResults =
+            if (archivePrefix == null) {
+                RawResults(
+                    identifiedFiles,
+                    markedAsIdentifiedFiles,
+                    listIgnoredFiles,
+                    listPendingFiles,
+                    listSnippets,
+                    snippetMatchedLines,
+                    null
+                )
+            } else {
+                identifiedFiles.forEach {
+                    it.file = it.file.copy(path = it.file.path?.removePrefix(archivePrefix))
+                }
+
+                markedAsIdentifiedFiles.forEach {
+                    it.file = it.file.copy(path = it.file.path?.removePrefix(archivePrefix))
+                }
+
+                RawResults(
+                    identifiedFiles,
+                    markedAsIdentifiedFiles,
+                    listIgnoredFiles.map { it.copy(path = it.path.removePrefix(archivePrefix)) },
+                    listPendingFiles.map { it.removePrefix(archivePrefix) },
+                    listSnippets,
+                    snippetMatchedLines,
+                    archivePrefix
+                )
+            }
+    }
+}
 
 /**
  * A data class to hold FossID mapped results.
