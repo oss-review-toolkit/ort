@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.mercurial
 
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
@@ -29,6 +30,9 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+
+import org.semver4j.Semver
+import org.semver4j.SemverException
 
 private const val PKG_VERSION = "v1.0.0"
 
@@ -45,6 +49,14 @@ class MercurialFunTest : WordSpec({
 
     beforeEach {
         outputDir = tempdir()
+    }
+
+    "getVersion()" should {
+        "return a version that can be coerced to a Semver" {
+            shouldNotThrow<SemverException> {
+                Semver.coerce(hg.getVersion())
+            }
+        }
     }
 
     "download()" should {

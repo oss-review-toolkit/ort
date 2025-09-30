@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.maps.shouldContainExactly
@@ -34,6 +35,9 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.div
 
+import org.semver4j.Semver
+import org.semver4j.SemverException
+
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 
@@ -46,6 +50,14 @@ class GitRepoFunTest : WordSpec({
 
     beforeEach {
         outputDir = tempdir()
+    }
+
+    "getVersion()" should {
+        "return a version that can be coerced to a Semver" {
+            shouldNotThrow<SemverException> {
+                Semver.coerce(gitRepo.getVersion())
+            }
+        }
     }
 
     "download()" should {
