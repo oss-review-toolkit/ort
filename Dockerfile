@@ -115,13 +115,12 @@ WORKDIR $HOME
 ENTRYPOINT [ "/bin/bash" ]
 
 #------------------------------------------------------------------------
-# PYTHON - Build Python as a separate component with pyenv
-FROM base AS pythonbuild
+# PYTHON - Install Python binaries from astral-sh
+FROM base AS python_install
 
-ARG CONAN_VERSION
 ARG CONAN2_VERSION
+ARG CONAN_VERSION
 ARG PIP_VERSION
-ARG PYENV_GIT_TAG
 ARG PYTHON_INSPECTOR_VERSION
 ARG PYTHON_PIPENV_VERSION
 ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
@@ -129,41 +128,39 @@ ARG PYTHON_POETRY_VERSION
 ARG PYTHON_SETUPTOOLS_VERSION
 ARG PYTHON_VERSION
 ARG SCANCODE_VERSION
+ARG UV_VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+ENV PYTHON_INSTALL_ROOT=/opt/python
+ENV PATH=$PATH:$PYTHON_INSTALL_ROOT/bin:$PYTHON_INSTALL_ROOT/conan2/bin
+
+RUN ARCH=$(arch | sed s/aarch64/arm64/) \
+    && astral_release="20250918" \
+    && download_url="https://github.com/astral-sh/python-build-standalone/releases/download/${astral_release}" \
+    && mkdir -p $PYTHON_INSTALL_ROOT \
+    && arch="x86_64" \
+    && if [ "$ARCH" == "arm64" ]; then \
+    arch="aarch64"; \
+    fi \
+    && curl -L "${download_url}/cpython-${PYTHON_VERSION}+${astral_release}-${arch}-unknown-linux-gnu-install_only_stripped.tar.gz" | tar -C /opt -xz
+
+# This is required mostly because scancode-mini requirements
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    libreadline-dev \
-    libgdbm-dev \
-    libsqlite3-dev \
-    libssl-dev \
-    libbz2-dev \
-    liblzma-dev \
-    tk-dev \
+    libicu-dev \
+    pkg-config \
+    clang \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
-RUN curl -kSs https://pyenv.run | bash \
-    && pyenv install -v $PYTHON_VERSION \
-    && pyenv global $PYTHON_VERSION
-
 RUN ARCH=$(arch | sed s/aarch64/arm64/) \
-    &&  if [ "$ARCH" == "arm64" ]; then \
+    && if [ "$ARCH" == "arm64" ]; then \
     pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
     else \
-    curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION setuptools==$PYTHON_SETUPTOOLS_VERSION; \
-    rm requirements.txt; \
+    pip install -U scancode-toolkit==$SCANCODE_VERSION; \
     fi
-
-# Extract ScanCode license texts to a directory.
-RUN scancode-license-data --path /opt/scancode-license-data \
-    && find /opt/scancode-license-data -type f -not -name "*.LICENSE" -exec rm -f {} + \
-    && rm -rf /opt/scancode-license-data/static
 
 RUN pip install --no-cache-dir -U \
     pip=="$PIP_VERSION" \
@@ -175,19 +172,37 @@ RUN pip install --no-cache-dir -U \
     poetry=="$PYTHON_POETRY_VERSION" \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
-    setuptools=="$PYTHON_SETUPTOOLS_VERSION"
-RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
-    && wget https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz \
-    && tar -xvf conan-$CONAN2_VERSION-linux-x86_64.tgz\
+    setuptools=="$PYTHON_SETUPTOOLS_VERSION" \
+    uv="$UV_VERSION"
+
+# # Extract ScanCode license texts to a directory.
+# RUN ARCH=$(arch | sed s/aarch64/arm64/) \
+#     if [ "$ARCH" == "arm64" ]; then \
+#     echo "Not av ailable for Arm due distutils problem";
+# else \
+#     scancode-license-data --path /opt/scancode-license-data; \
+#     find /opt/scancode-license-data -type f -not -name "*.LICENSE" -exec rm -f {} + \; \
+#     fi
+
+# # Extract ScanCode license texts to a directory.
+# RUN ARCH=$(arch | sed s/aarch64/arm64/) \
+#     if [ "$ARCH" == "arm64" ]; then \
+#     echo "Not av ailable for Arm due distutils problem";
+# else \
+#     scancode-license-data --path /opt/scancode-license-data; \
+#     find /opt/scancode-license-data -type f -not -name "*.LICENSE" -exec rm -f {} + \; \
+#     fi
+
+RUN mkdir -p $PYTHON_INSTALL_ROOT/conan2 \
+    && curl -L https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz | tar -C $PYTHON_INSTALL_ROOT/conan2 -zvx bin \
     # Rename the Conan 2 executable to "conan2" to be able to call both Conan version from the package manager.
-    && mkdir $PYENV_ROOT/conan2 && mv /tmp/conan2/bin $PYENV_ROOT/conan2/ \
-    && mv $PYENV_ROOT/conan2/bin/conan $PYENV_ROOT/conan2/bin/conan2
+    && mv $PYTHON_INSTALL_ROOT/conan2/bin/conan $PYTHON_INSTALL_ROOT/conan2/bin/conan2
 
 FROM scratch AS python
-COPY --from=pythonbuild /opt/python /opt/python
+COPY --from=python_install /opt/python /opt/python
 
 FROM scratch AS scancode-license-data
-COPY --from=pythonbuild /opt/scancode-license-data /opt/scancode-license-data
+COPY --from=python_install /opt/scancode-license-data /opt/scancode-license-data
 
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
@@ -483,9 +498,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && sudo rm -rf /var/lib/apt/lists/*
 
 # Python
-ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
-COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
+ENV PYTHON_INSTALL_ROOT=/opt/python
+ENV PATH=$PATH:$PYTHON_INSTALL_ROOT/shims:$PYTHON_INSTALL_ROOT/bin:$PYTHON_INSTALL_ROOT/conan2/bin
+COPY --from=python --chown=$USER:$USER $PYTHON_INSTALL_ROOT $PYTHON_INSTALL_ROOT
 
 # NodeJS
 ENV NVM_DIR=/opt/nvm
