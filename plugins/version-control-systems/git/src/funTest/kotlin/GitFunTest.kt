@@ -17,30 +17,33 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.versioncontrolsystems.mercurial
+package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 
-private const val PKG_VERSION = "v1.0.0"
+private const val PKG_VERSION = "0.4.1"
 
-private const val REPO_URL = "https://hg.sr.ht/~breakfastquay/bqfft"
-private const val REPO_REV = "e1c392f85e973225ece81cf8d74287b3a4992dea"
-private const val REPO_PATH = "test"
+private const val REPO_URL = "https://github.com/jriecken/dependency-graph"
+private const val REPO_REV = "8964880d9bac33f0a7f030a74c7c9299a8f117c8"
+private const val REPO_PATH = "lib"
 
-private const val REPO_REV_FOR_VERSION = "a766fe47501b185bc46cffc210735304e28f2189"
-private const val REPO_PATH_FOR_VERSION = "build"
+private const val REPO_REV_FOR_VERSION = "371b23f37da064687518bace268d607a92ecbe8f"
+private const val REPO_PATH_FOR_VERSION = "specs"
 
-class MercurialDownloadFunTest : WordSpec({
-    val hg = Mercurial()
+class GitFunTest : WordSpec({
+    val git = GitFactory().create(PluginConfig.EMPTY)
     lateinit var outputDir: File
 
     beforeEach {
@@ -48,23 +51,31 @@ class MercurialDownloadFunTest : WordSpec({
     }
 
     "download()" should {
+        "not prompt for credentials for non-existing repositories" {
+            val url = "https://github.com/oss-review-toolkit/foobar.git"
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, url, "master"))
+
+            val exception = shouldThrow<DownloadException> {
+                git.download(pkg, outputDir, allowMovingRevisions = true)
+            }
+
+            exception.message shouldBe "Git failed to get revisions from URL $url."
+        }
+
         "get the given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
-                ".hg",
-                ".hgignore",
-                ".hgtags",
-                ".travis.yml",
-                "COPYING",
-                "Makefile",
+                ".git",
+                ".gitignore",
+                "CHANGELOG.md",
+                "LICENSE",
                 "README.md",
-                "bqfft",
-                "build",
-                "src",
-                "test"
+                "lib",
+                "package.json",
+                "specs"
             )
 
-            val workingTree = hg.download(pkg, outputDir)
+            val workingTree = git.download(pkg, outputDir)
             val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
                 it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
             }.sorted()
@@ -74,22 +85,18 @@ class MercurialDownloadFunTest : WordSpec({
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "get only the given path".config(enabled = hg.isAtLeastVersion("4.3")) {
-            val pkg = Package.EMPTY.copy(
-                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV, path = REPO_PATH)
-            )
+        "get only the given path" {
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
-                ".hgignore",
-                ".hgtags",
-                "COPYING",
-                "README.md",
-                "$REPO_PATH/TestFFT.cpp",
-                "$REPO_PATH/timings.cpp"
+                File("LICENSE"),
+                File("README.md"),
+                File(REPO_PATH, "dep_graph.js"),
+                File(REPO_PATH, "index.d.ts")
             )
 
-            val workingTree = hg.download(pkg, outputDir)
+            val workingTree = git.download(pkg, outputDir)
             val actualFiles = workingTree.getRootPath().walkBottomUp()
-                .onEnter { it.name != ".hg" }
+                .onEnter { it.name != ".git" }
                 .filter { it.isFile }
                 .map { it.relativeTo(outputDir) }
                 .sortedBy { it.path }
@@ -105,36 +112,31 @@ class MercurialDownloadFunTest : WordSpec({
                 id = Identifier("Test:::$PKG_VERSION"),
 
                 // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
-                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy")
+                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy")
             )
 
-            val workingTree = hg.download(pkg, outputDir)
+            val workingTree = git.download(pkg, outputDir)
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
         }
 
-        "get only the given path based on a package version".config(enabled = hg.isAtLeastVersion("4.3")) {
+        "get only the given path based on a package version" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$PKG_VERSION"),
 
                 // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
-                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
+                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
-                ".hgignore",
-                "COPYING",
-                "README.md",
-                "build/Makefile.inc",
-                "build/Makefile.linux.fftw",
-                "build/Makefile.linux.ipp",
-                "build/Makefile.osx",
-                "build/run-platform-tests.sh"
+                File("LICENSE"),
+                File("README.md"),
+                File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
             )
 
-            val workingTree = hg.download(pkg, outputDir)
+            val workingTree = git.download(pkg, outputDir)
             val actualFiles = workingTree.getRootPath().walkBottomUp()
-                .onEnter { it.name != ".hg" }
+                .onEnter { it.name != ".git" }
                 .filter { it.isFile }
                 .map { it.relativeTo(outputDir) }
                 .sortedBy { it.path }
