@@ -67,8 +67,17 @@ jobs:
         java-version: 21
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4
+    - name: Install Flox
+      uses: flox/install-flox-action@ba0eb4eb776f1d3b47279d7980f6643caffd8c41 # v2
+      with:
+        disable-metrics: true
+      if: runner.os != 'Windows'
+    - name: Run unit tests in a minimal environment
+      run: env -i "$(which flox)" activate -- ./gradlew --scan test jacocoTestReport
+      if: runner.os != 'Windows'
     - name: Run unit tests
       run: ./gradlew --scan test jacocoTestReport
+      if: runner.os == 'Windows'
     - name: Create Test Summary
       uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
       with:
