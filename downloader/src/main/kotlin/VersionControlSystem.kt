@@ -53,9 +53,7 @@ abstract class VersionControlSystem : Plugin {
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
         fun forType(vcsType: VcsType, configs: Map<String, PluginConfig> = emptyMap()) =
-            getAllVcsByPriority(configs).find { vcs ->
-                vcs.type == vcsType && vcs.isAvailable()
-            }
+            getAllVcsByPriority(configs).find { vcs -> vcs.type == vcsType }
 
         /**
          * A map to cache the [VersionControlSystem], if any, for previously queried URLs and their respective plugin
@@ -78,9 +76,7 @@ abstract class VersionControlSystem : Plugin {
                 when (val type = VcsHost.parseUrl(vcsUrl).type) {
                     VcsType.UNKNOWN -> {
                         // ...then eventually try to determine the type also dynamically.
-                        getAllVcsByPriority(configs).find { vcs ->
-                            vcs.isApplicableUrl(vcsUrl) && vcs.isAvailable()
-                        }
+                        getAllVcsByPriority(configs).find { vcs -> vcs.isApplicableUrl(vcsUrl) }
                     }
 
                     else -> forType(type, configs)
