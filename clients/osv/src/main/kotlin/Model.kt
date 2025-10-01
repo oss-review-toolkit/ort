@@ -89,7 +89,8 @@ data class Affected(
 @Serializable
 data class Credit(
     val name: String,
-    val contact: List<String> = emptyList()
+    val contact: List<String> = emptyList(),
+    val type: Type? = null
 ) {
     enum class Type {
         ANALYST,
