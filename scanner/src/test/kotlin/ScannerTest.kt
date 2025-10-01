@@ -41,9 +41,6 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 
-import java.io.File
-import java.io.IOException
-
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.FileList
@@ -54,7 +51,6 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -62,22 +58,14 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
-import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.scanner.provenance.FakeNestedProvenanceResolver
+import org.ossreviewtoolkit.scanner.provenance.FakeProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
-import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
-import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
-import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 @Suppress("LargeClass")
@@ -1108,158 +1096,8 @@ class ScannerTest : WordSpec({
     // TODO: Add tests to verify that scanner criteria are correctly handled.
 })
 
-/**
- * An implementation of [PackageScannerWrapper] that creates empty scan results.
- */
-@Suppress("RedundantNullableReturnType")
-private class FakePackageScannerWrapper(id: String = "fake") : PackageScannerWrapper {
-    override val descriptor = PluginDescriptor(id = id, displayName = id, description = "")
-    override val version = "1.0.0"
-    override val configuration = "config"
-
-    // Explicit nullability is required here for a mock response.
-    override val matcher: ScannerMatcher? = ScannerMatcher.create(details)
-    override val readFromStorage = true
-    override val writeToStorage = true
-
-    override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult =
-        createScanResult(nestedProvenance?.root ?: UnknownProvenance, details)
-}
-
-/**
- * An implementation of [ProvenanceScannerWrapper] that creates empty scan results.
- */
-private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
-    override val descriptor = PluginDescriptor(id = "fake", displayName = "fake", description = "")
-    override val version = "1.0.0"
-    override val configuration = "config"
-
-    override val matcher = ScannerMatcher.create(details)
-    override val readFromStorage = true
-    override val writeToStorage = true
-
-    override fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult =
-        createScanResult(provenance, details)
-}
-
-/**
- * An implementation of [PathScannerWrapper] that creates scan results with one license finding for each file.
- */
-private class FakePathScannerWrapper : PathScannerWrapper {
-    override val descriptor = PluginDescriptor(id = "fake", displayName = "fake", description = "")
-    override val version = "1.0.0"
-    override val configuration = "config"
-
-    override val matcher = ScannerMatcher.create(details)
-    override val readFromStorage = true
-    override val writeToStorage = true
-
-    override fun scanPath(path: File, context: ScanContext): ScanSummary {
-        val licenseFindings = path.walk().filter { it.isFile }.mapTo(mutableSetOf()) { file ->
-            LicenseFinding("Apache-2.0", TextLocation(file.relativeTo(path).path, 1, 2))
-        }
-
-        return ScanSummary.EMPTY.copy(licenseFindings = licenseFindings)
-    }
-}
-
-/**
- * An implementation of [ProvenanceDownloader] that creates a file called [filename] containing the serialized
- * provenance, instead of actually downloading the source code.
- */
-private class FakeProvenanceDownloader(val filename: String = "fake.txt") : ProvenanceDownloader {
-    override fun download(provenance: KnownProvenance): File =
-        createOrtTempDir().apply {
-            resolve(filename).writeText(provenance.toYaml())
-        }
-}
-
-/**
- * An implementation of [PackageProvenanceResolver] that returns the values from the package without performing any
- * validation.
- */
-private class FakePackageProvenanceResolver : PackageProvenanceResolver {
-    override suspend fun resolveProvenance(
-        pkg: Package,
-        defaultSourceCodeOrigins: List<SourceCodeOrigin>
-    ): KnownProvenance {
-        defaultSourceCodeOrigins.forEach { sourceCodeOrigin ->
-            when (sourceCodeOrigin) {
-                SourceCodeOrigin.ARTIFACT -> {
-                    if (pkg.sourceArtifact != RemoteArtifact.EMPTY) {
-                        return ArtifactProvenance(pkg.sourceArtifact)
-                    }
-                }
-
-                SourceCodeOrigin.VCS -> {
-                    if (pkg.vcsProcessed != VcsInfo.EMPTY) {
-                        return RepositoryProvenance(pkg.vcsProcessed, "resolvedRevision")
-                    }
-                }
-            }
-        }
-
-        throw IOException()
-    }
-}
-
-/**
- * An implementation of [NestedProvenanceResolver] that always returns a non-nested provenance.
- */
-private class FakeNestedProvenanceResolver : NestedProvenanceResolver {
-    override suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance =
-        NestedProvenance(root = provenance, subRepositories = emptyMap())
-}
-
-/**
- * An implementation of [PackageBasedScanStorageReader] and [PackageBasedScanStorageWriter] that returns scan results
- * with a single license finding for the provided [scannerDetails].
- */
-private class FakePackageBasedStorageReader(val scannerDetails: ScannerDetails) : PackageBasedScanStorageReader {
-    override fun read(
-        pkg: Package,
-        nestedProvenance: NestedProvenance,
-        scannerMatcher: ScannerMatcher?
-    ): List<NestedProvenanceScanResult> = listOf(createStoredNestedScanResult(nestedProvenance.root, scannerDetails))
-}
-
-private class FakeProvenanceBasedStorageReader(val scannerDetails: ScannerDetails) : ProvenanceBasedScanStorageReader {
-    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> =
-        listOf(createStoredScanResult(provenance, scannerDetails))
-}
-
-private class FakePackageBasedStorageWriter : PackageBasedScanStorageWriter {
-    override fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) = Unit
-}
-
-private class FakeProvenanceBasedStorageWriter : ProvenanceBasedScanStorageWriter {
-    override fun write(scanResult: ScanResult) = true
-}
-
 private fun createContext(labels: Map<String, String> = emptyMap(), type: PackageType = PackageType.PACKAGE) =
     ScanContext(labels, type)
-
-private fun createScanner(
-    provenanceDownloader: ProvenanceDownloader = FakeProvenanceDownloader(),
-    storageReaders: List<ScanStorageReader> = emptyList(),
-    storageWriters: List<ScanStorageWriter> = emptyList(),
-    packageProvenanceResolver: PackageProvenanceResolver = FakePackageProvenanceResolver(),
-    nestedProvenanceResolver: NestedProvenanceResolver = FakeNestedProvenanceResolver(),
-    packageScannerWrappers: List<ScannerWrapper> = emptyList(),
-    projectScannerWrappers: List<ScannerWrapper> = emptyList()
-) = Scanner(
-    ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false)),
-    DownloaderConfiguration(),
-    provenanceDownloader,
-    storageReaders,
-    storageWriters,
-    packageProvenanceResolver,
-    nestedProvenanceResolver,
-    mapOf(
-        PackageType.PROJECT to projectScannerWrappers,
-        PackageType.PACKAGE to packageScannerWrappers
-    )
-)
 
 private fun Package.Companion.new(type: String = "", group: String = "", name: String = "", version: String = "") =
     EMPTY.copy(id = Identifier(type, group, name, version))
@@ -1284,18 +1122,6 @@ private fun VcsInfo.Companion.valid() =
         revision = "f42e41a8fedc1e0acd78fab147e91fa047cb2853"
     )
 
-private fun createScanResult(
-    provenance: Provenance,
-    scannerDetails: ScannerDetails,
-    licenseFindings: Set<LicenseFinding> = setOf(
-        LicenseFinding("Apache-2.0", TextLocation("${scannerDetails.name}.txt", 1, 2))
-    )
-) = ScanResult(
-    provenance,
-    scannerDetails,
-    ScanSummary.EMPTY.copy(licenseFindings = licenseFindings)
-)
-
 private fun createNestedScanResult(
     provenance: KnownProvenance,
     scannerDetails: ScannerDetails,
@@ -1305,26 +1131,4 @@ private fun createNestedScanResult(
     scanResults = mapOf(
         provenance to listOf(createScanResult(provenance, scannerDetails))
     ) + subRepositories.values.associateWith { listOf(createScanResult(it, scannerDetails)) }
-)
-
-private fun createStoredScanResult(provenance: Provenance, scannerDetails: ScannerDetails) =
-    ScanResult(
-        provenance,
-        scannerDetails,
-        ScanSummary.EMPTY.copy(
-            licenseFindings = setOf(
-                LicenseFinding("Apache-2.0", TextLocation("storage.txt", 1, 2))
-            )
-        )
-    )
-
-private fun createStoredNestedScanResult(
-    provenance: KnownProvenance,
-    scannerDetails: ScannerDetails,
-    subRepositories: Map<String, RepositoryProvenance> = emptyMap()
-) = NestedProvenanceScanResult(
-    NestedProvenance(root = provenance, subRepositories = subRepositories),
-    scanResults = mapOf(
-        provenance to listOf(createStoredScanResult(provenance, scannerDetails))
-    ) + subRepositories.values.associateWith { listOf(createStoredScanResult(it, scannerDetails)) }
 )

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.scanner
 
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -41,12 +40,12 @@ private val PACKAGE_ID = Identifier("Dummy", "", "pkg1", "1.0.0")
 class MultipleScannersTest : WordSpec({
     "Scanning a project and a package with overlapping provenance and non-overlapping scanners" should {
         val analyzerResult = createAnalyzerResult()
-
-        val scannerWrappers = mapOf(
-            PackageType.PROJECT to listOf(DummyScanner("Dummy2")),
-            PackageType.PACKAGE to listOf(DummyScanner("Dummy1"))
+        val scanner = createScanner(
+            packageScannerWrappers = listOf(DummyPathScannerWrapper("Dummy1")),
+            projectScannerWrappers = listOf(DummyPathScannerWrapper("Dummy2"))
         )
-        val ortResult = createScanner(scannerWrappers).scan(analyzerResult, skipExcluded = false, emptyMap())
+
+        val ortResult = scanner.scan(analyzerResult, skipExcluded = false, emptyMap())
 
         "return scan results with non-overlapping scanners" {
             ortResult.scanner shouldNotBeNull {
