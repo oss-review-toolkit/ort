@@ -17,54 +17,51 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.scanner
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.downloader.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
-import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
-import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-import org.ossreviewtoolkit.scanner.PathScannerWrapper
-import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.Scanner
-import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.DummyNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.DummyProvenanceStorage
-import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readResource
 
 class ScannerIntegrationFunTest : WordSpec({
+    val workingTreeCache = DefaultWorkingTreeCache()
+    val scannerWrapper = DummyPathScannerWrapper()
+    val scanner = createScanner(
+        provenanceDownloader = DefaultProvenanceDownloader(DownloaderConfiguration(), workingTreeCache),
+        packageProvenanceResolver = DefaultPackageProvenanceResolver(DummyProvenanceStorage(), workingTreeCache),
+        nestedProvenanceResolver = DefaultNestedProvenanceResolver(DummyNestedProvenanceStorage(), workingTreeCache),
+        packageScannerWrappers = listOf(scannerWrapper),
+        projectScannerWrappers = listOf(scannerWrapper)
+    )
+
     "Scanning all packages corresponding to a single VCS" should {
         val analyzerResult = createAnalyzerResult(pkg0, pkg1, pkg2, pkg3, pkg4)
-        val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
+
+        val ortResult = scanner.scan(analyzerResult, skipExcluded = false, emptyMap())
 
         "return the expected ORT result" {
             val expectedResult = readResource("/scanner-integration-all-pkgs-expected-ort-result.yml")
@@ -96,7 +93,7 @@ class ScannerIntegrationFunTest : WordSpec({
             val analyzerResult = createAnalyzerResult(pkg1, pkg3)
             val expectedResult = readResource("/scanner-integration-subset-pkgs-expected-ort-result.yml")
 
-            val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
+            val ortResult = scanner.scan(analyzerResult, skipExcluded = false, emptyMap())
 
             patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe
                 patchExpectedResult(expectedResult)
@@ -106,37 +103,13 @@ class ScannerIntegrationFunTest : WordSpec({
     "Scanning a project with the same provenance as packages" should {
         "not have duplicated scan results" {
             val analyzerResult = createAnalyzerResultWithProject(project0, pkg0)
-            val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
+
+            val ortResult = scanner.scan(analyzerResult, skipExcluded = false, emptyMap())
 
             ortResult.getScanResultsForId(project0.id) shouldHaveSize 1
         }
     }
 })
-
-internal fun createScanner(scannerWrappers: Map<PackageType, List<ScannerWrapper>>? = null): Scanner {
-    val downloaderConfiguration = DownloaderConfiguration()
-    val workingTreeCache = DefaultWorkingTreeCache()
-    val provenanceDownloader = DefaultProvenanceDownloader(downloaderConfiguration, workingTreeCache)
-    val packageProvenanceStorage = DummyProvenanceStorage()
-    val nestedProvenanceStorage = DummyNestedProvenanceStorage()
-    val packageProvenanceResolver = DefaultPackageProvenanceResolver(packageProvenanceStorage, workingTreeCache)
-    val nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache)
-    val dummyScanner = DummyScanner()
-
-    return Scanner(
-        scannerConfig = ScannerConfiguration(),
-        downloaderConfig = downloaderConfiguration,
-        provenanceDownloader = provenanceDownloader,
-        storageReaders = emptyList(),
-        storageWriters = emptyList(),
-        packageProvenanceResolver = packageProvenanceResolver,
-        nestedProvenanceResolver = nestedProvenanceResolver,
-        scannerWrappers = scannerWrappers ?: mapOf(
-            PackageType.PROJECT to listOf(dummyScanner),
-            PackageType.PACKAGE to listOf(dummyScanner)
-        )
-    )
-}
 
 private fun createAnalyzerResult(vararg packages: Package): OrtResult {
     val project = Project.EMPTY.copy(
@@ -253,30 +226,3 @@ private val pkg4 = createPackage(
         path = "pkg4"
     )
 )
-
-internal class DummyScanner(id: String = "Dummy") : PathScannerWrapper {
-    override val descriptor = PluginDescriptor(id = id, displayName = id, description = "")
-    override val version = "1.0.0"
-    override val configuration = ""
-
-    override val matcher = null
-    override val readFromStorage = false
-    override val writeToStorage = false
-
-    override fun scanPath(path: File, context: ScanContext): ScanSummary {
-        val relevantFiles = path.walk()
-            .onEnter { it.name !in VCS_DIRECTORIES }
-            .filter { it.isFile }
-
-        val licenseFindings = relevantFiles.mapTo(mutableSetOf()) { file ->
-            LicenseFinding(
-                license = SpdxConstants.NOASSERTION,
-                location = TextLocation(file.relativeTo(path).invariantSeparatorsPath, TextLocation.UNKNOWN_LINE)
-            )
-        }
-
-        return ScanSummary.EMPTY.copy(
-            licenseFindings = licenseFindings
-        )
-    }
-}

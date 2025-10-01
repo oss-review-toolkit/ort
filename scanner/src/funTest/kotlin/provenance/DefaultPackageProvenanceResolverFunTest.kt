@@ -221,24 +221,3 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
         }
     }
 }
-
-internal class DummyProvenanceStorage : PackageProvenanceStorage {
-    override fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult? =
-        null
-
-    override fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult? = null
-
-    override fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> = emptyList()
-
-    override fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) {
-        /* no-op */
-    }
-
-    override fun writeProvenance(
-        id: Identifier,
-        sourceArtifact: RemoteArtifact,
-        result: PackageProvenanceResolutionResult
-    ) { /* no-op */ }
-
-    override fun deleteProvenances(id: Identifier) { /* no-op */ }
-}
