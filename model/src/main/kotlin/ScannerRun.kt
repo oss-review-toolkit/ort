@@ -89,7 +89,7 @@ data class ScannerRun(
     val issues: Map<Identifier, Set<Issue>> = emptyMap(),
 
     /**
-     * The names of the scanners which have been used to scan the package.
+     * The project / package identifiers that have been scanned, associated with the names of the scanners used.
      */
     @JsonSerialize(converter = ScannersMapConverter::class)
     val scanners: Map<Identifier, Set<String>>,
