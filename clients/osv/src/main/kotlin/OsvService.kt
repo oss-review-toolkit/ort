@@ -52,7 +52,10 @@ interface OsvService {
         /** The URL of the staging server. */
         const val STAGING_SERVER_URL = "https://api-staging.osv.dev"
 
-        val JSON = Json { namingStrategy = JsonNamingStrategy.SnakeCase }
+        val JSON = Json {
+            namingStrategy = JsonNamingStrategy.SnakeCase
+            ignoreUnknownKeys = true
+        }
 
         fun create(serverUrl: String? = null, client: OkHttpClient? = null): OsvService {
             val converterFactory = JSON.asConverterFactory(contentType = "application/json".toMediaType())
