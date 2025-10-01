@@ -30,7 +30,7 @@ jobs:
           ref: ${{ env.ORT_VERSION }}
           fetch-depth: 0
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
         with:
           dependency-graph: generate-and-submit
       - name: Publish to Maven Central
