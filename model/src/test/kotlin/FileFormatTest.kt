@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.node.MissingNode
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldThrowWithMessage
@@ -39,7 +40,7 @@ class FileFormatTest : WordSpec({
             val file = tempfile(suffix = ".json")
 
             file shouldHaveFileSize 0
-            file.readTree() shouldBe EMPTY_JSON_NODE
+            file.readTree() shouldBe MissingNode.getInstance()
         }
 
         "throw for invalid files" {
