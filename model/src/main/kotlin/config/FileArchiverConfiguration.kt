@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
@@ -31,6 +33,7 @@ import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 /**
  * The configuration model for a [FileArchiver].
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class FileArchiverConfiguration(
     /**
      * Toggle to enable or disable the file archiver functionality altogether.
