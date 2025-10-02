@@ -206,6 +206,7 @@ private val RESOLVED_LICENSE_INFO: ResolvedLicenseInfo by lazy {
                     location = TextLocation("LICENSE", TextLocation.UNKNOWN_LINE),
                     appliedCuration = null,
                     matchingPathExcludes = emptyList(),
+                    isExcludedByPathIncludes = false,
                     copyrights = emptySet()
                 )
             )
@@ -223,6 +224,7 @@ private val RESOLVED_LICENSE_INFO: ResolvedLicenseInfo by lazy {
                     location = TextLocation("LICENCE", TextLocation.UNKNOWN_LINE),
                     appliedCuration = null,
                     matchingPathExcludes = emptyList(),
+                    isExcludedByPathIncludes = false,
                     copyrights = emptySet()
                 )
             )
@@ -309,6 +311,7 @@ private val COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO: ResolvedLicenseInfo by lazy
                     copyrights = emptySet(),
                     licenseFindingCurations = emptyList(),
                     pathExcludes = emptyList(),
+                    pathIncludes = emptyList(),
                     relativeFindingsPath = ""
                 )
             )
