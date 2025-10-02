@@ -38,7 +38,7 @@ private val PROJECT_ID = Identifier("Dummy", "", "project", "1.0.0")
 private val PACKAGE_ID = Identifier("Dummy", "", "pkg1", "1.0.0")
 
 class MultipleScannersTest : WordSpec({
-    "Scanning a project and a package with overlapping provenance and non overlapping scanners" should {
+    "Scanning a project and a package with overlapping provenance and non-overlapping scanners" should {
         val analyzerResult = createAnalyzerResult()
 
         val scannerWrappers = mapOf(
