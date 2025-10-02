@@ -70,7 +70,7 @@ jobs:
     - name: Check for Detekt Issues
       run: ./gradlew detektAll
     - name: Upload SARIF File
-      uses: github/codeql-action/upload-sarif@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3
+      uses: github/codeql-action/upload-sarif@64d10c13136e1c5bce3e5fbde8d4906eeaafc885 # v3
       if: always() # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
@@ -129,7 +129,7 @@ jobs:
         post-pr-comment: false
         use-caches: false
     - name: Upload Code Scanning Results
-      uses: github/codeql-action/upload-sarif@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3
+      uses: github/codeql-action/upload-sarif@64d10c13136e1c5bce3e5fbde8d4906eeaafc885 # v3
       with:
         sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
   reuse-tool:
