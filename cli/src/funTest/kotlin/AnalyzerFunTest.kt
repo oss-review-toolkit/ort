@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class AnalyzerFunTest : WordSpec({
     "An analysis" should {
-        "correctly report repositories git-repo for projects" {
+        "correctly report git-repo repositories for projects" {
             val expectedRepository = readResourceValue<Repository>("/git-repo-expected-repository.yml")
             val projectDir = createGitRepoProject()
 
