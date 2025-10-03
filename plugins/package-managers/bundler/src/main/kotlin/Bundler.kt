@@ -176,7 +176,7 @@ class Bundler(
         }.onSuccess { installedBundlerVersion ->
             logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $installedBundlerVersion." }
         }.onFailure {
-            logger.warn { "Unable to determine the '$BUNDLER_GEM_NAME' Gem version." }
+            logger.warn { "Unable to determine the '$BUNDLER_GEM_NAME' Gem version: ${it.collectMessages()}" }
         }
     }
 
