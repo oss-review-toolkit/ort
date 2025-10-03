@@ -127,7 +127,7 @@ class OpossumReporter(
         private val externalAttributionSources: MutableMap<String, OpossumExternalAttributionSource> = mutableMapOf()
 
         internal fun create(input: ReporterInput, maxDepth: Int = Int.MAX_VALUE): OpossumInput {
-            addBaseUrl("/", input.ortResult.repository.vcs)
+            addBaseUrl("/", input.ortResult.repository.provenance.vcsInfo)
 
             SpdxLicense.entries.forEach {
                 val licenseText = input.licenseFactProvider.getLicenseText(it.id)?.text

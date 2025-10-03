@@ -159,7 +159,7 @@ fun ruleSet(
     licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
     resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(),
     projectSourceResolver: SourceTreeResolver = SourceTreeResolver.forRemoteRepository(
-        ortResult.repository.vcsProcessed
+        ortResult.repository.provenance.vcsInfo
     ),
     configure: RuleSet.() -> Unit = {}
 ) = RuleSet(ortResult, licenseInfoResolver, resolutionProvider, projectSourceResolver).apply(configure)
