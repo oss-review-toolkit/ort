@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -82,6 +83,7 @@ internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 private fun runScriptCode(code: String, workingDir: File? = null): Any? {
     val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
+        environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
         runScriptlet(code)
     }
 
@@ -91,6 +93,7 @@ private fun runScriptCode(code: String, workingDir: File? = null): Any? {
 private fun runScriptResource(resource: String, workingDir: File? = null): Any? {
     val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
+        environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
         runScriptlet(PathType.CLASSPATH, resource)
     }
 
