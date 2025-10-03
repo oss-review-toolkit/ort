@@ -156,14 +156,13 @@ class Bundler(
 
         if (bundlerVersion != null) {
             val duration = measureTime {
-                val output = runScriptCode(
-                    """
+                val code = """
                     require 'rubygems/commands/install_command'
                     cmd = Gem::Commands::InstallCommand.new
                     cmd.handle_options ["--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"]
                     cmd.execute
-                    """.trimIndent()
-                ).trim()
+                """.trimIndent()
+                val output = runScriptCode(code).trim()
 
                 output.lines().forEach(logger::info)
             }
@@ -172,7 +171,8 @@ class Bundler(
         }
 
         runCatching {
-            runScriptCode("puts(Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version)").trim()
+            val code = "puts(Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version)"
+            runScriptCode(code).trim()
         }.onSuccess { installedBundlerVersion ->
             logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $installedBundlerVersion." }
         }.onFailure {
