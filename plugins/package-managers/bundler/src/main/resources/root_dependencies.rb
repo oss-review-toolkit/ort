@@ -32,6 +32,4 @@ Bundler.load.current_dependencies.each { |dep|
     }
 }
 
-groups.to_yaml.tap { |yaml|
-    puts yaml
-}
+groups.to_yaml

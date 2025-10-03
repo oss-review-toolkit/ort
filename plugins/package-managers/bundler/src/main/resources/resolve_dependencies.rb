@@ -40,6 +40,4 @@ Bundler.ui.silence {
     # Resolving is triggered lazily, so the below "to_yaml" call might be the place where progress output needs to be
     # silenced in addition to the above "resolve_remotely" call.
     Bundler.definition.specs.map { |spec| spec.to_yaml }.join("\0")
-}.tap { |yaml|
-    puts yaml
 }

@@ -23,8 +23,6 @@ import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 
-import kotlin.time.measureTime
-
 import kotlinx.serialization.decodeFromString
 
 import org.apache.logging.log4j.kotlin.logger
@@ -81,24 +79,20 @@ private const val BUNDLER_GEM_NAME = "bundler"
  */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
-private fun runScriptCode(code: String, workingDir: File? = null): String {
+private fun runScriptCode(code: String, workingDir: File? = null): Any? {
     val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
-        runScriptlet(code).toString()
+        runScriptlet(code)
     }
-
-    if (output.isEmpty()) throw IOException("Failed to run script code '$code'.")
 
     return output
 }
 
-private fun runScriptResource(resource: String, workingDir: File? = null): String {
+private fun runScriptResource(resource: String, workingDir: File? = null): Any? {
     val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
-        runScriptlet(PathType.CLASSPATH, resource).toString()
+        runScriptlet(PathType.CLASSPATH, resource)
     }
-
-    if (output.isEmpty()) throw IOException("Failed to run script resource '$resource'.")
 
     return output
 }
@@ -155,24 +149,28 @@ class Bundler(
         val bundlerVersion = config.bundlerVersion ?: lockfilesBundlerVersion
 
         if (bundlerVersion != null) {
-            val duration = measureTime {
+            logger.info { "Installing custom Bundler version $bundlerVersion..." }
+
+            runCatching {
                 val code = """
                     require 'rubygems/commands/install_command'
                     cmd = Gem::Commands::InstallCommand.new
                     cmd.handle_options ["--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"]
                     cmd.execute
                 """.trimIndent()
-                val output = runScriptCode(code).trim()
-
-                output.lines().forEach(logger::info)
+                val result = runScriptCode(code) as Long
+                check(result == 0L) { "Installing the '$BUNDLER_GEM_NAME' Gem failed with error code $result." }
+            }.onSuccess {
+                logger.info { "Installing Bundler version $bundlerVersion completed successfully." }
+            }.onFailure {
+                logger.info { "Installing Bundler version $bundlerVersion failed: ${it.collectMessages()}" }
             }
-
-            logger.info { "Installing the '$BUNDLER_GEM_NAME' Gem in version $bundlerVersion took $duration." }
         }
 
         runCatching {
-            val code = "puts(Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version)"
-            runScriptCode(code).trim()
+            val code = "Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version"
+            val result = runScriptCode(code) as String
+            result.trim()
         }.onSuccess { installedBundlerVersion ->
             logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $installedBundlerVersion." }
         }.onFailure {
@@ -296,14 +294,14 @@ class Bundler(
     }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        YAML.decodeFromString(runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir))
+        YAML.decodeFromString(runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir).toString())
 
     private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
-        val stdout = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir)
+        val specs = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir).toString()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
-        val gemsInfo = stdout.split('\u0000').map {
+        val gemsInfo = specs.split('\u0000').map {
             val spec = YAML.decodeFromString<GemSpec>(it)
             GemInfo.createFromMetadata(spec)
         }.associateByTo(mutableMapOf()) {
