@@ -19,12 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
@@ -33,8 +31,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import org.yaml.snakeyaml.LoaderOptions
-
-val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategies.SNAKE_CASE as PropertyNamingStrategies.NamingBase
 
 /**
  * A lambda expression that can be [applied][apply] to all [ObjectMapper]s to configure them the same way.
@@ -45,7 +41,7 @@ val mapperConfig: ObjectMapper.() -> Unit = {
     registerModule(JavaTimeModule())
     disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
-    propertyNamingStrategy = PROPERTY_NAMING_STRATEGY
+    propertyNamingStrategy = SNAKE_CASE
 }
 
 val jsonMapper = JsonMapper().apply(mapperConfig)
@@ -65,8 +61,6 @@ val yamlMapper: YAMLMapper = YAMLMapper(
             }
         ).build()
 ).apply(mapperConfig).enable(YAMLGenerator.Feature.ALLOW_LONG_KEYS)
-
-val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()
 
 inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 
