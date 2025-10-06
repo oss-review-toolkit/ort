@@ -79,7 +79,7 @@ tasks.register<Jar>("fatJar") {
         configurations.runtimeClasspath.get().filter {
             check(it.extension == "jar")
 
-            val isGradleDependency = "gradle" in it.path && gradle.gradleVersion in it.path
+            val isGradleDependency = "gradle" in it.path && "-${gradle.gradleVersion}" in it.path
             if (isGradleDependency) logger.lifecycle("Filtering out '$it' from '${archiveFile.get().asFile.name}'.")
 
             // Omit JARs for Gradle dependencies from the fat JAR.
