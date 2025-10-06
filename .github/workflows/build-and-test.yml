@@ -88,36 +88,20 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: test-${{ matrix.os }}
-  funTest-non-docker:
+  funTest-no-external-tools:
     needs: build
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-    - name: Set tool version environment variables
-      run: cat .env.versions >> $GITHUB_ENV
-    - name: Install required tools
-      run: |
-          # Install git-repo.
-          mkdir -p $HOME/.local/bin
-          curl https://storage.googleapis.com/git-repo-downloads/repo -o $HOME/.local/bin/repo
-          chmod a+x $HOME/.local/bin/repo
-
-          # Install Askalono for functional tests.
-          curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip
-          unzip askalono-Linux.zip -d $HOME/.local/bin
-
-          # Install Licensee for functional tests.
-          echo "gem: --bindir $HOME/.local/bin" > $HOME/.gemrc
-          gem install --user-install licensee -v $LICENSEE_VERSION
-
-          # Install ScanCode for license texts.
-          curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
-          pipx install --pip-args="--no-cache-dir --constraint requirements.txt" scancode-toolkit==$SCANCODE_VERSION
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
+    - name: Install Flox
+      uses: flox/install-flox-action@ba0eb4eb776f1d3b47279d7980f6643caffd8c41 # v2
+      with:
+        disable-metrics: true
     - name: Run functional tests that do not require external tools
-      run: ./gradlew --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
+      run: env -i "$(which flox)" activate -- ./gradlew --scan -Dkotest.tags=!RequiresExternalTool funTest jacocoFunTestReport
     - name: Create Test Summary
       uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
       with:
@@ -127,8 +111,8 @@ jobs:
       uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        flags: funTest-non-docker
-  funTest-docker:
+        flags: funTest-no-external-tools
+  funTest-external-tools:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
@@ -162,7 +146,7 @@ jobs:
           -e HOME=/home/runner \
           -e GRADLE_OPTS="$GRADLE_OPTS" \
           ${{ env.TEST_IMAGE_TAG }} \
-          -c "./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
+          -c "./gradlew --scan -Dkotest.tags=RequiresExternalTool funTest jacocoFunTestReport"
     - name: Create Test Summary
       uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
       with:
@@ -172,4 +156,4 @@ jobs:
       uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        flags: funTest-docker
+        flags: funTest-external-tools
