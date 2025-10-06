@@ -176,9 +176,21 @@ SPDX-FileCopyrightText = "2020-2022 Linux Foundation and its Contributors"
 SPDX-License-Identifier = "CC-BY-3.0"
 
 [[annotations]]
+path = "plugins/reporters/opossum/src/funTest/resources/reporter-test-output.json"
+SPDX-FileCopyrightText = "2024 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+precedence = "override"
+
+[[annotations]]
 path = "reporter/src/main/resources/prismjs/**"
 SPDX-FileCopyrightText = "2012 Lea Verou"
 SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "utils/spdx/src/main/kotlin/SpdxConstants.kt"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+precedence = "override"
 
 [[annotations]]
 path = "utils/spdx/src/main/resources/exceptions/**"
