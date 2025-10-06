@@ -61,14 +61,14 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
- * The path to the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information.
+ * The name of the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information.
  */
-private const val ROOT_DEPENDENCIES_SCRIPT = "root_dependencies.rb"
+private const val ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "root_dependencies.rb"
 
 /**
- * The path to the helper script resource that resolves a `Gemfile`'s dependencies.
+ * The name of the helper script resource that resolves a `Gemfile`'s dependencies.
  */
-private const val RESOLVE_DEPENDENCIES_SCRIPT = "resolve_dependencies.rb"
+private const val RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "resolve_dependencies.rb"
 
 /**
  * The name of the Bundler Gem.
@@ -298,10 +298,10 @@ class Bundler(
 
     @Suppress("UNCHECKED_CAST")
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir) as Map<String, List<String>>
+        runScriptResource(ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME, workingDir) as Map<String, List<String>>
 
     private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
-        val specs = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir).toString()
+        val specs = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME, workingDir).toString()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
