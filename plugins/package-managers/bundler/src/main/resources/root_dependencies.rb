@@ -32,4 +32,4 @@ Bundler.load.current_dependencies.each { |dep|
     }
 }
 
-groups.to_yaml
+groups

@@ -296,8 +296,9 @@ class Bundler(
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        YAML.decodeFromString(runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir).toString())
+        runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir) as Map<String, List<String>>
 
     private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
         val specs = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir).toString()
