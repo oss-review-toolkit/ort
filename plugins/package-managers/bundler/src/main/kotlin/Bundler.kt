@@ -80,21 +80,21 @@ private const val BUNDLER_GEM_NAME = "bundler"
  */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
-private fun runScriptCode(code: String, workingDir: File? = null): Any? {
+private fun runScriptCode(sourceCode: String, workingDir: File? = null): Any? {
     val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
         environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
-        runScriptlet(code)
+        runScriptlet(sourceCode)
     }
 
     return output
 }
 
-private fun runScriptResource(resource: String, workingDir: File? = null): Any? {
+private fun runScriptResource(resourceName: String, workingDir: File? = null): Any? {
     val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
         environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
-        runScriptlet(PathType.CLASSPATH, resource)
+        runScriptlet(PathType.CLASSPATH, resourceName)
     }
 
     return output
