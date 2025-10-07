@@ -138,6 +138,4 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
     - name: Check REUSE Compliance
-      run: |
-        pipx install reuse
-        reuse lint
+      uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6
