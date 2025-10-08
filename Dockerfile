@@ -281,17 +281,11 @@ FROM base AS haskellbuild
 
 ARG HASKELL_STACK_VERSION
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    sudo apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    zlib1g-dev \
-    && sudo rm -rf /var/lib/apt/lists/*
+ENV PATH=$PATH:$HOME/.ghcup/bin
 
-ENV HASKELL_HOME=/opt/haskell
-ENV PATH=$PATH:$HASKELL_HOME/bin
-
-RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d $HASKELL_HOME/bin
+RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_MINIMAL=1 BOOTSTRAP_HASKELL_NONINTERACTIVE=1 sh && \
+    ghcup install stack $HASKELL_STACK_VERSION && \
+    mv $HOME/.ghcup /opt/haskell
 
 FROM scratch AS haskell
 COPY --from=haskellbuild /opt/haskell /opt/haskell
