@@ -22,12 +22,16 @@ package org.ossreviewtoolkit.model
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class PackageCurationTest : WordSpec({
@@ -358,6 +362,30 @@ class PackageCurationTest : WordSpec({
             result1.metadata.labels shouldBe mapOf("k1" to "v1")
             result2.metadata.labels shouldBe mapOf("k1" to "v1", "k2" to "v2")
             result3.metadata.labels shouldBe mapOf("k1" to "v1", "k2" to "v2-updated")
+        }
+    }
+
+    "Applying a curation to a package with a compound license expression" should {
+        "preserve the original top-level operator" {
+            val licenses = setOf("Apache-2.0", "MIT")
+
+            SpdxOperator.entries.forAll { operator ->
+                val expression = SpdxCompoundExpression(operator, licenses.map { it.toSpdx() })
+                val pkg = Package.EMPTY.copy(
+                    declaredLicenses = licenses,
+                    declaredLicensesProcessed = ProcessedDeclaredLicense(expression)
+                )
+                val curation = PackageCuration(
+                    id = pkg.id,
+                    data = PackageCurationData(
+                        description = "Updated description"
+                    )
+                )
+
+                val result = curation.apply(pkg.toCuratedPackage())
+
+                result.metadata.declaredLicensesProcessed.spdxExpression shouldBe expression
+            }
         }
     }
 

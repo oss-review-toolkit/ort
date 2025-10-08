@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 import org.ossreviewtoolkit.utils.common.zip
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS
 import org.ossreviewtoolkit.utils.spdx.toExpression
@@ -145,10 +146,20 @@ data class PackageCurationData(
         } ?: base.vcsProcessed
 
         val declaredLicenseMapping = basePackage.getDeclaredLicenseMapping() + declaredLicenseMapping
-        val declaredLicensesProcessed = DeclaredLicenseProcessor.process(
-            base.declaredLicenses,
-            declaredLicenseMapping
-        )
+
+        // Preserve an existing top-level operator from the base SPDX expression.
+        val declaredLicensesProcessed = when (val expression = base.declaredLicensesProcessed.spdxExpression) {
+            is SpdxCompoundExpression -> DeclaredLicenseProcessor.process(
+                base.declaredLicenses,
+                declaredLicenseMapping,
+                expression.operator
+            )
+
+            else -> DeclaredLicenseProcessor.process(
+                base.declaredLicenses,
+                declaredLicenseMapping
+            )
+        }
 
         val pkg = Package(
             id = base.id,
