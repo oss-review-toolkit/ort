@@ -505,7 +505,7 @@ ENV PATH=$PATH:/opt/go/bin
 COPY --from=golang --chown=$USER:$USER /opt/go /opt/go
 
 # Ruby
-ENV RBENV_ROOT=/opt/rbenv/
+ENV RBENV_ROOT=/opt/rbenv
 ENV GEM_HOME=/var/tmp/gem
 ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
 COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
