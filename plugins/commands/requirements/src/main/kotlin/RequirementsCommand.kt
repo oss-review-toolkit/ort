@@ -187,6 +187,7 @@ class RequirementsCommand(
         val (status, prefix, suffix) = if (tool.isInPath() || File(tool.command()).isFile) {
             runCatching {
                 val actualVersion = tool.getVersion()
+
                 runCatching {
                     val isRequiredVersion = tool.getVersionRequirement().let {
                         Semver.coerce(actualVersion)?.satisfies(it) == true
@@ -197,9 +198,13 @@ class RequirementsCommand(
                     } else {
                         Triple(VersionStatus.UNSATISFIED, WARNING_PREFIX, "Found version $actualVersion.")
                     }
+                }.onFailure {
+                    logger.debug { "Could not check the version requirement for $tool: ${it.message}" }
                 }.getOrElse {
                     Triple(VersionStatus.UNSATISFIED, WARNING_PREFIX, "Found version '$actualVersion'.")
                 }
+            }.onFailure {
+                logger.debug { "Could not get the version of $tool: ${it.message}" }
             }.getOrElse {
                 val status = if (tool.getVersionRequirement().isSatisfiedByAny) {
                     VersionStatus.SATISFIED
