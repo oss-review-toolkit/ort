@@ -516,6 +516,7 @@ COPY --from=scancode-license-data --chown=$USER:$USER /opt/scancode-license-data
 # Container with all supported package managers.
 FROM minimal-tools AS all-tools
 
+ARG ASKALONO_VERSION
 ARG COMPOSER_VERSION
 ARG PHP_VERSION
 
@@ -576,6 +577,13 @@ ENV PATH=$PATH:$BAZEL_HOME/bin
 
 COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
 COPY --from=bazel --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
+
+# Askalono
+RUN curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
+    mkdir /opt/askalono && \
+    unzip askalono-Linux.zip -d /opt/askalono
+
+ENV PATH=$PATH:/opt/askalono
 
 #------------------------------------------------------------------------
 # Runtime container with minimal selection of supported package managers pre-installed.
