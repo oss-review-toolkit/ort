@@ -8,7 +8,7 @@ gitSemverPlugin = "0.16.1"
 graalVmNativeImagePlugin = "0.11.1"
 ideaExtPlugin = "1.3"
 kotlinPlugin = "2.2.20"
-ksp = "2.2.20-2.0.3"
+ksp = "2.2.20-2.0.4"
 mavenPublishPlugin = "0.34.0"
 
 aeSecurity = "0.145.2"
