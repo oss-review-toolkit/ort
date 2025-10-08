@@ -48,7 +48,7 @@ internal object TablesReportModelMapper {
             .sortedBy { it.id }
 
         return TablesReport(
-            input.ortResult.repository.vcsProcessed,
+            input.ortResult.repository.provenance.vcsInfo,
             input.ortResult.repository.config,
             ruleViolations,
             getAnalyzerIssueSummaryTable(input),

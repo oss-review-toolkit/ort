@@ -214,7 +214,12 @@ private fun createOrtResult(
     }
 
     return OrtResult.EMPTY.copy(
-        repository = Repository(vcsInfo),
+        repository = Repository(
+            provenance = RepositoryProvenance(
+                vcsInfo = vcsInfo,
+                resolvedRevision = vcsInfo.revision
+            )
+        ),
         analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult.EMPTY.copy(
                 projects = setOf(

@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -120,7 +121,12 @@ internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
                 environment = Environment()
             ),
             repository = Repository(
-                vcs = projectVcs.normalize(),
+                provenance = projectVcs.normalize().let {
+                    RepositoryProvenance(
+                        vcsInfo = it,
+                        resolvedRevision = it.revision
+                    )
+                },
                 config = RepositoryConfiguration(
                     excludes = Excludes(
                         scopes = listOf(

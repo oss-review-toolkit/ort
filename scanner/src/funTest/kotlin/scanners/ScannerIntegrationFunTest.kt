@@ -28,6 +28,7 @@ import java.io.File
 import org.ossreviewtoolkit.downloader.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
@@ -36,6 +37,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
@@ -164,11 +166,15 @@ private fun createAnalyzerResultWithProject(project: Project, vararg packages: P
         config = AnalyzerConfiguration(enabledPackageManagers = emptyList())
     )
 
+    val resolvedRevision = projectWithScope.vcs.revision.ifEmpty { HashAlgorithm.SHA1.emptyValue }
+
     return OrtResult.EMPTY.copy(
         analyzer = analyzerRun,
         repository = Repository.EMPTY.copy(
-            vcsProcessed = projectWithScope.vcsProcessed,
-            vcs = projectWithScope.vcs
+            provenance = RepositoryProvenance(
+                vcsInfo = projectWithScope.vcs,
+                resolvedRevision = resolvedRevision
+            )
         )
     )
 }
