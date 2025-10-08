@@ -219,15 +219,18 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+    cmake \
     libreadline6-dev \
     libssl-dev \
     libz-dev \
     make \
+    pkg-config \
     xvfb \
     zlib1g-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
 ARG COCOAPODS_VERSION
+ARG LICENSEE_VERSION
 ARG RUBY_VERSION
 
 ENV RBENV_ROOT=/opt/rbenv
@@ -240,7 +243,7 @@ RUN src/configure \
     && make -C src
 RUN rbenv install $RUBY_VERSION -v \
     && rbenv global $RUBY_VERSION \
-    && gem install cocoapods:$COCOAPODS_VERSION
+    && gem install cocoapods:$COCOAPODS_VERSION licensee:$LICENSEE_VERSION
 
 FROM scratch AS ruby
 COPY --from=rubybuild /opt/rbenv /opt/rbenv
