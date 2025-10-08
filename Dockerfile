@@ -618,4 +618,7 @@ RUN mkdir -p "$HOME/.ort" "$HOME/.gradle"
 # Install cargo-credential-netrc late in the build to prevent an error accessing /opt/rust/cargo/registry/.
 RUN $CARGO_HOME/bin/cargo install cargo-credential-netrc
 
+# Verify that all tools required by ORT are available.
+RUN ort requirements
+
 ENTRYPOINT ["/opt/ort/bin/ort"]
