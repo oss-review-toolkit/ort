@@ -240,7 +240,7 @@ RUN src/configure \
     && make -C src
 RUN rbenv install $RUBY_VERSION -v \
     && rbenv global $RUBY_VERSION \
-    && gem install bundler cocoapods:$COCOAPODS_VERSION
+    && gem install cocoapods:$COCOAPODS_VERSION
 
 FROM scratch AS ruby
 COPY --from=rubybuild /opt/rbenv /opt/rbenv
