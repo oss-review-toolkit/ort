@@ -33,10 +33,10 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.WorkingTreeCache
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
@@ -54,7 +54,7 @@ interface PackageProvenanceResolver {
      *
      * Throws an [IOException] if the provenance cannot be resolved.
      */
-    suspend fun resolveProvenance(pkg: Package, defaultSourceCodeOrigins: List<SourceCodeOrigin>): KnownProvenance
+    suspend fun resolveProvenance(pkg: Package, defaultSourceCodeOrigins: List<SourceCodeOrigin>): RemoteProvenance
 }
 
 /**
@@ -74,7 +74,7 @@ class DefaultPackageProvenanceResolver(
     override suspend fun resolveProvenance(
         pkg: Package,
         defaultSourceCodeOrigins: List<SourceCodeOrigin>
-    ): KnownProvenance {
+    ): RemoteProvenance {
         val errors = mutableMapOf<SourceCodeOrigin, Throwable>()
         val sourceCodeOrigins = pkg.sourceCodeOrigins ?: defaultSourceCodeOrigins
 

@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -1168,7 +1169,7 @@ private class FakePathScannerWrapper : PathScannerWrapper {
  * provenance, instead of actually downloading the source code.
  */
 private class FakeProvenanceDownloader(val filename: String = "fake.txt") : ProvenanceDownloader {
-    override fun download(provenance: KnownProvenance): File =
+    override fun download(provenance: RemoteProvenance): File =
         createOrtTempDir().apply {
             resolve(filename).writeText(provenance.toYaml())
         }
@@ -1182,7 +1183,7 @@ private class FakePackageProvenanceResolver : PackageProvenanceResolver {
     override suspend fun resolveProvenance(
         pkg: Package,
         defaultSourceCodeOrigins: List<SourceCodeOrigin>
-    ): KnownProvenance {
+    ): RemoteProvenance {
         defaultSourceCodeOrigins.forEach { sourceCodeOrigin ->
             when (sourceCodeOrigin) {
                 SourceCodeOrigin.ARTIFACT -> {
@@ -1207,7 +1208,7 @@ private class FakePackageProvenanceResolver : PackageProvenanceResolver {
  * An implementation of [NestedProvenanceResolver] that always returns a non-nested provenance.
  */
 private class FakeNestedProvenanceResolver : NestedProvenanceResolver {
-    override suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance =
+    override suspend fun resolveNestedProvenance(provenance: RemoteProvenance): NestedProvenance =
         NestedProvenance(root = provenance, subRepositories = emptyMap())
 }
 
@@ -1297,7 +1298,7 @@ private fun createScanResult(
 )
 
 private fun createNestedScanResult(
-    provenance: KnownProvenance,
+    provenance: RemoteProvenance,
     scannerDetails: ScannerDetails,
     subRepositories: Map<String, RepositoryProvenance> = emptyMap()
 ) = NestedProvenanceScanResult(
@@ -1319,7 +1320,7 @@ private fun createStoredScanResult(provenance: Provenance, scannerDetails: Scann
     )
 
 private fun createStoredNestedScanResult(
-    provenance: KnownProvenance,
+    provenance: RemoteProvenance,
     scannerDetails: ScannerDetails,
     subRepositories: Map<String, RepositoryProvenance> = emptyMap()
 ) = NestedProvenanceScanResult(
