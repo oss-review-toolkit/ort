@@ -28,6 +28,7 @@ import kotlinx.serialization.json.decodeFromStream
 
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 private val json = Json {
@@ -37,6 +38,19 @@ private val json = Json {
 
 internal object NuGetInspector : CommandLineTool {
     override fun command(workingDir: File?) = "nuget-inspector"
+
+    override fun getVersion(workingDir: File?): String {
+        // Work-around for https://github.com/aboutcode-org/nuget-inspector/issues/71.
+        val version = run(
+            *getVersionArguments().splitOnWhitespace().toTypedArray(),
+            workingDir = workingDir,
+            environment = mapOf("NO_COLOR" to "1")
+        )
+
+        check(version.exitValue == 255)
+
+        return version.stderr.trim()
+    }
 
     /**
      * Run the nuget-inspector CLI tool on the project with the given [definitionFile]. The optional [nugetConfig] may
