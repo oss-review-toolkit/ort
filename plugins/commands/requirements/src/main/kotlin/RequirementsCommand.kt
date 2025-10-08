@@ -193,7 +193,7 @@ class RequirementsCommand(
                         Semver.coerce(actualVersion)?.satisfies(it) == true
                     }
 
-                    if (isRequiredVersion) {
+                    if (isRequiredVersion || tool.getVersionRequirement().isSatisfiedByAny) {
                         Triple(VersionStatus.SATISFIED, SUCCESS_PREFIX, "Found version $actualVersion.")
                     } else {
                         Triple(VersionStatus.UNSATISFIED, WARNING_PREFIX, "Found version $actualVersion.")
