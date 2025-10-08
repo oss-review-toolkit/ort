@@ -118,6 +118,18 @@ ENTRYPOINT [ "/bin/bash" ]
 # PYTHON - Build Python as a separate component with pyenv
 FROM base AS pythonbuild
 
+ARG CONAN_VERSION
+ARG CONAN2_VERSION
+ARG PIP_VERSION
+ARG PYENV_GIT_TAG
+ARG PYTHON_INSPECTOR_VERSION
+ARG PYTHON_PIPENV_VERSION
+ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
+ARG PYTHON_POETRY_VERSION
+ARG PYTHON_SETUPTOOLS_VERSION
+ARG PYTHON_VERSION
+ARG SCANCODE_VERSION
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -133,24 +145,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     tk-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG PYTHON_VERSION
-ARG PYENV_GIT_TAG
-
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
 RUN curl -kSs https://pyenv.run | bash \
     && pyenv install -v $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION
-
-ARG CONAN_VERSION
-ARG CONAN2_VERSION
-ARG PYTHON_INSPECTOR_VERSION
-ARG PYTHON_PIPENV_VERSION
-ARG PYTHON_POETRY_VERSION
-ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
-ARG PYTHON_SETUPTOOLS_VERSION
-ARG PIP_VERSION
-ARG SCANCODE_VERSION
 
 RUN ARCH=$(arch | sed s/aarch64/arm64/) \
     &&  if [ "$ARCH" == "arm64" ]; then \
@@ -265,6 +264,7 @@ COPY --from=rustbuild /opt/rust /opt/rust
 FROM base AS gobuild
 
 ARG GO_VERSION
+
 ENV GOBIN=/opt/go/bin
 ENV PATH=$PATH:/opt/go/bin
 
@@ -279,14 +279,14 @@ COPY --from=gobuild /opt/go /opt/go
 # HASKELL STACK
 FROM base AS haskellbuild
 
+ARG HASKELL_STACK_VERSION
+
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
     zlib1g-dev \
     && sudo rm -rf /var/lib/apt/lists/*
-
-ARG HASKELL_STACK_VERSION
 
 ENV HASKELL_HOME=/opt/haskell
 ENV PATH=$PATH:$HASKELL_HOME/bin
@@ -300,6 +300,8 @@ COPY --from=haskellbuild /opt/haskell /opt/haskell
 # REPO / ANDROID SDK
 FROM base AS androidbuild
 
+ARG ANDROID_CMD_VERSION
+
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update -qq \
@@ -307,7 +309,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     unzip \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG ANDROID_CMD_VERSION
 ENV ANDROID_HOME=/opt/android-sdk
 
 RUN --mount=type=tmpfs,target=/android \
@@ -333,6 +334,7 @@ COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 FROM base AS dartbuild
 
 ARG DART_VERSION
+
 WORKDIR /opt/
 
 ENV DART_SDK=/opt/dart-sdk
@@ -470,6 +472,8 @@ COPY --from=ortbuild /opt/ort /opt/ort
 # Container with minimal selection of supported package managers.
 FROM base AS minimal-tools
 
+ARG NODEJS_VERSION
+
 # Remove ort build scripts
 RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
 
@@ -487,7 +491,6 @@ ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
 COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
 
 # NodeJS
-ARG NODEJS_VERSION
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
 COPY --from=nodejs --chown=$USER:$USER $NVM_DIR $NVM_DIR
@@ -515,6 +518,9 @@ COPY --from=scancode-license-data --chown=$USER:$USER /opt/scancode-license-data
 #------------------------------------------------------------------------
 # Container with all supported package managers.
 FROM minimal-tools AS all-tools
+
+ARG COMPOSER_VERSION
+ARG PHP_VERSION
 
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
@@ -547,9 +553,6 @@ ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
 COPY --from=dotnet --chown=$USER:$USER $DOTNET_HOME $DOTNET_HOME
 
 # PHP
-ARG PHP_VERSION
-ARG COMPOSER_VERSION
-
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update \
