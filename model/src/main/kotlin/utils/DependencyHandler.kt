@@ -65,4 +65,27 @@ interface DependencyHandler<D> {
      * *null*.
      */
     fun createPackage(dependency: D, issues: MutableCollection<Issue>): Package?
+
+    /**
+     * Determine whether [dependenciesA] and [dependenciesB] are to be considered equal. Implementors may override the
+     * default, for example if specific optimizations can be done (like skipping of deep comparisons), or if stricter
+     * checks are needed (like when ordering or duplicates matter).
+     */
+    fun areDependenciesEqual(dependenciesA: List<D>, dependenciesB: List<D>): Boolean {
+        // Do a cheap check on the size of distinct dependencies first.
+        val depsA = dependenciesA.distinct()
+        val depsB = dependenciesB.distinct()
+        if (depsA.size != depsB.size) return false
+
+        // Compare dependencies by Identifiers, not by all properties of D, as that might include variant properties.
+        val idToDepA = depsA.associateBy { identifierFor(it) }
+        val idToDepB = depsB.associateBy { identifierFor(it) }
+        if (idToDepA.keys != idToDepB.keys) return false
+
+        // Do a deep comparison of transitive dependencies.
+        return idToDepA.all { (id, depA) ->
+            val depB = idToDepB[id] ?: return false
+            areDependenciesEqual(dependenciesFor(depA), dependenciesFor(depB))
+        }
+    }
 }
