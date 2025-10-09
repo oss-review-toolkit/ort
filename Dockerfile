@@ -472,7 +472,7 @@ FROM base AS minimal-tools
 ARG NODEJS_VERSION
 
 # Remove ort build scripts
-RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
+RUN sudo rm -rf /etc/scripts
 
 #  Install optional tool subversion for ORT analyzer
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
