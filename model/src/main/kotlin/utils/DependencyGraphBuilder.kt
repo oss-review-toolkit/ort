@@ -439,13 +439,13 @@ class DependencyGraphBuilder<D>(
 }
 
 /**
- * Convert the direct dependency references of all projects to a list of nodes and edges that represent the final
- * dependency graph. Apply the given [indexMapping] to the indices pointing to dependencies.
+ * Convert the direct dependency references of all projects to a list of nodes and a set of edges that represent the
+ * final dependency graph. Apply the given [indexMapping] to the indices pointing to dependencies.
  */
 private fun Collection<DependencyReference>.toGraph(
     indexMapping: IntArray
 ): Pair<List<DependencyGraphNode>, Set<DependencyGraphEdge>> {
-    val nodes = mutableSetOf<DependencyGraphNode>()
+    val nodes = mutableListOf<DependencyGraphNode>()
     val edges = mutableSetOf<DependencyGraphEdge>()
     val nodeIndices = mutableMapOf<NodeKey, Int>()
 
@@ -464,7 +464,7 @@ private fun Collection<DependencyReference>.toGraph(
         }
     }
 
-    return nodes.toList() to edges
+    return nodes to edges
 }
 
 private fun Collection<DependencyReference>.visitEach(visit: (ref: DependencyReference) -> Unit) {
