@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.DUMMY_COMPILER_SETTINGS
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEPENDENCIES
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEV_DEPENDENCIES
+import org.ossreviewtoolkit.utils.common.MaskedString
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -117,6 +118,10 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
 
     override fun runInspectCommand(workingDir: File, pkgName: String, jsonFile: File) {
         conan.command.run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
+    }
+
+    override fun authenticate(remote: String, username: MaskedString, password: MaskedString) {
+        conan.command.run("user", "-r", remote, "-p", password, username).requireSuccess()
     }
 
     /**

@@ -24,6 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.utils.common.MaskedString
 
 /**
  * A version handler interface for Conan. Its implementations provide the package manager logic for a specific Conan
@@ -61,6 +62,11 @@ internal interface ConanVersionHandler {
      * Run the command "conan inspect" for the given [pkgName] and write the output to [jsonFile].
      */
     fun runInspectCommand(workingDir: File, pkgName: String, jsonFile: File)
+
+    /**
+     * Authenticate against the given [remote] with the provided [username] and [password].
+     */
+    fun authenticate(remote: String, username: MaskedString, password: MaskedString)
 }
 
 /**

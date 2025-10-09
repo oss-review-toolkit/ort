@@ -271,12 +271,7 @@ class Conan(
                 if (auth != null) {
                     // Configure Conan's authentication based on ORT's authentication for the remote.
                     runCatching {
-                        command.run(
-                            "user",
-                            "-r", remoteName,
-                            "-p", String(auth.password).masked(),
-                            auth.userName.masked()
-                        ).requireSuccess()
+                        handler.authenticate(remoteName, auth.userName.masked(), String(auth.password).masked())
                     }.onFailure {
                         logger.error { "Failed to configure user authentication for remote '$remoteName'." }
                     }
