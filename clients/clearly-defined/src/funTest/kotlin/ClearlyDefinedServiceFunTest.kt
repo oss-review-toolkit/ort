@@ -34,7 +34,6 @@ import io.kotest.matchers.string.shouldStartWith
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.test.readResource
 
 class ClearlyDefinedServiceFunTest : WordSpec({
@@ -60,7 +59,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         "return single curation data" {
-            val service = ClearlyDefinedService.create(client = okHttpClient)
+            val service = ClearlyDefinedService.create()
 
             val curation = service.getCuration(coordinates)
 
@@ -69,7 +68,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
         // TODO: Enable again once HTTP 429 "Too Many Requests" errors are resolved.
         "return bulk curation data".config(enabled = false) {
-            val service = ClearlyDefinedService.create(client = okHttpClient)
+            val service = ClearlyDefinedService.create()
 
             val curations = service.getCurations(listOf(coordinates))
             val curation = curations[coordinates]?.curations?.get(coordinates)
@@ -113,7 +112,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         // Disable this test by default as it talks to the real development instance of ClearlyDefined and creates
         // pull-requests at https://github.com/clearlydefined/curated-data-dev.
         "return a summary of the created pull-request".config(enabled = false) {
-            val service = ClearlyDefinedService.create(Server.DEVELOPMENT, okHttpClient)
+            val service = ClearlyDefinedService.create(Server.DEVELOPMENT)
 
             val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
 
@@ -127,7 +126,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
     "Definitions" should {
         // TODO: Enable again once HTTP 429 "Too Many Requests" errors are resolved.
         "contain facets for file entries".config(enabled = false) {
-            val service = ClearlyDefinedService.create(client = okHttpClient)
+            val service = ClearlyDefinedService.create()
             val coordinates = Coordinates(
                 type = ComponentType.NPM,
                 provider = Provider.NPM_JS,
