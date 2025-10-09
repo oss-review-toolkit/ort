@@ -135,10 +135,10 @@ class DependencyGraphBuilder<D>(
     private val resolvedPackages = mutableMapOf<Identifier, Package>()
 
     /**
-     * A list storing all [DependencyReference]s that have been created to represent the dependencies known to this
-     * builder.
+     * A map storing all [DependencyReference]s that have been created to represent the dependencies of type D known to
+     * this builder.
      */
-    private val references = mutableListOf<DependencyReference>()
+    private val references = mutableMapOf<DependencyReference, D>()
 
     /**
      * Add the given [dependency] for the scope with the given [scopeName] to this builder. This function needs to be
@@ -177,7 +177,7 @@ class DependencyGraphBuilder<D>(
         if (checkReferences) checkReferences()
 
         val (sortedDependencyIds, indexMapping) = constructSortedDependencyIds(dependencyIds)
-        val (nodes, edges) = references.toGraph(indexMapping)
+        val (nodes, edges) = references.keys.toGraph(indexMapping)
 
         return DependencyGraph(
             sortedDependencyIds,
@@ -210,7 +210,7 @@ class DependencyGraphBuilder<D>(
                 danglingIds.joinToString(postfix = ".") { "'${it.toCoordinates()}'" }
         }
 
-        val packageReferencesKeysWithMultipleDistinctPackageReferences = references.groupBy { it.key }.filter {
+        val packageReferencesKeysWithMultipleDistinctPackageReferences = references.keys.groupBy { it.key }.filter {
             it.value.distinct().size > 1
         }.keys
 
@@ -327,16 +327,14 @@ class DependencyGraphBuilder<D>(
      * these have to be placed in separate fragments of the dependency graph.
      */
     private fun dependencyTreeEquals(ref: DependencyReference, dependency: D): Boolean {
-        val dependencies = dependencyHandler.dependenciesFor(dependency)
-        if (ref.dependencies.size != dependencies.size) return false
-
-        val dependencies1 = ref.dependencies.mapTo(mutableSetOf()) { dependencyIds[it.pkg] }
-        val dependencies2 = dependencies.associateBy { dependencyHandler.identifierFor(it) }
-        if (dependencies1 != dependencies2.keys) return false
-
-        return ref.dependencies.all { refDep ->
-            dependencies2[dependencyIds[refDep.pkg]]?.let { dependencyTreeEquals(refDep, it) } == true
+        val refDep = checkNotNull(references[ref]) {
+            "$ref is not known to this builder."
         }
+
+        return dependencyHandler.areDependenciesEqual(
+            dependencyHandler.dependenciesFor(refDep),
+            dependencyHandler.dependenciesFor(dependency)
+        )
     }
 
     /**
@@ -400,7 +398,7 @@ class DependencyGraphBuilder<D>(
             issues = issues
         )
         fragmentMapping[index.root] = ref
-        references += ref
+        references[ref] = dependency
 
         if (ref.issues.isEmpty() && ref.linkage !in PackageLinkage.PROJECT_LINKAGE) {
             validPackageDependencies += id
