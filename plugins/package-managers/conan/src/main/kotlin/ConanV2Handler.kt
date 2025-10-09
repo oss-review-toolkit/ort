@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.DUMMY_
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEPENDENCIES
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEV_DEPENDENCIES
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_TEST_DEPENDENCIES
+import org.ossreviewtoolkit.utils.common.MaskedString
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -164,6 +165,10 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
             "--out-file",
             jsonFile.absolutePath
         ).requireSuccess()
+    }
+
+    override fun authenticate(remote: String, username: MaskedString, password: MaskedString) {
+        conan.command.run("remote", "login", "-p", password, remote, username).requireSuccess()
     }
 
     /**
