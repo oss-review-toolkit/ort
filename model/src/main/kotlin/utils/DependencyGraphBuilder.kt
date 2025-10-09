@@ -188,16 +188,18 @@ class DependencyGraphBuilder<D>(
         )
     }
 
-    private fun Set<DependencyGraphEdge>.removeCycles(): Set<DependencyGraphEdge> {
-        val edges = toMutableSet()
+    private fun Collection<DependencyGraphEdge>.removeCycles(): List<DependencyGraphEdge> {
+        val edges = toMutableList()
         val edgesToKeep = breakCycles(edges)
+
+        @Suppress("ConvertArgumentToSet")
         val edgesToRemove = edges - edgesToKeep
 
         edgesToRemove.forEach {
             logger.warn { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
         }
 
-        return filterTo(mutableSetOf()) { it in edgesToKeep }
+        return filter { it in edgesToKeep }
     }
 
     private fun checkReferences() {
@@ -436,14 +438,14 @@ class DependencyGraphBuilder<D>(
 }
 
 /**
- * Convert the direct dependency references of all projects to a list of nodes and edges that represent the final
+ * Convert the direct dependency references of all projects to lists of nodes and edges that represent the final
  * dependency graph. Apply the given [indexMapping] to the indices pointing to dependencies.
  */
 private fun Collection<DependencyReference>.toGraph(
     indexMapping: IntArray
-): Pair<List<DependencyGraphNode>, Set<DependencyGraphEdge>> {
-    val nodes = mutableSetOf<DependencyGraphNode>()
-    val edges = mutableSetOf<DependencyGraphEdge>()
+): Pair<List<DependencyGraphNode>, List<DependencyGraphEdge>> {
+    val nodes = mutableListOf<DependencyGraphNode>()
+    val edges = mutableListOf<DependencyGraphEdge>()
     val nodeIndices = mutableMapOf<NodeKey, Int>()
 
     fun getOrAddNodeIndex(ref: DependencyReference): Int =
@@ -461,7 +463,7 @@ private fun Collection<DependencyReference>.toGraph(
         }
     }
 
-    return nodes.toList() to edges
+    return nodes to edges
 }
 
 private fun Collection<DependencyReference>.visitEach(visit: (ref: DependencyReference) -> Unit) {
@@ -493,7 +495,7 @@ private enum class NodeColor { WHITE, GRAY, BLACK }
  * A depth-first-search (DFS)-based implementation which breaks all cycles in O(V + E).
  * Finding a minimal solution is NP-complete.
  */
-internal fun breakCycles(edges: Collection<DependencyGraphEdge>): Set<DependencyGraphEdge> {
+internal fun breakCycles(edges: Collection<DependencyGraphEdge>): List<DependencyGraphEdge> {
     val outgoingEdgesForNodes = edges.groupBy({ it.from }, { it.to }).mapValues { it.value.toMutableSet() }
     val color = outgoingEdgesForNodes.keys.associateWithTo(mutableMapOf()) { NodeColor.WHITE }
 
@@ -525,7 +527,7 @@ internal fun breakCycles(edges: Collection<DependencyGraphEdge>): Set<Dependency
         visit(v)
     }
 
-    return outgoingEdgesForNodes.flatMapTo(mutableSetOf()) { (fromNode, toNodes) ->
+    return outgoingEdgesForNodes.flatMap { (fromNode, toNodes) ->
         toNodes.map { toNode -> DependencyGraphEdge(fromNode, toNode) }
     }
 }
