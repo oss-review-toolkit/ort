@@ -28,11 +28,50 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.shouldNotBe
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.utils.common.div
 
 @Tags("RequiresExternalTool")
 class VersionControlSystemFunTest : WordSpec({
+    val vcsRoot = File("..").absoluteFile.normalize()
+    val relProjDir = File("src/test")
+    val absProjDir = relProjDir.absoluteFile
+
+    "For an absolute working directory, getPathToRoot()" should {
+        val absVcsDir = VersionControlSystem.forDirectory(absProjDir)!!
+
+        "work if given absolute paths" {
+            absVcsDir.getPathToRoot(vcsRoot) shouldBe ""
+            absVcsDir.getPathToRoot(vcsRoot / "downloader" / "src") shouldBe "downloader/src"
+            absVcsDir.getPathToRoot(absProjDir / "kotlin") shouldBe "downloader/src/test/kotlin"
+        }
+
+        "work if given relative paths" {
+            absVcsDir.getPathToRoot(File(".")) shouldBe "downloader"
+            absVcsDir.getPathToRoot(File("..")) shouldBe ""
+            absVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
+        }
+    }
+
+    "For a relative working directory, getPathToRoot()" should {
+        val relVcsDir = VersionControlSystem.forDirectory(relProjDir)!!
+
+        "work if given absolute paths" {
+            relVcsDir.getPathToRoot(vcsRoot) shouldBe ""
+            relVcsDir.getPathToRoot(vcsRoot / "downloader" / "src") shouldBe "downloader/src"
+            relVcsDir.getPathToRoot(absProjDir / "kotlin") shouldBe "downloader/src/test/kotlin"
+        }
+
+        "work if given relative paths" {
+            relVcsDir.getPathToRoot(relProjDir) shouldBe "downloader/src/test"
+            relVcsDir.getPathToRoot(File("..")) shouldBe ""
+            relVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
+        }
+    }
+
     "forUrl()" should {
         "return null for an unsupported repository URL" {
             val repositoryUrl = "https://example.com"
