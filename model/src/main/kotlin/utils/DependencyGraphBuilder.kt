@@ -191,10 +191,13 @@ class DependencyGraphBuilder<D>(
     private fun Set<DependencyGraphEdge>.removeCycles(): Set<DependencyGraphEdge> {
         val edges = toMutableSet()
         val edgesToKeep = breakCycles(edges)
-        val edgesToRemove = edges - edgesToKeep
 
-        edgesToRemove.forEach {
-            logger.warn { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
+        if (logger.delegate.isInfoEnabled) {
+            val edgesToRemove = edges - edgesToKeep
+
+            edgesToRemove.forEach {
+                logger.info { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
+            }
         }
 
         return filterTo(mutableSetOf()) { it in edgesToKeep }
