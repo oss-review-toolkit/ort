@@ -25,6 +25,7 @@ import io.kotest.matchers.shouldBe
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 
 import java.io.File
 import java.io.IOException
@@ -32,8 +33,6 @@ import java.io.IOException
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.plugins.api.PluginConfig
-import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitFactory
 import org.ossreviewtoolkit.utils.common.div
 
 class VersionControlSystemTest : WordSpec({
@@ -84,11 +83,11 @@ class VersionControlSystemTest : WordSpec({
             )
 
             val workingTree = mockk<WorkingTree>()
+            val vcs = spyk<VersionControlSystem>()
 
             every { workingTree.guessRevisionName(any(), any()) } returns "v1.6.0"
 
-            GitFactory().create(PluginConfig.EMPTY)
-                .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
+            vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "v1.6.0"
             )
         }
@@ -103,6 +102,11 @@ class VersionControlSystemTest : WordSpec({
             )
 
             val workingTree = mockk<WorkingTree>()
+            val vcs = spyk<VersionControlSystem> {
+                every { type } returns VcsType.GIT
+                every { isFixedRevision(any(), "master") } returns Result.success(false)
+                every { isFixedRevision(any(), "main") } returns Result.success(false)
+            }
 
             every {
                 workingTree.guessRevisionName(any(), any())
@@ -111,8 +115,7 @@ class VersionControlSystemTest : WordSpec({
             every { workingTree.listRemoteBranches() } returns listOf("main")
             every { workingTree.listRemoteTags() } returns emptyList()
 
-            GitFactory().create(PluginConfig.EMPTY)
-                .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
+            vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "master",
                 "main"
             )
