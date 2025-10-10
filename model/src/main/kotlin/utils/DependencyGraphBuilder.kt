@@ -201,7 +201,7 @@ class DependencyGraphBuilder<D>(
             }
         }
 
-        return filter { it in edgesToKeep }
+        return edgesToKeep
     }
 
     private fun checkReferences() {
