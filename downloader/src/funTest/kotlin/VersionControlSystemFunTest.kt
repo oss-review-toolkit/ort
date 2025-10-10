@@ -41,7 +41,7 @@ class VersionControlSystemFunTest : WordSpec({
     val absProjDir = relProjDir.absoluteFile
 
     "For an absolute working directory, getPathToRoot()" should {
-        val absVcsDir = VersionControlSystem.forDirectory(absProjDir)!!
+        val absVcsDir = checkNotNull(VersionControlSystem.forDirectory(absProjDir))
 
         "work if given absolute paths" {
             absVcsDir.getPathToRoot(vcsRoot) shouldBe ""
@@ -57,7 +57,7 @@ class VersionControlSystemFunTest : WordSpec({
     }
 
     "For a relative working directory, getPathToRoot()" should {
-        val relVcsDir = VersionControlSystem.forDirectory(relProjDir)!!
+        val relVcsDir = checkNotNull(VersionControlSystem.forDirectory(relProjDir))
 
         "work if given absolute paths" {
             relVcsDir.getPathToRoot(vcsRoot) shouldBe ""
