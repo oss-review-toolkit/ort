@@ -496,7 +496,7 @@ private enum class NodeColor { WHITE, GRAY, BLACK }
  * Finding a minimal solution is NP-complete.
  */
 internal fun breakCycles(edges: Collection<DependencyGraphEdge>): List<DependencyGraphEdge> {
-    val outgoingEdgesForNodes = edges.groupBy({ it.from }, { it.to }).mapValues { it.value.toMutableSet() }
+    val outgoingEdgesForNodes = edges.groupByTo(mutableMapOf(), { it.from }, { it.to })
     val color = outgoingEdgesForNodes.keys.associateWithTo(mutableMapOf()) { NodeColor.WHITE }
 
     fun visit(u: Int) {
