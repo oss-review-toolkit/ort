@@ -200,7 +200,7 @@ class DependencyGraphBuilder<D>(
             }
         }
 
-        return filterTo(mutableSetOf()) { it in edgesToKeep }
+        return edgesToKeep
     }
 
     private fun checkReferences() {
