@@ -21,58 +21,18 @@ package org.ossreviewtoolkit.downloader
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.result.shouldBeSuccess
-import io.kotest.matchers.shouldBe
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 
-import java.io.File
 import java.io.IOException
 
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.plugins.api.PluginConfig
-import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitFactory
-import org.ossreviewtoolkit.utils.common.div
 
 class VersionControlSystemTest : WordSpec({
-    val vcsRoot = File("..").absoluteFile.normalize()
-    val relProjDir = File("src/test")
-    val absProjDir = relProjDir.absoluteFile
-
-    "For an absolute working directory, getPathToRoot()" should {
-        val absVcsDir = VersionControlSystem.forDirectory(absProjDir)!!
-
-        "work if given absolute paths" {
-            absVcsDir.getPathToRoot(vcsRoot) shouldBe ""
-            absVcsDir.getPathToRoot(vcsRoot / "downloader" / "src") shouldBe "downloader/src"
-            absVcsDir.getPathToRoot(absProjDir / "kotlin") shouldBe "downloader/src/test/kotlin"
-        }
-
-        "work if given relative paths" {
-            absVcsDir.getPathToRoot(File(".")) shouldBe "downloader"
-            absVcsDir.getPathToRoot(File("..")) shouldBe ""
-            absVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
-        }
-    }
-
-    "For a relative working directory, getPathToRoot()" should {
-        val relVcsDir = VersionControlSystem.forDirectory(relProjDir)!!
-
-        "work if given absolute paths" {
-            relVcsDir.getPathToRoot(vcsRoot) shouldBe ""
-            relVcsDir.getPathToRoot(vcsRoot / "downloader" / "src") shouldBe "downloader/src"
-            relVcsDir.getPathToRoot(absProjDir / "kotlin") shouldBe "downloader/src/test/kotlin"
-        }
-
-        "work if given relative paths" {
-            relVcsDir.getPathToRoot(relProjDir) shouldBe "downloader/src/test"
-            relVcsDir.getPathToRoot(File("..")) shouldBe ""
-            relVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
-        }
-    }
-
     "getRevisionCandidates()" should {
         "prefer a matching tag name over a branch name from metadata" {
             val pkg = Package.EMPTY.copy(
@@ -84,11 +44,11 @@ class VersionControlSystemTest : WordSpec({
             )
 
             val workingTree = mockk<WorkingTree>()
+            val vcs = spyk<VersionControlSystem>()
 
             every { workingTree.guessRevisionName(any(), any()) } returns "v1.6.0"
 
-            GitFactory().create(PluginConfig.EMPTY)
-                .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
+            vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "v1.6.0"
             )
         }
@@ -103,6 +63,11 @@ class VersionControlSystemTest : WordSpec({
             )
 
             val workingTree = mockk<WorkingTree>()
+            val vcs = spyk<VersionControlSystem> {
+                every { type } returns VcsType.GIT
+                every { isFixedRevision(any(), "master") } returns Result.success(false)
+                every { isFixedRevision(any(), "main") } returns Result.success(false)
+            }
 
             every {
                 workingTree.guessRevisionName(any(), any())
@@ -111,8 +76,7 @@ class VersionControlSystemTest : WordSpec({
             every { workingTree.listRemoteBranches() } returns listOf("main")
             every { workingTree.listRemoteTags() } returns emptyList()
 
-            GitFactory().create(PluginConfig.EMPTY)
-                .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
+            vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "master",
                 "main"
             )

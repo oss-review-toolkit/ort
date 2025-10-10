@@ -89,7 +89,7 @@ fun patchExpectedResult(
 
         if (definitionFile != null) {
             val projectDir = definitionFile.parentFile
-            val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+            val vcsDir = checkNotNull(VersionControlSystem.forDirectory(projectDir))
             val url = vcsDir.getRemoteUrl()
             val path = vcsDir.getPathToRoot(projectDir)
 

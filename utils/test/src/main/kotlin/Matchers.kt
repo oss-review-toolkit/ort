@@ -92,7 +92,7 @@ fun matchExpectedResult(
     if (multiLineDiff != "unified") return EqMatcher(expected)
 
     return Matcher { actual ->
-        val vcsDir = VersionControlSystem.forDirectory(expectedResultFile)!!
+        val vcsDir = checkNotNull(VersionControlSystem.forDirectory(expectedResultFile))
         val relativeExpectedResultFile = vcsDir.getPathToRoot(expectedResultFile)
 
         val expectedLines = expected.lines()
