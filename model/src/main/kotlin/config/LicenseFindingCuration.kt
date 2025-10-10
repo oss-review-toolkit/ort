@@ -42,7 +42,7 @@ data class LicenseFindingCuration(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonDeserialize(converter = CsvStringToIntListConverter::class)
-    @JsonSerialize(converter = IntListToCsvStringConverter::class)
+    @JsonSerialize(converter = IntCollectionToCsvStringConverter::class)
     val startLines: List<Int> = emptyList(),
 
     /**
@@ -87,8 +87,8 @@ data class LicenseFindingCuration(
     }
 }
 
-private class IntListToCsvStringConverter : StdConverter<List<Int>, String>() {
-    override fun convert(value: List<Int>): String = value.joinToString(separator = ",")
+private class IntCollectionToCsvStringConverter : StdConverter<Collection<Int>, String>() {
+    override fun convert(value: Collection<Int>): String = value.joinToString(separator = ",")
 }
 
 private class CsvStringToIntListConverter : StdConverter<String, List<Int>>() {

@@ -26,8 +26,8 @@ import com.fasterxml.jackson.databind.util.StdConverter
 import java.util.SortedSet
 
 internal class SpdxRelationshipSortedSetConverter :
-    StdConverter<List<SpdxRelationship>, SortedSet<SpdxRelationship>>() {
-    override fun convert(value: List<SpdxRelationship>) =
+    StdConverter<Collection<SpdxRelationship>, SortedSet<SpdxRelationship>>() {
+    override fun convert(value: Collection<SpdxRelationship>) =
         value.toSortedSet(
             compareBy<SpdxRelationship> { it.spdxElementId }
                 .thenBy { it.relatedSpdxElement }
