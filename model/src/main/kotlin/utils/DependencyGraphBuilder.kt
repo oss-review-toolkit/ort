@@ -192,11 +192,13 @@ class DependencyGraphBuilder<D>(
         val edges = toMutableList()
         val edgesToKeep = breakCycles(edges)
 
-        @Suppress("ConvertArgumentToSet")
-        val edgesToRemove = edges - edgesToKeep
+        if (logger.delegate.isInfoEnabled) {
+            @Suppress("ConvertArgumentToSet")
+            val edgesToRemove = edges - edgesToKeep
 
-        edgesToRemove.forEach {
-            logger.warn { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
+            edgesToRemove.forEach {
+                logger.info { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
+            }
         }
 
         return filter { it in edgesToKeep }
