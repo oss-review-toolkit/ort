@@ -23,6 +23,6 @@ import com.fasterxml.jackson.databind.util.StdConverter
 
 import java.util.SortedSet
 
-class StringSortedSetConverter : StdConverter<Set<String>, SortedSet<String>>() {
-    override fun convert(value: Set<String>) = value.toSortedSet()
+class StringSortedSetConverter : StdConverter<Collection<String>, SortedSet<String>>() {
+    override fun convert(value: Collection<String>) = value.toSortedSet()
 }

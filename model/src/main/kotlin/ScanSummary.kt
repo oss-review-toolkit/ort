@@ -169,8 +169,8 @@ data class ScanSummary(
  * Set the `affectedPath` for scan timeout errors if it is null. This way scan results which have been created before
  * the `affectedPath` was introduced will still have that property set.
  */
-internal class IssueListConverter : StdConverter<List<Issue>, List<Issue>>() {
-    override fun convert(issues: List<Issue>): List<Issue> =
+internal class IssueListConverter : StdConverter<Collection<Issue>, List<Issue>>() {
+    override fun convert(issues: Collection<Issue>): List<Issue> =
         issues.map { issue ->
             if (issue.affectedPath != null) return@map issue
             val match = TIMEOUT_ERROR_REGEX.matchEntire(issue.message) ?: return@map issue

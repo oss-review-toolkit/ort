@@ -59,6 +59,6 @@ data class FileList(
     }
 }
 
-private class FileEntrySortedSetConverter : StdConverter<Set<FileEntry>, SortedSet<FileEntry>>() {
-    override fun convert(value: Set<FileEntry>) = value.toSortedSet(compareBy { it.path })
+private class FileEntrySortedSetConverter : StdConverter<Collection<FileEntry>, SortedSet<FileEntry>>() {
+    override fun convert(value: Collection<FileEntry>) = value.toSortedSet(compareBy { it.path })
 }

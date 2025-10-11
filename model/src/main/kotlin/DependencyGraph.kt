@@ -106,7 +106,7 @@ data class DependencyGraph(
      * determined.
      */
     @JsonSerialize(converter = DependencyGraphEdgeSortedSetConverter::class)
-    val edges: Set<DependencyGraphEdge> = emptySet()
+    val edges: List<DependencyGraphEdge> = emptyList()
 ) {
     companion object {
         /**
@@ -413,7 +413,7 @@ private fun constructNodeDependenciesFromScopeRoots(roots: Set<DependencyReferen
  */
 private fun constructNodeDependenciesFromGraph(
     nodes: List<DependencyGraphNode>,
-    edges: Set<DependencyGraphEdge>
+    edges: List<DependencyGraphEdge>
 ): NodeDependencies {
     val mapping = mutableMapOf<DependencyGraphNode, MutableList<DependencyGraphNode>>()
 

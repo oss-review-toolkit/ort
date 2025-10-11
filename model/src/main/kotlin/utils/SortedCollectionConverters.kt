@@ -42,48 +42,50 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.SnippetFinding
 
-class CopyrightFindingSortedSetConverter : StdConverter<Set<CopyrightFinding>, SortedSet<CopyrightFinding>>() {
-    override fun convert(value: Set<CopyrightFinding>) = value.toSortedSet(CopyrightFinding.COMPARATOR)
+class CopyrightFindingSortedSetConverter : StdConverter<Collection<CopyrightFinding>, SortedSet<CopyrightFinding>>() {
+    override fun convert(value: Collection<CopyrightFinding>) = value.toSortedSet(CopyrightFinding.COMPARATOR)
 }
 
-class DependencyGraphEdgeSortedSetConverter : StdConverter<Set<DependencyGraphEdge>, Set<DependencyGraphEdge>>() {
-    override fun convert(value: Set<DependencyGraphEdge>) = value.toSortedSet(compareBy({ it.from }, { it.to }))
+class DependencyGraphEdgeSortedSetConverter :
+    StdConverter<Collection<DependencyGraphEdge>, Set<DependencyGraphEdge>>() {
+    override fun convert(value: Collection<DependencyGraphEdge>) = value.toSortedSet(compareBy({ it.from }, { it.to }))
 }
 
-class DependencyReferenceSortedSetConverter : StdConverter<Set<DependencyReference>, SortedSet<DependencyReference>>() {
-    override fun convert(value: Set<DependencyReference>) =
+class DependencyReferenceSortedSetConverter :
+    StdConverter<Collection<DependencyReference>, SortedSet<DependencyReference>>() {
+    override fun convert(value: Collection<DependencyReference>) =
         value.toSortedSet(compareBy({ it.pkg.toString() }, { it.fragment }))
 }
 
 /** Do not convert to SortedSet in order to not require a comparator consistent with equals */
-class FileListSortedSetConverter : StdConverter<Set<FileList>, Set<FileList>>() {
-    override fun convert(value: Set<FileList>) = value.sortedBy { it.provenance.getSortKey() }.toSet()
+class FileListSortedSetConverter : StdConverter<Collection<FileList>, Set<FileList>>() {
+    override fun convert(value: Collection<FileList>) = value.sortedBy { it.provenance.getSortKey() }.toSet()
 }
 
 /** Do not convert to SortedSet in order to not require a comparator consistent with equals */
-class FileListEntrySortedSetConverter : StdConverter<Set<FileList.Entry>, Set<FileList.Entry>>() {
-    override fun convert(value: Set<FileList.Entry>) = value.sortedBy { it.path }.toSet()
+class FileListEntrySortedSetConverter : StdConverter<Collection<FileList.Entry>, Set<FileList.Entry>>() {
+    override fun convert(value: Collection<FileList.Entry>) = value.sortedBy { it.path }.toSet()
 }
 
-class LicenseFindingSortedSetConverter : StdConverter<Set<LicenseFinding>, SortedSet<LicenseFinding>>() {
-    override fun convert(value: Set<LicenseFinding>) = value.toSortedSet(LicenseFinding.COMPARATOR)
+class LicenseFindingSortedSetConverter : StdConverter<Collection<LicenseFinding>, SortedSet<LicenseFinding>>() {
+    override fun convert(value: Collection<LicenseFinding>) = value.toSortedSet(LicenseFinding.COMPARATOR)
 }
 
-class PackageReferenceSortedSetConverter : StdConverter<Set<PackageReference>, SortedSet<PackageReference>>() {
-    override fun convert(value: Set<PackageReference>) = value.toSortedSet(compareBy { it.id })
+class PackageReferenceSortedSetConverter : StdConverter<Collection<PackageReference>, SortedSet<PackageReference>>() {
+    override fun convert(value: Collection<PackageReference>) = value.toSortedSet(compareBy { it.id })
 }
 
-class PackageSortedSetConverter : StdConverter<Set<Package>, SortedSet<Package>>() {
-    override fun convert(value: Set<Package>) = value.toSortedSet(compareBy { it.id })
+class PackageSortedSetConverter : StdConverter<Collection<Package>, SortedSet<Package>>() {
+    override fun convert(value: Collection<Package>) = value.toSortedSet(compareBy { it.id })
 }
 
-class ProjectSortedSetConverter : StdConverter<Set<Project>, SortedSet<Project>>() {
-    override fun convert(value: Set<Project>) = value.toSortedSet(compareBy { it.id })
+class ProjectSortedSetConverter : StdConverter<Collection<Project>, SortedSet<Project>>() {
+    override fun convert(value: Collection<Project>) = value.toSortedSet(compareBy { it.id })
 }
 
 class ProvenanceResolutionResultSortedSetConverter :
-    StdConverter<Set<ProvenanceResolutionResult>, SortedSet<ProvenanceResolutionResult>>() {
-    override fun convert(value: Set<ProvenanceResolutionResult>) = value.toSortedSet(compareBy { it.id })
+    StdConverter<Collection<ProvenanceResolutionResult>, SortedSet<ProvenanceResolutionResult>>() {
+    override fun convert(value: Collection<ProvenanceResolutionResult>) = value.toSortedSet(compareBy { it.id })
 }
 
 class ScannersMapConverter : StdConverter<Map<Identifier, Set<String>>, Map<Identifier, Set<String>>>() {
@@ -91,16 +93,16 @@ class ScannersMapConverter : StdConverter<Map<Identifier, Set<String>>, Map<Iden
 }
 
 /** Do not convert to SortedSet in order to not require a comparator consistent with equals */
-class ScanResultSortedSetConverter : StdConverter<Set<ScanResult>, Set<ScanResult>>() {
-    override fun convert(value: Set<ScanResult>) = value.sortedBy { it.provenance.getSortKey() }.toSet()
+class ScanResultSortedSetConverter : StdConverter<Collection<ScanResult>, Set<ScanResult>>() {
+    override fun convert(value: Collection<ScanResult>) = value.sortedBy { it.provenance.getSortKey() }.toSet()
 }
 
-class ScopeSortedSetConverter : StdConverter<Set<Scope>, SortedSet<Scope>>() {
-    override fun convert(value: Set<Scope>) = value.toSortedSet(compareBy { it.name })
+class ScopeSortedSetConverter : StdConverter<Collection<Scope>, SortedSet<Scope>>() {
+    override fun convert(value: Collection<Scope>) = value.toSortedSet(compareBy { it.name })
 }
 
-class SnippetFindingSortedSetConverter : StdConverter<Set<SnippetFinding>, SortedSet<SnippetFinding>>() {
-    override fun convert(value: Set<SnippetFinding>) = value.toSortedSet(compareBy { it.sourceLocation })
+class SnippetFindingSortedSetConverter : StdConverter<Collection<SnippetFinding>, SortedSet<SnippetFinding>>() {
+    override fun convert(value: Collection<SnippetFinding>) = value.toSortedSet(compareBy { it.sourceLocation })
 }
 
 private fun Provenance.getSortKey(): String =
