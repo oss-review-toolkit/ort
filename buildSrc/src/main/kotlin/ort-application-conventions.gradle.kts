@@ -46,6 +46,7 @@ plugins {
 }
 
 application {
+    // As the Java version used at runtime is not generally known, only hard-code some uncritical options.
     applicationDefaultJvmArgs = listOf(
         "--add-opens", "java.base/java.io=ALL-UNNAMED",
         "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
