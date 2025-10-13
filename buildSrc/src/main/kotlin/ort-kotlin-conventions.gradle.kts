@@ -118,7 +118,30 @@ java {
     }
 }
 
+val globalJvmArgs by extra {
+    val javaVersion = JavaVersion.toVersion(javaLanguageVersion.toInt())
+
+    buildList {
+        // See https://kotest.io/docs/next/extensions/system_extensions.html#system-environment.
+        if (javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
+            add("--add-opens")
+            add("java.base/java.io=ALL-UNNAMED")
+
+            add("--add-opens")
+            add("java.base/java.lang=ALL-UNNAMED")
+
+            add("--add-opens")
+            add("java.base/java.util=ALL-UNNAMED")
+
+            add("--add-opens")
+            add("java.base/sun.nio.ch=ALL-UNNAMED")
+        }
+    }
+}
+
 tasks.withType<JavaExec>().configureEach {
+    jvmArgs = globalJvmArgs
+
     val normalizedName = name.trimEnd { !it.isLetter() }.lowercase()
 
     // Work around https://youtrack.jetbrains.com/issue/KTIJ-34755.
@@ -222,6 +245,8 @@ tasks.register<Jar>("javadocJar") {
 }
 
 tasks.withType<Test>().configureEach {
+    jvmArgs = globalJvmArgs
+
     // Work-around for "--tests" only being able to include tests, see https://github.com/gradle/gradle/issues/6505.
     properties["tests.exclude"]?.also { excludes ->
         filter {
@@ -237,16 +262,6 @@ tasks.withType<Test>().configureEach {
             includes.toString().split(',').map { includeTestsMatching(it) }
             isFailOnNoMatchingTests = false
         }
-    }
-
-    if (javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
-        // See https://kotest.io/docs/next/extensions/system_extensions.html#system-environment.
-        jvmArgs(
-            "--add-opens", "java.base/java.io=ALL-UNNAMED",
-            "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-            "--add-opens", "java.base/java.util=ALL-UNNAMED",
-            "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
-        )
     }
 
     val testSystemProperties = mutableListOf("gradle.build.dir" to project.layout.buildDirectory.get().asFile.path)
