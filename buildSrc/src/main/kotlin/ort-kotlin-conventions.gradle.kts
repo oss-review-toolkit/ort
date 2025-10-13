@@ -136,6 +136,11 @@ val globalJvmArgs by extra {
             add("--add-opens")
             add("java.base/sun.nio.ch=ALL-UNNAMED")
         }
+
+        // See https://openjdk.org/jeps/424.
+        if (javaVersion.isCompatibleWith(JavaVersion.VERSION_19)) {
+            add("--enable-native-access=ALL-UNNAMED")
+        }
     }
 }
 
