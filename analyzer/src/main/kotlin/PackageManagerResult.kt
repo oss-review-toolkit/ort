@@ -19,14 +19,14 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-
 import java.io.File
 
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.utils.PackageSortedSetConverter
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * A data class representing the result of the execution of a [PackageManager]. An instance contains the single

@@ -19,15 +19,16 @@
 
 package org.ossreviewtoolkit.utils.spdxdocument
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-
 import java.io.File
+
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.SerializationFeature
+import tools.jackson.databind.cfg.DateTimeFeature
+import tools.jackson.databind.cfg.MapperBuilder
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.dataformat.yaml.YAMLMapper
+import tools.jackson.module.kotlin.kotlinModule
+import tools.jackson.module.kotlin.readValue
 
 object SpdxModelMapper {
     /**
@@ -79,7 +80,7 @@ object SpdxModelMapper {
      */
 
     @PublishedApi
-    internal val jsonMapper: ObjectMapper = JsonMapper().apply(mapperConfig)
+    internal val jsonMapper: JsonMapper = JsonMapper.builder().apply(mapperConfig).build()
 
     inline fun <reified T : Any> fromJson(json: String): T = jsonMapper.readValue(json)
 
@@ -90,17 +91,15 @@ object SpdxModelMapper {
      */
 
     @PublishedApi
-    internal val yamlMapper: ObjectMapper = YAMLMapper().apply(mapperConfig)
+    internal val yamlMapper: YAMLMapper = YAMLMapper.builder().apply(mapperConfig).build()
 
     inline fun <reified T : Any> fromYaml(yaml: String): T = yamlMapper.readValue(yaml)
 
     fun toYaml(value: Any): String = yamlMapper.writeValueAsString(value)
 }
 
-private val mapperConfig: ObjectMapper.() -> Unit = {
-    registerKotlinModule()
-
-    registerModule(JavaTimeModule())
-    disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+val mapperConfig: MapperBuilder<*, *>.() -> Unit = {
+    addModule(kotlinModule())
+    disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
     enable(SerializationFeature.INDENT_OUTPUT)
 }

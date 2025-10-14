@@ -20,10 +20,6 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
 import java.time.Instant
 
@@ -32,6 +28,11 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
+
+import tools.jackson.core.JsonGenerator
+import tools.jackson.databind.SerializationContext
+import tools.jackson.databind.annotation.JsonSerialize
+import tools.jackson.databind.ser.std.StdSerializer
 
 /**
  * An issue that occurred while executing ORT.
@@ -71,7 +72,7 @@ data class Issue(
 }
 
 class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) {
-    override fun serialize(value: String, gen: JsonGenerator, provider: SerializerProvider) {
+    override fun serialize(value: String, gen: JsonGenerator, provider: SerializationContext) {
         gen.writeString(value.normalizeLineBreaks())
     }
 }

@@ -31,7 +31,6 @@ dependencies {
 
     implementation(jacksonLibs.jacksonCore)
     implementation(jacksonLibs.jacksonDataformatYaml)
-    implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
 
     testImplementation(libs.kotest.assertions.json)

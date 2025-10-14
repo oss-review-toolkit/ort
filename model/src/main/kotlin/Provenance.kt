@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.module.kotlin.treeToValue
+import tools.jackson.core.JsonParser
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.annotation.JsonDeserialize
+import tools.jackson.databind.deser.std.StdDeserializer
+import tools.jackson.module.kotlin.treeToValue
 
 /**
  * Provenance information about the origin of source code.
@@ -88,7 +88,7 @@ data class RepositoryProvenance(
  */
 private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Provenance {
-        val node = p.codec.readTree<JsonNode>(p)
+        val node = p.readValueAsTree<JsonNode>()
         return when {
             node.has("source_artifact") -> {
                 val sourceArtifact = jsonMapper.treeToValue<RemoteArtifact>(node["source_artifact"])
@@ -98,7 +98,7 @@ private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::c
             node.has("vcs_info") -> {
                 val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs_info"])
                 // For backward compatibility, if there is no resolved_revision use the revision from vcsInfo.
-                val resolvedRevision = node["resolved_revision"]?.textValue() ?: vcsInfo.revision
+                val resolvedRevision = node["resolved_revision"]?.asString() ?: vcsInfo.revision
                 RepositoryProvenance(vcsInfo, resolvedRevision)
             }
 

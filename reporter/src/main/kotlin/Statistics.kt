@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.reporter
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
@@ -38,6 +37,8 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * A class containing statistics for an [OrtResult].

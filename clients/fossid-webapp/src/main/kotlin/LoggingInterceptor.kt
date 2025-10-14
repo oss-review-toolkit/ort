@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.databind.node.TextNode
-
 import java.nio.charset.StandardCharsets
 
 import okhttp3.Interceptor
@@ -32,6 +29,9 @@ import okio.Buffer
 import okio.GzipSource
 
 import org.apache.logging.log4j.kotlin.logger
+
+import tools.jackson.databind.node.ObjectNode
+import tools.jackson.databind.node.TextNode
 
 /**
  * An interceptor that logs the body of FossID requests, but takes care that the credentials are not logged.

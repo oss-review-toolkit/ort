@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands.dev
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
-
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -42,6 +39,9 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.utils.common.expandTilde
+
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.node.ObjectNode
 
 internal class RewriteTestAssetsCommand : OrtHelperCommand(
     help = "Searches all test assets directories in the given ORT sources directory for recognized serialized files " +

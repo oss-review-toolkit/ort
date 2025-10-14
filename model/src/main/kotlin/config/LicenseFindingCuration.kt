@@ -20,11 +20,12 @@
 package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.util.StdConverter
 
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+
+import tools.jackson.databind.annotation.JsonDeserialize
+import tools.jackson.databind.annotation.JsonSerialize
+import tools.jackson.databind.util.StdConverter
 
 /**
  * A curation for a license finding. Use it to correct a license finding or to add a license that was not previously
