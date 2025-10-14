@@ -27,20 +27,20 @@ class CompositeBazelModuleRegistryServiceTest : WordSpec({
         "match the server's base url and the package name" {
             val expr1 = "https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/modules/abseil-cpp/" +
                 "20230125.1/source.json"
-            val group1 = CompositeBazelModuleRegistryService.Companion.URL_REGEX.matchEntire(expr1)?.groups
+            val group1 = CompositeBazelModuleRegistryService.URL_REGEX.matchEntire(expr1)?.groups
 
             group1?.get("server")
                 ?.value shouldBe "https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/"
             group1?.get("package")?.value shouldBe "abseil-cpp"
 
             val expr2 = "https://bcr.bazel.build/modules/rules_proto/5.3.0-21.7/source.json"
-            val group2 = CompositeBazelModuleRegistryService.Companion.URL_REGEX.matchEntire(expr2)?.groups
+            val group2 = CompositeBazelModuleRegistryService.URL_REGEX.matchEntire(expr2)?.groups
 
             group2?.get("server")?.value shouldBe "https://bcr.bazel.build/"
             group2?.get("package")?.value shouldBe "rules_proto"
 
             val expr3 = "https://bcr.bazel.build/modules/upb/0.0.0-20220923-a547704/source.json"
-            val group3 = CompositeBazelModuleRegistryService.Companion.URL_REGEX.matchEntire(expr3)?.groups
+            val group3 = CompositeBazelModuleRegistryService.URL_REGEX.matchEntire(expr3)?.groups
 
             group3?.get("server")?.value shouldBe "https://bcr.bazel.build/"
             group3?.get("package")?.value shouldBe "upb"
