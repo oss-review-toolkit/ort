@@ -53,7 +53,7 @@ class FossId2023dot1Test : StringSpec({
         server.start()
 
         mockkObject(FossIdServiceWithVersion.Companion)
-        coEvery { FossIdServiceWithVersion.Companion.create(any()) } answers {
+        coEvery { FossIdServiceWithVersion.create(any()) } answers {
             VersionedFossIdService2021dot2(firstArg(), "2023.2.0")
         }
 
