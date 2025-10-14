@@ -19,12 +19,9 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.rules
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-
 /**
  * An "ignore rule" allows specifying FossID which files need to be excluded from scan.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class IgnoreRule(
     /**
      * The id of the rule.
