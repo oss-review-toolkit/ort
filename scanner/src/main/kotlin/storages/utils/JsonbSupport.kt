@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.scanner.storages.utils
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.json.jsonb
 
 import org.ossreviewtoolkit.model.jsonMapper
+
+import tools.jackson.module.kotlin.readValue
 
 /**
  * Create a JSONB column using [jsonMapper] for serialization and deserialization. As the null character "\u0000" is not

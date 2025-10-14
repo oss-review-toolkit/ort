@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.utils.test
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.core.TestConfiguration
 import io.kotest.engine.spec.tempfile
 
@@ -28,6 +26,8 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
+
+import tools.jackson.module.kotlin.readValue
 
 fun TestConfiguration.extractResource(name: String) =
     tempfile(name.substringAfterLast('/')).apply { writeText(readResource(name)) }
@@ -41,7 +41,7 @@ fun TestConfiguration.readOrtResult(name: String) =
         .readValue<OrtResult>(patchExpectedResult(readResource(name)))
 
 inline fun <reified T : Any> TestConfiguration.readResourceValue(name: String): T =
-    FileFormat.forExtension(name.substringAfterLast('.')).mapper.readValue<T>(getResource(name))
+    FileFormat.forExtension(name.substringAfterLast('.')).mapper.readValue<T>(getResource(name).readText())
 
 /**
  * Return the corresponding [File] location in the source tree. The function is for development only, and can help

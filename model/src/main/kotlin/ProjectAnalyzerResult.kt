@@ -20,9 +20,10 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.model.utils.PackageSortedSetConverter
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * A class that bundles all information generated during an analysis.
