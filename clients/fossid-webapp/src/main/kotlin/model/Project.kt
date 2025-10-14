@@ -19,10 +19,8 @@
 
 package org.ossreviewtoolkit.clients.fossid.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class Project(
     val id: Int,
 

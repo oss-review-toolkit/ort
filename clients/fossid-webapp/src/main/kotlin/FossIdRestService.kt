@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.BeanProperty
 import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.MapperFeature
@@ -80,6 +81,7 @@ interface FossIdRestService {
             // FossID has a bug in get_results/scan.
             // Sometimes the match_type is "ignored", sometimes it is "Ignored".
             enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+            configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             addModule(
                 kotlinModule().addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer())
                     .addDeserializer(PolymorphicInt::class.java, PolymorphicIntDeserializer())
