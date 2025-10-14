@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
-
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -35,6 +32,9 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.expandTilde
+
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.dataformat.yaml.YAMLGenerator
 
 internal class ImportCopyrightGarbageCommand : OrtHelperCommand(
     help = "Import copyright garbage from a plain text file containing one copyright statement per line into the " +

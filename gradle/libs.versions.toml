@@ -28,7 +28,7 @@ greenmail = "2.1.8"
 gson = "2.13.2"
 hikari = "7.0.2"
 hoplite = "2.9.0"
-jackson = "2.21.0"
+jackson = "3.0.4"
 jakartaMail = "2.0.2"
 jerseyCommon = "4.0.2"
 jgit = "7.5.0.202512021534-r"
@@ -114,7 +114,7 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
 hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
-jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
+jackson-bom = { module = "tools.jackson:jackson-bom", version.ref = "jackson" }
 jakartaMail = { module = "com.sun.mail:jakarta.mail", version.ref = "jakartaMail" }
 jerseyCommon = { module = "org.glassfish.jersey.core:jersey-common", version.ref = "jerseyCommon" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }

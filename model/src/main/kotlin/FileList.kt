@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-
 import org.ossreviewtoolkit.model.utils.FileListEntrySortedSetConverter
 import org.ossreviewtoolkit.utils.common.getDuplicates
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * The file info for files contained in [provenance].

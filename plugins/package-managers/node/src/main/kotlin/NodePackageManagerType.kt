@@ -60,7 +60,7 @@ enum class NodePackageManagerType(
                 logger.error { "Failed to parse '$workspaceFile': ${it.collectMessages()}" }
             }.getOrNull() ?: return null
 
-            return packages.map { "${workspaceFile.parentFile.invariantSeparatorsPath}/${it.textValue()}" }
+            return packages.map { "${workspaceFile.parentFile.invariantSeparatorsPath}/${it.asString()}" }
         }
     },
 
@@ -153,7 +153,7 @@ enum class NodePackageManagerType(
         }
 
         return packages.map {
-            val pattern = "${workspaceFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
+            val pattern = "${workspaceFile.parentFile.invariantSeparatorsPath}/${it.asString()}"
 
             // NPM and Yarn treat "*" as an alias for "**", so replace any single "*" with "**".
             pattern.replace(WORKSPACES_SINGLE_ASTERISK_REGEX, "**")

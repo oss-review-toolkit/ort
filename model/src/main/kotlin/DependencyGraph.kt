@@ -21,13 +21,14 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.utils.DependencyGraphEdgeSortedSetConverter
 import org.ossreviewtoolkit.model.utils.DependencyReferenceSortedSetConverter
 import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * Type alias for a [Map] that associates a [DependencyGraphNode] with the nodes representing its dependencies.

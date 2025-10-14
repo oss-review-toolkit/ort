@@ -19,14 +19,13 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.BeanProperty
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JavaType
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.BeanProperty
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.JavaType
+import tools.jackson.databind.ValueDeserializer
+import tools.jackson.databind.deser.std.StdDeserializer
 
 /**
  * A custom JSON deserializer implementation to deal with inconsistencies in error responses sent by FossID
@@ -34,13 +33,13 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
  * empty array for the value, which cannot be handled by the default deserialization.
  */
 internal class PolymorphicDataDeserializer(val boundType: JavaType? = null) :
-    StdDeserializer<PolymorphicData<Any>>(PolymorphicData::class.java), ContextualDeserializer {
+    StdDeserializer<PolymorphicData<Any>>(PolymorphicData::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicData<Any> {
         requireNotNull(boundType) {
             "The PolymorphicDataDeserializer needs a type to deserialize values!"
         }
 
-        return when (p.currentToken) {
+        return when (p.currentToken()) {
             JsonToken.START_ARRAY -> {
                 val arrayType = ctxt.typeFactory.constructArrayType(boundType)
                 val array = ctxt.readValue<Array<Any>>(p, arrayType)
@@ -59,7 +58,7 @@ internal class PolymorphicDataDeserializer(val boundType: JavaType? = null) :
         }
     }
 
-    override fun createContextual(ctxt: DeserializationContext?, property: BeanProperty?): JsonDeserializer<*> {
+    override fun createContextual(ctxt: DeserializationContext?, property: BeanProperty?): ValueDeserializer<*> {
         val type = property?.member?.type?.bindings?.getBoundType(0)
         return PolymorphicDataDeserializer(type)
     }

@@ -20,8 +20,6 @@
 package org.ossreviewtoolkit.plugins.commands.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.convert
@@ -40,6 +38,9 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
+
+import tools.jackson.dataformat.yaml.YAMLMapper
+import tools.jackson.module.kotlin.registerKotlinModule
 
 @OrtPlugin(
     displayName = "Config",

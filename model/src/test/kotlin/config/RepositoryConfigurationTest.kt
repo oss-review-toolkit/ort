@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException
-
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.haveSize
@@ -36,6 +34,8 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+
+import tools.jackson.databind.exc.ValueInstantiationException
 
 class RepositoryConfigurationTest : WordSpec({
     "RepositoryConfiguration" should {

@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.databind.node.TextNode
-
 import java.nio.charset.StandardCharsets
 
 import okhttp3.Interceptor
@@ -32,6 +29,9 @@ import okio.Buffer
 import okio.GzipSource
 
 import org.apache.logging.log4j.kotlin.logger
+
+import tools.jackson.databind.node.ObjectNode
+import tools.jackson.databind.node.StringNode
 
 /**
  * An interceptor that logs the body of FossID requests, but takes care that the credentials are not logged.
@@ -138,9 +138,9 @@ private fun String.sanitizeForLogging(): String {
 
         // Replace the credentials in the Git repository URL. The function [replaceCredentialsInUri]
         // from utils.common is not used to avoid a dependency in the FossID client.
-        if (urlWithCredentials != null && urlWithCredentials is TextNode) {
+        if (urlWithCredentials != null && urlWithCredentials is StringNode) {
             val url = urlWithCredentials.toString().replace("//[\\w:]+@".toRegex(), "//")
-            dataObject.set<ObjectNode>("git_repo_url", TextNode(url))
+            dataObject.set("git_repo_url", StringNode(url))
         }
     }
 

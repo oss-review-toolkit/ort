@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -30,6 +29,8 @@ import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * A generic descriptor for a software package. It contains all relevant metadata about a package like the name,

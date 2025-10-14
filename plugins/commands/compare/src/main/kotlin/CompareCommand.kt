@@ -19,13 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.commands.compare
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
@@ -51,6 +44,13 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.ort.Environment
+
+import tools.jackson.core.JsonParser
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.deser.std.StdDeserializer
+import tools.jackson.databind.module.SimpleModule
+import tools.jackson.module.kotlin.readValue
 
 @OrtPlugin(
     displayName = "Compare",

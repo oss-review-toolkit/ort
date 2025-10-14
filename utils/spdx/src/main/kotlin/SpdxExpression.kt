@@ -20,12 +20,13 @@
 package org.ossreviewtoolkit.utils.spdx
 
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.DOCUMENT_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionParser
+
+import tools.jackson.databind.annotation.JsonSerialize
+import tools.jackson.databind.ser.std.ToStringSerializer
 
 /**
  * An SPDX expression as defined by version 2.2 of the [SPDX specification, annex D][1].

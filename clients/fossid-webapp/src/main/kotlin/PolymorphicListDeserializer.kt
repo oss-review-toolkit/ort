@@ -19,14 +19,13 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.BeanProperty
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JavaType
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.BeanProperty
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.JavaType
+import tools.jackson.databind.ValueDeserializer
+import tools.jackson.databind.deser.std.StdDeserializer
 
 /**
  * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
@@ -38,13 +37,13 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
  * - to address a FossID bug in get_all_scans operation, arrays are converted to list.
  */
 internal class PolymorphicListDeserializer(val boundType: JavaType? = null) :
-    StdDeserializer<PolymorphicList<Any>>(PolymorphicList::class.java), ContextualDeserializer {
+    StdDeserializer<PolymorphicList<Any>>(PolymorphicList::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicList<Any> {
         requireNotNull(boundType) {
             "The PolymorphicListDeserializer needs a type to deserialize values!"
         }
 
-        return when (p.currentToken) {
+        return when (p.currentToken()) {
             JsonToken.VALUE_FALSE -> PolymorphicList()
 
             JsonToken.START_ARRAY -> {
@@ -71,7 +70,7 @@ internal class PolymorphicListDeserializer(val boundType: JavaType? = null) :
         }
     }
 
-    override fun createContextual(ctxt: DeserializationContext?, property: BeanProperty?): JsonDeserializer<*> {
+    override fun createContextual(ctxt: DeserializationContext?, property: BeanProperty?): ValueDeserializer<*> {
         // Extract the type from the property, i.e. the T in PolymorphicList.data<T>
         val type = property?.member?.type?.bindings?.getBoundType(0)
         return PolymorphicListDeserializer(type)

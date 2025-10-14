@@ -21,9 +21,9 @@
 
 package org.ossreviewtoolkit.utils.spdxdocument.model
 
-import com.fasterxml.jackson.databind.util.StdConverter
-
 import java.util.SortedSet
+
+import tools.jackson.databind.util.StdConverter
 
 internal class SpdxRelationshipSortedSetConverter :
     StdConverter<List<SpdxRelationship>, SortedSet<SpdxRelationship>>() {
