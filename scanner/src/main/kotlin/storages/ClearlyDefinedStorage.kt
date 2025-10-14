@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.time.Instant
 
 import kotlin.coroutines.cancellation.CancellationException
@@ -63,6 +61,8 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
 import retrofit2.HttpException
+
+import tools.jackson.databind.JsonNode
 
 /**
  * A storage implementation that tries to download ScanCode results from ClearlyDefined.

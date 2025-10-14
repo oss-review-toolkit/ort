@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.utils.test
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.core.TestConfiguration
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
+
+import tools.jackson.module.kotlin.readValue
 
 fun TestConfiguration.getResource(name: String) = checkNotNull(javaClass.getResource(name))
 
@@ -35,4 +35,4 @@ fun TestConfiguration.readOrtResult(name: String) =
         .readValue<OrtResult>(patchExpectedResult(readResource(name)))
 
 inline fun <reified T : Any> TestConfiguration.readResourceValue(name: String): T =
-    FileFormat.forExtension(name.substringAfterLast('.')).mapper.readValue<T>(getResource(name))
+    FileFormat.forExtension(name.substringAfterLast('.')).mapper.readValue<T>(getResource(name).readText())

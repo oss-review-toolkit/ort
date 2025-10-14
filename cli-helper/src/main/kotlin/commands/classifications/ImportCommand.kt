@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands.classifications
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
@@ -41,6 +39,8 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+
+import tools.jackson.module.kotlin.readValue
 
 internal class ImportCommand : OrtHelperCommand(
     help = "Import license classifications from supported providers to ORT format."
