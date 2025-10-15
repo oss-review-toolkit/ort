@@ -63,7 +63,7 @@ internal class GradleDependencyHandler(
 
     override fun dependenciesFor(dependency: OrtDependency): List<OrtDependency> = dependency.dependencies
 
-    override fun issuesForDependency(dependency: OrtDependency): List<Issue> =
+    override fun issuesFor(dependency: OrtDependency): List<Issue> =
         listOfNotNull(
             dependency.error?.let {
                 createAndLogIssue(

@@ -252,7 +252,7 @@ class DependencyGraphBuilder<D>(
         processed: Set<D>
     ): DependencyReference? {
         val id = dependencyHandler.identifierFor(dependency)
-        val issues = dependencyHandler.issuesForDependency(dependency).toMutableList()
+        val issues = dependencyHandler.issuesFor(dependency).toMutableList()
         val index = updateDependencyMappingAndPackages(id, dependency, issues)
 
         val ref = when (val result = findDependencyInGraph(index, dependency)) {
