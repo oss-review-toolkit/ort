@@ -355,7 +355,7 @@ private object PackageRefDependencyHandler : DependencyHandler<PackageReference>
     override fun createPackage(dependency: PackageReference, issues: MutableCollection<Issue>): Package? =
         Package.EMPTY.copy(id = dependency.id).takeUnless { dependency.id.namespace == NO_PACKAGE_NAMESPACE }
 
-    override fun issuesForDependency(dependency: PackageReference): List<Issue> = dependency.issues
+    override fun issuesFor(dependency: PackageReference): List<Issue> = dependency.issues
 }
 
 /**

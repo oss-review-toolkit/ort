@@ -64,5 +64,5 @@ interface DependencyHandler<D> {
      * encounter problems when obtaining dependency representations. These can be reported here. This base
      * implementation returns an empty collection.
      */
-    fun issuesForDependency(dependency: D): List<Issue> = emptyList()
+    fun issuesFor(dependency: D): List<Issue> = emptyList()
 }
