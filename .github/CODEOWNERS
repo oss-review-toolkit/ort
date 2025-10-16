@@ -4,7 +4,6 @@
 
 * @oss-review-toolkit/kotlin-devs
 *.md @oss-review-toolkit/core-devs
-/**/*Sw360* @oss-review-toolkit/kotlin-devs @bs-ondem @oheger-bosch
 /advisor/ @oss-review-toolkit/kotlin-devs @MarcelBochtler @oheger-bosch
 /clients/fossid-webapp/ @oss-review-toolkit/kotlin-devs @nnobelis
 /plugins/reporters/web-app-template/ @tsteenbe

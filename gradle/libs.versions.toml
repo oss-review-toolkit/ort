@@ -64,7 +64,6 @@ semver4j = "6.0.0"
 slf4j = "2.0.17"
 springCore = "6.2.12"
 svnkit = "1.10.13"
-sw360Client = "19.0.0"
 tika = "3.2.3"
 wagonHttp = "3.5.3"
 wiremock = "3.13.1"
@@ -179,7 +178,6 @@ semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
 slf4j = { module = "org.slf4j:slf4j-api ", version.ref = "slf4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }
 svnkit = { module = "com.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
-sw360Client = { module = "org.eclipse.sw360:client", version.ref = "sw360Client" }
 tika = { module = "org.apache.tika:tika-core", version.ref = "tika" }
 wagon-http = { module = "org.apache.maven.wagon:wagon-http", version.ref = "wagonHttp" }
 wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
