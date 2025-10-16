@@ -61,4 +61,15 @@ class Yarn2FunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Resolve dependencies for a Yarn 4 project with a dependency with a patch" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn2/dependency-with-patch/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/yarn2/dependency-with-patch-expected-output.yml")
+
+        val result = Yarn2Factory
+            .create(corepackEnabled = true)
+            .resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
