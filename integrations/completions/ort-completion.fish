@@ -3,7 +3,7 @@
 
 
 ### Setup for ort
-set -l ort_subcommands 'advise analyze compare config download evaluate migrate notify plugins report requirements scan upload-curations upload-result-to-postgres upload-result-to-sw360'
+set -l ort_subcommands 'advise analyze compare config download evaluate migrate notify plugins report requirements scan upload-curations upload-result-to-postgres'
 
 ## Options for ort
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l config -s c -r -F -d 'The path to a configuration file.'
@@ -204,13 +204,4 @@ complete -c ort -n "__fish_seen_subcommand_from upload-result-to-postgres" -l ta
 complete -c ort -n "__fish_seen_subcommand_from upload-result-to-postgres" -l column-name -r -d 'The name of the JSONB column to store the ORT result.'
 complete -c ort -n "__fish_seen_subcommand_from upload-result-to-postgres" -l create-table -d 'Create the table if it does not exist.'
 complete -c ort -n "__fish_seen_subcommand_from upload-result-to-postgres" -s h -l help -d 'Show this message and exit'
-
-
-### Setup for upload-result-to-sw360
-complete -c ort -f -n __fish_use_subcommand -a upload-result-to-sw360 -d 'Upload an ORT result to SW360.'
-
-## Options for upload-result-to-sw360
-complete -c ort -n "__fish_seen_subcommand_from upload-result-to-sw360" -l ort-file -s i -r -F -d 'The ORT result file to read as input.'
-complete -c ort -n "__fish_seen_subcommand_from upload-result-to-sw360" -l attach-sources -s a -d 'Download sources of packages and upload them as attachments to SW360 releases.'
-complete -c ort -n "__fish_seen_subcommand_from upload-result-to-sw360" -s h -l help -d 'Show this message and exit'
 
