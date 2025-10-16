@@ -90,20 +90,6 @@ class OrtConfigurationTest : WordSpec({
                 ProviderPluginConfiguration(
                     type = "ClearlyDefined",
                     options = mapOf("serverUrl" to "https://api.clearlydefined.io", "minTotalLicenseScore" to "80")
-                ),
-                ProviderPluginConfiguration(
-                    type = "SW360",
-                    options = mapOf(
-                        "restUrl" to "https://your-sw360-rest-url",
-                        "authUrl" to "https://your-authentication-url"
-                    ),
-                    secrets = mapOf(
-                        "username" to "username",
-                        "password" to "password",
-                        "clientId" to "clientId",
-                        "clientPassword" to "clientPassword",
-                        "token" to "token"
-                    )
                 )
             )
 
