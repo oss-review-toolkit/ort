@@ -8,9 +8,6 @@
     ":semanticCommitTypeAll(deps)"
   ],
   "dependencyDashboard": false,
-  "ignoreDeps": [
-    "org.eclipse.sw360:client"
-  ],
   "ignorePaths": [
     "plugins/reporters/web-app-template",
     "**/src/funTest/assets/**",
