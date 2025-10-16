@@ -115,21 +115,6 @@ interface FossIdRestService {
         }
     }
 
-    /**
-     * An interceptor to set the timeout of the requests based on the call headers. If no timeout header is present,
-     * default timeout of the client is used.
-     */
-    object TimeoutInterceptor : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-            val request = chain.request()
-            val newReadTimeout = request.header(READ_TIMEOUT_HEADER)
-
-            val readTimeout = newReadTimeout?.toIntOrNull() ?: chain.readTimeoutMillis()
-
-            return chain.withReadTimeout(readTimeout, TimeUnit.MILLISECONDS).proceed(request)
-        }
-    }
-
     @POST("api.php")
     suspend fun getProject(@Body body: PostRequestBody): PolymorphicDataResponseBody<Project>
 
@@ -237,4 +222,19 @@ interface FossIdRestService {
 
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
+}
+
+/**
+ * An interceptor to set the timeout of the requests based on the call headers. If no timeout header is present,
+ * default timeout of the client is used.
+ */
+private object TimeoutInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+        val request = chain.request()
+        val newReadTimeout = request.header(READ_TIMEOUT_HEADER)
+
+        val readTimeout = newReadTimeout?.toIntOrNull() ?: chain.readTimeoutMillis()
+
+        return chain.withReadTimeout(readTimeout, TimeUnit.MILLISECONDS).proceed(request)
+    }
 }
