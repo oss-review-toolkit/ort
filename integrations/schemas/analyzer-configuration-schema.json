@@ -24,48 +24,8 @@
         "packageManagers": {
             "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-manager-configuration-schema.json"
         },
-        "sw360Configuration": {
-            "$ref": "#/definitions/Sw360Configuration"
-        },
         "skipExcluded": {
             "type": "boolean"
-        }
-    },
-    "definitions": {
-        "Sw360Configuration": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "restUrl": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "authUrl": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "username": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "clientId": {
-                    "type": "string"
-                },
-                "clientPassword": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "authUrl",
-                "clientId",
-                "restUrl",
-                "username"
-            ]
         }
     }
 }
