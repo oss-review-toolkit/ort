@@ -21,18 +21,10 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.BeanProperty
-import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.JavaType
-import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 
@@ -87,143 +79,6 @@ interface FossIdRestService {
                     .addDeserializer(PolymorphicInt::class.java, PolymorphicIntDeserializer())
                     .addDeserializer(PolymorphicData::class.java, PolymorphicDataDeserializer())
             )
-        }
-
-        /**
-         * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
-         * sent by the FossID server.
-         * FossID usually returns data as a List or Map, but in case of no entries it returns a Boolean (which is set to
-         * false). This custom deserializer streamlines the result:
-         * - maps are converted to lists by ignoring the keys
-         * - empty list is returned when the result is Boolean
-         * - to address a FossID bug in get_all_scans operation, arrays are converted to list.
-         */
-        private class PolymorphicListDeserializer(val boundType: JavaType? = null) :
-            StdDeserializer<PolymorphicList<Any>>(PolymorphicList::class.java), ContextualDeserializer {
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicList<Any> {
-                requireNotNull(boundType) {
-                    "The PolymorphicListDeserializer needs a type to deserialize values!"
-                }
-
-                return when (p.currentToken) {
-                    JsonToken.VALUE_FALSE -> PolymorphicList()
-                    JsonToken.START_ARRAY -> {
-                        val arrayType = ctxt.typeFactory.constructArrayType(boundType)
-                        val array = ctxt.readValue<Array<Any>>(p, arrayType)
-                        PolymorphicList(array.toList())
-                    }
-
-                    JsonToken.START_OBJECT -> {
-                        val mapType = ctxt.typeFactory.constructMapType(
-                            LinkedHashMap::class.java,
-                            String::class.java,
-                            boundType.rawClass
-                        )
-                        val map = ctxt.readValue<Map<Any, Any>>(p, mapType)
-
-                        // Only keep the map's values: If the FossID functions which return a PolymorphicList return a
-                        // map, it always is the list of elements grouped by id. Since the ids are also present in the
-                        // elements themselves, no information is lost by discarding the keys.
-                        PolymorphicList(map.values.toList())
-                    }
-
-                    else -> error("FossID returned a type not handled by this deserializer!")
-                }
-            }
-
-            override fun createContextual(ctxt: DeserializationContext?, property: BeanProperty?): JsonDeserializer<*> {
-                // Extract the type from the property, i.e. the T in PolymorphicList.data<T>
-                val type = property?.member?.type?.bindings?.getBoundType(0)
-                return PolymorphicListDeserializer(type)
-            }
-        }
-
-        /**
-         * A custom JSON deserializer implementation to deal with inconsistencies in error responses sent by FossID
-         * for requests returning a single value. If such a request fails, the response from FossID contains an
-         * empty array for the value, which cannot be handled by the default deserialization.
-         */
-        private class PolymorphicDataDeserializer(val boundType: JavaType? = null) :
-            StdDeserializer<PolymorphicData<Any>>(PolymorphicData::class.java), ContextualDeserializer {
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicData<Any> {
-                requireNotNull(boundType) {
-                    "The PolymorphicDataDeserializer needs a type to deserialize values!"
-                }
-
-                return when (p.currentToken) {
-                    JsonToken.START_ARRAY -> {
-                        val arrayType = ctxt.typeFactory.constructArrayType(boundType)
-                        val array = ctxt.readValue<Array<Any>>(p, arrayType)
-                        PolymorphicData(array.firstOrNull())
-                    }
-
-                    JsonToken.START_OBJECT -> {
-                        val data = ctxt.readValue<Any>(p, boundType)
-                        PolymorphicData(data)
-                    }
-
-                    else -> {
-                        val delegate = ctxt.findNonContextualValueDeserializer(boundType)
-                        PolymorphicData(delegate.deserialize(p, ctxt))
-                    }
-                }
-            }
-
-            override fun createContextual(ctxt: DeserializationContext?, property: BeanProperty?): JsonDeserializer<*> {
-                val type = property?.member?.type?.bindings?.getBoundType(0)
-                return PolymorphicDataDeserializer(type)
-            }
-        }
-
-        /**
-         * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
-         * sent by the FossID server.
-         * When deleting a scan, FossID returns the scan id as a string in the `data` property of the response. If no
-         * scan could be found, it returns an empty array. Starting with FossID version 2023.1, the return type of the
-         * [deleteScan] function is now a map of strings to strings. Creating a special [FossIdServiceWithVersion]
-         * implementation for this call is an overkill as ORT does not even use the return value. Therefore, this change
-         * is also handled by the [PolymorphicIntDeserializer].
-         * This custom deserializer streamlines the result: everything is converted to Int and empty array is converted
-         * to `null`. This deserializer also accepts primitive integers and arrays containing integers and maps of
-         * strings to strings containing a single entry with an integer value.
-         */
-        private class PolymorphicIntDeserializer :
-            StdDeserializer<PolymorphicInt>(PolymorphicInt::class.java) {
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicInt {
-                return when (p.currentToken) {
-                    JsonToken.VALUE_STRING -> {
-                        val value = ctxt.readValue(p, String::class.java)
-                        PolymorphicInt(value.toInt())
-                    }
-
-                    JsonToken.VALUE_NUMBER_INT -> {
-                        val value = ctxt.readValue(p, Int::class.java)
-                        PolymorphicInt(value)
-                    }
-
-                    JsonToken.START_ARRAY -> {
-                        val array = ctxt.readValue(p, IntArray::class.java)
-                        val value = if (array.isEmpty()) null else array.first()
-                        PolymorphicInt(value)
-                    }
-
-                    JsonToken.START_OBJECT -> {
-                        val mapType = ctxt.typeFactory.constructMapType(
-                            LinkedHashMap::class.java,
-                            String::class.java,
-                            String::class.java
-                        )
-                        val map = ctxt.readValue<Map<Any, Any>>(p, mapType)
-                        if (map.size != 1) {
-                            error("A map representing a polymorphic integer should have one value!")
-                        }
-
-                        PolymorphicInt(map.values.first().toString().toInt())
-                    }
-
-                    else -> error("FossID returned a type not handled by this deserializer!")
-                }
-            }
         }
 
         /**
