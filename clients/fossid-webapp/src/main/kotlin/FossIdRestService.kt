@@ -108,18 +108,18 @@ interface FossIdRestService {
                 return when (p.currentToken) {
                     JsonToken.VALUE_FALSE -> PolymorphicList()
                     JsonToken.START_ARRAY -> {
-                        val arrayType = JSON_MAPPER.typeFactory.constructArrayType(boundType)
-                        val array = JSON_MAPPER.readValue<Array<Any>>(p, arrayType)
+                        val arrayType = ctxt.typeFactory.constructArrayType(boundType)
+                        val array = ctxt.readValue<Array<Any>>(p, arrayType)
                         PolymorphicList(array.toList())
                     }
 
                     JsonToken.START_OBJECT -> {
-                        val mapType = JSON_MAPPER.typeFactory.constructMapType(
+                        val mapType = ctxt.typeFactory.constructMapType(
                             LinkedHashMap::class.java,
                             String::class.java,
                             boundType.rawClass
                         )
-                        val map = JSON_MAPPER.readValue<Map<Any, Any>>(p, mapType)
+                        val map = ctxt.readValue<Map<Any, Any>>(p, mapType)
 
                         // Only keep the map's values: If the FossID functions which return a PolymorphicList return a
                         // map, it always is the list of elements grouped by id. Since the ids are also present in the
@@ -152,13 +152,13 @@ interface FossIdRestService {
 
                 return when (p.currentToken) {
                     JsonToken.START_ARRAY -> {
-                        val arrayType = JSON_MAPPER.typeFactory.constructArrayType(boundType)
-                        val array = JSON_MAPPER.readValue<Array<Any>>(p, arrayType)
+                        val arrayType = ctxt.typeFactory.constructArrayType(boundType)
+                        val array = ctxt.readValue<Array<Any>>(p, arrayType)
                         PolymorphicData(array.firstOrNull())
                     }
 
                     JsonToken.START_OBJECT -> {
-                        val data = JSON_MAPPER.readValue<Any>(p, boundType)
+                        val data = ctxt.readValue<Any>(p, boundType)
                         PolymorphicData(data)
                     }
 
@@ -192,28 +192,28 @@ interface FossIdRestService {
             override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicInt {
                 return when (p.currentToken) {
                     JsonToken.VALUE_STRING -> {
-                        val value = JSON_MAPPER.readValue(p, String::class.java)
+                        val value = ctxt.readValue(p, String::class.java)
                         PolymorphicInt(value.toInt())
                     }
 
                     JsonToken.VALUE_NUMBER_INT -> {
-                        val value = JSON_MAPPER.readValue(p, Int::class.java)
+                        val value = ctxt.readValue(p, Int::class.java)
                         PolymorphicInt(value)
                     }
 
                     JsonToken.START_ARRAY -> {
-                        val array = JSON_MAPPER.readValue(p, IntArray::class.java)
+                        val array = ctxt.readValue(p, IntArray::class.java)
                         val value = if (array.isEmpty()) null else array.first()
                         PolymorphicInt(value)
                     }
 
                     JsonToken.START_OBJECT -> {
-                        val mapType = JSON_MAPPER.typeFactory.constructMapType(
+                        val mapType = ctxt.typeFactory.constructMapType(
                             LinkedHashMap::class.java,
                             String::class.java,
                             String::class.java
                         )
-                        val map = JSON_MAPPER.readValue<Map<Any, Any>>(p, mapType)
+                        val map = ctxt.readValue<Map<Any, Any>>(p, mapType)
                         if (map.size != 1) {
                             error("A map representing a polymorphic integer should have one value!")
                         }
