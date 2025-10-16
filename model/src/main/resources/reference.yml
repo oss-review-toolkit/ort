@@ -330,15 +330,6 @@ ort:
           minimumIdle: 600000
         type: PROVENANCE_BASED
 
-      sw360Configuration:
-        restUrl: 'https://your-sw360-rest-url'
-        authUrl: 'https://your-authentication-url'
-        username: username
-        password: password
-        clientId: clientId
-        clientPassword: clientPassword
-        token: token
-
     # Storage readers are listed from highest to lower priority, i.e. the first match wins.
     storageReaders: [local, postgres, http, aws, clearlyDefined]
 
