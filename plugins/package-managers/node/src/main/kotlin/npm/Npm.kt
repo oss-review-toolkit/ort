@@ -54,7 +54,7 @@ import org.semver4j.range.RangeListFactory
 internal object NpmCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
-    override fun getVersionRequirement(): RangeList = RangeListFactory.create("6.* - 10.*")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create("6.* - 11.*")
 }
 
 data class NpmConfig(
