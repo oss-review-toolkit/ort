@@ -121,7 +121,7 @@ FROM base AS pythonbuild
 ARG CONAN_VERSION
 ARG CONAN2_VERSION
 ARG PIP_VERSION
-ARG PYENV_GIT_TAG
+ARG PYENV_VERSION
 ARG PYTHON_INSPECTOR_VERSION
 ARG PYTHON_PIPENV_VERSION
 ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
@@ -147,7 +147,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
-RUN curl -kSs https://pyenv.run | bash \
+RUN export PYENV_GIT_TAG=v$PYENV_VERSION \
+    && curl -kSs https://pyenv.run | bash \
     && pyenv install -v $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION
 
