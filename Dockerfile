@@ -121,6 +121,7 @@ FROM base AS python_install
 ARG CONAN2_VERSION
 ARG CONAN_VERSION
 ARG PIP_VERSION
+ARG PYTHON_CLICK_VERSION
 ARG PYTHON_INSPECTOR_VERSION
 ARG PYTHON_PIPENV_VERSION
 ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
@@ -155,13 +156,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     clang \
     && sudo rm -rf /var/lib/apt/lists/*
 
-RUN ARCH=$(arch | sed s/aarch64/arm64/) \
-    && if [ "$ARCH" == "arm64" ]; then \
-    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
-    else \
-    pip install -U scancode-toolkit==$SCANCODE_VERSION; \
-    fi
-
 RUN pip install --no-cache-dir -U \
     pip=="$PIP_VERSION" \
     wheel \
@@ -172,8 +166,16 @@ RUN pip install --no-cache-dir -U \
     poetry=="$PYTHON_POETRY_VERSION" \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
+    click==$PYTHON_CLICK_VERSION \
     setuptools=="$PYTHON_SETUPTOOLS_VERSION" \
     uv=="$UV_VERSION"
+
+RUN ARCH=$(arch | sed s/aarch64/arm64/) \
+    && if [ "$ARCH" == "arm64" ]; then \
+    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
+    else \
+    pip install -U scancode-toolkit==$SCANCODE_VERSION; \
+    fi
 
 # # Extract ScanCode license texts to a directory.
 # RUN ARCH=$(arch | sed s/aarch64/arm64/) \
