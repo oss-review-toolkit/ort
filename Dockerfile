@@ -173,7 +173,7 @@ RUN pip install --no-cache-dir -U \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
     setuptools=="$PYTHON_SETUPTOOLS_VERSION" \
-    uv="$UV_VERSION"
+    uv=="$UV_VERSION"
 
 # # Extract ScanCode license texts to a directory.
 # RUN ARCH=$(arch | sed s/aarch64/arm64/) \
