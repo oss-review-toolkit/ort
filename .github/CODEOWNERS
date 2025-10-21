@@ -2,11 +2,17 @@
 # last matching pattern is used, see
 # https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners#codeowners-syntax
 
-* @oss-review-toolkit/kotlin-devs
-*.md @oss-review-toolkit/core-devs
-/**/*Sw360* @oss-review-toolkit/kotlin-devs @bs-ondem @oheger-bosch
-/advisor/ @oss-review-toolkit/kotlin-devs @MarcelBochtler @oheger-bosch
-/clients/fossid-webapp/ @oss-review-toolkit/kotlin-devs @nnobelis
+# Members of @oss-review-toolkit/kotlin-devs.
+* @fviernau @MarcelBochtler @mnonnenmacher @nnobelis @oheger-bosch @sschuberth
+
+# Members of @oss-review-toolkit/core-devs.
+*.md @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
+
+# Owners of the web app reporter.
 /plugins/reporters/web-app-template/ @tsteenbe
-/spdx-utils/src/main/ @oss-review-toolkit/core-devs
-/LICENSE @oss-review-toolkit/core-devs
+
+# Members of @oss-review-toolkit/core-devs.
+/spdx-utils/src/main/ @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
+
+# Members of @oss-review-toolkit/core-devs.
+/LICENSE @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
