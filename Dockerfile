@@ -121,6 +121,8 @@ FROM base AS pythonbuild
 ARG CONAN_VERSION
 ARG CONAN2_VERSION
 ARG PIP_VERSION
+# PYENV_GIT_TAG is consumed as described here:
+# https://github.com/pyenv/pyenv-installer/blob/63a9e6a216796aeba2535a3bac8e79ba5d95166d/README.rst?plain=1#L22.
 ARG PYENV_GIT_TAG
 ARG PYTHON_INSPECTOR_VERSION
 ARG PYTHON_PIPENV_VERSION
