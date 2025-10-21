@@ -105,7 +105,7 @@ cli/build/install/ort/bin/ort analyze
 
 Alternatively to a single file, curations may also be split across multiple files below a directory, by default `$ORT_CONFIG_DIR/curations`.
 File and directory package curation providers may also be configured as [FilePackageCurationProviders](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-curation-providers/file/src/main/kotlin/FilePackageCurationProvider.kt) in `$ORT_CONFIG_DIR/config.yml`.
-Similarly, ORT can use [ClearlyDefined](https://clearlydefined.io/) and [SW360](https://www.eclipse.org/sw360/) as sources for curated metadata.
+Similarly, ORT can use [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata.
 See the [reference configuration file](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/resources/reference.yml) for examples.
 
 To override curations, e.g. for testing them locally, you can also pass a `curations.yml` file or a curations directory via the `--package-curations-file` / `--package-curations-dir` options of the *evaluator*:
