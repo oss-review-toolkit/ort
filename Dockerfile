@@ -19,10 +19,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-INCLUDE_ARGS .env.versions
+ARG JAVA_VERSION=21
+ARG UBUNTU_VERSION=jammy
 
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
 FROM eclipse-temurin:$JAVA_VERSION-jdk-$UBUNTU_VERSION AS base
+
+INCLUDE_ENVS .env.versions
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -118,18 +121,6 @@ ENTRYPOINT [ "/bin/bash" ]
 # PYTHON - Build Python as a separate component with pyenv
 FROM base AS pythonbuild
 
-ARG CONAN_VERSION
-ARG CONAN2_VERSION
-ARG PIP_VERSION
-ARG PYENV_GIT_TAG
-ARG PYTHON_INSPECTOR_VERSION
-ARG PYTHON_PIPENV_VERSION
-ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
-ARG PYTHON_POETRY_VERSION
-ARG PYTHON_SETUPTOOLS_VERSION
-ARG PYTHON_VERSION
-ARG SCANCODE_VERSION
-
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -193,9 +184,6 @@ COPY --from=pythonbuild /opt/scancode-license-data /opt/scancode-license-data
 # NODEJS - Build NodeJS as a separate component with nvm
 FROM base AS nodejsbuild
 
-ARG BOWER_VERSION
-ARG NODEJS_VERSION
-
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
 
@@ -229,10 +217,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     zlib1g-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG COCOAPODS_VERSION
-ARG LICENSEE_VERSION
-ARG RUBY_VERSION
-
 ENV RBENV_ROOT=/opt/rbenv
 ENV PATH=$RBENV_ROOT/bin:$RBENV_ROOT/shims/:$RBENV_ROOT/plugins/ruby-build/bin:$PATH
 
@@ -252,8 +236,6 @@ COPY --from=rubybuild /opt/rbenv /opt/rbenv
 # RUST - Build as a separate component
 FROM base AS rustbuild
 
-ARG RUST_VERSION
-
 ENV RUST_HOME=/opt/rust
 ENV CARGO_HOME=$RUST_HOME/cargo
 ENV RUSTUP_HOME=$RUST_HOME/rustup
@@ -265,8 +247,6 @@ COPY --from=rustbuild /opt/rust /opt/rust
 #------------------------------------------------------------------------
 # GOLANG - Build as a separate component
 FROM base AS gobuild
-
-ARG GO_VERSION
 
 ENV GOBIN=/opt/go/bin
 ENV PATH=$PATH:/opt/go/bin
@@ -282,8 +262,6 @@ COPY --from=gobuild /opt/go /opt/go
 # HASKELL STACK
 FROM base AS haskellbuild
 
-ARG HASKELL_STACK_VERSION
-
 ENV PATH=$PATH:$HOME/.ghcup/bin
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_MINIMAL=1 BOOTSTRAP_HASKELL_NONINTERACTIVE=1 sh && \
@@ -296,8 +274,6 @@ COPY --from=haskellbuild /opt/haskell /opt/haskell
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
 FROM base AS androidbuild
-
-ARG ANDROID_CMD_VERSION
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -330,8 +306,6 @@ COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 #  Dart
 FROM base AS dartbuild
 
-ARG DART_VERSION
-
 WORKDIR /opt/
 
 ENV DART_SDK=/opt/dart-sdk
@@ -351,8 +325,6 @@ COPY --from=dartbuild /opt/dart-sdk /opt/dart-sdk
 # SBT
 FROM base AS scalabuild
 
-ARG SBT_VERSION
-
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:$SBT_HOME/bin
 
@@ -364,8 +336,6 @@ COPY --from=scalabuild /opt/sbt /opt/sbt
 #------------------------------------------------------------------------
 # SWIFT
 FROM base AS swiftbuild
-
-ARG SWIFT_VERSION
 
 ENV SWIFT_HOME=/opt/swift
 ENV PATH=$PATH:$SWIFT_HOME/bin
@@ -386,9 +356,6 @@ COPY --from=swiftbuild /opt/swift /opt/swift
 #------------------------------------------------------------------------
 # DOTNET
 FROM base AS dotnetbuild
-
-ARG DOTNET_VERSION
-ARG NUGET_INSPECTOR_VERSION
 
 ENV DOTNET_HOME=/opt/dotnet
 ENV NUGET_INSPECTOR_HOME=$DOTNET_HOME
@@ -415,8 +382,6 @@ COPY --from=dotnetbuild /opt/dotnet /opt/dotnet
 #------------------------------------------------------------------------
 # BAZEL
 FROM base AS bazelbuild
-
-ARG BAZELISK_VERSION
 
 ENV BAZEL_HOME=/opt/bazel
 ENV GOBIN=/opt/go/bin
@@ -469,8 +434,6 @@ COPY --from=ortbuild /opt/ort /opt/ort
 # Container with minimal selection of supported package managers.
 FROM base AS minimal-tools
 
-ARG NODEJS_VERSION
-
 # Remove ort build scripts
 RUN sudo rm -rf /etc/scripts
 
@@ -515,10 +478,6 @@ COPY --from=scancode-license-data --chown=$USER:$USER /opt/scancode-license-data
 #------------------------------------------------------------------------
 # Container with all supported package managers.
 FROM minimal-tools AS all-tools
-
-ARG ASKALONO_VERSION
-ARG COMPOSER_VERSION
-ARG PHP_VERSION
 
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
