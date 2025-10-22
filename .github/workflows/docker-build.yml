@@ -8,7 +8,7 @@ on:
     branches:
       - main
     tags:
-      - "[0-9]+.[0-9]+.[0-9]+"
+      - '[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
 
 env:
@@ -32,6 +32,8 @@ jobs:
         run: |
           ORT_VERSION=$(./gradlew -q printVersion)
           echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
       - name: Login to GitHub Container Registry
@@ -63,6 +65,7 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache,mode=max
           build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          platforms: linux/amd64,linux/arm64
           sbom: true
       - name: Build 'ort' Docker Image
         if: ${{ github.event_name == 'pull_request' }}
@@ -73,6 +76,7 @@ jobs:
           labels: ${{ steps.meta-ort.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
           build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          platforms: linux/amd64,linux/arm64
           sbom: true
       - name: Extract Metadata for 'ort-minimal' Docker Image
         id: meta-ort-minimal
@@ -98,6 +102,7 @@ jobs:
           target: minimal
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
           build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          platforms: linux/amd64,linux/arm64
           sbom: true
       - name: Print Disk Space
         run: df -h
