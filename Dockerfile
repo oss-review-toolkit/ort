@@ -107,7 +107,7 @@ ARG CRT_FILES="*.crt"
 COPY "$CRT_FILES" /tmp/certificates/
 
 RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
-    &&  /etc/scripts/import_certificates.sh /tmp/certificates/
+    && /etc/scripts/import_certificates.sh /tmp/certificates/
 
 USER $USER
 WORKDIR $HOME
@@ -154,7 +154,7 @@ RUN curl -kSs https://pyenv.run | bash \
     && pyenv global $PYTHON_VERSION
 
 RUN ARCH=$(arch | sed s/aarch64/arm64/) \
-    &&  if [ "$ARCH" == "arm64" ]; then \
+    && if [ "$ARCH" == "arm64" ]; then \
     pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
     else \
     curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
@@ -329,7 +329,7 @@ FROM scratch AS android
 COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 
 #------------------------------------------------------------------------
-#  Dart
+# Dart
 FROM base AS dartbuild
 
 ARG DART_VERSION
@@ -476,7 +476,7 @@ ARG NODEJS_VERSION
 # Remove ort build scripts
 RUN sudo rm -rf /etc/scripts
 
-#  Install optional tool subversion for ORT analyzer
+# Install optional tool subversion for ORT analyzer
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update && \
