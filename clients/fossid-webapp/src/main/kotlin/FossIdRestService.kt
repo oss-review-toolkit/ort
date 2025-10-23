@@ -206,6 +206,7 @@ interface FossIdRestService {
     suspend fun extractArchives(@Body body: PostRequestBody): EntityResponseBody<Boolean>
 
     @POST("api.php")
+    @Headers("$READ_TIMEOUT_HEADER:${60 * 1000}")
     suspend fun removeUploadedContent(
         @Body body: PostRequestBody
     ): PolymorphicDataResponseBody<RemoveUploadContentResponse>
