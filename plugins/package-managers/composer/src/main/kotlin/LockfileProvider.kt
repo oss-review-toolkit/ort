@@ -40,7 +40,7 @@ class LockfileProvider(private val definitionFile: File) {
         val definitionFileBackup = enableLockfileCreation()
 
         return try {
-            require(createLockFile())
+            createLockFile()
             block(lockfile)
         } finally {
             lockfile.delete()
@@ -69,7 +69,7 @@ class LockfileProvider(private val definitionFile: File) {
         return definitionFileBackup
     }
 
-    private fun createLockFile(): Boolean {
+    private fun createLockFile() {
         val args = buildList {
             add("--no-interaction")
             add("update")
@@ -82,7 +82,6 @@ class LockfileProvider(private val definitionFile: File) {
             }
         }
 
-        val update = ComposerCommand.run(workingDir, *args.toTypedArray())
-        return update.isSuccess
+        ComposerCommand.run(workingDir, *args.toTypedArray()).requireSuccess()
     }
 }
