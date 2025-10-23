@@ -130,6 +130,7 @@ class UploadArchiveHandler(
 
     override suspend fun afterCheckScan(scanCode: String) {
         if (config.deleteUploadedArchiveAfterScan) {
+            logger.info { "Deleting uploaded archive for scan '$scanCode'." }
             service.removeUploadedContent(config.user.value, config.apiKey.value, scanCode)
                 .checkResponse("remove previously uploaded content 2", false)
         }
