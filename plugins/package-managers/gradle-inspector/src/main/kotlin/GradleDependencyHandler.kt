@@ -125,6 +125,26 @@ internal class GradleDependencyHandler(
             isMetadataOnly = hasNoArtifacts
         )
     }
+
+    override fun areDependenciesEqual(dependenciesA: List<OrtDependency>, dependenciesB: List<OrtDependency>): Boolean {
+        val depsA = dependenciesA.distinct()
+        val depsB = dependenciesB.distinct()
+
+        // Do a cheap check on the size of distinct dependencies first.
+        if (depsA.size != depsB.size) return false
+
+        val idToDepA = depsA.associateBy { identifierFor(it) to it.variants }
+        val idToDepB = depsB.associateBy { identifierFor(it) to it.variants }
+
+        // Return early if Identifiers including variants are the same.
+        if (idToDepA.keys == idToDepB.keys) return true
+
+        // Fall back to a deep comparison of transitive dependencies.
+        return idToDepA.all { (id, depA) ->
+            val depB = idToDepB[id] ?: return false
+            areDependenciesEqual(dependenciesFor(depA), dependenciesFor(depB))
+        }
+    }
 }
 
 // See http://maven.apache.org/pom.html#SCM.

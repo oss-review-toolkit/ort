@@ -47,7 +47,7 @@ class PackageManagerDependencyHandler(
 
     override fun identifierFor(dependency: ResolvableDependencyNode): Identifier = dependency.id
 
-    override fun issuesForDependency(dependency: ResolvableDependencyNode): List<Issue> = dependency.issues
+    override fun issuesFor(dependency: ResolvableDependencyNode): List<Issue> = dependency.issues
 
     override fun linkageFor(dependency: ResolvableDependencyNode): PackageLinkage = dependency.linkage
 
