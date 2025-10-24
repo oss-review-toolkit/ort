@@ -27,4 +27,42 @@ initscript {
 
 allprojects {
     apply plugin: OrtModelPlugin
+
+    // Force Gradle to use Ivy descriptors and disable Gradle metadata for Ivy repositories
+    // This allows legacy targetConfiguration to work
+    repositories.configureEach { repo ->
+        if (repo instanceof org.gradle.api.artifacts.repositories.IvyArtifactRepository) {
+            repo.metadataSources {
+                ivyDescriptor()
+                artifact()
+                // Explicitly disable Gradle metadata which causes variant resolution issues
+                // with targetConfiguration
+            }
+
+            // Check if repository should preserve its custom pattern layout
+            // Set repo.name = "customIvyLayout" in your build.gradle to skip ORT pattern configuration
+            def skipPatternConfig = repo.name?.contains("customIvyLayout") ||
+                                   System.getProperty("ort.ivy.preservePatterns") == "true"
+
+            if (!skipPatternConfig) {
+                // Support multiple Ivy layout patterns for different Artifactory configurations
+                // Gradle will try each pattern in order until it finds the artifact
+                // m2compatible = false keeps dots in organization (e.g., com.artifactory stays as com.artifactory)
+                repo.patternLayout {
+                    // Artifactory Ivy layout with 'ivys' subdirectory (e.g., com.artifactory/module/version/ivys/ivy-version.xml)
+                    ivy '[organisation]/[module]/[revision]/ivys/ivy-[revision].xml'
+                    artifact '[organisation]/[module]/[revision]/jars/[artifact]-[revision](-[classifier])(.[ext])'
+                    artifact '[organisation]/[module]/[revision]/[type]s/[artifact]-[revision](-[classifier])(.[ext])'
+
+                    // Standard Ivy layout (e.g., com.artifactory/module/version/ivy-version.xml)
+                    ivy '[organisation]/[module]/[revision]/ivy-[revision].xml'
+                    artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier])(.[ext])'
+
+                    // Keep m2compatible = false to preserve dots in organization names
+                    // If you need Maven-style paths (com/artifactory), repositories should use Maven layout instead
+                    m2compatible = false
+                }
+            }
+        }
+    }
 }
