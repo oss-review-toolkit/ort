@@ -22,12 +22,13 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel
 import OrtDependency
 
 /**
- * The type of this Gradle dependency. In case of a project, it is [projectType]. Otherwise it is "Maven" unless there
- * is no POM, then it is "Unknown".
+ * The type of this Gradle dependency. In case of a project, it is [projectType]. Otherwise it is "Maven" if a POM
+ * file exists, "Ivy" if an ivy.xml exists, or "Unknown" if there is no metadata.
  */
 fun OrtDependency.getIdentifierType(projectType: String) =
     when {
         isProjectDependency -> projectType
+        pomFile?.contains("/ivy-") == true && pomFile?.endsWith(".xml") == true -> "Ivy"
         pomFile != null -> "Maven"
         else -> "Unknown"
     }
