@@ -134,6 +134,12 @@ image_build scala ort/scala "$SBT_VERSION" \
     --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
     "$@"
 
+# Apache Ivy
+image_build ivy ort/ivy "$IVY_VERSION" \
+    --build-arg IVY_VERSION="$IVY_VERSION" \
+    --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
+    "$@"
+
 # Dart
 image_build dart ort/dart "$DART_VERSION" \
     --build-arg DART_VERSION="$DART_VERSION" \
@@ -172,4 +178,5 @@ image_build run ort "$ORT_VERSION" \
     --build-context "haskell=docker-image://${DOCKER_IMAGE_ROOT}/ort/haskell:latest" \
     --build-context "scala=docker-image://${DOCKER_IMAGE_ROOT}/ort/scala:latest" \
     --build-context "gleam=docker-image://${DOCKER_IMAGE_ROOT}/ort/gleam:latest" \
+    --build-context "ivy=docker-image://${DOCKER_IMAGE_ROOT}/ort/ivy:latest" \
     "$@"
