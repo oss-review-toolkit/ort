@@ -364,6 +364,25 @@ FROM scratch AS scala
 COPY --from=scalabuild /opt/sbt /opt/sbt
 
 #------------------------------------------------------------------------
+# APACHE IVY
+FROM base AS ivybuild
+
+ARG IVY_VERSION
+
+ENV IVY_HOME=/opt/ivy
+ENV PATH=$PATH:$IVY_HOME/bin
+
+RUN mkdir -p $IVY_HOME/bin \
+    && curl -L https://archive.apache.org/dist/ant/ivy/$IVY_VERSION/apache-ivy-$IVY_VERSION-bin.tar.gz \
+    | tar -xz -C $IVY_HOME --strip-components=1 \
+    && echo '#!/bin/sh' > $IVY_HOME/bin/ivy \
+    && echo 'exec java -jar '"$IVY_HOME"'/ivy-'"$IVY_VERSION"'.jar "$@"' >> $IVY_HOME/bin/ivy \
+    && chmod a+x $IVY_HOME/bin/ivy
+
+FROM scratch AS ivy
+COPY --from=ivybuild /opt/ivy /opt/ivy
+
+#------------------------------------------------------------------------
 # SWIFT
 FROM base AS swiftbuild
 
@@ -539,6 +558,11 @@ COPY --from=swift --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:$SBT_HOME/bin
 COPY --from=scala --chown=$USER:$USER $SBT_HOME $SBT_HOME
+
+# Apache Ivy
+ENV IVY_HOME=/opt/ivy
+ENV PATH=$PATH:$IVY_HOME/bin
+COPY --from=ivy --chown=$USER:$USER $IVY_HOME $IVY_HOME
 
 # Dart
 ENV DART_SDK=/opt/dart-sdk

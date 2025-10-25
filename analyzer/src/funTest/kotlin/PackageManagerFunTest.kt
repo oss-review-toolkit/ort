@@ -56,6 +56,7 @@ class PackageManagerFunTest : WordSpec({
         "gomod/go.mod",
         "gradle-groovy/build.gradle",
         "gradle-kotlin/build.gradle.kts",
+        "ivy/ivy.xml",
         "maven/pom.xml",
 
         // Note that the NPM, PNPM and Yarn implementations share code. Internal logic decides dynamically whether to
@@ -111,6 +112,7 @@ class PackageManagerFunTest : WordSpec({
                     "gradle-groovy/build.gradle",
                     "gradle-kotlin/build.gradle.kts"
                 )
+                managedFilesById["Ivy"] should containExactly("ivy/ivy.xml")
                 managedFilesById["Maven"] should containExactly("maven/pom.xml")
                 managedFilesById["NPM"] should containExactly("npm-pnpm-and-yarn/package.json")
                 managedFilesById["NuGet"] should containExactlyInAnyOrder(
