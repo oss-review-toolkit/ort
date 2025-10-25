@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.model
 
 import com.networknt.schema.InputFormat
-import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
+import com.networknt.schema.SchemaRegistry
+import com.networknt.schema.SpecificationVersion
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
@@ -30,6 +30,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 
 import java.io.File
+import java.net.URI
 
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
@@ -265,7 +266,11 @@ class JsonSchemaTest : StringSpec({
     }
 })
 
-private val schemaV7 = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
+private val schemaV7 = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_7) { builder ->
+    builder.schemaLoader { schemaLoader ->
+        schemaLoader.fetchRemoteResources()
+    }
+}
 
 private val repositoryConfigurationSchema =
     File("../integrations/schemas/repository-configuration-schema.json").toURI()
@@ -275,3 +280,5 @@ private val repositoryConfigurationAnalyzerConfiguration =
 
 private val repositoryConfigurationPackageManagerConfiguration =
     File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").toURI()
+
+private fun SchemaRegistry.getSchema(uri: URI) = getSchema(uri.toURL().openStream())
