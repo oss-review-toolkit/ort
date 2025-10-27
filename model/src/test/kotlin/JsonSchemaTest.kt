@@ -266,9 +266,11 @@ class JsonSchemaTest : StringSpec({
     }
 })
 
-private val schemaV7 = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_7) { builder ->
-    builder.schemaLoader { schemaLoader ->
-        schemaLoader.fetchRemoteResources()
+private val schemaRegistry: SchemaRegistry by lazy {
+    SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_7) { builder ->
+        builder.schemaLoader { schemaLoader ->
+            schemaLoader.fetchRemoteResources()
+        }
     }
 }
 
@@ -281,4 +283,4 @@ private val repositoryConfigurationAnalyzerConfiguration =
 private val repositoryConfigurationPackageManagerConfiguration =
     File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").toURI()
 
-private fun getSchema(uri: URI) = schemaV7.getSchema(uri.toURL().openStream())
+private fun getSchema(uri: URI) = schemaRegistry.getSchema(uri.toURL().openStream())
