@@ -46,7 +46,7 @@ class JsonSchemaTest : StringSpec({
     "ORT's own repository configuration file validates successfully" {
         val repositoryConfiguration = File("../$ORT_REPO_CONFIG_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(repositoryConfigurationSchema)
+        val errors = getSchema(repositoryConfigurationSchema)
             .validate(repositoryConfiguration, InputFormat.YAML)
 
         errors should beEmpty()
@@ -58,7 +58,7 @@ class JsonSchemaTest : StringSpec({
             examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.name.endsWith(ORT_REPO_CONFIG_FILENAME) }
 
         repositoryConfiguration.forAll {
-            val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(it.readText(), InputFormat.YAML)
+            val errors = getSchema(repositoryConfigurationSchema).validate(it.readText(), InputFormat.YAML)
 
             errors should beEmpty()
         }
@@ -69,7 +69,7 @@ class JsonSchemaTest : StringSpec({
             "/analyzer-repository-configuration.ort.yml"
         ).analyzer
 
-        val errors = schemaV7.getSchema(repositoryConfigurationAnalyzerConfiguration)
+        val errors = getSchema(repositoryConfigurationAnalyzerConfiguration)
             .validate(analyzerConfiguration.toYaml(), InputFormat.YAML)
 
         errors should beEmpty()
@@ -80,7 +80,7 @@ class JsonSchemaTest : StringSpec({
             "/package-manager-repository-configuration.ort.yml"
         ).analyzer?.packageManagers
 
-        val errors = schemaV7.getSchema(repositoryConfigurationPackageManagerConfiguration)
+        val errors = getSchema(repositoryConfigurationPackageManagerConfiguration)
             .validate(packageManagerConfiguration.toYaml(), InputFormat.YAML)
 
         errors should beEmpty()
@@ -90,7 +90,7 @@ class JsonSchemaTest : StringSpec({
         val curationsSchema = File("../integrations/schemas/curations-schema.json").toURI()
         val curationsExample = File("../examples/$ORT_PACKAGE_CURATIONS_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(curationsSchema).validate(curationsExample, InputFormat.YAML)
+        val errors = getSchema(curationsSchema).validate(curationsExample, InputFormat.YAML)
 
         errors should beEmpty()
     }
@@ -99,7 +99,7 @@ class JsonSchemaTest : StringSpec({
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
         val packageConfiguration = File("../examples/$ORT_PACKAGE_CONFIGURATION_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(packageConfigurationSchema).validate(packageConfiguration, InputFormat.YAML)
+        val errors = getSchema(packageConfigurationSchema).validate(packageConfiguration, InputFormat.YAML)
 
         errors should beEmpty()
     }
@@ -108,7 +108,7 @@ class JsonSchemaTest : StringSpec({
         val resolutionsSchema = File("../integrations/schemas/resolutions-schema.json").toURI()
         val resolutionsExample = File("../examples/$ORT_RESOLUTIONS_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(resolutionsSchema).validate(resolutionsExample, InputFormat.YAML)
+        val errors = getSchema(resolutionsSchema).validate(resolutionsExample, InputFormat.YAML)
 
         errors should beEmpty()
     }
@@ -117,7 +117,7 @@ class JsonSchemaTest : StringSpec({
         val ortConfigurationSchema = File("../integrations/schemas/ort-configuration-schema.json").toURI()
         val referenceConfigFile = File("src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(ortConfigurationSchema).validate(referenceConfigFile, InputFormat.YAML)
+        val errors = getSchema(ortConfigurationSchema).validate(referenceConfigFile, InputFormat.YAML)
 
         errors should beEmpty()
     }
@@ -126,7 +126,7 @@ class JsonSchemaTest : StringSpec({
         val licenseClassificationsSchema = File("../integrations/schemas/license-classifications-schema.json").toURI()
         val licenseClassificationsExample = File("../examples/$ORT_LICENSE_CLASSIFICATIONS_FILENAME").readText()
 
-        val errors = schemaV7.getSchema(licenseClassificationsSchema)
+        val errors = getSchema(licenseClassificationsSchema)
             .validate(licenseClassificationsExample, InputFormat.YAML)
 
         errors should beEmpty()
@@ -135,7 +135,7 @@ class JsonSchemaTest : StringSpec({
     "Snippet choices validate successfully" {
         val repositoryConfiguration = readResource("/snippet-choices-repository-configuration.ort.yml")
 
-        val errors = schemaV7.getSchema(repositoryConfigurationSchema)
+        val errors = getSchema(repositoryConfigurationSchema)
             .validate(repositoryConfiguration, InputFormat.YAML)
 
         errors should beEmpty()
@@ -143,7 +143,7 @@ class JsonSchemaTest : StringSpec({
 
     "Package configuration with no matchers validates successfully" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val schema = schemaV7.getSchema(packageConfigurationSchema)
+        val schema = getSchema(packageConfigurationSchema)
 
         val configWithNoMatchers = """
             id: "Pip::example-package:0.0.1"
@@ -156,7 +156,7 @@ class JsonSchemaTest : StringSpec({
 
     "Package configuration with only vcs validates successfully" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val schema = schemaV7.getSchema(packageConfigurationSchema)
+        val schema = getSchema(packageConfigurationSchema)
 
         val configWithVcs = """
             id: "Pip::example-package:0.0.1"
@@ -172,7 +172,7 @@ class JsonSchemaTest : StringSpec({
 
     "Package configuration with only source_artifact_url validates successfully" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val schema = schemaV7.getSchema(packageConfigurationSchema)
+        val schema = getSchema(packageConfigurationSchema)
 
         val configWithSourceArtifact = """
             id: "Pip::example-package:0.0.1"
@@ -186,7 +186,7 @@ class JsonSchemaTest : StringSpec({
 
     "Package configuration with only source_code_origin validates successfully" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val schema = schemaV7.getSchema(packageConfigurationSchema)
+        val schema = getSchema(packageConfigurationSchema)
 
         val configWithSourceCodeOrigin = """
             id: "Pip::example-package:0.0.1"
@@ -200,7 +200,7 @@ class JsonSchemaTest : StringSpec({
 
     "Package configuration with vcs and source_artifact_url fails validation" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val schema = schemaV7.getSchema(packageConfigurationSchema)
+        val schema = getSchema(packageConfigurationSchema)
 
         val configWithVcsAndSourceArtifact = """
             id: "Pip::example-package:0.0.1"
@@ -217,7 +217,7 @@ class JsonSchemaTest : StringSpec({
 
     "Package configuration with vcs and source_code_origin fails validation" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val schema = schemaV7.getSchema(packageConfigurationSchema)
+        val schema = getSchema(packageConfigurationSchema)
 
         val configWithVcsAndSourceCodeOrigin = """
             id: "Pip::example-package:0.0.1"
@@ -234,7 +234,7 @@ class JsonSchemaTest : StringSpec({
 
     "Package configuration with source_artifact_url and source_code_origin fails validation" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val schema = schemaV7.getSchema(packageConfigurationSchema)
+        val schema = getSchema(packageConfigurationSchema)
 
         val configWithSourceArtifactAndSourceCodeOrigin = """
             id: "Pip::example-package:0.0.1"
@@ -249,7 +249,7 @@ class JsonSchemaTest : StringSpec({
 
     "Package configuration with all three matchers fails validation" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val schema = schemaV7.getSchema(packageConfigurationSchema)
+        val schema = getSchema(packageConfigurationSchema)
 
         val configWithAllMatchers = """
             id: "Pip::example-package:0.0.1"
@@ -281,4 +281,4 @@ private val repositoryConfigurationAnalyzerConfiguration =
 private val repositoryConfigurationPackageManagerConfiguration =
     File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").toURI()
 
-private fun SchemaRegistry.getSchema(uri: URI) = getSchema(uri.toURL().openStream())
+private fun getSchema(uri: URI) = schemaV7.getSchema(uri.toURL().openStream())
