@@ -51,6 +51,13 @@ interface DependencyHandler<D> {
     fun linkageFor(dependency: D): PackageLinkage
 
     /**
+     * Return a list with known issues for the given [dependency]. Some package manager implementations may already
+     * encounter problems when obtaining dependency representations. These can be reported here. This base
+     * implementation returns an empty collection.
+     */
+    fun issuesFor(dependency: D): List<Issue> = emptyList()
+
+    /**
      * Create a [Package] to represent the given [dependency]. This is used to populate the packages in the analyzer
      * result. The creation of a package may fail, e.g. if the dependency cannot be resolved. In this case, a concrete
      * implementation is expected to return a dummy [Package] with correct coordinates and add a corresponding issue to
@@ -60,9 +67,25 @@ interface DependencyHandler<D> {
     fun createPackage(dependency: D, issues: MutableCollection<Issue>): Package?
 
     /**
-     * Return a list with known issues for the given [dependency]. Some package manager implementations may already
-     * encounter problems when obtaining dependency representations. These can be reported here. This base
-     * implementation returns an empty collection.
+     * Determine whether [dependenciesA] and [dependenciesB] are to be considered equal. Implementors may override the
+     * default, for example if specific optimizations can be done (like skipping of deep comparisons), or if stricter
+     * checks are needed (like when ordering or duplicates matter).
      */
-    fun issuesForDependency(dependency: D): List<Issue> = emptyList()
+    fun areDependenciesEqual(dependenciesA: List<D>, dependenciesB: List<D>): Boolean {
+        // Do a cheap check on the size of distinct dependencies first.
+        val depsA = dependenciesA.distinct()
+        val depsB = dependenciesB.distinct()
+        if (depsA.size != depsB.size) return false
+
+        // Compare dependencies by Identifiers, not by all properties of D, as that might include variant properties.
+        val idToDepA = depsA.associateBy { identifierFor(it) }
+        val idToDepB = depsB.associateBy { identifierFor(it) }
+        if (idToDepA.keys != idToDepB.keys) return false
+
+        // Do a deep comparison of transitive dependencies.
+        return idToDepA.all { (id, depA) ->
+            val depB = idToDepB[id] ?: return false
+            areDependenciesEqual(dependenciesFor(depA), dependenciesFor(depB))
+        }
+    }
 }

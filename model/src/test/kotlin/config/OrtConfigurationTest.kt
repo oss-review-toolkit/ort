@@ -90,20 +90,6 @@ class OrtConfigurationTest : WordSpec({
                 ProviderPluginConfiguration(
                     type = "ClearlyDefined",
                     options = mapOf("serverUrl" to "https://api.clearlydefined.io", "minTotalLicenseScore" to "80")
-                ),
-                ProviderPluginConfiguration(
-                    type = "SW360",
-                    options = mapOf(
-                        "restUrl" to "https://your-sw360-rest-url",
-                        "authUrl" to "https://your-authentication-url"
-                    ),
-                    secrets = mapOf(
-                        "username" to "username",
-                        "password" to "password",
-                        "clientId" to "clientId",
-                        "clientPassword" to "clientPassword",
-                        "token" to "token"
-                    )
                 )
             )
 
@@ -278,7 +264,7 @@ class OrtConfigurationTest : WordSpec({
 
                 storages shouldNotBeNull {
                     keys should containExactlyInAnyOrder(
-                        "local", "http", "aws", "clearlyDefined", "postgres", "sw360Configuration"
+                        "local", "http", "aws", "clearlyDefined", "postgres"
                     )
 
                     val localStorage = this["local"]
@@ -324,16 +310,6 @@ class OrtConfigurationTest : WordSpec({
                     }
 
                     postgresStorage.type shouldBe StorageType.PROVENANCE_BASED
-
-                    val sw360Storage = this["sw360Configuration"]
-                    sw360Storage.shouldBeInstanceOf<Sw360StorageConfiguration>()
-                    sw360Storage.restUrl shouldBe "https://your-sw360-rest-url"
-                    sw360Storage.authUrl shouldBe "https://your-authentication-url"
-                    sw360Storage.username shouldBe "username"
-                    sw360Storage.password shouldBe "password"
-                    sw360Storage.clientId shouldBe "clientId"
-                    sw360Storage.clientPassword shouldBe "clientPassword"
-                    sw360Storage.token shouldBe "token"
                 }
 
                 storageReaders should containExactly("local", "postgres", "http", "aws", "clearlyDefined")

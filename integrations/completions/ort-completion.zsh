@@ -144,10 +144,6 @@ _ort() {
         _ort_upload_result_to_postgres $(( i + 1 ))
         return
         ;;
-      upload-result-to-sw360)
-        _ort_upload_result_to_sw360 $(( i + 1 ))
-        return
-        ;;
       *)
         (( i = i + 1 ))
         # drop the head of the array
@@ -185,7 +181,7 @@ _ort() {
     "--help")
       ;;
     *)
-      COMPREPLY=($(compgen -W 'advise analyze compare config download evaluate migrate notify plugins report requirements scan upload-curations upload-result-to-postgres upload-result-to-sw360' -- "${word}"))
+      COMPREPLY=($(compgen -W 'advise analyze compare config download evaluate migrate notify plugins report requirements scan upload-curations upload-result-to-postgres' -- "${word}"))
       ;;
   esac
 }
@@ -1584,69 +1580,6 @@ _ort_upload_result_to_postgres() {
     "--column-name")
       ;;
     "--create-table")
-      ;;
-    "--help")
-      ;;
-  esac
-}
-
-_ort_upload_result_to_sw360() {
-  local i=$1
-  local in_param=''
-  local fixed_arg_names=()
-  local vararg_name=''
-  local can_parse_options=1
-
-  while [[ ${i} -lt $COMP_CWORD ]]; do
-    if [[ ${can_parse_options} -eq 1 ]]; then
-      case "${COMP_WORDS[$i]}" in
-        --)
-          can_parse_options=0
-          (( i = i + 1 ));
-          continue
-          ;;
-        --ort-file|-i)
-          __skip_opt_eq
-          (( i = i + 1 ))
-          [[ ${i} -gt COMP_CWORD ]] && in_param='--ort-file' || in_param=''
-          continue
-          ;;
-        --attach-sources|-a)
-          __skip_opt_eq
-          in_param=''
-          continue
-          ;;
-        -h|--help)
-          __skip_opt_eq
-          in_param=''
-          continue
-          ;;
-      esac
-    fi
-    case "${COMP_WORDS[$i]}" in
-      *)
-        (( i = i + 1 ))
-        # drop the head of the array
-        fixed_arg_names=("${fixed_arg_names[@]:1}")
-        ;;
-    esac
-  done
-  local word="${COMP_WORDS[$COMP_CWORD]}"
-  if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--ort-file -i --attach-sources -a -h --help' -- "${word}"))
-    return
-  fi
-
-  # We're either at an option's value, or the first remaining fixed size
-  # arg, or the vararg if there are no fixed args left
-  [[ -z "${in_param}" ]] && in_param=${fixed_arg_names[0]}
-  [[ -z "${in_param}" ]] && in_param=${vararg_name}
-
-  case "${in_param}" in
-    "--ort-file")
-       __complete_files "${word}"
-      ;;
-    "--attach-sources")
       ;;
     "--help")
       ;;
