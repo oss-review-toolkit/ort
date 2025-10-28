@@ -13,7 +13,7 @@ mavenPublishPlugin = "0.34.0"
 
 aeSecurity = "0.146.0"
 asciidoctorj = "3.0.0"
-asciidoctorjPdf = "2.3.21"
+asciidoctorjPdf = "2.3.23"
 blackduckCommon = "67.0.20"
 blackduckCommonApi = "2023.10.0.7"
 bouncyCastle = "1.82"
