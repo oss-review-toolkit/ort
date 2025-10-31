@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.scanners.fossid.events
 
 import java.io.File
+import java.net.SocketTimeoutException
 
 import kotlin.io.path.createTempFile
 
@@ -131,8 +132,13 @@ class UploadArchiveHandler(
     override suspend fun afterCheckScan(scanCode: String) {
         if (config.deleteUploadedArchiveAfterScan) {
             logger.info { "Deleting uploaded archive for scan '$scanCode'." }
-            service.removeUploadedContent(config.user.value, config.apiKey.value, scanCode)
-                .checkResponse("remove previously uploaded content 2", false)
+
+            try {
+                service.removeUploadedContent(config.user.value, config.apiKey.value, scanCode)
+                    .checkResponse("remove previously uploaded content 2", false)
+            } catch (e: SocketTimeoutException) {
+                logger.info { "Ignoring timeout while deleting uploaded archive: ${e.message}" }
+            }
         }
     }
 
