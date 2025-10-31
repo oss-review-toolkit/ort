@@ -23,8 +23,8 @@ import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 
 import com.networknt.schema.InputFormat as NetworkNtInputFormat
-import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
+import com.networknt.schema.SchemaRegistry
+import com.networknt.schema.SpecificationVersion
 
 import io.kotest.assertions.eq.EqMatcher
 import io.kotest.matchers.Matcher
@@ -135,7 +135,7 @@ enum class InputFormat(internal val networkNtInputformat: NetworkNtInputFormat) 
 
 fun matchJsonSchema(schemaJson: String, inputFormat: InputFormat = InputFormat.JSON): Matcher<String> =
     Matcher { actual ->
-        val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaJson)
+        val schema = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_7).getSchema(schemaJson)
         val violations = schema.validate(actual, inputFormat.networkNtInputformat)
 
         MatcherResult(
