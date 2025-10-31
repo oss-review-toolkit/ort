@@ -121,10 +121,13 @@ private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
         val builder = DependencyGraphBuilder(handler)
 
         graph.scopes.forEach { (scopeName, rootIndices) ->
-            navigator.dependenciesAccessor(packageManagerName, graph, rootIndices).forEach { node ->
-                handler.resolvePackageManagerDependency(node).forEach {
-                    builder.addDependency(scopeName, it)
-                }
+            val nodes = navigator.dependenciesAccessor(packageManagerName, graph, rootIndices)
+            val resolvableNodes = nodes.flatMap { node ->
+                handler.resolvePackageManagerDependency(node)
+            }
+
+            resolvableNodes.forEach { node ->
+                builder.addDependency(scopeName, node)
             }
         }
 
