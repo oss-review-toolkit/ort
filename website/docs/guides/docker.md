@@ -62,10 +62,10 @@ With the following steps, `.netrc` can be used with Docker.
    The format often shared online with the properties separated by newlines does **not** work with Docker images for ORT, as not all included third-party tools support this format.
 
 2. Mount the `.netrc` into the home directory of the ORT Docker container.
-   By default, that is the `/root` directory:
+   By default, that is the `/home/ort` directory:
 
    ```shell
-   docker run -v <workspace_path>:/project -v <netrc_folder_path>/.netrc:/root/.netrc ort --info scan (...)
+   docker run -v <workspace_path>:/project -v <netrc_folder_path>/.netrc:/home/ort/.netrc ort --info scan (...)
    ```
 
    **Important:**
@@ -81,10 +81,10 @@ It is also possible to use `git config` to set up access to private repositories
     ```
 
 2. Mount the `.gitconfig` into the home directory of the ORT Docker container.
-   By default, that is the `/root` directory:
+   By default, that is the `/home/ort` directory:
 
     ```shell
-    docker run -v <workspace_path>:/project -v <gitconfig_path>:/root/.gitconfig ort --info scan (...)
+    docker run -v <workspace_path>:/project -v <gitconfig_path>:/home/ort/.gitconfig ort --info scan (...)
     ```
 
    **Important:**
