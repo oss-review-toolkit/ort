@@ -167,26 +167,50 @@ interface DependencyNavigator {
         allDependencies: Set<Identifier>
     ): Map<Identifier, List<Identifier>> {
         data class QueueItem(
-            val pkgRef: DependencyNode,
-            val parents: List<Identifier>
+            val node: DependencyNode,
+            val parent: Identifier?
         )
 
         val remainingIds = allDependencies.toMutableSet()
         val queue = LinkedList<QueueItem>()
+        val predecessors = mutableMapOf<Identifier, Identifier>()
         val result = sortedMapOf<Identifier, List<Identifier>>()
 
-        nodes.forEach { queue.offer(QueueItem(it.getStableReference(), emptyList())) }
+        nodes.forEach { queue.offer(QueueItem(it.getStableReference(), null)) }
 
-        while (queue.isNotEmpty()) {
-            val item = queue.poll()
-            if (item.pkgRef.id in remainingIds) {
-                result[item.pkgRef.id] = item.parents
-                remainingIds -= item.pkgRef.id
+        while (queue.isNotEmpty() && remainingIds.isNotEmpty()) {
+            val (currentNode, parentId) = queue.poll()
+            val currentId = currentNode.id
+
+            // Skip if the path to this node has already been found.
+            if (currentId in result) continue
+
+            // Record predecessors for path reconstruction.
+            if (parentId != null && currentId !in predecessors) {
+                predecessors[currentId] = parentId
             }
 
-            val newParents = item.parents + item.pkgRef.id
-            item.pkgRef.visitDependencies { dependencyNodes ->
-                dependencyNodes.forEach { node -> queue.offer(QueueItem(node.getStableReference(), newParents)) }
+            // If this is a target dependency, reconstruct the path.
+            if (currentId in remainingIds) {
+                val path = mutableListOf<Identifier>()
+
+                var iterId = parentId
+                while (iterId != null) {
+                    path += iterId
+                    iterId = predecessors[iterId]
+                }
+
+                result[currentId] = path.asReversed()
+                remainingIds -= currentId
+            }
+
+            currentNode.visitDependencies { dependencyNodes ->
+                dependencyNodes.forEach { dep ->
+                    val depId = dep.getStableReference().id
+                    if (depId !in predecessors) {
+                        queue.offer(QueueItem(dep.getStableReference(), currentId))
+                    }
+                }
             }
         }
 
