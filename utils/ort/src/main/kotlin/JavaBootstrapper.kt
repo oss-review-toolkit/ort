@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.utils.ort
 
 import java.io.File
+import java.security.MessageDigest
 
+import kotlin.text.toByteArray
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
@@ -131,7 +133,20 @@ object JavaBootstrapper {
             return Result.failure(it)
         }
 
-        val installDir = (ortToolsDirectory / "jdks" / pkg.distribution / pkg.distributionVersion)
+        return downloadJdk(pkg.links.pkgDownloadRedirect)
+    }
+
+    /**
+     * Download the resolved JDK Url and return its directory on success, or an exception on failure.
+     */
+    fun downloadJdk(sdkUrl: String): Result<File> {
+        val safeHash =
+            MessageDigest.getInstance("SHA-256")
+                .digest(sdkUrl.toByteArray())
+                .joinToString("") { "%02x".format(it) }
+                .take(16)
+
+        val installDir = (ortToolsDirectory / "jdks" / safeHash)
             .apply {
                 if (isDirectory) {
                     logger.info { "Not downloading the JDK again as the directory '$this' already exists." }
@@ -141,11 +156,10 @@ object JavaBootstrapper {
                 safeMkdirs()
             }
 
-        val url = pkg.links.pkgDownloadRedirect
-        logger.info { "Downloading the JDK package from $url..." }
+        logger.info { "Downloading the JDK package from $sdkUrl..." }
 
         val (archive, downloadDuration) = measureTimedValue {
-            okHttpClient.downloadFile(url, installDir).getOrElse {
+            okHttpClient.downloadFile(sdkUrl, installDir).getOrElse {
                 return Result.failure(it)
             }
         }
