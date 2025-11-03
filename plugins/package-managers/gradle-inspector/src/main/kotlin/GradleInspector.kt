@@ -93,7 +93,12 @@ data class GradleInspectorConfig(
      * The directory of the Java home to use when analyzing projects. By default, the same Java home as for ORT itself
      * is used.
      */
-    val javaHome: String?
+    val javaHome: String?,
+
+    /**
+     * Custom JDK URL for direct download instead of the Disco service. It is valid if the javaVersion is set together.
+     */
+    val customJdkUrl: String?
 )
 
 /**
@@ -160,16 +165,25 @@ class GradleInspector(
                         addProgressListener(ProgressListener { logger.debug(it.displayName) })
                     }
 
-                    val javaHome = config.javaVersion
-                        ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
-                        ?.let {
-                            JavaBootstrapper.installJdk("TEMURIN", it).onFailure { e ->
+                    val javaHome = config.customJdkUrl
+                        ?.let { url ->
+                            JavaBootstrapper.downloadJdk(url).onFailure { e ->
                                 issues += createAndLogIssue(e.collectMessages())
                             }.getOrNull()
-                        } ?: config.javaHome?.let { File(it) }
+                        }
+
+                        ?: config.javaVersion
+                            ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
+                            ?.let { version ->
+                                JavaBootstrapper.installJdk("TEMURIN", version).onFailure { e ->
+                                    issues += createAndLogIssue(e.collectMessages())
+                                }.getOrNull()
+                            }
+
+                        ?: config.javaHome?.let { File(it) }
 
                     javaHome?.also {
-                        logger.info { "Setting Java home for project analysis to '$it'." }
+                        logger.info { "Setting Java home for project analysis to '$it'. " }
                         setJavaHome(it)
                     }
                 }

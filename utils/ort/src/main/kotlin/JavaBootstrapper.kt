@@ -20,9 +20,7 @@
 package org.ossreviewtoolkit.utils.ort
 
 import java.io.File
-import java.security.MessageDigest
 
-import kotlin.text.toByteArray
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
@@ -41,6 +39,7 @@ import org.ossreviewtoolkit.clients.foojay.ReleaseStatus
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.enumSetOf
+import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 
@@ -140,13 +139,9 @@ object JavaBootstrapper {
      * Download the resolved JDK Url and return its directory on success, or an exception on failure.
      */
     fun downloadJdk(sdkUrl: String): Result<File> {
-        val safeHash =
-            MessageDigest.getInstance("SHA-256")
-                .digest(sdkUrl.toByteArray())
-                .joinToString("") { "%02x".format(it) }
-                .take(16)
+        val encodedFilename = sdkUrl.fileSystemEncode()
 
-        val installDir = (ortToolsDirectory / "jdks" / safeHash)
+        val installDir = (ortToolsDirectory / "jdks" / encodedFilename)
             .apply {
                 if (isDirectory) {
                     logger.info { "Not downloading the JDK again as the directory '$this' already exists." }
