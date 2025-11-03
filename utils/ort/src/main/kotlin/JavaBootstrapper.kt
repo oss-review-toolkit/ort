@@ -131,17 +131,25 @@ object JavaBootstrapper {
             return Result.failure(it)
         }
 
-        val installDir = (ortToolsDirectory / "jdks" / pkg.distribution / pkg.distributionVersion)
-            .apply {
-                if (isDirectory) {
-                    logger.info { "Not downloading the JDK again as the directory '$this' already exists." }
-                    return Result.success(singleContainedDirectoryOrThis())
-                }
+        return downloadJdk(
+            pkg.links.pkgDownloadRedirect,
+            ortToolsDirectory / "jdks" / pkg.distribution / pkg.distributionVersion
+        )
+    }
 
-                safeMkdirs()
+    /**
+     * Download a JDK from [url] and unpack it to [installDir]. Return a result with the actual installation directory.
+     */
+    fun downloadJdk(url: String, installDir: File): Result<File> {
+        with(installDir) {
+            if (isDirectory) {
+                logger.info { "Not downloading the JDK again as the directory '$this' already exists." }
+                return Result.success(singleContainedDirectoryOrThis())
             }
 
-        val url = pkg.links.pkgDownloadRedirect
+            safeMkdirs()
+        }
+
         logger.info { "Downloading the JDK package from $url..." }
 
         val (archive, downloadDuration) = measureTimedValue {
