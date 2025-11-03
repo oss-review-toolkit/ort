@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
+import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
@@ -82,6 +83,11 @@ data class GradleInspectorConfig(
      * properties.
      */
     val gradleVersion: String?,
+
+    /**
+     * A custom URL for direct JDK download. Overrides `javaVersion` if both are specified.
+     */
+    val customJdkUrl: String?,
 
     /**
      * The version of Java to use when analyzing projects. By default, the same Java version as for ORT itself it used.
@@ -160,17 +166,30 @@ class GradleInspector(
                         addProgressListener(ProgressListener { logger.debug(it.displayName) })
                     }
 
-                    val javaHome = config.javaVersion
-                        ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
-                        ?.let {
-                            JavaBootstrapper.installJdk("TEMURIN", it).onFailure { e ->
+                    val javaHome = when {
+                        config.customJdkUrl != null -> {
+                            val installDir = ortToolsDirectory / "jdks" / config.customJdkUrl.fileSystemEncode()
+                            JavaBootstrapper.downloadJdk(config.customJdkUrl, installDir).onFailure { e ->
                                 issues += createAndLogIssue(e.collectMessages())
                             }.getOrNull()
-                        } ?: config.javaHome?.let { File(it) }
+                        }
 
-                    javaHome?.also {
-                        logger.info { "Setting Java home for project analysis to '$it'." }
-                        setJavaHome(it)
+                        config.javaVersion != null -> {
+                            if (!JavaBootstrapper.isRunningOnJdk(config.javaVersion)) {
+                                JavaBootstrapper.installJdk("TEMURIN", config.javaVersion).onFailure { e ->
+                                    issues += createAndLogIssue(e.collectMessages())
+                                }.getOrNull()
+                            } else {
+                                null
+                            }
+                        }
+
+                        else -> config.javaHome?.let { File(it) }
+                    }
+
+                    if (javaHome != null) {
+                        logger.info { "Setting Java home for project analysis to '$javaHome'. " }
+                        setJavaHome(javaHome)
                     }
                 }
                 .setJvmArguments(jvmArgs)
