@@ -183,8 +183,9 @@ class GradleInspector(
                         ?: config.javaHome?.let { File(it) }
 
                     javaHome?.also {
-                        logger.info { "Setting Java home for project analysis to '$it'. " }
-                        setJavaHome(it)
+                        val javaHomePath = if (Os.isMac) it / "Contents" / "Home" else it
+                        logger.info { "Setting Java home for project analysis to '$javaHomePath'." }
+                        setJavaHome(javaHomePath)
                     }
                 }
                 .setJvmArguments(jvmArgs)
