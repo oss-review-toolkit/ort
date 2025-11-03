@@ -813,7 +813,16 @@ class FossId internal constructor(
             "${pendingFiles.size} pending files have been returned for scan '$scanCode'."
         }
 
-        pendingFiles += listUnmatchedSnippetChoices(markedAsIdentifiedFiles, snippetChoices).also { newPendingFiles ->
+        // Here the search for the archive prefix cannot be conditioned to config.isArchiveUploadMode because the
+        // current run could be configured in clone repository mode but the scan is a previous scan created in archive
+        // upload mode.
+        val archivePrefix = getArchivePrefix(pendingFiles, identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles)
+
+        pendingFiles += listUnmatchedSnippetChoices(
+            markedAsIdentifiedFiles,
+            snippetChoices,
+            archivePrefix
+        ).also { newPendingFiles ->
             newPendingFiles.map {
                 logger.info {
                     "Marked as identified file '$it' is not in .ort.yml anymore or its configuration has been " +
@@ -823,11 +832,6 @@ class FossId internal constructor(
                 service.unmarkAsIdentified(config.user.value, config.apiKey.value, scanCode, it, false)
             }
         }
-
-        // Here the search for the archive prefix cannot be conditioned to config.isArchiveUploadMode because the
-        // current run could be configured in clone repository mode but the scan is a previous scan created in archive
-        // upload mode.
-        val archivePrefix = getArchivePrefix(pendingFiles, identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles)
 
         val matchedLines = mutableMapOf<Int, MatchedLines>()
         val pendingFilesIterator = pendingFiles.iterator()

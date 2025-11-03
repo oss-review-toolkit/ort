@@ -438,15 +438,19 @@ private fun getLicenseFindingFromSnippetChoice(
  * Check all [markedAsIdentifiedFiles] if their snippet choices locations count or non-relevant snippets locations count
  * matches the ones stored in the [OrtComment]: When not, it means some of this configuration has been removed and the
  * files should be considered as pending again. Such files are returned.
+ * If present, the optional [archivePrefix] is removed from the marked files names when looking for their corresponding
+ * snippet choices.
  */
 internal fun listUnmatchedSnippetChoices(
     markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
-    snippetChoices: List<SnippetChoice>
+    snippetChoices: List<SnippetChoice>,
+    archivePrefix: String?
 ): List<String> =
     markedAsIdentifiedFiles.filterNot { markedAsIdentifiedFile ->
         val markedFileName = markedAsIdentifiedFile.getFileName()
+        val markedFileNameWithoutPrefix = archivePrefix?.let { markedFileName.removePrefix(it) } ?: markedFileName
         val snippetChoicesByName = snippetChoices.filter {
-            it.given.sourceLocation.path == markedFileName
+            it.given.sourceLocation.path == markedFileNameWithoutPrefix
         }
 
         val comment = markedAsIdentifiedFile.comments.values.firstOrNull {
