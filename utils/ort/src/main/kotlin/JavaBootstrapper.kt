@@ -50,8 +50,10 @@ object JavaBootstrapper {
     /**
      * Return the single top-level directory contained in this directory, if any, or return this directory otherwise.
      */
-    private fun File.singleContainedDirectoryOrThis() =
-        walk().maxDepth(1).filter { it != this && it.isDirectory }.singleOrNull() ?: this
+    private fun File.singleContainedDirectoryOrThis(): File {
+        val dir = walk().maxDepth(1).filter { it != this && it.isDirectory }.singleOrNull() ?: this
+        return if (Os.isMac) dir / "Contents" / "Home" else dir
+    }
 
     /**
      * Return whether ORT is running on a JDK (not JRE) of the specified [version].
