@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAtLeastOne
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -678,6 +679,48 @@ class FossIdSnippetChoiceTest : WordSpec({
             summary.snippetFindings should beEmpty()
         }
 
+        "add the license of already marked file with a snippet choice to the license findings (scan in archive mode)" {
+            val projectCode = PROJECT
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, isArchiveMode = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            val choiceLocation = TextLocation(FILE_1, 10, 20)
+            val payload = OrtCommentPayload(mapOf("MIT" to listOf(choiceLocation)), 1, 0)
+            val comment = jsonMapper.writeValueAsString(mapOf(ORT_NAME to payload))
+            val markedAsIdentifiedFile = createMarkAsIdentifiedFile("MIT", FILE_1_ARCHIVE_MODE, comment)
+            FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "", isArchiveMode = true)
+                .expectRemoveUploadedContent(scanCode)
+                .expectUploadFile(scanCode)
+                .expectExtractArchives(scanCode)
+                .mockFiles(
+                    scanCode,
+                    markedFiles = listOf(markedAsIdentifiedFile)
+                )
+
+            val snippetChoices = createSnippetChoices(
+                vcsInfo.url,
+                createSnippetChoice(choiceLocation, PURL_1, "")
+            )
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
+
+            summary.licenseFindings.shouldBeSingleton {
+                it.license shouldBe "MIT".toSpdx()
+                it.location shouldBe choiceLocation
+            }
+
+            summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
+            summary.snippetFindings should beEmpty()
+        }
+
         "add the license of marked as identified files that have been manually marked in the UI (legacy behavior)" {
             val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
@@ -772,6 +815,72 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             coVerify {
                 service.unmarkAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
+            }
+        }
+
+        "put a marked as identified file back to pending if it has no snippet choice (scan in archive mode)" {
+            val projectCode = PROJECT
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, isArchiveMode = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            val choiceLocation = TextLocation(FILE_1, 10, 20)
+            val payload = OrtCommentPayload(mapOf("MIT" to listOf(choiceLocation)), 1, 0)
+            val comment = jsonMapper.writeValueAsString(mapOf(ORT_NAME to payload))
+            val markedAsIdentifiedFile = createMarkAsIdentifiedFile("MIT", FILE_1_ARCHIVE_MODE, comment)
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "", isArchiveMode = true)
+                .expectRemoveUploadedContent(scanCode)
+                .expectUploadFile(scanCode)
+                .expectExtractArchives(scanCode)
+                .mockFiles(
+                    scanCode,
+                    markedFiles = listOf(markedAsIdentifiedFile),
+                    snippets = listOf(
+                        createSnippet(0, FILE_1, PURL_1),
+                        createSnippet(1, FILE_1, PURL_2),
+                        createSnippet(2, FILE_1, PURL_3)
+                    ),
+                    matchedLines = mapOf(
+                        0 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        1 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        2 to MatchedLines.create((20..30).toList(), (20..30).toList())
+                    )
+                )
+                // The unmark as identified call is made on the real snippet path.
+                .expectUnmarkAsIdentified(scanCode, FILE_1_ARCHIVE_MODE)
+
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = emptyList()).summary
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
+                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
+            }
+
+            summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
+            summary.snippetFindings shouldHaveSize 2
+            summary.snippetFindings.first().apply {
+                sourceLocation.path shouldBe FILE_1
+                snippets.map { it.purl } shouldBe listOf(PURL_1, PURL_2)
+            }
+
+            summary.snippetFindings.last().apply {
+                sourceLocation.path shouldBe FILE_1
+                snippets.map { it.purl } shouldBe listOf(PURL_3)
+            }
+
+            coVerify {
+                service.removeUploadedContent(USER, API_KEY, scanCode)
+                service.uploadFile(USER, API_KEY, scanCode, any())
+                service.extractArchives(USER, API_KEY, scanCode, any())
+                service.unmarkAsIdentified(USER, API_KEY, scanCode, FILE_1_ARCHIVE_MODE, any())
             }
         }
 
