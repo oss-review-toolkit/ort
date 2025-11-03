@@ -461,7 +461,12 @@ data class OrtResult(
                 dependencyNavigator.projectDependencies(it, matcher = MATCH_SUB_PROJECTS)
             }
 
+            subProjectIds.forEach { logger.info { "wklenk --- sub-project it=$it" } }
+
             projects.removeAll { it.id in subProjectIds }
+
+            // This line would do the thing
+            // projects.removeAll { it.id in subProjectIds && it.id.namespace.isNotEmpty() }
         }
 
         return projects
