@@ -42,7 +42,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract Metadata for 'ort' Docker Image
         id: meta-ort
-        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5
+        uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort
@@ -76,7 +76,7 @@ jobs:
           sbom: true
       - name: Extract Metadata for 'ort-minimal' Docker Image
         id: meta-ort-minimal
-        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5
+        uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal
