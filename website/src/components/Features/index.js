@@ -158,8 +158,8 @@ const FeatureList = [
         </p>
         <ul>
           <li>
-            Policy rules can use any data gathered by the ORT, including
-            license, copyright, and vulnerability information.
+            Policy rules can use any data gathered by ORT, including license,
+            copyright, and vulnerability information.
           </li>
           <li>
             Provides an in-built rule set based on the{' '}
