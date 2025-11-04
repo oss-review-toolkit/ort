@@ -46,7 +46,10 @@ class VulnerableCodeFunTest : WordSpec({
                     "CVE-2023-49295"
                 )
 
-                getValue("CVE-2023-49295").references.find {
+                val vulnerability = getValue("CVE-2023-49295")
+                vulnerability.summary shouldBe "quic-go is an implementation of the QUIC protocol (RFC 9000, RFC..."
+
+                vulnerability.references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-49295"
                 } shouldNotBeNull {
                     scoringSystem shouldBe "cvssv3"
@@ -74,7 +77,10 @@ class VulnerableCodeFunTest : WordSpec({
                     "CVE-2023-2976"
                 )
 
-                getValue("CVE-2023-2976").references.find {
+                val vulnerability = getValue("CVE-2023-2976")
+                vulnerability.summary shouldBe "Use of Java's default temporary directory for file creation in `..."
+
+                vulnerability.references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
                 } shouldNotBeNull {
                     scoringSystem shouldBe "cvssv3"
@@ -98,7 +104,10 @@ class VulnerableCodeFunTest : WordSpec({
                     "CVE-2023-42503"
                 )
 
-                getValue("CVE-2023-42503").references.find {
+                val vulnerability = getValue("CVE-2023-42503")
+                vulnerability.summary shouldBe "Improper Input Validation, Uncontrolled Resource Consumption vul..."
+
+                vulnerability.references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-42503"
                 } shouldNotBeNull {
                     scoringSystem shouldBe "cvssv3"
@@ -124,7 +133,10 @@ class VulnerableCodeFunTest : WordSpec({
                     "CVE-2024-48948"
                 )
 
-                getValue("CVE-2024-48948").references.find {
+                val vulnerability = getValue("CVE-2024-48948")
+                vulnerability.summary shouldBe "The Elliptic package 6.5.7 for Node.js, in its for ECDSA impleme..."
+
+                vulnerability.references.find {
                     it.url.toString() == "https://github.com/indutny/elliptic"
                 } shouldNotBeNull {
                     scoringSystem shouldBe "cvssv3.1"

@@ -58,6 +58,11 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 private const val BULK_REQUEST_SIZE = 100
 
 /**
+ * The maximum length for the summary as derived from the description of a vulnerability.
+ */
+private const val MAX_SUMMARY_LENGTH = 64
+
+/**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
  * [VulnerableCode][https://github.com/aboutcode-org/vulnerablecode] instance.
  */
@@ -133,8 +138,19 @@ class VulnerableCode(
      * Convert this vulnerability from the VulnerableCode data model to a [Vulnerability]. Populate [issues] if this
      * fails.
      */
-    private fun VulnerableCodeService.Vulnerability.toModel(issues: MutableList<Issue>): Vulnerability =
-        Vulnerability(id = preferredCommonId(), references = references.flatMap { it.toModel(issues) })
+    private fun VulnerableCodeService.Vulnerability.toModel(issues: MutableList<Issue>): Vulnerability {
+        val description = description?.ifBlank { null }
+        return Vulnerability(
+            id = preferredCommonId(),
+            // VulnerableCode API v1 has no dedicated summary field (its summary actually is the description), so try to
+            // summarize the description.
+            summary = description?.take(MAX_SUMMARY_LENGTH)?.let {
+                if (it.length < description.length) "$it..." else it
+            },
+            description = description,
+            references = references.flatMap { it.toModel(issues) }
+        )
+    }
 
     /**
      * Convert this reference from the VulnerableCode data model to a list of [VulnerabilityReference] objects.

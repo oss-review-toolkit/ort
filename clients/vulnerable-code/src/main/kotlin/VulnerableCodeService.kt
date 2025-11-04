@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.clients.vulnerablecode
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNames
@@ -128,6 +129,10 @@ interface VulnerableCodeService {
     data class Vulnerability(
         /** The VulnerableCode-specific identifier for this vulnerability. */
         val vulnerabilityId: String,
+
+        /** A description of the vulnerability. Older versions of VulnerableCode do not have this field. */
+        @SerialName("summary")
+        val description: String? = null,
 
         /** A list with [VulnerabilityReference]s pointing to sources of information about this vulnerability. */
         val references: List<VulnerabilityReference>,
