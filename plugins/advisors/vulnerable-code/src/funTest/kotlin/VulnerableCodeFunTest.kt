@@ -36,7 +36,7 @@ class VulnerableCodeFunTest : WordSpec({
         "return findings for QUIC" {
             val vc = VulnerableCodeFactory.create()
             val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
-            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
             val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
 
@@ -62,7 +62,7 @@ class VulnerableCodeFunTest : WordSpec({
         "return findings for Guava" {
             val vc = VulnerableCodeFactory.create()
             val id = Identifier("Maven:com.google.guava:guava:19.0")
-            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
             val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
 
@@ -88,7 +88,7 @@ class VulnerableCodeFunTest : WordSpec({
         "return findings for Commons-Compress" {
             val vc = VulnerableCodeFactory.create()
             val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
-            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
             val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
 
@@ -114,7 +114,7 @@ class VulnerableCodeFunTest : WordSpec({
         "return findings for Elliptic" {
             val vc = VulnerableCodeFactory.create()
             val id = Identifier("NPM::elliptic:6.5.7")
-            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
             val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
 
