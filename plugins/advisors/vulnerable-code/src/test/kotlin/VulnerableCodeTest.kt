@@ -193,6 +193,8 @@ class VulnerableCodeTest : WordSpec({
             val expLog4jVulnerabilities = listOf(
                 Vulnerability(
                     id = "GHSA-jfh8-c2jp-5v3q",
+                    summary = "Remote code injection in Log4j",
+                    description = "Remote code injection in Log4j",
                     references = listOf(
                         VulnerabilityReference(
                             URI("http://ref.com/files/165225/Apache-Log4j2-2.14.1-Remote-Code-Execution.html"),
@@ -205,6 +207,8 @@ class VulnerableCodeTest : WordSpec({
                 ),
                 Vulnerability(
                     id = "CVE-2021-44832",
+                    summary = "Improper Input Validation and Injection in Apache Log4j2",
+                    description = "Improper Input Validation and Injection in Apache Log4j2",
                     references = listOf(
                         VulnerabilityReference(
                             URI("https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2021-44832.json"),
