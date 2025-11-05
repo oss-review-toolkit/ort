@@ -35,9 +35,9 @@ class PoetryFunTest : WordSpec({
         "return the expected python version" {
             getPythonVersion("~3.10") shouldBe "3.10"
             getPythonVersion("^3.10,<3.11") shouldBe "3.10"
-            getPythonVersion("^3.10") shouldBe "3.13"
-            getPythonVersion("^3.11,<4.0") shouldBe "3.13"
-            getPythonVersion("^3.10,<4.0") shouldBe "3.13"
+            getPythonVersion("^3.10") shouldBe "3.14"
+            getPythonVersion("^3.11,<4.0") shouldBe "3.14"
+            getPythonVersion("^3.10,<4.0") shouldBe "3.14"
         }
 
         "return null if constraint cannot be satisfied" {
