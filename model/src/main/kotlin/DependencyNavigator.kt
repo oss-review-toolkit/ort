@@ -172,7 +172,7 @@ interface DependencyNavigator {
      */
     private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Identifier, List<Identifier>> {
         data class QueueItem(
-            val pkgRef: DependencyNode,
+            val node: DependencyNode,
             val parent: DependencyNode?
         )
 
@@ -186,18 +186,18 @@ interface DependencyNavigator {
 
         while (queue.isNotEmpty()) {
             val item = queue.poll()
-            if (item.pkgRef in predecessorForVisitedNode) continue
+            if (item.node in predecessorForVisitedNode) continue
 
-            predecessorForVisitedNode[item.pkgRef] = item.parent
+            predecessorForVisitedNode[item.node] = item.parent
             // Once any node with a particular identifier is visited, the endpoint of the shortest path to that
             // identifier is known to be that visited node.
-            firstVisitedNodeForId.putIfAbsent(item.pkgRef.id, item.pkgRef)
+            firstVisitedNodeForId.putIfAbsent(item.node.id, item.node)
 
-            item.pkgRef.visitDependencies { dependencyNodes ->
+            item.node.visitDependencies { dependencyNodes ->
                 dependencyNodes.forEach { node ->
                     val ref = node.getStableReference()
                     if (ref !in predecessorForVisitedNode) {
-                        queue.offer(QueueItem(ref, item.pkgRef))
+                        queue.offer(QueueItem(ref, item.node))
                     }
                 }
             }
