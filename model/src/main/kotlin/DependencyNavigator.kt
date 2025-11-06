@@ -157,10 +157,9 @@ interface DependencyNavigator {
      */
     private fun getShortestPathForScope(project: Project, scope: String): Map<Identifier, List<Identifier>> {
         val directDependencies = directDependencies(project, scope)
-        val scopeDependencies = scopeDependencies(project, scope)
-        val shortestPaths = getShortestPathsForScope(directDependencies, scopeDependencies)
+        val shortestPaths = getShortestPathsForScope(directDependencies)
 
-        val unvisitedDependencies = scopeDependencies - shortestPaths.keys
+        val unvisitedDependencies = scopeDependencies(project, scope) - shortestPaths.keys
         require(unvisitedDependencies.isEmpty()) {
             "Could not find the shortest path for these dependencies: ${unvisitedDependencies.joinToString()}"
         }
@@ -169,38 +168,52 @@ interface DependencyNavigator {
     }
 
     /**
-     * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes] and a set with
-     * [allDependencies].
+     * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes].
      */
-    private fun getShortestPathsForScope(
-        nodes: Sequence<DependencyNode>,
-        allDependencies: Set<Identifier>
-    ): Map<Identifier, List<Identifier>> {
+    private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Identifier, List<Identifier>> {
         data class QueueItem(
             val pkgRef: DependencyNode,
-            val parents: List<Identifier>
+            val parent: DependencyNode?
         )
 
-        val remainingIds = allDependencies.toMutableSet()
+        // A node is visited if and only if it is a key in this map.
+        val predecessorForVisitedNode = mutableMapOf<DependencyNode, DependencyNode?>()
         val queue = LinkedList<QueueItem>()
-        val result = sortedMapOf<Identifier, List<Identifier>>()
+        // Keep track of the end-points of the shortest paths to speed up the re-construction.
+        val firstVisitedNodeForId = mutableMapOf<Identifier, DependencyNode>()
 
-        nodes.forEach { queue.offer(QueueItem(it.getStableReference(), emptyList())) }
+        nodes.forEach { queue.offer(QueueItem(it.getStableReference(), null)) }
 
         while (queue.isNotEmpty()) {
             val item = queue.poll()
-            if (item.pkgRef.id in remainingIds) {
-                result[item.pkgRef.id] = item.parents
-                remainingIds -= item.pkgRef.id
-            }
+            if (item.pkgRef in predecessorForVisitedNode) continue
 
-            val newParents = item.parents + item.pkgRef.id
+            predecessorForVisitedNode[item.pkgRef] = item.parent
+            // Once any node with a particular identifier is visited, the endpoint of the shortest path to that
+            // identifier is known to be that visited node.
+            firstVisitedNodeForId.putIfAbsent(item.pkgRef.id, item.pkgRef)
+
             item.pkgRef.visitDependencies { dependencyNodes ->
-                dependencyNodes.forEach { node -> queue.offer(QueueItem(node.getStableReference(), newParents)) }
+                dependencyNodes.forEach { node ->
+                    val ref = node.getStableReference()
+                    if (ref !in predecessorForVisitedNode) {
+                        queue.offer(QueueItem(ref, item.pkgRef))
+                    }
+                }
             }
         }
 
-        return result
+        // Reconstruct the shortest paths.
+        return firstVisitedNodeForId.mapValues { (_, node) ->
+            LinkedList<Identifier>().apply {
+                var current = predecessorForVisitedNode[node]
+
+                while (current != null) {
+                    addFirst(current.id)
+                    current = predecessorForVisitedNode[current]
+                }
+            }
+        }
     }
 
     /**
