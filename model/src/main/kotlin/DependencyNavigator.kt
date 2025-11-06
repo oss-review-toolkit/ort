@@ -155,8 +155,18 @@ interface DependencyNavigator {
      * Determine the map of the shortest paths for all the dependencies of a [project], given its map of
      * [projectDependencies].
      */
-    private fun getShortestPathForScope(project: Project, scope: String): Map<Identifier, List<Identifier>> =
-        getShortestPathsForScope(directDependencies(project, scope), scopeDependencies(project, scope))
+    private fun getShortestPathForScope(project: Project, scope: String): Map<Identifier, List<Identifier>> {
+        val directDependencies = directDependencies(project, scope)
+        val scopeDependencies = scopeDependencies(project, scope)
+        val shortestPaths = getShortestPathsForScope(directDependencies, scopeDependencies)
+
+        val unvisitedDependencies = scopeDependencies - shortestPaths.keys
+        require(unvisitedDependencies.isEmpty()) {
+            "Could not find the shortest path for these dependencies: ${unvisitedDependencies.joinToString()}"
+        }
+
+        return shortestPaths
+    }
 
     /**
      * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes] and a set with
@@ -188,10 +198,6 @@ interface DependencyNavigator {
             item.pkgRef.visitDependencies { dependencyNodes ->
                 dependencyNodes.forEach { node -> queue.offer(QueueItem(node.getStableReference(), newParents)) }
             }
-        }
-
-        require(remainingIds.isEmpty()) {
-            "Could not find the shortest path for these dependencies: ${remainingIds.joinToString()}"
         }
 
         return result
