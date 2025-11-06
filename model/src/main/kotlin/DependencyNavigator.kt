@@ -168,59 +168,59 @@ interface DependencyNavigator {
     }
 
     /**
-     * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes].
-     */
-    private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Identifier, List<Identifier>> {
-        data class QueueItem(
-            val node: DependencyNode,
-            val parent: DependencyNode?
-        )
-
-        // A node is visited if and only if it is a key in this map.
-        val predecessorForVisitedNode = mutableMapOf<DependencyNode, DependencyNode?>()
-        val queue = LinkedList<QueueItem>()
-        // Keep track of the end-points of the shortest paths to speed up the re-construction.
-        val firstVisitedNodeForId = mutableMapOf<Identifier, DependencyNode>()
-
-        nodes.forEach { queue.offer(QueueItem(it.getStableReference(), null)) }
-
-        while (queue.isNotEmpty()) {
-            val item = queue.poll()
-            if (item.node in predecessorForVisitedNode) continue
-
-            predecessorForVisitedNode[item.node] = item.parent
-            // Once any node with a particular identifier is visited, the endpoint of the shortest path to that
-            // identifier is known to be that visited node.
-            firstVisitedNodeForId.putIfAbsent(item.node.id, item.node)
-
-            item.node.visitDependencies { dependencyNodes ->
-                dependencyNodes.forEach { node ->
-                    val ref = node.getStableReference()
-                    if (ref !in predecessorForVisitedNode) {
-                        queue.offer(QueueItem(ref, item.node))
-                    }
-                }
-            }
-        }
-
-        // Reconstruct the shortest paths.
-        return firstVisitedNodeForId.mapValues { (_, node) ->
-            LinkedList<Identifier>().apply {
-                var current = predecessorForVisitedNode[node]
-
-                while (current != null) {
-                    addFirst(current.id)
-                    current = predecessorForVisitedNode[current]
-                }
-            }
-        }
-    }
-
-    /**
      * Traverse the given sequence of [dependencies] recursively to determine the depth of the dependency tree.
      */
     private fun getTreeDepthRecursive(dependencies: Sequence<DependencyNode>): Int =
         dependencies.map { dependency ->
             1 + dependency.visitDependencies { getTreeDepthRecursive(it) }
         }.maxOrNull() ?: 0
+}
+
+private data class QueueItem(
+    val node: DependencyNode,
+    val parent: DependencyNode?
+)
+
+/**
+ * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes].
+ */
+private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Identifier, List<Identifier>> {
+    // A node is visited if and only if it is a key in this map.
+    val predecessorForVisitedNode = mutableMapOf<DependencyNode, DependencyNode?>()
+    val queue = LinkedList<QueueItem>()
+    // Keep track of the end-points of the shortest paths to speed up the re-construction.
+    val firstVisitedNodeForId = mutableMapOf<Identifier, DependencyNode>()
+
+    nodes.forEach { queue.offer(QueueItem(it.getStableReference(), null)) }
+
+    while (queue.isNotEmpty()) {
+        val item = queue.poll()
+        if (item.node in predecessorForVisitedNode) continue
+
+        predecessorForVisitedNode[item.node] = item.parent
+        // Once any node with a particular identifier is visited, the endpoint of the shortest path to that
+        // identifier is known to be that visited node.
+        firstVisitedNodeForId.putIfAbsent(item.node.id, item.node)
+
+        item.node.visitDependencies { dependencyNodes ->
+            dependencyNodes.forEach { node ->
+                val ref = node.getStableReference()
+                if (ref !in predecessorForVisitedNode) {
+                    queue.offer(QueueItem(ref, item.node))
+                }
+            }
+        }
+    }
+
+    // Reconstruct the shortest paths.
+    return firstVisitedNodeForId.mapValues { (_, node) ->
+        LinkedList<Identifier>().apply {
+            var current = predecessorForVisitedNode[node]
+
+            while (current != null) {
+                addFirst(current.id)
+                current = predecessorForVisitedNode[current]
+            }
+        }
+    }
 }
