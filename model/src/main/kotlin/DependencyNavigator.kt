@@ -187,11 +187,9 @@ private data class QueueItem(
 private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Identifier, List<Identifier>> {
     // A node is visited if and only if it is a key in this map.
     val predecessorForVisitedNode = mutableMapOf<DependencyNode, DependencyNode?>()
-    val queue = LinkedList<QueueItem>()
     // Keep track of the end-points of the shortest paths to speed up the re-construction.
     val firstVisitedNodeForId = mutableMapOf<Identifier, DependencyNode>()
-
-    nodes.forEach { queue.offer(QueueItem(it.getStableReference(), null)) }
+    val queue = nodes.mapTo(LinkedList()) { QueueItem(it.getStableReference(), null) }
 
     while (queue.isNotEmpty()) {
         val item = queue.poll()
