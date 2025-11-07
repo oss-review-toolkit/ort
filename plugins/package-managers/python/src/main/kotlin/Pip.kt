@@ -60,7 +60,13 @@ data class PipConfig(
      * The Python version to resolve dependencies for. If not set, the version is detected from the environment and if
      * that fails, the default version is used.
      */
-    val pythonVersion: String?
+    val pythonVersion: String?,
+
+    /**
+     * If "true", enables verbose logging in `python-inspector`.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val pythonInspectorVerbose: Boolean
 )
 
 /**
@@ -125,7 +131,8 @@ class Pip internal constructor(
                     definitionFile = definitionFile,
                     pythonVersion = pythonVersion.split('.', limit = 3).take(2).joinToString(""),
                     operatingSystem = config.operatingSystem,
-                    analyzeSetupPyInsecurely = config.analyzeSetupPyInsecurely
+                    analyzeSetupPyInsecurely = config.analyzeSetupPyInsecurely,
+                    verbose = config.pythonInspectorVerbose
                 )
             } finally {
                 workingDir.resolve(".cache").safeDeleteRecursively()

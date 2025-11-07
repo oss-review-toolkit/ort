@@ -63,7 +63,8 @@ internal object PythonInspector : CommandLineTool {
         definitionFile: File,
         pythonVersion: String,
         operatingSystem: String,
-        analyzeSetupPyInsecurely: Boolean
+        analyzeSetupPyInsecurely: Boolean,
+        verbose: Boolean
     ): Result {
         val outputFile = createOrtTempFile(prefix = "python-inspector", suffix = ".json")
 
@@ -79,6 +80,10 @@ internal object PythonInspector : CommandLineTool {
 
             if (analyzeSetupPyInsecurely) {
                 add("--analyze-setup-py-insecurely")
+            }
+
+            if (verbose) {
+                add("--verbose")
             }
 
             if (definitionFile.name == "setup.py") {
