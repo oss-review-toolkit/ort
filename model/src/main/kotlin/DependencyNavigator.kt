@@ -192,19 +192,19 @@ private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Ident
     val queue = nodes.mapTo(LinkedList()) { QueueItem(it.getStableReference(), null) }
 
     while (queue.isNotEmpty()) {
-        val item = queue.poll()
-        if (item.node in predecessorForVisitedNode) continue
+        val (node, predecessorNode) = queue.poll()
+        if (node in predecessorForVisitedNode) continue
 
-        predecessorForVisitedNode[item.node] = item.predecessorNode
+        predecessorForVisitedNode[node] = predecessorNode
         // Once any node with a particular identifier is visited, the endpoint of the shortest path to that
         // identifier is known to be that visited node.
-        firstVisitedNodeForId.putIfAbsent(item.node.id, item.node)
+        firstVisitedNodeForId.putIfAbsent(node.id, node)
 
-        item.node.visitDependencies { dependencyNodes ->
+        node.visitDependencies { dependencyNodes ->
             dependencyNodes.forEach { dependencyNode ->
                 val ref = dependencyNode.getStableReference()
                 if (ref !in predecessorForVisitedNode) {
-                    queue.offer(QueueItem(ref, item.node))
+                    queue.offer(QueueItem(ref, node))
                 }
             }
         }
