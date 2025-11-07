@@ -201,8 +201,8 @@ private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Ident
         firstVisitedNodeForId.putIfAbsent(item.node.id, item.node)
 
         item.node.visitDependencies { dependencyNodes ->
-            dependencyNodes.forEach { node ->
-                val ref = node.getStableReference()
+            dependencyNodes.forEach { dependencyNode ->
+                val ref = dependencyNode.getStableReference()
                 if (ref !in predecessorForVisitedNode) {
                     queue.offer(QueueItem(ref, item.node))
                 }
