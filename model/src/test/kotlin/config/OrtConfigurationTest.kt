@@ -69,6 +69,7 @@ class OrtConfigurationTest : WordSpec({
 
             with(ortConfig.licenseFilePatterns) {
                 licenseFilenames should containExactly("license*")
+                noticeFilenames should containExactly("notice*")
                 patentFilenames should containExactly("patents")
                 otherLicenseFilenames should containExactly("readme*")
             }
