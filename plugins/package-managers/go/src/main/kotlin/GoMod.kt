@@ -424,6 +424,10 @@ private data class GoModule(
  */
 @Serializable
 private data class ModuleInfoFile(
+    @SerialName("Version")
+    val version: String,
+    @SerialName("Time")
+    val time: String,
     @SerialName("Origin")
     val origin: Origin
 ) {
