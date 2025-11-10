@@ -128,15 +128,10 @@ interface DependencyNavigator {
      * direct dependencies the shortest path is empty. The resulting map has scope names as keys; the values are maps
      * with the shorted paths to all the dependencies contained in that scope.
      */
-    fun getShortestPaths(project: Project): Map<String, Map<Identifier, List<Identifier>>> {
-        val pathMap = mutableMapOf<String, Map<Identifier, List<Identifier>>>()
-
-        scopeNames(project).forEach { scope ->
-            pathMap[scope] = getShortestPathForScope(project, scope)
+    fun getShortestPaths(project: Project): Map<String, Map<Identifier, List<Identifier>>> =
+        scopeNames(project).associateWith { scope ->
+            getShortestPathForScope(project, scope)
         }
-
-        return pathMap
-    }
 
     /**
      * Return the depth of the dependency tree rooted at the given [project] associated with this [scopeName]. If the
