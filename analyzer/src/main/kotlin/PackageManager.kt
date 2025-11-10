@@ -418,7 +418,7 @@ fun parseAuthorString(
         var email: String? = null
         var homepage: String? = null
 
-        // Extract an email address and remove it from the original autgor string.
+        // Extract an email address and remove it from the original author string.
         val e = emailDelimiters.toList().map { Regex.escape(it.toString()) }
         val emailRegex = Regex("${e.first()}(.+@.+)${e.last()}")
         cleanedAuthor = cleanedAuthor.replace(emailRegex) {
@@ -426,7 +426,7 @@ fun parseAuthorString(
             ""
         }
 
-        // Extract a homepage URL and remove it from the original autgor string.
+        // Extract a homepage URL and remove it from the original author string.
         val h = homepageDelimiters.toList().map { Regex.escape(it.toString()) }
         val homepageRegex = Regex("${h.first()}(.+(?:://|www|.).+)${h.last()}")
         cleanedAuthor = cleanedAuthor.replace(homepageRegex) {
