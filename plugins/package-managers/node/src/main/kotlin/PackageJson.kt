@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import java.io.File
+import java.io.IOException
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -49,9 +50,32 @@ internal fun parsePackageJson(file: File): PackageJson = parsePackageJson(file.r
 
 internal fun parsePackageJson(json: String): PackageJson = parsePackageJson(JSON.parseToJsonElement(json))
 
-internal fun parsePackageJsons(jsons: String): List<PackageJson> =
+internal fun parsePackageJsons(jsons: String): List<Result<PackageJson>> =
     jsons.byteInputStream().use { input ->
-        JSON.decodeToSequence<JsonElement>(input).mapTo(mutableListOf()) { parsePackageJson(it) }
+        JSON.decodeToSequence<JsonElement>(input).mapTo(mutableListOf()) { element ->
+            runCatching {
+                parsePackageJson(element)
+            }.recoverCatching {
+                if (element !is JsonObject) throw it
+
+                // Try to enrich the exception with more package details that are still available.
+                val name = (element["name"] as? JsonPrimitive)?.content
+                val version = (element["version"] as? JsonPrimitive)?.content
+                val homepage = (element["homepage"] as? JsonPrimitive)?.content
+                val gitHead = (element["gitHead"] as? JsonPrimitive)?.content
+
+                val message = buildString {
+                    append("Error parsing package JSON metadata for package")
+                    if (name != null) append(" named '$name'")
+                    if (version != null) append(" in version $version")
+                    if (homepage != null) append(" hosted at $homepage")
+                    if (homepage != null) append(" in revision $gitHead")
+                    append(".")
+                }
+
+                throw IOException(message, it)
+            }
+        }
     }
 
 internal fun parsePackageJson(element: JsonElement): PackageJson {

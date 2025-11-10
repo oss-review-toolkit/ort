@@ -26,9 +26,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
@@ -42,6 +44,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.getInstalledModulesDirs
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -82,9 +85,11 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
     NodePackageManager(NodePackageManagerType.YARN2) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
     internal val yarn2Command = Yarn2Command(config.corepackEnabled)
+
+    private val issues = mutableListOf<Issue>()
     private val moduleInfoResolver = ModuleInfoResolver { workingDir, moduleIds ->
         runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE).map { chunk ->
+            val resultChunks = moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE).map { chunk ->
                 async {
                     val process = yarn2Command.run(
                         "npm",
@@ -99,7 +104,13 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
                     parsePackageJsons(process.stdout)
                 }
-            }.awaitAll().flatten().toSet()
+            }.awaitAll()
+
+            resultChunks.flatten().mapNotNullTo(mutableSetOf()) { result ->
+                result.onFailure {
+                    issues += createAndLogIssue(it.collectMessages())
+                }.getOrNull()
+            }
         }
     }
 
@@ -155,7 +166,8 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
             ProjectAnalyzerResult(
                 project = project.copy(scopeNames = scopes.getNames()),
-                packages = emptySet()
+                packages = emptySet(),
+                issues = issues
             )
         }
     }
