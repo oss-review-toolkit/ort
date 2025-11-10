@@ -186,10 +186,20 @@ private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(s
             is JsonObject -> listOf(this)
 
             is JsonPrimitive -> {
-                parseAuthorString(contentOrNull)
-                    .filter { it.name != null }
-                    .map { Author(checkNotNull(it.name), it.email, it.homepage) }
-                    .map { JSON.encodeToJsonElement(it) }
+                parseAuthorString(contentOrNull).mapNotNull { info ->
+                    when {
+                        info.name != null -> Author(checkNotNull(info.name), info.email, info.homepage)
+                        info.email == null -> null
+                        else -> {
+                            val nameFromEmail = checkNotNull(info.email).substringBefore('@')
+                                .replace('.', ' ')
+                                .replace(Regex("\\b([a-z])")) { it.value.uppercase() }
+                            Author(nameFromEmail, info.email, info.homepage)
+                        }
+                    }
+                }.map {
+                    JSON.encodeToJsonElement(it)
+                }
             }
 
             else -> throw SerializationException("Unexpected JSON element.")

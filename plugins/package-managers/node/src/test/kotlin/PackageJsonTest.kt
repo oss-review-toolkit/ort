@@ -29,10 +29,24 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Author
 
 class PackageJsonTest : WordSpec({
     "parsePackageJson()" should {
-        "deserialize the author from a textual node" {
+        "deserialize the author from a primitive node with name and email" {
             val json = """
             {
               "author": "Jane Doe <jane.doe@example.com>"
+            }
+            """.trimIndent()
+
+            val packageJson = parsePackageJson(json)
+
+            packageJson.authors should containExactlyInAnyOrder(
+                Author(name = "Jane Doe", email = "jane.doe@example.com")
+            )
+        }
+
+        "deserialize the author from a primitive node with email only" {
+            val json = """
+            {
+              "author": "<jane.doe@example.com>"
             }
             """.trimIndent()
 
