@@ -226,10 +226,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
     compilerOptions {
         allWarningsAsErrors = true
-        freeCompilerArgs = listOf(
-            "-Xannotation-default-target=param-property",
-            "-Xconsistent-data-class-copy-visibility"
-        )
+        freeCompilerArgs.addAll("-Xannotation-default-target=param-property", "-Xconsistent-data-class-copy-visibility")
         jvmTarget = maxKotlinJvmTarget
         optIn = optInRequirements
     }
