@@ -429,7 +429,7 @@ private data class ModuleInfoFile(
     @SerialName("Time")
     val time: String,
     @SerialName("Origin")
-    val origin: Origin
+    val origin: Origin? = null
 ) {
     @Serializable
     data class Origin(
@@ -456,13 +456,14 @@ private fun ModuleInfo.toVcsInfo(): VcsInfo? {
     val escapedVersion = escapeModuleVersion(version)
     val infoFile = goMod?.let { File(it).resolveSibling("$escapedVersion.info") } ?: return null
     val info = infoFile.inputStream().use { JSON.decodeFromStream<ModuleInfoFile>(it) }
-    val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
+    val origin = info.origin ?: return null
+    val type = origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
 
     return VcsInfo(
         type = type,
-        url = checkNotNull(info.origin.url),
-        revision = checkNotNull(info.origin.hash),
-        path = info.origin.subdir.orEmpty()
+        url = checkNotNull(origin.url),
+        revision = checkNotNull(origin.hash),
+        path = origin.subdir.orEmpty()
     )
 }
 
