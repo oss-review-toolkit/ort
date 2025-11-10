@@ -56,19 +56,15 @@ import org.eclipse.aether.RepositorySystem
 import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.artifact.DefaultArtifact
-import org.eclipse.aether.impl.RemoteRepositoryManager
-import org.eclipse.aether.impl.RepositoryConnectorProvider
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest
-import org.eclipse.aether.spi.connector.ArtifactDownload
+import org.eclipse.aether.resolution.ArtifactRequest
 import org.eclipse.aether.spi.connector.layout.RepositoryLayout
 import org.eclipse.aether.spi.connector.layout.RepositoryLayoutProvider
 import org.eclipse.aether.spi.connector.transport.GetTask
+import org.eclipse.aether.spi.connector.transport.PeekTask
 import org.eclipse.aether.spi.connector.transport.TransporterProvider
-import org.eclipse.aether.transfer.AbstractTransferListener
-import org.eclipse.aether.transfer.NoRepositoryConnectorException
-import org.eclipse.aether.transfer.TransferEvent
 import org.eclipse.aether.util.repository.JreProxySelector
 
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -277,44 +273,15 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
     private fun requestRemoteArtifact(
         artifact: Artifact,
-        repositories: List<RemoteRepository>,
-        useReposFromDependencies: Boolean
+        artifactRepository: RemoteRepository,
+        allRepositories: List<RemoteRepository>,
     ): RemoteArtifact {
-        val allRepositories = if (useReposFromDependencies) {
-            val repoSystem = containerLookup<RepositorySystem>()
-
-            // Create an artifact descriptor to get the list of repositories from the related POM file.
-            val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
-            val artifactDescriptorResult = repoSystem
-                .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
-            repositories + artifactDescriptorResult.repositories
-        } else {
-            repositories
-        }.toSet()
-
         val cacheKey = "$artifact@$allRepositories"
 
         remoteArtifactCache.read(cacheKey)?.let {
             logger.debug { "Reading remote artifact for '$artifact' from disk cache." }
             return it.fromYaml()
         }
-
-        // Filter out local repositories, as remote artifacts should never point to files on the local disk.
-        val remoteRepositories = allRepositories.filterNot {
-            // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
-            it.url.startsWith("file:/")
-        }.mapTo(mutableSetOf()) { repository ->
-            RemoteRepository.Builder(repository).apply {
-                repositorySystemSession.proxySelector.getProxy(repository)?.also(::setProxy)
-                repositorySystemSession.authenticationSelector.getAuthentication(repository)?.also(::setAuthentication)
-            }.build()
-        }
-
-        if (allRepositories.size > remoteRepositories.size) {
-            logger.debug { "Ignoring local repositories ${allRepositories - remoteRepositories}." }
-        }
-
-        logger.debug { "Searching for '$artifact' in $remoteRepositories." }
 
         data class ArtifactLocationInfo(
             val repository: RemoteRepository,
@@ -325,7 +292,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
         val repositoryLayoutProvider = containerLookup<RepositoryLayoutProvider>()
 
-        val locationInfo = remoteRepositories.mapNotNull { repository ->
+        val locationInfo = listOf(artifactRepository).mapNotNull { repository ->
             val repositoryLayout = runCatching {
                 repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
             }.onFailure {
@@ -341,8 +308,6 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
             }
         }
 
-        val remoteRepositoryManager = containerLookup<RemoteRepositoryManager>()
-        val repositoryConnectorProvider = containerLookup<RepositoryConnectorProvider>()
         val transporterProvider = containerLookup<TransporterProvider>()
 
         // Check the remote repositories for the availability of the artifact.
@@ -350,73 +315,47 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
         locationInfo.forEach { info ->
             logger.debug { "Trying to download artifact '$artifact' from ${info.downloadUrl}." }
 
-            val snapshot = artifact.isSnapshot
-            val policy = remoteRepositoryManager.getPolicy(
-                repositorySystemSession, info.repository, !snapshot, snapshot
-            )
+            val checksumLocations = info.layout.getChecksumLocations(artifact, false, info.location)
 
-            val localPath = repositorySystemSession.localRepositoryManager
-                .getPathForRemoteArtifact(artifact, info.repository, "project")
-            val downloadFile = File(repositorySystemSession.localRepositoryManager.repository.basedir, localPath)
+            // TODO: Could store multiple checksums in model instead of only the first.
+            val checksumLocation = checksumLocations.first()
 
-            val artifactDownload = ArtifactDownload(artifact, "project", downloadFile, policy.checksumPolicy)
-            artifactDownload.isExistenceCheck = true
-            artifactDownload.listener = object : AbstractTransferListener() {
-                override fun transferFailed(event: TransferEvent?) {
-                    logger.debug {
-                        "Transfer failed for repository with ID '${info.repository.id}': $event"
-                    }
-                }
+            logger.info { "Getting checksum for '$artifact' in '${info.repository}' ${checksumLocation}." }
 
-                override fun transferSucceeded(event: TransferEvent?) {
-                    logger.debug { "Transfer succeeded: $event" }
-                }
+            val transporter = transporterProvider.newTransporter(repositorySystemSession, info.repository)
+
+            val hash = runCatching {
+                val task = GetTask(checksumLocation.location)
+                transporter.get(task)
+
+                parseChecksum(task.dataString, checksumLocation.checksumAlgorithmFactory.name)
+            }.getOrElse {
+                it.showStackTrace()
+
+                logger.warn { "Could not get checksum for '$artifact': ${it.collectMessages()}" }
+
+                // Fall back to an empty hash.
+                Hash.NONE
             }
 
-            try {
-                wrapMavenSession {
-                    repositoryConnectorProvider.newRepositoryConnector(repositorySystemSession, info.repository).use {
-                        it.get(listOf(artifactDownload), null)
-                    }
-                }
-            } catch (e: NoRepositoryConnectorException) {
-                e.showStackTrace()
-
-                logger.warn { "Could not create connector for repository '${info.repository}': ${e.collectMessages()}" }
-
-                return@forEach
-            }
-
-            if (artifactDownload.exception == null) {
-                logger.debug { "Found '$artifact' in '${info.repository}'." }
-
-                val checksumLocations = info.layout.getChecksumLocations(artifact, false, info.location)
-
-                // TODO: Could store multiple checksums in model instead of only the first.
-                val checksumLocation = checksumLocations.first()
-
-                val transporter = transporterProvider.newTransporter(repositorySystemSession, info.repository)
-
-                val hash = runCatching {
-                    val task = GetTask(checksumLocation.location)
-                    transporter.get(task)
-
-                    parseChecksum(task.dataString, checksumLocation.checksumAlgorithmFactory.name)
+            if (hash == Hash.NONE) {
+                val artifactFound = runCatching {
+                    val task = PeekTask(info.location)
+                    transporter.peek(task)
+                    true
                 }.getOrElse {
                     it.showStackTrace()
-
-                    logger.warn { "Could not get checksum for '$artifact': ${it.collectMessages()}" }
-
-                    // Fall back to an empty hash.
-                    Hash.NONE
+                    logger.warn { "Could not get artifact '$artifact': ${it.collectMessages()}" }
+                    false
                 }
 
-                return RemoteArtifact(info.downloadUrl, hash).also { remoteArtifact ->
-                    logger.debug { "Writing remote artifact for '$artifact' to disk cache." }
-                    remoteArtifactCache.write(cacheKey, remoteArtifact.toYaml())
+                if (!artifactFound) {
+                    return@forEach
                 }
-            } else {
-                logger.debug { artifactDownload.exception.collectMessages() }
+            }
+            return RemoteArtifact(info.downloadUrl, hash).also { remoteArtifact ->
+                logger.debug { "Writing remote artifact for '$artifact' to disk cache." }
+                remoteArtifactCache.write(cacheKey, remoteArtifact.toYaml())
             }
         }
 
@@ -499,21 +438,48 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
         val declaredLicenses = parseLicenses(mavenProject)
         val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
 
-        val binaryRemoteArtifact = localProject?.let {
-            RemoteArtifact.EMPTY
-        } ?: requestRemoteArtifact(artifact, repositories, useReposFromDependencies)
+        // retrieve the pom file for the artifact to know from which repository it is coming
+        val pomArtifact = artifact.let {
+            DefaultArtifact(it.groupId, it.artifactId, null, "pom", it.version)
+        }
+        val pomArtifactRequest = ArtifactRequest(pomArtifact, repositories, "project")
+        val result = containerLookup<RepositorySystem>().resolveArtifact(repositorySystemSession, pomArtifactRequest)
+        val artifactRepository = result.repository
+
+        // reconstruct all repositories that would be used for resolving the artifact
+        // the repositories are used to construct a cache key for the artifact
+        val allRepositories = if (useReposFromDependencies) {
+            val repoSystem = containerLookup<RepositorySystem>()
+
+            // Create an artifact descriptor to get the list of repositories from the related POM file.
+            val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
+            val artifactDescriptorResult = repoSystem
+                .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
+            repositories + artifactDescriptorResult.repositories
+        } else {
+            repositories
+        }.toSet()
+
+        val binaryRemoteArtifact = when {
+            localProject != null -> RemoteArtifact.EMPTY
+            artifactRepository !is RemoteRepository -> RemoteArtifact.EMPTY
+            else -> {
+                requestRemoteArtifact(artifact, artifactRepository, allRepositories.toList())
+            }
+        }
 
         val isBinaryArtifactModified = isArtifactModified(artifact, binaryRemoteArtifact)
 
         val sourceRemoteArtifact = when {
             localProject != null -> RemoteArtifact.EMPTY
+            artifactRepository !is RemoteRepository -> RemoteArtifact.EMPTY
             artifact.extension == "pom" -> binaryRemoteArtifact
             else -> {
                 val sourceArtifact = artifact.let {
                     DefaultArtifact(it.groupId, it.artifactId, "sources", "jar", it.version)
                 }
 
-                requestRemoteArtifact(sourceArtifact, repositories, useReposFromDependencies)
+                requestRemoteArtifact(sourceArtifact, artifactRepository, allRepositories.toList())
             }
         }
 
