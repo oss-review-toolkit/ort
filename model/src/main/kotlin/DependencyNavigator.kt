@@ -157,14 +157,7 @@ interface DependencyNavigator {
      */
     private fun getShortestPathForScope(project: Project, scope: String): Map<Identifier, List<Identifier>> {
         val directDependencies = directDependencies(project, scope)
-        val shortestPaths = getShortestPathsForScope(directDependencies)
-
-        val unvisitedDependencies = scopeDependencies(project, scope) - shortestPaths.keys
-        require(unvisitedDependencies.isEmpty()) {
-            "Could not find the shortest path for these dependencies: ${unvisitedDependencies.joinToString()}"
-        }
-
-        return shortestPaths
+        return getShortestPathsForScope(directDependencies)
     }
 
     /**
