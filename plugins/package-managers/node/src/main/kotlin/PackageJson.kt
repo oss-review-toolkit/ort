@@ -176,8 +176,7 @@ data class PackageJson(
 private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(serializer<List<Author>>()) {
     override fun transformDeserialize(element: JsonElement): JsonElement =
         when (element) {
-            is JsonObject -> JsonArray(listOf(element))
-            is JsonPrimitive -> JsonArray(element.toAuthorObject())
+            is JsonObject, is JsonPrimitive -> JsonArray(element.toAuthorObject())
             is JsonArray -> JsonArray(element.flatMap { it.toAuthorObject() })
         }
 
