@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
-import org.ossreviewtoolkit.utils.common.collapseWhitespace
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
@@ -400,47 +399,6 @@ abstract class PackageManager(val projectType: String) : Plugin {
         }
     }
 }
-
-/**
- * Parse a string with metadata about an [author] that several package managers use and try to extract the author's
- * name, email address, and homepage. These properties are typically surrounded by specific delimiters, e.g. the email
- * address is often surrounded by angle brackets (see [emailDelimiters]) and the homepage is often surrounded by
- * parentheses (see [homepageDelimiters]). Return [AuthorInfo] for these properties where unavailable ones are set to
- * null.
- */
-fun parseAuthorString(
-    author: String?,
-    emailDelimiters: Pair<Char, Char> = '<' to '>',
-    homepageDelimiters: Pair<Char, Char> = '(' to ')'
-): Set<AuthorInfo> =
-    author?.split(',', '\n')?.mapTo(mutableSetOf()) { singleAuthor ->
-        var cleanedAuthor = singleAuthor
-        var email: String? = null
-        var homepage: String? = null
-
-        // Extract an email address and remove it from the original author string.
-        val e = emailDelimiters.toList().map { Regex.escape(it.toString()) }
-        val emailRegex = Regex("${e.first()}(.+@.+)${e.last()}")
-        cleanedAuthor = cleanedAuthor.replace(emailRegex) {
-            email = it.groupValues.last()
-            ""
-        }
-
-        // Extract a homepage URL and remove it from the original author string.
-        val h = homepageDelimiters.toList().map { Regex.escape(it.toString()) }
-        val homepageRegex = Regex("${h.first()}(.+(?:://|www|.).+)${h.last()}")
-        cleanedAuthor = cleanedAuthor.replace(homepageRegex) {
-            homepage = it.groupValues.last()
-            ""
-        }
-
-        AuthorInfo(cleanedAuthor.collapseWhitespace().ifEmpty { null }, email, homepage)
-    }.orEmpty()
-
-/**
- * Information about an author, including the [name], [email] address, and [homepage] URL.
- */
-data class AuthorInfo(val name: String?, val email: String?, val homepage: String?)
 
 private fun PackageManagerResult.addDependencyGraphIfMissing(): PackageManagerResult {
     // If the condition is true, then [CompatibilityDependencyNavigator] constructs a [DependencyGraphNavigator].
