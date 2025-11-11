@@ -183,7 +183,15 @@ private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(s
 
     private fun JsonElement.toAuthorObject(): List<JsonElement> =
         when (this) {
-            is JsonObject -> listOf(this)
+            is JsonObject -> when {
+                get("name") == null -> {
+                    val name = get("email")?.let { guessNameFromEmail(it.jsonPrimitive.content) }
+                    val nameEntry = "name" to JsonPrimitive(name)
+                    listOf(JsonObject(this + nameEntry))
+                }
+
+                else -> listOf(this)
+            }
 
             is JsonPrimitive -> parseAuthorString(contentOrNull).mapNotNull { info ->
                 when {
