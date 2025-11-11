@@ -40,6 +40,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.serializer
 
+import org.ossreviewtoolkit.analyzer.guessNameFromEmail
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Author
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Repository
@@ -189,12 +190,7 @@ private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(s
                     when {
                         info.name != null -> Author(checkNotNull(info.name), info.email, info.homepage)
                         info.email == null -> null
-                        else -> {
-                            val nameFromEmail = checkNotNull(info.email).substringBefore('@')
-                                .replace('.', ' ')
-                                .replace(Regex("\\b([a-z])")) { it.value.uppercase() }
-                            Author(nameFromEmail, info.email, info.homepage)
-                        }
+                        else -> Author(guessNameFromEmail(checkNotNull(info.email)), info.email, info.homepage)
                     }
                 }.map {
                     JSON.encodeToJsonElement(it)

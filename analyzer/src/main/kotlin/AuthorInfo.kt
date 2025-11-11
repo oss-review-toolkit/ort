@@ -61,3 +61,13 @@ fun parseAuthorString(
 
         AuthorInfo(cleanedAuthor.collapseWhitespace().ifEmpty { null }, email, homepage)
     }.orEmpty()
+
+/**
+ * Trivially guess an author's name from the given [email] address.
+ */
+fun guessNameFromEmail(email: String): String =
+    email.substringBefore('@')
+        .replace('.', ' ')
+        .replace(lowercaseStartRegex) { it.value.uppercase() }
+
+private val lowercaseStartRegex = Regex("\\b([a-z])")
