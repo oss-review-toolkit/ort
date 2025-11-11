@@ -185,16 +185,14 @@ private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(s
         when (this) {
             is JsonObject -> listOf(this)
 
-            is JsonPrimitive -> {
-                parseAuthorString(contentOrNull).mapNotNull { info ->
-                    when {
-                        info.name != null -> Author(checkNotNull(info.name), info.email, info.homepage)
-                        info.email == null -> null
-                        else -> Author(guessNameFromEmail(checkNotNull(info.email)), info.email, info.homepage)
-                    }
-                }.map {
-                    JSON.encodeToJsonElement(it)
+            is JsonPrimitive -> parseAuthorString(contentOrNull).mapNotNull { info ->
+                when {
+                    info.name != null -> Author(checkNotNull(info.name), info.email, info.homepage)
+                    info.email == null -> null
+                    else -> Author(guessNameFromEmail(checkNotNull(info.email)), info.email, info.homepage)
                 }
+            }.map {
+                JSON.encodeToJsonElement(it)
             }
 
             else -> throw SerializationException("Unexpected JSON element.")
