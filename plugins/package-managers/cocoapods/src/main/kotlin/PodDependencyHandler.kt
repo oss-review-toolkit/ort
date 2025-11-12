@@ -173,4 +173,10 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
 
         return podspecProcess.stdout.trim()
     }
+
+    override fun areDependenciesEqual(dependenciesA: List<Lockfile.Pod>, dependenciesB: List<Lockfile.Pod>): Boolean {
+        val propertiesA = dependenciesA.mapTo(mutableSetOf()) { it.name to it.version }
+        val propertiesB = dependenciesB.mapTo(mutableSetOf()) { it.name to it.version }
+        return propertiesA == propertiesB
+    }
 }
