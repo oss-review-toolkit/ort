@@ -195,6 +195,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             manager.afterResolution(info.absoluteProjectPath, definitionFiles)
         }
 
+        logger.info { "Building analyzer result." }
+
         return state.buildResult(excludes)
     }
 

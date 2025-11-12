@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
@@ -114,11 +116,15 @@ class AnalyzerResultBuilder {
 private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
     if (dependencyGraphs.size < 2) return this
 
+    logger.info { "Resolving package manager dependencies across ${dependencyGraphs.size} graphs." }
+
     val handler = PackageManagerDependencyHandler(this)
     val navigator = DependencyGraphNavigator(dependencyGraphs)
 
     val graphs = dependencyGraphs.mapValues { (packageManagerName, graph) ->
         val builder = DependencyGraphBuilder(handler)
+
+        logger.info { "Resolving dependencies for $packageManagerName across ${graph.scopes.size} scope(s)." }
 
         graph.scopes.forEach { (scopeName, rootIndices) ->
             val nodes = navigator.dependenciesAccessor(packageManagerName, graph, rootIndices)
