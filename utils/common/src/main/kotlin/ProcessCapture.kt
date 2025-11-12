@@ -93,7 +93,7 @@ class ProcessCapture(
         }
 
     val commandLine = command.joinToString(" ")
-    val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")!!
+    val usedWorkingDir = builder.directory()?.normalize() ?: System.getProperty("user.dir")!!
 
     private val process = builder.start()
 
