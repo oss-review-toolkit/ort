@@ -116,10 +116,21 @@ class AnalyzerResultBuilder {
 private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
     if (dependencyGraphs.size < 2) return this
 
-    logger.info { "Resolving package manager dependencies across ${dependencyGraphs.size} graphs." }
-
     val handler = PackageManagerDependencyHandler(this)
     val navigator = DependencyGraphNavigator(dependencyGraphs)
+
+    // Exit early if no graph contains placeholder nodes for package manager dependencies to avoid expensive graph
+    // reconstruction in those regular cases.
+    val hasPackageManagerDependencies = dependencyGraphs.any { (packageManagerName, graph) ->
+        graph.scopes.any { (_, rootIndices) ->
+            val nodes = navigator.dependenciesAccessor(packageManagerName, graph, rootIndices)
+            nodes.any { it.isPackageManagerDependency }
+        }
+    }
+
+    if (!hasPackageManagerDependencies) return this
+
+    logger.info { "Resolving package manager dependencies across ${dependencyGraphs.size} graphs." }
 
     // Resolve package manager dependencies by constructing new graphs that have the placeholder nodes replaced with
     // copies of the referenced nodes.
