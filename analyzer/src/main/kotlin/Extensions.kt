@@ -80,17 +80,25 @@ fun PackageManagerDependency.toPackageReference(issues: List<Issue> = emptyList(
     )
 
 /**
+ * Indicate whether this dependency is a package manager dependency.
+ */
+internal val DependencyNode.isPackageManagerDependency: Boolean
+    get() = id.type == TYPE
+
+/**
  * Decode this dependency node into a [PackageManagerDependency], or return null if this is not a package manager
  * dependency.
  */
 internal fun DependencyNode.toPackageManagerDependency(): PackageManagerDependency? =
-    id.type.takeIf { it == TYPE }?.let {
+    if (isPackageManagerDependency) {
         PackageManagerDependency(
             packageManager = id.namespace,
             definitionFile = id.name.decodeColon(),
             scope = id.version.substringAfter('@'),
             linkage = PackageLinkage.valueOf(id.version.substringBefore('@'))
         )
+    } else {
+        null
     }
 
 /**
