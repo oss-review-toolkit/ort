@@ -6,11 +6,11 @@ type: 'Bug'
 labels: ['to triage']
 
 ---
-### Describe the bug
+## Describe the bug
 
 A clear and concise description of what the bug is.
 
-### To Reproduce
+## To Reproduce
 
 Steps to reproduce the behavior:
 
@@ -19,11 +19,11 @@ Steps to reproduce the behavior:
 3. Finally do '...'
 4. See error
 
-### Expected behavior
+## Expected behavior
 
 A clear and concise description of what you expected to happen.
 
-### Console / log output
+## Console / log output
 
 Add console and / or log output that shows the error and additional context.
 No screenshots of plain text please, to keep text searchable.
@@ -32,7 +32,7 @@ No screenshots of plain text please, to keep text searchable.
 <copy & paste console output to here; no screenshots please>
 ```
 
-### Environment
+## Environment
 
 Output of the `ort requirements` command (ensure to remove any sensitive information manually):
 
@@ -52,6 +52,6 @@ Output of the `ort requirements` command (ensure to remove any sensitive informa
 <copy & paste console output to here; no screenshots please>
 ```
 
-### Additional context
+## Additional context
 
 Add any other context about the problem here.
