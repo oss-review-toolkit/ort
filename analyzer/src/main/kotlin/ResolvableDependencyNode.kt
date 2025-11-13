@@ -36,9 +36,9 @@ sealed class ResolvableDependencyNode : DependencyNode
 class ProjectScopeDependencyNode(
     override val id: Identifier,
     override val linkage: PackageLinkage,
-    override val issues: List<Issue>,
     private val dependencies: Sequence<DependencyNode>
 ) : ResolvableDependencyNode() {
+    override val issues: List<Issue> = emptyList()
     override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = block(dependencies)
 }
 

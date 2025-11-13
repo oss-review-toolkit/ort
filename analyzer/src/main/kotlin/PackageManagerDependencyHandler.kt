@@ -62,7 +62,6 @@ class PackageManagerDependencyHandler(
                 ProjectScopeDependencyNode(
                     id = project.id,
                     linkage = packageManagerDependency.linkage,
-                    issues = emptyList(),
                     dependencies = dependencies.map { it.getStableReference() }
                 )
             }
