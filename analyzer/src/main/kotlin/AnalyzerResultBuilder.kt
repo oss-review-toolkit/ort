@@ -121,6 +121,8 @@ private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
     val handler = PackageManagerDependencyHandler(this)
     val navigator = DependencyGraphNavigator(dependencyGraphs)
 
+    // Resolve package manager dependencies by constructing new graphs that have the placeholder nodes replaced with
+    // copies of the referenced nodes.
     val graphs = dependencyGraphs.mapValues { (packageManagerName, graph) ->
         val builder = DependencyGraphBuilder(handler)
 
@@ -133,6 +135,11 @@ private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
             }
 
             resolvableNodes.forEach { node ->
+                // TODO: Adding a dependency internally calls `areDependenciesEqual()`, but the implementation from
+                //       `PackageManagerDependencyHandler` and not any package-manager-specific override, meaning that
+                //       optimizations done there are lost here. Ideally, this would be solved by changing the whole
+                //       algorithm to not reconstruct the graph by copying all nodes, but by only replacing the
+                //       placeholder nodes for package manager dependencies with references to the respective graphs.
                 builder.addDependency(scopeName, node)
             }
         }
