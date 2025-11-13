@@ -43,9 +43,9 @@ import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.HostedDepe
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.PathDependency
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.SdkDependency
 
-internal fun parsePubspec(pubspecFile: File): Pubspec = parsePubspec(pubspecFile.readText())
+internal fun parsePubspec(pubspec: File) = parsePubspec(pubspec.readText())
 
-internal fun parsePubspec(pubspecYaml: String): Pubspec = YAML.decodeFromString(pubspecYaml)
+internal fun parsePubspec(pubspec: String) = YAML.decodeFromString<Pubspec>(pubspec)
 
 /**
  * See https://dart.dev/tools/pub/pubspec.
