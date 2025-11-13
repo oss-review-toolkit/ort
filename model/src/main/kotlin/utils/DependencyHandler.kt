@@ -72,6 +72,8 @@ interface DependencyHandler<D> {
      * checks are needed (like when ordering or duplicates matter).
      */
     fun areDependenciesEqual(dependenciesA: List<D>, dependenciesB: List<D>): Boolean {
+        if (dependenciesA.isEmpty() && dependenciesB.isEmpty()) return true
+
         // Do a cheap check on the size of distinct dependencies first.
         val depsA = dependenciesA.distinct()
         val depsB = dependenciesB.distinct()

@@ -137,7 +137,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
 
         return runCatching {
             // Convert the Ruby podspec file to JSON.
-            CocoaPodsCommand.run(parentFile, "ipc", "spec", "--silent", patchedPodspecFile.absolutePath)
+            CocoaPodsCommand.run(parentFile, "ipc", "spec", "--silent", patchedPodspecFile.canonicalPath)
                 .requireSuccess()
                 .stdout
         }.onFailure { e ->
@@ -172,5 +172,11 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         }
 
         return podspecProcess.stdout.trim()
+    }
+
+    override fun areDependenciesEqual(dependenciesA: List<Lockfile.Pod>, dependenciesB: List<Lockfile.Pod>): Boolean {
+        val propertiesA = dependenciesA.mapTo(mutableSetOf()) { it.name to it.version }
+        val propertiesB = dependenciesB.mapTo(mutableSetOf()) { it.name to it.version }
+        return propertiesA == propertiesB
     }
 }

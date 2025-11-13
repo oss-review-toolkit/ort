@@ -45,10 +45,9 @@ packages:
 - id: "Conan::bzip2:1.0.8"
   purl: "pkg:conan/bzip2@1.0.8"
   declared_licenses:
-  - "bzip2-1.0.8"
+  - "bzip2-1.0.6"
   declared_licenses_processed:
-    unmapped:
-    - "bzip2-1.0.8"
+    spdx_expression: "bzip2-1.0.6"
   description: "bzip2 is a free and open-source file compression program that uses\
     \ the Burrows Wheeler algorithm."
   homepage_url: "https://sourceware.org/bzip2"
