@@ -39,7 +39,9 @@ import kotlinx.serialization.encoding.Decoder
 
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo.Description
 
-internal fun parseLockfile(lockfile: File) = YAML.decodeFromString<Lockfile>(lockfile.readText())
+internal fun parseLockfile(lockfile: File) = parseLockfile(lockfile.readText())
+
+internal fun parseLockfile(lockfile: String) = YAML.decodeFromString<Lockfile>(lockfile)
 
 /**
  * See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/lock_file.dart#L18.
