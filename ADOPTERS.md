@@ -6,7 +6,7 @@ This really helps the project to gain momentum and credibility.
 It is a small contribution back to the project with a big impact.*
 
 | Organization | Contact | Description of Use |
-|--------------|---------|--------------------|
+| ------------ | ------- | ------------------ |
 | [Alliander](https://www.alliander.com/en/open-source/) | ospo@alliander.com | Alliander is mainly interested in the security side of the software supply chain. Alliander uses multiple tools and has evaluated even more, but currently ORT is unbeaten. ORT provides accurate and detailed scan results and allows us to define a thorough policy to use in evaluation. We are currently working to adopt ORT for thorough scans in addition to other tools. We are working with the community to get ORT running in GitHub Actions. |
 | [Cariad SE](https://cariad.technology) | oss@cariad.technology | Cariad uses ORT as the central orchestrator for end-to-end license and OSS compliance tooling with customized reports and data automation. All data produced is used by several services across the group. |
 | [Deutsche Telekom AG](https://www.telekom.de/) | daniel.eder@magenta.at | Deutsche Telekom is in the process of adopting ORT as part of our CI/CD chain and is working on a custom ORT reporter in our [ORT fork](https://github.com/telekom/ort). |
