@@ -28,6 +28,9 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 
+/**
+ * A special dependency handler to create and resolve dependencies between different package managers.
+ */
 class PackageManagerDependencyHandler(
     private val analyzerResult: AnalyzerResult
 ) : DependencyHandler<ResolvableDependencyNode> {
