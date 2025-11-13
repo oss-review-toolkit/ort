@@ -364,7 +364,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             ).summary
 
             summary.snippetFindings should beEmpty()
-            coVerify {
+            coVerify(exactly = 1) {
                 service.createScan(USER, API_KEY, projectCode, scanCode, null, null, comment)
                 service.removeUploadedContent(USER, API_KEY, scanCode)
                 service.uploadFile(USER, API_KEY, scanCode, any())
@@ -876,7 +876,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 snippets.map { it.purl } shouldBe listOf(PURL_3)
             }
 
-            coVerify {
+            coVerify(exactly = 1) {
                 service.removeUploadedContent(USER, API_KEY, scanCode)
                 service.uploadFile(USER, API_KEY, scanCode, any())
                 service.extractArchives(USER, API_KEY, scanCode, any())

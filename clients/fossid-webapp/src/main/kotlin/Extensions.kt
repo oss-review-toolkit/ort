@@ -670,7 +670,7 @@ suspend fun FossIdRestService.extractArchives(
 
 /**
  * Remove uploaded content for the given [scanCode]. If [fileName] is specified, only this file is removed.
- *
+ * Please note that it removes all uploaded content, the archive and the extracted files.
  * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.removeUploadedContent(
