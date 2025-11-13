@@ -26,11 +26,10 @@ import java.io.File
 import java.time.LocalDateTime
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.KeepGeneratedSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
@@ -69,6 +68,7 @@ internal data class OpossumInputMetadata(
     val fileCreationDate: LocalDateTimeAsString = LocalDateTime.now()
 )
 
+@KeepGeneratedSerializer
 @Serializable(OpossumResourcesSerializer::class)
 internal data class OpossumResources(
     val tree: MutableMap<String, OpossumResources> = mutableMapOf()
@@ -119,19 +119,13 @@ internal data class OpossumResources(
         }.plus("/")
 }
 
-private object OpossumResourcesSerializer : KSerializer<OpossumResources> {
-    override val descriptor = buildClassSerialDescriptor("Resource")
-
+private object OpossumResourcesSerializer : KSerializer<OpossumResources> by OpossumResources.generatedSerializer() {
     override fun serialize(encoder: Encoder, value: OpossumResources) {
         if (value.isFile()) {
             encoder.encodeInt(1)
         } else {
             encoder.encodeSerializableValue(MapSerializer(String.serializer(), this), value.tree)
         }
-    }
-
-    override fun deserialize(decoder: Decoder): OpossumResources {
-        throw NotImplementedError("Deserialization of OpossumResources is not supported.")
     }
 }
 

@@ -26,8 +26,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.listSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
@@ -186,9 +184,7 @@ internal data class DependencyReference(
  * property.
  */
 object StringListSerializer : KSerializer<List<String>> {
-    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("StringList") {
-        element("value", listSerialDescriptor<String>())
-    }
+    override val descriptor = listSerialDescriptor<String>()
 
     override fun serialize(encoder: Encoder, value: List<String>) {
         encoder.encodeSerializableValue(ListSerializer(String.serializer()), value)
