@@ -87,14 +87,14 @@ private object DescriptionDeserializer : KSerializer<Description> by Description
     }
 
     override fun deserialize(decoder: Decoder): Description {
-        val input = decoder.beginStructure(descriptor) as YamlInput
+        require(decoder is YamlInput) {
+            "Only YAML input is supported."
+        }
 
-        val result = when (val node = input.node) {
+        val result = when (val node = decoder.node) {
             is YamlScalar -> Description(name = node.content)
             else -> Description.generatedSerializer().deserialize(decoder)
         }
-
-        input.endStructure(descriptor)
 
         return result
     }
