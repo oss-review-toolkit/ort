@@ -28,8 +28,8 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 
 /**
- * A class to model a [linkage]-type of dependency on the results of another [packageManager] when resolving [scope]
- * from [definitionFile].
+ * A class to model a dependency with the given [linkage] from one package manager on the results of another
+ * [packageManager] when resolving the [scope] from a [definitionFile].
  */
 data class PackageManagerDependency(
     val packageManager: String,
