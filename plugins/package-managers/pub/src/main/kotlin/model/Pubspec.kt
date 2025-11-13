@@ -107,13 +107,11 @@ internal data class Pubspec(
  */
 private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> by serializer<Map<String, Dependency>>() {
     override fun deserialize(decoder: Decoder): Map<String, Dependency> {
-        val input = decoder.beginStructure(descriptor) as YamlInput
+        require(decoder is YamlInput) {
+            "Only YAML input is supported."
+        }
 
-        val result = input.node.yamlMap.entries.asSequence().associate { it.key.content to it.value.decodeDependency() }
-
-        input.endStructure(descriptor)
-
-        return result
+        return decoder.node.yamlMap.entries.asSequence().associate { it.key.content to it.value.decodeDependency() }
     }
 
     private fun YamlNode.decodeDependency(): Dependency {
