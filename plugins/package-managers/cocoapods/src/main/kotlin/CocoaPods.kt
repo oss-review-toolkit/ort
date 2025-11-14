@@ -102,7 +102,7 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
 
     private fun resolveDependenciesInternal(analysisRoot: File, definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val lockfile = workingDir / LOCKFILE_FILENAME
+        val lockfilePath = workingDir / LOCKFILE_FILENAME
         val issues = mutableListOf<Issue>()
 
         val projectId = Identifier(
@@ -123,11 +123,11 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
             scopeNames = setOf(SCOPE_NAME)
         )
 
-        if (lockfile.isFile) {
-            val lockfileData = lockfile.readText().parseLockfile()
+        if (lockfilePath.isFile) {
+            val lockfile = lockfilePath.readText().parseLockfile()
 
             // Resolve paths of external sources relative to the lockfile.
-            val lockfileWithResolvedPaths = lockfileData.withResolvedPaths(lockfile)
+            val lockfileWithResolvedPaths = lockfile.withResolvedPaths(lockfilePath)
 
             dependencyHandler.setContext(lockfileWithResolvedPaths)
 
@@ -137,9 +137,9 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
             graphBuilder.addDependencies(projectId, SCOPE_NAME, dependencies)
         } else {
             issues += createAndLogIssue(
-                "Missing lockfile '${lockfile.relativeTo(analysisRoot).invariantSeparatorsPath}' for definition file " +
-                    "'${definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath}'. The analysis of a Podfile " +
-                    "without a lockfile is not supported."
+                "Missing lockfile '${lockfilePath.relativeTo(analysisRoot).invariantSeparatorsPath}' " +
+                    "for definition file '${definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath}'. " +
+                    "The analysis of a Podfile without a lockfile is not supported."
             )
         }
 
