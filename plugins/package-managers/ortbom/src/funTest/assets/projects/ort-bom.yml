@@ -1,0 +1,37 @@
+
+project_name: "Example ORT BOM project"
+authors:
+  - "John Doe"
+  - "Foo Bar"
+vcs:
+  type: "GIT"
+  url: "https://git.example.com/project_x/"
+  revision: "master"
+  path: "/"
+homepage_url: "https://project_x.example.com"
+dependencies:
+  - purl: "pkg:maven/com.example/full@1.1.0"
+    description: "Package with fully elaborated model."
+    vcs: 
+      type: "Mercurial"
+      url: "https://git.example.com/full/"
+      revision: "master"
+      path: "/"
+    source_artifact:
+      url: "https://repo.example.com/m2/full-1.1.0-sources.jar"
+      hash: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+    declared_licenses: 
+      - "Apache-2.0"
+      - "MIT"
+    homepage_url: "https://project_x.example.com/full"
+    labels: 
+      label: "value"
+      label2: "value2"
+    curation: 
+      concluded_license: "Apache-2.1"
+      comment: "Manually curated to add license information."
+
+  - purl: "pkg:maven/com.example/minimal@0.1.0"
+    description: "Package with minimal fields required."
+    declared_licenses:
+      - "MIT"
