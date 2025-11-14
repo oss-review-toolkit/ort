@@ -153,42 +153,15 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
 /**
  * Return a new [Lockfile] instance with all external source paths resolved relative to the given [lockfilePath].
  */
-internal fun Lockfile.withResolvedPaths(lockfilePath: File): Lockfile {
-    val resolvedExternalSources = externalSources.mapValues { entry ->
-        Lockfile.ExternalSource(
-            entry.value.path?.let { lockfilePath.resolveSibling(it).path },
-            entry.value.podspec?.let { lockfilePath.resolveSibling(it).path }
-        )
-    }
-
-    val pods = mutableListOf<Lockfile.Pod>()
-    val dependencies = mutableListOf<Lockfile.Dependency>()
-
-    val lockFile = Lockfile(pods, dependencies, resolvedExternalSources, checkoutOptions)
-
-    this.pods.forEach { pod ->
-        val resolvedPod = Lockfile.Pod(
-            pod.name,
-            pod.version,
-            pod.dependencies.map { dependency ->
-                Lockfile.Dependency(
-                    dependency.name,
-                    dependency.versionConstraint
-                )
-            }
-        )
-
-        pods += resolvedPod
-    }
-
-    this.dependencies.forEach { dependency ->
-        val resolvedDependency = Lockfile.Dependency(dependency.name, dependency.versionConstraint)
-
-        dependencies += resolvedDependency
-    }
-
-    return lockFile
-}
+internal fun Lockfile.withResolvedPaths(lockfilePath: File): Lockfile =
+    copy(
+        externalSources = externalSources.mapValues { entry ->
+            Lockfile.ExternalSource(
+                entry.value.path?.let { lockfilePath.resolveSibling(it).path },
+                entry.value.podspec?.let { lockfilePath.resolveSibling(it).path }
+            )
+        }
+    )
 
 internal fun Lockfile.getDirectDependencies(): List<Lockfile.Pod> {
     val names = dependencies.mapTo(mutableSetOf()) { it.name }
