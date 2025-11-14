@@ -36,6 +36,7 @@ class WinnowingTest : StringSpec({
     "The fingerprint should be calculated correctly for the Apache-2.0 license text" {
         wfpForResource("/wfp/Apache-2.0.license") shouldBe """
             file=e3fc50a88d0a364313df4b21ef20c29e,11357,Apache-2.0.license
+            fh2=c4082b6c254c9fb71136710391d9728b
             5=33193f1b,1716113f,0c557e09
             9=643a45ae,2ae8e84a,bacd17ac
             10=c54959e6,c8c4ada9
@@ -185,6 +186,7 @@ class WinnowingTest : StringSpec({
     "The fingerprint should be calculated correctly for the CC-BY-3.0 license text" {
         wfpForResource("/wfp/CC-BY-3.0.license") shouldBe """
             file=6dffb34dbf23fffe10cc646d9c030e14,19467,CC-BY-3.0.license
+            fh2=3d45b71994c4e442eb721c8dfb176ec4
             5=996e9d8b,1a6dc238
             6=70a3753f,14d9bf35,0dbf4b11,d58971b7,86fbc9f3
             8=38a05276,065a11d9
@@ -443,6 +445,7 @@ class WinnowingTest : StringSpec({
         // Note that the ".pdf" file extension is hard-coded to be skipped for snippet calculation.
         wfpForResource("/wfp/sigmod03.pdf", binFile = true) shouldBe """
             file=232512a681d2488f61ade07516f899b5,155473,sigmod03.pdf
+            fh2=ce5e3f3670aafa0f84aa7168290c9fcf
 
         """.trimIndent()
     }
