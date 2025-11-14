@@ -167,7 +167,7 @@ internal fun Lockfile.withResolvedPaths(lockfilePath: File): Lockfile {
     val lockFile = Lockfile(pods, dependencies, resolvedExternalSources, checkoutOptions)
 
     this.pods.forEach { pod ->
-        val resolvedPod = lockFile.Pod(
+        val resolvedPod = Lockfile.Pod(
             pod.name,
             pod.version,
             pod.dependencies.map { dependency ->
