@@ -49,7 +49,8 @@ class PythonInspectorFunTest : StringSpec({
                 definitionFile = definitionFile,
                 pythonVersion = "27",
                 operatingSystem = "linux",
-                analyzeSetupPyInsecurely = true
+                analyzeSetupPyInsecurely = true,
+                verbose = false
             )
         } finally {
             workingDir.resolve(".cache").safeDeleteRecursively()
@@ -70,7 +71,8 @@ class PythonInspectorFunTest : StringSpec({
                 definitionFile = definitionFile,
                 pythonVersion = "311",
                 operatingSystem = "linux",
-                analyzeSetupPyInsecurely = false
+                analyzeSetupPyInsecurely = false,
+                verbose = false
             )
         } finally {
             workingDir.resolve(".cache").safeDeleteRecursively()
