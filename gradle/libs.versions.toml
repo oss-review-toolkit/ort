@@ -66,7 +66,7 @@ springCore = "7.0.0"
 svnkit = "1.10.13"
 tika = "3.2.3"
 wagonHttp = "3.5.3"
-wiremock = "3.13.1"
+wiremock = "3.13.2"
 xmlutil = "0.91.3"
 xz = "1.10"
 
