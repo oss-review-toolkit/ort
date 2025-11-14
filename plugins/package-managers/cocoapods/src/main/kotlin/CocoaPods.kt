@@ -128,10 +128,7 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
 
             dependencyHandler.setContext(lockfile)
 
-            // Convert direct dependencies with version constraints to pods with resolved versions.
-            val dependencies = lockfile.getDirectDependencies()
-
-            graphBuilder.addDependencies(projectId, SCOPE_NAME, dependencies)
+            graphBuilder.addDependencies(projectId, SCOPE_NAME, lockfile.getDirectDependencies())
         } else {
             issues += createAndLogIssue(
                 "Missing lockfile '${lockfilePath.relativeTo(analysisRoot).invariantSeparatorsPath}' " +
