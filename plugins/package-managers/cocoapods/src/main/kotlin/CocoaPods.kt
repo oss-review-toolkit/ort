@@ -124,15 +124,12 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
         )
 
         if (lockfilePath.isFile) {
-            val lockfile = lockfilePath.readText().parseLockfile()
+            val lockfile = lockfilePath.readText().parseLockfile().withResolvedPaths(lockfilePath)
 
-            // Resolve paths of external sources relative to the lockfile.
-            val lockfileWithResolvedPaths = lockfile.withResolvedPaths(lockfilePath)
-
-            dependencyHandler.setContext(lockfileWithResolvedPaths)
+            dependencyHandler.setContext(lockfile)
 
             // Convert direct dependencies with version constraints to pods with resolved versions.
-            val dependencies = lockfileWithResolvedPaths.getDirectDependencies()
+            val dependencies = lockfile.getDirectDependencies()
 
             graphBuilder.addDependencies(projectId, SCOPE_NAME, dependencies)
         } else {
