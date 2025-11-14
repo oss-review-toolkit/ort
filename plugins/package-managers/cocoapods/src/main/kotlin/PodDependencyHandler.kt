@@ -41,29 +41,43 @@ import org.ossreviewtoolkit.utils.common.searchUpwardFor
 
 internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
     private val podspecCache = mutableMapOf<String, Podspec>()
+    private val podsForName = mutableMapOf<String, Lockfile.Pod>()
+    private lateinit var lockfile: Lockfile
 
-    fun clearPodspecCache() = podspecCache.clear()
+    fun setContext(lockfile: Lockfile) {
+        // The cache entries are not re-usable across definition files because the keys do not contain the
+        // dependency version. If non-default Specs repositories were supported, then these would also need to
+        // be part of the key. As that's more complicated and not giving much performance prefer the more memory
+        // consumption friendly option of clearing the cache.
+        podspecCache.clear()
+        podsForName.clear()
+
+        lockfile.pods.associateByTo(podsForName) { it.name }
+        this.lockfile = lockfile
+    }
 
     override fun identifierFor(dependency: Lockfile.Pod): Identifier =
         with(dependency) {
             // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
             // given revision, so the same version might be used in different revisions. To still get a unique
             // identifier, append the revision to the version.
+            val checkoutOption = lockfile.checkoutOptions[dependency.name]
             val revision = checkoutOption?.commit ?: checkoutOption?.tag ?: checkoutOption?.branch
             val uniqueVersion = listOfNotNull(version, revision).joinToString("-")
             Identifier("Pod", "", name, uniqueVersion)
         }
 
     override fun dependenciesFor(dependency: Lockfile.Pod): List<Lockfile.Pod> =
-        dependency.dependencies.mapNotNull { it.resolvedPod }
+        dependency.dependencies.mapNotNull { podsForName[it.name] }
 
     override fun linkageFor(dependency: Lockfile.Pod): PackageLinkage = PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: Lockfile.Pod, issues: MutableCollection<Issue>): Package {
         val id = identifierFor(dependency)
 
-        if (dependency.checkoutOption != null) {
-            val (url, revision) = with(dependency.checkoutOption) {
+        val checkoutOption = lockfile.checkoutOptions[dependency.name]
+        if (checkoutOption != null) {
+            val (url, revision) = with(checkoutOption) {
                 val revision = commit ?: tag ?: branch
                 git.orEmpty() to revision.orEmpty()
             }
@@ -82,9 +96,10 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         val basePodName = dependency.name.substringBefore('/')
         val podspec = podspecCache.getOrPut(basePodName) {
             // Lazily only call the pod CLI if the podspec is not available from the external source.
+            val externalSource = lockfile.externalSources[dependency.name]
             val podspecFile = sequence {
-                yield(dependency.externalSource?.path?.let { "$it/$basePodName.podspec" })
-                yield(dependency.externalSource?.podspec)
+                yield(externalSource?.path?.let { "$it/$basePodName.podspec" })
+                yield(externalSource?.podspec)
                 yield(getPodspecPath(basePodName, dependency.version))
             }.firstNotNullOfOrNull { path ->
                 path?.let { File(it) }?.takeIf { it.isFile }

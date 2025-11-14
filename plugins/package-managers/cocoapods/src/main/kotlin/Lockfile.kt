@@ -46,9 +46,7 @@ internal data class Lockfile(
     /** Details about how to retrieve pods from external sources. */
     val checkoutOptions: Map<String, CheckoutOption>
 ) {
-    private val podsByName by lazy { pods.associateBy { it.name } }
-
-    inner class Pod(
+    data class Pod(
         /** The name of this pod. */
         val name: String,
 
@@ -57,20 +55,15 @@ internal data class Lockfile(
 
         /** The direct dependencies of this pod. */
         val dependencies: List<Dependency> = emptyList()
-    ) {
-        val externalSource = this@Lockfile.externalSources[name]
-        val checkoutOption = this@Lockfile.checkoutOptions[name]
-    }
+    )
 
-    inner class Dependency(
+    data class Dependency(
         /** The name of this direct dependency. */
         val name: String,
 
         /** The version constraint for this direct dependency. */
         val versionConstraint: String?
-    ) {
-        val resolvedPod by lazy { this@Lockfile.podsByName[name] }
-    }
+    )
 
     data class ExternalSource(
         /** The path to the local directory where the pod is hosted. */
@@ -129,30 +122,30 @@ internal fun String.parseLockfile(): Lockfile {
 
     val lockfile = Lockfile(pods, dependencies, externalSources, checkoutOptions)
 
-    pods += root.get<YamlList>("PODS")?.items.orEmpty().map { it.toPod(lockfile) }
-    dependencies += root.get<YamlList>("DEPENDENCIES")?.items.orEmpty().map { it.toDependency(lockfile) }
+    pods += root.get<YamlList>("PODS")?.items.orEmpty().map { it.toPod() }
+    dependencies += root.get<YamlList>("DEPENDENCIES")?.items.orEmpty().map { it.toDependency() }
 
     return lockfile
 }
 
-private fun YamlNode.toPod(lockfile: Lockfile): Pod =
+private fun YamlNode.toPod(): Pod =
     when {
         this is YamlMap -> {
             val (key, value) = yamlMap.entries.entries.single()
             val (name, version) = parseNameAndVersion(key.content)
-            val directDependencies = value.yamlList.items.map { it.toDependency(lockfile) }
-            lockfile.Pod(name, checkNotNull(version), directDependencies)
+            val directDependencies = value.yamlList.items.map { it.toDependency() }
+            Pod(name, checkNotNull(version), directDependencies)
         }
 
         else -> {
             val (name, version) = parseNameAndVersion(yamlScalar.content)
-            lockfile.Pod(name, checkNotNull(version))
+            Pod(name, checkNotNull(version))
         }
     }
 
-private fun YamlNode.toDependency(lockfile: Lockfile): Dependency {
+private fun YamlNode.toDependency(): Dependency {
     val (name, version) = parseNameAndVersion(yamlScalar.content)
-    return lockfile.Dependency(name, version)
+    return Dependency(name, version)
 }
 
 private fun parseNameAndVersion(entry: String): Pair<String, String?> {
