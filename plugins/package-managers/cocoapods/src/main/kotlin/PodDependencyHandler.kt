@@ -41,8 +41,18 @@ import org.ossreviewtoolkit.utils.common.searchUpwardFor
 
 internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
     private val podspecCache = mutableMapOf<String, Podspec>()
+    private val podsForName = mutableMapOf<String, Lockfile.Pod>()
 
-    fun clearPodspecCache() = podspecCache.clear()
+    fun setContext(lockfile: Lockfile) {
+        // The cache entries are not re-usable across definition files because the keys do not contain the
+        // dependency version. If non-default Specs repositories were supported, then these would also need to
+        // be part of the key. As that's more complicated and not giving much performance prefer the more memory
+        // consumption friendly option of clearing the cache.
+        podspecCache.clear()
+        podsForName.clear()
+
+        lockfile.pods.associateByTo(podsForName) { it.name }
+    }
 
     override fun identifierFor(dependency: Lockfile.Pod): Identifier =
         with(dependency) {
@@ -55,7 +65,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         }
 
     override fun dependenciesFor(dependency: Lockfile.Pod): List<Lockfile.Pod> =
-        dependency.dependencies.mapNotNull { it.resolvedPod }
+        dependency.dependencies.mapNotNull { podsForName[it.name] }
 
     override fun linkageFor(dependency: Lockfile.Pod): PackageLinkage = PackageLinkage.DYNAMIC
 

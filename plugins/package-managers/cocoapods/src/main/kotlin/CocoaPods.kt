@@ -129,11 +129,7 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
             // Resolve paths of external sources relative to the lockfile.
             val lockfileWithResolvedPaths = lockfileData.withResolvedPaths(lockfile)
 
-            // The cache entries are not re-usable across definition files because the keys do not contain the
-            // dependency version. If non-default Specs repositories were supported, then these would also need to
-            // be part of the key. As that's more complicated and not giving much performance prefer the more memory
-            // consumption friendly option of clearing the cache.
-            dependencyHandler.clearPodspecCache()
+            dependencyHandler.setContext(lockfileWithResolvedPaths)
 
             // Convert direct dependencies with version constraints to pods with resolved versions.
             val dependencies = lockfileWithResolvedPaths.dependencies.mapNotNull {
