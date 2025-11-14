@@ -132,15 +132,7 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
             dependencyHandler.setContext(lockfileWithResolvedPaths)
 
             // Convert direct dependencies with version constraints to pods with resolved versions.
-            val dependencies = lockfileWithResolvedPaths.dependencies.mapNotNull {
-                it.resolvedPod?.run {
-                    lockfileWithResolvedPaths.Pod(
-                        name,
-                        version,
-                        dependencies
-                    )
-                }
-            }
+            val dependencies = lockfileWithResolvedPaths.getDirectDependencies()
 
             graphBuilder.addDependencies(projectId, SCOPE_NAME, dependencies)
         } else {
@@ -179,7 +171,7 @@ internal fun Lockfile.withResolvedPaths(lockfilePath: File): Lockfile {
             pod.name,
             pod.version,
             pod.dependencies.map { dependency ->
-                lockFile.Dependency(
+                Lockfile.Dependency(
                     dependency.name,
                     dependency.versionConstraint
                 )
@@ -190,10 +182,15 @@ internal fun Lockfile.withResolvedPaths(lockfilePath: File): Lockfile {
     }
 
     this.dependencies.forEach { dependency ->
-        val resolvedDependency = lockFile.Dependency(dependency.name, dependency.versionConstraint)
+        val resolvedDependency = Lockfile.Dependency(dependency.name, dependency.versionConstraint)
 
         dependencies += resolvedDependency
     }
 
     return lockFile
+}
+
+internal fun Lockfile.getDirectDependencies(): List<Lockfile.Pod> {
+    val names = dependencies.mapTo(mutableSetOf()) { it.name }
+    return pods.filter { it.name in names }
 }
