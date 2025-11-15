@@ -72,12 +72,29 @@ internal class GradleDependencyHandler(
 
         val id = identifierFor(dependency)
         val model = dependency.mavenModel ?: run {
-            issues += createAndLogIssue(
-                source = GradleInspectorFactory.descriptor.displayName,
-                message = "No Maven model available for '${id.toCoordinates()}'."
-            )
+            // If no Maven model is available, this might be an Ivy dependency or artifact without metadata
+            // Only warn for non-Ivy dependencies, as Ivy dependencies are expected to not have Maven POMs
+            if (id.type != "Ivy") {
+                issues += createAndLogIssue(
+                    source = GradleInspectorFactory.descriptor.displayName,
+                    message = "No POM found for component '${id.toCoordinates()}'.",
+                    severity = org.ossreviewtoolkit.model.Severity.WARNING
+                )
+            }
 
-            return null
+            // Create a basic package with minimal information
+            return Package(
+                id = id,
+                authors = emptySet(),
+                declaredLicenses = emptySet(),
+                declaredLicensesProcessed = DeclaredLicenseProcessor.process(emptySet()),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = VcsInfo.EMPTY
+            )
         }
 
         val isSpringMetadataProject = with(id) {
@@ -264,7 +281,23 @@ private fun createRemoteArtifact(
     extension: String? = null
 ): RemoteArtifact {
     val algorithm = "sha1"
-    val artifactBaseUrl = pomUrl?.removeSuffix(".pom") ?: return RemoteArtifact.EMPTY
+
+    // Handle both Maven POM files (.pom) and Ivy descriptor files (ivy-*.xml)
+    val artifactBaseUrl = when {
+        pomUrl == null -> return RemoteArtifact.EMPTY
+        pomUrl.endsWith(".pom") -> pomUrl.removeSuffix(".pom")
+        pomUrl.contains("/ivy-") && pomUrl.endsWith(".xml") -> {
+            // For Ivy descriptors like .../ivy-4.9.2.4.xml, extract the artifact name and version
+            // Pattern: .../[module]/[version]/ivy-[version].xml -> .../[module]/[version]/[module]-[version]
+            val pathParts = pomUrl.split("/")
+            val version = pathParts[pathParts.size - 2]
+            val module = pathParts[pathParts.size - 3]
+            val basePath = pathParts.dropLast(1).joinToString("/")
+            "$basePath/$module-$version"
+        }
+
+        else -> pomUrl.removeSuffix(".xml")
+    }
 
     val artifactUrl = buildString {
         append(artifactBaseUrl)
