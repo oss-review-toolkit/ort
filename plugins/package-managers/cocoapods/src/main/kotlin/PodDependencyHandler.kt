@@ -101,9 +101,9 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
                 yield(externalSource?.path?.let { "$it/$basePodName.podspec" })
                 yield(externalSource?.podspec)
                 yield(getPodspecPath(basePodName, dependency.version))
-            }.firstNotNullOfOrNull { path ->
+            }.mapNotNull { path ->
                 path?.let { File(it) }?.takeIf { it.isFile }
-            }
+            }.firstOrNull()
 
             podspecFile?.parsePodspecFile() ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
         }
