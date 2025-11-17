@@ -25,9 +25,11 @@ import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.concurrent.shouldCompleteWithin
 import io.kotest.matchers.shouldBe
 
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.Identifier
@@ -147,6 +149,74 @@ class GitFunTest : WordSpec({
                 "README.md",
                 "specs",
                 "specs/dep_graph_spec.js"
+            )
+        }
+
+        "apply URL replacements recursively" {
+            val url = "https://github.com/oss-review-toolkit/ort-test-data-git-submodules.git"
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, url, "git-protocol-submodule-urls"))
+
+            // Using GitHub with the deprecated "git://" protocol actually hangs instead of failing explicitly.
+            val workingTree = shouldCompleteWithin(40, TimeUnit.SECONDS) {
+                git.download(pkg, outputDir, allowMovingRevisions = true)
+            }
+
+            workingTree.isValid() shouldBe true
+            workingTree.getRootPath().walk().onEnter {
+                it == outputDir || it.parentFile.resolve(".gitmodules").isFile
+            }.mapNotNullTo(mutableListOf()) { file ->
+                file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
+            }.shouldContainExactlyInAnyOrder(
+                "commons-text",
+                "test-data-npm",
+                "LICENSE",
+                "README.md",
+
+                "commons-text/.git",
+                "commons-text/.gitignore",
+                "commons-text/.travis.yml",
+                "commons-text/CONTRIBUTING.md",
+                "commons-text/LICENSE.txt",
+                "commons-text/NOTICE.txt",
+                "commons-text/README.md",
+                "commons-text/RELEASE-NOTES.txt",
+                "commons-text/checkstyle-suppressions.xml",
+                "commons-text/checkstyle.xml",
+                "commons-text/license-header.txt",
+                "commons-text/pom.xml",
+                "commons-text/sb-excludes.xml",
+
+                "test-data-npm/isarray",
+                "test-data-npm/long.js",
+                "test-data-npm/.git",
+                "test-data-npm/.gitignore",
+                "test-data-npm/.gitmodules",
+                "test-data-npm/LICENSE",
+                "test-data-npm/README.md",
+                "test-data-npm/package-lock.json",
+                "test-data-npm/package.json",
+
+                "test-data-npm/isarray/.git",
+                "test-data-npm/isarray/.gitignore",
+                "test-data-npm/isarray/.travis.yml",
+                "test-data-npm/isarray/LICENSE",
+                "test-data-npm/isarray/Makefile",
+                "test-data-npm/isarray/README.md",
+                "test-data-npm/isarray/component.json",
+                "test-data-npm/isarray/index.js",
+                "test-data-npm/isarray/package-lock.json",
+                "test-data-npm/isarray/package.json",
+                "test-data-npm/isarray/test.js",
+
+                "test-data-npm/long.js/.git",
+                "test-data-npm/long.js/.gitignore",
+                "test-data-npm/long.js/.travis.yml",
+                "test-data-npm/long.js/LICENSE",
+                "test-data-npm/long.js/README.md",
+                "test-data-npm/long.js/bower.json",
+                "test-data-npm/long.js/index.js",
+                "test-data-npm/long.js/package.json",
+                "test-data-npm/long.js/webpack.config.js"
             )
         }
     }
