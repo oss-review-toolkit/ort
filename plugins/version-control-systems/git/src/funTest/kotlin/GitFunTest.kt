@@ -152,6 +152,17 @@ class GitFunTest : WordSpec({
             )
         }
 
+        "apply URL replacements" {
+            val pkg = Package.EMPTY.copy(
+                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL.replace("https://", "git://"), REPO_REV)
+            )
+
+            // Using GitHub with the deprecated "git://" protocol actually hangs instead of failing explicitly.
+            shouldCompleteWithin(10, TimeUnit.SECONDS) {
+                git.download(pkg, outputDir)
+            }
+        }
+
         "apply URL replacements recursively" {
             val url = "https://github.com/oss-review-toolkit/ort-test-data-git-submodules.git"
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, url, "git-protocol-submodule-urls"))
