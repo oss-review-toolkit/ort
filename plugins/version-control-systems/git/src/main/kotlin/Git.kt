@@ -64,11 +64,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
-// Replace prefixes of Git submodule repository URLs.
-private val REPOSITORY_URL_PREFIX_REPLACEMENTS = listOf(
-    "git://" to "https://"
-)
-
 object GitCommand : CommandLineTool {
     private val versionRegex = Regex("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
@@ -143,6 +138,16 @@ class Git(
     override val priority = 100
     override val latestRevisionNames = listOf("HEAD", "@")
 
+    private val repositoryUrlPrefixReplacements = buildList {
+        // Replace prefixes of Git submodule repository URLs.
+        add("git://" to "https://")
+
+        if (config.replaceSshWithHttps) {
+            add("ssh://git@" to "https://")
+            add("git@github.com:" to "https://github.com/")
+        }
+    }
+
     override fun getVersion() = GitCommand.getVersion()
 
     override fun getDefaultBranchName(url: String): String {
@@ -182,7 +187,7 @@ class Git(
                     gitInfoDir.resolve("sparse-checkout").writeText(globPatterns.joinToString("\n"))
                 }
 
-                REPOSITORY_URL_PREFIX_REPLACEMENTS.groupBy(
+                repositoryUrlPrefixReplacements.groupBy(
                     { it.second }, { it.first }
                 ).forEach { (replacement, prefixes) ->
                     git.repository.config.setStringList("url", replacement, "insteadOf", prefixes)
@@ -321,7 +326,7 @@ class Git(
     private fun updateSubmodules(workingTree: GitWorkingTree) {
         if (!workingTree.getRootPath().resolve(".gitmodules").isFile) return
 
-        val configArgs = REPOSITORY_URL_PREFIX_REPLACEMENTS.flatMap { (prefix, replacement) ->
+        val configArgs = repositoryUrlPrefixReplacements.flatMap { (prefix, replacement) ->
             listOf("-c", "url.$replacement.insteadOf=$prefix")
         }
 

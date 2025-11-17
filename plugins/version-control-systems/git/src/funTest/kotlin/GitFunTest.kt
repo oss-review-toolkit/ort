@@ -52,7 +52,7 @@ private const val REPO_PATH_FOR_VERSION = "specs"
 
 @Tags("RequiresExternalTool")
 class GitFunTest : WordSpec({
-    val git = GitFactory().create(PluginConfig.EMPTY)
+    val git = GitFactory().create(PluginConfig(options = mapOf("replaceSshWithHttps" to "true")))
     lateinit var outputDir: File
 
     beforeEach {
@@ -159,6 +159,16 @@ class GitFunTest : WordSpec({
 
             // Using GitHub with the deprecated "git://" protocol actually hangs instead of failing explicitly.
             shouldCompleteWithin(10, TimeUnit.SECONDS) {
+                git.download(pkg, outputDir)
+            }
+        }
+
+        "apply SSH URL replacements" {
+            val pkg = Package.EMPTY.copy(
+                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL.replace("https://", "ssh://git@"), REPO_REV)
+            )
+
+            shouldNotThrow<DownloadException> {
                 git.download(pkg, outputDir)
             }
         }
