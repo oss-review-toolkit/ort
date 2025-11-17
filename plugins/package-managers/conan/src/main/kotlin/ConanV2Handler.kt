@@ -51,7 +51,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
 
     override fun getConanStoragePath(): File = getConanHome().resolve("p")
 
-    override fun process(definitionFile: File, lockfileName: String?): HandlerResults {
+    override fun process(definitionFile: File, lockfileName: String?, conanProfile: File?): HandlerResults {
         val workingDir = definitionFile.parentFile
 
         // Create a default build profile.
@@ -59,35 +59,34 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
             conan.command.run(workingDir, "profile", "detect")
         }
 
+        val extraArgs = buildList {
+            if (conanProfile != null) {
+                add("-pr")
+                add(conanProfile.toRelativeString(definitionFile.parentFile))
+            } else {
+                addAll(DUMMY_COMPILER_SETTINGS)
+            }
+
+            if (lockfileName != null) {
+                conan.verifyLockfileBelongsToProject(workingDir, lockfileName)
+                add("-l")
+                add(lockfileName)
+            }
+        }.toTypedArray()
+
         val jsonFile = createOrtTempDir().resolve("info.json")
-        if (lockfileName != null) {
-            conan.verifyLockfileBelongsToProject(workingDir, lockfileName)
-            conan.command.run(
-                workingDir,
-                "graph",
-                "info",
-                "-f",
-                "json",
-                "-l",
-                lockfileName,
-                "--out-file",
-                jsonFile.absolutePath,
-                *DUMMY_COMPILER_SETTINGS,
-                definitionFile.name
-            ).requireSuccess()
-        } else {
-            conan.command.run(
-                workingDir,
-                "graph",
-                "info",
-                "-f",
-                "json",
-                "--out-file",
-                jsonFile.absolutePath,
-                *DUMMY_COMPILER_SETTINGS,
-                definitionFile.name
-            ).requireSuccess()
-        }
+
+        conan.command.run(
+            workingDir,
+            "graph",
+            "info",
+            "-f",
+            "json",
+            "--out-file",
+            jsonFile.absolutePath,
+            *extraArgs,
+            definitionFile.name
+        ).requireSuccess()
 
         val pkgInfosV2 = parsePackageInfosV2(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively() }
 

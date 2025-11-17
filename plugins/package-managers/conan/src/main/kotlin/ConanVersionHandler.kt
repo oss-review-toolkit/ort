@@ -42,10 +42,10 @@ internal interface ConanVersionHandler {
     fun getConanStoragePath(): File
 
     /**
-     * Resolve the dependencies defined in the [definitionFile] and given the lockfile [lockfileName], and return them
-     * as [HandlerResults].
+     * Resolve the dependencies defined in the [definitionFile], with optional [lockfileName] / [conanProfile], and
+     * return them as [HandlerResults].
      */
-    fun process(definitionFile: File, lockfileName: String?): HandlerResults
+    fun process(definitionFile: File, lockfileName: String?, conanProfile: File?): HandlerResults
 
     /**
      * Get the Conan data file for a package with the given [name] and [version] from the [conanStorageDir]. This file

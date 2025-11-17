@@ -96,7 +96,13 @@ data class ConanConfig(
      * development environment.
      */
     @OrtPluginOption(defaultValue = "false")
-    val useConan2: Boolean
+    val useConan2: Boolean,
+
+    /**
+     * The path, relative to the root of the analysis, of a Conan profile to use during dependency resolution.
+     * If not specified, the default profile is used instead.
+     */
+    val conanProfilePath: String?
 )
 
 /**
@@ -215,7 +221,11 @@ class Conan(
                 config.lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } == true
             }
 
-            val handlerResults = handler.process(definitionFile, config.lockfileName)
+            val resolvedProfilePath = config.conanProfilePath?.let { profilePath ->
+                analysisRoot / profilePath
+            }
+
+            val handlerResults = handler.process(definitionFile, config.lockfileName, resolvedProfilePath)
 
             val result = with(handlerResults) {
                 val scopes = setOfNotNull(dependenciesScope, devDependenciesScope, testDependenciesScope)
