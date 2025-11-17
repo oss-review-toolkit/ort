@@ -51,6 +51,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
         val workingDir = definitionFile.parentFile
         val jsonFile = createOrtTempDir().resolve("info.json")
         if (lockfileName != null) {
+            // Note that none of profile, settings, options, env or conf 'host' can be used with a lockfile.
             conan.verifyLockfileBelongsToProject(workingDir, lockfileName)
             conan.command.run(
                 workingDir,
