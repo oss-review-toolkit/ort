@@ -32,5 +32,12 @@ data class GitConfig(
 
     /** Whether nested submodules should be updated, or if only top-level submodules should be considered. */
     @OrtPluginOption(defaultValue = "true")
-    val updateNestedSubmodules: Boolean
+    val updateNestedSubmodules: Boolean,
+
+    /**
+     * Whether to force SSH / SCP URLs (which always require authentication) to use HTTPS instead (which might work
+     * without authentication).
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val replaceSshWithHttps: Boolean
 )
