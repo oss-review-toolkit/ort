@@ -24,6 +24,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -78,9 +79,14 @@ class GitFunTest : WordSpec({
 
         "get the given revision" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV))
-            val expectedFiles = listOf(
-                ".git",
-                ".gitignore",
+
+            val workingTree = git.download(pkg, outputDir)
+
+            workingTree.isValid() shouldBe true
+            workingTree.getRevision() shouldBe REPO_REV
+            workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) { file ->
+                file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
+            }.shouldContainExactlyInAnyOrder(
                 "CHANGELOG.md",
                 "LICENSE",
                 "README.md",
@@ -88,37 +94,24 @@ class GitFunTest : WordSpec({
                 "package.json",
                 "specs"
             )
-
-            val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
-            }.sorted()
-
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
         "get only the given path" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV, path = REPO_PATH))
-            val expectedFiles = listOf(
-                File("LICENSE"),
-                File("README.md"),
-                File(REPO_PATH, "dep_graph.js"),
-                File(REPO_PATH, "index.d.ts")
-            )
 
             val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walkBottomUp()
-                .onEnter { it.name != ".git" }
-                .filter { it.isFile }
-                .map { it.relativeTo(outputDir) }
-                .sortedBy { it.path }
-                .toList()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            workingTree.getRootPath().walk().mapNotNullTo(mutableListOf()) { file ->
+                file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
+            }.shouldContainExactlyInAnyOrder(
+                "LICENSE",
+                "README.md",
+                "lib",
+                "lib/dep_graph.js",
+                "lib/index.d.ts"
+            )
         }
 
         "work based on a package version" {
@@ -142,23 +135,19 @@ class GitFunTest : WordSpec({
                 // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
                 vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
             )
-            val expectedFiles = listOf(
-                File("LICENSE"),
-                File("README.md"),
-                File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
-            )
 
             val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walkBottomUp()
-                .onEnter { it.name != ".git" }
-                .filter { it.isFile }
-                .map { it.relativeTo(outputDir) }
-                .sortedBy { it.path }
-                .toList()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            workingTree.getRootPath().walk().mapNotNullTo(mutableListOf()) { file ->
+                file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
+            }.shouldContainExactlyInAnyOrder(
+                "LICENSE",
+                "README.md",
+                "specs",
+                "specs/dep_graph_spec.js"
+            )
         }
     }
 })
