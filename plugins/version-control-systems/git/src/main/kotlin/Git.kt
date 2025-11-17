@@ -182,6 +182,12 @@ class Git(
                     gitInfoDir.resolve("sparse-checkout").writeText(globPatterns.joinToString("\n"))
                 }
 
+                REPOSITORY_URL_PREFIX_REPLACEMENTS.groupBy(
+                    { it.second }, { it.first }
+                ).forEach { (replacement, prefixes) ->
+                    git.repository.config.setStringList("url", replacement, "insteadOf", prefixes)
+                }
+
                 git.repository.config.save()
             }
         } catch (e: GitAPIException) {
