@@ -336,7 +336,7 @@ class Git(
             }
         }.recover {
             // As Git's dumb HTTP transport does not support shallow capabilities, also try to not limit the depth.
-            val updateArgs = listOfNotNull("submodule", "update", recursive)
+            val updateArgs = listOfNotNull("submodule", "update", "--init", recursive)
             workingTree.runGit(*updateArgs.toTypedArray())
         }
     }
