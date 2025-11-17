@@ -47,28 +47,30 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
 
     override fun getConanStoragePath(): File = getConanHome().resolve("data")
 
-    override fun process(definitionFile: File, lockfileName: String?): HandlerResults {
+    override fun process(definitionFile: File, lockfileName: String?, conanProfile: File?): HandlerResults {
         val workingDir = definitionFile.parentFile
         val jsonFile = createOrtTempDir().resolve("info.json")
-        if (lockfileName != null) {
+
+        val extraArgs = when {
+            conanProfile != null -> arrayOf("-pr", conanProfile.toRelativeString(definitionFile.parentFile))
+
             // Note that none of profile, settings, options, env or conf 'host' can be used with a lockfile.
-            conan.verifyLockfileBelongsToProject(workingDir, lockfileName)
-            conan.command.run(
-                workingDir,
-                "info", definitionFile.name,
-                "-l", lockfileName,
-                "--json", jsonFile.absolutePath
-            ).requireSuccess()
-        } else {
-            conan.command.run(
-                workingDir,
-                "info",
-                definitionFile.name,
-                "--json",
-                jsonFile.absolutePath,
-                *DUMMY_COMPILER_SETTINGS
-            ).requireSuccess()
+            lockfileName != null -> {
+                conan.verifyLockfileBelongsToProject(workingDir, lockfileName)
+                arrayOf("-l", lockfileName)
+            }
+
+            else -> DUMMY_COMPILER_SETTINGS
         }
+
+        conan.command.run(
+            workingDir,
+            "info",
+            definitionFile.name,
+            "--json",
+            jsonFile.absolutePath,
+            *extraArgs
+        ).requireSuccess()
 
         val pkgInfos = parsePackageInfosV1(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively() }
 
