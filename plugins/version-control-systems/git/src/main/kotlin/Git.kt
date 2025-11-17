@@ -315,18 +315,16 @@ class Git(
     private fun updateSubmodules(workingTree: GitWorkingTree) {
         if (!workingTree.getRootPath().resolve(".gitmodules").isFile) return
 
-        val recursive = "--recursive".takeIf { config.updateNestedSubmodules }
-
         val insteadOf = REPOSITORY_URL_PREFIX_REPLACEMENTS.map { (prefix, replacement) ->
             "url.$replacement.insteadOf $prefix"
         }
 
+        val recursive = "--recursive".takeIf { config.updateNestedSubmodules }
+        val updateArgs = listOfNotNull("submodule", "update", "--init", recursive)
+
         runCatching {
             // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=580731 is implemented.
-            val updateArgs = listOfNotNull(
-                "submodule", "update", "--init", recursive, "--depth", "${config.historyDepth}"
-            )
-            workingTree.runGit(*updateArgs.toTypedArray())
+            workingTree.runGit(*updateArgs.toTypedArray(), "--depth", "${config.historyDepth}")
 
             insteadOf.forEach {
                 val foreachArgs = listOfNotNull(
@@ -336,7 +334,6 @@ class Git(
             }
         }.recover {
             // As Git's dumb HTTP transport does not support shallow capabilities, also try to not limit the depth.
-            val updateArgs = listOfNotNull("submodule", "update", "--init", recursive)
             workingTree.runGit(*updateArgs.toTypedArray())
         }
     }
