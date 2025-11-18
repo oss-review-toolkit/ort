@@ -94,13 +94,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
 
         val podspec = getPodspec(dependency.name, dependency.version)
 
-        val vcs = podspec?.source?.git?.let { url ->
-            VcsInfo(
-                type = VcsType.GIT,
-                url = url,
-                revision = podspec.source.tag.orEmpty()
-            )
-        }.orEmpty()
+        val vcs = podspec?.toVcsInfo().orEmpty()
 
         return Package(
             id = id,
@@ -198,3 +192,12 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         return propertiesA == propertiesB
     }
 }
+
+private fun Podspec.toVcsInfo(): VcsInfo? =
+    source?.git?.let { url ->
+        VcsInfo(
+            type = VcsType.GIT,
+            url = url,
+            revision = source.tag.orEmpty()
+        )
+    }
