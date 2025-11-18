@@ -26,6 +26,8 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsInfoCurationData
 
 class SpringPackageCurationProviderTest : StringSpec({
     val provider = SpringPackageCurationProvider()
@@ -38,6 +40,23 @@ class SpringPackageCurationProviderTest : StringSpec({
             PackageCuration(
                 id = id,
                 data = PackageCurationData(isMetadataOnly = true)
+            )
+        )
+    }
+
+    "Get the correct paths for Spring Boot projects" {
+        val id = Identifier("Maven:org.springframework.boot:spring-boot-antlib:3.5.4")
+        val pkg = Package.EMPTY.copy(
+            id = id,
+            vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
+        )
+
+        provider.getCurationsFor(setOf(pkg)) shouldContainExactly setOf(
+            PackageCuration(
+                id = id,
+                data = PackageCurationData(
+                    vcs = VcsInfoCurationData(path = "spring-boot-project/spring-boot-tools/spring-boot-antlib")
+                )
             )
         )
     }
