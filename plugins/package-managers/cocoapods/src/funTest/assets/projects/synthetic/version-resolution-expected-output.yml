@@ -332,7 +332,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/matrix-org/matrix-analytics-events.git"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
