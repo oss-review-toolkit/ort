@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.spring
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
@@ -38,6 +39,16 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCuration
 open class SpringPackageCurationProvider(
     override val descriptor: PluginDescriptor = SpringPackageCurationProviderFactory.descriptor
 ) : PackageCurationProvider {
+    val springBootProjectPaths = mutableMapOf<String, Map<String, String>>()
+
+    fun getSpringBootProjectPath(subProjectName: String, projectVersion: String): String {
+        val paths = springBootProjectPaths.getOrPut(projectVersion) {
+            getSpringProjectPaths("spring-boot", projectVersion)
+        }
+
+        return paths.getValue(subProjectName)
+    }
+
     override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> {
         val springPackages = packages.filter {
             it.id.type == "Maven" && it.id.namespace.startsWith("org.springframework")
@@ -60,6 +71,14 @@ open class SpringPackageCurationProvider(
 
             if (isMetadataOnly) {
                 data = data.copy(isMetadataOnly = isMetadataOnly)
+            }
+
+            if (pkg.vcsProcessed.url == "https://github.com/spring-projects/spring-boot.git") {
+                runCatching {
+                    getSpringBootProjectPath(pkg.id.name, pkg.id.version)
+                }.onSuccess { path ->
+                    data = data.copy(vcs = VcsInfoCurationData(path = path))
+                }
             }
 
             if (data != PackageCurationData()) {
