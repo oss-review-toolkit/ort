@@ -123,6 +123,17 @@ class SpdxExpressionChoiceTest : WordSpec({
 
             shouldThrow<InvalidSubExpressionException> { expression.applyChoice(choice, subExpression) }
         }
+
+        "resolve the choice for a sub-expression in a compound expression" {
+            val expression = "(CDDL-1.1 OR GPL-2.0-only) AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)"
+                .toSpdx()
+            val choice = "CDDL-1.1".toSpdx()
+            val subExpression = "CDDL-1.1 OR GPL-2.0-only".toSpdx()
+
+            val result = expression.applyChoice(choice, subExpression)
+
+            result shouldBe "CDDL-1.1 AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)".toSpdx()
+        }
     }
 
     "applyChoices()" should {
@@ -198,6 +209,33 @@ class SpdxExpressionChoiceTest : WordSpec({
             val result = expression.applyChoices(choices)
 
             result shouldBe "a".toSpdx()
+        }
+
+        "apply choices regardless of license order in an OR-expression" {
+            val expression = "(GPL-2.0-only OR MIT) AND Apache-2.0".toSpdx()
+            val choicesGivenGplOrMit = listOf(SpdxLicenseChoice("GPL-2.0-only OR MIT".toSpdx(), "MIT".toSpdx()))
+            val choicesGivenMitOrGpl = listOf(SpdxLicenseChoice("MIT OR GPL-2.0-only".toSpdx(), "MIT".toSpdx()))
+
+            val resultGivenGplOrMit = expression.applyChoices(choicesGivenGplOrMit)
+            val resultGivenMitOrGpl = expression.applyChoices(choicesGivenMitOrGpl)
+
+            resultGivenGplOrMit shouldBe "MIT AND Apache-2.0".toSpdx()
+            resultGivenMitOrGpl shouldBe "MIT AND Apache-2.0".toSpdx()
+        }
+
+        "resolve the choice for a sub-expression in a compound expression" {
+            // This test ensures that when applying a choice to a sub-expression that appears multiple times,
+            // only the matching occurrence is replaced, not similar-looking expressions with WITH-operands.
+            // This prevents the over-simplification bug where string replacement would affect too much.
+            val expression = "(CDDL-1.1 OR GPL-2.0-only) AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)"
+                .toSpdx()
+            val choices = listOf(SpdxLicenseChoice("CDDL-1.1 OR GPL-2.0-only".toSpdx(), "CDDL-1.1".toSpdx()))
+
+            val result = expression.applyChoices(choices)
+
+            // The second OR-expression should remain unchanged because it has a WITH-operand and thus does not exactly
+            // match the sub-expression despite containing a sub-string of it.
+            result shouldBe "CDDL-1.1 AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)".toSpdx()
         }
     }
 
