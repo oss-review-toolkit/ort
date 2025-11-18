@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
     - name: Setup Java
       uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5
       with:
@@ -39,7 +39,7 @@ jobs:
       security-events: write
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
     - name: Initialize CodeQL
       uses: github/codeql-action/init@014f16e7ab1402f30e7c3329d33797e7948572db # v4
       with:
@@ -59,7 +59,7 @@ jobs:
     needs: build
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
     - name: Setup Java
       uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5
       with:
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
     - name: Install Flox
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
       with:
         submodules: recursive
     - name: Free Disk Space
