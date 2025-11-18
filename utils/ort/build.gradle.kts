@@ -38,7 +38,7 @@ dependencies {
     api(libs.kotlinx.coroutines)
     api(libs.okhttp)
 
-    implementation(projects.clients.foojay)
+    implementation(projects.clients.foojayClient)
 
     implementation(libs.awsS3)
     implementation(libs.commonsCompress)
