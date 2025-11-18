@@ -72,13 +72,12 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
     override fun linkageFor(dependency: Lockfile.Pod): PackageLinkage = PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: Lockfile.Pod, issues: MutableCollection<Issue>): Package {
-        val id = identifierFor(dependency)
         val checkoutOption = lockfile.checkoutOptions[dependency.name]
         val podspec = getPodspec(dependency.name, dependency.version)
         val vcs = checkoutOption?.toVcsInfo() ?: podspec?.toVcsInfo().orEmpty()
 
         return Package(
-            id = id,
+            id = identifierFor(dependency),
             authors = emptySet(),
             declaredLicenses = setOfNotNull(podspec?.license?.takeUnless { it.isEmpty() }),
             description = podspec?.summary.orEmpty(),
