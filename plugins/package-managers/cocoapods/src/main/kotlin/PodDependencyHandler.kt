@@ -182,8 +182,8 @@ private fun Podspec.toVcsInfo(): VcsInfo? =
         )
     }
 
-private fun Lockfile.CheckoutOption.toVcsInfo(): VcsInfo {
-    val revision = commit ?: tag ?: branch.orEmpty()
-    val url = git.orEmpty()
+private fun Lockfile.CheckoutOption.toVcsInfo(): VcsInfo? {
+    val revision = commit ?: tag ?: branch ?: return null
+    val url = git ?: return null
     return VcsInfo(VcsType.GIT, url, revision)
 }
