@@ -70,25 +70,31 @@ project(":utils:scripting").name = "scripting-utils"
 project(":utils:spdx").name = "spdx-utils"
 project(":utils:test").name = "test-utils"
 
-file("plugins").walk().maxDepth(3).filter {
-    it.isFile && it.name == "build.gradle.kts"
-}.mapTo(mutableListOf()) {
-    it.parentFile.toRelativeString(rootDir).replace(File.separatorChar, ':')
-}.forEach { projectPath ->
-    include(":$projectPath")
+includeSubprojects("plugins", maxDepth = 3, setOf("gradle-inspector", "gradle-model", "gradle-plugin", "web-app-template"))
 
-    // Give API and package-manager projects a dedicated name that includes the type of plugin, but keep the names of
-    // accompanying project as-is.
-    val accompanyingProjects = setOf("gradle-inspector", "gradle-model", "gradle-plugin", "web-app-template")
+/**
+ * Add include statements and custom names for the projects hosted inside [directoryName] and up to [maxDepth] directory
+ * levels below, with [accompanyingProjects] to be excluded from the custom project naming logic.
+ */
+fun includeSubprojects(directoryName: String, maxDepth: Int, accompanyingProjects: Set<String> = emptySet()) {
+    file(directoryName).walk().maxDepth(maxDepth).filter {
+        it.isFile && it.name == "build.gradle.kts"
+    }.mapTo(mutableListOf()) {
+        it.parentFile.toRelativeString(rootDir).replace(File.separatorChar, ':')
+    }.forEach { projectPath ->
+        include(":$projectPath")
 
-    val parts = projectPath.split(':')
-    if (parts.size == 3 && parts[2] !in accompanyingProjects) {
-        // Convert the plural name for the type of plugin to singular.
-        val singularTypeName = parts[1].removeSuffix("s")
+        // Give API and subprojects of a type a dedicated name, but keep the names of accompanying project as-is.
+        val parts = projectPath.split(':', limit = maxDepth)
+        val projectName = parts.last()
+        if (parts.size == maxDepth && projectName !in accompanyingProjects) {
+            // Convert the plural name for the type of plugin to singular.
+            val singularTypeName = parts[maxDepth - 2].removeSuffix("s")
 
-        project(":$projectPath").name = when(parts[2]) {
-            "api" -> "$singularTypeName-api"
-            else -> "${parts[2]}-$singularTypeName"
+            project(":$projectPath").name = when(projectName) {
+                "api" -> "$singularTypeName-api"
+                else -> "$projectName-$singularTypeName"
+            }
         }
     }
 }
