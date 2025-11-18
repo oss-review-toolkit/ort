@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 
@@ -93,22 +92,9 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
             )
         }
 
-        val basePodName = dependency.name.substringBefore('/')
-        val podspec = podspecCache.getOrPut(basePodName) {
-            // Lazily only call the pod CLI if the podspec is not available from the external source.
-            val externalSource = lockfile.externalSources[dependency.name]
-            val podspecFile = sequence {
-                yield(externalSource?.path?.let { "$it/$basePodName.podspec" })
-                yield(externalSource?.podspec)
-                yield(getPodspecPath(basePodName, dependency.version))
-            }.firstNotNullOfOrNull { path ->
-                path?.let { File(it) }?.takeIf { it.isFile }
-            }
+        val podspec = getPodspec(dependency.name, dependency.version)
 
-            podspecFile?.parsePodspecFile() ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
-        }
-
-        val vcs = podspec.source?.git?.let { url ->
+        val vcs = podspec?.source?.git?.let { url ->
             VcsInfo(
                 type = VcsType.GIT,
                 url = url,
@@ -119,14 +105,31 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         return Package(
             id = id,
             authors = emptySet(),
-            declaredLicenses = setOfNotNull(podspec.license.takeUnless { it.isEmpty() }),
-            description = podspec.summary,
-            homepageUrl = podspec.homepage,
+            declaredLicenses = setOfNotNull(podspec?.license?.takeUnless { it.isEmpty() }),
+            description = podspec?.summary.orEmpty(),
+            homepageUrl = podspec?.homepage.orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = podspec.source?.http?.let { RemoteArtifact(it, Hash.NONE) }.orEmpty(),
+            sourceArtifact = podspec?.source?.http?.let { RemoteArtifact(it, Hash.NONE) }.orEmpty(),
             vcs = vcs,
-            vcsProcessed = processPackageVcs(vcs, podspec.homepage)
+            vcsProcessed = processPackageVcs(vcs, podspec?.homepage.orEmpty())
         )
+    }
+
+    private fun getPodspec(name: String, version: String): Podspec? {
+        val basename = name.substringBefore('/')
+        return podspecCache.getOrPut(basename) {
+            // Lazily only call the pod CLI if the podspec is not available from the external source.
+            val externalSource = lockfile.externalSources[name]
+            val podspecFile = sequence {
+                yield(externalSource?.path?.let { "$it/$basename.podspec" })
+                yield(externalSource?.podspec)
+                yield(getPodspecPath(basename, version))
+            }.firstNotNullOfOrNull { path ->
+                path?.let { File(it) }?.takeIf { it.isFile }
+            }
+
+            podspecFile?.parsePodspecFile() ?: return null
+        }
     }
 
     private fun File.parsePodspecFile(): Podspec? {
