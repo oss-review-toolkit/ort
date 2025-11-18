@@ -118,6 +118,7 @@ jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jac
 jakartaMail = { module = "com.sun.mail:jakarta.mail", version.ref = "jakartaMail" }
 jerseyCommon = { module = "org.glassfish.jersey.core:jersey-common", version.ref = "jerseyCommon" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
+jgit-http-apache = { module = "org.eclipse.jgit:org.eclipse.jgit.http.apache", version.ref = "jgit" }
 jgit-ssh-apache = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache", version.ref = "jgit" }
 jgit-ssh-apache-agent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
 jiraRestClient-api = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
