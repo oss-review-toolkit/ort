@@ -538,15 +538,6 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
             PackageManager.processProjectVcs(it, vcsFromPackage, *vcsFallbackUrls)
         } ?: PackageManager.processPackageVcs(vcsFromPackage, *vcsFallbackUrls)
 
-        val isSpringMetadataProject = with(mavenProject) {
-            listOf("boot", "cloud").any {
-                groupId == "org.springframework.$it" && (
-                    artifactId.startsWith("spring-$it-starter") ||
-                        artifactId.startsWith("spring-$it-contract-spec")
-                    )
-            }
-        }
-
         return Package(
             id = Identifier(
                 type = "Maven",
@@ -563,8 +554,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
             sourceArtifact = sourceRemoteArtifact,
             vcs = vcsFromPackage,
             vcsProcessed = vcsProcessed,
-            isMetadataOnly = (mavenProject.packaging == "pom" && binaryRemoteArtifact.url.endsWith(".pom"))
-                || isSpringMetadataProject,
+            isMetadataOnly = mavenProject.packaging == "pom" && binaryRemoteArtifact.url.endsWith(".pom"),
             isModified = isBinaryArtifactModified || isSourceArtifactModified
         )
     }
