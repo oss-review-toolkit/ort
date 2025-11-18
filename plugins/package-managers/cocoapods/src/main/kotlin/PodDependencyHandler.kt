@@ -76,19 +76,16 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
 
         val checkoutOption = lockfile.checkoutOptions[dependency.name]
         if (checkoutOption != null) {
-            val (url, revision) = with(checkoutOption) {
-                val revision = commit ?: tag ?: branch
-                git.orEmpty() to revision.orEmpty()
-            }
+            val vcs = checkoutOption.toVcsInfo()
 
             return Package(
                 id = id,
                 declaredLicenses = emptySet(),
                 description = "",
-                homepageUrl = url,
+                homepageUrl = vcs.url,
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo(VcsType.GIT, url, revision)
+                vcs = checkoutOption.toVcsInfo()
             )
         }
 
@@ -201,3 +198,9 @@ private fun Podspec.toVcsInfo(): VcsInfo? =
             revision = source.tag.orEmpty()
         )
     }
+
+private fun Lockfile.CheckoutOption.toVcsInfo(): VcsInfo {
+    val revision = commit ?: tag ?: branch.orEmpty()
+    val url = git.orEmpty()
+    return VcsInfo(VcsType.GIT, url, revision)
+}
