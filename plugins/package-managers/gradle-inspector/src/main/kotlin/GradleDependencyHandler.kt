@@ -80,14 +80,7 @@ internal class GradleDependencyHandler(
             return null
         }
 
-        val isSpringMetadataProject = with(id) {
-            listOf("boot", "cloud").any {
-                namespace == "org.springframework.$it"
-                    && (name.startsWith("spring-$it-starter") || name.startsWith("spring-$it-contract-spec"))
-            }
-        }
-
-        val hasNoArtifacts = dependency.pomFile == null || isSpringMetadataProject
+        val hasNoArtifacts = dependency.pomFile == null
 
         val binaryArtifact = when {
             hasNoArtifacts -> RemoteArtifact.EMPTY
