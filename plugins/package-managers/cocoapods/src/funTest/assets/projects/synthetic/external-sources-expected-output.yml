@@ -206,7 +206,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/MacLabs/MLHudAlert.git"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:

@@ -73,25 +73,9 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
 
     override fun createPackage(dependency: Lockfile.Pod, issues: MutableCollection<Issue>): Package {
         val id = identifierFor(dependency)
-
         val checkoutOption = lockfile.checkoutOptions[dependency.name]
-        if (checkoutOption != null) {
-            val vcs = checkoutOption.toVcsInfo()
-
-            return Package(
-                id = id,
-                declaredLicenses = emptySet(),
-                description = "",
-                homepageUrl = vcs.url,
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = checkoutOption.toVcsInfo()
-            )
-        }
-
         val podspec = getPodspec(dependency.name, dependency.version)
-
-        val vcs = podspec?.toVcsInfo().orEmpty()
+        val vcs = checkoutOption?.toVcsInfo() ?: podspec?.toVcsInfo().orEmpty()
 
         return Package(
             id = id,
