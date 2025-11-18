@@ -31,14 +31,6 @@ include(":analyzer")
 include(":cli")
 include(":cli-helper")
 include(":cli-test-launcher")
-include(":clients:bazel-module-registry")
-include(":clients:clearly-defined")
-include(":clients:dos")
-include(":clients:foojay")
-include(":clients:fossid-webapp")
-include(":clients:oss-index")
-include(":clients:osv")
-include(":clients:vulnerable-code")
 include(":detekt-rules")
 include(":downloader")
 include(":evaluator")
@@ -46,30 +38,10 @@ include(":model")
 include(":notifier")
 include(":reporter")
 include(":scanner")
-include(":utils:common")
-include(":utils:config")
-include(":utils:ort")
-include(":utils:scripting")
-include(":utils:spdx")
-include(":utils:spdx-document")
-include(":utils:test")
 include(":version-catalog")
 
-project(":clients:bazel-module-registry").name = "bazel-module-registry-client"
-project(":clients:clearly-defined").name = "clearly-defined-client"
-project(":clients:dos").name = "dos-client"
-project(":clients:fossid-webapp").name = "fossid-webapp-client"
-project(":clients:oss-index").name = "oss-index-client"
-project(":clients:osv").name = "osv-client"
-project(":clients:vulnerable-code").name = "vulnerable-code-client"
-
-project(":utils:common").name = "common-utils"
-project(":utils:config").name = "config-utils"
-project(":utils:ort").name = "ort-utils"
-project(":utils:scripting").name = "scripting-utils"
-project(":utils:spdx").name = "spdx-utils"
-project(":utils:test").name = "test-utils"
-
+includeSubprojects("clients", maxDepth = 2)
+includeSubprojects("utils", maxDepth = 2)
 includeSubprojects("plugins", maxDepth = 3, setOf("gradle-inspector", "gradle-model", "gradle-plugin", "web-app-template"))
 
 /**
@@ -89,7 +61,7 @@ fun includeSubprojects(directoryName: String, maxDepth: Int, accompanyingProject
         val projectName = parts.last()
         if (parts.size == maxDepth && projectName !in accompanyingProjects) {
             // Convert the plural name for the type of plugin to singular.
-            val singularTypeName = parts[maxDepth - 2].removeSuffix("s")
+            val singularTypeName = parts[maxDepth - 2].let { if (it == "utils") it else it.removeSuffix("s") }
 
             project(":$projectPath").name = when(projectName) {
                 "api" -> "$singularTypeName-api"
