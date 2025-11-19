@@ -359,28 +359,36 @@ class Downloader(private val config: DownloaderConfiguration) {
             }
         }
 
-        try {
-            if (sourceArchive.extension == "gem") {
-                // Unpack the nested data archive for Ruby Gems.
-                val gemDirectory = createOrtTempDir("gem")
-                val dataFile = gemDirectory / "data.tar.gz"
+        if (sourceArchive.extension == "gem") {
+            // Unpack the nested data archive for Ruby Gems.
+            val gemDirectory = createOrtTempDir("gem")
+            val dataFile = gemDirectory / "data.tar.gz"
 
-                try {
-                    sourceArchive.unpack(gemDirectory)
-                    dataFile.unpack(outputDirectory)
-                } finally {
-                    gemDirectory.safeDeleteRecursively()
+            try {
+                sourceArchive.unpack(gemDirectory)
+                dataFile.unpack(outputDirectory)
+            } catch (e: IOException) {
+                logger.error {
+                    "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessages()}"
                 }
-            } else {
-                sourceArchive.unpackTryAllTypes(outputDirectory)
-            }
-        } catch (e: IOException) {
-            logger.error {
-                "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessages()}"
-            }
 
-            tempDir?.safeDeleteRecursively()
-            throw DownloadException(e)
+                tempDir?.safeDeleteRecursively()
+                throw DownloadException(e)
+            } finally {
+                gemDirectory.safeDeleteRecursively()
+            }
+        } else {
+            try {
+                sourceArchive.unpackTryAllTypes(outputDirectory)
+            } catch (e: IOException) {
+                logger.warn {
+                    "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessages()}"
+                }
+
+                logger.info {
+                    "Treating '${sourceArchive.absolutePath}' as a source code file."
+                }
+            }
         }
 
         logger.info {
