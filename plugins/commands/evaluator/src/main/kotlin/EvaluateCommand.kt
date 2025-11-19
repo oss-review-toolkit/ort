@@ -305,6 +305,8 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
             if (packageConfigurationsDir != null) {
                 add(DirPackageConfigurationProvider(packageConfigurationsDir))
             } else {
+                // This only adds those package configuration providers that are both enabled in the ORT configuration
+                // (which is the default) and available in the classpath.
                 val providers = PackageConfigurationProviderFactory.create(ortConfig.packageConfigurationProviders)
                 addAll(providers.map { it.second })
             }

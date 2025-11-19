@@ -170,6 +170,8 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
                 }
             }
 
+            // This only adds those package curation providers that are both enabled in the ORT configuration (which is
+            // the default) and available in the classpath.
             addAll(PackageCurationProviderFactory.create(ortConfig.packageCurationProviders))
         }
 
