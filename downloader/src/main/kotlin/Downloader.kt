@@ -27,6 +27,7 @@ import java.net.URI
 import kotlin.time.TimeSource
 
 import org.apache.logging.log4j.kotlin.logger
+import org.apache.tika.Tika
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -306,6 +307,7 @@ class Downloader(private val config: DownloaderConfiguration) {
      * happens but the source code is only checked to be available. An [ArtifactProvenance] is returned on success or a
      * [DownloadException] is thrown in case of failure.
      */
+    @Suppress("ThrowsCount")
     fun downloadSourceArtifact(
         sourceArtifact: RemoteArtifact,
         outputDirectory: File,
@@ -384,6 +386,12 @@ class Downloader(private val config: DownloaderConfiguration) {
                 logger.warn {
                     "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessages()}"
                 }
+
+                val mimeType = Tika().detect(sourceArchive)
+                val isSourceCodeFile = (mimeType.startsWith("text/") && !mimeType.endsWith("html"))
+                    || (mimeType.startsWith("application/") && mimeType.endsWith("script"))
+
+                if (!isSourceCodeFile) throw DownloadException("The artifact does not seem to be a source code file", e)
 
                 logger.info {
                     "Treating '${sourceArchive.absolutePath}' as a source code file."
