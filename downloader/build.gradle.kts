@@ -29,6 +29,7 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation(libs.kotlinx.coroutines)
+    implementation(libs.tika)
 
     funTestImplementation(platform(projects.plugins.versionControlSystems))
 
