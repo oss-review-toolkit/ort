@@ -310,8 +310,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
             }
         }
 
-        val packageConfigurationProvider =
-            CompositePackageConfigurationProvider(*enabledPackageConfigurationProviders.toTypedArray())
+        val packageConfigurationProvider = CompositePackageConfigurationProvider(enabledPackageConfigurationProviders)
 
         ortResultInput = ortResultInput.setPackageConfigurations(packageConfigurationProvider)
 
