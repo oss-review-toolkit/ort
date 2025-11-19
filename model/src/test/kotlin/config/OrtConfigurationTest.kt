@@ -90,7 +90,8 @@ class OrtConfigurationTest : WordSpec({
                 ProviderPluginConfiguration(
                     type = "ClearlyDefined",
                     options = mapOf("serverUrl" to "https://api.clearlydefined.io", "minTotalLicenseScore" to "80")
-                )
+                ),
+                ProviderPluginConfiguration(type = "Spring", enabled = false)
             )
 
             ortConfig.severeIssueThreshold shouldBe Severity.ERROR
