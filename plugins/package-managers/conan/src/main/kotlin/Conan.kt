@@ -222,7 +222,8 @@ class Conan(
             }
 
             val resolvedProfilePath = config.conanProfilePath?.let { profilePath ->
-                analysisRoot / profilePath
+                val analysisRootDir = if (analysisRoot.isFile) analysisRoot.parentFile else analysisRoot
+                analysisRootDir / profilePath
             }
 
             val handlerResults = handler.process(definitionFile, config.lockfileName, resolvedProfilePath)
