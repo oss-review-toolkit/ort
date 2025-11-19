@@ -305,9 +305,8 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
             if (packageConfigurationsDir != null) {
                 add(DirPackageConfigurationProvider(packageConfigurationsDir))
             } else {
-                val packageConfigurationProviders =
-                    PackageConfigurationProviderFactory.create(ortConfig.packageConfigurationProviders)
-                addAll(packageConfigurationProviders.map { it.second })
+                val providers = PackageConfigurationProviderFactory.create(ortConfig.packageConfigurationProviders)
+                addAll(providers.map { it.second })
             }
         }
 
