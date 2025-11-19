@@ -109,13 +109,14 @@ data class OrtConfiguration(
 
     /**
      * The package curation providers to use. Defaults to providers for the default [ORT_PACKAGE_CURATIONS_FILENAME] and
-     * [ORT_PACKAGE_CURATIONS_DIRNAME] configuration locations. The order of this list defines the priority of the
-     * providers: Providers that appear earlier in the list can overwrite curations for the same package from providers
-     * that appear later in the list.
+     * [ORT_PACKAGE_CURATIONS_DIRNAME] configuration locations as well as the provider for Spring packages. The order of
+     * this list defines the priority of the providers: Providers that appear earlier in the list can overwrite
+     * curations for the same package from providers that appear later in the list.
      */
     val packageCurationProviders: List<ProviderPluginConfiguration> = listOf(
         ProviderPluginConfiguration(type = "DefaultDir"),
-        ProviderPluginConfiguration(type = "DefaultFile")
+        ProviderPluginConfiguration(type = "DefaultFile"),
+        ProviderPluginConfiguration(type = "Spring")
     ),
 
     /**
