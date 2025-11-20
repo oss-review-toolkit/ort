@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.nextOrNull
 
 import org.semver4j.range.RangeList
@@ -48,6 +49,9 @@ internal object PnpmCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
 
     override fun getVersionRequirement(): RangeList = RangeListFactory.create("5.* - 10.*")
+
+    override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture =
+        super.run(*args, workingDir = workingDir, environment = mapOf("NODE_OPTIONS" to "--use-system-ca"))
 }
 
 /**
