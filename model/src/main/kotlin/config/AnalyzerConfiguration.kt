@@ -61,6 +61,7 @@ data class AnalyzerConfiguration(
         "Maven",
         "NPM",
         "NuGet",
+        "OrtProjectFile",
         "PIP",
         "Pipenv",
         "PNPM",
