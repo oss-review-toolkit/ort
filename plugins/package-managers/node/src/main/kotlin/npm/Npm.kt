@@ -55,6 +55,9 @@ internal object NpmCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
     override fun getVersionRequirement(): RangeList = RangeListFactory.create("6.* - 11.*")
+
+    override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture =
+        super.run(*args, workingDir = workingDir, environment = mapOf("NODE_OPTIONS" to "--use-system-ca"))
 }
 
 data class NpmConfig(
