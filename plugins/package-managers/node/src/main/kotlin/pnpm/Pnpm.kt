@@ -160,7 +160,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
             "--prod".takeUnless { Scope.DEV_DEPENDENCIES in scopes }
         )
 
-        PnpmCommand.run(args = args.toTypedArray(), workingDir = workingDir).requireSuccess()
+        PnpmCommand.run(workingDir, *args.toTypedArray()).requireSuccess()
     }
 }
 
