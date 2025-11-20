@@ -73,7 +73,8 @@ class PackageManagerFunTest : WordSpec({
         "spdx-project/project.spdx.yml",
         "spm-app/Package.resolved",
         "spm-lib/Package.swift",
-        "stack/stack.yaml"
+        "stack/stack.yaml",
+        "ort-bon/ort-bom.yml"
     )
 
     val projectDir = tempdir()
