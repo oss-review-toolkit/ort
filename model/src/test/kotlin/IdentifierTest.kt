@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.assertSoftly
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.maps.containExactly

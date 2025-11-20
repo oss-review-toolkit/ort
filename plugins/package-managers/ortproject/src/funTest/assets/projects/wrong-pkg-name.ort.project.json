@@ -1,0 +1,8 @@
+{
+  "projectName": "Example ORT project with wrong package name",
+  "dependencies": [
+    {
+      "purl": "something:maven/com.example/full@1.1.0"
+    }
+  ]
+}
