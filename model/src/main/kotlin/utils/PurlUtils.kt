@@ -32,39 +32,40 @@ import org.ossreviewtoolkit.utils.common.percentEncode
 enum class PurlType(
     private val value: String,
     val nameNormalization: (String) -> String = { it },
-    val namespaceNormalization: (String) -> String = { it }
+    val namespaceNormalization: (String) -> String = { it },
+    val ortIdentifierType: String
 ) {
-    APK("apk", { it.lowercase() }, { it.lowercase() }),
-    BAZEL("bazel", { it.lowercase() }),
-    BITBUCKET("bitbucket", { it.lowercase() }, { it.lowercase() }),
-    BOWER("bower"),
-    CARGO("cargo"),
-    CARTHAGE("carthage"),
-    COCOAPODS("cocoapods"),
-    COMPOSER("composer", { it.lowercase() }, { it.lowercase() }),
-    CONAN("conan"),
-    CONDA("conda"),
-    CRAN("cran"),
-    DEBIAN("deb", { it.lowercase() }, { it.lowercase() }),
-    DOCKER("docker"),
-    DRUPAL("drupal"),
-    GEM("gem"),
-    GENERIC("generic"),
-    GITHUB("github", { it.lowercase() }, { it.lowercase() }),
-    GITLAB("gitlab"),
-    GOLANG("golang", { it.lowercase() }, { it.lowercase() }),
-    HACKAGE("hackage"),
-    HEX("hex"),
-    HUGGING_FACE("huggingface"),
-    MAVEN("maven"),
-    MLFLOW("mlflow"),
-    NPM("npm", { it.lowercase() }),
-    NUGET("nuget"),
-    OTP("otp"),
-    PUB("pub", { it.lowercase() }),
-    PYPI("pypi", { it.lowercase() }),
-    RPM("rpm", namespaceNormalization = { it.lowercase() }),
-    SWIFT("swift");
+    APK("apk", { it.lowercase() }, { it.lowercase() }, ortIdentifierType = "Apk"),
+    BAZEL("bazel", { it.lowercase() }, ortIdentifierType = "Bazel"),
+    BITBUCKET("bitbucket", { it.lowercase() }, { it.lowercase() }, ortIdentifierType = "Bitbucket"),
+    BOWER("bower", ortIdentifierType = "Bower"),
+    CARGO("cargo", ortIdentifierType = "Cargo"),
+    CARTHAGE("carthage", ortIdentifierType = "Carthage"),
+    COCOAPODS("cocoapods", ortIdentifierType = "CocoaPods"),
+    COMPOSER("composer", { it.lowercase() }, { it.lowercase() }, ortIdentifierType = "Composer"),
+    CONAN("conan", ortIdentifierType = "Conan"),
+    CONDA("conda", ortIdentifierType = "Conda"),
+    CRAN("cran", ortIdentifierType = "Cran"),
+    DEBIAN("deb", { it.lowercase() }, { it.lowercase() }, ortIdentifierType = "Debian"),
+    DOCKER("docker", ortIdentifierType = "Docker"),
+    DRUPAL("drupal", ortIdentifierType = "Drupal"),
+    GEM("gem", ortIdentifierType = "Gem"),
+    GENERIC("generic", ortIdentifierType = "Generic"),
+    GITHUB("github", { it.lowercase() }, { it.lowercase() }, ortIdentifierType = "GitHub"),
+    GITLAB("gitlab", ortIdentifierType = "GitLab"),
+    GOLANG("golang", { it.lowercase() }, { it.lowercase() }, ortIdentifierType = "Go"),
+    HACKAGE("hackage", ortIdentifierType = "Hackage"),
+    HEX("hex", ortIdentifierType = "Hex"),
+    HUGGING_FACE("huggingface", ortIdentifierType = "HuggingFace"),
+    MAVEN("maven", ortIdentifierType = "Maven"),
+    MLFLOW("mlflow", ortIdentifierType = "MlFlow"),
+    NPM("npm", { it.lowercase() }, ortIdentifierType = "NPM"),
+    NUGET("nuget", ortIdentifierType = "NuGet"),
+    OTP("otp", ortIdentifierType = "Otp"),
+    PUB("pub", { it.lowercase() }, ortIdentifierType = "Pub"),
+    PYPI("pypi", { it.lowercase() }, ortIdentifierType = "PyPi"),
+    RPM("rpm", namespaceNormalization = { it.lowercase() }, ortIdentifierType = "RPM"),
+    SWIFT("swift", ortIdentifierType = "Swift");
 
     init {
         check(value == value.lowercase()) { "The type must be in canonical lowercase form." }
@@ -74,6 +75,11 @@ enum class PurlType(
         @JvmStatic
         fun fromString(value: String): PurlType =
             PurlType.entries.find { it.value == value } ?: throw IllegalArgumentException("Unknown purl type: $value")
+
+        @JvmStatic
+        fun getOrtTypeFromPurlType(purlType: String): String =
+            PurlType.entries.find { it.value == purlType }?.ortIdentifierType
+                ?: purlType.replaceFirstChar { it.uppercase() }
     }
 
     override fun toString() = value
