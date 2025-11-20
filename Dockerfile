@@ -310,8 +310,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 ENV ANDROID_HOME=/opt/android-sdk
 
-RUN --mount=type=tmpfs,target=/android \
-    cd /android \
+RUN mkdir /tmp/android && chmod =1777 /tmp/android
+RUN --mount=type=tmpfs,target=/tmp/android \
+    cd /tmp/android \
     && curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip \
     && unzip -q commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip -d $ANDROID_HOME \
     && PROXY_HOST_AND_PORT=${https_proxy#*://} \
@@ -341,10 +342,11 @@ ENV PATH=$PATH:$DART_SDK/bin
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN --mount=type=tmpfs,target=/dart \
+RUN mkdir /tmp/dart && chmod =1777 /tmp/dart
+RUN --mount=type=tmpfs,target=/tmp/dart \
     ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/) \
-    && curl -o /dart/dart.zip -L https://storage.googleapis.com/dart-archive/channels/stable/release/$DART_VERSION/sdk/dartsdk-linux-$ARCH-release.zip \
-    && unzip /dart/dart.zip
+    && curl -o /tmp/dart/dart.zip -L https://storage.googleapis.com/dart-archive/channels/stable/release/$DART_VERSION/sdk/dartsdk-linux-$ARCH-release.zip \
+    && unzip /tmp/dart/dart.zip
 
 FROM scratch AS dart
 COPY --from=dartbuild /opt/dart-sdk /opt/dart-sdk
