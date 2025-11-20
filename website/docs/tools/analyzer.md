@@ -20,7 +20,7 @@ Currently, the following package managers (grouped by the programming language t
 * C / C++
   * [Bazel](https://bazel.build/) (limitations: see [open tasks](https://github.com/oss-review-toolkit/ort/issues/264))
   * [Conan 1.x and 2.x](https://conan.io/)
-  * Also see: [SPDX documents](#spdx-as-fallback-package-manager)
+  * Also see: [Fallback Package Managers](#fallback-package-managers)
 * Dart / Flutter
   * [Pub](https://pub.dev/)
 * Gleam
@@ -61,6 +61,16 @@ Currently, the following package managers (grouped by the programming language t
 * Unmanaged
   * This is a special "package manager" that manages all files that cannot be associated with any of the other package managers.
 
-## SPDX as Fallback Package Manager
+## Fallback Package Managers
 
-If another package manager that is not part of the list above is used (or no package manager at all), the generic fallback to [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe [projects](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml) or [packages](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).
+If another package manager that is not part of the list above is used (or no package manager at all),
+the generic fallbacks can be used:
+
+### ORT Project package manager
+
+The [ORT Project package manager](../guides/ort-project-package-manager.md) can be used to manually define projects and
+their dependencies in an ORT Project definition file.
+
+### SPDX
+
+The [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe [projects](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml) or [packages](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).
