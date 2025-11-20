@@ -1,0 +1,18 @@
+projectName: "Example ORT project"
+description: "Project X description"
+homepageUrl: "https://project_x.example.com"
+declaredLicenses:
+  - "Apache-2.0"
+authors:
+  - "John Doe"
+  - "Foo Bar"
+dependencies:
+  - purl: "pkg:maven/com.example/full@1.1.0"
+    sourceArtifact:
+      url: "https://repo.example.com/m2/full-1.1.0-sources.jar"
+      hash:
+        value: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+        algorithm: "JUST_WRONG"
+    declaredLicenses:
+      - "Apache-2.0"
+      - "MIT"
