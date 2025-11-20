@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotContain
@@ -135,6 +136,106 @@ class PurlExtensionsTest : WordSpec({
 
         "work for a purl without qualifiers" {
             "pkg:npm/mime-db@1.33.0".toProvenance() shouldBe UnknownProvenance
+        }
+    }
+
+    "When mapping to Identifier Purl representation" should {
+        "fail to parse a non 'pkg' type purl" {
+            shouldThrow<IllegalArgumentException> {
+                "nonpkg:github/example.com/valid-with-namespace@1.0".toIdentifier()
+            }
+        }
+
+        "fail to parse invalid purl format" {
+            shouldThrow<IllegalArgumentException> {
+                "github/example.com/valid-with-namespace@1.0".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl without type" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:EnterpriseLibrary.Common@6.0.1304".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl without type and version" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:EnterpriseLibrary.Common".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl containing forbidden characters in name" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:n&g?inx/nginx@0.8.9".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl containing forbidden characters in version" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:docker/cassandra@sha256:244fd47e07d1004f0aed9c".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl that name starts with number" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:3nginx/nginx@0.8.9".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl that contains forbidden characters in type" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:nginx:a/nginx@0.8.9".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl with invalid qualifier" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:npm/myartifact@1.0.0?in%20production=true".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl without name" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:maven/@1.3.4".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl without name and type" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg:@6.0.1304".toIdentifier()
+            }
+        }
+
+        "fail to parse a purl with percent-encoded colon" {
+            shouldThrow<IllegalArgumentException> {
+                "pkg%3Amaven/org.apache.commons/io".toIdentifier()
+            }
+        }
+
+        "properly parse purls from purl spec examples" {
+            val purls = listOf(
+                "pkg:deb/debian/curl@7.50.3-1?arch=i386&distro=jessie",
+                "pkg:gem/jruby-launcher@1.1.2?platform=java",
+                "pkg:golang/google.golang.org/genproto#googleapis/api/annotations",
+                "pkg:maven/org.apache.xmlgraphics/batik-anim@1.9.1?repository_url=repo.spring.io%2Frelease",
+                "pkg:npm/%40angular/animation@12.3.1",
+                "pkg:nuget/EnterpriseLibrary.Common@6.0.1304",
+                "pkg:pypi/django@1.11.1",
+                "pkg:rpm/fedora/curl@7.50.3-1.fc25?arch=i386&distro=fedora-25",
+                "pkg:rpm/opensuse/curl@7.56.1-1.1.?arch=i386&distro=opensuse-tumbleweed"
+            )
+
+            val identifiers = purls.map { it.toIdentifier() }
+
+            identifiers[0] shouldBe Identifier("deb", "debian", "curl", "7.50.3-1")
+            identifiers[1] shouldBe Identifier("gem", "", "jruby-launcher", "1.1.2")
+            identifiers[2] shouldBe Identifier("golang", "google.golang.org", "genproto", "")
+            identifiers[3] shouldBe Identifier("maven", "org.apache.xmlgraphics", "batik-anim", "1.9.1")
+            identifiers[4] shouldBe Identifier("npm", "@angular", "animation", "12.3.1")
+            identifiers[5] shouldBe Identifier("nuget", "", "EnterpriseLibrary.Common", "6.0.1304")
+            identifiers[6] shouldBe Identifier("pypi", "", "django", "1.11.1")
+            identifiers[7] shouldBe Identifier("rpm", "fedora", "curl", "7.50.3-1.fc25")
+            identifiers[8] shouldBe Identifier("rpm", "opensuse", "curl", "7.56.1-1.1.")
         }
     }
 })
