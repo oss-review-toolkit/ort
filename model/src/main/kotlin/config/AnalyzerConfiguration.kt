@@ -62,6 +62,7 @@ data class AnalyzerConfiguration(
         "Mix",
         "NPM",
         "NuGet",
+        "OrtProjectFile",
         "PIP",
         "Pipenv",
         "PNPM",

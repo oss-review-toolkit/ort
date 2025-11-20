@@ -1,0 +1,3 @@
+projectName: "Example ORT project with invalid package purl"
+dependencies:
+  - purl: "pkg/maven/com.example/minimal@0.1.0"
