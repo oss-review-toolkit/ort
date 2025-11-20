@@ -54,6 +54,53 @@ class PurlUtilsTest : StringSpec({
             }
         }
     }
+
+    "Should throw an exception for purl type not found" {
+        val exception = kotlin.runCatching {
+            PurlType.fromString("unknowntype")
+        }.exceptionOrNull()
+
+        exception shouldBe IllegalArgumentException("Unknown purl type: unknowntype")
+    }
+
+    "Should map known Purl types to Ort identifier types correctly" {
+        PurlType.getOrtTypeFromPurlType("apk") shouldBe "Apk"
+        PurlType.getOrtTypeFromPurlType("bazel") shouldBe "Bazel"
+        PurlType.getOrtTypeFromPurlType("bitbucket") shouldBe "Bitbucket"
+        PurlType.getOrtTypeFromPurlType("bower") shouldBe "Bower"
+        PurlType.getOrtTypeFromPurlType("cargo") shouldBe "Cargo"
+        PurlType.getOrtTypeFromPurlType("carthage") shouldBe "Carthage"
+        PurlType.getOrtTypeFromPurlType("cocoapods") shouldBe "CocoaPods"
+        PurlType.getOrtTypeFromPurlType("composer") shouldBe "Composer"
+        PurlType.getOrtTypeFromPurlType("conan") shouldBe "Conan"
+        PurlType.getOrtTypeFromPurlType("conda") shouldBe "Conda"
+        PurlType.getOrtTypeFromPurlType("cran") shouldBe "Cran"
+        PurlType.getOrtTypeFromPurlType("deb") shouldBe "Deb"
+        PurlType.getOrtTypeFromPurlType("docker") shouldBe "Docker"
+        PurlType.getOrtTypeFromPurlType("drupal") shouldBe "Drupal"
+        PurlType.getOrtTypeFromPurlType("gem") shouldBe "Gem"
+        PurlType.getOrtTypeFromPurlType("generic") shouldBe "Generic"
+        PurlType.getOrtTypeFromPurlType("github") shouldBe "GitHub"
+        PurlType.getOrtTypeFromPurlType("gitlab") shouldBe "GitLab"
+        PurlType.getOrtTypeFromPurlType("golang") shouldBe "Go"
+        PurlType.getOrtTypeFromPurlType("hackage") shouldBe "Hackage"
+        PurlType.getOrtTypeFromPurlType("hex") shouldBe "Hex"
+        PurlType.getOrtTypeFromPurlType("huggingface") shouldBe "HuggingFace"
+        PurlType.getOrtTypeFromPurlType("maven") shouldBe "Maven"
+        PurlType.getOrtTypeFromPurlType("mlflow") shouldBe "MlFlow"
+        PurlType.getOrtTypeFromPurlType("npm") shouldBe "NPM"
+        PurlType.getOrtTypeFromPurlType("nuget") shouldBe "NuGet"
+        PurlType.getOrtTypeFromPurlType("otp") shouldBe "Otp"
+        PurlType.getOrtTypeFromPurlType("pub") shouldBe "Pub"
+        PurlType.getOrtTypeFromPurlType("pypi") shouldBe "PyPi"
+        PurlType.getOrtTypeFromPurlType("rpm") shouldBe "RPM"
+        PurlType.getOrtTypeFromPurlType("swift") shouldBe "Swift"
+    }
+
+    "Should map unknown Purl types to Ort identifier types correctly" {
+        PurlType.getOrtTypeFromPurlType("unknowntype") shouldBe "Unknowntype"
+        PurlType.getOrtTypeFromPurlType("jit") shouldBe "Jit"
+    }
 })
 
 private data class TestSuiteData(

@@ -32,7 +32,8 @@ import org.ossreviewtoolkit.utils.common.percentEncode
 enum class PurlType(
     private val value: String,
     val nameNormalization: (String) -> String = { it },
-    val namespaceNormalization: (String) -> String = { it }
+    val namespaceNormalization: (String) -> String = { it },
+    private val ortIdentifierType: String = value.replaceFirstChar { it.uppercase() }
 ) {
     APK("apk", { it.lowercase() }, { it.lowercase() }),
     BAZEL("bazel", { it.lowercase() }),
@@ -40,7 +41,7 @@ enum class PurlType(
     BOWER("bower"),
     CARGO("cargo"),
     CARTHAGE("carthage"),
-    COCOAPODS("cocoapods"),
+    COCOAPODS("cocoapods", ortIdentifierType = "CocoaPods"),
     COMPOSER("composer", { it.lowercase() }, { it.lowercase() }),
     CONAN("conan"),
     CONDA("conda"),
@@ -50,20 +51,20 @@ enum class PurlType(
     DRUPAL("drupal"),
     GEM("gem"),
     GENERIC("generic"),
-    GITHUB("github", { it.lowercase() }, { it.lowercase() }),
-    GITLAB("gitlab"),
-    GOLANG("golang", { it.lowercase() }, { it.lowercase() }),
+    GITHUB("github", { it.lowercase() }, { it.lowercase() }, ortIdentifierType = "GitHub"),
+    GITLAB("gitlab", ortIdentifierType = "GitLab"),
+    GOLANG("golang", { it.lowercase() }, { it.lowercase() }, ortIdentifierType = "Go"),
     HACKAGE("hackage"),
     HEX("hex"),
-    HUGGING_FACE("huggingface"),
+    HUGGING_FACE("huggingface", ortIdentifierType = "HuggingFace"),
     MAVEN("maven"),
-    MLFLOW("mlflow"),
-    NPM("npm", { it.lowercase() }),
-    NUGET("nuget"),
+    MLFLOW("mlflow", ortIdentifierType = "MlFlow"),
+    NPM("npm", { it.lowercase() }, ortIdentifierType = "NPM"),
+    NUGET("nuget", ortIdentifierType = "NuGet"),
     OTP("otp"),
     PUB("pub", { it.lowercase() }),
-    PYPI("pypi", { it.lowercase() }),
-    RPM("rpm", namespaceNormalization = { it.lowercase() }),
+    PYPI("pypi", { it.lowercase() }, ortIdentifierType = "PyPi"),
+    RPM("rpm", namespaceNormalization = { it.lowercase() }, ortIdentifierType = "RPM"),
     SWIFT("swift");
 
     init {
@@ -74,6 +75,11 @@ enum class PurlType(
         @JvmStatic
         fun fromString(value: String): PurlType =
             PurlType.entries.find { it.value == value } ?: throw IllegalArgumentException("Unknown purl type: $value")
+
+        @JvmStatic
+        fun getOrtTypeFromPurlType(purlType: String): String =
+            PurlType.entries.find { it.value == purlType }?.ortIdentifierType
+                ?: purlType.replaceFirstChar { it.uppercase() }
     }
 
     override fun toString() = value
