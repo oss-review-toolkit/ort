@@ -1,5 +1,5 @@
 [versions]
-buildConfigPlugin = "5.7.1"
+buildConfigPlugin = "6.0.0"
 dependencyAnalysisPlugin = "3.5.0"
 detektPlugin = "1.23.8"
 dokkatooPlugin = "2.4.0"
