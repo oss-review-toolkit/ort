@@ -25,6 +25,9 @@ import com.fasterxml.jackson.annotation.JsonValue
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.encodeOr
 
+import space.iseki.purl.PUrl
+import space.iseki.purl.PUrlParsingException
+
 /**
  * A unique identifier for a software component.
  */
@@ -66,6 +69,16 @@ data class Identifier(
         // This comparator is consistent with `equals()` as all properties are taken into account.
         private val COMPARATOR = compareBy<Identifier>({ it.type }, { it.namespace }, { it.name })
             .thenComparing({ it.version }, AlphaNumericComparator)
+
+        @Suppress("SwallowedException")
+        fun fromPurl(purlString: String): Identifier {
+            try {
+                val purl = PUrl.parse(purlString)
+                return Identifier(purl.type, purl.namespace.joinToString("."), purl.name, purl.version)
+            } catch (ex: PUrlParsingException) {
+                throw IllegalArgumentException(ex.message)
+            }
+        }
     }
 
     private constructor(properties: List<String>) : this(
