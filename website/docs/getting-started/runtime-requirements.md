@@ -6,7 +6,7 @@ sidebar_position: 2
 
 ORT is being continuously used on Linux, Windows and macOS by the [core development team](https://github.com/orgs/oss-review-toolkit/people), so these operating systems are considered to be well-supported.
 
-To run the ORT binaries (also see [Installation from binaries](installation.md#from-binaries)) at least Java 11 is required.
+To run the ORT binaries (also see [Installation from binaries](installation.md#from-binaries)) at least Java 21 is required.
 Memory and CPU requirements vary depending on the size and type of project(s) to analyze / scan, but the general recommendation is to configure Java with 8 GiB of memory and to use a CPU with at least 4 cores.
 
 ```shell
