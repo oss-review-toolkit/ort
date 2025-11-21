@@ -239,13 +239,12 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             List<OrtRepository> repositories = project.repositories.findResults {
                 if (it instanceof DefaultMavenArtifactRepository) {
                     new OrtRepositoryImpl(it.url.toString(), it.credentials?.username, it.credentials?.password)
+                } else if (it instanceof DefaultIvyArtifactRepository) {
+                    // Support Ivy repositories (e.g., Artifactory with Ivy layout)
+                    new OrtRepositoryImpl(it.url.toString(), it.credentials?.username, it.credentials?.password)
                 } else if (it instanceof DefaultFlatDirArtifactRepository) {
                     warnings.add('Project uses a flat dir repository which is not supported by the analyzer. ' +
                             "Dependencies from this repository will be ignored: ${it.dirs}".toString())
-                    null
-                } else if (it instanceof DefaultIvyArtifactRepository) {
-                    warnings.add('Project uses an Ivy repository which is not supported by the analyzer. ' +
-                            "Dependencies from this repository will be ignored: ${it.url}".toString())
                     null
                 } else {
                     errors.add("Unknown repository type: ${it.getClass().name}".toString())
@@ -343,6 +342,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
 
                 ComponentIdentifier id = dependencyResult.selected.id
                 if (id instanceof ModuleComponentIdentifier) {
+                    // Try to resolve Maven POM first
                     def resolvedComponents = project.dependencies.createArtifactResolutionQuery()
                             .forComponents(id)
                             .withArtifacts(MavenModule, MavenPomArtifact)
@@ -351,6 +351,17 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
 
                     // Imitate Kotlin's "firstOrNull()".
                     def result = resolvedComponents?.find { true }?.getArtifacts(MavenPomArtifact)?.find { true }
+
+                    // If Maven POM not found, try Ivy descriptor
+                    if (result == null) {
+                        resolvedComponents = project.dependencies.createArtifactResolutionQuery()
+                                .forComponents(id)
+                                .withArtifacts(IvyModule, IvyDescriptorArtifact)
+                                .execute()
+                                .resolvedComponents
+
+                        result = resolvedComponents?.find { true }?.getArtifacts(IvyDescriptorArtifact)?.find { true }
+                    }
 
                     String error = null
                     String warning = null
@@ -361,7 +372,8 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                     } else if (result instanceof UnresolvedArtifactResult) {
                         error = collectCauses(result.failure).toString()
                     } else if (result == null) {
-                        error = 'Resolution did not return any artifacts'
+                        // Neither Maven POM nor Ivy descriptor found - this might be okay for some dependencies
+                        warning = 'Resolution did not return any metadata artifacts (POM or Ivy descriptor)'
                     } else {
                         error = "Unknown ArtifactResult type: ${result.getClass().name}".toString()
                     }

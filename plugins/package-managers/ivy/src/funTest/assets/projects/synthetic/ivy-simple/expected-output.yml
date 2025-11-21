@@ -1,0 +1,112 @@
+# SPDX-FileCopyrightText: 2025 The ORT Project Authors <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+---
+projects:
+- id: "Ivy:com.example:sample-project:1.0.0"
+  definition_file_path: ""
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+  homepage_url: ""
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Maven:commons-lang:commons-lang:2.6"
+  - name: "runtime"
+    dependencies:
+    - id: "Maven:org.apache.logging.log4j:log4j-core:2.17.1"
+  - name: "test"
+    dependencies:
+    - id: "Maven:junit:junit:4.13.2"
+packages:
+- id: "Maven:commons-lang:commons-lang:2.6"
+  purl: "pkg:maven/commons-lang/commons-lang@2.6"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:junit:junit:4.13.2"
+  purl: "pkg:maven/junit/junit@4.13.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:org.apache.logging.log4j:log4j-core:2.17.1"
+  purl: "pkg:maven/org.apache.logging.log4j/log4j-core@2.17.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
