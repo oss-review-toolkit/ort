@@ -307,11 +307,11 @@ internal fun List<String>.groupLines(vararg markers: String): List<String> {
     }
 
     // If no lines but the last end with a dot, assume the message to be a single sentence.
-    return if (
-        nonFooterLines.size > 1 &&
-        nonFooterLines.last().endsWith('.') &&
-        nonFooterLines.subList(0, nonFooterLines.size - 1).none { it.endsWith('.') }
-    ) {
+    val isMultiLineSentence = nonFooterLines.size > 1
+        && nonFooterLines.last().endsWith('.')
+        && nonFooterLines.subList(0, nonFooterLines.size - 1).none { it.endsWith('.') }
+
+    return if (isMultiLineSentence) {
         listOf(nonFooterLines.joinToString(" "))
     } else {
         nonFooterLines.map { it.trim() }
