@@ -311,7 +311,10 @@ internal fun List<String>.groupLines(vararg markers: String): List<String> {
         && nonFooterLines.last().endsWith('.')
         && nonFooterLines.subList(0, nonFooterLines.size - 1).none { it.endsWith('.') }
 
-    return if (isMultiLineSentence) {
+    val isLoginError = nonFooterLines.firstOrNull() == "Incorrect or missing password."
+        && nonFooterLines.lastOrNull() == "npm login"
+
+    return if (isMultiLineSentence || isLoginError) {
         listOf(nonFooterLines.joinToString(" "))
     } else {
         nonFooterLines.map { it.trim() }
