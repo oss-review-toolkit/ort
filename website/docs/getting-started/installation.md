@@ -94,7 +94,7 @@ Alternatively, use the script at `scripts/docker_build.sh` which also sets the O
 
 Install these additional prerequisites:
 
-* Java Development Kit (JDK) version 11 or later; also remember to set the `JAVA_HOME` environment variable accordingly.
+* Java Development Kit (JDK) version 21 or later; also remember to set the `JAVA_HOME` environment variable accordingly.
 
 Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap Gradle and download all required dependencies).
 

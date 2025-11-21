@@ -64,7 +64,7 @@ For detailed information, see the documentation on the [ORT Website](https://oss
 
 ORT is being continuously used on Linux, Windows and macOS by the [core development team](https://github.com/orgs/oss-review-toolkit/people), so these operating systems are considered to be well-supported.
 
-To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least Java 11 is required.
+To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least Java 21 is required.
 Memory and CPU requirements vary depending on the size and type of project(s) to analyze / scan, but the general recommendation is to configure Java with 8 GiB of memory and to use a CPU with at least 4 cores.
 
 ```shell
@@ -113,7 +113,7 @@ Alternatively, use the script at `scripts/docker_build.sh` which also sets the O
 
 Install these additional prerequisites:
 
-* Java Development Kit (JDK) version 11 or later; also remember to set the `JAVA_HOME` environment variable accordingly.
+* Java Development Kit (JDK) version 21 or later; also remember to set the `JAVA_HOME` environment variable accordingly.
 
 Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap Gradle and download all required dependencies).
 
