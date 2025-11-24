@@ -88,7 +88,7 @@ tasks.register("allDependencies") {
     }
 }
 
-open class OrtPrintTask : PrintTask({ "" }, "Prints the current project version") {
+open class OrtPrintTask : PrintTask({ "" }, "Prints the current project version", "") {
     private val projectVersion = project.version.toString()
 
     @TaskAction
