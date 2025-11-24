@@ -35,6 +35,8 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.realFile
 
+const val NPM_RUNTIME_CONFIGURATION_FILENAME = ".npmrc"
+
 abstract class NodePackageManager(val managerType: NodePackageManagerType) : PackageManager(managerType.projectType) {
     internal abstract val graphBuilder: DependencyGraphBuilder<*>
 
@@ -72,6 +74,21 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
             description = packageJson.description.orEmpty(),
             homepageUrl = packageJson.homepage.orEmpty()
         )
+    }
+
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
+        super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
+
+        definitionFiles.forEach {
+            val npmrc = it.resolveSibling(NPM_RUNTIME_CONFIGURATION_FILENAME)
+            if (npmrc.isFile) {
+                logger.info { "There is a project-specific runtime configuration file at '${npmrc.absolutePath}'." }
+            }
+        }
     }
 
     override fun mapDefinitionFiles(
