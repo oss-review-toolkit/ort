@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
@@ -45,6 +46,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -147,7 +149,8 @@ internal enum class SpdxPackageType(val infix: String, val suffix: String = "") 
 internal fun Package.toSpdxPackage(
     type: SpdxPackageType,
     licenseInfoResolver: LicenseInfoResolver,
-    ortResult: OrtResult
+    ortResult: OrtResult,
+    autoConcludeToEffectiveLicense: Boolean
 ): SpdxPackage {
     val packageVerificationCode = ortResult.getPackageVerificationCode(id, type)?.let {
         SpdxPackageVerificationCode(packageVerificationCodeValue = it)
@@ -158,6 +161,14 @@ internal fun Package.toSpdxPackage(
         .applyChoices(ortResult.getRepositoryLicenseChoices())
 
     val licenseDeclared = resolvedLicenseInfo.mainLicense()?.simplify()
+
+    val licenseConcluded = concludedLicense ?: run {
+        // Do not use `CONCLUDED_OR_DECLARED_AND_DETECTED` here to support explicitly setting the `concludedLicense` to
+        // the `licenseDeclared` in order to acknowledge the latter and record it as the license concluded in SPDX.
+        val licenseView = LicenseView(enumSetOf(LicenseSource.DECLARED, LicenseSource.DETECTED))
+        resolvedLicenseInfo.effectiveLicense(licenseView)
+            .takeIf { autoConcludeToEffectiveLicense && it != licenseDeclared }
+    }
 
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
@@ -184,9 +195,9 @@ internal fun Package.toSpdxPackage(
             // Clear the concluded license as it might need to be different for the VCS location.
             SpdxPackageType.VCS_PACKAGE -> SpdxConstants.NOASSERTION
 
-            SpdxPackageType.PROJECT -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
+            SpdxPackageType.PROJECT -> licenseConcluded.nullOrBlankToSpdxNoassertionOrNone()
 
-            else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
+            else -> licenseConcluded.nullOrBlankToSpdxNoassertionOrNone()
         },
         licenseDeclared = licenseDeclared
             ?.sorted()
