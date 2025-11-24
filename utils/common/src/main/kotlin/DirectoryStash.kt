@@ -32,49 +32,49 @@ import kotlin.io.path.moveTo
 import org.apache.logging.log4j.kotlin.logger
 
 /**
- * A convenience function that stashes directories using a [DirectoryStash] instance.
+ * A convenience function that stashes directories / files using a [DirectoryStash] instance.
  */
-fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf(*directories))
+fun stashDirectories(vararg files: File): Closeable = DirectoryStash(setOf(*files))
 
 /**
- * A [Closeable] class which temporarily moves away directories and moves them back on close. Any conflicting directory
- * created at the location of an original directory is deleted before the original state is restored. If a specified
- * directory did not exist on initialization, it will also not exist on close.
+ * A [Closeable] class which temporarily moves away directories / [files] and moves them back on close. Any conflicting
+ * directory / file created at the location of an original directory / file is deleted before the original state is
+ * restored. If a specified directory / file did not exist on initialization, it will also not exist on close.
  */
-class DirectoryStash(directories: Set<File>) : Closeable {
-    private val stashedDirectories: Map<File, File?> = directories.associateWith { originalDir ->
+class DirectoryStash(files: Set<File>) : Closeable {
+    private val stash: Map<File, File?> = files.associateWith { original ->
         // Check this on each iteration instead of filtering beforehand to properly handle parent / child directories.
-        if (originalDir.isDirectory) {
-            // Create a temporary directory to move the original directory into as a sibling of the original directory
-            // to ensure it resides on the same file system for being able to perform an atomic move.
-            val tempDir = createTempDirectory(originalDir.parentFile.toPath(), ".stash").toFile()
+        if (!original.exists()) return@associateWith null
 
-            // Use a non-existing directory as the target to ensure the directory can be moved atomically.
-            val stashDir = tempDir / originalDir.name
+        // Create a temporary directory to move the original directory / file into as a sibling of the original
+        // directory / file to ensure it resides on the same file system for being able to perform an atomic move.
+        val tempDir = createTempDirectory(original.parentFile.toPath(), ".stash").toFile()
 
-            logger.info {
-                "Temporarily moving directory from '${originalDir.absolutePath}' to '${stashDir.absolutePath}'."
-            }
+        // Use a non-existing directory as the target to ensure the directory can be moved atomically.
+        val stashDir = tempDir / original.name
 
-            originalDir.toPath().moveTo(stashDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-
-            stashDir
-        } else {
-            null
+        logger.info {
+            val thing = if (original.isDirectory) "directory" else "file"
+            "Temporarily moving $thing from '${original.absolutePath}' to '${stashDir.absolutePath}'."
         }
+
+        original.toPath().moveTo(stashDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+
+        stashDir
     }
 
     override fun close() {
-        // Restore directories in reverse order of stashing to properly handle parent / child directories.
-        stashedDirectories.keys.reversed().forEach { originalDir ->
-            originalDir.safeDeleteRecursively()
+        // Restore directories / files in reverse order of stashing to properly handle parent / child directories.
+        stash.keys.reversed().forEach { original ->
+            original.safeDeleteRecursively()
 
-            stashedDirectories[originalDir]?.let { stashDir ->
+            stash[original]?.let { stashDir ->
+                stashDir.toPath().moveTo(original.toPath(), StandardCopyOption.ATOMIC_MOVE)
+
                 logger.info {
-                    "Moving back directory from '${stashDir.absolutePath}' to '${originalDir.absolutePath}'."
+                    val thing = if (original.isDirectory) "directory" else "file"
+                    "Moved back $thing from '${stashDir.absolutePath}' to '${original.absolutePath}'."
                 }
-
-                stashDir.toPath().moveTo(originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
                 // Delete the top-level temporary directory which should be empty now.
                 if (!stashDir.parentFile.delete()) {
