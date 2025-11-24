@@ -228,7 +228,7 @@ private fun OrtResult.getPackageVerificationCode(id: Identifier, type: SpdxPacka
     }
 
 /**
- * Use [licenseTextProvider] to add the license texts for all packages to the [SpdxDocument].
+ * Use [licenseFactProvider] to add the license texts for all packages to the [SpdxDocument].
  */
 internal fun SpdxDocument.addExtractedLicenseInfo(licenseFactProvider: LicenseFactProvider): SpdxDocument {
     val allLicenses = buildSet {
