@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("Filename")
-
 package org.ossreviewtoolkit.utils.common
 
 import java.io.Closeable
@@ -30,11 +28,6 @@ import kotlin.io.path.createTempDirectory
 import kotlin.io.path.moveTo
 
 import org.apache.logging.log4j.kotlin.logger
-
-/**
- * A convenience function that stashes directories / files using a [DirectoryStash] instance.
- */
-fun stashDirectories(vararg files: File): Closeable = DirectoryStash(setOf(*files))
 
 /**
  * A [Closeable] class which temporarily moves away directories / [files] and moves them back on close. Any conflicting
@@ -84,3 +77,8 @@ class DirectoryStash(files: Set<File>) : Closeable {
         }
     }
 }
+
+/**
+ * A convenience function that stashes directories / files using a [DirectoryStash] instance.
+ */
+fun stashDirectories(vararg files: File): Closeable = DirectoryStash(setOf(*files))
