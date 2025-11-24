@@ -163,5 +163,23 @@ class DirectoryStashFunTest : StringSpec() {
 
             sandboxDirShouldBeInOriginalState()
         }
+
+        "individual files can be stashed" {
+            stashDirectories(aNestedFile, bNestedFile).use {}
+
+            sandboxDirShouldBeInOriginalState()
+        }
+
+        "files and their parent directories can be stashed" {
+            stashDirectories(aNestedFile, aSubdir, bNestedFile, bSubdir).use {}
+
+            sandboxDirShouldBeInOriginalState()
+        }
+
+        "root directories and files can be stashed" {
+            stashDirectories(a, aNestedFile, b, bNestedFile).use {}
+
+            sandboxDirShouldBeInOriginalState()
+        }
     }
 }
