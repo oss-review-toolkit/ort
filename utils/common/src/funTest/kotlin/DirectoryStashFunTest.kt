@@ -35,19 +35,19 @@ import java.io.IOException
 class DirectoryStashFunTest : StringSpec() {
     private lateinit var sandboxDir: File
     private lateinit var a: File
-    private lateinit var a1: File
+    private lateinit var aSubdir: File
     private lateinit var b: File
-    private lateinit var b1: File
+    private lateinit var bSubdir: File
 
     override suspend fun beforeTest(testCase: TestCase) {
         sandboxDir = tempdir()
         a = sandboxDir / "a"
-        a1 = a / "a1"
+        aSubdir = a / "a-subdir"
         b = sandboxDir / "b"
-        b1 = b / "b1"
+        bSubdir = b / "b-subdir"
 
-        check(a1.mkdirs())
-        check(b1.mkdirs())
+        check(aSubdir.mkdirs())
+        check(bSubdir.mkdirs())
     }
 
     private fun sandboxDirShouldBeInOriginalState() {
@@ -55,16 +55,16 @@ class DirectoryStashFunTest : StringSpec() {
         a should containNFiles(1)
         b should containNFiles(1)
         a should exist()
-        a1 should exist()
+        aSubdir should exist()
         b should exist()
-        b1 should exist()
+        bSubdir should exist()
     }
 
     init {
         "given single directory, when stashed, subtree is not existent" {
             stashDirectories(a).use {
                 a shouldNot exist()
-                a1 shouldNot exist()
+                aSubdir shouldNot exist()
             }
         }
 
@@ -102,27 +102,27 @@ class DirectoryStashFunTest : StringSpec() {
         }
 
         "given parent and child, stashing works" {
-            stashDirectories(a, a1).use {
+            stashDirectories(a, aSubdir).use {
                 a shouldNot exist()
-                a1 shouldNot exist()
+                aSubdir shouldNot exist()
             }
         }
 
         "given parent and child, un-stashing works" {
-            stashDirectories(a, a1).use {}
+            stashDirectories(a, aSubdir).use {}
 
             sandboxDirShouldBeInOriginalState()
         }
 
         "given child and parent, stashing works" {
-            stashDirectories(a1, a).use {
+            stashDirectories(aSubdir, a).use {
                 a shouldNot exist()
-                a1 shouldNot exist()
+                aSubdir shouldNot exist()
             }
         }
 
         "given child and parent, un-stashing works" {
-            stashDirectories(a1, a).use {}
+            stashDirectories(aSubdir, a).use {}
 
             sandboxDirShouldBeInOriginalState()
         }
