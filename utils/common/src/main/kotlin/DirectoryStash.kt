@@ -29,6 +29,8 @@ import kotlin.io.path.moveTo
 
 import org.apache.logging.log4j.kotlin.logger
 
+typealias FileStash = DirectoryStash
+
 /**
  * A [Closeable] class which temporarily moves away directories / [files] and moves them back on close. Any conflicting
  * directory / file created at the location of an original directory / file is deleted before the original state is
@@ -82,3 +84,8 @@ class DirectoryStash(files: Set<File>) : Closeable {
  * A convenience function that stashes directories / files using a [DirectoryStash] instance.
  */
 fun stashDirectories(vararg files: File): Closeable = DirectoryStash(setOf(*files))
+
+/**
+ * A convenience function that stashes directories / files using a [DirectoryStash] instance.
+ */
+fun stashFiles(vararg files: File): Closeable = FileStash(setOf(*files))
