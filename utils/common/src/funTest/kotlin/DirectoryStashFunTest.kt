@@ -23,6 +23,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.containNFiles
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.should
@@ -54,10 +55,10 @@ class DirectoryStashFunTest : StringSpec() {
         sandboxDir should containNFiles(2)
         a should containNFiles(1)
         b should containNFiles(1)
-        a should exist()
-        aSubdir should exist()
-        b should exist()
-        bSubdir should exist()
+        a shouldBe aDirectory()
+        aSubdir shouldBe aDirectory()
+        b shouldBe aDirectory()
+        bSubdir shouldBe aDirectory()
     }
 
     init {
