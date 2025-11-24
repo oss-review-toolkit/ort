@@ -36,13 +36,14 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NPM_RUNTIME_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.DirectoryStash
+import org.ossreviewtoolkit.utils.common.FileStash
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -61,6 +62,12 @@ internal object NpmCommand : CommandLineTool {
 }
 
 data class NpmConfig(
+    /**
+     * If true, ignore any project-specific `.npmrc` files.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val ignoreProjectNpmrcFiles: Boolean,
+
     /**
      * If true, the "--legacy-peer-deps" flag is passed to NPM to ignore conflicts in peer dependencies which are
      * reported since NPM 7. This allows to analyze NPM 6 projects with peer dependency conflicts. For more information
@@ -85,7 +92,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-    private lateinit var stash: DirectoryStash
+    private lateinit var stash: FileStash
 
     private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->
         runCatching {
@@ -109,8 +116,13 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
         NpmCommand.checkVersion()
 
-        val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
-        stash = DirectoryStash(directories)
+        val files = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
+
+        if (config.ignoreProjectNpmrcFiles) {
+            files += definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling(NPM_RUNTIME_CONFIGURATION_FILENAME) }
+        }
+
+        stash = FileStash(files)
     }
 
     override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
