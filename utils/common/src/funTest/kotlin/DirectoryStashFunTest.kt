@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.file.aDirectory
+import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.containNFiles
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.should
@@ -35,30 +36,45 @@ import java.io.IOException
 
 class DirectoryStashFunTest : StringSpec() {
     private lateinit var sandboxDir: File
+
     private lateinit var a: File
     private lateinit var aSubdir: File
+    private lateinit var aNestedFile: File
+
     private lateinit var b: File
     private lateinit var bSubdir: File
+    private lateinit var bNestedFile: File
 
     override suspend fun beforeTest(testCase: TestCase) {
         sandboxDir = tempdir()
+
         a = sandboxDir / "a"
         aSubdir = a / "a-subdir"
+        aNestedFile = aSubdir / "a-file"
+
         b = sandboxDir / "b"
         bSubdir = b / "b-subdir"
+        bNestedFile = bSubdir / "b-file"
 
         check(aSubdir.mkdirs())
+        check(aNestedFile.createNewFile())
+
         check(bSubdir.mkdirs())
+        check(bNestedFile.createNewFile())
     }
 
     private fun sandboxDirShouldBeInOriginalState() {
         sandboxDir should containNFiles(2)
-        a should containNFiles(1)
-        b should containNFiles(1)
+
         a shouldBe aDirectory()
+        a should containNFiles(1)
         aSubdir shouldBe aDirectory()
+        aNestedFile shouldBe aFile()
+
         b shouldBe aDirectory()
+        b should containNFiles(1)
         bSubdir shouldBe aDirectory()
+        bNestedFile shouldBe aFile()
     }
 
     init {
