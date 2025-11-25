@@ -83,13 +83,11 @@ internal class Yarn2DependencyHandler(
 
 internal val PackageInfo.isProject: Boolean get() = value.substringAfterLast("@").startsWith("workspace:")
 
-internal val PackageInfo.moduleName: String get() {
+internal val PackageInfo.moduleName: String get() =
     // TODO: Handle patched packages different than non-patched ones.
     // Patch packages have locators as e.g. the following, where the first component ends with "@patch".
     // resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d
-    val endIndex = value.indexOf("@", startIndex = 1)
-    return value.take(endIndex)
-}
+    Locator.parse(value).moduleName
 
 internal val PackageInfo.moduleId: String get() = buildString {
     append(moduleName)
@@ -97,5 +95,20 @@ internal val PackageInfo.moduleId: String get() = buildString {
     if (children.version.isNotBlank()) {
         append("@")
         append(children.version)
+    }
+}
+
+internal data class Locator(
+    val moduleName: String,
+    val remainder: String
+) {
+    companion object {
+        fun parse(value: String): Locator {
+            val moduleNameEndIndex = value.indexOf("@", startIndex = 1)
+            return Locator(
+                moduleName = value.take(moduleNameEndIndex),
+                remainder = value.substring(moduleNameEndIndex + 1)
+            )
+        }
     }
 }
