@@ -112,5 +112,7 @@ internal data class Locator(
         }
     }
 
-    fun isProject(): Boolean = remainder.startsWith("workspace:")
+    fun isProject(): Boolean =
+        remainder.startsWith("workspace:") ||
+            (remainder.startsWith("virtual:") && "#workspace:" in remainder)
 }
