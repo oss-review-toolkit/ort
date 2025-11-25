@@ -41,4 +41,12 @@ class Yarn2DependencyHandlerTest : WordSpec({
             locator.remainder shouldBe "workspace:packages/spark"
         }
     }
+
+    "Locator.isProject()" should {
+        "work for a workspace package" {
+            val locator = Locator.parse("@failing/package-with-lightningcss@workspace:packages/spark")
+
+            locator.isProject() shouldBe true
+        }
+    }
 })
