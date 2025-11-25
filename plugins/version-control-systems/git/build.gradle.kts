@@ -40,8 +40,6 @@ dependencies {
 
     implementation(libs.jgit)
 
-    implementation(libs.jgit.http.apache)
-
     implementation(libs.jgit.ssh.apache) {
         exclude(group = "org.apache.sshd", module = "sshd-sftp")
             .because("it is not required for cloning via SSH and causes issues with GraalVM native images")

@@ -35,11 +35,9 @@ import org.eclipse.jgit.lib.ObjectIdRef
 import org.eclipse.jgit.lib.SymbolicRef
 import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
-import org.eclipse.jgit.transport.HttpTransport
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.TagOpt
 import org.eclipse.jgit.transport.URIish
-import org.eclipse.jgit.transport.http.apache.HttpClientConnectionFactory
 import org.eclipse.jgit.transport.sshd.DefaultProxyDataFactory
 import org.eclipse.jgit.transport.sshd.JGitKeyCache
 import org.eclipse.jgit.transport.sshd.ServerKeyDatabase
@@ -101,10 +99,6 @@ class Git(
 ) : VersionControlSystem() {
     companion object {
         init {
-            // Use Apache HttpClient for HTTP transport in JGit instead of the default java.net.HttpURLConnection based
-            // transport. This avoids caching credentials too eagerly for basic authentication.
-            HttpTransport.setConnectionFactory(HttpClientConnectionFactory())
-
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
             // discrepancies in the way .netrc files are interpreted between JGit's and ORT's implementation.
             CredentialsProvider.setDefault(AuthenticatorCredentialsProvider)
