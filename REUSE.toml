@@ -11,6 +11,11 @@ SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
+path = "**/.flox/**"
+SPDX-FileCopyrightText = "2025 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
 path = "**/.gitattributes"
 SPDX-FileCopyrightText = "2018 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
 SPDX-License-Identifier = "Apache-2.0"
