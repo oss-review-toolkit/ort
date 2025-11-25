@@ -74,8 +74,8 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val inputDir by option(
         "--input-dir", "-i",
-        help = "The project directory to analyze. May point to a definition file if only a single package manager is " +
-            "enabled."
+        help = "The project directory to analyze. May point to a definition file, but only if just a single package" +
+            "manager is enabled, and the definition file does not depend on any further definition files."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
