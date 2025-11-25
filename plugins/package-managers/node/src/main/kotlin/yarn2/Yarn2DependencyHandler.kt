@@ -81,7 +81,7 @@ internal class Yarn2DependencyHandler(
     }
 }
 
-internal val PackageInfo.isProject: Boolean get() = value.substringAfterLast("@").startsWith("workspace:")
+internal val PackageInfo.isProject: Boolean get() = Locator.parse(value).isProject()
 
 internal val PackageInfo.moduleName: String get() =
     // TODO: Handle patched packages different than non-patched ones.
@@ -111,4 +111,6 @@ internal data class Locator(
             )
         }
     }
+
+    fun isProject(): Boolean = remainder.startsWith("workspace:")
 }
