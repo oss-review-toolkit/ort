@@ -29,9 +29,7 @@ import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.moduleId
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
-import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 
 internal class Yarn2DependencyHandler(
     private val moduleInfoResolver: ModuleInfoResolver
@@ -40,7 +38,11 @@ internal class Yarn2DependencyHandler(
     private val packageInfoForLocator = mutableMapOf<String, PackageInfo>()
     private lateinit var workingDir: File
 
-    fun setContext(workingDir: File, moduleDirs: Set<File>, packageInfoForLocator: Map<String, PackageInfo>) {
+    fun setContext(
+        workingDir: File,
+        packageJsonForModuleId: Map<String, PackageJson>,
+        packageInfoForLocator: Map<String, PackageInfo>
+    ) {
         this.workingDir = workingDir
 
         this.packageInfoForLocator.apply {
@@ -48,11 +50,9 @@ internal class Yarn2DependencyHandler(
             putAll(packageInfoForLocator)
         }
 
-        packageJsonForModuleId.clear()
-
-        moduleDirs.forEach { moduleDir ->
-            val packageJson = parsePackageJson(moduleDir.resolve(NodePackageManagerType.DEFINITION_FILE))
-            packageJsonForModuleId[packageJson.moduleId] = packageJson
+        this.packageJsonForModuleId.apply {
+            clear()
+            putAll(packageJsonForModuleId)
         }
     }
 

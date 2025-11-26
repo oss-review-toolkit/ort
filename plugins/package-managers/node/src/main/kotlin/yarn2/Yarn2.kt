@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getDependenciesForScope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getInstalledModulesDirs
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
+import org.ossreviewtoolkit.plugins.packagemanagers.node.moduleId
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -142,7 +143,12 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
         val packageInfoForLocator = getPackageInfos(workingDir).associateBy { it.value }
-        handler.setContext(workingDir, getInstalledModulesDirs(workingDir), packageInfoForLocator)
+        val packageJsonForModuleId = getInstalledModulesDirs(workingDir).associate { moduleDir ->
+            val packageJson = parsePackageJson(moduleDir.resolve(NodePackageManagerType.DEFINITION_FILE))
+            packageJson.moduleId to packageJson
+        }
+
+        handler.setContext(workingDir, packageJsonForModuleId, packageInfoForLocator)
 
         // Warm-up the cache to speed-up processing.
         requestAllPackageDetails(packageInfoForLocator.values)
