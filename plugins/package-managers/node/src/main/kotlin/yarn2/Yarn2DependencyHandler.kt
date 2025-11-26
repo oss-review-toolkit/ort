@@ -37,7 +37,6 @@ internal class Yarn2DependencyHandler(
     private val moduleInfoResolver: ModuleInfoResolver
 ) : DependencyHandler<PackageInfo> {
     private val packageJsonForModuleId = mutableMapOf<String, PackageJson>()
-    private val moduleDirForModuleId = mutableMapOf<String, File>()
     private val packageInfoForLocator = mutableMapOf<String, PackageInfo>()
     private lateinit var workingDir: File
 
@@ -50,12 +49,10 @@ internal class Yarn2DependencyHandler(
         }
 
         packageJsonForModuleId.clear()
-        moduleDirForModuleId.clear()
 
         moduleDirs.forEach { moduleDir ->
             val packageJson = parsePackageJson(moduleDir.resolve(NodePackageManagerType.DEFINITION_FILE))
             packageJsonForModuleId[packageJson.moduleId] = packageJson
-            moduleDirForModuleId[packageJson.moduleId] = moduleDir
         }
     }
 
