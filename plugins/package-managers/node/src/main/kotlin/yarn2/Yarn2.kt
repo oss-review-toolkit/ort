@@ -142,11 +142,14 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         installDependencies(workingDir)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
-        val packageInfoForLocator = getPackageInfos(workingDir).associateBy { it.value }
         val packageJsonForModuleId = getInstalledModulesDirs(workingDir).associate { moduleDir ->
             val packageJson = parsePackageJson(moduleDir.resolve(NodePackageManagerType.DEFINITION_FILE))
             packageJson.moduleId to packageJson
         }
+
+        val packageInfoForLocator = getPackageInfos(workingDir)
+            .filterNotInstalled(packageJsonForModuleId.keys)
+            .associateBy { it.value }
 
         handler.setContext(workingDir, packageJsonForModuleId, packageInfoForLocator)
 
@@ -195,6 +198,21 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         ).requireSuccess()
 
         return parsePackageInfos(process.stdout)
+    }
+
+    private fun Collection<PackageInfo>.filterNotInstalled(installedModuleIds: Set<String>): List<PackageInfo> {
+        val infoForLocator = associateBy { it.value }
+
+        return mapNotNull { info ->
+            if (info.moduleId !in installedModuleIds) return@mapNotNull null
+            info.copy(
+                children = info.children.copy(
+                    dependencies = info.children.dependencies.filter { dep ->
+                        infoForLocator.getValue(dep.locator).moduleId in installedModuleIds
+                    }
+                )
+            )
+        }
     }
 
     private fun getWorkspaceModuleDirs(workingDir: File): Set<File> {
