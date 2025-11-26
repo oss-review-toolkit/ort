@@ -5,6 +5,13 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@lmdb/lmdb-darwin-arm64@npm:3.0.13":
+  version: 3.0.13
+  resolution: "@lmdb/lmdb-darwin-arm64@npm:3.0.13"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
 "@react-native-community/netinfo@npm:11.2.1":
   version: 11.2.1
   resolution: "@react-native-community/netinfo@npm:11.2.1"
@@ -371,12 +378,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "yarn2-package-with-lockfile@workspace:."
   dependencies:
+    "@lmdb/lmdb-darwin-arm64": 3.0.13
     "@react-native-community/netinfo": 11.2.1
     cheerio: 1.0.0-rc.1
     cson: ~4.1.0
     long: ^3.2.0
     promise: ~7.3.1
   dependenciesMeta:
+    "@lmdb/lmdb-darwin-arm64":
+      optional: true
     promise:
       optional: true
   languageName: unknown
