@@ -320,7 +320,7 @@ class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlR
             td { +(ruleViolation.violation.pkg?.toCoordinates() ?: "-") }
             td {
                 +if (ruleViolation.violation.license != null) {
-                    "${ruleViolation.violation.licenseSource}: ${ruleViolation.violation.license}"
+                    "${ruleViolation.violation.licenseSources.joinToString()}: ${ruleViolation.violation.license}"
                 } else {
                     "-"
                 }
