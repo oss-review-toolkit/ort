@@ -202,14 +202,25 @@ open class PackageRule(
     /**
      * A DSL function to configure a [LicenseRule] and add it to this rule.
      */
-    fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
-        resolvedLicenseInfo.filter(licenseView, filterSources = true)
+    fun licenseRule(
+        name: String,
+        licenseView: LicenseView,
+        separateEvaluationPerSource: Boolean = true,
+        block: LicenseRule.() -> Unit
+    ) {
+        val effectiveResolvedLicenseInfo = resolvedLicenseInfo.filter(licenseView, filterSources = true)
             .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.metadata.id), licenseView)
-            .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView).forEach { resolvedLicense ->
+            .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView)
+
+        effectiveResolvedLicenseInfo.forEach { resolvedLicense ->
+            if (separateEvaluationPerSource) {
                 resolvedLicense.sources.forEach { licenseSource ->
                     licenseRules += LicenseRule(name, resolvedLicense, setOf(licenseSource)).apply(block)
                 }
+            } else {
+                licenseRules += LicenseRule(name, resolvedLicense, resolvedLicense.sources).apply(block)
             }
+        }
     }
 
     fun issue(severity: Severity, message: String, howToFix: String) =
