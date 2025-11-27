@@ -130,7 +130,7 @@ abstract class Rule(
         severity: Severity,
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSource: LicenseSource?,
+        licenseSources: Set<LicenseSource>,
         message: String,
         howToFix: String
     ) {
@@ -139,7 +139,7 @@ abstract class Rule(
             rule = name,
             pkg = pkgId,
             license = license,
-            licenseSources = setOfNotNull(licenseSource),
+            licenseSources = licenseSources,
             message = message,
             howToFix = howToFix
         )
@@ -151,10 +151,10 @@ abstract class Rule(
     fun hint(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSource: LicenseSource?,
+        licenseSources: Set<LicenseSource>,
         message: String,
         howToFix: String
-    ) = issue(Severity.HINT, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.HINT, pkgId, license, licenseSources, message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [violations].
@@ -162,10 +162,10 @@ abstract class Rule(
     fun warning(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSource: LicenseSource?,
+        licenseSources: Set<LicenseSource>,
         message: String,
         howToFix: String
-    ) = issue(Severity.WARNING, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.WARNING, pkgId, license, licenseSources, message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [violations].
@@ -173,10 +173,10 @@ abstract class Rule(
     fun error(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSource: LicenseSource?,
+        licenseSources: Set<LicenseSource>,
         message: String,
         howToFix: String
-    ) = issue(Severity.ERROR, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.ERROR, pkgId, license, licenseSources, message, howToFix)
 
     /**
      * A DSL helper class, providing convenience functions for adding [RuleMatcher]s to this rule.

@@ -207,28 +207,28 @@ open class PackageRule(
             .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.metadata.id), licenseView)
             .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView).forEach { resolvedLicense ->
                 resolvedLicense.sources.forEach { licenseSource ->
-                    licenseRules += LicenseRule(name, resolvedLicense, licenseSource).apply(block)
+                    licenseRules += LicenseRule(name, resolvedLicense, setOf(licenseSource)).apply(block)
                 }
             }
     }
 
     fun issue(severity: Severity, message: String, howToFix: String) =
-        issue(severity, pkg.metadata.id, null, null, message, howToFix)
+        issue(severity, pkg.metadata.id, null, emptySet(), message, howToFix)
 
     /**
      * Add a [hint][Severity.HINT] to the list of [violations].
      */
-    fun hint(message: String, howToFix: String) = hint(pkg.metadata.id, null, null, message, howToFix)
+    fun hint(message: String, howToFix: String) = hint(pkg.metadata.id, null, emptySet(), message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [violations].
      */
-    fun warning(message: String, howToFix: String) = warning(pkg.metadata.id, null, null, message, howToFix)
+    fun warning(message: String, howToFix: String) = warning(pkg.metadata.id, null, emptySet(), message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [violations].
      */
-    fun error(message: String, howToFix: String) = error(pkg.metadata.id, null, null, message, howToFix)
+    fun error(message: String, howToFix: String) = error(pkg.metadata.id, null, emptySet(), message, howToFix)
 
     /**
      * A [Rule] to check a single license of the [package][pkg].
@@ -242,10 +242,21 @@ open class PackageRule(
         val resolvedLicense: ResolvedLicense,
 
         /**
-         * The source of the license.
+         * The license sources to evaluate the rule for. Must not be empty and be contained in the [resolvedLicense].
          */
-        val licenseSource: LicenseSource
+        val licenseSources: Set<LicenseSource>
     ) : Rule(ruleSet, name) {
+        init {
+            require(licenseSources.isNotEmpty()) {
+                "The given license sources must not be empty."
+            }
+
+            val invalidLicenseSources = licenseSources - resolvedLicense.sources
+            require(invalidLicenseSources.isEmpty()) {
+                "The license sources $invalidLicenseSources are not part of the resolved license."
+            }
+        }
+
         /**
          * A shortcut for the [license][ResolvedLicense.license] in [resolvedLicense].
          */
@@ -257,11 +268,11 @@ open class PackageRule(
          */
         fun pkg() = pkg
 
-        override val description = "\tEvaluating license rule '$name' for $licenseSource license " +
+        override val description = "\tEvaluating license rule '$name' for $licenseSources license " +
             "'${resolvedLicense.license}'."
 
         override fun issueSource() =
-            "$name - ${pkg.metadata.id.toCoordinates()} - ${resolvedLicense.license} ($licenseSource)"
+            "$name - ${pkg.metadata.id.toCoordinates()} - ${resolvedLicense.license} ($licenseSources})"
 
         /**
          * A [RuleMatcher] that checks if a [detected][LicenseSource.DETECTED] license is
@@ -271,7 +282,8 @@ open class PackageRule(
             object : RuleMatcher {
                 override val description = "isDetectedExcluded($license)"
 
-                override fun matches() = licenseSource == LicenseSource.DETECTED && resolvedLicense.isDetectedExcluded
+                override fun matches() =
+                    licenseSources.singleOrNull() == LicenseSource.DETECTED && resolvedLicense.isDetectedExcluded
             }
 
         /**
@@ -290,22 +302,23 @@ open class PackageRule(
             }
 
         fun issue(severity: Severity, message: String, howToFix: String) =
-            issue(severity, pkg.metadata.id, license, licenseSource, message, howToFix)
+            issue(severity, pkg.metadata.id, license, licenseSources, message, howToFix)
 
         /**
          * Add a [hint][Severity.HINT] to the list of [violations].
          */
-        fun hint(message: String, howToFix: String) = hint(pkg.metadata.id, license, licenseSource, message, howToFix)
+        fun hint(message: String, howToFix: String) = hint(pkg.metadata.id, license, licenseSources, message, howToFix)
 
         /**
          * Add a [warning][Severity.WARNING] to the list of [violations].
          */
         fun warning(message: String, howToFix: String) =
-            warning(pkg.metadata.id, license, licenseSource, message, howToFix)
+            warning(pkg.metadata.id, license, licenseSources, message, howToFix)
 
         /**
          * Add an [error][Severity.ERROR] to the list of [violations].
          */
-        fun error(message: String, howToFix: String) = error(pkg.metadata.id, license, licenseSource, message, howToFix)
+        fun error(message: String, howToFix: String) =
+            error(pkg.metadata.id, license, licenseSources, message, howToFix)
     }
 }

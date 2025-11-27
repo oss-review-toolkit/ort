@@ -34,7 +34,7 @@ class RuleTest : WordSpec() {
     private val ruleSet = ruleSet(ortResult)
     private val id = Identifier("type:namespace:name:version")
     private val license = SpdxLicenseIdExpression("license")
-    private val licenseSource = LicenseSource.DECLARED
+    private val licenseSources = setOf(LicenseSource.DECLARED)
     private val message = "violation message"
     private val howToFix = "how to fix"
 
@@ -49,14 +49,14 @@ class RuleTest : WordSpec() {
             "add an issue with the correct severity" {
                 val rule = createRule()
 
-                rule.hint(id, license, licenseSource, message, howToFix)
+                rule.hint(id, license, licenseSources, message, howToFix)
 
                 rule.violations should haveSize(1)
                 rule.violations.first().let { violation ->
                     violation.rule shouldBe rule.name
                     violation.pkg shouldBe id
                     violation.license shouldBe license
-                    violation.licenseSources should containExactlyInAnyOrder(licenseSource)
+                    violation.licenseSources should containExactlyInAnyOrder(licenseSources)
                     violation.severity shouldBe Severity.HINT
                     violation.message shouldBe message
                     violation.howToFix shouldBe howToFix
@@ -68,14 +68,14 @@ class RuleTest : WordSpec() {
             "add an issue with the correct severity" {
                 val rule = createRule()
 
-                rule.warning(id, license, licenseSource, message, howToFix)
+                rule.warning(id, license, licenseSources, message, howToFix)
 
                 rule.violations should haveSize(1)
                 rule.violations.first().let { violation ->
                     violation.rule shouldBe rule.name
                     violation.pkg shouldBe id
                     violation.license shouldBe license
-                    violation.licenseSources should containExactlyInAnyOrder(licenseSource)
+                    violation.licenseSources should containExactlyInAnyOrder(licenseSources)
                     violation.severity shouldBe Severity.WARNING
                     violation.message shouldBe message
                     violation.howToFix shouldBe howToFix
@@ -87,14 +87,14 @@ class RuleTest : WordSpec() {
             "add an issue with the correct severity" {
                 val rule = createRule()
 
-                rule.error(id, license, licenseSource, message, howToFix)
+                rule.error(id, license, licenseSources, message, howToFix)
 
                 rule.violations should haveSize(1)
                 rule.violations.first().let { violation ->
                     violation.rule shouldBe rule.name
                     violation.pkg shouldBe id
                     violation.license shouldBe license
-                    violation.licenseSources should containExactlyInAnyOrder(licenseSource)
+                    violation.licenseSources should containExactlyInAnyOrder(licenseSources)
                     violation.severity shouldBe Severity.ERROR
                     violation.message shouldBe message
                     violation.howToFix shouldBe howToFix
