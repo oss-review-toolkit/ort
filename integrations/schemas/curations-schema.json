@@ -89,6 +89,9 @@
                 "VCS"
               ]
             }
+          },
+          "labels": {
+            "type": "object"
           }
         }
       }
