@@ -78,7 +78,7 @@ class EvaluatorTest : WordSpec({
                     rule = "rule 1",
                     pkg = Identifier("type:namespace:name:1.0"),
                     license = SpdxLicenseIdExpression("license-1"),
-                    licenseSource = LicenseSource.DETECTED,
+                    licenseSources = setOf(LicenseSource.DETECTED),
                     severity = Severity.ERROR,
                     message = "message 1",
                     howToFix = "how to fix 1"
@@ -88,7 +88,7 @@ class EvaluatorTest : WordSpec({
                     rule = "rule 2",
                     pkg = Identifier("type:namespace:name:2.0"),
                     license = SpdxLicenseIdExpression("license-2"),
-                    licenseSource = LicenseSource.DECLARED,
+                    licenseSources = setOf(LicenseSource.DECLARED),
                     severity = Severity.WARNING,
                     message = "message 2",
                     howToFix = "how to fix 2"
@@ -102,7 +102,7 @@ class EvaluatorTest : WordSpec({
                 rule shouldBe "rule 1"
                 pkg shouldBe Identifier("type:namespace:name:1.0")
                 license shouldBe "license-1".toSpdx()
-                licenseSource shouldBe LicenseSource.DETECTED
+                licenseSources should containExactlyInAnyOrder(LicenseSource.DETECTED)
                 severity shouldBe Severity.ERROR
                 message shouldBe "message 1"
                 howToFix shouldBe "how to fix 1"
@@ -112,7 +112,7 @@ class EvaluatorTest : WordSpec({
                 rule shouldBe "rule 2"
                 pkg shouldBe Identifier("type:namespace:name:2.0")
                 license shouldBe "license-2".toSpdx()
-                licenseSource shouldBe LicenseSource.DECLARED
+                licenseSources should containExactlyInAnyOrder(LicenseSource.DECLARED)
                 severity shouldBe Severity.WARNING
                 message shouldBe "message 2"
                 howToFix shouldBe "how to fix 2"

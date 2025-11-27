@@ -38,9 +38,9 @@ data class RuleViolation(
     val license: SpdxSingleLicenseExpression?,
 
     /**
-     * The [source][LicenseSource] of the [license]. Can be null if the rule does not work on licenses.
+     * The [sources][licenseSources] of the [license]. Can be empty if the rule does not work on licenses.
      */
-    val licenseSource: LicenseSource?,
+    val licenseSources: Set<LicenseSource>,
 
     /**
      * The severity of the rule violation.

@@ -139,7 +139,7 @@ abstract class Rule(
             rule = name,
             pkg = pkgId,
             license = license,
-            licenseSource = licenseSource,
+            licenseSources = setOfNotNull(licenseSource),
             message = message,
             howToFix = howToFix
         )
