@@ -265,7 +265,7 @@ internal fun getInstalledModulesDirs(projectDir: File): Set<File> {
 * This handles both regular modules and namespaced (@organization) modules.
 */
 private fun getChildModuleDirs(moduleDir: File): Set<File> {
-    val nodeModulesDir = moduleDir.resolve("node_modules").takeIf { it.isDirectory } ?: return emptySet()
+    val nodeModulesDir = moduleDir.resolve(NODE_MODULES_DIRNAME).takeIf { it.isDirectory } ?: return emptySet()
 
     fun File.isModuleDir(): Boolean =
         isDirectory && !isHidden && !name.startsWith("@") && resolve(NodePackageManagerType.DEFINITION_FILE).isFile
