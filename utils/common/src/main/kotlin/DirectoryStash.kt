@@ -45,16 +45,16 @@ class DirectoryStash(files: Set<File>) : Closeable {
         // directory / file to ensure it resides on the same file system for being able to perform an atomic move.
         val tempDir = createTempDirectory(original.parentFile.toPath(), ".stash").toFile()
 
-        val stashDir = tempDir / original.name
+        val stash = tempDir / original.name
 
         logger.info {
             val thing = if (original.isDirectory) "directory" else "file"
-            "Temporarily moving $thing from '${original.absolutePath}' to '${stashDir.absolutePath}'."
+            "Temporarily moving $thing from '${original.absolutePath}' to '${stash.absolutePath}'."
         }
 
-        original.toPath().moveTo(stashDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+        original.toPath().moveTo(stash.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
-        stashDir
+        stash
     }
 
     override fun close() {
