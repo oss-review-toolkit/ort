@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.evaluator
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -55,7 +56,7 @@ class RuleTest : WordSpec() {
                     violation.rule shouldBe rule.name
                     violation.pkg shouldBe id
                     violation.license shouldBe license
-                    violation.licenseSource shouldBe licenseSource
+                    violation.licenseSources should containExactlyInAnyOrder(licenseSource)
                     violation.severity shouldBe Severity.HINT
                     violation.message shouldBe message
                     violation.howToFix shouldBe howToFix
@@ -74,7 +75,7 @@ class RuleTest : WordSpec() {
                     violation.rule shouldBe rule.name
                     violation.pkg shouldBe id
                     violation.license shouldBe license
-                    violation.licenseSource shouldBe licenseSource
+                    violation.licenseSources should containExactlyInAnyOrder(licenseSource)
                     violation.severity shouldBe Severity.WARNING
                     violation.message shouldBe message
                     violation.howToFix shouldBe howToFix
@@ -93,7 +94,7 @@ class RuleTest : WordSpec() {
                     violation.rule shouldBe rule.name
                     violation.pkg shouldBe id
                     violation.license shouldBe license
-                    violation.licenseSource shouldBe licenseSource
+                    violation.licenseSources should containExactlyInAnyOrder(licenseSource)
                     violation.severity shouldBe Severity.ERROR
                     violation.message shouldBe message
                     violation.howToFix shouldBe howToFix
