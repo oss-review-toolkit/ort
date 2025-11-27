@@ -512,7 +512,7 @@ class OrtResultTest : WordSpec({
                             rule = "rule id",
                             pkg = Identifier("Maven", "org.ossreviewtoolkit", "resolved-violation", "0.8.15"),
                             license = null,
-                            licenseSource = null,
+                            licenseSources = emptySet(),
                             severity = Severity.HINT,
                             message = "Rule violation message to resolve",
                             howToFix = ""
@@ -534,7 +534,7 @@ class OrtResultTest : WordSpec({
                             rule = "Resolved rule violation",
                             pkg = Identifier("Maven", "org.ossreviewtoolkit", "resolved-violation", "0.8.15"),
                             license = null,
-                            licenseSource = null,
+                            licenseSources = emptySet(),
                             severity = Severity.ERROR,
                             message = "Rule violation message to resolve",
                             howToFix = ""
@@ -543,7 +543,7 @@ class OrtResultTest : WordSpec({
                             rule = "Rule violation without resolution",
                             pkg = Identifier("Maven", "com.example", "package-without-resolution", "1.0.0"),
                             license = null,
-                            licenseSource = null,
+                            licenseSources = emptySet(),
                             severity = Severity.WARNING,
                             message = "Message without any resolution",
                             howToFix = ""
@@ -552,7 +552,7 @@ class OrtResultTest : WordSpec({
                             rule = "Rule violation below minSeverity",
                             pkg = Identifier("Maven", "com.example", "violation-below-threshold", "3.14"),
                             license = null,
-                            licenseSource = null,
+                            licenseSources = emptySet(),
                             severity = Severity.HINT,
                             message = "Message without any resolution",
                             howToFix = ""

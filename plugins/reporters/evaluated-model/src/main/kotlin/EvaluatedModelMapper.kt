@@ -393,7 +393,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             rule = ruleViolation.rule,
             pkg = pkg,
             license = license,
-            licenseSource = ruleViolation.licenseSource,
+            licenseSources = ruleViolation.licenseSources,
             severity = ruleViolation.severity,
             message = ruleViolation.message,
             howToFix = ruleViolation.howToFix,
