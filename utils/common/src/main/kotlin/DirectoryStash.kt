@@ -45,7 +45,6 @@ class DirectoryStash(files: Set<File>) : Closeable {
         // directory / file to ensure it resides on the same file system for being able to perform an atomic move.
         val tempDir = createTempDirectory(original.parentFile.toPath(), ".stash").toFile()
 
-        // Use a non-existing directory as the target to ensure the directory can be moved atomically.
         val stashDir = tempDir / original.name
 
         logger.info {
