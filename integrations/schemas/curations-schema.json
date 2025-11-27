@@ -80,6 +80,15 @@
           },
           "is_modified": {
             "type": "boolean"
+          },
+          "source_code_origins": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "ARTIFACT",
+                "VCS"
+              ]
+            }
           }
         }
       }
