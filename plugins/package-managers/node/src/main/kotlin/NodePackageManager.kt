@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.realFile
 
+const val NODE_MODULES_DIRNAME = "node_modules"
 const val NPM_RUNTIME_CONFIGURATION_FILENAME = ".npmrc"
 
 abstract class NodePackageManager(val managerType: NodePackageManagerType) : PackageManager(managerType.projectType) {

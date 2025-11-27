@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
@@ -98,7 +99,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
         YarnCommand.checkVersion()
 
-        val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
+        val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling(NODE_MODULES_DIRNAME) }
         stash = DirectoryStash(directories)
     }
 

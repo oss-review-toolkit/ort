@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NPM_RUNTIME_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
@@ -116,7 +117,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
         NpmCommand.checkVersion()
 
-        val files = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
+        val files = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling(NODE_MODULES_DIRNAME) }
 
         if (config.ignoreProjectNpmrcFiles) {
             files += definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling(NPM_RUNTIME_CONFIGURATION_FILENAME) }
