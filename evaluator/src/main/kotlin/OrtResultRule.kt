@@ -43,7 +43,7 @@ open class OrtResultRule(
             severity = severity,
             pkgId = null,
             license = null,
-            licenseSource = null,
+            licenseSources = emptySet(),
             message = message,
             howToFix = howToFix
         )
@@ -52,7 +52,7 @@ open class OrtResultRule(
         hint(
             pkgId = null,
             license = null,
-            licenseSource = null,
+            licenseSources = emptySet(),
             message = message,
             howToFix = howToFix
         )
@@ -61,7 +61,7 @@ open class OrtResultRule(
         warning(
             pkgId = null,
             license = null,
-            licenseSource = null,
+            licenseSources = emptySet(),
             message = message,
             howToFix = howToFix
         )
@@ -70,7 +70,7 @@ open class OrtResultRule(
         error(
             pkgId = null,
             license = null,
-            licenseSource = null,
+            licenseSources = emptySet(),
             message = message,
             howToFix = howToFix
         )
