@@ -52,7 +52,7 @@ enum class PathExcludeReason {
     OPTIONAL_COMPONENT_OF,
 
     /**
-     * Any other reason which cannot be represented by any other element of [PathExcludeReason].
+     * A fallback reason for the [PathExcludeReason] when none of the other reasons apply.
      */
     OTHER,
 

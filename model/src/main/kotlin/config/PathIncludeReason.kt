@@ -26,7 +26,7 @@ enum class PathIncludeReason {
     SOURCE_OF,
 
     /**
-     * Any other reason which cannot be represented by any other element of [PathIncludeReason].
+     * A fallback reason for the [PathIncludeReason] when none of the other reasons apply.
      */
     OTHER
 }
