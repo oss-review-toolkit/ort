@@ -123,14 +123,14 @@ abstract class Rule(
 
     /**
      * Add an issue of the given [severity] for [pkgId] to the list of violations. Optionally, the offending [license]
-     * and its [source][licenseSource] can be specified. The [message] further explains the violation itself and
+     * and its [sources][licenseSources] can be specified. The [message] further explains the violation itself and
      * [howToFix] explains how it can be fixed.
      */
     fun issue(
         severity: Severity,
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSource: LicenseSource?,
+        licenseSources: Set<LicenseSource>,
         message: String,
         howToFix: String
     ) {
@@ -139,7 +139,7 @@ abstract class Rule(
             rule = name,
             pkg = pkgId,
             license = license,
-            licenseSource = licenseSource,
+            licenseSources = licenseSources,
             message = message,
             howToFix = howToFix
         )
@@ -151,10 +151,10 @@ abstract class Rule(
     fun hint(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSource: LicenseSource?,
+        licenseSources: Set<LicenseSource>,
         message: String,
         howToFix: String
-    ) = issue(Severity.HINT, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.HINT, pkgId, license, licenseSources, message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [violations].
@@ -162,10 +162,10 @@ abstract class Rule(
     fun warning(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSource: LicenseSource?,
+        licenseSources: Set<LicenseSource>,
         message: String,
         howToFix: String
-    ) = issue(Severity.WARNING, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.WARNING, pkgId, license, licenseSources, message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [violations].
@@ -173,10 +173,10 @@ abstract class Rule(
     fun error(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSource: LicenseSource?,
+        licenseSources: Set<LicenseSource>,
         message: String,
         howToFix: String
-    ) = issue(Severity.ERROR, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.ERROR, pkgId, license, licenseSources, message, howToFix)
 
     /**
      * A DSL helper class, providing convenience functions for adding [RuleMatcher]s to this rule.
@@ -197,3 +197,52 @@ abstract class Rule(
         }
     }
 }
+
+/**
+ * Backward compatibility for [Rule.issue()].
+ */
+@Suppress("unused") // This is intended to be used by rule implementations.
+fun Rule.issue(
+    severity: Severity,
+    pkgId: Identifier?,
+    license: SpdxSingleLicenseExpression?,
+    licenseSource: LicenseSource?,
+    message: String,
+    howToFix: String
+) = issue(severity, pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+
+/**
+ * Backward compatibility for [Rule.hint()].
+ */
+@Suppress("unused") // This is intended to be used by rule implementations.
+fun Rule.hint(
+    pkgId: Identifier?,
+    license: SpdxSingleLicenseExpression?,
+    licenseSource: LicenseSource?,
+    message: String,
+    howToFix: String
+) = hint(pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+
+/**
+ * Backward compatibility for [Rule.warning()].
+ */
+@Suppress("unused") // This is intended to be used by rule implementations.
+fun Rule.warning(
+    pkgId: Identifier?,
+    license: SpdxSingleLicenseExpression?,
+    licenseSource: LicenseSource?,
+    message: String,
+    howToFix: String
+) = warning(pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+
+/**
+ * Backward compatibility for [Rule.error()].
+ */
+@Suppress("unused") // This is intended to be used by rule implementations.
+fun Rule.error(
+    pkgId: Identifier?,
+    license: SpdxSingleLicenseExpression?,
+    licenseSource: LicenseSource?,
+    message: String,
+    howToFix: String
+) = warning(pkgId, license, setOfNotNull(licenseSource), message, howToFix)

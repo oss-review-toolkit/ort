@@ -1070,7 +1070,8 @@ rule_violations:
   rule: "rule 1"
   pkg: 3
   license: 9
-  license_source: "DETECTED"
+  license_sources:
+  - "DETECTED"
   severity: "ERROR"
   message: "EPL-1.0 error"
   how_to_fix: "* *Step 1*\n* __Step 2__\n* ***Step 3***\n```\nSome long text verify\
@@ -1079,7 +1080,8 @@ rule_violations:
   rule: "rule 2"
   pkg: 2
   license: 3
-  license_source: "DECLARED"
+  license_sources:
+  - "DECLARED"
   severity: "HINT"
   message: "Apache-2.0 hint"
   how_to_fix: "* *Step 1*\n* __Step 2__\n* ***Step 3***\n```\nSome long text verify\
@@ -1090,7 +1092,8 @@ rule_violations:
   rule: "rule 3"
   pkg: 8
   license: 16
-  license_source: "CONCLUDED"
+  license_sources:
+  - "CONCLUDED"
   severity: "WARNING"
   message: "BSD-3-Clause warning"
   how_to_fix: "* *Step 1*\n* __Step 2__\n* ***Step 3***\n```\nSome long text verify\

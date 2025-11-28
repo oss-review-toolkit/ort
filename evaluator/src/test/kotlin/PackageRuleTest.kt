@@ -56,7 +56,7 @@ class PackageRuleTest : WordSpec() {
                 originalExpressions = setOf(ResolvedOriginalExpression(license, licenseSource)),
                 locations = emptySet()
             ),
-            licenseSource = licenseSource
+            licenseSources = setOf(licenseSource)
         )
 
     init {
