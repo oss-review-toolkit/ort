@@ -268,6 +268,16 @@ open class PackageRule(
             }
         }
 
+        /** Backwards compatibility */
+        @Suppress("unused") // This is intended to be used by rule implementations.
+        val licenseSource by lazy {
+            require(licenseSources.size == 1) {
+                "The license source is ambiguous. Please use the licenseSources property instead."
+            }
+
+            licenseSources.single()
+        }
+
         /**
          * A shortcut for the [license][ResolvedLicense.license] in [resolvedLicense].
          */
