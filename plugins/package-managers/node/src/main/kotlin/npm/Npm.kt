@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NPM_RUNTIME_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
@@ -93,7 +92,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-    private lateinit var stash: FileStash
+    private lateinit var fileStash: FileStash
 
     private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->
         runCatching {
@@ -117,17 +116,21 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
         NpmCommand.checkVersion()
 
-        val files = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling(NODE_MODULES_DIRNAME) }
-
-        if (config.ignoreProjectNpmrcFiles) {
-            files += definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling(NPM_RUNTIME_CONFIGURATION_FILENAME) }
+        val npmrcFiles = definitionFiles.mapNotNullTo(mutableSetOf()) { definitionFile ->
+            definitionFile.resolveSibling(NPM_RUNTIME_CONFIGURATION_FILENAME).takeIf { it.isFile }?.also {
+                logger.info { "Project-specific '$NPM_RUNTIME_CONFIGURATION_FILENAME' file present at '$it'." }
+            }
         }
 
-        stash = FileStash(files)
+        if (config.ignoreProjectNpmrcFiles) {
+            fileStash = FileStash(npmrcFiles)
+        }
     }
 
     override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
-        stash.close()
+        if (config.ignoreProjectNpmrcFiles) fileStash.close()
+
+        super.afterResolution(analysisRoot, definitionFiles)
     }
 
     override fun resolveDependencies(
