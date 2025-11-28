@@ -33,12 +33,15 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.realFile
 
 const val NODE_MODULES_DIRNAME = "node_modules"
 const val NPM_RUNTIME_CONFIGURATION_FILENAME = ".npmrc"
 
 abstract class NodePackageManager(val managerType: NodePackageManagerType) : PackageManager(managerType.projectType) {
+    protected lateinit var dirStash: DirectoryStash
+
     // This needs to be "internal" instead of "protected" as overrides expose internal types.
     internal abstract val graphBuilder: DependencyGraphBuilder<*>
 
@@ -85,12 +88,19 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
     ) {
         super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
 
-        definitionFiles.forEach {
-            val npmrc = it.resolveSibling(NPM_RUNTIME_CONFIGURATION_FILENAME)
-            if (npmrc.isFile) {
-                logger.info { "There is a project-specific runtime configuration file at '${npmrc.absolutePath}'." }
+        val nodeModulesDirs = definitionFiles.mapNotNullTo(mutableSetOf()) { definitionFile ->
+            definitionFile.resolveSibling(NODE_MODULES_DIRNAME).takeIf { it.isDirectory }?.also {
+                logger.info { "Project-specific '$NODE_MODULES_DIRNAME' directory present at '$it'." }
             }
         }
+
+        dirStash = DirectoryStash(nodeModulesDirs)
+    }
+
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
+        dirStash.close()
+
+        super.afterResolution(analysisRoot, definitionFiles)
     }
 
     override fun mapDefinitionFiles(

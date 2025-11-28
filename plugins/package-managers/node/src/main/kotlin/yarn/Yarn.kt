@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
@@ -50,7 +49,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.getInstalledModulesDirs
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.alsoIfNull
@@ -79,8 +77,6 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
     NodePackageManager(NodePackageManagerType.YARN) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-    private lateinit var stash: DirectoryStash
-
     private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->
         val process = YarnCommand.run(workingDir, "info", "--json", moduleId)
 
@@ -98,13 +94,6 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
 
         YarnCommand.checkVersion()
-
-        val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling(NODE_MODULES_DIRNAME) }
-        stash = DirectoryStash(directories)
-    }
-
-    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
-        stash.close()
     }
 
     override fun resolveDependencies(
