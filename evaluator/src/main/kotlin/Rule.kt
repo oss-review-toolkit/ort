@@ -197,3 +197,52 @@ abstract class Rule(
         }
     }
 }
+
+/**
+ * Backward compatibility for [Rule.issue()].
+ */
+@Suppress("unused") // This is intended to be used by rule implementations.
+fun Rule.issue(
+    severity: Severity,
+    pkgId: Identifier?,
+    license: SpdxSingleLicenseExpression?,
+    licenseSource: LicenseSource?,
+    message: String,
+    howToFix: String
+) = issue(severity, pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+
+/**
+ * Backward compatibility for [Rule.hint()].
+ */
+@Suppress("unused") // This is intended to be used by rule implementations.
+fun Rule.hint(
+    pkgId: Identifier?,
+    license: SpdxSingleLicenseExpression?,
+    licenseSource: LicenseSource?,
+    message: String,
+    howToFix: String
+) = hint(pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+
+/**
+ * Backward compatibility for [Rule.warning()].
+ */
+@Suppress("unused") // This is intended to be used by rule implementations.
+fun Rule.warning(
+    pkgId: Identifier?,
+    license: SpdxSingleLicenseExpression?,
+    licenseSource: LicenseSource?,
+    message: String,
+    howToFix: String
+) = warning(pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+
+/**
+ * Backward compatibility for [Rule.error()].
+ */
+@Suppress("unused") // This is intended to be used by rule implementations.
+fun Rule.error(
+    pkgId: Identifier?,
+    license: SpdxSingleLicenseExpression?,
+    licenseSource: LicenseSource?,
+    message: String,
+    howToFix: String
+) = error(pkgId, license, setOfNotNull(licenseSource), message, howToFix)
