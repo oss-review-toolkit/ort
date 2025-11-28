@@ -57,6 +57,7 @@ data class AnalyzerConfiguration(
         "Conan",
         "GoMod",
         "GradleInspector",
+        "Ivy",
         "Maven",
         "NPM",
         "NuGet",

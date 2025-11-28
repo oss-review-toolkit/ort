@@ -31,6 +31,7 @@ import org.gradle.api.artifacts.component.ComponentIdentifier
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentSelector
+import org.gradle.api.artifacts.repositories.IvyArtifactRepository
 import org.gradle.api.artifacts.repositories.UrlArtifactRepository
 import org.gradle.api.artifacts.result.DependencyResult
 import org.gradle.api.artifacts.result.ResolvedArtifactResult
@@ -43,6 +44,8 @@ import org.gradle.api.internal.artifacts.result.ResolvedComponentResultInternal
 import org.gradle.api.logging.Logging
 import org.gradle.internal.component.external.model.DefaultModuleComponentIdentifier
 import org.gradle.internal.resolve.ModuleVersionResolveException
+import org.gradle.ivy.IvyDescriptorArtifact
+import org.gradle.ivy.IvyModule
 import org.gradle.maven.MavenModule
 import org.gradle.maven.MavenPomArtifact
 import org.gradle.tooling.provider.model.ToolingModelBuilder
@@ -126,26 +129,61 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             FileModelSource(pomFile)
         }
 
-        return pomFiles.associate {
-            // Trigger resolution of parent POMs by building the POM model.
-            it.id.componentIdentifier.toString() to fileModelBuilder.buildModel(it.file)
-        }
+        return pomFiles.mapNotNull { artifact ->
+            // Skip Ivy descriptors - they cannot be built as Maven models
+            val isIvyDescriptor = artifact.file.name.startsWith("ivy-") && artifact.file.name.endsWith(".xml")
+            if (isIvyDescriptor) {
+                logger.info("Skipping Maven model building for Ivy descriptor: ${artifact.file.name}")
+                null
+            } else {
+                runCatching {
+                    // Trigger resolution of parent POMs by building the POM model.
+                    artifact.id.componentIdentifier.toString() to fileModelBuilder.buildModel(artifact.file)
+                }.getOrElse { e ->
+                    logger.warn("Failed to build Maven model for ${artifact.id.componentIdentifier}: ${e.message}")
+                    null
+                }
+            }
+        }.toMap()
     }
 
     /**
      * Resolve the POM files for the given [componentIds] and return them.
+     * If a POM is not found, try to resolve the Ivy descriptor instead.
      */
     private fun Project.resolvePoms(componentIds: List<ComponentIdentifier>): List<ResolvedArtifactResult> {
-        val resolutionResult = dependencies.createArtifactResolutionQuery()
+        // Try to resolve Maven POMs first
+        val mavenResolutionResult = dependencies.createArtifactResolutionQuery()
             .forComponents(componentIds)
             .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
             .execute()
 
-        return resolutionResult.resolvedComponents.flatMap {
+        val resolvedPoms = mavenResolutionResult.resolvedComponents.flatMap {
             it.getArtifacts(MavenPomArtifact::class.java)
         }.filterIsInstance<ResolvedArtifactResult>()
+
+        // Find component IDs that didn't resolve to POMs
+        val resolvedComponentIds = resolvedPoms.map { it.id.componentIdentifier }.toSet()
+        val unresolvedComponentIds = componentIds.filterNot { it in resolvedComponentIds }
+
+        // Try to resolve Ivy descriptors for unresolved components
+        val ivyDescriptors = if (unresolvedComponentIds.isNotEmpty()) {
+            val ivyResolutionResult = dependencies.createArtifactResolutionQuery()
+                .forComponents(unresolvedComponentIds)
+                .withArtifacts(IvyModule::class.java, IvyDescriptorArtifact::class.java)
+                .execute()
+
+            ivyResolutionResult.resolvedComponents.flatMap {
+                it.getArtifacts(IvyDescriptorArtifact::class.java)
+            }.filterIsInstance<ResolvedArtifactResult>()
+        } else {
+            emptyList()
+        }
+
+        return resolvedPoms + ivyDescriptors
     }
 
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     private fun Collection<DependencyResult>.toOrtDependencies(
         poms: Map<String, ModelBuildingResult>,
         visited: Set<ComponentIdentifier>
@@ -188,20 +226,38 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 }.getOrNull()
 
                                 repositories[repositoryId]?.let { repository ->
-                                    // Note: Only Maven-style layout is supported for now.
+                                    // Check if this is an Ivy repository
+                                    val isIvyRepository = repository is IvyArtifactRepository
+
                                     buildString {
                                         append(repository.url.toString().removeSuffix("/"))
                                         append('/')
-                                        append(id.group.replace('.', '/'))
-                                        append('/')
-                                        append(id.module)
-                                        append('/')
-                                        append(id.version)
-                                        append('/')
-                                        append(id.module)
-                                        append('-')
-                                        append(id.version)
-                                        append(".pom")
+
+                                        if (isIvyRepository) {
+                                            // Ivy layout: [organisation]/[module]/[revision]/ivy-[revision].xml
+                                            // Note: organization uses '/' as separator, like Maven
+                                            append(id.group.replace('.', '/'))
+                                            append('/')
+                                            append(id.module)
+                                            append('/')
+                                            append(id.version)
+                                            append('/')
+                                            append("ivy-")
+                                            append(id.version)
+                                            append(".xml")
+                                        } else {
+                                            // Maven layout: [group]/[artifact]/[version]/[artifact]-[version].pom
+                                            append(id.group.replace('.', '/'))
+                                            append('/')
+                                            append(id.module)
+                                            append('/')
+                                            append(id.version)
+                                            append('/')
+                                            append(id.module)
+                                            append('-')
+                                            append(id.version)
+                                            append(".pom")
+                                        }
                                     }
                                 }
                             } else {
@@ -209,8 +265,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                             }
 
                             val modelBuildingResult = poms[id.toString()]
-                            if (modelBuildingResult == null) {
-                                val message = "No POM found for component '$id'."
+                            val isIvyDescriptor = pomFile?.endsWith(".xml") == true && pomFile.contains("/ivy-")
+
+                            if (modelBuildingResult == null && !isIvyDescriptor) {
+                                val message = "No Maven POM or Ivy descriptor found for component '$id'."
                                 logger.warn(message)
                                 warnings += message
                             }
@@ -298,10 +356,41 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                         appendCauses(dep.failure)
                     }
 
-                    logger.error(message)
-                    errors += message
+                    // Check if this is a targetConfiguration error (legacy Ivy feature)
+                    val isTargetConfigurationError =
+                        message.contains("no variant with that configuration name exists") ||
+                            message.contains("Cannot select a variant by configuration name")
 
-                    null
+                    if (
+                        isTargetConfigurationError &&
+                        dep.attempted is org.gradle.api.artifacts.component.ModuleComponentSelector
+                    ) {
+                        // This is likely an Ivy dependency with legacy targetConfiguration
+                        // Try to create a basic package from the available information
+                        val selector = dep.attempted as org.gradle.api.artifacts.component.ModuleComponentSelector
+
+                        logger.warn("$message [Creating basic package without full metadata]")
+                        warnings += message
+
+                        OrtDependencyImpl(
+                            groupId = selector.group,
+                            artifactId = selector.module,
+                            version = selector.version,
+                            classifier = "",
+                            extension = "",
+                            variants = emptySet(),
+                            dependencies = emptyList(),
+                            error = null,
+                            warning = "Dependency resolved with limited metadata due to legacy targetConfiguration",
+                            pomFile = null,
+                            mavenModel = null,
+                            localPath = null
+                        )
+                    } else {
+                        logger.error(message)
+                        errors += message
+                        null
+                    }
                 }
 
                 else -> {
