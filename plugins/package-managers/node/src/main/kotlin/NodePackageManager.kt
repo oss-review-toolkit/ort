@@ -39,6 +39,7 @@ const val NODE_MODULES_DIRNAME = "node_modules"
 const val NPM_RUNTIME_CONFIGURATION_FILENAME = ".npmrc"
 
 abstract class NodePackageManager(val managerType: NodePackageManagerType) : PackageManager(managerType.projectType) {
+    // This needs to be "internal" instead of "protected" as overrides expose internal types.
     internal abstract val graphBuilder: DependencyGraphBuilder<*>
 
     internal fun parseProject(packageJsonFile: File, analysisRoot: File): Project {
