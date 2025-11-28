@@ -378,6 +378,8 @@ class Downloader(private val config: DownloaderConfiguration) {
         } else {
             try {
                 sourceArchive.unpackTryAllTypes(outputDirectory)
+
+                logger.info { "Successfully unpacked ${sourceArtifact.url} to '${outputDirectory.absolutePath}'..." }
             } catch (e: IOException) {
                 logger.warn {
                     "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessages()}"
@@ -389,13 +391,13 @@ class Downloader(private val config: DownloaderConfiguration) {
 
                 if (!isSourceCodeFile) throw DownloadException("The artifact does not seem to be a source code file", e)
 
-                logger.info { "Treating '${sourceArchive.absolutePath}' as a source code file." }
+                logger.info {
+                    "Copying source code file '${sourceArchive.absolutePath}' to '${outputDirectory.absolutePath}'."
+                }
 
                 sourceArchive.copyTo(outputDirectory / sourceArchive.name)
             }
         }
-
-        logger.info { "Successfully unpacked ${sourceArtifact.url} to '${outputDirectory.absolutePath}'..." }
 
         tempDir?.safeDeleteRecursively()
         return ArtifactProvenance(sourceArtifact)
