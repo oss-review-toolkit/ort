@@ -73,7 +73,7 @@ jobs:
         disable-metrics: true
       if: runner.os != 'Windows'
     - name: Run unit tests in a minimal environment
-      run: env -i "$(which flox)" activate -- ./gradlew --scan test jacocoTestReport
+      run: ./flox/run_isolated.sh minimal ./gradlew --scan test jacocoTestReport
       if: runner.os != 'Windows'
     - name: Run unit tests
       run: ./gradlew --scan test jacocoTestReport
@@ -101,7 +101,7 @@ jobs:
       with:
         disable-metrics: true
     - name: Run functional tests that do not require external tools
-      run: env -i "$(which flox)" activate -- ./gradlew --scan -Dkotest.tags=!RequiresExternalTool funTest jacocoFunTestReport
+      run: ./flox/run_isolated.sh minimal ./gradlew --scan -Dkotest.tags=!RequiresExternalTool funTest jacocoFunTestReport
     - name: Create Test Summary
       uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
       with:

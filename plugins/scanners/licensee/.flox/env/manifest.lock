@@ -1,0 +1,55 @@
+{
+  "lockfile-version": 1,
+  "manifest": {
+    "version": 1,
+    "install": {
+      "licensee": {
+        "pkg-path": "licensee",
+        "version": "9.18.0"
+      }
+    },
+    "vars": {
+      "FLOX_DISABLE_METRICS": "true"
+    },
+    "options": {
+      "systems": [
+        "x86_64-linux"
+      ],
+      "cuda-detection": false,
+      "activate": {
+        "mode": "run"
+      }
+    }
+  },
+  "packages": [
+    {
+      "attr_path": "licensee",
+      "broken": false,
+      "derivation": "/nix/store/8dz9kax6nrxfs9ih5flvqa3rzn6z4m3g-licensee-9.18.0.drv",
+      "description": "Ruby Gem to detect under what license a project is distributed",
+      "install_id": "licensee",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "name": "licensee-9.18.0",
+      "pname": "licensee",
+      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "rev_count": 901419,
+      "rev_date": "2025-11-24T06:39:56Z",
+      "scrape_date": "2025-11-26T03:22:11.287396Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "9.18.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/0vvfcirkcb60fgdb5262ql2kh8s27i9z-licensee-9.18.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    }
+  ]
+}

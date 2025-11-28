@@ -1,0 +1,14 @@
+# Flox manifest version managed by Flox CLI
+version = 1
+
+[vars]
+FLOX_DISABLE_METRICS = "true"
+
+[options]
+activate.mode = "run"
+cuda-detection = false
+systems = ["x86_64-linux"]
+
+[install]
+askalono.pkg-path = "askalono"
+askalono.version = "0.5.0"

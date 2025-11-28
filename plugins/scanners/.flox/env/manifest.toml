@@ -1,0 +1,17 @@
+# Flox manifest version managed by Flox CLI
+version = 1
+
+[vars]
+FLOX_DISABLE_METRICS = "true"
+
+[options]
+activate.mode = "run"
+cuda-detection = false
+systems = ["x86_64-linux"]
+
+[include]
+environments = [
+  { dir = "askalono" },
+  { dir = "licensee" },
+  { dir = "scancode" }
+]

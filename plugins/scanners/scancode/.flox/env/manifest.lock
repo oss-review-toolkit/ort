@@ -1,0 +1,56 @@
+{
+  "lockfile-version": 1,
+  "manifest": {
+    "version": 1,
+    "install": {
+      "scancode": {
+        "pkg-path": "python313Packages.scancode-toolkit",
+        "version": "32.4.1"
+      }
+    },
+    "vars": {
+      "FLOX_DISABLE_METRICS": "true"
+    },
+    "options": {
+      "systems": [
+        "x86_64-linux"
+      ],
+      "cuda-detection": false,
+      "activate": {
+        "mode": "run"
+      }
+    }
+  },
+  "packages": [
+    {
+      "attr_path": "python313Packages.scancode-toolkit",
+      "broken": false,
+      "derivation": "/nix/store/4cdwapmmmbdsn4df6052hfv8dgl21rli-python3.13-scancode-toolkit-32.4.1.drv",
+      "description": "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts",
+      "install_id": "scancode",
+      "license": "[ Apache-2.0, CC-BY-4.0 ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "name": "python3.13-scancode-toolkit-32.4.1",
+      "pname": "scancode-toolkit",
+      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "rev_count": 901419,
+      "rev_date": "2025-11-24T06:39:56Z",
+      "scrape_date": "2025-11-26T03:23:32.725926Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "32.4.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/r1adpf44r11x5mmajphffvwmck0fbpxw-python3.13-scancode-toolkit-32.4.1-dist",
+        "out": "/nix/store/qlxbfh5mc5i047xi0qmn4zycnqpwis9n-python3.13-scancode-toolkit-32.4.1"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    }
+  ]
+}
