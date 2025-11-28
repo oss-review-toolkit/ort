@@ -319,9 +319,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
         verifyOutputDirectory(outputDirectory)
 
-        logger.info {
-            "Trying to download source artifact from ${sourceArtifact.url}..."
-        }
+        logger.info { "Trying to download source artifact from ${sourceArtifact.url}..." }
 
         // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
         val isLocalFileUrl = sourceArtifact.url.startsWith("file:/")
@@ -352,9 +350,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
         if (sourceArtifact.hash.algorithm != HashAlgorithm.NONE) {
             if (sourceArtifact.hash.algorithm == HashAlgorithm.UNKNOWN) {
-                logger.warn {
-                    "Cannot verify source artifact with ${sourceArtifact.hash}, skipping verification."
-                }
+                logger.warn { "Cannot verify source artifact with ${sourceArtifact.hash}, skipping verification." }
             } else if (!sourceArtifact.hash.verify(sourceArchive)) {
                 tempDir?.safeDeleteRecursively()
                 throw DownloadException("Source artifact does not match expected ${sourceArtifact.hash}.")
@@ -393,15 +389,11 @@ class Downloader(private val config: DownloaderConfiguration) {
 
                 if (!isSourceCodeFile) throw DownloadException("The artifact does not seem to be a source code file", e)
 
-                logger.info {
-                    "Treating '${sourceArchive.absolutePath}' as a source code file."
-                }
+                logger.info { "Treating '${sourceArchive.absolutePath}' as a source code file." }
             }
         }
 
-        logger.info {
-            "Successfully unpacked ${sourceArtifact.url} to '${outputDirectory.absolutePath}'..."
-        }
+        logger.info { "Successfully unpacked ${sourceArtifact.url} to '${outputDirectory.absolutePath}'..." }
 
         tempDir?.safeDeleteRecursively()
         return ArtifactProvenance(sourceArtifact)
