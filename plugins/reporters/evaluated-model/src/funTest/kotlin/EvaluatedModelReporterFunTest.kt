@@ -39,17 +39,17 @@ class EvaluatedModelReporterFunTest : WordSpec({
             outputDir = tempdir()
         ).single().getOrThrow().readText().normalizeLineBreaks()
 
+    val ortResult by lazy { readOrtResult("/reporter-test-input.yml") }
+
     "EvaluatedModelReporter" should {
         "create the expected JSON output" {
             val expectedResult = readResource("/evaluated-model-reporter-test-expected-output.json")
-            val ortResult = readOrtResult("/reporter-test-input.yml")
 
             EvaluatedModelReporterFactory.create().generateReport(ortResult) shouldBe expectedResult
         }
 
         "create the expected YAML output" {
             val expectedResult = readResource("/evaluated-model-reporter-test-expected-output.yml")
-            val ortResult = readOrtResult("/reporter-test-input.yml")
 
             EvaluatedModelReporterFactory.create(
                 outputFileFormats = listOf("yml")
@@ -58,7 +58,6 @@ class EvaluatedModelReporterFunTest : WordSpec({
 
         "create the expected YAML output with dependency tree de-duplication enabled" {
             val expectedResult = readResource("/evaluated-model-reporter-test-deduplicate-expected-output.yml")
-            val ortResult = readOrtResult("/reporter-test-input.yml")
 
             EvaluatedModelReporterFactory.create(
                 outputFileFormats = listOf("yml"),
