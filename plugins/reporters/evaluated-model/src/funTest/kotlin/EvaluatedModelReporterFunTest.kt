@@ -45,24 +45,29 @@ class EvaluatedModelReporterFunTest : WordSpec({
         "create the expected JSON output" {
             val expectedResult = readResource("/evaluated-model-reporter-test-expected-output.json")
 
-            EvaluatedModelReporterFactory.create().generateReport(ortResult) shouldBe expectedResult
+            val result = EvaluatedModelReporterFactory.create().generateReport(ortResult)
+
+            result shouldBe expectedResult
         }
 
         "create the expected YAML output" {
             val expectedResult = readResource("/evaluated-model-reporter-test-expected-output.yml")
 
-            EvaluatedModelReporterFactory.create(
-                outputFileFormats = listOf("yml")
-            ).generateReport(ortResult) shouldBe expectedResult
+            val result = EvaluatedModelReporterFactory
+                .create(outputFileFormats = listOf("yml"))
+                .generateReport(ortResult)
+
+            result shouldBe expectedResult
         }
 
         "create the expected YAML output with dependency tree de-duplication enabled" {
             val expectedResult = readResource("/evaluated-model-reporter-test-deduplicate-expected-output.yml")
 
-            EvaluatedModelReporterFactory.create(
-                outputFileFormats = listOf("yml"),
-                deduplicateDependencyTree = true
-            ).generateReport(ortResult) shouldBe expectedResult
+            val result = EvaluatedModelReporterFactory
+                .create(outputFileFormats = listOf("yml"), deduplicateDependencyTree = true)
+                .generateReport(ortResult)
+
+            result shouldBe expectedResult
         }
     }
 })
