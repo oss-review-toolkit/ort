@@ -390,6 +390,8 @@ class Downloader(private val config: DownloaderConfiguration) {
                 if (!isSourceCodeFile) throw DownloadException("The artifact does not seem to be a source code file", e)
 
                 logger.info { "Treating '${sourceArchive.absolutePath}' as a source code file." }
+
+                sourceArchive.copyTo(outputDirectory / sourceArchive.name)
             }
         }
 
