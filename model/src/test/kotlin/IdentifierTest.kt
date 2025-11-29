@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.assertSoftly
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.maps.containExactly
@@ -132,6 +133,36 @@ class IdentifierTest : WordSpec({
                 Identifier("").isFromOrg("ossreviewtoolkit") shouldBe false
                 Identifier("type:namespace:name:version").isFromOrg("ossreviewtoolkit") shouldBe false
                 Identifier("Maven:project.com.here:name:version").isFromOrg("ossreviewtoolkit") shouldBe false
+            }
+        }
+    }
+
+    "Purl representation" should {
+        "should accept only pkg type purls" {
+            shouldThrow<IllegalArgumentException> {
+                Identifier.fromPurl("nonpkg:someurl/example.com/invalid@1.1")
+            }
+        }
+
+        "be parsed correctly for purl with namespace" {
+            val id = Identifier.fromPurl("pkg:github/example.com/valid-with-namespace@1.0")
+
+            with(id) {
+                type shouldBe "github"
+                namespace shouldBe "example.com"
+                name shouldBe "valid-with-namespace"
+                version shouldBe "1.0"
+            }
+        }
+
+        "be parsed correctly for purl without namespace" {
+            val id = Identifier.fromPurl("pkg:pypi/valid-without-namespace@2.0")
+
+            with(id) {
+                type shouldBe "pypi"
+                namespace shouldBe ""
+                name shouldBe "valid-without-namespace"
+                version shouldBe "2.0"
             }
         }
     }
