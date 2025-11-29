@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
@@ -159,6 +160,14 @@ internal fun Package.toSpdxPackage(
         .applyChoices(ortResult.getPackageLicenseChoices(id))
         .applyChoices(ortResult.getRepositoryLicenseChoices())
 
+    val licenseDeclared = resolvedLicenseInfo.mainLicense()?.simplify()
+
+    // Do not use `CONCLUDED_OR_DECLARED_AND_DETECTED` here to support explicitly setting the `concludedLicense` to the
+    // `licenseDeclared` in order to acknowledge the latter and record it as the license concluded in SPDX.
+    val licenseView = LicenseView(setOf(LicenseSource.DECLARED, LicenseSource.DETECTED))
+    val licenseConcluded = concludedLicense ?: resolvedLicenseInfo.effectiveLicense(licenseView)
+        .takeUnless { it == licenseDeclared }
+
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
         checksums = when (type) {
@@ -182,11 +191,10 @@ internal fun Package.toSpdxPackage(
             SpdxPackageType.SOURCE_PACKAGE -> SpdxConstants.NOASSERTION
             // Clear the concluded license as it might need to be different for the VCS location.
             SpdxPackageType.VCS_PACKAGE -> SpdxConstants.NOASSERTION
-            SpdxPackageType.PROJECT -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
-            else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
+            SpdxPackageType.PROJECT -> licenseConcluded.nullOrBlankToSpdxNoassertionOrNone()
+            else -> licenseConcluded.nullOrBlankToSpdxNoassertionOrNone()
         },
-        licenseDeclared = resolvedLicenseInfo.mainLicense()
-            ?.simplify()
+        licenseDeclared = licenseDeclared
             ?.sorted()
             ?.nullOrBlankToSpdxNoassertionOrNone()
             ?: SpdxConstants.NONE,
