@@ -122,8 +122,20 @@ abstract class PackageManager(val projectType: String) : Plugin {
                 }
             }.filter { it.isDirectory }.forEach { dir ->
                 val filesInCurrentDir = dir.walk().maxDepth(1).filterTo(mutableListOf()) {
-                    val isIncluded = includes.isPathIncluded(rootPath, it.toPath())
-                    it.isFile && !excludes.isPathExcluded(rootPath, it.toPath()) && isIncluded
+                    val path = runCatching {
+                        it.toPath()
+                    }.getOrElse { e ->
+                        logger.warn {
+                            "Could not get the path for '$it'. It will not be included due to: ${e.collectMessages()}"
+                        }
+
+                        return@filterTo false
+                    }
+
+                    val isIncluded = includes.isPathIncluded(rootPath, path)
+                    val isExcluded = excludes.isPathExcluded(rootPath, path)
+
+                    it.isFile && !isExcluded && isIncluded
                 }
 
                 distinctPackageManagers.forEach { manager ->
