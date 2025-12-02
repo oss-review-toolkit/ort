@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,43 +41,43 @@ class CopyrightStatementsProcessorTest : WordSpec({
 
         "group statements with upper-case (C)" {
             val statements = listOf(
-                "Copyright (C) 2017 The ORT Project Authors",
-                "Copyright (C) 2022 The ORT Project Authors"
+                "Copyright (C) 2017 The ORT Project Copyright Holders",
+                "Copyright (C) 2022 The ORT Project Copyright Holders"
             )
 
             val result = CopyrightStatementsProcessor.process(statements)
 
             result.processedStatements.keys should containExactlyInAnyOrder(
-                "Copyright (C) 2017, 2022 The ORT Project Authors"
+                "Copyright (C) 2017, 2022 The ORT Project Copyright Holders"
             )
             result.unprocessedStatements should beEmpty()
         }
 
         "group statements with lower-case (c)" {
             val statements = listOf(
-                "Copyright (c) 2017 The ORT Project Authors",
-                "Copyright (c) 2022 The ORT Project Authors"
+                "Copyright (c) 2017 The ORT Project Copyright Holders",
+                "Copyright (c) 2022 The ORT Project Copyright Holders"
             )
 
             val result = CopyrightStatementsProcessor.process(statements)
 
             result.processedStatements.keys should containExactlyInAnyOrder(
-                "Copyright (c) 2017, 2022 The ORT Project Authors"
+                "Copyright (c) 2017, 2022 The ORT Project Copyright Holders"
             )
             result.unprocessedStatements should beEmpty()
         }
 
         "not group statements with mixed-case (C) and (c)" {
             val statements = listOf(
-                "Copyright (C) 2017 The ORT Project Authors",
-                "Copyright (c) 2022 The ORT Project Authors"
+                "Copyright (C) 2017 The ORT Project Copyright Holders",
+                "Copyright (c) 2022 The ORT Project Copyright Holders"
             )
 
             val result = CopyrightStatementsProcessor.process(statements)
 
             result.processedStatements.keys should containExactlyInAnyOrder(
-                "Copyright (C) 2017 The ORT Project Authors",
-                "Copyright (c) 2022 The ORT Project Authors"
+                "Copyright (C) 2017 The ORT Project Copyright Holders",
+                "Copyright (c) 2022 The ORT Project Copyright Holders"
             )
             result.unprocessedStatements should beEmpty()
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2022 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class ResolvedLicenseTest : WordSpec({
         "be consolidated without processing if their statements are exactly the same" {
             val originalFindings = listOf(
                 ResolvedCopyrightFinding(
-                    statement = "Copyright (C) 2022 The ORT Project Authors",
+                    statement = "Copyright (C) 2022 The ORT Project Copyright Holders",
                     location = TextLocation(
                         path = "/path/to/file/A",
                         line = 2
@@ -40,7 +40,7 @@ class ResolvedLicenseTest : WordSpec({
                     matchingPathExcludes = emptyList()
                 ),
                 ResolvedCopyrightFinding(
-                    statement = "Copyright (C) 2022 The ORT Project Authors",
+                    statement = "Copyright (C) 2022 The ORT Project Copyright Holders",
                     location = TextLocation(
                         path = "/path/to/file/B",
                         line = 2
@@ -53,7 +53,7 @@ class ResolvedLicenseTest : WordSpec({
 
             resolvedCopyrights shouldHaveSize 1
             with(resolvedCopyrights.first()) {
-                statement shouldBe "Copyright (C) 2022 The ORT Project Authors"
+                statement shouldBe "Copyright (C) 2022 The ORT Project Copyright Holders"
                 findings.map { it.location.path } should containExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
             }
         }
@@ -61,7 +61,7 @@ class ResolvedLicenseTest : WordSpec({
         "be consolidated with processing if their statements are afterwards the same" {
             val originalFindings = listOf(
                 ResolvedCopyrightFinding(
-                    statement = "Copyright (C) 2022 The ORT Project Authors",
+                    statement = "Copyright (C) 2022 The ORT Project Copyright Holders",
                     location = TextLocation(
                         path = "/path/to/file/A",
                         line = 2
@@ -70,7 +70,7 @@ class ResolvedLicenseTest : WordSpec({
                 ),
                 ResolvedCopyrightFinding(
                     // Note the "." at the end.
-                    statement = "Copyright (C) 2022 The ORT Project Authors.",
+                    statement = "Copyright (C) 2022 The ORT Project Copyright Holders.",
                     location = TextLocation(
                         path = "/path/to/file/B",
                         line = 2
@@ -83,7 +83,7 @@ class ResolvedLicenseTest : WordSpec({
 
             resolvedCopyrights shouldHaveSize 1
             with(resolvedCopyrights.first()) {
-                statement shouldBe "Copyright (C) 2022 The ORT Project Authors"
+                statement shouldBe "Copyright (C) 2022 The ORT Project Copyright Holders"
                 findings.map { it.location.path } should containExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
             }
         }

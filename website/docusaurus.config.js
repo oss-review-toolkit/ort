@@ -145,7 +145,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} <a href="https://github.com/oss-review-toolkit/ort/graphs/contributors">The ORT Project Authors</a>.
+        copyright: `Copyright © ${new Date().getFullYear()} <a href="https://github.com/oss-review-toolkit/ort/graphs/contributors">The ORT Project Copyright Holders</a>.
                     Built with <a href="https://docusaurus.io">Docusaurus</a>.`,
       },
       prism: {
