@@ -4,6 +4,8 @@ Copyright years in this file refer to the first contribution done by the
 respective contributor. It does not imply that contributions have only been made
 in that year.
 
+Corporate Copyright Holders are:
+
 Copyright (C) 2017 HERE Europe B.V.
 Copyright (C) 2019 Verifa Oy
 Copyright (C) 2019 Bosch Software Innovations GmbH
@@ -22,6 +24,14 @@ Copyright (C) 2023 Double Open Oy
 Copyright (C) 2024 Robert Bosch GmbH
 Copyright (C) 2024 Cariad SE
 Copyright (C) 2025 Quartett mobile GmbH
+
+Indiviual Copyright Holders are:
+
+Copyright (C) 2017 Martin Nonnenmacher
+Copyright (C) 2017 Sebastian Schuberth
+Copyright (C) 2018 Frank Viernau
+Copyright (C) 2018 Thomas Steenbergen
+Copyright (C) 2020 Marcel Bochtler
 
 Authors can be looked up from the Git history or on the project page:
 https://github.com/oss-review-toolkit/ort/graphs/contributors
