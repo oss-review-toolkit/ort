@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2019 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = t
                         isResolved: webAppRuleViolation.isResolved,
                         key: webAppRuleViolation.key,
                         message: webAppRuleViolation.message,
-                        packageId: webAppRuleViolation.package 
+                        packageId: webAppRuleViolation.package
                             ? webAppRuleViolation.package.id : '',
                         rule: webAppRuleViolation.rule,
                         severity: webAppRuleViolation.severity,
