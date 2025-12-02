@@ -132,6 +132,13 @@ jobs:
       uses: github/codeql-action/upload-sarif@fe4161a26a8629af62121b670040955b330f9af2 # v4
       with:
         sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
+  renovate-validation:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+    - name: Validate Renovate Config
+      run: npx -y --package renovate@latest -- renovate-config-validator renovate.json
   reuse-tool:
     runs-on: ubuntu-24.04
     steps:
