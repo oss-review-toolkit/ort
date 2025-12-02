@@ -1,10 +1,14 @@
 The ORT Project <https://oss-review-toolkit.org>
 
-Copyright (C) 2017-2023 HERE Europe B.V.
+Copyright years in this file refer to the first contribution done by the
+respective contributor. It does not imply that contributions have only been made
+in that year.
+
+Copyright (C) 2017 HERE Europe B.V.
 Copyright (C) 2019 Verifa Oy
-Copyright (C) 2019-2020 Bosch Software Innovations GmbH
-Copyright (C) 2020-2021 SCANOSS TECNOLOGIAS SL
-Copyright (C) 2020-2023 Bosch.IO GmbH
+Copyright (C) 2019 Bosch Software Innovations GmbH
+Copyright (C) 2020 SCANOSS TECNOLOGIAS SL
+Copyright (C) 2020 Bosch.IO GmbH
 Copyright (C) 2021 Alliander N.V.
 Copyright (C) 2021 Dr. Ing. h.c. F. Porsche AG
 Copyright (C) 2021 JetBrains s.r.o. and Kotlin Programming Language contributors
@@ -13,8 +17,8 @@ Copyright (C) 2021 TNG Technology Consulting GmbH
 Copyright (C) 2022 BMW CarIT GmbH
 Copyright (C) 2022 Eclypsium Inc.
 Copyright (C) 2022 Google, LLC
-Copyright (C) 2022-2024 EPAM Systems, Inc.
-Copyright (C) 2023-2024 Double Open Oy
+Copyright (C) 2022 EPAM Systems, Inc.
+Copyright (C) 2023 Double Open Oy
 Copyright (C) 2024 Robert Bosch GmbH
 Copyright (C) 2024 Cariad SE
 Copyright (C) 2025 Quartett mobile GmbH
