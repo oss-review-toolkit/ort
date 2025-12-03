@@ -132,6 +132,9 @@ class ScanCodeLicenseFactProvider(
     override fun hasLicenseText(licenseId: String): Boolean = getLicenseTextFile(licenseId) != null
 }
 
+private val File.isNotBlank: Boolean
+    get() = useLines { lines -> lines.skipYamlFrontMatter().any { line -> line.any { !it.isWhitespace() } } }
+
 internal fun Sequence<String>.skipYamlFrontMatter(): Sequence<String> {
     var inFrontMatter = false
 
@@ -149,6 +152,3 @@ internal fun Sequence<String>.skipYamlFrontMatter(): Sequence<String> {
         it.isBlank()
     }
 }
-
-private val File.isNotBlank: Boolean
-    get() = useLines { lines -> lines.skipYamlFrontMatter().any { line -> line.any { !it.isWhitespace() } } }
