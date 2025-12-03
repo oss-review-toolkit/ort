@@ -75,14 +75,10 @@ class ScanCodeLicenseFactProvider(
             return@lazy it
         } ?: logger.debug { "Could not locate the ScanCode 'licenses' text directory." }
 
-        FALLBACK_DIR.takeIf { it.isDirectory }.also {
-            if (it == null) {
-                logger.debug { "Could not locate fallback directory: $FALLBACK_DIR" }
-            } else {
-                logger.debug { "Located fallback ScanCode license text directory: $it" }
-                return@lazy it
-            }
-        }
+        FALLBACK_DIR.takeIf { it.isDirectory }?.also {
+            logger.debug { "Located fallback ScanCode license text directory: $it" }
+            return@lazy it
+        } ?: logger.debug { "Could not locate fallback directory: $FALLBACK_DIR" }
 
         logger.warn { "Could not locate any ScanCode license text directory." }
 
