@@ -20,8 +20,10 @@
 package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 
 import java.io.File
+import java.lang.invoke.MethodHandles
 
 import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -68,33 +70,10 @@ class ScanCodeLicenseFactProvider(
             }
         }
 
-        logger.debug { "Trying to locate the ScanCode license text directory..." }
-
-        val scanCodeExeDir = Os.getPathFromEnvironment("scancode")?.realFile?.parentFile
-
-        if (scanCodeExeDir == null) {
-            logger.debug { "Could not locate the ScanCode executable directory." }
-        } else {
-            logger.debug { "Located ScanCode executable directory: $scanCodeExeDir" }
-        }
-
-        val pythonBinDir = listOf("bin", "Scripts")
-        val scanCodeBaseDir = scanCodeExeDir?.takeUnless { it.name in pythonBinDir } ?: scanCodeExeDir?.parentFile
-
-        if (scanCodeBaseDir == null) {
-            logger.debug { "Could not locate the ScanCode base directory." }
-        } else {
-            logger.debug { "Located ScanCode base directory: $scanCodeBaseDir" }
-        }
-
-        val licenseDir = scanCodeBaseDir?.walk()?.find { it.isDirectory && it.endsWith("licensedcode/data/licenses") }
-
-        if (licenseDir == null) {
-            logger.debug { "Could not locate the ScanCode 'licenses' text directory." }
-        } else {
-            logger.debug { "Located ScanCode license text directory: $licenseDir" }
-            return@lazy licenseDir
-        }
+        findLicenseDir()?.also {
+            logger.debug { "Located ScanCode license text directory: $it" }
+            return@lazy it
+        } ?: logger.debug { "Could not locate the ScanCode 'licenses' text directory." }
 
         FALLBACK_DIR.takeIf { it.isDirectory }.also {
             if (it == null) {
@@ -132,8 +111,33 @@ class ScanCodeLicenseFactProvider(
     override fun hasLicenseText(licenseId: String): Boolean = getLicenseTextFile(licenseId) != null
 }
 
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
 private val File.isNotBlank: Boolean
     get() = useLines { lines -> lines.skipYamlFrontMatter().any { line -> line.any { !it.isWhitespace() } } }
+
+private fun findLicenseDir(): File? {
+    logger.debug { "Trying to locate the ScanCode license text directory..." }
+
+    val scanCodeExeDir = Os.getPathFromEnvironment("scancode")?.realFile?.parentFile
+
+    if (scanCodeExeDir == null) {
+        logger.debug { "Could not locate the ScanCode executable directory." }
+    } else {
+        logger.debug { "Located ScanCode executable directory: $scanCodeExeDir" }
+    }
+
+    val pythonBinDir = listOf("bin", "Scripts")
+    val scanCodeBaseDir = scanCodeExeDir?.takeUnless { it.name in pythonBinDir } ?: scanCodeExeDir?.parentFile
+
+    if (scanCodeBaseDir == null) {
+        logger.debug { "Could not locate the ScanCode base directory." }
+    } else {
+        logger.debug { "Located ScanCode base directory: $scanCodeBaseDir" }
+    }
+
+    return scanCodeBaseDir?.walk()?.find { it.isDirectory && it.endsWith("licensedcode/data/licenses") }
+}
 
 internal fun Sequence<String>.skipYamlFrontMatter(): Sequence<String> {
     var inFrontMatter = false
