@@ -31,9 +31,10 @@ import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.realFile
 
-private val FALLBACK_DIR = File("/opt/scancode-license-data")
+private const val LICENSE_DATA_PATH = "/opt/scancode-license-data"
 
 /** The configuration for the ScanCode license fact provider. */
 data class ScanCodeLicenseFactProviderConfig(
@@ -75,10 +76,13 @@ class ScanCodeLicenseFactProvider(
             return@lazy it
         } ?: logger.debug { "Could not locate the ScanCode 'licenses' text directory." }
 
-        FALLBACK_DIR.takeIf { it.isDirectory }?.also {
-            logger.debug { "Located fallback ScanCode license text directory: $it" }
+        val targetDir = File(LICENSE_DATA_PATH)
+        if (targetDir.isDirectory) return@lazy targetDir
+
+        exportLicenseData(targetDir)?.also {
+            logger.debug { "Located exported license data directory: $it" }
             return@lazy it
-        } ?: logger.debug { "Could not locate fallback directory: $FALLBACK_DIR" }
+        } ?: logger.debug { "Could not locate exported license data." }
 
         logger.warn { "Could not locate any ScanCode license text directory." }
 
@@ -133,6 +137,15 @@ private fun findLicenseDir(): File? {
     }
 
     return scanCodeBaseDir?.walk()?.find { it.isDirectory && it.endsWith("licensedcode/data/licenses") }
+}
+
+private fun exportLicenseData(targetDir: File): File? {
+    val process = ProcessCapture(
+        "scancode-license-data", "--path", targetDir.absolutePath,
+        environment = mapOf("LC_ALL" to "en_US.UTF-8")
+    )
+
+    return targetDir.takeIf { process.isSuccess && it.isDirectory }
 }
 
 internal fun Sequence<String>.skipYamlFrontMatter(): Sequence<String> {
