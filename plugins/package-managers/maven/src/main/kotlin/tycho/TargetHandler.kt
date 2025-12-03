@@ -117,13 +117,18 @@ internal class TargetHandler(
      * to find the original Maven coordinates for affected artifacts. They are needed to retrieve the correct metadata.
      * Result is *null* if no matching Maven dependency is found.
      */
-    fun mapToMavenDependency(tychoArtifact: Artifact): Artifact? =
-        mavenDependencies[tychoArtifact.artifactId]?.also { dep ->
+    fun mapToMavenDependency(tychoArtifact: Artifact): Artifact? {
+        // Strip the "wrapped." prefix that might have been added by Tycho's automatic bundle wrapping mechanism
+        // (missingManifest="generate") to find the original Maven artifact.
+        val unwrappedArtifactId = tychoArtifact.artifactId.removePrefix("wrapped.")
+
+        return mavenDependencies[unwrappedArtifactId]?.also { dep ->
             logger.info {
                 "Mapping Tycho artifact '${tychoArtifact.groupId}:${tychoArtifact.artifactId}' to Maven " +
                     "dependency '${dep.groupId}:${dep.artifactId}'."
             }
         }
+    }
 }
 
 /**

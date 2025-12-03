@@ -43,6 +43,15 @@
                     <version>2.15.2</version>
                     <type>jar</type>
                 </dependency>
+
+                <!-- This dependency has a missing manifest in its jar, so Tycho will generate one and wrap a
+                     p2 bundle around it. -->
+                <dependency>
+                    <groupId>org.apache.xmlbeans</groupId>
+                    <artifactId>xmlbeans</artifactId>
+                    <version>3.1.0</version>
+                    <type>jar</type>
+                </dependency>
             </dependencies>
         </location>
     </locations>
