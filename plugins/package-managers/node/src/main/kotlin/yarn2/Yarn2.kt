@@ -186,6 +186,10 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
             "install",
             workingDir = workingDir,
             environment = mapOf(
+                // Disable the execution of postinstall scripts for security reasons.
+                // See: https://yarnpkg.com/configuration/yarnrc#enableScripts
+                "YARN_ENABLE_SCRIPTS" to "false",
+
                 // Set the node linker to "node-modules" as the "node_modules" directory is required by this class to
                 // filter out optional dependencies that were not installed.
                 // See: https://yarnpkg.com/features/linkers
