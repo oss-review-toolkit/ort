@@ -182,7 +182,16 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
     }
 
     private fun installDependencies(workingDir: File) {
-        yarn2Command.run("install", workingDir = workingDir).requireSuccess()
+        yarn2Command.run(
+            "install",
+            workingDir = workingDir,
+            environment = mapOf(
+                // Set the node linker to "node-modules" as the "node_modules" directory is required by this class to
+                // filter out optional dependencies that were not installed.
+                // See: https://yarnpkg.com/features/linkers
+                "YARN_NODE_LINKER" to "node-modules"
+            )
+        ).requireSuccess()
     }
 
     private fun getPackageInfos(workingDir: File): List<PackageInfo> {
