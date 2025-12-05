@@ -77,8 +77,8 @@ data class GoModConfig(
      * analyze correctly if e.g. tags were removed from repositories. In such cases the proxy should not be disabled to
      * still get cached metadata.
      */
-    @OrtPluginOption(defaultValue = "true")
-    val disableGoProxy: Boolean
+    @OrtPluginOption(defaultValue = "true", aliases = ["disableGoProxy"])
+    val forceDirectGoProxy: Boolean
 )
 
 /**
@@ -100,7 +100,7 @@ class GoMod(
     private val goEnvironment = buildMap {
         put("GOWORK", "off")
 
-        if (config.disableGoProxy) {
+        if (config.forceDirectGoProxy) {
             val cleanGoPath = createOrtTempDir()
             put("GOPATH", cleanGoPath.absolutePath)
             put("GOPROXY", "direct")
