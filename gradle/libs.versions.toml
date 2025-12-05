@@ -21,7 +21,6 @@ clikt = "5.0.3"
 commonsCompress = "1.28.0"
 cyclonedx = "11.0.1"
 diffUtils = "4.16"
-diskLruCache = "2.0.2"
 exposed = "0.61.0"
 flexmark = "0.64.8"
 freemarker = "2.3.34"
@@ -43,6 +42,7 @@ kotlinPoet = "2.2.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxHtml = "0.12.0"
 kotlinxSerialization = "1.9.0"
+kottage = "1.9.0"
 ks3 = "1.0.0"
 tomlkt = "0.5.0"
 log4jApi = "2.25.2"
@@ -101,7 +101,6 @@ cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclo
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektPlugin" }
 diffUtils = { module = "io.github.java-diff-utils:java-diff-utils", version.ref = "diffUtils" }
-diskLruCache = { module = "com.jakewharton:disklrucache", version.ref = "diskLruCache" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
 exposed-javaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
@@ -143,6 +142,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-serialization-toml = { module = "net.peanuuutz.tomlkt:tomlkt", version.ref = "tomlkt" }
 kotlinx-serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version.ref = "xmlutil" }
 kotlinx-serialization-yaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
+kottage = { module = "io.github.irgaly.kottage:kottage", version.ref = "kottage" }
 ks3-jdk = { module = "io.ks3:ks3-jdk", version.ref = "ks3" }
 ks3-standard = { module = "io.ks3:ks3-standard", version.ref = "ks3" }
 ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp"}
