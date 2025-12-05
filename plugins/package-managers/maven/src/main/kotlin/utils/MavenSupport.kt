@@ -19,11 +19,20 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
 
+import io.github.irgaly.kottage.Kottage
+import io.github.irgaly.kottage.KottageEnvironment
+import io.github.irgaly.kottage.getOrNull
+import io.github.irgaly.kottage.platform.KottageContext
+import io.github.irgaly.kottage.put
+import io.github.irgaly.kottage.strategy.KottageLruStrategy
+
 import java.io.Closeable
 import java.io.File
 import java.net.URI
 
 import kotlin.time.Duration.Companion.hours
+
+import kotlinx.coroutines.MainScope
 
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
@@ -79,16 +88,15 @@ import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
-import org.ossreviewtoolkit.utils.common.gibibytes
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -101,11 +109,17 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     private val container = createContainer()
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
 
-    private val remoteArtifactCache = DiskCache(
-        directory = ortDataDirectory / "cache" / "analyzer" / workspaceReader.repository.contentType,
-        maxCacheSizeInBytes = 1.gibibytes,
-        maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
+    val kottage = Kottage(
+        name = "maven-support-store",
+        directoryPath = (ortDataDirectory / "cache" / "analyzer" / workspaceReader.repository.contentType).absolutePath,
+        environment = KottageEnvironment(KottageContext()),
+        scope = MainScope()
     )
+
+    val remoteArtifactCache = kottage.cache("remote-artifact-cache") {
+        strategy = KottageLruStrategy(maxEntryCount = 5000)
+        defaultExpireTime = 6.hours
+    }
 
     // The MavenSettingsBuilder class is deprecated, but internally it uses its successor SettingsBuilder. Calling
     // MavenSettingsBuilder requires less code than calling SettingsBuilder, so use it until it is removed.
@@ -294,7 +308,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
         val cacheKey = "$artifact@$allRepositories"
 
-        remoteArtifactCache.read(cacheKey)?.let {
+        // TODO: Straight use `RemoteArtifact` instead of `String` here once the model classes use KxS.
+        runBlocking { remoteArtifactCache.getOrNull<String>(cacheKey) }?.let {
             logger.debug { "Reading remote artifact for '$artifact' from disk cache." }
             return it.fromYaml()
         }
@@ -413,7 +428,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
                 return RemoteArtifact(info.downloadUrl, hash).also { remoteArtifact ->
                     logger.debug { "Writing remote artifact for '$artifact' to disk cache." }
-                    remoteArtifactCache.write(cacheKey, remoteArtifact.toYaml())
+                    runBlocking { remoteArtifactCache.put(cacheKey, remoteArtifact.toYaml()) }
                 }
             } else {
                 logger.debug { artifactDownload.exception.collectMessages() }
@@ -430,7 +445,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
             if (downloadUrls.any { url -> PACKAGING_TYPES.any { url.endsWith(".$it") } }) {
                 logger.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
 
-                remoteArtifactCache.write(cacheKey, remoteArtifact.toYaml())
+                runBlocking { remoteArtifactCache.put(cacheKey, remoteArtifact.toYaml()) }
             } else {
                 logger.warn { "Could not find artifact $artifact in any of $downloadUrls." }
             }
@@ -596,7 +611,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     }
 
     override fun close() {
-        remoteArtifactCache.close()
+        runBlocking { kottage.close() }
     }
 }
 
