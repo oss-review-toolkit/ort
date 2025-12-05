@@ -31,6 +31,9 @@ dependencies:
     concludedLicense: "MIT-Festival"
     description: "Package description."
     homepageUrl: "https://example.com/example-dependency-two"
+    authors:
+      - "Author One"
+      - "Author Two"
     isExcluded: false
     isDynamicallyLinked: false
     labels:
