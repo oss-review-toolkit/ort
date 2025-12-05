@@ -104,6 +104,8 @@ class GoMod(
             val cleanGoPath = createOrtTempDir()
             put("GOPATH", cleanGoPath.absolutePath)
             put("GOPROXY", "direct")
+        } else if (!config.disableGoProxy && System.getenv("GOPROXY") != null) {
+            put("GOPROXY", System.getenv("GOPROXY"))
         }
     }
 
