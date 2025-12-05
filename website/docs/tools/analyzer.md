@@ -29,6 +29,7 @@ Currently, the following package managers (grouped by the programming language t
   * [Stack](https://haskellstack.org/)
 * Java
   * [Gradle](https://gradle.org/)
+  * [Ivy](https://ant.apache.org/ivy/)
   * [Maven](https://maven.apache.org/) (limitations: [default profile only](https://github.com/oss-review-toolkit/ort/issues/1774))
     * Including the [Tycho](https://tycho.eclipseprojects.io/doc/main/index.html) extension for building OSGi bundles and Eclipse IDE plug-ins.
 * JavaScript / Node.js
