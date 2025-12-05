@@ -60,7 +60,9 @@ data class ResolvedLicense(
      * True, if this license was [detected][LicenseSource.DETECTED] and all [locations] have matching path excludes.
      */
     val isDetectedExcluded by lazy {
-        LicenseSource.DETECTED in sources && locations.all { it.matchingPathExcludes.isNotEmpty() }
+        LicenseSource.DETECTED in sources && locations.all {
+            it.matchingPathExcludes.isNotEmpty() || it.isExcludedByPathIncludes
+        }
     }
 
     init {
@@ -95,13 +97,16 @@ data class ResolvedLicense(
 
     /**
      * Filter all excluded copyrights. Copyrights which have
-     * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes] are removed.
+     * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes] or for which [no include are defined]
+     * [ResolvedCopyrightFinding.isExcludedByPathIncludes] are removed.
      */
     fun filterExcludedCopyrights(): ResolvedLicense =
         copy(
             locations = locations.mapTo(mutableSetOf()) { location ->
                 location.copy(
-                    copyrights = location.copyrights.filterTo(mutableSetOf()) { it.matchingPathExcludes.isEmpty() }
+                    copyrights = location.copyrights.filterTo(mutableSetOf()) {
+                        it.matchingPathExcludes.isEmpty() || it.isExcludedByPathIncludes
+                    }
                 )
             }
         )
