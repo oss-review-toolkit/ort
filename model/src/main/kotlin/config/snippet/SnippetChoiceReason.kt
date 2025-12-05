@@ -34,7 +34,7 @@ enum class SnippetChoiceReason {
     ORIGINAL_FINDING,
 
     /**
-     * Other reason.
+     * Any other reason which cannot be represented by any other element of [SnippetChoiceReason].
      */
     OTHER
 }
