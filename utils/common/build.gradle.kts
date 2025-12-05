@@ -26,7 +26,6 @@ dependencies {
     api(libs.commonsCompress)
     api(libs.semver4j)
 
-    implementation(libs.diskLruCache)
     implementation(libs.log4j.api)
     implementation(libs.springCore)
 
