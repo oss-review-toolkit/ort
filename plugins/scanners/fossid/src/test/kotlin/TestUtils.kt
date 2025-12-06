@@ -70,6 +70,7 @@ import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
 import org.ossreviewtoolkit.clients.fossid.removeUploadedContent
+import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.clients.fossid.uploadFile
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
@@ -789,6 +790,103 @@ fun FossIdServiceWithVersion.verifyUploadArchiveWorkflow(
         removeUploadedContent(USER, API_KEY, scanCode)
         uploadFile(USER, API_KEY, scanCode, any())
         extractArchives(USER, API_KEY, scanCode, any())
+    }
+
+    coVerify(exactly = 0) {
+        createProject(any())
+    }
+}
+
+/**
+ * Mock all the different functions called during a clone repository workflow for a new scan [scanCode].
+ * If [deltaScans] is enabled, it also mocks the checks for existing scans.
+ * If [existingScans] is not empty, it also mocks the list operation that return these scans. The last existing scan
+ * code will be status checked and its ignore rules listed.
+ * The [existingScanCode] can be used to specify which existing scan to check the status and list the ignore rules for,
+ * otherwise the last existing scan is used.
+ * The [checkScanStatuses] can be used to specify which statuses to expect when checking the status of the new scan.
+ */
+@Suppress("LongParameterList")
+internal fun FossIdServiceWithVersion.expectCloneRepositoryWorkflow(
+    projectCode: String,
+    scanCode: String,
+    vcsInfo: VcsInfo,
+    projectRevision: String = REVISION_MASTER,
+    existingScans: List<Scan> = emptyList(),
+    deltaScans: Boolean = false,
+    existingIgnoreRules: List<IgnoreRule> = emptyList(),
+    existingScanCode: String? = null,
+    checkScanStatuses: List<ScanStatus>? = null
+): FossIdServiceWithVersion =
+    apply {
+        expectProjectRequest(projectCode)
+        expectListScans(projectCode, existingScans)
+        // TODO: This should be done only if deltaScans is true, but currently the tests with delta scans disabled still
+        //       rely on existing scans.
+
+        val resolvedExistingScanCode = existingScanCode ?: existingScans.takeIf { it.isNotEmpty() }?.last()?.code
+        if (resolvedExistingScanCode != null) {
+            expectCheckScanStatus(resolvedExistingScanCode, ScanStatus.FINISHED)
+            expectListIgnoreRules(resolvedExistingScanCode, existingIgnoreRules)
+        }
+
+        val statuses = checkScanStatuses ?: if (deltaScans) {
+            listOf(ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+        } else {
+            listOf(ScanStatus.FINISHED)
+        }
+
+        expectCheckScanStatus(scanCode, *statuses.toTypedArray())
+
+        expectCreateScan(projectCode, scanCode, vcsInfo, projectRevision)
+        expectDownload(scanCode)
+    }
+
+/**
+ * Verify that all functions called during a clone repository workflow for a new scan [scanCode] were called.
+ * If [verifyRunScanOptions] is not null, it is verified that a scan has been run with the given options.
+ * If [verifyDeleteScan] is true, it is verified that the scan has been deleted after processing.
+ * If [ignoreRulesScancode] is not null, it is verified that ignore rules have been loaded for this scancode, and that
+ * they have been created for [scanCode].
+ */
+@Suppress("LongParameterList")
+internal fun FossIdServiceWithVersion.verifyCloneRepositoryWorkflow(
+    projectCode: String,
+    scanCode: String,
+    vcsInfo: VcsInfo,
+    comment: OrtScanComment,
+    verifyRunScanOptions: Map<String, String>? = null,
+    verifyDeleteScan: Boolean = false,
+    ignoreRulesScancode: String? = null
+) {
+    coVerify {
+        createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment.asJsonString())
+        downloadFromGit(USER, API_KEY, scanCode)
+        checkDownloadStatus(USER, API_KEY, scanCode)
+        if (verifyDeleteScan) {
+            deleteScan(USER, API_KEY, scanCode)
+        }
+
+        verifyRunScanOptions?.also {
+            runScan(
+                USER,
+                API_KEY,
+                scanCode,
+                it
+            )
+        }
+
+        ignoreRulesScancode?.also {
+            listIgnoreRules(USER, API_KEY, it)
+            createIgnoreRule(
+                USER,
+                API_KEY,
+                scanCode,
+                IGNORE_RULE.type,
+                IGNORE_RULE.value,
+                DEFAULT_IGNORE_RULE_SCOPE
+            )
+        }
     }
 
     coVerify(exactly = 0) {
