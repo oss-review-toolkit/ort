@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.scanners.fossid
 
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -737,3 +738,60 @@ internal fun FossId.scan(
             snippetChoices = snippetChoices
         )
     )
+
+/**
+ * Mock all the different functions called during an upload archive workflow for a new scan [scanCode].
+ * If [deltaScans] is enabled, it also mocks the checks for existing scans.
+ * If [existingScans] is not empty, it also mocks the checks for the contained scans status.
+ */
+@Suppress("LongParameterList")
+internal fun FossIdServiceWithVersion.expectUploadArchiveWorkflow(
+    projectCode: String,
+    scanCode: String,
+    vcsInfo: VcsInfo,
+    projectRevision: String,
+    existingScans: List<Scan> = emptyList(),
+    deltaScans: Boolean
+): FossIdServiceWithVersion =
+    apply {
+        expectProjectRequest(projectCode)
+        expectListScans(projectCode, existingScans)
+        // TODO: This should be done only if deltaScans is true, but currently the tests with delta scans disabled still
+        //       rely on existing scans.
+        existingScans.forEach {
+            it.code?.also { existingScanCode ->
+                expectCheckScanStatus(existingScanCode, ScanStatus.FINISHED)
+            }
+        }
+
+        if (deltaScans) {
+            expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+        } else {
+            expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+        }
+
+        expectCreateScan(projectCode, scanCode, vcsInfo, projectRevision, true)
+        expectRemoveUploadedContent(scanCode)
+        expectUploadFile(scanCode)
+        expectExtractArchives(scanCode)
+    }
+
+/**
+ * Verify that all functions called during an upload archive workflow for a new scan [scanCode] were called
+ */
+fun FossIdServiceWithVersion.verifyUploadArchiveWorkflow(
+    projectCode: String,
+    scanCode: String,
+    comment: OrtScanComment
+) {
+    coVerify(exactly = 1) {
+        createScan(USER, API_KEY, projectCode, scanCode, null, null, comment.asJsonString())
+        removeUploadedContent(USER, API_KEY, scanCode)
+        uploadFile(USER, API_KEY, scanCode, any())
+        extractArchives(USER, API_KEY, scanCode, any())
+    }
+
+    coVerify(exactly = 0) {
+        createProject(any())
+    }
+}
