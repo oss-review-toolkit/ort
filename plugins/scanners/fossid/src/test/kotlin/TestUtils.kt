@@ -117,6 +117,12 @@ internal val IGNORE_RULE = IgnoreRule(1, RuleType.EXTENSION, ".docx", SCAN_ID, "
 /** The default scope used when creating ignore rule. */
 internal val DEFAULT_IGNORE_RULE_SCOPE = RuleScope.SCAN
 
+/* An empty VCS revision. */
+internal const val REVISION_EMPTY = ""
+
+/* The 'master' VCS revision. */
+internal const val REVISION_MASTER = "master"
+
 /**
  * Create a new [FossId] instance with the specified [config].
  */
@@ -197,9 +203,9 @@ internal fun createVersionControlSystemMock(): VersionControlSystem {
     }
 
     val vcs = mockk<VersionControlSystem> {
-        every { getDefaultBranchName(any()) } returns "master"
+        every { getDefaultBranchName(any()) } returns REVISION_MASTER
         every { initWorkingTree(any(), any()) } returns wt
-        every { updateWorkingTree(any(), any()) } returns Result.success("master")
+        every { updateWorkingTree(any(), any()) } returns Result.success(REVISION_MASTER)
     }
 
     return vcs
@@ -228,7 +234,7 @@ internal fun createScan(
     revision: String,
     scanCode: String,
     scanId: Int = SCAN_ID,
-    comment: String = "master",
+    comment: String = REVISION_MASTER,
     legacyComment: Boolean = false
 ): Scan =
     mockk<Scan> {
@@ -252,7 +258,7 @@ internal fun createScanWithUploadedContent(
     revision: String,
     scanCode: String,
     scanId: Int = SCAN_ID,
-    comment: String = "master"
+    comment: String = REVISION_MASTER
 ): Scan =
     mockk<Scan> {
         every { gitRepoUrl } returns null
@@ -632,7 +638,7 @@ internal fun FossIdServiceWithVersion.expectCreateScan(
     projectCode: String,
     scanCode: String,
     vcsInfo: VcsInfo,
-    projectRevision: String = "master",
+    projectRevision: String = REVISION_MASTER,
     isArchiveMode: Boolean = false
 ): FossIdServiceWithVersion {
     val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, projectRevision).asJsonString()
