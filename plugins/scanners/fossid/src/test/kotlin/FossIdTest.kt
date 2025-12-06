@@ -53,16 +53,13 @@ import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
-import org.ossreviewtoolkit.clients.fossid.extractArchives
 import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
-import org.ossreviewtoolkit.clients.fossid.removeUploadedContent
 import org.ossreviewtoolkit.clients.fossid.runScan
-import org.ossreviewtoolkit.clients.fossid.uploadFile
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
@@ -208,13 +205,14 @@ class FossIdTest : WordSpec({
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
 
             val service = FossIdRestService.create(config.serverUrl)
-                .expectProjectRequest(projectCode)
-                .expectListScans(projectCode, listOf(scan))
-                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName, true)
-                .expectRemoveUploadedContent(scanCode)
-                .expectUploadFile(scanCode)
-                .expectExtractArchives(scanCode)
+                .expectUploadArchiveWorkflow(
+                    projectCode,
+                    scanCode,
+                    vcsInfo,
+                    branchName,
+                    listOf(scan),
+                    false
+                )
                 .mockFiles(scanCode)
 
             val fossId = createFossId(config)
@@ -224,17 +222,8 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
             )
 
-            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
-            coVerify(exactly = 1) {
-                service.createScan(USER, API_KEY, projectCode, scanCode, null, null, comment)
-                service.removeUploadedContent(USER, API_KEY, scanCode)
-                service.uploadFile(USER, API_KEY, scanCode, any())
-                service.extractArchives(USER, API_KEY, scanCode, any())
-            }
-
-            coVerify(exactly = 0) {
-                service.createProject(any())
-            }
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName)
+            service.verifyUploadArchiveWorkflow(projectCode, scanCode, comment = comment)
         }
 
         "rewrite the snippet results paths for a scan created by uploading an archive" {
@@ -253,13 +242,14 @@ class FossIdTest : WordSpec({
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
 
             val service = FossIdRestService.create(config.serverUrl)
-                .expectProjectRequest(projectCode)
-                .expectListScans(projectCode, listOf(scan))
-                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName, true)
-                .expectRemoveUploadedContent(scanCode)
-                .expectUploadFile(scanCode)
-                .expectExtractArchives(scanCode)
+                .expectUploadArchiveWorkflow(
+                    projectCode,
+                    scanCode,
+                    vcsInfo,
+                    branchName,
+                    listOf(scan),
+                    false
+                )
                 .mockFiles(
                     scanCode,
                     pendingFiles = listOf(file1ArchiveMode),
@@ -274,17 +264,8 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
             )
 
-            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName).asJsonString()
-            coVerify(exactly = 1) {
-                service.createScan(USER, API_KEY, projectCode, scanCode, null, null, comment)
-                service.removeUploadedContent(USER, API_KEY, scanCode)
-                service.uploadFile(USER, API_KEY, scanCode, any())
-                service.extractArchives(USER, API_KEY, scanCode, any())
-            }
-
-            coVerify(exactly = 0) {
-                service.createProject(any())
-            }
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, branchName)
+            service.verifyUploadArchiveWorkflow(projectCode, scanCode, comment)
 
             val location = TextLocation(file1, TextLocation.UNKNOWN_LINE)
             result.summary.snippetFindings shouldHaveSingleElement SnippetFinding(
@@ -1196,14 +1177,14 @@ class FossIdTest : WordSpec({
             val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode)
 
             val service = FossIdRestService.create(config.serverUrl)
-                .expectProjectRequest(projectCode)
-                .expectListScans(projectCode, listOf(scan))
-                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
-                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_MASTER, true)
-                .expectRemoveUploadedContent(scanCode)
-                .expectUploadFile(scanCode)
-                .expectExtractArchives(scanCode)
+                .expectUploadArchiveWorkflow(
+                    projectCode,
+                    scanCode,
+                    vcsInfo,
+                    REVISION_MASTER,
+                    listOf(scan),
+                    true
+                )
                 .mockFiles(scanCode)
             coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
 
@@ -1214,22 +1195,8 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to REVISION_MASTER)
             )
 
-            coVerify(exactly = 1) {
-                service.removeUploadedContent(USER, API_KEY, scanCode)
-                service.uploadFile(USER, API_KEY, scanCode, any())
-                service.extractArchives(USER, API_KEY, scanCode, any())
-                service.runScan(
-                    USER,
-                    API_KEY,
-                    scanCode,
-                    mapOf(
-                        *FossId.deltaScanRunParameters(originCode),
-                        "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0",
-                        "sensitivity" to "10"
-                    )
-                )
-            }
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, REVISION_MASTER)
+            service.verifyUploadArchiveWorkflow(projectCode, scanCode, comment)
         }
 
         "create a delta scan in archive mode for an existing scan created in archive mode" {
@@ -1241,14 +1208,14 @@ class FossIdTest : WordSpec({
             val scan = createScanWithUploadedContent(vcsInfo.url, vcsInfo.revision, originCode)
 
             val service = FossIdRestService.create(config.serverUrl)
-                .expectProjectRequest(projectCode)
-                .expectListScans(projectCode, listOf(scan))
-                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
-                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_MASTER, true)
-                .expectRemoveUploadedContent(scanCode)
-                .expectUploadFile(scanCode)
-                .expectExtractArchives(scanCode)
+                .expectUploadArchiveWorkflow(
+                    projectCode,
+                    scanCode,
+                    vcsInfo,
+                    REVISION_MASTER,
+                    listOf(scan),
+                    true
+                )
                 .mockFiles(scanCode)
             coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
 
@@ -1259,22 +1226,8 @@ class FossIdTest : WordSpec({
                 mapOf(FossId.PROJECT_REVISION_LABEL to REVISION_MASTER)
             )
 
-            coVerify(exactly = 1) {
-                service.removeUploadedContent(USER, API_KEY, scanCode)
-                service.uploadFile(USER, API_KEY, scanCode, any())
-                service.extractArchives(USER, API_KEY, scanCode, any())
-                service.runScan(
-                    USER,
-                    API_KEY,
-                    scanCode,
-                    mapOf(
-                        *FossId.deltaScanRunParameters(originCode),
-                        "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0",
-                        "sensitivity" to "10"
-                    )
-                )
-            }
+            val comment = createOrtScanComment(vcsInfo.url, vcsInfo.revision, REVISION_MASTER)
+            service.verifyUploadArchiveWorkflow(projectCode, scanCode, comment)
         }
 
         "apply exclusion rules to a non-delta scan" {
