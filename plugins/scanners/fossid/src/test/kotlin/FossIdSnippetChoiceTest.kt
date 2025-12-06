@@ -120,7 +120,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -165,7 +165,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -212,7 +212,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -261,7 +261,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -413,7 +413,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -460,7 +460,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -516,7 +516,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -561,7 +561,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -606,7 +606,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -654,7 +654,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -695,7 +695,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "", isArchiveMode = true)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY, isArchiveMode = true)
                 .expectRemoveUploadedContent(scanCode)
                 .expectUploadFile(scanCode)
                 .expectExtractArchives(scanCode)
@@ -734,7 +734,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -772,7 +772,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -834,7 +834,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "", isArchiveMode = true)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY, isArchiveMode = true)
                 .expectRemoveUploadedContent(scanCode)
                 .expectUploadFile(scanCode)
                 .expectExtractArchives(scanCode)
@@ -900,7 +900,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -959,7 +959,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -1004,7 +1004,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -1049,7 +1049,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,
@@ -1092,7 +1092,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectCreateScan(projectCode, scanCode, vcsInfo, REVISION_EMPTY)
                 .expectDownload(scanCode)
                 .mockFiles(
                     scanCode,

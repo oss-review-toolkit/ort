@@ -304,16 +304,7 @@ class FossId internal constructor(
                 val result = if (config.deltaScans) {
                     checkAndCreateDeltaScan(handler, scans, url, revision, projectCode, repositoryName, context)
                 } else {
-                    checkAndCreateScan(
-                        handler,
-                        scans,
-                        url,
-                        revision,
-                        projectCode,
-                        repositoryName,
-                        nestedProvenance,
-                        context
-                    )
+                    checkAndCreateScan(handler, url, revision, projectCode, repositoryName, context)
                 }
 
                 if (config.waitForResult && provenance is RepositoryProvenance) {
@@ -501,12 +492,10 @@ class FossId internal constructor(
     @Suppress("LongParameterList")
     private suspend fun checkAndCreateScan(
         handler: EventHandler,
-        scans: List<Scan>,
         url: String,
         revision: String,
         projectCode: String,
         projectName: String,
-        nestedProvenance: NestedProvenance?,
         context: ScanContext
     ): FossIdResult {
         val projectRevision = context.labels[PROJECT_REVISION_LABEL]
@@ -517,41 +506,18 @@ class FossId internal constructor(
             logger.info { "Project revision is '$projectRevision'." }
         }
 
-        val existingScan = scans.recentScansForRepository(
-            url,
-            revision = revision,
-            projectRevision = projectRevision
-        ).findLatestPendingOrFinishedScan()
+        logger.info { "Creating scan for $url and revision $revision..." }
 
-        val result = if (existingScan == null) {
-            logger.info { "No scan found for $url and revision $revision. Creating scan..." }
+        val scanCode = namingProvider.createScanCode(repositoryName = projectName, branch = revision)
+        val newUrl = handler.transformURL(url)
+        val scanId = createScan(handler, projectCode, scanCode, newUrl, revision, projectRevision.orEmpty())
 
-            val scanCode = namingProvider.createScanCode(repositoryName = projectName, branch = revision)
-            val newUrl = handler.transformURL(url)
-            val scanId = createScan(handler, projectCode, scanCode, newUrl, revision, projectRevision.orEmpty())
+        val issues = mutableListOf<Issue>()
+        handler.afterScanCreation(scanCode, null, issues, context)
 
-            val issues = mutableListOf<Issue>()
-            handler.afterScanCreation(scanCode, null, issues, context)
+        if (config.waitForResult) checkScan(handler, scanCode)
 
-            if (config.waitForResult) checkScan(handler, scanCode)
-
-            FossIdResult(scanCode, scanId, issues)
-        } else {
-            logger.info { "Scan '${existingScan.code}' found for $url and revision $revision." }
-
-            val existingScanCode = requireNotNull(existingScan.code) {
-                "The code for an existing scan must not be null."
-            }
-
-            // Create a specific handler for the existing scan.
-            val handlerForExistingScan = EventHandler.getHandler(existingScan, config, nestedProvenance, service)
-
-            if (config.waitForResult) checkScan(handlerForExistingScan, existingScan.code.orEmpty())
-
-            FossIdResult(existingScanCode, existingScan.id.toString())
-        }
-
-        return result
+        return FossIdResult(scanCode, scanId, issues)
     }
 
     /**
