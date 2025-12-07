@@ -77,6 +77,9 @@ project:
       dependencies:
       - id: "NPM::asap:2.0.6"
     - id: "NPM:@csstools:css-color-parser:3.0.8"
+      dependencies:
+      - id: "NPM:@csstools:color-helpers:5.1.0"
+      - id: "NPM:@csstools:css-calc:2.1.4"
 packages:
 - id: "NPM::asap:2.0.6"
   purl: "pkg:npm/asap@2.0.6"
@@ -851,6 +854,62 @@ packages:
     url: "https://github.com/TooTallNate/util-deprecate.git"
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
     path: ""
+- id: "NPM:@csstools:color-helpers:5.1.0"
+  purl: "pkg:npm/%40csstools/color-helpers@5.1.0"
+  declared_licenses:
+  - "MIT-0"
+  declared_licenses_processed:
+    spdx_expression: "MIT-0"
+  description: "Color helpers to ease transformation between formats, gamut, etc"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/color-helpers#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/color-helpers/-/color-helpers-5.1.0.tgz"
+    hash:
+      value: "106c54c808cabfd1ab4c602d8505ee584c2996ef"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "132530a36b9f711a886602ce4bf1e95de95f2a5b"
+    path: "packages/color-helpers"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "132530a36b9f711a886602ce4bf1e95de95f2a5b"
+    path: "packages/color-helpers"
+- id: "NPM:@csstools:css-calc:2.1.4"
+  purl: "pkg:npm/%40csstools/css-calc@2.1.4"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Solve CSS math expressions"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-calc#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-calc/-/css-calc-2.1.4.tgz"
+    hash:
+      value: "8473f63e2fcd6e459838dd412401d5948f224c65"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "7a21bdf28305a0915af8e002b98ba82bc25a1573"
+    path: "packages/css-calc"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "7a21bdf28305a0915af8e002b98ba82bc25a1573"
+    path: "packages/css-calc"
 - id: "NPM:@csstools:css-color-parser:3.0.8"
   purl: "pkg:npm/%40csstools/css-color-parser@3.0.8"
   declared_licenses:
