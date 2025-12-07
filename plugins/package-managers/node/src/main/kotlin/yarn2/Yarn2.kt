@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.utils.ort.runBlocking
  * The amount of package details to query at once with `yarn npm info`.
  */
 private const val YARN_NPM_INFO_CHUNK_SIZE = 1000
+private val virtualPackageRegex = Regex("""^(@[^@]+)@.*#npm:([0-9]+\.[0-9]+\.[0-9]+)""")
 
 data class Yarn2Config(
     /**
@@ -169,7 +170,15 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
             scopes.forEach { scope ->
                 val dependencyNames = packageJson.getDependenciesForScope(scope)
                 val dependencies = packageInfo.children.dependencies
-                    .map { packageInfoForLocator.getValue(it.locator) }
+                    .map { dependency ->
+                        // Map virtual package locators to their corresponding real package locators as only their
+                        // package infos contain the transitive dependencies.
+                        val locator = virtualPackageRegex.find(dependency.locator)?.let {
+                            "${it.groupValues[1]}@npm:${it.groupValues[2]}"
+                        } ?: dependency.locator
+
+                        packageInfoForLocator.getValue(locator)
+                    }
                     .filter { it.moduleName in dependencyNames }
 
                 graphBuilder.addDependencies(project.id, scope.descriptor, dependencies)
