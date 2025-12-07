@@ -169,7 +169,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
             scopes.forEach { scope ->
                 val dependencyNames = packageJson.getDependenciesForScope(scope)
                 val dependencies = packageInfo.children.dependencies
-                    .map { packageInfoForLocator.getValue(it.locator) }
+                    .map { packageInfoForLocator.getValue(it.realLocator) }
                     .filter { it.moduleName in dependencyNames }
 
                 graphBuilder.addDependencies(project.id, scope.descriptor, dependencies)
