@@ -76,7 +76,7 @@ project:
     - id: "NPM::promise:7.3.1"
       dependencies:
       - id: "NPM::asap:2.0.6"
-    - id: "NPM:@react-native-community:netinfo:11.2.1"
+    - id: "NPM:@csstools:css-color-parser:3.0.8"
 packages:
 - id: "NPM::asap:2.0.6"
   purl: "pkg:npm/asap@2.0.6"
@@ -851,36 +851,34 @@ packages:
     url: "https://github.com/TooTallNate/util-deprecate.git"
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
     path: ""
-- id: "NPM:@react-native-community:netinfo:11.2.1"
-  purl: "pkg:npm/%40react-native-community/netinfo@11.2.1"
-  authors:
-  - "Matt Oakes"
+- id: "NPM:@csstools:css-color-parser:3.0.8"
+  purl: "pkg:npm/%40csstools/css-color-parser@3.0.8"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "React Native Network Info API for iOS & Android"
-  homepage_url: "https://github.com/react-native-netinfo/react-native-netinfo#readme"
+  description: "Parse CSS color values"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-color-parser#readme"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-11.2.1.tgz"
+    url: "https://registry.npmjs.org/@csstools/css-color-parser/-/css-color-parser-3.0.8.tgz"
     hash:
-      value: "177f5409f2ac41fd51ede6e4994307bb0edb2178"
+      value: "5fe9322920851450bf5e065c2b0e731b9e165394"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/react-native-netinfo/react-native-netinfo.git"
-    revision: "736138c36eeebb0a320f8eccd263f909855f5c75"
-    path: ""
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "1e7b98202406e4041a9dae1629ec9272138fd77f"
+    path: "packages/css-color-parser"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/react-native-netinfo/react-native-netinfo.git"
-    revision: "736138c36eeebb0a320f8eccd263f909855f5c75"
-    path: ""
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "1e7b98202406e4041a9dae1629ec9272138fd77f"
+    path: "packages/css-color-parser"
 - id: "NPM:@types:node:22.9.0"
   purl: "pkg:npm/%40types/node@22.9.0"
   declared_licenses:
