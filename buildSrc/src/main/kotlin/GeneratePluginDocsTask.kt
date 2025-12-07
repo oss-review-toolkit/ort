@@ -188,7 +188,8 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                     }
 
                     option["default"]?.also {
-                        appendLine("![Default](https://img.shields.io/badge/Default-$it-darkgreen)")
+                        val escaped = it.toString().replace("-", "--")
+                        appendLine("![Default](https://img.shields.io/badge/Default-$escaped-darkgreen)")
                     }
 
                     appendLine()
