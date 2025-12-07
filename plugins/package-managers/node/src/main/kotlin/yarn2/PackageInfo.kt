@@ -26,6 +26,9 @@ import kotlinx.serialization.json.decodeToSequence
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
+/** A regular expression to match locators that point to virtual packages and capture their package name and version. */
+private val VIRTUAL_PACKAGE_REGEX = Regex("""^(@[^@]+)@.*#npm:([0-9]+\.[0-9]+\.[0-9]+)""")
+
 internal fun parsePackageInfos(info: String): List<PackageInfo> =
     info.byteInputStream().use { JSON.decodeToSequence<PackageInfo>(it) }.toList()
 
@@ -57,5 +60,12 @@ internal data class PackageInfo(
     data class Dependency(
         val descriptor: String,
         val locator: String
-    )
+    ) {
+        /**
+         * If [locator] refers to a virtual package, this property contains the locator of the corresponding real
+         * package, otherwise it is identical to [locator]. This is needed for dependency resolution, because only the
+         * package info of the real package contains the transitive dependencies.
+         */
+        val realLocator = VIRTUAL_PACKAGE_REGEX.replace(locator) { "${it.groupValues[1]}@npm:${it.groupValues[2]}" }
+    }
 }

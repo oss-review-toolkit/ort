@@ -65,7 +65,7 @@ internal class Yarn2DependencyHandler(
         )
 
     override fun dependenciesFor(dependency: PackageInfo): List<PackageInfo> =
-        dependency.children.dependencies.map { packageInfoForLocator.getValue(it.locator) }
+        dependency.children.dependencies.map { packageInfoForLocator.getValue(it.realLocator) }
 
     override fun linkageFor(dependency: PackageInfo): PackageLinkage =
         if (dependency.isProject) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
