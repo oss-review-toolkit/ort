@@ -20,6 +20,7 @@ projects:
   scopes:
   - name: "dependencies"
     dependencies:
+    - id: "NPM:@csstools:css-color-parser:3.0.8"
     - id: "NPM:@here:harp-fetch:0.3.6"
       dependencies:
       - id: "NPM::node-fetch:2.6.0"
@@ -68,6 +69,7 @@ projects:
     - id: "Yarn2::pkg2:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
+      - id: "NPM:@csstools:css-color-parser:3.0.8"
       - id: "NPM:@here:harp-fetch:0.3.6"
         dependencies:
         - id: "NPM::node-fetch:2.6.0"
@@ -102,6 +104,34 @@ packages:
     url: "https://github.com/bitinn/node-fetch.git"
     revision: "95286f52bb866283bc69521a04efe1de37b26a33"
     path: ""
+- id: "NPM:@csstools:css-color-parser:3.0.8"
+  purl: "pkg:npm/%40csstools/css-color-parser@3.0.8"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Parse CSS color values"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-color-parser#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-color-parser/-/css-color-parser-3.0.8.tgz"
+    hash:
+      value: "5fe9322920851450bf5e065c2b0e731b9e165394"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "1e7b98202406e4041a9dae1629ec9272138fd77f"
+    path: "packages/css-color-parser"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "1e7b98202406e4041a9dae1629ec9272138fd77f"
+    path: "packages/css-color-parser"
 - id: "NPM:@here:harp-fetch:0.3.6"
   purl: "pkg:npm/%40here/harp-fetch@0.3.6"
   authors:
