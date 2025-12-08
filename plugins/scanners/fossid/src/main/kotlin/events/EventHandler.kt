@@ -66,22 +66,6 @@ interface EventHandler {
 
                 CloneRepositoryHandler(config, service)
             }
-
-        /**
-         * Return an [EventHandler] based on the given [config], [nestedProvenance] and [service]. The handler is
-         * tailored for the given [existingScan].
-         */
-        fun getHandler(
-            existingScan: Scan,
-            config: FossIdConfig,
-            nestedProvenance: NestedProvenance?,
-            service: FossIdServiceWithVersion
-        ): EventHandler {
-            // Create a specific handler for the existing scan, based on its configuration, not to the current scanner
-            // configuration.
-            val configForExistingScan = config.copy(isArchiveMode = existingScan.gitRepoUrl == null)
-            return getHandler(configForExistingScan, nestedProvenance, service)
-        }
     }
 
     /**
