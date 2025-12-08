@@ -375,11 +375,7 @@ private fun RuleViolation.format() =
 
         license?.let { license ->
             append(license)
-            licenseSource?.let { source ->
-                append(" (")
-                append(source)
-                append(")")
-            }
+            licenseSources.takeUnless { it.isEmpty() }?.joinToString(prefix = "(", postfix = ")") { it.toString() }
 
             append(" - ")
         }
