@@ -757,15 +757,13 @@ internal fun FossIdServiceWithVersion.expectUploadArchiveWorkflow(
     apply {
         expectProjectRequest(projectCode)
         expectListScans(projectCode, existingScans)
-        // TODO: This should be done only if deltaScans is true, but currently the tests with delta scans disabled still
-        //       rely on existing scans.
-        existingScans.forEach {
-            it.code?.also { existingScanCode ->
-                expectCheckScanStatus(existingScanCode, ScanStatus.FINISHED)
-            }
-        }
-
         if (deltaScans) {
+            existingScans.forEach {
+                it.code?.also { existingScanCode ->
+                    expectCheckScanStatus(existingScanCode, ScanStatus.FINISHED)
+                }
+            }
+
             expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
         } else {
             expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -821,13 +819,12 @@ internal fun FossIdServiceWithVersion.expectCloneRepositoryWorkflow(
     apply {
         expectProjectRequest(projectCode)
         expectListScans(projectCode, existingScans)
-        // TODO: This should be done only if deltaScans is true, but currently the tests with delta scans disabled still
-        //       rely on existing scans.
-
-        val resolvedExistingScanCode = existingScanCode ?: existingScans.takeIf { it.isNotEmpty() }?.last()?.code
-        if (resolvedExistingScanCode != null) {
-            expectCheckScanStatus(resolvedExistingScanCode, ScanStatus.FINISHED)
-            expectListIgnoreRules(resolvedExistingScanCode, existingIgnoreRules)
+        if (deltaScans) {
+            val resolvedExistingScanCode = existingScanCode ?: existingScans.takeIf { it.isNotEmpty() }?.last()?.code
+            if (resolvedExistingScanCode != null) {
+                expectCheckScanStatus(resolvedExistingScanCode, ScanStatus.FINISHED)
+                expectListIgnoreRules(resolvedExistingScanCode, existingIgnoreRules)
+            }
         }
 
         val statuses = checkScanStatuses ?: if (deltaScans) {
