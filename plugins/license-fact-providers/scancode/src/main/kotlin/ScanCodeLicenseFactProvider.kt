@@ -32,9 +32,11 @@ import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.realFile
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
-private const val LICENSE_DATA_PATH = "/opt/scancode-license-data"
+private val FALLBACK_DIR = File("/opt/scancode-license-data")
 
 /** The configuration for the ScanCode license fact provider. */
 data class ScanCodeLicenseFactProviderConfig(
@@ -76,17 +78,20 @@ class ScanCodeLicenseFactProvider(
             return@lazy it
         } ?: logger.debug { "Could not locate the ScanCode 'licenses' text directory." }
 
-        val targetDir = File(LICENSE_DATA_PATH)
-        if (targetDir.isDirectory) return@lazy targetDir
-
-        exportLicenseData(targetDir)?.also {
-            logger.debug { "Located exported license data directory: $it" }
+        FALLBACK_DIR.takeIf { it.isDirectory }?.also {
+            logger.debug { "Located fallback ScanCode license text directory: $it" }
             return@lazy it
-        } ?: logger.debug { "Could not locate exported license data." }
+        } ?: logger.debug { "Could not locate fallback directory: $FALLBACK_DIR" }
 
-        logger.warn { "Could not locate any ScanCode license text directory." }
-
-        null
+        val exportDir = ortDataDirectory / "scanner" / "scancode-license-data"
+        exportDir.takeIf { it.isDirectory }?.also {
+            logger.debug { "Using existing license data from directory: $it" }
+        } ?: exportLicenseData(exportDir)?.also {
+            logger.debug { "Using exported license data from directory: $it" }
+        } ?: run {
+            logger.warn { "Could not locate any ScanCode license text directory." }
+            null
+        }
     }
 
     private fun getLicenseTextFile(licenseId: String): File? {
