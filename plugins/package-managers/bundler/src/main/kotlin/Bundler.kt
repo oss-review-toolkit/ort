@@ -348,7 +348,7 @@ class Bundler(
     }
 
     private fun getGemspecFile(workingDir: File) =
-        workingDir.walk().maxDepth(1).filter { it.isFile && it.extension == "gemspec" }.firstOrNull()
+        workingDir.walk().maxDepth(1).firstOrNull { it.isFile && it.extension == "gemspec" }
 
     private fun queryRubyGems(name: String, version: String, retryCount: Int = 3): GemInfo? {
         // NOTE: Explicitly use platform=ruby here to enforce the same behavior here that is also used in the Bundler
