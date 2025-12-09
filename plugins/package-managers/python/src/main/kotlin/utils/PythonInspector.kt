@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
 import java.io.File
+import java.io.IOException
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -100,42 +101,77 @@ internal object PythonInspector : CommandLineTool {
         }
 
         return try {
-            run(
+            val processBinary = run(
                 *commandLineOptions.toTypedArray(),
                 workingDir = workingDir,
                 environment = mapOf("LC_ALL" to "en_US.UTF-8")
-            ).requireSuccess()
-            val binaryResult = outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
+            )
 
-            // Do a consistency check on the binary packages.
-            val packagePurls = mutableSetOf<String>()
-            binaryResult.projects.forEach { project ->
-                project.packageData.forEach { data ->
-                    data.dependencies.mapNotNullTo(packagePurls) { it.purl }
-                }
+            val binaryResult = if (processBinary.isSuccess) {
+                outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
+            } else {
+                null
             }
 
-            if (packagePurls.size != binaryResult.packages.size) {
-                logger.warn {
-                    "The number of unique dependencies (${packagePurls.size}) does not match the number of packages " +
-                        "(${binaryResult.packages.size}), which might indicate a bug in python-inspector."
+            if (binaryResult != null) {
+                // Do a consistency check on the binary packages.
+                val packagePurls = mutableSetOf<String>()
+                binaryResult.projects.forEach { project ->
+                    project.packageData.forEach { data ->
+                        data.dependencies.mapNotNullTo(packagePurls) { it.purl }
+                    }
                 }
 
-                val resultsPurls = binaryResult.packages.mapNotNullTo(mutableSetOf()) { it.purl }
-                logger.warn { "Packages that are not contained as dependencies: ${packagePurls - resultsPurls}" }
-                logger.warn { "Dependencies that are not contained as packages: ${resultsPurls - packagePurls}" }
+                if (packagePurls.size != binaryResult.packages.size) {
+                    logger.warn {
+                        "The number of unique dependencies (${packagePurls.size}) does not match the number of " +
+                            "packages (${binaryResult.packages.size}), which might indicate a bug in python-inspector."
+                    }
+
+                    val resultsPurls = binaryResult.packages.mapNotNullTo(mutableSetOf()) { it.purl }
+                    logger.warn { "Packages that are not contained as dependencies: ${packagePurls - resultsPurls}" }
+                    logger.warn { "Dependencies that are not contained as packages: ${resultsPurls - packagePurls}" }
+                }
             }
 
             // TODO: Avoid this terrible hack to run once more with `--prefer-source` to work around
             //       https://github.com/aboutcode-org/python-inspector/issues/229.
-            run(
+            val processSource = run(
                 *(commandLineOptions + "--prefer-source").toTypedArray(),
                 workingDir = workingDir,
                 environment = mapOf("LC_ALL" to "en_US.UTF-8")
-            ).requireSuccess()
-            val sourceResult = outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
+            )
 
-            binaryResult.copy(packages = binaryResult.packages + sourceResult.packages)
+            val sourceResult = if (processSource.isSuccess) {
+                outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
+            } else {
+                null
+            }
+
+            when {
+                binaryResult != null && sourceResult != null ->
+                    binaryResult.copy(packages = binaryResult.packages + sourceResult.packages)
+
+                binaryResult != null -> {
+                    logger.warn { "Unable to determine source dependencies, using only binary dependencies." }
+                    binaryResult
+                }
+
+                sourceResult != null -> {
+                    logger.warn { "Unable to determine binary dependencies, using only source dependencies." }
+                    sourceResult
+                }
+
+                else -> {
+                    val message = buildString {
+                        appendLine("Unable to determine dependencies:")
+                        appendLine(processBinary.errorMessage)
+                        appendLine(processBinary.errorMessage)
+                    }
+
+                    throw IOException(message)
+                }
+            }
         } finally {
             outputFile.parentFile.safeDeleteRecursively()
         }
