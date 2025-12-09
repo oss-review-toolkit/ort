@@ -53,6 +53,16 @@ class Yarn2FunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Resolve dependencies for a project with circular dependencies correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-circular-dependencies/package.json")
+        val expectedResultFile =
+            getAssetFile("projects/synthetic/yarn2/project-with-circular-dependencies-expected-output.yml")
+
+        val result = Yarn2Factory.create().resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Resolve dependencies for a workspaces project correctly" {
         val definitionFile = getAssetFile("projects/synthetic/yarn2/workspaces/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn2/workspaces-expected-output.yml")
