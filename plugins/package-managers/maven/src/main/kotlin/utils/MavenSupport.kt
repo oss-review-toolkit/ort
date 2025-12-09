@@ -119,7 +119,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
     val remoteArtifactCache = kottage.cache("remote-artifact-cache") {
         strategy = KottageLruStrategy(maxCacheSize = 1.gibibytes)
-        defaultExpireTime = 6.hours
+        defaultExpireTime = 24.hours
     }
 
     // The MavenSettingsBuilder class is deprecated, but internally it uses its successor SettingsBuilder. Calling
