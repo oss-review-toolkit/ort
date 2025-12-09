@@ -33,9 +33,7 @@ import org.jruby.embed.ScriptingContainer
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
-import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -48,7 +46,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
@@ -395,91 +392,5 @@ class Bundler(
                 }
             }
         }.getOrNull()
-    }
-}
-
-internal data class GemInfo(
-    val name: String,
-    val version: String,
-    val homepageUrl: String,
-    val authors: Set<String>,
-    val declaredLicenses: Set<String>,
-    val description: String,
-    val runtimeDependencies: Set<String>,
-    val vcs: VcsInfo,
-    val artifact: RemoteArtifact
-) {
-    companion object {
-        fun createFromMetadata(spec: GemSpec): GemInfo {
-            val runtimeDependencies = spec.dependencies.mapNotNullTo(mutableSetOf()) { (name, type) ->
-                name.takeIf { type == VersionDetails.Scope.RUNTIME.toString() }
-            }
-
-            val homepage = spec.homepage.orEmpty()
-            val info = spec.description ?: spec.summary
-
-            return GemInfo(
-                spec.name,
-                spec.version.version,
-                homepage,
-                spec.authors.mapToSetOfNotEmptyStrings(),
-                spec.licenses.mapToSetOfNotEmptyStrings(),
-                info.orEmpty(),
-                runtimeDependencies,
-                VcsHost.parseUrl(homepage),
-                RemoteArtifact.EMPTY
-            )
-        }
-
-        fun createFromGem(details: VersionDetails): GemInfo {
-            val runtimeDependencies = details.dependencies[VersionDetails.Scope.RUNTIME]
-                ?.mapTo(mutableSetOf()) { it.name }
-                .orEmpty()
-
-            val vcs = listOfNotNull(details.sourceCodeUri, details.homepageUri)
-                .mapToSetOfNotEmptyStrings()
-                .firstOrNull()
-                ?.let { VcsHost.parseUrl(it) }
-                .orEmpty()
-
-            val artifact = if (details.gemUri != null && details.sha != null) {
-                RemoteArtifact(details.gemUri, Hash.create(details.sha))
-            } else {
-                RemoteArtifact.EMPTY
-            }
-
-            return GemInfo(
-                details.name,
-                details.version,
-                details.homepageUri.orEmpty(),
-                details.authors?.split(',').mapToSetOfNotEmptyStrings(),
-                details.licenses.mapToSetOfNotEmptyStrings(),
-                details.info.orEmpty(),
-                runtimeDependencies,
-                vcs,
-                artifact
-            )
-        }
-
-        private fun Collection<String>?.mapToSetOfNotEmptyStrings(): Set<String> =
-            this?.mapNotNullTo(mutableSetOf()) { string -> string.trim().ifEmpty { null } }.orEmpty()
-    }
-
-    fun merge(other: GemInfo): GemInfo {
-        require(name == other.name && version == other.version) {
-            "Cannot merge specs for different gems."
-        }
-
-        return GemInfo(
-            name,
-            version,
-            homepageUrl.ifEmpty { other.homepageUrl },
-            authors.ifEmpty { other.authors },
-            declaredLicenses.ifEmpty { other.declaredLicenses },
-            description.ifEmpty { other.description },
-            runtimeDependencies.ifEmpty { other.runtimeDependencies },
-            vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
-            artifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.artifact
-        )
     }
 }
