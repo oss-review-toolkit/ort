@@ -47,9 +47,11 @@ fun Identifier.getPurlType() =
         "gem" -> PurlType.GEM
         "go" -> PurlType.GOLANG
         "hackage" -> PurlType.HACKAGE
+        "hex" -> PurlType.HEX
         "maven" -> PurlType.MAVEN
         "npm" -> PurlType.NPM
         "nuget" -> PurlType.NUGET
+        "otp" -> PurlType.OTP
         "pod" -> PurlType.COCOAPODS
         "pub" -> PurlType.PUB
         "pypi" -> PurlType.PYPI
