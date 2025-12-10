@@ -1,0 +1,6 @@
+name = "empty_deps_project"
+version = "1.0.0"
+
+[dependencies]
+
+[dev-dependencies]

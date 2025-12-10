@@ -1,0 +1,124 @@
+---
+project:
+  id: "Gleam::no_lockfile_project:1.0.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Hex::gleam_stdlib:0.67.1"
+    - id: "OTP::gleam_json:main"
+    - id: "OTP::local_pkg:2.0.0"
+packages:
+- id: "Hex::gleam_stdlib:0.67.1"
+  purl: "pkg:hex/gleam_stdlib@0.67.1"
+  cpe: "cpe:2.3:a:gleam-lang:stdlib:0.67.1:*:*:*:*:*:*:*"
+  authors:
+  - "Louis Pilfold <louis@lpil.uk>"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A standard library for the Gleam programming language"
+  homepage_url: "https://gleam.run/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/gleam_stdlib-0.67.1.tar"
+    hash:
+      value: "6ce3e4189a8b8ec2f73ab61a2fbde49f159d6c9c61c49e3b3082e439f260d3d0"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/gleam-lang/stdlib.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/gleam-lang/stdlib.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "OTP::gleam_json:main"
+  purl: "pkg:otp/gleam_json@main"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/gleam-lang/json"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: "git@github.com:gleam-lang/json.git"
+    revision: "main"
+    path: ""
+  vcs_processed:
+    type: ""
+    url: "ssh://git@github.com/gleam-lang/json.git"
+    revision: "main"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "OTP::local_pkg:2.0.0"
+  purl: "pkg:otp/local_pkg@2.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/local_pkg"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/local_pkg"
+  source_code_origins:
+  - "VCS"
+issues:
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "Gleam"
+  message: "Dependencies were resolved dynamically as no lockfile was present. Only\
+    \ the latest matching versions of direct dependencies were resolved without transitive\
+    \ dependency resolution. The results are not reproducible. Consider running 'gleam\
+    \ deps download' to generate a manifest.toml lockfile."
+  severity: "WARNING"
