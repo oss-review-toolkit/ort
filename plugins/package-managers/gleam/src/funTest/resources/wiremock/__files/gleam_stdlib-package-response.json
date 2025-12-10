@@ -1,0 +1,23 @@
+{
+  "name": "gleam_stdlib",
+  "latest_stable_version": "0.67.1",
+  "releases": [
+    { "version": "0.67.1" },
+    { "version": "0.67.0" },
+    { "version": "0.34.0" },
+    { "version": "0.33.0" }
+  ],
+  "meta": {
+    "description": "A standard library for the Gleam programming language",
+    "licenses": ["Apache-2.0"],
+    "links": {
+      "Repository": "https://github.com/gleam-lang/stdlib",
+      "Website": "https://gleam.run/"
+    }
+  },
+  "owners": [
+    {
+      "username": "lpil"
+    }
+  ]
+}
