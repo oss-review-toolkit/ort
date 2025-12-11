@@ -415,7 +415,7 @@ internal fun createMarkAsIdentifiedFile(
 
     return MarkedAsIdentifiedFile(
         comment = "comment",
-        comments = if (comment == null) emptyMap() else mapOf(1 to Comment(1, 1, comment)),
+        comments = PolymorphicData(if (comment == null) emptyMap() else mapOf(1 to Comment(1, 1, comment))),
         identificationId = 1,
         identificationCopyright = "copyright",
         isDistributed = 1,
