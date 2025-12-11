@@ -375,6 +375,24 @@ class Downloader(private val config: DownloaderConfiguration) {
             } finally {
                 gemDirectory.safeDeleteRecursively()
             }
+        } else if (sourceArtifact.url.contains("hex.pm/tarballs/")) {
+            // Unpack the nested contents archive for Hex packages.
+            val hexDirectory = createOrtTempDir("hex")
+            val contentsFile = hexDirectory / "contents.tar.gz"
+
+            try {
+                sourceArchive.unpack(hexDirectory)
+                contentsFile.unpack(outputDirectory)
+            } catch (e: IOException) {
+                logger.error {
+                    "Could not unpack Hex package '${sourceArchive.absolutePath}': ${e.collectMessages()}"
+                }
+
+                tempDir?.safeDeleteRecursively()
+                throw DownloadException(e)
+            } finally {
+                hexDirectory.safeDeleteRecursively()
+            }
         } else {
             try {
                 sourceArchive.unpackTryAllTypes(outputDirectory)
