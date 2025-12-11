@@ -32,7 +32,7 @@ data class MarkedAsIdentifiedFile(
 
     val identificationId: Int,
 
-    val identificationCopyright: String,
+    val identificationCopyright: String?,
 
     val isDistributed: Int,
 
@@ -64,5 +64,5 @@ data class MarkedAsIdentifiedFile(
 
     override fun getFileName(): String = checkNotNull(file.path)
 
-    override fun getCopyright(): String = identificationCopyright
+    override fun getCopyright(): String = identificationCopyright.orEmpty()
 }
