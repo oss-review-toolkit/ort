@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified
 
+import org.ossreviewtoolkit.clients.fossid.PolymorphicData
+
 data class File(
     val id: String?,
 
@@ -29,5 +31,5 @@ data class File(
 
     val size: Int?,
 
-    val licenses: MutableMap<Int, License>?
+    val licenses: PolymorphicData<MutableMap<Int, License>>?
 )

@@ -379,7 +379,7 @@ private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
         sha1 = null,
         sha256 = null,
         size = index,
-        licenses = mutableMapOf(index to license)
+        licenses = PolymorphicData(mutableMapOf(index to license))
     )
 
     return file
@@ -428,7 +428,7 @@ internal fun createMarkAsIdentifiedFile(
             sha1 = "fileSha1",
             sha256 = "fileSha256",
             size = 0,
-            licenses = if (comment != null) null else mutableMapOf(1 to fileLicense)
+            licenses = PolymorphicData(if (comment != null) null else mutableMapOf(1 to fileLicense))
         )
     }
 }

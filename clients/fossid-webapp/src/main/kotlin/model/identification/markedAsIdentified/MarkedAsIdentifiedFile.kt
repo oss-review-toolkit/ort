@@ -46,7 +46,7 @@ data class MarkedAsIdentifiedFile(
     lateinit var file: File
 
     override fun toSummary(): SummaryIdentifiedFile {
-        val licenses = file.licenses?.let { licenses ->
+        val licenses = file.licenses?.value?.let { licenses ->
             licenses.values.map {
                 License(
                     identifier = checkNotNull(it.file.licenseIdentifier),
