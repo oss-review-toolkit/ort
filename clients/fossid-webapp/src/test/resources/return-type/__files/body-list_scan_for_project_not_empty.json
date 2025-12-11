@@ -37,6 +37,35 @@
           "comment": "TestORT"
         }
       }
+    },
+    "3": {
+      "row_id": "2",
+      "file_id": "4611459",
+      "file_path": "src/main/java/com/example/client/response/ReportResponse.java",
+      "is_distributed": "1",
+      "file_md5": "b8a8c00bf1dea4d52cb6a842b7affe08",
+      "file_sha1": "da7c6657784025f38d5bb64733004ca01aa17ac0",
+      "file_sha256": "af0254a01efd2ff2bdabce1299d8232625025330c711cf8bece7e566596aea2f",
+      "file_size": "377",
+      "identification_id": "29648306",
+      "identification_copyright": null,
+      "components": {
+        "352": {
+          "identification_id": 29648306,
+          "component_id": 352,
+          "component_name": "Original Code",
+          "component_version": "Unspecified",
+          "component_copyright": null,
+          "component_cpe": null,
+          "component_license_name": "[template] Basic Proprietary Commercial License",
+          "component_license_identifier": "[template] Basic Proprietary Commercial License",
+          "component_license_is_foss": 0,
+          "component_license_is_spdx_standard": 0,
+          "component_include_in_report": 1,
+          "component_is_copyleft": 0,
+          "component_identified_date": "2025-12-08 09:13:10"
+        }
+      }
     }
   }
 }
