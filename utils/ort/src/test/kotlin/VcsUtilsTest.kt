@@ -52,6 +52,8 @@ class VcsUtilsTest : WordSpec({
                     to "ssh://git@github.com/logicalparadox/idris.git",
                 "git@github.com:oss-review-toolkit/ort.git"
                     to "ssh://git@github.com/oss-review-toolkit/ort.git",
+                "git@git.sr.ht:~user/repo"
+                    to "ssh://git@git.sr.ht/~user/repo",
                 "ssh://user@gerrit.server.com:29418/parent/project"
                     to "ssh://user@gerrit.server.com:29418/parent/project"
             )
