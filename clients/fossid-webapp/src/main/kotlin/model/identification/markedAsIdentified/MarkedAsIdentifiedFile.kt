@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentif
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 
+import org.ossreviewtoolkit.clients.fossid.PolymorphicData
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.Component
 import org.ossreviewtoolkit.clients.fossid.model.summary.License
 import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
@@ -28,7 +29,7 @@ import org.ossreviewtoolkit.clients.fossid.model.summary.SummaryIdentifiedFile
 
 data class MarkedAsIdentifiedFile(
     val comment: String?,
-    val comments: Map<Int, Comment> = emptyMap(),
+    val comments: PolymorphicData<Map<Int, Comment>> = PolymorphicData(emptyMap()),
 
     val identificationId: Int,
 

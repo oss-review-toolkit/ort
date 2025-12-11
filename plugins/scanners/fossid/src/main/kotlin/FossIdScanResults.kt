@@ -147,7 +147,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
         var fileComment: OrtComment? = null
 
         if (summarizable is MarkedAsIdentifiedFile) {
-            summarizable.comments.values.firstOrNull {
+            summarizable.comments.value?.values?.firstOrNull {
                 ORT_NAME in it.comment
             }?.also {
                 runCatching {
@@ -453,7 +453,7 @@ internal fun listUnmatchedSnippetChoices(
             it.given.sourceLocation.path == markedFileNameWithoutPrefix
         }
 
-        val comment = markedAsIdentifiedFile.comments.values.firstOrNull {
+        val comment = markedAsIdentifiedFile.comments.value?.values?.firstOrNull {
             ORT_NAME in it.comment
         }?.runCatching {
             jsonMapper.readValue(this.comment, OrtComment::class.java)
