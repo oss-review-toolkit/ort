@@ -59,7 +59,7 @@ class LicenseViewTest : WordSpec() {
         vararg licenses: Pair<String, LicenseSource>
     ): Matcher<List<Pair<SpdxSingleLicenseExpression, LicenseSource>>?> =
         transformingCollectionMatcher(
-            expected = licenses.toList(),
+            expected = licenses.asList(),
             matcher = ::containAll
         ) { list ->
             list.map { (expression, source) -> expression.toString() to source }
