@@ -27,7 +27,7 @@ import io.kotest.matchers.shouldBe
 
 import java.time.DayOfWeek
 
-private enum class MyEnum { A, B }
+private enum class MyEnum { A, B, C }
 
 class EnumUtilsTest : WordSpec({
     "Creating enum sets" should {
@@ -45,6 +45,14 @@ class EnumUtilsTest : WordSpec({
 
         "work with null elements" {
             enumSetOfNotNull(null, MyEnum.B) shouldBe enumSetOf(MyEnum.B)
+        }
+    }
+
+    "The intersection" should {
+        "return elements that two sets have in common" {
+            enumSetOf<MyEnum>().intersect(enumSetOf()) shouldBe enumSetOf()
+            enumSetOf(MyEnum.A).intersect(enumSetOf(MyEnum.A)) shouldBe enumSetOf(MyEnum.A)
+            enumSetOf(MyEnum.A, MyEnum.B).intersect(enumSetOf(MyEnum.B, MyEnum.C)) shouldBe enumSetOf(MyEnum.B)
         }
     }
 

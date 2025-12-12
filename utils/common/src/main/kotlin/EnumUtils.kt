@@ -34,6 +34,11 @@ inline fun <reified T : Enum<T>> enumSetOfNotNull(vararg elements: T?): EnumSet<
     elements.filterNotNullTo(enumSetOf())
 
 /**
+ * Return an [EnumSet] that contains the intersection of the elements of [this] and [other].
+ */
+fun <E : Enum<E>> EnumSet<E>.intersect(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { retainAll(other) }
+
+/**
  * Return an [EnumSet] that contains the elements of [this] and [other].
  */
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
