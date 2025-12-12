@@ -38,7 +38,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         val provider = ClearlyDefinedPackageCurationProviderFactory.create()
 
         "return an existing curation for the javax.servlet-api Maven package" {
-            val packages = createPackagesFromIds("Go::github.com/eclipse/paho.mqtt.golang:1.5.0")
+            val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
 
             withRetry {
                 val curations = provider.getCurationsFor(packages)
