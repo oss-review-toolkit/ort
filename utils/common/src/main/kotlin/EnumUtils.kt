@@ -28,6 +28,12 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elements: T): EnumSet<T> =
     EnumSet.noneOf(T::class.java).apply { addAll(elements) }
 
 /**
+ * Return an [EnumSet] with only those given [elements] that are not null.
+ */
+inline fun <reified T : Enum<T>> enumSetOfNotNull(vararg elements: T?): EnumSet<T> =
+    elements.filterNotNullTo(enumSetOf())
+
+/**
  * Return an [EnumSet] that contains the elements of [this] and [other].
  */
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }

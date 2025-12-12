@@ -42,6 +42,10 @@ class EnumUtilsTest : WordSpec({
         "work with multiple elements" {
             enumSetOf(MyEnum.A, MyEnum.B).shouldContainExactlyInAnyOrder(MyEnum.A, MyEnum.B)
         }
+
+        "work with null elements" {
+            enumSetOfNotNull(null, MyEnum.B) shouldBe enumSetOf(MyEnum.B)
+        }
     }
 
     "The plus operator" should {
