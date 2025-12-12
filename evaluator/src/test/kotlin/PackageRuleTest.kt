@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
@@ -56,7 +57,7 @@ class PackageRuleTest : WordSpec() {
                 originalExpressions = setOf(ResolvedOriginalExpression(license, licenseSource)),
                 locations = emptySet()
             ),
-            licenseSources = setOf(licenseSource)
+            licenseSources = enumSetOf(licenseSource)
         )
 
     init {
