@@ -21,12 +21,29 @@ package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.time.DayOfWeek
 
+private enum class MyEnum { A, B }
+
 class EnumUtilsTest : WordSpec({
+    "Creating enum sets" should {
+        "work with no elements" {
+            enumSetOf<MyEnum>() should beEmpty()
+        }
+
+        "work with one element" {
+            enumSetOf(MyEnum.A).shouldContainExactlyInAnyOrder(MyEnum.A)
+        }
+
+        "work with multiple elements" {
+            enumSetOf(MyEnum.A, MyEnum.B).shouldContainExactlyInAnyOrder(MyEnum.A, MyEnum.B)
+        }
+    }
+
     "The plus operator" should {
         "create an empty set if both summands are empty" {
             val sum = enumSetOf<DayOfWeek>() + enumSetOf()
