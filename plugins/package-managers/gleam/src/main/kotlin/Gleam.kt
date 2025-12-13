@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.gleam.GleamManifest.Package.SourceType
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
@@ -135,7 +136,7 @@ class Gleam internal constructor(
 
         val issues = mutableListOf<Issue>()
         val validPackages = manifest.packages.filter { pkg ->
-            if (pkg.source == "local" && pkg.localPath != null) {
+            if (pkg.source == SourceType.LOCAL && pkg.localPath != null) {
                 if (!isValidLocalPath(workingDir, pkg.localPath)) {
                     issues += Issue(
                         source = projectType,
@@ -509,7 +510,7 @@ private sealed interface ResolvedPackage {
 
 private fun GleamManifest.Package.toIdentifier(): Identifier =
     Identifier(
-        type = if (source == "hex") "Hex" else "OTP",
+        type = if (source == SourceType.HEX) "Hex" else "OTP",
         namespace = "",
         name = name,
         version = version
@@ -520,18 +521,16 @@ private fun GleamManifest.Package.toIdentifier(): Identifier =
  */
 private fun GleamManifest.Package.resolveVcsInfo(hexInfo: HexPackageInfo?, projectVcs: VcsInfo): VcsInfo =
     when (source) {
-        "local" -> {
+        SourceType.LOCAL -> {
             val normalizedPath = File(localPath.orEmpty()).normalize().path
             projectVcs.copy(path = normalizedPath.prependPath(projectVcs.path))
         }
 
-        "git" -> VcsHost.parseUrl(repo.orEmpty()).let {
+        SourceType.GIT -> VcsHost.parseUrl(repo.orEmpty()).let {
             if (!commit.isNullOrEmpty()) it.copy(revision = commit) else it
         }
 
-        "hex" -> VcsHost.parseUrl(hexInfo?.meta?.links?.get("Repository").orEmpty())
-
-        else -> VcsInfo.EMPTY
+        SourceType.HEX -> VcsHost.parseUrl(hexInfo?.meta?.links?.get("Repository").orEmpty())
     }
 
 /**
@@ -539,8 +538,8 @@ private fun GleamManifest.Package.resolveVcsInfo(hexInfo: HexPackageInfo?, proje
  */
 private fun GleamManifest.Package.resolveRepositoryUrl(hexInfo: HexPackageInfo?): String =
     when (source) {
-        "git" -> repo.orEmpty()
-        "hex" -> hexInfo?.meta?.links?.get("Repository").orEmpty()
+        SourceType.GIT -> repo.orEmpty()
+        SourceType.HEX -> hexInfo?.meta?.links?.get("Repository").orEmpty()
         else -> ""
     }
 
@@ -549,17 +548,16 @@ private fun GleamManifest.Package.resolveRepositoryUrl(hexInfo: HexPackageInfo?)
  */
 private fun GleamManifest.Package.resolveHomepageUrl(hexInfo: HexPackageInfo?, projectHomepageUrl: String): String =
     when (source) {
-        "hex" -> hexInfo?.meta?.links?.get("Website") ?: "https://hex.pm/packages/$name"
-        "git" -> toHomepageUrl(repo.orEmpty())
-        "local" -> projectHomepageUrl
-        else -> ""
+        SourceType.HEX -> hexInfo?.meta?.links?.get("Website") ?: "https://hex.pm/packages/$name"
+        SourceType.GIT -> toHomepageUrl(repo.orEmpty())
+        SourceType.LOCAL -> projectHomepageUrl
     }
 
 /**
  * Create a source artifact for Hex packages with a checksum.
  */
 private fun GleamManifest.Package.createSourceArtifact(): RemoteArtifact =
-    if (source == "hex" && outerChecksum != null) {
+    if (source == SourceType.HEX && outerChecksum != null) {
         RemoteArtifact(
             url = "https://repo.hex.pm/tarballs/$name-$version.tar",
             hash = Hash(outerChecksum, HashAlgorithm.SHA256)
@@ -573,7 +571,7 @@ private fun GleamManifest.Package.toOrtPackage(
     projectVcs: VcsInfo,
     projectHomepageUrl: String
 ): Package {
-    val hexInfo = if (source == "hex") hexClient.getPackageInfo(name) else null
+    val hexInfo = if (source == SourceType.HEX) hexClient.getPackageInfo(name) else null
     val vcs = resolveVcsInfo(hexInfo, projectVcs)
     val repositoryUrl = resolveRepositoryUrl(hexInfo)
 
@@ -588,7 +586,7 @@ private fun GleamManifest.Package.toOrtPackage(
         sourceArtifact = createSourceArtifact(),
         vcs = vcs,
         vcsProcessed = vcs.normalize(),
-        sourceCodeOrigins = if (source == "hex") {
+        sourceCodeOrigins = if (source == SourceType.HEX) {
             listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
         } else {
             listOf(SourceCodeOrigin.VCS)

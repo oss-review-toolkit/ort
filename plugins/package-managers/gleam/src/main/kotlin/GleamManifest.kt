@@ -56,8 +56,8 @@ internal data class GleamManifest(
         @SerialName("otp_app")
         val otpApp: String? = null,
 
-        /** The source of the package: "hex", "git", or "local". */
-        val source: String = "hex",
+        /** The source of the package. */
+        val source: SourceType = SourceType.HEX,
 
         /** The SHA256 checksum of the package tarball (for hex packages). */
         @SerialName("outer_checksum")
@@ -72,7 +72,14 @@ internal data class GleamManifest(
         /** The local path (for path/local packages). */
         @SerialName("path")
         val localPath: String? = null
-    )
+    ) {
+        @Serializable
+        enum class SourceType {
+            @SerialName("hex") HEX,
+            @SerialName("git") GIT,
+            @SerialName("local") LOCAL
+        }
+    }
 
     /**
      * Represents a direct requirement from gleam.toml as recorded in the manifest.
@@ -80,9 +87,16 @@ internal data class GleamManifest(
     @Serializable
     data class Requirement(
         /** The source of the requirement: "hex", "git", or "path". */
-        val source: String = "hex",
+        val source: SourceType = SourceType.HEX,
 
         /** The version constraint (for hex packages). */
         val version: String? = null
-    )
+    ) {
+        @Serializable
+        enum class SourceType {
+            @SerialName("hex") HEX,
+            @SerialName("git") GIT,
+            @SerialName("path") PATH
+        }
+    }
 }
