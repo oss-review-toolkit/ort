@@ -45,7 +45,7 @@ class GleamFunTest : StringSpec({
             .usingFilesUnderClasspath("wiremock")
     )
 
-    val gleam by lazy { Gleam(hexApiClientFactory = { HexApiClient(server.baseUrl()) }) }
+    fun createGleam() = Gleam(hexApiClientFactory = { HexApiClient(server.baseUrl()) })
 
     beforeSpec { server.start() }
     beforeEach { server.resetAll() }
@@ -55,7 +55,7 @@ class GleamFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gleam/gleam.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/gleam-expected-output.yml")
 
-        val result = gleam.resolveSingleProject(definitionFile)
+        val result = createGleam().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -64,7 +64,7 @@ class GleamFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gleam-no-lockfile/gleam.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/gleam-no-lockfile-expected-output.yml")
 
-        val result = gleam.resolveSingleProject(definitionFile)
+        val result = createGleam().resolveSingleProject(definitionFile)
 
         result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -74,7 +74,7 @@ class GleamFunTest : StringSpec({
         val expectedResultFile =
             getAssetFile("projects/synthetic/gleam-no-lockfile-expected-output-allow-dynamic-versions.yml")
 
-        val result = gleam.resolveSingleProject(definitionFile, allowDynamicVersions = true)
+        val result = createGleam().resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -83,7 +83,7 @@ class GleamFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gleam-no-deps/gleam.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/gleam-no-deps-expected-output.yml")
 
-        val result = gleam.resolveSingleProject(definitionFile)
+        val result = createGleam().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -92,7 +92,7 @@ class GleamFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gleam-empty-deps/gleam.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/gleam-empty-deps-expected-output.yml")
 
-        val result = gleam.resolveSingleProject(definitionFile)
+        val result = createGleam().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
