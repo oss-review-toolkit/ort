@@ -334,7 +334,7 @@ class Gleam internal constructor(
 
     private fun resolvePathDependency(
         name: String,
-        dep: GleamDependency.Path,
+        dep: GleamToml.Dependency.Path,
         workingDir: File,
         projectVcs: VcsInfo,
         projectHomepageUrl: String,
@@ -371,12 +371,12 @@ class Gleam internal constructor(
         issues: MutableList<Issue>
     ): Map<String, ResolvedPackage> =
         dependencies.mapNotNull { (name, element) ->
-            when (val dep = GleamDependency.fromToml(element)) {
-                is GleamDependency.Hex -> resolveHexDependency(name, dep.version, hexClient, issues)
+            when (val dep = GleamToml.Dependency.fromToml(element)) {
+                is GleamToml.Dependency.Hex -> resolveHexDependency(name, dep.version, hexClient, issues)
                     ?.let { name to it }
 
-                is GleamDependency.Git -> name to ResolvedPackage.Git(name, dep.url, dep.ref)
-                is GleamDependency.Path -> resolvePathDependency(
+                is GleamToml.Dependency.Git -> name to ResolvedPackage.Git(name, dep.url, dep.ref)
+                is GleamToml.Dependency.Path -> resolvePathDependency(
                     name,
                     dep,
                     workingDir,
