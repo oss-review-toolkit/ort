@@ -34,6 +34,17 @@ internal data class GleamManifest(
     /** Direct requirements from the project's gleam.toml. */
     val requirements: Map<String, Requirement>
 ) {
+    companion object {
+        /**
+         * A constant for a [GleamManifest] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = GleamManifest(
+            packages = emptyList(),
+            requirements = emptyMap()
+        )
+    }
+
     /**
      * Represents a resolved package in the manifest.toml lockfile.
      */
