@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
 @Serializable
 internal data class HexPackageInfo(
     val name: String,
-    val latestStableVersion: String? = null,
     val releases: List<Release> = emptyList(),
     val meta: Meta? = null,
     val owners: List<Owner> = emptyList()

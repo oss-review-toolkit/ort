@@ -29,10 +29,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class GleamManifest(
     /** List of all resolved packages including transitive dependencies. */
-    val packages: List<Package>,
-
-    /** Direct requirements from the project's gleam.toml. */
-    val requirements: Map<String, Requirement>
+    val packages: List<Package>
 ) {
     /**
      * Represents a resolved package in the manifest.toml lockfile.
@@ -45,16 +42,8 @@ internal data class GleamManifest(
         /** The resolved version. */
         val version: String,
 
-        /** The build tools used by this package (e.g., "gleam", "rebar3", "mix"). */
-        @SerialName("build_tools")
-        val buildTools: List<String> = emptyList(),
-
         /** The package's direct dependencies (package names). */
         val requirements: List<String> = emptyList(),
-
-        /** The OTP application name for Erlang integration. */
-        @SerialName("otp_app")
-        val otpApp: String? = null,
 
         /** The source of the package. */
         val source: SourceType = SourceType.HEX,
@@ -80,16 +69,4 @@ internal data class GleamManifest(
             @SerialName("local") LOCAL
         }
     }
-
-    /**
-     * Represents a direct requirement from gleam.toml as recorded in the manifest.
-     */
-    @Serializable
-    data class Requirement(
-        /** The source of the requirement: "hex", "git", or "path". */
-        val source: String = "hex",
-
-        /** The version constraint (for hex packages). */
-        val version: String? = null
-    )
 }
