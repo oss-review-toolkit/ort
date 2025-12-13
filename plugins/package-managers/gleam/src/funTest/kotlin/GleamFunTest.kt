@@ -31,10 +31,13 @@ import io.kotest.property.arbitrary.single
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withInvariantIssues
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -57,7 +60,7 @@ class GleamFunTest : StringSpec({
 
         val result = createGleam().resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project without lockfile fails if 'allowDynamicVersions' is disabled" {
@@ -117,6 +120,28 @@ class GleamFunTest : StringSpec({
         projectFiles.map { it.path } should containExactly(
             "projectA/gleam.toml",
             "projectB/gleam.toml"
+        )
+    }
+
+    "Multi-project with cross-directory path dependencies are detected correctly" {
+        val projectDir = getAssetFile("projects/synthetic/gleam-multi-project")
+        val definitionFileParent = projectDir / "gleam.toml"
+        val definitionFileChild = projectDir / "child" / "gleam.toml"
+        val definitionFileSibling = projectDir / "sibling" / "gleam.toml"
+        val expectedResultFile = getAssetFile("projects/synthetic/gleam-multi-project-expected-output.yml")
+
+        val result = analyze(projectDir, packageManagers = setOf(GleamFactory())).getAnalyzerResult()
+
+        val childPath = definitionFileChild.relativeTo(projectDir).invariantSeparatorsPath
+        val siblingPath = definitionFileSibling.relativeTo(projectDir).invariantSeparatorsPath
+
+        result.toYaml() should matchExpectedResult(
+            expectedResultFile,
+            definitionFileParent,
+            custom = mapOf(
+                "<REPLACE_DEFINITION_FILE_PATH_CHILD>" to childPath,
+                "<REPLACE_DEFINITION_FILE_PATH_SIBLING>" to siblingPath
+            )
         )
     }
 })

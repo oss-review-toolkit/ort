@@ -1,0 +1,7 @@
+name = "sibling_pkg"
+version = "1.0.0"
+description = "A sibling Gleam project"
+licences = ["MIT"]
+
+[dependencies]
+gleam_json = ">= 2.0.0 and < 3.0.0"

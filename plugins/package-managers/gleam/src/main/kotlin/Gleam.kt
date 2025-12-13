@@ -130,6 +130,7 @@ class Gleam internal constructor(
         val context = GleamProjectContext(
             hexClient = hexClient,
             project = project,
+            analysisRoot = analysisRoot,
             workingDir = workingDir,
             gleamToml = gleamToml,
             manifest = manifest

@@ -1,0 +1,202 @@
+---
+projects:
+- id: "Gleam::child_pkg:1.0.0"
+  definition_file_path: "<REPLACE_PATH>/child/gleam.toml"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/child"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "OTP::sibling_pkg:1.0.0"
+      dependencies:
+      - id: "Hex::gleam_json:2.0.0"
+        dependencies:
+        - id: "Hex::gleam_stdlib:0.34.0"
+- id: "Gleam::parent_project:1.0.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "OTP::child_pkg:1.0.0"
+      dependencies:
+      - id: "OTP::sibling_pkg:1.0.0"
+        dependencies:
+        - id: "Hex::gleam_json:2.0.0"
+          dependencies:
+          - id: "Hex::gleam_stdlib:0.34.0"
+- id: "Gleam::sibling_pkg:1.0.0"
+  definition_file_path: "<REPLACE_PATH>/sibling/gleam.toml"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/sibling"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Hex::gleam_json:2.0.0"
+      dependencies:
+      - id: "Hex::gleam_stdlib:0.34.0"
+packages:
+- id: "Hex::gleam_json:2.0.0"
+  purl: "pkg:hex/gleam_json@2.0.0"
+  cpe: "cpe:2.3:a:gleam-lang:json:2.0.0:*:*:*:*:*:*:*"
+  authors:
+  - "Louis Pilfold <louis@lpil.uk>"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Work with JSON in Gleam"
+  homepage_url: "https://gleam.run/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/gleam_json-2.0.0.tar"
+    hash:
+      value: "e108ab9b822e0a64a0cc64eb95e4b5c5cb95f9e1e7b3ec8f2b4f68b3a7d4d9c5"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/gleam-lang/json.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/gleam-lang/json.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "Hex::gleam_stdlib:0.34.0"
+  purl: "pkg:hex/gleam_stdlib@0.34.0"
+  cpe: "cpe:2.3:a:gleam-lang:stdlib:0.34.0:*:*:*:*:*:*:*"
+  authors:
+  - "Louis Pilfold <louis@lpil.uk>"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A standard library for the Gleam programming language"
+  homepage_url: "https://gleam.run/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/gleam_stdlib-0.34.0.tar"
+    hash:
+      value: "1fb8454d2991e9b4c0c804544d8a9ad0f6f335a207d3b7a581e123b6e0d7a519"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/gleam-lang/stdlib.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/gleam-lang/stdlib.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "OTP::child_pkg:1.0.0"
+  purl: "pkg:otp/child_pkg@1.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/child"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/child"
+  source_code_origins:
+  - "VCS"
+- id: "OTP::sibling_pkg:1.0.0"
+  purl: "pkg:otp/sibling_pkg@1.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/sibling"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/sibling"
+  source_code_origins:
+  - "VCS"

@@ -45,6 +45,7 @@ import org.semver4j.range.RangeListFactory
 internal data class GleamProjectContext(
     val hexClient: HexApiClient,
     val project: Project,
+    val analysisRoot: File,
     val workingDir: File,
     val gleamToml: GleamToml,
     val manifest: GleamManifest
@@ -144,7 +145,7 @@ internal data class ManifestPackageInfo(val pkg: GleamManifest.Package) : GleamP
             sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
         )
 
-        if (!isValidLocalPath(context.workingDir, pkg.localPath.orEmpty())) {
+        if (!isValidLocalPath(context.analysisRoot, context.workingDir, pkg.localPath.orEmpty())) {
             issues += Issue(
                 source = "Gleam",
                 message = "Path dependency '${pkg.name}' with path '${pkg.localPath}' " +
@@ -185,7 +186,7 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
 
     private fun resolvePathVersion(context: GleamProjectContext): String {
         val pathDep = dep as? GleamToml.Dependency.Path ?: return ""
-        if (!isValidLocalPath(context.workingDir, pathDep.path)) return ""
+        if (!isValidLocalPath(context.analysisRoot, context.workingDir, pathDep.path)) return ""
         val localGleamToml = context.workingDir.resolve(pathDep.path).resolve("gleam.toml")
         return if (localGleamToml.isFile) {
             parseGleamToml(localGleamToml).version
@@ -275,7 +276,7 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
             sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
         )
 
-        if (!isValidLocalPath(context.workingDir, pathDep.path)) {
+        if (!isValidLocalPath(context.analysisRoot, context.workingDir, pathDep.path)) {
             issues += Issue(
                 source = "Gleam",
                 message = "Path dependency '$depName' with path '${pathDep.path}' " +
@@ -353,10 +354,10 @@ internal fun findMatchingVersion(versions: List<String>, requirement: String): S
 }
 
 /**
- * Validate that a local path dependency stays within the project directory.
- * Returns true if the resolved path is within the working directory.
+ * Validate that a local path dependency stays within the analysis root directory.
+ * Returns true if the resolved path is within the analysis root.
  */
-internal fun isValidLocalPath(workingDir: File, path: String): Boolean {
+internal fun isValidLocalPath(analysisRoot: File, workingDir: File, path: String): Boolean {
     val resolvedPath = workingDir.resolve(path).canonicalFile
-    return resolvedPath.relativeToOrNull(workingDir.canonicalFile) != null
+    return resolvedPath.startsWith(analysisRoot.canonicalFile)
 }

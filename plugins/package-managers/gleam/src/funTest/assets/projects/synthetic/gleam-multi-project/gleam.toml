@@ -1,0 +1,7 @@
+name = "parent_project"
+version = "1.0.0"
+description = "A parent Gleam project for multi-project testing"
+licences = ["MIT"]
+
+[dependencies]
+child_pkg = { path = "./child" }
