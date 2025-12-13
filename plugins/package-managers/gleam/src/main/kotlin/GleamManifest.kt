@@ -29,7 +29,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class GleamManifest(
     /** List of all resolved packages including transitive dependencies. */
-    val packages: List<Package>
+    val packages: List<Package> = emptyList()
 ) {
     /**
      * Represents a resolved package in the manifest.toml lockfile.
