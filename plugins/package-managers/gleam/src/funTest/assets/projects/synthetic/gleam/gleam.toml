@@ -12,6 +12,7 @@ repo = "test-project"
 gleam_stdlib = ">= 0.34.0 and < 2.0.0"
 gleam_json = { git = "git@github.com:gleam-lang/json.git", ref = "main" }
 local_pkg = { path = "./local_pkg" }
+invalid_pkg = { path = "/invalid-path" }
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"

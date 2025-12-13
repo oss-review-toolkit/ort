@@ -24,6 +24,13 @@ project:
     - id: "OTP::gleam_json:3.1.0"
       dependencies:
       - id: "Hex::gleam_stdlib:0.34.0"
+    - id: "OTP::invalid_pkg:1.0.0"
+      issues:
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Gleam"
+        message: "Path dependency 'invalid_pkg' with path '/invalid-path' points outside\
+          \ the project directory."
+        severity: "WARNING"
     - id: "OTP::local_pkg:2.0.0"
   - name: "dev-dependencies"
     dependencies:
@@ -124,6 +131,34 @@ packages:
     type: ""
     url: "ssh://git@github.com/gleam-lang/json.git"
     revision: "d303aa3a182b43dced57939dc68b770202b5bdbf"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "OTP::invalid_pkg:1.0.0"
+  purl: "pkg:otp/invalid_pkg@1.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/test-org/test-project"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
     path: ""
   source_code_origins:
   - "VCS"
