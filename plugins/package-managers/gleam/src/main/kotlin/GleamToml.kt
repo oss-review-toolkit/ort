@@ -28,6 +28,8 @@ import net.peanuuutz.tomlkt.TomlTable
 import net.peanuuutz.tomlkt.asTomlLiteral
 import net.peanuuutz.tomlkt.asTomlTable
 
+private val HOMEPAGE_KEYS = listOf("website", "home page", "homepage")
+
 /**
  * Represents the gleam.toml project manifest file.
  * See https://gleam.run/writing-gleam/gleam-toml/ for the specification.
@@ -64,120 +66,117 @@ internal data class GleamToml(
 
     /** Links to project resources like homepage, documentation, etc. */
     val links: List<Link> = emptyList()
-)
-
-/**
- * Represents a link in the gleam.toml links section.
- */
-@Serializable
-internal data class Link(
-    val title: String,
-    val href: String
-)
-
-private val HOMEPAGE_KEYS = listOf("website", "home page", "homepage")
-
-/**
- * Find the homepage URL from the links section.
- * Searches for links with titles matching "Website", "Home page", or "Homepage" (case-insensitive).
- */
-internal fun GleamToml.findHomepageUrl(): String =
-    links.firstOrNull { it.title.lowercase() in HOMEPAGE_KEYS }?.href.orEmpty()
-
-/**
- * Represents the repository configuration in gleam.toml.
- * Can be either a well-known hosting service (github, gitlab, etc.) or a custom URL.
- */
-@Serializable
-internal data class Repository(
-    /** The type of repository hosting. */
-    val type: String? = null,
-
-    /** The username or organization on the hosting service. */
-    val user: String? = null,
-
-    /** The repository name on the hosting service. */
-    val repo: String? = null,
-
-    /** The host for self-hosted services like forgejo or gitea. */
-    val host: String? = null,
-
-    /** A custom URL for self-hosted or other repositories. */
-    val url: String? = null
 ) {
-    companion object {
-        private val KNOWN_HOSTS = mapOf(
-            "github" to "github.com",
-            "gitlab" to "gitlab.com",
-            "bitbucket" to "bitbucket.org",
-            "codeberg" to "codeberg.org",
-            "tangled" to "tangled.sh"
-        )
+    /**
+     * Represents a link in the gleam.toml links section.
+     */
+    @Serializable
+    data class Link(
+        val title: String,
+        val href: String
+    )
+
+    /**
+     * Represents the repository configuration in gleam.toml.
+     * Can be either a well-known hosting service (github, gitlab, etc.) or a custom URL.
+     */
+    @Serializable
+    data class Repository(
+        /** The type of repository hosting. */
+        val type: String? = null,
+
+        /** The username or organization on the hosting service. */
+        val user: String? = null,
+
+        /** The repository name on the hosting service. */
+        val repo: String? = null,
+
+        /** The host for self-hosted services like forgejo or gitea. */
+        val host: String? = null,
+
+        /** A custom URL for self-hosted or other repositories. */
+        val url: String? = null
+    ) {
+        companion object {
+            private val KNOWN_HOSTS = mapOf(
+                "github" to "github.com",
+                "gitlab" to "gitlab.com",
+                "bitbucket" to "bitbucket.org",
+                "codeberg" to "codeberg.org",
+                "tangled" to "tangled.sh"
+            )
+        }
+
+        /**
+         * Constructs the full repository URL based on the type and other fields.
+         */
+        fun toUrl(): String? {
+            if (type == "custom") return url
+
+            val normalizedType = type?.lowercase() ?: return null
+
+            // SourceHut has a special URL format with ~ prefix
+            if (normalizedType == "sourcehut") {
+                return user?.let { u -> repo?.let { r -> "https://git.sr.ht/~$u/$r" } }
+            }
+
+            // Self-hosted services require a host parameter
+            if (normalizedType == "forgejo" || normalizedType == "gitea") {
+                return host?.let { h -> user?.let { u -> repo?.let { r -> "https://$h/$u/$r" } } }
+            }
+
+            // Well-known hosts
+            val hostDomain = KNOWN_HOSTS[normalizedType] ?: return null
+            return user?.let { u -> repo?.let { r -> "https://$hostDomain/$u/$r" } }
+        }
     }
 
     /**
-     * Constructs the full repository URL based on the type and other fields.
+     * Represents a dependency in gleam.toml which can be:
+     * - A hex package with a version constraint (string)
+     * - A path dependency (object with "path" field)
+     * - A git dependency (object with "git" field and optional "ref")
      */
-    fun toUrl(): String? {
-        if (type == "custom") return url
+    sealed interface Dependency {
+        /** A dependency from hex.pm with a version constraint. */
+        data class Hex(val version: String) : Dependency
 
-        val normalizedType = type?.lowercase() ?: return null
+        /** A local path dependency. */
+        data class Path(val path: String) : Dependency
 
-        // SourceHut has a special URL format with ~ prefix
-        if (normalizedType == "sourcehut") {
-            return user?.let { u -> repo?.let { r -> "https://git.sr.ht/~$u/$r" } }
-        }
+        /** A git repository dependency. */
+        data class Git(val url: String, val ref: String? = null) : Dependency
 
-        // Self-hosted services require a host parameter
-        if (normalizedType == "forgejo" || normalizedType == "gitea") {
-            return host?.let { h -> user?.let { u -> repo?.let { r -> "https://$h/$u/$r" } } }
-        }
+        companion object {
+            /**
+             * Parse a TOML element into a Dependency.
+             */
+            fun fromToml(element: TomlElement): Dependency =
+                when (element) {
+                    is TomlLiteral -> Hex(element.asTomlLiteral().content)
+                    is TomlTable -> {
+                        val table = element.asTomlTable()
+                        when {
+                            "path" in table -> Path(table.getValue("path").asTomlLiteral().content)
+                            "git" in table -> Git(
+                                url = table.getValue("git").asTomlLiteral().content,
+                                ref = table["ref"]?.asTomlLiteral()?.content
+                            )
 
-        // Well-known hosts
-        val hostDomain = KNOWN_HOSTS[normalizedType] ?: return null
-        return user?.let { u -> repo?.let { r -> "https://$hostDomain/$u/$r" } }
-    }
-}
-
-/**
- * Represents a dependency in gleam.toml which can be:
- * - A hex package with a version constraint (string)
- * - A path dependency (object with "path" field)
- * - A git dependency (object with "git" field and optional "ref")
- */
-internal sealed interface GleamDependency {
-    /** A dependency from hex.pm with a version constraint. */
-    data class Hex(val version: String) : GleamDependency
-
-    /** A local path dependency. */
-    data class Path(val path: String) : GleamDependency
-
-    /** A git repository dependency. */
-    data class Git(val url: String, val ref: String? = null) : GleamDependency
-
-    companion object {
-        /**
-         * Parse a TOML element into a GleamDependency.
-         */
-        fun fromToml(element: TomlElement): GleamDependency =
-            when (element) {
-                is TomlLiteral -> Hex(element.asTomlLiteral().content)
-                is TomlTable -> {
-                    val table = element.asTomlTable()
-                    when {
-                        "path" in table -> Path(table.getValue("path").asTomlLiteral().content)
-                        "git" in table -> Git(
-                            url = table.getValue("git").asTomlLiteral().content,
-                            ref = table["ref"]?.asTomlLiteral()?.content
-                        )
-
-                        else -> throw IllegalArgumentException("Unknown dependency format: $element")
+                            else -> throw IllegalArgumentException("Unknown dependency format: $element")
+                        }
                     }
-                }
 
-                else -> throw IllegalArgumentException("Unknown dependency format: $element")
-            }
+                    else -> throw IllegalArgumentException("Unknown dependency format: $element")
+                }
+        }
     }
+
+    /**
+     * Find the homepage URL from the links section.
+     * Searches for links with titles matching "Website", "Home page", or "Homepage" (case-insensitive).
+     */
+    fun findHomepageUrl(): String = links.firstOrNull { it.title.lowercase() in HOMEPAGE_KEYS }?.href.orEmpty()
 }
 
 // Regex patterns for converting Hex version requirements to semver4j format
