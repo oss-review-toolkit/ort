@@ -57,7 +57,7 @@ class GleamFunTest : StringSpec({
 
         val result = createGleam().resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project without lockfile fails if 'allowDynamicVersions' is disabled" {

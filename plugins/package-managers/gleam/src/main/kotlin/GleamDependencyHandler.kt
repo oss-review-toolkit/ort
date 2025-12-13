@@ -392,5 +392,5 @@ private fun findMatchingVersion(versions: List<String>, requirement: String): St
  */
 private fun isValidLocalPath(workingDir: File, path: String): Boolean {
     val resolvedPath = workingDir.resolve(path).canonicalFile
-    return resolvedPath.relativeToOrNull(workingDir.canonicalFile) != null
+    return resolvedPath.startsWith(workingDir.canonicalFile)
 }
