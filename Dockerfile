@@ -156,7 +156,7 @@ RUN curl -kSs https://pyenv.run | bash \
 
 RUN ARCH=$(arch | sed s/aarch64/arm64/) \
     && if [ "$ARCH" == "arm64" ]; then \
-    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
+    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION licensedcode-data setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     else \
     curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
     pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION setuptools==$PYTHON_SETUPTOOLS_VERSION; \
