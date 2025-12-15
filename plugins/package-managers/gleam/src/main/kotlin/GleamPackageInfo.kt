@@ -55,7 +55,7 @@ internal sealed interface GleamPackageInfo {
 /**
  * A dependency from the manifest.toml lockfile - already resolved.
  */
-internal data class ManifestPackageInfo(val pkg: GleamManifest.Package) : GleamPackageInfo {
+internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) : GleamPackageInfo {
     override val name: String get() = pkg.name
     override val dependencies: List<String> get() = pkg.requirements
 
@@ -172,7 +172,10 @@ internal data class ManifestPackageInfo(val pkg: GleamManifest.Package) : GleamP
 /**
  * A dependency from gleam.toml - needs dynamic resolution.
  */
-internal data class DependencyPackageInfo(val depName: String, val dep: GleamToml.Dependency) : GleamPackageInfo {
+internal data class DependencyPackageInfo(
+    private val depName: String,
+    private val dep: GleamToml.Dependency
+) : GleamPackageInfo {
     override val name: String get() = depName
     override val dependencies: List<String> get() = emptyList()
 
