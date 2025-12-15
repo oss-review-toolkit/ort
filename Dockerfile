@@ -140,6 +140,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
     libreadline-dev \
     libgdbm-dev \
+    libicu-dev \
     libsqlite3-dev \
     libssl-dev \
     libbz2-dev \
