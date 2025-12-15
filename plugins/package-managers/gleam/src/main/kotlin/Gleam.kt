@@ -69,6 +69,17 @@ class Gleam internal constructor(
 
     private val dependencyHandler = GleamDependencyHandler()
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
+    private var projectDirs = emptySet<File>()
+
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
+        super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
+
+        projectDirs = definitionFiles.mapTo(mutableSetOf()) { it.parentFile.canonicalFile }
+    }
 
     override fun mapDefinitionFiles(
         analysisRoot: File,
@@ -133,7 +144,8 @@ class Gleam internal constructor(
             analysisRoot = analysisRoot,
             workingDir = workingDir,
             gleamToml = gleamToml,
-            manifest = manifest
+            manifest = manifest,
+            projectDirs = projectDirs
         )
 
         val deps = gleamToml.dependencies.map { (name, element) ->

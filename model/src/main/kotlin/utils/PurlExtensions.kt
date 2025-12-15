@@ -51,7 +51,7 @@ fun Identifier.getPurlType() =
         "maven" -> PurlType.MAVEN
         "npm" -> PurlType.NPM
         "nuget" -> PurlType.NUGET
-        "otp" -> PurlType.OTP
+        "otp", "gleam" -> PurlType.OTP
         "pod" -> PurlType.COCOAPODS
         "pub" -> PurlType.PUB
         "pypi" -> PurlType.PYPI

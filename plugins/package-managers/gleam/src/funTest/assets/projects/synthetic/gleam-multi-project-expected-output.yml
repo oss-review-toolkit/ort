@@ -20,7 +20,8 @@ projects:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "OTP::sibling_pkg:1.0.0"
+    - id: "Gleam::sibling_pkg:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Hex::gleam_json:2.0.0"
         dependencies:
@@ -45,9 +46,11 @@ projects:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "OTP::child_pkg:1.0.0"
+    - id: "Gleam::child_pkg:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
-      - id: "OTP::sibling_pkg:1.0.0"
+      - id: "Gleam::sibling_pkg:1.0.0"
+        linkage: "PROJECT_DYNAMIC"
         dependencies:
         - id: "Hex::gleam_json:2.0.0"
           dependencies:
@@ -143,60 +146,4 @@ packages:
     path: ""
   source_code_origins:
   - "ARTIFACT"
-  - "VCS"
-- id: "OTP::child_pkg:1.0.0"
-  purl: "pkg:otp/child_pkg@1.0.0"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/child"
-  vcs_processed:
-    type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/child"
-  source_code_origins:
-  - "VCS"
-- id: "OTP::sibling_pkg:1.0.0"
-  purl: "pkg:otp/sibling_pkg@1.0.0"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/sibling"
-  vcs_processed:
-    type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/sibling"
-  source_code_origins:
   - "VCS"
