@@ -21,9 +21,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
 import java.net.HttpURLConnection
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNamingStrategy
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
@@ -35,11 +32,6 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
  * Client for fetching package metadata from the Hex.pm API.
  */
 internal class HexApiClient(private val baseUrl: String = "https://hex.pm") {
-    private val json = Json {
-        ignoreUnknownKeys = true
-        namingStrategy = JsonNamingStrategy.SnakeCase
-    }
-
     private val packageCache = mutableMapOf<String, HexPackageInfo?>()
     private val userCache = mutableMapOf<String, HexUserInfo?>()
 
@@ -54,7 +46,7 @@ internal class HexApiClient(private val baseUrl: String = "https://hex.pm") {
             val url = "$baseUrl/api/packages/$name"
 
             okHttpClient.downloadText(url).mapCatching {
-                json.decodeFromString<HexPackageInfo>(it)
+                parseHexModel<HexPackageInfo>(it)
             }.onFailure {
                 handleError(it, "package '$name'")
             }.getOrNull()
@@ -69,7 +61,7 @@ internal class HexApiClient(private val baseUrl: String = "https://hex.pm") {
         val url = "$baseUrl/api/packages/$name/releases/$version"
 
         return okHttpClient.downloadText(url).mapCatching {
-            json.decodeFromString<HexReleaseInfo>(it)
+            parseHexModel<HexReleaseInfo>(it)
         }.onFailure {
             handleError(it, "release '$name@$version'")
         }.getOrNull()
@@ -86,7 +78,7 @@ internal class HexApiClient(private val baseUrl: String = "https://hex.pm") {
             val url = "$baseUrl/api/users/$username"
 
             okHttpClient.downloadText(url).mapCatching {
-                json.decodeFromString<HexUserInfo>(it)
+                parseHexModel<HexUserInfo>(it)
             }.onFailure {
                 handleError(it, "user '$username'")
             }.getOrNull()

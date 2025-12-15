@@ -20,6 +20,15 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
+
+private val json = Json {
+    ignoreUnknownKeys = true
+    namingStrategy = JsonNamingStrategy.SnakeCase
+}
+
+internal inline fun <reified T> parseHexModel(data: String) = json.decodeFromString<T>(data)
 
 /**
  * Response model for the Hex.pm package API.
