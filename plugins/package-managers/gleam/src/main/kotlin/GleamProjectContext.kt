@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.Project
 /**
  * Context containing all project-level information needed for dependency resolution.
  */
-internal data class GleamProjectContext(
+internal class GleamProjectContext(
     val hexClient: HexApiClient,
     val project: Project,
     val analysisRoot: File,
