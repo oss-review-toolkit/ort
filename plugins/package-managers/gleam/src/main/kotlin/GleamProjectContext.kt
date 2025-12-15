@@ -31,7 +31,6 @@ internal class GleamProjectContext(
     val project: Project,
     val analysisRoot: File,
     val workingDir: File,
-    val gleamToml: GleamToml,
     val manifest: GleamManifest,
     val projectDirs: Set<File>
 )
