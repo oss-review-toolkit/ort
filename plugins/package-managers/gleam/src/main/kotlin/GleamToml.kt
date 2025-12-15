@@ -32,8 +32,6 @@ import net.peanuuutz.tomlkt.asTomlLiteral
 import net.peanuuutz.tomlkt.asTomlTable
 import net.peanuuutz.tomlkt.decodeFromNativeReader
 
-private val HOMEPAGE_KEYS = listOf("website", "home page", "homepage")
-
 private val toml = Toml { ignoreUnknownKeys = true }
 
 internal fun parseGleamToml(file: File): GleamToml = file.reader().use { toml.decodeFromNativeReader<GleamToml>(it) }
@@ -75,6 +73,10 @@ internal data class GleamToml(
     /** Links to project resources like homepage, documentation, etc. */
     val links: List<Link> = emptyList()
 ) {
+    companion object {
+        private val HOMEPAGE_KEYS = listOf("website", "home page", "homepage")
+    }
+
     /**
      * Represents a link in the gleam.toml links section.
      */
