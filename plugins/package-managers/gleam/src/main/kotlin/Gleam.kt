@@ -138,7 +138,6 @@ class Gleam internal constructor(
             project = project,
             analysisRoot = analysisRoot,
             workingDir = workingDir,
-            gleamToml = gleamToml,
             manifest = manifest,
             projectDirs = projectDirs
         )
