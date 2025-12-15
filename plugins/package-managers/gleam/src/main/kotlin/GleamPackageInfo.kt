@@ -27,7 +27,6 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
@@ -38,19 +37,6 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 import org.semver4j.Semver
 import org.semver4j.range.RangeListFactory
-
-/**
- * Context containing all project-level information needed for dependency resolution.
- */
-internal data class GleamProjectContext(
-    val hexClient: HexApiClient,
-    val project: Project,
-    val analysisRoot: File,
-    val workingDir: File,
-    val gleamToml: GleamToml,
-    val manifest: GleamManifest,
-    val projectDirs: Set<File>
-)
 
 /**
  * A sealed interface representing a Gleam dependency that can be either:
