@@ -328,7 +328,7 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
 /**
  * Resolve owners to formatted author strings by fetching user details from Hex API.
  */
-internal fun resolveAuthors(owners: List<HexPackageInfo.Owner>, hexClient: HexApiClient): Set<String> =
+private fun resolveAuthors(owners: List<HexPackageInfo.Owner>, hexClient: HexApiClient): Set<String> =
     owners.mapNotNull { it.username }
         .mapTo(mutableSetOf()) { username ->
             val userInfo = hexClient.getUserInfo(username) ?: HexUserInfo(username)
@@ -339,7 +339,7 @@ internal fun resolveAuthors(owners: List<HexPackageInfo.Owner>, hexClient: HexAp
 /**
  * Generate a CPE identifier from a GitHub repository URL.
  */
-internal fun generateCpe(repositoryUrl: String, version: String): String? {
+private fun generateCpe(repositoryUrl: String, version: String): String? {
     if (repositoryUrl.isBlank()) return null
 
     val vcsInfo = VcsHost.parseUrl(repositoryUrl)
@@ -360,7 +360,7 @@ internal fun generateCpe(repositoryUrl: String, version: String): String? {
 /**
  * Convert a VCS URL to a browsable homepage URL.
  */
-internal fun toHomepageUrl(vcsUrl: String): String {
+private fun toHomepageUrl(vcsUrl: String): String {
     if (vcsUrl.isBlank()) return vcsUrl
     val normalizedUrl = normalizeVcsUrl(vcsUrl)
     val host = VcsHost.fromUrl(normalizedUrl) ?: return vcsUrl
@@ -371,7 +371,7 @@ internal fun toHomepageUrl(vcsUrl: String): String {
 /**
  * Find the latest version that matches a Hex version requirement.
  */
-internal fun findMatchingVersion(versions: List<String>, requirement: String): String? {
+private fun findMatchingVersion(versions: List<String>, requirement: String): String? {
     val semverRequirement = convertHexVersionRequirement(requirement)
     val rangeList = RangeListFactory.create(semverRequirement)
 
@@ -386,7 +386,7 @@ internal fun findMatchingVersion(versions: List<String>, requirement: String): S
  * Validate that a local path dependency stays within the analysis root directory.
  * Returns true if the resolved path is within the analysis root.
  */
-internal fun isValidLocalPath(analysisRoot: File, workingDir: File, path: String): Boolean {
+private fun isValidLocalPath(analysisRoot: File, workingDir: File, path: String): Boolean {
     val resolvedPath = workingDir.resolve(path).canonicalFile
     return resolvedPath.startsWith(analysisRoot.canonicalFile)
 }
