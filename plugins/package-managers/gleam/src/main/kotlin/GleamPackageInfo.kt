@@ -312,15 +312,18 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
 }
 
 /**
- * Resolve owners to formatted author strings by fetching user details from Hex API.
+ * Find the latest version that matches a Hex version requirement.
  */
-private fun resolveAuthors(owners: List<HexPackageInfo.Owner>, hexClient: HexApiClient): Set<String> =
-    owners.mapNotNull { it.username }
-        .mapTo(mutableSetOf()) { username ->
-            val userInfo = hexClient.getUserInfo(username) ?: HexUserInfo(username)
-            val name = userInfo.fullName ?: userInfo.username
-            userInfo.email?.takeIf { it.isNotEmpty() }?.let { "$name <$it>" } ?: name
-        }
+private fun findMatchingVersion(versions: List<String>, requirement: String): String? {
+    val semverRequirement = convertHexVersionRequirement(requirement)
+    val rangeList = RangeListFactory.create(semverRequirement)
+
+    return versions
+        .mapNotNull { Semver.coerce(it) }
+        .sortedDescending()
+        .firstOrNull { it.satisfies(rangeList) }
+        ?.version
+}
 
 /**
  * Generate a CPE identifier from a GitHub repository URL.
@@ -344,6 +347,26 @@ private fun generateCpe(repositoryUrl: String, version: String): String? {
 }
 
 /**
+ * Validate that a local path dependency stays within the analysis root directory.
+ * Returns true if the resolved path is within the analysis root.
+ */
+private fun isValidLocalPath(analysisRoot: File, workingDir: File, path: String): Boolean {
+    val resolvedPath = workingDir.resolve(path).canonicalFile
+    return resolvedPath.startsWith(analysisRoot.canonicalFile)
+}
+
+/**
+ * Resolve owners to formatted author strings by fetching user details from Hex API.
+ */
+private fun resolveAuthors(owners: List<HexPackageInfo.Owner>, hexClient: HexApiClient): Set<String> =
+    owners.mapNotNull { it.username }
+        .mapTo(mutableSetOf()) { username ->
+            val userInfo = hexClient.getUserInfo(username) ?: HexUserInfo(username)
+            val name = userInfo.fullName ?: userInfo.username
+            userInfo.email?.takeIf { it.isNotEmpty() }?.let { "$name <$it>" } ?: name
+        }
+
+/**
  * Convert a VCS URL to a browsable homepage URL.
  */
 private fun toHomepageUrl(vcsUrl: String): String {
@@ -352,27 +375,4 @@ private fun toHomepageUrl(vcsUrl: String): String {
     val host = VcsHost.fromUrl(normalizedUrl) ?: return vcsUrl
     val vcsInfo = host.toVcsInfo(normalizedUrl) ?: return vcsUrl
     return host.toPermalink(vcsInfo) ?: vcsUrl
-}
-
-/**
- * Find the latest version that matches a Hex version requirement.
- */
-private fun findMatchingVersion(versions: List<String>, requirement: String): String? {
-    val semverRequirement = convertHexVersionRequirement(requirement)
-    val rangeList = RangeListFactory.create(semverRequirement)
-
-    return versions
-        .mapNotNull { Semver.coerce(it) }
-        .sortedDescending()
-        .firstOrNull { it.satisfies(rangeList) }
-        ?.version
-}
-
-/**
- * Validate that a local path dependency stays within the analysis root directory.
- * Returns true if the resolved path is within the analysis root.
- */
-private fun isValidLocalPath(analysisRoot: File, workingDir: File, path: String): Boolean {
-    val resolvedPath = workingDir.resolve(path).canonicalFile
-    return resolvedPath.startsWith(analysisRoot.canonicalFile)
 }
