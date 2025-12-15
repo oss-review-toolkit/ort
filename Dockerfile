@@ -80,8 +80,6 @@ ARG USERNAME=ort
 ARG USER_ID=1000
 ARG USER_GID=$USER_ID
 ARG HOMEDIR=/home/ort
-ENV HOME=$HOMEDIR
-ENV USER=$USERNAME
 
 # Non privileged user
 RUN groupadd --gid $USER_GID $USERNAME \
@@ -92,7 +90,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     --home-dir $HOMEDIR \
     --create-home $USERNAME
 
-RUN chgrp $USER /opt \
+RUN chgrp $USERNAME /opt \
     && chmod g+wx /opt
 
 # sudo support
@@ -109,8 +107,10 @@ COPY "$CRT_FILES" /tmp/certificates/
 RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
     && /etc/scripts/import_certificates.sh /tmp/certificates/
 
-USER $USER
-WORKDIR $HOME
+USER $USERNAME
+WORKDIR $HOMEDIR
+ENV USER=$USERNAME
+ENV HOME=$HOMEDIR
 
 ENTRYPOINT [ "/bin/bash" ]
 
