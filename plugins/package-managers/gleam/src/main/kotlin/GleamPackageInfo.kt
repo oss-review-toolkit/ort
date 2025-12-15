@@ -312,6 +312,46 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
 }
 
 /**
+ * Convert a Hex-style version requirement to semver4j range syntax.
+ *
+ * Handles:
+ * - `~>` operator: `~> 0.7` -> `>=0.7.0 <1.0.0`, `~> 0.7.3` -> `>=0.7.3 <0.8.0`
+ * - `and` keyword -> space (implicit AND in semver4j)
+ * - `or` keyword -> `||`
+ */
+internal fun convertHexVersionRequirement(requirement: String): String =
+    requirement
+        .let { expandTildeOperators(it) }
+        .replace(AND_KEYWORD, " ")
+        .replace(OR_KEYWORD, " || ")
+        .replace(Regex("\\s+"), " ")
+        .trim()
+
+private val AND_KEYWORD = Regex("\\s+and\\s+", RegexOption.IGNORE_CASE)
+private val OR_KEYWORD = Regex("\\s+or\\s+", RegexOption.IGNORE_CASE)
+
+/**
+ * Expand all ~> (tilde) operators in a version requirement string.
+ * - `~> X.Y.Z` -> `>=X.Y.Z <X.(Y+1).0`
+ * - `~> X.Y` -> `>=X.Y.0 <(X+1).0.0`
+ */
+private fun expandTildeOperators(requirement: String): String =
+    // Match 3-part versions first, then 2-part versions.
+    TILDE_WITH_PATCH.replace(requirement) { match ->
+        val (major, minor, patch) = match.destructured
+        ">=$major.$minor.$patch <$major.${minor.toInt() + 1}.0"
+    }.let { result ->
+        TILDE_WITHOUT_PATCH.replace(result) { match ->
+            val (major, minor) = match.destructured
+            ">=$major.$minor.0 <${major.toInt() + 1}.0.0"
+        }
+    }
+
+// Regex patterns for converting Hex version requirements to semver4j format.
+private val TILDE_WITH_PATCH = Regex("~>\\s*(\\d+)\\.(\\d+)\\.(\\d+)")
+private val TILDE_WITHOUT_PATCH = Regex("~>\\s*(\\d+)\\.(\\d+)(?!\\.)")
+
+/**
  * Find the latest version that matches a Hex version requirement.
  */
 private fun findMatchingVersion(versions: List<String>, requirement: String): String? {
