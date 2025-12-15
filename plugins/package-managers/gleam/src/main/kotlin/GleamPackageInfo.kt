@@ -320,8 +320,7 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
  * - `or` keyword -> `||`
  */
 internal fun convertHexVersionRequirement(requirement: String): String =
-    requirement
-        .let { expandTildeOperators(it) }
+    expandTildeOperators(requirement)
         .replace(AND_KEYWORD, " ")
         .replace(OR_KEYWORD, " || ")
         .replace(Regex("\\s+"), " ")
