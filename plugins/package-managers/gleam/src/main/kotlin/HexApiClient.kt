@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
 import java.net.HttpURLConnection
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 
@@ -31,54 +30,6 @@ import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
-
-/**
- * Response model for the Hex.pm package API.
- * See https://github.com/hexpm/specifications/blob/main/apiary.apib
- */
-@Serializable
-internal data class HexPackageInfo(
-    val name: String,
-    val latestStableVersion: String? = null,
-    val releases: List<Release> = emptyList(),
-    val meta: Meta? = null,
-    val owners: List<Owner> = emptyList()
-) {
-    @Serializable
-    data class Release(val version: String)
-
-    @Serializable
-    data class Meta(
-        val description: String? = null,
-        val licenses: List<String> = emptyList(),
-        val links: Map<String, String> = emptyMap()
-    )
-
-    @Serializable
-    data class Owner(
-        val username: String? = null
-    )
-}
-
-/**
- * Response model for the Hex.pm release API.
- */
-@Serializable
-internal data class HexReleaseInfo(
-    val version: String,
-    val checksum: String
-)
-
-/**
- * Response model for the Hex.pm user API.
- * See https://github.com/hexpm/specifications/blob/main/apiary.apib
- */
-@Serializable
-internal data class HexUserInfo(
-    val username: String,
-    val fullName: String? = null,
-    val email: String? = null
-)
 
 /**
  * Client for fetching package metadata from the Hex.pm API.
