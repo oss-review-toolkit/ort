@@ -19,16 +19,24 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
+import java.io.File
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+import net.peanuuutz.tomlkt.Toml
 import net.peanuuutz.tomlkt.TomlElement
 import net.peanuuutz.tomlkt.TomlLiteral
 import net.peanuuutz.tomlkt.TomlTable
 import net.peanuuutz.tomlkt.asTomlLiteral
 import net.peanuuutz.tomlkt.asTomlTable
+import net.peanuuutz.tomlkt.decodeFromNativeReader
 
 private val HOMEPAGE_KEYS = listOf("website", "home page", "homepage")
+
+private val toml = Toml { ignoreUnknownKeys = true }
+
+internal fun parseGleamToml(file: File): GleamToml = file.reader().use { toml.decodeFromNativeReader<GleamToml>(it) }
 
 /**
  * Represents the gleam.toml project manifest file.

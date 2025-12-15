@@ -21,9 +21,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
 import java.io.File
 
-import net.peanuuutz.tomlkt.Toml
-import net.peanuuutz.tomlkt.decodeFromNativeReader
-
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
@@ -45,8 +42,6 @@ private const val GLEAM_TOML = "gleam.toml"
 private const val MANIFEST_TOML = "manifest.toml"
 private const val SCOPE_DEPENDENCIES = "dependencies"
 private const val SCOPE_DEV_DEPENDENCIES = "dev-dependencies"
-
-private val toml = Toml { ignoreUnknownKeys = true }
 
 /**
  * The [Gleam](https://gleam.run/) package manager for Gleam.
@@ -172,8 +167,6 @@ class Gleam internal constructor(
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
-    private fun parseManifest(file: File) = file.reader().use { toml.decodeFromNativeReader<GleamManifest>(it) }
-
     private fun createProject(definitionFile: File, gleamToml: GleamToml): Project {
         val workingDir = definitionFile.parentFile
 
@@ -200,5 +193,3 @@ class Gleam internal constructor(
         )
     }
 }
-
-internal fun parseGleamToml(file: File): GleamToml = file.reader().use { toml.decodeFromNativeReader<GleamToml>(it) }

@@ -19,8 +19,17 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
+import java.io.File
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+import net.peanuuutz.tomlkt.Toml
+import net.peanuuutz.tomlkt.decodeFromNativeReader
+
+private val toml = Toml { ignoreUnknownKeys = true }
+
+internal fun parseManifest(file: File) = file.reader().use { toml.decodeFromNativeReader<GleamManifest>(it) }
 
 /**
  * Represents the manifest.toml lockfile for Gleam projects.
