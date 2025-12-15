@@ -125,17 +125,16 @@ internal data class GleamToml(
 
             val normalizedType = type?.lowercase() ?: return null
 
-            // SourceHut has a special URL format with ~ prefix
+            // SourceHut has a special URL format with ~ prefix.
             if (normalizedType == "sourcehut") {
                 return user?.let { u -> repo?.let { r -> "https://git.sr.ht/~$u/$r" } }
             }
 
-            // Self-hosted services require a host parameter
+            // Self-hosted services require a host parameter.
             if (normalizedType == "forgejo" || normalizedType == "gitea") {
                 return host?.let { h -> user?.let { u -> repo?.let { r -> "https://$h/$u/$r" } } }
             }
 
-            // Well-known hosts
             val hostDomain = KNOWN_HOSTS[normalizedType] ?: return null
             return user?.let { u -> repo?.let { r -> "https://$hostDomain/$u/$r" } }
         }
@@ -189,7 +188,7 @@ internal data class GleamToml(
     fun findHomepageUrl(): String = links.firstOrNull { it.title.lowercase() in HOMEPAGE_KEYS }?.href.orEmpty()
 }
 
-// Regex patterns for converting Hex version requirements to semver4j format
+// Regex patterns for converting Hex version requirements to semver4j format.
 private val TILDE_WITH_PATCH = Regex("~>\\s*(\\d+)\\.(\\d+)\\.(\\d+)")
 private val TILDE_WITHOUT_PATCH = Regex("~>\\s*(\\d+)\\.(\\d+)(?!\\.)")
 private val AND_KEYWORD = Regex("\\s+and\\s+", RegexOption.IGNORE_CASE)
@@ -217,7 +216,7 @@ internal fun convertHexVersionRequirement(requirement: String): String =
  * - `~> X.Y` -> `>=X.Y.0 <(X+1).0.0`
  */
 private fun expandTildeOperators(requirement: String): String =
-    // Match 3-part versions first, then 2-part versions
+    // Match 3-part versions first, then 2-part versions.
     TILDE_WITH_PATCH.replace(requirement) { match ->
         val (major, minor, patch) = match.destructured
         ">=$major.$minor.$patch <$major.${minor.toInt() + 1}.0"
