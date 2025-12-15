@@ -52,8 +52,9 @@ internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
             .mapNotNull { manifestPackagesByName[it] }
             .map { ManifestPackageInfo(it) }
 
-    override fun linkageFor(dependency: GleamPackageInfo): PackageLinkage = PackageLinkage.DYNAMIC
+    override fun linkageFor(dependency: GleamPackageInfo): PackageLinkage =
+        if (tryLock(dependency).isProject(context)) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: GleamPackageInfo, issues: MutableCollection<Issue>): Package =
+    override fun createPackage(dependency: GleamPackageInfo, issues: MutableCollection<Issue>): Package? =
         tryLock(dependency).toOrtPackage(context, issues)
 }

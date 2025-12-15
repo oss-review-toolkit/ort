@@ -48,7 +48,8 @@ internal data class GleamProjectContext(
     val analysisRoot: File,
     val workingDir: File,
     val gleamToml: GleamToml,
-    val manifest: GleamManifest
+    val manifest: GleamManifest,
+    val projectDirs: Set<File>
 )
 
 /**
@@ -61,7 +62,8 @@ internal sealed interface GleamPackageInfo {
     val dependencies: List<String>
 
     fun toIdentifier(context: GleamProjectContext): Identifier
-    fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package
+    fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package?
+    fun isProject(context: GleamProjectContext): Boolean
 }
 
 /**
@@ -71,15 +73,28 @@ internal data class ManifestPackageInfo(val pkg: GleamManifest.Package) : GleamP
     override val name: String get() = pkg.name
     override val dependencies: List<String> get() = pkg.requirements
 
-    override fun toIdentifier(context: GleamProjectContext): Identifier =
-        Identifier(
-            type = if (pkg.source == SourceType.HEX) "Hex" else "OTP",
+    override fun isProject(context: GleamProjectContext): Boolean {
+        if (pkg.source != SourceType.LOCAL) return false
+        val resolvedPath = context.workingDir.resolve(pkg.localPath.orEmpty()).canonicalFile
+        return resolvedPath in context.projectDirs
+    }
+
+    override fun toIdentifier(context: GleamProjectContext): Identifier {
+        val type = when (pkg.source) {
+            SourceType.HEX -> "Hex"
+            SourceType.GIT -> "OTP"
+            SourceType.LOCAL -> "Gleam"
+        }
+
+        return Identifier(
+            type = type,
             namespace = "",
             name = pkg.name,
             version = pkg.version
         )
+    }
 
-    override fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package =
+    override fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package? =
         when (pkg.source) {
             SourceType.HEX -> createHexPackage(context)
             SourceType.GIT -> createGitPackage(context)
@@ -131,7 +146,10 @@ internal data class ManifestPackageInfo(val pkg: GleamManifest.Package) : GleamP
         )
     }
 
-    private fun createLocalPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package {
+    private fun createLocalPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package? {
+        // If this is a project being analyzed, don't create a package.
+        if (isProject(context)) return null
+
         val basePackage = Package(
             id = toIdentifier(context),
             authors = emptySet(),
@@ -172,6 +190,12 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
     override val name: String get() = depName
     override val dependencies: List<String> get() = emptyList()
 
+    override fun isProject(context: GleamProjectContext): Boolean {
+        val pathDep = dep as? GleamToml.Dependency.Path ?: return false
+        val resolvedPath = context.workingDir.resolve(pathDep.path).canonicalFile
+        return resolvedPath in context.projectDirs
+    }
+
     override fun toIdentifier(context: GleamProjectContext): Identifier =
         when (dep) {
             is GleamToml.Dependency.Hex -> {
@@ -181,7 +205,9 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
 
             is GleamToml.Dependency.Git -> Identifier("OTP", "", depName, dep.ref.orEmpty())
 
-            is GleamToml.Dependency.Path -> Identifier("OTP", "", depName, resolvePathVersion(context))
+            is GleamToml.Dependency.Path -> {
+                Identifier("Gleam", "", depName, resolvePathVersion(context))
+            }
         }
 
     private fun resolvePathVersion(context: GleamProjectContext): String {
@@ -195,7 +221,7 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
         }
     }
 
-    override fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package =
+    override fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package? =
         when (dep) {
             is GleamToml.Dependency.Hex -> createHexPackage(context)
             is GleamToml.Dependency.Git -> createGitPackage(context)
@@ -260,7 +286,10 @@ internal data class DependencyPackageInfo(val depName: String, val dep: GleamTom
         )
     }
 
-    private fun createPathPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package {
+    private fun createPathPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package? {
+        // If this is a project being analyzed, don't create a package.
+        if (isProject(context)) return null
+
         val pathDep = dep as GleamToml.Dependency.Path
 
         val basePackage = Package(

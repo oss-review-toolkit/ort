@@ -20,10 +20,38 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
+    - id: "Gleam::local_pkg:2.0.0"
     - id: "Hex::gleam_stdlib:0.67.1"
     - id: "OTP::gleam_json:main"
-    - id: "OTP::local_pkg:2.0.0"
 packages:
+- id: "Gleam::local_pkg:2.0.0"
+  purl: "pkg:otp/local_pkg@2.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/local_pkg"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/local_pkg"
+  source_code_origins:
+  - "VCS"
 - id: "Hex::gleam_stdlib:0.67.1"
   purl: "pkg:hex/gleam_stdlib@0.67.1"
   cpe: "cpe:2.3:a:gleam-lang:stdlib:0.67.1:*:*:*:*:*:*:*"
@@ -84,34 +112,6 @@ packages:
     url: "ssh://git@github.com/gleam-lang/json.git"
     revision: "main"
     path: ""
-  source_code_origins:
-  - "VCS"
-- id: "OTP::local_pkg:2.0.0"
-  purl: "pkg:otp/local_pkg@2.0.0"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/local_pkg"
-  vcs_processed:
-    type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/local_pkg"
   source_code_origins:
   - "VCS"
 issues:
