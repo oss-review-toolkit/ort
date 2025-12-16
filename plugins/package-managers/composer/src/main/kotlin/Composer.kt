@@ -111,18 +111,14 @@ class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descr
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
     ): List<File> {
-        val projectFiles = definitionFiles.toMutableList()
-
         // Ignore definition files from vendor directories that reside next to other definition files, to avoid the
         // former from being recognized as projects.
-        var index = 0
-        while (index < projectFiles.size - 1) {
-            val projectFile = projectFiles[index++]
-            val vendorDir = projectFile.resolveSibling("vendor")
-            projectFiles.subList(index, projectFiles.size).removeAll { it.startsWith(vendorDir) }
+        val buildDirs = definitionFiles.map { it.resolveSibling("vendor") }
+        return definitionFiles.filterNot { definitionFile ->
+            buildDirs.any { buildDir ->
+                definitionFile.startsWith(buildDir)
+            }
         }
-
-        return projectFiles
     }
 
     override fun resolveDependencies(

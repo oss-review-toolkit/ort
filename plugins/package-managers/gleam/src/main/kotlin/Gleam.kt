@@ -81,18 +81,14 @@ class Gleam internal constructor(
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
     ): List<File> {
-        val projectFiles = definitionFiles.toMutableList()
-
         // Ignore definition files from build directories that reside next to other definition files,
         // to avoid dependency gleam.toml files from being recognized as projects.
-        var index = 0
-        while (index < projectFiles.size - 1) {
-            val projectFile = projectFiles[index++]
-            val buildDir = projectFile.resolveSibling("build")
-            projectFiles.subList(index, projectFiles.size).removeAll { it.startsWith(buildDir) }
+        val buildDirs = definitionFiles.map { it.resolveSibling("build") }
+        return definitionFiles.filterNot { definitionFile ->
+            buildDirs.any { buildDir ->
+                definitionFile.startsWith(buildDir)
+            }
         }
-
-        return projectFiles
     }
 
     override fun resolveDependencies(
