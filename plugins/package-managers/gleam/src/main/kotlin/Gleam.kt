@@ -108,7 +108,6 @@ class Gleam internal constructor(
             manifestFile.isFile || !hasDependencies
         }
 
-        val hexClient = hexApiClientFactory()
         val issues = mutableListOf<Issue>()
 
         val project = createProject(definitionFile, gleamToml)
@@ -130,7 +129,7 @@ class Gleam internal constructor(
         }
 
         val context = GleamProjectContext(
-            hexClient = hexClient,
+            hexClient = hexApiClientFactory(),
             project = project,
             analysisRoot = analysisRoot,
             workingDir = workingDir,
