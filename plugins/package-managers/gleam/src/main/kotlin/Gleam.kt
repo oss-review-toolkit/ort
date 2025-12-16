@@ -145,9 +145,13 @@ class Gleam internal constructor(
             graphBuilder.addDependencies(project.id, scope.descriptor, dependencies)
         }
 
-        val projectWithScopes = project.copy(scopeNames = graphBuilder.scopesFor(project.id))
-
-        return listOf(ProjectAnalyzerResult(projectWithScopes, emptySet(), issues))
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project.copy(scopeNames = graphBuilder.scopesFor(project.id)),
+                packages = emptySet(),
+                issues = issues
+            )
+        )
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
