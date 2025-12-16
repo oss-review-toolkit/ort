@@ -137,20 +137,20 @@ class Gleam internal constructor(
             projectDirs = projectDirs
         )
 
-        val deps = gleamToml.dependencies.map { (name, element) ->
+        val dependencies = gleamToml.dependencies.map { (name, element) ->
             DependencyPackageInfo(name, GleamToml.Dependency.fromToml(element))
         }
 
-        val devDeps = gleamToml.devDependencies.map { (name, element) ->
+        val devDependencies = gleamToml.devDependencies.map { (name, element) ->
             DependencyPackageInfo(name, GleamToml.Dependency.fromToml(element))
         }
 
         dependencyHandler.setContext(context)
 
-        if (deps.isNotEmpty()) graphBuilder.addDependencies(project.id, SCOPE_DEPENDENCIES, deps)
+        if (dependencies.isNotEmpty()) graphBuilder.addDependencies(project.id, SCOPE_DEPENDENCIES, dependencies)
 
-        if (devDeps.isNotEmpty()) {
-            graphBuilder.addDependencies(project.id, SCOPE_DEV_DEPENDENCIES, devDeps)
+        if (devDependencies.isNotEmpty()) {
+            graphBuilder.addDependencies(project.id, SCOPE_DEV_DEPENDENCIES, devDependencies)
         }
 
         val projectWithScopes = project.copy(scopeNames = graphBuilder.scopesFor(project.id))
