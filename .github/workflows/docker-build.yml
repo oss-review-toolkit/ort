@@ -144,13 +144,13 @@ jobs:
           echo "${{ steps.build-ort-minimal.outputs.digest }}" > "/tmp/digests/ort-minimal/${{ matrix.name }}"
       - name: Upload ORT digest
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: ort-digest-${{ matrix.name }}
           path: /tmp/digests/ort/*
       - name: Upload ORT-minimal digest
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: ort-minimal-digest-${{ matrix.name }}
           path: /tmp/digests/ort-minimal/*
@@ -166,13 +166,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download ORT digests
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           pattern: ort-digest-*
           path: /tmp/digests/ort
           merge-multiple: true
       - name: Download ORT-minimal digests
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           pattern: ort-minimal-digest-*
           path: /tmp/digests/ort-minimal
