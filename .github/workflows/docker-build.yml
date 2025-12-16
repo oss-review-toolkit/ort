@@ -144,13 +144,13 @@ jobs:
           echo "${{ steps.build-ort-minimal.outputs.digest }}" > "/tmp/digests/ort-minimal/${{ matrix.name }}"
       - name: Upload ORT digest
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ort-digest-${{ matrix.name }}
           path: /tmp/digests/ort/*
       - name: Upload ORT-minimal digest
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ort-minimal-digest-${{ matrix.name }}
           path: /tmp/digests/ort-minimal/*
