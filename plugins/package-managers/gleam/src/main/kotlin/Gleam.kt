@@ -64,7 +64,7 @@ class Gleam internal constructor(
 
     private val dependencyHandler = GleamDependencyHandler()
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
-    private var projectDirs = emptySet<File>()
+    private lateinit var projectDirs: Set<File>
 
     override fun beforeResolution(
         analysisRoot: File,
