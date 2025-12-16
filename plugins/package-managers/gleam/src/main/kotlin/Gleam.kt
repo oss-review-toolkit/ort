@@ -40,8 +40,6 @@ import org.ossreviewtoolkit.utils.common.div
 
 private const val GLEAM_TOML = "gleam.toml"
 private const val MANIFEST_TOML = "manifest.toml"
-private const val SCOPE_DEPENDENCIES = "dependencies"
-private const val SCOPE_DEV_DEPENDENCIES = "dev-dependencies"
 
 /**
  * The [Gleam](https://gleam.run/) package manager for Gleam.
@@ -137,20 +135,14 @@ class Gleam internal constructor(
             projectDirs = projectDirs
         )
 
-        val dependencies = gleamToml.dependencies.map { (name, element) ->
-            DependencyPackageInfo(name, GleamToml.Dependency.fromToml(element))
-        }
-
-        val devDependencies = gleamToml.devDependencies.map { (name, element) ->
-            DependencyPackageInfo(name, GleamToml.Dependency.fromToml(element))
-        }
-
         dependencyHandler.setContext(context)
 
-        if (dependencies.isNotEmpty()) graphBuilder.addDependencies(project.id, SCOPE_DEPENDENCIES, dependencies)
+        Scope.entries.forEach { scope ->
+            val dependencies = gleamToml.getScopeDependencies(scope).map { (name, element) ->
+                DependencyPackageInfo(name, GleamToml.Dependency.fromToml(element))
+            }
 
-        if (devDependencies.isNotEmpty()) {
-            graphBuilder.addDependencies(project.id, SCOPE_DEV_DEPENDENCIES, devDependencies)
+            graphBuilder.addDependencies(project.id, scope.descriptor, dependencies)
         }
 
         val projectWithScopes = project.copy(scopeNames = graphBuilder.scopesFor(project.id))
@@ -187,3 +179,14 @@ class Gleam internal constructor(
         )
     }
 }
+
+private enum class Scope(val descriptor: String) {
+    DEPENDENCIES("dependencies"),
+    DEV_DEPEDENCIES("dev-dependencies")
+}
+
+private fun GleamToml.getScopeDependencies(scope: Scope) =
+    when (scope) {
+        Scope.DEPENDENCIES -> dependencies
+        Scope.DEV_DEPEDENCIES -> devDependencies
+    }
