@@ -197,3 +197,9 @@ private fun GleamToml.getScopeDependencies(scope: Scope) =
         Scope.DEPENDENCIES -> dependencies
         Scope.DEV_DEPEDENCIES -> devDependencies
     }
+
+private val HOMEPAGE_KEYS = setOf("website", "home page", "homepage")
+
+private fun GleamToml.findHomepageUrl(): String {
+    return links.firstOrNull { it.title.lowercase() in HOMEPAGE_KEYS }?.href.orEmpty()
+}

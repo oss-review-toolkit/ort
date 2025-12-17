@@ -73,10 +73,6 @@ internal data class GleamToml(
     /** Links to project resources like homepage, documentation, etc. */
     val links: List<Link> = emptyList()
 ) {
-    companion object {
-        private val HOMEPAGE_KEYS = listOf("website", "home page", "homepage")
-    }
-
     /**
      * Represents a link in the gleam.toml links section.
      */
@@ -180,10 +176,4 @@ internal data class GleamToml(
                 }
         }
     }
-
-    /**
-     * Find the homepage URL from the links section.
-     * Searches for links with titles matching "Website", "Home page", or "Homepage" (case-insensitive).
-     */
-    fun findHomepageUrl(): String = links.firstOrNull { it.title.lowercase() in HOMEPAGE_KEYS }?.href.orEmpty()
 }
