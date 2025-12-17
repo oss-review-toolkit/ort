@@ -67,8 +67,8 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
 
     override fun toIdentifier(context: GleamProjectContext): Identifier {
         val type = when (pkg.source) {
-            SourceType.HEX -> "Hex"
-            SourceType.GIT -> "OTP"
+            SourceType.HEX -> PACKAGE_TYPE_HEX
+            SourceType.GIT -> PACKAGE_TYPE_OTP
             SourceType.LOCAL -> PROJECT_TYPE
         }
 
@@ -189,10 +189,10 @@ internal data class DependencyPackageInfo(
         when (dep) {
             is GleamToml.Dependency.Hex -> {
                 val version = resolveHexVersion(context).orEmpty()
-                Identifier("Hex", "", depName, version)
+                Identifier(PACKAGE_TYPE_HEX, "", depName, version)
             }
 
-            is GleamToml.Dependency.Git -> Identifier("OTP", "", depName, dep.ref.orEmpty())
+            is GleamToml.Dependency.Git -> Identifier(PACKAGE_TYPE_OTP, "", depName, dep.ref.orEmpty())
 
             is GleamToml.Dependency.Path -> {
                 Identifier(PROJECT_TYPE, "", depName, resolvePathVersion(context))
