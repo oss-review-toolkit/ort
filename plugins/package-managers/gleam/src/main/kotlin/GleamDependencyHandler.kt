@@ -34,7 +34,7 @@ internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
 
     fun setContext(context: GleamProjectContext) {
         this.context = context
-        this.manifestPackagesByName = context.manifest.packages.associateBy { it.name }
+        manifestPackagesByName = context.manifest.packages.associateBy { it.name }
     }
 
     private fun tryLock(dependency: GleamPackageInfo): GleamPackageInfo =
