@@ -30,11 +30,14 @@ import org.ossreviewtoolkit.model.utils.DependencyHandler
  */
 internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
     private lateinit var context: GleamProjectContext
-    private lateinit var manifestPackagesByName: Map<String, GleamManifest.Package>
+    private val manifestPackagesByName = mutableMapOf<String, GleamManifest.Package>()
 
     fun setContext(context: GleamProjectContext) {
         this.context = context
-        manifestPackagesByName = context.manifest.packages.associateBy { it.name }
+        manifestPackagesByName.apply {
+            clear()
+            context.manifest.packages.associateByTo(this) { it.name }
+        }
     }
 
     private fun tryLock(dependency: GleamPackageInfo): GleamPackageInfo =
