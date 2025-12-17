@@ -181,7 +181,7 @@ class Gleam internal constructor(
             declaredLicenses = gleamToml.licences.toSet(),
             vcs = vcs,
             vcsProcessed = vcsProcessed,
-            homepageUrl = gleamToml.findHomepageUrl().ifEmpty { vcsUrl },
+            homepageUrl = gleamToml.findHomepageUrl() ?: vcsUrl,
             scopeNames = emptySet()
         )
     }
@@ -200,6 +200,7 @@ private fun GleamToml.getScopeDependencies(scope: Scope) =
 
 private val HOMEPAGE_KEYS = setOf("website", "home page", "homepage")
 
-private fun GleamToml.findHomepageUrl(): String {
-    return links.firstOrNull { it.title.lowercase() in HOMEPAGE_KEYS }?.href.orEmpty()
-}
+private fun GleamToml.findHomepageUrl(): String? =
+    links.asSequence()
+        .filter { it.title.lowercase() in HOMEPAGE_KEYS }
+        .firstNotNullOfOrNull { it.href.ifEmpty { null } }
