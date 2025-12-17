@@ -69,7 +69,7 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
         val type = when (pkg.source) {
             SourceType.HEX -> "Hex"
             SourceType.GIT -> "OTP"
-            SourceType.LOCAL -> "Gleam"
+            SourceType.LOCAL -> PROJECT_TYPE
         }
 
         return Identifier(
@@ -151,7 +151,7 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
 
         if (!isValidLocalPath(context.analysisRoot, context.workingDir, pkg.localPath.orEmpty())) {
             issues += Issue(
-                source = "Gleam",
+                source = PROJECT_TYPE,
                 message = "Path dependency '${pkg.name}' with path '${pkg.localPath}' " +
                     "points outside the project directory.",
                 severity = Severity.WARNING
@@ -195,7 +195,7 @@ internal data class DependencyPackageInfo(
             is GleamToml.Dependency.Git -> Identifier("OTP", "", depName, dep.ref.orEmpty())
 
             is GleamToml.Dependency.Path -> {
-                Identifier("Gleam", "", depName, resolvePathVersion(context))
+                Identifier(PROJECT_TYPE, "", depName, resolvePathVersion(context))
             }
         }
 
@@ -296,7 +296,7 @@ internal data class DependencyPackageInfo(
 
         if (!isValidLocalPath(context.analysisRoot, context.workingDir, pathDep.path)) {
             issues += Issue(
-                source = "Gleam",
+                source = PROJECT_TYPE,
                 message = "Path dependency '$depName' with path '${pathDep.path}' " +
                     "points outside the project directory.",
                 severity = Severity.WARNING

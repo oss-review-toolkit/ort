@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.utils.common.div
 
 private const val GLEAM_TOML = "gleam.toml"
 private const val MANIFEST_TOML = "manifest.toml"
+internal const val PROJECT_TYPE = "Gleam"
 
 /**
  * The [Gleam](https://gleam.run/) package manager for Gleam.
@@ -55,7 +56,7 @@ private const val MANIFEST_TOML = "manifest.toml"
 class Gleam internal constructor(
     override val descriptor: PluginDescriptor = GleamFactory.descriptor,
     private val hexApiClientFactory: () -> HexApiClient
-) : PackageManager("Gleam") {
+) : PackageManager(PROJECT_TYPE) {
     constructor(descriptor: PluginDescriptor = GleamFactory.descriptor) : this(descriptor, ::HexApiClient)
 
     override val globsForDefinitionFiles = listOf(GLEAM_TOML)
