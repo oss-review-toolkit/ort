@@ -40,6 +40,8 @@ import org.ossreviewtoolkit.utils.common.div
 
 private const val GLEAM_TOML = "gleam.toml"
 private const val MANIFEST_TOML = "manifest.toml"
+internal const val PACKAGE_TYPE_OTP = "OTP"
+internal const val PACKAGE_TYPE_HEX = "Hex"
 internal const val PROJECT_TYPE = "Gleam"
 
 /**
