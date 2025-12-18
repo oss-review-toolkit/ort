@@ -183,7 +183,7 @@ internal data class DependencyReference(
  * A (de)serialized for the list of licenses: the JSON can contain either null, string or an array of string for this
  * property.
  */
-object StringListSerializer : KSerializer<List<String>> {
+private object StringListSerializer : KSerializer<List<String>> {
     override val descriptor = listSerialDescriptor<String>()
 
     override fun serialize(encoder: Encoder, value: List<String>) {
