@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
@@ -123,8 +122,7 @@ class Gleam internal constructor(
                 message = "Dependencies were resolved dynamically as no lockfile was present. " +
                     "Only the latest matching versions of direct dependencies were resolved without " +
                     "transitive dependency resolution. The results are not reproducible. " +
-                    "Consider running 'gleam deps download' to generate a manifest.toml lockfile.",
-                severity = Severity.WARNING
+                    "Consider running 'gleam deps download' to generate a manifest.toml lockfile."
             )
             GleamManifest.EMPTY
         }
