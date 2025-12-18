@@ -139,8 +139,8 @@ class Gleam internal constructor(
         dependencyHandler.setContext(context)
 
         Scope.entries.forEach { scope ->
-            val dependencies = gleamToml.getScopeDependencies(scope).map { (name, element) ->
-                DependencyPackageInfo(name, GleamToml.Dependency.fromToml(element))
+            val dependencies = gleamToml.getScopeDependencies(scope).map { (name, dep) ->
+                DependencyPackageInfo(name, dep)
             }
 
             graphBuilder.addDependencies(project.id, scope.descriptor, dependencies)
