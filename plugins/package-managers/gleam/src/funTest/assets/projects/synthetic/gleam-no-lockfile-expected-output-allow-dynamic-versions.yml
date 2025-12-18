@@ -121,4 +121,4 @@ issues:
     \ the latest matching versions of direct dependencies were resolved without transitive\
     \ dependency resolution. The results are not reproducible. Consider running 'gleam\
     \ deps download' to generate a manifest.toml lockfile."
-  severity: "WARNING"
+  severity: "ERROR"
