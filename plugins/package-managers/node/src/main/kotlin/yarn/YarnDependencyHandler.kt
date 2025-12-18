@@ -36,10 +36,10 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 internal class YarnDependencyHandler(
     private val moduleInfoResolver: ModuleInfoResolver
 ) : DependencyHandler<YarnListNode> {
+    private lateinit var workingDir: File
+    private val projectDirs = mutableSetOf<File>()
     private val packageJsonForModuleId = mutableMapOf<String, PackageJson>()
     private val moduleDirForModuleId = mutableMapOf<String, File>()
-    private val projectDirs = mutableSetOf<File>()
-    private lateinit var workingDir: File
 
     fun setContext(workingDir: File, moduleDirs: Set<File>, projectDirs: Set<File>) {
         this.workingDir = workingDir
