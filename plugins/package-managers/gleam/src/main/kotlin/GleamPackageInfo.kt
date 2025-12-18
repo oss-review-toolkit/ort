@@ -56,8 +56,8 @@ internal sealed interface GleamPackageInfo {
  * A dependency from the manifest.toml lockfile - already resolved.
  */
 internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) : GleamPackageInfo {
-    override val name: String get() = pkg.name
-    override val dependencies: List<String> get() = pkg.requirements
+    override val name = pkg.name
+    override val dependencies = pkg.requirements
 
     override fun isProject(context: GleamProjectContext): Boolean {
         if (pkg.source != SourceType.LOCAL) return false
@@ -173,11 +173,10 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
  * A dependency from gleam.toml - needs dynamic resolution.
  */
 internal data class DependencyPackageInfo(
-    private val depName: String,
+    override val name: String,
     private val dep: GleamToml.Dependency
 ) : GleamPackageInfo {
-    override val name: String get() = depName
-    override val dependencies: List<String> get() = emptyList()
+    override val dependencies = emptyList<String>()
 
     override fun isProject(context: GleamProjectContext): Boolean {
         val pathDep = dep as? GleamToml.Dependency.Path ?: return false
@@ -189,13 +188,13 @@ internal data class DependencyPackageInfo(
         when (dep) {
             is GleamToml.Dependency.Hex -> {
                 val version = resolveHexVersion(context).orEmpty()
-                Identifier(PACKAGE_TYPE_HEX, "", depName, version)
+                Identifier(PACKAGE_TYPE_HEX, "", name, version)
             }
 
-            is GleamToml.Dependency.Git -> Identifier(PACKAGE_TYPE_OTP, "", depName, dep.ref.orEmpty())
+            is GleamToml.Dependency.Git -> Identifier(PACKAGE_TYPE_OTP, "", name, dep.ref.orEmpty())
 
             is GleamToml.Dependency.Path -> {
-                Identifier(PROJECT_TYPE, "", depName, resolvePathVersion(context))
+                Identifier(PROJECT_TYPE, "", name, resolvePathVersion(context))
             }
         }
 
@@ -219,18 +218,18 @@ internal data class DependencyPackageInfo(
 
     private fun resolveHexVersion(context: GleamProjectContext): String? {
         val hexDep = dep as? GleamToml.Dependency.Hex ?: return null
-        val packageInfo = context.hexClient.getPackageInfo(depName) ?: return null
+        val packageInfo = context.hexClient.getPackageInfo(name) ?: return null
         val versions = packageInfo.releases.map { it.version }
         return findMatchingVersion(versions, hexDep.version)
     }
 
     private fun createHexPackage(context: GleamProjectContext): Package {
         val hexDep = dep as GleamToml.Dependency.Hex
-        val packageInfo = context.hexClient.getPackageInfo(depName)
+        val packageInfo = context.hexClient.getPackageInfo(name)
         val versions = packageInfo?.releases?.map { it.version }.orEmpty()
         val version = findMatchingVersion(versions, hexDep.version).orEmpty()
         val checksum = version.takeIf { it.isNotEmpty() }?.let {
-            context.hexClient.getReleaseInfo(depName, it)?.checksum
+            context.hexClient.getReleaseInfo(name, it)?.checksum
         }
 
         val repositoryUrl = packageInfo?.meta?.links?.get("Repository").orEmpty()
@@ -242,11 +241,11 @@ internal data class DependencyPackageInfo(
             authors = packageInfo?.let { resolveAuthors(it.owners, context.hexClient) }.orEmpty(),
             declaredLicenses = packageInfo?.meta?.licenses?.toSet().orEmpty(),
             description = packageInfo?.meta?.description.orEmpty(),
-            homepageUrl = packageInfo?.meta?.links?.get("Website") ?: "https://hex.pm/packages/$depName",
+            homepageUrl = packageInfo?.meta?.links?.get("Website") ?: "https://hex.pm/packages/$name",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = checksum?.let {
                 RemoteArtifact(
-                    url = "https://repo.hex.pm/tarballs/$depName-$version.tar",
+                    url = "https://repo.hex.pm/tarballs/$name-$version.tar",
                     hash = Hash(it, HashAlgorithm.SHA256)
                 )
             } ?: RemoteArtifact.EMPTY,
@@ -297,8 +296,7 @@ internal data class DependencyPackageInfo(
         if (!isValidLocalPath(context.analysisRoot, context.workingDir, pathDep.path)) {
             issues += Issue(
                 source = PROJECT_TYPE,
-                message = "Path dependency '$depName' with path '${pathDep.path}' " +
-                    "points outside the project directory.",
+                message = "Path dependency '$name' with path '${pathDep.path}' points outside the project directory.",
                 severity = Severity.WARNING
             )
 
