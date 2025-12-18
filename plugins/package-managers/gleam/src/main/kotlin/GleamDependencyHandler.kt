@@ -34,6 +34,7 @@ internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
 
     fun setContext(context: GleamProjectContext) {
         this.context = context
+
         manifestPackagesByName.apply {
             clear()
             context.manifest.packages.associateByTo(this) { it.name }

@@ -34,9 +34,9 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 internal class Yarn2DependencyHandler(
     private val moduleInfoResolver: ModuleInfoResolver
 ) : DependencyHandler<PackageInfo> {
+    private lateinit var workingDir: File
     private val packageJsonForModuleId = mutableMapOf<String, PackageJson>()
     private val packageInfoForLocator = mutableMapOf<String, PackageInfo>()
-    private lateinit var workingDir: File
 
     fun setContext(
         workingDir: File,
