@@ -21,11 +21,15 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
 import java.io.File
 
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 import net.peanuuutz.tomlkt.Toml
-import net.peanuuutz.tomlkt.TomlElement
+import net.peanuuutz.tomlkt.TomlDecoder
 import net.peanuuutz.tomlkt.TomlLiteral
 import net.peanuuutz.tomlkt.TomlTable
 import net.peanuuutz.tomlkt.asTomlLiteral
@@ -64,11 +68,11 @@ internal data class GleamToml(
     val target: String? = null,
 
     /** The project dependencies as a map of package names to version constraints or dependency objects. */
-    val dependencies: Map<String, TomlElement> = emptyMap(),
+    val dependencies: Map<String, Dependency> = emptyMap(),
 
     /** Development-only dependencies. */
     @SerialName("dev-dependencies")
-    val devDependencies: Map<String, TomlElement> = emptyMap(),
+    val devDependencies: Map<String, Dependency> = emptyMap(),
 
     /** Links to project resources like homepage, documentation, etc. */
     val links: List<Link> = emptyList()
@@ -142,6 +146,7 @@ internal data class GleamToml(
      * - A path dependency (object with "path" field)
      * - A git dependency (object with "git" field and optional "ref")
      */
+    @Serializable(DependencySerializer::class)
     sealed interface Dependency {
         /** A dependency from hex.pm with a version constraint. */
         data class Hex(val version: String) : Dependency
@@ -151,29 +156,38 @@ internal data class GleamToml(
 
         /** A git repository dependency. */
         data class Git(val url: String, val ref: String? = null) : Dependency
+    }
+}
 
-        companion object {
-            /**
-             * Parse a TOML element into a Dependency.
-             */
-            fun fromToml(element: TomlElement): Dependency =
-                when (element) {
-                    is TomlLiteral -> Hex(element.asTomlLiteral().content)
-                    is TomlTable -> {
-                        val table = element.asTomlTable()
-                        when {
-                            "path" in table -> Path(table.getValue("path").asTomlLiteral().content)
-                            "git" in table -> Git(
-                                url = table.getValue("git").asTomlLiteral().content,
-                                ref = table["ref"]?.asTomlLiteral()?.content
-                            )
+private object DependencySerializer : KSerializer<GleamToml.Dependency> {
+    override val descriptor = PolymorphicSerializer(GleamToml.Dependency::class).descriptor
 
-                            else -> throw IllegalArgumentException("Unknown dependency format: $element")
-                        }
-                    }
+    /**
+     * Parse a TOML element into a Dependency.
+     */
+    override fun deserialize(decoder: Decoder): GleamToml.Dependency {
+        require(decoder is TomlDecoder)
+
+        return when (val element = decoder.decodeTomlElement()) {
+            is TomlLiteral -> GleamToml.Dependency.Hex(element.asTomlLiteral().content)
+            is TomlTable -> {
+                val table = element.asTomlTable()
+                when {
+                    "path" in table -> GleamToml.Dependency.Path(table.getValue("path").asTomlLiteral().content)
+                    "git" in table -> GleamToml.Dependency.Git(
+                        url = table.getValue("git").asTomlLiteral().content,
+                        ref = table["ref"]?.asTomlLiteral()?.content
+                    )
 
                     else -> throw IllegalArgumentException("Unknown dependency format: $element")
                 }
+            }
+
+            else -> throw IllegalArgumentException("Unknown dependency format: $element")
         }
+    }
+
+    override fun serialize(encoder: Encoder, value: GleamToml.Dependency) {
+        throw NotImplementedError("${descriptor.serialName} can only be deserialized.")
     }
 }
