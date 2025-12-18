@@ -55,8 +55,8 @@ class GleamFunTest : StringSpec({
     afterSpec { server.stop() }
 
     "Project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gleam-project-with-lockfile/gleam.toml")
-        val expectedResultFile = getAssetFile("projects/synthetic/gleam-project-with-lockfile-expected-output.yml")
+        val definitionFile = getAssetFile("projects/synthetic/project-with-lockfile/gleam.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/project-with-lockfile-expected-output.yml")
 
         val result = createGleam().resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -64,8 +64,8 @@ class GleamFunTest : StringSpec({
     }
 
     "Project without lockfile fails if 'allowDynamicVersions' is disabled" {
-        val definitionFile = getAssetFile("projects/synthetic/gleam-no-lockfile/gleam.toml")
-        val expectedResultFile = getAssetFile("projects/synthetic/gleam-no-lockfile-expected-output.yml")
+        val definitionFile = getAssetFile("projects/synthetic/no-lockfile/gleam.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/no-lockfile-expected-output.yml")
 
         val result = createGleam().resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -73,9 +73,9 @@ class GleamFunTest : StringSpec({
     }
 
     "Project without lockfile succeeds if 'allowDynamicVersions' is enabled" {
-        val definitionFile = getAssetFile("projects/synthetic/gleam-no-lockfile/gleam.toml")
+        val definitionFile = getAssetFile("projects/synthetic/no-lockfile/gleam.toml")
         val expectedResultFile =
-            getAssetFile("projects/synthetic/gleam-no-lockfile-expected-output-allow-dynamic-versions.yml")
+            getAssetFile("projects/synthetic/no-lockfile-expected-output-allow-dynamic-versions.yml")
 
         val result = createGleam().resolveSingleProject(
             definitionFile,
@@ -87,8 +87,8 @@ class GleamFunTest : StringSpec({
     }
 
     "Project with no dependencies is resolved correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gleam-no-deps/gleam.toml")
-        val expectedResultFile = getAssetFile("projects/synthetic/gleam-no-deps-expected-output.yml")
+        val definitionFile = getAssetFile("projects/synthetic/no-deps/gleam.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/no-deps-expected-output.yml")
 
         val result = createGleam().resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -96,8 +96,8 @@ class GleamFunTest : StringSpec({
     }
 
     "Project with empty dependency sections is resolved correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gleam-empty-deps/gleam.toml")
-        val expectedResultFile = getAssetFile("projects/synthetic/gleam-empty-deps-expected-output.yml")
+        val definitionFile = getAssetFile("projects/synthetic/empty-deps/gleam.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/empty-deps-expected-output.yml")
 
         val result = createGleam().resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -124,11 +124,11 @@ class GleamFunTest : StringSpec({
     }
 
     "Multi-project with cross-directory path dependencies are detected correctly" {
-        val projectDir = getAssetFile("projects/synthetic/gleam-multi-project")
+        val projectDir = getAssetFile("projects/synthetic/multi-project")
         val definitionFileParent = projectDir / "gleam.toml"
         val definitionFileChild = projectDir / "child" / "gleam.toml"
         val definitionFileSibling = projectDir / "sibling" / "gleam.toml"
-        val expectedResultFile = getAssetFile("projects/synthetic/gleam-multi-project-expected-output.yml")
+        val expectedResultFile = getAssetFile("projects/synthetic/multi-project-expected-output.yml")
 
         val result = analyze(projectDir, packageManagers = setOf(GleamFactory())).getAnalyzerResult()
 
