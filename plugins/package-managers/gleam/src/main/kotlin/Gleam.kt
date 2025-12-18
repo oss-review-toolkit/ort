@@ -138,7 +138,9 @@ class Gleam internal constructor(
 
         dependencyHandler.setContext(context)
 
-        Scope.entries.forEach { scope ->
+        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
+
+        scopes.forEach { scope ->
             val dependencies = gleamToml.getScopeDependencies(scope).map { (name, dep) ->
                 DependencyPackageInfo(name, dep)
             }
@@ -187,7 +189,9 @@ class Gleam internal constructor(
 
 private enum class Scope(val descriptor: String) {
     DEPENDENCIES("dependencies"),
-    DEV_DEPEDENCIES("dev-dependencies")
+    DEV_DEPEDENCIES("dev-dependencies");
+
+    fun isExcluded(excludes: Excludes) = excludes.isScopeExcluded(descriptor)
 }
 
 private fun GleamToml.getScopeDependencies(scope: Scope) =
