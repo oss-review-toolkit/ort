@@ -49,3 +49,5 @@ dependencies {
     implementation(libs.plugin.ksp)
     implementation(libs.plugin.mavenPublish)
 }
+
+version = rootProject.version
