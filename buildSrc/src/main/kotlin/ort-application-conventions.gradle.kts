@@ -25,11 +25,6 @@ import java.nio.file.Files
 
 import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
 
-import org.gradle.accessors.dm.LibrariesForLibs
-
-private val Project.libs: LibrariesForLibs
-    get() = extensions.getByType()
-
 val javaLanguageVersion: String by project
 
 plugins {
