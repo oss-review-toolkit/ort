@@ -55,8 +55,8 @@ class GleamFunTest : StringSpec({
     afterSpec { server.stop() }
 
     "Project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gleam/gleam.toml")
-        val expectedResultFile = getAssetFile("projects/synthetic/gleam-expected-output.yml")
+        val definitionFile = getAssetFile("projects/synthetic/gleam-project-with-lockfile/gleam.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/gleam-project-with-lockfile-expected-output.yml")
 
         val result = createGleam().resolveSingleProject(definitionFile, resolveScopes = true)
 
