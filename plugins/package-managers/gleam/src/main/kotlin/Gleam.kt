@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
@@ -112,18 +113,7 @@ class Gleam internal constructor(
 
         val project = createProject(definitionFile, gleamToml)
 
-        val manifest = if (manifestFile.isFile) {
-            parseManifest(manifestFile)
-        } else if (!hasDependencies) {
-            GleamManifest.EMPTY
-        } else {
-            issues += Issue(
-                source = projectType,
-                message = "No lockfile found. No dependencies were resolved. " +
-                    "Run 'gleam deps download' to generate a manifest.toml lockfile."
-            )
-            GleamManifest.EMPTY
-        }
+        val manifest = resolveManifest(manifestFile, hasDependencies, workingDir, issues)
 
         val context = GleamProjectContext(
             hexClient = hexApiClientFactory(),
@@ -158,6 +148,47 @@ class Gleam internal constructor(
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+
+    private fun resolveManifest(
+        manifestFile: File,
+        hasDependencies: Boolean,
+        workingDir: File,
+        issues: MutableList<Issue>
+    ): GleamManifest =
+        when {
+            manifestFile.isFile -> parseManifest(manifestFile)
+
+            !hasDependencies -> GleamManifest.EMPTY
+
+            !GleamCommand.isInPath() -> {
+                issues += Issue(
+                    source = projectType,
+                    message = "No lockfile found and the 'gleam' command is not available in PATH. " +
+                        "No dependencies were resolved."
+                )
+                GleamManifest.EMPTY
+            }
+
+            else -> {
+                val process = GleamCommand.run(workingDir, "deps", "download")
+                if (process.isSuccess) {
+                    issues += Issue(
+                        source = projectType,
+                        message = "No lockfile found. Dependencies were resolved by running 'gleam deps download'. " +
+                            "The results may not be reproducible.",
+                        severity = Severity.WARNING
+                    )
+                    parseManifest(manifestFile)
+                } else {
+                    issues += Issue(
+                        source = projectType,
+                        message = "No lockfile found and running 'gleam deps download' failed with exit code " +
+                            "${process.exitValue}. No dependencies were resolved.\n${process.stderr}"
+                    )
+                    GleamManifest.EMPTY
+                }
+            }
+        }
 
     private fun createProject(definitionFile: File, gleamToml: GleamToml): Project {
         val workingDir = definitionFile.parentFile
