@@ -153,6 +153,13 @@ image_build haskell ort/haskell "$HASKELL_STACK_VERSION" \
     --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
     "$@"
 
+# Gleam
+image_build gleam ort/gleam "$GLEAM_VERSION" \
+    --build-arg GLEAM_VERSION="$GLEAM_VERSION" \
+    --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
+    --build-context "gobuild=docker-image://${DOCKER_IMAGE_ROOT}/ort/golang:latest" \
+    "$@"
+
 # Main runtime ORT image
 image_build run ort "$ORT_VERSION" \
     --build-arg ORT_VERSION="$ORT_VERSION" \
@@ -164,4 +171,5 @@ image_build run ort "$ORT_VERSION" \
     --build-context "dart=docker-image://${DOCKER_IMAGE_ROOT}/ort/dart:latest" \
     --build-context "haskell=docker-image://${DOCKER_IMAGE_ROOT}/ort/haskell:latest" \
     --build-context "scala=docker-image://${DOCKER_IMAGE_ROOT}/ort/scala:latest" \
+    --build-context "gleam=docker-image://${DOCKER_IMAGE_ROOT}/ort/gleam:latest" \
     "$@"
