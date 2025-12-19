@@ -67,5 +67,8 @@ internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
             is DependencyPackageInfo -> manifestPackagesByName[name]?.let {
                 ManifestPackageInfo(it)
             } ?: this
+            // TODO: This is a dependency entry from a 'gleam.toml' which does not have a corresponding
+            // entry in the lockfile. This case happens in case the lockfile is absent and needs to be
+            // improved, see #11245.
         }
 }
