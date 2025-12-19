@@ -471,6 +471,39 @@ FROM scratch AS ortbin
 COPY --from=ortbuild /opt/ort /opt/ort
 
 #------------------------------------------------------------------------
+# Gleam
+FROM base AS gleambuild
+
+ARG GLEAM_VERSION
+
+ENV GLEAM_HOME=/opt/gleam
+ENV GOBIN=/opt/go/bin
+
+# Install cosign via go install for signature verification
+COPY --from=gobuild /opt/go /opt/go
+RUN $GOBIN/go install github.com/sigstore/cosign/v2/cmd/cosign@latest && chmod a+x $GOBIN/cosign
+
+# Download Gleam binary and sigstore bundle, then verify
+RUN mkdir -p $GLEAM_HOME/bin \
+    && ARCH=$(arch) \
+    && curl -L "https://github.com/gleam-lang/gleam/releases/download/v${GLEAM_VERSION}/gleam-v${GLEAM_VERSION}-${ARCH}-unknown-linux-musl.tar.gz" \
+       -o /tmp/gleam.tar.gz \
+    && curl -L "https://github.com/gleam-lang/gleam/releases/download/v${GLEAM_VERSION}/gleam-v${GLEAM_VERSION}-${ARCH}-unknown-linux-musl.tar.gz.sigstore" \
+       -o /tmp/gleam.sigstore \
+    && $GOBIN/cosign verify-blob \
+       --bundle /tmp/gleam.sigstore \
+       --certificate-identity-regexp "^https://github.com/gleam-lang/gleam/.*@refs/tags/v${GLEAM_VERSION}$" \
+       --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+       /tmp/gleam.tar.gz \
+    && tar -xzf /tmp/gleam.tar.gz -C $GLEAM_HOME/bin \
+    && chmod a+x $GLEAM_HOME/bin/gleam \
+    && rm /tmp/gleam.tar.gz /tmp/gleam.sigstore \
+    && $GLEAM_HOME/bin/gleam --version
+
+FROM scratch AS gleam
+COPY --from=gleambuild /opt/gleam /opt/gleam
+
+#------------------------------------------------------------------------
 # Container with minimal selection of supported package managers.
 FROM base AS minimal-tools
 
@@ -590,6 +623,11 @@ RUN curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSI
     unzip askalono-Linux.zip -d /opt/askalono
 
 ENV PATH=$PATH:/opt/askalono
+
+# Gleam
+ENV GLEAM_HOME=/opt/gleam
+ENV PATH=$PATH:$GLEAM_HOME/bin
+COPY --from=gleam --chown=$USER:$USER $GLEAM_HOME $GLEAM_HOME
 
 #------------------------------------------------------------------------
 # Runtime container with minimal selection of supported package managers pre-installed.

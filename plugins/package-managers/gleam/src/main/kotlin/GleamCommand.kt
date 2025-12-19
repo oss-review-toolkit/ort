@@ -17,28 +17,16 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-plugin-conventions")
+package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
-    // Apply third-party plugins.
-    alias(libs.plugins.kotlinSerialization)
-}
+import java.io.File
 
-dependencies {
-    api(projects.analyzer)
-    api(projects.model)
+import org.ossreviewtoolkit.utils.common.CommandLineTool
 
-    implementation(projects.downloader)
-    implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
+internal object GleamCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "gleam"
 
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.serialization.toml)
+    override fun getVersionArguments() = "--version"
 
-    ksp(projects.analyzer)
-
-    funTestImplementation(testFixtures(projects.analyzer))
-    funTestImplementation(libs.wiremock)
+    override fun transformVersion(output: String) = output.removePrefix("gleam ").trim()
 }
