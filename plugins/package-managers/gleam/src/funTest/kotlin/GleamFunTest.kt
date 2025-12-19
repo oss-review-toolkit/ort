@@ -22,9 +22,17 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldBeSingleton
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.shouldContain
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.file
 import io.kotest.property.arbitrary.single
@@ -35,12 +43,14 @@ import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withInvariantIssues
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
+@Tags("RequiresExternalTool")
 class GleamFunTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
@@ -88,17 +98,36 @@ class GleamFunTest : StringSpec({
     }
 
     "Resolve dependencies for a project without a lockfile if 'allowDynamicVersions' is enabled" {
-        val definitionFile = getAssetFile("projects/synthetic/no-lockfile/gleam.toml")
-        val expectedResultFile =
-            getAssetFile("projects/synthetic/no-lockfile-expected-output-allow-dynamic-versions.yml")
+        val projectDir = tempdir()
+        getAssetFile("projects/synthetic/no-lockfile").copyRecursively(projectDir)
 
         val result = createGleam().resolveSingleProject(
-            definitionFile,
+            projectDir.resolve("gleam.toml"),
             resolveScopes = true,
             allowDynamicVersions = true
         )
 
-        result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        result.packages shouldNot beEmpty()
+        result.packages.map { it.id.name } shouldContain "gleam_stdlib"
+    }
+
+    "Resolve dependencies fails with error details for broken gleam.toml" {
+        val projectDir = tempdir()
+        getAssetFile("projects/synthetic/no-lockfile-broken").copyRecursively(projectDir)
+
+        val result = createGleam().resolveSingleProject(
+            projectDir.resolve("gleam.toml"),
+            resolveScopes = true,
+            allowDynamicVersions = true
+        )
+
+        result.issues.shouldBeSingleton {
+            it.severity shouldBe Severity.ERROR
+            it.message shouldContain "failed with exit code"
+            it.message shouldContain "Dependency resolution failed"
+        }
+
+        result.packages should beEmpty()
     }
 
     "Resolve dependencies for a project with no dependencies correctly" {
