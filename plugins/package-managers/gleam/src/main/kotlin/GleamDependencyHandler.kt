@@ -41,30 +41,31 @@ internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
         }
     }
 
-    private fun getManifestPackageInfoOrDefault(dependency: GleamPackageInfo): GleamPackageInfo =
-        when (dependency) {
-            is ManifestPackageInfo -> dependency
-            is DependencyPackageInfo -> manifestPackagesByName[dependency.name]?.let {
-                ManifestPackageInfo(it)
-            } ?: dependency
-        }
-
     override fun identifierFor(dependency: GleamPackageInfo): Identifier =
-        getManifestPackageInfoOrDefault(dependency).toIdentifier(context)
+        dependency.getManifestPackageInfoOrDefault().toIdentifier(context)
 
     override fun dependenciesFor(dependency: GleamPackageInfo): List<GleamPackageInfo> =
-        getManifestPackageInfoOrDefault(dependency)
+        dependency
+            .getManifestPackageInfoOrDefault()
             .dependencies
             .mapNotNull { manifestPackagesByName[it] }
             .map { ManifestPackageInfo(it) }
 
     override fun linkageFor(dependency: GleamPackageInfo): PackageLinkage =
-        if (getManifestPackageInfoOrDefault(dependency).isProject(context)) {
+        if (dependency.getManifestPackageInfoOrDefault().isProject(context)) {
             PackageLinkage.PROJECT_DYNAMIC
         } else {
             PackageLinkage.DYNAMIC
         }
 
     override fun createPackage(dependency: GleamPackageInfo, issues: MutableCollection<Issue>): Package? =
-        getManifestPackageInfoOrDefault(dependency).toOrtPackage(context, issues)
+        dependency.getManifestPackageInfoOrDefault().toOrtPackage(context, issues)
+
+    private fun GleamPackageInfo.getManifestPackageInfoOrDefault(): GleamPackageInfo =
+        when (this) {
+            is ManifestPackageInfo -> this
+            is DependencyPackageInfo -> manifestPackagesByName[name]?.let {
+                ManifestPackageInfo(it)
+            } ?: this
+        }
 }
