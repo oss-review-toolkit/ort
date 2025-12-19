@@ -41,34 +41,16 @@ internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
         }
     }
 
-    override fun identifierFor(dependency: GleamPackageInfo): Identifier =
-        dependency.getManifestPackageInfoOrDefault().toIdentifier(context)
+    override fun identifierFor(dependency: GleamPackageInfo): Identifier = dependency.toIdentifier(context)
 
     override fun dependenciesFor(dependency: GleamPackageInfo): List<GleamPackageInfo> =
-        dependency
-            .getManifestPackageInfoOrDefault()
-            .dependencies
+        dependency.dependencies
             .mapNotNull { manifestPackagesByName[it] }
             .map { ManifestPackageInfo(it) }
 
     override fun linkageFor(dependency: GleamPackageInfo): PackageLinkage =
-        if (dependency.getManifestPackageInfoOrDefault().isProject(context)) {
-            PackageLinkage.PROJECT_DYNAMIC
-        } else {
-            PackageLinkage.DYNAMIC
-        }
+        if (dependency.isProject(context)) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: GleamPackageInfo, issues: MutableCollection<Issue>): Package? =
-        dependency.getManifestPackageInfoOrDefault().toOrtPackage(context, issues)
-
-    private fun GleamPackageInfo.getManifestPackageInfoOrDefault(): GleamPackageInfo =
-        when (this) {
-            is ManifestPackageInfo -> this
-            is DependencyPackageInfo -> manifestPackagesByName[name]?.let {
-                ManifestPackageInfo(it)
-            } ?: this
-            // TODO: This is a dependency entry from a 'gleam.toml' which does not have a corresponding
-            // entry in the lockfile. This case happens in case the lockfile is absent and needs to be
-            // improved, see #11245.
-        }
+        dependency.toOrtPackage(context, issues)
 }
