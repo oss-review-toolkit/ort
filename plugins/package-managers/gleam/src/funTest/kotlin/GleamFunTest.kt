@@ -87,7 +87,7 @@ class GleamFunTest : StringSpec({
         result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Resolve dependencies for a project without a lockfile correctly if 'allowDynamicVersions' is enabled" {
+    "Resolve dependencies for a project without a lockfile if 'allowDynamicVersions' is enabled" {
         val definitionFile = getAssetFile("projects/synthetic/no-lockfile/gleam.toml")
         val expectedResultFile =
             getAssetFile("projects/synthetic/no-lockfile-expected-output-allow-dynamic-versions.yml")

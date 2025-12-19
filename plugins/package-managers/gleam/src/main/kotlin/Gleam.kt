@@ -119,10 +119,8 @@ class Gleam internal constructor(
         } else {
             issues += Issue(
                 source = projectType,
-                message = "Dependencies were resolved dynamically as no lockfile was present. " +
-                    "Only the latest matching versions of direct dependencies were resolved without " +
-                    "transitive dependency resolution. The results are not reproducible. " +
-                    "Consider running 'gleam deps download' to generate a manifest.toml lockfile."
+                message = "No lockfile found. No dependencies were resolved. " +
+                    "Run 'gleam deps download' to generate a manifest.toml lockfile."
             )
             GleamManifest.EMPTY
         }
@@ -141,9 +139,10 @@ class Gleam internal constructor(
         val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
 
         scopes.forEach { scope ->
-            val dependencies = gleamToml.getScopeDependencies(scope).map { (name, dep) ->
-                DependencyPackageInfo(name, dep)
-            }
+            val directDepNames = gleamToml.getScopeDependencies(scope).keys
+            val dependencies = manifest.packages
+                .filter { it.name in directDepNames }
+                .map { ManifestPackageInfo(it) }
 
             graphBuilder.addDependencies(project.id, scope.descriptor, dependencies)
         }

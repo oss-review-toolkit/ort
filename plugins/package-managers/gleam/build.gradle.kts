@@ -36,7 +36,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.toml)
-    implementation(libs.semver4j)
 
     ksp(projects.analyzer)
 
