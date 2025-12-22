@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-
 import org.ossreviewtoolkit.clients.fossid.model.IntBooleanDeserializer
+
+import tools.jackson.databind.annotation.JsonDeserialize
 
 data class File(
     val id: String?,

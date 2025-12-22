@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.utils
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.ByteArrayInputStream
 import java.io.File
 
@@ -36,6 +34,8 @@ import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+
+import tools.jackson.module.kotlin.readValue
 
 /**
  * A resolver for [FileList]s that are associated with [KnownProvenance]s.

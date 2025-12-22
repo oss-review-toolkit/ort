@@ -21,13 +21,6 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.MapperFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.module.kotlin.jsonMapper
-import com.fasterxml.jackson.module.kotlin.kotlinModule
-
 import java.util.concurrent.TimeUnit
 
 import okhttp3.Interceptor
@@ -61,6 +54,13 @@ import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
+import tools.jackson.databind.DeserializationFeature
+import tools.jackson.databind.MapperFeature
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.PropertyNamingStrategies
+import tools.jackson.module.kotlin.jsonMapper
+import tools.jackson.module.kotlin.kotlinModule
+
 private const val READ_TIMEOUT_HEADER = "READ_TIMEOUT"
 
 interface FossIdRestService {
@@ -75,7 +75,8 @@ interface FossIdRestService {
             enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
             configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             addModule(
-                kotlinModule().addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer())
+                kotlinModule()
+                    .addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer())
                     .addDeserializer(PolymorphicInt::class.java, PolymorphicIntDeserializer())
                     .addDeserializer(PolymorphicData::class.java, PolymorphicDataDeserializer())
             )
