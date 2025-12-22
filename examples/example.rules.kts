@@ -225,7 +225,7 @@ fun RuleSet.highSeverityVulnerabilityInPackageRule() = packageRule("HIGH_SEVERIT
     issue(
         Severity.ERROR,
         "The package ${pkg.metadata.id.toCoordinates()} has a vulnerability with $scoringSystem severity > " +
-            "${scoreThreshold}.",
+            "$scoreThreshold.",
         howToFixDefault()
     )
 }
