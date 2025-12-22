@@ -69,8 +69,7 @@ private fun createAnalyzerResult(): OrtResult {
     val vcs = VcsInfo(
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort-test-data-scanner.git",
-        revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec",
-        path = ""
+        revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     )
 
     val pkg = Package.EMPTY.copy(
