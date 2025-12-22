@@ -16,6 +16,7 @@
         "GoMod",
         "Gradle",
         "GradleInspector",
+        "Ivy",
         "Maven",
         "NPM",
         "NuGet",
