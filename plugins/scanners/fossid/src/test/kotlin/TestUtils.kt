@@ -598,7 +598,7 @@ internal fun FossIdServiceWithVersion.expectRemoveUploadedContent(scanCode: Stri
 }
 
 /**
- * Prepare this service mock to expect a request to upload a file for the given [scanCode]. The file nane is not
+ * Prepare this service mock to expect a request to upload a file for the given [scanCode]. The filename is not
  * required as the FossID scanner generates a unique name for each file.
  */
 internal fun FossIdServiceWithVersion.expectUploadFile(scanCode: String): FossIdServiceWithVersion {
@@ -609,7 +609,7 @@ internal fun FossIdServiceWithVersion.expectUploadFile(scanCode: String): FossId
 }
 
 /**
- * Prepare this service mock to expect a request to extract archives for the given [scanCode]. The file nane is not
+ * Prepare this service mock to expect a request to extract archives for the given [scanCode]. The filename is not
  * required as the FossID scanner generates a unique name for each file.
  */
 internal fun FossIdServiceWithVersion.expectExtractArchives(scanCode: String): FossIdServiceWithVersion {
