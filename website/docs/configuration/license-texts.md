@@ -3,7 +3,7 @@
 Several ORT reporters can include license texts in their output.
 For example, the [PlainTextTemplateReporter](reporter-templates.md#plain-text-templates) can include license texts in the generated open source notices.
 
-ORT suports two main ways to get license texts: [License Fact Providers](#license-fact-providers) and [License File Archives](#license-file-archives).
+ORT supports two main ways to get license texts: [License Fact Providers](#license-fact-providers) and [License File Archives](#license-file-archives).
 
 ## License Fact Providers
 
