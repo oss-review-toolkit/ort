@@ -46,7 +46,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
     fun setContext(lockfile: Lockfile) {
         this.lockfile = lockfile
 
-        // The cache entries are not re-usable across definition files because the keys do not contain the
+        // The cache entries are not reusable across definition files because the keys do not contain the
         // dependency version. If non-default Specs repositories were supported, then these would also need to
         // be part of the key. As that's more complicated and not giving much performance prefer the more memory
         // consumption friendly option of clearing the cache.
