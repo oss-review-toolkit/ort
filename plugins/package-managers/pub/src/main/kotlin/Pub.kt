@@ -90,9 +90,9 @@ private val ALL_PUB_SCOPE_NAMES = setOf(SCOPE_NAME_DEPENDENCIES, SCOPE_NAME_DEV_
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
 private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 
-internal class PubCommand(private val flutterAbsolutePath: File) : CommandLineTool {
+internal class PubCommand(private val flutterAbsolutePath: File?) : CommandLineTool {
     @Suppress("unused") // The no-arg constructor is required by the requirements command.
-    constructor() : this(File(""))
+    constructor() : this(null)
 
     override fun getVersion(workingDir: File?): String {
         val result = ProcessCapture(workingDir, command(workingDir), getVersionArguments()).requireSuccess()
@@ -105,7 +105,10 @@ internal class PubCommand(private val flutterAbsolutePath: File) : CommandLineTo
     override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
 
     override fun command(workingDir: File?): String =
-        if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$dartCommand" else dartCommand
+        when {
+            flutterAbsolutePath?.isDirectory == true -> "$flutterAbsolutePath${File.separator}$dartCommand"
+            else -> dartCommand
+        }
 
     private fun commandPub(): String = "${command()} pub"
 
@@ -802,11 +805,10 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         PackageManagerResult(projectResults.filterProjectPackages())
 }
 
-private fun commandFlutter(flutterAbsolutePath: File): String =
-    if (flutterAbsolutePath.isDirectory) {
-        "$flutterAbsolutePath${File.separator}$flutterCommand pub"
-    } else {
-        "$flutterCommand pub"
+private fun commandFlutter(flutterAbsolutePath: File?): String =
+    when {
+        flutterAbsolutePath?.isDirectory == true -> "$flutterAbsolutePath${File.separator}$flutterCommand pub"
+        else -> "$flutterCommand pub"
     }
 
 private val PackageInfo.isProject: Boolean
