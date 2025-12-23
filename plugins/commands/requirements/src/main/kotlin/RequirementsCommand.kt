@@ -125,21 +125,21 @@ class RequirementsCommand(
 
         classes.filterNot {
             Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
-        }.sortedBy { it.simpleName }.forEach {
+        }.sortedBy { it.simpleName }.forEach { cliClass ->
             runCatching {
                 fun Class<out Any>.isBundledPlugin(type: String) =
                     packageName.startsWith("org.ossreviewtoolkit.plugins.$type.")
 
-                val kotlinObject = it.kotlin.objectInstance
+                val kotlinObject = cliClass.kotlin.objectInstance
 
                 val (instance, category) = when {
                     kotlinObject != null -> {
-                        logger.debug { "$it is a Kotlin object." }
+                        logger.debug { "$cliClass is a Kotlin object." }
 
                         val category = when {
-                            it.isBundledPlugin("packagemanagers") -> "PackageManager"
-                            it.isBundledPlugin("scanners") -> "Scanner"
-                            it.isBundledPlugin("versioncontrolsystems") -> "VersionControlSystem"
+                            cliClass.isBundledPlugin("packagemanagers") -> "PackageManager"
+                            cliClass.isBundledPlugin("scanners") -> "Scanner"
+                            cliClass.isBundledPlugin("versioncontrolsystems") -> "VersionControlSystem"
                             else -> "Other tool"
                         }
 
@@ -147,8 +147,8 @@ class RequirementsCommand(
                     }
 
                     else -> {
-                        logger.debug { "Trying to instantiate $it without any arguments." }
-                        it.getDeclaredConstructor().newInstance() to "Other tool"
+                        logger.debug { "Trying to instantiate $cliClass without any arguments." }
+                        cliClass.getDeclaredConstructor().newInstance() to "Other tool"
                     }
                 }
 
@@ -156,7 +156,7 @@ class RequirementsCommand(
                     tools.getOrPut(category) { mutableListOf() } += instance
                 }
             }.onFailure { e ->
-                echo(Theme.Default.danger("There was an error instantiating $it: $e."))
+                echo(Theme.Default.danger("There was an error instantiating $cliClass: $e."))
                 throw ProgramResult(1)
             }
         }
