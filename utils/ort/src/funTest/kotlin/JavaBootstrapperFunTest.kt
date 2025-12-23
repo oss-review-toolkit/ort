@@ -25,7 +25,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.common.Os
 
-class JavaBootstrapperTest : StringSpec({
+class JavaBootstrapperFunTest : StringSpec({
     "The Java version running the test should be detected as a JDK" {
         JavaBootstrapper.isRunningOnJdk(Environment.JAVA_VERSION) shouldBe true
     }
