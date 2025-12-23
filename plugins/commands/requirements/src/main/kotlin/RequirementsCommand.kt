@@ -130,26 +130,19 @@ class RequirementsCommand(
                 fun Class<out Any>.isBundledPlugin(type: String) =
                     packageName.startsWith("org.ossreviewtoolkit.plugins.$type.")
 
-                val kotlinObject = cliClass.kotlin.objectInstance
+                val instance = cliClass.kotlin.objectInstance?.let {
+                    logger.debug { "$cliClass is a Kotlin object." }
+                    it
+                } ?: run {
+                    logger.debug { "Trying to instantiate $cliClass without any arguments." }
+                    cliClass.getDeclaredConstructor().newInstance()
+                }
 
-                val (instance, category) = when {
-                    kotlinObject != null -> {
-                        logger.debug { "$cliClass is a Kotlin object." }
-
-                        val category = when {
-                            cliClass.isBundledPlugin("packagemanagers") -> "PackageManager"
-                            cliClass.isBundledPlugin("scanners") -> "Scanner"
-                            cliClass.isBundledPlugin("versioncontrolsystems") -> "VersionControlSystem"
-                            else -> "Other tool"
-                        }
-
-                        kotlinObject to category
-                    }
-
-                    else -> {
-                        logger.debug { "Trying to instantiate $cliClass without any arguments." }
-                        cliClass.getDeclaredConstructor().newInstance() to "Other tool"
-                    }
+                val category = when {
+                    cliClass.isBundledPlugin("packagemanagers") -> "PackageManager"
+                    cliClass.isBundledPlugin("scanners") -> "Scanner"
+                    cliClass.isBundledPlugin("versioncontrolsystems") -> "VersionControlSystem"
+                    else -> "Other tool"
                 }
 
                 if (instance.command().isNotEmpty()) {
