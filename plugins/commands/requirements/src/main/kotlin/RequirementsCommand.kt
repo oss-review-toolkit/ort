@@ -28,9 +28,6 @@ import java.util.EnumSet
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
@@ -147,22 +144,6 @@ class RequirementsCommand(
                         }
 
                         kotlinObject
-                    }
-
-                    PackageManager::class.java.isAssignableFrom(it) -> {
-                        category = "PackageManager"
-                        logger.debug { "$it is a $category." }
-                        it.getDeclaredConstructor(
-                            String::class.java,
-                            File::class.java,
-                            AnalyzerConfiguration::class.java,
-                            RepositoryConfiguration::class.java
-                        ).newInstance(
-                            "",
-                            File(""),
-                            AnalyzerConfiguration(),
-                            RepositoryConfiguration()
-                        )
                     }
 
                     else -> {
