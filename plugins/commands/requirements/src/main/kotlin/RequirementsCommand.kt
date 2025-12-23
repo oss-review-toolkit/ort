@@ -132,23 +132,23 @@ class RequirementsCommand(
 
                 val kotlinObject = it.kotlin.objectInstance
 
-                var category = "Other tool"
-                val instance = when {
+                val (instance, category) = when {
                     kotlinObject != null -> {
                         logger.debug { "$it is a Kotlin object." }
 
-                        when {
-                            it.isBundledPlugin("packagemanagers") -> category = "PackageManager"
-                            it.isBundledPlugin("scanners") -> category = "Scanner"
-                            it.isBundledPlugin("versioncontrolsystems") -> category = "VersionControlSystem"
+                        val category = when {
+                            it.isBundledPlugin("packagemanagers") -> "PackageManager"
+                            it.isBundledPlugin("scanners") -> "Scanner"
+                            it.isBundledPlugin("versioncontrolsystems") -> "VersionControlSystem"
+                            else -> "Other tool"
                         }
 
-                        kotlinObject
+                        kotlinObject to category
                     }
 
                     else -> {
                         logger.debug { "Trying to instantiate $it without any arguments." }
-                        it.getDeclaredConstructor().newInstance()
+                        it.getDeclaredConstructor().newInstance() to "Other tool"
                     }
                 }
 
