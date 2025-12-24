@@ -37,6 +37,7 @@ const SeverityTag = ({ severity, isResolved = false, tooltipText = '' }) => {
             >
                 <Tag
                     color="#b0c4de"
+                    variant="solid"
                 >
                     <s>
                         {`${severity.charAt(0).toUpperCase()}${severity.slice(1)}`}
@@ -48,6 +49,7 @@ const SeverityTag = ({ severity, isResolved = false, tooltipText = '' }) => {
 
             <Tag
                 color={severityColors[severity]}
+                variant="solid"
             >
                 {`${severity.charAt(0).toUpperCase()}${severity.slice(1)}`}
             </Tag>
