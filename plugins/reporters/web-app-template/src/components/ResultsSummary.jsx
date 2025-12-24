@@ -168,7 +168,7 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                             () => {
                                 const timelineItems = [
                                     {
-                                        children: (
+                                        content: (
                                             <span>
                                                 Scanned revision
                                                 {' '}
@@ -189,7 +189,7 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                         )
                                     },
                                     {
-                                        children: (
+                                        content: (
                                             <span>
                                                 Found
                                                 {' '}
@@ -230,7 +230,7 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                 if (declaredLicensesProcessed.length !== 0
                                     && detectedLicensesProcessed.length === 0) {
                                     timelineItems.push({
-                                        children: (
+                                        content: (
                                             <span>
                                                 {' '}
                                                 Detected
@@ -246,7 +246,7 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                 } else if (declaredLicensesProcessed.length === 0
                                     && detectedLicensesProcessed.length !== 0) {
                                     timelineItems.push({
-                                        children: (
+                                        content: (
                                             <span>
                                                 {' '}
                                                 Detected
@@ -262,7 +262,7 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                 } else if (declaredLicensesProcessed.length !== 0
                                     && detectedLicensesProcessed.length !== 0) {
                                     timelineItems.push({
-                                        children: (
+                                        content: (
                                             <span>
                                                 Detected
                                                 {' '}
@@ -283,10 +283,10 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                 }
 
                                 timelineItems.push({
-                                    dot: (hasUnresolvedIssues || hasUnresolvedRuleViolations)
+                                    icon: (hasUnresolvedIssues || hasUnresolvedRuleViolations)
                                         ? (<ExclamationCircleOutlined style={{ fontSize: 16 }} />)
                                         : (<CheckCircleOutlined style={{ fontSize: 16 }} />),
-                                    children: (
+                                    content: (
                                         <span>
                                             {
                                                 !!hasUnresolvedIssues
@@ -397,7 +397,6 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                         <Col span={22} offset={1}>
                             <Tabs
                                 className="ort-tabs-summary-overview"
-                                tabPosition="top"
                                 items={(() => {
                                     const tabItems = [
                                         {
