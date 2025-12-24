@@ -179,7 +179,7 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                 value: 4
             },
             {
-                text: (<Tag color="#b0c4de">Resolved</Tag>),
+                text: (<Tag color="#b0c4de" variant="solid">Resolved</Tag>),
                 value: 10
             }
         ],

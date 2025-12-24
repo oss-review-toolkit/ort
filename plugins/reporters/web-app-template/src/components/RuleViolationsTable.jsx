@@ -170,7 +170,7 @@ const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = t
                 value: 2
             },
             {
-                text: (<Tag color="#b0c4de">Resolved</Tag>),
+                text: (<Tag color="#b0c4de" variant="solid">Resolved</Tag>),
                 value: 10
             }
         ],
