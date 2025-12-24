@@ -9,6 +9,10 @@ path_excludes:
   reason: "EXAMPLE_OF"
   comment: "These are example files."
 - _id: 2
+  pattern: "project/file1.java"
+  reason: "DOCUMENTATION_OF"
+  comment: "The file only contains documentation."
+- _id: 3
   pattern: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat"
   reason: "DATA_FILE_OF"
 scope_excludes:
@@ -16,6 +20,21 @@ scope_excludes:
   pattern: "testCompile"
   reason: "TEST_DEPENDENCY_OF"
   comment: "The scope only contains test dependencies."
+license_finding_curations:
+- _id: 0
+  path: "project/file2.java"
+  detected_license: "MIT"
+  concluded_license: "Apache-2.0"
+  reason: "INCORRECT"
+  comment: "The finding was incorrect."
+package_configurations:
+- _id: 0
+  id: "Maven:org.hamcrest:hamcrest-core:1.3"
+  source_code_origin: "ARTIFACT"
+  path_excludes:
+  - 2
+  license_finding_curations:
+  - 0
 copyrights:
 - _id: 0
   statement: "Copyright (c) example authors."
@@ -885,6 +904,8 @@ packages:
     url: ""
     revision: ""
     path: ""
+  package_configurations:
+  - 0
   paths:
   - 9
   levels:
@@ -1190,7 +1211,7 @@ repository:
       paths:
       - 0
       - 1
-      - 2
+      - 3
       scopes:
       - 0
     resolutions:
