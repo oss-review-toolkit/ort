@@ -869,6 +869,7 @@
       "revision" : "",
       "path" : ""
     },
+    "package_configurations" : [ 0 ],
     "paths" : [ 5, 6 ],
     "levels" : [ 1, 2 ],
     "scopes" : [ 0, 1 ],
@@ -956,6 +957,7 @@
       "revision" : "",
       "path" : ""
     },
+    "package_configurations" : [ 1 ],
     "paths" : [ 9 ],
     "levels" : [ 1 ],
     "scopes" : [ 1 ],

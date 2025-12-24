@@ -801,6 +801,8 @@ packages:
     url: ""
     revision: ""
     path: ""
+  package_configurations:
+  - 0
   paths:
   - 5
   - 6
@@ -885,6 +887,8 @@ packages:
     url: ""
     revision: ""
     path: ""
+  package_configurations:
+  - 1
   paths:
   - 9
   levels:
