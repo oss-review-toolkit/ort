@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
@@ -264,6 +265,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             vcs = project.vcs,
             vcsProcessed = project.vcsProcessed,
             curations = emptyList(),
+            packageConfigurations = emptyList(),
             paths = mutableListOf(),
             levels = sortedSetOf(0),
             scopes = mutableSetOf(),
@@ -301,6 +303,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val detectedExcludedLicenses = mutableSetOf<LicenseId>()
         val findings = mutableListOf<EvaluatedFinding>()
         val issues = mutableListOf<EvaluatedIssue>()
+        var packageConfigurations: List<PackageConfiguration> = emptyList()
+
+        input.ortResult.getScanResultsForId(pkg.id).map { scanResult ->
+            packageConfigurations += input.ortResult.getPackageConfigurations(pkg.id, scanResult.provenance)
+        }
 
         val excludeInfo = packageExcludeInfo.getValue(pkg.id)
 
@@ -330,6 +337,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             vcs = pkg.vcs,
             vcsProcessed = pkg.vcsProcessed,
             curations = curatedPkg.curations,
+            packageConfigurations = packageConfigurations,
             paths = mutableListOf(),
             levels = sortedSetOf(),
             scopes = mutableSetOf(),
@@ -589,6 +597,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
             curations = emptyList(),
+            packageConfigurations = emptyList(),
             paths = mutableListOf(),
             levels = sortedSetOf(),
             scopes = mutableSetOf(),
