@@ -32,7 +32,7 @@ const ErrorPage = ({ message, submessage }) => (
             <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
                 <Col span={8}>
                     <Alert
-                        message={ message }
+                        title={ message }
                         type="error"
                         showIcon={true}
                         description={(

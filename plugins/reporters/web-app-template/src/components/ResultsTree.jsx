@@ -175,7 +175,7 @@ const ResultsTree = ({ webAppOrtResult }) => {
                             <Drawer
                                 placement="right"
                                 closable={true}
-                                width="65%"
+                                size="65%"
                                 open={drawerOpen}
                                 title={
                                     (() => {

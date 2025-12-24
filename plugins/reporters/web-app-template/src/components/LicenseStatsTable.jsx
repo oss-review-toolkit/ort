@@ -96,9 +96,9 @@ const LicenseStatsTable = ({ emptyText, licenses, licenseStats }) => {
                     current: pagination.current,
                     hideOnSinglePage: true,
                     onChange: handlePaginationChange,
-                    position: 'bottom',
                     pageSize: pagination.pageSize,
                     pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
+                    placement: 'bottom',
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
                 }
             }

@@ -105,9 +105,9 @@ const PackagePaths = ({ paths }) => {
                             <Steps
                                 className="ort-package-path"
                                 current={stepItems.length - 1}
-                                direction="vertical"
+                                orientation="vertical"
                                 items={stepItems}
-                                progressDot={true}
+                                type="dot"
                                 size="small"
                             />
                         </List.Item>

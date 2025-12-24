@@ -734,7 +734,7 @@ const ResultsTable = ({ webAppOrtResult }) => {
                     onChange: handlePaginationChange,
                     pageSize: pagination.pageSize,
                     pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
-                    position: 'both',
+                    placement: 'both',
                     showSizeChanger: true
                 }}
                 onChange={handleTableChange}
