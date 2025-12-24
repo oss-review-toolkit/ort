@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
@@ -92,6 +93,8 @@ import org.ossreviewtoolkit.reporter.Statistics
 data class EvaluatedModel(
     val pathExcludes: List<PathExclude>,
     val scopeExcludes: List<ScopeExclude>,
+    val licenseFindingCurations: List<LicenseFindingCuration>,
+    val packageConfigurations: List<PackageConfiguration>,
     val copyrights: List<CopyrightStatement>,
     val licenses: List<LicenseId>,
     val scopes: List<EvaluatedScope>,
@@ -131,7 +134,9 @@ data class EvaluatedModel(
             EvaluatedScope::class.java,
             EvaluatedVulnerability::class.java,
             IssueResolution::class.java,
+            LicenseFindingCuration::class.java,
             LicenseId::class.java,
+            PackageConfiguration::class.java,
             PathExclude::class.java,
             RuleViolationResolution::class.java,
             ScopeExclude::class.java,
