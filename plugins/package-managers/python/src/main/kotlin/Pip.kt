@@ -40,7 +40,12 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-private val OPERATING_SYSTEMS = listOf("linux", "macos", "windows")
+@Suppress("EnumEntryNameCase", "EnumNaming")
+enum class OperatingSystem {
+    linux,
+    macos,
+    windows
+}
 
 data class PipConfig(
     /**
@@ -54,7 +59,7 @@ data class PipConfig(
      * The name of the operating system to resolve dependencies for. One of "linux", "macos", or "windows".
      */
     @OrtPluginOption(defaultValue = "linux")
-    val operatingSystem: String,
+    val operatingSystem: OperatingSystem,
 
     /**
      * The Python version to resolve dependencies for. If not set, the version is detected from the environment and if
@@ -83,13 +88,6 @@ class Pip internal constructor(
         this(descriptor, config, "PIP")
 
     override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
-
-    init {
-        require(config.operatingSystem in OPERATING_SYSTEMS) {
-            val acceptedValues = OPERATING_SYSTEMS.joinToString { "'$it'" }
-            "The 'operatingSystem' option must be one of $acceptedValues, but was '${config.operatingSystem}'."
-        }
-    }
 
     override fun resolveDependencies(
         analysisRoot: File,
@@ -124,7 +122,7 @@ class Pip internal constructor(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
                     pythonVersion = pythonVersion.split('.', limit = 3).take(2).joinToString(""),
-                    operatingSystem = config.operatingSystem,
+                    operatingSystem = config.operatingSystem.name,
                     analyzeSetupPyInsecurely = config.analyzeSetupPyInsecurely
                 )
             } finally {
