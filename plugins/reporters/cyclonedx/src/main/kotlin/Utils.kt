@@ -23,7 +23,6 @@ import java.util.SortedSet
 
 import kotlin.collections.filter
 
-import org.cyclonedx.Format
 import org.cyclonedx.model.AttachmentText
 import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
@@ -67,11 +66,6 @@ internal fun Collection<String>.mapNamesToLicenses(origin: String, input: Report
  */
 internal fun ResolvedLicenseInfo.getLicenseNames(vararg sources: LicenseSource): SortedSet<String> =
     licenses.filter { license -> sources.any { it in license.sources } }.mapTo(sortedSetOf()) { it.license.toString() }
-
-/**
- * Return the CycloneDX [Format] for the given extension as a [String], or null if there is no match.
- */
-internal fun String.toFormat(): Format? = Format.entries.find { this == it.extension }
 
 /**
  * Map an ORT hash object to a CycloneDX hash object.

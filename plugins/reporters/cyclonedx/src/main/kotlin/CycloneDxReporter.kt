@@ -23,8 +23,7 @@ import java.io.File
 import java.util.Date
 import java.util.UUID
 
-import org.apache.logging.log4j.kotlin.logger
-
+import org.cyclonedx.Format
 import org.cyclonedx.Version
 import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
@@ -40,17 +39,41 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginEnumEntry
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 
 internal const val DEFAULT_SCHEMA_VERSION_NAME = "1.6" // Version.VERSION_16.versionString
 internal val DEFAULT_SCHEMA_VERSION = Version.entries.single { it.versionString == DEFAULT_SCHEMA_VERSION_NAME }
+
+@Suppress("EnumEntryNameCase", "EnumNaming")
+enum class SchemaVersion(val version: Version) {
+    @OrtPluginEnumEntry(alternativeName = "1.0")
+    VERSION_10(Version.VERSION_10),
+
+    @OrtPluginEnumEntry(alternativeName = "1.1")
+    VERSION_11(Version.VERSION_11),
+
+    @OrtPluginEnumEntry(alternativeName = "1.2")
+    VERSION_12(Version.VERSION_12),
+
+    @OrtPluginEnumEntry(alternativeName = "1.3")
+    VERSION_13(Version.VERSION_13),
+
+    @OrtPluginEnumEntry(alternativeName = "1.4")
+    VERSION_14(Version.VERSION_14),
+
+    @OrtPluginEnumEntry(alternativeName = "1.5")
+    VERSION_15(Version.VERSION_15),
+
+    @OrtPluginEnumEntry(alternativeName = "1.6")
+    VERSION_16(Version.VERSION_16)
+}
 
 data class CycloneDxReporterConfig(
     /**
@@ -60,7 +83,7 @@ data class CycloneDxReporterConfig(
         defaultValue = DEFAULT_SCHEMA_VERSION_NAME,
         aliases = ["schema.version"]
     )
-    val schemaVersion: String,
+    val schemaVersion: SchemaVersion,
 
     /**
      * The license for the data contained in the report. Defaults to "CC0-1.0".
@@ -88,7 +111,7 @@ data class CycloneDxReporterConfig(
         defaultValue = "JSON",
         aliases = ["output.file.formats"]
     )
-    val outputFileFormats: List<String>
+    val outputFileFormats: List<Format>
 )
 
 /**
@@ -115,18 +138,9 @@ class CycloneDxReporter(
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
         val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
 
-        val schemaVersion = Version.entries.find {
-            it.versionString == config.schemaVersion
-        } ?: throw IllegalArgumentException("Unsupported CycloneDX schema version '${config.schemaVersion}'.")
+        val outputFormats = config.outputFileFormats.toSet()
 
-        val outputFileExtensions = config.outputFileFormats.mapNotNullTo(mutableSetOf()) {
-            val extension = it.trim().lowercase()
-            extension.toFormat().alsoIfNull {
-                logger.warn { "No CycloneDX format supports the '$extension' extension." }
-            }
-        }
-
-        require(outputFileExtensions.isNotEmpty()) {
+        require(outputFormats.isNotEmpty()) {
             "No valid CycloneDX output formats specified."
         }
 
@@ -198,7 +212,12 @@ class CycloneDxReporter(
 
             bom.addVulnerabilities(input.ortResult.getVulnerabilities())
 
-            reportFileResults += bom.writeFormats(schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileExtensions)
+            reportFileResults += bom.writeFormats(
+                config.schemaVersion.version,
+                outputDir,
+                REPORT_BASE_FILENAME,
+                outputFormats
+            )
         } else {
             projects.forEach { project ->
                 val bom = Bom().apply {
@@ -265,7 +284,12 @@ class CycloneDxReporter(
                 bom.addVulnerabilities(input.ortResult.getVulnerabilities())
 
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
-                reportFileResults += bom.writeFormats(schemaVersion, outputDir, reportName, outputFileExtensions)
+                reportFileResults += bom.writeFormats(
+                    config.schemaVersion.version,
+                    outputDir,
+                    reportName,
+                    outputFormats
+                )
             }
         }
 

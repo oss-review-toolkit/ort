@@ -33,6 +33,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
+import org.cyclonedx.Format
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
@@ -54,7 +55,7 @@ class CycloneDxReporterFunTest : WordSpec({
         "create just one file" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
-                outputFileFormats = listOf("json")
+                outputFileFormats = listOf(Format.JSON)
             ).generateReport(ReporterInput(ORT_RESULT), outputDir)
 
             bomFileResults.shouldBeSingleton {
@@ -65,7 +66,7 @@ class CycloneDxReporterFunTest : WordSpec({
         "be valid XML according to schema version $defaultSchemaVersion" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
-                outputFileFormats = listOf("xml")
+                outputFileFormats = listOf(Format.XML)
             ).generateReport(ReporterInput(ORT_RESULT), outputDir)
 
             bomFileResults.shouldBeSingleton {
@@ -82,7 +83,7 @@ class CycloneDxReporterFunTest : WordSpec({
 
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
-                outputFileFormats = listOf("xml")
+                outputFileFormats = listOf(Format.XML)
             ).generateReport(
                 ReporterInput(
                     ORT_RESULT_WITH_VULNERABILITIES,
@@ -105,7 +106,7 @@ class CycloneDxReporterFunTest : WordSpec({
         "the expected XML file even if some copyrights contain non printable characters" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
-                outputFileFormats = listOf("xml")
+                outputFileFormats = listOf(Format.XML)
             ).generateReport(ReporterInput(ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS), outputDir)
 
             bomFileResults.shouldBeSingleton {
@@ -119,7 +120,7 @@ class CycloneDxReporterFunTest : WordSpec({
         "be valid JSON according to schema version $defaultSchemaVersion" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
-                outputFileFormats = listOf("json")
+                outputFileFormats = listOf(Format.JSON)
             ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
 
             bomFileResults.shouldBeSingleton {
@@ -136,7 +137,7 @@ class CycloneDxReporterFunTest : WordSpec({
 
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
-                outputFileFormats = listOf("json")
+                outputFileFormats = listOf(Format.JSON)
             ).generateReport(
                 ReporterInput(
                     ORT_RESULT_WITH_VULNERABILITIES,
@@ -161,7 +162,7 @@ class CycloneDxReporterFunTest : WordSpec({
         "create one file per project" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = false,
-                outputFileFormats = listOf("json")
+                outputFileFormats = listOf(Format.JSON)
             ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
 
             bomFileResults shouldHaveSize 2
@@ -172,7 +173,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
-                    outputFileFormats = listOf("xml")
+                    outputFileFormats = listOf(Format.XML)
                 ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir).also {
                     it shouldHaveSize 2
                 }
@@ -194,7 +195,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
-                    outputFileFormats = listOf("json")
+                    outputFileFormats = listOf(Format.JSON)
                 ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir).also {
                     it shouldHaveSize 2
                 }
@@ -216,7 +217,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
-                    outputFileFormats = listOf("json")
+                    outputFileFormats = listOf(Format.JSON)
                 ).generateReport(
                     ReporterInput(
                         ORT_RESULT,
