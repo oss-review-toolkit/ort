@@ -23,11 +23,19 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginEnumEntry
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
+
+enum class ConfigFileFormat(val format: FileFormat) {
+    JSON(FileFormat.JSON),
+
+    @OrtPluginEnumEntry(aliases = ["YML"])
+    YAML(FileFormat.YAML)
+}
 
 data class EvaluatedModelReporterConfig(
     /**
@@ -45,7 +53,7 @@ data class EvaluatedModelReporterConfig(
         defaultValue = "JSON",
         aliases = ["output.file.formats"]
     )
-    val outputFileFormats: List<String>
+    val outputFileFormats: List<ConfigFileFormat>
 )
 
 /**
@@ -63,15 +71,13 @@ class EvaluatedModelReporter(
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val evaluatedModel = EvaluatedModel.create(input, config.deduplicateDependencyTree)
 
-        val outputFileFormats = config.outputFileFormats.map { FileFormat.forExtension(it) }
-
-        return outputFileFormats.map { fileFormat ->
+        return config.outputFileFormats.toSet().map { fileFormat ->
             runCatching {
-                outputDir.resolve("evaluated-model.${fileFormat.fileExtension}").apply {
+                outputDir.resolve("evaluated-model.${fileFormat.format.fileExtension}").apply {
                     bufferedWriter().use {
                         when (fileFormat) {
-                            FileFormat.JSON -> evaluatedModel.toJson(it)
-                            FileFormat.YAML -> evaluatedModel.toYaml(it)
+                            ConfigFileFormat.JSON -> evaluatedModel.toJson(it)
+                            ConfigFileFormat.YAML -> evaluatedModel.toYaml(it)
                         }
                     }
                 }
