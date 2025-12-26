@@ -25,6 +25,8 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+enum class TestEnum { FIRST, SECOND, THIRD }
+
 class OptionParsersTest : WordSpec({
     "parseBooleanOption()" should {
         val factory = createFactory(
@@ -32,6 +34,8 @@ class OptionParsersTest : WordSpec({
                 name = "booleanOption",
                 description = "A boolean option.",
                 type = PluginOptionType.BOOLEAN,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = "false",
                 aliases = emptyList(),
                 isNullable = false,
@@ -66,6 +70,8 @@ class OptionParsersTest : WordSpec({
                 name = "nullableBooleanOption",
                 description = "A nullable boolean option.",
                 type = PluginOptionType.BOOLEAN,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = null,
                 aliases = emptyList(),
                 isNullable = true,
@@ -94,12 +100,200 @@ class OptionParsersTest : WordSpec({
         }
     }
 
+    "findEnumEntry()" should {
+        val entries = listOf(
+            EnumEntry(name = "FIRST", alternativeName = "1st", aliases = emptyList()),
+            EnumEntry(name = "SECOND", alternativeName = "2nd", aliases = listOf("second", "2.0")),
+            EnumEntry(name = "THIRD", alternativeName = null, aliases = listOf("third", "3.0"))
+        )
+
+        "find an entry by name" {
+            findEnumEntry<TestEnum>(entries, "THIRD") shouldBe TestEnum.THIRD
+        }
+
+        "find an entry by alternative name" {
+            findEnumEntry<TestEnum>(entries, "1st") shouldBe TestEnum.FIRST
+        }
+
+        "ignore the name if an alternative name is set" {
+            findEnumEntry<TestEnum>(entries, "FIRST") shouldBe null
+        }
+
+        "find an entry by alias" {
+            findEnumEntry<TestEnum>(entries, "second") shouldBe TestEnum.SECOND
+            findEnumEntry<TestEnum>(entries, "2.0") shouldBe TestEnum.SECOND
+            findEnumEntry<TestEnum>(entries, "third") shouldBe TestEnum.THIRD
+            findEnumEntry<TestEnum>(entries, "3.0") shouldBe TestEnum.THIRD
+        }
+    }
+
+    "parseEnumOption()" should {
+        val factory = createFactory(
+            PluginOption(
+                name = "enumOption",
+                description = "An enum option.",
+                type = PluginOptionType.ENUM,
+                enumType = "TestEnum",
+                enumEntries = TestEnum.entries.map { EnumEntry(it.name, null, emptyList()) },
+                defaultValue = "FIRST",
+                aliases = emptyList(),
+                isNullable = false,
+                isRequired = false
+            )
+        )
+
+        "return the correct enum value from the options" {
+            factory.parseEnumOption<TestEnum>(
+                "enumOption",
+                PluginConfig(options = mapOf("enumOption" to "FIRST"))
+            ) shouldBe TestEnum.FIRST
+        }
+
+        "return the default value if the option is not set" {
+            factory.parseEnumOption<TestEnum>("enumOption", PluginConfig.EMPTY) shouldBe TestEnum.FIRST
+        }
+
+        "throw an exception for an invalid enum value" {
+            shouldThrow<IllegalArgumentException> {
+                factory.parseEnumOption<TestEnum>(
+                    "enumOption",
+                    PluginConfig(options = mapOf("enumOption" to "INVALID"))
+                )
+            }
+        }
+    }
+
+    "parseNullableEnumOption()" should {
+        val factory = createFactory(
+            PluginOption(
+                name = "nullableEnumOption",
+                description = "A nullable enum option.",
+                type = PluginOptionType.ENUM,
+                enumType = "TestEnum",
+                enumEntries = TestEnum.entries.map { EnumEntry(it.name, null, emptyList()) },
+                defaultValue = null,
+                aliases = emptyList(),
+                isNullable = true,
+                isRequired = false
+            )
+        )
+
+        "return the correct enum value from the options" {
+            factory.parseEnumOption<TestEnum>(
+                "nullableEnumOption",
+                PluginConfig(options = mapOf("nullableEnumOption" to "SECOND"))
+            ) shouldBe TestEnum.SECOND
+        }
+
+        "return null if the option is not set" {
+            factory.parseNullableEnumOption<TestEnum>("nullableEnumOption", PluginConfig.EMPTY) shouldBe null
+        }
+
+        "throw an exception for an invalid enum value" {
+            shouldThrow<IllegalArgumentException> {
+                factory.parseEnumOption<TestEnum>(
+                    "nullableEnumOption",
+                    PluginConfig(options = mapOf("nullableEnumOption" to "INVALID"))
+                )
+            }
+        }
+    }
+
+    "parseEnumListOption()" should {
+        val factory = createFactory(
+            PluginOption(
+                name = "enumListOption",
+                description = "An enum list option.",
+                type = PluginOptionType.ENUM_LIST,
+                enumType = "TestEnum",
+                enumEntries = TestEnum.entries.map { EnumEntry(it.name, null, emptyList()) },
+                defaultValue = "FIRST,SECOND",
+                aliases = emptyList(),
+                isNullable = false,
+                isRequired = false
+            )
+        )
+
+        "return the correct enum list from the options" {
+            factory.parseEnumListOption<TestEnum>(
+                "enumListOption",
+                PluginConfig(options = mapOf("enumListOption" to "SECOND,THIRD"))
+            ) shouldBe listOf(TestEnum.SECOND, TestEnum.THIRD)
+        }
+
+        "trim values and filter out empty strings" {
+            factory.parseEnumListOption<TestEnum>(
+                "enumListOption",
+                PluginConfig(options = mapOf("enumListOption" to " first , , third , "))
+            ) shouldBe listOf(TestEnum.FIRST, TestEnum.THIRD)
+        }
+
+        "return the default value if the option is not set" {
+            factory.parseEnumListOption<TestEnum>("enumListOption", PluginConfig.EMPTY) shouldBe
+                listOf(TestEnum.FIRST, TestEnum.SECOND)
+        }
+
+        "throw an exception for an invalid enum value" {
+            shouldThrow<IllegalArgumentException> {
+                factory.parseEnumListOption<TestEnum>(
+                    "enumListOption",
+                    PluginConfig(options = mapOf("enumListOption" to "INVALID"))
+                )
+            }
+        }
+    }
+
+    "parseNullableEnumListOption()" should {
+        val factory = createFactory(
+            PluginOption(
+                name = "nullableEnumListOption",
+                description = "A nullable enum list option.",
+                type = PluginOptionType.ENUM_LIST,
+                enumType = "TestEnum",
+                enumEntries = TestEnum.entries.map { EnumEntry(it.name, null, emptyList()) },
+                defaultValue = null,
+                aliases = emptyList(),
+                isNullable = true,
+                isRequired = false
+            )
+        )
+
+        "return the correct enum list from the options" {
+            factory.parseNullableEnumListOption<TestEnum>(
+                "nullableEnumListOption",
+                PluginConfig(options = mapOf("nullableEnumListOption" to "SECOND,THIRD"))
+            ) shouldBe listOf(TestEnum.SECOND, TestEnum.THIRD)
+        }
+
+        "trim values and filter out empty strings" {
+            factory.parseNullableEnumListOption<TestEnum>(
+                "nullableEnumListOption",
+                PluginConfig(options = mapOf("nullableEnumListOption" to " first , , third , "))
+            ) shouldBe listOf(TestEnum.FIRST, TestEnum.THIRD)
+        }
+
+        "return null if the option is not set" {
+            factory.parseNullableEnumListOption<TestEnum>("nullableEnumListOption", PluginConfig.EMPTY) shouldBe null
+        }
+
+        "throw an exception for an invalid enum value" {
+            shouldThrow<IllegalArgumentException> {
+                factory.parseEnumListOption<TestEnum>(
+                    "nullableEnumListOption",
+                    PluginConfig(options = mapOf("nullableEnumListOption" to "INVALID"))
+                )
+            }
+        }
+    }
+
     "parseIntegerOption()" should {
         val factory = createFactory(
             PluginOption(
                 name = "integerOption",
                 description = "An integer option.",
                 type = PluginOptionType.INTEGER,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = "42",
                 aliases = emptyList(),
                 isNullable = false,
@@ -134,6 +328,8 @@ class OptionParsersTest : WordSpec({
                 name = "nullableIntegerOption",
                 description = "A nullable integer option.",
                 type = PluginOptionType.INTEGER,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = null,
                 aliases = emptyList(),
                 isNullable = true,
@@ -168,6 +364,8 @@ class OptionParsersTest : WordSpec({
                 name = "longOption",
                 description = "A long option.",
                 type = PluginOptionType.LONG,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = "42000000000",
                 aliases = emptyList(),
                 isNullable = false,
@@ -202,6 +400,8 @@ class OptionParsersTest : WordSpec({
                 name = "nullableLongOption",
                 description = "A nullable long option.",
                 type = PluginOptionType.LONG,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = null,
                 aliases = emptyList(),
                 isNullable = true,
@@ -236,6 +436,8 @@ class OptionParsersTest : WordSpec({
                 name = "secretOption",
                 description = "A secret option.",
                 type = PluginOptionType.SECRET,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = "defaultSecret",
                 aliases = emptyList(),
                 isNullable = false,
@@ -261,6 +463,8 @@ class OptionParsersTest : WordSpec({
                 name = "nullableSecretOption",
                 description = "A nullable secret option.",
                 type = PluginOptionType.SECRET,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = null,
                 aliases = emptyList(),
                 isNullable = true,
@@ -286,6 +490,8 @@ class OptionParsersTest : WordSpec({
                 name = "stringOption",
                 description = "A string option.",
                 type = PluginOptionType.STRING,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = "defaultString",
                 aliases = emptyList(),
                 isNullable = false,
@@ -311,6 +517,8 @@ class OptionParsersTest : WordSpec({
                 name = "nullableStringOption",
                 description = "A nullable string option.",
                 type = PluginOptionType.STRING,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = null,
                 aliases = emptyList(),
                 isNullable = true,
@@ -336,6 +544,8 @@ class OptionParsersTest : WordSpec({
                 name = "stringListOption",
                 description = "A string list option.",
                 type = PluginOptionType.STRING_LIST,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = "a,b,c",
                 aliases = emptyList(),
                 isNullable = true,
@@ -367,6 +577,8 @@ class OptionParsersTest : WordSpec({
                     name = "stringListOption",
                     description = "A string list option.",
                     type = PluginOptionType.STRING_LIST,
+                    enumType = null,
+                    enumEntries = null,
                     defaultValue = "",
                     aliases = emptyList(),
                     isNullable = false,
@@ -382,6 +594,8 @@ class OptionParsersTest : WordSpec({
                 name = "nullableStringListOption",
                 description = "A nullable string list option.",
                 type = PluginOptionType.STRING_LIST,
+                enumType = null,
+                enumEntries = null,
                 defaultValue = null,
                 aliases = emptyList(),
                 isNullable = true,

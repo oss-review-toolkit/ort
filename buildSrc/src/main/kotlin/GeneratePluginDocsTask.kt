@@ -203,6 +203,23 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                         appendLine(":** ${aliases.joinToString(", ") { "`$it`" }}*")
                     }
 
+                    val enumEntries = (option["enumEntries"] as List<*>?)?.map { it as Map<*, *> }
+                    if (enumEntries?.isNotEmpty() == true) {
+                        appendLine()
+                        appendLine("**Possible values:**")
+                        appendLine(enumEntries.joinToString { entry ->
+                            buildString {
+                                append("`${entry["alternativeName"] ?: entry["name"]}`")
+                                val aliases = entry["aliases"] as List<*>
+                                if (aliases.isNotEmpty()) {
+                                    append(" (alias")
+                                    if (aliases.size > 1) append("es")
+                                    append(": ${aliases.joinToString { "`$it`" }})")
+                                }
+                            }
+                        })
+                    }
+
                     appendLine()
                     appendLine(option["description"])
                     appendLine()
