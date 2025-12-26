@@ -192,6 +192,14 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                         appendLine("![Default](https://img.shields.io/badge/Default-$escaped-darkgreen)")
                     }
 
+                    val aliases = option["aliases"] as List<*>
+                    if (aliases.isNotEmpty()) {
+                        appendLine()
+                        append("***Alias")
+                        if (aliases.size > 1) append("es")
+                        appendLine(":** ${aliases.joinToString(", ") { "`$it`" }}*")
+                    }
+
                     appendLine()
                     appendLine(option["description"])
                     appendLine()
