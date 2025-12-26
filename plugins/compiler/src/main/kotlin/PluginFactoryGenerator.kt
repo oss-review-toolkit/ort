@@ -130,16 +130,31 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
     /**
      * Generate the code block to initialize the config object from the [PluginConfig].
      */
+    @Suppress("CyclomaticComplexMethod")
     private fun getConfigFromMapInitializer(configType: TypeName, pluginOptions: List<PluginOption>) =
         CodeBlock.builder().apply {
             add("val configObject = %T(\n", configType)
 
             pluginOptions.forEach { option ->
+                val enumClassName = option.enumType?.let {
+                    ClassName(it.substringBeforeLast('.'), it.substringAfterLast('.'))
+                }
+
                 add("    ${option.name} = ")
 
                 fun readOption(name: String) =
                     when (option.type) {
                         PluginOptionType.BOOLEAN -> add("config.options[%S]?.toBooleanStrict()", name)
+                        PluginOptionType.ENUM -> add(
+                            "config.options[%S]?.let { enumValueOf<%T>(it) }",
+                            name,
+                            checkNotNull(enumClassName)
+                        )
+                        PluginOptionType.ENUM_LIST -> add(
+                            "config.options[%S]?.split(',')?.map { enumValueOf<%T>(it.trim()) }",
+                            name,
+                            checkNotNull(enumClassName)
+                        )
                         PluginOptionType.INTEGER -> add("config.options[%S]?.toInt()", name)
                         PluginOptionType.LONG -> add("config.options[%S]?.toLong()", name)
                         PluginOptionType.SECRET -> add("config.secrets[%S]?.let { %T(it) }", name, Secret::class)
@@ -163,6 +178,22 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                 option.defaultValue?.let { defaultValue ->
                     when (option.type) {
                         PluginOptionType.BOOLEAN -> add("\n        ?: %L", defaultValue.toBoolean())
+                        PluginOptionType.ENUM -> add("\n        ?: %T.`%L`", checkNotNull(enumClassName), defaultValue)
+
+                        PluginOptionType.ENUM_LIST -> {
+                            if (defaultValue.isEmpty()) {
+                                add("\n        ?: emptyList()")
+                            } else {
+                                add("\n        ?: listOf(")
+
+                                defaultValue.split(',').forEach { value ->
+                                    add("%T.`%L`,", checkNotNull(enumClassName), value.trim())
+                                }
+
+                                add(")")
+                            }
+                        }
+
                         PluginOptionType.INTEGER -> add("\n        ?: %L", defaultValue.toInt())
                         PluginOptionType.LONG -> add("\n        ?: %LL", defaultValue.toLong())
                         PluginOptionType.SECRET -> add("\n        ?: %T(%S)", Secret::class, defaultValue)
@@ -197,10 +228,17 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             add(")\n\n")
         }.build()
 
+    @Suppress("CyclomaticComplexMethod")
     private fun getConfigArguments(pluginOptions: List<PluginOption>) =
         pluginOptions.map { option ->
+            val enumClassName = option.enumType?.let {
+                ClassName(it.substringBeforeLast('.'), it.substringAfterLast('.'))
+            }
+
             val type = when (option.type) {
                 PluginOptionType.BOOLEAN -> Boolean::class.asClassName()
+                PluginOptionType.ENUM -> checkNotNull(enumClassName)
+                PluginOptionType.ENUM_LIST -> List::class.asClassName().parameterizedBy(checkNotNull(enumClassName))
                 PluginOptionType.INTEGER -> Int::class.asClassName()
                 PluginOptionType.LONG -> Long::class.asClassName()
                 PluginOptionType.SECRET -> Secret::class.asClassName()
@@ -214,6 +252,22 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                 val codeBlock = CodeBlock.builder().apply {
                     when (option.type) {
                         PluginOptionType.BOOLEAN -> add("%L", defaultValue.toBoolean())
+                        PluginOptionType.ENUM -> add("%T.`%L`", checkNotNull(enumClassName), defaultValue)
+
+                        PluginOptionType.ENUM_LIST -> {
+                            if (defaultValue.isEmpty()) {
+                                add("emptyList()")
+                            } else {
+                                add("listOf(")
+
+                                defaultValue.split(',').forEach { value ->
+                                    add("%T.`%L`,", checkNotNull(enumClassName), value.trim())
+                                }
+
+                                add(")")
+                            }
+                        }
+
                         PluginOptionType.INTEGER -> add("%L", defaultValue.toInt())
                         PluginOptionType.LONG -> add("%LL", defaultValue.toLong())
                         PluginOptionType.SECRET -> add("%T(%S)", Secret::class, defaultValue)
@@ -284,7 +338,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                     |            name = %S,
                     |            description = %S,
                     |            type = %T.%L,
-                    |            defaultValue = %S,
+                    |            enumType = %S,
                     |
                     """.trimMargin(),
                     PluginOption::class,
@@ -292,8 +346,24 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                     it.description,
                     PluginOptionType::class,
                     it.type.name,
-                    it.defaultValue
+                    it.enumType
                 )
+
+                it.enumEntries?.let { enumEntries ->
+                    if (enumEntries.isNotEmpty()) {
+                        add("            enumEntries = listOf(\n")
+
+                        enumEntries.forEach { entry ->
+                            add("                %S,\n", entry)
+                        }
+
+                        add("            ),\n")
+                    } else {
+                        add("            enumEntries = emptyList(),\n")
+                    }
+                } ?: add("            enumEntries = null,\n")
+
+                add("            defaultValue = %S,\n", it.defaultValue)
 
                 if (it.aliases.isNotEmpty()) {
                     add("            aliases = listOf(\n")

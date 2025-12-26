@@ -200,6 +200,12 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                         appendLine(":** ${aliases.joinToString(", ") { "`$it`" }}*")
                     }
 
+                    val enumEntries = option["enumEntries"] as List<*>?
+                    if (enumEntries?.isNotEmpty() == true) {
+                        appendLine()
+                        appendLine("**Possible values:** ${enumEntries.joinToString(", ") { "`$it`" }}")
+                    }
+
                     appendLine()
                     appendLine(option["description"])
                     appendLine()

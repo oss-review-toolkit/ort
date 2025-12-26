@@ -51,6 +51,12 @@ enum class PluginOptionType {
     /** A [Boolean] option. */
     BOOLEAN,
 
+    /** An enum option. */
+    ENUM,
+
+    /** An enum [List] option. */
+    ENUM_LIST,
+
     /** An [Int] option. */
     INTEGER,
 
@@ -85,6 +91,16 @@ data class PluginOption(
      * The [type][PluginOptionType] of the option.
      */
     val type: PluginOptionType,
+
+    /**
+     * The enum type name if [type] is [PluginOptionType.ENUM] or [PluginOptionType.ENUM_LIST], `null` otherwise.
+     */
+    val enumType: String?,
+
+    /**
+     * The enum entries if [type] is [PluginOptionType.ENUM] or [PluginOptionType.ENUM_LIST], `null` otherwise.
+     */
+    val enumEntries: List<String>?,
 
     /**
      * The default value of the option, or `null` if the option is required.
