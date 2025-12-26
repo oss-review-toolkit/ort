@@ -285,7 +285,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                     |            description = %S,
                     |            type = %T.%L,
                     |            defaultValue = %S,
-                    |            aliases = listOf(
+                    |
                     """.trimMargin(),
                     PluginOption::class,
                     it.name,
@@ -295,13 +295,20 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                     it.defaultValue
                 )
 
-                it.aliases.forEach { alias ->
-                    add("                %S,", alias)
+                if (it.aliases.isNotEmpty()) {
+                    add("            aliases = listOf(\n")
+
+                    it.aliases.forEach { alias ->
+                        add("                %S,\n", alias)
+                    }
+
+                    add("            ),\n")
+                } else {
+                    add("            aliases = emptyList(),\n")
                 }
 
                 add(
                     """    
-                    |            ),
                     |            isNullable = %L,
                     |            isRequired = %L
                     |        ),
