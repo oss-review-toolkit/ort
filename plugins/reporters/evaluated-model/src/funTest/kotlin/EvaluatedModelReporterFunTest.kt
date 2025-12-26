@@ -54,7 +54,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
             val expectedResult = readResource("/evaluated-model-reporter-test-expected-output.yml")
 
             val result = EvaluatedModelReporterFactory
-                .create(outputFileFormats = listOf("yml"))
+                .create(outputFileFormats = listOf(ConfigFileFormat.YAML))
                 .generateReport(ortResult)
 
             result shouldBe expectedResult
@@ -64,7 +64,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
             val expectedResult = readResource("/evaluated-model-reporter-test-deduplicate-expected-output.yml")
 
             val result = EvaluatedModelReporterFactory
-                .create(outputFileFormats = listOf("yml"), deduplicateDependencyTree = true)
+                .create(outputFileFormats = listOf(ConfigFileFormat.YAML), deduplicateDependencyTree = true)
                 .generateReport(ortResult)
 
             result shouldBe expectedResult
