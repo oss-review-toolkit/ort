@@ -291,7 +291,7 @@ class TychoTest : WordSpec({
             val rootResults = results.single { it.project.id.name == "root" }
             rootResults.issues shouldContainExactlyInAnyOrder issues
 
-            verify(atLeast = 1) {
+            verify(at least = 1) {
                 // Make sure that the resolver is used for the feature check function.
                 resolver.isFeature(any())
             }

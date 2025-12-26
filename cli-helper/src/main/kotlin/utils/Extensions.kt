@@ -263,7 +263,7 @@ internal fun String.wrapAt(column: Int): String =
             val wrapIndex = lastSpaceBeforeColumnIndex.takeUnless { it == -1 } ?: firstSpaceAfterColumnIndex
 
             val line = if (wrapIndex != -1) {
-                text.substring(0, wrapIndex)
+                text.take(wrapIndex)
             } else {
                 text
             }

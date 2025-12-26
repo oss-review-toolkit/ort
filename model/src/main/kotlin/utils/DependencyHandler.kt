@@ -67,7 +67,7 @@ interface DependencyHandler<D> {
     fun createPackage(dependency: D, issues: MutableCollection<Issue>): Package?
 
     /**
-     * Determine whether [dependenciesA] and [dependenciesB] are to be considered equal. Implementors may override the
+     * Determine whether [dependenciesA] and [dependenciesB] are to be considered equal. Implementers may override the
      * default, for example if specific optimizations can be done (like skipping of deep comparisons), or if stricter
      * checks are needed (like when ordering or duplicates matter).
      */

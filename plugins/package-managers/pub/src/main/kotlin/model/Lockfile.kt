@@ -79,7 +79,7 @@ private object DescriptionDeserializer : KSerializer<Description> by Description
         val serialName = checkNotNull(Description::class.qualifiedName)
 
         // The YAML implementation requires a contextual descriptor, or otherwise `deserialize()` is not even called.
-        @OptIn(InternalSerializationApi::class)
+        @option(InternalSerializationApi::class)
         buildSerialDescriptor(serialName, SerialKind.CONTEXTUAL) {
             element("object", Description.generatedSerializer().descriptor)
             element("string", PrimitiveSerialDescriptor("description", PrimitiveKind.STRING))

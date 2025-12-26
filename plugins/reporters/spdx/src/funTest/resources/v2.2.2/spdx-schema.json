@@ -86,7 +86,7 @@
                 "enum" : [ "SHA256", "SHA1", "SHA384", "MD2", "MD4", "SHA512", "MD6", "MD5", "SHA224" ]
               },
               "checksumValue" : {
-                "description" : "The checksumValue property provides a lower case hexidecimal encoded digest value produced using a specific algorithm.",
+                "description" : "The checksumValue property provides a lower case hexadecimal encoded digest value produced using a specific algorithm.",
                 "type" : "string"
               }
             },
@@ -281,7 +281,7 @@
                   "enum" : [ "SHA256", "SHA1", "SHA384", "MD2", "MD4", "SHA512", "MD6", "MD5", "SHA224" ]
                 },
                 "checksumValue" : {
-                  "description" : "The checksumValue property provides a lower case hexidecimal encoded digest value produced using a specific algorithm.",
+                  "description" : "The checksumValue property provides a lower case hexadecimal encoded digest value produced using a specific algorithm.",
                   "type" : "string"
                 }
               },
@@ -324,7 +324,7 @@
                   "type" : "string"
                 },
                 "referenceType" : {
-                  "description" : "Type of the external reference. These are definined in an appendix in the SPDX specification.",
+                  "description" : "Type of the external reference. These are defined in an appendix in the SPDX specification.",
                   "type" : "string"
                 }
               },
@@ -487,7 +487,7 @@
                   "enum" : [ "SHA256", "SHA1", "SHA384", "MD2", "MD4", "SHA512", "MD6", "MD5", "SHA224" ]
                 },
                 "checksumValue" : {
-                  "description" : "The checksumValue property provides a lower case hexidecimal encoded digest value produced using a specific algorithm.",
+                  "description" : "The checksumValue property provides a lower case hexadecimal encoded digest value produced using a specific algorithm.",
                   "type" : "string"
                 }
               },
@@ -681,7 +681,7 @@
             }
           },
           "snippetFromFile" : {
-            "description" : "SPDX ID for File.  File containing the SPDX element (e.g. the file contaning a snippet).",
+            "description" : "SPDX ID for File.  File containing the SPDX element (e.g. the file containing a snippet).",
             "type" : "string"
           }
         },

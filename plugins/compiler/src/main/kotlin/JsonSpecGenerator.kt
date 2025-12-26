@@ -37,7 +37,7 @@ class JsonSpecGenerator(private val codeGenerator: CodeGenerator) {
         prettyPrint = true
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
+    @option(ExperimentalSerializationApi::class)
     fun generate(pluginSpec: PluginSpec) {
         val jsonObject = buildJsonObject {
             putJsonObject("descriptor") {

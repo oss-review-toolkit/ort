@@ -67,7 +67,7 @@ class WebAppReporter(
         val evaluatedModel = EvaluatedModel.create(input, config.deduplicateDependencyTree)
 
         val index = template.indexOf(PLACEHOLDER)
-        val prefix = template.substring(0, index)
+        val prefix = template.take(index)
         val suffix = template.substring(index + PLACEHOLDER.length, template.length)
 
         val reportFileResult = runCatching {

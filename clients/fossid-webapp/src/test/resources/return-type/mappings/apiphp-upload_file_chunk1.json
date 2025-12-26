@@ -19,7 +19,7 @@
       }
     },
     "bodyPatterns" : [ {
-      "equalTo" : "Hello Worl"
+      "equalTo" : "Hello World"
     } ]
   },
   "response" : {

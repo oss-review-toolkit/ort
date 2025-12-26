@@ -2752,8 +2752,8 @@ gost-engine/ecp_id_tc26_gost_3410_2012_512_paramSetB.c
 gost-engine/ecp_id_tc26_gost_3410_2012_512_paramSetC.c
 gost-engine/getopt.h
 gost-engine/gost-engine.h
-gost-engine/gost.txt
-gost-engine/gost.txt.old
+ghost-engine/ghost.txt
+ghost-engine/ghost.txt.old
 gost-engine/gost12sum.c
 gost-engine/gost89.c
 gost-engine/gost89.h
@@ -10931,7 +10931,7 @@ src/util/verto/verto-module.h
 src/util/verto/verto.c
 src/util/verto/verto.h
 src/utils.coffee
-src/vc/excpt.rs
+src/vc/except.rs
 src/vc/limits.rs
 src/vc/vadefs.rs
 src/vc/vcruntime.rs

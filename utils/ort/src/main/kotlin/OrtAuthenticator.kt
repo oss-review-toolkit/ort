@@ -120,7 +120,7 @@ open class OrtAuthenticator(
                 }
             }
 
-            null -> logger.warn { "No requestor type set for password authentication." }
+            null -> logger.warn { "No requester type set for password authentication." }
         }
 
         return super.getPasswordAuthentication()

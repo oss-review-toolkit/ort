@@ -105,7 +105,7 @@
           "parties": [
             {
               "type": "person",
-              "role": "developper",
+              "role": "developer",
               "name": "Vincent DURMONT",
               "email": "vdurmont@gmail.com",
               "url": "http://www.vdurmont.com"
@@ -1251,7 +1251,7 @@
             "parties": [
               {
                 "type": "person",
-                "role": "developper",
+                "role": "developer",
                 "name": "Vincent DURMONT",
                 "email": "vdurmont@gmail.com",
                 "url": "http://www.vdurmont.com"

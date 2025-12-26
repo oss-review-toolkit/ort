@@ -112,7 +112,7 @@ class PluginSpecFactory {
     /**
      * Get the plugin options from the config class by mapping its properties to [PluginOption] instances.
      */
-    @OptIn(KspExperimental::class)
+    @option(KspExperimental::class)
     private fun KSClassDeclaration.getPluginOptions(): List<PluginOption> {
         require(Modifier.DATA in modifiers) {
             "Config class $this must be a data class."

@@ -7937,10 +7937,10 @@ libraries/kotlin.test/jvm
 libraries/kotlin.test/jvm/src
 libraries/kotlin.test/jvm/src/main
 libraries/kotlin.test/jvm/src/test
-libraries/kotlin.test/testng
-libraries/kotlin.test/testng/src
-libraries/kotlin.test/testng/src/main
-libraries/kotlin.test/testng/src/test
+libraries/kotlin.test/testing
+libraries/kotlin.test/testing/src
+libraries/kotlin.test/testing/src/main
+libraries/kotlin.test/testing/src/test
 libraries/kotlin.test/wasm
 libraries/kotlin.test/wasm/src
 libraries/kotlin.test/wasm/src/main
@@ -8452,7 +8452,7 @@ lodash.flow
 lodash.flowright
 lodash.foreach
 lodash.foreachright
-lodash.forin
+lodash.foreign
 lodash.forinright
 lodash.forown
 lodash.forownright
@@ -14508,7 +14508,7 @@ wasm/wasm.ir/src/org/jetbrains
 wasm/wasm.ir/src/org/jetbrains/kotlin
 wasm/wasm.ir/src/org/jetbrains/kotlin/wasm
 wasm/wasm.ir/src/org/jetbrains/kotlin/wasm/ir
-wasm/wasm.ir/src/org/jetbrains/kotlin/wasm/ir/convertors
+wasm/wasm.ir/src/org/jetbrains/kotlin/wasm/ir/converters
 wasm/wasm.ir/test
 watchOS Example
 watchOS Example/watchOS Example WatchKit Extension

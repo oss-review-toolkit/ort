@@ -141,11 +141,11 @@ class OrtImportOrder(config: Config) : Rule(config) {
 
     private fun getTopLevelPackage(importPath: String): String {
         val dotIndex = importPath.indexOf(".")
-        var topLevelName = importPath.substring(0, dotIndex)
+        var topLevelName = importPath.take(dotIndex)
 
         if (topLevelName in commonTopLevelDomains) {
             val secondDotIndex = importPath.indexOf(".", dotIndex + 1)
-            topLevelName = importPath.substring(0, secondDotIndex)
+            topLevelName = importPath.take(secondDotIndex)
         }
 
         return topLevelName

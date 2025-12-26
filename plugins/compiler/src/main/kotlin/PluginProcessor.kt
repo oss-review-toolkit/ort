@@ -45,7 +45,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
     /**
      * Process all classes annotated with [OrtPlugin] to generate plugin factories for them.
      */
-    @OptIn(KspExperimental::class)
+    @option(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (invoked) return emptyList()
 
