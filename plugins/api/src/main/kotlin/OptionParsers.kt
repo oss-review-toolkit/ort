@@ -21,9 +21,12 @@
 
 package org.ossreviewtoolkit.plugins.api
 
+import kotlin.enums.enumEntries
+
 import org.ossreviewtoolkit.utils.common.Options
 
-private inline fun <T> PluginFactory<*>.parseNullableOption(
+@PublishedApi
+internal inline fun <T> PluginFactory<*>.parseNullableOption(
     name: String,
     options: Options,
     expectedType: PluginOptionType,
@@ -47,7 +50,8 @@ private inline fun <T> PluginFactory<*>.parseNullableOption(
     return null
 }
 
-private inline fun <T> PluginFactory<*>.parseOption(
+@PublishedApi
+internal inline fun <T> PluginFactory<*>.parseOption(
     name: String,
     options: Options,
     expectedType: PluginOptionType,
@@ -64,6 +68,60 @@ fun PluginFactory<*>.parseBooleanOption(name: String, config: PluginConfig): Boo
 /** Parse a nullable [boolean][PluginOptionType.BOOLEAN] option from the given [config]. */
 fun PluginFactory<*>.parseNullableBooleanOption(name: String, config: PluginConfig): Boolean? =
     parseNullableOption(name, config.options, PluginOptionType.BOOLEAN) { _, value -> value.toBooleanStrict() }
+
+/** Find an enum entry from [T] that is matched by [value] based on the provided [entries] from the plugin config. */
+inline fun <reified T : Enum<T>> findEnumEntry(entries: List<EnumEntry>, value: String): T? =
+    entries.find { entry ->
+        (entry.alternativeName ?: entry.name).equals(value, ignoreCase = true)
+            || entry.aliases.any { it.equals(value, ignoreCase = true) }
+    }?.let { entry -> enumEntries<T>().find { it.name == entry.name } }
+
+/** Parse an [enum][PluginOptionType.ENUM] option from the given [config]. */
+inline fun <reified T : Enum<T>> PluginFactory<*>.parseEnumOption(name: String, config: PluginConfig): T =
+    parseOption(name, config.options, PluginOptionType.ENUM) { option, value ->
+        findEnumEntry(option.enumEntries.orEmpty(), value)
+            ?: throw IllegalArgumentException(
+                "Value '$value' is not valid for enum option '$name' of plugin '${descriptor.id}'. " +
+                    "Valid values are: ${enumEntries<T>().joinToString { it.name }}."
+            )
+    }
+
+/** Parse a nullable [enum][PluginOptionType.ENUM] option from the given [config]. */
+inline fun <reified T : Enum<T>> PluginFactory<*>.parseNullableEnumOption(name: String, config: PluginConfig): T? =
+    parseNullableOption(name, config.options, PluginOptionType.ENUM) { option, value ->
+        findEnumEntry(option.enumEntries.orEmpty(), value)
+            ?: throw IllegalArgumentException(
+                "Value '$value' is not valid for enum option '$name' of plugin '${descriptor.id}'. " +
+                    "Valid values are: ${enumEntries<T>().joinToString { it.name }}."
+            )
+    }
+
+/** Parse an [enum list][PluginOptionType.ENUM_LIST] option from the given [config]. */
+inline fun <reified T : Enum<T>> PluginFactory<*>.parseEnumListOption(name: String, config: PluginConfig): List<T> =
+    parseOption(name, config.options, PluginOptionType.ENUM_LIST) { option, value ->
+        value.split(',').mapNotNull { it.trim().ifEmpty { null } }.map { item ->
+            findEnumEntry(option.enumEntries.orEmpty(), item)
+                ?: throw IllegalArgumentException(
+                    "Value '$item' is not valid for enum list option '$name' of plugin '${descriptor.id}'. " +
+                        "Valid values are: ${enumEntries<T>().joinToString { it.name }}."
+                )
+        }
+    }
+
+/** Parse a nullable [enum list][PluginOptionType.ENUM_LIST] option from the given [config]. */
+inline fun <reified T : Enum<T>> PluginFactory<*>.parseNullableEnumListOption(
+    name: String,
+    config: PluginConfig
+): List<T>? =
+    parseNullableOption(name, config.options, PluginOptionType.ENUM_LIST) { option, value ->
+        value.split(',').mapNotNull { it.trim().ifEmpty { null } }.map { item ->
+            findEnumEntry(option.enumEntries.orEmpty(), item)
+                ?: throw IllegalArgumentException(
+                    "Value '$item' is not valid for enum list option '$name' of plugin '${descriptor.id}'. " +
+                        "Valid values are: ${enumEntries<T>().joinToString { it.name }}."
+                )
+        }
+    }
 
 /** Parse an [integer][PluginOptionType.INTEGER] option from the given [config]. */
 fun PluginFactory<*>.parseIntegerOption(name: String, config: PluginConfig): Int =
