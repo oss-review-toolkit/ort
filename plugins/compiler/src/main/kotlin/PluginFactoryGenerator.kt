@@ -155,23 +155,23 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
 
                 // Add code to handle aliases.
                 option.aliases.forEach { alias ->
-                    add(" ?: ")
+                    add("\n        ?: ")
                     readOption(alias)
                 }
 
                 // Add the default value if present.
                 option.defaultValue?.let { defaultValue ->
                     when (option.type) {
-                        PluginOptionType.BOOLEAN -> add(" ?: %L", defaultValue.toBoolean())
-                        PluginOptionType.INTEGER -> add(" ?: %L", defaultValue.toInt())
-                        PluginOptionType.LONG -> add(" ?: %LL", defaultValue.toLong())
-                        PluginOptionType.SECRET -> add(" ?: %T(%S)", Secret::class, defaultValue)
-                        PluginOptionType.STRING -> add(" ?: %S", defaultValue)
+                        PluginOptionType.BOOLEAN -> add("\n        ?: %L", defaultValue.toBoolean())
+                        PluginOptionType.INTEGER -> add("\n        ?: %L", defaultValue.toInt())
+                        PluginOptionType.LONG -> add("\n        ?: %LL", defaultValue.toLong())
+                        PluginOptionType.SECRET -> add("\n        ?: %T(%S)", Secret::class, defaultValue)
+                        PluginOptionType.STRING -> add("\n        ?: %S", defaultValue)
                         PluginOptionType.STRING_LIST -> {
                             if (defaultValue.isEmpty()) {
-                                add(" ?: emptyList()")
+                                add("\n        ?: emptyList()")
                             } else {
-                                add(" ?: listOf(")
+                                add("\n        ?: listOf(")
 
                                 defaultValue.split(',').forEach { value ->
                                     add("%S,", value.trim())
