@@ -60,17 +60,16 @@ data class FossIdReporterConfig(
     val user: Secret,
 
     /**
-     * The type of report to generate. See [ReportType].
+     * The type of report to generate.
      */
     @OrtPluginOption(defaultValue = "XLSX")
-    val reportType: String,
+    val reportType: ReportType,
 
     /**
-     * The type of selection to use. Allowed values are "INCLUDE_ALL_LICENSES", "INCLUDE_COPYLEFT", "INCLUDE_FOSS", and
-     * "INCLUDE_MARKED_LICENSES".
+     * The type of selection to use.
      */
     @OrtPluginOption(defaultValue = "INCLUDE_ALL_LICENSES")
-    val selectionType: String
+    val selectionType: SelectionType
 )
 
 @OrtPlugin(
@@ -93,11 +92,8 @@ class FossIdReporter(
         const val SCAN_CODE_KEY = "scancode"
     }
 
-    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
-        val reportType = ReportType.valueOf(config.reportType)
-        val selectionType = SelectionType.valueOf(config.selectionType)
-
-        return runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> =
+        runBlocking(Dispatchers.IO.limitedParallelism(20)) {
             val service = FossIdRestService.create(config.serverUrl)
             val scanResults = input.ortResult.getScanResults().values.flatten()
             val scanCodes = scanResults.flatMapTo(mutableSetOf()) {
@@ -112,8 +108,8 @@ class FossIdReporter(
                         config.user.value,
                         config.apiKey.value,
                         scanCode,
-                        reportType,
-                        selectionType,
+                        config.reportType,
+                        config.selectionType,
                         outputDir
                     ).onFailure {
                         it.showStackTrace()
@@ -124,5 +120,4 @@ class FossIdReporter(
                 }
             }.awaitAll()
         }
-    }
 }
