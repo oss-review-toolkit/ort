@@ -23,8 +23,7 @@ import java.io.File
 import java.util.Date
 import java.util.UUID
 
-import org.apache.logging.log4j.kotlin.logger
-
+import org.cyclonedx.Format
 import org.cyclonedx.Version
 import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
@@ -45,12 +44,22 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 
 internal const val DEFAULT_SCHEMA_VERSION_NAME = "1.6" // Version.VERSION_16.versionString
 internal val DEFAULT_SCHEMA_VERSION = Version.entries.single { it.versionString == DEFAULT_SCHEMA_VERSION_NAME }
+
+@Suppress("EnumEntryNameCase", "EnumNaming")
+enum class SchemaVersion(val version: Version) {
+    `1.0`(Version.VERSION_10),
+    `1.1`(Version.VERSION_11),
+    `1.2`(Version.VERSION_12),
+    `1.3`(Version.VERSION_13),
+    `1.4`(Version.VERSION_14),
+    `1.5`(Version.VERSION_15),
+    `1.6`(Version.VERSION_16)
+}
 
 data class CycloneDxReporterConfig(
     /**
@@ -60,7 +69,7 @@ data class CycloneDxReporterConfig(
         defaultValue = DEFAULT_SCHEMA_VERSION_NAME,
         aliases = ["schema.version"]
     )
-    val schemaVersion: String,
+    val schemaVersion: SchemaVersion,
 
     /**
      * The license for the data contained in the report. Defaults to "CC0-1.0".
@@ -88,7 +97,7 @@ data class CycloneDxReporterConfig(
         defaultValue = "JSON",
         aliases = ["output.file.formats"]
     )
-    val outputFileFormats: List<String>
+    val outputFileFormats: List<Format>
 )
 
 /**
@@ -115,18 +124,9 @@ class CycloneDxReporter(
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
         val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
 
-        val schemaVersion = Version.entries.find {
-            it.versionString == config.schemaVersion
-        } ?: throw IllegalArgumentException("Unsupported CycloneDX schema version '${config.schemaVersion}'.")
+        val outputFormats = config.outputFileFormats.toSet()
 
-        val outputFileExtensions = config.outputFileFormats.mapNotNullTo(mutableSetOf()) {
-            val extension = it.trim().lowercase()
-            extension.toFormat().alsoIfNull {
-                logger.warn { "No CycloneDX format supports the '$extension' extension." }
-            }
-        }
-
-        require(outputFileExtensions.isNotEmpty()) {
+        require(outputFormats.isNotEmpty()) {
             "No valid CycloneDX output formats specified."
         }
 
@@ -198,7 +198,12 @@ class CycloneDxReporter(
 
             bom.addVulnerabilities(input.ortResult.getVulnerabilities())
 
-            reportFileResults += bom.writeFormats(schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileExtensions)
+            reportFileResults += bom.writeFormats(
+                config.schemaVersion.version,
+                outputDir,
+                REPORT_BASE_FILENAME,
+                outputFormats
+            )
         } else {
             projects.forEach { project ->
                 val bom = Bom().apply {
@@ -265,7 +270,12 @@ class CycloneDxReporter(
                 bom.addVulnerabilities(input.ortResult.getVulnerabilities())
 
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
-                reportFileResults += bom.writeFormats(schemaVersion, outputDir, reportName, outputFileExtensions)
+                reportFileResults += bom.writeFormats(
+                    config.schemaVersion.version,
+                    outputDir,
+                    reportName,
+                    outputFormats
+                )
             }
         }
 
