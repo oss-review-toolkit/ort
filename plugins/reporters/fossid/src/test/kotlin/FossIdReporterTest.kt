@@ -64,8 +64,8 @@ private val DEFAULT_CONFIG = FossIdReporterConfig(
     serverUrl = SERVER_URL_SAMPLE,
     apiKey = Secret(API_KEY_SAMPLE),
     user = Secret(USER_KEY_SAMPLE),
-    reportType = "HTML_DYNAMIC",
-    selectionType = "INCLUDE_ALL_LICENSES"
+    reportType = ReportType.HTML_DYNAMIC,
+    selectionType = SelectionType.INCLUDE_ALL_LICENSES
 )
 
 private const val SCANCODE_1 = "scancode1"
@@ -113,7 +113,7 @@ class FossIdReporterTest : WordSpec({
         }
 
         "allow to specify a report type" {
-            val (serviceMock, reporterMock) = createReporterMock(DEFAULT_CONFIG.copy(reportType = "XLSX"))
+            val (serviceMock, reporterMock) = createReporterMock(DEFAULT_CONFIG.copy(reportType = ReportType.XLSX))
             val input = createReporterInput(SCANCODE_1)
 
             reporterMock.generateReport(input)
@@ -150,7 +150,7 @@ class FossIdReporterTest : WordSpec({
 
         "allow to specify a selection type" {
             val (serviceMock, reporterMock) = createReporterMock(
-                DEFAULT_CONFIG.copy(selectionType = "INCLUDE_COPYLEFT")
+                DEFAULT_CONFIG.copy(selectionType = SelectionType.INCLUDE_COPYLEFT)
             )
             val input = createReporterInput(SCANCODE_1)
 
