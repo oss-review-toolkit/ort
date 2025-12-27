@@ -52,8 +52,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
-import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
-import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_3
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
@@ -432,7 +430,6 @@ private fun Provenance.matches(sourceCodeOrigin: SourceCodeOrigin): Boolean =
 
 internal val SpdxDocumentReporterConfig.wantSpdx23: Boolean
     get() = when (spdxVersion) {
-        SPDX_VERSION_2_2 -> false
-        SPDX_VERSION_2_3 -> true
-        else -> throw IllegalArgumentException("Unsupported SPDX version '$spdxVersion'.")
+        SpdxVersion.SPDX_2_2 -> false
+        SpdxVersion.SPDX_2_3 -> true
     }
