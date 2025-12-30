@@ -72,6 +72,7 @@ jobs:
             name: "X86"
           - os: "ubuntu-24.04-arm"
             name: "ARM64"
+      fail-fast: false
     runs-on: "${{ matrix.os }}"
     env:
       ORT_VERSION: ${{ needs.metadata.outputs.version }}
