@@ -154,8 +154,7 @@ RUN curl -kSs https://pyenv.run | bash \
     && pyenv install -v $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION
 
-RUN ARCH=$(arch | sed s/aarch64/arm64/) \
-    && if [ "$ARCH" == "arm64" ]; then \
+RUN if [ "$(arch)" = "aarch64" ]; then \
     pip install -U scancode-toolkit-mini==$SCANCODE_VERSION licensedcode-data setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     else \
     curl -Os https://raw.githubusercontent.com/aboutcode-org/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
