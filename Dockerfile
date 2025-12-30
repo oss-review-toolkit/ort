@@ -584,9 +584,14 @@ COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
 COPY --from=bazel --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
 
 # Askalono
-RUN curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
-    mkdir /opt/askalono && \
-    unzip askalono-Linux.zip -d /opt/askalono
+RUN mkdir /opt/askalono && \
+    if [ "$(arch)" = "aarch64" ]; then \
+    cargo install --git https://github.com/jpeddicord/askalono.git --tag $ASKALONO_VERSION; \
+    mv /opt/rust/cargo/bin/askalono /opt/askalono; \
+    else \
+    curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip; \
+    unzip askalono-Linux.zip -d /opt/askalono; \
+    fi
 
 ENV PATH=$PATH:/opt/askalono
 
