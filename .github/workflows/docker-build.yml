@@ -18,7 +18,7 @@ env:
 jobs:
   metadata:
     name: Get Metadata
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.get-version.outputs.ORT_VERSION }}
       ort-tags: ${{ steps.meta-ort.outputs.tags }}
@@ -164,7 +164,7 @@ jobs:
     needs:
       - metadata
       - build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Download ORT digests
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
