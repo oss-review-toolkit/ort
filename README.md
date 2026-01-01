@@ -138,7 +138,7 @@ Depending on how ORT was installed, it can be run in the following ways:
   docker run ort --help
   ```
 
-  You can find further hints for using ORT with Docker in the [documentation](./website/docs/guides/docker.md).
+  You can find further hints for using ORT with Docker in the [documentation](./docs/guides/docker.md).
 
 * If the ORT distribution was built from sources, use
 
