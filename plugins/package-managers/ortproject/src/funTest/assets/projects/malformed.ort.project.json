@@ -1,0 +1,9 @@
+{
+  "projectName": "Example ORT project with wrong format of file",
+  "dependencies": "OK",
+  "dependencies": [
+    {
+      "purl": "something:maven/com.example/full@1.1.0"
+    }
+  ]
+}

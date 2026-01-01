@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.bundles.hoplite)
     implementation(libs.hikari)
     implementation(libs.postgres)
+    implementation(libs.purl)
     implementation(libs.semver4j)
     implementation(libs.tika)
 

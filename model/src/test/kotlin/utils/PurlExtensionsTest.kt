@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotContain
@@ -135,6 +136,36 @@ class PurlExtensionsTest : WordSpec({
 
         "work for a purl without qualifiers" {
             "pkg:npm/mime-db@1.33.0".toProvenance() shouldBe UnknownProvenance
+        }
+    }
+
+    "When mapping to Identifier Purl representation" should {
+        "accept only pkg type purls" {
+            shouldThrow<IllegalArgumentException> {
+                "nonpkg:someurl/example.com/invalid@1.1".toIdentifier()
+            }
+        }
+
+        "be parsed correctly for purl with namespace" {
+            val id = "pkg:github/example.com/valid-with-namespace@1.0".toIdentifier()
+
+            with(id) {
+                type shouldBe "github"
+                namespace shouldBe "example.com"
+                name shouldBe "valid-with-namespace"
+                version shouldBe "1.0"
+            }
+        }
+
+        "be parsed correctly for purl without namespace" {
+            val id = "pkg:pypi/valid-without-namespace@2.0".toIdentifier()
+
+            with(id) {
+                type shouldBe "pypi"
+                namespace shouldBe ""
+                name shouldBe "valid-without-namespace"
+                version shouldBe "2.0"
+            }
         }
     }
 })

@@ -1,0 +1,20 @@
+{
+  "projectName": "subproject-x-2",
+  "description": "Project X-2 description",
+  "homepageUrl": "https://project_x-2.example.com",
+  "declaredLicenses": [
+    "Apache-2.0"
+  ],
+  "authors": [
+    "Author with no name"
+  ],
+  "dependencies": [
+    {
+      "purl": "pkg:maven/com.example/sub-x2@1.1.0",
+      "description": "Package of subproject 2",
+      "declaredLicenses": [
+        "Apache-2.0"
+      ]
+    }
+  ]
+}
