@@ -26,18 +26,19 @@ import java.util.jar.Manifest
 import kotlin.io.resolve
 
 import org.apache.logging.log4j.kotlin.logger
-import org.apache.maven.repository.RepositorySystem
 
 import org.eclipse.aether.artifact.Artifact
 
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.div
 
 /**
  * A class providing some helper functionality for accessing artifacts and metadata in the local Maven repository.
  */
 internal class LocalRepositoryHelper(
     /** The root directory of the local Maven repository. */
-    private val localRepositoryRoot: File = RepositorySystem.defaultUserLocalRepository
+    private val localRepositoryRoot: File = Os.userHomeDirectory / ".m2" / "repository"
 ) {
     companion object {
         /** The name of the root folder that stores artifacts downloaded from P2 repositories. */
