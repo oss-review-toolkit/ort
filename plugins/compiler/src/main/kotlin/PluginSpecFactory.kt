@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.compiler
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.getConstructors
+import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSType
@@ -154,18 +155,25 @@ class PluginSpecFactory {
 
             val annotation = annotations.firstOrNull()
 
-            val type = when (paramTypeString) {
-                "kotlin.Boolean" -> PluginOptionType.BOOLEAN
-                "kotlin.Int" -> PluginOptionType.INTEGER
-                "kotlin.Long" -> PluginOptionType.LONG
-                "org.ossreviewtoolkit.plugins.api.Secret" -> PluginOptionType.SECRET
-                "kotlin.String" -> PluginOptionType.STRING
-                "kotlin.collections.List<kotlin.String>" -> PluginOptionType.STRING_LIST
+            val type = when {
+                isEnumType(paramType) -> PluginOptionType.ENUM
+                isEnumListType(paramType) -> PluginOptionType.ENUM_LIST
 
-                else -> throw IllegalArgumentException(
-                    "Config class constructor parameter ${param.name?.asString()} has unsupported type " +
-                        "$paramTypeString."
-                )
+                else -> {
+                    when (paramTypeString) {
+                        "kotlin.Boolean" -> PluginOptionType.BOOLEAN
+                        "kotlin.Int" -> PluginOptionType.INTEGER
+                        "kotlin.Long" -> PluginOptionType.LONG
+                        "org.ossreviewtoolkit.plugins.api.Secret" -> PluginOptionType.SECRET
+                        "kotlin.String" -> PluginOptionType.STRING
+                        "kotlin.collections.List<kotlin.String>" -> PluginOptionType.STRING_LIST
+
+                        else -> throw IllegalArgumentException(
+                            "Config class constructor parameter ${param.name?.asString()} has unsupported type " +
+                                "$paramTypeString."
+                        )
+                    }
+                }
             }
 
             val defaultValue = annotation?.defaultValue?.takeUnless { it == OrtPluginOption.NO_DEFAULT_VALUE }
@@ -174,6 +182,8 @@ class PluginSpecFactory {
                 name = param.name?.asString().orEmpty(),
                 description = prop.docString?.trim().orEmpty(),
                 type = type,
+                enumType = getEnumType(paramType),
+                enumEntries = getEnumEntries(paramType),
                 defaultValue = defaultValue,
                 aliases = annotation?.aliases?.asList().orEmpty(),
                 isNullable = paramType.isMarkedNullable,
@@ -203,3 +213,65 @@ class PluginSpecFactory {
 
 internal fun derivePluginId(pluginClassName: String, pluginBaseClassName: String): String =
     pluginClassName.removeSuffix(pluginBaseClassName.removePrefix("Ort"))
+
+/**
+ * Return `true` if the given [type] is an enum type.
+ */
+private fun isEnumType(type: KSType): Boolean =
+    type.declaration.let { it is KSClassDeclaration && it.classKind == ClassKind.ENUM_CLASS }
+
+/**
+ * Return `true` if the given [type] is a [List] with an enum type as its single type argument.
+ */
+private fun isEnumListType(type: KSType): Boolean =
+    type.declaration.let {
+        it.qualifiedName?.asString() == "kotlin.collections.List"
+    } && type.arguments.size == 1 && run {
+        val argType = type.arguments[0].type?.resolve() ?: return@run false
+        val argDeclaration = argType.declaration
+        argDeclaration is KSClassDeclaration && argDeclaration.classKind == ClassKind.ENUM_CLASS
+    }
+
+/**
+ * Return the qualified name of the enum type if the given [type] is an enum type or a [List] of an enum type, `null`
+ * otherwise.
+ */
+private fun getEnumType(type: KSType): String? =
+    when {
+        isEnumType(type) -> {
+            type.declaration.qualifiedName?.asString()
+        }
+
+        isEnumListType(type) -> {
+            val argType = checkNotNull(type.arguments[0].type).resolve()
+            argType.declaration.qualifiedName?.asString()
+        }
+
+        else -> null
+    }
+
+/**
+ * Return the names of the enum entries if the given [type] is an enum type or a [List] of an enum type, `null`
+ * otherwise.
+ */
+private fun getEnumEntries(type: KSType): List<String>? =
+    when {
+        isEnumType(type) -> {
+            type.declaration
+                .let { (it as KSClassDeclaration).declarations.filterIsInstance<KSClassDeclaration>() }
+                .filter { it.classKind == ClassKind.ENUM_ENTRY }
+                .map { it.simpleName.asString() }
+                .toList()
+        }
+
+        isEnumListType(type) -> {
+            val argType = checkNotNull(type.arguments[0].type).resolve()
+            argType.declaration
+                .let { (it as KSClassDeclaration).declarations.filterIsInstance<KSClassDeclaration>() }
+                .filter { it.classKind == ClassKind.ENUM_ENTRY }
+                .map { it.simpleName.asString() }
+                .toList()
+        }
+
+        else -> null
+    }

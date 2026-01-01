@@ -50,6 +50,18 @@ class JsonSpecGenerator(private val codeGenerator: CodeGenerator) {
                         addJsonObject {
                             put("name", it.name)
                             put("type", it.type.name)
+                            put("enumType", it.enumType)
+
+                            it.enumEntries.let { enumEntries ->
+                                if (enumEntries == null) {
+                                    put("enumEntries", null)
+                                } else {
+                                    putJsonArray("enumEntries") {
+                                        addAll(enumEntries)
+                                    }
+                                }
+                            }
+
                             put("description", it.description)
                             put("default", it.defaultValue)
 

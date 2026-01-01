@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
@@ -54,7 +55,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
             val expectedResult = readResource("/evaluated-model-reporter-test-expected-output.yml")
 
             val result = EvaluatedModelReporterFactory
-                .create(outputFileFormats = listOf("yml"))
+                .create(outputFileFormats = listOf(FileFormat.YAML))
                 .generateReport(ortResult)
 
             result shouldBe expectedResult
@@ -64,7 +65,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
             val expectedResult = readResource("/evaluated-model-reporter-test-deduplicate-expected-output.yml")
 
             val result = EvaluatedModelReporterFactory
-                .create(outputFileFormats = listOf("yml"), deduplicateDependencyTree = true)
+                .create(outputFileFormats = listOf(FileFormat.YAML), deduplicateDependencyTree = true)
                 .generateReport(ortResult)
 
             result shouldBe expectedResult

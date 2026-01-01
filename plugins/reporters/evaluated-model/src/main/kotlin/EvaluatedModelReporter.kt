@@ -45,7 +45,7 @@ data class EvaluatedModelReporterConfig(
         defaultValue = "JSON",
         aliases = ["output.file.formats"]
     )
-    val outputFileFormats: List<String>
+    val outputFileFormats: List<FileFormat>
 )
 
 /**
@@ -63,9 +63,7 @@ class EvaluatedModelReporter(
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val evaluatedModel = EvaluatedModel.create(input, config.deduplicateDependencyTree)
 
-        val outputFileFormats = config.outputFileFormats.map { FileFormat.forExtension(it) }
-
-        return outputFileFormats.map { fileFormat ->
+        return config.outputFileFormats.toSet().map { fileFormat ->
             runCatching {
                 outputDir.resolve("evaluated-model.${fileFormat.fileExtension}").apply {
                     bufferedWriter().use {
