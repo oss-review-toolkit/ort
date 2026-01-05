@@ -4,3 +4,6 @@ useGitIgnore: true
 # Exclude the website because Docusaurus validates links itself.
 excludedDirs:
   - website
+ignorePatterns:
+  # The link is valid but linkspector gets a 403 response when running on GitHub Actions.
+  - pattern: '^https://www.epam.com/services/engineering/open-source$'
