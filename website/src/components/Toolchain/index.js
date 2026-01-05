@@ -102,7 +102,7 @@ export default function Toolchain() {
         </p>
         <p>
           For more information on how to use these tools, check out the{' '}
-          <Link to="/docs/category/tools">documentation</Link>.
+          <Link to="/docs/reference/cli">documentation</Link>.
         </p>
       </div>
     </section>

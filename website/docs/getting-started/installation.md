@@ -1,52 +1,10 @@
----
-sidebar_position: 1
----
-
 # Installation
+
+If you want to run ORT in a CI pipeline, see [CI Integrations](ci-integrations.md) instead.
 
 ## From Docker
 
-The easiest way to run ORT is to use the Docker images available from the GitHub container registry.
-There are two images available:
-[`ort`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort/versions) and [`ort-minimal`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort-minimal/versions).
-
-The difference between those two images is that `ort` contains installations of all supported package managers while `ort-minimal` contains only the most commonly used package managers to reduce the image size.
-For example, for release `13.0.0` the size of the [`ort`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort/168323397?tag=13.0.0) image is ~7 GB and the size of the [`ort-minimal`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort-minimal/168320821?tag=13.0.0) image is ~3 GB.
-The examples below use the `ort` image.
-To run them with the `ort-minimal` image replace `ort` with `ort-minimal`.
-
-To run the Docker image for the latest ORT release use:
-
-```shell
-$ docker run ghcr.io/oss-review-toolkit/ort --version
-13.0.0
-```
-
-To run a specific version, for example `12.0.0`, use:
-
-```shell
-$ docker run ghcr.io/oss-review-toolkit/ort:12.0.0 --version
-12.0.0
-```
-
-To show the command line help, run the image with the `--help` option:
-
-```shell
-docker run ghcr.io/oss-review-toolkit/ort --help
-```
-
-To show which versions of the required tools are installed run the image with the `requirements` command:
-
-```shell
-docker run ghcr.io/oss-review-toolkit/ort requirements
-```
-
-The above commands always create a new Docker container.
-To avoid that they pile up Docker can be run with the `--rm` flag to automatically remove the container when the command has finished:
-
-```shell
-docker run --rm ghcr.io/oss-review-toolkit/ort [command]
-```
+The easiest way to run ORT is to use the official Docker images. See [Docker](docker.md) for details.
 
 ## From binaries
 
@@ -108,7 +66,7 @@ Depending on how ORT was installed, it can be run in the following ways:
   docker run ort --help
   ```
 
-  You can find further hints for using ORT with Docker in the [documentation](../guides/docker.md).
+  You can find further hints for using ORT with Docker in the [documentation](../tutorials/docker.md).
 
 * If the ORT distribution was built from sources, use
 

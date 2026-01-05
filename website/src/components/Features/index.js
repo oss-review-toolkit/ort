@@ -27,7 +27,7 @@ const FeatureList = [
   {
     title: 'Analyzer',
     Svg: require('@site/static/img/analyzer.svg').default,
-    link: 'docs/tools/analyzer',
+    link: 'docs/reference/cli/analyzer',
     command: 'analyze',
     description: (
       <>
@@ -40,7 +40,10 @@ const FeatureList = [
           <li>
             Support for more than 20 package managers, including Bazel, Cargo,
             Gradle, Maven, npm, PIP, pnpm, Yarn, and{' '}
-            <Link to="docs/tools/analyzer">many more</Link>.
+            <Link to="docs/reference/cli/analyzer#supported-package-managers">
+              many more
+            </Link>
+            .
           </li>
           <li>
             Works out-of-the-box with most project setups, no need for
@@ -48,7 +51,9 @@ const FeatureList = [
           </li>
           <li>
             Support for package metadata curations, either{' '}
-            <Link to="docs/configuration/package-curations">self-written</Link>{' '}
+            <Link to="docs/reference/configuration/package-curations">
+              self-written
+            </Link>{' '}
             or sourced from public repositories like{' '}
             <Link to="https://clearlydefined.io/">ClearlyDefined</Link>.
           </li>
@@ -67,7 +72,7 @@ const FeatureList = [
   {
     title: 'Downloader',
     Svg: require('@site/static/img/downloader.svg').default,
-    link: 'docs/tools/downloader',
+    link: 'docs/reference/cli/downloader',
     command: 'download',
     description: (
       <>
@@ -93,13 +98,13 @@ const FeatureList = [
   {
     title: 'Scanner',
     Svg: require('@site/static/img/scanner.svg').default,
-    link: 'docs/tools/scanner',
+    link: 'docs/reference/cli/scanner',
     command: 'scan',
     description: (
       <>
         <p>
           The <b>Scanner</b> integrates third-party{' '}
-          <Link to="docs/category/scanners">source code scanners</Link> to
+          <Link to="docs/reference/cli/scanner">source code scanners</Link> to
           gather information about licenses, copyrights, and snippets in the
           source code of your projects and their dependencies.
         </p>
@@ -123,7 +128,7 @@ const FeatureList = [
   {
     title: 'Advisor',
     Svg: require('@site/static/img/advisor.svg').default,
-    link: 'docs/tools/advisor',
+    link: 'docs/reference/cli/advisor',
     command: 'advise',
     description: (
       <>
@@ -134,8 +139,8 @@ const FeatureList = [
         <ul>
           <li>
             Support for several{' '}
-            <Link to="docs/category/advisors">vulnerability providers</Link>,
-            including OSV and VulnerableCode.
+            <Link to="docs/reference/cli/advisor">vulnerability providers</Link>
+            , including OSV and VulnerableCode.
           </li>
           <li>
             Found vulnerabilities can be resolved if they do not apply to your
@@ -148,7 +153,7 @@ const FeatureList = [
   {
     title: 'Evaluator',
     Svg: require('@site/static/img/evaluator.svg').default,
-    link: 'docs/tools/evaluator',
+    link: 'docs/reference/cli/evaluator',
     command: 'evaluate',
     description: (
       <>
@@ -176,14 +181,14 @@ const FeatureList = [
   {
     title: 'Reporter',
     Svg: require('@site/static/img/reporter.svg').default,
-    link: 'docs/tools/reporter',
+    link: 'docs/reference/cli/reporter',
     command: 'report',
     description: (
       <>
         <p>
           The <b>Reporter</b> generates{' '}
-          <Link to="docs/category/reporters">various reports</Link> based on the
-          data gathered by the ORT toolchain.
+          <Link to="docs/reference/cli/reporter">various reports</Link> based on
+          the data gathered by the ORT toolchain.
         </p>
         <ul>
           <li>
@@ -198,8 +203,10 @@ const FeatureList = [
           </li>
           <li>
             Can build a{' '}
-            <Link to="docs/plugins/reporters/WebApp">web application</Link> in a
-            single HTML file to visualize the gathered data.
+            <Link to="docs/reference/plugins/reporters/WebApp">
+              web application
+            </Link>{' '}
+            in a single HTML file to visualize the gathered data.
           </li>
         </ul>
       </>

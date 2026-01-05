@@ -55,15 +55,21 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro"
-          >
-            Introduction
-          </Link>
-          <Link
-            className="button button--secondary button--lg"
             to="/docs/getting-started/installation"
           >
             Getting Started
+          </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to="/docs/tutorials/walkthrough"
+          >
+            Tutorials
+          </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to="/docs/reference/cli"
+          >
+            CLI Reference
           </Link>
         </div>
         <CommandBox command="docker run ghcr.io/oss-review-toolkit/ort --help" />
