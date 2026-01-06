@@ -25,11 +25,6 @@ import java.nio.file.Files
 
 import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
 
-import org.gradle.accessors.dm.LibrariesForLibs
-
-private val Project.libs: LibrariesForLibs
-    get() = extensions.getByType()
-
 val javaLanguageVersion: String by project
 
 plugins {
@@ -87,7 +82,7 @@ graalvmNative {
                         listOf("^/META-INF/native-image/org.jline/.*"),
                     // The contained "reflect-config.json" does not match the code of the AWS flavor of the Apache HTTP
                     // client.
-                    "software.amazon.awssdk:apache-client:2.40.1" to
+                    "software.amazon.awssdk:apache-client:2.41.0" to
                         listOf("^/META-INF/native-image/software.amazon.awssdk/apache-client/.*")
                 )
             )

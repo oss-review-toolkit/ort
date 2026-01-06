@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.util.EnumSet
+
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
@@ -36,7 +38,7 @@ data class EvaluatedRuleViolation(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val license: LicenseId?,
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val licenseSources: Set<LicenseSource>,
+    val licenseSources: EnumSet<LicenseSource>,
     val severity: Severity,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val message: String,

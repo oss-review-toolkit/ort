@@ -30,7 +30,7 @@ interface PluginFactory<out PLUGIN : Plugin> {
         /**
          * Return all plugin factories of type [FACTORY].
          */
-        inline fun <reified FACTORY : PluginFactory<PLUGIN>, PLUGIN> getAll() =
+        inline fun <reified FACTORY : PluginFactory<PLUGIN>, PLUGIN : Plugin> getAll() =
             getLoaderFor<FACTORY>()
                 .iterator()
                 .asSequence()

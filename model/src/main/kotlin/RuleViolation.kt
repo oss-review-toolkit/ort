@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import java.util.EnumSet
+
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 data class RuleViolation(
@@ -40,7 +42,7 @@ data class RuleViolation(
     /**
      * The [sources][licenseSources] of the [license]. Can be empty if the rule does not work on licenses.
      */
-    val licenseSources: Set<LicenseSource>,
+    val licenseSources: EnumSet<LicenseSource>,
 
     /**
      * The severity of the rule violation.

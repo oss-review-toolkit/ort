@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import java.util.EnumSet
+
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
@@ -34,6 +36,7 @@ import org.ossreviewtoolkit.model.vulnerabilities.Cvss3Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Cvss4Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseReferenceExpression
@@ -215,7 +218,7 @@ open class PackageRule(
         effectiveResolvedLicenseInfo.forEach { resolvedLicense ->
             if (separateEvaluationPerSource) {
                 resolvedLicense.sources.forEach { licenseSource ->
-                    licenseRules += LicenseRule(name, resolvedLicense, setOf(licenseSource)).apply(block)
+                    licenseRules += LicenseRule(name, resolvedLicense, enumSetOf(licenseSource)).apply(block)
                 }
             } else {
                 licenseRules += LicenseRule(name, resolvedLicense, resolvedLicense.sources).apply(block)
@@ -224,22 +227,22 @@ open class PackageRule(
     }
 
     fun issue(severity: Severity, message: String, howToFix: String) =
-        issue(severity, pkg.metadata.id, null, emptySet(), message, howToFix)
+        issue(severity, pkg.metadata.id, null, enumSetOf(), message, howToFix)
 
     /**
      * Add a [hint][Severity.HINT] to the list of [violations].
      */
-    fun hint(message: String, howToFix: String) = hint(pkg.metadata.id, null, emptySet(), message, howToFix)
+    fun hint(message: String, howToFix: String) = hint(pkg.metadata.id, null, enumSetOf(), message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [violations].
      */
-    fun warning(message: String, howToFix: String) = warning(pkg.metadata.id, null, emptySet(), message, howToFix)
+    fun warning(message: String, howToFix: String) = warning(pkg.metadata.id, null, enumSetOf(), message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [violations].
      */
-    fun error(message: String, howToFix: String) = error(pkg.metadata.id, null, emptySet(), message, howToFix)
+    fun error(message: String, howToFix: String) = error(pkg.metadata.id, null, enumSetOf(), message, howToFix)
 
     /**
      * A [Rule] to check a single license of the [package][pkg].
@@ -255,7 +258,7 @@ open class PackageRule(
         /**
          * The license sources to evaluate the rule for. Must not be empty and be contained in the [resolvedLicense].
          */
-        val licenseSources: Set<LicenseSource>
+        val licenseSources: EnumSet<LicenseSource>
     ) : Rule(ruleSet, name) {
         init {
             require(licenseSources.isNotEmpty()) {

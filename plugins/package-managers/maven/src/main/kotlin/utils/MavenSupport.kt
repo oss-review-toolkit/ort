@@ -90,6 +90,7 @@ import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
+import org.ossreviewtoolkit.utils.common.gibibytes
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
@@ -117,8 +118,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     )
 
     val remoteArtifactCache = kottage.cache("remote-artifact-cache") {
-        strategy = KottageLruStrategy(maxEntryCount = 5000)
-        defaultExpireTime = 6.hours
+        strategy = KottageLruStrategy(maxCacheSize = 1.gibibytes)
+        defaultExpireTime = 24.hours
     }
 
     // The MavenSettingsBuilder class is deprecated, but internally it uses its successor SettingsBuilder. Calling

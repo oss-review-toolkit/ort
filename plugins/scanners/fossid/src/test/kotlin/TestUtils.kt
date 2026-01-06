@@ -379,7 +379,7 @@ private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
         sha1 = null,
         sha256 = null,
         size = index,
-        licenses = mutableMapOf(index to license)
+        licenses = PolymorphicData(mutableMapOf(index to license))
     )
 
     return file
@@ -415,7 +415,7 @@ internal fun createMarkAsIdentifiedFile(
 
     return MarkedAsIdentifiedFile(
         comment = "comment",
-        comments = if (comment == null) emptyMap() else mapOf(1 to Comment(1, 1, comment)),
+        comments = PolymorphicData(if (comment == null) emptyMap() else mapOf(1 to Comment(1, 1, comment))),
         identificationId = 1,
         identificationCopyright = "copyright",
         isDistributed = 1,
@@ -428,7 +428,7 @@ internal fun createMarkAsIdentifiedFile(
             sha1 = "fileSha1",
             sha256 = "fileSha256",
             size = 0,
-            licenses = if (comment != null) null else mutableMapOf(1 to fileLicense)
+            licenses = PolymorphicData(if (comment != null) null else mutableMapOf(1 to fileLicense))
         )
     }
 }
@@ -598,7 +598,7 @@ internal fun FossIdServiceWithVersion.expectRemoveUploadedContent(scanCode: Stri
 }
 
 /**
- * Prepare this service mock to expect a request to upload a file for the given [scanCode]. The file nane is not
+ * Prepare this service mock to expect a request to upload a file for the given [scanCode]. The filename is not
  * required as the FossID scanner generates a unique name for each file.
  */
 internal fun FossIdServiceWithVersion.expectUploadFile(scanCode: String): FossIdServiceWithVersion {
@@ -609,7 +609,7 @@ internal fun FossIdServiceWithVersion.expectUploadFile(scanCode: String): FossId
 }
 
 /**
- * Prepare this service mock to expect a request to extract archives for the given [scanCode]. The file nane is not
+ * Prepare this service mock to expect a request to extract archives for the given [scanCode]. The filename is not
  * required as the FossID scanner generates a unique name for each file.
  */
 internal fun FossIdServiceWithVersion.expectExtractArchives(scanCode: String): FossIdServiceWithVersion {

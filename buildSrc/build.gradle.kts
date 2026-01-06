@@ -38,8 +38,6 @@ repositories {
 }
 
 dependencies {
-    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
-
     implementation(libs.jgit)
     implementation(libs.plugin.dependencyAnalysis)
     implementation(libs.plugin.detekt)
@@ -49,3 +47,5 @@ dependencies {
     implementation(libs.plugin.ksp)
     implementation(libs.plugin.mavenPublish)
 }
+
+version = rootProject.version

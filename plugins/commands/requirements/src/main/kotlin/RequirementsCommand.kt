@@ -28,9 +28,6 @@ import java.util.EnumSet
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
@@ -128,54 +125,31 @@ class RequirementsCommand(
 
         classes.filterNot {
             Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
-        }.sortedBy { it.simpleName }.forEach {
+        }.sortedBy { it.simpleName }.forEach { cliClass ->
             runCatching {
                 fun Class<out Any>.isBundledPlugin(type: String) =
                     packageName.startsWith("org.ossreviewtoolkit.plugins.$type.")
 
-                val kotlinObject = it.kotlin.objectInstance
+                val instance = cliClass.kotlin.objectInstance?.let {
+                    logger.debug { "$cliClass is a Kotlin object." }
+                    it
+                } ?: run {
+                    logger.debug { "Trying to instantiate $cliClass without any arguments." }
+                    cliClass.getDeclaredConstructor().newInstance()
+                }
 
-                var category = "Other tool"
-                val instance = when {
-                    kotlinObject != null -> {
-                        logger.debug { "$it is a Kotlin object." }
-
-                        when {
-                            it.isBundledPlugin("packagemanagers") -> category = "PackageManager"
-                            it.isBundledPlugin("scanners") -> category = "Scanner"
-                            it.isBundledPlugin("versioncontrolsystems") -> category = "VersionControlSystem"
-                        }
-
-                        kotlinObject
-                    }
-
-                    PackageManager::class.java.isAssignableFrom(it) -> {
-                        category = "PackageManager"
-                        logger.debug { "$it is a $category." }
-                        it.getDeclaredConstructor(
-                            String::class.java,
-                            File::class.java,
-                            AnalyzerConfiguration::class.java,
-                            RepositoryConfiguration::class.java
-                        ).newInstance(
-                            "",
-                            File(""),
-                            AnalyzerConfiguration(),
-                            RepositoryConfiguration()
-                        )
-                    }
-
-                    else -> {
-                        logger.debug { "Trying to instantiate $it without any arguments." }
-                        it.getDeclaredConstructor().newInstance()
-                    }
+                val category = when {
+                    cliClass.isBundledPlugin("packagemanagers") -> "PackageManager"
+                    cliClass.isBundledPlugin("scanners") -> "Scanner"
+                    cliClass.isBundledPlugin("versioncontrolsystems") -> "VersionControlSystem"
+                    else -> "Other tool"
                 }
 
                 if (instance.command().isNotEmpty()) {
                     tools.getOrPut(category) { mutableListOf() } += instance
                 }
             }.onFailure { e ->
-                echo(Theme.Default.danger("There was an error instantiating $it: $e."))
+                echo(Theme.Default.danger("There was an error instantiating $cliClass: $e."))
                 throw ProgramResult(1)
             }
         }

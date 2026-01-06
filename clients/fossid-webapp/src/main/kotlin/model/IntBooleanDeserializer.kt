@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
  * This class deserializes a String containing 0/1 to boolean.
  * Null string leads to null Boolean.
  */
-class IntBooleanDeserializer : StdDeserializer<Boolean>(Boolean::class.java) {
+internal class IntBooleanDeserializer : StdDeserializer<Boolean>(Boolean::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Boolean =
         when (val text = p.text) {
             "0" -> false

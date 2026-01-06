@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentif
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 
+import org.ossreviewtoolkit.clients.fossid.PolymorphicData
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.Component
 import org.ossreviewtoolkit.clients.fossid.model.summary.License
 import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
@@ -28,11 +29,11 @@ import org.ossreviewtoolkit.clients.fossid.model.summary.SummaryIdentifiedFile
 
 data class MarkedAsIdentifiedFile(
     val comment: String?,
-    val comments: Map<Int, Comment> = emptyMap(),
+    val comments: PolymorphicData<Map<Int, Comment>> = PolymorphicData(emptyMap()),
 
     val identificationId: Int,
 
-    val identificationCopyright: String,
+    val identificationCopyright: String?,
 
     val isDistributed: Int,
 
@@ -45,7 +46,7 @@ data class MarkedAsIdentifiedFile(
     lateinit var file: File
 
     override fun toSummary(): SummaryIdentifiedFile {
-        val licenses = file.licenses?.let { licenses ->
+        val licenses = file.licenses?.value?.let { licenses ->
             licenses.values.map {
                 License(
                     identifier = checkNotNull(it.file.licenseIdentifier),
@@ -64,5 +65,5 @@ data class MarkedAsIdentifiedFile(
 
     override fun getFileName(): String = checkNotNull(file.path)
 
-    override fun getCopyright(): String = identificationCopyright
+    override fun getCopyright(): String = identificationCopyright.orEmpty()
 }

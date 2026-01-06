@@ -24,6 +24,7 @@ import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -119,6 +120,42 @@ class DownloaderFunTest : WordSpec({
 
             tyrexDir.isDirectory shouldBe true
             tyrexDir.walk().count() shouldBe 409
+        }
+
+        "succeed for Hex packages and extract nested contents" {
+            val artifactUrl = "https://repo.hex.pm/tarballs/filepath-1.1.2.tar"
+            val pkg = Package(
+                id = Identifier(
+                    type = "Hex",
+                    namespace = "",
+                    name = "filepath",
+                    version = "1.1.2"
+                ),
+                declaredLicenses = emptySet(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = artifactUrl,
+                    hash = Hash.create("b0a3762cde6dcdc4f066842d5e5c67a1b9f717f5")
+                ),
+                vcs = VcsInfo.EMPTY
+            )
+
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
+            }
+
+            // Verify that the nested contents.tar.gz was extracted, not just the outer tar.
+            // The gleam.toml file is inside contents.tar.gz.
+            val gleamToml = outputDir / "gleam.toml"
+            gleamToml shouldBe aFile()
+
+            val srcDir = outputDir / "src"
+            srcDir shouldBe aDirectory()
         }
 
         "succeed for sources JAR artifacts" {

@@ -19,8 +19,12 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import java.util.EnumSet
+
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.utils.common.enumSetOf
+import org.ossreviewtoolkit.utils.common.intersect
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
@@ -29,19 +33,19 @@ import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
  * licenses relevant to an evaluator rule whereas the [licenseSources] is the filter criteria. Only the entry with the
  * lowest index in the given [licenseSources] which yields a non-empty result is used as filter criteria.
  */
-class LicenseView(vararg licenseSources: Set<LicenseSource>) {
+class LicenseView(vararg licenseSources: EnumSet<LicenseSource>) {
     companion object {
         /**
          * Return all licenses.
          */
-        val ALL = LicenseView(setOf(LicenseSource.DECLARED, LicenseSource.DETECTED, LicenseSource.CONCLUDED))
+        val ALL = LicenseView(enumSetOf(LicenseSource.DECLARED, LicenseSource.DETECTED, LicenseSource.CONCLUDED))
 
         /**
          * Return only the concluded licenses if they exist, otherwise return declared and detected licenses.
          */
         val CONCLUDED_OR_DECLARED_AND_DETECTED = LicenseView(
-            setOf(LicenseSource.CONCLUDED),
-            setOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
+            enumSetOf(LicenseSource.CONCLUDED),
+            enumSetOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
         )
 
         /**
@@ -49,33 +53,33 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
          * return the detected licenses.
          */
         val CONCLUDED_OR_DECLARED_OR_DETECTED = LicenseView(
-            setOf(LicenseSource.CONCLUDED),
-            setOf(LicenseSource.DECLARED),
-            setOf(LicenseSource.DETECTED)
+            enumSetOf(LicenseSource.CONCLUDED),
+            enumSetOf(LicenseSource.DECLARED),
+            enumSetOf(LicenseSource.DETECTED)
         )
 
         /**
          * Return only the concluded licenses if they exist, otherwise return detected licenses.
          */
         val CONCLUDED_OR_DETECTED = LicenseView(
-            setOf(LicenseSource.CONCLUDED),
-            setOf(LicenseSource.DETECTED)
+            enumSetOf(LicenseSource.CONCLUDED),
+            enumSetOf(LicenseSource.DETECTED)
         )
 
         /**
          * Return only the concluded licenses.
          */
-        val ONLY_CONCLUDED = LicenseView(setOf(LicenseSource.CONCLUDED))
+        val ONLY_CONCLUDED = LicenseView(enumSetOf(LicenseSource.CONCLUDED))
 
         /**
          * Return only the declared licenses.
          */
-        val ONLY_DECLARED = LicenseView(setOf(LicenseSource.DECLARED))
+        val ONLY_DECLARED = LicenseView(enumSetOf(LicenseSource.DECLARED))
 
         /**
          * Return only the detected licenses.
          */
-        val ONLY_DETECTED = LicenseView(setOf(LicenseSource.DETECTED))
+        val ONLY_DETECTED = LicenseView(enumSetOf(LicenseSource.DETECTED))
     }
 
     private val licenseSources = licenseSources.toSet()
@@ -112,7 +116,7 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
         // Collect only the licenses instead of the full ResolvedLicense objects here, because calculating the hash
         // codes can be expensive for resolved licenses with many license and copyright findings.
         val remainingLicenses = mutableSetOf<SpdxSingleLicenseExpression>()
-        val remainingSources = mutableMapOf<SpdxSingleLicenseExpression, Set<LicenseSource>>()
+        val remainingSources = mutableMapOf<SpdxSingleLicenseExpression, EnumSet<LicenseSource>>()
 
         run loop@{
             licenseSources.forEach { sources ->

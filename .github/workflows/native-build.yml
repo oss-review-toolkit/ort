@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup GraalVM
-        uses: graalvm/setup-graalvm@790e28947b79a9c09c3391c0f18bf8d0f102ed69 # v1
+        uses: graalvm/setup-graalvm@54b4f5a65c1a84b2fdfdc2078fe43df32819e4b1 # v1
         with:
           distribution: graalvm
           java-version: 25
@@ -31,7 +31,7 @@ jobs:
         with:
           files: cli/build/native/nativeCompile/ort
       - name: Upload Executable
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: ORT Analyzer-only
           path: cli/build/native/nativeCompile/ort

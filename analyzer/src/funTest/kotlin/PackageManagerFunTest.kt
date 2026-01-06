@@ -53,6 +53,7 @@ class PackageManagerFunTest : WordSpec({
         "conan-py/conanfile.py",
         "conan-txt/conanfile.txt",
         "dotnet/test.csproj",
+        "gleam/gleam.toml",
         "gomod/go.mod",
         "gradle-groovy/build.gradle",
         "gradle-kotlin/build.gradle.kts",
@@ -106,6 +107,7 @@ class PackageManagerFunTest : WordSpec({
                     "conan-py/conanfile.py",
                     "conan-txt/conanfile.txt"
                 )
+                managedFilesById["Gleam"] should containExactly("gleam/gleam.toml")
                 managedFilesById["GoMod"] should containExactly("gomod/go.mod")
                 managedFilesById["GradleInspector"] should containExactlyInAnyOrder(
                     "gradle-groovy/build.gradle",

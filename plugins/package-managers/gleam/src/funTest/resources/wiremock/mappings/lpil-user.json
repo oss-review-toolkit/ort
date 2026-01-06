@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/users/lpil"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "lpil-user-response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

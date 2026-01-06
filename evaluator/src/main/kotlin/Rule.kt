@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import java.util.EnumSet
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
@@ -27,6 +29,7 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.utils.common.enumSetOfNotNull
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
@@ -130,7 +133,7 @@ abstract class Rule(
         severity: Severity,
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSources: Set<LicenseSource>,
+        licenseSources: EnumSet<LicenseSource>,
         message: String,
         howToFix: String
     ) {
@@ -151,7 +154,7 @@ abstract class Rule(
     fun hint(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSources: Set<LicenseSource>,
+        licenseSources: EnumSet<LicenseSource>,
         message: String,
         howToFix: String
     ) = issue(Severity.HINT, pkgId, license, licenseSources, message, howToFix)
@@ -162,7 +165,7 @@ abstract class Rule(
     fun warning(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSources: Set<LicenseSource>,
+        licenseSources: EnumSet<LicenseSource>,
         message: String,
         howToFix: String
     ) = issue(Severity.WARNING, pkgId, license, licenseSources, message, howToFix)
@@ -173,7 +176,7 @@ abstract class Rule(
     fun error(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
-        licenseSources: Set<LicenseSource>,
+        licenseSources: EnumSet<LicenseSource>,
         message: String,
         howToFix: String
     ) = issue(Severity.ERROR, pkgId, license, licenseSources, message, howToFix)
@@ -209,7 +212,7 @@ fun Rule.issue(
     licenseSource: LicenseSource?,
     message: String,
     howToFix: String
-) = issue(severity, pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+) = issue(severity, pkgId, license, enumSetOfNotNull(licenseSource), message, howToFix)
 
 /**
  * Backward compatibility for [Rule.hint()].
@@ -221,7 +224,7 @@ fun Rule.hint(
     licenseSource: LicenseSource?,
     message: String,
     howToFix: String
-) = hint(pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+) = hint(pkgId, license, enumSetOfNotNull(licenseSource), message, howToFix)
 
 /**
  * Backward compatibility for [Rule.warning()].
@@ -233,7 +236,7 @@ fun Rule.warning(
     licenseSource: LicenseSource?,
     message: String,
     howToFix: String
-) = warning(pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+) = warning(pkgId, license, enumSetOfNotNull(licenseSource), message, howToFix)
 
 /**
  * Backward compatibility for [Rule.error()].
@@ -245,4 +248,4 @@ fun Rule.error(
     licenseSource: LicenseSource?,
     message: String,
     howToFix: String
-) = error(pkgId, license, setOfNotNull(licenseSource), message, howToFix)
+) = error(pkgId, license, enumSetOfNotNull(licenseSource), message, howToFix)

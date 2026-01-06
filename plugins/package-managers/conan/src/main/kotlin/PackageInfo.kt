@@ -137,7 +137,7 @@ internal data class Graph(
 internal data class PackageV2(
     val ref: String,
     val author: String? = null,
-    @Serializable(with = StringListSerializer::class)
+    @Serializable(StringListSerializer::class)
     val license: List<String> = emptyList(),
     val homepage: String? = null,
     val url: String? = null,
@@ -183,7 +183,7 @@ internal data class DependencyReference(
  * A (de)serialized for the list of licenses: the JSON can contain either null, string or an array of string for this
  * property.
  */
-object StringListSerializer : KSerializer<List<String>> {
+private object StringListSerializer : KSerializer<List<String>> {
     override val descriptor = listSerialDescriptor<String>()
 
     override fun serialize(encoder: Encoder, value: List<String>) {

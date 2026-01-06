@@ -78,7 +78,7 @@ class EvaluatorTest : WordSpec({
                     rule = "rule 1",
                     pkg = Identifier("type:namespace:name:1.0"),
                     license = SpdxLicenseIdExpression("license-1"),
-                    licenseSources = setOf(LicenseSource.DETECTED),
+                    licenseSources = enumSetOf(LicenseSource.DETECTED),
                     severity = Severity.ERROR,
                     message = "message 1",
                     howToFix = "how to fix 1"
@@ -88,7 +88,7 @@ class EvaluatorTest : WordSpec({
                     rule = "rule 2",
                     pkg = Identifier("type:namespace:name:2.0"),
                     license = SpdxLicenseIdExpression("license-2"),
-                    licenseSources = setOf(LicenseSource.DECLARED),
+                    licenseSources = enumSetOf(LicenseSource.DECLARED),
                     severity = Severity.WARNING,
                     message = "message 2",
                     howToFix = "how to fix 2"

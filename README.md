@@ -166,7 +166,7 @@ For everything from reporting bugs to asking questions, please go through the [i
 
 # License
 
-Copyright (C) 2017-2025 [The ORT Project Copyright Holders](./NOTICE).
+Copyright (C) 2017-2026 [The ORT Project Copyright Holders](./NOTICE).
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
 

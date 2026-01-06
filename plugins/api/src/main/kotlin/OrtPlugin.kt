@@ -30,6 +30,7 @@ import kotlin.reflect.KClass
  * the plugins, handling the [PluginConfig], and providing the [PluginDescriptor].
  */
 @Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
 annotation class OrtPlugin(
     /**
      * The id of the plugin. Must be unique among all plugins for the same extension point. If empty, the id is derived

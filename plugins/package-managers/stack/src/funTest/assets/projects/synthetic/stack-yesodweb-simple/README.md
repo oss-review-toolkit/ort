@@ -1,6 +1,6 @@
 ## Haskell Setup
 
-1. If you haven't already, [install Stack](https://haskell-lang.org/get-started)
+1. If you haven't already, [install Stack](https://www.haskell.org/get-started)
 	* On POSIX systems, this is usually `curl -sSL https://get.haskellstack.org/ | sh`
 2. Install the `yesod` command line tool: `stack install yesod-bin --install-ghc`
 3. Build libraries: `stack build`
@@ -40,4 +40,3 @@ stack test --flag stack-yesodweb-simple:library-only --flag stack-yesodweb-simpl
 * Ask the [Yesod Google Group](https://groups.google.com/forum/#!forum/yesodweb)
 * There are several chatrooms you can ask for help:
 	* For IRC, try Freenode#yesod and Freenode#haskell
-	* [Functional Programming Slack](https://fpchat-invite.herokuapp.com/), in the #haskell, #haskell-beginners, or #yesod channels.

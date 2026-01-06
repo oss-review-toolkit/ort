@@ -23,6 +23,8 @@ Currently, the following package managers (grouped by the programming language t
   * Also see: [SPDX documents](#spdx-as-fallback-package-manager)
 * Dart / Flutter
   * [Pub](https://pub.dev/)
+* Gleam
+  * [Gleam](https://gleam.run/)
 * Go
   * [GoMod](https://github.com/golang/go/wiki/Modules)
 * Haskell

@@ -22,10 +22,21 @@ package org.ossreviewtoolkit.utils.common
 import java.util.EnumSet
 
 /**
- * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().
+ * A Kotlin-style convenience function to replace [EnumSet.of] and [EnumSet.noneOf] for the given [elements].
  */
-inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
-    EnumSet.noneOf(T::class.java).apply { addAll(elems) }
+inline fun <reified T : Enum<T>> enumSetOf(vararg elements: T): EnumSet<T> =
+    EnumSet.noneOf(T::class.java).apply { addAll(elements) }
+
+/**
+ * Return an [EnumSet] with only those given [elements] that are not null.
+ */
+inline fun <reified T : Enum<T>> enumSetOfNotNull(vararg elements: T?): EnumSet<T> =
+    elements.filterNotNullTo(enumSetOf())
+
+/**
+ * Return an [EnumSet] that contains the intersection of the elements of [this] and [other].
+ */
+fun <E : Enum<E>> EnumSet<E>.intersect(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { retainAll(other) }
 
 /**
  * Return an [EnumSet] that contains the elements of [this] and [other].

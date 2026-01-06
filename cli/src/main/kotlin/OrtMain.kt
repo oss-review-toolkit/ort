@@ -28,6 +28,7 @@ import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.core.subcommands
+import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.output.MordantHelpFormatter
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -43,6 +44,7 @@ import com.github.ajalt.mordant.rendering.VerticalAlign
 import com.github.ajalt.mordant.rendering.Widget
 import com.github.ajalt.mordant.table.ColumnWidth
 import com.github.ajalt.mordant.table.grid
+import com.github.ajalt.mordant.terminal.Terminal
 
 import kotlin.system.exitProcess
 
@@ -120,6 +122,7 @@ class OrtMain : CliktCommand(ORT_NAME) {
 
         context {
             helpFormatter = { MordantHelpFormatter(context = it, REQUIRED_OPTION_MARKER, showDefaultValues = true) }
+            terminal = Terminal(nonInteractiveWidth = Int.MAX_VALUE)
         }
 
         // Pass an empty PluginConfig here as commands are not configurable.

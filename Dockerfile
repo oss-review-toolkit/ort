@@ -80,8 +80,6 @@ ARG USERNAME=ort
 ARG USER_ID=1000
 ARG USER_GID=$USER_ID
 ARG HOMEDIR=/home/ort
-ENV HOME=$HOMEDIR
-ENV USER=$USERNAME
 
 # Non privileged user
 RUN groupadd --gid $USER_GID $USERNAME \
@@ -92,7 +90,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     --home-dir $HOMEDIR \
     --create-home $USERNAME
 
-RUN chgrp $USER /opt \
+RUN chgrp $USERNAME /opt \
     && chmod g+wx /opt
 
 # sudo support
@@ -109,8 +107,10 @@ COPY "$CRT_FILES" /tmp/certificates/
 RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
     && /etc/scripts/import_certificates.sh /tmp/certificates/
 
-USER $USER
-WORKDIR $HOME
+USER $USERNAME
+WORKDIR $HOMEDIR
+ENV USER=$USERNAME
+ENV HOME=$HOMEDIR
 
 ENTRYPOINT [ "/bin/bash" ]
 
@@ -140,6 +140,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
     libreadline-dev \
     libgdbm-dev \
+    libicu-dev \
     libsqlite3-dev \
     libssl-dev \
     libbz2-dev \
@@ -153,11 +154,10 @@ RUN curl -kSs https://pyenv.run | bash \
     && pyenv install -v $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION
 
-RUN ARCH=$(arch | sed s/aarch64/arm64/) \
-    && if [ "$ARCH" == "arm64" ]; then \
-    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
+RUN if [ "$(arch)" = "aarch64" ]; then \
+    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION licensedcode-data setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     else \
-    curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+    curl -Os https://raw.githubusercontent.com/aboutcode-org/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
     pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     rm requirements.txt; \
     fi
@@ -584,9 +584,14 @@ COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
 COPY --from=bazel --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
 
 # Askalono
-RUN curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
-    mkdir /opt/askalono && \
-    unzip askalono-Linux.zip -d /opt/askalono
+RUN mkdir /opt/askalono && \
+    if [ "$(arch)" = "aarch64" ]; then \
+    cargo install --git https://github.com/jpeddicord/askalono.git --tag $ASKALONO_VERSION; \
+    mv /opt/rust/cargo/bin/askalono /opt/askalono; \
+    else \
+    curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip; \
+    unzip askalono-Linux.zip -d /opt/askalono; \
+    fi
 
 ENV PATH=$PATH:/opt/askalono
 

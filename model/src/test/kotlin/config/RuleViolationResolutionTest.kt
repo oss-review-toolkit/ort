@@ -24,6 +24,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.utils.common.enumSetOf
 
 class RuleViolationResolutionTest : WordSpec({
     "matches" should {
@@ -66,7 +67,7 @@ private fun ruleViolation(message: String) =
         rule = "",
         pkg = null,
         license = null,
-        licenseSources = emptySet(),
+        licenseSources = enumSetOf(),
         severity = Severity.ERROR,
         message = message,
         howToFix = ""

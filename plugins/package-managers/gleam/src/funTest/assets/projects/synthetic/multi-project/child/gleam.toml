@@ -1,0 +1,7 @@
+name = "child_pkg"
+version = "1.0.0"
+description = "A child Gleam project that depends on sibling"
+licences = ["MIT"]
+
+[dependencies]
+sibling_pkg = { path = "../sibling" }

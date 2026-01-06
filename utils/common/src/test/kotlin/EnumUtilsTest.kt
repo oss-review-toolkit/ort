@@ -21,12 +21,41 @@ package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.time.DayOfWeek
 
+private enum class MyEnum { A, B, C }
+
 class EnumUtilsTest : WordSpec({
+    "Creating enum sets" should {
+        "work with no elements" {
+            enumSetOf<MyEnum>() should beEmpty()
+        }
+
+        "work with one element" {
+            enumSetOf(MyEnum.A).shouldContainExactlyInAnyOrder(MyEnum.A)
+        }
+
+        "work with multiple elements" {
+            enumSetOf(MyEnum.A, MyEnum.B).shouldContainExactlyInAnyOrder(MyEnum.A, MyEnum.B)
+        }
+
+        "work with null elements" {
+            enumSetOfNotNull(null, MyEnum.B) shouldBe enumSetOf(MyEnum.B)
+        }
+    }
+
+    "The intersection" should {
+        "return elements that two sets have in common" {
+            enumSetOf<MyEnum>().intersect(enumSetOf()) shouldBe enumSetOf()
+            enumSetOf(MyEnum.A).intersect(enumSetOf(MyEnum.A)) shouldBe enumSetOf(MyEnum.A)
+            enumSetOf(MyEnum.A, MyEnum.B).intersect(enumSetOf(MyEnum.B, MyEnum.C)) shouldBe enumSetOf(MyEnum.B)
+        }
+    }
+
     "The plus operator" should {
         "create an empty set if both summands are empty" {
             val sum = enumSetOf<DayOfWeek>() + enumSetOf()
