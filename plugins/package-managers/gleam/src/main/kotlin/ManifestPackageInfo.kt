@@ -36,31 +36,19 @@ import org.ossreviewtoolkit.plugins.packagemanagers.gleam.GleamManifest.Package.
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 /**
- * A sealed interface representing a Gleam dependency from the manifest.toml lockfile.
- */
-internal sealed interface GleamPackageInfo {
-    val name: String
-    val dependencies: List<String>
-
-    fun toIdentifier(context: GleamProjectContext): Identifier
-    fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package?
-    fun isProject(context: GleamProjectContext): Boolean
-}
-
-/**
  * A dependency from the manifest.toml lockfile - already resolved.
  */
-internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) : GleamPackageInfo {
-    override val name = pkg.name
-    override val dependencies = pkg.requirements
+internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) {
+    val name = pkg.name
+    val dependencies = pkg.requirements
 
-    override fun isProject(context: GleamProjectContext): Boolean {
+    fun isProject(context: GleamProjectContext): Boolean {
         if (pkg.source != SourceType.LOCAL) return false
         val resolvedPath = context.workingDir.resolve(pkg.localPath.orEmpty()).canonicalFile
         return resolvedPath in context.projectDirs
     }
 
-    override fun toIdentifier(context: GleamProjectContext): Identifier {
+    fun toIdentifier(): Identifier {
         val type = when (pkg.source) {
             SourceType.HEX -> PACKAGE_TYPE_HEX
             SourceType.GIT -> PACKAGE_TYPE_OTP
@@ -75,10 +63,10 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
         )
     }
 
-    override fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package? =
+    fun toOrtPackage(context: GleamProjectContext, issues: MutableCollection<Issue>): Package? =
         when (pkg.source) {
             SourceType.HEX -> createHexPackage(context)
-            SourceType.GIT -> createGitPackage(context)
+            SourceType.GIT -> createGitPackage()
             SourceType.LOCAL -> createLocalPackage(context, issues)
         }
 
@@ -88,7 +76,7 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
         val vcs = VcsHost.parseUrl(repositoryUrl)
 
         return Package(
-            id = toIdentifier(context),
+            id = toIdentifier(),
             cpe = generateCpe(repositoryUrl, pkg.version),
             authors = hexInfo?.let { resolveAuthors(it.owners, context.hexClient) }.orEmpty(),
             declaredLicenses = hexInfo?.meta?.licenses?.toSet().orEmpty(),
@@ -107,13 +95,13 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
         )
     }
 
-    private fun createGitPackage(context: GleamProjectContext): Package {
+    private fun createGitPackage(): Package {
         val vcs = VcsHost.parseUrl(pkg.repo.orEmpty()).let {
             if (!pkg.commit.isNullOrEmpty()) it.copy(revision = pkg.commit) else it
         }
 
         return Package(
-            id = toIdentifier(context),
+            id = toIdentifier(),
             cpe = generateCpe(pkg.repo.orEmpty(), pkg.version),
             authors = emptySet(),
             declaredLicenses = emptySet(),
@@ -132,7 +120,7 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
         if (isProject(context)) return null
 
         val basePackage = Package(
-            id = toIdentifier(context),
+            id = toIdentifier(),
             authors = emptySet(),
             declaredLicenses = emptySet(),
             description = "",

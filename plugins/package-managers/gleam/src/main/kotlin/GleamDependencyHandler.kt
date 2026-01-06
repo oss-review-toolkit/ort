@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.utils.DependencyHandler
 /**
  * A [DependencyHandler] for Gleam dependencies.
  */
-internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
+internal class GleamDependencyHandler : DependencyHandler<ManifestPackageInfo> {
     private lateinit var context: GleamProjectContext
     private val manifestPackagesByName = mutableMapOf<String, GleamManifest.Package>()
 
@@ -41,16 +41,16 @@ internal class GleamDependencyHandler : DependencyHandler<GleamPackageInfo> {
         }
     }
 
-    override fun identifierFor(dependency: GleamPackageInfo): Identifier = dependency.toIdentifier(context)
+    override fun identifierFor(dependency: ManifestPackageInfo): Identifier = dependency.toIdentifier()
 
-    override fun dependenciesFor(dependency: GleamPackageInfo): List<GleamPackageInfo> =
+    override fun dependenciesFor(dependency: ManifestPackageInfo): List<ManifestPackageInfo> =
         dependency.dependencies
             .mapNotNull { manifestPackagesByName[it] }
             .map { ManifestPackageInfo(it) }
 
-    override fun linkageFor(dependency: GleamPackageInfo): PackageLinkage =
+    override fun linkageFor(dependency: ManifestPackageInfo): PackageLinkage =
         if (dependency.isProject(context)) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: GleamPackageInfo, issues: MutableCollection<Issue>): Package? =
+    override fun createPackage(dependency: ManifestPackageInfo, issues: MutableCollection<Issue>): Package? =
         dependency.toOrtPackage(context, issues)
 }
