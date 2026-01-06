@@ -4,5 +4,5 @@ licences = ["MIT"]
 
 [dependencies]
 gleam_stdlib = ">= 0.34.0"
-gleam_json = { git = "git@github.com:gleam-lang/json.git", ref = "main" }
+gleam_json = { git = "https://github.com/gleam-lang/json.git", ref = "main" }
 local_pkg = { path = "./local_pkg" }
