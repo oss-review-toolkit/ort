@@ -102,7 +102,7 @@ class GleamFunTest : StringSpec({
         getAssetFile("projects/synthetic/no-lockfile").copyRecursively(projectDir)
 
         val result = createGleam().resolveSingleProject(
-            projectDir.resolve("gleam.toml"),
+            projectDir / "gleam.toml",
             resolveScopes = true,
             allowDynamicVersions = true
         )
@@ -116,7 +116,7 @@ class GleamFunTest : StringSpec({
         getAssetFile("projects/synthetic/no-lockfile-broken").copyRecursively(projectDir)
 
         val result = createGleam().resolveSingleProject(
-            projectDir.resolve("gleam.toml"),
+            projectDir / "gleam.toml",
             resolveScopes = true,
             allowDynamicVersions = true
         )

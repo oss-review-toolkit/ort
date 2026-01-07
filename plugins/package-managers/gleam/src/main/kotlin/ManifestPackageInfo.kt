@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.plugins.packagemanagers.gleam.GleamManifest.Package.SourceType
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 /**
@@ -175,8 +176,8 @@ private fun generateCpe(repositoryUrl: String, version: String): String? {
  * Returns true if the resolved path is within the analysis root.
  */
 private fun isValidLocalPath(analysisRoot: File, workingDir: File, path: String): Boolean {
-    val resolvedPath = workingDir.resolve(path).canonicalFile
-    return resolvedPath.startsWith(analysisRoot.canonicalFile)
+    val resolvedPath = workingDir / path
+    return resolvedPath.canonicalFile.startsWith(analysisRoot.canonicalFile)
 }
 
 /**
