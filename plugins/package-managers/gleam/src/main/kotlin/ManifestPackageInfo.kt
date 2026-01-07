@@ -90,7 +90,6 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
                 )
             } ?: RemoteArtifact.EMPTY,
             vcs = vcs,
-            vcsProcessed = vcs.normalize(),
             sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
         )
     }
@@ -110,7 +109,6 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = vcs,
-            vcsProcessed = vcs.normalize(),
             sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
         )
     }
@@ -128,7 +126,6 @@ internal data class ManifestPackageInfo(private val pkg: GleamManifest.Package) 
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo.EMPTY,
             sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
         )
 
