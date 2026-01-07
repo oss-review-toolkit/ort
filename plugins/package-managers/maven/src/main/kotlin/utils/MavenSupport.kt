@@ -158,10 +158,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
         repositorySystemSession.mirrorSelector = HttpsMirrorSelector(repositorySystemSession.mirrorSelector)
 
-        val localRepository = mavenRepositorySystem.createLocalRepository(
-            createMavenExecutionRequest(),
-            org.apache.maven.repository.RepositorySystem.defaultUserLocalRepository
-        )
+        val request = createMavenExecutionRequest()
+        val localRepository = mavenRepositorySystem.createLocalRepository(request, request.localRepositoryPath)
 
         val session = LegacyLocalRepositoryManager.overlay(
             localRepository, repositorySystemSession,
