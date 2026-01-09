@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.utils.ort
 
 import java.io.File
-import java.util.concurrent.ConcurrentHashMap
 
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
@@ -36,7 +35,6 @@ import org.ossreviewtoolkit.clients.foojay.LibCType
 import org.ossreviewtoolkit.clients.foojay.OperatingSystem
 import org.ossreviewtoolkit.clients.foojay.Package
 import org.ossreviewtoolkit.clients.foojay.PackageType
-import org.ossreviewtoolkit.clients.foojay.PackagesResult
 import org.ossreviewtoolkit.clients.foojay.ReleaseStatus
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.div
@@ -48,18 +46,6 @@ import org.semver4j.Semver
 
 object JavaBootstrapper {
     private val discoService = DiscoService.create()
-
-    /**
-     * A map to cache the results from the disco service. The key is a [Pair] of distribution name and version.
-     */
-    private val packageCache = ConcurrentHashMap<Pair<String, String>, PackagesResult>()
-
-    /**
-     * Clear the internal cache used to store results from the disco service. This is mainly useful for testing.
-     */
-    internal fun clearCache() {
-        packageCache.clear()
-    }
 
     /**
      * Return the single top-level directory contained in this directory, if any, or return this directory otherwise.
@@ -113,21 +99,19 @@ object JavaBootstrapper {
 
         val packages = runCatching {
             runBlocking {
-                packageCache.getOrPut(distributionName to version) {
-                    discoService.getPackages(
-                        version,
-                        enumSetOf(distro),
-                        enumSetOf(arch),
-                        enumSetOf(ArchiveType.TAR, ArchiveType.TAR_GZ, ArchiveType.TGZ, ArchiveType.ZIP),
-                        enumSetOf(PackageType.JDK),
-                        enumSetOf(os),
-                        if (os == OperatingSystem.LINUX) enumSetOf(LibCType.GLIBC) else enumSetOf(),
-                        enumSetOf(ReleaseStatus.GENERAL_AVAILABILITY),
-                        directlyDownloadable = true,
-                        Latest.AVAILABLE,
-                        freeToUseInProduction = true
-                    )
-                }
+                discoService.getPackages(
+                    version,
+                    enumSetOf(distro),
+                    enumSetOf(arch),
+                    enumSetOf(ArchiveType.TAR, ArchiveType.TAR_GZ, ArchiveType.TGZ, ArchiveType.ZIP),
+                    enumSetOf(PackageType.JDK),
+                    enumSetOf(os),
+                    if (os == OperatingSystem.LINUX) enumSetOf(LibCType.GLIBC) else enumSetOf(),
+                    enumSetOf(ReleaseStatus.GENERAL_AVAILABILITY),
+                    directlyDownloadable = true,
+                    Latest.AVAILABLE,
+                    freeToUseInProduction = true
+                )
             }
         }.getOrElse {
             return Result.failure(it)
