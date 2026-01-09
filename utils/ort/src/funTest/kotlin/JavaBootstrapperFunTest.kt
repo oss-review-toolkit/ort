@@ -20,10 +20,18 @@
 package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
+import io.mockk.every
+import io.mockk.mockkObject
+
+import okhttp3.Cache
+
+import org.ossreviewtoolkit.clients.foojay.DiscoService
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.mebibytes
 
 class JavaBootstrapperFunTest : StringSpec({
     "The Java version running the test should be detected as a JDK" {
@@ -31,11 +39,21 @@ class JavaBootstrapperFunTest : StringSpec({
     }
 
     "A JDK for Temurin 21 can be found" {
-        JavaBootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
-            it.distribution shouldBe "temurin"
-            it.jdkVersion shouldBe 21
-            Os.Name.fromString(it.operatingSystem) shouldBe Os.Name.current
-            Os.Arch.fromString(it.architecture) shouldBe Os.Arch.current
+        val tempCache = Cache(tempdir(), 1.mebibytes)
+
+        val tempCacheClient = OkHttpClientHelper.buildClient {
+            cache(tempCache)
+        }
+
+        mockkObject(JavaBootstrapper) {
+            every { JavaBootstrapper.discoService } returns DiscoService.create(client = tempCacheClient)
+
+            JavaBootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
+                it.distribution shouldBe "temurin"
+                it.jdkVersion shouldBe 21
+                Os.Name.fromString(it.operatingSystem) shouldBe Os.Name.current
+                Os.Arch.fromString(it.architecture) shouldBe Os.Arch.current
+            }
         }
     }
 })

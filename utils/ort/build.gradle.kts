@@ -44,5 +44,7 @@ dependencies {
     implementation(libs.commonsCompress)
     implementation(libs.xz)
 
+    funTestImplementation(libs.mockk)
+
     testImplementation(libs.mockk)
 }
