@@ -11,9 +11,9 @@ If no options are provided, the "disclosure_document" template is used, and if s
 * `template.id`:
   A comma-separated list of IDs for templates built into ORT.
   Currently, the following IDs are supported:
-  * "[disclosure_document](../../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/disclosure_document.ftl)"
-  * "[vulnerability_report](../../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/vulnerability_report.ftl)"
-  * "[defect_report](../../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/defect_report.ftl)"
+  * "[disclosure_document](../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/disclosure_document.ftl)"
+  * "[vulnerability_report](../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/vulnerability_report.ftl)"
+  * "[defect_report](../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/defect_report.ftl)"
 * `template.path`:
   A comma-separated list of paths to template files provided by the user.
 
@@ -100,13 +100,13 @@ import Example from '!!raw-loader!@site/../examples/asciidoctor-pdf-theme.yml'
 
 ## Plain Text Templates
 
-The [`PlainTextTemplateReporter`](../../../plugins/reporters/freemarker/src/main/kotlin/PlainTextTemplateReporter.kt) enables customization of the generated open source notices with [Apache Freemarker](https://freemarker.apache.org/) templates and producing any other arbitrary plain text files, such as `.adoc` files.
+The [`PlainTextTemplateReporter`](../../plugins/reporters/freemarker/src/main/kotlin/PlainTextTemplateReporter.kt) enables customization of the generated open source notices with [Apache Freemarker](https://freemarker.apache.org/) templates and producing any other arbitrary plain text files, such as `.adoc` files.
 
 ORT provides two templates that can be used as a base for creating your custom open source notices:
 
-* [default](../../../plugins/reporters/freemarker/src/main/resources/templates/plain-text/NOTICE_DEFAULT.ftl):
+* [default](../../plugins/reporters/freemarker/src/main/resources/templates/plain-text/NOTICE_DEFAULT.ftl):
   Prints a summary of all licenses found in the project itself and lists licenses for all dependencies separately.
-* [summary](../../../plugins/reporters/freemarker/src/main/resources/templates/plain-text/NOTICE_SUMMARY.ftl):
+* [summary](../../plugins/reporters/freemarker/src/main/resources/templates/plain-text/NOTICE_SUMMARY.ftl):
   Prints a summary of all licenses found in the project itself and all dependencies.
 
 See the code comments in the templates for how they work.
