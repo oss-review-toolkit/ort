@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.clients.fossid.model
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import tools.jackson.core.JsonParser
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.deser.std.StdDeserializer
 
 /**
  * This class deserializes a String containing 0/1 to boolean.
