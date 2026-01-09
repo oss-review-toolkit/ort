@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.utils.common.unpack
 import org.semver4j.Semver
 
 object JavaBootstrapper {
-    private val discoService = DiscoService.create(client = OkHttpClientHelper.buildClient())
+    internal val discoService = DiscoService.create(client = OkHttpClientHelper.buildClient())
 
     /**
      * Return the single top-level directory contained in this directory, if any, or return this directory otherwise.
