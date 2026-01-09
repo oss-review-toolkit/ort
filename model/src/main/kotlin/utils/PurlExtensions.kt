@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import com.github.packageurl.MalformedPackageURLException
+import com.github.packageurl.PackageURL
+
 import java.net.URLDecoder
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -145,5 +148,24 @@ fun String.toProvenance(): Provenance {
         }
 
         else -> UnknownProvenance
+    }
+}
+
+/**
+ * Creates [Identifier] based on the given [package URL](https://github.com/package-url/purl-spec) ("purl").
+ */
+@Suppress("SwallowedException")
+fun String.toIdentifier(): Identifier {
+    try {
+        val purl = PackageURL(this)
+
+        return Identifier(
+            purl.type,
+            purl.namespace.orEmpty(),
+            purl.name,
+            purl.version.orEmpty()
+        )
+    } catch (ex: MalformedPackageURLException) {
+        throw IllegalArgumentException(ex.message)
     }
 }
