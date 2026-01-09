@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.test.TestCaseOrder
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
@@ -28,25 +29,57 @@ import io.mockk.every
 import io.mockk.mockkObject
 
 import okhttp3.Cache
+import okhttp3.CacheControl
+import okhttp3.Interceptor
 
 import org.ossreviewtoolkit.clients.foojay.DiscoService
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.mebibytes
 
 class JavaBootstrapperFunTest : StringSpec({
+    // Enforce sequential ordering of tests to ensure the HTTP cache is populated before running the respective test.
+    testCaseOrder = TestCaseOrder.Sequential
+
+    val tempCache by lazy { Cache(tempdir(), 1.mebibytes) }
+
     "The Java version running the test should be detected as a JDK" {
         JavaBootstrapper.isRunningOnJdk(Environment.JAVA_VERSION) shouldBe true
     }
 
     "A JDK for Temurin 21 can be found" {
-        val tempCache = Cache(tempdir(), 1.mebibytes)
-
         val tempCacheClient = OkHttpClientHelper.buildClient {
             cache(tempCache)
         }
 
         mockkObject(JavaBootstrapper) {
             every { JavaBootstrapper.discoService } returns DiscoService.create(client = tempCacheClient)
+
+            JavaBootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
+                it.distribution shouldBe "temurin"
+                it.jdkVersion shouldBe 21
+                Os.Name.fromString(it.operatingSystem) shouldBe Os.Name.current
+                Os.Arch.fromString(it.architecture) shouldBe Os.Arch.current
+            }
+        }
+    }
+
+    // Running this test in isolation deliberately fails to easily prove that only the cache is used.
+    "A JDK for Temurin 21 can be found in the cache" {
+        val forceCacheInterceptor = Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .cacheControl(CacheControl.FORCE_CACHE)
+                .build()
+
+            chain.proceed(request)
+        }
+
+        val forceCacheClient = OkHttpClientHelper.buildClient {
+            cache(tempCache)
+            addInterceptor(forceCacheInterceptor)
+        }
+
+        mockkObject(JavaBootstrapper) {
+            every { JavaBootstrapper.discoService } returns DiscoService.create(client = forceCacheClient)
 
             JavaBootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
                 it.distribution shouldBe "temurin"
