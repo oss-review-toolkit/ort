@@ -33,6 +33,7 @@ import java.io.Writer
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
@@ -133,6 +134,7 @@ data class EvaluatedModel(
             EvaluatedVulnerability::class.java,
             IssueResolution::class.java,
             LicenseId::class.java,
+            PackageCurationData::class.java,
             PackageConfiguration::class.java,
             PathExclude::class.java,
             RuleViolationResolution::class.java,

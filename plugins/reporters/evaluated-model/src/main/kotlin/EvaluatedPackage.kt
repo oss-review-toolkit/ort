@@ -65,6 +65,7 @@ data class EvaluatedPackage(
     val vcs: VcsInfo,
     val vcsProcessed: VcsInfo = vcs.normalize(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonIdentityReference(alwaysAsId = true)
     val curations: List<PackageCurationData>,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonIdentityReference(alwaysAsId = true)
