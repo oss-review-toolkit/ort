@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -64,7 +65,11 @@ data class EvaluatedPackage(
     val vcs: VcsInfo,
     val vcsProcessed: VcsInfo = vcs.normalize(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonIdentityReference(alwaysAsId = true)
     val curations: List<PackageCurationData>,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonIdentityReference(alwaysAsId = true)
+    val packageConfigurations: List<PackageConfiguration>,
     @JsonIdentityReference(alwaysAsId = true)
     val paths: MutableList<EvaluatedPackagePath>,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
