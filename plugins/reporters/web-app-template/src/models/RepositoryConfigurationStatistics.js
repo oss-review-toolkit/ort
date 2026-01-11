@@ -43,23 +43,23 @@ class RepositoryConfigurationStatistics {
             }
 
             if (Number.isInteger(obj.license_finding_curations) || Number.isInteger(obj.licenseFindingCurations)) {
-              this.#licenseFindingCurations = obj.license_finding_curations || obj.licenseFindingCurations;
+                this.#licenseFindingCurations = obj.license_finding_curations || obj.licenseFindingCurations;
             }
 
             if (Number.isInteger(obj.pathExcludes) || Number.isInteger(obj.path_excludes)) {
-              this.#pathExcludes = obj.path_excludes || obj.pathExcludes;
+                this.#pathExcludes = obj.path_excludes || obj.pathExcludes;
             }
 
             if (Number.isInteger(obj.rule_violation_resolutions) || Number.isInteger(obj.ruleViolationResolutions)) {
-              this.#ruleViolationResolutions = obj.rule_violation_resolutions || obj.ruleViolationResolutions;
+                this.#ruleViolationResolutions = obj.rule_violation_resolutions || obj.ruleViolationResolutions;
             }
 
             if (Number.isInteger(obj.scopeExcludes) || Number.isInteger(obj.scope_excludes)) {
-              this.#scopeExcludes = obj.scope_excludes || obj.scopeExcludes;
+                this.#scopeExcludes = obj.scope_excludes || obj.scopeExcludes;
             }
 
             if (Number.isInteger(obj.vulnerability_resolutions) || Number.isInteger(obj.vulnerabilityResolutions)) {
-              this.#vulnerabilityResolutions = obj.vulnerability_resolutions || obj.vulnerabilityResolutions;
+                this.#vulnerabilityResolutions = obj.vulnerability_resolutions || obj.vulnerabilityResolutions;
             }
         }
     }
