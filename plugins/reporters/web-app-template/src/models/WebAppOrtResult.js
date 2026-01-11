@@ -18,7 +18,6 @@
  */
 
 import Metadata from './Metadata';
-import Repository from './Repository';
 import Statistics from './Statistics';
 import WebAppCopyright from './WebAppCopyright';
 import WebAppLicense from './WebAppLicense';
@@ -26,6 +25,7 @@ import WebAppOrtIssue from './WebAppOrtIssue';
 import WebAppPackage from './WebAppPackage';
 import WebAppPath from './WebAppPath';
 import WebAppPathExclude from './WebAppPathExclude';
+import WebAppRepository from './WebAppRepository';
 import WebAppResolution from './WebAppResolution';
 import WebAppRuleViolation from './WebAppRuleViolation';
 import WebAppScanResult from './WebAppScanResult';
@@ -201,7 +201,7 @@ class WebAppOrtResult {
             }
 
             if (obj.repository) {
-                this.#repository = new Repository(obj.repository);
+                this.#repository = new WebAppRepository(obj.repository, this);
             }
 
             if (obj.repository_configuration || obj.repositoryConfiguration) {

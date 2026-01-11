@@ -18,6 +18,7 @@
  */
 
 import VcsInfo from './VcsInfo';
+import WebAppRepositoryConfiguration from './WebAppRepositoryConfiguration';
 
 class Repository {
     #vcs = new VcsInfo();
@@ -26,18 +27,31 @@ class Repository {
 
     #nestedRepositories = new Map();
 
-    constructor(obj) {
+    #config = {};
+
+    constructor(obj, webAppOrtResult) {
         if (obj instanceof Object) {
             if (obj.vcs) {
                 this.#vcs = obj.vcs;
             }
 
             if (obj.vcs_processed || obj.vcsProcessed) {
-                this.#vcsProcessed = obj.vcs_processed || obj.vcsProcessed;
+                const vcsProcessed = obj.vcs_processed || obj.vcsProcessed;
+                this.#vcsProcessed = new VcsInfo(vcsProcessed);
             }
 
             if (obj.nested_repositories || obj.nestedRepositories) {
-                this.#nestedRepositories = obj.nested_repositories || obj.nestedRepositories;
+                const nestedRepositories = obj.nested_repositories || obj.nestedRepositories;
+
+                if (nestedRepositories !== null && nestedRepositories instanceof Object) {
+                    Object.entries(nestedRepositories).forEach(
+                        ([string, vcsInfo]) => this.#nestedRepositories.set(string, new VcsInfo(vcsInfo))
+                    );
+                }
+            }
+
+            if (obj.config) {
+                this.#config = new WebAppRepositoryConfiguration(obj.config, webAppOrtResult);
             }
         }
     }
@@ -52,6 +66,10 @@ class Repository {
 
     get nestedRepositories() {
         return this.#nestedRepositories;
+    }
+
+    get config() {
+        return this.#config;
     }
 }
 
