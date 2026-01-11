@@ -23,6 +23,7 @@ import WebAppCopyright from './WebAppCopyright';
 import WebAppLicense from './WebAppLicense';
 import WebAppOrtIssue from './WebAppOrtIssue';
 import WebAppPackage from './WebAppPackage';
+import WebAppPackageCuration from './WebAppPackageCuration';
 import WebAppPath from './WebAppPath';
 import WebAppPathExclude from './WebAppPathExclude';
 import WebAppRepository from './WebAppRepository';
@@ -78,6 +79,8 @@ class WebAppOrtResult {
 
     #packagesByKeyMap = new Map();
 
+    #packageCurations = [];
+
     #packagesIdtoKeyMap = new Map();
 
     #pathExcludes = [];
@@ -120,6 +123,12 @@ class WebAppOrtResult {
                 }
             }
 
+            if (obj.copyrights) {
+                for (let i = 0, len = obj.copyrights.length; i < len; i++) {
+                    this.#copyrights.push(new WebAppCopyright(obj.copyrights[i]));
+                }
+            }
+
             if (obj.labels) {
                 this.#labels = obj.labels;
             }
@@ -136,6 +145,14 @@ class WebAppOrtResult {
 
             if (obj.meta_data || obj.metaData || obj.metadata) {
                 this.#metadata = new Metadata(obj.meta_data || obj.metaData || obj.metadata);
+            }
+
+            if (obj.package_curations || obj.packageCurations) {
+                const packageCurations = obj.package_curations || obj.obj.packageCurations;
+
+                for (let i = 0, len = packageCurations.length; i < len; i++) {
+                    this.#packageCurations.push(new WebAppPackageCuration(packageCurations[i], this));
+                }
             }
 
             if (obj.packages) {
@@ -442,6 +459,10 @@ class WebAppOrtResult {
         return this.#metadata;
     }
 
+    get packageCurations() {
+        return this.#packageCurations;
+    }
+
     get packages() {
         return this.#packages;
     }
@@ -514,6 +535,10 @@ class WebAppOrtResult {
         return this.#licenses[val] || null;
     }
 
+    getLicenseFindingCurationByIndex(val) {
+        return this.#repository.config.curations.licenseFindings[val] || null;
+    }
+
     getLicenseByName(val) {
         return this.#licenses[this.#licensesIndexesByNameMap.get(val)] || null;
     }
@@ -532,6 +557,10 @@ class WebAppOrtResult {
 
     getPackageByKey(val) {
         return this.#packagesByKeyMap.get(val) || [];
+    }
+
+    getPackageCurationByIndex(val) {
+        return this.#packageCurations[val] || null;
     }
 
     getPathByIndex(val) {
@@ -645,6 +674,10 @@ class WebAppOrtResult {
 
     hasLevels() {
         return this.#levels.length > 0;
+    }
+
+    hasPackageCurations() {
+        return this.#packageCurations.length > 0;
     }
 
     hasPathExcludes() {
