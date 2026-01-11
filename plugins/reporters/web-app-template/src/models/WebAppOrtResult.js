@@ -78,6 +78,8 @@ class WebAppOrtResult {
 
     #packagesByKeyMap = new Map();
 
+    #packagesIdtoKeyMap = new Map();
+
     #pathExcludes = [];
 
     #paths = [];
@@ -143,6 +145,7 @@ class WebAppOrtResult {
                     const webAppPackage = new WebAppPackage(packages[i], this);
                     this.#packages.push(webAppPackage);
                     this.#packagesByKeyMap.set(webAppPackage.key, webAppPackage);
+                    this.#packagesIdtoKeyMap.set(webAppPackage.id, webAppPackage.key);
 
                     if (webAppPackage.isProject) {
                         this.#projects.push(webAppPackage);
@@ -517,6 +520,10 @@ class WebAppOrtResult {
 
     getLicenseIndexByName(val) {
         return this.#licensesIndexesByNameMap.get(val) || null;
+    }
+
+    getPackageById(val) {
+        return this.getPackageByKey(this.#packagesIdtoKeyMap.get(val)) || null;
     }
 
     getPackageByIndex(val) {
