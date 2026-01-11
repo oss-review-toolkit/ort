@@ -32,7 +32,9 @@ class WebAppPackage {
 
     #concludedLicense;
 
-    #curations = [];
+    #curations;
+
+    #curationIndexes = new Set();
 
     #declaredLicenses = new Set();
 
@@ -145,7 +147,7 @@ class WebAppPackage {
             }
 
             if (obj.curations) {
-                this.#curations = obj.curations;
+                this.#curationIndexes = new Set(obj.curations);
             }
 
             if (obj.declared_licenses || obj.declaredLicenses) {
@@ -346,7 +348,21 @@ class WebAppPackage {
     }
 
     get curations() {
+        if (!this.#curations && this.#webAppOrtResult) {
+            this.#curations = [];
+            this.#curationIndexes.forEach((index) => {
+                const webAppPackageCuration = this.#webAppOrtResult.getPackageCurationByIndex(index) || null;
+                if (webAppPackageCuration) {
+                    this.#curations.push(webAppPackageCuration);
+                }
+            });
+        }
+
         return this.#curations;
+    }
+
+    get curationIndexes() {
+        return this.#curationIndexes;
     }
 
     get declaredLicenses() {
@@ -640,6 +656,10 @@ class WebAppPackage {
     hasConcludedLicense() {
         return this.#concludedLicense
             && this.#concludedLicense.length !== 0;
+    }
+
+    hasCurations() {
+        return this.#curationIndexes.size !== 0;
     }
 
     hasDeclaredLicenses() {
