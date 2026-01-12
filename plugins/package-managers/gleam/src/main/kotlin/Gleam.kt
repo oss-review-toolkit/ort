@@ -129,9 +129,7 @@ class Gleam internal constructor(
 
         scopes.forEach { scope ->
             val directDepNames = gleamToml.getScopeDependencies(scope).keys
-            val dependencies = manifest.packages
-                .filter { it.name in directDepNames }
-                .map { ManifestPackageInfo(it) }
+            val dependencies = manifest.packages.filter { it.name in directDepNames }
 
             graphBuilder.addDependencies(project.id, scope.descriptor, dependencies)
         }
