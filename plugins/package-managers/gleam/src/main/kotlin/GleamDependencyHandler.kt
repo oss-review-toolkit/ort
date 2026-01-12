@@ -57,7 +57,7 @@ internal class GleamDependencyHandler : DependencyHandler<GleamManifest.Package>
     override fun identifierFor(dependency: GleamManifest.Package): Identifier = dependency.toIdentifier()
 
     override fun dependenciesFor(dependency: GleamManifest.Package): List<GleamManifest.Package> =
-        dependency.requirements.mapNotNull { manifestPackagesByName[it] }
+        dependency.requirements.map { manifestPackagesByName.getValue(it) }
 
     override fun linkageFor(dependency: GleamManifest.Package): PackageLinkage =
         if (dependency.isProject(context)) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
