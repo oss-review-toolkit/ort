@@ -20,21 +20,37 @@
 import DependencyTreeStatistics from './DependencyTreeStatistics';
 import IssueStatistics from './IssueStatistics';
 import LicenseStatistics from './LicenseStatistics';
+import RepositoryConfigurationStatistics from './RepositoryConfigurationStatistics';
 
 class Statistics {
-    #dependencyTree;
+    #dependencyTree = new DependencyTreeStatistics();
 
-    #openIssues;
+    #executionDurationInSeconds = 0;
 
-    #openRuleViolations;
+    #openIssues = new IssueStatistics();
 
-    #licenses;
+    #openRuleViolations = new IssueStatistics();
+
+    #openVulnerabilities = 0;
+
+    #licenses = new LicenseStatistics();
+
+    #repositoryConfiguration = new RepositoryConfigurationStatistics();
 
     constructor(obj) {
         if (obj instanceof Object) {
             if (obj.dependency_tree || obj.dependencyTree) {
                 const dependencyTree = obj.dependency_tree || obj.dependencyTree;
                 this.#dependencyTree = new DependencyTreeStatistics(dependencyTree);
+            }
+
+            if (obj.execution_duration_in_seconds || obj.executionDurationInSeconds) {
+                this.#executionDurationInSeconds = obj.execution_duration_in_seconds
+                    || obj.executionDurationInSeconds;
+            }
+
+            if (obj.licenses) {
+                this.#licenses = new LicenseStatistics(obj.licenses);
             }
 
             if (obj.open_issues || obj.openIssues) {
@@ -48,14 +64,24 @@ class Statistics {
                 this.#openRuleViolations = new IssueStatistics(openRuleViolations);
             }
 
-            if (obj.licenses) {
-                this.#licenses = new LicenseStatistics(obj.licenses);
+            if (obj.open_vulnerabilities || obj.openVulnerabilities) {
+                this.#openVulnerabilities = obj.open_vulnerabilities
+                    || obj.openVulnerabilities;
+            }
+
+            if (obj.repositoryConfiguration || obj.repository_configuration) {
+                const repositoryConfiguration = obj.repositoryConfiguration || obj.repository_configuration;
+                this.#repositoryConfiguration = new RepositoryConfigurationStatistics(repositoryConfiguration);
             }
         }
     }
 
     get dependencyTree() {
         return this.#dependencyTree;
+    }
+
+    get executionDurationInSeconds() {
+        return this.#executionDurationInSeconds;
     }
 
     get licenses() {
@@ -68,6 +94,14 @@ class Statistics {
 
     get openRuleViolations() {
         return this.#openRuleViolations;
+    }
+
+    get openVulnerabilities() {
+        return this.#openVulnerabilities;
+    }
+
+    get repositoryConfiguration() {
+        return this.#repositoryConfiguration;
     }
 }
 
