@@ -33,6 +33,20 @@ import org.semver4j.range.RangeListFactory
 private val IVY_VERSION_RANGE_INDICATORS = listOf(",", "~", "*", "+", ">", "<", "=", " - ", "^", ".x", "||")
 
 /**
+ * Return true if the version of this [Identifier] is an Ivy version range.
+ */
+fun Identifier.isVersionRange(): Boolean {
+    val ranges = getVersionRanges()?.get()?.flatten() ?: return false
+    val rangeVersions = ranges.mapTo(mutableSetOf()) { it.rangeVersion }
+    val isSingleVersion = rangeVersions.size <= 1 && ranges.all { range ->
+        // Determine whether the non-accessible `Range.rangeOperator` is `RangeOperator.EQUALS`.
+        range.toString().startsWith("=")
+    }
+
+    return !isSingleVersion
+}
+
+/**
  * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
  * package with the given [identifier][pkgId].
  */
@@ -53,17 +67,6 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
 
         it.showStackTrace()
     }.getOrDefault(false)
-
-internal fun Identifier.isVersionRange(): Boolean {
-    val ranges = getVersionRanges()?.get()?.flatten() ?: return false
-    val rangeVersions = ranges.mapTo(mutableSetOf()) { it.rangeVersion }
-    val isSingleVersion = rangeVersions.size <= 1 && ranges.all { range ->
-        // Determine whether the non-accessible `Range.rangeOperator` is `RangeOperator.EQUALS`.
-        range.toString().startsWith("=")
-    }
-
-    return !isSingleVersion
-}
 
 private fun Identifier.getVersionRanges(): RangeList? {
     if (IVY_VERSION_RANGE_INDICATORS.none { version.contains(it, ignoreCase = true) }) return null
