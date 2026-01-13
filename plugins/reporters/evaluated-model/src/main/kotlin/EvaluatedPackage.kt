@@ -26,7 +26,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.PackageConfiguration
@@ -65,7 +65,7 @@ data class EvaluatedPackage(
     val vcs: VcsInfo,
     val vcsProcessed: VcsInfo = vcs.normalize(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val curations: List<PackageCurationData>,
+    val curations: List<PackageCuration>,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageConfigurations: List<PackageConfiguration>,
     @JsonIdentityReference(alwaysAsId = true)
