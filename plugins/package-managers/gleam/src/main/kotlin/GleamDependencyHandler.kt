@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.plugins.packagemanagers.gleam.GleamManifest.Package.SourceType
@@ -109,7 +110,7 @@ private fun GleamManifest.Package.createHexPackage(context: GleamProjectContext)
                 url = "https://repo.hex.pm/tarballs/$name-$version.tar",
                 hash = Hash(it, HashAlgorithm.SHA256)
             )
-        } ?: RemoteArtifact.EMPTY,
+        }.orEmpty(),
         vcs = vcs,
         sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
     )
