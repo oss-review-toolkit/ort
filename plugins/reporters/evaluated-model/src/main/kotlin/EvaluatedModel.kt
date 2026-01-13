@@ -33,7 +33,7 @@ import java.io.Writer
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
@@ -96,7 +96,7 @@ data class EvaluatedModel(
     val scopeExcludes: List<ScopeExclude>,
     val licenseFindingCurations: List<LicenseFindingCuration>,
     val packageConfigurations: List<PackageConfiguration>,
-    val packageCurations: List<PackageCurationData>,
+    val packageCurations: List<PackageCuration>,
     val copyrights: List<CopyrightStatement>,
     val licenses: List<LicenseId>,
     val scopes: List<EvaluatedScope>,
@@ -139,7 +139,7 @@ data class EvaluatedModel(
             LicenseFindingCuration::class.java,
             LicenseId::class.java,
             PackageConfiguration::class.java,
-            PackageCurationData::class.java,
+            PackageCuration::class.java,
             PathExclude::class.java,
             RuleViolationResolution::class.java,
             ScopeExclude::class.java,

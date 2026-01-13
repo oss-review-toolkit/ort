@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
@@ -75,7 +75,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val issues = mutableListOf<EvaluatedIssue>()
     private val issueResolutions = mutableListOf<IssueResolution>()
     private val packageConfigurations = mutableListOf<PackageConfiguration>()
-    private val packageCurations = mutableListOf<PackageCurationData>()
+    private val packageCurations = mutableListOf<PackageCuration>()
     private val pathExcludes = mutableListOf<PathExclude>()
     private val scopeExcludes = mutableListOf<ScopeExclude>()
     private val ruleViolations = mutableListOf<EvaluatedRuleViolation>()
@@ -94,6 +94,25 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     )
 
     private val packageExcludeInfo = mutableMapOf<Identifier, PackageExcludeInfo>()
+
+    /**
+     * Associates curations in the order they have been applied for the corresponding curated package.
+     */
+    private val curationsForId: Map<Identifier, List<PackageCuration>> by lazy {
+        val allCurations = input.ortResult.resolvedConfiguration.packageCurations.flatMap { it.curations }
+
+        buildMap {
+            input.ortResult.getPackages().forEach { curatedPackage ->
+                val curationForCurationData = allCurations.filter {
+                    it.isApplicable(curatedPackage.metadata.id)
+                }.associateBy { it.data }
+
+                this[curatedPackage.metadata.id] = curatedPackage.curations.map { curationData ->
+                    curationForCurationData.getValue(curationData)
+                }
+            }
+        }
+    }
 
     /**
      * Build an [EvaluatedModel] instance. If [deduplicateDependencyTree] is *true*, remove duplicate subtrees from
@@ -322,7 +341,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         val evaluatedPathExcludes = pathExcludes.addIfRequired(excludeInfo.pathExcludes)
         val evaluatedScopeExcludes = scopeExcludes.addIfRequired(excludeInfo.scopeExcludes)
-        val curations = packageCurations.addIfRequired(curatedPkg.curations)
+        val curations = packageCurations.addIfRequired(curationsForId.getValue(curatedPkg.metadata.id))
 
         val evaluatedPackage = EvaluatedPackage(
             id = pkg.id,

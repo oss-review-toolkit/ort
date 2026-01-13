@@ -42,12 +42,18 @@
   } ],
   "package_curations" : [ {
     "_id" : 0,
-    "comment" : "Foobar is an imaginary dependency and offers a license choice",
-    "concluded_license" : "GPL-2.0-only OR MIT"
+    "id" : "Maven:com.foobar:foobar:1.0",
+    "curations" : {
+      "comment" : "Foobar is an imaginary dependency and offers a license choice",
+      "concluded_license" : "GPL-2.0-only OR MIT"
+    }
   }, {
     "_id" : 1,
-    "comment" : "H2 database offers a license choice",
-    "concluded_license" : "MPL-2.0 OR EPL-1.0"
+    "id" : "Maven:com.h2database:h2:1.4.200",
+    "curations" : {
+      "comment" : "H2 database offers a license choice",
+      "concluded_license" : "MPL-2.0 OR EPL-1.0"
+    }
   } ],
   "copyrights" : [ {
     "_id" : 0,
