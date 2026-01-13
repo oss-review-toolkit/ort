@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
@@ -74,6 +75,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val issues = mutableListOf<EvaluatedIssue>()
     private val issueResolutions = mutableListOf<IssueResolution>()
     private val packageConfigurations = mutableListOf<PackageConfiguration>()
+    private val packageCurations = mutableListOf<PackageCurationData>()
     private val pathExcludes = mutableListOf<PathExclude>()
     private val scopeExcludes = mutableListOf<ScopeExclude>()
     private val ruleViolations = mutableListOf<EvaluatedRuleViolation>()
@@ -148,6 +150,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             scanResults = scanResults,
             packages = packages.values.toList(),
             packageConfigurations = packageConfigurations,
+            packageCurations = packageCurations,
             paths = paths,
             dependencyTrees = dependencyTrees,
             ruleViolationResolutions = ruleViolationResolutions,
@@ -319,6 +322,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         val evaluatedPathExcludes = pathExcludes.addIfRequired(excludeInfo.pathExcludes)
         val evaluatedScopeExcludes = scopeExcludes.addIfRequired(excludeInfo.scopeExcludes)
+        val curations = packageCurations.addIfRequired(curatedPkg.curations)
 
         val evaluatedPackage = EvaluatedPackage(
             id = pkg.id,
@@ -342,7 +346,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             sourceArtifact = pkg.sourceArtifact,
             vcs = pkg.vcs,
             vcsProcessed = pkg.vcsProcessed,
-            curations = curatedPkg.curations,
+            curations = curations,
             packageConfigurations = packageConfigurations,
             paths = mutableListOf(),
             levels = sortedSetOf(),

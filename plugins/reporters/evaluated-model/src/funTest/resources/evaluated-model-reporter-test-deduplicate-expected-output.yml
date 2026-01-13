@@ -35,6 +35,13 @@ package_configurations:
   - 2
   license_finding_curations:
   - 0
+package_curations:
+- _id: 0
+  comment: "Foobar is an imaginary dependency and offers a license choice"
+  concluded_license: "GPL-2.0-only OR MIT"
+- _id: 1
+  comment: "H2 database offers a license choice"
+  concluded_license: "MPL-2.0 OR EPL-1.0"
 copyrights:
 - _id: 0
   statement: "Copyright (c) example authors."
@@ -721,8 +728,7 @@ packages:
     revision: ""
     path: ""
   curations:
-  - comment: "Foobar is an imaginary dependency and offers a license choice"
-    concluded_license: "GPL-2.0-only OR MIT"
+  - 0
   paths:
   - 3
   levels:
@@ -771,8 +777,7 @@ packages:
     revision: ""
     path: ""
   curations:
-  - comment: "H2 database offers a license choice"
-    concluded_license: "MPL-2.0 OR EPL-1.0"
+  - 1
   paths:
   - 4
   levels:
