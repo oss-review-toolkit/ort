@@ -854,6 +854,19 @@ resolved_configuration:
       curations:
         comment: "H2 database offers a license choice"
         concluded_license: "MPL-2.0 OR EPL-1.0"
+  package_configurations:
+    - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+      source_code_origin: ARTIFACT
+      path_excludes:
+      - pattern: "project/file1.java"
+        reason: "DOCUMENTATION_OF"
+        comment: "The file only contains documentation."
+      license_finding_curations:
+      - path: "project/file2.java"
+        detected_license: "MIT"
+        concluded_license: "Apache-2.0"
+        reason: "INCORRECT"
+        comment: "The finding was incorrect."
   resolutions:
     issues:
     - message: "Example advisor error, resolved."
