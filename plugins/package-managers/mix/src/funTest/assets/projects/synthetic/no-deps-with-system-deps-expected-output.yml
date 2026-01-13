@@ -1,0 +1,140 @@
+---
+project:
+  id: "otp::no_deps:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "required"
+    dependencies:
+    - id: "otp::elixir:~> 1.8"
+      dependencies:
+      - id: "otp::stdlib:"
+        dependencies:
+        - id: "otp::kernel:"
+    - id: "otp::logger:"
+packages:
+- id: "otp::elixir:~> 1.8"
+  purl: "pkg:otp/elixir?download_url=https://github.com/elixir-lang/elixir/archive/refs/heads/main.zip&repository_url=https://github.com/elixir-lang/elixir&vcs_url=git%2Bhttps://github.com/elixir-lang/elixir.git#lib/elixir"
+  declared_licenses:
+  - "Apache-2.0"
+  - "LicenseRef-scancode-unicode"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND LicenseRef-scancode-unicode"
+  description: ""
+  homepage_url: "https://elixir-lang.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/elixir-lang/elixir/archive/refs/heads/main.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/elixir-lang/elixir.git"
+    revision: ""
+    path: "lib/elixir"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/elixir-lang/elixir.git"
+    revision: ""
+    path: "lib/elixir"
+- id: "otp::kernel:"
+  purl: "pkg:otp/kernel?download_url=https://github.com/erlang/otp/archive/refs/heads/master.zip&repository_url=https://github.com/erlang/otp&vcs_url=git%2Bhttps://github.com/erlang/otp.git#lib/kernel"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://www.erlang.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/erlang/otp/archive/refs/heads/master.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/erlang/otp.git"
+    revision: ""
+    path: "lib/kernel"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/erlang/otp.git"
+    revision: ""
+    path: "lib/kernel"
+- id: "otp::logger:"
+  purl: "pkg:otp/logger?download_url=https://github.com/elixir-lang/elixir/archive/refs/heads/main.zip&repository_url=https://github.com/elixir-lang/elixir&vcs_url=git%2Bhttps://github.com/elixir-lang/elixir.git#lib/logger"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://elixir-lang.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/elixir-lang/elixir/archive/refs/heads/main.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/elixir-lang/elixir.git"
+    revision: ""
+    path: "lib/logger"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/elixir-lang/elixir.git"
+    revision: ""
+    path: "lib/logger"
+- id: "otp::stdlib:"
+  purl: "pkg:otp/stdlib?download_url=https://github.com/erlang/otp/archive/refs/heads/master.zip&repository_url=https://github.com/erlang/otp&vcs_url=git%2Bhttps://github.com/erlang/otp.git#lib/stdlib"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://www.erlang.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/erlang/otp/archive/refs/heads/master.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/erlang/otp.git"
+    revision: ""
+    path: "lib/stdlib"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/erlang/otp.git"
+    revision: ""
+    path: "lib/stdlib"
