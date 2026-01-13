@@ -67,20 +67,17 @@ internal class GleamDependencyHandler : DependencyHandler<GleamManifest.Package>
         dependency.toOrtPackage(context, issues)
 }
 
-private fun GleamManifest.Package.toIdentifier(): Identifier {
-    val type = when (source) {
-        SourceType.HEX -> PACKAGE_TYPE_HEX
-        SourceType.GIT -> PACKAGE_TYPE_OTP
-        SourceType.LOCAL -> PROJECT_TYPE
-    }
-
-    return Identifier(
-        type = type,
+private fun GleamManifest.Package.toIdentifier(): Identifier =
+    Identifier(
+        type = when (source) {
+            SourceType.HEX -> PACKAGE_TYPE_HEX
+            SourceType.GIT -> PACKAGE_TYPE_OTP
+            SourceType.LOCAL -> PROJECT_TYPE
+        },
         namespace = "",
         name = name,
         version = version
     )
-}
 
 private fun GleamManifest.Package.toOrtPackage(
     context: GleamProjectContext,
