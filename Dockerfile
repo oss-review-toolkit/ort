@@ -130,6 +130,7 @@ ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
 ARG PYTHON_POETRY_VERSION
 ARG PYTHON_SETUPTOOLS_VERSION
 ARG PYTHON_VERSION
+ARG REUSE_VERSION
 ARG SCANCODE_VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -177,7 +178,16 @@ RUN pip install --no-cache-dir -U \
     poetry=="$PYTHON_POETRY_VERSION" \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
+    reuse=="$REUSE_VERSION" \
     setuptools=="$PYTHON_SETUPTOOLS_VERSION"
+
+# Document REUSE tool license (GPL-3.0-or-later).
+RUN mkdir -p /opt/licenses \
+    && echo "REUSE Tool" > /opt/licenses/reuse.md \
+    && echo "License: GPL-3.0-or-later" >> /opt/licenses/reuse.md \
+    && echo "Source: https://codeberg.org/fsfe/reuse-tool" >> /opt/licenses/reuse.md \
+    && echo "Installed via pip, unmodified." >> /opt/licenses/reuse.md
+
 RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
     && wget https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz \
     && tar -xvf conan-$CONAN2_VERSION-linux-x86_64.tgz\
@@ -187,6 +197,9 @@ RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
+
+FROM scratch AS python-licenses
+COPY --from=pythonbuild /opt/licenses /opt/licenses
 
 FROM scratch AS scancode-license-data
 COPY --from=pythonbuild /opt/scancode-license-data /opt/scancode-license-data
@@ -548,6 +561,9 @@ ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-instal
 COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
 
 COPY --from=scancode-license-data --chown=$USER:$USER /opt/scancode-license-data /opt/scancode-license-data
+
+# Third-party tool licenses
+COPY --from=python-licenses --chown=$USER:$USER /opt/licenses /opt/licenses
 
 #------------------------------------------------------------------------
 # Container with all supported package managers.
