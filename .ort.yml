@@ -54,6 +54,12 @@ resolutions:
     reason: "SCANNER_ISSUE"
     comment: >-
       This file contains test data. Contained licenses do not apply to the OSS Review Toolkit.
+  vulnerabilities:
+  - id: "CVE-2024-6763"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      The vulnerable package 'Maven:org.eclipse.jetty:jetty-http:11.0.26' is introduced as a transitive dependency of 'Maven:org.wiremock:wiremock:3.13.2'
+      which is a package exclusively used for testing and thus is neither distributed nor exploitable in a deployment.
 curations:
   license_findings:
   - path: "README.md"
