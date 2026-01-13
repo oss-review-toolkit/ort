@@ -60,6 +60,37 @@ fun Identifier.getPurlType() =
     }
 
 /**
+ * Map a [PurlType] to the corresponding ORT Identifier type string.
+ *
+ * This is the inverse operation of [Identifier.getPurlType].
+ * It converts a [PurlType] enum value to the corresponding ORT
+ * type string format.
+ */
+fun PurlType.toOrtType(): String =
+    when (this) {
+        PurlType.BAZEL -> "bazel"
+        PurlType.BOWER -> "bower"
+        PurlType.CARTHAGE -> "carthage"
+        PurlType.COMPOSER -> "composer"
+        PurlType.CONAN -> "conan"
+        PurlType.CARGO -> "crate"
+        PurlType.GEM -> "gem"
+        PurlType.GOLANG -> "go"
+        PurlType.HACKAGE -> "hackage"
+        PurlType.HEX -> "hex"
+        PurlType.MAVEN -> "Maven"
+        PurlType.NPM -> "npm"
+        PurlType.NUGET -> "nuget"
+        PurlType.OTP -> "otp"
+        PurlType.COCOAPODS -> "pod"
+        PurlType.PUB -> "pub"
+        PurlType.PYPI -> "pypi"
+        PurlType.SWIFT -> "swift"
+        PurlType.GENERIC -> "generic"
+        else -> toString().lowercase()
+    }
+
+/**
  * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
  * the [Identifier].
  * Optional [qualifiers] may be given and will be appended to the purl as query parameters e.g.
