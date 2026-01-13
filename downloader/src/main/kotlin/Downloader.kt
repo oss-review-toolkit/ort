@@ -375,7 +375,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             } finally {
                 gemDirectory.safeDeleteRecursively()
             }
-        } else if (sourceArtifact.url.contains("hex.pm/tarballs/")) {
+        } else if ("hex.pm/tarballs/" in sourceArtifact.url) {
             // Unpack the nested contents archive for Hex packages.
             val hexDirectory = createOrtTempDir("hex")
             val contentsFile = hexDirectory / "contents.tar.gz"
