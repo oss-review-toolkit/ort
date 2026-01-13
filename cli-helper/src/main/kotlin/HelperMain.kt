@@ -74,7 +74,7 @@ internal class HelperMain : CliktCommand(ORTH_NAME) {
     init {
         context {
             helpFormatter = { MordantHelpFormatter(context = it, REQUIRED_OPTION_MARKER, showDefaultValues = true) }
-            terminal = Terminal(nonInteractiveWidth = Int.MAX_VALUE)
+            terminal = Terminal(nonInteractiveWidth = 200)
         }
 
         subcommands(

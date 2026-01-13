@@ -122,7 +122,7 @@ class OrtMain : CliktCommand(ORT_NAME) {
 
         context {
             helpFormatter = { MordantHelpFormatter(context = it, REQUIRED_OPTION_MARKER, showDefaultValues = true) }
-            terminal = Terminal(nonInteractiveWidth = Int.MAX_VALUE)
+            terminal = Terminal(nonInteractiveWidth = 200)
         }
 
         // Pass an empty PluginConfig here as commands are not configurable.
