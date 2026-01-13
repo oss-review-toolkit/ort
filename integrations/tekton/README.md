@@ -9,7 +9,7 @@ The pipeline works best on [Google Kubernetes Engine](https://cloud.google.com/k
 To run the pipeline, you will need the following things:
 
 * A Kubernetes cluster with Tekton installed (follow the [installation instructions](https://tekton.dev/docs/pipelines/install/)).
-* You will need to install the [git-clone](https://hub.tekton.dev/tekton/task/git-clone) and [gcs-upload](https://hub.tekton.dev/tekton/task/gcs-upload) tasks.
+* You will need to install the [git-clone](https://github.com/tektoncd/catalog/tree/main/task/git-clone) and [gcs-upload](https://github.com/tektoncd/catalog/tree/main/task/gcs-upload) tasks.
 * A [Google Cloud Storage](https://cloud.google.com/products/storage) bucket.
 
 The pipeline is defined in `ort-pipeline.yaml`.
@@ -21,7 +21,7 @@ The pipeline takes a few inputs:
   It is used for checking out the source code repo, and for storing the temporary artifacts.
 * `gcs-credentials` is a workspace and will need a volume.
   On GKE, you can use Workload Identities to allow the Kubernetes Service Account (KSA) to access the GCS bucket for uploading the results.
-  (If you are not using Workload Identity, find more information how to configure credentials in the [gcs-upload](https://hub.tekton.dev/tekton/task/gcs-upload) documentation.)
+  (If you are not using Workload Identity, find more information how to configure credentials in the [gcs-upload](https://tekton.dev/docs/chains/provenance-storage-gcs-tutorial/) documentation.)
 * `repo-url` is a parameter and takes the path to the Git repo that should be scanned.
 * `result-bucket-path` is a parameter and takes the path to GCS where the result report should be stored e.g. `gs://<gcs-bucket>/<sub_path>`.
 
@@ -39,4 +39,4 @@ In order to trigger a run, e.g. for the [Simple Maven example](https://github.co
 You probably do not want to trigger each execution via `kubectl`.
 Check out the [Tekton documentation](https://tekton.dev/docs/triggers/) to learn how you can trigger a *PipelineRun* via *EventListeners*.
 
-If you are not working on a public GitHub repository, you should also check out how to work with a [private repo](https://hub.tekton.dev/tekton/task/git-clone).
+If you are not working on a public GitHub repository, you should also check out how to work with a [private repo](https://tekton.dev/docs/how-to-guides/clone-repository/).
