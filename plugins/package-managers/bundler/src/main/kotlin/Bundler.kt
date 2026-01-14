@@ -160,9 +160,8 @@ class Bundler(
         }
 
         runCatching {
-            val code = "Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version"
-            val result = runScriptCode(code) as String
-            result.trim()
+            val code = "Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version.to_s"
+            runScriptCode(code) as String
         }.onSuccess { installedBundlerVersion ->
             logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $installedBundlerVersion." }
         }.onFailure {
