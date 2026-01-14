@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodeCommand
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
@@ -49,8 +50,13 @@ internal object PnpmCommand : CommandLineTool {
 
     override fun getVersionRequirement(): RangeList = RangeListFactory.create("5.* - 10.*")
 
-    override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture =
-        super.run(*args, workingDir = workingDir, environment = mapOf("NODE_OPTIONS" to "--use-system-ca"))
+    override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture {
+        val environment = buildMap {
+            if (NodeCommand.hasUseSystemCaOption) put("NODE_OPTIONS", "--use-system-ca")
+        }
+
+        return super.run(*args, workingDir = workingDir, environment = environment)
+    }
 }
 
 /**
