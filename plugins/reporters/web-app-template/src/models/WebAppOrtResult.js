@@ -21,8 +21,10 @@ import Metadata from './Metadata';
 import Statistics from './Statistics';
 import WebAppCopyright from './WebAppCopyright';
 import WebAppLicense from './WebAppLicense';
+import WebAppLicenseFindingCuration from './WebAppLicenseFindingCuration';
 import WebAppOrtIssue from './WebAppOrtIssue';
 import WebAppPackage from './WebAppPackage';
+import WebAppPackageConfiguration from './WebAppPackageConfiguration';
 import WebAppPackageCuration from './WebAppPackageCuration';
 import WebAppPath from './WebAppPath';
 import WebAppPathExclude from './WebAppPathExclude';
@@ -69,6 +71,8 @@ class WebAppOrtResult {
 
     #levels = [];
 
+    #licenseFindingCurations = [];
+
     #licenses = [];
 
     #licensesIndexesByNameMap = new Map();
@@ -78,6 +82,8 @@ class WebAppOrtResult {
     #packages = [];
 
     #packagesByKeyMap = new Map();
+
+    #packageConfigurations = [];
 
     #packageCurations = [];
 
@@ -133,6 +139,16 @@ class WebAppOrtResult {
                 this.#labels = obj.labels;
             }
 
+            if (obj.license_finding_curations || obj.licenseFindingCurations) {
+                const licenseFindingCurations = obj.license_finding_curations || obj.licenseFindingCurations;
+
+                for (let i = 0, len = licenseFindingCurations.length; i < len; i++) {
+                    this.#licenseFindingCurations.push(
+                        new WebAppLicenseFindingCuration(licenseFindingCurations[i], this)
+                    );
+                }
+            }
+
             if (obj.licenses) {
                 const { licenses } = obj;
                 this.#licensesIndexesByNameMap.clear();
@@ -145,6 +161,14 @@ class WebAppOrtResult {
 
             if (obj.meta_data || obj.metaData || obj.metadata) {
                 this.#metadata = new Metadata(obj.meta_data || obj.metaData || obj.metadata);
+            }
+
+            if (obj.package_configurations || obj.packageConfigurations) {
+                const packageConfigurations = obj.package_configurations || obj.packageConfigurations;
+
+                for (let i = 0, len = packageConfigurations.length; i < len; i++) {
+                    this.#packageConfigurations.push(new WebAppPackageConfiguration(packageConfigurations[i], this));
+                }
             }
 
             if (obj.package_curations || obj.packageCurations) {
@@ -447,6 +471,10 @@ class WebAppOrtResult {
         return this.#levels;
     }
 
+    get licenseFindingCurations() {
+        return this.#licenseFindingCurations;
+    }
+
     get licenses() {
         return this.#licenses;
     }
@@ -457,6 +485,10 @@ class WebAppOrtResult {
 
     get metadata() {
         return this.#metadata;
+    }
+
+    get packageConfigurations() {
+        return this.#packageConfigurations;
     }
 
     get packageCurations() {
@@ -536,7 +568,7 @@ class WebAppOrtResult {
     }
 
     getLicenseFindingCurationByIndex(val) {
-        return this.#repository.config.curations.licenseFindings[val] || null;
+        return this.#licenseFindingCurations[val] || null;
     }
 
     getLicenseByName(val) {
@@ -561,6 +593,10 @@ class WebAppOrtResult {
 
     getPackageCurationByIndex(val) {
         return this.#packageCurations[val] || null;
+    }
+
+    getPackageConfigurationByIndex(val) {
+        return this.#packageConfigurations[val] || null;
     }
 
     getPathByIndex(val) {
@@ -674,6 +710,10 @@ class WebAppOrtResult {
 
     hasLevels() {
         return this.#levels.length > 0;
+    }
+
+    hasPackageConfigurations() {
+        return this.#packageConfigurations.length > 0;
     }
 
     hasPackageCurations() {
