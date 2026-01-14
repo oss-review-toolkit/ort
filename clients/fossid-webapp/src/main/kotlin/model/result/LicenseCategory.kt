@@ -19,12 +19,17 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.result
 
+/**
+ * The category of a license in the FossId Knowledge Base. The list of license categories is visible at:
+ * https://<FossID server>/help/en/web-application/license_categories.html.
+ */
 enum class LicenseCategory {
     COMMERCIAL,
     NON_COMMERCIAL,
     NON_LICENSE,
     PERMISSIVE,
     SOURCE_AVAILABLE,
+    SOURCE_AVAILABLE_NC,
     STRONG_COPYLEFT,
     UNCATEGORIZED,
     WEAK_COPYLEFT
