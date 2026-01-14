@@ -86,6 +86,10 @@ class WebAppPackage {
 
     #levels = new Set([]);
 
+    #packageConfigurations;
+
+    #packageConfigurationIndexes = new Set();
+
     #pathExcludes;
 
     #pathExcludeIndexes = new Set();
@@ -243,9 +247,16 @@ class WebAppPackage {
                 this.#levels = new Set(obj.levels);
             }
 
+            if (obj.package_configurations || obj.packageConfigurations) {
+                this.#packageConfigurationIndexes =
+                    new Set(obj.package_configurations || obj.packageConfigurations);
+            }
+
             if (obj.path_excludes || obj.pathExcludes) {
                 const pathExcludeIndexes = obj.path_excludes || obj.pathExcludes;
                 this.#pathExcludeIndexes = new Set(pathExcludeIndexes);
+                const pathExcludesIndexes = obj.path_excludes || obj.pathExcludes;
+                this.#pathExcludeIndexes = new Set(pathExcludesIndexes);
             }
 
             if (obj.paths) {
@@ -477,6 +488,24 @@ class WebAppPackage {
 
     get packageIndex() {
         return this.#_id;
+    }
+
+    get packageConfigurations() {
+        if (!this.#packageConfigurations && this.#webAppOrtResult) {
+            this.#packageConfigurations = [];
+            this.#packageConfigurationIndexes.forEach((index) => {
+                const webAppPackageConfiguration = this.#webAppOrtResult.getPackageConfigurationByIndex(index) || null;
+                if (webAppPackageConfiguration) {
+                    this.#packageConfigurations.push(webAppPackageConfiguration);
+                }
+            });
+        }
+
+        return this.#packageConfigurations;
+    }
+
+    get packageConfigurationIndexes() {
+        return this.#packageConfigurationIndexes;
     }
 
     get pathExcludes() {
@@ -713,6 +742,10 @@ class WebAppPackage {
     hasLicenses() {
         return this.declaredLicenses.size !== 0
             || this.detectedLicenses.size !== 0;
+    }
+
+    hasPackageConfigurations() {
+        return this.#packageConfigurationIndexes.size !== 0;
     }
 
     hasPathExcludes() {
