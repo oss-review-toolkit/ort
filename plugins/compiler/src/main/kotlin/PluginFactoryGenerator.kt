@@ -138,23 +138,9 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                 add("    ${option.name} = ")
 
                 if (option.isNullable) {
-                    when (option.type) {
-                        PluginOptionType.BOOLEAN -> add("parseNullableBooleanOption(%S, config)", option.name)
-                        PluginOptionType.INTEGER -> add("parseNullableIntegerOption(%S, config)", option.name)
-                        PluginOptionType.LONG -> add("parseNullableLongOption(%S, config)", option.name)
-                        PluginOptionType.SECRET -> add("parseNullableSecretOption(%S, config)", option.name)
-                        PluginOptionType.STRING -> add("parseNullableStringOption(%S, config)", option.name)
-                        PluginOptionType.STRING_LIST -> add("parseNullableStringListOption(%S, config)", option.name)
-                    }
+                    add("parseNullable${option.type}Option(%S, config)", option.name)
                 } else {
-                    when (option.type) {
-                        PluginOptionType.BOOLEAN -> add("parseBooleanOption(%S, config)", option.name)
-                        PluginOptionType.INTEGER -> add("parseIntegerOption(%S, config)", option.name)
-                        PluginOptionType.LONG -> add("parseLongOption(%S, config)", option.name)
-                        PluginOptionType.SECRET -> add("parseSecretOption(%S, config)", option.name)
-                        PluginOptionType.STRING -> add("parseStringOption(%S, config)", option.name)
-                        PluginOptionType.STRING_LIST -> add("parseStringListOption(%S, config)", option.name)
-                    }
+                    add("parse${option.type}Option(%S, config)", option.name)
                 }
 
                 add(",\n")
