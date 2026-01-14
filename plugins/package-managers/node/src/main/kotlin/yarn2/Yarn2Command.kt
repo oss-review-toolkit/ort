@@ -27,10 +27,12 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodeCommand
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
@@ -69,6 +71,20 @@ internal class Yarn2Command(private val corepackEnabled: Boolean?) : CommandLine
         if (workingDir == null) "" else super.getVersion(workingDir)
 
     override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=2.0.0")
+
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
+        super.run(
+            *args,
+            workingDir = workingDir,
+            environment = environment.toMutableMap().apply {
+                if (NodeCommand.hasUseSystemCaOption) {
+                    compute("NODE_OPTIONS") { _, options ->
+                        // Additional whitespaces do not matter when separating options.
+                        "${options.orEmpty()} --use-system-ca"
+                    }
+                }
+            }
+        )
 
     private fun isCorepackEnabled(workingDir: File): Boolean =
         corepackEnabled ?: isCorepackEnabledInManifest(workingDir)
