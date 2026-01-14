@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import YAML from 'yaml';
+
 import Metadata from './Metadata';
 import Statistics from './Statistics';
 import WebAppCopyright from './WebAppCopyright';
@@ -86,6 +88,8 @@ class WebAppOrtResult {
     #packageConfigurations = [];
 
     #packageCurations = [];
+
+    #packageCurationsAsPlainJsObject;
 
     #packagesIdtoKeyMap = new Map();
 
@@ -173,6 +177,7 @@ class WebAppOrtResult {
 
             if (obj.package_curations || obj.packageCurations) {
                 const packageCurations = obj.package_curations || obj.obj.packageCurations;
+                this.#packageCurationsAsPlainJsObject = packageCurations.map(({ _id, ...rest }) => rest);
 
                 for (let i = 0, len = packageCurations.length; i < len; i++) {
                     this.#packageCurations.push(new WebAppPackageCuration(packageCurations[i], this));
@@ -593,6 +598,15 @@ class WebAppOrtResult {
 
     getPackageCurationByIndex(val) {
         return this.#packageCurations[val] || null;
+    }
+
+    getPackageCurationsAsYamlString() {
+        return YAML.stringify(
+            this.#packageCurationsAsPlainJsObject,
+            {
+                aliasDuplicateObjects: false
+            }
+        );
     }
 
     getPackageConfigurationByIndex(val) {

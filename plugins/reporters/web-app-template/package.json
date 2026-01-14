@@ -30,7 +30,8 @@
         "react-dom": "^19.2.3",
         "react-redux": "^9.2.0",
         "react-syntax-highlighter": "^16.1.0",
-        "recharts": "3.6.0"
+        "recharts": "3.6.0",
+        "yaml": "^2.8.2"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^5.1.2",
