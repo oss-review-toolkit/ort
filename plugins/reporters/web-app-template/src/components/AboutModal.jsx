@@ -129,6 +129,27 @@ const AboutModal = ({ webAppOrtResult, isModalVisible, handleModalCancel }) => {
                         });
                     }
 
+                    if (webAppOrtResult.hasPackageCurations()) {
+                        tabItems.push({
+                            label: (
+                                <span>
+                                    <FileTextOutlined style={{ marginRight: 5 }}/>
+                                    Package Curations
+                                </span>
+                            ),
+                            key: 'ort-tabs-package-curations',
+                            children: (
+                                <SyntaxHighlighter
+                                    language="yaml"
+                                    showLineNumbers={true}
+                                    style={lioshi}
+                                >
+                                    {webAppOrtResult.getPackageCurationsAsYamlString()}
+                                </SyntaxHighlighter>
+                            )
+                        });
+                    }
+
                     tabItems.push({
                         label: (
                             <span>
