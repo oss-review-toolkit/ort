@@ -62,13 +62,19 @@ internal object YarnCommand : CommandLineTool {
 
     override fun getVersionRequirement(): RangeList = RangeListFactory.create("1.3.* - 1.22.*")
 
-    override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture {
-        val environment = buildMap {
-            if (NodeCommand.hasUseSystemCaOption) put("NODE_OPTIONS", "--use-system-ca")
-        }
-
-        return super.run(*args, workingDir = workingDir, environment = environment)
-    }
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
+        super.run(
+            *args,
+            workingDir = workingDir,
+            environment = environment.toMutableMap().apply {
+                if (NodeCommand.hasUseSystemCaOption) {
+                    compute("NODE_OPTIONS") { _, options ->
+                        // Additional whitespaces do not matter when separating options.
+                        "${options.orEmpty()} --use-system-ca"
+                    }
+                }
+            }
+        )
 }
 
 /**
