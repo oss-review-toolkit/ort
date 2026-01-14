@@ -57,24 +57,16 @@ import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-/**
- * The name of the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information.
- */
+/** The name of the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information. */
 private const val ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "root_dependencies.rb"
 
-/**
- * The name of the helper script resource that resolves a `Gemfile`'s dependencies.
- */
+/** The name of the helper script resource that resolves a `Gemfile`'s dependencies. */
 private const val RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "resolve_dependencies.rb"
 
-/**
- * The name of the Bundler Gem.
- */
+/** The name of the Bundler Gem. */
 private const val BUNDLER_GEM_NAME = "bundler"
 
-/**
- * The name of the file where Bundler stores locked down dependency information.
- */
+/** The name of the file where Bundler stores locked down dependency information. */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
 private fun runScriptCode(sourceCode: String, workingDir: File? = null): Any? {
