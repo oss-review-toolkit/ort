@@ -23,6 +23,8 @@ import {
 } from 'react';
 
 import {
+    CheckSquareOutlined,
+    CloseSquareOutlined,
     CloudDownloadOutlined,
     DeleteOutlined,
     EyeOutlined,
@@ -70,6 +72,7 @@ const ResultsTable = ({ webAppOrtResult }) => {
                         detectedLicensesProcessedText: Array.from(webAppPackage.detectedLicensesProcessed).join(', '),
                         effectiveLicense: webAppPackage.effectiveLicense || '',
                         excludeReasonsText: Array.from(webAppPackage.excludeReasons).join(', '),
+                        hasCurations: webAppPackage.hasCurations() || false,
                         homepageUrl: webAppPackage.homepageUrl || '',
                         id: webAppPackage.id,
                         isExcluded: webAppPackage.isExcluded,
@@ -528,6 +531,58 @@ const ResultsTable = ({ webAppOrtResult }) => {
                 (value) => setFilteredInfo({ ...filteredInfo, vcsProcessedUrl: value })
             )
         });
+    }
+
+    if (webAppOrtResult.hasPackageCurations()) {
+        toggleColumnMenuItems.push({ text: 'Package Curations', value: 'curationIndexes' });
+        if (columnsToShow.includes('curationIndexes')) {
+            columns.push({
+                align: 'left',
+                filters: (() => [
+                    {
+                        text: (
+                            <span>
+                                <CheckSquareOutlined />
+                                {' '}
+                                Yes
+                            </span>
+                        ),
+                        value: true
+                    },
+                    {
+                        text: (
+                            <span>
+                                <CloseSquareOutlined />
+                                {' '}
+                                No
+                            </span>
+                        ),
+                        value: false
+                    }
+                ])(),
+                filteredValue: filteredInfo.curationIndexes || null,
+                key: 'curationIndexes',
+                onFilter: (value, record) => record.hasCurations === value,
+                render: (record) => (
+                    record.hasCurations
+                        ? (
+                            <span>
+                                <Tooltip
+                                    placement="right"
+                                    title="This package metadata has been corrected."
+                                >
+                                    <CheckSquareOutlined />
+                                </Tooltip>
+                            </span>
+                            )
+                        : (
+                            <CloseSquareOutlined />
+                            )
+                ),
+                title: 'Curations',
+                width: 95
+            });
+        }
     }
 
     toggleColumnMenuItems.push({ text: 'Project', value: 'projectIndexes' });
