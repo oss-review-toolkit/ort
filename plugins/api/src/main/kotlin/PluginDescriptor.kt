@@ -47,24 +47,26 @@ data class PluginDescriptor(
 /**
  * The supported types of plugin options.
  */
-enum class PluginOptionType {
+enum class PluginOptionType(val typeName: String) {
     /** A [Boolean] option. */
-    BOOLEAN,
+    BOOLEAN("Boolean"),
 
     /** An [Int] option. */
-    INTEGER,
+    INTEGER("Integer"),
 
     /** A [Long] option. */
-    LONG,
+    LONG("Long"),
 
     /** A [Secret] option. */
-    SECRET,
+    SECRET("Secret"),
 
     /** A [String] option. */
-    STRING,
+    STRING("String"),
 
     /** A [List]<[String]> option. */
-    STRING_LIST
+    STRING_LIST("StringList");
+
+    override fun toString() = typeName
 }
 
 /**
