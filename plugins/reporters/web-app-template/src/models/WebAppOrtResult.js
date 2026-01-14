@@ -87,6 +87,8 @@ class WebAppOrtResult {
 
     #packageConfigurations = [];
 
+    #packageConfigurationsAsPlainJsObject;
+
     #packageCurations = [];
 
     #packageCurationsAsPlainJsObject;
@@ -168,10 +170,37 @@ class WebAppOrtResult {
             }
 
             if (obj.package_configurations || obj.packageConfigurations) {
+                const licenseFindingCurations = (
+                    obj.license_finding_curations || obj.licenseFindingCurations
+                )?.map(({ _id, ...rest }) => rest) || [];
                 const packageConfigurations = obj.package_configurations || obj.packageConfigurations;
+                const pathExcludes = (obj.path_excludes || obj.pathExcludes).map(({ _id, ...rest }) => rest);
+
+                this.#packageConfigurationsAsPlainJsObject = packageConfigurations.map(({ _id, ...rest }) => rest);
 
                 for (let i = 0, len = packageConfigurations.length; i < len; i++) {
-                    this.#packageConfigurations.push(new WebAppPackageConfiguration(packageConfigurations[i], this));
+                    const webAppPackageConfiguration = new WebAppPackageConfiguration(packageConfigurations[i], this);
+                    this.#packageConfigurations.push(webAppPackageConfiguration);
+
+                    const { pathExcludeIndexes } = webAppPackageConfiguration
+                    if (pathExcludeIndexes.length !== 0) {
+                        this.#packageConfigurationsAsPlainJsObject[i].path_excludes = [];
+                        for (let j = 0, len = pathExcludeIndexes.length; j < len; j++) {
+                            this.#packageConfigurationsAsPlainJsObject[i].path_excludes.push(
+                                pathExcludes[pathExcludeIndexes[j]]
+                            );
+                        }
+                    }
+
+                    const { licenseFindingCurationIndexes } = webAppPackageConfiguration
+                    if (licenseFindingCurationIndexes.length !== 0) {
+                        this.#packageConfigurationsAsPlainJsObject[i].license_finding_curations = [];
+                        for (let j = 0, len = licenseFindingCurationIndexes.length; j < len; j++) {
+                            this.#packageConfigurationsAsPlainJsObject[i].license_finding_curations.push(
+                                licenseFindingCurations[licenseFindingCurationIndexes[j]]
+                            );
+                        }
+                    }
                 }
             }
 
@@ -594,6 +623,15 @@ class WebAppOrtResult {
 
     getPackageByKey(val) {
         return this.#packagesByKeyMap.get(val) || [];
+    }
+
+    getPackageConfigurationsAsYamlString() {
+        return YAML.stringify(
+            this.#packageConfigurationsAsPlainJsObject,
+            {
+                aliasDuplicateObjects: false
+            }
+        );
     }
 
     getPackageCurationByIndex(val) {
