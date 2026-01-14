@@ -71,7 +71,7 @@ const AboutModal = ({ webAppOrtResult, isModalVisible, handleModalCancel }) => {
                             label: (
                                 <span>
                                     <FileTextOutlined style={{ marginRight: 5 }}/>
-                                    Excludes (.ort.yml)
+                                    The .ort.yml file
                                 </span>
                             ),
                             key: 'ort-tabs-excludes',
