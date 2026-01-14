@@ -73,6 +73,7 @@ const ResultsTable = ({ webAppOrtResult }) => {
                         effectiveLicense: webAppPackage.effectiveLicense || '',
                         excludeReasonsText: Array.from(webAppPackage.excludeReasons).join(', '),
                         hasCurations: webAppPackage.hasCurations() || false,
+                        hasPackageConfigurations: webAppPackage.hasPackageConfigurations() || false,
                         homepageUrl: webAppPackage.homepageUrl || '',
                         id: webAppPackage.id,
                         isExcluded: webAppPackage.isExcluded,
@@ -531,6 +532,58 @@ const ResultsTable = ({ webAppOrtResult }) => {
                 (value) => setFilteredInfo({ ...filteredInfo, vcsProcessedUrl: value })
             )
         });
+    }
+
+    if (webAppOrtResult.hasPackageConfigurations()) {
+        toggleColumnMenuItems.push({ text: 'Package Configurations', value: 'packageConfigurationIndexes' });
+        if (columnsToShow.includes('packageConfigurationIndexes')) {
+            columns.push({
+                align: 'left',
+                filters: (() => [
+                    {
+                        text: (
+                            <span>
+                                <CheckSquareOutlined />
+                                {' '}
+                                Yes
+                            </span>
+                        ),
+                        value: true
+                    },
+                    {
+                        text: (
+                            <span>
+                                <CloseSquareOutlined />
+                                {' '}
+                                No
+                            </span>
+                        ),
+                        value: false
+                    }
+                ])(),
+                filteredValue: filteredInfo.curationsIndexes || null,
+                key: 'curationsIndexes',
+                onFilter: (value, record) => record.hasPackageConfigurations === value,
+                render: (record) => (
+                    record.hasPackageConfigurations
+                        ? (
+                            <span className="ort-excludes">
+                                <Tooltip
+                                    placement="right"
+                                    title="This package file findings have been corrected or excluded."
+                                >
+                                    <CheckSquareOutlined />
+                                </Tooltip>
+                            </span>
+                            )
+                        : (
+                            <CloseSquareOutlined />
+                            )
+                ),
+                title: 'Configs',
+                width: 85
+            });
+        }
     }
 
     if (webAppOrtResult.hasPackageCurations()) {
