@@ -320,7 +320,7 @@ const PackageFindingsTable = ({ webAppPackage }) => {
                 onChange: handlePaginationChange,
                 pageSize: pagination.pageSize,
                 pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
-                position: 'bottom',
+                placement: 'bottom',
                 showSizeChanger: true,
                 showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
             }}

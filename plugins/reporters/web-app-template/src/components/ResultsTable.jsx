@@ -34,6 +34,7 @@ import {
     LaptopOutlined
 } from '@ant-design/icons';
 import {
+    Button,
     Col,
     Collapse,
     Dropdown,
@@ -707,14 +708,18 @@ const ResultsTable = ({ webAppOrtResult }) => {
         <div>
             <Row justify="end">
                 <Col>
-                    <Space
+                    <Space.Compact
                         style={{
                             marginBottom: 16
                         }}
                     >
-                        <Dropdown.Button
-                            icon={<EyeOutlined />}
-                            size="small"
+                        <Button
+                            icon={ <DeleteOutlined />}
+                            onClick={handleClearAllFiltersAndSorting}
+                        >
+                             Clear filters and sorters
+                        </Button>
+                        <Dropdown
                             menu={{
                                 className: 'ort-table-toggle-columns',
                                 items: toggleColumnMenuItems.map(
@@ -736,12 +741,10 @@ const ResultsTable = ({ webAppOrtResult }) => {
                                 onClick: handleToggleColumns,
                                 selectedKeys: columnsToShow
                             }}
-                            onClick={handleClearAllFiltersAndSorting}
                         >
-                            <DeleteOutlined />
-                            Clear filters and sorters
-                        </Dropdown.Button>
-                    </Space>
+                            <Button icon={<EyeOutlined />} />
+                        </Dropdown>
+                    </Space.Compact>
                 </Col>
             </Row>
             <Table
