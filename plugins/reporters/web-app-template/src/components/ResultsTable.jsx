@@ -45,6 +45,7 @@ import {
     Tooltip
 } from 'antd';
 
+import PackageConfigurations from './PackageConfigurations';
 import PackageCurations from './PackageCurations';
 import PackageDetails from './PackageDetails';
 import PackageFindingsTable from './PackageFindingsTable';
@@ -812,6 +813,18 @@ const ResultsTable = ({ webAppOrtResult }) => {
                                             key: 'package-curations',
                                             children: (
                                                 <PackageCurations
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPackageConfigurations()) {
+                                        collapseItems.push({
+                                            label: 'Package Configurations',
+                                            key: 'package-configurations',
+                                            children: (
+                                                <PackageConfigurations
                                                     webAppPackage={webAppPackage}
                                                 />
                                             )

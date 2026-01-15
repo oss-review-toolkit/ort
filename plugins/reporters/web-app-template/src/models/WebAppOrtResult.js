@@ -670,6 +670,25 @@ class WebAppOrtResult {
         return this.#packageConfigurations[val] || null;
     }
 
+    getPackageConfigurationsAsYamlFromIndexes(values) {
+        const packageConfigurations = [];
+        if (values && typeof values.forEach === 'function') {
+            values.forEach((index) => {
+                const packageConfiguration = this.#packageConfigurationsAsPlainJsObject[index] || null;
+                if (packageConfiguration) {
+                    packageConfigurations.push(packageConfiguration);
+                }
+            });
+        }
+
+        return YAML.stringify(
+            packageConfigurations,
+            {
+                aliasDuplicateObjects: false
+            }
+        ) || null;
+    }
+
     getPathByIndex(val) {
         return this.#paths[val] || null;
     }
