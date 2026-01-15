@@ -25,9 +25,10 @@ plugins {
 dependencies {
     api(projects.analyzer)
     api(projects.model)
+    api(projects.plugins.api)
+    api(projects.utils.cyclonedxUtils)
 
     implementation(projects.utils.commonUtils)
-    implementation(projects.utils.cyclonedxUtils)
 
     ksp(projects.analyzer)
 
