@@ -90,6 +90,8 @@ class WebAppPackage {
 
     #packageConfigurations;
 
+    #packageConfigurationsAsYaml;
+
     #packageConfigurationIndexes = new Set();
 
     #pathExcludes;
@@ -514,6 +516,16 @@ class WebAppPackage {
         }
 
         return this.#packageConfigurations;
+    }
+
+    get packageConfigurationsAsYaml() {
+        if (!this.#packageConfigurationsAsYaml && this.#webAppOrtResult) {
+            this.#packageConfigurationsAsYaml = this.#webAppOrtResult.getPackageConfigurationsAsYamlFromIndexes(
+                this.packageConfigurationIndexes
+            ) || null;
+        }
+
+        return this.#packageConfigurationsAsYaml;
     }
 
     get packageConfigurationIndexes() {

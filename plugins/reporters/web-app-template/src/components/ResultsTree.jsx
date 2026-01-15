@@ -34,6 +34,7 @@ import {
     Tree
 } from 'antd';
 
+import PackageConfigurations from './PackageConfigurations';
 import PackageCurations from './PackageCurations';
 import PackageDetails from './PackageDetails';
 import PackageFindingsTable from './PackageFindingsTable';
@@ -274,6 +275,18 @@ const ResultsTree = ({ webAppOrtResult }) => {
                                                 key: 'package-curations',
                                                 children: (
                                                     <PackageCurations
+                                                        webAppPackage={selectedWebAppPackage}
+                                                    />
+                                                )
+                                            });
+                                        }
+
+                                        if (selectedWebAppPackage.hasPackageConfigurations()) {
+                                            collapseItems.push({
+                                                label: 'Package Configurations',
+                                                key: 'package-configurations',
+                                                children: (
+                                                    <PackageConfigurations
                                                         webAppPackage={selectedWebAppPackage}
                                                     />
                                                 )
