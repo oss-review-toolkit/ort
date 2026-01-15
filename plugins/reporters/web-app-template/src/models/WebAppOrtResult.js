@@ -638,6 +638,25 @@ class WebAppOrtResult {
         return this.#packageCurations[val] || null;
     }
 
+    getPackageCurationsAsYamlFromIndexes(values) {
+        const packageCurations = [];
+        if (values && typeof values.forEach === 'function') {
+            values.forEach((index) => {
+                const packageCuration = this.#packageCurationsAsPlainJsObject[index] || null;
+                if (packageCuration) {
+                    packageCurations.push(packageCuration);
+                }
+            });
+        }
+
+        return YAML.stringify(
+            packageCurations,
+            {
+                aliasDuplicateObjects: false
+            }
+        ) || null;
+    }
+
     getPackageCurationsAsYamlString() {
         return YAML.stringify(
             this.#packageCurationsAsPlainJsObject,

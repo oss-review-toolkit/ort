@@ -45,6 +45,7 @@ import {
     Tooltip
 } from 'antd';
 
+import PackageCurations from './PackageCurations';
 import PackageDetails from './PackageDetails';
 import PackageFindingsTable from './PackageFindingsTable';
 import PackageLicenses from './PackageLicenses';
@@ -799,6 +800,18 @@ const ResultsTable = ({ webAppOrtResult }) => {
                                             key: 'package-scan-results',
                                             children: (
                                                 <PackageFindingsTable
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasCurations()) {
+                                        collapseItems.push({
+                                            label: 'Package Curations',
+                                            key: 'package-curations',
+                                            children: (
+                                                <PackageCurations
                                                     webAppPackage={webAppPackage}
                                                 />
                                             )
