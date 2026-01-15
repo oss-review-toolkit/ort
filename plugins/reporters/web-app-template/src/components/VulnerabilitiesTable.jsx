@@ -481,7 +481,7 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                     onChange: handlePaginationChange,
                     pageSize: pagination.pageSize,
                     pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
-                    position: 'bottom',
+                    placement: 'bottom',
                     showQuickJumper: true,
                     showSizeChanger: true,
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} issues`
