@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
  */
 class PathLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT) {
     private val licenseFileMatcher = createFileMatcher(licenseFilePatterns.licenseFilenames)
+    private val noticeFileMatcher = createFileMatcher(licenseFilePatterns.noticeFilenames)
     private val patentFileMatcher = createFileMatcher(licenseFilePatterns.patentFilenames)
     private val otherLicenseFileMatcher = createFileMatcher(licenseFilePatterns.otherLicenseFilenames)
 
@@ -83,6 +84,7 @@ class PathLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFileP
             }.mapValues { it.value.toSet() }
 
         val licenseFiles = filePathsByDir(licenseFileMatcher)
+        val noticeFiles = filePathsByDir(noticeFileMatcher)
         val patentFiles = filePathsByDir(patentFileMatcher)
         val otherLicenseFiles = filePathsByDir(otherLicenseFileMatcher)
 
@@ -107,6 +109,7 @@ class PathLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFileP
                 addApplicableLicenseFiles(otherLicenseFiles)
             }
 
+            addApplicableLicenseFiles(noticeFiles)
             addApplicableLicenseFiles(patentFiles)
         }
 
