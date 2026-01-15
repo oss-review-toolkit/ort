@@ -34,6 +34,8 @@ class WebAppPackage {
 
     #curations;
 
+    #curationsAsYaml;
+
     #curationIndexes = new Set();
 
     #declaredLicenses = new Set();
@@ -370,6 +372,16 @@ class WebAppPackage {
         }
 
         return this.#curations;
+    }
+
+    get curationsAsYaml() {
+        if (!this.#curationsAsYaml && this.#webAppOrtResult) {
+            this.#curationsAsYaml = this.#webAppOrtResult.getPackageCurationsAsYamlFromIndexes(
+                this.curationIndexes
+            ) || null;
+        }
+
+        return this.#curationsAsYaml;
     }
 
     get curationIndexes() {
