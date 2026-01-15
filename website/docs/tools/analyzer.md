@@ -23,6 +23,10 @@ Currently, the following package managers (grouped by the programming language t
   * Also see: [SPDX documents](#spdx-as-fallback-package-manager)
 * Dart / Flutter
   * [Pub](https://pub.dev/)
+* Elixir
+  * [Mix](https://hexdocs.pm/mix/)
+* Erlang
+  * [Rebar3](https://www.rebar3.org/)
 * Gleam
   * [Gleam](https://gleam.run/)
 * Go
