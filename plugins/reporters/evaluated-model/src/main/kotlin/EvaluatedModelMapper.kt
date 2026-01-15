@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathInclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
@@ -62,7 +63,7 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 /**
  * Maps the [reporter input][input] to an [EvaluatedModel].
  */
-@Suppress("TooManyFunctions")
+@Suppress("LargeClass", "TooManyFunctions")
 internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val packages = mutableMapOf<Identifier, EvaluatedPackage>()
     private val paths = mutableListOf<EvaluatedPackagePath>()
@@ -77,6 +78,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val packageConfigurations = mutableListOf<PackageConfiguration>()
     private val packageCurations = mutableListOf<PackageCuration>()
     private val pathExcludes = mutableListOf<PathExclude>()
+    private val pathIncludes = mutableListOf<PathInclude>()
     private val scopeExcludes = mutableListOf<ScopeExclude>()
     private val ruleViolations = mutableListOf<EvaluatedRuleViolation>()
     private val ruleViolationResolutions = mutableListOf<RuleViolationResolution>()
@@ -90,6 +92,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         var id: Identifier,
         var isExcluded: Boolean,
         val pathExcludes: MutableList<PathExclude> = mutableListOf(),
+        val pathIncludes: MutableList<PathInclude> = mutableListOf(),
         val scopeExcludes: MutableList<ScopeExclude> = mutableListOf()
     )
 
@@ -159,6 +162,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         return EvaluatedModel(
             pathExcludes = pathExcludes,
+            pathIncludes = pathIncludes,
             scopeExcludes = scopeExcludes,
             issueResolutions = issueResolutions,
             issues = issues,
@@ -197,14 +201,17 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         input.ortResult.getProjects().forEach { project ->
             val pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
+            val pathIncludes = input.ortResult.getIncludes().findPathIncludes(project, input.ortResult)
             val dependencies = input.ortResult.dependencyNavigator.projectDependencies(project)
-            if (pathExcludes.isEmpty()) {
+            if (pathExcludes.isEmpty() && pathIncludes.isEmpty()) {
                 val info = packageExcludeInfo.getValue(project.id)
                 if (info.isExcluded) {
                     info.isExcluded = false
                     info.pathExcludes.clear()
                     info.scopeExcludes.clear()
                 }
+
+                info.pathIncludes.clear()
             } else {
                 dependencies.forEach { id ->
                     val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }
@@ -212,6 +219,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     if (info.isExcluded) {
                         info.pathExcludes += pathExcludes
                     }
+
+                    info.pathIncludes += pathIncludes
                 }
             }
 
@@ -266,6 +275,14 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 .flatMap { it.pathExcludes }
         }
 
+    private fun getPathIncludes(id: Identifier, provenance: Provenance): List<PathInclude> =
+        if (input.ortResult.isProject(id)) {
+            input.ortResult.getIncludes().paths
+        } else {
+            input.ortResult.getPackageConfigurations(id, provenance)
+                .flatMap { it.pathIncludes }
+        }
+
     private fun addProject(project: Project) {
         val scanResults = mutableListOf<EvaluatedScanResult>()
         val detectedLicenses = mutableSetOf<LicenseId>()
@@ -274,7 +291,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val issues = mutableListOf<EvaluatedIssue>()
 
         val applicablePathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
+        val applicablePathIncludes = input.ortResult.getIncludes().findPathIncludes(project, input.ortResult)
         val evaluatedPathExcludes = pathExcludes.addIfRequired(applicablePathExcludes)
+        pathIncludes.addIfRequired(applicablePathIncludes)
 
         val evaluatedPackage = EvaluatedPackage(
             id = project.id,
@@ -316,7 +335,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
 
         val includedDetectedLicenses = findings.filter {
-            it.type == EvaluatedFindingType.LICENSE && it.pathExcludes.isEmpty()
+            val isIncluded = pathIncludes.isEmpty() || pathIncludes.any { include -> include.matches(it.path) }
+            it.type == EvaluatedFindingType.LICENSE && it.pathExcludes.isEmpty() && isIncluded
         }.mapNotNullTo(mutableSetOf()) { it.license }
 
         detectedExcludedLicenses += detectedLicenses - includedDetectedLicenses
@@ -698,6 +718,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         findings: MutableList<EvaluatedFinding>
     ) {
         val pathExcludes = getPathExcludes(id, scanResult.provenance)
+        val pathIncludes = getPathIncludes(id, scanResult.provenance)
         val licenseFindingCurations = getLicenseFindingCurations(id, scanResult.provenance)
         // Sort the curated findings here to avoid the need to sort in the web-app each time it is loaded.
         val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
@@ -717,6 +738,16 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 val evaluatedPathExcludes = pathExcludes
                     .filter { it.matches(copyrightFinding.location.getRelativePathToRoot(id)) }
                     .let { this@EvaluatedModelMapper.pathExcludes.addIfRequired(it) }
+                pathIncludes.let { this@EvaluatedModelMapper.pathIncludes.addIfRequired(it) }
+
+                val evaluatedPathIncludes = if (pathIncludes.isEmpty() || pathIncludes.any { include ->
+                        include.matches(copyrightFinding.location.getRelativePathToRoot(id))
+                    }
+                ) {
+                    emptyList()
+                } else {
+                    pathIncludes
+                }
 
                 findings += EvaluatedFinding(
                     type = EvaluatedFindingType.COPYRIGHT,
@@ -726,7 +757,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     startLine = copyrightFinding.location.startLine,
                     endLine = copyrightFinding.location.endLine,
                     scanResult = evaluatedScanResult,
-                    pathExcludes = evaluatedPathExcludes
+                    pathExcludes = evaluatedPathExcludes,
+                    isExcludedByPathIncludes = evaluatedPathExcludes.isEmpty() && evaluatedPathIncludes.isNotEmpty()
                 )
             }
 
@@ -737,6 +769,18 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     .filter { it.matches(licenseFinding.location.getRelativePathToRoot(id)) }
                     .let { this@EvaluatedModelMapper.pathExcludes.addIfRequired(it) }
 
+                pathIncludes.let { this@EvaluatedModelMapper.pathIncludes.addIfRequired(it) }
+
+                val evaluatedPathIncludes = if (pathIncludes.isEmpty() || pathIncludes.any {
+                            include ->
+                        include.matches(licenseFinding.location.getRelativePathToRoot(id))
+                    }
+                ) {
+                    emptyList()
+                } else {
+                    pathIncludes
+                }
+
                 findings += EvaluatedFinding(
                     type = EvaluatedFindingType.LICENSE,
                     license = actualLicense,
@@ -745,7 +789,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     startLine = licenseFinding.location.startLine,
                     endLine = licenseFinding.location.endLine,
                     scanResult = evaluatedScanResult,
-                    pathExcludes = evaluatedPathExcludes
+                    pathExcludes = evaluatedPathExcludes,
+                    isExcludedByPathIncludes = evaluatedPathExcludes.isEmpty() && evaluatedPathIncludes.isNotEmpty()
                 )
             }
         }
@@ -810,7 +855,13 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             )
         }
 
-        return copy(config = config.copy(excludes = excludes, resolutions = resolutions))
+        val includes = with(config.includes) {
+            copy(
+                paths = paths.map { pathIncludes.addIfRequired(it) }
+            )
+        }
+
+        return copy(config = config.copy(excludes = excludes, includes = includes, resolutions = resolutions))
     }
 }
 
