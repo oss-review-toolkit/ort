@@ -84,7 +84,7 @@ const ResultsTable = ({ webAppOrtResult }) => {
                         key: webAppPackage.key,
                         levels: webAppPackage.levels,
                         levelsText: Array.from(webAppPackage.levels).join(', '),
-                        repository: webAppPackage.vcsProcessedUrl || '',
+                        repository: webAppPackage.vcsProcessed.url || webAppPackage.vcs.url || null,
                         scopesText: Array.from(webAppPackage.scopeNames).join(', '),
                         scopeIndexes: webAppPackage.scopeIndexes
                     })
@@ -519,24 +519,6 @@ const ResultsTable = ({ webAppOrtResult }) => {
         });
     }
 
-    toggleColumnMenuItems.push({ text: 'Repository', value: 'vcsProcessedUrl' });
-    if (columnsToShow.includes('vcsProcessedUrl')) {
-        columns.push({
-            align: 'left',
-            dataIndex: 'vcsProcessedUrl',
-            responsive: ['md'],
-            sorter: (a, b) => a.vcsProcessedUrl.localeCompare(b.vcsProcessedUrl),
-            sortOrder: sortedInfo.field === 'vcsProcessedUrl' && sortedInfo.order,
-            textWrap: 'word-break',
-            title: 'Repository',
-            ...getColumnSearchProps(
-                'vcsProcessedUrl',
-                filteredInfo.vcsProcessedUrl,
-                (value) => setFilteredInfo({ ...filteredInfo, vcsProcessedUrl: value })
-            )
-        });
-    }
-
     if (webAppOrtResult.hasPackageConfigurations()) {
         toggleColumnMenuItems.push({ text: 'Package Configurations', value: 'packageConfigurationIndexes' });
         if (columnsToShow.includes('packageConfigurationIndexes')) {
@@ -666,6 +648,25 @@ const ResultsTable = ({ webAppOrtResult }) => {
             ),
             title: 'Project',
             width: 85
+        });
+    }
+
+    toggleColumnMenuItems.push({ text: 'Repository', value: 'repository' });
+    if (columnsToShow.includes('repository')) {
+        columns.push({
+            align: 'left',
+            dataIndex: 'repository',
+            responsive: ['md'],
+            filteredValue: filteredInfo.repository || null,
+            sorter: (a, b) => a.repository.localeCompare(b.repository),
+            sortOrder: sortedInfo.field === 'repository' && sortedInfo.order,
+            textWrap: 'word-break',
+            title: 'Repository',
+            ...getColumnSearchProps(
+                'repository',
+                filteredInfo.repository,
+                (value) => setFilteredInfo({ ...filteredInfo, repository: value })
+            )
         });
     }
 
