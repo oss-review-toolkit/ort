@@ -177,7 +177,7 @@ const ResultsTree = ({ webAppOrtResult }) => {
                             <Drawer
                                 placement="right"
                                 closable={true}
-                                size="65%"
+                                size={Math.max(1000, window.innerWidth * 0.70)}
                                 open={drawerOpen}
                                 title={
                                     (() => {
