@@ -77,7 +77,7 @@ class FossIdClientNewProjectTest : StringSpec({
     "Project can be created" {
         service.createProject("", "", PROJECT_CODE, PROJECT_CODE) shouldNotBeNull {
             checkResponse("create project")
-            data.shouldNotBeNull() shouldContain("project_id" to "405")
+            data.shouldNotBeNull() shouldContain ("project_id" to "405")
         }
     }
 

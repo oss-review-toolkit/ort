@@ -152,8 +152,8 @@ internal fun <T : Summarizable> List<T>.mapSummary(
             }?.also {
                 runCatching {
                     fileComment = jsonMapper.readValue(it.comment, OrtComment::class.java)
-                }.onFailure {
-                    logger.error { "Cannot deserialize comment for ${summary.path}: ${it.message}." }
+                }.onFailure { e ->
+                    logger.error { "Cannot deserialize comment for ${summary.path}: ${e.message}." }
                 }
             }
         }
@@ -196,8 +196,8 @@ private fun mapLicense(
     location: TextLocation,
     issues: MutableList<Issue>,
     detectedLicenseMapping: Map<String, String>
-): LicenseFinding? {
-    return runCatching {
+): LicenseFinding? =
+    runCatching {
         // TODO: The detected license mapping must be applied here, because FossID can return license strings
         //       which cannot be parsed to an SpdxExpression. A better solution could be to automatically
         //       convert the strings into a form that can be parsed, then the mapping could be applied globally.
@@ -211,7 +211,6 @@ private fun mapLicense(
             affectedPath = location.path
         )
     }.getOrNull()
-}
 
 /**
  * Map the raw snippets to ORT [SnippetFinding]s. If a snippet license cannot be parsed, an issues is added to [issues].

@@ -30,5 +30,6 @@ internal object NodeCommand : CommandLineTool {
     val hasUseSystemCaOption by lazy { Semver(getVersion()).isGreaterThanOrEqualTo("23.8.0") }
 
     override fun command(workingDir: File?) = "node"
+
     override fun transformVersion(output: String) = output.removePrefix("v").trimEnd()
 }

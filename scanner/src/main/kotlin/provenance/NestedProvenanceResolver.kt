@@ -46,12 +46,11 @@ class DefaultNestedProvenanceResolver(
     private val storage: NestedProvenanceStorage,
     private val workingTreeCache: WorkingTreeCache
 ) : NestedProvenanceResolver {
-    override suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance {
-        return when (provenance) {
+    override suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance =
+        when (provenance) {
             is ArtifactProvenance -> NestedProvenance(root = provenance, subRepositories = emptyMap())
             is RepositoryProvenance -> resolveNestedRepository(provenance)
         }
-    }
 
     private suspend fun resolveNestedRepository(provenance: RepositoryProvenance): NestedProvenance {
         val storedResult = storage.readNestedProvenance(provenance)

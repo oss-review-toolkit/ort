@@ -83,9 +83,7 @@ class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descrip
         analysisRoot: File,
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
-    ): List<File> {
-        return definitionFiles.filterNot { file -> ".build/checkouts" in file.path }
-    }
+    ): List<File> = definitionFiles.filterNot { file -> ".build/checkouts" in file.path }
 
     override fun resolveDependencies(
         analysisRoot: File,

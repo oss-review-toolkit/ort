@@ -23,5 +23,7 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
  * The possible types of an [EvaluatedIssue].
  */
 enum class EvaluatedIssueType {
-    ADVISOR, ANALYZER, SCANNER
+    ADVISOR,
+    ANALYZER,
+    SCANNER
 }

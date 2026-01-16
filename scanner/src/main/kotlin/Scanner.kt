@@ -354,16 +354,16 @@ class Scanner(
                             storePackageScanResult(pkg, nestedProvenanceScanResult)
 
                             nestedProvenanceScanResult.scanResults.forEach { (provenance, scanResults) ->
-                                scanResults.forEach { scanResult ->
-                                    provenanceScanResultsToStore += provenance to scanResult
+                                scanResults.forEach { provenanceScanResult ->
+                                    provenanceScanResultsToStore += provenance to provenanceScanResult
                                 }
                             }
                         }
                     }
 
                     // Store only deduplicated provenance scan results.
-                    provenanceScanResultsToStore.forEach { (provenance, scanResult) ->
-                        storeProvenanceScanResult(provenance, scanResult)
+                    provenanceScanResultsToStore.forEach { (provenance, provenanceScanResult) ->
+                        storeProvenanceScanResult(provenance, provenanceScanResult)
                     }
                 }.onFailure { e ->
                     val issue = scanner.createAndLogIssue(

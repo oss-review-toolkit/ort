@@ -819,9 +819,6 @@ class FossIdTest : WordSpec({
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode, comment = branchName)
 
-            val originCode2 = "originalScanCode2"
-            val scan2 = createScan(vcsInfo.url, vcsInfo.revision, scanId = 2, scanCode = originCode2)
-
             val service = FossIdRestService.create(config.serverUrl)
                 .expectCloneRepositoryWorkflow(projectCode, scanCode, vcsInfo, branchName, listOf(scan), true)
                 .mockFiles(scanCode)

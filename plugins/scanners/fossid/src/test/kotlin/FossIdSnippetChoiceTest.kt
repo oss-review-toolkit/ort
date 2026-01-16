@@ -1117,13 +1117,11 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             summary.snippetFindings shouldHaveSize 2
 
-            summary.snippetFindings.first().apply { // one snippet is remaining for file 1
-                sourceLocation.path shouldBe FILE_1
-            }
+            // One snippet is remaining for file 1.
+            summary.snippetFindings.first().sourceLocation.path shouldBe FILE_1
 
-            summary.snippetFindings.last().apply { // one snippet for file 2, then the limit is reached
-                sourceLocation.path shouldBe FILE_2
-            }
+            // One snippet for file 2, then the limit is reached.
+            summary.snippetFindings.last().sourceLocation.path shouldBe FILE_2
 
             summary.issues.forAtLeastOne {
                 it.message shouldBe "The snippets limit of 2 has been reached. To see the possible remaining " +

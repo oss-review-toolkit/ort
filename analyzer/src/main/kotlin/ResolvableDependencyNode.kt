@@ -39,6 +39,7 @@ class ProjectScopeDependencyNode(
     private val dependencies: Sequence<DependencyNode>
 ) : ResolvableDependencyNode() {
     override val issues: List<Issue> = emptyList()
+
     override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = block(dependencies)
 }
 
@@ -50,5 +51,6 @@ class DependencyNodeDelegate(private val node: DependencyNode) : ResolvableDepen
     override val id: Identifier = node.id
     override val linkage = node.linkage
     override val issues = node.issues
+
     override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = node.visitDependencies(block)
 }

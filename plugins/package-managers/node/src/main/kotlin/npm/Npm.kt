@@ -101,7 +101,6 @@ data class NpmConfig(
 )
 class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, private val config: NpmConfig) :
     NodePackageManager(NodePackageManagerType.NPM) {
-
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private lateinit var fileStash: FileStash

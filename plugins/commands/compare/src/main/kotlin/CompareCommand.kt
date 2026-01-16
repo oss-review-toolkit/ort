@@ -104,6 +104,7 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
         help = "Ignore temporary directory differences."
     ).flag()
 
+    @Suppress("ThrowsCount")
     override fun run() {
         if (fileA == fileB) {
             echo(Theme.Default.success("The arguments point to the same file."))

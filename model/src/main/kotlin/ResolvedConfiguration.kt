@@ -90,7 +90,9 @@ data class ResolvedPackageCurations(
         val id: String
 
         // TODO: Add the attributes `type` and `config` from the provider configuration.
-    ) companion object {
+    )
+
+    companion object {
         /**
          * The provider ID to associate with package curations coming from the repository configuration.
          */

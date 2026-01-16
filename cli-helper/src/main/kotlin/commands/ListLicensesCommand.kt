@@ -239,8 +239,8 @@ private fun Map<SpdxExpression, List<TextLocationGroup>>.writeValueAsString(
     isPathExcluded: (String) -> Boolean,
     provenanceIndex: Int,
     includeLicenseTexts: Boolean = true
-): String {
-    return buildString {
+): String =
+    buildString {
         fun appendLineIndent(value: String, indent: Int) {
             require(indent > 0)
             appendLine(value.replaceIndent(" ".repeat(indent)))
@@ -272,7 +272,6 @@ private fun Map<SpdxExpression, List<TextLocationGroup>>.writeValueAsString(
             appendLine()
         }
     }
-}
 
 private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocationGroup> {
     val resolvedLocations = mutableMapOf<String, MutableSet<TextLocation>>()

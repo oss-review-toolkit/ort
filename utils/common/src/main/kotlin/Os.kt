@@ -26,7 +26,10 @@ import java.io.File
  */
 object Os {
     enum class Name(private val substring: String) {
-        LINUX("linux"), MAC("mac"), WINDOWS("windows"), UNKNOWN("");
+        LINUX("linux"),
+        MAC("mac"),
+        WINDOWS("windows"),
+        UNKNOWN("");
 
         companion object {
             /**
@@ -56,7 +59,9 @@ object Os {
     val isWindows = Name.current == Name.WINDOWS
 
     enum class Arch(private vararg val aliases: String) {
-        X86_64("x86_64", "amd64", "x64"), AARCH64("aarch64", "arm64"), UNKNOWN("");
+        X86_64("x86_64", "amd64", "x64"),
+        AARCH64("aarch64", "arm64"),
+        UNKNOWN("");
 
         companion object {
             /**

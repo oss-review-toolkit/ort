@@ -127,6 +127,7 @@ open class ProjectSourceRule(
     fun projectSourceHasFile(vararg patterns: String): RuleMatcher =
         object : RuleMatcher {
             override val description = "projectSourceHasFile('${patterns.joinToString()}')"
+
             override fun matches(): Boolean = projectSourceFindFiles(*patterns).isNotEmpty()
         }
 

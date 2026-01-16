@@ -181,6 +181,7 @@ class GoMod(
      */
     private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph<GoModule> {
         fun GoModule.hasModuleInfo() = name in moduleInfoForModuleName
+
         fun moduleInfo(moduleName: String): ModuleInfo = moduleInfoForModuleName.getValue(moduleName)
 
         fun parseModuleEntry(entry: String): GoModule =

@@ -279,7 +279,7 @@ class FreemarkerTemplateProcessor(
         @Suppress("MemberVisibilityCanBePrivate") // This function is used in the templates.
         fun mergeResolvedLicenses(licenses: List<ResolvedLicense>): List<ResolvedLicense> =
             licenses.groupBy { it.license }
-                .map { (_, licenses) -> licenses.merge() }
+                .map { (_, resolvedLicenses) -> resolvedLicenses.merge() }
                 .sortedBy { it.license.toString() }
 
         /**

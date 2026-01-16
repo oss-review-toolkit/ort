@@ -27,7 +27,11 @@ ktlint:
     active: false
   ArgumentListWrapping:
     active: false
+  ChainMethodContinuation:
+    active: false
   ChainWrapping:
+    active: false
+  ClassSignature:
     active: false
   CommentWrapping:
     active: false
@@ -40,11 +44,15 @@ ktlint:
     active: false
   MaximumLineLength:
     active: false
+  NoBlankLineInList:
+    active: false
   NoWildcardImports:
     active: false
   ParameterListWrapping:
     active: false
   SpacingBetweenDeclarationsWithAnnotations:
+    active: false
+  StringTemplateIndent:
     active: false
   TrailingCommaOnCallSite:
     active: true

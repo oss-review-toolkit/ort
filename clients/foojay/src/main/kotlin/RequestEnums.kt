@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("EnumWrapping")
+
 package org.ossreviewtoolkit.clients.foojay
 
 import kotlinx.serialization.SerialName

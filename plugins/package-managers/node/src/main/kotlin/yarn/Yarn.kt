@@ -288,7 +288,7 @@ private fun List<YarnListNode>.undoDeduplication(): List<YarnListNode> {
         // Disregard entries which are not a dependency, but only installed in the module's dir for de-duplication.
         if (color == null) return null
 
-        val childrenAncestorIds = ancestorNames + setOfNotNull(name)
+        val childrenAncestorIds = ancestorNames + name
         val replacedNode = replacements[name] ?: this.copy(name = name)
 
         return replacedNode.copy(
@@ -312,7 +312,7 @@ private fun List<YarnListNode>.undoDeduplication(): List<YarnListNode> {
  * line option '--network-timeout'.
  */
 internal fun parseYarnInfo(stdout: String, stderr: String): PackageJson? =
-    extractDataNodes(stdout, "inspect").firstOrNull()?.let(::parsePackageJson).alsoIfNull {
+    extractDataNodes(stdout, "inspect").firstOrNull()?.let(::parsePackageJson).alsoIfNull { _ ->
         extractDataNodes(stderr, "warning").forEach {
             logger.info { "Warning running Yarn info: ${it.jsonPrimitive.content}" }
         }

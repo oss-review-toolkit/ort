@@ -187,7 +187,6 @@ private object DependencySerializer : KSerializer<GleamToml.Dependency> {
         }
     }
 
-    override fun serialize(encoder: Encoder, value: GleamToml.Dependency) {
+    override fun serialize(encoder: Encoder, value: GleamToml.Dependency) =
         throw NotImplementedError("${descriptor.serialName} can only be deserialized.")
-    }
 }

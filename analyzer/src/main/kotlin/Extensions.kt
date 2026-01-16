@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.utils.common.alsoIfNull
 private const val TYPE = "PackageManagerDependency"
 
 private fun String.encodeColon() = replace(':', '\u0000')
+
 private fun String.decodeColon() = replace('\u0000', ':')
 
 /**

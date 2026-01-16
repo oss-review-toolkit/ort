@@ -119,10 +119,10 @@ internal val IGNORE_RULE = IgnoreRule(1, RuleType.EXTENSION, ".docx", SCAN_ID, "
 /** The default scope used when creating ignore rule. */
 internal val DEFAULT_IGNORE_RULE_SCOPE = RuleScope.SCAN
 
-/* An empty VCS revision. */
+/** An empty VCS revision. */
 internal const val REVISION_EMPTY = ""
 
-/* The 'master' VCS revision. */
+/** The 'master' VCS revision. */
 internal const val REVISION_MASTER = "master"
 
 /**

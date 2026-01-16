@@ -187,8 +187,8 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
         excludes: Excludes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
-    ): PackageManagerResult {
-        return Maven(sbtMode = true).run {
+    ): PackageManagerResult =
+        Maven(sbtMode = true).run {
             beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
 
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
@@ -196,7 +196,6 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
                 afterResolution(analysisRoot, definitionFiles)
             }
         }
-    }
 
     override fun resolveDependencies(
         analysisRoot: File,

@@ -184,12 +184,12 @@ private fun resolveAllReferences(
     knownUris: MutableSet<URI>
 ) {
     document.resolveReferences(cache, baseUri).forEach { (ref, resolvedDoc) ->
-        resolvedDoc.document?.let { document ->
-            references += ref to ResolvedSpdxDocument(document, resolvedDoc.uri)
+        resolvedDoc.document?.let { resolvedDocument ->
+            references += ref to ResolvedSpdxDocument(resolvedDocument, resolvedDoc.uri)
             if (knownUris.add(resolvedDoc.uri)) {
                 resolveAllReferences(
                     cache,
-                    document,
+                    resolvedDocument,
                     resolvedDoc.uri,
                     references,
                     issues,

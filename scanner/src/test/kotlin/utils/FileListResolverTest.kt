@@ -82,7 +82,9 @@ class FileListResolverTest : WordSpec({
             val resolver = FileListResolver(
                 storage = object : ProvenanceFileStorage {
                     override fun hasData(provenance: KnownProvenance) = true
+
                     override fun getData(provenance: KnownProvenance) = null
+
                     override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) =
                         throw IOException()
                 },
@@ -139,7 +141,9 @@ class FileListResolverTest : WordSpec({
             val resolver = FileListResolver(
                 storage = object : ProvenanceFileStorage {
                     override fun hasData(provenance: KnownProvenance) = false
+
                     override fun getData(provenance: KnownProvenance) = null
+
                     override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) =
                         throw IOException()
                 },

@@ -83,12 +83,17 @@ data class SpdxExternalReference(
         val category: Category
     ) {
         data object Cpe22Type : Type("cpe22Type", Category.SECURITY)
+
         data object Cpe23Type : Type("cpe23Type", Category.SECURITY)
 
         data object Bower : Type("bower", Category.PACKAGE_MANAGER)
+
         data object MavenCentral : Type("maven-central", Category.PACKAGE_MANAGER)
+
         data object Npm : Type("npm", Category.PACKAGE_MANAGER)
+
         data object NuGet : Type("nuget", Category.PACKAGE_MANAGER)
+
         data object Purl : Type("purl", Category.PACKAGE_MANAGER)
 
         data object SoftwareHeritage : Type("swh", Category.PERSISTENT_ID)

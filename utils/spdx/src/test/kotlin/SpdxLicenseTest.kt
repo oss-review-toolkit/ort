@@ -63,7 +63,7 @@ class SpdxLicenseTest : WordSpec({
         "be correct for 'or later' non-GPL ids" {
             val gfdl11OrLater = SpdxLicense.forId("GFDL-1.1-or-later")
             gfdl11OrLater shouldNotBeNull {
-                text shouldMatchResource("/licenses/GFDL-1.1-or-later")
+                text shouldMatchResource "/licenses/GFDL-1.1-or-later"
             }
         }
     }

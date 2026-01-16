@@ -329,9 +329,9 @@ private fun StringBuilder.appendCauses(exception: Throwable) {
         appendLine(" Causes are:")
         val allCauses = mutableSetOf<String>()
 
-        fun getAllCauses(exception: Throwable) {
-            exception.message?.also(allCauses::add)
-            exception.cause?.also { getAllCauses(it) }
+        fun getAllCauses(throwable: Throwable) {
+            throwable.message?.also(allCauses::add)
+            throwable.cause?.also { getAllCauses(it) }
         }
 
         causes.forEach { getAllCauses(it) }

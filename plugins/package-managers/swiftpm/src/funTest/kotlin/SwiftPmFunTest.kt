@@ -76,18 +76,19 @@ class SwiftPmFunTest : WordSpec({
     }
 
     @Suppress("MaxLineLength")
-    "Analyzing a lockfile with a dependency loaded over SPM registry instead of source control with no registry config present" should {
-        "return the correct result" {
-            val definitionFile =
-                getAssetFile("projects/synthetic/only-lockfile-v3-with-SPM-registry-dependency/Package.resolved")
-            val expectedResultFile =
-                getAssetFile("projects/synthetic/expected-output-only-lockfile-v3-with-SPM-registry-dependency.yml")
+    "Analyzing a lockfile with a dependency loaded over SPM registry instead of source control with no registry config present" should
+        {
+            "return the correct result" {
+                val definitionFile =
+                    getAssetFile("projects/synthetic/only-lockfile-v3-with-SPM-registry-dependency/Package.resolved")
+                val expectedResultFile =
+                    getAssetFile("projects/synthetic/expected-output-only-lockfile-v3-with-SPM-registry-dependency.yml")
 
-            val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
+                val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
 
-            result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+                result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+            }
         }
-    }
 
     "Analyzing a lockfile with a dependency loaded over SPM registry with registry configuration" should {
         "return the correct result" {

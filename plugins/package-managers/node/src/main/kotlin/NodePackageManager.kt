@@ -110,11 +110,9 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
     ): List<File> {
         val enabledIds = analyzerConfig.determineEnabledPackageManagers().map { it.descriptor.id.uppercase() }
 
-        // Only keep those types for which a package manager is enabled.
-        val enabledTypes = NodePackageManagerType.entries.filter { it.name in enabledIds }
-
-        // Assume the first type to be the best candidate for the fallback.
-        val fallbackType = enabledTypes.first()
+        // Only keep those types for which a package manager is enabled and assume the first type to be the best
+        // candidate for the fallback.
+        val fallbackType = NodePackageManagerType.entries.first { it.name in enabledIds }
 
         return NodePackageManagerDetection(definitionFiles).filterApplicable(managerType, fallbackType)
     }

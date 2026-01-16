@@ -146,4 +146,5 @@ private fun createSnippet(id: Int, matchType: MatchType, purl: String, license: 
     )
 
 private fun IntRange.toPolymorphicList() = toList().toPolymorphicList()
+
 private fun List<Int>.toPolymorphicList() = PolymorphicList(this)
