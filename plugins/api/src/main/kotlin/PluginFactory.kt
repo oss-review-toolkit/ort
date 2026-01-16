@@ -128,12 +128,14 @@ interface PluginFactory<out PLUGIN : Plugin> {
 
     /** Parse a [string list][PluginOptionType.STRING_LIST] option from the given [config]. */
     fun parseStringListOption(name: String, config: PluginConfig): List<String> =
-        parseOption(name, config.options, PluginOptionType.STRING_LIST) { it.split(',').map { str -> str.trim() } }
+        parseOption(name, config.options, PluginOptionType.STRING_LIST) { value ->
+            value.split(',').mapNotNull { it.trim().ifEmpty { null } }
+        }
 
     /** Parse a nullable [string list][PluginOptionType.STRING_LIST] option from the given [config]. */
     fun parseNullableStringListOption(name: String, config: PluginConfig): List<String>? =
-        parseNullableOption(name, config.options, PluginOptionType.STRING_LIST) {
-            it.split(',').map { str -> str.trim() }
+        parseNullableOption(name, config.options, PluginOptionType.STRING_LIST) { value ->
+            value.split(',').mapNotNull { it.trim().ifEmpty { null } }
         }
 }
 
