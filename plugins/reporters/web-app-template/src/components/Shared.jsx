@@ -75,8 +75,7 @@ const getColumnSearchProps = (dataIndex, filteredValue, setFilteredValue) => ({
         }
 
         return !searchStrValues.every(value => !recordValue.includes(value));
-    },
-    render: (text) => text
+    }
 });
 
 export { getColumnSearchProps };
