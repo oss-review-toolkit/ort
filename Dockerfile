@@ -653,6 +653,10 @@ ENTRYPOINT ["/opt/ort/bin/ort"]
 # Runtime container with all supported package managers pre-installed.
 FROM all-tools AS run
 
+ARG HOMEDIR=/home/ort
+ARG USER_ID=1000
+ARG USER_GID=$USER_ID
+
 # ORT
 COPY --from=ortbin --chown=$USER:$USER /opt/ort /opt/ort
 ENV PATH=$PATH:/opt/ort/bin
@@ -667,6 +671,9 @@ RUN mkdir -p "$HOME/.ort" "$HOME/.gradle"
 RUN $CARGO_HOME/bin/cargo install cargo-credential-netrc
 
 # Verify that all tools required by ORT are available.
-RUN ort requirements
+# Mount /tmp and $HOMEDIR as cache to prevent temporary files from being persisted to the image.
+RUN --mount=type=tmpfs,target=/tmp \
+    --mount=type=cache,target=$HOMEDIR,uid=$USER_ID,gid=$USER_GID \
+    ort requirements
 
 ENTRYPOINT ["/opt/ort/bin/ort"]
