@@ -5,6 +5,10 @@ excludes:
     reason: "TEST_OF"
     comment: >-
       Licenses contained in this directory are used for testing and do not apply to the OSS Review Toolkit.
+  - pattern: "docs/**"
+    reason: "DOCUMENTATION_OF"
+    comment: >-
+      This directory contains project website with examples using licenses that do not apply to the OSS Review Toolkit.
   - pattern: "evaluator/src/main/resources/rules/matrixseqexpl.json"
     reason: "DATA_FILE_OF"
     comment: >-
@@ -27,6 +31,10 @@ excludes:
     reason: "TEST_OF"
     comment: >-
       Licenses contained in this directory are used for testing and do not apply to the OSS Review Toolkit.
+  - pattern: "website/**"
+    reason: "DOCUMENTATION_OF"
+    comment: >-
+      This directory contains project website with examples using licenses that do not apply to the OSS Review Toolkit.
   scopes:
   - pattern: "(test.*|funTest.*)"
     reason: "TEST_DEPENDENCY_OF"

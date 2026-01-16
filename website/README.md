@@ -1,8 +1,24 @@
-# Docusaurus
+# ORT Project Website
 
-This [Docusaurus 2](https://docusaurus.io/) project contains the document website of ORT which is published to the `gh-pages` branch.
+This directory contains the ORT project website, which is built using [Docusaurus](https://docusaurus.io/) and published to the `gh-pages` branch.
+
+## Prerequisites
+
+### Install npm
+
+To build the website, you need to have [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) installed on your system.
+
+### Generate Plugin Documentation
+
+Before you can build the project, you'll need to generate the documentation for various ORT plugins by running:
+
+```shell
+./gradlew generatePluginDocs
+```
 
 ## Installation
+
+To install all the dependencies required for building the ORT website, run:
 
 ```shell
 npm install
@@ -10,33 +26,31 @@ npm install
 
 ## Local Development
 
+To start a local development server, run the below command. It will open up your default web browser,
+allowing you to see any changes you make without needing to reload.
+
 ```shell
 npm start
 ```
 
-This command starts a local development server and opens up a browser window.
-Most changes are reflected live without having to restart the server.
-
 ## Build
+
+To generate a static version of the ORT website in the `build` directory, execute the following command.
 
 ```
 npm run build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
 ## Deployment
 
-Using SSH:
+To deploy the website over SSH, run:
 
 ```
 USE_SSH=true npm run deploy
 ```
 
-Not using SSH:
+Alternatively, to deploy the website to GitHub Pages via the `gh-pages` branch, run:
 
 ```
-GIT_USER=<Your GitHub username> npm deploy
+GIT_USER=<Your GitHub Username> npm deploy
 ```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
