@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldMatch
@@ -34,6 +35,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.extractResource
@@ -73,6 +75,12 @@ class ScanCodeTest : WordSpec({
 
             scannerWithConfig.getCommandLineOptions("31.2.4").joinToString(" ") shouldMatch
                 "--command --line --commandLineNonConfig"
+        }
+
+        "not contain empty strings when created from PluginConfig with default commandLineNonConfig" {
+            val scannerFromConfig = ScanCodeFactory().create(PluginConfig.EMPTY)
+
+            scannerFromConfig.getCommandLineOptions("32.0.0") shouldNotContain ""
         }
     }
 
