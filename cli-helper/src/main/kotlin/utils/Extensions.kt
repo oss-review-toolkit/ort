@@ -21,9 +21,6 @@
 
 package org.ossreviewtoolkit.helper.utils
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
-
 import java.io.File
 import java.nio.file.Paths
 
@@ -72,6 +69,9 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.dataformat.yaml.YAMLGenerator
 
 /**
  * Return an approximated minimal sublist of [this] so that the result still matches the exact same entries of the given
