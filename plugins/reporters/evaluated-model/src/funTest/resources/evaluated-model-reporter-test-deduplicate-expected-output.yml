@@ -39,9 +39,15 @@ package_curations:
 - _id: 0
   id: "Maven:com.foobar:foobar:1.0"
   curations:
+    comment: "A label for testing"
+    labels:
+      foo: "bar"
+- _id: 1
+  id: "Maven:com.foobar:foobar:1.0"
+  curations:
     comment: "Foobar is an imaginary dependency and offers a license choice"
     concluded_license: "GPL-2.0-only OR MIT"
-- _id: 1
+- _id: 2
   id: "Maven:com.h2database:h2:1.4.200"
   curations:
     comment: "H2 database offers a license choice"
@@ -731,8 +737,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  labels:
+    foo: "bar"
   curations:
   - 0
+  - 1
   paths:
   - 3
   levels:
@@ -781,7 +790,7 @@ packages:
     revision: ""
     path: ""
   curations:
-  - 1
+  - 2
   paths:
   - 4
   levels:
