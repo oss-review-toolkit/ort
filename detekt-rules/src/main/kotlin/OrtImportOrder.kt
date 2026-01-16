@@ -19,16 +19,21 @@
 
 package org.ossreviewtoolkit.detekt
 
+import com.intellij.core.CoreApplicationEnvironment
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
+import com.intellij.psi.impl.source.tree.TreeCopyHandler
 
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
+import dev.detekt.api.modifiedText
 
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPsiFactory
@@ -36,7 +41,40 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.resolve.ImportPath
 
 class OrtImportOrder(config: Config) : Rule(config, "Reports files that do not follow ORT's order for imports") {
+    init {
+        if (autoCorrect) {
+            // This extension is required to be able to modify the list of imports programmatically.
+            @Suppress("UnstableApiUsage")
+            CoreApplicationEnvironment.registerExtensionPoint(
+                ApplicationManager.getApplication().extensionArea,
+                TreeCopyHandler.EP_NAME,
+                TreeCopyHandler::class.java
+            )
+        }
+    }
+
     private val commonTopLevelDomains = listOf("com", "org", "io")
+
+    private lateinit var workingFile: KtFile
+
+    override fun visit(root: KtFile) {
+        // Create a writable copy of the file if auto-correct is enabled. For the general idea see:
+        // https://github.com/detekt/detekt/blob/v2.0.0-alpha.1/detekt-rules-ktlint-wrapper/src/main/kotlin/dev/detekt/rules/ktlintwrapper/KtlintRule.kt#L44-L58
+        workingFile = if (autoCorrect) {
+            KtPsiFactory(root.project).createPhysicalFile(
+                fileName = root.name,
+                text = root.modifiedText ?: root.text
+            )
+        } else {
+            root
+        }
+
+        super.visit(workingFile)
+
+        if (autoCorrect && workingFile.modificationStamp > 0) {
+            root.modifiedText = workingFile.text
+        }
+    }
 
     override fun visitImportList(importList: KtImportList) {
         super.visitImportList(importList)
@@ -61,7 +99,7 @@ class OrtImportOrder(config: Config) : Rule(config, "Reports files that do not f
         val expectedImportOrder = createExpectedImportOrder(importPaths)
 
         if (importPaths != expectedImportOrder) {
-            if (autoCorrect) fixImportListOrder(importList, expectedImportOrder)
+            if (autoCorrect) fixImportListOrder(checkNotNull(workingFile.importList), expectedImportOrder)
 
             val finding = Finding(
                 Entity.from(importList),
