@@ -625,7 +625,7 @@ class WebAppOrtResult {
         return this.#packagesByKeyMap.get(val) || [];
     }
 
-    getPackageConfigurationsAsYamlString() {
+    getPackageConfigurationsAsYaml() {
         return YAML.stringify(
             this.#packageConfigurationsAsPlainJsObject,
             {
@@ -657,7 +657,7 @@ class WebAppOrtResult {
         ) || null;
     }
 
-    getPackageCurationsAsYamlString() {
+    getPackageCurationsAsYaml() {
         return YAML.stringify(
             this.#packageCurationsAsPlainJsObject,
             {
