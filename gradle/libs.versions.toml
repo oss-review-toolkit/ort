@@ -1,7 +1,7 @@
 [versions]
 buildConfigPlugin = "6.0.7"
 dependencyAnalysisPlugin = "3.5.1"
-detektPlugin = "1.23.8"
+detektPlugin = "2.0.0-alpha.1"
 dokkatooPlugin = "2.4.0"
 downloadPlugin = "5.6.0"
 gitSemverPlugin = "0.18.0"
@@ -80,8 +80,8 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 [libraries]
 # These are Maven coordinates for Gradle plugins, which are required for use in precompiled plugin scripts.
 plugin-dependencyAnalysis = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysisPlugin" }
-plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
-plugin-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektPlugin" }
+plugin-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
+plugin-detekt-formatting = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detektPlugin" }
 plugin-dokkatoo = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }
 plugin-graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
@@ -98,8 +98,9 @@ bouncyCastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "boun
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
-detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
-detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektPlugin" }
+detekt-api = { module = "dev.detekt:detekt-api", version.ref = "detektPlugin" }
+detekt-psiUtils = { module = "dev.detekt:detekt-psi-utils", version.ref = "detektPlugin" }
+detekt-test = { module = "dev.detekt:detekt-test", version.ref = "detektPlugin" }
 diffUtils = { module = "io.github.java-diff-utils:java-diff-utils", version.ref = "diffUtils" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }

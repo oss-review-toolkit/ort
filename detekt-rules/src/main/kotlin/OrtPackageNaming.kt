@@ -19,32 +19,41 @@
 
 package org.ossreviewtoolkit.detekt
 
-import io.github.detekt.psi.toFilePath
-
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Rule
+import dev.detekt.psi.absolutePath
 
 import java.io.File
+import java.nio.file.Path
 
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.pathString
+import kotlin.io.path.relativeTo
+
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPackageDirective
 
 private const val ORT_PACKAGE_NAMESPACE = "org.ossreviewtoolkit"
 
-class OrtPackageNaming(config: Config) : Rule(config) {
+class OrtPackageNaming(config: Config) : Rule(
+    config,
+    "Reports files that do not follow ORT's package naming conventions"
+) {
     private val pathPattern = Regex("""[/\\]src[/\\][^/\\]+[/\\]kotlin[/\\]""")
     private val forwardOrBackwardSlashPattern = Regex("""[/\\]""")
 
-    override val issue = Issue(
-        javaClass.simpleName,
-        Severity.Style,
-        "Reports files that do not follow ORT's package naming conventions",
-        Debt.FIVE_MINS
-    )
+    private var projectPath: Path? = null
+
+    override fun preVisit(root: KtFile) {
+        super.preVisit(root)
+
+        // TODO: Find a better way to determine the project path. Unfortunately, `KtFile.project.basePath` is null.
+        projectPath = generateSequence(root.absolutePath()) { it.parent }.find {
+            it.resolve("build.gradle.kts").isRegularFile()
+        }
+    }
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
         super.visitPackageDirective(directive)
@@ -53,8 +62,8 @@ class OrtPackageNaming(config: Config) : Rule(config) {
         // simulates an ORT extension class in a different package.
         if (directive.qualifiedName.isEmpty() || directive.qualifiedName.startsWith("test.")) return
 
-        val path = directive.containingKtFile.toFilePath().relativePath.toString()
-        if (pathPattern !in path) return
+        val path = projectPath?.let { directive.containingKtFile.absolutePath().relativeTo(it).pathString }
+        if (path == null || pathPattern !in path) return
 
         val (pathPrefix, pathSuffix) = path.split(pathPattern, 2).map { File(it) }
         val projectDir = pathPrefix.name
@@ -75,15 +84,10 @@ class OrtPackageNaming(config: Config) : Rule(config) {
 
         val nestedPath = pathSuffix.parent?.replace(forwardOrBackwardSlashPattern, ".")?.let { ".$it" }.orEmpty()
         val expectedPackageName = ORT_PACKAGE_NAMESPACE + projectGroup + projectName + nestedPath
+        val actualPackageName = directive.qualifiedName
 
-        if (directive.qualifiedName != expectedPackageName) {
-            val message = "'${directive.qualifiedName}' should be '$expectedPackageName'"
-            val finding = CodeSmell(
-                issue,
-                // Use the message as the name to also see it in CLI output and not only in the report files.
-                Entity.from(directive).copy(name = message),
-                message
-            )
+        if (actualPackageName != expectedPackageName) {
+            val finding = Finding(Entity.from(directive), "'$actualPackageName' should be '$expectedPackageName'")
             report(finding)
         }
     }

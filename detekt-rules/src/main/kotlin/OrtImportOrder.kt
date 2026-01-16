@@ -19,18 +19,15 @@
 
 package org.ossreviewtoolkit.detekt
 
-import io.github.detekt.psi.absolutePath
+import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Rule
+import dev.detekt.psi.absolutePath
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtImportDirective
@@ -39,15 +36,8 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.resolve.ImportPath
 
-class OrtImportOrder(config: Config) : Rule(config) {
+class OrtImportOrder(config: Config) : Rule(config, "Reports files that do not follow ORT's order for imports") {
     private val commonTopLevelDomains = listOf("com", "org", "io")
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        Severity.Style,
-        "Reports files that do not follow ORT's order for imports",
-        Debt.FIVE_MINS
-    )
 
     override fun visitImportList(importList: KtImportList) {
         super.visitImportList(importList)
@@ -75,14 +65,12 @@ class OrtImportOrder(config: Config) : Rule(config) {
             if (autoCorrect) fixImportListOrder(importList, expectedImportOrder)
 
             val path = importList.containingKtFile.absolutePath()
-            val message = "Imports in file '$path' are not sorted alphabetically or single blank lines are missing " +
-                "between different top-level packages"
-            val finding = CodeSmell(
-                issue,
-                // Use the message as the name to also see it in CLI output and not only in the report files.
-                Entity.from(importList).copy(name = message),
-                message
+            val finding = Finding(
+                Entity.from(importList),
+                "Imports in file '$path' are not sorted alphabetically or single blank lines are missing between " +
+                    "different top-level packages"
             )
+
             report(finding)
         }
     }
