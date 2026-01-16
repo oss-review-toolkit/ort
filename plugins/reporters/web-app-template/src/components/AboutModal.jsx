@@ -144,7 +144,7 @@ const AboutModal = ({ webAppOrtResult, isModalVisible, handleModalCancel }) => {
                                     showLineNumbers={true}
                                     style={lioshi}
                                 >
-                                    {webAppOrtResult.getPackageConfigurationsAsYamlString()}
+                                    {webAppOrtResult.getPackageConfigurationsAsYaml()}
                                 </SyntaxHighlighter>
                             )
                         });
@@ -165,7 +165,7 @@ const AboutModal = ({ webAppOrtResult, isModalVisible, handleModalCancel }) => {
                                     showLineNumbers={true}
                                     style={lioshi}
                                 >
-                                    {webAppOrtResult.getPackageCurationsAsYamlString()}
+                                    {webAppOrtResult.getPackageCurationsAsYaml()}
                                 </SyntaxHighlighter>
                             )
                         });
