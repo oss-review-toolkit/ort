@@ -75,7 +75,8 @@ class IncludesTest : WordSpec() {
 
     private fun setProjects(vararg projects: Project) {
         val packages = mutableSetOf<Package>()
-        if (packageId in projects.flatMap { ortResult.dependencyNavigator.projectDependencies(it) }) packages += pkg.metadata
+        val allProjectDependencies = projects.flatMap { ortResult.dependencyNavigator.projectDependencies(it) }
+        if (packageId in allProjectDependencies) packages += pkg.metadata
         val analyzerResult = ortResult.analyzer!!.result.copy(
             projects = projects.toSet(),
             packages = packages

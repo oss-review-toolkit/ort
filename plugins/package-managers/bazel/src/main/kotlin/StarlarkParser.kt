@@ -40,7 +40,17 @@ internal data class BazelDepDirective(
 )
 
 internal enum class TokenType {
-    IDENTIFIER, STRING, NUMBER, BOOLEAN, EQUALS, COMMA, LPAREN, RPAREN, LBRACKET, RBRACKET, EOF
+    IDENTIFIER,
+    STRING,
+    NUMBER,
+    BOOLEAN,
+    EQUALS,
+    COMMA,
+    LPAREN,
+    RPAREN,
+    LBRACKET,
+    RBRACKET,
+    EOF
 }
 
 internal data class Token(val type: TokenType, val value: String)

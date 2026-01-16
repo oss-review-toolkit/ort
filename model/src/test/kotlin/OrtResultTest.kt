@@ -157,7 +157,7 @@ class OrtResultTest : WordSpec({
             val ids = ortResult.getProjectsAndPackages(includeSubProjects = false)
 
             ids should haveSize(8)
-            ids shouldNotContain(subProjectId)
+            ids shouldNotContain subProjectId
         }
     }
 

@@ -103,9 +103,8 @@ object EnvironmentVariableFilter {
      * Test whether the variable with the given [name] can be passed to a child process according to the criteria
      * described in the header comment.
      */
-    fun isAllowed(name: String): Boolean {
-        return name in allowNames || denySubstrings.none { name.contains(it, ignoreCase = true) }
-    }
+    fun isAllowed(name: String): Boolean =
+        name in allowNames || denySubstrings.none { name.contains(it, ignoreCase = true) }
 
     /**
      * Remove all keys from [environment] that do not pass this filter.

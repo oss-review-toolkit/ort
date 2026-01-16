@@ -23,5 +23,6 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
  * The possible types of an [EvaluatedFinding].
  */
 enum class EvaluatedFindingType {
-    COPYRIGHT, LICENSE
+    COPYRIGHT,
+    LICENSE
 }

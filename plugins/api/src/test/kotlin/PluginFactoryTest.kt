@@ -43,6 +43,7 @@ private val testDescriptor = PluginDescriptor(
 
 private val testFactory = object : PluginFactory<Plugin> {
     override val descriptor = testDescriptor
+
     override fun create(config: PluginConfig) =
         object : Plugin {
             override val descriptor = testDescriptor

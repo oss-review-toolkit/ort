@@ -99,6 +99,7 @@ interface EventHandler {
     /**
      * Event handler that is called after a scan has been created.
      */
+    @Suppress("RedundantSuspendModifier")
     suspend fun afterScanCreation(
         scanCode: String,
         existingScan: Scan?,
@@ -109,10 +110,12 @@ interface EventHandler {
     /**
      * Event handler that is called before a scan has been checked.
      */
+    @Suppress("RedundantSuspendModifier")
     suspend fun beforeCheckScan(scanCode: String) {}
 
     /**
      * Event handler that is called after a scan has been checked.
      */
+    @Suppress("RedundantSuspendModifier")
     suspend fun afterCheckScan(scanCode: String) {}
 }

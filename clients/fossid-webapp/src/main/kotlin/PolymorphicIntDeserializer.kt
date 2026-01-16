@@ -38,8 +38,8 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
  */
 internal class PolymorphicIntDeserializer :
     StdDeserializer<PolymorphicInt>(PolymorphicInt::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicInt {
-        return when (p.currentToken) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicInt =
+        when (p.currentToken) {
             JsonToken.VALUE_STRING -> {
                 val value = ctxt.readValue(p, String::class.java)
                 PolymorphicInt(value.toInt())
@@ -72,5 +72,4 @@ internal class PolymorphicIntDeserializer :
 
             else -> error("FossID returned a type not handled by this deserializer!")
         }
-    }
 }

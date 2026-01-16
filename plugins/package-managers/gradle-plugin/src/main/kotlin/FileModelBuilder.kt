@@ -98,6 +98,7 @@ private class SimpleModelResolver(private val resolve: ModelSourceResolver) : Mo
         resolve(dependency.groupId, dependency.artifactId, dependency.version)
 
     override fun addRepository(repository: Repository) = Unit
+
     override fun addRepository(repository: Repository, replace: Boolean) = Unit
 
     override fun newCopy(): ModelResolver = this

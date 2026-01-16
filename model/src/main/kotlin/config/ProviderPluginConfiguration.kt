@@ -34,9 +34,10 @@ import org.ossreviewtoolkit.utils.common.Options
 data class ProviderPluginConfiguration(
     /**
      * The [id][PluginDescriptor.id] of the provider plugin.
+     *
+     * TODO: Solve name conflict as this property refers to the plugin id, but this class already has an id property
+     *       which could be confusing.
      */
-    // TODO: Solve name conflict as this property refers to the plugin id, but this class already has an id property
-    //       which could be confusing.
     val type: String,
 
     /**

@@ -459,7 +459,8 @@ private fun extractScmProperties(scmInfo: String?): Map<ScmProperties, String> =
             fields.drop(1).mapNotNull { field ->
                 field.split('=').takeIf { it.size == 2 }
             }.forEach { (key, value) ->
-                runCatching { // Ignore unknown keys.
+                runCatching {
+                    // Ignore unknown keys.
                     put(ScmProperties.valueOf(key.uppercase()), value.removeSurrounding("\""))
                 }
             }

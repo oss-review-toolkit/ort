@@ -92,7 +92,8 @@ private data class PinV1(
 @Serializable
 internal data class SwiftPackageRegistryConfiguration(
     val version: Int,
-    val registries: Map<String, Registry> = emptyMap() // Map contains the mapping SCOPE <-> Registry
+    // Map contains the mapping SCOPE <-> Registry.
+    val registries: Map<String, Registry> = emptyMap()
 ) {
     @Serializable
     data class Registry(

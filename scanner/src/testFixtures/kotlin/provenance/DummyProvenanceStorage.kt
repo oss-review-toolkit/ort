@@ -32,7 +32,7 @@ class DummyProvenanceStorage : PackageProvenanceStorage {
     override fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> = emptyList()
 
     override fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) {
-        /* no-op */
+        // no-op
     }
 
     override fun writeProvenance(

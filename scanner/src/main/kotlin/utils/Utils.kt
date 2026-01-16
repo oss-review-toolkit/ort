@@ -47,9 +47,9 @@ fun getVcsPathsForProvenances(provenances: Set<ProvenanceResolutionResult>) =
         provenances.forEach { provenance ->
             val packageVcsPath = provenance.packageProvenance.vcsPath
 
-            provenance.getKnownProvenancesWithoutVcsPath().forEach { (repositoryPath, provenance) ->
+            provenance.getKnownProvenancesWithoutVcsPath().forEach { (repositoryPath, knownProvenance) ->
                 getVcsPathForRepositoryOrNull(packageVcsPath, repositoryPath)?.let { vcsPath ->
-                    getOrPut(provenance) { mutableSetOf() } += vcsPath
+                    getOrPut(knownProvenance) { mutableSetOf() } += vcsPath
                 }
             }
         }

@@ -84,10 +84,11 @@ class FossIdReporter(
     private val config: FossIdReporterConfig
 ) : Reporter {
     companion object {
-        // TODO: The below should be unified with [FossId.SCAN_CODE_KEY], without creating a dependency between scanner
-        //       and reporter.
         /**
          * Name of key in [ScanResult.additionalData] containing the scancode.
+         *
+         * TODO: The below should be unified with [FossId.SCAN_CODE_KEY], without creating a dependency between scanner
+         *       and reporter.
          */
         const val SCAN_CODE_KEY = "scancode"
     }

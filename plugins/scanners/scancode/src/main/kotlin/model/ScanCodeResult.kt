@@ -32,7 +32,8 @@ import kotlinx.serialization.json.jsonPrimitive
 data class ScanCodeResult(
     val headers: List<HeaderEntry>,
     val files: List<FileEntry>,
-    val licenseReferences: List<LicenseReference>? = null // Available only with "--license-references".
+    // Available only with "--license-references".
+    val licenseReferences: List<LicenseReference>? = null
 )
 
 @Serializable

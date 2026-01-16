@@ -86,15 +86,14 @@ class JiraNotifier(private val restClient: JiraRestClient) {
     /**
      * Return the issue for the given [issueKey].
      */
-    fun getIssue(issueKey: String): Issue? {
-        return runCatching {
+    fun getIssue(issueKey: String): Issue? =
+        runCatching {
             restClient.issueClient.getIssue(issueKey).claim()
         }.onFailure {
             logger.error {
                 "Could not retrieve the issue with the key '$issueKey' due to: ${it.collectMessages()}"
             }
         }.getOrNull()
-    }
 
     /**
      * Returns a [ProjectIssueBuilder] object, which can be used to do operations for the given [projectKey].

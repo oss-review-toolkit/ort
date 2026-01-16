@@ -77,5 +77,6 @@ internal data class HandlerResults(
     val projectPackage: Package,
     val dependenciesScope: Scope,
     val devDependenciesScope: Scope,
-    val testDependenciesScope: Scope? = null // Conan 2 only.
+    // Conan 2 only.
+    val testDependenciesScope: Scope? = null
 )

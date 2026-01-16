@@ -72,6 +72,7 @@ data class PackageReference(
         val result = mutableSetOf<Identifier>()
 
         val queue: Deque<Pair<PackageReference, Int>> = LinkedList()
+
         fun enqueue(packages: Collection<PackageReference>, level: Int) {
             if (maxDepth !in 0..<level) {
                 packages.forEach { queue += Pair(it, level) }
@@ -79,6 +80,7 @@ data class PackageReference(
         }
 
         enqueue(dependencies, 1)
+
         while (queue.isNotEmpty()) {
             val (pkg, level) = queue.removeFirst()
 

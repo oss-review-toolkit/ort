@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.common
 
+import java.util.Locale
+
 /**
  * Return the bytes equal to this [Int] number of kibibytes (KiB).
  */
@@ -37,7 +39,7 @@ inline val Int.gibibytes get(): Long = mebibytes * 1024L
 /**
  * Format this [Double] as a string with the provided number of [decimalPlaces].
  */
-fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(this)
+fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(Locale.ROOT, this)
 
 /**
  * Converts this [Number] from bytes to mebibytes (MiB).

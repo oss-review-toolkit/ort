@@ -26,5 +26,6 @@ import java.io.File
  */
 sealed interface GroupTypes {
     data class FileType(val file: File) : GroupTypes
+
     data class StringType(val string: String) : GroupTypes
 }

@@ -109,8 +109,8 @@ class OrtResultBuilder {
         return project
     }
 
-    fun build(): OrtResult {
-        return OrtResult.EMPTY.copy(
+    fun build(): OrtResult =
+        OrtResult.EMPTY.copy(
             analyzer = AnalyzerRun.EMPTY.copy(
                 result = AnalyzerResult(
                     projects = projects,
@@ -118,7 +118,6 @@ class OrtResultBuilder {
                 )
             )
         )
-    }
 }
 
 @OrtResultDsl

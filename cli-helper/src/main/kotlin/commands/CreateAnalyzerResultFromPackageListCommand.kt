@@ -102,7 +102,7 @@ internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
             id = Identifier("$PROJECT_TYPE::$projectName:"),
             vcs = projectVcs,
             vcsProcessed = projectVcs.normalize(),
-            scopeDependencies = setOfNotNull(
+            scopeDependencies = setOf(
                 packageList.dependencies.filterNot { it.isExcluded }.toScope(MAIN_SCOPE_NAME),
                 packageList.dependencies.filter { it.isExcluded }.toScope(EXCLUDED_SCOPE_NAME)
             )

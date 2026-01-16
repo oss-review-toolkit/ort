@@ -1103,10 +1103,13 @@ private fun Package.Companion.new(type: String = "", group: String = "", name: S
     EMPTY.copy(id = Identifier(type, group, name, version))
 
 private fun Package.artifactProvenance() = ArtifactProvenance(sourceArtifact)
+
 private fun Package.repositoryProvenance() = RepositoryProvenance(vcsProcessed, "resolvedRevision")
 
 private fun Package.withValidSourceArtifact() = copy(sourceArtifact = RemoteArtifact.valid())
+
 private fun Package.withValidVcs() = copy(vcsProcessed = VcsInfo.valid())
+
 private fun Package.withVcsRevision(revision: String) = copy(vcsProcessed = vcsProcessed.copy(revision = revision))
 
 private fun RemoteArtifact.Companion.valid() =
