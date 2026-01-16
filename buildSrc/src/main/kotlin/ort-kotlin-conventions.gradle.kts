@@ -17,8 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.report.ReportMergeTask
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -43,7 +43,7 @@ plugins {
     // Apply third-party plugins.
     id("com.autonomousapps.dependency-analysis")
     id("dev.adamko.dokkatoo")
-    id("io.gitlab.arturbosch.detekt")
+    id("dev.detekt")
 
     kotlin("jvm")
 }
@@ -97,7 +97,7 @@ detekt {
 
     source.from(fileTree(".") { include("*.gradle.kts") }, "src/funTest/kotlin", "src/testFixtures/kotlin")
 
-    basePath = rootDir.path
+    basePath = rootDir
 }
 
 java {
@@ -187,15 +187,13 @@ tasks.withType<Detekt>().configureEach detekt@{
         // TODO: Enable this once https://github.com/detekt/detekt/issues/5034 is resolved and use the merged
         //       Markdown file as a GitHub Action job summary, see
         //       https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/.
-        md.required = false
+        markdown.required = false
 
         sarif.required = true
-        txt.required = false
-        xml.required = false
     }
 
     mergeDetektReports.configure {
-        input.from(this@detekt.sarifReportFile)
+        input.from(this@detekt.reports.sarif.outputLocation)
     }
 
     finalizedBy(mergeDetektReports)

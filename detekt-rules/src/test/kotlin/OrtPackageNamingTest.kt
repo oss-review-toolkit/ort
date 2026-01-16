@@ -19,18 +19,19 @@
 
 package org.ossreviewtoolkit.detekt
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
+import dev.detekt.test.utils.compileForTest
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 
-import java.io.File
+import org.jetbrains.kotlin.psi.KtFile
 
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 class OrtPackageNamingTest : WordSpec({
@@ -43,7 +44,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.model"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should beEmpty()
         }
@@ -54,7 +55,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.model.config"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should beEmpty()
         }
@@ -65,7 +66,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.clients.osv"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should beEmpty()
         }
@@ -76,7 +77,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.clients.osv.utils"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should beEmpty()
         }
@@ -87,7 +88,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.plugins.packagecurationproviders.file"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should beEmpty()
         }
@@ -98,7 +99,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.plugins.packagecurationproviders.file.utils"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should beEmpty()
         }
@@ -109,7 +110,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.clients.clearlydefined"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should beEmpty()
         }
@@ -120,7 +121,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package com.example"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should haveSize(1)
         }
@@ -131,7 +132,7 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.cli"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should haveSize(1)
         }
@@ -142,20 +143,16 @@ class OrtPackageNamingTest : WordSpec({
                 content = "package org.ossreviewtoolkit.model.utils"
             )
 
-            val findings = rule.lint(file.toPath())
+            val findings = rule.lint(file)
 
             findings should haveSize(1)
         }
     }
 })
 
-private fun TestConfiguration.createFile(dir: String, content: String): File {
-    // The file needs to be created in the below directory because detekt uses it to determine relative paths in tests.
-    val parent = File("build/classes/kotlin/test/$dir").safeMkdirs()
-
-    afterTest {
-        parent.safeDeleteRecursively()
-    }
-
-    return File(parent, "Test.kt").apply { writeText(content) }
+private fun TestConfiguration.createFile(dir: String, content: String): KtFile {
+    val projectDir = tempdir().apply { resolve("build.gradle.kts").createNewFile() }
+    val parent = projectDir.resolve(dir).safeMkdirs()
+    val file = parent.resolve("Test.kt").apply { writeText(content) }
+    return compileForTest(file.toPath())
 }

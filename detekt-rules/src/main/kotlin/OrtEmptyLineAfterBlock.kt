@@ -19,31 +19,25 @@
 
 package org.ossreviewtoolkit.detekt
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Rule
+
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 
-class OrtEmptyLineAfterBlock(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        Severity.Style,
-        "Reports code blocks that are not followed by an empty line",
-        Debt.FIVE_MINS
-    )
-
+class OrtEmptyLineAfterBlock(config: Config) : Rule(
+    config,
+    "Reports code blocks that are not followed by an empty line"
+) {
     override fun visitBlockExpression(blockExpression: KtBlockExpression) {
         super.visitBlockExpression(blockExpression)
         checkExpression(blockExpression)
@@ -71,15 +65,7 @@ class OrtEmptyLineAfterBlock(config: Config) : Rule(config) {
         if (secondElementAfterBlock is LeafPsiElement && secondElementAfterBlock.elementType in allowedElements) return
 
         if (!firstElementAfterBlock.isNewLine(2)) {
-            val message = "Missing empty line after block."
-
-            val finding = CodeSmell(
-                issue,
-                // Use the message as the name to also see it in CLI output and not only in the report files.
-                Entity.from(expression).copy(name = message),
-                message
-            )
-
+            val finding = Finding(Entity.from(expression), "Missing empty line after block.")
             report(finding)
         }
     }

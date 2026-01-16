@@ -4,17 +4,17 @@
 
 complexity:
   CyclomaticComplexMethod:
-    threshold: 25
+    allowedComplexity: 25
   LongMethod:
-    threshold: 158
+    allowedLines: 158
   LongParameterList:
-    constructorThreshold: 11
-    functionThreshold: 8
+    allowedConstructorParameters: 11
+    allowedFunctionParameters: 8
   NestedBlockDepth:
-    threshold: 10
+    allowedDepth: 10
   TooManyFunctions:
-    thresholdInClasses: 19
-    thresholdInObjects: 14
+    allowedFunctionsPerClass: 19
+    allowedFunctionsPerObject: 14
 
 coroutines:
   InjectDispatcher:
@@ -22,7 +22,7 @@ coroutines:
 
 # Formatting rules are implemented via the ktlint plugin and are the only rules that support auto-formatting. However,
 # as ktlint does not allow to configure exceptions, some rules need to be disabled completely.
-formatting:
+ktlint:
   AnnotationOnSeparateLine:
     active: false
   ArgumentListWrapping:
@@ -79,12 +79,11 @@ style:
     excludes: ["**/clients/github-graphql/build/generated/**"]
   ReturnCount:
     active: false
-  SpacingBetweenPackageAndImports:
+  SpacingAfterPackageDeclaration:
     active: true
   ThrowsCount:
     max: 5
   WildcardImport:
-    excludes: ''
     excludeImports:
       - org.ossreviewtoolkit.helper.commands.*
       - org.ossreviewtoolkit.utils.spdx.SpdxLicense.*

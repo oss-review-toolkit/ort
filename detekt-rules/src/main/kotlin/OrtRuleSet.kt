@@ -19,20 +19,19 @@
 
 package org.ossreviewtoolkit.detekt
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetProvider
 
 class OrtRuleSet : RuleSetProvider {
-    override val ruleSetId: String = "ORT"
+    override val ruleSetId = RuleSet.Id("ORT")
 
-    override fun instance(config: Config) =
+    override fun instance() =
         RuleSet(
             ruleSetId,
             listOf(
-                OrtEmptyLineAfterBlock(config),
-                OrtImportOrder(config),
-                OrtPackageNaming(config)
+                ::OrtEmptyLineAfterBlock,
+                ::OrtImportOrder,
+                ::OrtPackageNaming
             )
         )
 }

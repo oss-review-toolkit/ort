@@ -29,6 +29,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.detekt.api)
+    compileOnly(libs.detekt.psiUtils)
 
     testImplementation(libs.detekt.api)
     testImplementation(libs.detekt.test)
