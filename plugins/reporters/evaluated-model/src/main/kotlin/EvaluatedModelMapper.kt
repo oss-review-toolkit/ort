@@ -62,7 +62,7 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 /**
  * Maps the [reporter input][input] to an [EvaluatedModel].
  */
-@Suppress("TooManyFunctions")
+@Suppress("LargeClass", "TooManyFunctions")
 internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val packages = mutableMapOf<Identifier, EvaluatedPackage>()
     private val paths = mutableListOf<EvaluatedPackagePath>()
@@ -291,6 +291,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = project.vcs,
             vcsProcessed = project.vcsProcessed,
+            labels = emptyMap(),
             curations = emptyList(),
             packageConfigurations = emptyList(),
             paths = mutableListOf(),
@@ -365,6 +366,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             sourceArtifact = pkg.sourceArtifact,
             vcs = pkg.vcs,
             vcsProcessed = pkg.vcsProcessed,
+            labels = pkg.labels,
             curations = curations,
             packageConfigurations = packageConfigurations,
             paths = mutableListOf(),
@@ -625,6 +627,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
+            labels = emptyMap(),
             curations = emptyList(),
             packageConfigurations = emptyList(),
             paths = mutableListOf(),

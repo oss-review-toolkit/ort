@@ -65,6 +65,8 @@ data class EvaluatedPackage(
     val vcs: VcsInfo,
     val vcsProcessed: VcsInfo = vcs.normalize(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val labels: Map<String, String> = emptyMap(),
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val curations: List<PackageCuration>,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageConfigurations: List<PackageConfiguration>,
