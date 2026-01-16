@@ -31,6 +31,8 @@ import {
     Drawer,
     Input,
     message,
+    Space,
+    Tag,
     Tree
 } from 'antd';
 
@@ -289,6 +291,28 @@ const ResultsTree = ({ webAppOrtResult }) => {
                                                     <PackageConfigurations
                                                         webAppPackage={selectedWebAppPackage}
                                                     />
+                                                )
+                                            });
+                                        }
+
+                                        if (selectedWebAppPackage.hasLabels()) {
+                                            collapseItems.push({
+                                                label: 'Package Labels',
+                                                key: 'package-labels',
+                                                children: (
+                                                    <Space
+                                                        className="ort-package-labels"
+                                                        size="small"
+                                                    >
+                                                        {[...selectedWebAppPackage.labels].map(([key, value]) => (
+                                                            <Tag
+                                                                key={`package-label-${key}`}
+                                                                variant="outlined"
+                                                            >
+                                                                {`${key}=${value}`}
+                                                            </Tag>
+                                                        ))}
+                                                    </Space>
                                                 )
                                             });
                                         }

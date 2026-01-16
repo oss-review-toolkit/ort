@@ -88,6 +88,8 @@ class WebAppPackage {
 
     #levels = new Set([]);
 
+    #labels = new Map();
+
     #packageConfigurations;
 
     #packageConfigurationsAsYaml;
@@ -245,6 +247,12 @@ class WebAppPackage {
 
             if (obj.is_project || obj.isProject) {
                 this.#isProject = obj.is_project || obj.isProject;
+            }
+
+            if (obj.labels) {
+                Object.entries(obj.labels).forEach(
+                    ([key, value]) => this.#labels.set(key, value)
+                );
             }
 
             if (obj.levels) {
@@ -494,6 +502,10 @@ class WebAppPackage {
         }
 
         return this.#issues;
+    }
+
+    get labels() {
+        return this.#labels;
     }
 
     get levels() {
@@ -757,6 +769,10 @@ class WebAppPackage {
 
     hasIssues() {
         return this.issues.length > 0;
+    }
+
+    hasLabels() {
+        return this.#labels.size > 0;
     }
 
     hasLevel(val) {

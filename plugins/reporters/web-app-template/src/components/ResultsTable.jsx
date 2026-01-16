@@ -42,6 +42,7 @@ import {
     Row,
     Space,
     Table,
+    Tag,
     Tooltip
 } from 'antd';
 
@@ -82,6 +83,7 @@ const ResultsTable = ({ webAppOrtResult }) => {
                         isExcluded: webAppPackage.isExcluded,
                         isProject: webAppPackage.isProject,
                         key: webAppPackage.key,
+                        labels: webAppPackage.labels,
                         levels: webAppPackage.levels,
                         levelsText: Array.from(webAppPackage.levels).join(', '),
                         repository: webAppPackage.vcsProcessed.url || webAppPackage.vcs.url || null,
@@ -519,6 +521,36 @@ const ResultsTable = ({ webAppOrtResult }) => {
         });
     }
 
+    toggleColumnMenuItems.push({ text: 'Labels', value: 'labels' });
+    if (columnsToShow.includes('labels')) {
+        columns.push({
+            align: 'left',
+            dataIndex: 'labels',
+            render: (record) => {
+                if (!(record instanceof Map) || record.size === 0) return null;
+                return (
+                    <Space
+                        className="ort-package-labels"
+                        orientation="vertical"
+                        size="small"
+                    >
+                        {[...record].map(([key, value]) => (
+                            <Tag key={key}>{`${key}-${value}`}</Tag>
+                        ))}
+                    </Space>
+                );
+            },
+            responsive: ['md'],
+            title: 'Labels',
+            width: '10%',
+            ...getColumnSearchProps(
+                'labels',
+                filteredInfo.labels,
+                (value) => setFilteredInfo({ ...filteredInfo, labels: value })
+            )
+        });
+    }
+
     if (webAppOrtResult.hasPackageConfigurations()) {
         toggleColumnMenuItems.push({ text: 'Package Configurations', value: 'packageConfigurationIndexes' });
         if (columnsToShow.includes('packageConfigurationIndexes')) {
@@ -828,6 +860,28 @@ const ResultsTable = ({ webAppOrtResult }) => {
                                                 <PackageConfigurations
                                                     webAppPackage={webAppPackage}
                                                 />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasLabels()) {
+                                        collapseItems.push({
+                                            label: 'Package Labels',
+                                            key: 'package-labels',
+                                            children: (
+                                                <Space
+                                                    className="ort-package-labels"
+                                                    size="small"
+                                                >
+                                                    {[...webAppPackage.labels].map(([key, value]) => (
+                                                        <Tag
+                                                            key={`package-label-${key}`}
+                                                            variant="outlined"
+                                                        >
+                                                            {`${key}=${value}`}
+                                                        </Tag>
+                                                    ))}
+                                                </Space>
                                             )
                                         });
                                     }
