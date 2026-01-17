@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
  * This class calculates [Metadata] for a given [OrtResult].
@@ -29,6 +30,17 @@ import org.ossreviewtoolkit.model.OrtResult
 internal class MetadataCalculator {
     fun getMetadata(ortResult: OrtResult) =
         Metadata(
-            analyzerStartTime = ortResult.analyzer?.startTime ?: Instant.now()
+            analyzerStartTime = ortResult.analyzer?.startTime ?: Instant.now(),
+            analyzerEndTime = ortResult.analyzer?.endTime ?: Instant.now(),
+            analyzerEnvironment = ortResult.analyzer?.environment ?: Environment(),
+            scannerStartTime = ortResult.scanner?.startTime ?: Instant.now(),
+            scannerEndTime = ortResult.scanner?.endTime ?: Instant.now(),
+            scannerEnvironment = ortResult.scanner?.environment ?: Environment(),
+            evaluatorStartTime = ortResult.evaluator?.startTime ?: Instant.now(),
+            evaluatorEndTime = ortResult.evaluator?.endTime ?: Instant.now(),
+            evaluatorEnvironment = ortResult.advisor?.environment ?: Environment(),
+            advisorStartTime = ortResult.advisor?.startTime ?: Instant.now(),
+            advisorEndTime = ortResult.advisor?.endTime ?: Instant.now(),
+            advisorEnvironment = ortResult.advisor?.environment ?: Environment()
         )
 }

@@ -19,14 +19,84 @@
 
 package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import java.time.Instant
+
+import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
  * Metadata about the ORT run itself.
  */
 data class Metadata(
     /**
+     * The time the Advisor started.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val advisorStartTime: Instant,
+
+    /**
+     * The time the Advisor ended.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val advisorEndTime: Instant,
+
+    /**
+     * The [Environment] in which the advisor was executed.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val advisorEnvironment: Environment,
+
+    /**
      * The time the Analyzer started.
      */
-    val analyzerStartTime: Instant
+    val analyzerStartTime: Instant,
+
+    /**
+     * The time the Analyzer ended.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val analyzerEndTime: Instant,
+
+    /**
+     * The [Environment] in which the analyzer was executed.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val analyzerEnvironment: Environment,
+
+    /**
+     * The time the Evaluator started.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val evaluatorStartTime: Instant,
+
+    /**
+     * The time the Evaluator ended.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val evaluatorEndTime: Instant,
+
+    /**
+     * The [Environment] in which the evaluator was executed.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val evaluatorEnvironment: Environment,
+
+    /**
+     * The time the Evaluator started.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val scannerStartTime: Instant,
+
+    /**
+     * The time the Evaluator ended.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val scannerEndTime: Instant,
+
+    /**
+     * The [Environment] in which the scanner was executed.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val scannerEnvironment: Environment
 )
