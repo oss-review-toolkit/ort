@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
+import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Evaluator(
@@ -59,6 +60,6 @@ class Evaluator(
 
         val endTime = Instant.now()
 
-        return EvaluatorRun(startTime, endTime, violations)
+        return EvaluatorRun(startTime, endTime, Environment(), violations)
     }
 }

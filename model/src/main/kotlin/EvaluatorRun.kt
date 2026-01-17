@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.utils.ort.Environment
+
 /**
  * The summary of a single run of the evaluator.
  */
@@ -36,6 +38,11 @@ data class EvaluatorRun(
     val endTime: Instant,
 
     /**
+     * The [Environment] in which the evaluator was executed.
+     */
+    val environment: Environment,
+
+    /**
      * The list of [RuleViolation]s found by the evaluator.
      */
     val violations: List<RuleViolation>
@@ -48,6 +55,7 @@ data class EvaluatorRun(
         val EMPTY = EvaluatorRun(
             startTime = Instant.EPOCH,
             endTime = Instant.EPOCH,
+            environment = Environment(),
             violations = emptyList()
         )
     }
