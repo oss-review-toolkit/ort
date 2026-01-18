@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodeCommand
@@ -44,6 +45,27 @@ import org.ossreviewtoolkit.utils.common.nextOrNull
 
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
+
+data class PnPMConfig(
+    /**
+     * The version of PNPM to use when analyzing projects. Defaults to the version 10.24.0
+     */
+    val pnpmVersion: String?,
+
+    /**
+     * Ignore "pnpmfile" when analyzing projects. Defaults to "--ignore-pnpmfile"
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val ignore_pnpmfile: Boolean,
+
+    /**
+     * Ignore "pnpmfile" when analyzing projects. Defaults to ""--ignore-scripts"
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val ignore_scripts: Boolean,
+
+    
+)
 
 internal object PnpmCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
@@ -74,8 +96,9 @@ internal object PnpmCommand : CommandLineTool {
     description = "The PNPM package manager for Node.js.",
     factory = PackageManagerFactory::class
 )
-class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
+class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor, private val config: PnPMConfig) : 
     NodePackageManager(NodePackageManagerType.PNPM) {
+    
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->
@@ -158,10 +181,11 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
     }
 
     private fun installDependencies(workingDir: File, scopes: Collection<Scope>) {
+        
         val args = listOfNotNull(
             "install",
-            "--ignore-pnpmfile",
-            "--ignore-scripts",
+            "--ignore-pnpmfile".takeIf { config.ignore_pnpmfile },
+            "--ignore-scripts".takeIf { config.ignore_scripts },
             "--frozen-lockfile", // Use the existing lockfile instead of updating an outdated one.
             "--prod".takeUnless { Scope.DEV_DEPENDENCIES in scopes }
         )
