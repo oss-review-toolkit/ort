@@ -54,6 +54,25 @@ class PurlUtilsTest : StringSpec({
             }
         }
     }
+
+    "Should throw an exception for purl type not found" {
+        val exception = kotlin.runCatching {
+            PurlType.fromString("unknowntype")
+        }.exceptionOrNull()
+
+        exception shouldBe IllegalArgumentException("Unknown purl type: unknowntype")
+    }
+
+    "Should map known Purl types to Ort identifier types correctly" {
+        PurlType.getOrtTypeFromPurlType("cocoapods") shouldBe "CocoaPods"
+        PurlType.getOrtTypeFromPurlType("swift") shouldBe "Swift"
+        PurlType.getOrtTypeFromPurlType("npm") shouldBe "NPM"
+    }
+
+    "Should map unknown Purl types to Ort identifier types correctly" {
+        PurlType.getOrtTypeFromPurlType("unknowntype") shouldBe "Unknowntype"
+        PurlType.getOrtTypeFromPurlType("jit") shouldBe "Jit"
+    }
 })
 
 private data class TestSuiteData(
