@@ -18,8 +18,7 @@
  */
 
 import {
-    useMemo,
-    useState
+    useMemo
 } from 'react';
 
 import {
@@ -56,7 +55,17 @@ import PathExcludesTable from './PathExcludesTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-const ResultsTable = ({ webAppOrtResult }) => {
+const ResultsTable = ({
+    columnsToShow,
+    filteredInfo,
+    pagination,
+    setColumnsToShow,
+    setFilteredInfo,
+    setPagination,
+    setSortedInfo,
+    sortedInfo,
+    webAppOrtResult
+}) => {
     // Convert packages as Antd only accepts vanilla objects as input
     const packages = useMemo(
         () => {
@@ -95,33 +104,7 @@ const ResultsTable = ({ webAppOrtResult }) => {
         []
     );
 
-    /* === Table state handling === */
-
-    // State variable for displaying table in various pages
-    const [pagination, setPagination] = useState({ current: 1, pageSize: 100 });
-
-    // State variable for filtering the contents of table columns
-    const filteredInfoDefault = {
-        excludes: [],
-        id: [],
-        homepageUrl: [],
-        vcsProcessedUrl: []
-    };
-    const [filteredInfo, setFilteredInfo] = useState(filteredInfoDefault);
-
-    // State variable for sorting table columns
-    const [sortedInfo, setSortedInfo] = useState({});
-
-    // State variable for showing or hiding table columns
-    const [columnsToShow, setColumnsToShow] = useState([
-        'declaredLicensesProcessed',
-        'detectedLicensesProcessed',
-        'levels',
-        'scopeIndexes'
-    ]);
-
     /* === Table columns === */
-
     const columns = [];
     let toggleColumnMenuItems = [];
 
@@ -708,7 +691,12 @@ const ResultsTable = ({ webAppOrtResult }) => {
 
     // Handle for clearing column filters and sorting changes
     const handleClearAllFiltersAndSorting = () => {
-        setFilteredInfo(filteredInfoDefault);
+        setFilteredInfo({
+            excludes: [],
+            id: [],
+            homepageUrl: [],
+            vcsProcessedUrl: []
+        });
         setSortedInfo({});
     };
 

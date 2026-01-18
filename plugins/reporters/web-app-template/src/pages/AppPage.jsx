@@ -43,6 +43,36 @@ const AppPage = ({ webAppOrtResult }) => {
     const [activeTab, setActiveTab] = useState('ort-tabs-summary');
     const [isAboutModalVisible, setIsAboutModalVisible] = useState(false);
 
+    /* === ResultsTable state handling === */
+
+    // State variable for displaying ResultsTable in various pages
+    const [resultsTablePagination, setResultsTablePagination] = useState({ current: 1, pageSize: 100 });
+
+    // State variable with default ResultsTable columns to show
+    const columnsToShowDefault = [
+        'declaredLicensesProcessed',
+        'detectedLicensesProcessed',
+        'levels',
+        'scopeIndexes'
+    ];
+
+    // State variable with default for filtering the contents of ResultsTable columns
+    const filteredInfoDefault = {
+        excludes: [],
+        id: [],
+        homepageUrl: [],
+        vcsProcessedUrl: []
+    };
+
+    // State variable for filtering ResultsTable columns
+    const [resultsTableFilteredInfo, setResultsTableFilteredInfo] = useState(filteredInfoDefault);
+
+    // State variable for sorting ResultsTable columns
+    const [resultsTableSortedInfo, setResultsTableSortedInfo] = useState({});
+
+    // State variable for showing or hiding ResultsTable columns
+    const [resultsTableColumnsToShow, setResultsTableColumnsToShow] = useState(columnsToShowDefault);
+
     const handleAboutClick = (key) => {
         setIsAboutModalVisible(true);
     };
@@ -93,7 +123,17 @@ const AppPage = ({ webAppOrtResult }) => {
                                     ),
                                     key: 'ort-tabs-table',
                                     children: (
-                                        <ResultsTable webAppOrtResult={ webAppOrtResult }/>
+                                        <ResultsTable
+                                            columnsToShow={resultsTableColumnsToShow}
+                                            filteredInfo={resultsTableFilteredInfo}
+                                            pagination={resultsTablePagination}
+                                            setColumnsToShow={setResultsTableColumnsToShow}
+                                            setFilteredInfo={setResultsTableFilteredInfo}
+                                            setPagination={setResultsTablePagination}
+                                            sortedInfo={resultsTableSortedInfo}
+                                            setSortedInfo={setResultsTableSortedInfo}
+                                            webAppOrtResult={webAppOrtResult}
+                                        />
                                     )
                                 },
                                 {
