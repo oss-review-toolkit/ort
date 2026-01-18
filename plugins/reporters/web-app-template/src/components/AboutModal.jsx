@@ -32,6 +32,8 @@ import lioshi from 'react-syntax-highlighter/dist/esm/styles/hljs/lioshi';
 
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 
+import ToolMetadataCards from './ToolMetadataCards';
+
 const { Item } = Descriptions;
 
 SyntaxHighlighter.registerLanguage('yaml', yaml);
@@ -42,16 +44,6 @@ const AboutModal = ({ webAppOrtResult, isModalVisible, handleModalCancel }) => {
         metadata,
         repositoryConfiguration
     } = webAppOrtResult;
-
-    const analyzerStartDate = new Date(metadata.analyzerStartTime).toLocaleDateString(
-        undefined,
-        {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }
-    );
 
     return (
         <Modal
@@ -210,17 +202,8 @@ const AboutModal = ({ webAppOrtResult, isModalVisible, handleModalCancel }) => {
                                         OSS Review Toolkit code repository
                                     </a> for further details.
                                 </p>
-                                {
-                                    !!analyzerStartDate
-                                    && (
-                                        <p>
-                                            This ORT report is based on an analysis started on
-                                            {' '}
-                                            {analyzerStartDate}
-                                            .
-                                        </p>
-                                    )
-                                }
+                                <h2>ORT Run Details</h2>
+                                <ToolMetadataCards metadata={metadata} />
                             </span>
                         )
                     });
