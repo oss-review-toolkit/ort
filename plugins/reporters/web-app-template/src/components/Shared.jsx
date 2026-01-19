@@ -26,6 +26,26 @@ import {
     Space
 } from 'antd';
 
+const convertIso8601Date2Sentence = (iso8601Date) => {
+    if (!iso8601Date) return '—';
+    const date = new Date(iso8601Date.replace(/(\.\d{3})\d*Z$/, '$1Z'));
+
+    const timeFormatter = new Intl.DateTimeFormat(undefined, {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        timeZoneName: 'short'
+    });
+
+    const dateFormatter = new Intl.DateTimeFormat(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    return `${timeFormatter.format(date)} on ${dateFormatter.format(date)}`;
+};
+
 const getColumnSearchProps = (dataIndex, filteredValue, setFilteredValue) => ({
     filteredValue,
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -88,4 +108,4 @@ const renderAnchor = (text, href) => (
     </a>
 );
 
-export { getColumnSearchProps, renderAnchor };
+export { convertIso8601Date2Sentence, getColumnSearchProps, renderAnchor };

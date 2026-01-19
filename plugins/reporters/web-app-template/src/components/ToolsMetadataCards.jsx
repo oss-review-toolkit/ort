@@ -25,6 +25,8 @@ import {
     Typography
 } from 'antd';
 
+import { convertIso8601Date2Sentence } from './Shared';
+
 const { Text } = Typography;
 
 const ToolMetadataCards = ({ metadata }) => {
@@ -47,26 +49,6 @@ const ToolMetadataCards = ({ metadata }) => {
         return { mins, secs };
     };
 
-    const formatStartSentence = (startIso) => {
-        if (!startIso) return '—';
-        const d = new Date(startIso.replace(/(\.\d{3})\d*Z$/, '$1Z'));
-
-        const timeFormatter = new Intl.DateTimeFormat(undefined, {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-            timeZoneName: 'short'
-        });
-
-        const dateFormatter = new Intl.DateTimeFormat(undefined, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-
-        return `${timeFormatter.format(d)} on ${dateFormatter.format(d)}`;
-    };
-
     return (
         <Row gutter={[16, 16]}>
             {tools.map(({ key, title }) => {
@@ -83,7 +65,7 @@ const ToolMetadataCards = ({ metadata }) => {
                             <Card title={title} size="small">
                                 <Descriptions column={1} size="small">
                                     <Descriptions.Item label="Started">
-                                        <Text>{formatStartSentence(start)}</Text>
+                                        <Text>{convertIso8601Date2Sentence(start)}</Text>
                                     </Descriptions.Item>
 
                                     <Descriptions.Item label="Duration">
