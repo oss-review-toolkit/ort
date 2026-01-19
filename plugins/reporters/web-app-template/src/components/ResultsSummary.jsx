@@ -215,16 +215,19 @@ const ResultsSummary = ({ webAppOrtResult, showInResultsTable }) => {
                                                 {' '}
                                                 scopes
                                                 {
-                                                    !!scopes && scopes.length > 0 && <span>
-                                                        {' '}
-                                                        and
-                                                        {' '}
-                                                        <b>
-                                                            {levels.length}
-                                                        </b>
-                                                        {' '}
-                                                        dependency levels
-                                                    </span>
+                                                    !!scopes && scopes.length > 0
+                                                    && (
+                                                        <span>
+                                                            {' '}
+                                                            and
+                                                            {' '}
+                                                            <b>
+                                                                {levels.length}
+                                                            </b>
+                                                            {' '}
+                                                            dependency levels
+                                                        </span>
+                                                    )
                                                 }
                                             </span>
                                         )
@@ -295,78 +298,84 @@ const ResultsSummary = ({ webAppOrtResult, showInResultsTable }) => {
                                             {
                                                 !!hasUnresolvedIssues
                                                 && !hasUnresolvedRuleViolations
-                                                && <span className="ort-error">
-                                                    <b>
-                                                        Completed scan with
-                                                        {' '}
-                                                        {unresolvedIssues}
-                                                        {' '}
-                                                        unresolved issue
-                                                        {unresolvedIssues > 1 && 's'}
-                                                        {
-                                                            webAppOrtResult.hasExcludes()
-                                                            && (
-                                                                <span>
-                                                                    {' '}
-                                                                    in non-excluded source code or dependencies
-                                                                </span>
-                                                            )
-                                                        }
-                                                    </b>
-                                                </span>
+                                                && (
+                                                    <span className="ort-error">
+                                                        <b>
+                                                            Completed scan with
+                                                            {' '}
+                                                            {unresolvedIssues}
+                                                            {' '}
+                                                            unresolved issue
+                                                            {unresolvedIssues > 1 && 's'}
+                                                            {
+                                                                webAppOrtResult.hasExcludes()
+                                                                && (
+                                                                    <span>
+                                                                        {' '}
+                                                                        in non-excluded source code or dependencies
+                                                                    </span>
+                                                                )
+                                                            }
+                                                        </b>
+                                                    </span>
+                                                )
                                             }
                                             {
                                                 !hasUnresolvedIssues
                                                 && !!hasUnresolvedRuleViolations
-                                                && <span className="ort-error">
-                                                    <b>
-                                                        Completed scan with
-                                                        {' '}
-                                                        {unresolvedRuleViolations}
-                                                        {' '}
-                                                        unresolved policy violation
-                                                        {unresolvedRuleViolations > 1 && 's'}
-                                                        {
-                                                            webAppOrtResult.hasExcludes()
-                                                            && (
-                                                                <span>
-                                                                    {' '}
-                                                                    in non-excluded source code or dependencies
-                                                                </span>
-                                                            )
-                                                        }
-                                                    </b>
-                                                </span>
+                                                && (
+                                                    <span className="ort-error">
+                                                        <b>
+                                                            Completed scan with
+                                                            {' '}
+                                                            {unresolvedRuleViolations}
+                                                            {' '}
+                                                            unresolved policy violation
+                                                            {unresolvedRuleViolations > 1 && 's'}
+                                                            {
+                                                                webAppOrtResult.hasExcludes()
+                                                                && (
+                                                                    <span>
+                                                                        {' '}
+                                                                        in non-excluded source code or dependencies
+                                                                    </span>
+                                                                )
+                                                            }
+                                                        </b>
+                                                    </span>
+                                                )
                                             }
                                             {
                                                 !!hasUnresolvedIssues
                                                 && !!hasUnresolvedRuleViolations
-                                                && <span className="ort-error">
-                                                    <b>
-                                                        Completed scan with
-                                                        {' '}
-                                                        {unresolvedIssues}
-                                                        {' '}
-                                                        unresolved issue
-                                                        {unresolvedIssues > 1 && 's'}
-                                                        {' '}
-                                                        and
-                                                        {' '}
-                                                        {unresolvedRuleViolations}
-                                                        {' '}
-                                                        unresolved policy violation
-                                                        {unresolvedRuleViolations > 1 && 's'}
-                                                        {
-                                                            webAppOrtResult.hasExcludes()
-                                                            && (
-                                                                <span>
-                                                                    {' '}
-                                                                    in non-excluded source code or dependencies
-                                                                </span>
-                                                            )
-                                                        }
-                                                    </b>
-                                                </span>
+                                                && (
+                                                    <span className="ort-error">
+                                                        <b>
+                                                            Completed scan with
+                                                            {' '}
+                                                            {unresolvedIssues}
+                                                            {' '}
+                                                            unresolved issue
+                                                            {unresolvedIssues > 1 && 's'}
+                                                            {' '}
+                                                            and
+                                                            {' '}
+                                                            {unresolvedRuleViolations}
+                                                            {' '}
+                                                            unresolved policy violation
+                                                            {unresolvedRuleViolations > 1 && 's'}
+                                                            {
+                                                                webAppOrtResult.hasExcludes()
+                                                                && (
+                                                                    <span>
+                                                                        {' '}
+                                                                        in non-excluded source code or dependencies
+                                                                    </span>
+                                                                )
+                                                            }
+                                                        </b>
+                                                    </span>
+                                                )
                                             }
                                             {
                                                 !hasUnresolvedIssues && !hasUnresolvedRuleViolations
