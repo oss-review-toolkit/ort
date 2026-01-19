@@ -77,12 +77,14 @@ const PackageDetails = ({ webAppPackage }) => {
                 )
             }
             {
-                !!isProject && <Item
+                !!isProject && (
+                    <Item
                         label="Defined in"
                         key="ort-package-definition-file-path"
                     >
                         {definitionFilePath}
                     </Item>
+                )
             }
             {
                 webAppPackage.hasAuthors()
@@ -96,20 +98,24 @@ const PackageDetails = ({ webAppPackage }) => {
                 )
             }
             {
-                !!description && <Item
+                !!description && (
+                    <Item
                         label="Description"
                         key="ort-package-description"
                     >
                         {description}
                     </Item>
+                )
             }
             {
-                !!homepageUrl && <Item
+                !!homepageUrl && (
+                    <Item
                         label="Homepage"
                         key="ort-package-homepage"
                     >
                         {renderAhref(homepageUrl)}
                     </Item>
+                )
             }
             {
                 !!vcsUrl
