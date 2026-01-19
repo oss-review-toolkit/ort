@@ -68,7 +68,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
     - name: Check for Detekt Issues
-      run: ./gradlew detektAll
+      run: ./gradlew detekt
+    - name: Check for Detekt Issues with type resolution
+      run: ./gradlew detektMain detektTestFixtures detektTest detektFunTest
     - name: Upload SARIF File
       uses: github/codeql-action/upload-sarif@cdefb33c0f6224e58673d9004f47f7cb3e328b89 # v4
       if: always() # Upload even if the previous step failed.
