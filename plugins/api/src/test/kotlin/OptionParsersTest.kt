@@ -50,7 +50,7 @@ private val testFactory = object : PluginFactory<Plugin> {
         }
 }
 
-class PluginFactoryTest : WordSpec({
+class OptionParsersTest : WordSpec({
     "parseStringListOption()" should {
         "return an empty list for an empty default value" {
             val result = testFactory.parseStringListOption("stringList", PluginConfig.EMPTY)
