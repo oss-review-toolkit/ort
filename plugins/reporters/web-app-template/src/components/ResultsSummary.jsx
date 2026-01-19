@@ -44,7 +44,7 @@ import LicenseStatsTable from './LicenseStatsTable';
 import RuleViolationsTable from './RuleViolationsTable';
 import VulnerabilitiesTable from './VulnerabilitiesTable';
 
-const ResultsSummary = ({ webAppOrtResult }) => {
+const ResultsSummary = ({ webAppOrtResult, showInResultsTable }) => {
     const {
         declaredLicensesProcessed,
         detectedLicensesProcessed,
@@ -157,6 +157,10 @@ const ResultsSummary = ({ webAppOrtResult }) => {
         },
         []
     );
+
+    const handleLicenseStatsTableClick = (license, type) => {
+        showInResultsTable({ licenseName: license, licenseType: type });
+    };
 
     return (
         <div className="ort-summary">
@@ -476,6 +480,12 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                                             emptyText="No effective licenses"
                                                             licenses={effectiveLicenses}
                                                             licenseStats={effectiveLicensesProcessedAsNameValueColor}
+                                                            handleClick={
+                                                                (license) => handleLicenseStatsTableClick(
+                                                                    license,
+                                                                    'effective'
+                                                                )
+                                                            }
                                                         />
                                                     </Col>
                                                     <Col xs={24} sm={24} md={24} lg={24} xl={15}>
@@ -504,6 +514,12 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                                             emptyText="No declared licenses"
                                                             licenses={declaredLicensesProcessed}
                                                             licenseStats={declaredLicensesProcessedAsNameValueColor}
+                                                            handleClick={
+                                                                (license) => handleLicenseStatsTableClick(
+                                                                    license,
+                                                                    'declared'
+                                                                )
+                                                            }
                                                         />
                                                     </Col>
                                                     <Col xs={24} sm={24} md={24} lg={24} xl={15}>
@@ -532,6 +548,12 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                                             emptyText="No detected licenses"
                                                             licenses={detectedLicensesProcessed}
                                                             licenseStats={detectedLicensesProcessedAsNameValueColor}
+                                                            handleClick={
+                                                                (license) => handleLicenseStatsTableClick(
+                                                                    license,
+                                                                    'detected'
+                                                                )
+                                                            }
                                                         />
                                                     </Col>
                                                     <Col xs={24} sm={24} md={24} lg={24} xl={15}>

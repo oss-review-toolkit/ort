@@ -85,6 +85,68 @@ const AppPage = ({ webAppOrtResult }) => {
         setActiveTab(key);
     };
 
+    const handleShowInResultsTable = (obj) => {
+        switch (obj.licenseType) {
+            case 'declared': {
+                const declaredlicenseIndex = webAppOrtResult.getLicenseIndexByName(obj.licenseName);
+                setResultsTableColumnsToShow([
+                    'declaredLicensesProcessed',
+                    'levels',
+                    'scopeIndexes'
+                ]);
+                setResultsTableFilteredInfo({
+                    excludes: [],
+                    id: [],
+                    declaredLicensesMapped: [declaredlicenseIndex],
+                    homepageUrl: [],
+                    vcsProcessedUrl: []
+                });
+                setResultsTablePagination({ current: 1, pageSize: 100 });
+                setResultsTableSortedInfo({});
+                setActiveTab('ort-tabs-table');
+                break;
+            }
+            case 'detected': {
+                const detectedLicenseIndex = webAppOrtResult.getLicenseIndexByName(obj.licenseName);
+                setResultsTableColumnsToShow([
+                    'detectedLicensesProcessed',
+                    'levels',
+                    'scopeIndexes'
+                ]);
+                setResultsTableFilteredInfo({
+                    excludes: [],
+                    id: [],
+                    detectedLicensesProcessed: [detectedLicenseIndex],
+                    homepageUrl: [],
+                    vcsProcessedUrl: []
+                });
+                setResultsTablePagination({ current: 1, pageSize: 100 });
+                setResultsTableSortedInfo({});
+                setActiveTab('ort-tabs-table');
+                break;
+            }
+            case 'effective': {
+                const { licenseName } = obj;
+                setResultsTableColumnsToShow([
+                    'effectiveLicense',
+                    'levels',
+                    'scopeIndexes'
+                ]);
+                setResultsTableFilteredInfo({
+                    excludes: [],
+                    id: [],
+                    effectiveLicense: [licenseName],
+                    homepageUrl: [],
+                    vcsProcessedUrl: []
+                });
+                setResultsTablePagination({ current: 1, pageSize: 100 });
+                setResultsTableSortedInfo({});
+                setActiveTab('ort-tabs-table');
+                break;
+            }
+        }
+    };
+
     return (
         <Layout className="ort-app">
             <Content>
@@ -111,7 +173,9 @@ const AppPage = ({ webAppOrtResult }) => {
                                     ),
                                     key: 'ort-tabs-summary',
                                     children: (
-                                        <ResultsSummary webAppOrtResult={ webAppOrtResult }/>
+                                        <ResultsSummary
+                                            showInResultsTable={handleShowInResultsTable}
+                                            webAppOrtResult={webAppOrtResult}/>
                                     )
                                 },
                                 {
@@ -145,7 +209,7 @@ const AppPage = ({ webAppOrtResult }) => {
                                     ),
                                     key: 'ort-tabs-tree',
                                     children: (
-                                        <ResultsTree webAppOrtResult={ webAppOrtResult } />
+                                        <ResultsTree webAppOrtResult={webAppOrtResult} />
                                     )
                                 }
                             ]}
