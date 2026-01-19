@@ -21,14 +21,46 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
- * This class calculates [Metadata] for a given [OrtResult].
+ * Metadata about the ORT tool runs.
  */
-internal class MetadataCalculator {
-    fun getMetadata(ortResult: OrtResult) =
-        Metadata(
-            analyzerStartTime = ortResult.analyzer?.startTime ?: Instant.now()
-        )
+data class ToolsMetadata(
+    /**
+     * The metadata for the analyzer run.
+     */
+    val analyzer: Run?,
+
+    /**
+     * The metadata for the scanner run.
+     */
+    val scanner: Run?,
+
+    /**
+     * The metadata for the advisor run.
+     */
+    val advisor: Run?,
+
+    /**
+     * The metadata for the evaluator run.
+     */
+    val evaluator: Run?
+) {
+    data class Run(
+        /**
+         * The time the run started.
+         */
+        val startTime: Instant,
+
+        /**
+         * The time the run started.
+         */
+        val endTime: Instant,
+
+        /**
+         * The [Environment] in which the run was executed.
+         */
+        val environment: Environment
+    )
 }
