@@ -17,20 +17,52 @@
  * License-Filename: LICENSE
  */
 
-class Metadata {
-    #analyzerStartTime;
+import Run from './Run';
+
+class ToolsMetadata {
+    #advisor;
+
+    #analyzer;
+
+    #evaluator;
+
+    #scanner;
 
     constructor(obj) {
         if (obj instanceof Object) {
-            if (obj.analyzer_start_time || obj.analyzerStartTime) {
-                this.#analyzerStartTime = obj.analyzer_start_time || obj.analyzerStartTime;
+            if (obj.advisor) {
+                this.#advisor = new Run(obj.advisor);
+            }
+
+            if (obj.analyzer) {
+                this.#analyzer = new Run(obj.analyzer);
+            }
+
+            if (obj.evaluator) {
+                this.#evaluator = new Run(obj.evaluator);
+            }
+
+            if (obj.scanner) {
+                this.#scanner = new Run(obj.scanner);
             }
         }
     }
 
-    get analyzerStartTime() {
-        return this.#analyzerStartTime;
+    get advisor() {
+        return this.#advisor || null;
+    }
+
+    get analyzer() {
+        return this.#analyzer || null;
+    }
+
+    get evaluator() {
+        return this.#evaluator || null
+    }
+
+    get scanner() {
+        return this.#scanner || null;
     }
 }
 
-export default Metadata;
+export default ToolsMetadata;

@@ -19,8 +19,8 @@
 
 import YAML from 'yaml';
 
-import Metadata from './Metadata';
 import Statistics from './Statistics';
+import ToolsMetadata from './ToolsMetadata';
 import WebAppCopyright from './WebAppCopyright';
 import WebAppLicense from './WebAppLicense';
 import WebAppLicenseFindingCuration from './WebAppLicenseFindingCuration';
@@ -79,8 +79,6 @@ class WebAppOrtResult {
 
     #licensesIndexesByNameMap = new Map();
 
-    #metadata = {};
-
     #packages = [];
 
     #packagesByKeyMap = new Map();
@@ -110,6 +108,8 @@ class WebAppOrtResult {
     #scopesByNameMap = new Map();
 
     #statistics = {};
+
+    #toolsMetadata = {};
 
     #repository;
 
@@ -165,8 +165,8 @@ class WebAppOrtResult {
                 }
             }
 
-            if (obj.meta_data || obj.metaData || obj.metadata) {
-                this.#metadata = new Metadata(obj.meta_data || obj.metaData || obj.metadata);
+            if (obj.tools_metadata || obj.toolsMetadata) {
+                this.#toolsMetadata = new ToolsMetadata(obj.tools_metadata || obj.toolsMetadata);
             }
 
             if (obj.package_configurations || obj.packageConfigurations) {
@@ -517,10 +517,6 @@ class WebAppOrtResult {
         return this.#licensesIndexesByNameMap || null;
     }
 
-    get metadata() {
-        return this.#metadata;
-    }
-
     get packageConfigurations() {
         return this.#packageConfigurations;
     }
@@ -575,6 +571,10 @@ class WebAppOrtResult {
 
     get statistics() {
         return this.#statistics;
+    }
+
+    get toolsMetadata() {
+        return this.#toolsMetadata;
     }
 
     get treeNodesByPackageIndexMap() {
