@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.utils.spdx
 
-import com.fasterxml.jackson.module.kotlin.readValue
+import tools.jackson.module.kotlin.readValue
 
 /**
  * A mapping from simple license names to valid SPDX license IDs. This mapping only contains license strings which *can*
@@ -31,8 +31,8 @@ object SpdxSimpleLicenseMapping {
      * The map of simple license names associated with their corresponding [SPDX license][SpdxLicense].
      */
     internal val simpleLicenseMapping: Map<String, SpdxLicense> by lazy {
-        val resource = checkNotNull(javaClass.getResource("/simple-license-mapping.yml"))
-        yamlMapper.readValue(resource)
+        val resource = checkNotNull(javaClass.getResourceAsStream("/simple-license-mapping.yml"))
+        resource.use { yamlMapper.readValue(it) }
     }
 
     /**
@@ -47,8 +47,8 @@ object SpdxSimpleLicenseMapping {
      * [SpdxSingleLicenseExpression].
      */
     val deprecatedExpressionMapping: Map<String, SpdxSingleLicenseExpression> by lazy {
-        val resource = checkNotNull(javaClass.getResource("/deprecated-license-mapping.yml"))
-        val mapping = yamlMapper.readValue<Map<String, SpdxSingleLicenseExpression>>(resource)
+        val resource = checkNotNull(javaClass.getResourceAsStream("/deprecated-license-mapping.yml"))
+        val mapping = resource.use { yamlMapper.readValue<Map<String, SpdxSingleLicenseExpression>>(it) }
         mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
     }
 
