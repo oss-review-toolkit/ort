@@ -22,10 +22,10 @@ import {
 } from 'react';
 
 import { FileTextOutlined } from '@ant-design/icons';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 
 // Generates the HTML to display license stats as a table
-const LicenseStatsTable = ({ emptyText, licenses, licenseStats }) => {
+const LicenseStatsTable = ({ emptyText, licenses, licenseStats, handleClick }) => {
     /* === Table state handling === */
 
     // State variable for displaying table in various pages
@@ -54,10 +54,13 @@ const LicenseStatsTable = ({ emptyText, licenses, licenseStats }) => {
             sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
             key: 'name',
             render: (text, row) => (
-                <span>
+                <Button
+                    type="link"
+                    onClick={(e) => { e.stopPropagation(); handleClick(text); }}
+                >
                     <FileTextOutlined style={{ color: row.color }} />
                     {` ${text}`}
-                </span>
+                </Button>
             ),
             textWrap: 'word-break'
         }, {
@@ -67,6 +70,14 @@ const LicenseStatsTable = ({ emptyText, licenses, licenseStats }) => {
             sorter: (a, b) => a.value - b.value,
             sortOrder: sortedInfo.columnKey === 'value' && sortedInfo.order,
             key: 'value',
+            render: (text, row) => (
+                <Button
+                    type="link"
+                    onClick={(e) => { e.stopPropagation(); handleClick(row.name); }}
+                >
+                    {text}
+                </Button>
+            ),
             width: 150
         }
     ];
