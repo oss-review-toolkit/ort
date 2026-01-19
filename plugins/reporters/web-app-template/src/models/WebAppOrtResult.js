@@ -610,7 +610,7 @@ class WebAppOrtResult {
     }
 
     getLicenseIndexByName(val) {
-        return this.#licensesIndexesByNameMap.get(val) || null;
+        return this.#licensesIndexesByNameMap.get(val);
     }
 
     getPackageById(val) {
