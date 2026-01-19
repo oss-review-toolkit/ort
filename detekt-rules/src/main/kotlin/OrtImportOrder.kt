@@ -26,7 +26,6 @@ import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import dev.detekt.psi.absolutePath
 
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -64,11 +63,10 @@ class OrtImportOrder(config: Config) : Rule(config, "Reports files that do not f
         if (importPaths != expectedImportOrder) {
             if (autoCorrect) fixImportListOrder(importList, expectedImportOrder)
 
-            val path = importList.containingKtFile.absolutePath()
             val finding = Finding(
                 Entity.from(importList),
-                "Imports in file '$path' are not sorted alphabetically or single blank lines are missing between " +
-                    "different top-level packages"
+                "Imports are not sorted alphabetically or single blank lines are missing between different top-level " +
+                    "packages"
             )
 
             report(finding)
