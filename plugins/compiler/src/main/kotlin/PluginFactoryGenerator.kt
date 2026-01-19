@@ -26,6 +26,7 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
@@ -137,13 +138,12 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             pluginOptions.forEach { option ->
                 add("    ${option.name} = ")
 
-                if (option.isNullable) {
-                    add("parseNullable${option.type}Option(%S, config)", option.name)
-                } else {
-                    add("parse${option.type}Option(%S, config)", option.name)
-                }
+                val parserFunction = MemberName(
+                    "org.ossreviewtoolkit.plugins.api",
+                    if (option.isNullable) "parseNullable${option.type}Option" else "parse${option.type}Option"
+                )
 
-                add(",\n")
+                add("%M(%S, config),\n", parserFunction, option.name)
             }
 
             // TODO: Decide if an exception should be thrown if the options or secrets maps contain values that do not
