@@ -33,6 +33,7 @@ class OrtImportOrderTest : WordSpec({
     "OrtImportOrder rule" should {
         "succeed if the order is correct" {
             val findings = rule.lint(
+                // language=Kotlin
                 """
                 import java.io.File
                 import java.time.Instant
@@ -67,6 +68,7 @@ class OrtImportOrderTest : WordSpec({
 
         "fail if imports are not sorted alphabetically" {
             val findings = rule.lint(
+                // language=Kotlin
                 """
                 import java.time.Instant
                 import java.io.File
@@ -78,6 +80,7 @@ class OrtImportOrderTest : WordSpec({
 
         "fail if an empty line between different top-level packages is missing" {
             val findings = rule.lint(
+                // language=Kotlin
                 """
                 import java.time.Instant
                 import kotlinx.coroutines.CoroutineScope
