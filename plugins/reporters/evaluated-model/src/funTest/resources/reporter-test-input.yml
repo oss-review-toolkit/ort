@@ -57,12 +57,12 @@ analyzer:
   end_time: "1970-01-01T00:35:05Z"
   environment:
     ort_version: "72463cc"
+    build_jdk: "21.0.7+6-LTS"
     java_version: "1.8.0_181"
     os: "Linux"
     processors: 8
     max_memory: 8321499136
     variables: {}
-    tool_versions: {}
   config:
     allow_dynamic_versions: false
   result:
@@ -379,12 +379,12 @@ scanner:
   end_time: "1970-01-01T00:48:00Z"
   environment:
     ort_version: "72463cc"
+    build_jdk: "21.0.7+6-LTS"
     java_version: "1.8.0_181"
     os: "Linux"
     processors: 8
     max_memory: 8321499136
     variables: {}
-    tool_versions: {}
   config:
     skip_concluded: false
     detected_license_mapping:
@@ -768,12 +768,12 @@ advisor:
   end_time: "1970-01-01T01:08:00Z"
   environment:
     ort_version: "72463cc"
+    build_jdk: "21.0.7+6-LTS"
     java_version: "1.8.0_181"
     os: "Linux"
     processors: 8
     max_memory: 8321499136
     variables: {}
-    tool_versions: {}
   config:
     config:
       Vulnerable_code:
