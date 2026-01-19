@@ -78,4 +78,14 @@ const getColumnSearchProps = (dataIndex, filteredValue, setFilteredValue) => ({
     }
 });
 
-export { getColumnSearchProps };
+const renderAnchor = (text, href) => (
+    <a
+        href={href || text}
+        rel="noopener noreferrer"
+        target="_blank"
+    >
+        {text}
+    </a>
+);
+
+export { getColumnSearchProps, renderAnchor };
