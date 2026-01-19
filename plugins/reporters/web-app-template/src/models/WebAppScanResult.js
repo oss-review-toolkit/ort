@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import { randomStringGenerator } from '../utils';
+
 import Provenance from './Provenance';
 import ScannerDetails from './ScannerDetails';
 
@@ -65,6 +67,8 @@ class WebAppScanResult {
             if (obj.start_time || obj.startTime) {
                 this.#startTime = obj.start_time || obj.startTime;
             }
+
+            this.key = randomStringGenerator(20);
         }
     }
 
