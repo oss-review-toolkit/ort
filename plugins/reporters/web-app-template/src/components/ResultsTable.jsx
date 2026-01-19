@@ -51,6 +51,7 @@ import PackageDetails from './PackageDetails';
 import PackageFindingsTable from './PackageFindingsTable';
 import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
+import PackageScanResultsDetails from './PackageScanResultsDetails';
 import PathExcludesTable from './PathExcludesTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
@@ -822,6 +823,18 @@ const ResultsTable = ({
                                             key: 'package-scan-results',
                                             children: (
                                                 <PackageFindingsTable
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasFindings()) {
+                                        collapseItems.push({
+                                            label: 'Scan Results Details',
+                                            key: 'package-scan-results-details',
+                                            children: (
+                                                <PackageScanResultsDetails
                                                     webAppPackage={webAppPackage}
                                                 />
                                             )
