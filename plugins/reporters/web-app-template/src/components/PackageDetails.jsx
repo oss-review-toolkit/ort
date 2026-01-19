@@ -19,6 +19,8 @@
 
 import { Descriptions } from 'antd';
 
+import { renderAnchor } from './Shared';
+
 const { Item } = Descriptions;
 
 // Generates the HTML for packages details like
@@ -45,16 +47,6 @@ const PackageDetails = ({ webAppPackage }) => {
             url: vcsProcessedUrl
         }
     } = webAppPackage;
-
-    const renderAhref = (text, href) => (
-        <a
-            href={href || text}
-            rel="noopener noreferrer"
-            target="_blank"
-        >
-            {text}
-        </a>
-    );
 
     return (
         <Descriptions
@@ -113,7 +105,7 @@ const PackageDetails = ({ webAppPackage }) => {
                         label="Homepage"
                         key="ort-package-homepage"
                     >
-                        {renderAhref(homepageUrl)}
+                        {renderAnchor(homepageUrl)}
                     </Item>
                 )
             }
@@ -124,7 +116,7 @@ const PackageDetails = ({ webAppPackage }) => {
                         label="Declared Repository"
                         key="ort-package-vcs-url"
                     >
-                        {renderAhref(vcsUrl)}
+                        {renderAnchor(vcsUrl)}
                     </Item>
                 )
             }
@@ -158,7 +150,7 @@ const PackageDetails = ({ webAppPackage }) => {
                         label="Processed Repository"
                         key="ort-package-vcs-processed-url"
                     >
-                        {renderAhref(vcsProcessedUrl)}
+                        {renderAnchor(vcsProcessedUrl)}
                     </Item>
                 )
             }
@@ -191,7 +183,7 @@ const PackageDetails = ({ webAppPackage }) => {
                         label="Source Artifact"
                         key="ort-package-source-artifact"
                     >
-                        {renderAhref(sourceArtifact.url)}
+                        {renderAnchor(sourceArtifact.url)}
                     </Item>
                 )
             }
@@ -202,7 +194,7 @@ const PackageDetails = ({ webAppPackage }) => {
                         label="Binary Artifact"
                         key="ort-package-binary-artifact"
                     >
-                        {renderAhref(binaryArtifact.url)}
+                        {renderAnchor(binaryArtifact.url)}
                     </Item>
                 )
             }
