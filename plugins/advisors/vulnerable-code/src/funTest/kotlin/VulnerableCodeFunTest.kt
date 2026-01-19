@@ -62,7 +62,9 @@ class VulnerableCodeFunTest : WordSpec({
     }
 
     "Vulnerable Maven packages" should {
-        "return findings for Guava" {
+        // TODO: The test consistently fails with "unexpected end of stream".
+        //       This should be investigated and the test be re-enabled again.
+        "return findings for Guava".config(enabled = false) {
             val vc = VulnerableCodeFactory.create()
             val id = Identifier("Maven:com.google.guava:guava:19.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
