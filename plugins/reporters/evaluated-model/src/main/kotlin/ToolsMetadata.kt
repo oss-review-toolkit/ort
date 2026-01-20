@@ -49,12 +49,12 @@ data class ToolsMetadata(
 ) {
     data class Run(
         /**
-         * The time the run started.
+         * The time the run has started.
          */
         val startTime: Instant,
 
         /**
-         * The time the run started.
+         * The time the run has finished.
          */
         val endTime: Instant,
 
