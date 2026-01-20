@@ -9,7 +9,7 @@ graalVmNativeImagePlugin = "0.11.4"
 ideaExtPlugin = "1.3"
 kotlinPlugin = "2.3.0"
 ksp = "2.3.4"
-mavenPublishPlugin = "0.35.0"
+mavenPublishPlugin = "0.36.0"
 
 aeSecurity = "0.151.0"
 asciidoctorj = "3.0.1"
