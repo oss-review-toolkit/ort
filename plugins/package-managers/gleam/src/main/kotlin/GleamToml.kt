@@ -159,7 +159,7 @@ internal data class GleamToml(
     }
 }
 
-private object DependencySerializer : KSerializer<GleamToml.Dependency> {
+internal object DependencySerializer : KSerializer<GleamToml.Dependency> {
     override val descriptor = PolymorphicSerializer(GleamToml.Dependency::class).descriptor
 
     /**
