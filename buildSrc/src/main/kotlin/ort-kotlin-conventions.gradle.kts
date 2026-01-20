@@ -42,8 +42,8 @@ plugins {
 
     // Apply third-party plugins.
     id("com.autonomousapps.dependency-analysis")
-    id("dev.adamko.dokkatoo")
     id("dev.detekt")
+    id("org.jetbrains.dokka")
 
     kotlin("jvm")
 }
@@ -214,15 +214,6 @@ tasks.withType<KotlinCompile>().configureEach {
         jvmTarget = maxKotlinJvmTarget
         optIn = optInRequirements
     }
-}
-
-tasks.register<Jar>("javadocJar") {
-    description = "Assembles a JAR containing the Javadoc documentation."
-    group = "Documentation"
-
-    dependsOn(tasks.dokkatooGeneratePublicationJavadoc)
-    from(tasks.dokkatooGeneratePublicationJavadoc.flatMap { it.outputDirectory })
-    archiveClassifier = "javadoc"
 }
 
 tasks.withType<Test>().configureEach {

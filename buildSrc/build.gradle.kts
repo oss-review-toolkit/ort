@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.jgit)
     implementation(libs.plugin.dependencyAnalysis)
     implementation(libs.plugin.detekt)
-    implementation(libs.plugin.dokkatoo)
+    implementation(libs.plugin.dokka)
     implementation(libs.plugin.graalVmNativeImage)
     implementation(libs.plugin.kotlin)
     implementation(libs.plugin.ksp)
