@@ -50,7 +50,7 @@ fun Identifier.isVersionRange(): Boolean {
  * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
  * package with the given [identifier][pkgId].
  */
-internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier) =
+internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
     runCatching {
         if (version == pkgId.version) return true
 
