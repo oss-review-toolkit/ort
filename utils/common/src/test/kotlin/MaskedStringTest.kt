@@ -62,7 +62,7 @@ class MaskedStringTest : StringSpec({
         masked1 shouldBe masked2
         masked1 shouldNotBe masked3
         masked1 shouldNotBe masked4
-        masked1 shouldNotBe Object()
+        masked1 shouldNotBe Any()
     }
 
     "unmaskedStrings() returns unmasked strings" {
