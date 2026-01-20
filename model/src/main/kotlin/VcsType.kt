@@ -22,11 +22,14 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
+import kotlinx.serialization.Serializable
+
 /**
  * A class for Version Control System types. Each type has one or more [aliases] associated to it, where the first
  * alias is the definite name. This class is not implemented as an enum as constructing from an unknown type should be
  * supported while maintaining that type as the primary alias for the string representation.
  */
+@Serializable(with = VcsTypeSerializer::class)
 data class VcsType private constructor(private val aliases: List<String>) {
     /**
      * A constructor that takes a [name] in addition to a variable number of other [aliases] to enforce a non-empty list

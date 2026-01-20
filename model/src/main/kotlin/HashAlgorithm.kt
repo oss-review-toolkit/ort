@@ -26,12 +26,15 @@ import java.io.File
 import java.io.InputStream
 import java.security.MessageDigest
 
+import kotlinx.serialization.Serializable
+
 import org.ossreviewtoolkit.utils.common.calculateHash
 
 /**
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
  * alias is the definite name.
  */
+@Serializable(with = HashAlgorithmSerializer::class)
 enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val isVerifiable: Boolean = true) {
     /**
      * No hash algorithm.
