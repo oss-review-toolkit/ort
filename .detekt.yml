@@ -1,6 +1,6 @@
-# Configuration of detekt rule sets, see https://arturbosch.github.io/detekt/comments.html.
+# Configuration of detekt rule sets, see https://detekt.dev/docs/intro.
 # This file only lists the differences to the default configuration at
-# https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml.
+# https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml.
 
 complexity:
   CyclomaticComplexMethod:
