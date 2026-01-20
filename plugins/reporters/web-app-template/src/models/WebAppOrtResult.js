@@ -839,6 +839,10 @@ class WebAppOrtResult {
         return this.#ruleViolationsByPackageIndexMap.has(val);
     }
 
+    hasScanResults() {
+        return this.#scanResults.length > 0;
+    }
+
     hasScopes() {
         return this.#scopes.length > 0;
     }
