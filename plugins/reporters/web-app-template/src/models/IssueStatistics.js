@@ -22,6 +22,8 @@ class IssueStatistics {
 
     #hints = 0;
 
+    #severe = 0;
+
     #warnings = 0;
 
     constructor(obj) {
@@ -32,6 +34,10 @@ class IssueStatistics {
 
             if (obj.hints !== null) {
                 this.#hints = obj.hints;
+            }
+
+            if (obj.severe !== null) {
+                this.#severe = obj.severe;
             }
 
             if (obj.warnings !== null) {
@@ -46,6 +52,10 @@ class IssueStatistics {
 
     get hints() {
         return this.#hints;
+    }
+
+    get severe() {
+        return this.#severe;
     }
 
     get warnings() {
