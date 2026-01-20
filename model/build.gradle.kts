@@ -23,6 +23,9 @@ plugins {
 
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
@@ -40,12 +43,14 @@ dependencies {
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.hoplite)
     implementation(libs.hikari)
+    implementation(libs.kotlinx.serialization.core)
     implementation(libs.postgres)
     implementation(libs.purl)
     implementation(libs.semver4j)
     implementation(libs.tika)
 
     testFixturesImplementation(projects.utils.testUtils)
+    testFixturesImplementation(libs.kotlinx.serialization.core)
 
     testImplementation(libs.jsonSchemaValidator)
     testImplementation(libs.mockk)

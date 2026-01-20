@@ -26,14 +26,23 @@ import java.io.File
 
 import kotlin.io.encoding.Base64
 
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+
 /**
  * A class that bundles a hash algorithm with its hash value.
  */
+@Serializable
 data class Hash(
     /**
      * The value calculated using the hash algorithm.
      */
     @JsonSerialize(converter = StringLowercaseConverter::class)
+    @Serializable(with = HashValueSerializer::class)
     val value: String,
 
     /**
@@ -107,4 +116,14 @@ data class Hash(
 
 private class StringLowercaseConverter : StdConverter<String, String>() {
     override fun convert(value: String): String = value.lowercase()
+}
+
+object HashValueSerializer : KSerializer<String> {
+    override val descriptor = PrimitiveSerialDescriptor("org.ossreviewtoolkit.model.HashValue", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: String) {
+        encoder.encodeString(value)
+    }
+
+    override fun deserialize(decoder: Decoder): String = decoder.decodeString().lowercase()
 }
