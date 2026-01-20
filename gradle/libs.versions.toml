@@ -2,7 +2,7 @@
 buildConfigPlugin = "6.0.7"
 dependencyAnalysisPlugin = "3.5.1"
 detektPlugin = "2.0.0-alpha.1"
-dokkatooPlugin = "2.4.0"
+dokkaPlugin = "2.2.0-Beta"
 downloadPlugin = "5.6.0"
 gitSemverPlugin = "0.18.0"
 graalVmNativeImagePlugin = "0.11.4"
@@ -82,7 +82,7 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 plugin-dependencyAnalysis = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysisPlugin" }
 plugin-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
 plugin-detekt-formatting = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detektPlugin" }
-plugin-dokkatoo = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }
+plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokkaPlugin" }
 plugin-graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
 plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }

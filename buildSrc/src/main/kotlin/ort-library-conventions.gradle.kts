@@ -33,5 +33,6 @@ plugins {
 }
 
 mavenPublishing {
-    configure(KotlinJvm(JavadocJar.Dokka("dokkatooGeneratePublicationJavadoc")))
+    // Note that "dokkaGenerateHtml" is simply an alias for the below task name.
+    configure(KotlinJvm(JavadocJar.Dokka("dokkaGeneratePublicationHtml")))
 }
