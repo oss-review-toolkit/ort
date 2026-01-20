@@ -119,7 +119,7 @@ internal data class OpossumResources(
         }.plus("/")
 }
 
-private object OpossumResourcesSerializer : KSerializer<OpossumResources> by OpossumResources.generatedSerializer() {
+internal object OpossumResourcesSerializer : KSerializer<OpossumResources> by OpossumResources.generatedSerializer() {
     override fun serialize(encoder: Encoder, value: OpossumResources) {
         if (value.isFile()) {
             encoder.encodeInt(1)
