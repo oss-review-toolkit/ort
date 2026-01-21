@@ -21,9 +21,12 @@ package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.shuffle
+import io.kotest.property.checkAll
 
 class AlphaNumericComparatorTest : StringSpec({
-    "Dates should be sorted correctly".config(invocations = 5) {
+    "Dates should be sorted correctly" {
         val sorted = listOf(
             "1999-3-3",
             "1999-12-25",
@@ -31,12 +34,13 @@ class AlphaNumericComparatorTest : StringSpec({
             "2000-1-10",
             "2000-3-23"
         )
-        val unsorted = sorted.shuffled()
 
-        unsorted.sortedWith(AlphaNumericComparator) shouldBe sorted
+        checkAll(5, Arb.shuffle(sorted)) { unsorted ->
+            unsorted.sortedWith(AlphaNumericComparator) shouldBe sorted
+        }
     }
 
-    "Fractions should be sorted correctly".config(invocations = 5) {
+    "Fractions should be sorted correctly" {
         val sorted = listOf(
             "1.002.01",
             "1.002.03",
@@ -47,12 +51,13 @@ class AlphaNumericComparatorTest : StringSpec({
             "1.010.12",
             "1.011.02"
         )
-        val unsorted = sorted.shuffled()
 
-        unsorted.sortedWith(AlphaNumericComparator) shouldBe sorted
+        checkAll(5, Arb.shuffle(sorted)) { unsorted ->
+            unsorted.sortedWith(AlphaNumericComparator) shouldBe sorted
+        }
     }
 
-    "Versions should be sorted correctly".config(invocations = 5) {
+    "Versions should be sorted correctly" {
         val sorted = listOf(
             "1.001",
             "1.1",
@@ -68,12 +73,13 @@ class AlphaNumericComparatorTest : StringSpec({
             "1.199",
             "1.200"
         )
-        val unsorted = sorted.shuffled()
 
-        unsorted.sortedWith(AlphaNumericComparator) shouldBe sorted
+        checkAll(5, Arb.shuffle(sorted)) { unsorted ->
+            unsorted.sortedWith(AlphaNumericComparator) shouldBe sorted
+        }
     }
 
-    "Words should be sorted correctly".config(invocations = 5) {
+    "Words should be sorted correctly" {
         val sorted = listOf(
             "1-02",
             "1-2",
@@ -105,8 +111,9 @@ class AlphaNumericComparatorTest : StringSpec({
             "x2-y08",
             "x8-y8"
         )
-        val unsorted = sorted.shuffled()
 
-        unsorted.sortedWith(AlphaNumericComparator) shouldBe sorted
+        checkAll(5, Arb.shuffle(sorted)) { unsorted ->
+            unsorted.sortedWith(AlphaNumericComparator) shouldBe sorted
+        }
     }
 })
