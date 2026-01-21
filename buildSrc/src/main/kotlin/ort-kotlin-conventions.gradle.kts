@@ -216,11 +216,6 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
-tasks.register<Jar>("sourcesJar") {
-    archiveClassifier = "sources"
-    from(sourceSets.main.get().allSource)
-}
-
 tasks.register<Jar>("javadocJar") {
     description = "Assembles a JAR containing the Javadoc documentation."
     group = "Documentation"
