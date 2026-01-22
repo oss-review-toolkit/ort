@@ -28,9 +28,11 @@ import javax.sql.DataSource
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.core.Transaction
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.vendors.currentDialectMetadata
 
 import org.ossreviewtoolkit.model.config.PostgresConnection
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
@@ -99,7 +101,7 @@ object DatabaseUtils {
     /**
      * Logs a warning in case the actual database encoding does not equal the [expectedEncoding].
      */
-    fun Transaction.checkDatabaseEncoding(expectedEncoding: String = "UTF8") =
+    fun JdbcTransaction.checkDatabaseEncoding(expectedEncoding: String = "UTF8") =
         execShow("SHOW client_encoding") { resultSet ->
             if (resultSet.next()) {
                 val clientEncoding = resultSet.getString(1)
@@ -115,12 +117,12 @@ object DatabaseUtils {
      * Return true if and only if a table named [tableName] exists.
      */
     fun Transaction.tableExists(tableName: String): Boolean =
-        tableName in db.dialect.allTablesNames().map { it.substringAfterLast(".") }
+        tableName in currentDialectMetadata.allTablesNames().map { it.substringAfterLast(".") }
 
     /**
      * Start a new transaction to execute the given [statement] on this [Database].
      */
-    fun <T> Database.transaction(statement: Transaction.() -> T): T = transaction(this, statement)
+    fun <T> Database.transaction(statement: JdbcTransaction.() -> T): T = transaction(db = this, statement = statement)
 
     /**
      * Add a property with the given [key] and [value] to the [HikariConfig]. If the [value] is *null*, this

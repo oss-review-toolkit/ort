@@ -27,12 +27,15 @@ import javax.sql.DataSource
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.DatabaseConfig
-import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
-import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.v1.core.DatabaseConfig
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greaterEq
+import org.jetbrains.exposed.v1.core.less
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils.createMissingTablesAndColumns
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils.withDataBaseLock
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -89,7 +92,7 @@ class PackageBasedPostgresStorage(
         }
     }
 
-    private fun Transaction.createIdentifierAndScannerVersionIndex() =
+    private fun JdbcTransaction.createIdentifierAndScannerVersionIndex() =
         exec(
             """
             CREATE INDEX identifier_and_scanner_version
@@ -106,7 +109,7 @@ class PackageBasedPostgresStorage(
     /**
      * Create an index that ensures that there is only one scan result for the same identifier, scanner, and provenance.
      */
-    private fun Transaction.createScanResultUniqueIndex() =
+    private fun JdbcTransaction.createScanResultUniqueIndex() =
         exec(
             """
             CREATE UNIQUE INDEX scan_result_unique_index

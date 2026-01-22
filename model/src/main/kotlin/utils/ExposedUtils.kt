@@ -21,34 +21,39 @@ package org.ossreviewtoolkit.model.utils
 
 import java.sql.ResultSet
 
-import org.jetbrains.exposed.sql.ComparisonOp
-import org.jetbrains.exposed.sql.Expression
-import org.jetbrains.exposed.sql.IColumnType
-import org.jetbrains.exposed.sql.QueryBuilder
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.statements.Statement
-import org.jetbrains.exposed.sql.statements.StatementType
-import org.jetbrains.exposed.sql.statements.api.PreparedStatementApi
-import org.jetbrains.exposed.sql.stringParam
+import org.jetbrains.exposed.v1.core.ComparisonOp
+import org.jetbrains.exposed.v1.core.Expression
+import org.jetbrains.exposed.v1.core.IColumnType
+import org.jetbrains.exposed.v1.core.QueryBuilder
+import org.jetbrains.exposed.v1.core.Transaction
+import org.jetbrains.exposed.v1.core.statements.Statement
+import org.jetbrains.exposed.v1.core.statements.StatementType
+import org.jetbrains.exposed.v1.core.stringParam
+import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
+import org.jetbrains.exposed.v1.jdbc.statements.BlockingExecutable
+import org.jetbrains.exposed.v1.jdbc.statements.api.JdbcPreparedStatementApi
 
 /**
  * Execute a [SHOW][1] query and return the [transformed][transform] result. This function is required because
- * [Transaction.exec] only expects a result for SELECT queries and throws an exception if other queries return a result.
+ * [JdbcTransaction.exec] only expects a result for SELECT queries and throws an exception if other queries return a
+ * result.
  *
  * [1]: https://www.postgresql.org/docs/current/sql-show.html
  */
-fun <T : Any> Transaction.execShow(statement: String, transform: (ResultSet) -> T): T? {
+fun <T : Any> JdbcTransaction.execShow(statement: String, transform: (ResultSet) -> T): T? {
     if (statement.isEmpty()) return null
 
     require(statement.startsWith("SHOW")) { "Query must start with 'SHOW'." }
 
-    return exec(object : Statement<T>(StatementType.SELECT, emptyList()) {
-        override fun arguments(): Iterable<Iterable<Pair<IColumnType<*>, Any?>>> = emptyList()
+    return exec(object : BlockingExecutable<T, Statement<T>> {
+        override val statement = object : Statement<T>(StatementType.OTHER, emptyList()) {
+            override fun arguments(): Iterable<Iterable<Pair<IColumnType<*>, Any?>>> = emptyList()
 
-        override fun prepareSQL(transaction: Transaction, prepared: Boolean): String = statement
+            override fun prepareSQL(transaction: Transaction, prepared: Boolean): String = statement
+        }
 
-        override fun PreparedStatementApi.executeInternal(transaction: Transaction): T =
-            executeQuery().use { transform(it) }
+        override fun JdbcPreparedStatementApi.executeInternal(transaction: JdbcTransaction): T =
+            executeQuery().use { transform(it.result) }
     })
 }
 

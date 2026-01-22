@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.scanner.storages.utils
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.json.jsonb
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.json.jsonb
 
 import org.ossreviewtoolkit.model.jsonMapper
 
