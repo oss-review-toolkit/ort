@@ -24,6 +24,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain
@@ -45,7 +46,9 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.VcsInfo
 
 class MavenDependencyHandlerTest : WordSpec({
     beforeSpec {
@@ -175,7 +178,7 @@ class MavenDependencyHandlerTest : WordSpec({
             handler.linkageFor(dependency) shouldBe PackageLinkage.PROJECT_DYNAMIC
         }
 
-        "handle an exception from MavenSupport" {
+        "return coordinates-only Package when an exception is raised from MavenSupport" {
             val exception = ProjectBuildingException(
                 "BrokenProject", "Cannot parse pom.",
                 IOException("General failure when reading hard disk.")
@@ -185,7 +188,24 @@ class MavenDependencyHandlerTest : WordSpec({
 
             val handler = createHandler { throw exception }
 
-            handler.createPackage(dependency, issues) should beNull()
+            val pkg = handler.createPackage(dependency, issues)
+            pkg.shouldNotBeNull()
+
+            with(pkg.id) {
+                type shouldBe "Maven"
+                namespace shouldBe artifact.groupId
+                name shouldBe artifact.artifactId
+                version shouldBe artifact.version
+            }
+
+            with(pkg) {
+                binaryArtifact shouldBe RemoteArtifact.EMPTY
+                declaredLicenses should beEmpty()
+                description shouldBe ""
+                homepageUrl shouldBe ""
+                sourceArtifact shouldBe RemoteArtifact.EMPTY
+                vcs shouldBe VcsInfo.EMPTY
+            }
 
             issues should haveSize(1)
             with(issues[0]) {
