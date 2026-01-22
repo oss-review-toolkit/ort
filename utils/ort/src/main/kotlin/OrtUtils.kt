@@ -25,6 +25,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 
 import org.apache.logging.log4j.kotlin.CoroutineThreadContext
+import org.apache.logging.log4j.kotlin.logger
 
 /**
  * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
@@ -34,7 +35,7 @@ var printStackTrace = false
 /**
  * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
  */
-fun Throwable.showStackTrace(): Unit = run { if (printStackTrace) printStackTrace() }
+fun Throwable.showStackTrace(): Unit = run { if (printStackTrace) logger.error("An exception has occurred: ", this) }
 
 /**
  * A wrapper for [kotlinx.coroutines.runBlocking] which always adds a [CoroutineThreadContext] to the newly created
