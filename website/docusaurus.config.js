@@ -35,6 +35,10 @@ const config = {
     locales: ['en'],
   },
 
+  markdown: {
+    mermaid: true,
+  },
+
   presets: [
     [
       'classic',
@@ -69,6 +73,7 @@ const config = {
         explicitSearchResultPath: true,
       },
     ],
+    '@docusaurus/theme-mermaid',
   ],
 
   themeConfig:
@@ -90,10 +95,10 @@ const config = {
             label: 'Docs',
           },
           {
-            to: '/docs/getting-started/tutorial',
-            label: 'Tutorial',
+            to: '/docs/tutorials/walkthrough',
+            label: 'Tutorials',
             position: 'left',
-            activeBaseRegex: `/docs/`,
+            activeBaseRegex: `/docs/tutorials`,
           },
           {
             href: 'https://github.com/oss-review-toolkit/ort',
@@ -110,11 +115,11 @@ const config = {
             items: [
               {
                 label: 'Docs',
-                to: '/docs/intro',
+                to: '/docs/introduction',
               },
               {
-                label: 'Tutorial',
-                to: '/docs/getting-started/tutorial',
+                label: 'Tutorials',
+                to: '/docs/tutorials/walkthrough',
               },
               {
                 label: 'Search',

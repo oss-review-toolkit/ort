@@ -92,12 +92,8 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
           fetch-depth: 0
-      - name: Setup Node
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
       - name: Check for Markdown issues
-        run: |
-          npm install -g markdownlint-rule-max-one-sentence-per-line@0.0.2
-          npx markdownlint-cli2
+        uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101 # v22
   prettier-website:
     runs-on: ubuntu-24.04
     steps:
