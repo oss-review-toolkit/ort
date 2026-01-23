@@ -21,10 +21,6 @@
       "recreateWhen": "never"
     },
     {
-      "matchManagers": ["npm"],
-      "rangeStrategy": "pin"
-    },
-    {
       "matchPackageNames": [
         "com.atlassian.jira:jira-rest-java-client-api",
         "com.atlassian.jira:jira-rest-java-client-app"
@@ -46,6 +42,7 @@
     },
     {
       "matchManagers": ["npm"],
+      "rangeStrategy": "pin",
       "schedule": "after 9pm on wednesday"
     }
   ],
