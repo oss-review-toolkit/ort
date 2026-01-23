@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdConfig
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossIdFactory
 import org.ossreviewtoolkit.plugins.scanners.fossid.OrtScanComment
@@ -91,7 +92,9 @@ class UploadArchiveHandler(
             issues += createAndLogIssue(FossIdFactory.descriptor.displayName, it.collectMessages(), Severity.WARNING)
         }.getOrThrow()
 
-        deleteExcludedFiles(path, context.includes, context.excludes)
+        val includes = context.includes ?: Includes.EMPTY
+        val excludes = context.excludes ?: Excludes.EMPTY
+        deleteExcludedFiles(path, includes, excludes)
 
         val sourceArchive = createTempFile("fossid-source-archive", ".zip")
         logger.info {
@@ -128,7 +131,7 @@ class UploadArchiveHandler(
             .checkResponse("extract archive", true)
     }
 
-    internal fun deleteExcludedFiles(path: File, includes: Includes?, excludes: Excludes?) {
+    internal fun deleteExcludedFiles(path: File, includes: Includes, excludes: Excludes) {
         path.walkBottomUp()
             .filter { it != path }
             .forEach { file ->
@@ -139,6 +142,6 @@ class UploadArchiveHandler(
             }
     }
 
-    private fun shouldDeleteFile(relativePath: String, includes: Includes?, excludes: Excludes?): Boolean =
-        includes?.isPathIncluded(relativePath) == false || excludes?.isPathExcluded(relativePath) == true
+    private fun shouldDeleteFile(relativePath: String, includes: Includes, excludes: Excludes): Boolean =
+        !isPathIncluded(relativePath, excludes, includes)
 }
