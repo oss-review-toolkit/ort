@@ -21,6 +21,10 @@
       "recreateWhen": "never"
     },
     {
+      "matchManagers": ["npm"],
+      "rangeStrategy": "pin"
+    },
+    {
       "matchPackageNames": [
         "com.atlassian.jira:jira-rest-java-client-api",
         "com.atlassian.jira:jira-rest-java-client-app"
