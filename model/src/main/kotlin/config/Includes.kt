@@ -21,9 +21,6 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.Project
-
 data class Includes(
     /**
      * Path includes.
@@ -38,14 +35,6 @@ data class Includes(
          */
         @JvmField
         val EMPTY = Includes()
-    }
-
-    /**
-     * Return the [PathInclude]s matching the [definitionFilePath][Project.definitionFilePath].
-     */
-    fun findPathIncludes(project: Project, ortResult: OrtResult): List<PathInclude> {
-        val definitionFilePath = ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)
-        return paths.filter { it.matches(definitionFilePath) }
     }
 
     /**
