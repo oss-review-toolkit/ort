@@ -110,11 +110,14 @@ data class ExampleConfiguration(
     val timeout: Int,
     
     /** The API token to use for authentication. */
+    @OrtPluginOption(aliases = ["apiToken", "authToken"])
     val token: Secret?
 )
 ```
 
 Here, the `serverUrl` property has a default value, the `timeout` property is required, and the `token` property is optional.
+The `token` property also has two aliases defined which can be used as alternative names for the option in the plugin configuration.
+This is useful to provide backward compatibility when renaming options.
 
 The generated `ExampleAdvisorFactory` class will contain two factory functions:
 
