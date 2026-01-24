@@ -37,7 +37,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
     abstract var inputFiles: FileTree
 
     @OutputDirectory
-    val outputDirectory = project.layout.projectDirectory.file("website/docs/plugins").asFile
+    val outputDirectory = project.layout.projectDirectory.file("docs/plugins").asFile
 
     @Internal
     val jsonSlurper = JsonSlurper()
