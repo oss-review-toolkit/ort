@@ -125,9 +125,9 @@ The generated `ExampleAdvisorFactory` class will contain two factory functions:
 class ExampleAdvisorProviderFactory : AdviceProviderFactory {
     override fun create(config: PluginConfig): ExampleAdvisor {
         val configObject = ExampleConfiguration(
-            serverUrl = config.options["serverUrl"] ?: "https://example.com",
-            timeout = config.options["timeout"]?.toInt() ?: error("Option timeout is required but not set."),
-            token = config.secrets["token"]
+            serverUrl = parseStringOption("serverUrl", config),
+            timeout = parseIntegerOption("timeout", config),
+            token = parseNullableSecretOption("token", config)
         )
 
         return ExampleAdvisor(descriptor, configObject)
