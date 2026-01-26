@@ -503,6 +503,26 @@ FROM scratch AS gleam
 COPY --from=gleambuild /opt/gleam /opt/gleam
 
 #------------------------------------------------------------------------
+# Askalono
+FROM rustbuild AS askalonobuild
+
+ARG ASKALONO_VERSION
+
+ENV PATH=$PATH:$CARGO_HOME/bin
+
+RUN mkdir -p /opt/askalono && \
+    if [ "$(arch)" = "aarch64" ]; then \
+    cargo install --git https://github.com/jpeddicord/askalono.git --tag $ASKALONO_VERSION --root /opt/askalono; \
+    else \
+    curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
+    unzip askalono-Linux.zip -d /opt/askalono/bin && \
+    rm askalono-Linux.zip; \
+    fi
+
+FROM scratch AS askalono
+COPY --from=askalonobuild /opt/askalono /opt/askalono
+
+#------------------------------------------------------------------------
 # Container with minimal selection of supported package managers.
 FROM base AS minimal-tools
 
@@ -617,16 +637,8 @@ COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
 COPY --from=bazel --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
 
 # Askalono
-RUN mkdir /opt/askalono && \
-    if [ "$(arch)" = "aarch64" ]; then \
-    cargo install --git https://github.com/jpeddicord/askalono.git --tag $ASKALONO_VERSION; \
-    mv /opt/rust/cargo/bin/askalono /opt/askalono; \
-    else \
-    curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip; \
-    unzip askalono-Linux.zip -d /opt/askalono; \
-    fi
-
-ENV PATH=$PATH:/opt/askalono
+COPY --from=askalono --chown=$USER:$USER /opt/askalono /opt/askalono
+ENV PATH=$PATH:/opt/askalono/bin
 
 # Gleam
 ENV GLEAM_HOME=/opt/gleam
