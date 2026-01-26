@@ -33,8 +33,9 @@ COPY scripts/set_apt_proxy.sh /etc/scripts/set_apt_proxy.sh
 RUN /etc/scripts/set_apt_proxy.sh
 
 # Base package set
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+RUN --mount=type=cache,target=/var/cache,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=tmpfs,target=/var/log \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -82,7 +83,8 @@ ARG USER_GID=$USER_ID
 ARG HOMEDIR=/home/ort
 
 # Non privileged user
-RUN groupadd --gid $USER_GID $USERNAME \
+RUN --mount=type=tmpfs,target=/var/log \
+    groupadd --gid $USER_GID $USERNAME \
     && useradd \
     --uid $USER_ID \
     --gid $USER_GID \
@@ -550,8 +552,9 @@ ARG NODEJS_VERSION
 RUN sudo rm -rf /etc/scripts
 
 # Install optional tool subversion for ORT analyzer
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+RUN --mount=type=cache,target=/var/cache,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=tmpfs,target=/var/log \
     sudo apt-get update && \
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
     subversion \
