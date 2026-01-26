@@ -37,7 +37,13 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
      * [workingDir] to [getRootPath]. It is not related to the path argument that was used for downloading, and at the
      * example of Git, it does not reflect the (single) path that was cloned in a sparse checkout.
      */
-    open fun getInfo() = VcsInfo(vcsType, getRemoteUrl(), getRevision(), path = getPathToRoot(workingDir))
+    open fun getInfo() =
+        VcsInfo(
+            type = vcsType,
+            url = runCatching { getRemoteUrl() }.getOrDefault(""),
+            revision = getRevision(),
+            path = getPathToRoot(workingDir)
+        )
 
     /**
      * Return the map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
