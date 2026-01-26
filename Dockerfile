@@ -391,7 +391,16 @@ RUN mkdir -p $SWIFT_HOME \
     SWIFT_PACKAGE="ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz"; \
     fi \
     && curl -L https://download.swift.org/swift-$SWIFT_VERSION-release/$SWIFT_PACKAGE \
-    | tar -xz -C $SWIFT_HOME --strip-components=2
+    | tar -xz -C $SWIFT_HOME --strip-components=2 \
+    # Prune Swift installation: remove debugging tools, IDE support, static libraries,
+    # sanitizers, and other components not needed for 'swift package show-dependencies'.
+    && rm -rf \
+    $SWIFT_HOME/bin/{*-swift-linux-musl-clang*,clangd,docc,lldb*,plutil,repl_swift,sourcekit-lsp,wasm-ld,wasmkit} \
+    $SWIFT_HOME/bin/llvm-{cov,objcopy,objdump,profdata,symbolizer} \
+    $SWIFT_HOME/bin/swift-{api-checker.py,build-sdk-interfaces,demangle,format,help} \
+    $SWIFT_HOME/lib/{clang/*/lib,liblldb*,libLTO*,libsourcekitdInProc.so,lldb,sourcekitd.framework,swift_static} \
+    $SWIFT_HOME/lib/swift/{embedded,FrameworkABIBaseline,migrator} \
+    $SWIFT_HOME/{libexec,local,share}
 
 FROM scratch AS swift
 COPY --from=swiftbuild /opt/swift /opt/swift
