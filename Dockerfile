@@ -523,6 +523,17 @@ FROM scratch AS askalono
 COPY --from=askalonobuild /opt/askalono /opt/askalono
 
 #------------------------------------------------------------------------
+# cargo-credential-netrc
+FROM rustbuild AS cargo-credential-netrc-build
+
+ENV PATH=$PATH:$CARGO_HOME/bin
+
+RUN cargo install cargo-credential-netrc --root /opt/cargo-credential-netrc
+
+FROM scratch AS cargo-credential-netrc
+COPY --from=cargo-credential-netrc-build /opt/cargo-credential-netrc /opt/cargo-credential-netrc
+
+#------------------------------------------------------------------------
 # Container with minimal selection of supported package managers.
 FROM base AS minimal-tools
 
@@ -556,6 +567,11 @@ ENV RUSTUP_HOME=$RUST_HOME/rustup
 ENV PATH=$PATH:$CARGO_HOME/bin:$RUSTUP_HOME/bin
 COPY --from=rust --chown=$USER:$USER $RUST_HOME $RUST_HOME
 RUN chmod o+rwx $CARGO_HOME
+
+# cargo-credential-netrc
+ENV CARGO_CREDENTIAL_NETRC_HOME=/opt/cargo-credential-netrc
+ENV PATH=$PATH:$CARGO_CREDENTIAL_NETRC_HOME/bin
+COPY --from=cargo-credential-netrc $CARGO_CREDENTIAL_NETRC_HOME $CARGO_CREDENTIAL_NETRC_HOME
 
 # Golang
 ENV PATH=$PATH:/opt/go/bin
@@ -678,9 +694,6 @@ WORKDIR $HOME
 
 # Ensure that these directories exist in the container to be able to mount directories from the host into them with correct permissions.
 RUN mkdir -p "$HOME/.ort" "$HOME/.gradle"
-
-# Install cargo-credential-netrc late in the build to prevent an error accessing /opt/rust/cargo/registry/.
-RUN $CARGO_HOME/bin/cargo install cargo-credential-netrc
 
 # Verify that all tools required by ORT are available.
 # Mount /tmp and $HOMEDIR as cache to prevent temporary files from being persisted to the image.
