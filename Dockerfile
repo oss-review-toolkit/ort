@@ -185,6 +185,8 @@ RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
     && mkdir $PYENV_ROOT/conan2 && mv /tmp/conan2/bin $PYENV_ROOT/conan2/ \
     && mv $PYENV_ROOT/conan2/bin/conan $PYENV_ROOT/conan2/bin/conan2
 
+RUN find /opt/python -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
 
