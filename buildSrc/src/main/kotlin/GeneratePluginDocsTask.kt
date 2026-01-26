@@ -200,7 +200,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                         appendLine()
                         append("***Alias")
                         if (aliases.size > 1) append("es")
-                        appendLine(":** ${aliases.joinToString(", ") { "`$it`" }}*")
+                        appendLine(":** ${aliases.joinToString { "`$it`" }}*")
                     }
 
                     val enumEntries = (option["enumEntries"] as List<*>?)?.map { it as Map<*, *> }
