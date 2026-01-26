@@ -331,6 +331,8 @@ RUN --mount=type=tmpfs,target=/tmp/android \
 RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > $ANDROID_HOME/cmdline-tools/bin/repo \
     && sudo chmod a+x $ANDROID_HOME/cmdline-tools/bin/repo
 
+RUN chmod -R o+rw "$ANDROID_HOME"
+
 FROM scratch AS android
 COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 
@@ -605,7 +607,7 @@ ENV ANDROID_USER_HOME=$HOME/.android
 ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/bin
 ENV PATH=$PATH:$ANDROID_HOME/platform-tools
 COPY --from=android --chown=$USER:$USER $ANDROID_HOME $ANDROID_HOME
-RUN sudo chmod -R o+rw $ANDROID_HOME
+RUN chmod o+rw $ANDROID_HOME
 
 # Swift
 ENV SWIFT_HOME=/opt/swift
