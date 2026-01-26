@@ -420,7 +420,10 @@ RUN mkdir -p $DOTNET_HOME \
 
 RUN mkdir -p $DOTNET_HOME/bin \
     && curl -L https://github.com/aboutcode-org/nuget-inspector/releases/download/v$NUGET_INSPECTOR_VERSION/nuget-inspector-v$NUGET_INSPECTOR_VERSION-linux-x64.tar.gz \
-    | tar --strip-components=1 -C $DOTNET_HOME/bin -xz
+    | tar --strip-components=1 -C $DOTNET_HOME/bin -xz \
+    # Prune .NET installation: keep only the runtime needed for nuget-inspector.
+    && rm -rf $DOTNET_HOME/{templates,packs,sdk,sdk-manifests} \
+    && rm -rf $DOTNET_HOME/shared/Microsoft.AspNetCore.App
 
 FROM scratch AS dotnet
 COPY --from=dotnetbuild /opt/dotnet /opt/dotnet
