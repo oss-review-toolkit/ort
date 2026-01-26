@@ -199,12 +199,15 @@ FROM base AS nodejsbuild
 
 ARG BOWER_VERSION
 ARG NODEJS_VERSION
+ARG USER_ID=1000
+ARG USER_GID=$USER_ID
 
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
 
 RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git $NVM_DIR
-RUN . $NVM_DIR/nvm.sh \
+RUN --mount=type=cache,target=/opt/nvm/.cache,uid=$USER_ID,gid=$USER_GID \
+    . $NVM_DIR/nvm.sh \
     && nvm install "$NODEJS_VERSION" \
     && nvm alias default "$NODEJS_VERSION" \
     && nvm use default \
