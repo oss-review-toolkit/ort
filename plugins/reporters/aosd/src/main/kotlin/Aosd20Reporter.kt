@@ -155,5 +155,6 @@ private fun Hash.toChecksums(): AOSD20.Checksums =
     when (algorithm) {
         // Other algorithms than SHA256 create an error message when importing.
         HashAlgorithm.SHA256 -> AOSD20.Checksums(sha256 = value)
+
         else -> AOSD20.Checksums(integrity = value)
     }

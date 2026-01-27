@@ -126,6 +126,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
 private fun storagePath(provenance: KnownProvenance) =
     when (provenance) {
         is ArtifactProvenance -> "artifact/${provenance.sourceArtifact.url.fileSystemEncode()}/$SCAN_RESULTS_FILE_NAME"
+
         is RepositoryProvenance -> {
             "repository/${provenance.vcsInfo.type.toString().fileSystemEncode()}" +
                 "/${provenance.vcsInfo.url.fileSystemEncode()}" +

@@ -487,16 +487,27 @@ internal fun listUnmatchedSnippetChoices(
 private fun urlToPackageType(url: String): PurlType =
     when (val provider = PackageProvider.get(url)) {
         PackageProvider.COCOAPODS -> PurlType.COCOAPODS
+
         PackageProvider.CRATES_IO -> PurlType.CARGO
+
         PackageProvider.DEBIAN -> PurlType.DEBIAN
+
         PackageProvider.GITHUB -> PurlType.GITHUB
+
         PackageProvider.GITLAB -> PurlType.GITLAB
+
         PackageProvider.GOLANG -> PurlType.GOLANG
+
         PackageProvider.MAVEN_CENTRAL, PackageProvider.MAVEN_GOOGLE -> PurlType.MAVEN
+
         PackageProvider.NPM_JS -> PurlType.NPM
+
         PackageProvider.NUGET -> PurlType.NUGET
+
         PackageProvider.PACKAGIST -> PurlType.COMPOSER
+
         PackageProvider.PYPI -> PurlType.PYPI
+
         PackageProvider.RUBYGEMS -> PurlType.GEM
 
         else -> {

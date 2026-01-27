@@ -178,9 +178,12 @@ internal fun Package.toSpdxPackage(
         licenseConcluded = when (type) {
             // Clear the concluded license as it might need to be different for the source artifact.
             SpdxPackageType.SOURCE_PACKAGE -> SpdxConstants.NOASSERTION
+
             // Clear the concluded license as it might need to be different for the VCS location.
             SpdxPackageType.VCS_PACKAGE -> SpdxConstants.NOASSERTION
+
             SpdxPackageType.PROJECT -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
+
             else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
         },
         licenseDeclared = resolvedLicenseInfo.mainLicense()

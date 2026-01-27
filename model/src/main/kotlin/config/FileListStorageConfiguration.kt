@@ -60,6 +60,7 @@ fun FileListStorageConfiguration?.createStorage(): ProvenanceFileStorage =
             storage = fileStorage.createFileStorage(),
             filename = FILENAME
         )
+
         this?.postgresStorage != null -> PostgresProvenanceFileStorage(
             dataSource = DatabaseUtils.createHikariDataSource(
                 config = postgresStorage.connection,
@@ -67,6 +68,7 @@ fun FileListStorageConfiguration?.createStorage(): ProvenanceFileStorage =
             ),
             tableName = TABLE_NAME
         )
+
         else -> FileProvenanceFileStorage(
             storage = XZCompressedLocalFileStorage(ortDataDirectory / "scanner" / "file-lists"),
             filename = FILENAME

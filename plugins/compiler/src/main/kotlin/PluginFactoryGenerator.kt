@@ -213,9 +213,13 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                         }
 
                         PluginOptionType.INTEGER -> add("%L", defaultValue.toInt())
+
                         PluginOptionType.LONG -> add("%LL", defaultValue.toLong())
+
                         PluginOptionType.SECRET -> add("%T(%S)", Secret::class, defaultValue)
+
                         PluginOptionType.STRING -> add("%S", defaultValue)
+
                         PluginOptionType.STRING_LIST -> {
                             if (defaultValue.isEmpty()) {
                                 add("emptyList()")

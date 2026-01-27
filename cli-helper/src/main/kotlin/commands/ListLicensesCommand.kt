@@ -305,6 +305,7 @@ private fun TextLocation.resolve(baseDir: File): String? {
 private fun Provenance.writeValueAsString(): String =
     when (this) {
         is ArtifactProvenance -> "url=${sourceArtifact.url}, hash=${sourceArtifact.hash.value}"
+
         is RepositoryProvenance -> {
             "type=${vcsInfo.type}, url=${vcsInfo.url}, path=${vcsInfo.path}, revision=$resolvedRevision"
         }

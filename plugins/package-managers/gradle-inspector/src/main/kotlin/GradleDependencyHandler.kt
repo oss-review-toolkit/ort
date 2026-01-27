@@ -84,6 +84,7 @@ internal class GradleDependencyHandler(
 
         val binaryArtifact = when {
             hasNoArtifacts -> RemoteArtifact.EMPTY
+
             else -> with(dependency) {
                 createRemoteArtifact(pomFile, classifier, extension.takeUnless { it == "bundle" })
             }

@@ -120,6 +120,7 @@ private class ProvenanceFileTable(tableName: String) : IntIdTable(tableName) {
 private fun KnownProvenance.storageKey(): String =
     when (this) {
         is ArtifactProvenance -> "source-artifact|${sourceArtifact.url}|${sourceArtifact.hash}"
+
         // The trailing "|" is kept for backward compatibility because there used to be an additional parameter.
         is RepositoryProvenance -> "vcs|${vcsInfo.type}|${vcsInfo.url}|$resolvedRevision|"
     }

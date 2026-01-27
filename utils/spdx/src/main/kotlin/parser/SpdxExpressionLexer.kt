@@ -84,8 +84,11 @@ class SpdxExpressionLexer(input: Sequence<Char>) {
 
                 return when (value.uppercase()) {
                     "AND" -> Token.AND(start)
+
                     "OR" -> Token.OR(start)
+
                     "WITH" -> Token.WITH(start)
+
                     else -> when {
                         value.startsWith("DocumentRef-") -> Token.DOCUMENTREF(start, position, value)
                         value.startsWith("LicenseRef-") -> Token.LICENSEREF(start, position, value)
