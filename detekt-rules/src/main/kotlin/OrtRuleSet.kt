@@ -20,10 +20,11 @@
 package org.ossreviewtoolkit.detekt
 
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 
 class OrtRuleSet : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("ORT")
+    override val ruleSetId = RuleSetId("ORT")
 
     override fun instance() =
         RuleSet(
