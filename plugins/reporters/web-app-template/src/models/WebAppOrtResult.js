@@ -125,6 +125,8 @@ class WebAppOrtResult {
 
     #vulnerabilitiesByPackageIndexMap = new Map();
 
+    #vulnerabilitiesStatsBySeverityIndexMap = new Map();
+
     #vulnerabilityResolutions = [];
 
     constructor(obj) {
@@ -388,16 +390,26 @@ class WebAppOrtResult {
             if (obj.vulnerabilities) {
                 const vulnerabilities = obj.vulnerabilities;
                 this.#vulnerabilitiesByPackageIndexMap.clear();
+                this.#vulnerabilitiesStatsBySeverityIndexMapBySeverityIndexMap.clear();
 
                 for (let i = 0, len = vulnerabilities.length; i < len; i++) {
                     const webAppVulnerability = new WebAppVulnerability(vulnerabilities[i], this);
-                    const { packageIndex } = webAppVulnerability;
+                    const { packageIndex, severityIndex } = webAppVulnerability;
                     this.#vulnerabilities.push(webAppVulnerability);
 
                     if (!this.#vulnerabilitiesByPackageIndexMap.has(packageIndex)) {
                         this.#vulnerabilitiesByPackageIndexMap.set(packageIndex, [webAppVulnerability]);
                     } else {
                         this.#vulnerabilitiesByPackageIndexMap.get(packageIndex).push(webAppVulnerability);
+                    }
+
+                    if (!this.#vulnerabilitiesStatsBySeverityIndexMap.has(severityIndex)) {
+                        this.#vulnerabilitiesStatsBySeverityIndexMap.set(severityIndex, 1);
+                    } else {
+                        this.#vulnerabilitiesStatsBySeverityIndexMap.set(
+                            severityIndex,
+                            this.#vulnerabilitiesStatsBySeverityIndexMap.get(severityIndex) + 1
+                        );
                     }
                 }
             }
@@ -739,6 +751,10 @@ class WebAppOrtResult {
 
     getVulnerabilitiesForPackageIndex(val) {
         return this.#vulnerabilitiesByPackageIndexMap.get(val) || [];
+    }
+
+    getVulnerabilitiesSeverityIndexStats() {
+        return this.#vulnerabilitiesStatsBySeverityIndexMap;
     }
 
     getVulnerabilityResolutionByIndex(val) {
