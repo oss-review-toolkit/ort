@@ -927,15 +927,17 @@ class FossId internal constructor(
 
         val fossIdScanUrl = buildFossIdScanUrl(config.serverUrl, result.scanId)
 
-        issues.add(
-            0,
-            Issue(
-                source = descriptor.id,
-                message = "This scan has $pendingFilesCount file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: $fossIdScanUrl",
-                severity = if (config.treatPendingIdentificationsAsError) Severity.ERROR else Severity.HINT
+        if (pendingFilesCount > 0) {
+            issues.add(
+                0,
+                Issue(
+                    source = descriptor.id,
+                    message = "This scan has $pendingFilesCount file(s) pending identification in FossID. " +
+                        "Please review and resolve them at: $fossIdScanUrl",
+                    severity = if (config.treatPendingIdentificationsAsError) Severity.ERROR else Severity.HINT
+                )
             )
-        )
+        }
 
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
 
