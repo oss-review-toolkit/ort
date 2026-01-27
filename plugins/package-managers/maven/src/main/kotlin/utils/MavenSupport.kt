@@ -523,7 +523,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
         val sourceRemoteArtifact = when {
             localProject != null -> RemoteArtifact.EMPTY
+
             artifact.extension == "pom" -> binaryRemoteArtifact
+
             else -> {
                 val sourceArtifact = artifact.let {
                     DefaultArtifact(it.groupId, it.artifactId, "sources", "jar", it.version)

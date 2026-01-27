@@ -74,6 +74,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
         val managersFromFiles = managerTypesForProjectDir[projectDir].orEmpty()
         when {
             manager !in managersFromFiles -> return false
+
             managersFromFiles.size == 1 -> {
                 logger.info { "Detected '$definitionFile' to be the root of a(n) $manager project." }
                 return true

@@ -722,8 +722,11 @@ class FossId internal constructor(
 
             when (response.data?.status) {
                 ScanStatus.FINISHED -> true
+
                 ScanStatus.FAILED -> error("Scan waited for has failed.")
+
                 null -> false
+
                 else -> {
                     logger.info {
                         "Scan status for scan '$scanCode' is '${response.data?.status}'. Waiting..."

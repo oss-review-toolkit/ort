@@ -133,7 +133,9 @@ private fun SpdxPackage.getConcludedLicense(): SpdxExpression? =
 private fun SpdxPackage.getRemoteArtifact(): RemoteArtifact? =
     when {
         SpdxConstants.isNotPresent(downloadLocation) -> null
+
         SPDX_VCS_PREFIXES.any { (prefix, _) -> downloadLocation.startsWith(prefix) } -> null
+
         else -> {
             if (downloadLocation.endsWith(".git")) {
                 logger.warn {

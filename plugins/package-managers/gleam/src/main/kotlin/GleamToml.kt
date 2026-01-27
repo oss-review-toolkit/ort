@@ -170,10 +170,12 @@ internal object DependencySerializer : KSerializer<GleamToml.Dependency> {
 
         return when (val element = decoder.decodeTomlElement()) {
             is TomlLiteral -> GleamToml.Dependency.Hex(element.asTomlLiteral().content)
+
             is TomlTable -> {
                 val table = element.asTomlTable()
                 when {
                     "path" in table -> GleamToml.Dependency.Path(table.getValue("path").asTomlLiteral().content)
+
                     "git" in table -> GleamToml.Dependency.Git(
                         url = table.getValue("git").asTomlLiteral().content,
                         ref = table["ref"]?.asTomlLiteral()?.content

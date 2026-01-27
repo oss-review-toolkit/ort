@@ -159,15 +159,21 @@ class PluginSpecFactory {
 
             val type = when {
                 isEnumType(paramType) -> PluginOptionType.ENUM
+
                 isEnumListType(paramType) -> PluginOptionType.ENUM_LIST
 
                 else -> {
                     when (paramTypeString) {
                         "kotlin.Boolean" -> PluginOptionType.BOOLEAN
+
                         "kotlin.Int" -> PluginOptionType.INTEGER
+
                         "kotlin.Long" -> PluginOptionType.LONG
+
                         "org.ossreviewtoolkit.plugins.api.Secret" -> PluginOptionType.SECRET
+
                         "kotlin.String" -> PluginOptionType.STRING
+
                         "kotlin.collections.List<kotlin.String>" -> PluginOptionType.STRING_LIST
 
                         else -> throw IllegalArgumentException(

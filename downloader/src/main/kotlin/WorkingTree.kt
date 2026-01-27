@@ -103,10 +103,12 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
                     "No matching tag for version '$version' found in $remoteTags. Please create a tag whose name " +
                         "contains the version."
                 )
+
             versionNames.size > 1 ->
                 throw IOException(
                     "Multiple matching tags found for version '$version': $versionNames. Please add a curation."
                 )
+
             else -> versionNames.first()
         }
     }

@@ -46,6 +46,7 @@ internal class PolymorphicListDeserializer(val boundType: JavaType? = null) :
 
         return when (p.currentToken) {
             JsonToken.VALUE_FALSE -> PolymorphicList()
+
             JsonToken.START_ARRAY -> {
                 val arrayType = ctxt.typeFactory.constructArrayType(boundType)
                 val array = ctxt.readValue<Array<Any>>(p, arrayType)

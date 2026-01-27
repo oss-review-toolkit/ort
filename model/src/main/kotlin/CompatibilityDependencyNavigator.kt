@@ -57,7 +57,9 @@ class CompatibilityDependencyNavigator internal constructor(
                         DependencyGraphNavigator(ortResult),
                         DependencyTreeNavigator
                     )
+
                 graphProjects.isEmpty() -> DependencyTreeNavigator
+
                 else -> DependencyGraphNavigator(ortResult)
             }
         }

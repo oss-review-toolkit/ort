@@ -98,6 +98,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for development and testing only."
             )
         )
+
         "Bundler" -> listOf(
             ScopeExclude(
                 pattern = "test",
@@ -105,6 +106,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for testing only."
             )
         )
+
         "Cargo" -> listOf(
             ScopeExclude(
                 pattern = "build-dependencies",
@@ -117,6 +119,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for development only."
             )
         )
+
         "Composer" -> listOf(
             ScopeExclude(
                 pattern = "require-dev",
@@ -124,6 +127,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for development only."
             )
         )
+
         "Conan" -> listOf(
             ScopeExclude(
                 pattern = "build_requires",
@@ -131,6 +135,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for development only."
             )
         )
+
         "GoMod" -> listOf(
             ScopeExclude(
                 pattern = "vendor",
@@ -138,6 +143,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages to build and test the main module."
             )
         )
+
         "Gradle" -> listOf(
             ScopeExclude(
                 pattern = "annotationProcessor",
@@ -250,6 +256,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for testing only."
             )
         )
+
         "Maven" -> listOf(
             ScopeExclude(
                 pattern = "provided",
@@ -262,6 +269,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for testing only."
             )
         )
+
         "NPM" -> listOf(
             ScopeExclude(
                 pattern = "devDependencies",
@@ -269,6 +277,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for development only."
             )
         )
+
         "Poetry" -> listOf(
             ScopeExclude(
                 pattern = "dev",
@@ -291,6 +300,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for testing only."
             )
         )
+
         "SBT" -> listOf(
             ScopeExclude(
                 pattern = "provided",
@@ -303,6 +313,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for testing only."
             )
         )
+
         "Stack" -> listOf(
             ScopeExclude(
                 pattern = "bench",
@@ -315,6 +326,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for testing only."
             )
         )
+
         "Yarn" -> listOf(
             ScopeExclude(
                 pattern = "devDependencies",
@@ -322,5 +334,6 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for development only."
             )
         )
+
         else -> emptyList()
     }

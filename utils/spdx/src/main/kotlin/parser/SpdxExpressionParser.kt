@@ -170,8 +170,11 @@ class SpdxExpressionParser(
             next = iterator.nextOrNull()
             val exception = when (next) {
                 is Token.IDENTIFIER -> consume<Token.IDENTIFIER>().value
+
                 is Token.LICENSEREF -> consume<Token.LICENSEREF>().value
+
                 is Token.DOCUMENTREF -> "${consume<Token.DOCUMENTREF>().value}:${consume<Token.LICENSEREF>().value}"
+
                 else -> throw SpdxExpressionParserException(
                     next,
                     Token.IDENTIFIER::class,

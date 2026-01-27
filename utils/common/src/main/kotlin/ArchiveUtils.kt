@@ -82,11 +82,15 @@ fun File.unpack(
     filter: (ArchiveEntry) -> Boolean = { true }
 ) = when (forceArchiveType.takeUnless { it == ArchiveType.NONE } ?: ArchiveType.getType(name)) {
     ArchiveType.SEVENZIP -> unpack7Zip(targetDirectory, filter)
+
     ArchiveType.ZIP -> unpackZip(targetDirectory, filter)
 
     ArchiveType.TAR -> inputStream().use { it.unpackTar(targetDirectory, filter) }
+
     ArchiveType.TAR_BZIP2 -> inputStream().use { BZip2CompressorInputStream(it).unpackTar(targetDirectory, filter) }
+
     ArchiveType.TAR_GZIP -> inputStream().use { GzipCompressorInputStream(it).unpackTar(targetDirectory, filter) }
+
     ArchiveType.TAR_XZ -> inputStream().use { XZCompressorInputStream(it).unpackTar(targetDirectory, filter) }
 
     ArchiveType.DEB -> unpackDeb(targetDirectory, filter)

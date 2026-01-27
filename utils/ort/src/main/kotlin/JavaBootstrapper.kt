@@ -82,8 +82,11 @@ object JavaBootstrapper {
 
         val os = when (Os.Name.current) {
             Os.Name.LINUX -> OperatingSystem.LINUX
+
             Os.Name.MAC -> OperatingSystem.MACOS
+
             Os.Name.WINDOWS -> OperatingSystem.WINDOWS
+
             else -> return Result.failure(
                 IllegalArgumentException("No JDK package for unsupported operating system '${Os.Name.current}' found.")
             )

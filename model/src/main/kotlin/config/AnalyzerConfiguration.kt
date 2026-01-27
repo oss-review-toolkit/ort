@@ -116,7 +116,9 @@ data class AnalyzerConfiguration(
     fun merge(override: RepositoryAnalyzerConfiguration): AnalyzerConfiguration {
         val mergedPackageManagers = when {
             packageManagers == null -> override.packageManagers
+
             override.packageManagers == null -> packageManagers
+
             else -> {
                 val keys = sortedSetOf(String.CASE_INSENSITIVE_ORDER).apply {
                     addAll(packageManagers.keys)

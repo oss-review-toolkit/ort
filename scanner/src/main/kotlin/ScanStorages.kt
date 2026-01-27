@@ -139,6 +139,7 @@ private fun createPostgresStorage(config: PostgresStorageConfiguration) =
         StorageType.PACKAGE_BASED -> PackageBasedPostgresStorage(
             DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = "scanner")
         )
+
         StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
             DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = "scanner")
         )

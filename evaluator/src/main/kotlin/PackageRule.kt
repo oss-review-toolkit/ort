@@ -319,6 +319,7 @@ open class PackageRule(
                     when (license) {
                         !is SpdxLicenseReferenceExpression ->
                             license.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED)
+
                         else -> false
                     }
             }
