@@ -1,7 +1,7 @@
 [versions]
 buildConfigPlugin = "6.0.7"
 dependencyAnalysisPlugin = "3.5.1"
-detektPlugin = "2.0.0-alpha.1"
+detektPlugin = "2.0.0-alpha.2"
 dokkaPlugin = "2.2.0-Beta"
 downloadPlugin = "5.6.0"
 gitSemverPlugin = "0.18.0"
