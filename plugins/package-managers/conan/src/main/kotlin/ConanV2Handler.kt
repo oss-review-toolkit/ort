@@ -174,11 +174,12 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
      * Return the map of packages and their identifiers which are contained in [pkgInfos].
      */
     private fun parsePackages(pkgInfos: List<PackageInfoV2>): Map<String, Package> =
-        // Package types are filtered because "conan graph info" return too many packages.
-        pkgInfos.filter { it.packageType == PackageType.STATIC_LIBRARY }.associate { pkgInfo ->
-            val pkg = parsePackage(pkgInfo)
-            "${pkg.id.name}:${pkg.id.version}" to pkg
-        }
+        pkgInfos
+            .filterNot { it.packageType == PackageType.APPLICATION || it.packageType == PackageType.BUILD_SCRIPTS }
+            .associate { pkgInfo ->
+                val pkg = parsePackage(pkgInfo)
+                "${pkg.id.name}:${pkg.id.version}" to pkg
+            }
 
     /**
      * Return the [Package] parsed from the given [pkgInfo].
