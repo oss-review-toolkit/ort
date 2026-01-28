@@ -26,13 +26,13 @@ project:
     - id: "Conan::libmysqlclient:8.1.0"
       dependencies:
       - id: "Conan::lz4:1.9.4"
-      - id: "Conan::openssl:3.6.0"
+      - id: "Conan::openssl:3.6.1"
         dependencies:
         - id: "Conan::zlib:1.3.1"
       - id: "Conan::zlib:1.3.1"
       - id: "Conan::zstd:1.5.7"
     - id: "Conan::libpq:15.4"
-    - id: "Conan::openssl:3.6.0"
+    - id: "Conan::openssl:3.6.1"
       dependencies:
       - id: "Conan::zlib:1.3.1"
     - id: "Conan::pcre2:10.42"
@@ -189,8 +189,8 @@ packages:
     revision: ""
     path: ""
   is_modified: true
-- id: "Conan::openssl:3.6.0"
-  purl: "pkg:conan/openssl@3.6.0"
+- id: "Conan::openssl:3.6.1"
+  purl: "pkg:conan/openssl@3.6.1"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -204,9 +204,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://github.com/openssl/openssl/releases/download/openssl-3.6.0/openssl-3.6.0.tar.gz"
+    url: "https://github.com/openssl/openssl/releases/download/openssl-3.6.1/openssl-3.6.1.tar.gz"
     hash:
-      value: "b6a5f44b7eb69e3fa35dbf15524405b44837a481d43d81daddde3ff21fcbb8e9"
+      value: "b1bfedcd5b289ff22aee87c9d600f515767ebf45f77168cb6d64f231f518a82e"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
