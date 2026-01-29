@@ -22,6 +22,7 @@
 package org.ossreviewtoolkit.model.utils
 
 import java.io.File
+import java.net.URLDecoder
 
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.utils.common.percentEncode
@@ -162,3 +163,130 @@ internal fun createPurl(
 
 // See https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst#known-qualifiers-keyvalue-pairs.
 private val KNOWN_QUALIFIER_KEYS = setOf("repository_url", "download_url", "vcs_url", "file_name", "checksum")
+
+/**
+ * Parsed components of a Package URL.
+ *
+ * @property type The package type (e.g., "npm", "maven", "hex").
+ * @property namespace The namespace/scope (optional, can be empty).
+ * @property name The package name.
+ * @property version The package version (optional, can be empty).
+ * @property qualifiers Map of qualifier key-value pairs (optional).
+ * @property subpath The subpath (optional, can be empty).
+ */
+data class ParsedPurl(
+    val type: String,
+    val namespace: String,
+    val name: String,
+    val version: String,
+    val qualifiers: Map<String, String>,
+    val subpath: String
+) {
+    /**
+     * Get the type as a [PurlType] enum, or null if the type is unknown.
+     */
+    @Suppress("SwallowedException")
+    fun getPurlType(): PurlType? =
+        try {
+            PurlType.fromString(type.lowercase())
+        } catch (e: IllegalArgumentException) {
+            // Type is not a recognized PURL type, return null
+            null
+        }
+}
+
+/**
+ * Parse a Package URL string into its components.
+ *
+ * Format: `pkg:<type>/<namespace>/<name>@<version>?<qualifiers>#<subpath>`
+ *
+ * @param purl The PURL string to parse.
+ * @return A [ParsedPurl] object with the parsed components, or null if the PURL is invalid.
+ */
+fun parsePurl(purl: String?): ParsedPurl? {
+    if (purl.isNullOrBlank()) return null
+    if (!purl.startsWith("pkg:")) return null
+
+    val after = purl.removePrefix("pkg:")
+    if (after.isEmpty()) return null
+
+    val mainPart = after.substringBefore('?').substringBefore('#')
+    val qualifiersStr = after.substringAfter('?', "").substringBefore('#')
+    val subpath = after.substringAfter('#', "")
+
+    val slashIndex = mainPart.indexOf('/')
+    if (slashIndex <= 0) return null
+
+    val type = mainPart.substring(0, slashIndex).trim()
+    if (type.isEmpty()) return null
+
+    val rest = mainPart.substring(slashIndex + 1)
+    val atIndex = rest.indexOf('@')
+
+    val (namespaceAndName, version) = if (atIndex >= 0) {
+        rest.substring(0, atIndex) to rest.substring(atIndex + 1)
+    } else {
+        rest to ""
+    }
+
+    val lastSlash = namespaceAndName.lastIndexOf('/')
+    val (namespace, name) = if (lastSlash >= 0) {
+        namespaceAndName.substring(0, lastSlash) to namespaceAndName.substring(lastSlash + 1)
+    } else {
+        "" to namespaceAndName
+    }
+
+    val qualifiers = if (qualifiersStr.isNotEmpty()) {
+        qualifiersStr.split('&').associate { pair ->
+            val parts = pair.split('=', limit = 2)
+            val key = parts.getOrElse(0) { "" }
+            val value = parts.getOrElse(1) { "" }
+            val decodedKey = URLDecoder.decode(key, "UTF-8")
+            val decodedValue = if (value.isNotEmpty()) {
+                URLDecoder.decode(value, "UTF-8")
+            } else {
+                ""
+            }
+
+            decodedKey to decodedValue
+        }
+    } else {
+        emptyMap()
+    }
+
+    val decodedSubpath = if (subpath.isNotEmpty()) {
+        URLDecoder.decode(subpath, "UTF-8")
+    } else {
+        ""
+    }
+
+    val decodedNamespace = if (namespace.isNotEmpty()) {
+        URLDecoder.decode(namespace, "UTF-8")
+    } else {
+        ""
+    }
+
+    val decodedName = if (name.isNotEmpty()) {
+        URLDecoder.decode(name, "UTF-8")
+    } else {
+        ""
+    }
+
+    if (decodedName.isEmpty()) return null
+
+    val decodedVersion = if (version.isNotEmpty()) {
+        val isChecksum = HashAlgorithm.VERIFIABLE.any { version.startsWith("${it.name.lowercase()}:") }
+        if (isChecksum) version else URLDecoder.decode(version, "UTF-8")
+    } else {
+        ""
+    }
+
+    return ParsedPurl(
+        type = type,
+        namespace = decodedNamespace,
+        name = decodedName,
+        version = decodedVersion,
+        qualifiers = qualifiers,
+        subpath = decodedSubpath
+    )
+}
