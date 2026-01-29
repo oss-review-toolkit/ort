@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -132,10 +133,8 @@ abstract class PackageManager(val projectType: String) : Plugin {
                         return@filterTo false
                     }
 
-                    val isIncluded = includes.isPathIncluded(rootPath, path)
-                    val isExcluded = excludes.isPathExcluded(rootPath, path)
-
-                    it.isFile && !isExcluded && isIncluded
+                    val relativePath = rootPath.relativize(path).invariantSeparatorsPathString
+                    it.isFile && isPathIncluded(relativePath, excludes, includes)
                 }
 
                 distinctPackageManagers.forEach { manager ->
@@ -231,13 +230,6 @@ abstract class PackageManager(val projectType: String) : Plugin {
          */
         private fun Excludes.isPathExcluded(root: Path, path: Path): Boolean =
             isPathExcluded(root.relativize(path).invariantSeparatorsPathString)
-
-        /**
-         * Check whether the given [path] interpreted relatively against [root] is matched by a path include in this
-         * [Includes] object.
-         */
-        private fun Includes.isPathIncluded(root: Path, path: Path): Boolean =
-            isPathIncluded(root.relativize(path).invariantSeparatorsPathString)
 
         /**
          * Get a fallback project name from the [definitionFile] path relative to the [analysisRoot]. This function
