@@ -19,21 +19,26 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
-    api(jacksonLibs.jacksonAnnotations)
-    api(jacksonLibs.jacksonDatabind)
+    api(projects.model)
+    api(projects.scanner)
+
+    api(libs.semver4j) {
+        because("This is a CommandLineTool.")
+    }
 
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxDocumentUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(jacksonLibs.jacksonCore)
-    implementation(jacksonLibs.jacksonDataformatYaml)
-    implementation(jacksonLibs.jacksonDatatypeJsr310)
-    implementation(jacksonLibs.jacksonModuleKotlin)
+    ksp(projects.scanner)
+
+    funTestApi(testFixtures(projects.scanner))
+    funTestImplementation(projects.utils.testUtils)
 
     testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotest.assertions.json)
+    testImplementation(libs.mockk)
 }
