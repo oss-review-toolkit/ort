@@ -19,9 +19,12 @@
 
 package org.ossreviewtoolkit.model
 
+import kotlinx.serialization.Serializable
+
 /**
  * Bundles information about a remote artifact.
  */
+@Serializable
 data class RemoteArtifact(
     /**
      * The URL of the remote artifact.
