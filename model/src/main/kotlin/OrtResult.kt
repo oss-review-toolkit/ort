@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
+import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.zipWithSets
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
@@ -193,16 +194,7 @@ data class OrtResult(
         getProjects().associateBy(
             { project -> project.id },
             { project ->
-                val pathExcludes = getExcludes().findPathExcludes(project, this)
-                val pathIncludes = getIncludes().findPathIncludes(project, this)
-
-                val isExcluded = if (getIncludes() == Includes.EMPTY) {
-                    // No includes are defined. It is excluded if it has path excludes.
-                    pathExcludes.isNotEmpty()
-                } else {
-                    // Some includes are defined. It is excluded if it has no path includes or has path excludes.
-                    pathIncludes.isEmpty() || pathExcludes.isNotEmpty()
-                }
+                val isExcluded = isProjectExcluded(project)
 
                 ProjectEntry(
                     project = project,
@@ -686,6 +678,15 @@ data class OrtResult(
                 }
             )
         )
+
+    /**
+     * Check if the given [project] is not included or excluded based on the path includes and excludes defined in the
+     * repository configuration
+     */
+    private fun OrtResult.isProjectExcluded(project: Project): Boolean {
+        val definitionFilePath = getDefinitionFilePathRelativeToAnalyzerRoot(project)
+        return !isPathIncluded(definitionFilePath, getExcludes(), getIncludes())
+    }
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())

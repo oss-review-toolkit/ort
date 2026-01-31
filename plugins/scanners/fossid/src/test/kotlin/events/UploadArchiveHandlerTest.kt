@@ -48,7 +48,7 @@ class UploadArchiveHandlerTest : WordSpec({
             val excludes = createExcludes("**/exclude.txt")
             val handler = createHandler()
 
-            handler.deleteExcludedFiles(tempDir, null, excludes)
+            handler.deleteExcludedFiles(tempDir, Includes.EMPTY, excludes)
 
             tempDir / "include.txt" shouldBe aFile()
             tempDir / "exclude.txt" shouldNotBe aFile()
@@ -62,7 +62,7 @@ class UploadArchiveHandlerTest : WordSpec({
             val excludes = createExcludes("**/node_modules/**", reason = PathExcludeReason.BUILD_TOOL_OF)
             val handler = createHandler()
 
-            handler.deleteExcludedFiles(tempDir, null, excludes)
+            handler.deleteExcludedFiles(tempDir, Includes.EMPTY, excludes)
 
             tempDir / "include" shouldBe aDirectory()
             tempDir / "include" / "file.txt" shouldBe aFile()
@@ -82,7 +82,7 @@ class UploadArchiveHandlerTest : WordSpec({
             val excludes = createExcludes("**/*.log", "**/*.tmp")
             val handler = createHandler()
 
-            handler.deleteExcludedFiles(tempDir, null, excludes)
+            handler.deleteExcludedFiles(tempDir, Includes.EMPTY, excludes)
 
             tempDir / "keep.txt" shouldBe aFile()
             tempDir / "src" / "keep.kt" shouldBe aFile()
@@ -104,7 +104,7 @@ class UploadArchiveHandlerTest : WordSpec({
             val includes = createIncludes("src/**/*.kt")
             val handler = createHandler()
 
-            handler.deleteExcludedFiles(tempDir, includes, null)
+            handler.deleteExcludedFiles(tempDir, includes, Excludes.EMPTY)
 
             tempDir / "src" / "main.kt" shouldBe aFile()
             tempDir / "src" / "test.kt" shouldBe aFile()
@@ -143,7 +143,7 @@ class UploadArchiveHandlerTest : WordSpec({
             val includes = createIncludes("src/**", "test/**")
             val handler = createHandler()
 
-            handler.deleteExcludedFiles(tempDir, includes, null)
+            handler.deleteExcludedFiles(tempDir, includes, Excludes.EMPTY)
 
             tempDir / "src" / "main.kt" shouldBe aFile()
             tempDir / "test" / "spec.kt" shouldBe aFile()
