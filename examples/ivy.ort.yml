@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2025 The ORT Project Authors <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Example ORT configuration for Apache Ivy projects
+
+# Path excludes
+excludes:
+  paths:
+    # Exclude test resources
+    - pattern: "**/test/**"
+      reason: "TEST_OF"
+      comment: "Test code and resources"
+
+  # Scope excludes (Ivy configurations)
+  scopes:
+    - pattern: "test"
+      reason: "TEST_DEPENDENCY_OF"
+      comment: "Test dependencies are not distributed"
+
+    - pattern: "provided"
+      reason: "PROVIDED_DEPENDENCY_OF"
+      comment: "Provided dependencies are supplied by runtime environment"
