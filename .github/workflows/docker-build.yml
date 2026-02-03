@@ -27,7 +27,7 @@ jobs:
       ort-minimal-labels: ${{ steps.meta-ort-minimal.outputs.labels }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
       - name: Setup Gradle
@@ -78,7 +78,7 @@ jobs:
       ORT_VERSION: ${{ needs.metadata.outputs.version }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
       - name: Free Disk Space
