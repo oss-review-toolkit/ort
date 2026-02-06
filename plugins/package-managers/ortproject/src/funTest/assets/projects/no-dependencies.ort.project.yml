@@ -1,0 +1,8 @@
+projectName: "Example ORT project"
+description: "Project X description"
+homepageUrl: "https://project_x.example.com"
+declaredLicenses:
+  - "Apache-2.0"
+authors:
+  - "John Doe"
+  - "Foo Bar"

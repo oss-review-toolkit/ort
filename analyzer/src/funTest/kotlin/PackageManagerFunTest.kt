@@ -64,6 +64,7 @@ class PackageManagerFunTest : WordSpec({
         "npm-pnpm-and-yarn/package.json",
 
         "nuget/packages.config",
+        "ort-project/ort.project.yml",
         "pip-requirements/requirements.txt",
         "pip-setup/setup.py",
         "pipenv/Pipfile.lock",
