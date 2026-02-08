@@ -12,8 +12,8 @@
         "version": "9.18.0"
       },
       "scancode": {
-        "pkg-path": "python313Packages.scancode-toolkit",
-        "version": "32.4.1"
+        "pkg-path": "python314Packages.scancode-toolkit",
+        "version": "32.5.0"
       }
     },
     "vars": {
@@ -33,18 +33,19 @@
     {
       "attr_path": "askalono",
       "broken": false,
-      "derivation": "/nix/store/cs0r6zbl6bi3vxn649kd88cinv423p17-askalono-0.5.0.drv",
+      "derivation": "/nix/store/b4kwp8pq40al2fz2gvph8fc32x4s0jba-askalono-0.5.0.drv",
       "description": "Tool to detect open source licenses from texts",
       "install_id": "askalono",
       "license": "Apache-2.0",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
       "name": "askalono-0.5.0",
       "pname": "askalono",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:21:45.089339Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:05:45.496996Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -53,7 +54,7 @@
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/29qdm571l1avbarlwgqmqcg8smj3cnaj-askalono-0.5.0"
+        "out": "/nix/store/v47wlr4kv7wjhg5bx2cj5fxfgvli08qn-askalono-0.5.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -62,18 +63,19 @@
     {
       "attr_path": "licensee",
       "broken": false,
-      "derivation": "/nix/store/8dz9kax6nrxfs9ih5flvqa3rzn6z4m3g-licensee-9.18.0.drv",
+      "derivation": "/nix/store/3m7rjdd7v9nfkhjgr3qh45pyh3xija0c-licensee-9.18.0.drv",
       "description": "Ruby Gem to detect under what license a project is distributed",
       "install_id": "licensee",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
       "name": "licensee-9.18.0",
       "pname": "licensee",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:22:11.287396Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:06:11.687132Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -82,37 +84,38 @@
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/0vvfcirkcb60fgdb5262ql2kh8s27i9z-licensee-9.18.0"
+        "out": "/nix/store/m40zxbr0qqb59p9i9i1zkshybq67ra0k-licensee-9.18.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
       "priority": 5
     },
     {
-      "attr_path": "python313Packages.scancode-toolkit",
+      "attr_path": "python314Packages.scancode-toolkit",
       "broken": false,
-      "derivation": "/nix/store/4cdwapmmmbdsn4df6052hfv8dgl21rli-python3.13-scancode-toolkit-32.4.1.drv",
+      "derivation": "/nix/store/na5bpz8ha2ig367mrg2hqcgvk27nbv7h-python3.14-scancode-toolkit-32.5.0.drv",
       "description": "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts",
       "install_id": "scancode",
       "license": "[ Apache-2.0, CC-BY-4.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "name": "python3.13-scancode-toolkit-32.4.1",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "name": "python3.14-scancode-toolkit-32.5.0",
       "pname": "scancode-toolkit",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:23:32.725926Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:07:34.528433Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
-      "version": "32.4.1",
+      "version": "32.5.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "dist": "/nix/store/r1adpf44r11x5mmajphffvwmck0fbpxw-python3.13-scancode-toolkit-32.4.1-dist",
-        "out": "/nix/store/qlxbfh5mc5i047xi0qmn4zycnqpwis9n-python3.13-scancode-toolkit-32.4.1"
+        "dist": "/nix/store/dg16m8i2yl9rv1jq1lnlrhw8m3bk8kx3-python3.14-scancode-toolkit-32.5.0-dist",
+        "out": "/nix/store/850cbv17kbxr1v9sfxrqvyjwwq5gcv8h-python3.14-scancode-toolkit-32.5.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -208,8 +211,8 @@
           "version": 1,
           "install": {
             "scancode": {
-              "pkg-path": "python313Packages.scancode-toolkit",
-              "version": "32.4.1"
+              "pkg-path": "python314Packages.scancode-toolkit",
+              "version": "32.5.0"
             }
           },
           "vars": {

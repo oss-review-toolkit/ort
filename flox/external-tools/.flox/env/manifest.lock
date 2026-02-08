@@ -24,8 +24,8 @@
         "version": "9.18.0"
       },
       "scancode": {
-        "pkg-path": "python313Packages.scancode-toolkit",
-        "version": "32.4.1"
+        "pkg-path": "python314Packages.scancode-toolkit",
+        "version": "32.5.0"
       }
     },
     "vars": {
@@ -45,18 +45,19 @@
     {
       "attr_path": "askalono",
       "broken": false,
-      "derivation": "/nix/store/cs0r6zbl6bi3vxn649kd88cinv423p17-askalono-0.5.0.drv",
+      "derivation": "/nix/store/b4kwp8pq40al2fz2gvph8fc32x4s0jba-askalono-0.5.0.drv",
       "description": "Tool to detect open source licenses from texts",
       "install_id": "askalono",
       "license": "Apache-2.0",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
       "name": "askalono-0.5.0",
       "pname": "askalono",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:21:45.089339Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:05:45.496996Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -65,7 +66,7 @@
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/29qdm571l1avbarlwgqmqcg8smj3cnaj-askalono-0.5.0"
+        "out": "/nix/store/v47wlr4kv7wjhg5bx2cj5fxfgvli08qn-askalono-0.5.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -74,29 +75,33 @@
     {
       "attr_path": "coreutils",
       "broken": false,
-      "derivation": "/nix/store/m507z3g5zq4lv5x99rqb6dfdh5m0xixx-coreutils-9.8.drv",
+      "derivation": "/nix/store/vkg1vry71m6v7mnp6n2v1nnx6s27bjc2-coreutils-9.9.drv",
       "description": "GNU Core Utilities",
       "install_id": "coreutils",
       "license": "GPL-3.0-or-later",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "name": "coreutils-9.8",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "name": "coreutils-9.9",
       "pname": "coreutils",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:21:45.670192Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:05:46.098477Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
-      "version": "9.8",
+      "version": "9.9",
       "outputs_to_install": [
+        "out",
+        "out",
+        "out",
         "out"
       ],
       "outputs": {
-        "debug": "/nix/store/94960sngigrxkp9c4xf1w5kkp99fn41j-coreutils-9.8-debug",
-        "info": "/nix/store/y1m7chay8is0jhibk9n4a39sacbnsf8q-coreutils-9.8-info",
-        "out": "/nix/store/imad8dvhp77h0pjbckp6wvmnyhp8dpgg-coreutils-9.8"
+        "debug": "/nix/store/fzcbb02abzvmyrvpa360abfbspnz9l1j-coreutils-9.9-debug",
+        "info": "/nix/store/7c3i7919ys6jk8qkccspz3bkc1lv82d9-coreutils-9.9-info",
+        "out": "/nix/store/i2vmgx46q9hd3z6rigaiman3wl3i2gc4-coreutils-9.9"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -105,18 +110,19 @@
     {
       "attr_path": "findutils",
       "broken": false,
-      "derivation": "/nix/store/3shvx0chqk6wsazrwqv401apv1p7cbmy-findutils-4.10.0.drv",
+      "derivation": "/nix/store/j03vi5rbki1d6pk6zacqq7vrq2y7s9m1-findutils-4.10.0.drv",
       "description": "GNU Find Utilities, the basic directory searching utilities of the GNU operating system",
       "install_id": "findutils",
       "license": "GPL-3.0-or-later",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
       "name": "findutils-4.10.0",
       "pname": "findutils",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:21:46.432840Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:05:46.893708Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -125,9 +131,9 @@
         "out"
       ],
       "outputs": {
-        "info": "/nix/store/a9zjkxa2lhxfczxh7rbv1gg92ssinpq2-findutils-4.10.0-info",
-        "locate": "/nix/store/w6wisplhj1i8s7msj7qnn5xi5m02izgs-findutils-4.10.0-locate",
-        "out": "/nix/store/av4xw9f56xlx5pgv862wabfif6m1yc0a-findutils-4.10.0"
+        "info": "/nix/store/r7ij2k3ps4jzj68yisgxis2bq5f7lacf-findutils-4.10.0-info",
+        "locate": "/nix/store/p99ac3k0wfj0l79wxrhym8viyk6h1d73-findutils-4.10.0-locate",
+        "out": "/nix/store/16wfacfgap3chf7mcjnd8dwi85dj4qqi-findutils-4.10.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -136,28 +142,30 @@
     {
       "attr_path": "gnused",
       "broken": false,
-      "derivation": "/nix/store/379i0mbr9krm4pp924s43k1mxgpjy36d-gnused-4.9.drv",
+      "derivation": "/nix/store/l9v6k09j2rgf7v93qz1b2j7r49cif497-gnused-4.9.drv",
       "description": "GNU sed, a batch stream editor",
       "install_id": "gnused",
       "license": "GPL-3.0-or-later",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
       "name": "gnused-4.9",
       "pname": "gnused",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:21:47.437825Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:05:47.951430Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
       "version": "4.9",
       "outputs_to_install": [
+        "out",
         "out"
       ],
       "outputs": {
-        "info": "/nix/store/p0xbl3agrrybwbqykdsh18yw1vf5n0p8-gnused-4.9-info",
-        "out": "/nix/store/drc7kang929jaza6cy9zdx10s4gw1z5p-gnused-4.9"
+        "info": "/nix/store/rr44gnjkn0j0h67blxaf7c69w6y5xv03-gnused-4.9-info",
+        "out": "/nix/store/ryz8kcrm2bxpccllfqlb7qldsfnqp5c2-gnused-4.9"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -166,28 +174,30 @@
     {
       "attr_path": "jdk21",
       "broken": false,
-      "derivation": "/nix/store/b7j35wva9ag6zzsvd1g4hvy1zmvv4pwv-openjdk-21.0.9+10.drv",
+      "derivation": "/nix/store/ii3a9afh8k1j8nikv12269mvrr1i4j9b-openjdk-21.0.9+10.drv",
       "description": "Open-source Java Development Kit",
       "install_id": "jdk21",
       "license": "GPL-2.0-only",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
       "name": "openjdk-21.0.9+10",
       "pname": "jdk21",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:22:06.781716Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:06:07.096726Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
       "version": "21.0.9+10",
       "outputs_to_install": [
+        "out",
         "out"
       ],
       "outputs": {
-        "debug": "/nix/store/iqrpym2396ppr5498xci88zf6kc37yxl-openjdk-21.0.9+10-debug",
-        "out": "/nix/store/65qpdkc33j5wqzxvz8c23zhgms8hl35y-openjdk-21.0.9+10"
+        "debug": "/nix/store/n262v22apasz3ng8gfhvccp43diynkn6-openjdk-21.0.9+10-debug",
+        "out": "/nix/store/yb16bzvkdimkgczlw30pkhfxnzal26ks-openjdk-21.0.9+10"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -196,18 +206,19 @@
     {
       "attr_path": "licensee",
       "broken": false,
-      "derivation": "/nix/store/8dz9kax6nrxfs9ih5flvqa3rzn6z4m3g-licensee-9.18.0.drv",
+      "derivation": "/nix/store/3m7rjdd7v9nfkhjgr3qh45pyh3xija0c-licensee-9.18.0.drv",
       "description": "Ruby Gem to detect under what license a project is distributed",
       "install_id": "licensee",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
       "name": "licensee-9.18.0",
       "pname": "licensee",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:22:11.287396Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:06:11.687132Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -216,37 +227,38 @@
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/0vvfcirkcb60fgdb5262ql2kh8s27i9z-licensee-9.18.0"
+        "out": "/nix/store/m40zxbr0qqb59p9i9i1zkshybq67ra0k-licensee-9.18.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
       "priority": 5
     },
     {
-      "attr_path": "python313Packages.scancode-toolkit",
+      "attr_path": "python314Packages.scancode-toolkit",
       "broken": false,
-      "derivation": "/nix/store/4cdwapmmmbdsn4df6052hfv8dgl21rli-python3.13-scancode-toolkit-32.4.1.drv",
+      "derivation": "/nix/store/na5bpz8ha2ig367mrg2hqcgvk27nbv7h-python3.14-scancode-toolkit-32.5.0.drv",
       "description": "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts",
       "install_id": "scancode",
       "license": "[ Apache-2.0, CC-BY-4.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "name": "python3.13-scancode-toolkit-32.4.1",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "name": "python3.14-scancode-toolkit-32.5.0",
       "pname": "scancode-toolkit",
-      "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
-      "rev_count": 901419,
-      "rev_date": "2025-11-24T06:39:56Z",
-      "scrape_date": "2025-11-26T03:23:32.725926Z",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:07:34.528433Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
-      "version": "32.4.1",
+      "version": "32.5.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "dist": "/nix/store/r1adpf44r11x5mmajphffvwmck0fbpxw-python3.13-scancode-toolkit-32.4.1-dist",
-        "out": "/nix/store/qlxbfh5mc5i047xi0qmn4zycnqpwis9n-python3.13-scancode-toolkit-32.4.1"
+        "dist": "/nix/store/dg16m8i2yl9rv1jq1lnlrhw8m3bk8kx3-python3.14-scancode-toolkit-32.5.0-dist",
+        "out": "/nix/store/850cbv17kbxr1v9sfxrqvyjwwq5gcv8h-python3.14-scancode-toolkit-32.5.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -328,8 +340,8 @@
               "version": "9.18.0"
             },
             "scancode": {
-              "pkg-path": "python313Packages.scancode-toolkit",
-              "version": "32.4.1"
+              "pkg-path": "python314Packages.scancode-toolkit",
+              "version": "32.5.0"
             }
           },
           "vars": {
