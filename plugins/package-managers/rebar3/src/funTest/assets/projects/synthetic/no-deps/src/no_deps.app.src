@@ -1,0 +1,12 @@
+{application, no_deps, [
+    {description, "Test app with no dependencies"},
+    {vsn, "0.1.0"},
+    {registered, []},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache-2.0"]}
+]}.
