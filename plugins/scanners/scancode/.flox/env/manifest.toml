@@ -10,5 +10,5 @@ cuda-detection = false
 systems = ["x86_64-linux"]
 
 [install]
-scancode.pkg-path = "python313Packages.scancode-toolkit"
-scancode.version = "32.4.1"
+scancode.pkg-path = "python314Packages.scancode-toolkit"
+scancode.version = "32.5.0"
