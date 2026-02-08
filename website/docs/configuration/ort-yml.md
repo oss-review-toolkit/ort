@@ -62,7 +62,7 @@ The path include below has the following effects:
 * License findings in files below the `src` directory are marked as included.
 
 ```yaml
-excludes:
+includes:
   paths:
   - pattern: "src/**"
     reason: "SOURCE_OF"
