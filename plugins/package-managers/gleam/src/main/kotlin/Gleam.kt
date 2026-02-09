@@ -32,7 +32,9 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.div
@@ -95,6 +97,7 @@ class Gleam internal constructor(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
@@ -125,7 +128,7 @@ class Gleam internal constructor(
 
         dependencyHandler.setContext(context)
 
-        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
+        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes, includes) }
 
         scopes.forEach { scope ->
             val directDepNames = gleamToml.getScopeDependencies(scope).keys
@@ -189,7 +192,7 @@ private enum class Scope(val descriptor: String) {
     DEPENDENCIES("dependencies"),
     DEV_DEPEDENCIES("dev-dependencies");
 
-    fun isExcluded(excludes: Excludes) = excludes.isScopeExcluded(descriptor)
+    fun isExcluded(excludes: Excludes, includes: Includes) = !isScopeIncluded(descriptor, excludes, includes)
 }
 
 private fun GleamToml.getScopeDependencies(scope: Scope) =

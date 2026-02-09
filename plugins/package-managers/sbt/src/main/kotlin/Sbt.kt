@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
@@ -185,6 +186,7 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
         analysisRoot: File,
         definitionFiles: List<File>,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): PackageManagerResult =
@@ -192,7 +194,7 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
             beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
 
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            resolveDependencies(analysisRoot, definitionFiles, excludes, analyzerConfig, labels).also {
+            resolveDependencies(analysisRoot, definitionFiles, excludes, includes, analyzerConfig, labels).also {
                 afterResolution(analysisRoot, definitionFiles)
             }
         }
@@ -201,6 +203,7 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ) = throw NotImplementedError() // This is not implemented in favor of overriding [resolveDependencies].

@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
@@ -325,6 +326,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
@@ -538,7 +540,14 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
             val gradleAnalyzerConfig = PluginConfig(mapOf("gradleVersion" to config.gradleVersion))
 
             val gradle = gradleFactory.create(gradleAnalyzerConfig)
-            gradle.resolveDependencies(androidDir, listOf(definitionFile), Excludes.EMPTY, analyzerConfig, labels).run {
+            gradle.resolveDependencies(
+                androidDir,
+                listOf(definitionFile),
+                Excludes.EMPTY,
+                Includes.EMPTY,
+                analyzerConfig,
+                labels
+            ).run {
                 projectResults.getValue(definitionFile).map { result ->
                     val project = result.project.withResolvedScopes(dependencyGraph)
                     result.copy(project = project, packages = sharedPackages)

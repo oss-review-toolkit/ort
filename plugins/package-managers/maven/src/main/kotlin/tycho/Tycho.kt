@@ -49,8 +49,10 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
@@ -110,6 +112,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
@@ -134,7 +137,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
             buildLog.inputStream().use { stream ->
                 parseDependencyTree(stream, collector.mavenProjects.values, resolver::isFeature).map { projectNode ->
                     val project = collector.mavenProjects.getValue(projectNode.artifact.identifier())
-                    processProjectDependencies(graphBuilder, project, projectNode.children, excludes)
+                    processProjectDependencies(graphBuilder, project, projectNode.children, includes, excludes)
                     project
                 }.toList()
             }
@@ -251,11 +254,12 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
         graphBuilder: DependencyGraphBuilder<DependencyNode>,
         project: MavenProject,
         dependencies: Collection<DependencyNode>,
+        includes: Includes,
         excludes: Excludes
     ) {
         val projectId = project.identifier(projectType)
 
-        dependencies.filterNot { excludes.isScopeExcluded(it.dependency.scope) }.forEach { node ->
+        dependencies.filter { isScopeIncluded(it.dependency.scope, excludes, includes) }.forEach { node ->
             graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
         }
     }

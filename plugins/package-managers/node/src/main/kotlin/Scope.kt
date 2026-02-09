@@ -20,12 +20,14 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
+import org.ossreviewtoolkit.model.utils.isScopeIncluded
 
 internal enum class Scope(val descriptor: String) {
     DEPENDENCIES("dependencies"),
     DEV_DEPENDENCIES("devDependencies");
 
-    fun isExcluded(excludes: Excludes): Boolean = excludes.isScopeExcluded(descriptor)
+    fun isExcluded(excludes: Excludes, includes: Includes): Boolean = !isScopeIncluded(descriptor, excludes, includes)
 }
 
 internal fun Collection<Scope>.getNames(): Set<String> = mapTo(mutableSetOf()) { it.descriptor }
