@@ -32,3 +32,10 @@ fun isPathIncluded(path: String, excludes: Excludes, includes: Includes): Boolea
 
     return isIncluded && !isExcluded
 }
+
+fun isScopeIncluded(scopeName: String, excludes: Excludes, includes: Includes): Boolean {
+    val isIncluded = includes.isScopeIncluded(scopeName)
+    val isExcluded = excludes.isScopeExcluded(scopeName)
+
+    return isIncluded && !isExcluded
+}

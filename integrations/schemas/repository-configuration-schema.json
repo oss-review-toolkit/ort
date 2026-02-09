@@ -33,6 +33,27 @@
               "reason"
             ]
           }
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/scopeIncludeReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pattern",
+              "reason"
+            ]
+          }
         }
       }
     },
@@ -301,6 +322,12 @@
         "PROVIDED_BY",
         "TEST_OF",
         "TEST_TOOL_OF"
+      ]
+    },
+    "scopeIncludeReason": {
+      "enum": [
+        "SOURCE_OF",
+        "OTHER"
       ]
     },
     "scopeExcludeReason": {
