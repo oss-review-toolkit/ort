@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
@@ -84,7 +85,14 @@ class SpdxDocumentFileFunTest : WordSpec({
             val definitionFiles = listOf(curlPackageFile, opensslPackageFile, zlibPackageFile)
             val analyzerRoot = getCommonParentFile(definitionFiles)
             val actualResult = SpdxDocumentFileFactory.create()
-                .resolveDependencies(analyzerRoot, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+                .resolveDependencies(
+                    analyzerRoot,
+                    definitionFiles,
+                    Excludes.EMPTY,
+                    Includes.EMPTY,
+                    AnalyzerConfiguration(),
+                    emptyMap()
+                )
                 // Extract only ProjectAnalyzerResults to avoid depending on other analyzer result specific items (e.g.
                 // the dependency graph).
                 .projectResults.values.flatten().associateBy { it.project.id }
@@ -166,7 +174,14 @@ class SpdxDocumentFileFunTest : WordSpec({
             val analysisRoot = getCommonParentFile(definitionFiles)
 
             val result = SpdxDocumentFileFactory.create()
-                .resolveDependencies(analysisRoot, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+                .resolveDependencies(
+                    analysisRoot,
+                    definitionFiles,
+                    Excludes.EMPTY,
+                    Includes.EMPTY,
+                    AnalyzerConfiguration(),
+                    emptyMap()
+                )
 
             result.projectResults[projectFile] shouldNotBeNull {
                 with(single()) {
@@ -196,7 +211,14 @@ class SpdxDocumentFileFunTest : WordSpec({
             val analysisRoot = getCommonParentFile(definitionFiles)
 
             val result = SpdxDocumentFileFactory.create()
-                .resolveDependencies(analysisRoot, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+                .resolveDependencies(
+                    analysisRoot,
+                    definitionFiles,
+                    Excludes.EMPTY,
+                    Includes.EMPTY,
+                    AnalyzerConfiguration(),
+                    emptyMap()
+                )
 
             result.projectResults[projectFile] shouldNotBeNull {
                 with(single()) {
@@ -268,7 +290,14 @@ class SpdxDocumentFileFunTest : WordSpec({
             val analysisRoot = getCommonParentFile(definitionFiles)
 
             val result = SpdxDocumentFileFactory.create()
-                .resolveDependencies(analysisRoot, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+                .resolveDependencies(
+                    analysisRoot,
+                    definitionFiles,
+                    Excludes.EMPTY,
+                    Includes.EMPTY,
+                    AnalyzerConfiguration(),
+                    emptyMap()
+                )
             val projectResults = result.projectResults.values.flatten()
             val projectIds = projectResults.map { it.project.id }
             val packageIds = projectResults.flatMap { projResult -> projResult.packages.map { it.id } }
@@ -291,7 +320,14 @@ class SpdxDocumentFileFunTest : WordSpec({
             val analysisRoot = getCommonParentFile(definitionFiles)
 
             val result = SpdxDocumentFileFactory.create()
-                .resolveDependencies(analysisRoot, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+                .resolveDependencies(
+                    analysisRoot,
+                    definitionFiles,
+                    Excludes.EMPTY,
+                    Includes.EMPTY,
+                    AnalyzerConfiguration(),
+                    emptyMap()
+                )
 
             val rootProject = result.projectResults[projectFile.absoluteFile]?.first()
 

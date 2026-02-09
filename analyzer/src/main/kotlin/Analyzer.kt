@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.toYaml
@@ -166,16 +167,16 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         val state = AnalyzerState()
         val packageManagerDependencies = determinePackageManagerDependencies(info)
         val excludes = config.excludes(info.repositoryConfiguration)
+        val includes = config.includes(info.repositoryConfiguration)
 
         runBlocking {
-            // The excludes are passed to allow the package managers to take in account the scope excludes. Since there
-            // is no scope includes, the includes are not passed to the package managers.
             info.managedFiles.entries.map { (manager, files) ->
                 PackageManagerRunner(
                     manager = manager,
                     definitionFiles = files,
                     analysisRoot = info.absoluteProjectPath,
                     excludes = excludes,
+                    includes = includes,
                     analyzerConfig = config,
                     labels = labels,
                     mustRunAfter = packageManagerDependencies[manager].orEmpty(),
@@ -300,6 +301,11 @@ private class PackageManagerRunner(
     val excludes: Excludes,
 
     /**
+     * The [Includes] to apply.
+     */
+    val includes: Includes,
+
+    /**
      * The [AnalyzerConfiguration] to use.
      */
     val analyzerConfig: AnalyzerConfiguration,
@@ -351,7 +357,14 @@ private class PackageManagerRunner(
         logger.info { "Starting ${manager.descriptor.displayName} analysis." }
 
         withContext(Dispatchers.IO.limitedParallelism(20)) {
-            val result = manager.resolveDependencies(analysisRoot, definitionFiles, excludes, analyzerConfig, labels)
+            val result = manager.resolveDependencies(
+                analysisRoot,
+                definitionFiles,
+                excludes,
+                includes,
+                analyzerConfig,
+                labels
+            )
 
             logger.info { "Finished ${manager.descriptor.displayName} analysis." }
 

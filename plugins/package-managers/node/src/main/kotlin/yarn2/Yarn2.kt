@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -134,6 +135,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
@@ -156,7 +158,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         // Warm-up the cache to speed-up processing.
         requestAllPackageDetails(packageInfoForLocator.values)
 
-        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
+        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes, includes) }
 
         return workspaceModuleDirs.map { projectDir ->
             val packageJsonFile = projectDir / NodePackageManagerType.DEFINITION_FILE
