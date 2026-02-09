@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
@@ -54,8 +55,16 @@ fun PackageManager.resolveSingleProject(
 
     beforeResolution(analyzerRoot, definitionFiles, analyzerConfig)
 
+    val includes = Includes.EMPTY
     val excludes = Excludes(scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) })
-    val managerResult = resolveDependencies(analyzerRoot, definitionFiles, excludes, analyzerConfig, emptyMap())
+    val managerResult = resolveDependencies(
+        analyzerRoot,
+        definitionFiles,
+        excludes,
+        includes,
+        analyzerConfig,
+        emptyMap()
+    )
 
     afterResolution(analyzerRoot, definitionFiles)
 

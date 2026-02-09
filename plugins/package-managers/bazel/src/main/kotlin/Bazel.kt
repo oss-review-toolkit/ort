@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -194,6 +195,7 @@ class Bazel(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
@@ -218,6 +220,7 @@ class Bazel(
                 val conanAnalyzerResults = resolveConanDependencies(
                     projectDir,
                     analysisRoot,
+                    includes,
                     excludes,
                     analyzerConfig,
                     labels
@@ -649,6 +652,7 @@ class Bazel(
     private fun resolveConanDependencies(
         projectDir: File,
         analysisRoot: File,
+        includes: Includes,
         excludes: Excludes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
@@ -680,6 +684,7 @@ class Bazel(
             analysisRoot,
             listOf(conanDefinitionFile),
             excludes,
+            includes,
             analyzerConfig,
             labels
         ).run {

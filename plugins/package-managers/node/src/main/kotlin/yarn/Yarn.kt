@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -112,6 +113,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
@@ -122,7 +124,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
         handler.setContext(workingDir, getInstalledModulesDirs(workingDir), workspaceModuleDirs)
 
-        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
+        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes, includes) }
         val moduleInfosForScope = scopes.associateWith { scope ->
             listModules(workingDir, scope).removeDanglingLinks(workingDir).resolveVersions().undoDeduplication()
         }
