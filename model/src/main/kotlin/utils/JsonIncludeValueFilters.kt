@@ -39,7 +39,7 @@ internal class ExcludesFilter {
 
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
 internal class IncludesFilter {
-    override fun equals(other: Any?): Boolean = other is Includes && other.paths.isEmpty()
+    override fun equals(other: Any?): Boolean = other is Includes && other.paths.isEmpty() && other.scopes.isEmpty()
 }
 
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.

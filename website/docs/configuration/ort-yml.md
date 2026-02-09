@@ -69,6 +69,28 @@ includes:
     comment: "This directory contains the source code of binaries that are distributed."
 ```
 
+### Including Scopes
+
+Many package managers support grouping of dependencies by their use.
+Such groups are called `scopes` in ORT.
+For example, Maven provides the scopes `compile`, `provided`, and `test`, while NPM scopes are `dependencies` and `devDependencies`.
+
+You can use regular expressions for `pattern` to match the scopes to include.
+
+Scopes includes always apply to all found projects in a scan.
+
+```yaml
+includes:
+  scopes:
+  - pattern: "src.*"
+    reason: "SOURCE_OF"
+    comment: "Source code of delivered packages."
+```
+
+The above example includes the scopes beginning with 'src' and excludes all the others.
+
+The list of available options for scopes is defined in [ScopeIncludeReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/ScopeIncludeReason.kt).
+
 ## Excludes
 
 ### When to Use Excludes
@@ -145,10 +167,6 @@ excludes:
 ```
 
 ### Excluding Scopes
-
-Many package managers support grouping of dependencies by their use.
-Such groups are called `scopes` in ORT.
-For example, Maven provides the scopes `compile`, `provided`, and `test`, while NPM scopes are `dependencies` and `devDependencies`.
 
 You can use regular expressions for `pattern` to match the scopes to exclude.
 This can be useful, for example, with Gradle, which creates a relatively large number of scopes (internally Gradle calls them `configurations`).
