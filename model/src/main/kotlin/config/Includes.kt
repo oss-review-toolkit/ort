@@ -26,7 +26,13 @@ data class Includes(
      * Path includes.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val paths: List<PathInclude> = emptyList()
+    val paths: List<PathInclude> = emptyList(),
+
+    /**
+     * Scopes that will be included from all projects.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val scopes: List<ScopeInclude> = emptyList()
 ) {
     companion object {
         /**
@@ -41,4 +47,9 @@ data class Includes(
      * True if any [path include][paths] matches [path] or if there is no path includes.
      */
     fun isPathIncluded(path: String) = paths.isEmpty() || paths.any { it.matches(path) }
+
+    /**
+     * True if the scope with the given [scopeName] is included by this [Includes] configuration.
+     */
+    fun isScopeIncluded(scopeName: String): Boolean = scopes.isEmpty() || scopes.any { it.matches(scopeName) }
 }
