@@ -286,7 +286,8 @@
     },
     "pathIncludeReason": {
       "enum": [
-        "SOURCE_OF"
+        "SOURCE_OF",
+        "OTHER"
       ]
     },
     "pathExcludeReason": {
