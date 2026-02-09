@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.isPathIncluded
+import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.zipWithSets
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
@@ -136,10 +137,10 @@ data class OrtResult(
         projects.forEach { project ->
             dependencyNavigator.scopeNames(project).forEach { scopeName ->
                 dependencyNavigator.scopeDependencies(project, scopeName).forEach { dependencies ->
-                    val isScopeExcluded = getExcludes().isScopeExcluded(scopeName)
+                    val isScopeIncluded = isScopeIncluded(scopeName, getExcludes(), getIncludes())
                     allDependencies += dependencies
 
-                    if (!isProjectExcluded(project.id) && !isScopeExcluded) {
+                    if (!isProjectExcluded(project.id) && isScopeIncluded) {
                         includedDependencies += dependencies
                     }
                 }
