@@ -344,11 +344,11 @@ class Scanner(
                             "'${scanner.descriptor.displayName}'."
                     }
 
+                    val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
+                    controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
+
                     val provenanceScanResultsToStore = mutableSetOf<Pair<KnownProvenance, ScanResult>>()
                     packagesWithIncompleteScanResult.forEach { pkg ->
-                        val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
-                        controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
-
                         // TODO: Run in coroutine.
                         if (scanner.writeToStorage) {
                             storePackageScanResult(pkg, nestedProvenanceScanResult)
