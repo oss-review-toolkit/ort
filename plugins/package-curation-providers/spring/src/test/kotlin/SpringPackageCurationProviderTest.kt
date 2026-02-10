@@ -60,4 +60,21 @@ class SpringPackageCurationProviderTest : StringSpec({
             )
         )
     }
+
+    "Get the correct VCS path for spring-boot-test-autoconfigure with a version range" {
+        val id = Identifier("Maven:org.springframework.boot:spring-boot-test-autoconfigure:[3.3.0,)")
+        val pkg = Package.EMPTY.copy(
+            id = id,
+            vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
+        )
+
+        provider.getCurationsFor(setOf(pkg)) shouldContainExactly setOf(
+            PackageCuration(
+                id = id,
+                data = PackageCurationData(
+                    vcs = VcsInfoCurationData(path = "spring-boot-project/spring-boot-test-autoconfigure")
+                )
+            )
+        )
+    }
 })

@@ -32,4 +32,5 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.semver4j)
 }
