@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.scanner
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -27,7 +29,9 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.utils.common.PATH_STRING_COMPARATOR
@@ -91,6 +95,12 @@ internal class ScanController(
      * The [ScanResult]s for each [KnownProvenance] and [ScannerWrapper].
      */
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
+
+    /**
+     * A set storing information about which provenances have been scanned by which scanners. This is used to
+     * deduplicate scan results.
+     */
+    private val scannedProvenances = mutableSetOf<Pair<Provenance, ScannerDetails>>()
 
     /**
      * The [FileList] for each [KnownProvenance].
@@ -159,7 +169,27 @@ internal class ScanController(
      * Add all [results].
      */
     fun addScanResults(scanner: ScannerWrapper, provenance: KnownProvenance, results: List<ScanResult>) {
-        scanResults.getOrPut(scanner) { mutableMapOf() }.getOrPut(provenance) { mutableListOf() }.addAll(results)
+        val newResults = results.filterTo(mutableSetOf()) {
+            scannedProvenances.add(it.provenance to it.scanner)
+        }
+
+        if (newResults.size < results.size) {
+            val message = buildString {
+                appendLine("Found multiple scan results for the same provenance and scanner.")
+                (results - newResults).forEach { result ->
+                    appendLine("Scanner:")
+                    appendLine(result.scanner.toYaml())
+                    appendLine("Provenance:")
+                    append(result.provenance.toYaml())
+                }
+            }
+
+            logger.warn { message }
+        }
+
+        scanResults.getOrPut(scanner) { mutableMapOf() }
+            .getOrPut(provenance) { mutableListOf() }
+            .addAll(newResults)
     }
 
     /**
