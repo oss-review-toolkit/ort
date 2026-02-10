@@ -27,7 +27,11 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.utils.common.PATH_STRING_COMPARATOR
@@ -91,6 +95,12 @@ internal class ScanController(
      * The [ScanResult]s for each [KnownProvenance] and [ScannerWrapper].
      */
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
+
+    /**
+     * A set storing information about which provenances have been scanned by which scanners. This is used to
+     * deduplicate scan results.
+     */
+    private val scannedProvenances = mutableSetOf<Pair<Provenance, ScannerDetails>>()
 
     /**
      * The [FileList] for each [KnownProvenance].
@@ -159,7 +169,32 @@ internal class ScanController(
      * Add all [results].
      */
     fun addScanResults(scanner: ScannerWrapper, provenance: KnownProvenance, results: List<ScanResult>) {
-        scanResults.getOrPut(scanner) { mutableMapOf() }.getOrPut(provenance) { mutableListOf() }.addAll(results)
+        val deduplicatedResults = results.filterTo(mutableSetOf()) {
+            scannedProvenances.add(it.provenance to it.scanner)
+        }
+
+        if (deduplicatedResults.size < results.size) {
+            val message = buildString {
+                appendLine("Found multiple scan results for the same provenance and scanner.")
+                (results - deduplicatedResults).forEach { result ->
+                    appendLine("Scanner:")
+                    appendLine(result.scanner.toYaml())
+                    appendLine("Provenance:")
+                    append(result.provenance.toYaml())
+                }
+            }
+
+            val pkgIds = getIdsByProvenance()[provenance].orEmpty()
+            val issue = createAndLogIssue(
+                source = "Scanner",
+                message = message,
+                severity = Severity.HINT
+            )
+            pkgIds.forEach { id -> addIssue(id, issue) }
+        }
+
+        scanResults.getOrPut(scanner) { mutableMapOf() }.getOrPut(provenance) { mutableListOf() }
+            .addAll(deduplicatedResults)
     }
 
     /**
