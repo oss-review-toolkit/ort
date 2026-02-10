@@ -24,6 +24,8 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.Identifier
+
 import org.semver4j.range.Range
 
 class VersionUtilsTest : WordSpec({
@@ -56,6 +58,22 @@ class VersionUtilsTest : WordSpec({
             "[3.3.0,)".getIvyVersionRanges().get() shouldBe listOf(
                 listOf(Range("3.3.0", Range.RangeOperator.GTE))
             )
+        }
+    }
+
+    "isApplicableIvyVersion()" should {
+        "support 'Sub Revision Matcher' syntax" {
+            with(Identifier(":::1.0.+")) {
+                isApplicableIvyVersion(Identifier(":::1.0.1")) shouldBe true
+                isApplicableIvyVersion(Identifier(":::1.0.a")) shouldBe true
+                isApplicableIvyVersion(Identifier(":::1.0.1.0")) shouldBe true
+            }
+
+            with(Identifier(":::1.1+")) {
+                isApplicableIvyVersion(Identifier(":::1.1")) shouldBe true
+                isApplicableIvyVersion(Identifier(":::1.1.5")) shouldBe true
+                isApplicableIvyVersion(Identifier(":::1.10")) shouldBe true
+            }
         }
     }
 })
