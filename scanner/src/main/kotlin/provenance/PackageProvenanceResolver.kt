@@ -145,8 +145,10 @@ class DefaultPackageProvenanceResolver(
             }
         }
 
-        // Try a cheap HEAD request to probe for the artifact first, and only fall back to a GET request on failure.
-        val responseCode = requestSourceArtifact(pkg, "HEAD").takeUnless { it == HttpURLConnection.HTTP_BAD_METHOD }
+        // Try a cheap HEAD request to probe for the artifact first, and fall back to a GET request only if necessary,
+        // like for servers that do not properly implement HEAD requests for redirected URLs.
+        val responseCode = requestSourceArtifact(pkg, "HEAD")
+            .takeUnless { it == HttpURLConnection.HTTP_BAD_METHOD || it == HttpURLConnection.HTTP_NOT_FOUND }
             ?: requestSourceArtifact(pkg, "GET")
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
