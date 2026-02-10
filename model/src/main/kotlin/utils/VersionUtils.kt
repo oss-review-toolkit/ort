@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.Semver
@@ -53,7 +54,11 @@ fun Identifier.isVersionRange(): Boolean {
  */
 internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
     runCatching {
+        // Support "Exact Revision Matcher" syntax.
         if (version == pkgId.version) return true
+
+        // Support "Sub Revision Matcher" syntax.
+        if (version.withoutSuffix("+")?.let { prefix -> pkgId.version.startsWith(prefix) } == true) return true
 
         // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
         // https://github.com/semver4j/semver4j/issues/132.
