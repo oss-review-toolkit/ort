@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.maps.haveSize
@@ -40,6 +41,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+
+import java.time.Instant
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -64,6 +67,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.provenance.FakeNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.FakeProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -234,6 +238,60 @@ class ScannerTest : WordSpec({
                     source shouldBe "fake"
                     message shouldContain "Scan error"
                 }
+            }
+        }
+
+        "handle duplicate results for a provenance" {
+            val packageScanner = FakePackageScannerWrapper()
+
+            val subUrl = "https://example.com/repository3.git"
+            val pkgWithVcs1 = Package.new(name = "project1").withValidVcs()
+            val pkgWithVcs2 = Package.new(name = "project2").withValidVcs()
+                .copy(vcsProcessed = pkgWithVcs1.vcsProcessed.copy(url = "https://example.com/repository2.git"))
+            val subPkg1 = Package.new(name = "project3").withValidVcs()
+                .copy(vcsProcessed = pkgWithVcs2.vcsProcessed.copy(url = subUrl))
+            val subPkg2 = Package.new(name = "project4").withValidVcs()
+                .copy(vcsProcessed = subPkg1.vcsProcessed)
+            val packages = setOf(pkgWithVcs1, pkgWithVcs2, subPkg1, subPkg2)
+            val pkgIds = packages.map(Package::id)
+
+            val result1 = createScanResult(pkgWithVcs1.repositoryProvenance(), packageScanner.details)
+            val result2 = result1.copy(
+                summary = result1.summary.copy(
+                    startTime = Instant.ofEpochSecond(20260210074611L),
+                    endTime = Instant.ofEpochSecond(20260210074647L)
+                )
+            )
+            val subRepositoryProvenance = RepositoryProvenance(VcsInfo.valid().copy(url = subUrl), "resolvedRevision")
+
+            val fakeNestedProvenanceResolver = FakeNestedProvenanceResolver()
+            val nestedProvenanceResolver = mockk<NestedProvenanceResolver> {
+                coEvery { resolveNestedProvenance(any()) } coAnswers {
+                    val provenance = firstArg<KnownProvenance>()
+                    if (provenance != subPkg1.repositoryProvenance()) {
+                        NestedProvenance(
+                            root = provenance,
+                            subRepositories = mapOf("sub" to subRepositoryProvenance)
+                        )
+                    } else {
+                        fakeNestedProvenanceResolver.resolveNestedProvenance(provenance)
+                    }
+                }
+            }
+
+            val scannerWrapper = spyk(packageScanner) {
+                every { scanPackage(any(), any()) } returnsMany listOf(result1, result2)
+            }
+
+            val scanner = createScanner(
+                packageScannerWrappers = listOf(scannerWrapper),
+                nestedProvenanceResolver = nestedProvenanceResolver
+            )
+
+            val scannerRun = scanner.scan(packages, createContext())
+
+            scannerRun.shouldNotBeNull {
+                getAllScanResults().keys shouldContainExactlyInAnyOrder pkgIds
             }
         }
     }
