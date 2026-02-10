@@ -77,8 +77,6 @@ dependencies {
 
     detektPlugins(libs.plugin.detekt.formatting)
 
-    implementation(enforcedPlatform(libs.kotlin.bom))
-
     implementation(libs.log4j.api.kotlin)
 
     constraints {
