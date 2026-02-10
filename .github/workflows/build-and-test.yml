@@ -158,3 +158,13 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-external-tools
+  publication-test:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+    - name: Publish to local Maven repository
+      run: ./gradlew publishToMavenLocal
