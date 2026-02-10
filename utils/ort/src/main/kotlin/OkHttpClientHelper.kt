@@ -124,6 +124,25 @@ val okHttpClient: OkHttpClient by lazy {
                 }
             }.getOrThrow()
         }
+        .addInterceptor { chain ->
+            val request = chain.request()
+
+            if (request.header(AUTHORIZATION_HEADER) == null) {
+                val credentials = requestPasswordAuthentication(request.url.toUri())
+                if (credentials != null) {
+                    val authenticatedRequest = request.newBuilder()
+                        .header(
+                            AUTHORIZATION_HEADER,
+                            Credentials.basic(credentials.userName, String(credentials.password))
+                        )
+                        .build()
+                    logger.debug { "Added AUTHORIZATION_HEADER for ${request.url.host}" }
+                    return@addInterceptor chain.proceed(authenticatedRequest)
+                }
+            }
+
+            chain.proceed(request)
+        }
         .cache(cache)
         .connectionSpecs(specs)
         .readTimeout(Duration.ofSeconds(READ_TIMEOUT_IN_SECONDS))
