@@ -34,7 +34,6 @@ plugins {
 
     // Apply precompiled plugins.
     id("ort-kotlin-conventions")
-    id("ort-publication-conventions")
 
     // Apply third-party plugins.
     id("org.graalvm.buildtools.native")
@@ -46,11 +45,6 @@ application {
         "--add-opens", "java.base/java.io=ALL-UNNAMED",
         "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
     )
-}
-
-mavenPublishing {
-    // Note that "dokkaGenerateHtml" is simply an alias for the below task name.
-    configure(KotlinJvm(JavadocJar.Dokka("dokkaGeneratePublicationHtml")))
 }
 
 graalvmNative {
