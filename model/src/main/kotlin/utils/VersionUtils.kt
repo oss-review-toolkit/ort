@@ -33,7 +33,7 @@ import org.semver4j.range.RangeListFactory
 /**
  * Return true if the version of this [Identifier] is an Ivy version range.
  */
-fun Identifier.isVersionRange(): Boolean = version.getIvyVersionRanges().get().isNotEmpty()
+fun Identifier.hasIvyVersionRange(): Boolean = version.getIvyVersionRanges().get().isNotEmpty()
 
 /**
  * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
