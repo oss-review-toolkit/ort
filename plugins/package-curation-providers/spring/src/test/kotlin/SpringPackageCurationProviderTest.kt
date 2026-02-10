@@ -44,7 +44,7 @@ class SpringPackageCurationProviderTest : StringSpec({
         )
     }
 
-    "Get the correct paths for Spring Boot projects" {
+    "Get the correct VCS path for spring-boot-antlib with a fixed version" {
         val id = Identifier("Maven:org.springframework.boot:spring-boot-antlib:3.5.4")
         val pkg = Package.EMPTY.copy(
             id = id,
