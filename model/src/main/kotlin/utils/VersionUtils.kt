@@ -16,6 +16,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
+
 package org.ossreviewtoolkit.model.utils
 
 import org.apache.logging.log4j.kotlin.logger
