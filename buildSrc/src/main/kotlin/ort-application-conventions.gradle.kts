@@ -96,6 +96,7 @@ graalvmNative {
 }
 
 dependencies {
+    implementation(enforcedPlatform(libs.kotlin.bom))
     implementation(libs.logbackClassic)
 
     runtimeOnly(libs.log4j.api.slf4j)
