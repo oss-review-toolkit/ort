@@ -76,7 +76,7 @@ class GradleFunTest : StringSpec() {
         }
 
         "Project dependencies are detected correctly".config(
-            // This does not get "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
+            // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
             enabled = false
         ) {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
@@ -89,7 +89,7 @@ class GradleFunTest : StringSpec() {
         }
 
         "External dependencies are detected correctly".config(
-            // This does not get "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
+            // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
             enabled = false
         ) {
             val definitionFile = getAssetFile("projects/synthetic/gradle/lib/build.gradle").toGradle()
@@ -112,7 +112,7 @@ class GradleFunTest : StringSpec() {
         }
 
         "Scopes are correctly excluded from the dependency graph".config(
-            // This does not get "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
+            // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
             enabled = false
         ) {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
