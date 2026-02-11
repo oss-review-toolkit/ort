@@ -7,9 +7,9 @@
   "license": "MIT",
   "main": "index.js",
   "engines": {
-    "node": ">16.0.0",
-    "pnpm": ">=5"
+    "node": ">16.0.0"
   },
+  "packageManager": "pnpm@10.29.2",
   "scripts": {},
   "dependencies": {
     "json-stable-stringify": "1.0.1",
