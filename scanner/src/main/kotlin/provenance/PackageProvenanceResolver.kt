@@ -151,7 +151,7 @@ class DefaultPackageProvenanceResolver(
             .takeUnless { it == HttpURLConnection.HTTP_BAD_METHOD || it == HttpURLConnection.HTTP_NOT_FOUND }
             ?: requestSourceArtifact(pkg, "GET")
 
-        if (responseCode == HttpURLConnection.HTTP_OK) {
+        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
             val artifactProvenance = ArtifactProvenance(pkg.sourceArtifact)
             storage.writeProvenance(pkg.id, pkg.sourceArtifact, ResolvedArtifactProvenance(artifactProvenance))
             return artifactProvenance
