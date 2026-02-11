@@ -9,6 +9,7 @@
   "license": "Apache-2.0",
   "author": "The Author <the.author@mail.example> (https://www.the.author.example/index.html)",
   "private": true,
+  "packageManager": "pnpm@10.29.2",
   "dependencies": {
     "cheerio": "1.0.0-rc.1",
     "long": "^3.2.0",
