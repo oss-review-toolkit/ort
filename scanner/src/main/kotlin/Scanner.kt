@@ -344,8 +344,10 @@ class Scanner(
                             "'${scanner.descriptor.displayName}'."
                     }
 
-                    val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
-                    controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
+                    val nestedProvenanceScanResult = controller.addAndDeduplicateNestedScanResult(
+                        scanner,
+                        scanResult.toNestedProvenanceScanResult(nestedProvenance)
+                    )
 
                     val provenanceScanResultsToStore = mutableSetOf<Pair<KnownProvenance, ScanResult>>()
                     packagesWithIncompleteScanResult.forEach { pkg ->
@@ -417,7 +419,7 @@ class Scanner(
                 }.onSuccess { scanResult ->
                     val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
 
-                    controller.addScanResults(scanner, provenance, listOf(scanResult))
+                    controller.addAndDeduplicateScanResults(scanner, provenance, listOf(scanResult))
 
                     storeProvenanceScanResult(provenance, scanResult)
 
@@ -467,7 +469,7 @@ class Scanner(
             scanResults.forEach { (scanner, scanResult) ->
                 val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
 
-                controller.addScanResults(scanner, provenance, listOf(scanResult))
+                controller.addAndDeduplicateScanResults(scanner, provenance, listOf(scanResult))
 
                 storeProvenanceScanResult(provenance, scanResult)
 
@@ -539,7 +541,7 @@ class Scanner(
                         reader.read(pkg, nestedProvenance, scannerMatcher)
                     }.onSuccess { results ->
                         results.forEach { result ->
-                            controller.addNestedScanResult(scanner, result)
+                            controller.addAndDeduplicateNestedScanResult(scanner, result)
                         }
                     }.onFailure { e ->
                         e.showStackTrace()
@@ -566,7 +568,7 @@ class Scanner(
                     runCatching {
                         reader.read(provenance, scannerMatcher)
                     }.onSuccess { results ->
-                        controller.addScanResults(scanner, provenance, results)
+                        controller.addAndDeduplicateScanResults(scanner, provenance, results)
                     }.onFailure { e ->
                         e.showStackTrace()
 
