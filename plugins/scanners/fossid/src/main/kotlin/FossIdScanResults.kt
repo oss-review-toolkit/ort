@@ -63,6 +63,12 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
+ * The JSON key for ORT comments. This is more specific than [ORT_NAME] to avoid matching plain text comments that
+ * happen to contain the word "ort".
+ */
+private const val ORT_COMMENT_KEY = "\"$ORT_NAME\":"
+
+/**
  * A data class to hold FossID raw results.
  */
 internal data class RawResults(
@@ -148,7 +154,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 
         if (summarizable is MarkedAsIdentifiedFile) {
             summarizable.comments.value?.values?.firstOrNull {
-                ORT_NAME in it.comment
+                ORT_COMMENT_KEY in it.comment
             }?.also {
                 runCatching {
                     fileComment = jsonMapper.readValue(it.comment, OrtComment::class.java)
@@ -453,7 +459,7 @@ internal fun listUnmatchedSnippetChoices(
         }
 
         val comment = markedAsIdentifiedFile.comments.value?.values?.firstOrNull {
-            ORT_NAME in it.comment
+            ORT_COMMENT_KEY in it.comment
         }?.runCatching {
             jsonMapper.readValue(this.comment, OrtComment::class.java)
         }?.onFailure {
