@@ -94,7 +94,7 @@ jobs:
       - name: Build & Push 'ort' Docker Image
         id: build-ort
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
+        uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
         with:
           context: .
           labels: ${{ needs.metadata.outputs.ort-labels }}
@@ -105,7 +105,7 @@ jobs:
           outputs: type=image,name=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort,push-by-digest=true,name-canonical=true,push=true
       - name: Build 'ort' Docker Image
         if: ${{ github.event_name == 'pull_request' }}
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
+        uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
         with:
           context: .
           tags: ${{ needs.metadata.outputs.ort-tags }}
@@ -116,7 +116,7 @@ jobs:
       - name: Build & Push 'ort-minimal' Docker Image
         id: build-ort-minimal
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
+        uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
         with:
           context: .
           # Do not "cache-to" here to not overwrite additional layers from the "full" image, which also contains all
@@ -129,7 +129,7 @@ jobs:
           outputs: type=image,name=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal,push-by-digest=true,name-canonical=true,push=true
       - name: Build 'ort-minimal' Docker Image
         if: ${{ github.event_name == 'pull_request' }}
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
+        uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
         with:
           context: .
           labels: ${{ needs.metadata.outputs.ort-minimal-labels }}
