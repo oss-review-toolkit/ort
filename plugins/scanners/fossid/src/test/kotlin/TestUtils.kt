@@ -386,12 +386,16 @@ private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
 }
 
 /**
- * Create a [MarkedAsIdentifiedFile] with the give [license] and [path].
+ * Create a [MarkedAsIdentifiedFile] with the given [license] and [path]. When [comment] is provided and
+ * [includeLicensesWithComment] is false (the default), the file's licenses will be set to null, as is expected when
+ * the comment contains ORT JSON with authoritative license information. Set [includeLicensesWithComment] to true
+ * when testing plain text comments that should not override the file's license.
  */
 internal fun createMarkAsIdentifiedFile(
     license: String,
     path: String,
-    comment: String? = null
+    comment: String? = null,
+    includeLicensesWithComment: Boolean = false
 ): MarkedAsIdentifiedFile {
     val fileLicense = License(
         id = 1,
@@ -413,6 +417,8 @@ internal fun createMarkAsIdentifiedFile(
         )
     }
 
+    val includeLicenses = comment == null || includeLicensesWithComment
+
     return MarkedAsIdentifiedFile(
         comment = "comment",
         comments = PolymorphicData(if (comment == null) emptyMap() else mapOf(1 to Comment(1, 1, comment))),
@@ -428,7 +434,7 @@ internal fun createMarkAsIdentifiedFile(
             sha1 = "fileSha1",
             sha256 = "fileSha256",
             size = 0,
-            licenses = PolymorphicData(if (comment != null) null else mutableMapOf(1 to fileLicense))
+            licenses = PolymorphicData(if (includeLicenses) mutableMapOf(1 to fileLicense) else null)
         )
     }
 }
