@@ -181,8 +181,8 @@ RUN uv pip install --no-cache-dir -U \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
     setuptools=="$PYTHON_SETUPTOOLS_VERSION"
 RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
-    && wget https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz \
-    && tar -xvf conan-$CONAN2_VERSION-linux-x86_64.tgz\
+    && [ "$(arch)" = "aarch64" ] && conan_arch="aarch64" || conan_arch="x86_64" \
+    && curl -L https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-${conan_arch}.tgz | tar -xvz \
     # Rename the Conan 2 executable to "conan2" to be able to call both Conan version from the package manager.
     && mkdir $UV_PYTHON_INSTALL_DIR/conan2 && mv /tmp/conan2/bin $UV_PYTHON_INSTALL_DIR/conan2/ \
     && mv $UV_PYTHON_INSTALL_DIR/conan2/bin/conan $UV_PYTHON_INSTALL_DIR/conan2/bin/conan2
