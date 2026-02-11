@@ -30,65 +30,63 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
 @Tags("RequiresExternalTool")
-class GradleFunTest : StringSpec() {
-    init {
-        "Root project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/gradle/build.gradle").toGradle()
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-root.yml")
+class GradleFunTest : StringSpec({
+    "Root project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/gradle/build.gradle").toGradle()
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-root.yml")
 
-            val result = GradleInspectorFactory.create(javaVersion = "17")
-                .resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = GradleInspectorFactory.create(javaVersion = "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
-
-        "Project dependencies are detected correctly".config(
-            // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
-            enabled = false
-        ) {
-            val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app.yml")
-
-            val result = GradleInspectorFactory.create(javaVersion = "17")
-                .resolveSingleProject(definitionFile, resolveScopes = true)
-
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
-
-        "External dependencies are detected correctly".config(
-            // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
-            enabled = false
-        ) {
-            val definitionFile = getAssetFile("projects/synthetic/gradle/lib/build.gradle").toGradle()
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib.yml")
-
-            val result = GradleInspectorFactory.create(javaVersion = "17")
-                .resolveSingleProject(definitionFile, resolveScopes = true)
-
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
-
-        "Unresolved dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/gradle/lib-without-repo/build.gradle").toGradle()
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib-without-repo.yml")
-
-            val result = GradleInspectorFactory.create(javaVersion = "17")
-                .resolveSingleProject(definitionFile, resolveScopes = true)
-
-            patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
-        }
-
-        "Scopes are correctly excluded from the dependency graph".config(
-            // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
-            enabled = false
-        ) {
-            val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-scopes-excludes.yml")
-
-            val result = GradleInspectorFactory.create(javaVersion = "17")
-                .resolveSingleProject(definitionFile, excludedScopes = setOf("test.*"), resolveScopes = true)
-
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
-}
+
+    "Project dependencies are detected correctly".config(
+        // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
+        enabled = false
+    ) {
+        val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app.yml")
+
+        val result = GradleInspectorFactory.create(javaVersion = "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "External dependencies are detected correctly".config(
+        // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
+        enabled = false
+    ) {
+        val definitionFile = getAssetFile("projects/synthetic/gradle/lib/build.gradle").toGradle()
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib.yml")
+
+        val result = GradleInspectorFactory.create(javaVersion = "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Unresolved dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/gradle/lib-without-repo/build.gradle").toGradle()
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib-without-repo.yml")
+
+        val result = GradleInspectorFactory.create(javaVersion = "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
+
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Scopes are correctly excluded from the dependency graph".config(
+        // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
+        enabled = false
+    ) {
+        val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-scopes-excludes.yml")
+
+        val result = GradleInspectorFactory.create(javaVersion = "17")
+            .resolveSingleProject(definitionFile, excludedScopes = setOf("test.*"), resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+})
