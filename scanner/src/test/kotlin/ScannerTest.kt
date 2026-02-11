@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -73,6 +74,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
+import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 @Suppress("LargeClass")
@@ -286,9 +288,18 @@ class ScannerTest : WordSpec({
                 every { scanPackage(any(), any()) } returnsMany listOf(result1, result2)
             }
 
+            val storedScanResults = mutableListOf<Pair<Provenance, ScannerDetails>>()
+            val writer = object : ProvenanceBasedScanStorageWriter {
+                override fun write(scanResult: ScanResult): Boolean {
+                    storedScanResults.add(scanResult.provenance to scanResult.scanner)
+                    return true
+                }
+            }
+
             val scanner = createScanner(
                 packageScannerWrappers = listOf(scannerWrapper),
-                nestedProvenanceResolver = nestedProvenanceResolver
+                nestedProvenanceResolver = nestedProvenanceResolver,
+                storageWriters = listOf(writer)
             )
 
             val scannerRun = scanner.scan(packages, createContext())
@@ -305,6 +316,8 @@ class ScannerTest : WordSpec({
                     it.severity shouldBe Severity.HINT
                 }
             }
+
+            storedScanResults.getDuplicates() should beEmpty()
         }
     }
 

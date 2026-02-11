@@ -157,26 +157,37 @@ internal class ScanController(
     }
 
     /**
-     * Add all scan results contained in the nested [result].
+     * Add all scan results contained in the nested [result]. Check for duplicates and generate issues for them.
+     * Return a [NestedProvenanceScanResult] containing only the scan results that could be added.
      */
-    fun addNestedScanResult(scanner: ScannerWrapper, result: NestedProvenanceScanResult) {
-        result.scanResults.forEach { (provenance, results) ->
-            addScanResults(scanner, provenance, results)
+    fun addAndDeduplicateNestedScanResult(
+        scanner: ScannerWrapper,
+        result: NestedProvenanceScanResult
+    ): NestedProvenanceScanResult {
+        val deduplicatedResults = result.scanResults.mapValues { (provenance, results) ->
+            addAndDeduplicateScanResults(scanner, provenance, results)
         }
+
+        return result.copy(scanResults = deduplicatedResults)
     }
 
     /**
-     * Add all [results].
+     * Add all [results]. Check for duplicates and generate issues for them. Return a list containing only the
+     * [ScanResult]s that could be added.
      */
-    fun addScanResults(scanner: ScannerWrapper, provenance: KnownProvenance, results: List<ScanResult>) {
-        val deduplicatedResults = results.filterTo(mutableSetOf()) {
+    fun addAndDeduplicateScanResults(
+        scanner: ScannerWrapper,
+        provenance: KnownProvenance,
+        results: List<ScanResult>
+    ): List<ScanResult> {
+        val deduplicatedResults = results.filter {
             scannedProvenances.add(it.provenance to it.scanner)
         }
 
         if (deduplicatedResults.size < results.size) {
             val message = buildString {
                 appendLine("Found multiple scan results for the same provenance and scanner.")
-                (results - deduplicatedResults).forEach { result ->
+                (results - deduplicatedResults.toSet()).forEach { result ->
                     appendLine("Scanner:")
                     appendLine(result.scanner.toYaml())
                     appendLine("Provenance:")
@@ -195,6 +206,8 @@ internal class ScanController(
 
         scanResults.getOrPut(scanner) { mutableMapOf() }.getOrPut(provenance) { mutableListOf() }
             .addAll(deduplicatedResults)
+
+        return deduplicatedResults
     }
 
     /**
