@@ -48,8 +48,11 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.config.ScopeInclude
+import org.ossreviewtoolkit.model.config.ScopeIncludeReason
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.yamlMapper
@@ -306,9 +309,40 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val mergedResults = AnalyzerResultBuilder()
                     .addResult(analyzerResult1)
                     .addResult(analyzerResult2)
-                    .build(excludes)
+                    .build(excludes, Includes.EMPTY)
 
                 mergedResults.projects.forAll { project ->
+                    project.scopeNames.orEmpty() shouldNotContain "scope-2"
+                }
+            }
+
+            "apply scope includes" {
+                val scopeInclude = ScopeInclude("scope-1", ScopeIncludeReason.SOURCE_OF)
+                val includes = Includes(scopes = listOf(scopeInclude))
+
+                val mergedResults = AnalyzerResultBuilder()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build(Excludes.EMPTY, includes)
+
+                mergedResults.projects.forAll { project ->
+                    project.scopeNames?.single() shouldBe "scope-1"
+                }
+            }
+
+            "apply scope includes and excludes" {
+                val scopeInclude = ScopeInclude("scope-1", ScopeIncludeReason.SOURCE_OF)
+                val scopeExclude = ScopeExclude("scope-1", ScopeExcludeReason.DOCUMENTATION_DEPENDENCY_OF)
+                val includes = Includes(scopes = listOf(scopeInclude))
+                val excludes = Excludes(scopes = listOf(scopeExclude))
+
+                val mergedResults = AnalyzerResultBuilder()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build(excludes, includes)
+
+                mergedResults.projects.forAll { project ->
+                    project.scopeNames.orEmpty() shouldNotContain "scope-1"
                     project.scopeNames.orEmpty() shouldNotContain "scope-2"
                 }
             }

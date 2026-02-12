@@ -198,7 +198,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         logger.info { "Building analyzer result." }
 
-        return state.buildResult(excludes)
+        return state.buildResult(excludes, includes)
     }
 
     private fun determinePackageManagerDependencies(info: ManagedFileInfo): Map<PackageManager, Set<String>> {
@@ -273,7 +273,7 @@ private class AnalyzerState {
         }
     }
 
-    fun buildResult(excludes: Excludes) = builder.build(excludes)
+    fun buildResult(excludes: Excludes, includes: Includes) = builder.build(excludes, includes)
 }
 
 /**

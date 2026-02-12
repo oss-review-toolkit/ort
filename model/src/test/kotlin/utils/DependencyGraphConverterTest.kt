@@ -42,8 +42,11 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.config.ScopeInclude
+import org.ossreviewtoolkit.model.config.ScopeIncludeReason
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class DependencyGraphConverterTest : WordSpec({
@@ -67,7 +70,21 @@ class DependencyGraphConverterTest : WordSpec({
             val scopeExclude = ScopeExclude("test", ScopeExcludeReason.TEST_DEPENDENCY_OF)
             val excludes = Excludes(scopes = listOf(scopeExclude))
 
-            val convertedResult = DependencyGraphConverter.convert(result, excludes)
+            val convertedResult = DependencyGraphConverter.convert(result, excludes, Includes.EMPTY)
+
+            convertedResult.projects.single().scopeNames shouldContainOnly listOf("main")
+            convertedResult.packages.forAll { it.id.version.drop(2).toInt() shouldBeLessThan 110 }
+        }
+
+        "exclude scopes due to scopes includes" {
+            val project = createProject("Maven", index = 1)
+
+            val result = createAnalyzerResult(project.createResult())
+
+            val scopeInclude = ScopeInclude("main", ScopeIncludeReason.SOURCE_OF)
+            val includes = Includes(scopes = listOf(scopeInclude))
+
+            val convertedResult = DependencyGraphConverter.convert(result, Excludes.EMPTY, includes)
 
             convertedResult.projects.single().scopeNames shouldContainOnly listOf("main")
             convertedResult.packages.forAll { it.id.version.drop(2).toInt() shouldBeLessThan 110 }
@@ -87,7 +104,7 @@ class DependencyGraphConverterTest : WordSpec({
             val scopeExclude = ScopeExclude("main", ScopeExcludeReason.TEST_DEPENDENCY_OF)
             val excludes = Excludes(scopes = listOf(scopeExclude))
 
-            val convertedResult = DependencyGraphConverter.convert(analyzerResult, excludes)
+            val convertedResult = DependencyGraphConverter.convert(analyzerResult, excludes, Includes.EMPTY)
 
             val allPackagesTypes = convertedResult.packages.mapTo(mutableSetOf()) { it.id.type }
             allPackagesTypes should containExactlyInAnyOrder("Maven", "Go")
