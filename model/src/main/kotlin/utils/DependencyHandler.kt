@@ -72,6 +72,7 @@ interface DependencyHandler<D> {
      * checks are needed (like when ordering or duplicates matter).
      */
     fun areDependenciesEqual(dependenciesA: List<D>, dependenciesB: List<D>): Boolean {
+        if (dependenciesA === dependenciesB) return true
         if (dependenciesA.isEmpty() && dependenciesB.isEmpty()) return true
 
         // Do a cheap check on the size of distinct dependencies first.

@@ -121,6 +121,7 @@ internal class GradleDependencyHandler(
     }
 
     override fun areDependenciesEqual(dependenciesA: List<OrtDependency>, dependenciesB: List<OrtDependency>): Boolean {
+        if (dependenciesA === dependenciesB) return true
         if (dependenciesA.isEmpty() && dependenciesB.isEmpty()) return true
 
         val depsA = dependenciesA.distinct()
