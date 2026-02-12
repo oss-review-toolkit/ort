@@ -3,7 +3,7 @@
   "extends": [
     "config:recommended",
     "docker:disable",
-    "helpers:pinGitHubActionDigests",
+    "helpers:pinGitHubActionDigestsToSemver",
     ":semanticCommitScopeDisabled",
     ":semanticCommitTypeAll(deps)"
   ],
