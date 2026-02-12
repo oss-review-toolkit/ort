@@ -195,8 +195,7 @@ class DependencyGraphBuilderTest : WordSpec({
             scopeDependencies(scopes, scope2) shouldBe setOf(depAcmeExclude)
         }
 
-        // TODO: Enable this once the functionality to break cycles is fully implemented.
-        "deal with cycles in dependencies".config(enabled = false) {
+        "deal with cycles in dependencies" {
             // A simple map of indexed nodes with their dependencies.
             @Suppress("NoMultipleSpaces")
             val dependencies = mapOf(
