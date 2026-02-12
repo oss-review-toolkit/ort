@@ -19,12 +19,14 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import java.net.URLDecoder
+import com.github.packageurl.PackageURL
+import com.github.packageurl.PackageURLBuilder
+
+import java.io.File
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -99,82 +101,139 @@ fun PurlType.toOrtType(): String =
  * pkg:golang/google.golang.org/genproto#googleapis/api/annotations
  */
 @JvmOverloads
-fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: String = "") =
-    if (this == Identifier.EMPTY) {
-        ""
+fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: String = ""): String {
+    if (this == Identifier.EMPTY) return ""
+
+    val type = getPurlType()
+    val combined = "$namespace/$name"
+    val purlNamespace = combined.substringBeforeLast('/')
+    val purlName = combined.substringAfterLast('/')
+
+    // Apply ORT-specific normalizations BEFORE passing to builder.
+    val normalizedNamespace = purlNamespace.trim('/').split('/').joinToString("/") { segment ->
+        type.namespaceNormalization(segment)
+    }.takeIf { it.isNotEmpty() }
+
+    val normalizedName = type.nameNormalization(purlName.trim('/'))
+
+    val normalizedSubpath = if (subpath.isNotEmpty()) {
+        subpath.trim('/').split('/')
+            .filter { it.isNotEmpty() }
+            .joinToString("/") {
+                // Instead of just discarding "." and "..", resolve them by normalizing.
+                File(it).normalize().path
+            }
+            .takeIf { it.isNotEmpty() }
     } else {
-        val combined = "$namespace/$name"
-        val purlNamespace = combined.substringBeforeLast('/')
-        val purlName = combined.substringAfterLast('/')
-        createPurl(getPurlType(), purlNamespace, purlName, version, qualifiers, subpath)
+        null
     }
 
-fun Identifier.toPurl(extras: PurlExtras) = toPurl(extras.qualifiers, extras.subpath)
+    return PackageURLBuilder.aPackageURL()
+        .withType(type.toString())
+        .withNamespace(normalizedNamespace)
+        .withName(normalizedName)
+        .withVersion(version.takeIf { it.isNotEmpty() })
+        .apply {
+            qualifiers.filterValues { it.isNotEmpty() }.forEach { (key, value) ->
+                withQualifier(key, value)
+            }
+        }
+        .withSubpath(normalizedSubpath)
+        .build()
+        .canonicalize()
+}
 
 /**
- * Encode a [Provenance] to extra qualifying data / a subpath of PURL.
+ * Create a PURL for this [Identifier] with qualifiers and subpath derived from [provenance].
  */
-fun Provenance.toPurlExtras(): PurlExtras =
-    when (this) {
-        is ArtifactProvenance -> with(sourceArtifact) {
-            val checksum = "${hash.algorithm.name.lowercase()}:${hash.value}"
-            PurlExtras(
-                "download_url" to url,
-                "checksum" to checksum
+fun Identifier.toPurl(provenance: Provenance): String =
+    when (provenance) {
+        is ArtifactProvenance -> {
+            val hash = provenance.sourceArtifact.hash
+            val qualifiers = buildMap {
+                put("download_url", provenance.sourceArtifact.url)
+
+                if (hash.algorithm.isVerifiable) {
+                    put("checksum", "${hash.algorithm.name.lowercase()}:${hash.value}")
+                }
+            }
+
+            toPurl(qualifiers = qualifiers)
+        }
+
+        is RepositoryProvenance -> {
+            toPurl(
+                qualifiers = mapOf(
+                    "vcs_type" to provenance.vcsInfo.type.toString(),
+                    "vcs_url" to provenance.vcsInfo.url,
+                    "vcs_revision" to provenance.vcsInfo.revision,
+                    "resolved_revision" to provenance.resolvedRevision
+                ),
+                subpath = provenance.vcsInfo.path
             )
         }
 
-        is RepositoryProvenance -> with(vcsInfo) {
-            PurlExtras(
-                "vcs_type" to type.toString(),
-                "vcs_url" to url,
-                "vcs_revision" to revision,
-                "resolved_revision" to resolvedRevision,
-                subpath = vcsInfo.path
-            )
-        }
-
-        is UnknownProvenance -> PurlExtras()
+        is UnknownProvenance -> toPurl()
     }
 
 /**
- * Decode [Provenance] from extra qualifying data / a subpath of the purl represented by this [String]. Return
- * [UnknownProvenance] if extra data is not present.
+ * Convert this [PackageURL] to an ORT [Identifier].
  */
-fun String.toProvenance(): Provenance {
-    val extras = substringAfter('?')
+fun PackageURL.toIdentifier(): Identifier {
+    val ortType = getPurlType()?.toOrtType() ?: type
+    val combinedName = listOfNotNull(namespace, name).joinToString("/")
 
-    fun getQualifierValue(name: String) = extras.substringAfter("$name=").takeWhile { it != '&' && it != '#' }
+    return Identifier(
+        type = ortType,
+        namespace = combinedName.substringBeforeLast("/", ""),
+        name = combinedName.substringAfterLast("/"),
+        version = version.orEmpty()
+    )
+}
+
+/**
+ * Decode [Provenance] from extra qualifying data / a subpath of this [PackageURL]. Return [UnknownProvenance] if
+ * extra data is not present.
+ */
+fun PackageURL.toProvenance(): Provenance {
+    val qualifiers = qualifiers.orEmpty()
 
     return when {
-        "download_url=" in extras -> {
-            val encodedUrl = getQualifierValue("download_url")
-
-            val checksum = getQualifierValue("checksum")
+        "download_url" in qualifiers -> {
+            val checksum = qualifiers["checksum"].orEmpty()
             val (algorithm, value) = checksum.split(':', limit = 2)
 
             ArtifactProvenance(
                 sourceArtifact = RemoteArtifact(
-                    url = URLDecoder.decode(encodedUrl, "UTF-8"),
+                    url = qualifiers["download_url"].orEmpty(),
                     hash = Hash(value, algorithm)
                 )
             )
         }
 
-        "vcs_url=" in extras -> {
-            val encodedUrl = getQualifierValue("vcs_url")
-
+        "vcs_url" in qualifiers -> {
             RepositoryProvenance(
                 vcsInfo = VcsInfo(
-                    type = VcsType.forName(getQualifierValue("vcs_type")),
-                    url = URLDecoder.decode(encodedUrl, "UTF-8"),
-                    revision = getQualifierValue("vcs_revision"),
-                    path = extras.substringAfterLast('#', "")
+                    type = VcsType.forName(qualifiers["vcs_type"].orEmpty()),
+                    url = qualifiers["vcs_url"].orEmpty(),
+                    revision = qualifiers["vcs_revision"].orEmpty(),
+                    path = subpath.orEmpty()
                 ),
-                resolvedRevision = getQualifierValue("resolved_revision")
+                resolvedRevision = qualifiers["resolved_revision"].orEmpty()
             )
         }
 
         else -> UnknownProvenance
     }
 }
+
+/**
+ * Parse a PURL string into a [PackageURL] object.
+ * Returns null if the string is null, blank, or invalid.
+ */
+fun String?.toPackageUrl(): PackageURL? = runCatching { PackageURL(this) }.getOrNull()
+
+/**
+ * Get the [PurlType] enum for this [PackageURL], or null if the type is unknown.
+ */
+fun PackageURL.getPurlType(): PurlType? = runCatching { PurlType.fromString(type.lowercase()) }.getOrNull()

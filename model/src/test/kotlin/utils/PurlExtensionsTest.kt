@@ -20,6 +20,9 @@
 package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldNotStartWith
@@ -29,6 +32,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.UnknownProvenance
@@ -88,7 +92,7 @@ class PurlExtensionsTest : WordSpec({
     }
 
     "Provenance conversion" should {
-        "work for extras of an artifact's provenance" {
+        "work for an artifact provenance" {
             val provenance = ArtifactProvenance(
                 sourceArtifact = RemoteArtifact(
                     url = "https://example.com/sources.zip",
@@ -100,16 +104,15 @@ class PurlExtensionsTest : WordSpec({
             )
             val id = Identifier("Maven:com.example:sources:1.2.3")
 
-            val extras = provenance.toPurlExtras()
-            val purl = id.toPurl(extras.qualifiers, extras.subpath)
+            val purl = id.toPurl(provenance)
 
             purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
-                "checksum=md5:ddce269a1e3d054cae349621c198dd52&" +
-                "download_url=https://example.com/sources.zip"
+                "checksum=md5%3Addce269a1e3d054cae349621c198dd52&" +
+                "download_url=https%3A%2F%2Fexample.com%2Fsources.zip"
             purl.toProvenance() shouldBe provenance
         }
 
-        "work for extras of a repository's provenance" {
+        "work for a repository provenance" {
             val provenance = RepositoryProvenance(
                 vcsInfo = VcsInfo(
                     type = VcsType.GIT,
@@ -121,14 +124,13 @@ class PurlExtensionsTest : WordSpec({
             )
             val id = Identifier("Maven:com.example:sources:1.2.3")
 
-            val extras = provenance.toPurlExtras()
-            val purl = id.toPurl(extras.qualifiers, extras.subpath)
+            val purl = id.toPurl(provenance)
 
             purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
                 "resolved_revision=7643b12421100d29fd2b78053e77bcb04a251b2e&" +
                 "vcs_revision=7643b12421100d29fd2b78053e77bcb04a251b2e&" +
                 "vcs_type=Git&" +
-                "vcs_url=https://github.com/apache/commons-text.git" +
+                "vcs_url=https%3A%2F%2Fgithub.com%2Fapache%2Fcommons-text.git" +
                 "#subpath"
             purl.toProvenance() shouldBe provenance
         }
@@ -137,4 +139,75 @@ class PurlExtensionsTest : WordSpec({
             "pkg:npm/mime-db@1.33.0".toProvenance() shouldBe UnknownProvenance
         }
     }
+
+    "Identifier conversion" should {
+        "work for a Maven identifier with namespace" {
+            val id = Identifier("Maven:com.example:sources:1.2.3")
+
+            val purl = id.toPurl()
+            val roundTrippedId = purl.toPackageUrl()?.toIdentifier()
+
+            roundTrippedId shouldBe id
+        }
+
+        "work for an NPM identifier without namespace" {
+            val id = Identifier("npm::mime-db:1.33.0")
+
+            val purl = id.toPurl()
+            val roundTrippedId = purl.toPackageUrl()?.toIdentifier()
+
+            roundTrippedId shouldBe id
+        }
+
+        "work for an NPM identifier with namespace" {
+            val id = Identifier("npm:@scope:package:2.0.0")
+
+            val purl = id.toPurl()
+            val roundTrippedId = purl.toPackageUrl()?.toIdentifier()
+
+            roundTrippedId shouldBe id
+        }
+
+        "work for a Go identifier with deep namespace" {
+            val id = Identifier("go:github.com/org:repo:1.0.0")
+
+            val purl = id.toPurl()
+            val roundTrippedId = purl.toPackageUrl()?.toIdentifier()
+
+            roundTrippedId shouldBe id
+        }
+    }
+
+    "toPackageUrl()" should {
+        "parse a valid PURL" {
+            "pkg:maven/org.apache.commons/io@1.3.4".toPackageUrl().shouldNotBeNull {
+                type shouldBe "maven"
+                namespace shouldBe "org.apache.commons"
+                name shouldBe "io"
+                version shouldBe "1.3.4"
+            }
+        }
+
+        "return null for invalid input" {
+            null.toPackageUrl() should beNull()
+            "".toPackageUrl() should beNull()
+            "not-a-purl".toPackageUrl() should beNull()
+        }
+    }
+
+    "getPurlType()" should {
+        "return the correct PurlType" {
+            "pkg:maven/org.example/foo@1.0".toPackageUrl().shouldNotBeNull {
+                getPurlType() shouldBe PurlType.MAVEN
+            }
+        }
+
+        "return null for unknown types" {
+            "pkg:unknown/foo@1.0".toPackageUrl().shouldNotBeNull {
+                getPurlType() should beNull()
+            }
+        }
+    }
 })
+
+private fun String.toProvenance(): Provenance = toPackageUrl()?.toProvenance() ?: UnknownProvenance
