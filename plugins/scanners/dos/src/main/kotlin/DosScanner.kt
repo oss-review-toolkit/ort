@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.model.utils.toPurlExtras
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
@@ -231,25 +230,18 @@ class DosScanner(
     }
 }
 
-private fun Collection<Package>.getDosPackages(provenance: Provenance = UnknownProvenance): List<PackageInfo> {
-    val extras = provenance.toPurlExtras()
-
-    return when (provenance) {
-        is RepositoryProvenance -> {
-            // Maintain the VCS path to get the "bookmarking" right for the file tree in the package configuration UI.
-            map {
-                PackageInfo(
-                    purl = it.id.toPurl(extras.qualifiers, it.vcsProcessed.path),
-                    declaredLicenseExpressionSPDX = it.declaredLicensesProcessed.spdxExpression?.toString()
-                )
-            }
-        }
-
-        else -> map {
-            PackageInfo(
-                purl = it.id.toPurl(extras),
-                declaredLicenseExpressionSPDX = it.declaredLicensesProcessed.spdxExpression?.toString()
+private fun Collection<Package>.getDosPackages(provenance: Provenance = UnknownProvenance): List<PackageInfo> =
+    map { pkg ->
+        // For RepositoryProvenance, use the package's VCS path for correct bookmarking in the UI.
+        val effectiveProvenance = when (provenance) {
+            is RepositoryProvenance -> provenance.copy(
+                vcsInfo = provenance.vcsInfo.copy(path = pkg.vcsProcessed.path)
             )
+
+            else -> provenance
         }
+        PackageInfo(
+            purl = pkg.id.toPurl(effectiveProvenance),
+            declaredLicenseExpressionSPDX = pkg.declaredLicensesProcessed.spdxExpression?.toString()
+        )
     }
-}

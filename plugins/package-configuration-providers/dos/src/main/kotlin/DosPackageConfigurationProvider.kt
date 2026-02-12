@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.model.utils.toPurlExtras
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.api.Secret
@@ -76,7 +75,7 @@ class DosPackageConfigurationProvider(
     private val client = DosClient(service)
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> {
-        val purl = packageId.toPurl(provenance.toPurlExtras())
+        val purl = packageId.toPurl(provenance)
 
         val packageResults = runBlocking { client.getPackageConfiguration(purl) }
             ?.takeUnless { it.licenseConclusions.isEmpty() && it.pathExclusions.isEmpty() } ?: return emptyList()
