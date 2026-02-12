@@ -34,6 +34,7 @@ dependencies {
     api(jacksonLibs.jacksonDatabind)
     api(jacksonLibs.jacksonDataformatYaml)
     api(libs.log4j.api)
+    api(libs.packageurl)
 
     implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
