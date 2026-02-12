@@ -111,14 +111,14 @@ class ComponentExtensionsTest : WordSpec({
             component.toIdentifier().namespace shouldBe "elixir-ecto"
         }
 
-        "handle unknown PURL types as generic" {
+        "preserve unknown PURL types" {
             val component = Component().apply {
                 name = "custom"
                 version = "1.0.0"
                 purl = "pkg:unknown/custom@1.0.0"
             }
 
-            component.toIdentifier().type shouldBe "generic"
+            component.toIdentifier().type shouldBe "unknown"
         }
     }
 

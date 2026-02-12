@@ -30,9 +30,8 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.utils.PurlType
-import org.ossreviewtoolkit.model.utils.parsePurl
-import org.ossreviewtoolkit.model.utils.toOrtType
+import org.ossreviewtoolkit.model.utils.toIdentifier
+import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -48,19 +47,13 @@ internal const val DEFAULT_ORT_TYPE = "CycloneDX"
  * component's group, name, and version properties.
  */
 fun Component.toIdentifier(defaultType: String = DEFAULT_ORT_TYPE): Identifier {
-    val parsedPurl = parsePurl(purl)
-
-    // Only use PURL type if we have a PURL; otherwise use the default type.
-    val type = parsedPurl?.let {
-        val purlType = it.getPurlType() ?: PurlType.GENERIC
-        purlType.toOrtType()
-    } ?: defaultType
+    val id = purl.toPackageUrl()?.toIdentifier()
 
     return Identifier(
-        type = type,
-        namespace = parsedPurl?.namespace?.takeIf { it.isNotBlank() } ?: group.orEmpty(),
-        name = parsedPurl?.name?.takeIf { it.isNotBlank() } ?: name,
-        version = parsedPurl?.version?.takeIf { it.isNotBlank() } ?: version.orEmpty()
+        type = id?.type ?: defaultType,
+        namespace = id?.namespace?.takeIf { it.isNotBlank() } ?: group.orEmpty(),
+        name = id?.name?.takeIf { it.isNotBlank() } ?: name,
+        version = id?.version?.takeIf { it.isNotBlank() } ?: version.orEmpty()
     )
 }
 
