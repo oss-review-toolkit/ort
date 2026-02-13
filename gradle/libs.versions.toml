@@ -54,7 +54,6 @@ mockk = "1.14.9"
 mordant = "3.0.2"
 okhttp = "5.3.2"
 postgres = "42.7.10"
-postgresEmbedded = "1.1.1"
 reflections = "0.10.2"
 retrofit = "3.0.0"
 s3 = "2.41.27"
@@ -131,6 +130,7 @@ kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.
 kotest-assertions-table = { module = "io.kotest:kotest-assertions-table", version.ref = "kotest" }
 kotest-extensions = { module = "io.kotest:kotest-extensions", version.ref = "kotest" }
 kotest-extensions-junitXml = { module = "io.kotest:kotest-extensions-junitxml", version.ref = "kotest" }
+kotest-extensions-testcontainers = { module = "io.kotest:kotest-extensions-testcontainers", version.ref = "kotest" }
 kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
@@ -169,7 +169,6 @@ mordantCoroutines = { module = "com.github.ajalt.mordant:mordant-coroutines", ve
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
-postgresEmbedded = { module = "com.opentable.components:otj-pg-embedded", version.ref = "postgresEmbedded" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-jackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
