@@ -69,7 +69,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Install Flox
-      uses: flox/install-flox-action@9428713e8d3883274c334b4b95b8830beebd24d2 # v2
+      uses: flox/install-flox-action@9428713e8d3883274c334b4b95b8830beebd24d2 # v2.3.0
       with:
         disable-metrics: true
         version: 1.8.4
@@ -99,7 +99,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Install Flox
-      uses: flox/install-flox-action@9428713e8d3883274c334b4b95b8830beebd24d2 # v2
+      uses: flox/install-flox-action@9428713e8d3883274c334b4b95b8830beebd24d2 # v2.3.0
       with:
         disable-metrics: true
         version: 1.8.4
