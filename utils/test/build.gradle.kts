@@ -42,5 +42,11 @@ dependencies {
     implementation(libs.kotest.framework.engine)
     implementation(libs.postgresEmbedded)
 
+    constraints {
+        implementation(libs.testcontainers.postgresql) {
+            because("A newer version is required for Docker 29.0.0 compatibility.")
+        }
+    }
+
     runtimeOnly(libs.log4j.api.slf4j)
 }
