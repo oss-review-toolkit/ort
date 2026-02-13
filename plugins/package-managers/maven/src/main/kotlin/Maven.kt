@@ -126,8 +126,8 @@ class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor,
             workingDir
         }
 
-        projectBuildingResult.dependencies.filterNot {
-            !isScopeIncluded(it.dependency.scope, excludes, includes)
+        projectBuildingResult.dependencies.filter {
+            isScopeIncluded(it.dependency.scope, excludes, includes)
         }.forEach { node ->
             graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
         }

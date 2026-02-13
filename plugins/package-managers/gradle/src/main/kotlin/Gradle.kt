@@ -283,8 +283,8 @@ class Gradle(
                     version = dependencyTreeModel.version
                 )
 
-                dependencyTreeModel.configurations.filterNot {
-                    !isScopeIncluded(it.name, excludes, includes)
+                dependencyTreeModel.configurations.filter {
+                    isScopeIncluded(it.name, excludes, includes)
                 }.forEach { configuration ->
                     graphBuilder.addDependencies(projectId, configuration.name, configuration.dependencies)
                 }
