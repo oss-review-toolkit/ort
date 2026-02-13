@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -49,6 +50,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginConfig
@@ -56,8 +58,6 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxDocumentCache
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
-import org.ossreviewtoolkit.utils.common.getQueryParameters
-import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -107,11 +107,7 @@ internal fun SpdxDocument.projectPackage(): SpdxPackage? =
  */
 internal fun SpdxPackage.extractScopeFromExternalReferences(): String? =
     externalRefs.filter { it.referenceType == SpdxExternalReference.Type.Purl }
-        // Need to convert the URI to a hierarchical one; otherwise query parameters cannot be extracted.
-        .map { it.referenceLocator.replace("pkg:", "pkg://") }
-        .firstNotNullOfOrNull {
-            it.toUri { uri -> uri.getQueryParameters()["scope"]?.singleOrNull() }.getOrNull()
-        }
+        .firstNotNullOfOrNull { it.referenceLocator.toPackageUrl()?.qualifiers?.get("scope") }
 
 /**
  * Return the declared license to be used in ORT's data model, which expects a not present value to be an empty set
@@ -310,17 +306,11 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
         val id = toIdentifier()
         val artifact = getRemoteArtifact()
 
-        val purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: buildString {
-            append(id.toPurl())
-
-            val qualifiers = listOfNotNull(
-                artifact?.url?.let { "download_url=$it" },
-                artifact?.hash?.takeIf { it.algorithm in HashAlgorithm.VERIFIABLE }
-                    ?.let { "checksum=${it.algorithm.name.lowercase()}:${it.value}" }
-            )
-
-            if (qualifiers.isNotEmpty()) append(qualifiers.joinToString(separator = "&", prefix = "?"))
-        }
+        val purl = locateExternalReference(SpdxExternalReference.Type.Purl)
+            ?: artifact
+                ?.let { if (it.hash.algorithm in HashAlgorithm.VERIFIABLE) it else it.copy(hash = Hash.NONE) }
+                ?.let { id.toPurl(ArtifactProvenance(it)) }
+            ?: id.toPurl()
 
         return Package(
             id = id,

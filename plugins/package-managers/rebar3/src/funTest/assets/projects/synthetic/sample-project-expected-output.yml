@@ -1,0 +1,58 @@
+---
+project:
+  id: "otp::sample_app:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  description: "Sample app for testing Rebar3 plugin"
+  homepage_url: ""
+  scopes:
+  - name: "required"
+    dependencies:
+    - id: "hex::meck:0.9.2"
+packages:
+- id: "hex::meck:0.9.2"
+  purl: "pkg:hex/meck@0.9.2"
+  authors:
+  - "Adam Lindberg"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A mocking framework for Erlang"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/eproxus/meck.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/eproxus/meck.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"

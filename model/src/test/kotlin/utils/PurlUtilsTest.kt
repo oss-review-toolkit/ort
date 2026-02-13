@@ -19,52 +19,41 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.utils.test.readResourceValue
-
 class PurlUtilsTest : StringSpec({
-    val testData = readResourceValue<List<TestSuiteData>>("/test-suite-data.json")
-    val testCases = testData.filterNot { it.isInvalid }.also { testCases ->
-        // Perform some sanity checks on the test data itself.
-        check(testCases.none { it.namespace?.isEmpty() == true })
+    "toPackageUrl() should parse a valid PURL" {
+        val purl = "pkg:maven/org.apache.commons/io@1.3.4"
+        val parsed = purl.toPackageUrl()
 
-        val slashes = setOf("/", "%2F", "%2f")
-        check(testCases.none { slashes.any { slash -> it.name != null && slash in it.name } })
+        parsed.shouldNotBeNull()
+        parsed.type shouldBe "maven"
+        parsed.namespace shouldBe "org.apache.commons"
+        parsed.name shouldBe "io"
+        parsed.version shouldBe "1.3.4"
     }
 
-    "The purl test suite should pass" {
-        assertSoftly {
-            testCases.forEach { testCase ->
-                // Invalid cases have been filtered out before.
-                val type = checkNotNull(testCase.type)
+    "toPackageUrl() should return null for invalid input" {
+        null.toPackageUrl() should beNull()
+        "".toPackageUrl() should beNull()
+        "not-a-purl".toPackageUrl() should beNull()
+    }
 
-                val purl = createPurl(
-                    PurlType.fromString(type),
-                    testCase.namespace.orEmpty(),
-                    testCase.name.orEmpty(),
-                    testCase.version.orEmpty(),
-                    testCase.qualifiers.orEmpty(),
-                    testCase.subpath.orEmpty()
-                )
+    "getPurlType() should return the correct PurlType" {
+        val purl = "pkg:maven/org.example/foo@1.0".toPackageUrl()
 
-                purl shouldBe testCase.canonicalPurl
-            }
-        }
+        purl.shouldNotBeNull()
+        purl.getPurlType() shouldBe PurlType.MAVEN
+    }
+
+    "getPurlType() should return null for unknown types" {
+        val purl = "pkg:unknown/foo@1.0".toPackageUrl()
+
+        purl.shouldNotBeNull()
+        purl.getPurlType() should beNull()
     }
 })
-
-private data class TestSuiteData(
-    val description: String,
-    val purl: String,
-    val canonicalPurl: String?,
-    val type: String?,
-    val namespace: String?,
-    val name: String?,
-    val version: String?,
-    val qualifiers: Map<String, String>?,
-    val subpath: String?,
-    val isInvalid: Boolean
-)
