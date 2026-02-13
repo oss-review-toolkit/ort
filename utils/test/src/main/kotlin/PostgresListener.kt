@@ -19,38 +19,39 @@
 
 package org.ossreviewtoolkit.utils.test
 
-import com.opentable.db.postgres.embedded.EmbeddedPostgres
+import com.zaxxer.hikari.HikariConfig
 
+import io.kotest.core.extensions.MountableExtension
 import io.kotest.core.listeners.TestListener
-import io.kotest.core.spec.Spec
 import io.kotest.core.test.TestCase
-
-import java.time.Duration
+import io.kotest.extensions.testcontainers.JdbcDatabaseContainerSpecExtension
 
 import javax.sql.DataSource
 
+import org.testcontainers.containers.PostgreSQLContainer
+
 /**
- * A [TestListener] that starts an [EmbeddedPostgres] instance before running the spec and closes it after the spec has
+ * A [TestListener] that starts a [PostgreSQLContainer] before running the spec and closes it after the spec has
  * finished. The database is cleared before each test.
  */
-class PostgresListener(private val startupWait: Duration = Duration.ofSeconds(20)) : TestListener {
-    private lateinit var postgres: EmbeddedPostgres
-
-    val dataSource: Lazy<DataSource> get() = lazyOf(postgres.postgresDatabase)
-
-    override suspend fun beforeSpec(spec: Spec) {
-        postgres = EmbeddedPostgres.builder().setPGStartupWait(startupWait).start()
-    }
+class PostgresListener :
+    TestListener,
+    MountableExtension<HikariConfig, DataSource> by JdbcDatabaseContainerSpecExtension(
+        PostgreSQLContainer<Nothing>("postgres:18-alpine")
+    ) {
+    val dataSource: Lazy<DataSource> get() = lazyOf(
+        mount {
+            maximumPoolSize = 3
+            minimumIdle = 1
+        }
+    )
 
     override suspend fun beforeEach(testCase: TestCase) {
-        postgres.postgresDatabase.connection.use { c ->
-            val s = c.createStatement()
-            s.execute("DROP SCHEMA public CASCADE")
-            s.execute("CREATE SCHEMA public")
+        dataSource.value.connection.use { c ->
+            c.createStatement().use { s ->
+                s.execute("DROP SCHEMA public CASCADE")
+                s.execute("CREATE SCHEMA public")
+            }
         }
-    }
-
-    override suspend fun afterSpec(spec: Spec) {
-        postgres.close()
     }
 }
