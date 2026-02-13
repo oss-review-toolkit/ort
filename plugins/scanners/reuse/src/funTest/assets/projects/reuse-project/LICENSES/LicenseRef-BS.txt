@@ -1,0 +1,4 @@
+BS License
+
+This is a made-up license for testing purposes.
+You can do whatever you want with this code.
