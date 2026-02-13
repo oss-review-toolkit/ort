@@ -19,11 +19,14 @@
 
 package org.ossreviewtoolkit.model
 
+import kotlinx.serialization.Serializable
+
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 /**
  * Bundles general Version Control System information.
  */
+@Serializable
 data class VcsInfo(
     /**
      * The type of the VCS, for example Git, GitRepo, Mercurial, etc.
