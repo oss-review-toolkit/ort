@@ -26,6 +26,7 @@ dependencies {
     api(projects.model)
     api(projects.plugins.versionControlSystems.gitVersionControlSystem)
 
+    api(libs.hikari)
     api(libs.kotest.assertions.core)
     api(libs.kotest.extensions)
     api(libs.logbackClassic) {
@@ -35,18 +36,13 @@ dependencies {
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.diffUtils)
     implementation(jacksonLibs.jacksonModuleKotlin)
+    implementation(libs.diffUtils)
     implementation(libs.jsonSchemaValidator)
     implementation(libs.kotest.extensions.junitXml)
+    implementation(libs.kotest.extensions.testcontainers)
     implementation(libs.kotest.framework.engine)
-    implementation(libs.postgresEmbedded)
-
-    constraints {
-        implementation(libs.testcontainers.postgresql) {
-            because("A newer version is required for Docker 29.0.0 compatibility.")
-        }
-    }
+    implementation(libs.testcontainers.postgresql)
 
     runtimeOnly(libs.log4j.api.slf4j)
 }
