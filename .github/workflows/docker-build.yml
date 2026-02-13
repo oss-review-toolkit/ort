@@ -39,7 +39,7 @@ jobs:
           echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_OUTPUT
       - name: Extract Metadata for 'ort' Docker Image
         id: meta-ort
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort
@@ -51,7 +51,7 @@ jobs:
             type=sha
       - name: Extract Metadata for 'ort-minimal' Docker Image
         id: meta-ort-minimal
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal
