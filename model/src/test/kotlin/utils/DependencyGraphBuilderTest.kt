@@ -211,6 +211,32 @@ class DependencyGraphBuilderTest : WordSpec({
             graph.nodes shouldHaveSize 3
         }
 
+        "deal with recursive cycles in dependencies" {
+            val scope = "CyclicScope"
+            val id1 = Identifier("NPM::mlly:1.8.0")
+            val id2 = Identifier("NPM::pkg-type:1.3.1")
+
+            val handler = object : DependencyHandler<Identifier>  {
+                override fun identifierFor(dependency: Identifier) = dependency
+
+                override fun dependenciesFor(dependency: Identifier) = when(dependency) {
+                    id1 -> listOf(id2)
+                    id2 -> listOf(id1)
+                    else -> emptyList()
+                }
+
+                override fun linkageFor(dependency: Identifier) = PackageLinkage.STATIC
+
+                override fun createPackage(dependency: Identifier, issues: MutableCollection<Issue>) =
+                    Package.EMPTY.copy(id = dependency)
+            }
+
+            DependencyGraphBuilder(handler)
+                .addDependency(scope, id1)
+                .addDependency(scope, id2)
+                .build()
+        }
+
         "check for illegal references when building the graph" {
             val depLang = createDependency("org.apache.commons", "commons-lang3", "3.11")
             val depNoPkg = createDependency(NO_PACKAGE_NAMESPACE, "invalid", "1.2")
