@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -107,12 +108,13 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         moduleInfoResolver.workingDir = workingDir
-        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
+        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes, includes) }
 
         installDependencies(workingDir, scopes)
 

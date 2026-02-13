@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.toYaml
@@ -166,16 +167,18 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         val state = AnalyzerState()
         val packageManagerDependencies = determinePackageManagerDependencies(info)
         val excludes = config.excludes(info.repositoryConfiguration)
+        val includes = config.includes(info.repositoryConfiguration)
 
         runBlocking {
-            // The excludes are passed to allow the package managers to take in account the scope excludes. Since there
-            // is no scope includes, the includes are not passed to the package managers.
+            // The excludes (resp. includes) are passed to allow the package managers to take in account the scope
+            // excludes (resp. includes).
             info.managedFiles.entries.map { (manager, files) ->
                 PackageManagerRunner(
                     manager = manager,
                     definitionFiles = files,
                     analysisRoot = info.absoluteProjectPath,
                     excludes = excludes,
+                    includes = includes,
                     analyzerConfig = config,
                     labels = labels,
                     mustRunAfter = packageManagerDependencies[manager].orEmpty(),
@@ -197,7 +200,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         logger.info { "Building analyzer result." }
 
-        return state.buildResult(excludes)
+        return state.buildResult(excludes, includes)
     }
 
     private fun determinePackageManagerDependencies(info: ManagedFileInfo): Map<PackageManager, Set<String>> {
@@ -272,7 +275,7 @@ private class AnalyzerState {
         }
     }
 
-    fun buildResult(excludes: Excludes) = builder.build(excludes)
+    fun buildResult(excludes: Excludes, includes: Includes) = builder.build(excludes, includes)
 }
 
 /**
@@ -298,6 +301,11 @@ private class PackageManagerRunner(
      * The [Excludes] to apply.
      */
     val excludes: Excludes,
+
+    /**
+     * The [Includes] to apply.
+     */
+    val includes: Includes,
 
     /**
      * The [AnalyzerConfiguration] to use.
@@ -351,7 +359,14 @@ private class PackageManagerRunner(
         logger.info { "Starting ${manager.descriptor.displayName} analysis." }
 
         withContext(Dispatchers.IO.limitedParallelism(20)) {
-            val result = manager.resolveDependencies(analysisRoot, definitionFiles, excludes, analyzerConfig, labels)
+            val result = manager.resolveDependencies(
+                analysisRoot,
+                definitionFiles,
+                excludes,
+                includes,
+                analyzerConfig,
+                labels
+            )
 
             logger.info { "Finished ${manager.descriptor.displayName} analysis." }
 

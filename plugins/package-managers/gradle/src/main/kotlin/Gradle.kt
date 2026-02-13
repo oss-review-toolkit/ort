@@ -52,8 +52,10 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
@@ -168,6 +170,7 @@ class Gradle(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
@@ -280,8 +283,8 @@ class Gradle(
                     version = dependencyTreeModel.version
                 )
 
-                dependencyTreeModel.configurations.filterNot {
-                    excludes.isScopeExcluded(it.name)
+                dependencyTreeModel.configurations.filter {
+                    isScopeIncluded(it.name, excludes, includes)
                 }.forEach { configuration ->
                     graphBuilder.addDependencies(projectId, configuration.name, configuration.dependencies)
                 }

@@ -301,10 +301,12 @@ abstract class PackageManager(val projectType: String) : Plugin {
      * to further stages. They are not interpreted by ORT, but can be used to configure behavior of custom package
      * manager implementations.
      */
+    @Suppress("LongParameterList")
     open fun resolveDependencies(
         analysisRoot: File,
         definitionFiles: List<File>,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): PackageManagerResult {
@@ -324,7 +326,7 @@ abstract class PackageManager(val projectType: String) : Plugin {
             val duration = measureTime {
                 runCatching {
                     result[definitionFile] =
-                        resolveDependencies(analysisRoot, definitionFile, excludes, analyzerConfig, labels)
+                        resolveDependencies(analysisRoot, definitionFile, excludes, includes, analyzerConfig, labels)
                 }.onFailure {
                     it.showStackTrace()
 
@@ -365,6 +367,7 @@ abstract class PackageManager(val projectType: String) : Plugin {
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult>

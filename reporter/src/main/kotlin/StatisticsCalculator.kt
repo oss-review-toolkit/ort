@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.reporter
 import java.time.Duration
 import java.time.Instant
 
+import kotlin.collections.filterNot
 import kotlin.time.toKotlinDuration
 
 import org.ossreviewtoolkit.model.Identifier
@@ -33,6 +34,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
+import org.ossreviewtoolkit.model.utils.isScopeIncluded
 
 /**
  * This class calculates [Statistics] for a given [OrtResult] and the applicable [IssueResolution]s and
@@ -94,7 +96,13 @@ object StatisticsCalculator {
             .flatMap { project ->
                 val scopes = ortResult.dependencyNavigator.scopeNames(project)
                 MutableList(scopes.size) { project }.zip(scopes)
-            }.filterNot { (_, scope) -> ignoreExcluded && ortResult.repository.config.excludes.isScopeExcluded(scope) }
+            }.filterNot { (_, scope) ->
+                ignoreExcluded && !isScopeIncluded(
+                    scope,
+                    ortResult.repository.config.excludes,
+                    ortResult.repository.config.includes
+                )
+            }
             .maxOfOrNull { (project, scope) -> ortResult.dependencyNavigator.dependencyTreeDepth(project, scope) } ?: 0
 
     private fun getIncludedScopes(ortResult: OrtResult): Set<String> =
@@ -102,7 +110,13 @@ object StatisticsCalculator {
             .getProjects()
             .filterNot { project -> ortResult.isExcluded(project.id) }
             .flatMap { project -> ortResult.dependencyNavigator.scopeNames(project) }
-            .filterNot { scope -> ortResult.repository.config.excludes.isScopeExcluded(scope) }
+            .filter { scope ->
+                isScopeIncluded(
+                    scope,
+                    ortResult.repository.config.excludes,
+                    ortResult.repository.config.includes
+                )
+            }
             .toSet()
 
     private fun getExcludedScopes(ortResult: OrtResult): Set<String> =

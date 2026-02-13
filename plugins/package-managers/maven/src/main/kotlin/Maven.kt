@@ -32,7 +32,9 @@ import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
@@ -106,6 +108,7 @@ class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor,
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
@@ -123,8 +126,8 @@ class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor,
             workingDir
         }
 
-        projectBuildingResult.dependencies.filterNot {
-            excludes.isScopeExcluded(it.dependency.scope)
+        projectBuildingResult.dependencies.filter {
+            isScopeIncluded(it.dependency.scope, excludes, includes)
         }.forEach { node ->
             graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
         }

@@ -36,6 +36,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 class NpmTest : WordSpec({
@@ -63,6 +64,7 @@ class NpmTest : WordSpec({
                     workingDir,
                     definitionFile,
                     Excludes.EMPTY,
+                    Includes.EMPTY,
                     AnalyzerConfiguration(allowDynamicVersions = true),
                     emptyMap()
                 )

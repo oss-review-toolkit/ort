@@ -64,6 +64,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
@@ -132,6 +133,7 @@ class TychoTest : WordSpec({
                 tempdir(),
                 definitionFile,
                 Excludes.EMPTY,
+                Includes.EMPTY,
                 AnalyzerConfiguration(),
                 emptyMap()
             )
@@ -164,6 +166,7 @@ class TychoTest : WordSpec({
                     tempdir(),
                     definitionFile,
                     Excludes.EMPTY,
+                    Includes.EMPTY,
                     AnalyzerConfiguration(),
                     emptyMap()
                 )
@@ -185,6 +188,7 @@ class TychoTest : WordSpec({
                 tempdir(),
                 definitionFile,
                 Excludes.EMPTY,
+                Includes.EMPTY,
                 AnalyzerConfiguration(),
                 emptyMap()
             )
@@ -212,6 +216,7 @@ class TychoTest : WordSpec({
                 tempdir(),
                 definitionFile,
                 Excludes.EMPTY,
+                Includes.EMPTY,
                 AnalyzerConfiguration(),
                 emptyMap()
             )
@@ -250,6 +255,7 @@ class TychoTest : WordSpec({
                 tempdir(),
                 definitionFile,
                 Excludes.EMPTY,
+                Includes.EMPTY,
                 AnalyzerConfiguration(),
                 emptyMap()
             )
@@ -284,6 +290,7 @@ class TychoTest : WordSpec({
                 tempdir(),
                 definitionFile,
                 Excludes.EMPTY,
+                Includes.EMPTY,
                 AnalyzerConfiguration(),
                 emptyMap()
             )

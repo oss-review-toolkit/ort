@@ -27,6 +27,10 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.PathInclude
 import org.ossreviewtoolkit.model.config.PathIncludeReason
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.config.ScopeInclude
+import org.ossreviewtoolkit.model.config.ScopeIncludeReason
 
 class ExcludesUtilsTest : WordSpec({
     "isPathIncluded()" should {
@@ -76,6 +80,60 @@ class ExcludesUtilsTest : WordSpec({
             val includes = Includes.EMPTY
             val excludes = Excludes(listOf(PathExclude("/some/path", PathExcludeReason.OTHER)))
             isPathIncluded("/some/path", excludes, includes) shouldBe false
+        }
+    }
+
+    "isScopeIncluded()" should {
+        "return true if scope is included and not excluded" {
+            val includes = Includes(scopes = listOf(ScopeInclude("myScope", ScopeIncludeReason.OTHER)))
+            val excludes = Excludes(
+                scopes = listOf(ScopeExclude("excludedScope", ScopeExcludeReason.DEV_DEPENDENCY_OF))
+            )
+            isScopeIncluded("myScope", excludes, includes) shouldBe true
+        }
+
+        "return false if scope is included and excluded" {
+            val includes = Includes(scopes = listOf(ScopeInclude("myScope", ScopeIncludeReason.OTHER)))
+            val excludes = Excludes(scopes = listOf(ScopeExclude("my.*", ScopeExcludeReason.DEV_DEPENDENCY_OF)))
+            isScopeIncluded("myScope", excludes, includes) shouldBe false
+        }
+
+        "return true if scope is included and if no excludes are defined" {
+            val includes = Includes(scopes = listOf(ScopeInclude("myScope", ScopeIncludeReason.OTHER)))
+            val excludes = Excludes.EMPTY
+            isScopeIncluded("myScope", excludes, includes) shouldBe true
+        }
+
+        "return false if scope is not included and not excluded" {
+            val includes = Includes(scopes = listOf(ScopeInclude("myScope", ScopeIncludeReason.OTHER)))
+            val excludes = Excludes(
+                scopes = listOf(ScopeExclude("myOtherScope", ScopeExcludeReason.DEV_DEPENDENCY_OF))
+            )
+            isScopeIncluded("aThirdScope", excludes, includes) shouldBe false
+        }
+
+        "return false if scope is not included and no excludes are defined" {
+            val includes = Includes(scopes = listOf(ScopeInclude("myScope", ScopeIncludeReason.OTHER)))
+            val excludes = Excludes.EMPTY
+            isScopeIncluded("myOtherScope", excludes, includes) shouldBe false
+        }
+
+        "return true if no includes are defined and no excludes are defined" {
+            val includes = Includes.EMPTY
+            val excludes = Excludes.EMPTY
+            isScopeIncluded("myScope", excludes, includes) shouldBe true
+        }
+
+        "return true if no includes are defined and the scope is not excluded" {
+            val includes = Includes.EMPTY
+            val excludes = Excludes(scopes = listOf(ScopeExclude("myScope", ScopeExcludeReason.DEV_DEPENDENCY_OF)))
+            isScopeIncluded("myOtherScope", excludes, includes) shouldBe true
+        }
+
+        "return false if scope is not included and is excluded" {
+            val includes = Includes.EMPTY
+            val excludes = Excludes(scopes = listOf(ScopeExclude("myScope", ScopeExcludeReason.DEV_DEPENDENCY_OF)))
+            isScopeIncluded("myScope", excludes, includes) shouldBe false
         }
     }
 })
