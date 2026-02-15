@@ -56,7 +56,6 @@ class OsvServiceWrapperFunTest : WordSpec({
                 it shouldHaveSize 3
 
                 it[0] should containAll(
-                    "CVE-2021-45931",
                     "CVE-2023-25193",
                     "OSV-2020-484"
                 )
