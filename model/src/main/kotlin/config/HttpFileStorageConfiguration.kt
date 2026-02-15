@@ -20,8 +20,9 @@
 package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.util.StdConverter
+
+import tools.jackson.databind.annotation.JsonSerialize
+import tools.jackson.databind.util.StdConverter
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class HttpFileStorageConfiguration(

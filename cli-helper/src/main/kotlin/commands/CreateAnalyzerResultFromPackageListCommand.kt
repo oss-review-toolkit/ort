@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
@@ -59,6 +56,9 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+
+import tools.jackson.databind.PropertyNamingStrategies
+import tools.jackson.module.kotlin.readValue
 
 internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
     help = "A command which turns a package list file into an analyzer result."

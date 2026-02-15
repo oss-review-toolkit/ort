@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
-import com.fasterxml.jackson.databind.Module
-import com.fasterxml.jackson.databind.PropertyName
-import com.fasterxml.jackson.databind.introspect.Annotated
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
-import com.fasterxml.jackson.databind.introspect.ObjectIdInfo
-import com.fasterxml.jackson.databind.module.SimpleModule
+import tools.jackson.databind.PropertyName
+import tools.jackson.databind.cfg.MapperConfig
+import tools.jackson.databind.introspect.Annotated
+import tools.jackson.databind.introspect.JacksonAnnotationIntrospector
+import tools.jackson.databind.introspect.ObjectIdInfo
+import tools.jackson.databind.module.SimpleModule
 
 /**
  * A Jackson [Module] that configures the [ObjectIdInfo] for the provided [types]. The configuration applied to these
@@ -43,7 +43,7 @@ class IntIdModule(private val types: List<Class<out Any>>) : SimpleModule() {
         super.setupModule(context)
 
         context.appendAnnotationIntrospector(object : JacksonAnnotationIntrospector() {
-            override fun findObjectIdInfo(ann: Annotated): ObjectIdInfo? {
+            override fun findObjectIdInfo(config: MapperConfig<*>, ann: Annotated): ObjectIdInfo? {
                 if (ann.rawType in types) {
                     return ObjectIdInfo(
                         PropertyName("_id"),
@@ -53,7 +53,7 @@ class IntIdModule(private val types: List<Class<out Any>>) : SimpleModule() {
                     )
                 }
 
-                return super.findObjectIdInfo(ann)
+                return super.findObjectIdInfo(config, ann)
             }
         })
     }

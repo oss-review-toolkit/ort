@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.commands.migrate
 
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
-
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
@@ -43,6 +41,8 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+
+import tools.jackson.dataformat.yaml.YAMLGenerator
 
 @OrtPlugin(
     displayName = "Migrate",

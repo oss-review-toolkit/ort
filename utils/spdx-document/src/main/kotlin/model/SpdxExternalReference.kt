@@ -23,11 +23,12 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+
+import tools.jackson.core.JsonParser
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.annotation.JsonDeserialize
+import tools.jackson.databind.deser.std.StdDeserializer
 
 /**
  *  A reference to an external source of additional information for an [SpdxPackage].
@@ -127,8 +128,8 @@ private class ReferenceTypeDeserializer : StdDeserializer<SpdxExternalReference.
     SpdxExternalReference.Type::class.java
 ) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): SpdxExternalReference.Type {
-        val node = p.codec.readTree<JsonNode>(p)
-        val typeName = node.textValue()
+        val node = p.readValueAsTree<JsonNode>()
+        val typeName = node.asString()
         val type = SpdxExternalReference.Type::class.sealedSubclasses.mapNotNull { it.objectInstance }
             .find { it.name == typeName }
         return type ?: SpdxExternalReference.Type.Other(typeName)

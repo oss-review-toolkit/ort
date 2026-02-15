@@ -20,13 +20,14 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.Deque
 import java.util.LinkedList
 
 import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
 import org.ossreviewtoolkit.model.utils.PackageReferenceSortedSetConverter
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package
