@@ -81,6 +81,7 @@ internal class GradleDependencyHandler(
         }
 
         val hasNoArtifacts = dependency.pomFile == null
+        val isPomArtifact = dependency.extension == "pom"
 
         val isKotlinMultiPlatform = dependency.variants.values.any {
             "org.jetbrains.kotlin.platform.type" in it.keys
@@ -101,6 +102,7 @@ internal class GradleDependencyHandler(
 
         val sourceArtifact = when {
             hasNoArtifacts -> RemoteArtifact.EMPTY
+            isPomArtifact && !isKotlinMultiPlatform -> binaryArtifact
             else -> createRemoteArtifact(dependency.pomFile, "sources", "jar")
         }
 
@@ -125,7 +127,7 @@ internal class GradleDependencyHandler(
             sourceArtifact = sourceArtifact,
             vcs = vcs,
             vcsProcessed = vcsProcessed,
-            isMetadataOnly = hasNoArtifacts
+            isMetadataOnly = hasNoArtifacts || (isPomArtifact && !isKotlinMultiPlatform)
         )
     }
 
