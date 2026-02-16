@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GradleBomFunTest : StringSpec({
-    "Gradle BOM dependencies are ignored" {
+    "Gradle BOM dependencies are not ignored" {
         val definitionFile = getAssetFile("projects/synthetic/gradle-bom/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-bom-expected-output.yml")
 
