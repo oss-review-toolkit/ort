@@ -71,10 +71,10 @@ packages:
       value: "756ba398c754fd6fcf37ee56446417ca2d431fec"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/jackson-bom/2.12.2/jackson-bom-2.12.2-sources.jar"
+    url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/jackson-bom/2.12.2/jackson-bom-2.12.2.pom"
     hash:
-      value: ""
-      algorithm: ""
+      value: "756ba398c754fd6fcf37ee56446417ca2d431fec"
+      algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git@github.com:FasterXML/jackson-bom.git"
@@ -85,6 +85,7 @@ packages:
     url: "ssh://git@github.com/FasterXML/jackson-bom.git"
     revision: "jackson-bom-2.12.2"
     path: ""
+  is_metadata_only: true
 - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
   purl: "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.12.2"
   authors:
@@ -176,10 +177,10 @@ packages:
       value: "e8848369738c03e40af5507686216f9b8b44b6a3"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.7.2/junit-bom-5.7.2-sources.jar"
+    url: "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.7.2/junit-bom-5.7.2.pom"
     hash:
-      value: ""
-      algorithm: ""
+      value: "e8848369738c03e40af5507686216f9b8b44b6a3"
+      algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/junit-team/junit5.git"
@@ -190,6 +191,7 @@ packages:
     url: "https://github.com/junit-team/junit5.git"
     revision: ""
     path: ""
+  is_metadata_only: true
 - id: "Maven:org.junit.platform:junit-platform-commons:1.7.2"
   purl: "pkg:maven/org.junit.platform/junit-platform-commons@1.7.2"
   authors:
