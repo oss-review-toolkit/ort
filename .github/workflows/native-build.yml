@@ -13,21 +13,21 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
       - name: Setup GraalVM
-        uses: graalvm/setup-graalvm@54b4f5a65c1a84b2fdfdc2078fe43df32819e4b1 # v1
+        uses: graalvm/setup-graalvm@54b4f5a65c1a84b2fdfdc2078fe43df32819e4b1 # v1.4.5
         with:
           distribution: graalvm
           java-version: 25
           native-image-job-reports: true
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+        uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
       - name: Build Executable
         run: ./gradlew -P cliAnalyzerOnly=true --no-configuration-cache :cli:nativeCompile
       - name: Compress Executable
-        uses: crazy-max/ghaction-upx@db8cc9515a4a7ea1b312cb82fbeae6d716daf777 # v3
+        uses: crazy-max/ghaction-upx@db8cc9515a4a7ea1b312cb82fbeae6d716daf777 # v3.2.0
         with:
           files: cli/build/native/nativeCompile/ort
       - name: Upload Executable

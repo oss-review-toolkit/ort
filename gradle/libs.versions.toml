@@ -47,23 +47,23 @@ ks3 = "1.0.0"
 tomlkt = "0.5.0"
 log4jApi = "2.25.3"
 log4jApiKotlin = "1.5.0"
-logback = "1.5.29"
+logback = "1.5.32"
 maven = "3.9.11"
-mavenResolver = "1.9.25"
+mavenResolver = "1.9.26"
 mockk = "1.14.9"
 mordant = "3.0.2"
 okhttp = "5.3.2"
-postgres = "42.7.9"
-postgresEmbedded = "1.1.1"
+postgres = "42.7.10"
 reflections = "0.10.2"
 retrofit = "3.0.0"
-s3 = "2.41.12"
+s3 = "2.41.27"
 saxonHe = "12.9"
 scanoss = "0.12.1"
 semver4j = "6.0.0"
 slf4j = "2.0.17"
-springCore = "7.0.3"
+springCore = "7.0.4"
 svnkit = "1.10.13"
+testcontainers = "1.21.4"
 tika = "3.2.3"
 wagonHttp = "3.5.3"
 wiremock = "3.13.2"
@@ -130,6 +130,7 @@ kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.
 kotest-assertions-table = { module = "io.kotest:kotest-assertions-table", version.ref = "kotest" }
 kotest-extensions = { module = "io.kotest:kotest-extensions", version.ref = "kotest" }
 kotest-extensions-junitXml = { module = "io.kotest:kotest-extensions-junitxml", version.ref = "kotest" }
+kotest-extensions-testcontainers = { module = "io.kotest:kotest-extensions-testcontainers", version.ref = "kotest" }
 kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
@@ -168,7 +169,6 @@ mordantCoroutines = { module = "com.github.ajalt.mordant:mordant-coroutines", ve
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
-postgresEmbedded = { module = "com.opentable.components:otj-pg-embedded", version.ref = "postgresEmbedded" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-jackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
@@ -180,6 +180,7 @@ semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
 slf4j = { module = "org.slf4j:slf4j-api ", version.ref = "slf4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }
 svnkit = { module = "com.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
 tika = { module = "org.apache.tika:tika-core", version.ref = "tika" }
 wagon-http = { module = "org.apache.maven.wagon:wagon-http", version.ref = "wagonHttp" }
 wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }

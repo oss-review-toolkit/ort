@@ -7,6 +7,7 @@
     "type": "git",
     "url": "https://github.com/oss-review-toolkit/ort.git"
   },
+  "packageManager": "pnpm@10.29.2",
   "dependencies": {
     "babel-cli": "6.26.0"
   }

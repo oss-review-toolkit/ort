@@ -27,11 +27,11 @@ jobs:
       ort-minimal-labels: ${{ steps.meta-ort-minimal.outputs.labels }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+        uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
       - name: Get ORT version
         id: get-version
         run: |
@@ -39,7 +39,7 @@ jobs:
           echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_OUTPUT
       - name: Extract Metadata for 'ort' Docker Image
         id: meta-ort
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort
@@ -51,7 +51,7 @@ jobs:
             type=sha
       - name: Extract Metadata for 'ort-minimal' Docker Image
         id: meta-ort-minimal
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal
@@ -78,15 +78,15 @@ jobs:
       ORT_VERSION: ${{ needs.metadata.outputs.version }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
       - name: Free Disk Space
         uses: ./.github/actions/free-disk-space
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -94,7 +94,7 @@ jobs:
       - name: Build & Push 'ort' Docker Image
         id: build-ort
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           context: .
           labels: ${{ needs.metadata.outputs.ort-labels }}
@@ -105,7 +105,7 @@ jobs:
           outputs: type=image,name=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort,push-by-digest=true,name-canonical=true,push=true
       - name: Build 'ort' Docker Image
         if: ${{ github.event_name == 'pull_request' }}
-        uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           context: .
           tags: ${{ needs.metadata.outputs.ort-tags }}
@@ -116,7 +116,7 @@ jobs:
       - name: Build & Push 'ort-minimal' Docker Image
         id: build-ort-minimal
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           context: .
           # Do not "cache-to" here to not overwrite additional layers from the "full" image, which also contains all
@@ -129,7 +129,7 @@ jobs:
           outputs: type=image,name=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal,push-by-digest=true,name-canonical=true,push=true
       - name: Build 'ort-minimal' Docker Image
         if: ${{ github.event_name == 'pull_request' }}
-        uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           context: .
           labels: ${{ needs.metadata.outputs.ort-minimal-labels }}
@@ -179,9 +179,9 @@ jobs:
           path: /tmp/digests/ort-minimal
           merge-multiple: true
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}

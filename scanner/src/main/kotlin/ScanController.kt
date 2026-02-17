@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.scanner
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -27,7 +29,9 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.utils.common.PATH_STRING_COMPARATOR
@@ -93,6 +97,12 @@ internal class ScanController(
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
 
     /**
+     * A set storing information about which provenances have been scanned by which scanners. This is used to
+     * deduplicate scan results.
+     */
+    private val scannedProvenances = mutableSetOf<Pair<Provenance, ScannerDetails>>()
+
+    /**
      * The [FileList] for each [KnownProvenance].
      */
     private val fileLists = mutableMapOf<KnownProvenance, FileList>()
@@ -147,19 +157,52 @@ internal class ScanController(
     }
 
     /**
-     * Add all scan results contained in the nested [result].
+     * Add all scan results contained in the nested [result]. Check for duplicates and generate issues for them.
+     * Return a [NestedProvenanceScanResult] containing only the scan results that could be added.
      */
-    fun addNestedScanResult(scanner: ScannerWrapper, result: NestedProvenanceScanResult) {
-        result.scanResults.forEach { (provenance, results) ->
-            addScanResults(scanner, provenance, results)
+    fun addAndDeduplicateNestedScanResult(
+        scanner: ScannerWrapper,
+        result: NestedProvenanceScanResult
+    ): NestedProvenanceScanResult {
+        val deduplicatedResults = result.scanResults.mapValues { (provenance, results) ->
+            addAndDeduplicateScanResults(scanner, provenance, results)
         }
+
+        return result.copy(scanResults = deduplicatedResults)
     }
 
     /**
-     * Add all [results].
+     * Add all [results]. Check for duplicates and generate issues for them. Return a list containing only the
+     * [ScanResult]s that could be added.
      */
-    fun addScanResults(scanner: ScannerWrapper, provenance: KnownProvenance, results: List<ScanResult>) {
-        scanResults.getOrPut(scanner) { mutableMapOf() }.getOrPut(provenance) { mutableListOf() }.addAll(results)
+    fun addAndDeduplicateScanResults(
+        scanner: ScannerWrapper,
+        provenance: KnownProvenance,
+        results: List<ScanResult>
+    ): List<ScanResult> {
+        val newResults = results.filter {
+            scannedProvenances.add(it.provenance to it.scanner)
+        }
+
+        if (newResults.size < results.size) {
+            val message = buildString {
+                appendLine("Found multiple scan results for the same provenance and scanner.")
+                (results - newResults.toSet()).forEach { result ->
+                    appendLine("Scanner:")
+                    appendLine(result.scanner.toYaml())
+                    appendLine("Provenance:")
+                    append(result.provenance.toYaml())
+                }
+            }
+
+            logger.warn { message }
+        }
+
+        scanResults.getOrPut(scanner) { mutableMapOf() }
+            .getOrPut(provenance) { mutableListOf() }
+            .addAll(newResults)
+
+        return newResults
     }
 
     /**

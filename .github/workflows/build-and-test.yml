@@ -21,14 +21,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Setup Java
-      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
       with:
         distribution: temurin
         java-version: 21
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Build all classes
       run: ./gradlew classes
   codeql-analysis:
@@ -39,18 +39,18 @@ jobs:
       security-events: write
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@45cbd0c69e560cd9e7cd7f8c32362050c9b7ded2 # v4
+      uses: github/codeql-action/init@9e907b5e64f6b83e7804b09294d44122997950d6 # v4.32.3
       with:
         languages: java
         tools: nightly
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Build all classes
       run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g --no-build-cache classes
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@45cbd0c69e560cd9e7cd7f8c32362050c9b7ded2 # v4
+      uses: github/codeql-action/analyze@9e907b5e64f6b83e7804b09294d44122997950d6 # v4.32.3
   test:
     strategy:
       matrix:
@@ -60,16 +60,16 @@ jobs:
     needs: build
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Setup Java
-      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
       with:
         distribution: temurin
         java-version: 21
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Install Flox
-      uses: flox/install-flox-action@9428713e8d3883274c334b4b95b8830beebd24d2 # v2
+      uses: flox/install-flox-action@9428713e8d3883274c334b4b95b8830beebd24d2 # v2.3.0
       with:
         disable-metrics: true
         version: 1.8.4
@@ -86,7 +86,7 @@ jobs:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
     - name: Upload code coverage data
-      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5
+      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: test-${{ matrix.os }}
@@ -95,11 +95,11 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Install Flox
-      uses: flox/install-flox-action@9428713e8d3883274c334b4b95b8830beebd24d2 # v2
+      uses: flox/install-flox-action@9428713e8d3883274c334b4b95b8830beebd24d2 # v2.3.0
       with:
         disable-metrics: true
         version: 1.8.4
@@ -111,7 +111,7 @@ jobs:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
     - name: Upload code coverage data
-      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5
+      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-no-external-tools
@@ -119,15 +119,15 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         submodules: recursive
     - name: Free Disk Space
       uses: ./.github/actions/free-disk-space
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
     - name: Build ORT Docker Image
-      uses: docker/build-push-action@ee4ca427a2f43b6a16632044ca514c076267da23 # v6
+      uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
       with:
         context: .
         load: true
@@ -135,7 +135,7 @@ jobs:
         target: all-tools
         cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Run functional tests that do require external tools
       run: |
         # Run the functional tests in the Docker container.
@@ -156,7 +156,7 @@ jobs:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
     - name: Upload code coverage data
-      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5
+      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-external-tools
@@ -165,8 +165,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Publish to local Maven repository
       run: ./gradlew publishToMavenLocal

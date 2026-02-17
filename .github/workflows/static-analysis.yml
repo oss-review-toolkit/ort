@@ -16,34 +16,34 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
       - name: Check Commit Messages
-        uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6
+        uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6.2.1
         with:
           configFile: .commitlintrc.yml
   code-base-checks:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Check copyrights, license headers, and .gitattributes
       run: ./gradlew checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   completions:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Setup Java
-      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
       with:
         distribution: temurin
         java-version: 21
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Generate completions
       run: |
         ./scripts/generate_completion_scripts.sh
@@ -64,15 +64,15 @@ jobs:
       security-events: write
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
     - name: Check for Detekt Issues
       run: ./gradlew detekt
     - name: Check for Detekt Issues with type resolution
       run: ./gradlew detektMain detektTestFixtures detektTest detektFunTest
     - name: Upload SARIF File
-      uses: github/codeql-action/upload-sarif@45cbd0c69e560cd9e7cd7f8c32362050c9b7ded2 # v4
+      uses: github/codeql-action/upload-sarif@9e907b5e64f6b83e7804b09294d44122997950d6 # v4.32.3
       if: always() # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
@@ -80,20 +80,20 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Check Links
-      uses: umbrelladocs/action-linkspector@652f85bc57bb1e7d4327260decc10aa68f7694c3 # v1
+      uses: umbrelladocs/action-linkspector@652f85bc57bb1e7d4327260decc10aa68f7694c3 # v1.4.0
       with:
         fail_level: error
   markdownlint:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
       - name: Setup Node
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
       - name: Check for Markdown issues
         run: |
           npm install -g markdownlint-rule-max-one-sentence-per-line@0.0.2
@@ -102,8 +102,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -122,7 +122,7 @@ jobs:
       security-events: write
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 0
     - name: Qodana Scan
@@ -131,20 +131,20 @@ jobs:
         post-pr-comment: false
         use-caches: false
     - name: Upload Code Scanning Results
-      uses: github/codeql-action/upload-sarif@45cbd0c69e560cd9e7cd7f8c32362050c9b7ded2 # v4
+      uses: github/codeql-action/upload-sarif@9e907b5e64f6b83e7804b09294d44122997950d6 # v4.32.3
       with:
         sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
   renovate-validation:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Validate Renovate Config
       run: npx -y --package renovate@latest -- renovate-config-validator renovate.json
   reuse-tool:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Check REUSE Compliance
       uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6

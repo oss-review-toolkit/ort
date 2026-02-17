@@ -18,18 +18,18 @@
   "dependencies": {
     "@docusaurus/core": "3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
-    "@easyops-cn/docusaurus-search-local": "^0.52.0",
-    "@mdx-js/react": "^3.0.0",
-    "clsx": "^2.0.0",
-    "prism-react-renderer": "^2.3.0",
-    "raw-loader": "^4.0.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "@easyops-cn/docusaurus-search-local": "0.52.2",
+    "@mdx-js/react": "3.1.1",
+    "clsx": "2.1.1",
+    "prism-react-renderer": "2.4.1",
+    "raw-loader": "4.0.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.9.2",
     "@docusaurus/types": "3.9.2",
-    "prettier": "^3.6.2"
+    "prettier": "3.8.1"
   },
   "browserslist": {
     "production": [
@@ -42,8 +42,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "engines": {
-    "node": ">=18.0"
   }
 }

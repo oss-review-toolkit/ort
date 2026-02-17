@@ -26,6 +26,7 @@ import org.gradle.api.internal.artifacts.DefaultProjectComponentIdentifier
 import org.gradle.api.internal.artifacts.repositories.DefaultFlatDirArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultIvyArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactRepository
+import org.gradle.internal.build.BuildState
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 
@@ -218,7 +219,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
 
                     try {
                         resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration
-                                .getArtifacts(Specs.SATISFIES_ALL)
+                                .getArtifacts()
                     } catch (ResolveException e) {
                         project.logger.info("Artifacts for configuration '${configuration.name}' could not be " +
                                 "resolved, therefore no information about artifact classifiers and extensions is " +
@@ -387,7 +388,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                     return new OrtDependencyImpl(id.group, id.module, id.version, classifier, extension, [] as Set, dependencies,
                             error, warning, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
-                    if (id.build.isCurrentBuild() || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
+                    if (isCurrentBuild(id.build, project) || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
                         def dependencyProject = project.rootProject.findProject(id.projectPath)
                         return new OrtDependencyImpl(groupId: dependencyProject.group.toString(),
                                 artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
@@ -414,6 +415,23 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                 return dependencyFromDisplayName(dependencyResult.requested.displayName, [],
                         "Unknown result type: ${dependencyResult.getClass().simpleName}", null)
             }
+        }
+
+        private static boolean isCurrentBuild(BuildIdentifier buildIdentifier, Project project) {
+            if (project.gradle.hasProperty('buildPath')) {
+                // For Gradle 9.1 and above.
+                return buildIdentifier.buildPath == project.gradle.buildPath
+            }
+
+            if (buildIdentifier.hasProperty('currentBuild')) {
+                // For Gradle 8.x and below.
+                return buildIdentifier.currentBuild
+            }
+
+            // Gradle 9.0 is missing "BuildIdentifier.currentBuild" but does not have "BuildIdentifier.buildPath", so
+            // use internal API to work around that.
+            BuildIdentifier projectBuildIdentifier = project.services.get(BuildState).buildIdentifier
+            return buildIdentifier.buildPath == projectBuildIdentifier.buildPath
         }
 
         private static boolean canBeResolved(Configuration configuration) {
@@ -489,7 +507,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                 if (id instanceof ModuleComponentIdentifier) {
                     return toIdentifier(id.group, id.module, id.version)
                 } else if (id instanceof ProjectComponentIdentifier) {
-                    if (id.build.currentBuild || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
+                    if (isCurrentBuild(id.build, project) || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
                         def dependencyProject = project.rootProject.findProject(id.projectPath)
                         return toIdentifier(dependencyProject.group.toString(), dependencyProject.name,
                                 dependencyProject.version.toString())
