@@ -83,6 +83,10 @@ internal class GradleDependencyHandler(
         val hasNoArtifacts = dependency.pomFile == null
         val isPomArtifact = dependency.extension == "pom"
 
+        val isPlatformDependency = dependency.variants.keys.any {
+            it.startsWith("platform-") || it.startsWith("enforced-platform-")
+        }
+
         val isKotlinMultiPlatform = dependency.variants.values.any {
             "org.jetbrains.kotlin.platform.type" in it.keys
         }
@@ -127,7 +131,7 @@ internal class GradleDependencyHandler(
             sourceArtifact = sourceArtifact,
             vcs = vcs,
             vcsProcessed = vcsProcessed,
-            isMetadataOnly = hasNoArtifacts || (isPomArtifact && !isKotlinMultiPlatform)
+            isMetadataOnly = hasNoArtifacts || (isPomArtifact && !isKotlinMultiPlatform) || isPlatformDependency
         )
     }
 
