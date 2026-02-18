@@ -217,7 +217,11 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 version = id.version,
                                 classifier = "",
                                 extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
-                                variants = selectedComponent.variants.mapTo(mutableSetOf()) { it.displayName },
+                                variants = selectedComponent.variants.associate {
+                                    it.displayName to it.attributes.keySet().associate { key ->
+                                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                                    }
+                                },
                                 dependencies = dependencies,
                                 error = null,
                                 warning = null,
@@ -247,7 +251,11 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
                                 classifier = "",
                                 extension = "",
-                                variants = selectedComponent.variants.mapTo(mutableSetOf()) { it.displayName },
+                                variants = selectedComponent.variants.associate {
+                                    it.displayName to it.attributes.keySet().associate { key ->
+                                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                                    }
+                                },
                                 dependencies = dependencies,
                                 error = null,
                                 warning = null,
