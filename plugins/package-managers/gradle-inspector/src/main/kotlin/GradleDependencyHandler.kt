@@ -82,8 +82,17 @@ internal class GradleDependencyHandler(
 
         val hasNoArtifacts = dependency.pomFile == null
 
+        val isKotlinMultiPlatform = dependency.variants.values.any {
+            "org.jetbrains.kotlin.platform.type" in it.keys
+        }
+
         val binaryArtifact = when {
             hasNoArtifacts -> RemoteArtifact.EMPTY
+
+            isKotlinMultiPlatform -> with(dependency) {
+                // TODO: Support more than just "jvm" targets for KMP projects.
+                createRemoteArtifact(pomFile, classifier, "jar")
+            }
 
             else -> with(dependency) {
                 createRemoteArtifact(pomFile, classifier, extension.takeUnless { it == "bundle" })
