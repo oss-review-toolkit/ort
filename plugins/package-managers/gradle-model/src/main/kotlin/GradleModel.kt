@@ -43,7 +43,7 @@ interface OrtDependency {
     val version: String
     val classifier: String
     val extension: String
-    val variants: Set<String>
+    val variants: Map<String, Map<String, String>>
     val dependencies: List<OrtDependency>
     val error: String?
     val warning: String?

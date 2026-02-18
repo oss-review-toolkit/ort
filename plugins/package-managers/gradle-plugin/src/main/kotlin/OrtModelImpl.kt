@@ -52,7 +52,7 @@ internal class OrtDependencyImpl(
     override val version: String,
     override val classifier: String,
     override val extension: String,
-    override val variants: Set<String>,
+    override val variants: Map<String, Map<String, String>>,
     override val dependencies: List<OrtDependency>,
     override val error: String?,
     override val warning: String?,
