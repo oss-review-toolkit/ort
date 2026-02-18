@@ -1343,9 +1343,9 @@ packages:
   description: "Coroutines support libraries for Kotlin"
   homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.5.2/kotlinx-coroutines-core-1.5.2.pom"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.5.2/kotlinx-coroutines-core-1.5.2.jar"
     hash:
-      value: "a7c7e93534ced240c9b3df6530ef5e40339c8a23"
+      value: "b69812855f235ec832341b48e721a5e62e7a888c"
       algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.5.2/kotlinx-coroutines-core-1.5.2-sources.jar"
