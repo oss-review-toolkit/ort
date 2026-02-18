@@ -60,11 +60,7 @@ object DependencyGraphConverter {
         val graphs = buildDependencyGraphs(projectsToConvert, excludes, includes)
         val allGraphs = result.dependencyGraphs + graphs
 
-        val filteredPackages = if (includes.scopes.isEmpty() && excludes.scopes.isEmpty()) {
-            result.packages
-        } else {
-            filterExcludedPackages(allGraphs.values, result.packages)
-        }
+        val filteredPackages = filterExcludedPackages(allGraphs.values, result.packages, excludes, includes)
 
         return result.copy(
             dependencyGraphs = allGraphs,
@@ -106,11 +102,18 @@ object DependencyGraphConverter {
     /**
      * Filter out all [packages] that are no longer referenced by one of the given [dependency graphs][graphs]. These
      * packages have been subject of scope excludes or not included by scope includes.
+     * If no scope [includes] and no scope [excludes] are defined, the original set of [packages] is returned as is.
      */
     private fun filterExcludedPackages(
         graphs: Collection<DependencyGraph>,
-        packages: Collection<Package>
+        packages: Set<Package>,
+        excludes: Excludes,
+        includes: Includes
     ): Set<Package> {
+        if (includes.scopes.isEmpty() && excludes.scopes.isEmpty()) {
+            return packages
+        }
+
         val includedPackages = graphs.flatMapTo(mutableSetOf()) { it.packages }
         return packages.filterTo(mutableSetOf()) { it.id in includedPackages }
     }
