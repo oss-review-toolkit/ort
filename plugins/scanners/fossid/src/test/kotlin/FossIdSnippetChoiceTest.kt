@@ -312,10 +312,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 )
             }
 
-            summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 0 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
-            }
+            summary.issues should beEmpty()
         }
 
         "mark a file with all snippets chosen as identified when the scan has been created in archive mode" {
@@ -395,10 +392,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 )
             }
 
-            summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 0 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
-            }
+            summary.issues should beEmpty()
         }
 
         "mark a file with only non relevant snippets for a given snippet location as identified" {
@@ -440,12 +434,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 service.markAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
             }
 
-            summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
-
-            summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 0 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
-            }
+            summary.issues should beEmpty()
         }
 
         "not mark a file with some non relevant snippets for a given snippet location as identified" {
