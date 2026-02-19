@@ -110,7 +110,7 @@ private data class PackageInfoV2Raw(
                 homepage = it.homepage,
                 label = it.label,
                 requires = it.dependencies.values.filter { dep ->
-                    dep.direct && dep.libs && dep.visible
+                    dep.direct && dep.visible
                 }.map { dep2 -> dep2.ref },
                 buildRequires = it.dependencies.values.filter { dep ->
                     dep.build && dep.direct
