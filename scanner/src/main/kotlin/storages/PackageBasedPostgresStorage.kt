@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import com.fasterxml.jackson.core.JsonProcessingException
-
 import java.sql.SQLException
 
 import javax.sql.DataSource
@@ -52,6 +50,8 @@ import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+
+import tools.jackson.core.JacksonException
 
 private val TABLE_NAME = ScanResults.tableName
 
@@ -151,7 +151,7 @@ class PackageBasedPostgresStorage(
                     .filter { it.provenance.matches(pkg) }
             }
         }.onFailure {
-            if (it is JsonProcessingException || it is SQLException) {
+            if (it is JacksonException || it is SQLException) {
                 it.showStackTrace()
 
                 val message = "Could not read scan results for '${pkg.id.toCoordinates()}' with " +

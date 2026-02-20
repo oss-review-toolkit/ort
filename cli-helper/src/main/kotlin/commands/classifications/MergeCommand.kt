@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands.classifications
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.check
 import com.github.ajalt.clikt.parameters.arguments.convert
@@ -34,6 +32,8 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.expandTilde
+
+import tools.jackson.module.kotlin.readValue
 
 internal class MergeCommand : OrtHelperCommand(
     help = "Merge multiple files with license classifications into one."

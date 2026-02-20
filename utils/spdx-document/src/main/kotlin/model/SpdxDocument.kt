@@ -21,11 +21,12 @@ package org.ossreviewtoolkit.utils.spdxdocument.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 const val SPDX_VERSION_2_2 = "SPDX-2.2"
 const val SPDX_VERSION_2_3 = "SPDX-2.3"

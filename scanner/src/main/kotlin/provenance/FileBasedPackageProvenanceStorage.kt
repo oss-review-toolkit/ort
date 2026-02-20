@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
@@ -35,6 +34,8 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
+
+import tools.jackson.module.kotlin.readValue
 
 class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProvenanceStorage {
     override fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult? =

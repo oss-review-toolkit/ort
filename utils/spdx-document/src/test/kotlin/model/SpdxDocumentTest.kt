@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.utils.spdxdocument.model
 
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException
-
 import io.kotest.assertions.json.ArrayOrder
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.assertions.throwables.shouldThrow
@@ -29,6 +27,8 @@ import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 import org.ossreviewtoolkit.utils.test.readResource
+
+import tools.jackson.databind.exc.ValueInstantiationException
 
 /**
  * This test uses the following test assets copied from the SPDX 2.2.2 specification examples.

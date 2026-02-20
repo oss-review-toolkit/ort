@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.core.JsonParseException
-import com.fasterxml.jackson.databind.node.MissingNode
-
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.WordSpec
@@ -33,6 +30,9 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.IOException
+
+import tools.jackson.core.JsonParseException
+import tools.jackson.databind.node.MissingNode
 
 class FileFormatTest : WordSpec({
     "File.readTree()" should {

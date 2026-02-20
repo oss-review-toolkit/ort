@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.utils.spdx
 
-import com.fasterxml.jackson.module.kotlin.readValue
+import tools.jackson.module.kotlin.readValue
 
 /**
  * A mapping from license strings collected from the declared licenses of Open Source packages to SPDX expressions. This
@@ -31,8 +31,8 @@ object SpdxDeclaredLicenseMapping {
      * The raw map which associates collected license strings with their corresponding SPDX expression.
      */
     internal val rawMapping by lazy {
-        val resource = checkNotNull(javaClass.getResource("/declared-license-mapping.yml"))
-        yamlMapper.readValue<Map<String, SpdxExpression>>(resource)
+        val resource = checkNotNull(javaClass.getResourceAsStream("/declared-license-mapping.yml"))
+        resource.use { yamlMapper.readValue<Map<String, SpdxExpression>>(it) }
     }
 
     /**

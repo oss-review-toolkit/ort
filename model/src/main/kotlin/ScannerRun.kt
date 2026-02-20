@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.io.File
 import java.time.Instant
@@ -43,6 +42,8 @@ import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.common.zipWithSets
 import org.ossreviewtoolkit.utils.ort.Environment
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * The summary of a single run of the scanner.
