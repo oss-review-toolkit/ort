@@ -5,19 +5,40 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@csstools/color-helpers@npm:^5.0.2":
+  version: 5.1.0
+  resolution: "@csstools/color-helpers@npm:5.1.0"
+  checksum: 2b1cef009309c30c6e6e904d259e809761a8482fe262b000dacc159d94bcd982d59d85baea449de0fd57afc98b7fc19561ffe756d2b679d56a39c48c2b9c556a
+  languageName: node
+  linkType: hard
+
+"@csstools/css-calc@npm:^2.1.2":
+  version: 2.1.4
+  resolution: "@csstools/css-calc@npm:2.1.4"
+  peerDependencies:
+    "@csstools/css-parser-algorithms": ^3.0.5
+    "@csstools/css-tokenizer": ^3.0.4
+  checksum: b833d1a031dfb3e3268655aa384121b864fce9bad05f111a3cf2a343eed69ba5d723f3f7cd0793fd7b7a28de2f8141f94568828f48de41d86cefa452eee06390
+  languageName: node
+  linkType: hard
+
+"@csstools/css-color-parser@npm:3.0.8":
+  version: 3.0.8
+  resolution: "@csstools/css-color-parser@npm:3.0.8"
+  dependencies:
+    "@csstools/color-helpers": ^5.0.2
+    "@csstools/css-calc": ^2.1.2
+  peerDependencies:
+    "@csstools/css-parser-algorithms": ^3.0.4
+    "@csstools/css-tokenizer": ^3.0.3
+  checksum: 7e04e821b8ad422c888ed03d5d9d7960a54bc19c5386dd1796da3b782940c3ea90136971d374b42fe7d7111f096941f8bbe7520fa591fb716c73b5b2f4f0cedb
+  languageName: node
+  linkType: hard
+
 "@lmdb/lmdb-darwin-arm64@npm:3.0.13":
   version: 3.0.13
   resolution: "@lmdb/lmdb-darwin-arm64@npm:3.0.13"
   conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@react-native-community/netinfo@npm:11.2.1":
-  version: 11.2.1
-  resolution: "@react-native-community/netinfo@npm:11.2.1"
-  peerDependencies:
-    react-native: ">=0.59"
-  checksum: d54b75c6dc6d7a8cbb054d84ed9326e1715259137e333f26cd801c6b820996cacceb5a1cf3ee94b91866361c040b7a12eb78db3695b076e8f30c3403985f98d5
   languageName: node
   linkType: hard
 
@@ -378,8 +399,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "yarn2-package-with-lockfile@workspace:."
   dependencies:
+    "@csstools/css-color-parser": 3.0.8
     "@lmdb/lmdb-darwin-arm64": 3.0.13
-    "@react-native-community/netinfo": 11.2.1
     cheerio: 1.0.0-rc.1
     cson: ~4.1.0
     long: ^3.2.0
