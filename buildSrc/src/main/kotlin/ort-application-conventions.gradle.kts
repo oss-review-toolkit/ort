@@ -34,6 +34,7 @@ plugins {
 
     // Apply precompiled plugins.
     id("ort-kotlin-conventions")
+    id("ort-publication-conventions")
 
     // Apply third-party plugins.
     id("org.graalvm.buildtools.native")
@@ -45,6 +46,11 @@ application {
         "--add-opens", "java.base/java.io=ALL-UNNAMED",
         "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
     )
+}
+
+mavenPublishing {
+    // Note that "dokkaGenerateHtml" is simply an alias for the below task name.
+    configure(KotlinJvm(JavadocJar.Dokka("dokkaGeneratePublicationHtml")))
 }
 
 graalvmNative {
@@ -94,6 +100,13 @@ dependencies {
     implementation(libs.logbackClassic)
 
     runtimeOnly(libs.log4j.api.slf4j)
+}
+
+tasks.withType<GenerateModuleMetadata>().configureEach {
+    // Suppress the error about publishing dependencies to enforced platforms, which Gradle overzealously considers to
+    // be a mistake, although it is completely fine to publish JARs for CLIs to Maven Central as a convenient
+    // distribution channel for programmatic use.
+    suppressedValidationErrors.add("enforced-platform")
 }
 
 tasks.named<BuildNativeImageTask>("nativeCompile") {
