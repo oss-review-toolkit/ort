@@ -1,0 +1,204 @@
+---
+projects:
+- id: "otp::child_app:0.0.0-dev"
+  definition_file_path: "<REPLACE_PATH>/apps/child_app/mix.exs"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/apps/child_app"
+  homepage_url: ""
+  scopes:
+  - name: "required"
+    dependencies:
+    - id: "hex::mime:2.0.6"
+- id: "otp::umbrella-project:0.0.0-dev"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "required"
+    dependencies:
+    - id: "hex::credo:1.7.12"
+      dependencies:
+      - id: "hex::bunt:1.0.0"
+      - id: "hex::file_system:1.1.0"
+      - id: "hex::jason:1.4.4"
+    - id: "otp::child_app:0.0.0-dev"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "hex::mime:2.0.6"
+packages:
+- id: "hex::bunt:1.0.0"
+  purl: "pkg:hex/bunt@1.0.0?checksum=sha256:dc5f86aa08a5f6fa6b8096f0735c4e76d54ae5c9fa2c143e5a1fc7c1cd9bb6b5&download_url=https://repo.hex.pm/tarballs/bunt-1.0.0.tar&vcs_url=https://github.com/rrrene/bunt"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: ""
+  homepage_url: "https://hex.pm/packages/bunt/1.0.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/bunt-1.0.0.tar"
+    hash:
+      value: "dc5f86aa08a5f6fa6b8096f0735c4e76d54ae5c9fa2c143e5a1fc7c1cd9bb6b5"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/rrrene/bunt.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rrrene/bunt.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::credo:1.7.12"
+  purl: "pkg:hex/credo@1.7.12?checksum=sha256:8493d45c656c5427d9c729235b99d498bd133421f3e0a683e5c1b561471291e5&download_url=https://repo.hex.pm/tarballs/credo-1.7.12.tar&vcs_url=https://github.com/rrrene/credo"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: ""
+  homepage_url: "https://hex.pm/packages/credo/1.7.12"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/credo-1.7.12.tar"
+    hash:
+      value: "8493d45c656c5427d9c729235b99d498bd133421f3e0a683e5c1b561471291e5"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/rrrene/credo.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rrrene/credo.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::file_system:1.1.0"
+  purl: "pkg:hex/file_system@1.1.0?checksum=sha256:bfcf81244f416871f2a2e15c1b515287faa5db9c6bcf290222206d120b3d43f6&download_url=https://repo.hex.pm/tarballs/file_system-1.1.0.tar&vcs_url=https://github.com/falood/file_system"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/file_system/1.1.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/file_system-1.1.0.tar"
+    hash:
+      value: "bfcf81244f416871f2a2e15c1b515287faa5db9c6bcf290222206d120b3d43f6"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/falood/file_system.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/falood/file_system.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::jason:1.4.4"
+  purl: "pkg:hex/jason@1.4.4?checksum=sha256:c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b&download_url=https://repo.hex.pm/tarballs/jason-1.4.4.tar&vcs_url=https://github.com/michalmuskala/jason"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/jason/1.4.4"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/jason-1.4.4.tar"
+    hash:
+      value: "c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/michalmuskala/jason.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/michalmuskala/jason.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::mime:2.0.6"
+  purl: "pkg:hex/mime@2.0.6?checksum=sha256:c9945363a6b26d747389aac3643f8e0e09d30499a138ad64fe8fd1d13d9b153e&download_url=https://repo.hex.pm/tarballs/mime-2.0.6.tar&vcs_url=https://github.com/elixir-plug/mime"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/mime/2.0.7"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/mime-2.0.6.tar"
+    hash:
+      value: "c9945363a6b26d747389aac3643f8e0e09d30499a138ad64fe8fd1d13d9b153e"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/elixir-plug/mime.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/elixir-plug/mime.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"

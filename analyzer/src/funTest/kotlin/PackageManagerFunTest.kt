@@ -58,6 +58,7 @@ class PackageManagerFunTest : WordSpec({
         "gradle-groovy/build.gradle",
         "gradle-kotlin/build.gradle.kts",
         "maven/pom.xml",
+        "mix/mix.exs",
 
         // Note that the NPM, PNPM and Yarn implementations share code. Internal logic decides dynamically whether to
         // process "package.json" with NPM, PNPM or Yarn.
@@ -68,6 +69,7 @@ class PackageManagerFunTest : WordSpec({
         "pip-setup/setup.py",
         "pipenv/Pipfile.lock",
         "poetry/poetry.lock",
+        "rebar3/rebar.config",
         "pub/pubspec.yaml",
         "sbt/build.sbt",
         "spdx-package/package.spdx.yml",
@@ -114,6 +116,7 @@ class PackageManagerFunTest : WordSpec({
                     "gradle-kotlin/build.gradle.kts"
                 )
                 managedFilesById["Maven"] should containExactly("maven/pom.xml")
+                managedFilesById["Mix"] should containExactly("mix/mix.exs")
                 managedFilesById["NPM"] should containExactly("npm-pnpm-and-yarn/package.json")
                 managedFilesById["NuGet"] should containExactlyInAnyOrder(
                     "dotnet/test.csproj",
@@ -127,6 +130,7 @@ class PackageManagerFunTest : WordSpec({
                 managedFilesById["PNPM"] should containExactly("npm-pnpm-and-yarn/package.json")
                 managedFilesById["Poetry"] should containExactly("poetry/poetry.lock")
                 managedFilesById["Pub"] should containExactly("pub/pubspec.yaml")
+                managedFilesById["Rebar3"] should containExactly("rebar3/rebar.config")
                 managedFilesById["SBT"] should containExactly("sbt/build.sbt")
                 managedFilesById["SpdxDocumentFile"] should containExactlyInAnyOrder(
                     "spdx-package/package.spdx.yml",

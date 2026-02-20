@@ -53,6 +53,7 @@ mavenResolver = "1.9.26"
 mockk = "1.14.9"
 mordant = "3.0.2"
 okhttp = "5.3.2"
+packageurl = "1.5.0"
 postgres = "42.7.10"
 reflections = "0.10.2"
 retrofit = "3.0.0"
@@ -168,6 +169,7 @@ mordant = { module = "com.github.ajalt.mordant:mordant", version.ref = "mordant"
 mordantCoroutines = { module = "com.github.ajalt.mordant:mordant-coroutines", version.ref = "mordant" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+packageurl = { module = "com.github.package-url:packageurl-java", version.ref = "packageurl" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

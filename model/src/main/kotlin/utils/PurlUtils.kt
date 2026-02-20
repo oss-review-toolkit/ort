@@ -21,10 +21,10 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import java.io.File
+import com.github.packageurl.PackageURL
+import com.github.packageurl.PackageURLBuilder
 
-import org.ossreviewtoolkit.model.HashAlgorithm
-import org.ossreviewtoolkit.utils.common.percentEncode
+import java.io.File
 
 /**
  * A subset of the Package URL types defined at https://github.com/package-url/purl-spec/blob/ad8a673/PURL-TYPES.rst.
@@ -80,23 +80,6 @@ enum class PurlType(
 }
 
 /**
- * Extra data than can be appended to a "clean" purl via qualifiers or a subpath.
- */
-data class PurlExtras(
-    /**
-     * Extra qualifying data as key / value pairs. Needs to be percent-encoded when used in a query string.
-     */
-    val qualifiers: Map<String, String>,
-
-    /**
-     * A subpath relative to the root of the package.
-     */
-    val subpath: String
-) {
-    constructor(vararg qualifiers: Pair<String, String>, subpath: String = "") : this(qualifiers.toMap(), subpath)
-}
-
-/**
  * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on given properties:
  * [type], [namespace], [name] and [version].
  * Optional [qualifiers] may be given and will be appended to the purl as query parameters e.g.
@@ -111,54 +94,51 @@ internal fun createPurl(
     version: String,
     qualifiers: Map<String, String> = emptyMap(),
     subpath: String = ""
-): String =
-    buildString {
-        append("pkg:")
-        append(type.toString())
-        append('/')
+): String {
+    // Apply ORT-specific normalizations BEFORE passing to builder.
+    val normalizedNamespace = namespace.trim('/').split('/').joinToString("/") { segment ->
+        type.namespaceNormalization(segment)
+    }.takeIf { it.isNotEmpty() }
 
-        if (namespace.isNotEmpty()) {
-            append(
-                namespace.trim('/').split('/').joinToString("/") { segment ->
-                    type.namespaceNormalization(segment).percentEncode()
-                }
-            )
-            append('/')
-        }
+    val normalizedName = type.nameNormalization(name.trim('/'))
 
-        append(type.nameNormalization(name.trim('/')).percentEncode())
-
-        if (version.isNotEmpty()) {
-            append('@')
-
-            // See https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst#character-encoding which
-            // says "the '#', '?', '@' and ':' characters must NOT be encoded when used as separators".
-            val isChecksum = HashAlgorithm.VERIFIABLE.any { version.startsWith("${it.name.lowercase()}:") }
-            if (isChecksum) append(version) else append(version.percentEncode())
-        }
-
-        qualifiers.filterValues { it.isNotEmpty() }.toSortedMap().onEachIndexed { index, entry ->
-            if (index == 0) append("?") else append("&")
-
-            val key = entry.key.lowercase()
-            append(key)
-
-            append("=")
-
-            if (key in KNOWN_QUALIFIER_KEYS) append(entry.value) else append(entry.value.percentEncode())
-        }
-
-        if (subpath.isNotEmpty()) {
-            val value = subpath.trim('/').split('/')
-                .filter { it.isNotEmpty() }
-                .joinToString("/", prefix = "#") {
-                    // Instead of just discarding "." and "..", resolve them by normalizing.
-                    File(it).normalize().path.percentEncode()
-                }
-
-            append(value)
-        }
+    val normalizedSubpath = if (subpath.isNotEmpty()) {
+        subpath.trim('/').split('/')
+            .filter { it.isNotEmpty() }
+            .joinToString("/") {
+                // Instead of just discarding "." and "..", resolve them by normalizing.
+                File(it).normalize().path
+            }
+            .takeIf { it.isNotEmpty() }
+    } else {
+        null
     }
 
-// See https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst#known-qualifiers-keyvalue-pairs.
-private val KNOWN_QUALIFIER_KEYS = setOf("repository_url", "download_url", "vcs_url", "file_name", "checksum")
+    return PackageURLBuilder.aPackageURL()
+        .withType(type.toString())
+        .withNamespace(normalizedNamespace)
+        .withName(normalizedName)
+        .withVersion(version.takeIf { it.isNotEmpty() })
+        .apply {
+            qualifiers.filterValues { it.isNotEmpty() }.forEach { (key, value) ->
+                withQualifier(key, value)
+            }
+        }
+        .withSubpath(normalizedSubpath)
+        .build()
+        .canonicalize()
+}
+
+/**
+ * Parse a PURL string into a [PackageURL] object.
+ * Returns null if the string is null, blank, or invalid.
+ */
+fun String?.toPackageUrl(): PackageURL? {
+    if (this.isNullOrBlank()) return null
+    return runCatching { PackageURL(this) }.getOrNull()
+}
+
+/**
+ * Get the [PurlType] enum for this [PackageURL], or null if the type is unknown.
+ */
+fun PackageURL.getPurlType(): PurlType? = runCatching { PurlType.fromString(type.lowercase()) }.getOrNull()
