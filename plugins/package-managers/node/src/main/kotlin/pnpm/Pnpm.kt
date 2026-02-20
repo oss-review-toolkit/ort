@@ -189,13 +189,10 @@ private fun ModuleInfo.getScopeDependencies(scope: Scope) =
  * possible, as a fallback the first list of [ModuleInfo] objects is returned.
  */
 private fun Sequence<List<ModuleInfo>>.findModulesFor(workingDir: File): List<ModuleInfo> {
-    val moduleInfoIterator = iterator()
-    val first = moduleInfoIterator.nextOrNull() ?: return emptyList()
+    val moduleInfosIterator = iterator()
+    val first = moduleInfosIterator.nextOrNull() ?: return emptyList()
 
-    fun List<ModuleInfo>.matchesWorkingDir() = any { File(it.path).absoluteFile == workingDir }
-
-    fun findMatchingModules(): List<ModuleInfo>? =
-        moduleInfoIterator.nextOrNull()?.takeIf { it.matchesWorkingDir() } ?: findMatchingModules()
-
-    return first.takeIf { it.matchesWorkingDir() } ?: findMatchingModules() ?: first
+    return moduleInfosIterator.asSequence().find { infos ->
+        infos.any { File(it.path).absoluteFile == workingDir }
+    } ?: first
 }
