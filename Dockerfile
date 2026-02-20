@@ -140,27 +140,27 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    libreadline-dev \
-    libgdbm-dev \
+    pkg-config \
     libicu-dev \
-    libsqlite3-dev \
-    libssl-dev \
-    libbz2-dev \
-    liblzma-dev \
-    tk-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
-RUN curl -kSs https://pyenv.run | bash \
-    && pyenv install -v $PYTHON_VERSION \
-    && pyenv global $PYTHON_VERSION
+ENV UV_PYTHON_INSTALL_DIR=/opt/python
+ENV UV_INSTALL_DIR=${UV_PYTHON_INSTALL_DIR}/bin
+ENV PATH=$PATH:${UV_INSTALL_DIR}:${UV_PYTHON_INSTALL_DIR}/ort-venv/bin
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && uv --version \
+    && uv venv -p ${PYTHON_VERSION} ${UV_PYTHON_INSTALL_DIR}/ort-venv
 
 RUN if [ "$(arch)" = "aarch64" ]; then \
-    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION licensedcode-data setuptools==$PYTHON_SETUPTOOLS_VERSION; \
+    uv pip install -U \
+    scancode-toolkit-mini==$SCANCODE_VERSION \
+    licensedcode-data \
+    setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     else \
     curl -Os https://raw.githubusercontent.com/aboutcode-org/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION setuptools==$PYTHON_SETUPTOOLS_VERSION; \
+    uv pip install -U --constraint requirements.txt \
+    scancode-toolkit==$SCANCODE_VERSION \
+    setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     rm requirements.txt; \
     fi
 
@@ -169,10 +169,10 @@ RUN scancode-license-data --path /opt/scancode-license-data \
     && find /opt/scancode-license-data -type f -not -name "*.LICENSE" -exec rm -f {} + \
     && rm -rf /opt/scancode-license-data/static
 
-RUN pip install --no-cache-dir -U \
+RUN uv pip install --no-cache-dir -U \
     pip=="$PIP_VERSION" \
     wheel \
-    && pip install --no-cache-dir -U \
+    && uv pip install --no-cache-dir -U \
     Mercurial \
     conan=="$CONAN_VERSION" \
     pipenv=="$PYTHON_PIPENV_VERSION" \
@@ -181,11 +181,11 @@ RUN pip install --no-cache-dir -U \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
     setuptools=="$PYTHON_SETUPTOOLS_VERSION"
 RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
-    && wget https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz \
-    && tar -xvf conan-$CONAN2_VERSION-linux-x86_64.tgz\
+    && [ "$(arch)" = "aarch64" ] && conan_arch="aarch64" || conan_arch="x86_64" \
+    && curl -L https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-${conan_arch}.tgz | tar -xvz \
     # Rename the Conan 2 executable to "conan2" to be able to call both Conan version from the package manager.
-    && mkdir $PYENV_ROOT/conan2 && mv /tmp/conan2/bin $PYENV_ROOT/conan2/ \
-    && mv $PYENV_ROOT/conan2/bin/conan $PYENV_ROOT/conan2/bin/conan2
+    && mkdir $UV_PYTHON_INSTALL_DIR/conan2 && mv /tmp/conan2/bin $UV_PYTHON_INSTALL_DIR/conan2/ \
+    && mv $UV_PYTHON_INSTALL_DIR/conan2/bin/conan $UV_PYTHON_INSTALL_DIR/conan2/bin/conan2
 
 RUN find /opt/python -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 
@@ -502,19 +502,19 @@ ENV GLEAM_HOME=/opt/gleam
 # Download cosign binary, verify Gleam binary signature, then clean up
 RUN COSIGN_ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
     && curl -L "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${COSIGN_ARCH}" \
-       -o /tmp/cosign \
+    -o /tmp/cosign \
     && chmod +x /tmp/cosign \
     && mkdir -p $GLEAM_HOME/bin \
     && ARCH=$(arch) \
     && curl -L "https://github.com/gleam-lang/gleam/releases/download/v${GLEAM_VERSION}/gleam-v${GLEAM_VERSION}-${ARCH}-unknown-linux-musl.tar.gz" \
-       -o /tmp/gleam.tar.gz \
+    -o /tmp/gleam.tar.gz \
     && curl -L "https://github.com/gleam-lang/gleam/releases/download/v${GLEAM_VERSION}/gleam-v${GLEAM_VERSION}-${ARCH}-unknown-linux-musl.tar.gz.sigstore" \
-       -o /tmp/gleam.sigstore \
+    -o /tmp/gleam.sigstore \
     && /tmp/cosign verify-blob \
-       --bundle /tmp/gleam.sigstore \
-       --certificate-identity-regexp "^https://github.com/gleam-lang/gleam/.*@refs/tags/v${GLEAM_VERSION}$" \
-       --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-       /tmp/gleam.tar.gz \
+    --bundle /tmp/gleam.sigstore \
+    --certificate-identity-regexp "^https://github.com/gleam-lang/gleam/.*@refs/tags/v${GLEAM_VERSION}$" \
+    --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+    /tmp/gleam.tar.gz \
     && tar -xzf /tmp/gleam.tar.gz -C $GLEAM_HOME/bin \
     && chmod a+x $GLEAM_HOME/bin/gleam \
     && rm /tmp/gleam.tar.gz /tmp/gleam.sigstore /tmp/cosign \
@@ -573,9 +573,9 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
     && sudo rm -rf /var/lib/apt/lists/*
 
 # Python
-ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
-COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
+ENV UV_PYTHON_INSTALL_DIR=/opt/python
+ENV PATH=$PATH:${UV_INSTALL_DIR}:${UV_PYTHON_INSTALL_DIR}/ort-venv/bin:$UV_PYTHON_INSTALL_DIR/conan2/bin
+COPY --from=python --chown=$USER:$USER $UV_PYTHON_INSTALL_DIR $UV_PYTHON_INSTALL_DIR
 
 # NodeJS
 ENV NVM_DIR=/opt/nvm
