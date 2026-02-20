@@ -70,7 +70,12 @@ internal fun NuGetInspector.Result.toOrtProject(
     }
 
     val packageReferences = nestedPackages.toPackageReferences()
-    val scopes = setOf(Scope(headers.first().projectFramework, packageReferences))
+    val packagesByNamespace = packageReferences.groupBy { packageRef ->
+        packageRef.id.namespace.takeIf { it.isNotEmpty() } ?: "any"
+    }
+    val scopes = packagesByNamespace.map { (namespace, packages) ->
+        Scope(namespace, packages.toSet())
+    }.toSet()
 
     return Project(
         id = id,
