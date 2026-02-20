@@ -1,0 +1,38 @@
+projectName: "Example ORT project"
+description: "Project X description"
+homepageUrl: "https://project_x.example.com"
+declaredLicenses:
+  - "Apache-2.0"
+authors:
+  - "John Doe"
+  - "Foo Bar"
+dependencies:
+  - purl: "pkg:maven/com.example/full@1.1.0"
+    description: "Package with fully elaborated model."
+    vcs:
+      type: "Mercurial"
+      url: "https://git.example.com/full/"
+      revision: "master"
+      path: "/"
+    sourceArtifact:
+      url: "https://repo.example.com/m2/full-1.1.0-sources.jar"
+      hash:
+        value: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+        algorithm: "SHA-1"
+    declaredLicenses:
+      - "Apache-2.0"
+      - "MIT"
+    homepageUrl: "https://project_x.example.com/full"
+    labels:
+      label: "value"
+      label2: "value2"
+    authors:
+      - "Doe John"
+      - "Bar Foo"
+    scopes:
+      - "main"
+      - "some_scope"
+    isModified: false
+    isMetadataOnly: false
+
+  - purl: "pkg:maven/com.example/minimal@0.1.0"
