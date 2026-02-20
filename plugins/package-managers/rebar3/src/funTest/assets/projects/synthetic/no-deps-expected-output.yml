@@ -1,0 +1,22 @@
+---
+project:
+  id: "otp::no_deps:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  description: "Test app with no dependencies"
+  homepage_url: ""
+  scopes: []
+packages: []

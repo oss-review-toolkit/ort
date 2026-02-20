@@ -1,0 +1,549 @@
+---
+project:
+  id: "otp::sample1:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "https://github.com/sample1"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "excluded"
+    dependencies:
+    - id: "hex::ex_doc:0.21.2"
+      dependencies:
+      - id: "hex::earmark:1.4.2"
+      - id: "hex::makeup_elixir:0.14.0"
+        dependencies:
+        - id: "hex::makeup:1.0.0"
+          dependencies:
+          - id: "hex::nimble_parsec:0.5.1"
+    - id: "hex::meck:0.8.13"
+  - name: "required"
+    dependencies:
+    - id: "hex::hackney:1.15.2"
+      dependencies:
+      - id: "hex::certifi:2.5.1"
+        dependencies:
+        - id: "hex::parse_trans:3.3.0"
+      - id: "hex::idna:6.0.0"
+        dependencies:
+        - id: "hex::unicode_util_compat:0.4.1"
+      - id: "hex::metrics:1.0.1"
+      - id: "hex::mimerl:1.2.0"
+      - id: "hex::ssl_verify_fun:1.1.5"
+    - id: "hex::jason:1.1.2"
+    - id: "hex::sweet_xml:0.6.6"
+packages:
+- id: "hex::certifi:2.5.1"
+  purl: "pkg:hex/certifi@2.5.1?checksum=sha256:805abd97539caf89ec6d4732c91e62ba9da0cda51ac462380bbd28ee697a8c42&download_url=https://repo.hex.pm/tarballs/certifi-2.5.1.tar&vcs_url=https://github.com/certifi/erlang-certifi"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: ""
+  homepage_url: "https://hex.pm/packages/certifi/2.5.1"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/certifi-2.5.1.tar"
+    hash:
+      value: "805abd97539caf89ec6d4732c91e62ba9da0cda51ac462380bbd28ee697a8c42"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/certifi/erlang-certifi.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/certifi/erlang-certifi.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::earmark:1.4.2"
+  purl: "pkg:hex/earmark@1.4.2?checksum=sha256:5e8806285d8a3a8999bd38e4a73c58d28534c856bc38c44818e5ba85bbda16fb&download_url=https://repo.hex.pm/tarballs/earmark-1.4.2.tar&vcs_url=https://github.com/pragdave/earmark"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/earmark/1.4.2"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/earmark-1.4.2.tar"
+    hash:
+      value: "5e8806285d8a3a8999bd38e4a73c58d28534c856bc38c44818e5ba85bbda16fb"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/pragdave/earmark.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pragdave/earmark.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::ex_doc:0.21.2"
+  purl: "pkg:hex/ex_doc@0.21.2?checksum=sha256:f1155337ae17ff7a1255217b4c1ceefcd1860b7ceb1a1874031e7a861b052e39&download_url=https://repo.hex.pm/tarballs/ex_doc-0.21.2.tar&vcs_url=https://github.com/elixir-lang/ex_doc"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/ex_doc/0.21.2"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/ex_doc-0.21.2.tar"
+    hash:
+      value: "f1155337ae17ff7a1255217b4c1ceefcd1860b7ceb1a1874031e7a861b052e39"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/elixir-lang/ex_doc.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/elixir-lang/ex_doc.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::hackney:1.15.2"
+  purl: "pkg:hex/hackney@1.15.2?checksum=sha256:e0100f8ef7d1124222c11ad362c857d3df7cb5f4204054f9f0f4a728666591fc&download_url=https://repo.hex.pm/tarballs/hackney-1.15.2.tar&vcs_url=https://github.com/benoitc/hackney"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/hackney/1.15.2"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/hackney-1.15.2.tar"
+    hash:
+      value: "e0100f8ef7d1124222c11ad362c857d3df7cb5f4204054f9f0f4a728666591fc"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/benoitc/hackney.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/benoitc/hackney.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::idna:6.0.0"
+  purl: "pkg:hex/idna@6.0.0?checksum=sha256:4bdd305eb64e18b0273864920695cb18d7a2021f31a11b9c5fbcd9a253f936e2&download_url=https://repo.hex.pm/tarballs/idna-6.0.0.tar&vcs_url=https://github.com/benoitc/erlang-idna"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: ""
+  homepage_url: "https://hex.pm/packages/idna/6.0.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/idna-6.0.0.tar"
+    hash:
+      value: "4bdd305eb64e18b0273864920695cb18d7a2021f31a11b9c5fbcd9a253f936e2"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/benoitc/erlang-idna.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/benoitc/erlang-idna.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::jason:1.1.2"
+  purl: "pkg:hex/jason@1.1.2?checksum=sha256:fdf843bca858203ae1de16da2ee206f53416bbda5dc8c9e78f43243de4bc3afe&download_url=https://repo.hex.pm/tarballs/jason-1.1.2.tar&vcs_url=https://github.com/michalmuskala/jason"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/jason/1.4.4"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/jason-1.1.2.tar"
+    hash:
+      value: "fdf843bca858203ae1de16da2ee206f53416bbda5dc8c9e78f43243de4bc3afe"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/michalmuskala/jason.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/michalmuskala/jason.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::makeup:1.0.0"
+  purl: "pkg:hex/makeup@1.0.0?checksum=sha256:a10c6eb62cca416019663129699769f0c2ccf39428b3bb3c0cb38c718a0c186d&download_url=https://repo.hex.pm/tarballs/makeup-1.0.0.tar&vcs_url=https://github.com/elixir-makeup/makeup"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: ""
+  homepage_url: "https://hex.pm/packages/makeup/1.0.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/makeup-1.0.0.tar"
+    hash:
+      value: "a10c6eb62cca416019663129699769f0c2ccf39428b3bb3c0cb38c718a0c186d"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/elixir-makeup/makeup.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/elixir-makeup/makeup.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::makeup_elixir:0.14.0"
+  purl: "pkg:hex/makeup_elixir@0.14.0?checksum=sha256:d4b316c7222a85bbaa2fd7c6e90e37e953257ad196dc229505137c5e505e9eff&download_url=https://repo.hex.pm/tarballs/makeup_elixir-0.14.0.tar&vcs_url=https://github.com/elixir-makeup/makeup_elixir"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: ""
+  homepage_url: "https://hex.pm/packages/makeup_elixir/0.14.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/makeup_elixir-0.14.0.tar"
+    hash:
+      value: "d4b316c7222a85bbaa2fd7c6e90e37e953257ad196dc229505137c5e505e9eff"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/elixir-makeup/makeup_elixir.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/elixir-makeup/makeup_elixir.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::meck:0.8.13"
+  purl: "pkg:hex/meck@0.8.13?checksum=sha256:d34f013c156db51ad57cc556891b9720e6a1c1df5fe2e15af999c84d6cebeb1a&download_url=https://repo.hex.pm/tarballs/meck-0.8.13.tar&vcs_url=https://github.com/eproxus/meck"
+  declared_licenses:
+  - "Apache 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2.0: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/meck/0.8.13"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/meck-0.8.13.tar"
+    hash:
+      value: "d34f013c156db51ad57cc556891b9720e6a1c1df5fe2e15af999c84d6cebeb1a"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/eproxus/meck.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/eproxus/meck.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::metrics:1.0.1"
+  purl: "pkg:hex/metrics@1.0.1?checksum=sha256:69b09adddc4f74a40716ae54d140f93beb0fb8978d8636eaded0c31b6f099f16&download_url=https://repo.hex.pm/tarballs/metrics-1.0.1.tar&vcs_url=https://github.com/benoitc/erlang-metrics"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: ""
+  homepage_url: "https://hex.pm/packages/metrics/1.0.1"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/metrics-1.0.1.tar"
+    hash:
+      value: "69b09adddc4f74a40716ae54d140f93beb0fb8978d8636eaded0c31b6f099f16"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/benoitc/erlang-metrics.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/benoitc/erlang-metrics.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::mimerl:1.2.0"
+  purl: "pkg:hex/mimerl@1.2.0?checksum=sha256:f278585650aa581986264638ebf698f8bb19df297f66ad91b18910dfc6e19323&download_url=https://repo.hex.pm/tarballs/mimerl-1.2.0.tar&vcs_url=https://github.com/benoitc/mimerl"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: ""
+  homepage_url: "https://hex.pm/packages/mimerl/1.2.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/mimerl-1.2.0.tar"
+    hash:
+      value: "f278585650aa581986264638ebf698f8bb19df297f66ad91b18910dfc6e19323"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/benoitc/mimerl.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/benoitc/mimerl.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::nimble_parsec:0.5.1"
+  purl: "pkg:hex/nimble_parsec@0.5.1?checksum=sha256:00e3ebdc821fb3a36957320d49e8f4bfa310d73ea31c90e5f925dc75e030da8f&download_url=https://repo.hex.pm/tarballs/nimble_parsec-0.5.1.tar&vcs_url=https://github.com/dashbitco/nimble_parsec"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/nimble_parsec/0.5.1"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/nimble_parsec-0.5.1.tar"
+    hash:
+      value: "00e3ebdc821fb3a36957320d49e8f4bfa310d73ea31c90e5f925dc75e030da8f"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dashbitco/nimble_parsec.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dashbitco/nimble_parsec.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::parse_trans:3.3.0"
+  purl: "pkg:hex/parse_trans@3.3.0?checksum=sha256:17ef63abde837ad30680ea7f857dd9e7ced9476cdd7b0394432af4bfc241b960&download_url=https://repo.hex.pm/tarballs/parse_trans-3.3.0.tar&vcs_url=https://github.com/uwiger/parse_trans"
+  declared_licenses:
+  - "Apache 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2.0: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/parse_trans/3.3.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/parse_trans-3.3.0.tar"
+    hash:
+      value: "17ef63abde837ad30680ea7f857dd9e7ced9476cdd7b0394432af4bfc241b960"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/uwiger/parse_trans.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/uwiger/parse_trans.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::ssl_verify_fun:1.1.5"
+  purl: "pkg:hex/ssl_verify_fun@1.1.5?checksum=sha256:13104d7897e38ed7f044c4de953a6c28597d1c952075eb2e328bc6d6f2bfc496&download_url=https://repo.hex.pm/tarballs/ssl_verify_fun-1.1.5.tar&vcs_url=https://github.com/deadtrickster/ssl_verify_fun.erl"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: ""
+  homepage_url: "https://hex.pm/packages/ssl_verify_fun/1.1.5"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/ssl_verify_fun-1.1.5.tar"
+    hash:
+      value: "13104d7897e38ed7f044c4de953a6c28597d1c952075eb2e328bc6d6f2bfc496"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/deadtrickster/ssl_verify_fun.erl.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/deadtrickster/ssl_verify_fun.erl.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::sweet_xml:0.6.6"
+  purl: "pkg:hex/sweet_xml@0.6.6?checksum=sha256:2e1ec458f892ffa81f9f8386e3f35a1af6db7a7a37748a64478f13163a1f3573&download_url=https://repo.hex.pm/tarballs/sweet_xml-0.6.6.tar&vcs_url=https://github.com/kbrw/sweet_xml"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: ""
+  homepage_url: "https://hex.pm/packages/sweet_xml/0.6.6"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/sweet_xml-0.6.6.tar"
+    hash:
+      value: "2e1ec458f892ffa81f9f8386e3f35a1af6db7a7a37748a64478f13163a1f3573"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/kbrw/sweet_xml.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/kbrw/sweet_xml.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
+- id: "hex::unicode_util_compat:0.4.1"
+  purl: "pkg:hex/unicode_util_compat@0.4.1?checksum=sha256:1d1848c40487cdb0b30e8ed975e34e025860c02e419cb615d255849f3427439d&download_url=https://repo.hex.pm/tarballs/unicode_util_compat-0.4.1.tar&vcs_url=https://github.com/benoitc/unicode_util_compat"
+  declared_licenses:
+  - "Apache 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2.0: "Apache-2.0"
+  description: ""
+  homepage_url: "https://hex.pm/packages/unicode_util_compat/0.4.1"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.hex.pm/tarballs/unicode_util_compat-0.4.1.tar"
+    hash:
+      value: "1d1848c40487cdb0b30e8ed975e34e025860c02e419cb615d255849f3427439d"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/benoitc/unicode_util_compat.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/benoitc/unicode_util_compat.git"
+    revision: ""
+    path: ""
+  source_code_origins:
+  - "ARTIFACT"
+  - "VCS"
