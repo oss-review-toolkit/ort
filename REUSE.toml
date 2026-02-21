@@ -54,6 +54,7 @@ SPDX-License-Identifier = "Apache-2.0"
 path = "**/src/funTest/assets/**"
 SPDX-FileCopyrightText = "2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>"
 SPDX-License-Identifier = "Apache-2.0"
+precedence = "override"
 
 [[annotations]]
 path = "**/src/test/assets/**"
