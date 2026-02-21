@@ -31,7 +31,9 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.getIdentifierType
@@ -39,6 +41,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.isProjectDepende
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -57,6 +60,23 @@ internal class GradleDependencyHandler(
      * property is writable.
      */
     var repositories = emptyList<RemoteRepository>()
+
+    /**
+     * Create a package with empty metadata for Ivy dependencies or artifacts without metadata.
+     */
+    private fun createEmptyPackage(id: Identifier) =
+        Package(
+            id = id,
+            authors = emptySet(),
+            declaredLicenses = emptySet(),
+            declaredLicensesProcessed = DeclaredLicenseProcessor.process(emptySet()),
+            description = "",
+            homepageUrl = "",
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = VcsInfo.EMPTY
+        )
 
     override fun identifierFor(dependency: OrtDependency): Identifier =
         with(dependency) { Identifier(getIdentifierType(projectType), groupId, artifactId, version) }
@@ -94,8 +114,43 @@ internal class GradleDependencyHandler(
             dependency.extension, dependency.version
         )
 
+        // Check if this dependency has Ivy metadata (ivy.xml) instead of Maven POM
+        val hasIvyMetadata = dependency.pomFile?.endsWith("ivy.xml") == true
+
         return runCatching {
-            maven.parsePackage(artifact, repositories, useReposFromDependencies = false)
+            if (hasIvyMetadata) {
+                // For Ivy dependencies, create a package with basic information
+                // TODO: Parse ivy.xml to extract license, description, etc.
+                createEmptyPackage(identifierFor(dependency))
+            } else {
+                maven.parsePackage(artifact, repositories, useReposFromDependencies = false)
+            }
+        }.recoverCatching { e ->
+            // If Maven parsing fails due to missing POM, try to treat it as an Ivy dependency
+            when (e) {
+                is ProjectBuildingException, is RepositoryException -> {
+                    val errorMessage = e.collectMessages()
+
+                    // Check if the error is specifically about missing POM file
+                    if (errorMessage.contains("pom") && errorMessage.contains("Could not find artifact")) {
+                        // Assume this might be an Ivy dependency and create a basic package
+                        // Log a warning but don't fail
+                        issues += createAndLogIssue(
+                            source = GradleFactory.descriptor.displayName,
+                            message = "No Maven POM found for '${artifact.identifier()}', treating as Ivy or " +
+                                "artifact without metadata.",
+                            severity = Severity.WARNING
+                        )
+
+                        createEmptyPackage(identifierFor(dependency))
+                    } else {
+                        // For other errors, propagate them
+                        throw e
+                    }
+                }
+
+                else -> throw e
+            }
         }.getOrElse { e ->
             when (e) {
                 is ProjectBuildingException, is RepositoryException -> {

@@ -58,6 +58,7 @@ data class AnalyzerConfiguration(
         "Gleam",
         "GoMod",
         "GradleInspector",
+        "Ivy",
         "Maven",
         "NPM",
         "NuGet",
