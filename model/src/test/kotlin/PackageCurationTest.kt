@@ -387,6 +387,34 @@ class PackageCurationTest : WordSpec({
                 result.metadata.declaredLicensesProcessed.spdxExpression shouldBe expression
             }
         }
+
+        "preserve OR operator when mapping makes previously invalid licenses valid" {
+            // This test case demonstrates a bug where two declared licenses - one valid SPDX and one
+            // invalid that needs mapping - are incorrectly combined with AND instead of OR.
+            val pkg = Package.EMPTY.copy(
+                declaredLicenses = setOf("Apache-2.0", "GNU Lesser General Public License v2.1 only"),
+                // In reality, the initial processing only mapped the valid license
+                declaredLicensesProcessed = ProcessedDeclaredLicense(
+                    spdxExpression = "Apache-2.0".toSpdx(),
+                    unmapped = setOf("GNU Lesser General Public License v2.1 only")
+                )
+            )
+
+            val curation = PackageCuration(
+                id = pkg.id,
+                data = PackageCurationData(
+                    declaredLicenseMapping = mapOf(
+                        "GNU Lesser General Public License v2.1 only" to "LGPL-2.1-only".toSpdx()
+                    )
+                )
+            )
+
+            val result = curation.apply(pkg.toCuratedPackage())
+
+            // Expected: Since the package originally declared two separate licenses, they should be
+            // combined with OR (dual-licensing), not AND (both licenses apply).
+            result.metadata.declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0 OR LGPL-2.1-only".toSpdx()
+        }
     }
 
     "isApplicable()" should {
