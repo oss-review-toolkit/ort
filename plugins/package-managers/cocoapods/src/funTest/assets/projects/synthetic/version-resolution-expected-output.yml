@@ -508,9 +508,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "Methods to allow using HTML code with CoreText."
   homepage_url: "https://github.com/Cocoanetics/DTCoreText"
   binary_artifact:
@@ -538,9 +537,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "Methods to allow using HTML code with CoreText."
   homepage_url: "https://github.com/Cocoanetics/DTCoreText"
   binary_artifact:
@@ -568,9 +566,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "Standard toolset classes and categories."
   homepage_url: "https://github.com/Cocoanetics/DTFoundation"
   binary_artifact:
@@ -598,9 +595,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "Standard toolset classes and categories."
   homepage_url: "https://github.com/Cocoanetics/DTFoundation"
   binary_artifact:
@@ -628,9 +624,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "Standard toolset classes and categories."
   homepage_url: "https://github.com/Cocoanetics/DTFoundation"
   binary_artifact:
@@ -658,9 +653,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "Standard toolset classes and categories."
   homepage_url: "https://github.com/Cocoanetics/DTFoundation"
   binary_artifact:
@@ -716,9 +710,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "A set of in-app debugging and exploration tools for iOS"
   homepage_url: "https://github.com/Flipboard/FLEX"
   binary_artifact:
