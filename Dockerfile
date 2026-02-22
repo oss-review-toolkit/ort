@@ -68,7 +68,6 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
     tzdata \
     uuid-dev \
     unzip \
-    wget \
     xz-utils \
     && rm -rf /var/lib/apt/lists/* \
     && git lfs install
@@ -180,9 +179,8 @@ RUN pip install --no-cache-dir -U \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
     setuptools=="$PYTHON_SETUPTOOLS_VERSION"
-RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
-    && wget https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz \
-    && tar -xvf conan-$CONAN2_VERSION-linux-x86_64.tgz\
+RUN mkdir /tmp/conan2 \
+    && curl -L https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-$(arch).tgz | tar -xz -C /tmp/conan2 \
     # Rename the Conan 2 executable to "conan2" to be able to call both Conan version from the package manager.
     && mkdir $PYENV_ROOT/conan2 && mv /tmp/conan2/bin $PYENV_ROOT/conan2/ \
     && mv $PYENV_ROOT/conan2/bin/conan $PYENV_ROOT/conan2/bin/conan2
