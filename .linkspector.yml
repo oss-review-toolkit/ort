@@ -9,3 +9,5 @@ ignorePatterns:
   - pattern: '^http://localhost(:[0-9]+)?(/.*)?$'
   # The link is valid but linkspector gets a 403 response when running on GitHub Actions.
   - pattern: '^https://www.epam.com/services/engineering/open-source$'
+  # The certificate expired but will probably not be renewed as the company is being wound up.
+  - pattern: "^https://hella-aglaia.com/$"
