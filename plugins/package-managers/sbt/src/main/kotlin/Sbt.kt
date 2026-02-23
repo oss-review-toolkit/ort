@@ -61,7 +61,10 @@ internal object SbtCommand : CommandLineTool {
         val projectVersion = lines.firstNotNullOfOrNull { it.withoutPrefix("sbt version in this project: ") }
         val scriptVersion = lines.firstNotNullOfOrNull { it.withoutPrefix("sbt script version: ") }
 
-        return checkNotNull(projectVersion ?: scriptVersion)
+        // See: https://github.com/sbt/sbt/blob/4b3c525c2207951bc6aeb04ff68f35adacbfc469/sbt#L580
+        val runnerVersion = lines.firstNotNullOfOrNull { it.withoutPrefix("sbt runner version: ") }
+
+        return checkNotNull(projectVersion ?: scriptVersion ?: runnerVersion)
     }
 }
 
