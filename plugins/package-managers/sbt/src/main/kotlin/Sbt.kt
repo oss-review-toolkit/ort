@@ -57,9 +57,7 @@ internal object SbtCommand : CommandLineTool {
     override fun transformVersion(output: String): String {
         val lines = output.lines()
 
-        // See the expected test output here:
-        // https://github.com/sbt/sbt-launcher-package/pull/285/files#diff-25311dcba3a7ac9d113cb964bd15cff334450620b35fdd1361a45b9bf249c10eR102
-        // https://github.com/sbt/sbt-launcher-package/pull/288/files#diff-25311dcba3a7ac9d113cb964bd15cff334450620b35fdd1361a45b9bf249c10eR91
+        // See: https://github.com/sbt/sbt-launcher-package/blob/888d064c5b346fd7aaa4f24499c27e1a0335e711/src/universal/bin/sbt#L384-L385
         val projectVersion = lines.firstNotNullOfOrNull { it.withoutPrefix("sbt version in this project: ") }
         val scriptVersion = lines.firstNotNullOfOrNull { it.withoutPrefix("sbt script version: ") }
 
