@@ -23,6 +23,7 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicReference
 import java.util.jar.Manifest
 
+import org.apache.logging.log4j.kotlin.KotlinLogger
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.AbstractMavenLifecycleParticipant
 import org.apache.maven.cli.MavenCli
@@ -199,7 +200,8 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
             mavenSupport.defaultPackageResolverFun(),
             repositoryHelper,
             resolver,
-            targetHandler
+            targetHandler,
+            logger
         )
         val dependencyHandler = MavenDependencyHandler(descriptor.displayName, projectType, mavenProjects, resolverFun)
         return DependencyGraphBuilder(dependencyHandler)
@@ -372,21 +374,52 @@ internal fun tychoPackageResolverFun(
     delegate: PackageResolverFun,
     repositoryHelper: LocalRepositoryHelper,
     resolver: P2ArtifactResolver,
-    targetHandler: TargetHandler
+    targetHandler: TargetHandler,
+    logger: KotlinLogger
 ): PackageResolverFun =
     { dependency ->
         runCatching {
             delegate(dependency)
         }.recoverCatching { exception ->
-            targetHandler.mapToMavenDependency(dependency.artifact)?.let { artifact ->
+            targetHandler.mapToMavenDependency(dependency.artifact)
+                .takeIf { it.isNotEmpty() }?.let { artifacts ->
+                    resolveMavenArtifacts(dependency, delegate, artifacts, logger)
+                } ?: createPackageFromLocalArtifact(dependency.artifact, repositoryHelper, resolver)
+                ?: throw exception
+        }.getOrThrow()
+    }
+
+/**
+ * Resolve a [dependency] via the standard Maven resolution process accessible through the given [resolver] function.
+ * Try the given [candidates] as potential Maven artifacts corresponding to the given dependency and return the first
+ * successfully resolved [Package]. Throw an exception if none of the candidates could be resolved.
+ */
+private fun resolveMavenArtifacts(
+    dependency: DependencyNode,
+    resolver: PackageResolverFun,
+    candidates: List<Artifact>,
+    logger: KotlinLogger
+): Package =
+    checkNotNull(
+        candidates.firstNotNullOfOrNull { artifact ->
+            runCatching {
+                logger.debug {
+                    "Trying to resolve Maven artifact candidate " +
+                        "'${artifact.groupId}:${artifact.artifactId}:${artifact.version}'."
+                }
+
                 val mappedDependency = DefaultDependencyNode(artifact).apply {
                     repositories = dependency.repositories
                 }
 
-                delegate(mappedDependency)
-            } ?: createPackageFromLocalArtifact(dependency.artifact, repositoryHelper, resolver)
-                ?: throw exception
-        }.getOrThrow()
+                resolver(mappedDependency)
+            }.onFailure { exception ->
+                logger.debug(exception) { "Failed to resolve Maven artifact candidate." }
+            }.getOrNull()
+        }
+    ) {
+        "Failed to resolve ${candidates.size} candidates for dependency " +
+            "'${dependency.artifact.identifier()}'."
     }
 
 /**

@@ -24,8 +24,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -55,22 +54,39 @@ class TargetHandlerTest : WordSpec({
     }
 
     "mapToMavenDependency()" should {
-        "return null if an artifact cannot be mapped to a Maven dependency" {
+        "return an empty list if an artifact cannot be mapped to a Maven dependency" {
             val tychoArtifact = DefaultArtifact("groupId", "artifactId", "ext", "version")
             val targetHandler = TargetHandler.create(tempdir())
 
-            targetHandler.mapToMavenDependency(tychoArtifact) should beNull()
+            targetHandler.mapToMavenDependency(tychoArtifact) should beEmpty()
         }
 
         "return the correct Maven dependency if an artifact can be mapped" {
             val tychoArtifact = DefaultArtifact("p2.eclipse.plugin", "ch.qos.logback.logback-classic", "jar", "1.5.6")
             val targetHandler = createTargetHandlerWithTargetFiles()
 
-            targetHandler.mapToMavenDependency(tychoArtifact).shouldNotBeNull {
-                groupId shouldBe "ch.qos.logback"
-                artifactId shouldBe "logback-classic"
-                version shouldBe "1.5.6"
+            targetHandler.mapToMavenDependency(tychoArtifact).shouldBeSingleton {
+                it.groupId shouldBe "ch.qos.logback"
+                it.artifactId shouldBe "logback-classic"
+                it.version shouldBe "1.5.6"
             }
+        }
+
+        "return the potential candidates for a wrapped artifact" {
+            val tychoArtifact = DefaultArtifact(
+                "p2.eclipse.plugin",
+                "wrapped.org.apache.commons.commons-lang3",
+                "pom",
+                "3.12.0"
+            )
+            val expectedCandidates = listOf(
+                DefaultArtifact("org.apache.commons", "commons-lang3", "jar", "3.12.0"),
+                DefaultArtifact("org.apache", "commons.commons-lang3", "jar", "3.12.0"),
+                DefaultArtifact("org", "apache.commons.commons-lang3", "jar", "3.12.0")
+            )
+            val targetHandler = createTargetHandlerWithTargetFiles()
+
+            targetHandler.mapToMavenDependency(tychoArtifact) should containExactlyInAnyOrder(expectedCandidates)
         }
     }
 
