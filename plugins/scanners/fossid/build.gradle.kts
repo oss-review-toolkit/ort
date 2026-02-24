@@ -33,6 +33,7 @@ dependencies {
     implementation(projects.utils.spdxUtils)
 
     implementation(libs.kotlinx.coroutines)
+    implementation(libs.packageurl)
 
     ksp(projects.scanner)
 

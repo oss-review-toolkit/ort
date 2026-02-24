@@ -35,61 +35,42 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 /**
- * Map a [Package]'s type to the string representation of the respective [PurlType], or fall back to [PurlType.GENERIC]
- * if the [Package]'s type has no direct equivalent.
+ * Map an ORT [Identifier] type to the corresponding PURL type string, or fall back to "generic"
+ * if there is no direct equivalent.
  */
-fun Identifier.getPurlType() =
+fun Identifier.getPurlType(): String =
     when (type.lowercase()) {
-        "bazel" -> PurlType.BAZEL
-        "bower" -> PurlType.BOWER
-        "carthage" -> PurlType.CARTHAGE
-        "composer" -> PurlType.COMPOSER
-        "conan" -> PurlType.CONAN
-        "crate" -> PurlType.CARGO
-        "gem" -> PurlType.GEM
-        "go" -> PurlType.GOLANG
-        "hackage" -> PurlType.HACKAGE
-        "hex" -> PurlType.HEX
-        "maven" -> PurlType.MAVEN
-        "npm" -> PurlType.NPM
-        "nuget" -> PurlType.NUGET
-        "otp", "gleam" -> PurlType.OTP
-        "pod" -> PurlType.COCOAPODS
-        "pub" -> PurlType.PUB
-        "pypi" -> PurlType.PYPI
-        "swift" -> PurlType.SWIFT
-        else -> PurlType.GENERIC
+        "bazel" -> "bazel"
+        "bower" -> "bower"
+        "carthage" -> "carthage"
+        "composer" -> "composer"
+        "conan" -> "conan"
+        "crate" -> "cargo"
+        "gem" -> "gem"
+        "go" -> "golang"
+        "hackage" -> "hackage"
+        "hex" -> "hex"
+        "maven" -> "maven"
+        "npm" -> "npm"
+        "nuget" -> "nuget"
+        "otp", "gleam" -> "otp"
+        "pod" -> "cocoapods"
+        "pub" -> "pub"
+        "pypi" -> "pypi"
+        "swift" -> "swift"
+        else -> "generic"
     }
 
 /**
- * Map a [PurlType] to the corresponding ORT Identifier type string.
- *
- * This is the inverse operation of [Identifier.getPurlType].
- * It converts a [PurlType] enum value to the corresponding ORT
- * type string format.
+ * Map a PURL type string to the corresponding ORT Identifier type string.
  */
-fun PurlType.toOrtType(): String =
-    when (this) {
-        PurlType.BAZEL -> "bazel"
-        PurlType.BOWER -> "bower"
-        PurlType.CARTHAGE -> "carthage"
-        PurlType.COMPOSER -> "composer"
-        PurlType.CONAN -> "conan"
-        PurlType.CARGO -> "crate"
-        PurlType.GEM -> "gem"
-        PurlType.GOLANG -> "go"
-        PurlType.HACKAGE -> "hackage"
-        PurlType.HEX -> "hex"
-        PurlType.MAVEN -> "Maven"
-        PurlType.NPM -> "npm"
-        PurlType.NUGET -> "nuget"
-        PurlType.OTP -> "otp"
-        PurlType.COCOAPODS -> "pod"
-        PurlType.PUB -> "pub"
-        PurlType.PYPI -> "pypi"
-        PurlType.SWIFT -> "swift"
-        PurlType.GENERIC -> "generic"
-        else -> toString().lowercase()
+internal fun purlTypeToOrtType(purlType: String): String =
+    when (purlType) {
+        "cargo" -> "crate"
+        "cocoapods" -> "pod"
+        "golang" -> "go"
+        "maven" -> "Maven"
+        else -> purlType
     }
 
 /**
@@ -106,15 +87,8 @@ fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: Str
 
     val type = getPurlType()
     val combined = "$namespace/$name"
-    val purlNamespace = combined.substringBeforeLast('/')
-    val purlName = combined.substringAfterLast('/')
-
-    // Apply ORT-specific normalizations BEFORE passing to builder.
-    val normalizedNamespace = purlNamespace.trim('/').split('/').joinToString("/") { segment ->
-        type.namespaceNormalization(segment)
-    }.takeIf { it.isNotEmpty() }
-
-    val normalizedName = type.nameNormalization(purlName.trim('/'))
+    val namespace = combined.substringBeforeLast('/').trim('/').takeIf { it.isNotEmpty() }
+    val name = combined.substringAfterLast('/').trim('/')
 
     val normalizedSubpath = if (subpath.isNotEmpty()) {
         subpath.trim('/').split('/')
@@ -129,9 +103,9 @@ fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: Str
     }
 
     return PackageURLBuilder.aPackageURL()
-        .withType(type.toString())
-        .withNamespace(normalizedNamespace)
-        .withName(normalizedName)
+        .withType(type)
+        .withNamespace(namespace)
+        .withName(name)
         .withVersion(version.takeIf { it.isNotEmpty() })
         .apply {
             qualifiers.filterValues { it.isNotEmpty() }.forEach { (key, value) ->
@@ -180,7 +154,7 @@ fun Identifier.toPurl(provenance: Provenance): String =
  * Convert this [PackageURL] to an ORT [Identifier].
  */
 fun PackageURL.toIdentifier(): Identifier {
-    val ortType = getPurlType()?.toOrtType() ?: type
+    val ortType = purlTypeToOrtType(type)
     val combinedName = listOfNotNull(namespace, name).joinToString("/")
 
     return Identifier(
@@ -232,8 +206,3 @@ fun PackageURL.toProvenance(): Provenance {
  * Returns null if the string is null, blank, or invalid.
  */
 fun String?.toPackageUrl(): PackageURL? = runCatching { PackageURL(this) }.getOrNull()
-
-/**
- * Get the [PurlType] enum for this [PackageURL], or null if the type is unknown.
- */
-fun PackageURL.getPurlType(): PurlType? = runCatching { PurlType.fromString(type.lowercase()) }.getOrNull()

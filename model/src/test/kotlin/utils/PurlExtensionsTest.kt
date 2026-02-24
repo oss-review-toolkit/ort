@@ -196,16 +196,28 @@ class PurlExtensionsTest : WordSpec({
     }
 
     "getPurlType()" should {
-        "return the correct PurlType" {
-            "pkg:maven/org.example/foo@1.0".toPackageUrl().shouldNotBeNull {
-                getPurlType() shouldBe PurlType.MAVEN
-            }
+        "return the correct PURL type for known ORT types" {
+            Identifier("Maven:com.example:foo:1.0").getPurlType() shouldBe "maven"
+            Identifier("npm::foo:1.0").getPurlType() shouldBe "npm"
+            Identifier("go:example.com:foo:1.0").getPurlType() shouldBe "golang"
+            Identifier("crate::foo:1.0").getPurlType() shouldBe "cargo"
         }
 
-        "return null for unknown types" {
-            "pkg:unknown/foo@1.0".toPackageUrl().shouldNotBeNull {
-                getPurlType() should beNull()
-            }
+        "return generic for unknown types" {
+            Identifier("Unknown::foo:1.0").getPurlType() shouldBe "generic"
+        }
+    }
+
+    "purlTypeToOrtType()" should {
+        "return the correct ORT type for known PURL types" {
+            purlTypeToOrtType("maven") shouldBe "Maven"
+            purlTypeToOrtType("npm") shouldBe "npm"
+            purlTypeToOrtType("golang") shouldBe "go"
+            purlTypeToOrtType("cargo") shouldBe "crate"
+        }
+
+        "return the type as-is for unknown PURL types" {
+            purlTypeToOrtType("unknown") shouldBe "unknown"
         }
     }
 })
