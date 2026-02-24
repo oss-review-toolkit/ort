@@ -561,14 +561,14 @@ ENV GLEAM_HOME=/opt/gleam
 
 # Download cosign binary, verify Gleam binary signature, then clean up
 RUN COSIGN_ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
-    && curl -L "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${COSIGN_ARCH}" \
+    && curl -sSL "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${COSIGN_ARCH}" \
        -o /tmp/cosign \
     && chmod +x /tmp/cosign \
     && mkdir -p $GLEAM_HOME/bin \
     && ARCH=$(arch) \
-    && curl -L "https://github.com/gleam-lang/gleam/releases/download/v${GLEAM_VERSION}/gleam-v${GLEAM_VERSION}-${ARCH}-unknown-linux-musl.tar.gz" \
+    && curl -sSL "https://github.com/gleam-lang/gleam/releases/download/v${GLEAM_VERSION}/gleam-v${GLEAM_VERSION}-${ARCH}-unknown-linux-musl.tar.gz" \
        -o /tmp/gleam.tar.gz \
-    && curl -L "https://github.com/gleam-lang/gleam/releases/download/v${GLEAM_VERSION}/gleam-v${GLEAM_VERSION}-${ARCH}-unknown-linux-musl.tar.gz.sigstore" \
+    && curl -sSL "https://github.com/gleam-lang/gleam/releases/download/v${GLEAM_VERSION}/gleam-v${GLEAM_VERSION}-${ARCH}-unknown-linux-musl.tar.gz.sigstore" \
        -o /tmp/gleam.sigstore \
     && /tmp/cosign verify-blob \
        --bundle /tmp/gleam.sigstore \
