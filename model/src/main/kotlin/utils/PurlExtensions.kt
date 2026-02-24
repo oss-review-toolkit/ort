@@ -90,6 +90,10 @@ fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: Str
     val namespace = combined.substringBeforeLast('/').trim('/').takeIf { it.isNotEmpty() }
     val name = combined.substringAfterLast('/').trim('/')
 
+    // Avoid a `MalformedPackageURLException` and behave like for `Identifier.EMPTY` in case of exotic packages like
+    // Pub SDK packages (e.g., sky_engine) where the name is not explicitly set.
+    if (name.isEmpty()) return ""
+
     val normalizedSubpath = if (subpath.isNotEmpty()) {
         subpath.trim('/').split('/')
             .filter { it.isNotEmpty() }
