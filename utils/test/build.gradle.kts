@@ -29,6 +29,7 @@ dependencies {
     api(libs.hikari)
     api(libs.kotest.assertions.core)
     api(libs.kotest.extensions)
+    api(libs.kotest.framework.engine)
     api(libs.logbackClassic) {
         because("Transitively export this to consumers so they do not have to declare a logger implementation.")
     }
@@ -41,7 +42,6 @@ dependencies {
     implementation(libs.jsonSchemaValidator)
     implementation(libs.kotest.extensions.junitXml)
     implementation(libs.kotest.extensions.testcontainers)
-    implementation(libs.kotest.framework.engine)
     implementation(libs.testcontainers.postgresql)
 
     runtimeOnly(libs.log4j.api.slf4j)
