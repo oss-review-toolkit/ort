@@ -58,7 +58,7 @@ internal class Yarn2DependencyHandler(
 
     override fun identifierFor(dependency: PackageInfo): Identifier =
         Identifier(
-            type = if (dependency.isProject) NodePackageManagerType.YARN2.projectType else "NPM",
+            type = with(NodePackageManagerType.YARN2) { if (dependency.isProject) projectType else packageType },
             namespace = dependency.moduleName.substringBefore("/", ""),
             name = dependency.moduleName.substringAfter("/"),
             version = dependency.children.version

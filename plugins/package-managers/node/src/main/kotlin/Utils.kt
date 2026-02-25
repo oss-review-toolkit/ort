@@ -169,7 +169,7 @@ internal fun parsePackage(packageJson: PackageJson, moduleInfoResolver: ModuleIn
 
     var vcsFromPackage = parseVcsInfo(packageJson)
 
-    val id = Identifier("NPM", namespace, name, version)
+    val id = Identifier(NodePackageManagerType.NPM.packageType, namespace, name, version)
 
     val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
         || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY

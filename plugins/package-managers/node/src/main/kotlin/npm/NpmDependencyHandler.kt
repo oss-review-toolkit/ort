@@ -40,7 +40,7 @@ internal class NpmDependencyHandler(
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
     override fun identifierFor(dependency: ModuleInfo): Identifier {
-        val type = if (dependency.isProject) NodePackageManagerType.NPM.projectType else "NPM"
+        val type = with(NodePackageManagerType.NPM) { if (dependency.isProject) projectType else packageType }
         val (namespace, name) = splitNamespaceAndName(dependency.name.orEmpty())
         val version = if (dependency.isProject) {
             val packageJson = packageJsonCache.getOrPut(dependency.packageJsonFile.realFile) {
