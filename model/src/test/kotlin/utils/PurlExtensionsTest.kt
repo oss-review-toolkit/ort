@@ -213,8 +213,8 @@ class PurlExtensionsTest : WordSpec({
             purlTypeToOrtType("cargo") shouldBe "crate"
             purlTypeToOrtType("cocoapods") shouldBe "pod"
             purlTypeToOrtType("golang") shouldBe "go"
-            purlTypeToOrtType("maven") shouldBe "Maven"
 
+            purlTypeToOrtType("maven") shouldBe "maven"
             purlTypeToOrtType("npm") shouldBe "npm"
         }
 

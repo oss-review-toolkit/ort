@@ -69,7 +69,6 @@ internal fun purlTypeToOrtType(purlType: String): String =
         "cargo" -> "crate"
         "cocoapods" -> "pod"
         "golang" -> "go"
-        "maven" -> "Maven"
         else -> purlType
     }
 
