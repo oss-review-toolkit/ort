@@ -738,9 +738,11 @@ private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
     return null
 }
 
-private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
+private val PathExclude.description: String
+    get() = joinNonBlank(reason.toString(), comment)
 
-private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
+private val ScopeExclude.description: String
+    get() = joinNonBlank(reason.toString(), comment)
 
 private fun joinNonBlank(vararg strings: String, separator: String = " - ") =
     strings.filter { it.isNotBlank() }.joinToString(separator)

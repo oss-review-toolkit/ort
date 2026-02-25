@@ -96,7 +96,9 @@ private class ResponseCache {
     val vulnerabilityViewsForOriginViewKey = ConcurrentHashMap<String, List<VulnerabilityView>>()
 }
 
-private val OriginView.key: String get() = "$externalNamespace:$externalId"
+private val OriginView.key: String
+    get() = "$externalNamespace:$externalId"
+
 private val ComponentsView.key: String
     // Only take the UUID of the version and variant, to avoid including the server URL into the key, to avoid
     // complexities related to the replacement of the server URL.

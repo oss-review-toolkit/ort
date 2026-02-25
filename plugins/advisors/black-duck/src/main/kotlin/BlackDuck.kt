@@ -224,7 +224,8 @@ private fun VulnerabilityCvss2View.getScoringSystemAndVector(): Pair<String, Str
     return scoringSystem to parsedVector
 }
 
-private val OriginView.identifier get() = "$externalNamespace:$externalId"
+private val OriginView.identifier
+    get() = "$externalNamespace:$externalId"
 
 private fun Map<Identifier, List<OriginView>>.getSummary(): String =
     buildString {
@@ -245,7 +246,8 @@ private fun Map<Identifier, List<OriginView>>.getSummary(): String =
         }
     }
 
-private val Package.blackDuckOriginId: String? get() = labels[BlackDuck.PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID]
+private val Package.blackDuckOriginId: String?
+    get() = labels[BlackDuck.PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID]
 
-private val Package.requestParam: String get() =
-    blackDuckOriginId?.let { "origin-id: '$it'" } ?: "purl: '$purl'"
+private val Package.requestParam: String
+    get() = blackDuckOriginId?.let { "origin-id: '$it'" } ?: "purl: '$purl'"

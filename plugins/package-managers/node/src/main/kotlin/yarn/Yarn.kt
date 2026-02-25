@@ -248,13 +248,17 @@ private val YarnListNode.moduleReference: ModuleReference get() {
     )
 }
 
-internal val YarnListNode.moduleAlias: String get() = moduleReference.alias ?: moduleName
+internal val YarnListNode.moduleAlias: String
+    get() = moduleReference.alias ?: moduleName
 
-internal val YarnListNode.moduleName: String get() = moduleReference.name
+internal val YarnListNode.moduleName: String
+    get() = moduleReference.name
 
-internal val YarnListNode.moduleVersion: String get() = moduleReference.version
+internal val YarnListNode.moduleVersion: String
+    get() = moduleReference.version
 
-internal val YarnListNode.linkPath: String? get() = moduleReference.linkPath
+internal val YarnListNode.linkPath: String?
+    get() = moduleReference.linkPath
 
 private fun List<YarnListNode>.removeDanglingLinks(workingDir: File): List<YarnListNode> =
     map {

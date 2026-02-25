@@ -81,13 +81,14 @@ fun getCommonParentFile(files: Collection<File>): File =
 /**
  * Get the size of this [File] in mebibytes (MiB) with two decimal places as [String].
  */
-val File.formatSizeInMib: String get() = "${length().bytesToMib().format()} MiB"
+val File.formatSizeInMib: String
+    get() = "${length().bytesToMib().format()} MiB"
 
 /**
  * Return true if and only if this file is a symbolic link.
  */
-val File.isSymbolicLink: Boolean get() =
-    runCatching {
+val File.isSymbolicLink: Boolean
+    get() = runCatching {
         // Note that we cannot use exists() to check beforehand whether a symbolic link exists to avoid a
         // NoSuchFileException to be thrown as it returns "false" e.g. for dangling Windows junctions.
         Files.readAttributes(toPath(), BasicFileAttributes::class.java, LinkOption.NOFOLLOW_LINKS).let {
@@ -99,7 +100,8 @@ val File.isSymbolicLink: Boolean get() =
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
  * resolve symbolic links on Windows.
  */
-val File.realFile: File get() = toPath().toRealPath().toFile()
+val File.realFile: File
+    get() = toPath().toRealPath().toFile()
 
 /**
  * If the SHELL environment variable is set, return the absolute file with a leading "~" expanded to the current user's

@@ -34,12 +34,14 @@ internal class Graph<T> private constructor(private val nodeMap: MutableMap<T, M
     /**
      * Return a set with all nodes (i.e. package identifiers) contained in this graph.
      */
-    val nodes: Set<T> get() = nodeMap.keys
+    val nodes: Set<T>
+        get() = nodeMap.keys
 
     /**
      * Return the size of this graph. This is the number of nodes it contains.
      */
-    val size: Int get() = nodeMap.size
+    val size: Int
+        get() = nodeMap.size
 
     /**
      * Add an edge (i.e. a dependency relation) from [source] node to [target] node to this dependency graph. Add

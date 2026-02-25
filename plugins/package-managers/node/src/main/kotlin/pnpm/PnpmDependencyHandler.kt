@@ -77,9 +77,11 @@ internal class PnpmDependencyHandler(
         packageJsonCache.getOrPut(packageJsonFile.realFile) { parsePackageJson(packageJsonFile) }
 }
 
-private val Dependency.workingDir: File get() = File(path)
+private val Dependency.workingDir: File
+    get() = File(path)
 
-private val Dependency.packageJsonFile: File get() = workingDir.resolve(NodePackageManagerType.DEFINITION_FILE)
+private val Dependency.packageJsonFile: File
+    get() = workingDir.resolve(NodePackageManagerType.DEFINITION_FILE)
 
 /**
  * pnpm install skips optional dependencies which are not compatible with the environment. In this case the path
@@ -88,4 +90,5 @@ private val Dependency.packageJsonFile: File get() = workingDir.resolve(NodePack
  * lockfile. Maybe, this can be mitigated by also using --frozen-lockfile. However, the documentation does not explain
  * how the combination of these two options works.
  */
-private val Dependency.isInstalled: Boolean get() = workingDir.isDirectory
+private val Dependency.isInstalled: Boolean
+    get() = workingDir.isDirectory

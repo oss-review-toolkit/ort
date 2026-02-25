@@ -39,12 +39,13 @@ class PostgresListener :
     MountableExtension<HikariConfig, DataSource> by JdbcDatabaseContainerSpecExtension(
         PostgreSQLContainer<Nothing>("postgres:18-alpine")
     ) {
-    val dataSource: Lazy<DataSource> get() = lazyOf(
-        mount {
-            maximumPoolSize = 3
-            minimumIdle = 1
-        }
-    )
+    val dataSource: Lazy<DataSource>
+        get() = lazyOf(
+            mount {
+                maximumPoolSize = 3
+                minimumIdle = 1
+            }
+        )
 
     override suspend fun beforeEach(testCase: TestCase) {
         dataSource.value.connection.use { c ->
