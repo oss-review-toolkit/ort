@@ -65,7 +65,7 @@ fun Identifier.getPurlType(): String =
  * Map a PURL type string to the corresponding ORT Identifier type string.
  */
 internal fun purlTypeToOrtType(purlType: String): String =
-    when (purlType) {
+    when (purlType.lowercase()) {
         "cargo" -> "crate"
         "cocoapods" -> "pod"
         "golang" -> "go"
