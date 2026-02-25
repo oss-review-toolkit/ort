@@ -61,7 +61,7 @@ internal class YarnDependencyHandler(
 
     override fun identifierFor(dependency: YarnListNode): Identifier =
         Identifier(
-            type = if (dependency.isProject()) NodePackageManagerType.YARN.projectType else "NPM",
+            type = if (dependency.isProject) NodePackageManagerType.YARN.projectType else "NPM",
             namespace = dependency.moduleName.substringBefore("/", ""),
             name = dependency.moduleName.substringAfter("/"),
             version = dependency.moduleVersion
@@ -71,15 +71,14 @@ internal class YarnDependencyHandler(
         dependency.children.orEmpty().filter { it.name in packageJsonForModuleId }
 
     override fun linkageFor(dependency: YarnListNode): PackageLinkage =
-        PackageLinkage.DYNAMIC.takeUnless { dependency.isProject() } ?: PackageLinkage.PROJECT_DYNAMIC
+        PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
 
     override fun createPackage(dependency: YarnListNode, issues: MutableCollection<Issue>): Package? {
-        val packageJson = packageJsonForModuleId[dependency.name]?.takeUnless { dependency.isProject() } ?: return null
+        val packageJson = packageJsonForModuleId[dependency.name]?.takeUnless { dependency.isProject } ?: return null
 
         return parsePackage(packageJson, moduleInfoResolver)
     }
 
-    private fun YarnListNode.isProject(): Boolean = isProject(name)
-
-    private fun isProject(moduleId: String) = moduleDirForModuleId[moduleId] in projectDirs
+    private val YarnListNode.isProject: Boolean
+        get() = moduleDirForModuleId[name] in projectDirs
 }

@@ -40,7 +40,8 @@ internal class PnpmDependencyHandler(
     private val workspaceModuleDirs = mutableSetOf<File>()
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
-    private fun Dependency.isProject(): Boolean = isInstalled && workingDir.realFile in workspaceModuleDirs
+    private val Dependency.isProject: Boolean
+        get() = isInstalled && workingDir.realFile in workspaceModuleDirs
 
     fun setWorkspaceModuleDirs(dirs: Collection<File>) {
         workspaceModuleDirs.apply {
@@ -50,10 +51,10 @@ internal class PnpmDependencyHandler(
     }
 
     override fun identifierFor(dependency: Dependency): Identifier {
-        val type = if (dependency.isProject()) NodePackageManagerType.PNPM.projectType else "NPM"
+        val type = if (dependency.isProject) NodePackageManagerType.PNPM.projectType else "NPM"
         val namespace = dependency.from.substringBeforeLast("/", "")
         val name = dependency.from.substringAfterLast("/")
-        val version = if (dependency.isProject()) {
+        val version = if (dependency.isProject) {
             readPackageJson(dependency.packageJsonFile).version.orEmpty()
         } else {
             dependency.version.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
@@ -66,10 +67,10 @@ internal class PnpmDependencyHandler(
         (dependency.dependencies + dependency.optionalDependencies).values.filter { it.isInstalled }
 
     override fun linkageFor(dependency: Dependency): PackageLinkage =
-        PackageLinkage.DYNAMIC.takeUnless { dependency.isProject() } ?: PackageLinkage.PROJECT_DYNAMIC
+        PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
 
     override fun createPackage(dependency: Dependency, issues: MutableCollection<Issue>): Package? =
-        dependency.takeUnless { it.isProject() || !it.isInstalled }?.let {
+        dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
             parsePackage(it.packageJsonFile, moduleInfoResolver)
         }
 
