@@ -165,6 +165,7 @@ class BazelFunTest : StringSpec({
         )
 
         val result = create("Bazel", PluginConfig(mapOf("useConan2" to "true"))).resolveSingleProject(definitionFile)
+
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
@@ -183,6 +184,7 @@ class BazelFunTest : StringSpec({
                 )
             )
         ).resolveSingleProject(definitionFile)
+
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
