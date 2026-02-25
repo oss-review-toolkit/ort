@@ -210,10 +210,11 @@ class PurlExtensionsTest : WordSpec({
 
     "purlTypeToOrtType()" should {
         "return the correct ORT type for known PURL types" {
-            purlTypeToOrtType("maven") shouldBe "Maven"
-            purlTypeToOrtType("npm") shouldBe "npm"
-            purlTypeToOrtType("golang") shouldBe "go"
             purlTypeToOrtType("cargo") shouldBe "crate"
+            purlTypeToOrtType("golang") shouldBe "go"
+            purlTypeToOrtType("maven") shouldBe "Maven"
+
+            purlTypeToOrtType("npm") shouldBe "npm"
         }
 
         "return the type as-is for unknown PURL types" {
