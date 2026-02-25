@@ -64,6 +64,8 @@ import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 
 import org.semver4j.Semver
 
+private const val PROJECT_TYPE = "Gradle"
+
 /**
  * The names of Gradle (Groovy, Kotlin script) build files for a Gradle project.
  */
@@ -116,7 +118,7 @@ data class GradleInspectorConfig(
 class GradleInspector(
     override val descriptor: PluginDescriptor = GradleInspectorFactory.descriptor,
     private val config: GradleInspectorConfig
-) : PackageManager("Gradle") {
+) : PackageManager(PROJECT_TYPE) {
     // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
     // "settings" files as we should consider "settings" files only if the same directory does not also contain a
     // "build" file.

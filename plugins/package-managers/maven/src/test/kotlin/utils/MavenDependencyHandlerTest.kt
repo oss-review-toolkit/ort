@@ -46,6 +46,8 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.PROJECT_TYPE
 
 class MavenDependencyHandlerTest : WordSpec({
     beforeSpec {
@@ -199,8 +201,6 @@ class MavenDependencyHandlerTest : WordSpec({
 })
 
 private const val MANAGER_NAME = "MavenTest"
-private const val PROJECT_TYPE = "MavenProject"
-private const val PACKAGE_TYPE = "Maven"
 private const val PACKAGE_ID_SUFFIX = "org.apache.commons:commons-lang2:3.12"
 
 /**

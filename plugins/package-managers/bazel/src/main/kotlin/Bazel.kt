@@ -78,6 +78,9 @@ import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "Bazel"
+private const val PACKAGE_TYPE = "Bazel"
+
 private const val BAZEL_FALLBACK_VERSION = "7.0.1"
 private const val BAZEL_RC_FILE = ".bazelrc"
 private const val BAZEL_RC_REGISTRY_PATTERN = "common --registry="
@@ -152,7 +155,7 @@ internal object BuildozerCommand : CommandLineTool {
 class Bazel(
     override val descriptor: PluginDescriptor = BazelFactory.descriptor,
     private val config: BazelConfig
-) : PackageManager("Bazel") {
+) : PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
 
     /**
@@ -555,7 +558,7 @@ class Bazel(
     private fun BazelModule.toPackageReference(archiveOverrides: Map<String, ArchiveOverride>): PackageReference =
         PackageReference(
             id = Identifier(
-                type = "Bazel",
+                type = PACKAGE_TYPE,
                 namespace = "",
                 name = key.substringBefore("@", ""),
                 version = key.substringAfter("@", "")

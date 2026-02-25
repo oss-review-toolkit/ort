@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -67,7 +68,7 @@ class MavenDependencyHandler(
 
     override fun identifierFor(dependency: DependencyNode): Identifier =
         Identifier(
-            type = if (isLocalProject(dependency)) projectType else "Maven",
+            type = if (isLocalProject(dependency)) projectType else PACKAGE_TYPE,
             namespace = dependency.artifact.groupId,
             name = dependency.artifact.artifactId,
             version = dependency.artifact.version

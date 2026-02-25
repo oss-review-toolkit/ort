@@ -54,11 +54,12 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
+private const val PROJECT_TYPE = "SwiftPM"
+private const val PACKAGE_TYPE = "Swift"
+
 private const val PACKAGE_SWIFT_NAME = "Package.swift"
 private const val PACKAGE_RESOLVED_NAME = "Package.resolved"
 private const val REGISTRY_CONFIGURATION_PATH = ".swiftpm/configuration/registries.json"
-
-private const val PACKAGE_TYPE = "Swift"
 
 private const val DEPENDENCIES_SCOPE_NAME = "dependencies"
 
@@ -77,7 +78,7 @@ internal object SwiftCommand : CommandLineTool {
     description = "The Swift Package Manager for Swift.",
     factory = PackageManagerFactory::class
 )
-class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descriptor) : PackageManager("SwiftPM") {
+class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descriptor) : PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
 
     override fun mapDefinitionFiles(

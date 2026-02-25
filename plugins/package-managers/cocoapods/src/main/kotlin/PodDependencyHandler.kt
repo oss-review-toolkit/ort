@@ -64,7 +64,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
             val checkoutOption = lockfile.checkoutOptions[dependency.name]
             val revision = checkoutOption?.commit ?: checkoutOption?.tag ?: checkoutOption?.branch
             val uniqueVersion = listOfNotNull(version, revision).joinToString("-")
-            Identifier("Pod", "", name, uniqueVersion)
+            Identifier(PACKAGE_TYPE, "", name, uniqueVersion)
         }
 
     override fun dependenciesFor(dependency: Lockfile.Pod): List<Lockfile.Pod> =

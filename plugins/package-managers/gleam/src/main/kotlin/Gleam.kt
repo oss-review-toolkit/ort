@@ -39,11 +39,12 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.div
 
+internal const val PROJECT_TYPE = "Gleam"
+internal const val PACKAGE_TYPE_HEX = "Hex"
+internal const val PACKAGE_TYPE_OTP = "OTP"
+
 private const val GLEAM_TOML = "gleam.toml"
 private const val MANIFEST_TOML = "manifest.toml"
-internal const val PACKAGE_TYPE_OTP = "OTP"
-internal const val PACKAGE_TYPE_HEX = "Hex"
-internal const val PROJECT_TYPE = "Gleam"
 
 /**
  * The [Gleam](https://gleam.run/) package manager for Gleam.

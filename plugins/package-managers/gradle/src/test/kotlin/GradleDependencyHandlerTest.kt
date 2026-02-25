@@ -101,7 +101,7 @@ class GradleDependencyHandlerTest : WordSpec({
 
             val scopes = graph.createScopes()
 
-            scopeDependencies(scopes, scope).single { it.id.type == "Maven" }
+            scopeDependencies(scopes, scope).single { it.id.type == PACKAGE_TYPE }
         }
 
         "collect a dependency of type Unknown" {
@@ -128,7 +128,7 @@ class GradleDependencyHandlerTest : WordSpec({
 
             val scopes = graph.createScopes()
 
-            scopeDependencies(scopes, scope).single { it.id.type == "Gradle" }
+            scopeDependencies(scopes, scope).single { it.id.type == PROJECT_TYPE }
         }
 
         "collect information about packages" {
@@ -307,7 +307,7 @@ class GradleDependencyHandlerTest : WordSpec({
             val issues = mutableListOf<Issue>()
 
             every { maven.parsePackage(any(), any(), useReposFromDependencies = false) } throws exception
-            val handler = GradleDependencyHandler("Gradle", maven)
+            val handler = GradleDependencyHandler(PROJECT_TYPE, maven)
 
             handler.createPackage(dep, issues) should beNull()
 
@@ -353,7 +353,7 @@ private fun createDependency(
  * this class.
  */
 private fun createGraphBuilder(): DependencyGraphBuilder<OrtDependency> {
-    val dependencyHandler = GradleDependencyHandler("Gradle", createMavenSupport())
+    val dependencyHandler = GradleDependencyHandler(PROJECT_TYPE, createMavenSupport())
     dependencyHandler.repositories = remoteRepositories
     return DependencyGraphBuilder(dependencyHandler)
 }
@@ -366,7 +366,7 @@ private fun createMavenSupport(): MavenSupport {
     val slotArtifact = slot<DefaultArtifact>()
     every { maven.parsePackage(capture(slotArtifact), remoteRepositories, useReposFromDependencies = false) } answers {
         val artifact = slotArtifact.captured
-        val id = Identifier("Maven", artifact.groupId, artifact.artifactId, artifact.version)
+        val id = Identifier(PACKAGE_TYPE, artifact.groupId, artifact.artifactId, artifact.version)
         Package(
             id,
             declaredLicenses = emptySet(),
@@ -384,7 +384,7 @@ private fun createMavenSupport(): MavenSupport {
 /**
  * Returns an [Identifier] for this [OrtDependency].
  */
-private fun OrtDependency.toId() = Identifier(getIdentifierType("Gradle"), groupId, artifactId, version)
+private fun OrtDependency.toId() = Identifier(getIdentifierType(PROJECT_TYPE), groupId, artifactId, version)
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].

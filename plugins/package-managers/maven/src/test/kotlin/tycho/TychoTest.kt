@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
@@ -627,7 +628,7 @@ private const val TEST_ARTIFACT_ID = "org.ossreviewtoolkit.test.bundle"
 private const val TEST_VERSION = "50.1.2"
 
 /** The expected package identifier generated for the test artifact. */
-private val testArtifactIdentifier = Identifier("Maven", TEST_GROUP_ID, TEST_ARTIFACT_ID, TEST_VERSION)
+private val testArtifactIdentifier = Identifier(PACKAGE_TYPE, TEST_GROUP_ID, TEST_ARTIFACT_ID, TEST_VERSION)
 
 /**
  * Create a mock [MavenProject] with default coordinates and the given [name] and optional [definitionFile].

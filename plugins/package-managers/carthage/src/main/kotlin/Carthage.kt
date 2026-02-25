@@ -46,6 +46,9 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
+private const val PROJECT_TYPE = "Carthage"
+internal const val PACKAGE_TYPE = "Carthage"
+
 /**
  * The [Carthage](https://github.com/Carthage/Carthage) package manager for Objective-C / Swift.
  */
@@ -54,7 +57,7 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
     description = "The Carthage package manager for Objective-C / Swift.",
     factory = PackageManagerFactory::class
 )
-class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descriptor) : PackageManager("Carthage") {
+class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descriptor) : PackageManager(PROJECT_TYPE) {
     // TODO: Add support for the Cartfile.
     //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.
     override val globsForDefinitionFiles = listOf("Cartfile.resolved")
@@ -185,7 +188,7 @@ class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descr
 
         return Package(
             id = Identifier(
-                type = "Carthage",
+                type = PACKAGE_TYPE,
                 namespace = vcsHost?.getUserOrOrganization(projectUrl).orEmpty(),
                 name = vcsHost?.getProject(projectUrl).orEmpty(),
                 version = revision
@@ -209,7 +212,7 @@ class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descr
 
         return Package(
             id = Identifier(
-                type = "Carthage",
+                type = PACKAGE_TYPE,
                 namespace = "",
                 name = fileUrl.substringAfterLast("/"),
                 version = revision
@@ -227,7 +230,7 @@ class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descr
     private fun createPackageFromBinarySpec(binarySpec: Map<String, String>, id: String, revision: String) =
         Package(
             id = Identifier(
-                type = "Carthage",
+                type = PACKAGE_TYPE,
                 namespace = "",
                 name = id.substringAfterLast("/").removeSuffix(".json"),
                 version = revision

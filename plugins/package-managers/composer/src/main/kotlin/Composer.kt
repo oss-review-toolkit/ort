@@ -56,6 +56,9 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "Composer"
+private const val PACKAGE_TYPE = "Composer"
+
 private const val COMPOSER_PHAR_BINARY = "composer.phar"
 private const val SCOPE_NAME_REQUIRE = "require"
 private const val SCOPE_NAME_REQUIRE_DEV = "require-dev"
@@ -90,7 +93,7 @@ internal object ComposerCommand : CommandLineTool {
     description = "The Composer package manager for PHP.",
     factory = PackageManagerFactory::class
 )
-class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descriptor) : PackageManager("Composer") {
+class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descriptor) : PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("composer.json")
 
     override fun beforeResolution(
@@ -317,7 +320,7 @@ private fun PackageInfo.toPackage(): Package {
 
     return Package(
         id = Identifier(
-            type = "Composer",
+            type = PACKAGE_TYPE,
             namespace = rawName.substringBefore('/'),
             name = rawName.substringAfter('/'),
             version = version

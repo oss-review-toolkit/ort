@@ -47,6 +47,9 @@ import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+internal const val PROJECT_TYPE = "CocoaPods"
+internal const val PACKAGE_TYPE = "Pod"
+
 private const val LOCKFILE_FILENAME = "Podfile.lock"
 private const val SCOPE_NAME = "dependencies"
 
@@ -74,7 +77,9 @@ internal object CocoaPodsCommand : CommandLineTool {
     description = "The CocoaPods package manager for Objective-C.",
     factory = PackageManagerFactory::class
 )
-class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.descriptor) : PackageManager("CocoaPods") {
+class CocoaPods(
+    override val descriptor: PluginDescriptor = CocoaPodsFactory.descriptor
+) : PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("Podfile")
 
     private val dependencyHandler = PodDependencyHandler()

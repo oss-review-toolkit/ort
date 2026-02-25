@@ -38,6 +38,8 @@ import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
+private const val PROJECT_TYPE = "Unmanaged"
+
 /**
  * A fake [PackageManager] for projects that do not use any of the known package managers, or no package manager at all.
  * It is required as in ORT's data model e.g. scan results need to be attached to projects (or packages), so files that
@@ -48,7 +50,9 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
     description = "The Unmanaged package manager for projects that do not use any package manager.",
     factory = PackageManagerFactory::class
 )
-class Unmanaged(override val descriptor: PluginDescriptor = UnmanagedFactory.descriptor) : PackageManager("Unmanaged") {
+class Unmanaged(
+    override val descriptor: PluginDescriptor = UnmanagedFactory.descriptor
+) : PackageManager(PROJECT_TYPE) {
     // The empty list returned here deliberately causes this special package manager to never be considered in
     // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
     // Analyzer.findManagedFiles().

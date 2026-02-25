@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.toPurl
 
-private const val TYPE = "PyPI"
+private const val PACKAGE_TYPE = "PyPI"
 
 internal fun PythonInspector.Result.toOrtProject(
     projectType: String,
@@ -135,7 +135,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
                 )
             } ?: RemoteArtifact.EMPTY
 
-        val id = Identifier(type = TYPE, namespace = "", name = pkg.name, version = pkg.version)
+        val id = Identifier(type = PACKAGE_TYPE, namespace = "", name = pkg.name, version = pkg.version)
         val declaredLicenses = pkg.declaredLicense?.getDeclaredLicenses().orEmpty()
         val declaredLicensesProcessed = processDeclaredLicenses(id, declaredLicenses)
 
@@ -179,6 +179,6 @@ internal fun List<PythonInspector.ResolvedDependency>.toPackageReferences(): Set
 
 private fun PythonInspector.ResolvedDependency.toPackageReference() =
     PackageReference(
-        id = Identifier(type = TYPE, namespace = "", name = packageName, version = installedVersion),
+        id = Identifier(type = PACKAGE_TYPE, namespace = "", name = packageName, version = installedVersion),
         dependencies = dependencies.toPackageReferences()
     )

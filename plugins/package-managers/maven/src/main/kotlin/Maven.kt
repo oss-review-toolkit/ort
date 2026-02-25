@@ -46,6 +46,9 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.isTychoProject
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.toOrtProject
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 
+internal const val PROJECT_TYPE = "Maven"
+internal const val PACKAGE_TYPE = "Maven"
+
 /**
  * The [Maven](https://maven.apache.org/) package manager for Java.
  */
@@ -55,7 +58,7 @@ import org.ossreviewtoolkit.utils.common.searchUpwardFor
     factory = PackageManagerFactory::class
 )
 class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor, private val sbtMode: Boolean) :
-    PackageManager(if (sbtMode) "SBT" else "Maven") {
+    PackageManager(if (sbtMode) "SBT" else PROJECT_TYPE) {
     constructor(descriptor: PluginDescriptor = MavenFactory.descriptor) : this(descriptor, false)
 
     override val globsForDefinitionFiles = listOf("pom.xml")

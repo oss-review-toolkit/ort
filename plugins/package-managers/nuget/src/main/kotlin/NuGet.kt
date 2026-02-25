@@ -36,6 +36,9 @@ import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.NuGetInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtProject
 
+private const val PROJECT_TYPE = "NuGet"
+internal const val PACKAGE_TYPE = "NuGet"
+
 data class NuGetConfig(
     /**
      * The path to the NuGet configuration file to use.
@@ -53,7 +56,7 @@ data class NuGetConfig(
     factory = PackageManagerFactory::class
 )
 class NuGet(override val descriptor: PluginDescriptor = NuGetFactory.descriptor, config: NuGetConfig) :
-    PackageManager("NuGet") {
+    PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj", "packages.config")
 
     private val nugetConfig = config.nugetConfigFile?.let { File(it) }

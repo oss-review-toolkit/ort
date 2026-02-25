@@ -256,7 +256,7 @@ private fun findProjectPackageInfo(pkgInfos: List<PackageInfoV2>, definitionFile
  */
 private fun parsePackageId(pkgInfo: PackageInfoV2) =
     Identifier(
-        type = "Conan",
+        type = PACKAGE_TYPE,
         namespace = "",
         name = pkgInfo.name,
         version = pkgInfo.version

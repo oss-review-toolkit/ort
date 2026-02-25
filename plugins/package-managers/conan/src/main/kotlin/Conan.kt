@@ -70,6 +70,9 @@ import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "Conan"
+internal const val PACKAGE_TYPE = "Conan"
+
 internal class ConanCommand(private val useConan2: Boolean = false) : CommandLineTool {
     override fun command(workingDir: File?) = if (useConan2) "conan2" else "conan"
 
@@ -120,7 +123,7 @@ data class ConanConfig(
 class Conan(
     override val descriptor: PluginDescriptor = ConanFactory.descriptor,
     private val config: ConanConfig
-) : PackageManager("Conan") {
+) : PackageManager(PROJECT_TYPE) {
     companion object {
         internal val DUMMY_COMPILER_SETTINGS = arrayOf(
             "-s", "compiler=gcc",

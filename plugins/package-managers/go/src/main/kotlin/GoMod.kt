@@ -60,6 +60,9 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "GoMod"
+private const val PACKAGE_TYPE = "Go"
+
 internal object GoCommand : CommandLineTool {
     override fun command(workingDir: File?) = "go"
 
@@ -97,7 +100,7 @@ data class GoModConfig(
 class GoMod(
     override val descriptor: PluginDescriptor = GoModFactory.descriptor,
     config: GoModConfig
-) : PackageManager("GoMod") {
+) : PackageManager(PROJECT_TYPE) {
     private val goEnvironment = buildMap {
         put("GOWORK", "off")
 
@@ -316,7 +319,7 @@ class GoMod(
         } else {
             // If the version is not blank, it is a package in ORT speak.
             Identifier(
-                type = "Go",
+                type = PACKAGE_TYPE,
                 namespace = "",
                 name = path,
                 version = normalizeModuleVersion(version)

@@ -55,6 +55,9 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
+private const val PROJECT_TYPE = "Cargo"
+private const val PACKAGE_TYPE = "Crate"
+
 private const val DEFAULT_KIND_NAME = "normal"
 private const val DEV_KIND_NAME = "dev"
 private const val BUILD_KIND_NAME = "build"
@@ -76,7 +79,7 @@ internal object CargoCommand : CommandLineTool {
     description = "The Cargo package manager for Rust.",
     factory = PackageManagerFactory::class
 )
-class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager("Cargo") {
+class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("Cargo.toml")
 
     /**
@@ -188,7 +191,7 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
 
                 val pkg = packageById.getValue(node.id)
                 PackageReference(
-                    id = Identifier("Crate", "", pkg.name, pkg.version),
+                    id = Identifier(PACKAGE_TYPE, "", pkg.name, pkg.version),
                     linkage = if (pkg.isProject(analysisRoot)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC,
                     dependencies = dependencyNodes.toPackageReferences()
                 )
@@ -257,7 +260,7 @@ private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packag
 
     return Package(
         id = Identifier(
-            type = "Crate",
+            type = PACKAGE_TYPE,
             // Note that Rust / Cargo do not support package namespaces, see:
             // https://samsieber.tech/posts/2020/09/registry-structure-influence/
             namespace = "",

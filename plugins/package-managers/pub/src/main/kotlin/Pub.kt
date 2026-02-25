@@ -82,6 +82,9 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "Pub"
+private const val PACKAGE_TYPE = "Pub"
+
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
@@ -168,7 +171,7 @@ data class PubConfig(
 )
 @Suppress("TooManyFunctions")
 class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, private val config: PubConfig) :
-    PackageManager("Pub") {
+    PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 
     private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: config.flutterVersion
@@ -452,7 +455,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
             if (pkgInfoFromLockfile == null || pkgInfoFromLockfile.source == "sdk") return@forEach
 
             val id = Identifier(
-                type = if (pkgInfoFromLockfile.isProject) projectType else "Pub",
+                type = if (pkgInfoFromLockfile.isProject) projectType else PACKAGE_TYPE,
                 namespace = "",
                 name = packageName,
                 version = pkgInfoFromLockfile.version.orEmpty()
@@ -708,7 +711,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                 }
 
                 val id = Identifier(
-                    type = if (packageInfo.isProject) projectType else "Pub",
+                    type = if (packageInfo.isProject) projectType else PACKAGE_TYPE,
                     namespace = "",
                     name = rawName,
                     version = version

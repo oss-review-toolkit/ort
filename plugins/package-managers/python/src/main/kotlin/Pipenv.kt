@@ -38,6 +38,8 @@ import org.semver4j.Semver
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "Pipenv"
+
 /**
  * The version that introduced the requirements command.
  */
@@ -61,7 +63,7 @@ internal object PipenvCommand : CommandLineTool {
 )
 class Pipenv(
     override val descriptor: PluginDescriptor = PipenvFactory.descriptor, private val config: PipConfig
-) : PackageManager("Pipenv") {
+) : PackageManager(PROJECT_TYPE) {
     // Usually, definition files should not contain (only) lockfiles, to also support the case when no lockfile is
     // present. However, there currently is no way to distinguish a Pipenv project from a vanilla Pip project without
     // looking at the lockfile.

@@ -46,7 +46,7 @@ internal class BowerDependencyHandler : DependencyHandler<PackageInfo> {
 
 internal fun PackageInfo.toIdentifier() =
     Identifier(
-        type = "Bower",
+        type = PACKAGE_TYPE,
         namespace = "",
         name = pkgMeta.name.orEmpty(),
         version = pkgMeta.version.orEmpty()

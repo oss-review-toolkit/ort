@@ -55,7 +55,7 @@ class CarthageTest : WordSpec() {
                 with(result.packages) {
                     size shouldBe 1
                     single().apply {
-                        id.type shouldBe "Carthage"
+                        id.type shouldBe PACKAGE_TYPE
                         vcs.url shouldBe "https://github.com/Alamofire/AlamofireImage.git"
                         vcs.revision shouldBe "3.2.0"
                     }
@@ -70,7 +70,7 @@ class CarthageTest : WordSpec() {
                 with(result.packages) {
                     size shouldBe 1
                     single().apply {
-                        id.type shouldBe "Carthage"
+                        id.type shouldBe PACKAGE_TYPE
                         vcs.type shouldBe VcsType.GIT
                         vcs.url shouldBe "https://host.tld/path/to/project.git"
                         vcs.revision shouldBe "1.0.0"
@@ -89,7 +89,7 @@ class CarthageTest : WordSpec() {
                 with(result.packages) {
                     size shouldBe 1
                     single().apply {
-                        id.type shouldBe "Carthage"
+                        id.type shouldBe PACKAGE_TYPE
                         id.name shouldBe "spec"
                         binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
                     }
@@ -108,7 +108,7 @@ class CarthageTest : WordSpec() {
                 with(result.packages) {
                     size shouldBe 3
                     forEach {
-                        it.id.type shouldBe "Carthage"
+                        it.id.type shouldBe PACKAGE_TYPE
                     }
 
                     count { "user/project" in it.vcs.url } shouldBe 1

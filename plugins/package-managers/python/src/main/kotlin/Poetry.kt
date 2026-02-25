@@ -53,6 +53,8 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.semver4j.Semver
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "Poetry"
+
 internal object PoetryCommand : CommandLineTool {
     override fun command(workingDir: File?) = "poetry"
 
@@ -69,7 +71,7 @@ internal object PoetryCommand : CommandLineTool {
 )
 class Poetry(
     override val descriptor: PluginDescriptor = PoetryFactory.descriptor, private val config: PipConfig
-) : PackageManager("Poetry") {
+) : PackageManager(PROJECT_TYPE) {
     companion object {
         /**
          * The name of the build system requirements and information file used by modern Python packages.

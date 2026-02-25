@@ -56,6 +56,9 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "Stack"
+private const val PACKAGE_TYPE = "Hackage"
+
 private const val EXTERNAL_SCOPE_NAME = "external"
 private const val TEST_SCOPE_NAME = "test"
 private const val BENCH_SCOPE_NAME = "bench"
@@ -85,7 +88,7 @@ internal object StackCommand : CommandLineTool {
     description = "The Stack package manager for Haskell.",
     factory = PackageManagerFactory::class
 )
-class Stack(override val descriptor: PluginDescriptor = StackFactory.descriptor) : PackageManager("Stack") {
+class Stack(override val descriptor: PluginDescriptor = StackFactory.descriptor) : PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("stack.yaml")
 
     override fun beforeResolution(
@@ -167,14 +170,14 @@ class Stack(override val descriptor: PluginDescriptor = StackFactory.descriptor)
 
     private fun Dependency.toPackage(): Package {
         val id = Identifier(
-            type = "Hackage",
+            type = PACKAGE_TYPE,
             namespace = "",
             name = name,
             version = version
         )
 
         if (location == null || location.type == Location.TYPE_HACKAGE) {
-            okHttpClient.downloadCabalFile(id)?.let { return parseCabalFile(it, "Hackage") }
+            okHttpClient.downloadCabalFile(id)?.let { return parseCabalFile(it, PACKAGE_TYPE) }
         }
 
         return Package.EMPTY.copy(

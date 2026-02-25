@@ -88,6 +88,7 @@ import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.gibibytes
@@ -558,7 +559,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
         return Package(
             id = Identifier(
-                type = "Maven",
+                type = PACKAGE_TYPE,
                 namespace = mavenProject.groupId,
                 name = mavenProject.artifactId,
                 version = mavenProject.version

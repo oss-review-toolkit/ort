@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
@@ -439,7 +440,7 @@ internal fun createPackageFromManifest(artifact: Artifact, manifest: Manifest, r
 
         Package(
             id = Identifier(
-                type = "Maven",
+                type = PACKAGE_TYPE,
                 namespace = artifact.groupId,
                 name = artifact.artifactId,
                 version = artifact.version

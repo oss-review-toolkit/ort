@@ -48,6 +48,8 @@ import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+private const val PROJECT_TYPE = "SBT"
+
 internal object SbtCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
 
@@ -97,7 +99,7 @@ data class SbtConfig(
     factory = PackageManagerFactory::class
 )
 class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, private val config: SbtConfig) :
-    PackageManager("SBT") {
+    PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
     override fun mapDefinitionFiles(

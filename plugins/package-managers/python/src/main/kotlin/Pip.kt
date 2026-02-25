@@ -41,6 +41,8 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
+private const val PROJECT_TYPE = "PIP"
+
 @Suppress("EnumEntryNameCase", "EnumNaming")
 enum class OperatingSystem {
     linux,
@@ -86,7 +88,7 @@ class Pip internal constructor(
     projectType: String
 ) : PackageManager(projectType) {
     constructor(descriptor: PluginDescriptor = PipFactory.descriptor, config: PipConfig) :
-        this(descriptor, config, "PIP")
+        this(descriptor, config, PROJECT_TYPE)
 
     override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
 

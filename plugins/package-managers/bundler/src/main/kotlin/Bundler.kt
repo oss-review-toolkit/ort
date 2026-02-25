@@ -58,6 +58,9 @@ import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
+private const val PROJECT_TYPE = "Bundler"
+private const val PACKAGE_TYPE = "Gem"
+
 /** The name of the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information. */
 private const val ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "root_dependencies.rb"
 
@@ -119,7 +122,7 @@ data class BundlerConfig(
 class Bundler(
     override val descriptor: PluginDescriptor = BundlerFactory.descriptor,
     private val config: BundlerConfig
-) : PackageManager("Bundler") {
+) : PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("Gemfile")
 
     override fun beforeResolution(
@@ -254,7 +257,7 @@ class Bundler(
 
         runCatching {
             val gemInfo = gemsInfo.getValue(gemName)
-            val gemId = Identifier("Gem", "", gemInfo.name, gemInfo.version)
+            val gemId = Identifier(PACKAGE_TYPE, "", gemInfo.name, gemInfo.version)
 
             // The project itself can be listed as a dependency if the project is a gem (i.e. there is a .gemspec file
             // for it, and the Gemfile refers to it). In that case, skip querying RubyGems and adding Package and
@@ -322,7 +325,7 @@ class Bundler(
         )
 
     private fun getPackageFromGemInfo(gemInfo: GemInfo): Package {
-        val gemId = Identifier("Gem", "", gemInfo.name, gemInfo.version)
+        val gemId = Identifier(PACKAGE_TYPE, "", gemInfo.name, gemInfo.version)
 
         return Package(
             id = gemId,

@@ -69,6 +69,8 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 
+private const val PROJECT_TYPE = "SpdxDocumentFile"
+
 private const val DEFAULT_SCOPE_NAME = "default"
 
 private val SPDX_LINKAGE_RELATIONSHIPS = mapOf(
@@ -269,7 +271,7 @@ private fun hasDefaultScopeLinkage(
     factory = PackageManagerFactory::class
 )
 class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentFileFactory.descriptor) :
-    PackageManager("SpdxDocumentFile") {
+    PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
     private val spdxDocumentCache = SpdxDocumentCache()

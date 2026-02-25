@@ -163,7 +163,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
      */
     private fun parsePackageId(pkgInfo: PackageInfoV1, workingDir: File) =
         Identifier(
-            type = "Conan",
+            type = PACKAGE_TYPE,
             namespace = "",
             name = conan.inspectField(pkgInfo.displayName, workingDir, "name").orEmpty(),
             version = conan.inspectField(pkgInfo.displayName, workingDir, "version").orEmpty()

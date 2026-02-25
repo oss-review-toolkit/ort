@@ -72,6 +72,9 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 import org.semver4j.Semver
 
+internal const val PROJECT_TYPE = "Gradle"
+internal const val PACKAGE_TYPE = "Maven"
+
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 
 private val GRADLE_BUILD_FILES = listOf("build.gradle", "build.gradle.kts")
@@ -112,7 +115,7 @@ data class GradleConfig(
 class Gradle(
     override val descriptor: PluginDescriptor = GradleFactory.descriptor,
     private val config: GradleConfig
-) : PackageManager("Gradle") {
+) : PackageManager(PROJECT_TYPE) {
     // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
     // "settings" files as we should consider "settings" files only if the same directory does not also contain a
     // "build" file.
