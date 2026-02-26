@@ -36,6 +36,7 @@ import java.io.File
 import java.net.URI
 import java.time.Duration
 
+import kotlin.script.experimental.host.UrlScriptSource
 import kotlin.time.toKotlinDuration
 
 import org.apache.logging.log4j.kotlin.logger
@@ -255,7 +256,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
             var allChecksSucceeded = true
 
             scriptUris.forEach {
-                if (evaluator.checkSyntax(it.toURL().readText())) {
+                if (evaluator.checkSyntax(it.toURL())) {
                     echo("Syntax check for $it succeeded.")
                 } else {
                     echo("Syntax check for $it failed.")
@@ -331,8 +332,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
             licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
         val evaluator = Evaluator(ortResultInput, licenseInfoResolver, resolutionProvider, licenseClassifications)
 
-        val scripts = scriptUris.map { it.toURL().readText() }
-        val evaluatorRun = evaluator.run(*scripts.toTypedArray())
+        val evaluatorRun = evaluator.runScripts(scriptUris.map { UrlScriptSource(it.toURL()) })
 
         if (evaluatorRun.violations.isNotEmpty()) {
             echo("The following ${evaluatorRun.violations.size} rule violations have been found:")

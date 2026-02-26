@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.evaluator
 import java.time.Instant
 
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.SourceCode
 import kotlin.script.experimental.api.constructorArgs
 import kotlin.script.experimental.api.scriptsInstancesSharing
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
@@ -42,7 +43,7 @@ class Evaluator(
     resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(),
     licenseClassifications: LicenseClassifications = LicenseClassifications(),
     time: Instant = Instant.now()
-) : ScriptRunner() {
+) : ScriptRunner<EvaluatorRun>() {
     override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate>()
 
     override val evalConfig = ScriptEvaluationConfiguration {
@@ -50,11 +51,13 @@ class Evaluator(
         scriptsInstancesSharing(true)
     }
 
-    fun run(vararg scripts: String): EvaluatorRun {
+    override fun runScript(script: SourceCode) = runScripts(listOf(script))
+
+    fun runScripts(scripts: Collection<SourceCode>): EvaluatorRun {
         val startTime = Instant.now()
 
         val violations = scripts.flatMapTo(mutableListOf()) {
-            val scriptInstance = runScript(it).scriptInstance as RulesScriptTemplate
+            val scriptInstance = run(it).scriptInstance as RulesScriptTemplate
             scriptInstance.ruleViolations
         }
 

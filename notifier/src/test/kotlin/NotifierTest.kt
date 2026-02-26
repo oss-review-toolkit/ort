@@ -26,8 +26,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 import io.kotest.matchers.types.beInstanceOf
 
-import kotlin.script.experimental.api.ResultValue
-
+import org.ossreviewtoolkit.model.NotifierRun
 import org.ossreviewtoolkit.model.config.JiraConfiguration
 import org.ossreviewtoolkit.model.config.NotifierConfiguration
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
@@ -46,7 +45,7 @@ class NotifierTest : WordSpec({
                         resolutionProvider as ResolutionProvider
                         """.trimIndent()
                     )
-                    result should beInstanceOf<ResultValue.Value>()
+                    result should beInstanceOf<NotifierRun>()
                 }
 
                 shouldThrow<RuntimeException> {
@@ -66,7 +65,7 @@ class NotifierTest : WordSpec({
                         resolutionProvider as ResolutionProvider
                         """.trimIndent()
                     )
-                    result should beInstanceOf<ResultValue.Value>()
+                    result should beInstanceOf<NotifierRun>()
                 }
             }
         }

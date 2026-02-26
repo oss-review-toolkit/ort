@@ -19,13 +19,19 @@
 
 package org.ossreviewtoolkit.utils.scripting
 
+import java.io.File
+import java.net.URL
+
 import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.ResultWithDiagnostics
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.ScriptDiagnostic
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.SourceCode
 import kotlin.script.experimental.api.valueOrThrow
-import kotlin.script.experimental.host.toScriptSource
+import kotlin.script.experimental.host.FileScriptSource
+import kotlin.script.experimental.host.StringScriptSource
+import kotlin.script.experimental.host.UrlScriptSource
 import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
 import kotlin.time.measureTimedValue
 
@@ -36,7 +42,7 @@ import org.ossreviewtoolkit.utils.ort.runBlocking
 /**
  * A class providing the framework to run Kotlin scripts.
  */
-abstract class ScriptRunner {
+abstract class ScriptRunner<T> {
     /** The scripting host instance. */
     private val scriptingHost = BasicJvmScriptingHost()
 
@@ -49,9 +55,9 @@ abstract class ScriptRunner {
     /**
      * Check the syntax of the [script] without evaluating it. Return true if syntax is correct, false otherwise.
      */
-    fun checkSyntax(script: String): Boolean {
+    fun checkSyntax(script: SourceCode): Boolean {
         val (result, duration) = measureTimedValue {
-            runBlocking { scriptingHost.compiler.invoke(script.toScriptSource(), compConfig) }
+            runBlocking { scriptingHost.compiler.invoke(script, compConfig) }
         }
 
         logger.info { "Compiling the script took $duration." }
@@ -61,11 +67,25 @@ abstract class ScriptRunner {
         return result is ResultWithDiagnostics.Success
     }
 
+    fun checkSyntax(script: File) = checkSyntax(FileScriptSource(script))
+
+    fun checkSyntax(script: String) = checkSyntax(StringScriptSource(script))
+
+    fun checkSyntax(script: URL) = checkSyntax(UrlScriptSource(script))
+
     /**
-     * Run the given [script], returning a [ResultValue].
+     * Run the given [script], returning a value of type [T].
      */
-    fun runScript(script: String): ResultValue {
-        val result = scriptingHost.eval(script.toScriptSource(), compConfig, evalConfig)
+    abstract fun runScript(script: SourceCode): T
+
+    fun runScript(script: File) = runScript(FileScriptSource(script))
+
+    fun runScript(script: String) = runScript(StringScriptSource(script))
+
+    fun runScript(script: URL) = runScript(UrlScriptSource(script))
+
+    protected fun run(script: SourceCode): ResultValue {
+        val result = scriptingHost.eval(script, compConfig, evalConfig)
 
         logReports(result.reports)
 
