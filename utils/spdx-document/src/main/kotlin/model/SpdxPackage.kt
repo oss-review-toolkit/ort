@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
  */
 data class SpdxPackage(
     /**
-     * A unique identifier for this [SpdxPackage] within a SPDX document.
+     * A unique identifier for this [SpdxPackage] within an SPDX document.
      */
     @JsonProperty("SPDXID")
     val spdxId: String,

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
- * A class for configuring metadata for a specific license referred to by a SPDX license identifier.
+ * A class for configuring metadata for a specific license referred to by an SPDX license identifier.
  *
  * The metadata consists of assignments to generic categories whose exact meaning is customer specific.
  * The categories a license belong to can be evaluated by other components, such as rules or templates,

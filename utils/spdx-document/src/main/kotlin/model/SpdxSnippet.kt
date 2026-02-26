@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 @JsonIgnoreProperties("ranges") // TODO: Implement ranges which is broken in the specification examples.
 data class SpdxSnippet(
     /**
-     * The unique identifies of this [SpdxSnippet] within a SPDX document.
+     * The unique identifies of this [SpdxSnippet] within an SPDX document.
      */
     @JsonProperty("SPDXID")
     val spdxId: String,
