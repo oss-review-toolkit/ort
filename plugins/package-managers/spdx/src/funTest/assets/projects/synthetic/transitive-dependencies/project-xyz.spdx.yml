@@ -1,5 +1,5 @@
 SPDXID: "SPDXRef-DOCUMENT"
-spdxVersion: "SPDX-2.2"
+spdxVersion: "SPDX-2.3"
 creationInfo:
   created: "2020-07-23T18:30:22Z"
   creators:
@@ -21,7 +21,7 @@ externalDocumentRefs:
   spdxDocument: "../libs/zlib/package.spdx.yml"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee"
+    checksumValue: "ae9c109f887e7afd1f41a12c9d4ec0b30b4078a6"
 packages:
 - SPDXID: "SPDXRef-Package-xyz"
   description: "Awesome product created by Example Inc."

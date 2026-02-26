@@ -1,5 +1,5 @@
 SPDXID: "SPDXRef-DOCUMENT"
-spdxVersion: "SPDX-2.2"
+spdxVersion: "SPDX-2.3"
 creationInfo:
   created: "2020-07-23T18:30:22Z"
   creators:
@@ -16,7 +16,7 @@ externalDocumentRefs:
     spdxDocument: "./subproject/subproject-with-conan-reference.spdx.yml"
     checksum:
       algorithm: "SHA1"
-      checksumValue: "032a087b0da8f353c03671a72179b807b4ec7eb3"
+      checksumValue: "2ecc1c19d9f91fed1cae5ec24d082068c2137307"
 packages:
   - SPDXID: "SPDXRef-Package-xyz"
     description: "Awesome product created by Example Inc."

@@ -1,5 +1,5 @@
 SPDXID: "SPDXRef-DOCUMENT"
-spdxVersion: "SPDX-2.2"
+spdxVersion: "SPDX-2.3"
 creationInfo:
   created: "2022-07-06T12:00:00Z"
   creators:
@@ -20,6 +20,6 @@ packages:
     versionInfo: "1.0.0"
     packageFileName: "./conanfile.py"
     externalRefs:
-    - referenceCategory: "PACKAGE_MANAGER"
+    - referenceCategory: "PACKAGE-MANAGER"
       referenceLocator: "pkg:conan/example.org/sub-conan@0.1.0?scope=requires"
       referenceType: "purl"

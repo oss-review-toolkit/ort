@@ -1,5 +1,5 @@
 SPDXID: "SPDXRef-DOCUMENT"
-spdxVersion: "SPDX-2.2"
+spdxVersion: "SPDX-2.3"
 creationInfo:
   created: "2020-07-23T18:30:22Z"
   creators:
@@ -16,17 +16,17 @@ externalDocumentRefs:
   spdxDocument: "../libs/curl/package.spdx.yml"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "73d64ad650d6e1fa418b70985f24d937d1151186"
+    checksumValue: "8cbc8f1717ed9e8927d404ec5ebd5fc44c4ba2b4"
 - externalDocumentId: "DocumentRef-openssl-1.1.1g"
   spdxDocument: "../libs/openssl/package.spdx.yml"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "3d38c716b5d7f75c893b8b2720b7c85aca7776ae"
+    checksumValue: "b7465918efa625d4c1aac9e6d7875b7d6f0883dc"
 - externalDocumentId: "DocumentRef-zlib-1.2.11"
   spdxDocument: "../libs/zlib/package.spdx.yml"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee"
+    checksumValue: "ae9c109f887e7afd1f41a12c9d4ec0b30b4078a6"
 packages:
 - SPDXID: "SPDXRef-Package-xyz"
   description: "Awesome product created by Example Inc."
