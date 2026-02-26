@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.reporter
 
 import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.SourceCode
 import kotlin.script.experimental.api.constructorArgs
 import kotlin.script.experimental.api.scriptsInstancesSharing
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
@@ -43,7 +44,7 @@ fun interface HowToFixTextProvider {
          * Return the [HowToFixTextProvider] which in-turn has to be returned by the given [script].
          */
         fun fromKotlinScript(script: String, ortResult: OrtResult): HowToFixTextProvider =
-            HowToFixScriptRunner(ortResult).run(script)
+            HowToFixScriptRunner(ortResult).runScript(script)
     }
 
     /**
@@ -53,7 +54,7 @@ fun interface HowToFixTextProvider {
     fun getHowToFixText(issue: Issue): String?
 }
 
-private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner() {
+private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner<HowToFixTextProvider>() {
     override val compConfig = createJvmCompilationConfigurationFromTemplate<HowToFixTextProviderScriptTemplate>()
 
     override val evalConfig = ScriptEvaluationConfiguration {
@@ -61,8 +62,8 @@ private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner() {
         scriptsInstancesSharing(true)
     }
 
-    fun run(script: String): HowToFixTextProvider {
-        val scriptValue = runScript(script) as ResultValue.Value
+    override fun runScript(script: SourceCode): HowToFixTextProvider {
+        val scriptValue = run(script) as ResultValue.Value
         return scriptValue.value as HowToFixTextProvider
     }
 }

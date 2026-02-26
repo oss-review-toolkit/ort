@@ -30,13 +30,14 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.getResource
 import org.ossreviewtoolkit.utils.test.ortResult
 import org.ossreviewtoolkit.utils.test.readResource
 
 class EvaluatorTest : WordSpec({
     "checkSyntax" should {
         "succeed if the script can be compiled" {
-            val script = readResource("/rules/osadl.rules.kts")
+            val script = getResource("/rules/osadl.rules.kts")
 
             val result = Evaluator(ortResult).checkSyntax(script)
 
@@ -56,13 +57,13 @@ class EvaluatorTest : WordSpec({
 
     "evaluate" should {
         "return no rule violations for an empty script" {
-            val result = Evaluator(ortResult).run("")
+            val result = Evaluator(ortResult).runScript("")
 
             result.violations should beEmpty()
         }
 
         "be able to access the ORT result" {
-            val result = Evaluator(ortResult).run(
+            val result = Evaluator(ortResult).runScript(
                 """
                 require(ortResult.labels["label"] == "value") { "Failed to verify the ORT result." }
                 """.trimIndent()
@@ -72,7 +73,7 @@ class EvaluatorTest : WordSpec({
         }
 
         "contain rule violations in the result" {
-            val result = Evaluator(ortResult).run(
+            val result = Evaluator(ortResult).runScript(
                 """
                 ruleViolations += RuleViolation(
                     rule = "rule 1",
@@ -150,7 +151,7 @@ class EvaluatorTest : WordSpec({
 
             val script = readResource("/rules/osadl.rules.kts")
 
-            val result = Evaluator(compatibleOrtResult).run(script)
+            val result = Evaluator(compatibleOrtResult).runScript(script)
 
             result.violations should beEmpty()
         }
@@ -184,7 +185,7 @@ class EvaluatorTest : WordSpec({
 
             val script = readResource("/rules/osadl.rules.kts")
 
-            val result = Evaluator(incompatibleOrtResult).run(script)
+            val result = Evaluator(incompatibleOrtResult).runScript(script)
 
             result.violations.map { it.message } should containExactlyInAnyOrder(
                 "The outbound license AGPL-3.0-or-later of project 'Maven:group:project-foo:1' is incompatible " +
@@ -218,7 +219,7 @@ class EvaluatorTest : WordSpec({
 
             val script = readResource("/rules/osadl.rules.kts")
 
-            val result = Evaluator(incompatibleOrtResult).run(script)
+            val result = Evaluator(incompatibleOrtResult).runScript(script)
 
             result.violations should haveSize(1)
             result.violations.first().message shouldBe "The outbound license Apache-2.0 of project " +

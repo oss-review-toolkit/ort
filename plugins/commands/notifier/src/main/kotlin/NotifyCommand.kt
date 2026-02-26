@@ -92,20 +92,15 @@ class NotifyCommand(descriptor: PluginDescriptor = NotifyCommandFactory.descript
 
         val notifier = Notifier(ortResult, ortConfig.notifier, resolutionProvider)
 
-        val script = notificationsFile?.readText() ?: readDefaultNotificationsFile()
-        notifier.run(script)
-    }
-
-    private fun readDefaultNotificationsFile(): String {
-        val notificationsFile = ortConfigDirectory / ORT_NOTIFIER_SCRIPT_FILENAME
-
-        if (!notificationsFile.isFile) {
-            throw UsageError(
-                "No notifications file option specified and no default notifications file found at " +
-                    "'$notificationsFile'."
-            )
+        val script = notificationsFile ?: (ortConfigDirectory / ORT_NOTIFIER_SCRIPT_FILENAME).also {
+            if (!it.isFile) {
+                throw UsageError(
+                    "No notifications file option specified and no default notifications file found at " +
+                        "'$notificationsFile'."
+                )
+            }
         }
 
-        return notificationsFile.readText()
+        notifier.runScript(script)
     }
 }
