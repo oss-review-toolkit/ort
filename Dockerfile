@@ -98,6 +98,9 @@ RUN chgrp $USERNAME /opt \
 RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
+# Make curl trust system certificates both at container build timeand run time.
+RUN echo "ca-native" > /etc/curlrc
+
 # Copy certificates scripts only.
 COPY scripts/*_certificates.sh /etc/scripts/
 
