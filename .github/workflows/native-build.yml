@@ -35,5 +35,5 @@ jobs:
         with:
           name: ORT Analyzer-only
           path: cli/build/native/nativeCompile/ort
-          compression-level: 0
+          archive: false
           retention-days: 7
