@@ -113,6 +113,9 @@ WORKDIR $HOMEDIR
 ENV USER=$USERNAME
 ENV HOME=$HOMEDIR
 
+# Make nodejs tools trust system certificates.
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+
 ENTRYPOINT [ "/bin/bash" ]
 
 #------------------------------------------------------------------------
