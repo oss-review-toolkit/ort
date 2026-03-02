@@ -173,7 +173,9 @@ internal object SpdxDocumentModelMapper {
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
             documentDescribes = projectPackages.map { it.spdxId },
-            name = config.documentName,
+            name = config.documentName
+                ?: projects.firstOrNull()?.id?.name?.takeIf(String::isNotBlank)
+                ?: "Unnamed document",
             packages = projectPackages + packages,
             relationships = relationships.sortedBy { it.spdxElementId },
             files = files
