@@ -81,10 +81,10 @@ data class SpdxDocumentReporterConfig(
     val documentComment: String?,
 
     /**
-     * The name of the generated [SpdxDocument].
+     * The name of the generated [SpdxDocument]. Defaults to the first project name from the ORT result if not set.
      */
-    @OrtPluginOption(defaultValue = "Unnamed document", aliases = ["document.name"])
-    val documentName: String,
+    @OrtPluginOption(aliases = ["document.name"])
+    val documentName: String?,
 
     /**
      * The list of file formats to generate.

@@ -83,6 +83,18 @@ class SpdxDocumentReporterFunTest : WordSpec({
             jsonSpdxDocument should matchJsonSchema(schemaJson)
             document.files should beEmpty()
         }
+
+        "use the project name as document name when no document name is configured" {
+            val jsonSpdxDocument = generateReport(
+                ORT_RESULT,
+                FileFormat.JSON,
+                SpdxVersion.SPDX_2_2,
+                documentName = null
+            )
+            val document = fromJson<SpdxDocument>(jsonSpdxDocument)
+
+            document.name shouldBe "proj1"
+        }
     }
 
     "Reporting to SPDX-2.3" should {
@@ -131,7 +143,8 @@ private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
     format: FileFormat,
     spdxVersion: SpdxVersion,
-    fileInformationEnabled: Boolean = true
+    fileInformationEnabled: Boolean = true,
+    documentName: String? = "some document name"
 ): String {
     val config = SpdxDocumentReporterConfig(
         spdxVersion = spdxVersion,
@@ -139,7 +152,7 @@ private fun TestConfiguration.generateReport(
         creationInfoPerson = "some creation info person",
         creationInfoOrganization = "some creation info organization",
         documentComment = "some document comment",
-        documentName = "some document name",
+        documentName = documentName,
         fileInformationEnabled = fileInformationEnabled,
         outputFileFormats = listOf(format)
     )
