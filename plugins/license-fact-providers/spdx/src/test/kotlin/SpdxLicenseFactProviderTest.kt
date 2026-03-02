@@ -29,6 +29,8 @@ import io.kotest.matchers.string.beEmpty
 import io.kotest.matchers.string.contain
 import io.kotest.matchers.string.haveLength
 
+import kotlin.enums.enumEntries
+
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 
@@ -43,13 +45,13 @@ class SpdxLicenseFactProviderTest : WordSpec({
         }
 
         "return the license text for all SPDX licenses" {
-            enumValues<SpdxLicense>().forAll {
+            enumEntries<SpdxLicense>().forAll {
                 provider.getLicenseText(it.id)?.text shouldNot beEmpty()
             }
         }
 
         "return the license text for all SPDX exceptions" {
-            enumValues<SpdxLicenseException>().forAll {
+            enumEntries<SpdxLicenseException>().forAll {
                 provider.getLicenseText(it.id)?.text shouldNot beEmpty()
             }
         }
@@ -61,13 +63,13 @@ class SpdxLicenseFactProviderTest : WordSpec({
 
     "hasLicenseText()" should {
         "return true for all SPDX licenses" {
-            enumValues<SpdxLicense>().forAll {
+            enumEntries<SpdxLicense>().forAll {
                 provider.hasLicenseText(it.id) shouldBe true
             }
         }
 
         "return true for all SPDX exceptions" {
-            enumValues<SpdxLicenseException>().forAll {
+            enumEntries<SpdxLicenseException>().forAll {
                 provider.hasLicenseText(it.id) shouldBe true
             }
         }

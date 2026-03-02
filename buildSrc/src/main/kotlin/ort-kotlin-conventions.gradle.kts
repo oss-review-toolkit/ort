@@ -20,6 +20,8 @@
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.report.ReportMergeTask
 
+import kotlin.enums.enumEntries
+
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.dependencies
@@ -154,7 +156,7 @@ tasks.withType<Jar>().configureEach {
 }
 
 val maxKotlinJvmTarget = runCatching { JvmTarget.fromTarget(javaLanguageVersion) }
-    .getOrDefault(enumValues<JvmTarget>().max())
+    .getOrDefault(enumEntries<JvmTarget>().max())
 
 val mergeDetektReportsTaskName = "mergeDetektReports"
 val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTaskName) != null) {
