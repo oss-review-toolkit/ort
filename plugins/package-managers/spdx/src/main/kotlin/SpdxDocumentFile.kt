@@ -88,11 +88,6 @@ private val SPDX_VCS_PREFIXES = mapOf(
 )
 
 /**
- * Return true if the [SpdxDocument] describes a project. Otherwise, if it describes a package, return false.
- */
-private fun SpdxDocument.isProject(): Boolean = projectPackage() != null
-
-/**
  * Return the [SpdxPackage] in the [SpdxDocument] that denotes a project, or null if no project but only packages are
  * defined.
  */
@@ -500,7 +495,7 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
         }.filter { (_, spdxDocument) ->
             // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies,
             // or a package-style SPDX document that describes a single (dependency-)package.
-            spdxDocument?.isProject() == true
+            spdxDocument?.projectPackage() != null
         }.keys.also { remainingFiles ->
             if (remainingFiles.isEmpty()) return definitionFiles
 
