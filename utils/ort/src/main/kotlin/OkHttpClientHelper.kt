@@ -71,6 +71,24 @@ object OkHttpClientHelper {
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
 
     /**
+     * A flag to control whether preemptive authentication should be enabled. If set to true, the HTTP client will
+     * attempt to add Basic authentication headers to requests before they are sent, based on credentials available
+     * from the Java authenticator. If set to false, authentication will only occur reactively in response to 401
+     * challenges.
+     */
+    var enablePreemptiveAuthentication: Boolean = false
+
+    /**
+     * Configure the OkHttpClient helper based on the HTTP client configuration. This should be called early in the
+     * application lifecycle, before the first HTTP client is built.
+     *
+     * @param enablePreemptiveAuth Whether to enable preemptive authentication.
+     */
+    fun configure(enablePreemptiveAuth: Boolean) {
+        enablePreemptiveAuthentication = enablePreemptiveAuth
+    }
+
+    /**
      * Build a preconfigured client that uses a cache directory inside the [ORT data directory][ortDataDirectory].
      * Proxy environment variables are by default respected, but the client can further be configured via the [block].
      */
@@ -124,24 +142,28 @@ val okHttpClient: OkHttpClient by lazy {
                 }
             }.getOrThrow()
         }
-        .addInterceptor { chain ->
-            val request = chain.request()
+        .apply {
+            if (OkHttpClientHelper.enablePreemptiveAuthentication) {
+                addInterceptor { chain ->
+                    val request = chain.request()
 
-            if (request.header(AUTHORIZATION_HEADER) == null) {
-                val credentials = requestPasswordAuthentication(request.url.toUri())
-                if (credentials != null) {
-                    val authenticatedRequest = request.newBuilder()
-                        .header(
-                            AUTHORIZATION_HEADER,
-                            Credentials.basic(credentials.userName, String(credentials.password))
-                        )
-                        .build()
-                    logger.debug { "Added AUTHORIZATION_HEADER for ${request.url.host}" }
-                    return@addInterceptor chain.proceed(authenticatedRequest)
+                    if (request.header(AUTHORIZATION_HEADER) == null) {
+                        val credentials = requestPasswordAuthentication(request.url.toUri())
+                        if (credentials != null) {
+                            val authenticatedRequest = request.newBuilder()
+                                .header(
+                                    AUTHORIZATION_HEADER,
+                                    Credentials.basic(credentials.userName, String(credentials.password))
+                                )
+                                .build()
+                            logger.debug { "Added AUTHORIZATION_HEADER for ${request.url.host}" }
+                            return@addInterceptor chain.proceed(authenticatedRequest)
+                        }
+                    }
+
+                    chain.proceed(request)
                 }
             }
-
-            chain.proceed(request)
         }
         .cache(cache)
         .connectionSpecs(specs)
