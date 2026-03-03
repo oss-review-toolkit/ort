@@ -93,8 +93,6 @@ abstract class CycloneDxPackageManager(
      */
     private fun createProjectFromSbom(definitionFile: File, component: Component, issues: MutableList<Issue>): Project {
         val definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
-        val fallbackName = definitionFile.parentFile.name.takeIf { it.isNotBlank() }
-            ?: definitionFile.nameWithoutExtension
 
         if (component.name.isNullOrBlank()) {
             issues += Issue(
@@ -108,6 +106,9 @@ abstract class CycloneDxPackageManager(
         val project = component.toProject(definitionFilePath, projectType)
 
         val correctedId = if (project.id.name.isBlank()) {
+            val fallbackName = definitionFile.parentFile.name.takeIf { it.isNotBlank() }
+                ?: definitionFile.nameWithoutExtension
+
             project.id.copy(type = projectType, name = fallbackName)
         } else {
             project.id.copy(type = projectType)
