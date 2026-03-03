@@ -528,12 +528,8 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
         val packages = mutableSetOf<Package>()
         val scopes = mutableSetOf<Scope>()
 
-        val projectPackage = if (!spdxDocument.isProject()) {
-            spdxDocument.packages.first()
-        } else {
-            requireNotNull(spdxDocument.projectPackage()) {
-                "The SPDX document file at '$definitionFile' does not describe a project."
-            }
+        val projectPackage = requireNotNull(spdxDocument.projectPackage() ?: spdxDocument.packages.firstOrNull()) {
+            "The SPDX document file at '$definitionFile' does not describe a project."
         }
 
         logger.info {
