@@ -356,10 +356,11 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
             val issues = mutableListOf<Issue>()
             getPackageManagerDependency(target, doc, analyzerConfig) ?: doc.getSpdxPackageForId(target, issues)
                 ?.let { dependency ->
-                    packages += dependency.toPackage(doc.getDefinitionFile(target), doc)
+                    val ortPackage = dependency.toPackage(doc.getDefinitionFile(target), doc)
+                    packages += ortPackage
 
                     PackageReference(
-                        id = dependency.toIdentifier(),
+                        id = ortPackage.id,
                         dependencies = getDependencies(target, doc, packages, ancestorIds, analyzerConfig),
                         linkage = getLinkageForDependency(dependency, pkgId, doc.relationships),
                         issues = issues
@@ -440,9 +441,11 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
 
                     getPackageManagerDependency(source, doc, analyzerConfig) ?: doc.getSpdxPackageForId(source, issues)
                         ?.let { dependency ->
-                            packages += dependency.toPackage(doc.getDefinitionFile(source), doc)
+                            val ortPackage = dependency.toPackage(doc.getDefinitionFile(source), doc)
+                            packages += ortPackage
+
                             PackageReference(
-                                id = dependency.toIdentifier(),
+                                id = ortPackage.id,
                                 dependencies = getDependencies(source, doc, packages, ancestorIds, analyzerConfig),
                                 issues = issues,
                                 linkage = getLinkageForDependency(dependency, target, doc.relationships)
