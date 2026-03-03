@@ -20,7 +20,7 @@ project:
     dependencies:
     - id: "PyPI::django:2.2.20"
       dependencies:
-      - id: "PyPI::pytz:2025.2"
+      - id: "PyPI::pytz:2026.1.post1"
       - id: "PyPI::sqlparse:0.5.5"
 packages:
 - id: "PyPI::django:2.2.20"
@@ -58,8 +58,8 @@ packages:
     url: "https://github.com/django/django.git"
     revision: ""
     path: ""
-- id: "PyPI::pytz:2025.2"
-  purl: "pkg:pypi/pytz@2025.2"
+- id: "PyPI::pytz:2026.1.post1"
+  purl: "pkg:pypi/pytz@2026.1.post1"
   authors:
   - "Stuart Bishop <stuart@stuartbishop.net>"
   declared_licenses:
@@ -72,14 +72,14 @@ packages:
   description: "World timezone definitions, modern and historical"
   homepage_url: "http://pythonhosted.org/pytz"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/81/c4/34e93fe5f5429d7570ec1fa436f1986fb1f00c3e0f43a589fe2bbcd22c3f/pytz-2025.2-py2.py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/10/99/781fe0c827be2742bcc775efefccb3b048a3a9c6ce9aec0cbf4a101677e5/pytz-2026.1.post1-py2.py3-none-any.whl"
     hash:
-      value: "5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00"
+      value: "f2fd16142fda348286a75e1a524be810bb05d444e5a081f37f7affc635035f7a"
       algorithm: "SHA-256"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/f8/bf/abbd3cdfb8fbc7fb3d4d38d320f2441b1e7cbe29be4f23797b4a2b5d8aac/pytz-2025.2.tar.gz"
+    url: "https://files.pythonhosted.org/packages/56/db/b8721d71d945e6a8ac63c0fc900b2067181dbb50805958d4d4661cf7d277/pytz-2026.1.post1.tar.gz"
     hash:
-      value: "360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3"
+      value: "3378dde6a0c3d26719182142c56e60c7f9af7e968076f31aae569d72a0358ee1"
       algorithm: "SHA-256"
   vcs:
     type: ""
