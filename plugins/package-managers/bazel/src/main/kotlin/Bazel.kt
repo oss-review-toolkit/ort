@@ -517,6 +517,8 @@ class Bazel(
                 .forEach { issues += createAndLogIssue(it) }
         }
 
+        val depDirectivesWithOverrides = depDirectives.toMutableMap()
+
         val mainModule = process.stdout.parseBazelModule()
         val (mainDeps, devDeps) = mainModule.dependencies.map { module ->
             val name = module.name ?: module.key.substringBefore("@", "")
@@ -525,12 +527,19 @@ class Bazel(
             val overriddenKey = "$name@$version"
             if (overriddenKey != module.key) {
                 logger.info { "Using overridden module key '$overriddenKey' instead of '${module.key}'." }
+
+                // If there is an override, the module key will change so it won't be possible to look up the dependency
+                // in `depDirectives` anymore. Therefore, a duplicated entry is added with the overridden key.
+                depDirectivesWithOverrides[module.key]?.also {
+                    depDirectivesWithOverrides += overriddenKey to it
+                }
+
                 module.copy(key = "$name@$version")
             } else {
                 module
             }
         }.partition {
-            val depDirective = depDirectives[it.key]
+            val depDirective = depDirectivesWithOverrides[it.key]
 
             if (depDirective == null) {
                 logger.warn { "No dependency directive found for '${it.key}'. Assuming it is a main dependency." }
