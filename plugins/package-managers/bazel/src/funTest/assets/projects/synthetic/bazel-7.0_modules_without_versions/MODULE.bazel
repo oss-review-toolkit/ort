@@ -1,4 +1,4 @@
-module(name = "my_bazel_module", version = "1.0.0")
+module(name = "my_bazel_module")
 
 bazel_dep(name = "nanopb", dev_dependency=True)
 

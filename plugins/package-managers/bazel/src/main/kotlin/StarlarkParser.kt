@@ -247,7 +247,7 @@ internal class Parser(input: String) {
 
         return ModuleDirective(
             name = params["name"] ?: throw IllegalArgumentException("Missing name in 'module' directive"),
-            version = params["version"] ?: throw IllegalArgumentException("Missing version in 'module' directive"),
+            version = params["version"].orEmpty(),
             compatibilityLevel = params["compatibility_level"]?.toInt() ?: 0
         )
     }
