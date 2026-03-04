@@ -257,7 +257,7 @@ class Bazel(
                         type = projectType,
                         namespace = "",
                         name = moduleMetadata.module?.name ?: VersionControlSystem.getPathInfo(definitionFile).path,
-                        version = moduleMetadata.module?.version.orEmpty()
+                        version = moduleMetadata.module?.version?.ifEmpty { projectVcs.revision }.orEmpty()
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     declaredLicenses = emptySet(),

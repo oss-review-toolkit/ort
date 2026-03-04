@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Bazel::my_bazel_module:1.0.0"
+  id: "Bazel::my_bazel_module:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
