@@ -81,6 +81,15 @@ class BazelFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Dependencies are detected correctly with Bazel when a dependency has no version" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-7.0_modules_without_versions/MODULE.bazel")
+        val expectedResultFile = getAssetFile("projects/synthetic/bazel-7.0-no-version-expected-output.yml")
+
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "An issue is created when the MODULE.bazel contains a different package version than the dependency graph" {
         val definitionFile = getAssetFile("projects/synthetic/bazel-8.0_warning/MODULE.bazel")
 
