@@ -55,7 +55,7 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
                         isResolved: webAppOrtIssue.isResolved,
                         key: webAppOrtIssue.key,
                         message: webAppOrtIssue.message,
-                        packageId: webAppOrtIssue.package.id,
+                        packageId: webAppOrtIssue.packageName,
                         severity: webAppOrtIssue.severity,
                         severityIndex: webAppOrtIssue.severityIndex,
                         source: webAppOrtIssue.source,
