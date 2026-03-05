@@ -313,13 +313,19 @@ private fun Set<Snippet>.mapSnippetFindingsForFile(
         }
 
         val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
-        val purl = snippet.purl ?: PackageURLBuilder.aPackageURL()
-            .withType(urlToPackageType(url))
-            .withNamespace(snippet.author)
-            .withName(snippet.artifact)
-            .withVersion(snippet.version)
-            .build()
-            .canonicalize()
+        val purl = when {
+            snippet.purl != null -> checkNotNull(snippet.purl)
+
+            snippet.artifact.isNullOrEmpty() -> ""
+
+            else -> PackageURLBuilder.aPackageURL()
+                .withType(urlToPackageType(url))
+                .withNamespace(snippet.author)
+                .withName(snippet.artifact)
+                .withVersion(snippet.version)
+                .build()
+                .canonicalize()
+        }
 
         val additionalSnippetData = mutableMapOf(
             FossId.SNIPPET_DATA_ID to snippet.id.toString(),

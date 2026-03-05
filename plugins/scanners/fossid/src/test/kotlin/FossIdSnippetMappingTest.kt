@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -110,6 +111,67 @@ class FossIdSnippetMappingTest : WordSpec({
             mappedSnippets.elementAtOrNull(2) shouldNotBeNull {
                 sourceLocation shouldBe TextLocation("src/main/java/com/vdurmont/semver4j/Requirement.java", 45, 675)
                 snippets.map { it.purl } should containExactly("pkg:github/vdurmont/semver4j@3.1.0")
+            }
+        }
+
+        "accept snippets without any artifact or purl" {
+            val issues = mutableListOf<Issue>()
+            val listSnippets = flowOf(
+                "src/main/java/Tokenizer.java" to
+                    setOf(
+                        createSnippet(
+                            1,
+                            MatchType.FULL,
+                            "",
+                            "MIT",
+                            "src/main/java/com/vdurmont/semver4j/Tokenizer.java"
+                        ).copy(
+                            author = "com/vdurmont",
+                            artifact = "semver4j",
+                            version = "3.1.0",
+                            url = "https://repo1.maven.org/maven2/com/vdurmont/semver4j/3.1.0/",
+                            purl = null
+                        ),
+                        createSnippet(
+                            2,
+                            MatchType.FULL,
+                            "pkg:maven/com.vdurmont/semver4j@3.1.0",
+                            "MIT",
+                            "com/vdurmont/semver4j/Tokenizer.java"
+                        ).copy(
+                            author = "com/vdurmont",
+                            artifact = null,
+                            version = "3.1.0",
+                            url = "https://repo1.maven.org/maven2/com/vdurmont/semver4j/3.1.0/",
+                            purl = null
+                        )
+                    )
+            )
+            val rawResults = RawResults(
+                emptyList(),
+                emptyList(),
+                emptyList(),
+                emptyList(),
+                listSnippets,
+                emptyMap()
+            )
+
+            val mappedSnippets = mapSnippetFindings(
+                rawResults,
+                500,
+                issues,
+                emptyMap(),
+                emptyList(),
+                mutableSetOf()
+            )
+
+            issues should beEmpty()
+            mappedSnippets.shouldBeSingleton { finding ->
+                with(finding.snippets) {
+                    this shouldHaveSize 2
+                    first().purl shouldBe "pkg:maven/com/vdurmont/semver4j@3.1.0"
+                    last().purl shouldBe ""
+                }
             }
         }
     }
