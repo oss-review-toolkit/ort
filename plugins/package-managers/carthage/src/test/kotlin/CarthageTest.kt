@@ -52,13 +52,10 @@ class CarthageTest : WordSpec() {
 
                 val result = carthage.resolveSingleProject(cartfile)
 
-                with(result.packages) {
-                    size shouldBe 1
-                    single().apply {
-                        id.type shouldBe PACKAGE_TYPE
-                        vcs.url shouldBe "https://github.com/Alamofire/AlamofireImage.git"
-                        vcs.revision shouldBe "3.2.0"
-                    }
+                result.packages.shouldBeSingleton {
+                    it.id.type shouldBe PACKAGE_TYPE
+                    it.vcs.url shouldBe "https://github.com/Alamofire/AlamofireImage.git"
+                    it.vcs.revision shouldBe "3.2.0"
                 }
             }
 
@@ -67,14 +64,11 @@ class CarthageTest : WordSpec() {
 
                 val result = carthage.resolveSingleProject(cartfile)
 
-                with(result.packages) {
-                    size shouldBe 1
-                    single().apply {
-                        id.type shouldBe PACKAGE_TYPE
-                        vcs.type shouldBe VcsType.GIT
-                        vcs.url shouldBe "https://host.tld/path/to/project.git"
-                        vcs.revision shouldBe "1.0.0"
-                    }
+                result.packages.shouldBeSingleton {
+                    it.id.type shouldBe PACKAGE_TYPE
+                    it.vcs.type shouldBe VcsType.GIT
+                    it.vcs.url shouldBe "https://host.tld/path/to/project.git"
+                    it.vcs.revision shouldBe "1.0.0"
                 }
             }
 
@@ -86,13 +80,11 @@ class CarthageTest : WordSpec() {
                 val cartfile = File("src/test/assets/Cartfile-binary.resolved")
 
                 val result = carthage.resolveSingleProject(cartfile)
-                with(result.packages) {
-                    size shouldBe 1
-                    single().apply {
-                        id.type shouldBe PACKAGE_TYPE
-                        id.name shouldBe "spec"
-                        binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
-                    }
+
+                result.packages.shouldBeSingleton {
+                    it.id.type shouldBe PACKAGE_TYPE
+                    it.id.name shouldBe "spec"
+                    it.binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
                 }
             }
 
