@@ -604,6 +604,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         )
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun parseInstalledPackages(
         lockfile: Lockfile,
         labels: Map<String, String>,
@@ -628,8 +629,8 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
 
                 val source = packageInfo.source
 
-                when {
-                    source == "path" -> {
+                when (source) {
+                    "path" -> {
                         rawName = packageName
                         val path = packageInfo.description.path.orEmpty()
                         vcs = VersionControlSystem.forDirectory(workingDir / path)?.getInfo() ?: run {
@@ -642,7 +643,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                         }
                     }
 
-                    source == "git" -> {
+                    "git" -> {
                         val pkgInfoFromYamlFile = readPackageInfoFromCache(packageInfo, workingDir)
 
                         rawName = pkgInfoFromYamlFile?.name ?: packageName
@@ -658,8 +659,33 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                         )
                     }
 
-                    // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
-                    source != "sdk" -> {
+                    "sdk" -> when (packageInfo.description.name) {
+                        "flutter" -> {
+                            // Set Flutter flag, which triggers another scan for iOS and Android native dependencies.
+                            containsFlutter = true
+                            // Set hardcoded package details.
+                            rawName = "flutter"
+                            description = "Flutter SDK"
+                            homepageUrl = "https://github.com/flutter/flutter"
+                        }
+
+                        "flutter_test" -> {
+                            // Set hardcoded package details.
+                            rawName = "flutter_test"
+                            description = "Flutter Test SDK"
+                            homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
+                        }
+
+                        else -> {
+                            issues += createAndLogIssue(
+                                message = "Unhandled SDK source '${packageInfo.description.name}'.",
+                                severity = Severity.WARNING,
+                                affectedPath = packageInfo.description.path
+                            )
+                        }
+                    }
+
+                    else -> {
                         val pkgInfoFromYamlFile = readPackageInfoFromCache(packageInfo, workingDir)
 
                         rawName = pkgInfoFromYamlFile?.name.orEmpty()
@@ -673,22 +699,6 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                         // main or master branch of the repository but never to the correct revision that matches
                         // the version of the package.
                         vcs = VcsHost.parseUrl(repositoryUrl).copy(revision = "")
-                    }
-
-                    packageInfo.description.path == "flutter" -> {
-                        // Set Flutter flag, which triggers another scan for iOS and Android native dependencies.
-                        containsFlutter = true
-                        // Set hardcoded package details.
-                        rawName = "flutter"
-                        description = "Flutter SDK"
-                        homepageUrl = "https://github.com/flutter/flutter"
-                    }
-
-                    packageInfo.description.path == "flutter_test" -> {
-                        // Set hardcoded package details.
-                        rawName = "flutter_test"
-                        description = "Flutter Test SDK"
-                        homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
                     }
                 }
 
