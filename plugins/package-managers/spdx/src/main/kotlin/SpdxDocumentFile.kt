@@ -369,47 +369,6 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
         }.also { ancestorIds.remove(pkgId) }
     }
 
-    internal fun getPackageManagerDependency(
-        pkgId: String,
-        doc: SpdxResolvedDocument,
-        analyzerConfig: AnalyzerConfiguration
-    ): PackageReference? {
-        val issues = mutableListOf<Issue>()
-        val spdxPackage = doc.getSpdxPackageForId(pkgId, issues) ?: return null
-        val definitionFile = doc.getDefinitionFile(pkgId) ?: return null
-
-        if (spdxPackage.packageFilename.isBlank()) return null
-
-        val scope = spdxPackage.extractScopeFromExternalReferences() ?: return null
-
-        val packageFile = definitionFile.resolveSibling(spdxPackage.packageFilename)
-
-        if (packageFile.isFile) {
-            val managedFiles = findManagedFiles(
-                packageFile.parentFile,
-                analyzerConfig.determineEnabledPackageManagers().map {
-                    val options = analyzerConfig.getPackageManagerConfiguration(it.descriptor.id)?.options.orEmpty()
-                    it.create(PluginConfig(options))
-                }
-            )
-
-            managedFiles.forEach { (manager, files) ->
-                if (files.any { it.canonicalPath == packageFile.canonicalPath }) {
-                    // TODO: The data from the spdxPackage is currently ignored, check if some fields need to be
-                    //       preserved somehow.
-                    return PackageManagerDependency(
-                        packageManager = manager.descriptor.id,
-                        definitionFile = VersionControlSystem.getPathInfo(packageFile).path,
-                        scope = scope,
-                        linkage = PackageLinkage.PROJECT_STATIC // TODO: Set linkage based on SPDX reference type.
-                    ).toPackageReference(issues)
-                }
-            }
-        }
-
-        return null
-    }
-
     /**
      * Return the dependencies of the package with the given [pkgId] defined in [doc] of the given
      * [dependencyOfRelation] type. Optionally, the [SpdxRelationship.Type.DEPENDS_ON] type is handled by
@@ -571,4 +530,45 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
     override fun createPackageManagerResult(
         projectResults: Map<File, List<ProjectAnalyzerResult>>
     ): PackageManagerResult = PackageManagerResult(projectResults.filterProjectPackages())
+}
+
+internal fun getPackageManagerDependency(
+    pkgId: String,
+    doc: SpdxResolvedDocument,
+    analyzerConfig: AnalyzerConfiguration
+): PackageReference? {
+    val issues = mutableListOf<Issue>()
+    val spdxPackage = doc.getSpdxPackageForId(pkgId, issues) ?: return null
+    val definitionFile = doc.getDefinitionFile(pkgId) ?: return null
+
+    if (spdxPackage.packageFilename.isBlank()) return null
+
+    val scope = spdxPackage.extractScopeFromExternalReferences() ?: return null
+
+    val packageFile = definitionFile.resolveSibling(spdxPackage.packageFilename)
+
+    if (packageFile.isFile) {
+        val managedFiles = PackageManager.findManagedFiles(
+            packageFile.parentFile,
+            analyzerConfig.determineEnabledPackageManagers().map {
+                val options = analyzerConfig.getPackageManagerConfiguration(it.descriptor.id)?.options.orEmpty()
+                it.create(PluginConfig(options))
+            }
+        )
+
+        managedFiles.forEach { (manager, files) ->
+            if (files.any { it.canonicalPath == packageFile.canonicalPath }) {
+                // TODO: The data from the spdxPackage is currently ignored, check if some fields need to be
+                //       preserved somehow.
+                return PackageManagerDependency(
+                    packageManager = manager.descriptor.id,
+                    definitionFile = VersionControlSystem.getPathInfo(packageFile).path,
+                    scope = scope,
+                    linkage = PackageLinkage.PROJECT_STATIC // TODO: Set linkage based on SPDX reference type.
+                ).toPackageReference(issues)
+            }
+        }
+    }
+
+    return null
 }
