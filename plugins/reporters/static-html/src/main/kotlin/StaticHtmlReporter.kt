@@ -382,7 +382,7 @@ class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlR
                 }
             }
 
-            td { +row.id.toCoordinates() }
+            td { +(row.id?.toCoordinates() ?: "-") }
 
             td {
                 p { issueDescription(row.issue) }
