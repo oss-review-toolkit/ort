@@ -58,6 +58,11 @@ data class AdvisorRun(
     val config: AdvisorConfiguration,
 
     /**
+     * The [Issue]s that occurred while preparing and querying advisor providers for this run.
+     */
+    val providerIssues: Set<Issue> = emptySet(),
+
+    /**
      * The [AdvisorResult]s for all [Package]s.
      */
     @JsonPropertyOrder(alphabetic = true)
@@ -69,6 +74,7 @@ data class AdvisorRun(
             endTime = Instant.EPOCH,
             environment = Environment(),
             config = AdvisorConfiguration(),
+            providerIssues = emptySet(),
             results = emptyMap()
         )
 
