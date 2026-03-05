@@ -1,0 +1,60 @@
+---
+project:
+  id: "Cargo::lib:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "Another Author"
+  - "anon"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  - "NOASSERTION"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 OR MIT OR NOASSERTION"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://example.org"
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Crate::log:0.4.29"
+      linkage: "STATIC"
+packages:
+- id: "Crate::log:0.4.29"
+  purl: "pkg:cargo/log@0.4.29"
+  authors:
+  - "The Rust Project Developers"
+  declared_licenses:
+  - "MIT OR Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 OR MIT"
+  description: "A lightweight logging facade for Rust\n"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/rust-lang-nursery/log.git"
+    revision: "43f2c2837f93be1c6ff9ce672a940d28152b09cf"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rust-lang-nursery/log.git"
+    revision: "43f2c2837f93be1c6ff9ce672a940d28152b09cf"
+    path: ""

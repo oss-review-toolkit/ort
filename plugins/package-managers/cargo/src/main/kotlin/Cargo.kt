@@ -255,7 +255,8 @@ private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packag
     // https://github.com/rust-lang/cargo/pull/4920
     val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, operator = SpdxOperator.OR)
 
-    val vcs = repository?.let { VcsHost.parseUrl(it) }.orEmpty()
+    val vcs = (source.takeIf { it?.startsWith("git+https://") == true } ?: repository)
+        ?.let { VcsHost.parseUrl(it) }.orEmpty()
     val vcsProcessed = getLocalPath()?.let { PackageManager.processProjectVcs(it) } ?: vcs.normalize()
 
     return Package(
@@ -295,24 +296,14 @@ private fun CargoMetadata.Package.parseDeclaredLicenses(): Set<String> {
     return declaredLicenses
 }
 
-// Match source dependencies that directly reference git repositories. The specified tag or branch
-// name is ignored (i.e. not captured) in favor of the actual commit hash that they currently refer
-// to.
-// See https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories
-// for the specification for this kind of dependency.
-private val GIT_DEPENDENCY_REGEX = Regex("git\\+(https://.*)\\?(?:rev|tag|branch)=.+#([0-9a-fA-F]{7,40})")
+private fun CargoMetadata.Package.parseSourceArtifact(hashes: Map<String, String>): RemoteArtifact? =
+    when (source) {
+        "registry+https://github.com/rust-lang/crates.io-index" -> {
+            val url = "https://crates.io/api/v1/crates/$name/$version/download"
+            val key = "$name $version ($source)"
+            val hash = Hash.create(hashes[key].orEmpty())
+            return RemoteArtifact(url, hash)
+        }
 
-private fun CargoMetadata.Package.parseSourceArtifact(hashes: Map<String, String>): RemoteArtifact? {
-    val source = source ?: return null
-
-    if (source == "registry+https://github.com/rust-lang/crates.io-index") {
-        val url = "https://crates.io/api/v1/crates/$name/$version/download"
-        val key = "$name $version ($source)"
-        val hash = Hash.create(hashes[key].orEmpty())
-        return RemoteArtifact(url, hash)
+        else -> null
     }
-
-    val match = GIT_DEPENDENCY_REGEX.matchEntire(source) ?: return null
-    val (url, hash) = match.destructured
-    return RemoteArtifact(url, Hash.create(hash))
-}
