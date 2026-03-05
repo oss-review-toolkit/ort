@@ -20,8 +20,6 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.carthage
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.core.test.TestCase
-import io.kotest.engine.test.TestResult
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.should
@@ -30,7 +28,6 @@ import io.kotest.matchers.string.shouldContain
 
 import io.mockk.every
 import io.mockk.mockkStatic
-import io.mockk.unmockkAll
 
 import java.io.File
 import java.net.URI
@@ -40,10 +37,6 @@ import org.ossreviewtoolkit.model.VcsType
 
 class CarthageTest : WordSpec() {
     private val carthage = CarthageFactory.create()
-
-    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
-        unmockkAll()
-    }
 
     init {
         "resolveDependencies" should {
@@ -73,39 +66,41 @@ class CarthageTest : WordSpec() {
             }
 
             "parse a binary dependency url" {
-                mockkStatic("kotlin.io.TextStreamsKt")
-                every { URI("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
-                    File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
+                mockkStatic("kotlin.io.TextStreamsKt") {
+                    every { URI("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
+                        File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
 
-                val cartfile = File("src/test/assets/Cartfile-binary.resolved")
+                    val cartfile = File("src/test/assets/Cartfile-binary.resolved")
 
-                val result = carthage.resolveSingleProject(cartfile)
+                    val result = carthage.resolveSingleProject(cartfile)
 
-                result.packages.shouldBeSingleton {
-                    it.id.type shouldBe PACKAGE_TYPE
-                    it.id.name shouldBe "spec"
-                    it.binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
+                    result.packages.shouldBeSingleton {
+                        it.id.type shouldBe PACKAGE_TYPE
+                        it.id.name shouldBe "spec"
+                        it.binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
+                    }
                 }
             }
 
             "parse mixed dependencies" {
-                mockkStatic("kotlin.io.TextStreamsKt")
-                every { URI("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
-                    File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
+                mockkStatic("kotlin.io.TextStreamsKt") {
+                    every { URI("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
+                        File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
 
-                val cartfile = File("src/test/assets/Cartfile-mixed.resolved")
+                    val cartfile = File("src/test/assets/Cartfile-mixed.resolved")
 
-                val result = carthage.resolveSingleProject(cartfile)
+                    val result = carthage.resolveSingleProject(cartfile)
 
-                with(result.packages) {
-                    size shouldBe 3
-                    forEach {
-                        it.id.type shouldBe PACKAGE_TYPE
+                    with(result.packages) {
+                        size shouldBe 3
+                        forEach {
+                            it.id.type shouldBe PACKAGE_TYPE
+                        }
+
+                        count { "user/project" in it.vcs.url } shouldBe 1
+                        count { "user-2/project_2" in it.vcs.url } shouldBe 1
+                        count { "binary/dependency.zip" in it.binaryArtifact.url } shouldBe 1
                     }
-
-                    count { "user/project" in it.vcs.url } shouldBe 1
-                    count { "user-2/project_2" in it.vcs.url } shouldBe 1
-                    count { "binary/dependency.zip" in it.binaryArtifact.url } shouldBe 1
                 }
             }
 
