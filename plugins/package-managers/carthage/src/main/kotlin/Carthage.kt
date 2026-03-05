@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -186,13 +187,19 @@ class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descr
         val vcsInfo = vcsInfoFromUrl.copy(revision = revision)
         val vcsHost = VcsHost.fromUrl(vcsInfo.url)
 
+        val id = Identifier(
+            type = PACKAGE_TYPE,
+            namespace = vcsHost?.getUserOrOrganization(projectUrl).orEmpty(),
+            name = vcsHost?.getProject(projectUrl).orEmpty(),
+            version = revision
+        )
+
         return Package(
-            id = Identifier(
-                type = PACKAGE_TYPE,
-                namespace = vcsHost?.getUserOrOrganization(projectUrl).orEmpty(),
-                name = vcsHost?.getProject(projectUrl).orEmpty(),
-                version = revision
-            ),
+            id = id,
+            purl = when {
+                vcsHost == null -> "pkg:git/${projectUrl.substringAfter("//")}@$revision"
+                else -> id.toPurl()
+            },
             authors = emptySet(),
             declaredLicenses = emptySet(),
             description = "",
