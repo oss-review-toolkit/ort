@@ -352,6 +352,14 @@
     "how_to_fix" : "Some how to fix text."
   }, {
     "_id" : 21,
+    "timestamp" : "2026-02-26T08:54:38.920436615Z",
+    "type" : "ADVISOR",
+    "source" : "Advisor",
+    "message" : "Example provider issue.",
+    "severity" : "ERROR",
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 22,
     "timestamp" : "2024-04-25T07:44:20.725613974Z",
     "type" : "ANALYZER",
     "source" : "Gradle",
@@ -361,7 +369,7 @@
     "path" : 0,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 22,
+    "_id" : 23,
     "timestamp" : "2024-04-25T07:44:20.725613974Z",
     "type" : "ANALYZER",
     "source" : "Gradle",
@@ -1128,7 +1136,7 @@
         "key" : 3,
         "linkage" : "DYNAMIC",
         "pkg" : 2,
-        "issues" : [ 21 ],
+        "issues" : [ 22 ],
         "children" : [ {
           "key" : 4,
           "linkage" : "DYNAMIC",
@@ -1157,7 +1165,7 @@
         "key" : 9,
         "linkage" : "DYNAMIC",
         "pkg" : 3,
-        "issues" : [ 22 ],
+        "issues" : [ 23 ],
         "children" : [ {
           "key" : 10,
           "linkage" : "DYNAMIC",
@@ -1250,10 +1258,10 @@
       "vulnerability_resolutions" : 0
     },
     "open_issues" : {
-      "errors" : 6,
+      "errors" : 7,
       "warnings" : 4,
       "hints" : 3,
-      "severe" : 10
+      "severe" : 11
     },
     "open_rule_violations" : {
       "errors" : 1,
