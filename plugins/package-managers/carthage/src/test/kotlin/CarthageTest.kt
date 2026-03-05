@@ -35,85 +35,83 @@ import java.net.URI
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.VcsType
 
-class CarthageTest : WordSpec() {
-    private val carthage = CarthageFactory.create()
+class CarthageTest : WordSpec({
+    val carthage = CarthageFactory.create()
 
-    init {
-        "resolveDependencies" should {
-            "parse a github dependency" {
-                val cartfile = File("src/test/assets/Cartfile-github.resolved")
+    "resolveDependencies" should {
+        "parse a github dependency" {
+            val cartfile = File("src/test/assets/Cartfile-github.resolved")
+
+            val result = carthage.resolveSingleProject(cartfile)
+
+            result.packages.shouldBeSingleton {
+                it.id.type shouldBe PACKAGE_TYPE
+                it.vcs.url shouldBe "https://github.com/Alamofire/AlamofireImage.git"
+                it.vcs.revision shouldBe "3.2.0"
+            }
+        }
+
+        "parse a generic git dependency" {
+            val cartfile = File("src/test/assets/Cartfile-generic-git.resolved")
+
+            val result = carthage.resolveSingleProject(cartfile)
+
+            result.packages.shouldBeSingleton {
+                it.id.type shouldBe PACKAGE_TYPE
+                it.vcs.type shouldBe VcsType.GIT
+                it.vcs.url shouldBe "https://host.tld/path/to/project.git"
+                it.vcs.revision shouldBe "1.0.0"
+            }
+        }
+
+        "parse a binary dependency url" {
+            mockkStatic("kotlin.io.TextStreamsKt") {
+                every { URI("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
+                    File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
+
+                val cartfile = File("src/test/assets/Cartfile-binary.resolved")
 
                 val result = carthage.resolveSingleProject(cartfile)
 
                 result.packages.shouldBeSingleton {
                     it.id.type shouldBe PACKAGE_TYPE
-                    it.vcs.url shouldBe "https://github.com/Alamofire/AlamofireImage.git"
-                    it.vcs.revision shouldBe "3.2.0"
-                }
-            }
-
-            "parse a generic git dependency" {
-                val cartfile = File("src/test/assets/Cartfile-generic-git.resolved")
-
-                val result = carthage.resolveSingleProject(cartfile)
-
-                result.packages.shouldBeSingleton {
-                    it.id.type shouldBe PACKAGE_TYPE
-                    it.vcs.type shouldBe VcsType.GIT
-                    it.vcs.url shouldBe "https://host.tld/path/to/project.git"
-                    it.vcs.revision shouldBe "1.0.0"
-                }
-            }
-
-            "parse a binary dependency url" {
-                mockkStatic("kotlin.io.TextStreamsKt") {
-                    every { URI("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
-                        File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
-
-                    val cartfile = File("src/test/assets/Cartfile-binary.resolved")
-
-                    val result = carthage.resolveSingleProject(cartfile)
-
-                    result.packages.shouldBeSingleton {
-                        it.id.type shouldBe PACKAGE_TYPE
-                        it.id.name shouldBe "spec"
-                        it.binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
-                    }
-                }
-            }
-
-            "parse mixed dependencies" {
-                mockkStatic("kotlin.io.TextStreamsKt") {
-                    every { URI("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
-                        File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
-
-                    val cartfile = File("src/test/assets/Cartfile-mixed.resolved")
-
-                    val result = carthage.resolveSingleProject(cartfile)
-
-                    with(result.packages) {
-                        size shouldBe 3
-                        forEach {
-                            it.id.type shouldBe PACKAGE_TYPE
-                        }
-
-                        count { "user/project" in it.vcs.url } shouldBe 1
-                        count { "user-2/project_2" in it.vcs.url } shouldBe 1
-                        count { "binary/dependency.zip" in it.binaryArtifact.url } shouldBe 1
-                    }
-                }
-            }
-
-            "throw an error for a wrongly defined dependency" {
-                val cartfile = File("src/test/assets/Cartfile-faulty.resolved")
-
-                val result = carthage.resolveSingleProject(cartfile)
-
-                result.packages should beEmpty()
-                result.issues.shouldBeSingleton {
-                    it.message shouldContain "IllegalArgumentException"
+                    it.id.name shouldBe "spec"
+                    it.binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
                 }
             }
         }
+
+        "parse mixed dependencies" {
+            mockkStatic("kotlin.io.TextStreamsKt") {
+                every { URI("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
+                    File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
+
+                val cartfile = File("src/test/assets/Cartfile-mixed.resolved")
+
+                val result = carthage.resolveSingleProject(cartfile)
+
+                with(result.packages) {
+                    size shouldBe 3
+                    forEach {
+                        it.id.type shouldBe PACKAGE_TYPE
+                    }
+
+                    count { "user/project" in it.vcs.url } shouldBe 1
+                    count { "user-2/project_2" in it.vcs.url } shouldBe 1
+                    count { "binary/dependency.zip" in it.binaryArtifact.url } shouldBe 1
+                }
+            }
+        }
+
+        "throw an error for a wrongly defined dependency" {
+            val cartfile = File("src/test/assets/Cartfile-faulty.resolved")
+
+            val result = carthage.resolveSingleProject(cartfile)
+
+            result.packages should beEmpty()
+            result.issues.shouldBeSingleton {
+                it.message shouldContain "IllegalArgumentException"
+            }
+        }
     }
-}
+})
