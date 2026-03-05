@@ -204,16 +204,34 @@ private fun getScannerIssueSummaryTable(input: ReporterInput): IssueTable =
         .toIssueSummaryTable(IssueTable.Type.SCANNER, input)
 
 private fun getAdvisorIssueSummaryTable(input: ReporterInput): IssueTable =
-    input.ortResult.getAdvisorIssues(omitExcluded = true, omitResolved = true)
-        .toIssueSummaryTable(IssueTable.Type.ADVISOR, input)
+    buildList {
+        addAll(
+            input.ortResult.getAdvisorIssues(omitExcluded = true, omitResolved = true)
+                .toIssueSummaryRows(input)
+        )
+
+        addAll(
+            input.ortResult.getAdvisorProviderIssues(omitResolved = true)
+                .toIssueSummaryRows(input)
+        )
+    }.sortedWith(ISSUE_ROW_COMPARATOR)
+        .let { rows -> IssueTable(IssueTable.Type.ADVISOR, rows) }
 
 private fun Map<Identifier, Set<Issue>>.toIssueSummaryTable(type: IssueTable.Type, input: ReporterInput): IssueTable {
-    val rows = flatMap { (id, issues) ->
-        issues.map { issue ->
-            val resolvableIssue = issue.toTableReportIssue(input.ortResult, input.howToFixTextProvider, false)
-            IssueTable.Row(resolvableIssue, id)
-        }
-    }.sortedWith(compareByDescending<IssueTable.Row> { it.issue.severity }.thenBy { it.id })
+    val rows = toIssueSummaryRows(input).sortedWith(ISSUE_ROW_COMPARATOR)
 
     return IssueTable(type, rows)
 }
+
+private fun Map<Identifier, Set<Issue>>.toIssueSummaryRows(input: ReporterInput) =
+    flatMap { (id, issues) -> issues.map { it.toRow(input, id) } }
+
+private fun Set<Issue>.toIssueSummaryRows(input: ReporterInput) = map { it.toRow(input, null) }
+
+private fun Issue.toRow(input: ReporterInput, id: Identifier?): IssueTable.Row {
+    val resolvableIssue = toTableReportIssue(input.ortResult, input.howToFixTextProvider, false)
+    return IssueTable.Row(resolvableIssue, id)
+}
+
+private val ISSUE_ROW_COMPARATOR =
+    compareByDescending<IssueTable.Row> { it.issue.severity }.thenBy { it.id }

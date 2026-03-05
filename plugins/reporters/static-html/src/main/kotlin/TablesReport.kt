@@ -96,9 +96,9 @@ internal data class IssueTable(
         val issue: TablesReportIssue,
 
         /**
-         * The identifier of the package the issue corresponds to.
+         * The identifier of the package the issue corresponds to, if any.
          */
-        val id: Identifier
+        val id: Identifier?
     )
 }
 
