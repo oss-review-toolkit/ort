@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
@@ -42,7 +43,10 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.toIdentifier
+import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxDocumentCache
@@ -50,11 +54,13 @@ import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocum
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.extractScopeFromExternalReferences
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.isExternalDocumentReferenceId
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.locateCpe
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.locateExternalReference
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.mapNotPresentToEmpty
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.projectPackage
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.toIdentifier
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.toPackage
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.wrapPresentInSet
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 
@@ -70,6 +76,15 @@ private val SPDX_LINKAGE_RELATIONSHIPS = mapOf(
 
 private val SPDX_SCOPE_RELATIONSHIPS = SpdxRelationship.Type.entries.filter { it.name.endsWith("_DEPENDENCY_OF") }
 
+data class SpdxDocumentFileConfig(
+    /**
+     * If this option is enabled and an SPDX package has a PURL as an external reference, the ORT [Package]'s
+     * [Identifier] is deduced from that PURL instead of from the [SpdxPackage]'s [ID][SpdxPackage.spdxId].
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val deduceOrtIdFromPurl: Boolean
+)
+
 /**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
  * packages. See https://github.com/spdx/spdx-spec/issues/439 for details.
@@ -79,7 +94,10 @@ private val SPDX_SCOPE_RELATIONSHIPS = SpdxRelationship.Type.entries.filter { it
     description = "A package manager that uses SPDX documents as definition files.",
     factory = PackageManagerFactory::class
 )
-class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentFileFactory.descriptor) :
+class SpdxDocumentFile(
+    override val descriptor: PluginDescriptor = SpdxDocumentFileFactory.descriptor,
+    private val config: SpdxDocumentFileConfig
+) :
     PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
@@ -116,7 +134,8 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
             val issues = mutableListOf<Issue>()
             getPackageManagerDependency(target, doc, analyzerConfig) ?: doc.getSpdxPackageForId(target, issues)
                 ?.let { dependency ->
-                    val ortPackage = dependency.toPackage(doc.getDefinitionFile(target), doc)
+                    val targetFile = doc.getDefinitionFile(target)
+                    val ortPackage = dependency.toPackage(targetFile, doc, config.deduceOrtIdFromPurl)
                     packages += ortPackage
 
                     PackageReference(
@@ -160,7 +179,8 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
 
                     getPackageManagerDependency(source, doc, analyzerConfig) ?: doc.getSpdxPackageForId(source, issues)
                         ?.let { dependency ->
-                            val ortPackage = dependency.toPackage(doc.getDefinitionFile(source), doc)
+                            val sourceFile = doc.getDefinitionFile(source)
+                            val ortPackage = dependency.toPackage(sourceFile, doc, config.deduceOrtIdFromPurl)
                             packages += ortPackage
 
                             PackageReference(
@@ -269,8 +289,12 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
             )
         )
 
+        val purlReference = projectPackage.locateExternalReference(SpdxExternalReference.Type.Purl)
+        val id = purlReference?.takeIf { config.deduceOrtIdFromPurl }?.run { toPackageUrl()?.toIdentifier() }
+            ?: projectPackage.toIdentifier(projectType)
+
         val project = Project(
-            id = projectPackage.toIdentifier(projectType),
+            id = id,
             cpe = projectPackage.locateCpe(),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.originator.wrapPresentInSet(),
