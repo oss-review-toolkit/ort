@@ -148,6 +148,14 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             }
         }
 
+        addIssues(
+            issues = input.ortResult.getAdvisorProviderIssues(),
+            type = EvaluatedIssueType.ADVISOR,
+            pkg = null,
+            scanResult = null,
+            path = null
+        )
+
         resultProjects.forEach { project ->
             val pkg = packages.getValue(project.id)
             addDependencyTree(project, pkg, deduplicateDependencyTree)
@@ -649,7 +657,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun addIssues(
         issues: Collection<Issue>,
         type: EvaluatedIssueType,
-        pkg: EvaluatedPackage,
+        pkg: EvaluatedPackage?,
         scanResult: EvaluatedScanResult?,
         path: EvaluatedPackagePath?
     ): List<EvaluatedIssue> {
@@ -663,7 +671,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 message = issue.message,
                 severity = issue.severity,
                 resolutions = resolutions,
-                isExcluded = input.ortResult.isExcluded(issue, pkg.id),
+                isExcluded = pkg?.id?.let { input.ortResult.isExcluded(issue, it) } ?: false,
                 pkg = pkg,
                 scanResult = scanResult,
                 path = path,
