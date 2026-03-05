@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 @Tags("RequiresExternalTool")
 class CargoFunTest : StringSpec({
-    "Projects dependencies are detected correctly" {
+    "Project dependencies are detected correctly" {
         val definitionFile = getAssetFile("projects/synthetic/cargo/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-expected-output.yml")
 
