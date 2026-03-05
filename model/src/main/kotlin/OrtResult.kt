@@ -335,6 +335,19 @@ data class OrtResult(
     ): Map<Identifier, Set<Issue>> =
         advisor?.getIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
 
+    /**
+     * Return all de-duplicated advisor [Issue]s that originate from advisor providers that have completely failed to
+     * be created or fetched results for. If [omitResolved] is set to true, resolved issues are omitted from the result.
+     * Issues with [severity][Issue.severity] below [minSeverity] are omitted from the result.
+     */
+    fun getAdvisorProviderIssues(
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Set<Issue> =
+        advisor?.providerIssues.orEmpty().filterTo(mutableSetOf()) {
+            (!omitResolved || !isResolved(it)) && it.severity >= minSeverity
+        }
+
     private fun Map<Identifier, Set<Issue>>.filterIssues(
         omitExcluded: Boolean = false,
         omitResolved: Boolean = false,
@@ -374,7 +387,10 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getOpenIssues(minSeverity: Severity = Severity.WARNING) =
-        getIssues(omitExcluded = true, omitResolved = true, minSeverity = minSeverity).values.flatten().distinct()
+        buildList {
+            getIssues(omitExcluded = true, omitResolved = true, minSeverity = minSeverity).values.forEach { addAll(it) }
+            addAll(getAdvisorProviderIssues(omitResolved = true, minSeverity = minSeverity))
+        }.distinct()
 
     /**
      * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
