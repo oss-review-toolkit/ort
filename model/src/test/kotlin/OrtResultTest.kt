@@ -475,6 +475,77 @@ class OrtResultTest : WordSpec({
 
             issues should beEmpty()
         }
+
+        "include advisor provider issues" {
+            val ortResult = OrtResult.EMPTY.copy(
+                analyzer = AnalyzerRun.EMPTY.copy(
+                    result = AnalyzerResult.EMPTY.copy(
+                        issues = mapOf(
+                            Identifier("Maven:org.oss-review-toolkit:example:1.0") to
+                                listOf(Issue(message = "Package issue", source = "", severity = Severity.WARNING))
+                        )
+                    )
+                ),
+                advisor = AdvisorRun.EMPTY.copy(
+                    providerIssues = setOf(
+                        Issue(message = "Provider issue", source = "", severity = Severity.WARNING),
+                        Issue(message = "Resolved provider issue", source = "", severity = Severity.WARNING)
+                    )
+                ),
+                resolvedConfiguration = ResolvedConfiguration(
+                    resolutions = Resolutions(
+                        issues = listOf(
+                            IssueResolution(
+                                message = "Resolved provider issue",
+                                reason = IssueResolutionReason.CANT_FIX_ISSUE,
+                                comment = "comment"
+                            )
+                        )
+                    )
+                )
+            )
+
+            val openIssues = ortResult.getOpenIssues()
+
+            openIssues.map { it.message } should containExactlyInAnyOrder(
+                "Package issue",
+                "Provider issue"
+            )
+        }
+    }
+
+    "getAdvisorProviderIssues()" should {
+        "return advisor provider issues and apply filters" {
+            val ortResult = OrtResult.EMPTY.copy(
+                advisor = AdvisorRun.EMPTY.copy(
+                    providerIssues = setOf(
+                        Issue(message = "Resolved provider issue", source = "", severity = Severity.ERROR),
+                        Issue(message = "Error provider issue", source = "", severity = Severity.ERROR),
+                        Issue(message = "Hint provider issue", source = "", severity = Severity.HINT)
+                    )
+                ),
+                resolvedConfiguration = ResolvedConfiguration(
+                    resolutions = Resolutions(
+                        issues = listOf(
+                            IssueResolution(
+                                message = "Resolved provider issue",
+                                reason = IssueResolutionReason.CANT_FIX_ISSUE,
+                                comment = "comment"
+                            )
+                        )
+                    )
+                )
+            )
+
+            ortResult.getAdvisorProviderIssues().map { it.message } should containExactlyInAnyOrder(
+                "Resolved provider issue",
+                "Error provider issue",
+                "Hint provider issue"
+            )
+
+            val filteredIssues = ortResult.getAdvisorProviderIssues(omitResolved = true, minSeverity = Severity.ERROR)
+            filteredIssues.map { it.message } shouldHaveSingleElement "Error provider issue"
+        }
     }
 
     "dependencyNavigator" should {
