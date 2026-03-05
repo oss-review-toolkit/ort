@@ -627,7 +627,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                 var vcs = VcsInfo.EMPTY
                 var authors = emptySet<String>()
 
-                val source = packageInfo.source.orEmpty()
+                val source = packageInfo.source
 
                 when {
                     source == "path" -> {
@@ -676,7 +676,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                         vcs = VcsHost.parseUrl(repositoryUrl).copy(revision = "")
                     }
 
-                    packageInfo.description.path.orEmpty() == "flutter" -> {
+                    packageInfo.description.path == "flutter" -> {
                         // Set Flutter flag, which triggers another scan for iOS and Android native dependencies.
                         containsFlutter = true
                         // Set hardcoded package details.
@@ -685,7 +685,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                         description = "Flutter SDK"
                     }
 
-                    packageInfo.description.path.orEmpty() == "flutter_test" -> {
+                    packageInfo.description.path == "flutter_test" -> {
                         // Set hardcoded package details.
                         rawName = "flutter_test"
                         homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
