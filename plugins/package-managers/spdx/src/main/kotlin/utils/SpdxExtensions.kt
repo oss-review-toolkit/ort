@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.utils.toIdentifier
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.PACKAGE_TYPE_SPDX
@@ -158,7 +159,11 @@ internal fun SpdxPackage.toIdentifier(type: String) =
 /**
  * Create a [Package] out of this [SpdxPackage].
  */
-internal fun SpdxPackage.toPackage(definitionFile: File?, doc: SpdxResolvedDocument): Package {
+internal fun SpdxPackage.toPackage(
+    definitionFile: File?,
+    doc: SpdxResolvedDocument,
+    deduceOrtIdFromPurl: Boolean
+): Package {
     val packageDescription = description.ifEmpty { summary }
 
     // If the VCS information cannot be determined from the VCS working tree itself, fall back to try getting it
@@ -173,10 +178,12 @@ internal fun SpdxPackage.toPackage(definitionFile: File?, doc: SpdxResolvedDocum
     val isBinaryArtifact = generatedFromRelations.any { it.spdxElementId == spdxId }
         && generatedFromRelations.none { it.relatedSpdxElement == spdxId }
 
-    val id = toIdentifier(PACKAGE_TYPE_SPDX)
-    val artifact = getRemoteArtifact()
+    val purlReference = locateExternalReference(SpdxExternalReference.Type.Purl)
+    val id = purlReference?.takeIf { deduceOrtIdFromPurl }?.run { toPackageUrl()?.toIdentifier() }
+        ?: toIdentifier(PACKAGE_TYPE_SPDX)
 
-    val purl = locateExternalReference(SpdxExternalReference.Type.Purl)
+    val artifact = getRemoteArtifact()
+    val purl = purlReference
         ?: artifact
             ?.let { if (it.hash.algorithm in HashAlgorithm.VERIFIABLE) it else it.copy(hash = Hash.NONE) }
             ?.let { id.toPurl(ArtifactProvenance(it)) }
