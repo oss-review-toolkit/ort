@@ -165,7 +165,11 @@ class AdviseCommand(descriptor: PluginDescriptor = AdviseCommandFactory.descript
         }
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
-        val issues = advisorRun.getIssues().flatMap { it.value }
+        val issues = buildList {
+            advisorRun.getIssues().values.forEach { addAll(it) }
+            addAll(advisorRun.providerIssues)
+        }
+
         SeverityStatsPrinter(terminal, resolutionProvider).stats(issues)
             .print().conclude(ortConfig.severeIssueThreshold, ORT_FAILURE_STATUS_CODE)
     }
