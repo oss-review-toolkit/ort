@@ -26,6 +26,7 @@ project:
     dependencies: []
   - name: "external"
     dependencies:
+    - id: "Hackage::containers:0.6.0.1"
     - id: "Hackage:Control:mtl:2.2.2"
       dependencies:
       - id: "Hackage:Control:transformers:0.5.5.0"
@@ -89,9 +90,15 @@ project:
       - id: "Hackage:Control:transformers:0.5.5.0"
       - id: "Hackage:Prelude:base:4.12.0.0"
       - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
-    - id: "Hackage:Data Structures:containers:0.6.0.1"
     - id: "Hackage:Data, Testing:tree-diff:0.0.2.1"
       dependencies:
+      - id: "Hackage::containers:0.6.0.1"
+      - id: "Hackage::tagged:0.8.6"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
       - id: "Hackage:Compatibility:base-compat:0.10.5"
         dependencies:
         - id: "Hackage:Prelude:base:4.12.0.0"
@@ -122,6 +129,13 @@ project:
         - id: "Hackage:Prelude:base:4.12.0.0"
       - id: "Hackage:Data:scientific:0.3.6.2"
         dependencies:
+        - id: "Hackage::containers:0.6.0.1"
+        - id: "Hackage::integer-logarithms:1.0.2.2"
+          dependencies:
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
         - id: "Hackage:Control:deepseq:1.4.4.0"
         - id: "Hackage:Data:bytestring:0.10.8.2"
         - id: "Hackage:Data:hashable:1.2.7.0"
@@ -145,7 +159,6 @@ project:
           - id: "Hackage:Control:transformers:0.5.5.0"
           - id: "Hackage:GHC:ghc-prim:0.5.3"
           - id: "Hackage:Prelude:base:4.12.0.0"
-        - id: "Hackage:Data Structures:containers:0.6.0.1"
         - id: "Hackage:Data, Parsing:binary:0.8.6.0"
         - id: "Hackage:Data, Text:text:1.2.3.1"
           dependencies:
@@ -153,12 +166,6 @@ project:
           - id: "Hackage:Data:bytestring:0.10.8.2"
           - id: "Hackage:Data Structures:array:0.5.3.0"
           - id: "Hackage:Data, Parsing:binary:0.8.6.0"
-          - id: "Hackage:GHC:ghc-prim:0.5.3"
-          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
-          - id: "Hackage:Prelude:base:4.12.0.0"
-        - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
-          dependencies:
-          - id: "Hackage:Data Structures:array:0.5.3.0"
           - id: "Hackage:GHC:ghc-prim:0.5.3"
           - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
           - id: "Hackage:Prelude:base:4.12.0.0"
@@ -219,7 +226,6 @@ project:
           dependencies:
           - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:Time:time:1.8.0.2"
-      - id: "Hackage:Data Structures:containers:0.6.0.1"
       - id: "Hackage:Data, Data Structures:vector:0.12.0.2"
         dependencies:
         - id: "Hackage:Control:deepseq:1.4.4.0"
@@ -230,12 +236,6 @@ project:
           - id: "Hackage:Prelude:base:4.12.0.0"
         - id: "Hackage:GHC:ghc-prim:0.5.3"
         - id: "Hackage:Prelude:base:4.12.0.0"
-      - id: "Hackage:Data, Phantom Types:tagged:0.8.6"
-        dependencies:
-        - id: "Hackage:Control:deepseq:1.4.4.0"
-        - id: "Hackage:Control:transformers:0.5.5.0"
-        - id: "Hackage:Prelude:base:4.12.0.0"
-        - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
       - id: "Hackage:Data, Text:text:1.2.3.1"
         dependencies:
         - id: "Hackage:Control:deepseq:1.4.4.0"
@@ -274,9 +274,9 @@ project:
       - id: "Hackage:Prelude:base:4.12.0.0"
       - id: "Hackage:Testing:QuickCheck:2.13.1"
         dependencies:
+        - id: "Hackage::containers:0.6.0.1"
         - id: "Hackage:Control:deepseq:1.4.4.0"
         - id: "Hackage:Control:transformers:0.5.5.0"
-        - id: "Hackage:Data Structures:containers:0.6.0.1"
         - id: "Hackage:Prelude:base:4.12.0.0"
         - id: "Hackage:System:random:1.1"
           dependencies:
@@ -295,6 +295,7 @@ project:
       - id: "Hackage:Text:pretty:1.1.3.6"
       - id: "Hackage:Text, Parsing:parsers:0.12.9"
         dependencies:
+        - id: "Hackage::containers:0.6.0.1"
         - id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
           dependencies:
           - id: "Hackage:Prelude:base:4.12.0.0"
@@ -309,6 +310,7 @@ project:
         - id: "Hackage:Control:transformers:0.5.5.0"
         - id: "Hackage:Data:charset:0.3.7.1"
           dependencies:
+          - id: "Hackage::containers:0.6.0.1"
           - id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
             dependencies:
             - id: "Hackage:Prelude:base:4.12.0.0"
@@ -334,10 +336,16 @@ project:
               - id: "Hackage:Prelude:base:4.12.0.0"
             - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:Data Structures:array:0.5.3.0"
-          - id: "Hackage:Data Structures:containers:0.6.0.1"
           - id: "Hackage:Prelude:base:4.12.0.0"
         - id: "Hackage:Data:scientific:0.3.6.2"
           dependencies:
+          - id: "Hackage::containers:0.6.0.1"
+          - id: "Hackage::integer-logarithms:1.0.2.2"
+            dependencies:
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:Control:deepseq:1.4.4.0"
           - id: "Hackage:Data:bytestring:0.10.8.2"
           - id: "Hackage:Data:hashable:1.2.7.0"
@@ -361,7 +369,6 @@ project:
             - id: "Hackage:Control:transformers:0.5.5.0"
             - id: "Hackage:GHC:ghc-prim:0.5.3"
             - id: "Hackage:Prelude:base:4.12.0.0"
-          - id: "Hackage:Data Structures:containers:0.6.0.1"
           - id: "Hackage:Data, Parsing:binary:0.8.6.0"
           - id: "Hackage:Data, Text:text:1.2.3.1"
             dependencies:
@@ -369,12 +376,6 @@ project:
             - id: "Hackage:Data:bytestring:0.10.8.2"
             - id: "Hackage:Data Structures:array:0.5.3.0"
             - id: "Hackage:Data, Parsing:binary:0.8.6.0"
-            - id: "Hackage:GHC:ghc-prim:0.5.3"
-            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
-            - id: "Hackage:Prelude:base:4.12.0.0"
-          - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
-            dependencies:
-            - id: "Hackage:Data Structures:array:0.5.3.0"
             - id: "Hackage:GHC:ghc-prim:0.5.3"
             - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
             - id: "Hackage:Prelude:base:4.12.0.0"
@@ -400,7 +401,6 @@ project:
             - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
             - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:Prelude:base:4.12.0.0"
-        - id: "Hackage:Data Structures:containers:0.6.0.1"
         - id: "Hackage:Data, Parsing:binary:0.8.6.0"
         - id: "Hackage:Data, Text:text:1.2.3.1"
           dependencies:
@@ -431,11 +431,19 @@ project:
         - id: "Hackage:Prelude:base:4.12.0.0"
         - id: "Hackage:Text, Parsing:attoparsec:0.13.2.2"
           dependencies:
+          - id: "Hackage::containers:0.6.0.1"
           - id: "Hackage:Control:deepseq:1.4.4.0"
           - id: "Hackage:Control:transformers:0.5.5.0"
           - id: "Hackage:Data:bytestring:0.10.8.2"
           - id: "Hackage:Data:scientific:0.3.6.2"
             dependencies:
+            - id: "Hackage::containers:0.6.0.1"
+            - id: "Hackage::integer-logarithms:1.0.2.2"
+              dependencies:
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
             - id: "Hackage:Control:deepseq:1.4.4.0"
             - id: "Hackage:Data:bytestring:0.10.8.2"
             - id: "Hackage:Data:hashable:1.2.7.0"
@@ -459,7 +467,6 @@ project:
               - id: "Hackage:Control:transformers:0.5.5.0"
               - id: "Hackage:GHC:ghc-prim:0.5.3"
               - id: "Hackage:Prelude:base:4.12.0.0"
-            - id: "Hackage:Data Structures:containers:0.6.0.1"
             - id: "Hackage:Data, Parsing:binary:0.8.6.0"
             - id: "Hackage:Data, Text:text:1.2.3.1"
               dependencies:
@@ -470,16 +477,9 @@ project:
               - id: "Hackage:GHC:ghc-prim:0.5.3"
               - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
               - id: "Hackage:Prelude:base:4.12.0.0"
-            - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
-              dependencies:
-              - id: "Hackage:Data Structures:array:0.5.3.0"
-              - id: "Hackage:GHC:ghc-prim:0.5.3"
-              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
-              - id: "Hackage:Prelude:base:4.12.0.0"
             - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
             - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:Data Structures:array:0.5.3.0"
-          - id: "Hackage:Data Structures:containers:0.6.0.1"
           - id: "Hackage:Data, Text:text:1.2.3.1"
             dependencies:
             - id: "Hackage:Control:deepseq:1.4.4.0"
@@ -492,6 +492,13 @@ project:
           - id: "Hackage:Prelude:base:4.12.0.0"
       - id: "Hackage:Text, Web, JSON:aeson:1.4.2.0"
         dependencies:
+        - id: "Hackage::containers:0.6.0.1"
+        - id: "Hackage::tagged:0.8.6"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
         - id: "Hackage:Compatibility:base-compat:0.10.5"
           dependencies:
           - id: "Hackage:Prelude:base:4.12.0.0"
@@ -525,6 +532,13 @@ project:
           - id: "Hackage:Prelude:base:4.12.0.0"
         - id: "Hackage:Data:scientific:0.3.6.2"
           dependencies:
+          - id: "Hackage::containers:0.6.0.1"
+          - id: "Hackage::integer-logarithms:1.0.2.2"
+            dependencies:
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:Control:deepseq:1.4.4.0"
           - id: "Hackage:Data:bytestring:0.10.8.2"
           - id: "Hackage:Data:hashable:1.2.7.0"
@@ -548,7 +562,6 @@ project:
             - id: "Hackage:Control:transformers:0.5.5.0"
             - id: "Hackage:GHC:ghc-prim:0.5.3"
             - id: "Hackage:Prelude:base:4.12.0.0"
-          - id: "Hackage:Data Structures:containers:0.6.0.1"
           - id: "Hackage:Data, Parsing:binary:0.8.6.0"
           - id: "Hackage:Data, Text:text:1.2.3.1"
             dependencies:
@@ -556,12 +569,6 @@ project:
             - id: "Hackage:Data:bytestring:0.10.8.2"
             - id: "Hackage:Data Structures:array:0.5.3.0"
             - id: "Hackage:Data, Parsing:binary:0.8.6.0"
-            - id: "Hackage:GHC:ghc-prim:0.5.3"
-            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
-            - id: "Hackage:Prelude:base:4.12.0.0"
-          - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
-            dependencies:
-            - id: "Hackage:Data Structures:array:0.5.3.0"
             - id: "Hackage:GHC:ghc-prim:0.5.3"
             - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
             - id: "Hackage:Prelude:base:4.12.0.0"
@@ -622,7 +629,6 @@ project:
             dependencies:
             - id: "Hackage:Prelude:base:4.12.0.0"
             - id: "Hackage:Time:time:1.8.0.2"
-        - id: "Hackage:Data Structures:containers:0.6.0.1"
         - id: "Hackage:Data, Data Structures:vector:0.12.0.2"
           dependencies:
           - id: "Hackage:Control:deepseq:1.4.4.0"
@@ -633,12 +639,6 @@ project:
             - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:GHC:ghc-prim:0.5.3"
           - id: "Hackage:Prelude:base:4.12.0.0"
-        - id: "Hackage:Data, Phantom Types:tagged:0.8.6"
-          dependencies:
-          - id: "Hackage:Control:deepseq:1.4.4.0"
-          - id: "Hackage:Control:transformers:0.5.5.0"
-          - id: "Hackage:Prelude:base:4.12.0.0"
-          - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
         - id: "Hackage:Data, Text:text:1.2.3.1"
           dependencies:
           - id: "Hackage:Control:deepseq:1.4.4.0"
@@ -650,7 +650,7 @@ project:
           - id: "Hackage:Prelude:base:4.12.0.0"
         - id: "Hackage:Development:th-abstraction:0.2.10.0"
           dependencies:
-          - id: "Hackage:Data Structures:containers:0.6.0.1"
+          - id: "Hackage::containers:0.6.0.1"
           - id: "Hackage:GHC:ghc-prim:0.5.3"
           - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
@@ -663,11 +663,19 @@ project:
         - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
         - id: "Hackage:Text, Parsing:attoparsec:0.13.2.2"
           dependencies:
+          - id: "Hackage::containers:0.6.0.1"
           - id: "Hackage:Control:deepseq:1.4.4.0"
           - id: "Hackage:Control:transformers:0.5.5.0"
           - id: "Hackage:Data:bytestring:0.10.8.2"
           - id: "Hackage:Data:scientific:0.3.6.2"
             dependencies:
+            - id: "Hackage::containers:0.6.0.1"
+            - id: "Hackage::integer-logarithms:1.0.2.2"
+              dependencies:
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
             - id: "Hackage:Control:deepseq:1.4.4.0"
             - id: "Hackage:Data:bytestring:0.10.8.2"
             - id: "Hackage:Data:hashable:1.2.7.0"
@@ -691,7 +699,6 @@ project:
               - id: "Hackage:Control:transformers:0.5.5.0"
               - id: "Hackage:GHC:ghc-prim:0.5.3"
               - id: "Hackage:Prelude:base:4.12.0.0"
-            - id: "Hackage:Data Structures:containers:0.6.0.1"
             - id: "Hackage:Data, Parsing:binary:0.8.6.0"
             - id: "Hackage:Data, Text:text:1.2.3.1"
               dependencies:
@@ -702,16 +709,9 @@ project:
               - id: "Hackage:GHC:ghc-prim:0.5.3"
               - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
               - id: "Hackage:Prelude:base:4.12.0.0"
-            - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
-              dependencies:
-              - id: "Hackage:Data Structures:array:0.5.3.0"
-              - id: "Hackage:GHC:ghc-prim:0.5.3"
-              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
-              - id: "Hackage:Prelude:base:4.12.0.0"
             - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
             - id: "Hackage:Prelude:base:4.12.0.0"
           - id: "Hackage:Data Structures:array:0.5.3.0"
-          - id: "Hackage:Data Structures:containers:0.6.0.1"
           - id: "Hackage:Data, Text:text:1.2.3.1"
             dependencies:
             - id: "Hackage:Control:deepseq:1.4.4.0"
@@ -750,6 +750,7 @@ project:
       - id: "Hackage:Prelude:base:4.12.0.0"
     - id: "Hackage:Graphs, Graphics:graphviz:2999.20.0.3"
       dependencies:
+      - id: "Hackage::containers:0.6.0.1"
       - id: "Hackage:Control:mtl:2.2.2"
         dependencies:
         - id: "Hackage:Control:transformers:0.5.5.0"
@@ -759,13 +760,12 @@ project:
         dependencies:
         - id: "Hackage:Control:deepseq:1.4.4.0"
         - id: "Hackage:Prelude:base:4.12.0.0"
-      - id: "Hackage:Data Structures:containers:0.6.0.1"
       - id: "Hackage:Data Structures, Graphs:fgl:5.7.0.1"
         dependencies:
+        - id: "Hackage::containers:0.6.0.1"
         - id: "Hackage:Control:deepseq:1.4.4.0"
         - id: "Hackage:Control:transformers:0.5.5.0"
         - id: "Hackage:Data Structures:array:0.5.3.0"
-        - id: "Hackage:Data Structures:containers:0.6.0.1"
         - id: "Hackage:Prelude:base:4.12.0.0"
       - id: "Hackage:Data, Text:text:1.2.3.1"
         dependencies:
@@ -901,9 +901,9 @@ project:
       - id: "Hackage:Time:time:1.8.0.2"
     - id: "Hackage:Testing:QuickCheck:2.13.1"
       dependencies:
+      - id: "Hackage::containers:0.6.0.1"
       - id: "Hackage:Control:deepseq:1.4.4.0"
       - id: "Hackage:Control:transformers:0.5.5.0"
-      - id: "Hackage:Data Structures:containers:0.6.0.1"
       - id: "Hackage:Prelude:base:4.12.0.0"
       - id: "Hackage:System:random:1.1"
         dependencies:
@@ -971,14 +971,15 @@ project:
         - id: "Hackage:Prelude:base:4.12.0.0"
       - id: "Hackage:Development:happy:1.19.9"
         dependencies:
+        - id: "Hackage::containers:0.6.0.1"
         - id: "Hackage:Control:mtl:2.2.2"
           dependencies:
           - id: "Hackage:Control:transformers:0.5.5.0"
           - id: "Hackage:Prelude:base:4.12.0.0"
         - id: "Hackage:Data Structures:array:0.5.3.0"
-        - id: "Hackage:Data Structures:containers:0.6.0.1"
         - id: "Hackage:Distribution:Cabal:2.4.1.0"
           dependencies:
+          - id: "Hackage::containers:0.6.0.1"
           - id: "Hackage:Control:deepseq:1.4.4.0"
           - id: "Hackage:Control:mtl:2.2.2"
             dependencies:
@@ -987,7 +988,6 @@ project:
           - id: "Hackage:Control:transformers:0.5.5.0"
           - id: "Hackage:Data:bytestring:0.10.8.2"
           - id: "Hackage:Data Structures:array:0.5.3.0"
-          - id: "Hackage:Data Structures:containers:0.6.0.1"
           - id: "Hackage:Data, Parsing:binary:0.8.6.0"
           - id: "Hackage:Data, Text:text:1.2.3.1"
             dependencies:
@@ -1045,6 +1045,87 @@ project:
   - name: "test"
     dependencies: []
 packages:
+- id: "Hackage::containers:0.6.0.1"
+  purl: "pkg:hackage/containers@0.6.0.1"
+  declared_licenses:
+  - "<unknown>"
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Hackage::integer-logarithms:1.0.2.2"
+  purl: "pkg:hackage/integer-logarithms@1.0.2.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Hackage::tagged:0.8.6"
+  purl: "pkg:hackage/tagged@0.8.6"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
 - id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
   purl: "pkg:hackage/Algebra%2C%20Data%2C%20Data%20Structures%2C%20Math/semigroups@0.18.5"
   authors:
@@ -2037,41 +2118,6 @@ packages:
     url: "http://git.haskell.org/packages/array.git"
     revision: ""
     path: ""
-- id: "Hackage:Data Structures:containers:0.6.0.1"
-  purl: "pkg:hackage/Data%20Structures/containers@0.6.0.1"
-  declared_licenses:
-  - "BSD3"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD3: "BSD-3-Clause"
-  description: "This package contains efficient general-purpose implementations\n\
-    of various immutable container types including sets, maps, sequences,\ntrees,\
-    \ and graphs.\n\nFor a walkthrough of what this package provides with examples\
-    \ of common\noperations see the [containers\nintroduction](https://haskell-containers.readthedocs.io).\n\
-    \nThe declared cost of each operation is either worst-case or amortized, but\n\
-    remains valid even if structures are shared."
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://hackage.haskell.org/package/containers-0.6.0.1/containers-0.6.0.1.tar.gz"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "http://github.com/haskell/containers.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/haskell/containers.git"
-    revision: ""
-    path: ""
 - id: "Hackage:Data Structures, Graphs:fgl:5.7.0.1"
   purl: "pkg:hackage/Data%20Structures%2C%20Graphs/fgl@5.7.0.1"
   authors:
@@ -2181,38 +2227,6 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/kolmodin/binary.git"
-    revision: ""
-    path: ""
-- id: "Hackage:Data, Phantom Types:tagged:0.8.6"
-  purl: "pkg:hackage/Data%2C%20Phantom%20Types/tagged@0.8.6"
-  authors:
-  - "Edward A. Kmett"
-  declared_licenses:
-  - "BSD3"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD3: "BSD-3-Clause"
-  description: "Haskell 98 phantom types to avoid unsafely passing dummy arguments."
-  homepage_url: "http://github.com/ekmett/tagged"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://hackage.haskell.org/package/tagged-0.8.6/tagged-0.8.6.tar.gz"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "git://github.com/ekmett/tagged.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/ekmett/tagged.git"
     revision: ""
     path: ""
 - id: "Hackage:Data, Testing:tree-diff:0.0.2.1"
@@ -2638,39 +2652,6 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/Daniel-Diaz/matrix.git"
-    revision: ""
-    path: ""
-- id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
-  purl: "pkg:hackage/Math%2C%20Algorithms%2C%20Number%20Theory/integer-logarithms@1.0.2.2"
-  authors:
-  - "Daniel Fischer"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "\"Math.NumberTheory.Logarithms\" and \"Math.NumberTheory.Powers.Integer\"\
-    \nfrom the arithmoi package.\n\nAlso provides \"GHC.Integer.Logarithms.Compat\"\
-    \ and\n\"Math.NumberTheory.Power.Natural\" modules, as well as some\nadditional\
-    \ functions in migrated modules."
-  homepage_url: "https://github.com/Bodigrim/integer-logarithms"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://hackage.haskell.org/package/integer-logarithms-1.0.2.2/integer-logarithms-1.0.2.2.tar.gz"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/Bodigrim/integer-logarithms"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/Bodigrim/integer-logarithms.git"
     revision: ""
     path: ""
 - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
