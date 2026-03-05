@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 
 import java.io.File
@@ -32,44 +30,36 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.HashAlgorithm
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.utils.toPackageUrl
-import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxDocumentCache
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocument
-import org.ossreviewtoolkit.utils.common.collapseWhitespace
-import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
-import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalDocumentReference
-import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.extractScopeFromExternalReferences
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.isExternalDocumentReferenceId
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.locateCpe
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.mapNotPresentToEmpty
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.projectPackage
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.toIdentifier
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.toPackage
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.wrapPresentInSet
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 
 private const val PROJECT_TYPE = "SpdxDocumentFile"
+internal const val PACKAGE_TYPE_SPDX = "SpdxDocumentFile"
 
 private const val DEFAULT_SCOPE_NAME = "default"
 
@@ -79,182 +69,6 @@ private val SPDX_LINKAGE_RELATIONSHIPS = mapOf(
 )
 
 private val SPDX_SCOPE_RELATIONSHIPS = SpdxRelationship.Type.entries.filter { it.name.endsWith("_DEPENDENCY_OF") }
-
-private val SPDX_VCS_PREFIXES = mapOf(
-    "git+" to VcsType.GIT,
-    "hg+" to VcsType.MERCURIAL,
-    "bzr+" to VcsType.UNKNOWN,
-    "svn+" to VcsType.SUBVERSION
-)
-
-/**
- * Return the [SpdxPackage] in the [SpdxDocument] that denotes a project, or null if no project but only packages are
- * defined.
- */
-internal fun SpdxDocument.projectPackage(): SpdxPackage? =
-    // An SpdxDocument that describes a project must have at least 2 packages, one for the project itself, and another
-    // one for at least one dependency package.
-    packages.takeIf { it.size > 1 || (it.size == 1 && externalDocumentRefs.isNotEmpty()) }
-        // The package that describes a project must have an "empty" package filename (as the "filename" is the project
-        // directory itself).
-        ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
-
-/**
- * Try to find an [SpdxExternalReference] in this [SpdxPackage] of type purl from which the scope of a
- * package manager dependency can be extracted. Return this scope or *null* if cannot be determined.
- */
-internal fun SpdxPackage.extractScopeFromExternalReferences(): String? =
-    externalRefs.filter { it.referenceType == SpdxExternalReference.Type.Purl }
-        .firstNotNullOfOrNull { it.referenceLocator.toPackageUrl()?.qualifiers?.get("scope") }
-
-/**
- * Return the declared license to be used in ORT's data model, which expects a not present value to be an empty set
- * instead of NONE or NOASSERTION.
- */
-private fun SpdxPackage.getDeclaredLicense(): Set<String> =
-    setOfNotNull(licenseDeclared.takeIf { SpdxConstants.isPresent(it) })
-
-/**
- * Return the concluded license to be used in ORT's data model, which uses null instead of NOASSERTION.
- */
-private fun SpdxPackage.getConcludedLicense(): SpdxExpression? =
-    licenseConcluded.takeUnless { it == SpdxConstants.NOASSERTION }?.toSpdx()
-
-/**
- * Return a [RemoteArtifact] for the artifact that the [downloadLocation][SpdxPackage.downloadLocation] points to. If
- * the download location is a "not present" value, or if it points to a VCS location instead, return null.
- */
-private fun SpdxPackage.getRemoteArtifact(): RemoteArtifact? =
-    when {
-        SpdxConstants.isNotPresent(downloadLocation) -> null
-
-        SPDX_VCS_PREFIXES.any { (prefix, _) -> downloadLocation.startsWith(prefix) } -> null
-
-        else -> {
-            if (downloadLocation.endsWith(".git")) {
-                logger.warn {
-                    "The download location $downloadLocation of SPDX package '$spdxId' looks like a Git repository " +
-                        "URL but it lacks the 'git+' prefix and thus will be treated as an artifact URL."
-                }
-            }
-
-            RemoteArtifact(downloadLocation, Hash.NONE)
-        }
-    }
-
-/**
- * Return the [VcsInfo] contained in the [downloadLocation][SpdxPackage.downloadLocation], or null if the download
- * location is a "not present" value / does not point to a VCS location.
- */
-internal fun SpdxPackage.getVcsInfo(): VcsInfo? {
-    if (SpdxConstants.isNotPresent(downloadLocation)) return null
-
-    return SPDX_VCS_PREFIXES.mapNotNull { (prefix, vcsType) ->
-        downloadLocation.withoutPrefix(prefix)?.let { url ->
-            var vcsUrl = url
-
-            val vcsPath = vcsUrl.substringAfterLast('#', "")
-            vcsUrl = vcsUrl.removeSuffix("#$vcsPath")
-
-            val vcsRevision = vcsUrl.substringAfterLast('@', "")
-            vcsUrl = vcsUrl.removeSuffix("@$vcsRevision")
-
-            VcsInfo(vcsType, vcsUrl, vcsRevision, path = vcsPath)
-        }
-    }.firstOrNull()
-}
-
-/**
- * Return the location of the first [external reference][SpdxExternalReference] of the given [type] in this
- * [SpdxPackage], or null if there is no such reference.
- */
-private fun SpdxPackage.locateExternalReference(type: SpdxExternalReference.Type): String? =
-    externalRefs.find { it.referenceType == type }?.referenceLocator
-
-/**
- * Return a CPE identifier for this package if present. Search for all CPE versions.
- */
-private fun SpdxPackage.locateCpe(): String? =
-    locateExternalReference(SpdxExternalReference.Type.Cpe23Type)
-        ?: locateExternalReference(SpdxExternalReference.Type.Cpe22Type)
-
-/**
- * Return whether the string has the format of an [SpdxExternalDocumentReference], with or without an additional
- * package id.
- */
-private fun String.isExternalDocumentReferenceId(): Boolean = startsWith(SpdxConstants.DOCUMENT_REF_PREFIX)
-
-/**
- * Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string.
- */
-private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
-
-/**
- * Sanitize a string for use as an [Identifier] property where colons are not supported by replacing them with spaces,
- * trimming, and finally collapsing multiple consecutive spaces.
- */
-private fun String.sanitize(): String = replace(':', ' ').collapseWhitespace()
-
-/**
- * Wrap any "present" SPDX value in a sorted set, or return an empty sorted set otherwise.
- */
-private fun String?.wrapPresentInSet(): Set<String> {
-    if (SpdxConstants.isPresent(this)) {
-        withoutPrefix(SpdxConstants.PERSON)?.let { persons ->
-            // In case of a person, allow a comma-separated list of persons.
-            return persons.split(',').mapTo(mutableSetOf()) { it.trim() }
-        }
-
-        // Do not split an organization like "Acme, Inc." by comma.
-        withoutPrefix(SpdxConstants.ORGANIZATION)?.let {
-            return setOf(it.trim())
-        }
-    }
-
-    return emptySet()
-}
-
-/**
- * Return the [PackageLinkage] between [dependency] and [dependant] as specified in [relationships]. If no
- * relationship is found, return [PackageLinkage.DYNAMIC].
- */
-private fun getLinkageForDependency(
-    dependency: SpdxPackage,
-    dependant: String,
-    relationships: List<SpdxRelationship>
-): PackageLinkage =
-    relationships.mapNotNull { relation ->
-        SPDX_LINKAGE_RELATIONSHIPS[relation.relationshipType]?.takeIf {
-            val relationId = if (relation.relatedSpdxElement.isExternalDocumentReferenceId()) {
-                relation.relatedSpdxElement.substringAfter(":")
-            } else {
-                relation.relatedSpdxElement
-            }
-
-            relationId == dependency.spdxId && relation.spdxElementId == dependant
-        }
-    }.singleOrNull() ?: PackageLinkage.DYNAMIC
-
-/**
- * Return true if the [relation] as defined in [relationships] describes an [SPDX_LINKAGE_RELATIONSHIPS] in the
- * [DEFAULT_SCOPE_NAME] so that the [source] depends on the [target].
- */
-private fun hasDefaultScopeLinkage(
-    source: String,
-    target: String,
-    relation: SpdxRelationship.Type,
-    relationships: List<SpdxRelationship>
-): Boolean {
-    if (relation !in SPDX_LINKAGE_RELATIONSHIPS) return false
-
-    val hasScopeRelationship = relationships.any {
-        it.relationshipType in SPDX_SCOPE_RELATIONSHIPS
-            // Scope relationships are defined in "reverse" as a "dependency of".
-            && it.relatedSpdxElement == source && it.spdxElementId == target
-    }
-
-    return !hasScopeRelationship
-}
 
 /**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
@@ -270,60 +84,6 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
     override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
     private val spdxDocumentCache = SpdxDocumentCache()
-
-    /**
-     * Create an [Identifier] out of this [SpdxPackage].
-     */
-    private fun SpdxPackage.toIdentifier() =
-        Identifier(
-            type = projectType,
-            namespace = listOfNotNull(supplier, originator).firstOrNull()
-                ?.withoutPrefix(SpdxConstants.ORGANIZATION).orEmpty().sanitize(),
-            name = name.sanitize(),
-            version = versionInfo.sanitize()
-        )
-
-    /**
-     * Create a [Package] out of this [SpdxPackage].
-     */
-    private fun SpdxPackage.toPackage(definitionFile: File?, doc: SpdxResolvedDocument): Package {
-        val packageDescription = description.ifEmpty { summary }
-
-        // If the VCS information cannot be determined from the VCS working tree itself, fall back to try getting it
-        // from the download location.
-        val packageDir = definitionFile?.resolveSibling(packageFilename)
-        val vcs = packageDir?.let { VersionControlSystem.forDirectory(it)?.getInfo() } ?: getVcsInfo().orEmpty()
-
-        val generatedFromRelations = doc.relationships.filter {
-            it.relationshipType == SpdxRelationship.Type.GENERATED_FROM
-        }
-
-        val isBinaryArtifact = generatedFromRelations.any { it.spdxElementId == spdxId }
-            && generatedFromRelations.none { it.relatedSpdxElement == spdxId }
-
-        val id = toIdentifier()
-        val artifact = getRemoteArtifact()
-
-        val purl = locateExternalReference(SpdxExternalReference.Type.Purl)
-            ?: artifact
-                ?.let { if (it.hash.algorithm in HashAlgorithm.VERIFIABLE) it else it.copy(hash = Hash.NONE) }
-                ?.let { id.toPurl(ArtifactProvenance(it)) }
-            ?: id.toPurl()
-
-        return Package(
-            id = id,
-            purl = purl,
-            cpe = locateCpe(),
-            authors = originator.wrapPresentInSet(),
-            declaredLicenses = getDeclaredLicense(),
-            concludedLicense = getConcludedLicense(),
-            description = packageDescription,
-            homepageUrl = homepage.mapNotPresentToEmpty(),
-            binaryArtifact = artifact.takeIf { isBinaryArtifact }.orEmpty(),
-            sourceArtifact = artifact.takeUnless { isBinaryArtifact }.orEmpty(),
-            vcs = vcs
-        )
-    }
 
     /**
      * Return the dependencies of the package with the given [pkgId] defined in [doc] of the
@@ -510,7 +270,7 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
         )
 
         val project = Project(
-            id = projectPackage.toIdentifier(),
+            id = projectPackage.toIdentifier(projectType),
             cpe = projectPackage.locateCpe(),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.originator.wrapPresentInSet(),
@@ -571,4 +331,46 @@ internal fun getPackageManagerDependency(
     }
 
     return null
+}
+
+/**
+ * Return the [PackageLinkage] between [dependency] and [dependant] as specified in [relationships]. If no
+ * relationship is found, return [PackageLinkage.DYNAMIC].
+ */
+private fun getLinkageForDependency(
+    dependency: SpdxPackage,
+    dependant: String,
+    relationships: List<SpdxRelationship>
+): PackageLinkage =
+    relationships.mapNotNull { relation ->
+        SPDX_LINKAGE_RELATIONSHIPS[relation.relationshipType]?.takeIf {
+            val relationId = if (relation.relatedSpdxElement.isExternalDocumentReferenceId()) {
+                relation.relatedSpdxElement.substringAfter(":")
+            } else {
+                relation.relatedSpdxElement
+            }
+
+            relationId == dependency.spdxId && relation.spdxElementId == dependant
+        }
+    }.singleOrNull() ?: PackageLinkage.DYNAMIC
+
+/**
+ * Return true if the [relation] as defined in [relationships] describes an [SPDX_LINKAGE_RELATIONSHIPS] in the
+ * [DEFAULT_SCOPE_NAME] so that the [source] depends on the [target].
+ */
+private fun hasDefaultScopeLinkage(
+    source: String,
+    target: String,
+    relation: SpdxRelationship.Type,
+    relationships: List<SpdxRelationship>
+): Boolean {
+    if (relation !in SPDX_LINKAGE_RELATIONSHIPS) return false
+
+    val hasScopeRelationship = relationships.any {
+        it.relationshipType in SPDX_SCOPE_RELATIONSHIPS
+            // Scope relationships are defined in "reverse" as a "dependency of".
+            && it.relatedSpdxElement == source && it.spdxElementId == target
+    }
+
+    return !hasScopeRelationship
 }
