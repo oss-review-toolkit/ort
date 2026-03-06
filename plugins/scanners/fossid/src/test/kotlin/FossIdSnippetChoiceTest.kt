@@ -65,9 +65,9 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.SnippetChoices
 import org.ossreviewtoolkit.model.config.snippet.Choice
 import org.ossreviewtoolkit.model.config.snippet.Given
-import org.ossreviewtoolkit.model.config.snippet.Provenance
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
+import org.ossreviewtoolkit.model.config.snippet.SnippetProvenance
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -1122,7 +1122,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 })
 
 private fun createSnippetChoices(provenanceUrl: String, vararg snippetChoices: SnippetChoice) =
-    listOf(SnippetChoices(Provenance(provenanceUrl), snippetChoices.toList()))
+    listOf(SnippetChoices(SnippetProvenance(provenanceUrl), snippetChoices.toList()))
 
 private fun createSnippetChoice(location: TextLocation, purl: String? = null, comment: String) =
     SnippetChoice(
