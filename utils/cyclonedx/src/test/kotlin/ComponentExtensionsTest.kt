@@ -384,8 +384,8 @@ class ComponentExtensionsTest : WordSpec({
 
             declaredLicenses should containExactlyInAnyOrder("MIT", "Apache-2.0")
             // DeclaredLicenseProcessor combines licenses with AND; order may vary.
-            declaredLicensesProcessed.spdxExpression?.decompose()?.map { it.toString() }?.toSet() shouldBe
-                setOf("MIT", "Apache-2.0")
+            declaredLicensesProcessed.spdxExpression?.decompose()?.map { it.toString() } should
+                containExactlyInAnyOrder("MIT", "Apache-2.0")
         }
     }
 
