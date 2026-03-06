@@ -242,7 +242,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
 private fun containLicensesExactly(vararg licenses: String): Matcher<ScanSummary?> =
     transformingCollectionMatcher(expected = licenses.toList(), matcher = ::containExactlyInAnyOrder) { summary ->
-        summary.licenseFindings.map { it.license.toString() }.toSet()
+        summary.licenseFindings.mapTo(mutableSetOf()) { it.license.toString() }
     }
 
 private fun containLocationsForLicenseExactly(license: String, vararg locations: TextLocation): Matcher<ScanSummary?> =

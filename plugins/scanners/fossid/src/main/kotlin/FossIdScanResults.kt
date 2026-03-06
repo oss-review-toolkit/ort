@@ -342,9 +342,9 @@ private fun Set<Snippet>.mapSnippetFindingsForFile(
             val rawMatchedLinesSnippetFile = rawMatchedLines?.mirrorFile.orEmpty().collapseToRanges()
 
             if (rawMatchedLinesSourceFile.isNotEmpty()) {
-                sourceLocations = rawMatchedLinesSourceFile.map { (first, second) ->
+                sourceLocations = rawMatchedLinesSourceFile.mapTo(mutableSetOf()) { (first, second) ->
                     TextLocation(file, first, second)
-                }.toSet()
+                }
             }
 
             snippetLocation = rawMatchedLinesSnippetFile.firstOrNull()
