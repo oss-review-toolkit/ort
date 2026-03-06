@@ -620,12 +620,11 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
 
         lockfile.packages.forEach { (packageName, packageInfo) ->
             runCatching {
-                val version = packageInfo.version.orEmpty()
-                var description = ""
                 var rawName = ""
+                var authors = emptySet<String>()
+                var description = ""
                 var homepageUrl = ""
                 var vcs = VcsInfo.EMPTY
-                var authors = emptySet<String>()
 
                 val source = packageInfo.source
 
@@ -647,9 +646,9 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                         val pkgInfoFromYamlFile = readPackageInfoFromCache(packageInfo, workingDir)
 
                         rawName = pkgInfoFromYamlFile?.name ?: packageName
+                        authors = pkgInfoFromYamlFile?.let { parseAuthors(it) }.orEmpty()
                         description = pkgInfoFromYamlFile?.description.orEmpty().trim()
                         homepageUrl = pkgInfoFromYamlFile?.homepage.orEmpty()
-                        authors = pkgInfoFromYamlFile?.let { parseAuthors(it) }.orEmpty()
 
                         vcs = VcsInfo(
                             type = VcsType.GIT,
@@ -664,9 +663,9 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                         val pkgInfoFromYamlFile = readPackageInfoFromCache(packageInfo, workingDir)
 
                         rawName = pkgInfoFromYamlFile?.name.orEmpty()
+                        authors = pkgInfoFromYamlFile?.let { parseAuthors(it) }.orEmpty()
                         description = pkgInfoFromYamlFile?.description.orEmpty().trim()
                         homepageUrl = pkgInfoFromYamlFile?.homepage.orEmpty()
-                        authors = pkgInfoFromYamlFile?.let { parseAuthors(it) }.orEmpty()
 
                         val repositoryUrl = pkgInfoFromYamlFile?.repository.orEmpty()
 
@@ -681,17 +680,19 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                         containsFlutter = true
                         // Set hardcoded package details.
                         rawName = "flutter"
-                        homepageUrl = "https://github.com/flutter/flutter"
                         description = "Flutter SDK"
+                        homepageUrl = "https://github.com/flutter/flutter"
                     }
 
                     packageInfo.description.path == "flutter_test" -> {
                         // Set hardcoded package details.
                         rawName = "flutter_test"
-                        homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
                         description = "Flutter Test SDK"
+                        homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
                     }
                 }
+
+                val version = packageInfo.version.orEmpty()
 
                 if (version.isEmpty()) {
                     logger.warn { "No version information found for package $rawName." }
