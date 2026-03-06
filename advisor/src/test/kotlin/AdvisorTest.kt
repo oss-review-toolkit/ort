@@ -20,9 +20,11 @@
 package org.ossreviewtoolkit.advisor
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -135,10 +137,11 @@ class AdvisorTest : WordSpec({
             val result = advisor.advise(originResult)
 
             result.advisor shouldNotBeNull {
-                results shouldBe mapOf(pkg.id to listOf(successfulResult))
-                providerIssues shouldHaveSize 1
-                providerIssues.single().message shouldBe
-                    "Failed to create provider 'FailingProvider': IllegalStateException: Could not initialize provider"
+                results should containExactly(pkg.id to listOf(successfulResult))
+                providerIssues.shouldBeSingleton {
+                    it.message shouldBe "Failed to create provider 'FailingProvider': IllegalStateException: Could " +
+                        "not initialize provider"
+                }
             }
 
             coVerify(exactly = 1) {
@@ -165,10 +168,11 @@ class AdvisorTest : WordSpec({
             val result = advisor.advise(originResult)
 
             result.advisor shouldNotBeNull {
-                results shouldBe mapOf(pkg.id to listOf(successfulResult))
-                providerIssues shouldHaveSize 1
-                providerIssues.single().message shouldBe
-                    "Failed to retrieve findings via 'FailingProvider': IllegalStateException: Could not query provider service"
+                results should containExactly(pkg.id to listOf(successfulResult))
+                providerIssues.shouldBeSingleton {
+                    it.message shouldBe "Failed to retrieve findings via 'FailingProvider': IllegalStateException: " +
+                        "Could not query provider service"
+                }
             }
 
             coVerify(exactly = 1) {
@@ -199,7 +203,7 @@ class AdvisorTest : WordSpec({
                 providerIssues shouldHaveSize 2
 
                 val messages = providerIssues.map { it.message }
-                messages shouldContainExactlyInAnyOrder listOf(
+                messages should containExactlyInAnyOrder(
                     "Failed to retrieve findings via 'FailingProvider1': IllegalArgumentException: Failure 1",
                     "Failed to retrieve findings via 'FailingProvider2': IllegalStateException: Failure 2"
                 )

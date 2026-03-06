@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -120,7 +120,7 @@ class LicenseClassificationsTest : WordSpec({
                 categories = listOf(LicenseCategory("permissive"))
             )
 
-            licenseClassifications.licensesByCategory["permissive"] shouldNotBeNull { shouldBeEmpty() }
+            licenseClassifications.licensesByCategory["permissive"] shouldNotBeNull { this should beEmpty() }
         }
 
         "return null when querying the licenses for an unknown category" {

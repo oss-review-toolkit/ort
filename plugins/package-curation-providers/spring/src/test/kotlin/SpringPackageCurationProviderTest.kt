@@ -20,7 +20,8 @@
 package org.ossreviewtoolkit.plugins.packagecurationproviders.spring
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -36,7 +37,7 @@ class SpringPackageCurationProviderTest : StringSpec({
         val id = Identifier("Maven:org.springframework.boot:spring-boot-starter-parent:2.7.4")
         val pkg = Package.EMPTY.copy(id = id)
 
-        provider.getCurationsFor(setOf(pkg)) shouldContainExactly setOf(
+        provider.getCurationsFor(setOf(pkg)) should containExactly(
             PackageCuration(
                 id = id,
                 data = PackageCurationData(isMetadataOnly = true)
@@ -51,7 +52,7 @@ class SpringPackageCurationProviderTest : StringSpec({
             vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
         )
 
-        provider.getCurationsFor(setOf(pkg)) shouldContainExactly setOf(
+        provider.getCurationsFor(setOf(pkg)) should containExactly(
             PackageCuration(
                 id = id,
                 data = PackageCurationData(
@@ -68,7 +69,7 @@ class SpringPackageCurationProviderTest : StringSpec({
             vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
         )
 
-        provider.getCurationsFor(setOf(pkg)) shouldContainExactly setOf(
+        provider.getCurationsFor(setOf(pkg)) should containExactly(
             PackageCuration(
                 id = id,
                 data = PackageCurationData(

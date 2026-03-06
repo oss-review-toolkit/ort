@@ -21,11 +21,9 @@ package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty as beEmptyCollection
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldBeSingleton
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -34,7 +32,6 @@ import io.kotest.matchers.shouldNot
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.beEmpty
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldNotBeEmpty
 import io.kotest.matchers.string.shouldStartWith
 
 import org.ossreviewtoolkit.analyzer.analyze
@@ -82,7 +79,7 @@ class OrtProjectFileFunTest : WordSpec({
                 }
 
                 project.authors should beEmptyCollection()
-                project.scopeDependencies.shouldBeEmpty()
+                project.scopeDependencies.shouldNotBeNull() should beEmptyCollection()
 
                 packages.shouldBeSingleton {
                     it.purl shouldBe "pkg:maven/com.example/minimal@0.1.0"
@@ -107,7 +104,7 @@ class OrtProjectFileFunTest : WordSpec({
                 // so just check for basic validity.
                 with(project.vcs) {
                     type shouldNotBe VcsType.UNKNOWN
-                    url.shouldNotBeEmpty()
+                    url shouldNot beEmpty()
                     revision shouldNot beEmpty()
                     path shouldBe "plugins/package-managers/ortproject/src/funTest/assets/projects"
                 }
@@ -118,7 +115,7 @@ class OrtProjectFileFunTest : WordSpec({
                 }
 
                 project.authors should beEmptyCollection()
-                project.scopeDependencies.shouldBeEmpty()
+                project.scopeDependencies.shouldNotBeNull() should beEmptyCollection()
 
                 packages.shouldBeSingleton {
                     it.purl shouldBe "pkg:maven/com.example/minimal@0.1.0"
@@ -244,24 +241,18 @@ class OrtProjectFileFunTest : WordSpec({
             val result = analyze(projectDir = definitionFile.parentFile).getAnalyzerResult()
 
             with(result) {
-                projects.map { it.id.name }
-                    .shouldContainExactlyInAnyOrder(
-                        setOf(
-                            "project-x",
-                            "subproject-x-1",
-                            "subproject-x-2"
-                        )
-                    )
+                projects.map { it.id.name } should containExactlyInAnyOrder(
+                    "project-x",
+                    "subproject-x-1",
+                    "subproject-x-2"
+                )
 
-                packages.map { it.purl }
-                    .shouldContainExactlyInAnyOrder(
-                        setOf(
-                            "pkg:maven/com.example/sub-x1@9.98.0",
-                            "pkg:maven/com.example/sub-x2@1.1.0",
-                            "pkg:maven/com.example/full@1.1.0",
-                            "pkg:maven/com.example/minimal@0.1.0"
-                        )
-                    )
+                packages.map { it.purl } should containExactlyInAnyOrder(
+                    "pkg:maven/com.example/sub-x1@9.98.0",
+                    "pkg:maven/com.example/sub-x2@1.1.0",
+                    "pkg:maven/com.example/full@1.1.0",
+                    "pkg:maven/com.example/minimal@0.1.0"
+                )
             }
         }
     }
@@ -276,7 +267,7 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
             type shouldBe "OrtProjectFile"
         }
 
-        project.authors shouldContainExactlyInAnyOrder setOf("John Doe", "Foo Bar")
+        project.authors should containExactlyInAnyOrder("John Doe", "Foo Bar")
 
         project.vcs shouldNotBeNull {
             type shouldNotBe VcsType.UNKNOWN
@@ -288,64 +279,62 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
         project.homepageUrl shouldBe "https://project_x.example.com"
 
         project.scopeDependencies shouldNotBeNull {
-            map { it.name } shouldContainExactlyInAnyOrder setOf("main", "some_scope")
+            map { it.name } should containExactlyInAnyOrder("main", "some_scope")
 
             find { it.name == "main" } shouldNotBeNull {
                 dependencies.shouldBeSingleton()
-                dependencies.map { dep -> dep.id.name } shouldContainExactly setOf("full")
+                dependencies.map { dep -> dep.id.name } should containExactly("full")
             }
 
             find { it.name == "some_scope" } shouldNotBeNull {
                 dependencies.shouldBeSingleton()
-                dependencies.map { dep -> dep.id.name } shouldContainExactly setOf("full")
+                dependencies.map { dep -> dep.id.name } should containExactly("full")
             }
         }
 
-        packages.map { it.purl } shouldContainExactlyInAnyOrder setOf(
+        packages.map { it.purl } should containExactlyInAnyOrder(
             "pkg:maven/com.example/full@1.1.0",
             "pkg:maven/com.example/minimal@0.1.0"
         )
 
-        packages.find { it.purl == "pkg:maven/com.example/full@1.1.0" }
-            .shouldNotBeNull {
-                description shouldBe "Package with fully elaborated model."
+        packages.find { it.purl == "pkg:maven/com.example/full@1.1.0" }.shouldNotBeNull {
+            description shouldBe "Package with fully elaborated model."
 
-                declaredLicenses shouldNotBeNull {
-                    containExactlyInAnyOrder(setOf("Apache-2.0", "MIT"))
-                }
-
-                vcs shouldNotBeNull {
-                    type shouldBe VcsType.MERCURIAL
-                    url shouldBe "https://git.example.com/full/"
-                    revision shouldBe "master"
-                    path shouldBe "/"
-                }
-
-                homepageUrl shouldBe "https://project_x.example.com/full"
-
-                sourceArtifact shouldNotBeNull {
-                    url shouldBe "https://repo.example.com/m2/full-1.1.0-sources.jar"
-                    hash.value shouldBe "da39a3ee5e6b4b0d3255bfef95601890afd80709"
-                    hash.algorithm.name shouldBe "SHA1"
-                }
-
-                authors.shouldContainExactlyInAnyOrder(setOf("Doe John", "Bar Foo"))
-                isModified shouldBe true
-                isMetadataOnly shouldBe true
+            declaredLicenses shouldNotBeNull {
+                containExactlyInAnyOrder(setOf("Apache-2.0", "MIT"))
             }
 
-        packages.find { it.purl == "pkg:maven/com.example/minimal@0.1.0" }
-            .shouldNotBeNull {
-                description should beEmpty()
-                declaredLicenses should beEmptyCollection()
-
-                vcs shouldBe VcsInfo.EMPTY
-                sourceArtifact shouldBe RemoteArtifact.EMPTY
-
-                labels should beEmptyMap()
-                authors should beEmptyCollection()
-                isModified shouldBe false
-                isMetadataOnly shouldBe false
+            vcs shouldNotBeNull {
+                type shouldBe VcsType.MERCURIAL
+                url shouldBe "https://git.example.com/full/"
+                revision shouldBe "master"
+                path shouldBe "/"
             }
+
+            homepageUrl shouldBe "https://project_x.example.com/full"
+
+            sourceArtifact shouldNotBeNull {
+                url shouldBe "https://repo.example.com/m2/full-1.1.0-sources.jar"
+                hash.value shouldBe "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+                hash.algorithm.name shouldBe "SHA1"
+            }
+
+            authors should containExactlyInAnyOrder("Doe John", "Bar Foo")
+            isModified shouldBe true
+            isMetadataOnly shouldBe true
+        }
+
+        packages.find { it.purl == "pkg:maven/com.example/minimal@0.1.0" }.shouldNotBeNull {
+            description should beEmpty()
+            declaredLicenses should beEmptyCollection()
+
+            vcs shouldBe VcsInfo.EMPTY
+            sourceArtifact shouldBe RemoteArtifact.EMPTY
+
+            labels should beEmptyMap()
+            authors should beEmptyCollection()
+            isModified shouldBe false
+            isMetadataOnly shouldBe false
+        }
     }
 }
