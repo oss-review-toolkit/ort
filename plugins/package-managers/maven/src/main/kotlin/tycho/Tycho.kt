@@ -120,7 +120,6 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
     ): List<ProjectAnalyzerResult> {
         logger.info { "Resolving Tycho dependencies for $definitionFile." }
 
-        val repositoryHelper = LocalRepositoryHelper()
         val collector = TychoProjectsCollector()
         val (exitCode, buildLog) = runBuild(collector, definitionFile.parentFile)
 
@@ -133,7 +132,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
                 collector.mavenProjects,
                 resolver,
                 targetHandler,
-                repositoryHelper
+                LocalRepositoryHelper(mavenSupport.localRepositoryPath())
             )
 
             buildLog.inputStream().use { stream ->
