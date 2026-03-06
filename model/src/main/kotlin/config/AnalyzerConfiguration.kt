@@ -76,7 +76,8 @@ data class AnalyzerConfiguration(
         "Tycho",
         "Unmanaged",
         "Yarn",
-        "Yarn2"
+        "Yarn2",
+        "YoctoSpdx"
     ),
 
     /**
