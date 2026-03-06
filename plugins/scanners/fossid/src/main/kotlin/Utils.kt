@@ -28,6 +28,7 @@ import org.apache.logging.log4j.kotlin.loggerOf
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.Severity
@@ -150,17 +151,34 @@ private fun urlToPackageType(url: String): String =
         }
     }
 
-internal fun Snippet.toPurl(url: String): String =
-    when {
-        purl != null -> checkNotNull(purl)
-
-        artifact.isNullOrEmpty() -> ""
-
-        else -> PackageURLBuilder.aPackageURL()
-            .withType(urlToPackageType(url))
-            .withNamespace(author)
-            .withName(artifact)
-            .withVersion(version)
-            .build()
-            .canonicalize()
+internal fun Snippet.toPurl(url: String): String {
+    if (purl != null) {
+        return checkNotNull(purl)
     }
+
+    if (artifact.isNullOrEmpty()) {
+        val vcsHost = VcsHost.fromUrl(url)
+        if (vcsHost != null) {
+            val orga = vcsHost.getUserOrOrganization(url)
+            val repo = vcsHost.getProject(url)
+
+            if (orga != null && repo != null) {
+                return PackageURLBuilder.aPackageURL().withType("github")
+                    .withNamespace(orga)
+                    .withName(repo)
+                    .withVersion(version)
+                    .build()
+                    .canonicalize()
+            }
+        }
+
+        return ""
+    }
+
+    return PackageURLBuilder.aPackageURL().withType(urlToPackageType(url))
+        .withNamespace(author)
+        .withName(artifact)
+        .withVersion(version)
+        .build()
+        .canonicalize()
+}

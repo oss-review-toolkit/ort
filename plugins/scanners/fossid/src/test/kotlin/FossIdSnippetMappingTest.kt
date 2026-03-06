@@ -174,6 +174,54 @@ class FossIdSnippetMappingTest : WordSpec({
                 }
             }
         }
+
+        "map github url to purl" {
+            val issues = mutableListOf<Issue>()
+            val listSnippets = flowOf(
+                "src/main/java/Tokenizer.java" to
+                    setOf(
+                        createSnippet(
+                            2,
+                            MatchType.FULL,
+                            "pkg:maven/com.vdurmont/semver4j@3.1.0",
+                            "MIT",
+                            "com/vdurmont/semver4j/Tokenizer.java"
+                        ).copy(
+                            author = "com/vdurmont",
+                            artifact = null,
+                            version = "3.1.0",
+                            url = "https://github.com/MartinPulec/UltraGrid/archive/refs/heads/devel.tar.gz",
+                            purl = null
+                        )
+                    )
+            )
+            val rawResults = RawResults(
+                emptyList(),
+                emptyList(),
+                emptyList(),
+                emptyList(),
+                listSnippets,
+                emptyMap()
+            )
+
+            val mappedSnippets = mapSnippetFindings(
+                rawResults,
+                500,
+                issues,
+                emptyMap(),
+                emptyList(),
+                mutableSetOf()
+            )
+
+            issues should beEmpty()
+            mappedSnippets.shouldBeSingleton { finding ->
+                with(finding.snippets) {
+                    this.shouldBeSingleton { snippet ->
+                        snippet.purl shouldBe "pkg:github/martinpulec/ultragrid@3.1.0"
+                    }
+                }
+            }
+        }
     }
 })
 
