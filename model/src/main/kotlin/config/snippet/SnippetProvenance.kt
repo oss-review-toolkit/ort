@@ -24,4 +24,4 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 /**
  * The URL of the [RepositoryProvenance] the snippet choice applies to.
  */
-data class Provenance(val url: String)
+data class SnippetProvenance(val url: String)

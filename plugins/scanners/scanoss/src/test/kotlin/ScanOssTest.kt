@@ -29,9 +29,9 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.SnippetChoices
 import org.ossreviewtoolkit.model.config.snippet.Choice
 import org.ossreviewtoolkit.model.config.snippet.Given
-import org.ossreviewtoolkit.model.config.snippet.Provenance
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
+import org.ossreviewtoolkit.model.config.snippet.SnippetProvenance
 
 // Sample files in the results.
 private const val FILE_1 = "a.java"
@@ -178,7 +178,7 @@ class ScanOssTest : WordSpec({
 })
 
 private fun createSnippetChoices(provenanceUrl: String, vararg snippetChoices: SnippetChoice) =
-    listOf(SnippetChoices(Provenance(provenanceUrl), snippetChoices.asList()))
+    listOf(SnippetChoices(SnippetProvenance(provenanceUrl), snippetChoices.asList()))
 
 private fun createSnippetChoice(location: TextLocation, purl: String? = null, comment: String) =
     SnippetChoice(
