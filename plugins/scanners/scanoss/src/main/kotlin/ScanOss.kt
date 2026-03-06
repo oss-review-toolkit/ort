@@ -35,9 +35,9 @@ import java.time.Instant
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.config.SnippetChoices
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PathScannerWrapper

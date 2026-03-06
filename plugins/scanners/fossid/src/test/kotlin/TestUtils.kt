@@ -87,7 +87,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.SnippetChoices
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
 import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.plugins.scanners.fossid.events.CloneRepositoryHandler
 import org.ossreviewtoolkit.plugins.scanners.fossid.events.UploadArchiveHandler

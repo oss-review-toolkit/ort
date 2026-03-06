@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.config.SnippetChoices
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**

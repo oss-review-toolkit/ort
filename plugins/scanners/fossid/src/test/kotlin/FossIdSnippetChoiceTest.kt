@@ -62,11 +62,11 @@ import org.ossreviewtoolkit.clients.fossid.uploadFile
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.SnippetChoices
 import org.ossreviewtoolkit.model.config.snippet.Choice
 import org.ossreviewtoolkit.model.config.snippet.Given
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
 import org.ossreviewtoolkit.model.config.snippet.SnippetProvenance
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
