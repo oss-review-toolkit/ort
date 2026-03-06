@@ -368,7 +368,7 @@ class OpossumReporter(
 
                     addSignal(
                         pathSignal,
-                        rootsBelowMaxDepth.map { resolvePath(it, pathFromFinding) }.toSet()
+                        rootsBelowMaxDepth.mapTo(mutableSetOf()) { resolvePath(it, pathFromFinding) }
                     )
                 }
             }
@@ -423,7 +423,7 @@ class OpossumReporter(
                 excludeFromNotice = true
             )
 
-            addSignal(signal, paths.map { resolvePath(it) }.toSet())
+            addSignal(signal, paths.mapTo(mutableSetOf()) { resolvePath(it) })
         }
 
         private fun addPackagesThatAreRootless(analyzerResultPackages: Set<CuratedPackage>) {

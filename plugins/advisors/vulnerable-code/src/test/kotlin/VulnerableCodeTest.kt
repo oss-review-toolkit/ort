@@ -376,7 +376,7 @@ private fun TestConfiguration.inputPackagesFromAnalyzerResult(): Set<Package> =
  * [identifiers].
  */
 private fun inputPackagesFromIdentifiers(vararg identifiers: Identifier): Set<Package> =
-    identifiers.map { Package.EMPTY.copy(id = it, purl = it.toPurl()) }.toSet()
+    identifiers.mapTo(mutableSetOf()) { Package.EMPTY.copy(id = it, purl = it.toPurl()) }
 
 /**
  * Generate the JSON body of the request to query information about the packages identified by the given [purls].

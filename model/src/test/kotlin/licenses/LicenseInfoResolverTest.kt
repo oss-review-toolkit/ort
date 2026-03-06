@@ -729,9 +729,9 @@ private fun createLicenseInfo(
 )
 
 private fun Map<String, List<TextLocation>>.toFindingsSet(): Set<LicenseFinding> =
-    flatMap { (license, locations) ->
+    flatMapTo(mutableSetOf()) { (license, locations) ->
         locations.map { LicenseFinding(license, it) }
-    }.toSet()
+    }
 
 private fun containNoLicenseLocations(): Matcher<ResolvedLicenseInfo?> =
     transformingCollectionEmptyMatcher { resolvedLicenseInfo ->
