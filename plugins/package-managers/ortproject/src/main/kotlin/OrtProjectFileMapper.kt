@@ -165,7 +165,7 @@ private fun Collection<DependencyDto>.toScopes(): Set<Scope> {
     return scopeMap.mapTo(mutableSetOf()) { (scopeName, identifiers) ->
         Scope(
             name = scopeName,
-            dependencies = identifiers.map { id -> PackageReference(id = id) }.toSet()
+            dependencies = identifiers.mapTo(mutableSetOf()) { id -> PackageReference(id = id) }
         )
     }
 }
