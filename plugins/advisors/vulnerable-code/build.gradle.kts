@@ -23,14 +23,13 @@ plugins {
 }
 
 dependencies {
-    api(projects.advisor)
-    api(projects.model)
+    api(projects.plugins.advisors.advisorApi)
+
+    ksp(projects.plugins.advisors.advisorApi)
 
     implementation(projects.clients.vulnerableCodeClient)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
-
-    ksp(projects.advisor)
 
     testImplementation(libs.wiremock)
 }

@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.advisor)
     implementation(projects.analyzer)
     implementation(projects.downloader)
+    implementation(projects.plugins.advisors.advisorApi)
     implementation(projects.plugins.api)
     implementation(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
     implementation(projects.plugins.packageCurationProviders.packageCurationProviderApi)

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.advisor
+package org.ossreviewtoolkit.plugins.advisors.api
 
 import java.util.ServiceLoader
 

@@ -27,8 +27,6 @@ import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.metaeffekt.core.security.cvss.CvssVector
-
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
@@ -36,8 +34,9 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
-import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
+import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
+import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
+import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
 import org.ossreviewtoolkit.plugins.api.orEmpty
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -147,37 +146,3 @@ class Advisor(
             AdvisorRun(startTime, endTime, Environment(), config, providerIssues, results)
         }
 }
-
-fun AdvisorResult.normalizeVulnerabilityData(): AdvisorResult =
-    copy(vulnerabilities = vulnerabilities.normalizeVulnerabilityData())
-
-fun List<Vulnerability>.normalizeVulnerabilityData(): List<Vulnerability> =
-    map { vulnerability ->
-        val normalizedReferences = vulnerability.references.map { reference ->
-            reference
-                .run {
-                    // Treat "MODERATE" as an alias for "MEDIUM" independently of the scoring system.
-                    if (severity == "MODERATE") copy(severity = "MEDIUM") else this
-                }
-                .run {
-                    // Reconstruct the base score from the vector if possible.
-                    if (score == null && vector != null) {
-                        val score = CvssVector.parseVector(vector)?.baseScore?.toFloat()
-                        copy(score = score)
-                    } else {
-                        this
-                    }
-                }
-                .run {
-                    // Reconstruct the severity from the scoring system and score if possible.
-                    if (severity == null && scoringSystem != null && score != null) {
-                        val severity = VulnerabilityReference.getQualitativeRating(scoringSystem, score)?.name
-                        copy(severity = severity)
-                    } else {
-                        this
-                    }
-                }
-        }
-
-        vulnerability.copy(references = normalizedReferences)
-    }

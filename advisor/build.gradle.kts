@@ -23,13 +23,11 @@ plugins {
 }
 
 dependencies {
-    api(projects.model)
-    api(projects.plugins.api)
     api(projects.utils.commonUtils)
 
+    implementation(projects.plugins.advisors.advisorApi)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.aeSecurity)
     implementation(libs.kotlinx.coroutines)
 
     testImplementation(libs.mockk)

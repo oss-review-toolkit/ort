@@ -28,9 +28,9 @@ import io.kotest.matchers.shouldNot
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
 import org.ossreviewtoolkit.utils.test.identifierToPackage
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
