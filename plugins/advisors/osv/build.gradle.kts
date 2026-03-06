@@ -23,8 +23,9 @@ plugins {
 }
 
 dependencies {
-    api(projects.advisor)
-    api(projects.model)
+    api(projects.plugins.advisors.advisorApi)
+
+    ksp(projects.plugins.advisors.advisorApi)
 
     implementation(projects.clients.osvClient)
     implementation(projects.utils.commonUtils)
@@ -32,6 +33,4 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
-
-    ksp(projects.advisor)
 }

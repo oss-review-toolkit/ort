@@ -32,8 +32,6 @@ import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.advisor.AdviceProvider
-import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -47,6 +45,8 @@ import org.ossreviewtoolkit.model.vulnerabilities.Cvss2Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Cvss3Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
+import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
+import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages

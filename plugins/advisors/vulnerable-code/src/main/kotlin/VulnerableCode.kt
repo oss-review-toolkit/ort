@@ -30,8 +30,6 @@ import kotlinx.coroutines.ensureActive
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.advisor.AdviceProvider
-import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
 import org.ossreviewtoolkit.model.AdvisorCapability
@@ -44,6 +42,8 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
+import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
+import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages

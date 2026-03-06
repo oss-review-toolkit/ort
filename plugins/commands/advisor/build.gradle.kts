@@ -29,6 +29,7 @@ dependencies {
 
     implementation(projects.advisor)
     implementation(projects.model)
+    implementation(projects.plugins.advisors.advisorApi)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 

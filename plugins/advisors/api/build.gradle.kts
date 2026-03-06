@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ * Copyright (C) 2023 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,12 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-plugin-conventions")
+    id("ort-library-conventions")
 }
 
 dependencies {
-    api(projects.plugins.advisors.advisorApi)
+    api(projects.model)
+    api(projects.plugins.api)
 
-    ksp(projects.plugins.advisors.advisorApi)
-
-    implementation(projects.clients.ossIndexClient)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
-
-    testImplementation(libs.wiremock)
+    api(libs.aeSecurity)
 }
