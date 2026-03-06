@@ -17,10 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model.config
-
-import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
-import org.ossreviewtoolkit.model.config.snippet.SnippetProvenance
+package org.ossreviewtoolkit.model.config.snippet
 
 /**
  * A collection of snippet choices for a given provenance.

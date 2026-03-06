@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
 import org.ossreviewtoolkit.model.utils.CurationsFilter
 import org.ossreviewtoolkit.model.utils.ExcludesFilter
 import org.ossreviewtoolkit.model.utils.IncludesFilter
