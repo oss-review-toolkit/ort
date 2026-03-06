@@ -37,138 +37,136 @@ import org.ossreviewtoolkit.model.utils.toIdentifier
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.utils.toPurl
 
-internal object OrtProjectFileMapper {
-    private const val DEFAULT_PROJECT_NAME = "unknown"
-    private const val PROJECT_TYPE = "OrtProjectFile"
+private const val DEFAULT_PROJECT_NAME = "unknown"
+private const val PROJECT_TYPE = "OrtProjectFile"
 
-    internal fun extractAndMapProject(projectDto: OrtProjectFileDto, vcsInfo: VcsInfo, definitionFile: File) =
-        Project(
-            id = Identifier(
-                name = projectDto.projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
-                type = PROJECT_TYPE,
-                namespace = "",
-                version = ""
-            ),
-            vcs = vcsInfo,
-            description = projectDto.description.orEmpty(),
-            authors = projectDto.authors,
-            homepageUrl = projectDto.homepageUrl.orEmpty(),
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            declaredLicenses = projectDto.declaredLicenses,
-            scopeDependencies = projectDto.dependencies.toScopes()
-        )
+internal fun extractAndMapProject(projectDto: OrtProjectFileDto, vcsInfo: VcsInfo, definitionFile: File) =
+    Project(
+        id = Identifier(
+            name = projectDto.projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
+            type = PROJECT_TYPE,
+            namespace = "",
+            version = ""
+        ),
+        vcs = vcsInfo,
+        description = projectDto.description.orEmpty(),
+        authors = projectDto.authors,
+        homepageUrl = projectDto.homepageUrl.orEmpty(),
+        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+        declaredLicenses = projectDto.declaredLicenses,
+        scopeDependencies = projectDto.dependencies.toScopes()
+    )
 
-    internal fun extractAndMapPackages(project: OrtProjectFileDto): Pair<Set<Package>, List<Issue>> {
-        val issues = mutableListOf<Issue>()
-        val packages = mutableSetOf<Package>()
+internal fun extractAndMapPackages(project: OrtProjectFileDto): Pair<Set<Package>, List<Issue>> {
+    val issues = mutableListOf<Issue>()
+    val packages = mutableSetOf<Package>()
 
-        project.dependencies.forEach {
-            val packageWithIssues = it.toPackage()
+    project.dependencies.forEach {
+        val packageWithIssues = it.toPackage()
 
-            packageWithIssues.first?.let { pkg -> packages.add(pkg) }
-            issues.addAll(packageWithIssues.second)
-        }
-
-        return Pair(packages, issues)
+        packageWithIssues.first?.let { pkg -> packages.add(pkg) }
+        issues.addAll(packageWithIssues.second)
     }
 
-    private fun DependencyDto.toPackage(): Pair<Package?, List<Issue>> {
-        try {
-            val identifiers = getIdentifiers()
-            val pkg = Package(
-                id = identifiers.first,
-                purl = identifiers.second,
-                sourceArtifact = sourceArtifact?.toRemoteArtifact().orEmpty(),
-                vcs = vcs?.toVcsInfo().orEmpty(),
-                declaredLicenses = declaredLicenses,
-                description = description.orEmpty(),
-                homepageUrl = homepageUrl.orEmpty(),
-                binaryArtifact = RemoteArtifact.EMPTY,
-                authors = authors,
-                labels = labels,
-                isModified = isModified ?: false,
-                isMetadataOnly = isMetadataOnly ?: false
-            )
+    return Pair(packages, issues)
+}
 
-            return Pair(pkg, emptyList())
-        } catch (e: IllegalArgumentException) {
-            val issue = Issue(
-                message = e.message.orEmpty(),
-                source = "OrtProjectFile"
-            )
-            return Pair(null, listOf(issue))
-        }
-    }
-
-    private fun VcsDto.toVcsInfo(): VcsInfo =
-        VcsInfo(
-            type = VcsType.forName(type.uppercase()),
-            url = url,
-            revision = revision,
-            path = path
+private fun DependencyDto.toPackage(): Pair<Package?, List<Issue>> {
+    try {
+        val identifiers = getIdentifiers()
+        val pkg = Package(
+            id = identifiers.first,
+            purl = identifiers.second,
+            sourceArtifact = sourceArtifact?.toRemoteArtifact().orEmpty(),
+            vcs = vcs?.toVcsInfo().orEmpty(),
+            declaredLicenses = declaredLicenses,
+            description = description.orEmpty(),
+            homepageUrl = homepageUrl.orEmpty(),
+            binaryArtifact = RemoteArtifact.EMPTY,
+            authors = authors,
+            labels = labels,
+            isModified = isModified ?: false,
+            isMetadataOnly = isMetadataOnly ?: false
         )
 
-    private fun SourceArtifactDto.toRemoteArtifact(): RemoteArtifact =
-        RemoteArtifact(
-            url = url,
-            hash = Hash(hash.value.lowercase(), hash.algorithm)
+        return Pair(pkg, emptyList())
+    } catch (e: IllegalArgumentException) {
+        val issue = Issue(
+            message = e.message.orEmpty(),
+            source = "OrtProjectFile"
         )
-
-    private fun DependencyDto.getIdentifiers(): Pair<Identifier, String> {
-        validateIdentifiers()
-        val packageUrl = purl.toPackageUrl()
-
-        when {
-            id.isNullOrBlank() && packageUrl == null ->
-                throw IllegalArgumentException("There is no id or purl defined for the package.")
-
-            !id.isNullOrBlank() && packageUrl != null ->
-                return Pair(Identifier(id), packageUrl.toString())
-
-            !id.isNullOrBlank() -> {
-                val identifier = Identifier(id)
-                return Pair(identifier, identifier.toPurl())
-            }
-
-            packageUrl != null ->
-                return Pair(packageUrl.toIdentifier(), packageUrl.toString())
-
-            else ->
-                throw IllegalArgumentException(
-                    "There is something wrong in dependency id/purl declaration for '$this'."
-                )
-        }
+        return Pair(null, listOf(issue))
     }
+}
 
-    private fun DependencyDto.validateIdentifiers() {
-        if (!id.isNullOrBlank()) {
+private fun VcsDto.toVcsInfo(): VcsInfo =
+    VcsInfo(
+        type = VcsType.forName(type.uppercase()),
+        url = url,
+        revision = revision,
+        path = path
+    )
+
+private fun SourceArtifactDto.toRemoteArtifact(): RemoteArtifact =
+    RemoteArtifact(
+        url = url,
+        hash = Hash(hash.value.lowercase(), hash.algorithm)
+    )
+
+private fun DependencyDto.getIdentifiers(): Pair<Identifier, String> {
+    validateIdentifiers()
+    val packageUrl = purl.toPackageUrl()
+
+    when {
+        id.isNullOrBlank() && packageUrl == null ->
+            throw IllegalArgumentException("There is no id or purl defined for the package.")
+
+        !id.isNullOrBlank() && packageUrl != null ->
+            return Pair(Identifier(id), packageUrl.toString())
+
+        !id.isNullOrBlank() -> {
             val identifier = Identifier(id)
-            require(!identifier.type.isBlank() && !identifier.name.isBlank() && !identifier.version.isBlank()) {
-                "The id '$id' is not a valid Identifier."
-            }
+            return Pair(identifier, identifier.toPurl())
         }
 
-        require(purl.isNullOrBlank() || purl.toPackageUrl() != null) {
-            throw IllegalArgumentException("The purl '$purl' is not a valid PackageURL.")
+        packageUrl != null ->
+            return Pair(packageUrl.toIdentifier(), packageUrl.toString())
+
+        else ->
+            throw IllegalArgumentException(
+                "There is something wrong in dependency id/purl declaration for '$this'."
+            )
+    }
+}
+
+private fun DependencyDto.validateIdentifiers() {
+    if (!id.isNullOrBlank()) {
+        val identifier = Identifier(id)
+        require(!identifier.type.isBlank() && !identifier.name.isBlank() && !identifier.version.isBlank()) {
+            "The id '$id' is not a valid Identifier."
         }
     }
 
-    private fun Collection<DependencyDto>.toScopes(): Set<Scope> {
-        val scopeMap = mutableMapOf<String, MutableList<Identifier>>()
-        forEach { dependency ->
-            if (dependency.scopes?.isNotEmpty() == true) {
-                dependency.scopes.forEach { scopeName ->
-                    scopeMap.getOrPut(scopeName) { mutableListOf() }
-                        .add(dependency.getIdentifiers().first)
-                }
+    require(purl.isNullOrBlank() || purl.toPackageUrl() != null) {
+        throw IllegalArgumentException("The purl '$purl' is not a valid PackageURL.")
+    }
+}
+
+private fun Collection<DependencyDto>.toScopes(): Set<Scope> {
+    val scopeMap = mutableMapOf<String, MutableList<Identifier>>()
+    forEach { dependency ->
+        if (dependency.scopes?.isNotEmpty() == true) {
+            dependency.scopes.forEach { scopeName ->
+                scopeMap.getOrPut(scopeName) { mutableListOf() }
+                    .add(dependency.getIdentifiers().first)
             }
         }
+    }
 
-        return scopeMap.mapTo(mutableSetOf()) { (scopeName, identifiers) ->
-            Scope(
-                name = scopeName,
-                dependencies = identifiers.map { id -> PackageReference(id = id) }.toSet()
-            )
-        }
+    return scopeMap.mapTo(mutableSetOf()) { (scopeName, identifiers) ->
+        Scope(
+            name = scopeName,
+            dependencies = identifiers.map { id -> PackageReference(id = id) }.toSet()
+        )
     }
 }
