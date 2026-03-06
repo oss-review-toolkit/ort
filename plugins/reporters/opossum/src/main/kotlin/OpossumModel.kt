@@ -35,7 +35,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.utils.getPurlType
+import org.ossreviewtoolkit.model.utils.toPackageUrl
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 internal val JSON = Json {
@@ -182,14 +183,15 @@ internal data class OpossumSignalFlat(
                 preSelected: Boolean = false,
                 followUp: Boolean = false,
                 excludeFromNotice: Boolean = false
-            ): OpossumSignal =
-                OpossumSignal(
+            ): OpossumSignal {
+                val purl = id?.toPurl().toPackageUrl()
+                return OpossumSignal(
                     base = OpossumSignalBase(
                         source = OpossumSignalSource(name = source),
-                        packageType = id?.getPurlType().toString(),
-                        packageNamespace = id?.namespace,
-                        packageName = id?.name,
-                        packageVersion = id?.version,
+                        packageType = purl?.type,
+                        packageNamespace = purl?.namespace,
+                        packageName = purl?.name,
+                        packageVersion = purl?.version,
                         copyright = copyright,
                         licenseName = license?.toString(),
                         url = url,
@@ -199,6 +201,7 @@ internal data class OpossumSignalFlat(
                     followUp = OpossumFollowUp.FOLLOW_UP.takeIf { followUp },
                     excludeFromNotice = excludeFromNotice
                 )
+            }
         }
 
         data class OpossumSignalBase(
