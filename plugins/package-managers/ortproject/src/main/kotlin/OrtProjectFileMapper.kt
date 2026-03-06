@@ -64,8 +64,8 @@ internal fun extractAndMapPackages(project: OrtProjectFileDto): Pair<Set<Package
     project.dependencies.forEach {
         val packageWithIssues = it.toPackage()
 
-        packageWithIssues.first?.let { pkg -> packages.add(pkg) }
-        issues.addAll(packageWithIssues.second)
+        packageWithIssues.first?.let { pkg -> packages += pkg }
+        issues += packageWithIssues.second
     }
 
     return Pair(packages, issues)
@@ -157,8 +157,7 @@ private fun Collection<DependencyDto>.toScopes(): Set<Scope> {
     forEach { dependency ->
         if (dependency.scopes?.isNotEmpty() == true) {
             dependency.scopes.forEach { scopeName ->
-                scopeMap.getOrPut(scopeName) { mutableListOf() }
-                    .add(dependency.getIdentifiers().first)
+                scopeMap.getOrPut(scopeName) { mutableListOf() } += dependency.getIdentifiers().first
             }
         }
     }
