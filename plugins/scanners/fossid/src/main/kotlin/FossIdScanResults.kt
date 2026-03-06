@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid
 
-import com.github.packageurl.PackageURLBuilder
-
 import java.lang.invoke.MethodHandles
 
 import kotlin.collections.map
@@ -43,7 +41,6 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Snippet as OrtSnippet
@@ -313,19 +310,7 @@ private fun Set<Snippet>.mapSnippetFindingsForFile(
         }
 
         val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
-        val purl = when {
-            snippet.purl != null -> checkNotNull(snippet.purl)
-
-            snippet.artifact.isNullOrEmpty() -> ""
-
-            else -> PackageURLBuilder.aPackageURL()
-                .withType(urlToPackageType(url))
-                .withNamespace(snippet.author)
-                .withName(snippet.artifact)
-                .withVersion(snippet.version)
-                .build()
-                .canonicalize()
-        }
+        val purl = snippet.toPurl(url)
 
         val additionalSnippetData = mutableMapOf(
             FossId.SNIPPET_DATA_ID to snippet.id.toString(),
@@ -498,44 +483,6 @@ internal fun listUnmatchedSnippetChoices(
             else -> true
         }
     }.map { it.getFileName() }
-
-/**
- * Return the PURL type string as determined from the given [url], or "generic" if there is no match.
- */
-private fun urlToPackageType(url: String): String =
-    when (val provider = PackageProvider.get(url)) {
-        PackageProvider.COCOAPODS -> "cocoapods"
-
-        PackageProvider.CRATES_IO -> "cargo"
-
-        PackageProvider.DEBIAN -> "deb"
-
-        PackageProvider.GITHUB -> "github"
-
-        PackageProvider.GITLAB -> "gitlab"
-
-        PackageProvider.GOLANG -> "golang"
-
-        PackageProvider.MAVEN_CENTRAL, PackageProvider.MAVEN_GOOGLE -> "maven"
-
-        PackageProvider.NPM_JS -> "npm"
-
-        PackageProvider.NUGET -> "nuget"
-
-        PackageProvider.PACKAGIST -> "composer"
-
-        PackageProvider.PYPI -> "pypi"
-
-        PackageProvider.RUBYGEMS -> "gem"
-
-        else -> {
-            "generic".also {
-                logger.warn {
-                    "Cannot determine purl type for URL $url and provider '$provider'. Falling back to '$it'."
-                }
-            }
-        }
-    }
 
 internal fun TextLocation.prettyPrint(): String =
     if (hasLineRange) {
