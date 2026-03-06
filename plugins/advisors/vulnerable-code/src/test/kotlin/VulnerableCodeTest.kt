@@ -33,10 +33,11 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeSingleton
-import io.kotest.matchers.maps.shouldNotBeEmpty
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import java.net.URI
 
@@ -79,7 +80,7 @@ class VulnerableCodeTest : WordSpec({
 
             val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
-            result.shouldNotBeEmpty()
+            result shouldNot beEmptyMap()
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
 
             val langResult = result.getValue(idLang)

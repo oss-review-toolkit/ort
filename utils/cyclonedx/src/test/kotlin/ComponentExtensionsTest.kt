@@ -20,8 +20,9 @@
 package org.ossreviewtoolkit.utils.cyclonedx
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.cyclonedx.model.Component
@@ -188,8 +189,8 @@ class ComponentExtensionsTest : WordSpec({
             }
 
             with(component.toProject("mix.exs")) {
-                authors shouldContainExactlyInAnyOrder listOf("John Doe")
-                declaredLicenses shouldContainExactlyInAnyOrder listOf("MIT")
+                authors should containExactlyInAnyOrder("John Doe")
+                declaredLicenses should containExactlyInAnyOrder("MIT")
             }
         }
 
@@ -253,8 +254,8 @@ class ComponentExtensionsTest : WordSpec({
                 id.version shouldBe "2.9.0"
                 purl shouldBe "pkg:hex/cowboy@2.9.0"
                 description shouldBe "HTTP server"
-                authors shouldContainExactlyInAnyOrder listOf("Loic Hoguin")
-                declaredLicenses shouldContainExactlyInAnyOrder listOf("ISC")
+                authors should containExactlyInAnyOrder("Loic Hoguin")
+                declaredLicenses should containExactlyInAnyOrder("ISC")
                 homepageUrl shouldBe "https://ninenines.eu"
                 vcs.type shouldBe VcsType.GIT
                 sourceArtifact.url shouldBe "https://hex.pm/packages/cowboy/2.9.0"
@@ -271,8 +272,8 @@ class ComponentExtensionsTest : WordSpec({
                 id.name shouldBe "minimal"
                 purl shouldBe ""
                 description shouldBe ""
-                authors.shouldBeEmpty()
-                declaredLicenses.shouldBeEmpty()
+                authors should beEmpty()
+                declaredLicenses should beEmpty()
                 homepageUrl shouldBe ""
                 vcs shouldBe VcsInfo.EMPTY
                 sourceArtifact shouldBe RemoteArtifact.EMPTY
@@ -307,7 +308,7 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            component.extractLicenseInfo().first shouldContainExactlyInAnyOrder listOf("MIT")
+            component.extractLicenseInfo().first should containExactlyInAnyOrder("MIT")
         }
 
         "extract license by name when id is missing" {
@@ -317,7 +318,7 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            component.extractLicenseInfo().first shouldContainExactlyInAnyOrder listOf("Custom License")
+            component.extractLicenseInfo().first should containExactlyInAnyOrder("Custom License")
         }
 
         "prefer id over name" {
@@ -332,13 +333,13 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            component.extractLicenseInfo().first shouldContainExactlyInAnyOrder listOf("MIT")
+            component.extractLicenseInfo().first should containExactlyInAnyOrder("MIT")
         }
 
         "return empty set when no licenses" {
             val component = Component()
 
-            component.extractLicenseInfo().first.shouldBeEmpty()
+            component.extractLicenseInfo().first should beEmpty()
         }
 
         "extract single license from SPDX expression" {
@@ -348,7 +349,7 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            component.extractLicenseInfo().first shouldContainExactlyInAnyOrder listOf("MIT")
+            component.extractLicenseInfo().first should containExactlyInAnyOrder("MIT")
         }
 
         "preserve SPDX expression in declaredLicensesProcessed" {
@@ -360,7 +361,7 @@ class ComponentExtensionsTest : WordSpec({
 
             val (declaredLicenses, declaredLicensesProcessed) = component.extractLicenseInfo()
 
-            declaredLicenses shouldContainExactlyInAnyOrder listOf(
+            declaredLicenses should containExactlyInAnyOrder(
                 "Apache-2.0",
                 "BSD-3-Clause",
                 "LGPL-2.1-only"
@@ -381,7 +382,7 @@ class ComponentExtensionsTest : WordSpec({
 
             val (declaredLicenses, declaredLicensesProcessed) = component.extractLicenseInfo()
 
-            declaredLicenses shouldContainExactlyInAnyOrder listOf("MIT", "Apache-2.0")
+            declaredLicenses should containExactlyInAnyOrder("MIT", "Apache-2.0")
             // DeclaredLicenseProcessor combines licenses with AND; order may vary.
             declaredLicensesProcessed.spdxExpression?.decompose()?.map { it.toString() }?.toSet() shouldBe
                 setOf("MIT", "Apache-2.0")
@@ -397,7 +398,7 @@ class ComponentExtensionsTest : WordSpec({
                 )
             }
 
-            component.extractAuthors() shouldContainExactlyInAnyOrder listOf("Author One", "Author Two")
+            component.extractAuthors() should containExactlyInAnyOrder("Author One", "Author Two")
         }
 
         "use email when name is missing" {
@@ -407,13 +408,13 @@ class ComponentExtensionsTest : WordSpec({
                 )
             }
 
-            component.extractAuthors() shouldContainExactlyInAnyOrder listOf("author@example.com")
+            component.extractAuthors() should containExactlyInAnyOrder("author@example.com")
         }
 
         "return empty set when no author information" {
             val component = Component()
 
-            component.extractAuthors().shouldBeEmpty()
+            component.extractAuthors() should beEmpty()
         }
 
         "skip blank names" {
@@ -424,7 +425,7 @@ class ComponentExtensionsTest : WordSpec({
                 )
             }
 
-            component.extractAuthors() shouldContainExactlyInAnyOrder listOf("Valid Author")
+            component.extractAuthors() should containExactlyInAnyOrder("Valid Author")
         }
     }
 

@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -42,7 +42,7 @@ class VulnerableCodeFunTest : WordSpec({
 
             results.flatMap { it.summary.issues } should beEmpty()
             with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
-                keys shouldContainAll setOf(
+                keys should containAll(
                     "CVE-2023-49295"
                 )
 
@@ -73,7 +73,7 @@ class VulnerableCodeFunTest : WordSpec({
 
             results.flatMap { it.summary.issues } should beEmpty()
             with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
-                keys shouldContainAll setOf(
+                keys should containAll(
                     "CVE-2018-10237",
                     "CVE-2020-8908",
                     "CVE-2023-2976"
@@ -102,7 +102,7 @@ class VulnerableCodeFunTest : WordSpec({
 
             results.flatMap { it.summary.issues } should beEmpty()
             with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
-                keys shouldContainAll setOf(
+                keys should containAll(
                     "CVE-2023-42503"
                 )
 
@@ -131,7 +131,7 @@ class VulnerableCodeFunTest : WordSpec({
 
             results.flatMap { it.summary.issues } should beEmpty()
             with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
-                keys shouldContainAll setOf(
+                keys should containAll(
                     "CVE-2024-48948"
                 )
 

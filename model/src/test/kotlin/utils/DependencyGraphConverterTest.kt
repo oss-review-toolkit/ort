@@ -24,7 +24,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainOnly
+import io.kotest.matchers.collections.containOnly
 import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -72,7 +72,7 @@ class DependencyGraphConverterTest : WordSpec({
 
             val convertedResult = DependencyGraphConverter.convert(result, excludes, Includes.EMPTY)
 
-            convertedResult.projects.single().scopeNames shouldContainOnly listOf("main")
+            convertedResult.projects.single().scopeNames should containOnly("main")
             convertedResult.packages.forAll { it.id.version.drop(2).toInt() shouldBeLessThan 110 }
         }
 
@@ -86,7 +86,7 @@ class DependencyGraphConverterTest : WordSpec({
 
             val convertedResult = DependencyGraphConverter.convert(result, Excludes.EMPTY, includes)
 
-            convertedResult.projects.single().scopeNames shouldContainOnly listOf("main")
+            convertedResult.projects.single().scopeNames should containOnly("main")
             convertedResult.packages.forAll { it.id.version.drop(2).toInt() shouldBeLessThan 110 }
         }
 

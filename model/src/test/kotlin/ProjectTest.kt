@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import io.mockk.mockk
@@ -60,7 +61,7 @@ class ProjectTest : WordSpec({
                 homepageUrl = "https//www.test-project.org"
             )
 
-            project.scopes.shouldBeEmpty()
+            project.scopes should beEmpty()
         }
     }
 })
