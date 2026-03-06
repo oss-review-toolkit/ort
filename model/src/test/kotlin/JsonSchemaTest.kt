@@ -277,4 +277,62 @@ class JsonSchemaTest : StringSpec({
 
         errors shouldNot beEmpty()
     }
+
+    "Full ORT Project File validates" {
+        val projectDefinition = """
+            projectName: "Example ORT project"
+            description: "Project description"
+            homepageUrl: "https://project.example.com"
+            declaredLicenses:
+              - "Apache-2.0"
+            authors:
+              - "John Doe"
+              - "Foo Bar"
+            dependencies:
+              - purl: "pkg:maven/com.example/full@1.1.0"
+                description: "Package with fully elaborated model."
+                vcs:
+                  type: "Mercurial"
+                  url: "https://example.com/hg/full"
+                  revision: "master"
+                  path: "/"
+                sourceArtifact:
+                  url: "https://repo.example.com/m2/full-1.1.0-sources.jar"
+                  hash: 
+                    value: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+                    algorithm: "SHA-1"
+                declaredLicenses:
+                  - "Apache-2.0"
+                  - "MIT"
+                homepageUrl: "https://project.example.com/full"
+                labels:
+                  label: "value"
+                  label2: "value2"
+                authors:
+                  - "Doe John"
+                  - "Bar Foo"
+                scopes:
+                  - "main"
+                  - "some_scope"
+                isModified: false
+                isMetadataOnly: false
+              - purl: "pkg:maven/com.example/minimal@0.1.0"
+              - id: "Maven:com.example:partial:1.0.1"
+        """.trimIndent()
+
+        val errors = validate(projectDefinition, File("../integrations/schemas/ort-project-schema.json"))
+
+        errors should beEmpty()
+    }
+
+    "ORT Project File with a dependency missing both purl and id fails validation" {
+        val projectDefinition = """
+            dependencies:
+              - description: "A dependency without purl or id."
+        """.trimIndent()
+
+        val errors = validate(projectDefinition, File("../integrations/schemas/ort-project-schema.json"))
+
+        errors shouldNot beEmpty()
+    }
 })
