@@ -26,7 +26,6 @@ import java.util.jar.Manifest
 import kotlin.io.resolve
 
 import org.apache.logging.log4j.kotlin.logger
-import org.apache.maven.repository.RepositorySystem
 
 import org.eclipse.aether.artifact.Artifact
 
@@ -37,7 +36,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
  */
 internal class LocalRepositoryHelper(
     /** The root directory of the local Maven repository. */
-    private val localRepositoryRoot: File = RepositorySystem.defaultUserLocalRepository
+    private val localRepositoryRoot: File
 ) {
     companion object {
         /** The name of the root folder that stores artifacts downloaded from P2 repositories. */
