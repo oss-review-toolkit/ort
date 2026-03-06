@@ -172,7 +172,12 @@ internal fun Snippet.toPurl(url: String): String {
             }
         }
 
-        return ""
+        return PackageURLBuilder.aPackageURL().withType("generic")
+            .withNamespace(author)
+            .withName(url)
+            .withVersion(version)
+            .build()
+            .canonicalize()
     }
 
     return PackageURLBuilder.aPackageURL().withType(urlToPackageType(url))

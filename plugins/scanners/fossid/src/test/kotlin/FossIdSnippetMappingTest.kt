@@ -170,7 +170,8 @@ class FossIdSnippetMappingTest : WordSpec({
                 with(finding.snippets) {
                     this shouldHaveSize 2
                     first().purl shouldBe "pkg:maven/com/vdurmont/semver4j@3.1.0"
-                    last().purl shouldBe ""
+                    last().purl shouldBe "pkg:generic/com/vdurmont/https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2F" +
+                        "vdurmont%2Fsemver4j%2F3.1.0%2F@3.1.0"
                 }
             }
         }
