@@ -744,9 +744,9 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
             }.onFailure {
                 it.showStackTrace()
 
-                val packageVersion = packageInfo.version
                 issues += createAndLogIssue(
-                    "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: ${it.collectMessages()}"
+                    "Failed to parse $PUBSPEC_YAML for package $packageName:${packageInfo.version}: " +
+                        it.collectMessages()
                 )
             }
         }
