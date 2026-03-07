@@ -159,9 +159,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
 
         repositorySystemSession.mirrorSelector = HttpsMirrorSelector(repositorySystemSession.mirrorSelector)
 
+        val executionRequest = createMavenExecutionRequest()
         val localRepository = mavenRepositorySystem.createLocalRepository(
-            createMavenExecutionRequest(),
-            org.apache.maven.repository.RepositorySystem.defaultUserLocalRepository
+            executionRequest,
+            executionRequest.localRepositoryPath
         )
 
         val session = LegacyLocalRepositoryManager.overlay(
@@ -198,6 +199,11 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
      * Looks up an instance of the class provided from the Maven Plexus container.
      */
     private inline fun <reified T> containerLookup(hint: String = "default"): T = container.lookup(T::class.java, hint)
+
+    /**
+     * Obtain the path to the local Maven repository as configured in the current Maven environment.
+     */
+    fun localRepositoryPath(): File = createMavenExecutionRequest().localRepositoryPath
 
     /**
      * Build the Maven projects defined in the provided [pomFiles] without resolving dependencies. The result can later
