@@ -35,7 +35,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 internal val JSON = Json {
@@ -186,7 +185,7 @@ internal data class OpossumSignalFlat(
                 OpossumSignal(
                     base = OpossumSignalBase(
                         source = OpossumSignalSource(name = source),
-                        packageType = id?.getPurlType().toString(),
+                        packageType = id?.type,
                         packageNamespace = id?.namespace,
                         packageName = id?.name,
                         packageVersion = id?.version,
