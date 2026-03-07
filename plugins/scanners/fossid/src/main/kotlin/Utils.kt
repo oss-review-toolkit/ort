@@ -19,13 +19,18 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid
 
+import com.github.packageurl.PackageURLBuilder
+
 import java.lang.invoke.MethodHandles
 
 import org.apache.logging.log4j.kotlin.loggerOf
 
+import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -106,4 +111,79 @@ internal fun List<IgnoreRule>.filterLegacyRules(referenceRules: List<IgnoreRule>
     }
 
     return legacyRules to issues
+}
+
+/**
+ * Return the PURL type string as determined from the given [url], or "generic" if there is no match.
+ */
+private fun urlToPackageType(url: String): String =
+    when (val provider = PackageProvider.get(url)) {
+        PackageProvider.COCOAPODS -> "cocoapods"
+
+        PackageProvider.CRATES_IO -> "cargo"
+
+        PackageProvider.DEBIAN -> "deb"
+
+        PackageProvider.GITHUB -> "github"
+
+        PackageProvider.GITLAB -> "gitlab"
+
+        PackageProvider.GOLANG -> "golang"
+
+        PackageProvider.MAVEN_CENTRAL, PackageProvider.MAVEN_GOOGLE -> "maven"
+
+        PackageProvider.NPM_JS -> "npm"
+
+        PackageProvider.NUGET -> "nuget"
+
+        PackageProvider.PACKAGIST -> "composer"
+
+        PackageProvider.PYPI -> "pypi"
+
+        PackageProvider.RUBYGEMS -> "gem"
+
+        else -> {
+            "generic".also {
+                logger.warn {
+                    "Cannot determine purl type for URL $url and provider '$provider'. Falling back to '$it'."
+                }
+            }
+        }
+    }
+
+internal fun Snippet.toPurl(url: String): String {
+    if (purl != null) {
+        return checkNotNull(purl)
+    }
+
+    if (artifact.isNullOrEmpty()) {
+        val vcsHost = VcsHost.fromUrl(url)
+        if (vcsHost != null) {
+            val orga = vcsHost.getUserOrOrganization(url)
+            val repo = vcsHost.getProject(url)
+
+            if (orga != null && repo != null) {
+                return PackageURLBuilder.aPackageURL().withType("github")
+                    .withNamespace(orga)
+                    .withName(repo)
+                    .withVersion(version)
+                    .build()
+                    .canonicalize()
+            }
+        }
+
+        return PackageURLBuilder.aPackageURL().withType("generic")
+            .withNamespace(author)
+            .withName(url)
+            .withVersion(version)
+            .build()
+            .canonicalize()
+    }
+
+    return PackageURLBuilder.aPackageURL().withType(urlToPackageType(url))
+        .withNamespace(author)
+        .withName(artifact)
+        .withVersion(version)
+        .build()
+        .canonicalize()
 }
