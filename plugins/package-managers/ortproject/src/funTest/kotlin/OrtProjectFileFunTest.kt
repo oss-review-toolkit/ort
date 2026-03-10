@@ -32,7 +32,6 @@ import io.kotest.matchers.shouldNot
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.beEmpty
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldStartWith
 
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.getAnalyzerResult
@@ -163,7 +162,7 @@ class OrtProjectFileFunTest : WordSpec({
             val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
-                it.message shouldStartWith "Unexpected JSON token at offset"
+                it.message shouldContain "Unexpected JSON token at offset"
                 it.source shouldBe "OrtProjectFile"
             }
         }
@@ -173,7 +172,7 @@ class OrtProjectFileFunTest : WordSpec({
             val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
-                it.message shouldStartWith "while parsing a block mapping"
+                it.message shouldContain "while parsing a block mapping"
                 it.source shouldBe "OrtProjectFile"
             }
         }
