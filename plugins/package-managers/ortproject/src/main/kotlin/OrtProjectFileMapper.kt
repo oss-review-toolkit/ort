@@ -148,7 +148,7 @@ private fun DependencyDto.validateIdentifiers() {
     }
 
     require(purl.isNullOrBlank() || purl.toPackageUrl() != null) {
-        throw IllegalArgumentException("The purl '$purl' is not a valid PackageURL.")
+        "The purl '$purl' is not a valid PackageURL."
     }
 }
 
