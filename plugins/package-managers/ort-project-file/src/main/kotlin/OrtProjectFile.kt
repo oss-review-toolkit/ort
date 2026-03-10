@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
 @OrtPlugin(
-    displayName = "OrtProjectFile",
+    displayName = "ORT Project File",
     description = "A package manager that uses an ORT-specific file format as package list source.",
     factory = PackageManagerFactory::class
 )

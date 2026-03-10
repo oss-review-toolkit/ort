@@ -163,7 +163,7 @@ class OrtProjectFileFunTest : WordSpec({
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
                 it.message shouldContain "Unexpected JSON token at offset"
-                it.source shouldBe "OrtProjectFile"
+                it.source shouldBe "ORT Project File"
             }
         }
 
@@ -173,7 +173,7 @@ class OrtProjectFileFunTest : WordSpec({
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
                 it.message shouldContain "while parsing a block mapping"
-                it.source shouldBe "OrtProjectFile"
+                it.source shouldBe "ORT Project File"
             }
         }
 
@@ -183,7 +183,7 @@ class OrtProjectFileFunTest : WordSpec({
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
                 it.message shouldContain "There is no id or purl defined for the package."
-                it.source shouldBe "OrtProjectFile"
+                it.source shouldBe "ORT Project File"
             }
         }
 
