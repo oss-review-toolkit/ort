@@ -90,7 +90,7 @@ data class SpdxDocumentFileConfig(
  * packages. See https://github.com/spdx/spdx-spec/issues/439 for details.
  */
 @OrtPlugin(
-    displayName = "SpdxDocumentFile",
+    displayName = "SPDX Document File",
     description = "A package manager that uses SPDX documents as definition files.",
     factory = PackageManagerFactory::class
 )
