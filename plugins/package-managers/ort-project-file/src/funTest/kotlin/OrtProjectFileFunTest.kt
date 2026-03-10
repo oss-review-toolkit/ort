@@ -69,7 +69,7 @@ class OrtProjectFileFunTest : WordSpec({
                     type shouldNotBe VcsType.UNKNOWN
                     url shouldNot beEmpty()
                     revision shouldNot beEmpty()
-                    path shouldBe "plugins/package-managers/ortproject/src/funTest/assets/projects"
+                    path shouldBe "plugins/package-managers/ort-project-file/src/funTest/assets/projects"
                 }
 
                 with(project.id) {
@@ -105,7 +105,7 @@ class OrtProjectFileFunTest : WordSpec({
                     type shouldNotBe VcsType.UNKNOWN
                     url shouldNot beEmpty()
                     revision shouldNot beEmpty()
-                    path shouldBe "plugins/package-managers/ortproject/src/funTest/assets/projects"
+                    path shouldBe "plugins/package-managers/ort-project-file/src/funTest/assets/projects"
                 }
 
                 with(project.id) {
@@ -272,7 +272,7 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
             type shouldNotBe VcsType.UNKNOWN
             url shouldNot beEmpty()
             revision shouldNot beEmpty()
-            path shouldBe "plugins/package-managers/ortproject/src/funTest/assets/projects"
+            path shouldBe "plugins/package-managers/ort-project-file/src/funTest/assets/projects"
         }
 
         project.homepageUrl shouldBe "https://project_x.example.com"
