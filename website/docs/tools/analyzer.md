@@ -77,4 +77,4 @@ their dependencies in an ORT Project definition file.
 
 ### SPDX
 
-The [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe [projects](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml) or [packages](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).
+The [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe [projects](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx-document-file/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml) or [packages](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx-document-file/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).
