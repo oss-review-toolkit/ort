@@ -515,6 +515,24 @@ class SpdxExpressionTest : WordSpec({
             "(h OR g) AND (f OR e) OR (c OR d) AND (a OR b)".toSpdx().sorted() should
                 beString("((a OR b) AND (c OR d)) OR ((e OR f) AND (g OR h))")
         }
+
+        "correctly sort sub-expressions with the same prefixes" {
+            "(a OR d) AND (a OR b)".toSpdx().sorted() should beString("(a OR b) AND (a OR d)")
+            "(a AND b AND d) OR (a AND b AND c)".toSpdx().sorted() should beString("(a AND b AND c) OR (a AND b AND d)")
+        }
+
+        "correctly sort nested compound expressions" {
+            SpdxCompoundExpression(
+                SpdxOperator.AND,
+                SpdxCompoundExpression(SpdxOperator.AND, "GPL-3.0-or-later".toSpdx(), "bzip2-1.0.6".toSpdx()),
+                SpdxCompoundExpression(
+                    SpdxOperator.AND,
+                    SpdxCompoundExpression(SpdxOperator.AND, "MS-PL".toSpdx(), "Apache-2.0".toSpdx()),
+                    SpdxCompoundExpression(SpdxOperator.AND, "Zlib".toSpdx(), "BSD-3-Clause".toSpdx())
+                )
+            ).sorted() should
+                beString("Apache-2.0 AND BSD-3-Clause AND GPL-3.0-or-later AND MS-PL AND Zlib AND bzip2-1.0.6")
+        }
     }
 
     "equals()" should {
