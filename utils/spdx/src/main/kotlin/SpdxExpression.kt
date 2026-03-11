@@ -289,7 +289,7 @@ class SpdxCompoundExpression(
 
             expression.children.forEach { addChildren(it) }
 
-            return children.sortedBy { it.toString() }
+            return children.sortedBy { it.toString().lowercase() }
         }
 
         return checkNotNull(getSortedChildrenWithSameOperator(this).toExpression(operator))
