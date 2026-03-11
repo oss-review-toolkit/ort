@@ -7,7 +7,7 @@ project:
   declared_licenses:
   - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   declared_licenses_processed:
-    spdx_expression: "Apache-2.0 AND LicenseRef-Proprietary-ExampleInc AND curl"
+    spdx_expression: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   vcs:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
@@ -41,7 +41,7 @@ packages:
   declared_licenses:
   - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   declared_licenses_processed:
-    spdx_expression: "Apache-2.0 AND LicenseRef-Proprietary-ExampleInc AND curl"
+    spdx_expression: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   description: "Awesome library created by Example Inc."
   homepage_url: "https://example.com/products/abc"
   binary_artifact:
@@ -105,7 +105,7 @@ packages:
   declared_licenses:
   - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   declared_licenses_processed:
-    spdx_expression: "Apache-2.0 AND LicenseRef-Proprietary-ExampleInc AND curl"
+    spdx_expression: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   description: "Another awesome library created by Example Inc."
   homepage_url: "https://example.com/products/def"
   binary_artifact:

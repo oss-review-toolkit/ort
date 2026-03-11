@@ -531,7 +531,7 @@ class SpdxExpressionTest : WordSpec({
                     SpdxCompoundExpression(SpdxOperator.AND, "Zlib".toSpdx(), "BSD-3-Clause".toSpdx())
                 )
             ).sorted() should
-                beString("Apache-2.0 AND BSD-3-Clause AND GPL-3.0-or-later AND MS-PL AND Zlib AND bzip2-1.0.6")
+                beString("Apache-2.0 AND BSD-3-Clause AND bzip2-1.0.6 AND GPL-3.0-or-later AND MS-PL AND Zlib")
         }
     }
 
