@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.util.StdConverter
 
+import org.ossreviewtoolkit.utils.ort.SpdxExpressionSortedConverter
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
@@ -57,12 +58,14 @@ data class LicenseFindingCuration(
      * [detectedLicense] or if [detectedLicense] is null.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonSerialize(converter = SpdxExpressionSortedConverter::class)
     val detectedLicense: SpdxExpression? = null,
 
     /**
      * The concluded license as SPDX expression or [org.ossreviewtoolkit.utils.spdx.SpdxConstants.NONE] for no license,
      * see https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60.
      */
+    @JsonSerialize(converter = SpdxExpressionSortedConverter::class)
     val concludedLicense: SpdxExpression,
 
     /**
