@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.SpdxExpressionSortedConverter
 import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
@@ -85,6 +86,7 @@ data class Package(
      * ORT itself does not set this field, it needs to be set by the user using a [PackageCuration].
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonSerialize(converter = SpdxExpressionSortedConverter::class)
     val concludedLicense: SpdxExpression? = null,
 
     /**
