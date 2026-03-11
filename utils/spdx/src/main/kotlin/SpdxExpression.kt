@@ -525,14 +525,6 @@ class SpdxLicenseWithExceptionExpression(
     override fun equals(other: Any?) =
         when (other) {
             is SpdxLicenseWithExceptionExpression -> license == other.license && exception == other.exception
-
-            is SpdxExpression -> {
-                val decomposed = other.decompose()
-                decomposed.singleOrNull()?.let {
-                    it is SpdxLicenseWithExceptionExpression && it.license == license && it.exception == exception
-                } == true
-            }
-
             else -> false
         }
 
@@ -590,14 +582,6 @@ class SpdxLicenseIdExpression(
     override fun equals(other: Any?) =
         when (other) {
             is SpdxLicenseIdExpression -> id == other.id && orLaterVersion == other.orLaterVersion
-
-            is SpdxExpression -> {
-                val decomposed = other.decompose()
-                decomposed.singleOrNull()?.let {
-                    it is SpdxLicenseIdExpression && it.id == id && it.orLaterVersion == orLaterVersion
-                } == true
-            }
-
             else -> false
         }
 
@@ -639,12 +623,6 @@ data class SpdxLicenseReferenceExpression(
     override fun equals(other: Any?) =
         when (other) {
             is SpdxLicenseReferenceExpression -> id == other.id
-
-            is SpdxExpression -> {
-                val decomposed = other.decompose()
-                decomposed.singleOrNull()?.let { it is SpdxLicenseReferenceExpression && it.id == id } == true
-            }
-
             else -> false
         }
 
