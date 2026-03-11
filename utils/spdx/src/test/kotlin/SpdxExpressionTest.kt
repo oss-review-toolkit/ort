@@ -557,6 +557,11 @@ class SpdxExpressionTest : WordSpec({
             "a".toSpdx() shouldNotBe "a AND b".toSpdx()
             "a".toSpdx() shouldNotBe "a+".toSpdx()
         }
+
+        "compare expressions case-insensitively" {
+            "CDDL-1.1 OR GPL-2.0-only WITH Classpath-Exception-2.0".toSpdx() shouldBe
+                "Cddl-1.1 OR Gpl-2.0-only WITH Classpath-exception-2.0".toSpdx()
+        }
     }
 
     "hashCode()" should {

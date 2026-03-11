@@ -524,7 +524,10 @@ class SpdxLicenseWithExceptionExpression(
 
     override fun equals(other: Any?) =
         when (other) {
-            is SpdxLicenseWithExceptionExpression -> license == other.license && exception == other.exception
+            is SpdxLicenseWithExceptionExpression -> {
+                license == other.license && exception.equals(other.exception, ignoreCase = true)
+            }
+
             else -> false
         }
 
@@ -581,7 +584,10 @@ class SpdxLicenseIdExpression(
 
     override fun equals(other: Any?) =
         when (other) {
-            is SpdxLicenseIdExpression -> id == other.id && orLaterVersion == other.orLaterVersion
+            is SpdxLicenseIdExpression -> {
+                id.equals(other.id, ignoreCase = true) && orLaterVersion == other.orLaterVersion
+            }
+
             else -> false
         }
 
@@ -622,7 +628,7 @@ data class SpdxLicenseReferenceExpression(
 
     override fun equals(other: Any?) =
         when (other) {
-            is SpdxLicenseReferenceExpression -> id == other.id
+            is SpdxLicenseReferenceExpression -> id.equals(other.id, ignoreCase = true)
             else -> false
         }
 
