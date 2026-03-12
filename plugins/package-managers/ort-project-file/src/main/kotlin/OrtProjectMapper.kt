@@ -36,6 +36,9 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toIdentifier
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.SourceArtifact
+import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Vcs
 
 private const val DEFAULT_PROJECT_NAME = "unknown"
 private const val PROJECT_TYPE = "OrtProjectFile"
