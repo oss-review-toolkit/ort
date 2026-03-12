@@ -35,6 +35,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.utils.toPackageUrl
 
 @Serializable
 internal data class OrtProject(
@@ -60,7 +61,25 @@ internal data class OrtProject(
         val scopes: Set<String>? = null,
         val isModified: Boolean? = null,
         val isMetadataOnly: Boolean? = null
-    )
+    ) {
+        init {
+            require(listOfNotNull(id, purl).isNotEmpty()) {
+                "There is no id or purl defined for the package."
+            }
+
+            if (id != null) {
+                require(!id.type.isBlank() && !id.name.isBlank() && !id.version.isBlank()) {
+                    "The id '${id.toCoordinates()}' is not a valid Identifier."
+                }
+            }
+
+            if (purl != null) {
+                requireNotNull(purl.toPackageUrl()) {
+                    "The purl '$purl' is not a valid PackageURL."
+                }
+            }
+        }
+    }
 
     @Serializable
     data class Vcs(
