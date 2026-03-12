@@ -192,7 +192,7 @@ class OrtProjectFileFunTest : WordSpec({
             val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
-                it.message shouldContain "The id 'Maven:0.1.0' is not a valid Identifier."
+                it.message shouldContain "The id 'Maven:0.1.0::' is not a valid Identifier."
                 it.source shouldBe "ORT Project File"
             }
         }

@@ -99,16 +99,14 @@ private fun Dependency.getIdentifiers(): Pair<Identifier, String> {
     val packageUrl = purl.toPackageUrl()
 
     when {
-        id.isNullOrBlank() && packageUrl == null ->
+        id == null && packageUrl == null ->
             throw IllegalArgumentException("There is no id or purl defined for the package.")
 
-        !id.isNullOrBlank() && packageUrl != null ->
-            return Pair(Identifier(id), packageUrl.toString())
+        id != null && packageUrl != null ->
+            return Pair(id, packageUrl.toString())
 
-        !id.isNullOrBlank() -> {
-            val identifier = Identifier(id)
-            return Pair(identifier, identifier.toPurl())
-        }
+        id != null ->
+            return Pair(id, id.toPurl())
 
         packageUrl != null ->
             return Pair(packageUrl.toIdentifier(), packageUrl.toString())
@@ -121,10 +119,9 @@ private fun Dependency.getIdentifiers(): Pair<Identifier, String> {
 }
 
 private fun Dependency.validateIdentifiers() {
-    if (!id.isNullOrBlank()) {
-        val identifier = Identifier(id)
-        require(!identifier.type.isBlank() && !identifier.name.isBlank() && !identifier.version.isBlank()) {
-            "The id '$id' is not a valid Identifier."
+    if (id != null) {
+        require(!id.type.isBlank() && !id.name.isBlank() && !id.version.isBlank()) {
+            "The id '${id.toCoordinates()}' is not a valid Identifier."
         }
     }
 
