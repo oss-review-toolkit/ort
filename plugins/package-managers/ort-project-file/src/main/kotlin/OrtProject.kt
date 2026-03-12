@@ -29,40 +29,40 @@ internal data class OrtProject(
     val homepageUrl: String? = null,
     val authors: Set<String> = emptySet(),
     val dependencies: List<Dependency>
-)
+) {
+    @Serializable
+    data class Dependency(
+        val id: String? = null,
+        val purl: String? = null,
+        val description: String? = null,
+        val vcs: Vcs? = null,
+        val sourceArtifact: SourceArtifact? = null,
+        val declaredLicenses: Set<String> = emptySet(),
+        val homepageUrl: String? = null,
+        val labels: Map<String, String> = emptyMap(),
+        val authors: Set<String> = emptySet(),
+        val scopes: Set<String>? = null,
+        val isModified: Boolean? = null,
+        val isMetadataOnly: Boolean? = null
+    )
 
-@Serializable
-internal data class Dependency(
-    val id: String? = null,
-    val purl: String? = null,
-    val description: String? = null,
-    val vcs: Vcs? = null,
-    val sourceArtifact: SourceArtifact? = null,
-    val declaredLicenses: Set<String> = emptySet(),
-    val homepageUrl: String? = null,
-    val labels: Map<String, String> = emptyMap(),
-    val authors: Set<String> = emptySet(),
-    val scopes: Set<String>? = null,
-    val isModified: Boolean? = null,
-    val isMetadataOnly: Boolean? = null
-)
+    @Serializable
+    data class Vcs(
+        val type: String,
+        val url: String,
+        val revision: String,
+        val path: String = ""
+    )
 
-@Serializable
-internal data class Vcs(
-    val type: String,
-    val url: String,
-    val revision: String,
-    val path: String = ""
-)
+    @Serializable
+    data class SourceArtifact(
+        val url: String,
+        val hash: Hash
+    )
 
-@Serializable
-internal data class SourceArtifact(
-    val url: String,
-    val hash: Hash
-)
-
-@Serializable
-internal data class Hash(
-    val value: String,
-    val algorithm: String
-)
+    @Serializable
+    data class Hash(
+        val value: String,
+        val algorithm: String
+    )
+}
