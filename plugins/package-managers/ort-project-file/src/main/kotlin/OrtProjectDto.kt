@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class OrtProjectFileDto(
+internal data class OrtProjectDto(
     val projectName: String? = null,
     val declaredLicenses: Set<String> = emptySet(),
     val description: String? = null,
