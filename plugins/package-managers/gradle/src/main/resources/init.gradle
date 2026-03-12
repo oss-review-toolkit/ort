@@ -212,46 +212,67 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                 }
             }
 
-            List<OrtConfiguration> configurations = project.configurations.findResults { configuration ->
-                if (canBeResolved(configuration)) {
-                    ResolutionResult result = configuration.getIncoming().getResolutionResult()
-                    Set<ResolvedArtifact> resolvedArtifacts = []
+            List<OrtConfiguration> configurations = []
+            List<OrtRepository> repositories = []
+            Set<String> processedConfigurations = []
+            Set<String> processedRepositories = []
 
-                    try {
-                        resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration
-                                .getArtifacts()
-                    } catch (ResolveException e) {
-                        project.logger.info("Artifacts for configuration '${configuration.name}' could not be " +
-                                "resolved, therefore no information about artifact classifiers and extensions is " +
-                                "available: ${collectCauses(e)}")
+            while (true) {
+                boolean foundNewEntries = false
+
+                List<Configuration> newConfigurations = project.configurations.matching {
+                    !processedConfigurations.contains(it.name)
+                }.toList()
+
+                newConfigurations.each { configuration ->
+                    processedConfigurations.add(configuration.name)
+                    foundNewEntries = true
+
+                    if (canBeResolved(configuration)) {
+                        ResolutionResult result = configuration.getIncoming().getResolutionResult()
+                        Set<ResolvedArtifact> resolvedArtifacts = []
+
+                        try {
+                            resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration
+                                    .getArtifacts()
+                        } catch (ResolveException e) {
+                            project.logger.info("Artifacts for configuration '${configuration.name}' could not be " +
+                                    "resolved, therefore no information about artifact classifiers and extensions is " +
+                                    "available: ${collectCauses(e)}")
+                        }
+
+                        List<OrtDependency> dependencies = result.getRoot().getDependencies().findResults {
+                            fetchDependency(it, project, resolvedArtifacts, [] as Set<String>)
+                        }
+
+                        configurations.add(new OrtConfigurationImpl(configuration.name, dependencies))
+                    } else {
+                        project.logger.info("Configuration '${configuration.name}' cannot be resolved.")
                     }
+                }
 
-                    List<OrtDependency> dependencies = result.getRoot().getDependencies().findResults {
-                        fetchDependency(it, project, resolvedArtifacts, [] as Set<String>)
+                List newRepositories = project.repositories.matching {
+                    !processedRepositories.contains(it.name)
+                }.toList()
+
+                newRepositories.each {
+                    processedRepositories.add(it.name)
+                    foundNewEntries = true
+
+                    if (it instanceof DefaultMavenArtifactRepository) {
+                        repositories.add(new OrtRepositoryImpl(it.url.toString(), it.credentials?.username, it.credentials?.password))
+                    } else if (it instanceof DefaultFlatDirArtifactRepository) {
+                        warnings.add('Project uses a flat dir repository which is not supported by the analyzer. ' +
+                                "Dependencies from this repository will be ignored: ${it.dirs}".toString())
+                    } else if (it instanceof DefaultIvyArtifactRepository) {
+                        warnings.add('Project uses an Ivy repository which is not supported by the analyzer. ' +
+                                "Dependencies from this repository will be ignored: ${it.url}".toString())
+                    } else {
+                        errors.add("Unknown repository type: ${it.getClass().name}".toString())
                     }
-
-                    new OrtConfigurationImpl(configuration.name, dependencies)
-                } else {
-                    project.logger.info("Configuration '${configuration.name}' cannot be resolved.")
-                    null
                 }
-            }
 
-            List<OrtRepository> repositories = project.repositories.findResults {
-                if (it instanceof DefaultMavenArtifactRepository) {
-                    new OrtRepositoryImpl(it.url.toString(), it.credentials?.username, it.credentials?.password)
-                } else if (it instanceof DefaultFlatDirArtifactRepository) {
-                    warnings.add('Project uses a flat dir repository which is not supported by the analyzer. ' +
-                            "Dependencies from this repository will be ignored: ${it.dirs}".toString())
-                    null
-                } else if (it instanceof DefaultIvyArtifactRepository) {
-                    warnings.add('Project uses an Ivy repository which is not supported by the analyzer. ' +
-                            "Dependencies from this repository will be ignored: ${it.url}".toString())
-                    null
-                } else {
-                    errors.add("Unknown repository type: ${it.getClass().name}".toString())
-                    null
-                }
+                if (!foundNewEntries) break
             }
 
             def version = project.version.toString()

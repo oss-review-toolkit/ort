@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+def lateRepoRegistered = false
+
+configurations.configureEach { configuration ->
+    if (configuration.canBeResolved) {
+        configuration.incoming.beforeResolve {
+            if (!lateRepoRegistered) {
+                lateRepoRegistered = true
+                repositories {
+                    maven {
+                        name = 'lateAddedRepo'
+                        url = 'https://repo.maven.apache.org/maven2'
+                    }
+                }
+            }
+        }
+    }
+}
+
+logger.quiet("The current working directory is set to: " + System.properties['user.dir'])

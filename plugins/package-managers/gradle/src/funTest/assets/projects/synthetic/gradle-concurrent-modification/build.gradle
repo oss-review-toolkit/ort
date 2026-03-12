@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+def lateConfigurationRegistered = false
+
+def registerLateConfiguration = {
+    if (!lateConfigurationRegistered) {
+        lateConfigurationRegistered = true
+        def lateAdded = configurations.create('lateAdded') {
+            canBeConsumed = false
+            canBeResolved = true
+        }
+
+        dependencies.add(lateAdded.name, project(':lib'))
+    }
+}
+
+configurations.configureEach { configuration ->
+    if (configuration.canBeResolved && configuration.name != 'lateAdded') {
+        configuration.incoming.beforeResolve {
+            registerLateConfiguration()
+        }
+    }
+}
+
+logger.quiet("The current working directory is set to: " + System.properties['user.dir'])
