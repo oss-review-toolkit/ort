@@ -22,22 +22,22 @@ package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class OrtProjectDto(
+internal data class OrtProject(
     val projectName: String? = null,
     val declaredLicenses: Set<String> = emptySet(),
     val description: String? = null,
     val homepageUrl: String? = null,
     val authors: Set<String> = emptySet(),
-    val dependencies: List<DependencyDto>
+    val dependencies: List<Dependency>
 )
 
 @Serializable
-internal data class DependencyDto(
+internal data class Dependency(
     val id: String? = null,
     val purl: String? = null,
     val description: String? = null,
-    val vcs: VcsDto? = null,
-    val sourceArtifact: SourceArtifactDto? = null,
+    val vcs: Vcs? = null,
+    val sourceArtifact: SourceArtifact? = null,
     val declaredLicenses: Set<String> = emptySet(),
     val homepageUrl: String? = null,
     val labels: Map<String, String> = emptyMap(),
@@ -48,7 +48,7 @@ internal data class DependencyDto(
 )
 
 @Serializable
-internal data class VcsDto(
+internal data class Vcs(
     val type: String,
     val url: String,
     val revision: String,
@@ -56,13 +56,13 @@ internal data class VcsDto(
 )
 
 @Serializable
-internal data class SourceArtifactDto(
+internal data class SourceArtifact(
     val url: String,
-    val hash: HashDto
+    val hash: Hash
 )
 
 @Serializable
-internal data class HashDto(
+internal data class Hash(
     val value: String,
     val algorithm: String
 )

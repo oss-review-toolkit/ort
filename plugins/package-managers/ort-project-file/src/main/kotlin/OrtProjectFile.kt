@@ -64,8 +64,8 @@ class OrtProjectFile(override val descriptor: PluginDescriptor = OrtProjectFileF
     ): List<ProjectAnalyzerResult> {
         val parsedProject = try {
             when (definitionFile.extension) {
-                "json" -> Json.decodeFromString<OrtProjectDto>(definitionFile.readText())
-                "yml", "yaml" -> Yaml.default.decodeFromString<OrtProjectDto>(definitionFile.readText())
+                "json" -> Json.decodeFromString<OrtProject>(definitionFile.readText())
+                "yml", "yaml" -> Yaml.default.decodeFromString<OrtProject>(definitionFile.readText())
                 else -> error("Unknown file format for file '${definitionFile.absolutePath}'.")
             }
         } catch (e: SerializationException) {
