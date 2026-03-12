@@ -95,41 +95,10 @@ private fun SourceArtifact.toRemoteArtifact(): RemoteArtifact =
     )
 
 private fun Dependency.getIdentifiers(): Pair<Identifier, String> {
-    validateIdentifiers()
-    val packageUrl = purl.toPackageUrl()
+    val packageUrl = purl?.let { checkNotNull(it.toPackageUrl()) }
+        ?: checkNotNull(id?.toPurl().toPackageUrl())
 
-    when {
-        id == null && packageUrl == null ->
-            throw IllegalArgumentException("There is no id or purl defined for the package.")
-
-        id != null && packageUrl != null ->
-            return Pair(id, packageUrl.toString())
-
-        id != null ->
-            return Pair(id, id.toPurl())
-
-        packageUrl != null ->
-            return Pair(packageUrl.toIdentifier(), packageUrl.toString())
-
-        else ->
-            throw IllegalArgumentException(
-                "There is something wrong in dependency id/purl declaration for '$this'."
-            )
-    }
-}
-
-private fun Dependency.validateIdentifiers() {
-    if (id != null) {
-        require(!id.type.isBlank() && !id.name.isBlank() && !id.version.isBlank()) {
-            "The id '${id.toCoordinates()}' is not a valid Identifier."
-        }
-    }
-
-    if (purl != null) {
-        requireNotNull(purl.toPackageUrl()) {
-            "The purl '$purl' is not a valid PackageURL."
-        }
-    }
+    return (id ?: packageUrl.toIdentifier()) to packageUrl.toString()
 }
 
 private fun Collection<Dependency>.toScopes(): Set<Scope> {
