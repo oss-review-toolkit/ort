@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 private const val DEFAULT_PROJECT_NAME = "unknown"
 private const val PROJECT_TYPE = "OrtProjectFile"
 
-internal fun extractAndMapProject(projectDto: OrtProjectFileDto, vcsInfo: VcsInfo, definitionFile: File) =
+internal fun extractAndMapProject(projectDto: OrtProjectDto, vcsInfo: VcsInfo, definitionFile: File) =
     Project(
         id = Identifier(
             name = projectDto.projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
@@ -57,7 +57,7 @@ internal fun extractAndMapProject(projectDto: OrtProjectFileDto, vcsInfo: VcsInf
         scopeDependencies = projectDto.dependencies.toScopes()
     )
 
-internal fun extractAndMapPackages(project: OrtProjectFileDto): Pair<Set<Package>, List<Issue>> {
+internal fun extractAndMapPackages(project: OrtProjectDto): Pair<Set<Package>, List<Issue>> {
     val issues = mutableListOf<Issue>()
     val packages = mutableSetOf<Package>()
 
