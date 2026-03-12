@@ -125,8 +125,10 @@ private fun Dependency.validateIdentifiers() {
         }
     }
 
-    require(purl.isNullOrBlank() || purl.toPackageUrl() != null) {
-        "The purl '$purl' is not a valid PackageURL."
+    if (purl != null) {
+        requireNotNull(purl.toPackageUrl()) {
+            "The purl '$purl' is not a valid PackageURL."
+        }
     }
 }
 
