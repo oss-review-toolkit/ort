@@ -40,24 +40,24 @@ import org.ossreviewtoolkit.model.utils.toPurl
 private const val DEFAULT_PROJECT_NAME = "unknown"
 private const val PROJECT_TYPE = "OrtProjectFile"
 
-internal fun extractAndMapProject(projectDto: OrtProjectDto, vcsInfo: VcsInfo, definitionFile: File) =
+internal fun extractAndMapProject(ortProject: OrtProject, vcsInfo: VcsInfo, definitionFile: File) =
     Project(
         id = Identifier(
-            name = projectDto.projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
+            name = ortProject.projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
             type = PROJECT_TYPE,
             namespace = "",
             version = ""
         ),
         vcs = vcsInfo,
-        description = projectDto.description.orEmpty(),
-        authors = projectDto.authors,
-        homepageUrl = projectDto.homepageUrl.orEmpty(),
+        description = ortProject.description.orEmpty(),
+        authors = ortProject.authors,
+        homepageUrl = ortProject.homepageUrl.orEmpty(),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        declaredLicenses = projectDto.declaredLicenses,
-        scopeDependencies = projectDto.dependencies.toScopes()
+        declaredLicenses = ortProject.declaredLicenses,
+        scopeDependencies = ortProject.dependencies.toScopes()
     )
 
-internal fun extractAndMapPackages(project: OrtProjectDto): Pair<Set<Package>, List<Issue>> {
+internal fun extractAndMapPackages(project: OrtProject): Pair<Set<Package>, List<Issue>> {
     val issues = mutableListOf<Issue>()
     val packages = mutableSetOf<Package>()
 
@@ -71,7 +71,7 @@ internal fun extractAndMapPackages(project: OrtProjectDto): Pair<Set<Package>, L
     return Pair(packages, issues)
 }
 
-private fun DependencyDto.toPackage(): Pair<Package?, List<Issue>> {
+private fun Dependency.toPackage(): Pair<Package?, List<Issue>> {
     try {
         val identifiers = getIdentifiers()
         val pkg = Package(
@@ -99,7 +99,7 @@ private fun DependencyDto.toPackage(): Pair<Package?, List<Issue>> {
     }
 }
 
-private fun VcsDto.toVcsInfo(): VcsInfo =
+private fun Vcs.toVcsInfo(): VcsInfo =
     VcsInfo(
         type = VcsType.forName(type.uppercase()),
         url = url,
@@ -107,13 +107,13 @@ private fun VcsDto.toVcsInfo(): VcsInfo =
         path = path
     )
 
-private fun SourceArtifactDto.toRemoteArtifact(): RemoteArtifact =
+private fun SourceArtifact.toRemoteArtifact(): RemoteArtifact =
     RemoteArtifact(
         url = url,
         hash = Hash(hash.value.lowercase(), hash.algorithm)
     )
 
-private fun DependencyDto.getIdentifiers(): Pair<Identifier, String> {
+private fun Dependency.getIdentifiers(): Pair<Identifier, String> {
     validateIdentifiers()
     val packageUrl = purl.toPackageUrl()
 
@@ -139,7 +139,7 @@ private fun DependencyDto.getIdentifiers(): Pair<Identifier, String> {
     }
 }
 
-private fun DependencyDto.validateIdentifiers() {
+private fun Dependency.validateIdentifiers() {
     if (!id.isNullOrBlank()) {
         val identifier = Identifier(id)
         require(!identifier.type.isBlank() && !identifier.name.isBlank() && !identifier.version.isBlank()) {
@@ -152,7 +152,7 @@ private fun DependencyDto.validateIdentifiers() {
     }
 }
 
-private fun Collection<DependencyDto>.toScopes(): Set<Scope> {
+private fun Collection<Dependency>.toScopes(): Set<Scope> {
     val scopeMap = mutableMapOf<String, MutableList<Identifier>>()
     forEach { dependency ->
         if (dependency.scopes?.isNotEmpty() == true) {
