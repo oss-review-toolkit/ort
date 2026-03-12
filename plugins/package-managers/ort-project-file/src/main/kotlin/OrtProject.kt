@@ -24,9 +24,17 @@ import com.charleskorn.kaml.Yaml
 import java.io.File
 import java.io.IOException
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
+
+import org.ossreviewtoolkit.model.Identifier
 
 @Serializable
 internal data class OrtProject(
@@ -39,7 +47,8 @@ internal data class OrtProject(
 ) {
     @Serializable
     data class Dependency(
-        val id: String? = null,
+        @Serializable(with = IdentifierSerializer::class)
+        val id: Identifier? = null,
         val purl: String? = null,
         val description: String? = null,
         val vcs: Vcs? = null,
@@ -84,3 +93,16 @@ internal fun File.parseOrtProject(): OrtProject =
     }.getOrElse { cause ->
         throw IOException("Could not parse ORT project file at '$absolutePath'.", cause)
     }
+
+private object IdentifierSerializer : KSerializer<Identifier> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
+        serialName = checkNotNull(Identifier::class.qualifiedName),
+        kind = PrimitiveKind.STRING
+    )
+
+    override fun serialize(encoder: Encoder, value: Identifier) {
+        encoder.encodeString(value.toCoordinates())
+    }
+
+    override fun deserialize(decoder: Decoder) = Identifier(decoder.decodeString())
+}
