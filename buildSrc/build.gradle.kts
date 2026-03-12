@@ -28,7 +28,7 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://repo.eclipse.org/content/groups/releases")
+            maven("https://repo.eclipse.org/content/repositories/releases")
         }
 
         filter {
