@@ -159,7 +159,7 @@ private fun Collection<Dependency>.toScopes(): Set<Scope> {
     val idsForScopeName = buildMap {
         this@toScopes.forEach { dependency ->
             dependency.scopes.orEmpty().forEach { scopeName ->
-                getOrPut(scopeName) { mutableListOf() } += dependency.getIdentifiers().first
+                getOrPut(scopeName) { mutableSetOf() } += dependency.getIdentifiers().first
             }
         }
     }
