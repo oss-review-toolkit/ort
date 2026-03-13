@@ -193,7 +193,7 @@ class OrtProjectFileFunTest : WordSpec({
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
                 it.message shouldContain "The id 'Maven:0.1.0' is not a valid Identifier."
-                it.source shouldBe "OrtProjectFile"
+                it.source shouldBe "ORT Project File"
             }
         }
 
@@ -203,7 +203,7 @@ class OrtProjectFileFunTest : WordSpec({
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
                 it.message shouldContain "The purl 'pkg/maven/com.example/minimal@0.1.0' is not a valid PackageURL."
-                it.source shouldBe "OrtProjectFile"
+                it.source shouldBe "ORT Project File"
             }
         }
 
