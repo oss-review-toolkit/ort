@@ -76,10 +76,10 @@ internal fun extractAndMapPackages(project: OrtProject): Pair<Set<Package>, List
 
 private fun Dependency.toPackage(): Pair<Package?, List<Issue>> {
     try {
-        val identifiers = getIdentifiers()
+        val (id, purl) = getIdentifiers()
         val pkg = Package(
-            id = identifiers.first,
-            purl = identifiers.second,
+            id = id,
+            purl = purl,
             sourceArtifact = sourceArtifact?.toRemoteArtifact().orEmpty(),
             vcs = vcs?.toVcsInfo().orEmpty(),
             declaredLicenses = declaredLicenses,
