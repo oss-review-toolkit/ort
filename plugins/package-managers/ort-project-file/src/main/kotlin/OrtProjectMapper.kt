@@ -43,25 +43,24 @@ import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Vcs
 private const val DEFAULT_PROJECT_NAME = "unknown"
 private const val PROJECT_TYPE = "OrtProjectFile"
 
-internal fun extractAndMapProject(ortProject: OrtProject, definitionFile: File) =
+internal fun OrtProject.mapToProject(definitionFile: File) =
     Project(
         id = Identifier(
-            name = ortProject.projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
+            name = projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
             type = PROJECT_TYPE,
             namespace = "",
             version = ""
         ),
         vcs = processProjectVcs(definitionFile.parentFile),
-        description = ortProject.description.orEmpty(),
-        authors = ortProject.authors,
-        homepageUrl = ortProject.homepageUrl.orEmpty(),
+        description = description.orEmpty(),
+        authors = authors,
+        homepageUrl = homepageUrl.orEmpty(),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        declaredLicenses = ortProject.declaredLicenses,
-        scopeDependencies = ortProject.dependencies.toScopes()
+        declaredLicenses = declaredLicenses,
+        scopeDependencies = dependencies.toScopes()
     )
 
-internal fun extractAndMapPackages(ortProject: OrtProject): Set<Package> =
-    ortProject.dependencies.mapTo(mutableSetOf()) { it.toPackage() }
+internal fun OrtProject.mapToPackages(): Set<Package> = dependencies.mapTo(mutableSetOf()) { it.toPackage() }
 
 private fun Dependency.toPackage(): Package {
     val (id, purl) = getIdentifiers()
