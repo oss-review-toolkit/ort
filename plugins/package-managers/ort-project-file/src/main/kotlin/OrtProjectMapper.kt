@@ -62,11 +62,10 @@ internal fun OrtProject.mapToProject(definitionFile: File) =
 
 internal fun OrtProject.mapToPackages(): Set<Package> = dependencies.mapTo(mutableSetOf()) { it.toPackage() }
 
-private fun Dependency.toPackage(): Package {
-    val (id, purl) = getIdentifiers()
-    return Package(
-        id = id,
-        purl = purl,
+private fun Dependency.toPackage(): Package =
+    Package(
+        id = toId(),
+        purl = toPurl(),
         sourceArtifact = sourceArtifact?.toRemoteArtifact().orEmpty(),
         vcs = vcs?.toVcsInfo().orEmpty(),
         declaredLicenses = declaredLicenses,
@@ -78,7 +77,6 @@ private fun Dependency.toPackage(): Package {
         isModified = isModified ?: false,
         isMetadataOnly = isMetadataOnly ?: false
     )
-}
 
 private fun Vcs.toVcsInfo(): VcsInfo =
     VcsInfo(
@@ -94,18 +92,15 @@ private fun SourceArtifact.toRemoteArtifact(): RemoteArtifact =
         hash = Hash(hash.value.lowercase(), hash.algorithm)
     )
 
-private fun Dependency.getIdentifiers(): Pair<Identifier, String> {
-    val packageUrl = purl?.let { checkNotNull(it.toPackageUrl()) }
-        ?: checkNotNull(id?.toPurl().toPackageUrl())
+private fun Dependency.toId(): Identifier = id ?: checkNotNull(purl?.toPackageUrl()?.toIdentifier())
 
-    return (id ?: packageUrl.toIdentifier()) to packageUrl.toString()
-}
+private fun Dependency.toPurl(): String = purl ?: checkNotNull(id).toPurl()
 
 private fun Collection<Dependency>.toScopes(): Set<Scope> {
     val idsForScopeName = buildMap {
         this@toScopes.forEach { dependency ->
             dependency.scopes.orEmpty().forEach { scopeName ->
-                getOrPut(scopeName) { mutableSetOf() } += dependency.getIdentifiers().first
+                getOrPut(scopeName) { mutableSetOf() } += dependency.toId()
             }
         }
     }
