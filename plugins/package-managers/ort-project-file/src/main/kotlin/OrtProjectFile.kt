@@ -19,13 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
 
-import com.charleskorn.kaml.Yaml
-
 import java.io.File
 
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
@@ -63,11 +59,7 @@ class OrtProjectFile(override val descriptor: PluginDescriptor = OrtProjectFileF
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val parsedProject = try {
-            when (definitionFile.extension) {
-                "json" -> Json.decodeFromString<OrtProject>(definitionFile.readText())
-                "yml", "yaml" -> Yaml.default.decodeFromString<OrtProject>(definitionFile.readText())
-                else -> error("Unknown file format for file '${definitionFile.absolutePath}'.")
-            }
+            definitionFile.parseOrtProject()
         } catch (e: SerializationException) {
             val issue = createAndLogIssue(
                 "Could not parse the ORT project file at '${definitionFile.absolutePath}': ${e.message}"
