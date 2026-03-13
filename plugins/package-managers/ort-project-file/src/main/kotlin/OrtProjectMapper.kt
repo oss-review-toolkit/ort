@@ -60,11 +60,11 @@ internal fun extractAndMapProject(ortProject: OrtProject, vcsInfo: VcsInfo, defi
         scopeDependencies = ortProject.dependencies.toScopes()
     )
 
-internal fun extractAndMapPackages(project: OrtProject): Pair<Set<Package>, List<Issue>> {
+internal fun extractAndMapPackages(ortProject: OrtProject): Pair<Set<Package>, List<Issue>> {
     val issues = mutableListOf<Issue>()
     val packages = mutableSetOf<Package>()
 
-    project.dependencies.forEach {
+    ortProject.dependencies.forEach {
         val packageWithIssues = it.toPackage()
 
         packageWithIssues.first?.let { pkg -> packages += pkg }
