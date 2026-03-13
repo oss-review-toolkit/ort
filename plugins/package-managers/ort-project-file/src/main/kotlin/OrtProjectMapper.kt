@@ -156,7 +156,7 @@ private fun Dependency.validateIdentifiers() {
 }
 
 private fun Collection<Dependency>.toScopes(): Set<Scope> {
-    val scopeMap = buildMap {
+    val idsForScopeName = buildMap {
         this@toScopes.forEach { dependency ->
             dependency.scopes.orEmpty().forEach { scopeName ->
                 getOrPut(scopeName) { mutableListOf() } += dependency.getIdentifiers().first
@@ -164,10 +164,10 @@ private fun Collection<Dependency>.toScopes(): Set<Scope> {
         }
     }
 
-    return scopeMap.mapTo(mutableSetOf()) { (scopeName, identifiers) ->
+    return idsForScopeName.mapTo(mutableSetOf()) { (scopeName, ids) ->
         Scope(
             name = scopeName,
-            dependencies = identifiers.mapTo(mutableSetOf()) { id -> PackageReference(id = id) }
+            dependencies = ids.mapTo(mutableSetOf()) { id -> PackageReference(id = id) }
         )
     }
 }
