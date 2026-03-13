@@ -156,11 +156,10 @@ private fun Dependency.validateIdentifiers() {
 }
 
 private fun Collection<Dependency>.toScopes(): Set<Scope> {
-    val scopeMap = mutableMapOf<String, MutableList<Identifier>>()
-    forEach { dependency ->
-        if (dependency.scopes?.isNotEmpty() == true) {
-            dependency.scopes.forEach { scopeName ->
-                scopeMap.getOrPut(scopeName) { mutableListOf() } += dependency.getIdentifiers().first
+    val scopeMap = buildMap {
+        this@toScopes.forEach { dependency ->
+            dependency.scopes.orEmpty().forEach { scopeName ->
+                getOrPut(scopeName) { mutableListOf() } += dependency.getIdentifiers().first
             }
         }
     }
