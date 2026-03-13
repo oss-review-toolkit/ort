@@ -62,11 +62,11 @@ class OrtProjectFile(override val descriptor: PluginDescriptor = OrtProjectFileF
             definitionFile
         )
 
-        val packagesWithIssues = extractAndMapPackages(ortProject)
+        val packages = extractAndMapPackages(ortProject)
         val projectAnalyzerResult = ProjectAnalyzerResult(
             project = project,
-            packages = packagesWithIssues.first,
-            issues = packagesWithIssues.second
+            packages = packages,
+            issues = emptyList()
         )
 
         return listOf(projectAnalyzerResult)
