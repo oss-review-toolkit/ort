@@ -377,7 +377,10 @@ class DependencyGraphBuilder<D>(
         processed: Set<D>
     ): DependencyReference? {
         val transitiveDependencies = dependencyHandler.dependenciesFor(dependency).mapNotNullTo(mutableSetOf()) {
-            addDependencyToGraph(scopeName, it, transitive = true, processed)
+            if (it in processed) {
+                return@mapNotNullTo null
+            }
+            addDependencyToGraph(scopeName, it, transitive = true, processed + dependency)
         }
 
         val fragmentMapping = referenceMappings[index.fragment]
