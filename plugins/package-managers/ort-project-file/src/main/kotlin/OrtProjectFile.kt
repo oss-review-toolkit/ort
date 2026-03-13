@@ -56,12 +56,9 @@ class OrtProjectFile(override val descriptor: PluginDescriptor = OrtProjectFileF
     ): List<ProjectAnalyzerResult> {
         val ortProject = definitionFile.parseOrtProject()
 
-        val project = extractAndMapProject(ortProject, definitionFile)
-
-        val packages = extractAndMapPackages(ortProject)
         val projectAnalyzerResult = ProjectAnalyzerResult(
-            project = project,
-            packages = packages,
+            project = ortProject.mapToProject(definitionFile),
+            packages = ortProject.mapToPackages(),
             issues = emptyList()
         )
 
