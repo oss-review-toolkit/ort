@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processProjectVcs
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -42,7 +43,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Vcs
 private const val DEFAULT_PROJECT_NAME = "unknown"
 private const val PROJECT_TYPE = "OrtProjectFile"
 
-internal fun extractAndMapProject(ortProject: OrtProject, vcsInfo: VcsInfo, definitionFile: File) =
+internal fun extractAndMapProject(ortProject: OrtProject, definitionFile: File) =
     Project(
         id = Identifier(
             name = ortProject.projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
@@ -50,7 +51,7 @@ internal fun extractAndMapProject(ortProject: OrtProject, vcsInfo: VcsInfo, defi
             namespace = "",
             version = ""
         ),
-        vcs = vcsInfo,
+        vcs = processProjectVcs(definitionFile.parentFile),
         description = ortProject.description.orEmpty(),
         authors = ortProject.authors,
         homepageUrl = ortProject.homepageUrl.orEmpty(),
