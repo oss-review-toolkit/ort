@@ -281,12 +281,10 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
             map { it.name } should containExactlyInAnyOrder("main", "some_scope")
 
             find { it.name == "main" } shouldNotBeNull {
-                dependencies.shouldBeSingleton()
                 dependencies.map { dep -> dep.id.name } should containExactly("full")
             }
 
             find { it.name == "some_scope" } shouldNotBeNull {
-                dependencies.shouldBeSingleton()
                 dependencies.map { dep -> dep.id.name } should containExactly("full")
             }
         }
