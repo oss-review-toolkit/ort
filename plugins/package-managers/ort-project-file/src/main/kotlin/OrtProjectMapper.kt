@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Source
 import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Vcs
 
 private const val DEFAULT_PROJECT_NAME = "unknown"
+private const val DEFAULT_SCOPE_NAME = "unnamed"
 private const val PROJECT_TYPE = "OrtProjectFile"
 
 internal fun OrtProject.mapToProject(definitionFile: File) =
@@ -99,7 +100,10 @@ private fun Dependency.toPurl(): String = purl ?: checkNotNull(id).toPurl()
 private fun Collection<Dependency>.toScopes(): Set<Scope> {
     val idsForScopeName = buildMap {
         this@toScopes.forEach { dependency ->
-            dependency.scopes.orEmpty().forEach { scopeName ->
+            val scopeNames = dependency.scopes?.takeUnless { it.isEmpty() }
+                ?: setOf(DEFAULT_SCOPE_NAME)
+
+            scopeNames.forEach { scopeName ->
                 getOrPut(scopeName) { mutableSetOf() } += dependency.toId()
             }
         }

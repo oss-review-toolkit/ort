@@ -33,6 +33,8 @@ import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.beEmpty
 import io.kotest.matchers.string.shouldContain
 
+import kotlin.collections.find
+
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
@@ -78,7 +80,9 @@ class OrtProjectFileFunTest : WordSpec({
                 }
 
                 project.authors should beEmptyCollection()
-                project.scopeDependencies.shouldNotBeNull() should beEmptyCollection()
+                project.scopeDependencies?.find { it.name == "unnamed" } shouldNotBeNull {
+                    dependencies.map { dep -> dep.id.name } should containExactly("minimal")
+                }
 
                 packages.shouldBeSingleton {
                     it.purl shouldBe "pkg:maven/com.example/minimal@0.1.0"
@@ -114,7 +118,9 @@ class OrtProjectFileFunTest : WordSpec({
                 }
 
                 project.authors should beEmptyCollection()
-                project.scopeDependencies.shouldNotBeNull() should beEmptyCollection()
+                project.scopeDependencies?.find { it.name == "unnamed" } shouldNotBeNull {
+                    dependencies.map { dep -> dep.id.name } should containExactly("minimal")
+                }
 
                 packages.shouldBeSingleton {
                     it.purl shouldBe "pkg:maven/com.example/minimal@0.1.0"
@@ -278,7 +284,7 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
         project.homepageUrl shouldBe "https://project_x.example.com"
 
         project.scopeDependencies shouldNotBeNull {
-            map { it.name } should containExactlyInAnyOrder("main", "some_scope")
+            map { it.name } should containExactlyInAnyOrder("main", "some_scope", "unnamed")
 
             find { it.name == "main" } shouldNotBeNull {
                 dependencies.map { dep -> dep.id.name } should containExactly("full")
@@ -286,6 +292,11 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
 
             find { it.name == "some_scope" } shouldNotBeNull {
                 dependencies.map { dep -> dep.id.name } should containExactly("full")
+            }
+
+            find { it.name == "unnamed" } shouldNotBeNull {
+                dependencies.shouldBeSingleton()
+                dependencies.map { dep -> dep.id.name } should containExactly("minimal")
             }
         }
 
