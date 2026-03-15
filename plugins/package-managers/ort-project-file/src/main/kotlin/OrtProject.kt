@@ -19,7 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
 
+import com.charleskorn.kaml.Yaml
+
+import java.io.File
+import java.io.IOException
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 @Serializable
 internal data class OrtProject(
@@ -66,3 +73,14 @@ internal data class OrtProject(
         val algorithm: String
     )
 }
+
+internal fun File.parseOrtProject(): OrtProject =
+    runCatching {
+        when (extension) {
+            "json" -> Json.decodeFromString<OrtProject>(readText())
+            "yml", "yaml" -> Yaml.default.decodeFromString<OrtProject>(readText())
+            else -> error("Unknown file extension: '$extension'.")
+        }
+    }.getOrElse { cause ->
+        throw IOException("Could not parse ORT project file at '$absolutePath'.", cause)
+    }

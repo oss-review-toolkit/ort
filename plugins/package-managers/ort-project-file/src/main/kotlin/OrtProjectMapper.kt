@@ -24,7 +24,6 @@ import java.io.File
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
@@ -60,46 +59,25 @@ internal fun extractAndMapProject(ortProject: OrtProject, vcsInfo: VcsInfo, defi
         scopeDependencies = ortProject.dependencies.toScopes()
     )
 
-internal fun extractAndMapPackages(project: OrtProject): Pair<Set<Package>, List<Issue>> {
-    val issues = mutableListOf<Issue>()
-    val packages = mutableSetOf<Package>()
+internal fun extractAndMapPackages(ortProject: OrtProject): Set<Package> =
+    ortProject.dependencies.mapTo(mutableSetOf()) { it.toPackage() }
 
-    project.dependencies.forEach {
-        val packageWithIssues = it.toPackage()
-
-        packageWithIssues.first?.let { pkg -> packages += pkg }
-        issues += packageWithIssues.second
-    }
-
-    return Pair(packages, issues)
-}
-
-private fun Dependency.toPackage(): Pair<Package?, List<Issue>> {
-    try {
-        val identifiers = getIdentifiers()
-        val pkg = Package(
-            id = identifiers.first,
-            purl = identifiers.second,
-            sourceArtifact = sourceArtifact?.toRemoteArtifact().orEmpty(),
-            vcs = vcs?.toVcsInfo().orEmpty(),
-            declaredLicenses = declaredLicenses,
-            description = description.orEmpty(),
-            homepageUrl = homepageUrl.orEmpty(),
-            binaryArtifact = RemoteArtifact.EMPTY,
-            authors = authors,
-            labels = labels,
-            isModified = isModified ?: false,
-            isMetadataOnly = isMetadataOnly ?: false
-        )
-
-        return Pair(pkg, emptyList())
-    } catch (e: IllegalArgumentException) {
-        val issue = Issue(
-            message = e.message.orEmpty(),
-            source = "OrtProjectFile"
-        )
-        return Pair(null, listOf(issue))
-    }
+private fun Dependency.toPackage(): Package {
+    val (id, purl) = getIdentifiers()
+    return Package(
+        id = id,
+        purl = purl,
+        sourceArtifact = sourceArtifact?.toRemoteArtifact().orEmpty(),
+        vcs = vcs?.toVcsInfo().orEmpty(),
+        declaredLicenses = declaredLicenses,
+        description = description.orEmpty(),
+        homepageUrl = homepageUrl.orEmpty(),
+        binaryArtifact = RemoteArtifact.EMPTY,
+        authors = authors,
+        labels = labels,
+        isModified = isModified ?: false,
+        isMetadataOnly = isMetadataOnly ?: false
+    )
 }
 
 private fun Vcs.toVcsInfo(): VcsInfo =
