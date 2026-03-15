@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
 
@@ -156,6 +157,7 @@ class OrtMain : CliktCommand(ORT_NAME) {
         val ortConfig = OrtConfiguration.load(args = configArguments, file = configFile)
         currentContext.findOrSetObject { ortConfig }
         LicenseFilePatterns.configure(ortConfig.licenseFilePatterns)
+        OkHttpClientHelper.configure(ortConfig.downloader.enablePreemptiveAuthentication)
 
         EnvironmentVariableFilter.reset(
             ortConfig.deniedProcessEnvironmentVariablesSubstrings,
