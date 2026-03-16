@@ -42,10 +42,8 @@ class OrtResultBuilder {
     inner class ProjectBuilder(private val id: String) {
         private val rootIds = mutableSetOf<String>()
 
-        @OrtResultDsl
         var license = "Apache-2.0"
 
-        @OrtResultDsl
         fun pkg(id: String, setup: PkgBuilder.() -> Unit): Package {
             rootIds += id
             val pkg = this@OrtResultBuilder.PkgBuilder(id).apply(setup).build()
@@ -80,10 +78,8 @@ class OrtResultBuilder {
 
     @OrtResultDsl
     inner class PkgBuilder(private val id: String) {
-        @OrtResultDsl
         var license = "Apache-2.0"
 
-        @OrtResultDsl
         fun pkg(id: String, setup: PkgBuilder.() -> Unit): Package {
             this@OrtResultBuilder.parentChildIds.getOrPut(this@PkgBuilder.id) { mutableSetOf() } += id
             val pkg = this@OrtResultBuilder.PkgBuilder(id).apply(setup).build()
@@ -102,7 +98,6 @@ class OrtResultBuilder {
         }
     }
 
-    @OrtResultDsl
     fun project(id: String, setup: ProjectBuilder.() -> Unit): Project {
         val project = ProjectBuilder(id).apply(setup).build()
         projects += project
@@ -120,5 +115,4 @@ class OrtResultBuilder {
         )
 }
 
-@OrtResultDsl
 fun ortResult(setup: OrtResultBuilder.() -> Unit) = OrtResultBuilder().apply(setup).build()
