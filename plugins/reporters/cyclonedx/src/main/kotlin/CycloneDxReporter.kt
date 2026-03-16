@@ -106,6 +106,20 @@ data class CycloneDxReporterConfig(
     val singleBom: Boolean,
 
     /**
+     * Allows overriding the component name in the metadata of the generated report in [singleBom] mode. Per default,
+     * the name is derived from a single top-level project (if any) or falls back to the VCS URL. Using this property,
+     * an arbitrary name can be set.
+     */
+    @OrtPluginOption(defaultValue = "")
+    val singleBomComponentName: String,
+
+    /**
+     * Allows specifying the component type in the metadata of the generated report in [singleBom] mode.
+     */
+    @OrtPluginOption(defaultValue = "APPLICATION")
+    val singleBomComponentType: Component.Type,
+
+    /**
      * A comma-separated list of (case-insensitive) output formats to export to. Supported are XML and JSON.
      */
     @OrtPluginOption(
@@ -142,10 +156,16 @@ class CycloneDxReporter(
          *   set to the VCS revision.
          * - To derive the component `name`, the function tries to find a single top-level project and obtains the name
          *   from this project. If this is not possible, it uses the URL from the VCS information.
+         *
+         * If these default values are not suitable, it is possible to override some of them via the reporter [config].
          */
-        internal fun getSingleBomMetadataComponent(projects: Collection<Project>, result: OrtResult): Component =
+        internal fun getSingleBomMetadataComponent(
+            projects: Collection<Project>,
+            result: OrtResult,
+            config: CycloneDxReporterConfig
+        ): Component =
             Component().apply {
-                type = Component.Type.APPLICATION
+                type = config.singleBomComponentType
 
                 val namespaces = projects.mapTo(mutableSetOf()) { it.id.namespace }
                 val versions = projects.mapTo(mutableSetOf()) { it.id.version }
@@ -154,7 +174,8 @@ class CycloneDxReporter(
                     bomRef = "$url@$revision"
 
                     group = namespaces.singleOrNull()
-                    name = findTopLevelProject(projects)?.id?.name ?: url
+                    name = config.singleBomComponentName.takeUnless { it.isEmpty() }
+                        ?: findTopLevelProject(projects)?.id?.name ?: url
                     version = versions.singleOrNull() ?: revision
                 }
             }
@@ -202,7 +223,7 @@ class CycloneDxReporter(
                 serialNumber = "urn:uuid:${UUID.randomUUID()}"
 
                 this.metadata = metadata.apply {
-                    component = getSingleBomMetadataComponent(projects, input.ortResult)
+                    component = getSingleBomMetadataComponent(projects, input.ortResult, config)
                 }
 
                 components = mutableListOf()
