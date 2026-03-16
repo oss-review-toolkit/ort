@@ -68,7 +68,7 @@ internal data class OrtProject(
             }
 
             if (id != null) {
-                require(!id.type.isBlank() && !id.name.isBlank() && !id.version.isBlank()) {
+                require(id.type.isNotBlank() && id.name.isNotBlank() && id.version.isNotBlank()) {
                     "The id '${id.toCoordinates()}' is not a valid Identifier."
                 }
             }
