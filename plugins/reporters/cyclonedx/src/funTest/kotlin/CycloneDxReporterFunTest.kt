@@ -34,6 +34,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 import org.cyclonedx.Format
+import org.cyclonedx.model.Component
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
@@ -223,6 +224,73 @@ class CycloneDxReporterFunTest : WordSpec({
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf(Format.JSON)
+            ).generateReport(
+                ReporterInput(
+                    ortResult,
+                    licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                ),
+                outputDir
+            )
+
+            bomFileResults.shouldBeSingleton {
+                it shouldBeSuccess { bomFile ->
+                    bomFile shouldBe aFile()
+                    bomFile shouldNotBe emptyFile()
+
+                    val actualBom = bomFile.readText().patchCycloneDxResult()
+                    actualBom shouldEqualJson expectedBom
+                }
+            }
+        }
+
+        "support configuring the type of the main component" {
+            val expectedBom = readResource("/cyclonedx-reporter-expected-result-type-override.json")
+
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf(Format.JSON),
+                singleBomComponentType = Component.Type.LIBRARY
+            ).generateReport(
+                ReporterInput(
+                    ORT_RESULT_WITH_VULNERABILITIES,
+                    licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                ),
+                outputDir
+            )
+
+            bomFileResults.shouldBeSingleton {
+                it shouldBeSuccess { bomFile ->
+                    bomFile shouldBe aFile()
+                    bomFile shouldNotBe emptyFile()
+
+                    val actualBom = bomFile.readText().patchCycloneDxResult()
+                    actualBom shouldEqualJson expectedBom
+                }
+            }
+        }
+
+        "support configuring the name of the main component" {
+            val expectedBom = readResource("/cyclonedx-reporter-expected-result-name-override.json")
+            val topLevelProject = Project.EMPTY.copy(
+                id = Identifier("NPM:@ort:root-test-project:1.0"),
+                definitionFilePath = "package.json",
+                vcs = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/oss-review-toolkit/ort.git",
+                    revision = "main"
+                ),
+                vcsProcessed = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/oss-review-toolkit/ort.git",
+                    revision = "main"
+                )
+            )
+            val ortResult = createResultWithAdditionalProject(topLevelProject)
+
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf(Format.JSON),
+                singleBomComponentName = "eric"
             ).generateReport(
                 ReporterInput(
                     ortResult,
