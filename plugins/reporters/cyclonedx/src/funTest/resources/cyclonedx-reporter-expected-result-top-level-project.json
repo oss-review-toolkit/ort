@@ -17,7 +17,7 @@
     "component": {
       "type": "application",
       "bom-ref": "https://github.com/oss-review-toolkit/ort.git@main",
-      "name": "https://github.com/oss-review-toolkit/ort.git",
+      "name": "root-test-project",
       "group": "@ort",
       "version": "1.0"
     },

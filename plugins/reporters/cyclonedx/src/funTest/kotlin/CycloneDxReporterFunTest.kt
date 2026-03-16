@@ -37,6 +37,11 @@ import org.cyclonedx.Format
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
@@ -156,6 +161,86 @@ class CycloneDxReporterFunTest : WordSpec({
                 }
             }
         }
+
+        "create the expected JSON file if there are projects with different namespace and version" {
+            val expectedBom = readResource("/cyclonedx-reporter-expected-result-different-projects.json")
+            val otherProject = Project.EMPTY.copy(
+                id = Identifier("Maven:@other:foo:2.0.0"),
+                definitionFilePath = "other/foo-2.0.0/pom.xml",
+                vcs = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/oss-review-toolkit/ort.git",
+                    revision = "main"
+                ),
+                vcsProcessed = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/oss-review-toolkit/ort.git",
+                    revision = "main"
+                )
+            )
+            val ortResult = createResultWithAdditionalProject(otherProject)
+
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf(Format.JSON)
+            ).generateReport(
+                ReporterInput(
+                    ortResult,
+                    licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                ),
+                outputDir
+            )
+
+            bomFileResults.shouldBeSingleton {
+                it shouldBeSuccess { bomFile ->
+                    bomFile shouldBe aFile()
+                    bomFile shouldNotBe emptyFile()
+
+                    val actualBom = bomFile.readText().patchCycloneDxResult()
+                    actualBom shouldEqualJson expectedBom
+                }
+            }
+        }
+
+        "create the expected JSON file if there is a single top-level project" {
+            val expectedBom = readResource("/cyclonedx-reporter-expected-result-top-level-project.json")
+            val otherProject = Project.EMPTY.copy(
+                id = Identifier("NPM:@ort:root-test-project:1.0"),
+                definitionFilePath = "package.json",
+                vcs = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/oss-review-toolkit/ort.git",
+                    revision = "main"
+                ),
+                vcsProcessed = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/oss-review-toolkit/ort.git",
+                    revision = "main"
+                )
+            )
+            val ortResult = createResultWithAdditionalProject(otherProject)
+
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf(Format.JSON)
+            ).generateReport(
+                ReporterInput(
+                    ortResult,
+                    licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                ),
+                outputDir
+            )
+
+            bomFileResults.shouldBeSingleton {
+                it shouldBeSuccess { bomFile ->
+                    bomFile shouldBe aFile()
+                    bomFile shouldNotBe emptyFile()
+
+                    val actualBom = bomFile.readText().patchCycloneDxResult()
+                    actualBom shouldEqualJson expectedBom
+                }
+            }
+        }
     }
 
     "BOM generation with multi option" should {
@@ -253,4 +338,16 @@ private fun String.patchCycloneDxResult(): String =
     ).replaceFirst(
         """(version[>"](\s*:\s*")?)[\w.+-]+""".toRegex(),
         "$1deadbeef"
+    )
+
+/**
+ * Create an [OrtResult] based on the standard test data that contains the additional [project].
+ */
+private fun createResultWithAdditionalProject(project: Project): OrtResult =
+    ORT_RESULT_WITH_VULNERABILITIES.copy(
+        analyzer = ORT_RESULT_WITH_VULNERABILITIES.analyzer?.copy(
+            result = requireNotNull(ORT_RESULT_WITH_VULNERABILITIES.analyzer).result.copy(
+                projects = ORT_RESULT_WITH_VULNERABILITIES.analyzer?.result?.projects.orEmpty() + project
+            )
+        )
     )
