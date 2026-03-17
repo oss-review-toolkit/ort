@@ -295,7 +295,6 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
             }
 
             find { it.name == "unnamed" } shouldNotBeNull {
-                dependencies.shouldBeSingleton()
                 dependencies.map { dep -> dep.id.name } should containExactly("minimal")
             }
         }
