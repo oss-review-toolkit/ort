@@ -330,6 +330,28 @@ class DependencyGraphBuilderTest : WordSpec({
         }
     }
 
+    "DependencyHandler" should {
+        "handle cyclic dependency graphs when checking for equality" {
+            val depLang = createDependency("org.apache.commons", "commons-lang3", "3.20.0")
+            val depCyc = spyk(createDependency("org.cyclic", "cyclic", "77.7"))
+            val depIntermediate = createDependency(
+                "org.intermediate",
+                "intermediate",
+                "1.0.0",
+                dependencies = setOf(depLang, depCyc)
+            )
+            val depRoot = createDependency("org.foo", "foo", "1.2.0", dependencies = setOf(depIntermediate))
+
+            // This causes a cycle in the dependency graph:
+            every { depCyc.dependencies } returns setOf(depRoot)
+
+            PackageRefDependencyHandler.areDependenciesEqual(
+                dependenciesA = listOf(depRoot),
+                dependenciesB = listOf(depRoot)
+            ) shouldBe true
+        }
+    }
+
     "breakCycles()" should {
         "not break undirected cycles" {
             val edges = listOf(
