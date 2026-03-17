@@ -30,6 +30,9 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
+import io.mockk.every
+import io.mockk.spyk
+
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphEdge
 import org.ossreviewtoolkit.model.Identifier
@@ -209,6 +212,31 @@ class DependencyGraphBuilderTest : WordSpec({
             scopeDependencies(scopes, scope) should containExactly(depCyc2)
 
             graph.nodes shouldHaveSize 3
+        }
+
+        "deal with cyclic dependency graphs" {
+            val scope = "CyclicGraph"
+            val depLang = createDependency("org.apache.commons", "commons-lang3", "3.20.0")
+            val depCyc = spyk(createDependency("org.cyclic", "cyclic", "77.7"))
+            val depIntermediate = createDependency(
+                "org.intermediate",
+                "intermediate",
+                "1.0.0",
+                dependencies = setOf(depLang, depCyc)
+            )
+            val depRoot = createDependency("org.foo", "foo", "1.2.0", dependencies = setOf(depIntermediate))
+
+            // This causes a cycle in the dependency graph:
+            every { depCyc.dependencies } returns setOf(depRoot)
+
+            val graph = createGraphBuilder()
+                .addDependency(scope, depRoot)
+                .build()
+            val scopes = graph.createScopes()
+
+            scopeDependencies(scopes, scope) should containExactly(depRoot)
+
+            graph.nodes shouldHaveSize 4
         }
 
         "check for illegal references when building the graph" {

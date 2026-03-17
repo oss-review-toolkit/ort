@@ -376,18 +376,20 @@ class DependencyGraphBuilder<D>(
         transitive: Boolean,
         processed: Set<D>
     ): DependencyReference? {
-        val transitiveDependencies = dependencyHandler.dependenciesFor(dependency).mapNotNullTo(mutableSetOf()) {
-            addDependencyToGraph(scopeName, it, transitive = true, processed)
-        }
+        val nextProcessed = processed + dependency
+        val transitiveDependencies = dependencyHandler.dependenciesFor(dependency)
+            .mapNotNullTo(mutableSetOf()) { dep ->
+                dep.takeUnless { it in nextProcessed }?.let {
+                    addDependencyToGraph(scopeName, dep, transitive = true, nextProcessed + dep)
+                }
+            }
 
         val fragmentMapping = referenceMappings[index.fragment]
         if (index.root in fragmentMapping) {
             // If this point is reached, the package has already been inserted when processing its dependencies.
             // This means that there is a cyclic dependency. To handle this case correctly, the insert operation has
-            // to be started anew unless the dependency has already been encountered.
-            if (dependency in processed) return null
-
-            return addDependencyToGraph(scopeName, dependency, transitive, processed + dependency)
+            // to be started anew.
+            return addDependencyToGraph(scopeName, dependency, transitive, nextProcessed)
         }
 
         val ref = DependencyReference(
