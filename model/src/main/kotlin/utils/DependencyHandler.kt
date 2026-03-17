@@ -71,7 +71,19 @@ interface DependencyHandler<D> {
      * default, for example if specific optimizations can be done (like skipping of deep comparisons), or if stricter
      * checks are needed (like when ordering or duplicates matter).
      */
-    fun areDependenciesEqual(dependenciesA: List<D>, dependenciesB: List<D>): Boolean {
+    fun areDependenciesEqual(dependenciesA: List<D>, dependenciesB: List<D>): Boolean =
+        compareDependencyGraphs(dependenciesA, dependenciesB, emptySet(), emptySet())
+
+    /**
+     * Helper function to recursively compare two dependency graphs [dependenciesA], and [dependenciesB]. The function
+     * deals with cycles in the graphs by storing already encountered nodes in [processedA], and [processedB].
+     */
+    private fun compareDependencyGraphs(
+        dependenciesA: List<D>,
+        dependenciesB: List<D>,
+        processedA: Set<D>,
+        processedB: Set<D>
+    ): Boolean {
         if (dependenciesA === dependenciesB) return true
         if (dependenciesA.isEmpty() && dependenciesB.isEmpty()) return true
 
@@ -88,7 +100,12 @@ interface DependencyHandler<D> {
         // Do a deep comparison of transitive dependencies.
         return idToDepA.all { (id, depA) ->
             val depB = idToDepB[id] ?: return false
-            areDependenciesEqual(dependenciesFor(depA), dependenciesFor(depB))
+            (depA in processedA && depB in processedB) || compareDependencyGraphs(
+                dependenciesFor(depA),
+                dependenciesFor(depB),
+                processedA + dependenciesA,
+                processedB + dependenciesB
+            )
         }
     }
 }
