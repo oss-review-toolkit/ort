@@ -59,7 +59,7 @@ class OrtProjectFileFunTest : WordSpec({
         }
 
         "return properly resolved package list for minimal project definition using purl" {
-            val definitionFile = getAssetFile("projects/minimal-purl.ortproject.json")
+            val definitionFile = getAssetFile("projects/minimal-purl.ortproject.yml")
             val result = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
 
             with(result) {
@@ -92,7 +92,7 @@ class OrtProjectFileFunTest : WordSpec({
         }
 
         "return properly resolved package list for minimal project definition using id" {
-            val definitionFile = getAssetFile("projects/minimal-id.ortproject.json")
+            val definitionFile = getAssetFile("projects/minimal-id.ortproject.yml")
             val result = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
 
             with(result) {
@@ -184,7 +184,7 @@ class OrtProjectFileFunTest : WordSpec({
         }
 
         "return UNKNOWN when vcs info type and revision is empty" {
-            val definitionFile = getAssetFile("projects/malformed-vcs.ortproject.json")
+            val definitionFile = getAssetFile("projects/malformed-vcs.ortproject.yml")
             val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
