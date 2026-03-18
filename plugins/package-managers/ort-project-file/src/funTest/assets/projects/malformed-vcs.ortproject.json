@@ -1,9 +1,8 @@
 {
-  "projectName": "Example ORT project with malformed VCS info in package",
   "dependencies": [
     {
       "purl": "pkg:maven/com.example/full@1.1.0",
-      "description": "Package with fully elaborated model.",
+      "description": "Package with malformed VCS info.",
       "vcs": {
         "url": "https://git.example.com/full/"
       }
