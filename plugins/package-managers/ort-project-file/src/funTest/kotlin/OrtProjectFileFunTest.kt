@@ -86,12 +86,7 @@ class OrtProjectFileFunTest : WordSpec({
 
                 packages.shouldBeSingleton {
                     it.purl shouldBe "pkg:maven/com.example/minimal@0.1.0"
-                    it.id shouldBe Identifier(
-                        type = "Maven",
-                        namespace = "com.example",
-                        name = "minimal",
-                        version = "0.1.0"
-                    )
+                    it.id shouldBe Identifier("Maven:com.example:minimal:0.1.0")
                 }
             }
         }
@@ -124,12 +119,7 @@ class OrtProjectFileFunTest : WordSpec({
 
                 packages.shouldBeSingleton {
                     it.purl shouldBe "pkg:maven/com.example/minimal@0.1.0"
-                    it.id shouldBe Identifier(
-                        type = "Maven",
-                        namespace = "com.example",
-                        name = "minimal",
-                        version = "0.1.0"
-                    )
+                    it.id shouldBe Identifier("Maven:com.example:minimal:0.1.0")
                 }
             }
         }
