@@ -71,6 +71,13 @@ object OkHttpClientHelper {
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
 
     /**
+     * A flag to control whether preemptive authentication should be used for HTTP requests. If set to true, Basic
+     * Authentication headers (based on credentials provided by the Java authenticator) are added to HTTP requests
+     * before they are sent. If set to false, authentication will only occur reactively in response to status code 401.
+     */
+    var enablePreemptiveAuthentication: Boolean = false
+
+    /**
      * Build a preconfigured client that uses a cache directory inside the [ORT data directory][ortDataDirectory].
      * Proxy environment variables are by default respected, but the client can further be configured via the [block].
      */
@@ -123,6 +130,29 @@ val okHttpClient: OkHttpClient by lazy {
                     "HTTP request to ${request.url} failed with an exception: ${it.collectMessages()}"
                 }
             }.getOrThrow()
+        }
+        .apply {
+            if (OkHttpClientHelper.enablePreemptiveAuthentication) {
+                addInterceptor { chain ->
+                    val request = chain.request()
+
+                    if (request.header(AUTHORIZATION_HEADER) == null) {
+                        val credentials = requestPasswordAuthentication(request.url.toUri())
+                        if (credentials != null) {
+                            val authenticatedRequest = request.newBuilder()
+                                .header(
+                                    AUTHORIZATION_HEADER,
+                                    Credentials.basic(credentials.userName, String(credentials.password))
+                                )
+                                .build()
+
+                            return@addInterceptor chain.proceed(authenticatedRequest)
+                        }
+                    }
+
+                    chain.proceed(request)
+                }
+            }
         }
         .cache(cache)
         .connectionSpecs(specs)

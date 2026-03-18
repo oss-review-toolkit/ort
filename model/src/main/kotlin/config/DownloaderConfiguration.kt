@@ -48,7 +48,14 @@ data class DownloaderConfiguration(
      * Configuration of the considered source code origins and their priority order. This must not be empty and not
      * contain any duplicates.
      */
-    val sourceCodeOrigins: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
+    val sourceCodeOrigins: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT),
+
+    /**
+     * A flag to control whether preemptive authentication should be used for HTTP requests. If set to true, Basic
+     * Authentication headers (based on credentials provided by the Java authenticator) are added to HTTP requests
+     * before they are sent. If set to false, authentication will only occur reactively in response to status code 401.
+     */
+    val enablePreemptiveAuthentication: Boolean = false
 ) {
     init {
         sourceCodeOrigins.requireNotEmptyNoDuplicates()
