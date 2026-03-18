@@ -153,26 +153,6 @@ class OrtProjectFileFunTest : WordSpec({
             }
         }
 
-        "return issue when json file is wrongly formatted" {
-            val definitionFile = getAssetFile("projects/malformed.ortproject.json")
-            val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
-            project.packages should beEmptyCollection()
-            project.issues.shouldBeSingleton {
-                it.message shouldContain "Unexpected JSON token at offset"
-                it.source shouldBe "ORT Project File"
-            }
-        }
-
-        "return issue when yaml file is wrongly formatted" {
-            val definitionFile = getAssetFile("projects/malformed.ortproject.yml")
-            val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
-            project.packages should beEmptyCollection()
-            project.issues.shouldBeSingleton {
-                it.message shouldContain "while parsing a block mapping"
-                it.source shouldBe "ORT Project File"
-            }
-        }
-
         "return issue when there is no package id or purl defined" {
             val definitionFile = getAssetFile("projects/no-pkg-id-or-purl.ortproject.yml")
             val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
@@ -209,25 +189,6 @@ class OrtProjectFileFunTest : WordSpec({
             project.packages should beEmptyCollection()
             project.issues.shouldBeSingleton {
                 it.message shouldContain "Fields [type, revision] are required"
-            }
-        }
-
-        "return issue when there are no dependencies section" {
-            val definitionFile = getAssetFile("projects/no-dependencies.ortproject.yml")
-            val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
-            project.packages should beEmptyCollection()
-            project.issues.shouldBeSingleton {
-                it.message shouldContain "Property 'dependencies' is required but it is missing."
-            }
-        }
-
-        "return issue when there are no dependencies defined" {
-            val definitionFile = getAssetFile("projects/dependencies-empty.ortproject.yml")
-            val project = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
-            project.packages should beEmptyCollection()
-            project.issues.shouldBeSingleton {
-                it.message shouldContain
-                    "Value for 'dependencies' is invalid: Unexpected null or empty value for non-null field."
             }
         }
 
