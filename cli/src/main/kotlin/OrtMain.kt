@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
 
@@ -161,6 +162,8 @@ class OrtMain : CliktCommand(ORT_NAME) {
             ortConfig.deniedProcessEnvironmentVariablesSubstrings,
             ortConfig.allowedProcessEnvironmentVariableNames
         )
+
+        OkHttpClientHelper.enablePreemptiveAuthentication = ortConfig.downloader.enablePreemptiveAuthentication
 
         if (helpAll) {
             registeredSubcommands().forEach {
