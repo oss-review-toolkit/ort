@@ -25,6 +25,7 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
+import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -234,21 +235,13 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
 
         project.homepageUrl shouldBe "https://project_x.example.com"
 
-        project.scopeDependencies shouldNotBeNull {
-            map { it.name } should containExactlyInAnyOrder("main", "some_scope", "unnamed")
-
-            find { it.name == "main" } shouldNotBeNull {
-                dependencies.map { dep -> dep.id.name } should containExactly("full")
-            }
-
-            find { it.name == "some_scope" } shouldNotBeNull {
-                dependencies.map { dep -> dep.id.name } should containExactly("full")
-            }
-
-            find { it.name == "unnamed" } shouldNotBeNull {
-                dependencies.map { dep -> dep.id.name } should containExactly("minimal")
-            }
-        }
+        project.scopeDependencies.orEmpty().associate { scope ->
+            scope.name to scope.dependencies.mapTo(mutableSetOf()) { it.id.name }
+        } shouldContainExactly mapOf(
+            "main" to setOf("full"),
+            "some_scope" to setOf("full"),
+            "unnamed" to setOf("minimal")
+        )
 
         packages.map { it.purl } should containExactlyInAnyOrder(
             "pkg:maven/com.example/full@1.1.0",
