@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
       with:
         distribution: temurin
-        java-version: 21
+        java-version: 25
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
     - name: Build all classes
@@ -65,7 +65,7 @@ jobs:
       uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
       with:
         distribution: temurin
-        java-version: 21
+        java-version: 25
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
     - name: Install Flox
