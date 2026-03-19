@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistry
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.RemoteBazelModuleRegistryService
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 
 /**
  * A composite Bazel module registry service that aggregates multiple [BazelModuleRegistryService] instances and
@@ -68,7 +69,7 @@ internal class CompositeBazelModuleRegistryService(
 
             val packageNamesForRegistry = packageNamesForServer.mapKeys { (url, _) ->
                 LocalBazelModuleRegistryService.create(url, projectDir)
-                    ?: RemoteBazelModuleRegistryService.create(url)
+                    ?: RemoteBazelModuleRegistryService.create(url, okHttpClient)
             }
 
             return CompositeBazelModuleRegistryService(packageNamesForRegistry)
