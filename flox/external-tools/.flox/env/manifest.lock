@@ -1,31 +1,38 @@
 {
   "lockfile-version": 1,
   "manifest": {
-    "version": 1,
+    "schema-version": "1.10.0",
     "install": {
       "askalono": {
         "pkg-path": "askalono",
-        "version": "0.5.0"
+        "version": "0.5.0",
+        "outputs": "all"
       },
       "coreutils": {
-        "pkg-path": "coreutils"
+        "pkg-path": "coreutils",
+        "outputs": "all"
       },
       "findutils": {
-        "pkg-path": "findutils"
+        "pkg-path": "findutils",
+        "outputs": "all"
       },
       "gnused": {
-        "pkg-path": "gnused"
+        "pkg-path": "gnused",
+        "outputs": "all"
       },
-      "jdk21": {
-        "pkg-path": "jdk21"
+      "jdk25": {
+        "pkg-path": "jdk25",
+        "outputs": "all"
       },
       "licensee": {
         "pkg-path": "licensee",
-        "version": "9.18.0"
+        "version": "9.18.0",
+        "outputs": "all"
       },
       "scancode": {
         "pkg-path": "python314Packages.scancode-toolkit",
-        "version": "32.5.0"
+        "version": "32.5.0",
+        "outputs": "all"
       }
     },
     "vars": {
@@ -57,8 +64,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:05:45.496996Z",
       "stabilities": [
-        "staging",
-        "unstable"
+        "unstable",
+        "staging"
       ],
       "unfree": false,
       "version": "0.5.0",
@@ -87,12 +94,20 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:05:46.098477Z",
       "stabilities": [
-        "staging",
-        "unstable"
+        "unstable",
+        "staging"
       ],
       "unfree": false,
       "version": "9.9",
       "outputs_to_install": [
+        "out",
+        "out",
+        "out",
+        "out",
+        "out",
+        "out",
+        "out",
+        "out",
         "out",
         "out",
         "out",
@@ -122,8 +137,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:05:46.893708Z",
       "stabilities": [
-        "staging",
-        "unstable"
+        "unstable",
+        "staging"
       ],
       "unfree": false,
       "version": "4.10.0",
@@ -154,12 +169,15 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:05:47.951430Z",
       "stabilities": [
-        "staging",
-        "unstable"
+        "unstable",
+        "staging"
       ],
       "unfree": false,
       "version": "4.9",
       "outputs_to_install": [
+        "out",
+        "out",
+        "out",
         "out",
         "out"
       ],
@@ -172,32 +190,31 @@
       "priority": 5
     },
     {
-      "attr_path": "jdk21",
+      "attr_path": "jdk25",
       "broken": false,
-      "derivation": "/nix/store/ii3a9afh8k1j8nikv12269mvrr1i4j9b-openjdk-21.0.9+10.drv",
+      "derivation": "/nix/store/bpj61dd4pqpf0qx1igiifjix3l4pvgc7-openjdk-25.0.2+10.drv",
       "description": "Open-source Java Development Kit",
-      "install_id": "jdk21",
+      "install_id": "jdk25",
       "license": "GPL-2.0-only",
       "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
-      "name": "openjdk-21.0.9+10",
-      "pname": "jdk21",
+      "name": "openjdk-25.0.2+10",
+      "pname": "jdk25",
       "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
       "rev_count": 940249,
       "rev_date": "2026-02-04T09:32:58Z",
-      "scrape_date": "2026-02-06T06:06:07.096726Z",
+      "scrape_date": "2026-02-06T06:06:07.099284Z",
       "stabilities": [
-        "staging",
-        "unstable"
+        "unstable",
+        "staging"
       ],
       "unfree": false,
-      "version": "21.0.9+10",
+      "version": "25.0.2+10",
       "outputs_to_install": [
-        "out",
         "out"
       ],
       "outputs": {
-        "debug": "/nix/store/n262v22apasz3ng8gfhvccp43diynkn6-openjdk-21.0.9+10-debug",
-        "out": "/nix/store/yb16bzvkdimkgczlw30pkhfxnzal26ks-openjdk-21.0.9+10"
+        "debug": "/nix/store/hdgwayvw7nd6slq6hdf8hfkpvbn62d3a-openjdk-25.0.2+10-debug",
+        "out": "/nix/store/vlk9ah96wjppmc82qnd3wjlca498ml81-openjdk-25.0.2+10"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -218,8 +235,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:06:11.687132Z",
       "stabilities": [
-        "staging",
-        "unstable"
+        "unstable",
+        "staging"
       ],
       "unfree": false,
       "version": "9.18.0",
@@ -248,8 +265,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:07:34.528433Z",
       "stabilities": [
-        "staging",
-        "unstable"
+        "unstable",
+        "staging"
       ],
       "unfree": false,
       "version": "32.5.0",
@@ -267,7 +284,7 @@
   ],
   "compose": {
     "composer": {
-      "version": 1,
+      "schema-version": "1.10.0",
       "vars": {
         "FLOX_DISABLE_METRICS": "true"
       },
@@ -294,19 +311,23 @@
     "include": [
       {
         "manifest": {
-          "version": 1,
+          "schema-version": "1.10.0",
           "install": {
             "coreutils": {
-              "pkg-path": "coreutils"
+              "pkg-path": "coreutils",
+              "outputs": "all"
             },
             "findutils": {
-              "pkg-path": "findutils"
+              "pkg-path": "findutils",
+              "outputs": "all"
             },
             "gnused": {
-              "pkg-path": "gnused"
+              "pkg-path": "gnused",
+              "outputs": "all"
             },
-            "jdk21": {
-              "pkg-path": "jdk21"
+            "jdk25": {
+              "pkg-path": "jdk25",
+              "outputs": "all"
             }
           },
           "vars": {
