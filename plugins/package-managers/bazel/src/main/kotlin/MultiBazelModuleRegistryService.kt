@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistry
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.RemoteBazelModuleRegistryService
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 
 /**
  * A special implementation of [BazelModuleRegistryService] that wraps an arbitrary number of other
@@ -56,7 +57,7 @@ internal class MultiBazelModuleRegistryService(
 
             val registryServices = registryUrls.mapTo(mutableListOf()) { url ->
                 LocalBazelModuleRegistryService.create(url, projectDir)
-                    ?: RemoteBazelModuleRegistryService.create(url)
+                    ?: RemoteBazelModuleRegistryService.create(url, okHttpClient)
             }
 
             return MultiBazelModuleRegistryService(registryServices)
