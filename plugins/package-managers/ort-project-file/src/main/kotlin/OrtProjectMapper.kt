@@ -47,9 +47,9 @@ private const val PROJECT_TYPE = "OrtProjectFile"
 internal fun OrtProject.mapToProject(definitionFile: File) =
     Project(
         id = Identifier(
-            name = projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
             type = PROJECT_TYPE,
             namespace = "",
+            name = projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
             version = ""
         ),
         vcs = processProjectVcs(definitionFile.parentFile),
