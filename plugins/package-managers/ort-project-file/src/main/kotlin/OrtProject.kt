@@ -44,7 +44,7 @@ internal data class OrtProject(
     val description: String? = null,
     val homepageUrl: String? = null,
     val authors: Set<String> = emptySet(),
-    val dependencies: List<Dependency>
+    val dependencies: List<Dependency> = emptyList()
 ) {
     @Serializable
     data class Dependency(

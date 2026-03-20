@@ -95,7 +95,7 @@ declaredLicenses:
 # (optional) List of authors of the project.
 authors:
   - String Author name.
-# (mandatory) List of dependency packages for the project.
+# (optional) List of dependency packages for the project.
 dependencies: 
   - Dependency element schema (see below)
 ~~~
