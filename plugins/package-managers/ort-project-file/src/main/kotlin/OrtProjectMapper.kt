@@ -21,6 +21,9 @@ package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
+
+import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processProjectVcs
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -40,16 +43,19 @@ import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Depend
 import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.SourceArtifact
 import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Vcs
 
-private const val DEFAULT_PROJECT_NAME = "unknown"
 private const val DEFAULT_SCOPE_NAME = "unnamed"
 private const val PROJECT_TYPE = "OrtProjectFile"
 
-internal fun OrtProject.mapToProject(definitionFile: File) =
+internal fun OrtProject.mapToProject(definitionFile: File, analysisRoot: File) =
     Project(
         id = Identifier(
             type = PROJECT_TYPE,
             namespace = "",
-            name = projectName?.takeUnless { it.isBlank() } ?: DEFAULT_PROJECT_NAME,
+            name = projectName.orEmpty().ifBlank {
+                PackageManager.getFallbackProjectName(analysisRoot, definitionFile).also {
+                    logger.info { "'$definitionFile' does not define a project name, falling back to '$it'." }
+                }
+            },
             version = ""
         ),
         vcs = processProjectVcs(definitionFile.parentFile),

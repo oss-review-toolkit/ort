@@ -75,11 +75,7 @@ class OrtProjectFileFunTest : WordSpec({
                     path shouldBe "plugins/package-managers/ort-project-file/src/funTest/assets/projects"
                 }
 
-                with(project.id) {
-                    name shouldBe "unknown"
-                    type shouldBe "OrtProjectFile"
-                }
-
+                project.id shouldBe Identifier("OrtProjectFile::minimal-purl.ortproject.yml:")
                 project.authors should beEmptyCollection()
                 project.scopeDependencies?.find { it.name == "unnamed" } shouldNotBeNull {
                     dependencies.map { dep -> dep.id.name } should containExactly("minimal")
@@ -108,11 +104,7 @@ class OrtProjectFileFunTest : WordSpec({
                     path shouldBe "plugins/package-managers/ort-project-file/src/funTest/assets/projects"
                 }
 
-                with(project.id) {
-                    name shouldBe "unknown"
-                    type shouldBe "OrtProjectFile"
-                }
-
+                project.id shouldBe Identifier("OrtProjectFile::minimal-id.ortproject.yml:")
                 project.authors should beEmptyCollection()
                 project.scopeDependencies?.find { it.name == "unnamed" } shouldNotBeNull {
                     dependencies.map { dep -> dep.id.name } should containExactly("minimal")

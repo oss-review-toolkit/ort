@@ -57,7 +57,7 @@ class OrtProjectFile(override val descriptor: PluginDescriptor = OrtProjectFileF
         val ortProject = definitionFile.parseOrtProject()
 
         val projectAnalyzerResult = ProjectAnalyzerResult(
-            project = ortProject.mapToProject(definitionFile),
+            project = ortProject.mapToProject(definitionFile, analysisRoot),
             packages = ortProject.mapToPackages(),
             issues = emptyList()
         )
