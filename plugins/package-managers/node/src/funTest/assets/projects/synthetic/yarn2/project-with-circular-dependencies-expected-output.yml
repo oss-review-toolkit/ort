@@ -31,11 +31,18 @@ project:
         dependencies:
         - id: "NPM::confbox:0.1.8"
         - id: "NPM::pathe:2.0.3"
+        - id: "NPM::mlly:1.8.0"
       - id: "NPM::ufo:1.6.1"
     - id: "NPM::pkg-types:1.3.1"
       dependencies:
       - id: "NPM::confbox:0.1.8"
       - id: "NPM::pathe:2.0.3"
+      - id: "NPM::mlly:1.8.0"
+        dependencies:
+          - id: "NPM::acorn:8.15.0"
+          - id: "NPM::pathe:2.0.3"
+          - id: "NPM::pkg-types:1.3.1"
+          - id: "NPM::ufo:1.6.1"
 packages:
 - id: "NPM::acorn:8.15.0"
   purl: "pkg:npm/acorn@8.15.0"
