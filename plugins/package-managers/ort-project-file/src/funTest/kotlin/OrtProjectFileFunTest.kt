@@ -68,7 +68,7 @@ class OrtProjectFileFunTest : WordSpec({
 
                 // VCS values may be different depending on the test environment,
                 // so just check for basic validity.
-                with(project.vcs) {
+                with(project.vcsProcessed) {
                     type shouldNotBe VcsType.UNKNOWN
                     url shouldNot beEmpty()
                     revision shouldNot beEmpty()
@@ -97,7 +97,7 @@ class OrtProjectFileFunTest : WordSpec({
 
                 // VCS values may be different depending on the test environment,
                 // so just check for basic validity.
-                with(project.vcs) {
+                with(project.vcsProcessed) {
                     type shouldNotBe VcsType.UNKNOWN
                     url shouldNot beEmpty()
                     revision shouldNot beEmpty()
@@ -218,7 +218,7 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
 
         project.authors should containExactlyInAnyOrder("John Doe", "Foo Bar")
 
-        project.vcs shouldNotBeNull {
+        project.vcsProcessed shouldNotBeNull {
             type shouldNotBe VcsType.UNKNOWN
             url shouldNot beEmpty()
             revision shouldNot beEmpty()
@@ -247,9 +247,9 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
                 containExactlyInAnyOrder(setOf("Apache-2.0", "MIT"))
             }
 
-            vcs shouldNotBeNull {
+            vcsProcessed shouldNotBeNull {
                 type shouldBe VcsType.MERCURIAL
-                url shouldBe "https://git.example.com/full/"
+                url shouldBe "https://git.example.com/full"
                 revision shouldBe "master"
                 path shouldBe "/"
             }
