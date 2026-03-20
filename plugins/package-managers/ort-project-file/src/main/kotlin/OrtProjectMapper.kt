@@ -54,7 +54,8 @@ internal fun OrtProject.mapToProject(definitionFile: File, analysisRoot: File) =
             },
             version = ""
         ),
-        vcs = processProjectVcs(definitionFile.parentFile),
+        vcs = VcsInfo.EMPTY,
+        vcsProcessed = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, homepageUrl.orEmpty()),
         description = description.orEmpty(),
         authors = authors,
         homepageUrl = homepageUrl.orEmpty(),
