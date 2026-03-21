@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.logger
-
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processProjectVcs
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -52,9 +50,7 @@ internal fun OrtProject.mapToProject(definitionFile: File, analysisRoot: File) =
             type = PROJECT_TYPE,
             namespace = "",
             name = projectName.orEmpty().ifBlank {
-                PackageManager.getFallbackProjectName(analysisRoot, definitionFile).also {
-                    logger.info { "'$definitionFile' does not define a project name, falling back to '$it'." }
-                }
+                PackageManager.getFallbackProjectName(analysisRoot, definitionFile)
             },
             version = ""
         ),
