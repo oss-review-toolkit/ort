@@ -53,9 +53,7 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
         val (namespace, name) = splitNamespaceAndName(packageJson.name.orEmpty())
 
         val projectName = name.ifBlank {
-            getFallbackProjectName(analysisRoot, packageJsonFile).also {
-                logger.warn { "'$packageJsonFile' does not define a name, falling back to '$it'." }
-            }
+            getFallbackProjectName(analysisRoot, packageJsonFile)
         }
 
         val vcs = parseVcsInfo(packageJson)
