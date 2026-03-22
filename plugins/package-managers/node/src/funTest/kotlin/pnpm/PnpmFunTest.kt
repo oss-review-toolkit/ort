@@ -81,4 +81,14 @@ class PnpmFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Resolve dependencies correctly for a project with node linked set to hoisted" {
+        val definitionFile = getAssetFile("projects/synthetic/pnpm/node-linker-hoisted/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/pnpm/node-linker-hoisted-expected-output.yml")
+
+        val result = analyze(definitionFile.parentFile, packageManagers = setOf(PnpmFactory())).getAnalyzerResult()
+        expectedResultFile.writeText(result.toYaml())
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
