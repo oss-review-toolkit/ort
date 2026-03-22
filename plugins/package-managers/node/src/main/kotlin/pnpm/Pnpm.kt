@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.nextOrNull
+import org.ossreviewtoolkit.utils.common.stashFiles
 
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
@@ -111,11 +112,32 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> =
+        // Handle file creation or changes caused by executing 'pnpm config set'.
+        stashFiles(
+            definitionFile.resolveSibling(".npmrc"),
+            definitionFile.resolveSibling("pnpm-workspace.yaml"),
+            copy = true
+        ).use {
+            resolveDependenciesInternal(
+                analysisRoot,
+                definitionFile,
+                excludes,
+                includes
+            )
+        }
+
+    private fun resolveDependenciesInternal(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        includes: Includes
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         moduleInfoResolver.workingDir = workingDir
         val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes, includes) }
 
+        useIsolatedNodeLinker(workingDir)
         installDependencies(workingDir, scopes)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
@@ -137,6 +159,14 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
                 packages = emptySet()
             )
         }
+    }
+
+    private fun useIsolatedNodeLinker(workingDir: File) {
+        // Always use the 'isolated' (default) node linker, to not have to deal with multiple ways of
+        // module file organization.
+        PnpmCommand.run(
+            workingDir, "config", "set", "node-linker", "isolated", "--location", "project"
+        ).requireSuccess()
     }
 
     private fun getWorkspaceModuleDirs(workingDir: File): Set<File> {
