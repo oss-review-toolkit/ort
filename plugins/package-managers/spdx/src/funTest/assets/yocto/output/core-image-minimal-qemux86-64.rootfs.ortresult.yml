@@ -1,0 +1,3378 @@
+---
+project:
+  id: "SPDX::core-image-minimal-qemux86-64.rootfs-20251202091030:"
+  definition_file_path: "plugins/package-managers/spdx/src/funTest/assets/yocto/input/core-image-minimal-qemux86-64.rootfs.spdx.json"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  homepage_url: ""
+  scopes:
+  - name: "archive"
+    dependencies:
+    - id: "SPDX::core-image-minimal:"
+  - name: "install"
+    dependencies:
+    - id: "SPDX::base-files:3.0.14"
+    - id: "SPDX::base-passwd:3.6.3"
+    - id: "SPDX::busybox:1.36.1"
+    - id: "SPDX::busybox-hwclock:1.36.1"
+    - id: "SPDX::busybox-syslog:1.36.1"
+    - id: "SPDX::busybox-udhcpc:1.36.1"
+    - id: "SPDX::eudev:3.2.14"
+    - id: "SPDX::init-ifupdown:1.0"
+    - id: "SPDX::init-system-helpers-service:1.66"
+    - id: "SPDX::initscripts:1.0"
+    - id: "SPDX::initscripts-functions:1.0"
+    - id: "SPDX::kernel-6.6.111-yocto-standard:6.6.111+git"
+    - id: "SPDX::kernel-image-6.6.111-yocto-standard:6.6.111+git"
+    - id: "SPDX::kernel-image-bzimage-6.6.111-yocto-standard:6.6.111+git"
+    - id: "SPDX::kernel-module-uvesafb-6.6.111-yocto-standard:6.6.111+git"
+    - id: "SPDX::kmod:31"
+    - id: "SPDX::ldconfig:2.39+git"
+    - id: "SPDX::libblkid1:2.39.3"
+    - id: "SPDX::libc6:2.39+git"
+    - id: "SPDX::libcrypto3:3.2.6"
+    - id: "SPDX::libkmod2:31"
+    - id: "SPDX::liblzma5:5.4.7"
+    - id: "SPDX::libz1:1.3.1"
+    - id: "SPDX::modutils-initscripts:1.0"
+    - id: "SPDX::netbase:6.4"
+    - id: "SPDX::openssl-conf:3.2.6"
+    - id: "SPDX::openssl-ossl-module-legacy:3.2.6"
+    - id: "SPDX::packagegroup-core-boot:1.0"
+    - id: "SPDX::sysvinit:3.04"
+    - id: "SPDX::sysvinit-inittab:2.88dsf"
+    - id: "SPDX::sysvinit-pidof:3.04"
+    - id: "SPDX::ttyrun:2.31.0"
+    - id: "SPDX::update-alternatives-opkg:0.6.3"
+    - id: "SPDX::update-rc.d:0.8+git"
+    - id: "SPDX::v86d:0.1.10"
+  - name: "source"
+    dependencies:
+    - id: "SPDX::Python-3.12.12.tar.xz:"
+    - id: "SPDX::acl-2.3.2.tar.gz:"
+    - id: "SPDX::attr-2.5.1.tar.gz:"
+    - id: "SPDX::autoconf-2.72e.tar.gz:"
+    - id: "SPDX::autoconf-archive-2023.02.20.tar.xz:"
+    - id: "SPDX::automake-1.16.5.tar.gz:"
+    - id: "SPDX::base-passwd_3.6.3.tar.xz:"
+    - id: "SPDX::bash-completion-2.12.0.tar.xz:"
+    - id: "SPDX::bc-1.07.1.tar.gz:"
+    - id: "SPDX::bison-3.8.2.tar.xz:"
+    - id: "SPDX::busybox-1.36.1.tar.bz2:"
+    - id: "SPDX::bzip2-1.0.8.tar.gz:"
+    - id: "SPDX::ca-certificates_20250419.tar.xz:"
+    - id: "SPDX::cmake-3.28.3.tar.gz:"
+    - id: "SPDX::curl-8.7.1.tar.xz:"
+    - id: "SPDX::elfutils-0.191.tar.bz2:"
+    - id: "SPDX::eudev-3.2.14.tar.gz:"
+    - id: "SPDX::expat-2.6.4.tar.bz2:"
+    - id: "SPDX::flex-2.6.4.tar.gz:"
+    - id: "SPDX::gdbm-1.23.tar.gz:"
+    - id: "SPDX::gettext-0.22.5.tar.gz:"
+    - id: "SPDX::git-2.44.4.tar.gz:"
+    - id: "SPDX::git.kernel.org.pub.scm.fs.ext2.e2fsprogs.git:"
+    - id: "SPDX::git.kernel.org.pub.scm.utils.kernel.kmod.kmod.git:"
+    - id: "SPDX::git.savannah.gnu.org.git.config.git:"
+    - id: "SPDX::git.yoctoproject.org.linux-yocto.git:"
+    - id: "SPDX::git.yoctoproject.org.opkg-utils:"
+    - id: "SPDX::git.yoctoproject.org.update-rc.d:"
+    - id: "SPDX::git.yoctoproject.org.yocto-kernel-cache:"
+    - id: "SPDX::git.yoctoproject.org.yocto-kernel-tools.git:"
+    - id: "SPDX::github.com.ThomasDickey.ncurses-snapshots.git:"
+    - id: "SPDX::github.com.besser82.libxcrypt.git:"
+    - id: "SPDX::github.com.facebook.zstd.git:"
+    - id: "SPDX::github.com.ibm-s390-linux.s390-tools:"
+    - id: "SPDX::github.com.ninja-build.ninja.git:"
+    - id: "SPDX::github.com.stevegrubb.libcap-ng.git:"
+    - id: "SPDX::github.com.thkukuk.libnsl:"
+    - id: "SPDX::gitlab.freedesktop.org.pkg-config.pkg-config.git:"
+    - id: "SPDX::gmp-6.3.0.tar.bz2:"
+    - id: "SPDX::gnutls-3.8.4.tar.xz:"
+    - id: "SPDX::gperf-3.1.tar.gz:"
+    - id: "SPDX::gtk-doc-1.33.2.tar.xz:"
+    - id: "SPDX::libarchive-3.7.9.tar.gz:"
+    - id: "SPDX::libcap-2.69.tar.xz:"
+    - id: "SPDX::libedit-20230828-3.1.tar.gz:"
+    - id: "SPDX::libffi-3.4.6.tar.gz:"
+    - id: "SPDX::libgcrypt-1.10.3.tar.bz2:"
+    - id: "SPDX::libgpg-error-1.48.tar.bz2:"
+    - id: "SPDX::libidn2-2.3.7.tar.gz:"
+    - id: "SPDX::libmicrohttpd-1.0.1.tar.gz:"
+    - id: "SPDX::libtasn1-4.20.0.tar.gz:"
+    - id: "SPDX::libtirpc-1.3.4.tar.bz2:"
+    - id: "SPDX::libtool-2.4.7.tar.gz:"
+    - id: "SPDX::libunistring-1.2.tar.gz:"
+    - id: "SPDX::linux-6.6.tar.xz:"
+    - id: "SPDX::m4-1.4.19.tar.gz:"
+    - id: "SPDX::make-4.4.1.tar.gz:"
+    - id: "SPDX::mpc-1.3.1.tar.gz:"
+    - id: "SPDX::mpfr-4.2.1.tar.xz:"
+    - id: "SPDX::netbase_6.4.tar.xz:"
+    - id: "SPDX::nettle-3.9.1.tar.gz:"
+    - id: "SPDX::openssl-3.2.6.tar.gz:"
+    - id: "SPDX::pcre2-10.43.tar.bz2:"
+    - id: "SPDX::perl-5.38.4.tar.gz:"
+    - id: "SPDX::perl-cross-1.6.2.tar.gz:"
+    - id: "SPDX::popt-1.19.tar.gz:"
+    - id: "SPDX::re2c-3.1.tar.xz:"
+    - id: "SPDX::readline-8.2.tar.gz:"
+    - id: "SPDX::rsync-3.2.7.tar.gz:"
+    - id: "SPDX::salsa.debian.org.debian.init-system-helpers.git:"
+    - id: "SPDX::sourceware.org.git.binutils-gdb.git:"
+    - id: "SPDX::sourceware.org.git.bzip2-tests.git:"
+    - id: "SPDX::sourceware.org.git.glibc.git:"
+    - id: "SPDX::sqlite-autoconf-3450300.tar.gz:"
+    - id: "SPDX::sysvinit-3.04.tar.xz:"
+    - id: "SPDX::unifdef-2.12.tar.xz:"
+    - id: "SPDX::util-linux-2.39.3.tar.xz:"
+    - id: "SPDX::v86d_0.1.10.orig.tar.gz:"
+    - id: "SPDX::xz-5.4.7.tar.gz:"
+    - id: "SPDX::zlib-1.3.1.tar.gz:"
+packages:
+- id: "SPDX::Python-3.12.12.tar.xz:"
+  purl: "pkg:generic/Python-3.12.12.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "PSF-2.0"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://www.python.org/ftp/python/3.12.12/Python-3.12.12.tar.xz"
+    hash:
+      value: "fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::acl-2.3.2.tar.gz:"
+  purl: "pkg:generic/acl-2.3.2.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://download.savannah.gnu.org/releases/acl/acl-2.3.2.tar.gz"
+    hash:
+      value: "5f2bdbad629707aa7d85c623f994aa8a1d2dec55a73de5205bac0bf6058a2f7c"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::attr-2.5.1.tar.gz:"
+  purl: "pkg:generic/attr-2.5.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://download.savannah.gnu.org/releases/attr/attr-2.5.1.tar.gz"
+    hash:
+      value: "bae1c6949b258a0d68001367ce0c741cebdacdd3b62965d17e5eb23cd78adaf8"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::autoconf-2.72e.tar.gz:"
+  purl: "pkg:generic/autoconf-2.72e.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://alpha.gnu.org/gnu/autoconf/autoconf-2.72e.tar.gz"
+    hash:
+      value: "f3478d3b597d51f5d61596fb2f6f6aba49cdd974b4b05ff0bac57f56b5cfdb39"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::autoconf-archive-2023.02.20.tar.xz:"
+  purl: "pkg:generic/autoconf-archive-2023.02.20.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-with-autoconf-exception"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/autoconf-archive/autoconf-archive-2023.02.20.tar.xz"
+    hash:
+      value: "71d4048479ae28f1f5794619c3d72df9c01df49b1c628ef85fde37596dc31a33"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::automake-1.16.5.tar.gz:"
+  purl: "pkg:generic/automake-1.16.5.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/automake/automake-1.16.5.tar.gz"
+    hash:
+      value: "07bd24ad08a64bc17250ce09ec56e921d6343903943e99ccf63bbf0705e34605"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::base-files:3.0.14"
+  purl: "pkg:generic/base-files@3.0.14"
+  cpe: "cpe:2.3:*:*:base-files:3.0.14:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "The base-files package creates the basic system directory structure\
+    \ and provides a small set of key configuration files for the system."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::base-passwd:3.6.3"
+  purl: "pkg:generic/base-passwd@3.6.3"
+  cpe: "cpe:2.3:*:*:base-passwd:3.6.3:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "The master copies of the user database files (/etc/passwd and /etc/group).\
+    \  The update-passwd tool is also provided to keep the system databases synchronized\
+    \ with these master files."
+  homepage_url: "https://launchpad.net/base-passwd"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::base-passwd_3.6.3.tar.xz:"
+  purl: "pkg:generic/base-passwd_3.6.3.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://launchpad.net/debian/+archive/primary/+files/base-passwd_3.6.3.tar.xz"
+    hash:
+      value: "83575327d8318a419caf2d543341215c046044073d1afec2acc0ac4d8095ff39"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::bash-completion-2.12.0.tar.xz:"
+  purl: "pkg:generic/bash-completion-2.12.0.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/scop/bash-completion/releases/download/2.12.0/bash-completion-2.12.0.tar.xz"
+    hash:
+      value: "3eb05b1783c339ef59ed576afb0f678fa4ef49a6de8a696397df3148f8345af9"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::bc-1.07.1.tar.gz:"
+  purl: "pkg:generic/bc-1.07.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/bc/bc-1.07.1.tar.gz"
+    hash:
+      value: "62adfca89b0a1c0164c2cdca59ca210c1d44c3ffc46daf9931cf4942664cb02a"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::bison-3.8.2.tar.xz:"
+  purl: "pkg:generic/bison-3.8.2.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/bison/bison-3.8.2.tar.xz"
+    hash:
+      value: "9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::busybox:1.36.1"
+  purl: "pkg:generic/busybox@1.36.1"
+  cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  description: "BusyBox combines tiny versions of many common UNIX utilities into\
+    \ a single small executable. It provides minimalist replacements for most of the\
+    \ utilities you usually find in GNU fileutils, shellutils, etc. The utilities\
+    \ in BusyBox generally have fewer options than their full-featured GNU cousins;\
+    \ however, the options that are included provide the expected functionality and\
+    \ behave very much like their GNU counterparts. BusyBox provides a fairly complete\
+    \ POSIX environment for any small or embedded system."
+  homepage_url: "https://www.busybox.net"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::busybox-1.36.1.tar.bz2:"
+  purl: "pkg:generic/busybox-1.36.1.tar.bz2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://busybox.net/downloads/busybox-1.36.1.tar.bz2"
+    hash:
+      value: "b8cc24c9574d809e7279c3be349795c5d5ceb6fdf19ca709f80cde50e47de314"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::busybox-hwclock:1.36.1"
+  purl: "pkg:generic/busybox-hwclock@1.36.1"
+  cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  description: "BusyBox combines tiny versions of many common UNIX utilities into\
+    \ a single small executable. It provides minimalist replacements for most of the\
+    \ utilities you usually find in GNU fileutils, shellutils, etc. The utilities\
+    \ in BusyBox generally have fewer options than their full-featured GNU cousins;\
+    \ however, the options that are included provide the expected functionality and\
+    \ behave very much like their GNU counterparts. BusyBox provides a fairly complete\
+    \ POSIX environment for any small or embedded system."
+  homepage_url: "https://www.busybox.net"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::busybox-syslog:1.36.1"
+  purl: "pkg:generic/busybox-syslog@1.36.1"
+  cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  description: "BusyBox combines tiny versions of many common UNIX utilities into\
+    \ a single small executable. It provides minimalist replacements for most of the\
+    \ utilities you usually find in GNU fileutils, shellutils, etc. The utilities\
+    \ in BusyBox generally have fewer options than their full-featured GNU cousins;\
+    \ however, the options that are included provide the expected functionality and\
+    \ behave very much like their GNU counterparts. BusyBox provides a fairly complete\
+    \ POSIX environment for any small or embedded system."
+  homepage_url: "https://www.busybox.net"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::busybox-udhcpc:1.36.1"
+  purl: "pkg:generic/busybox-udhcpc@1.36.1"
+  cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  description: "BusyBox combines tiny versions of many common UNIX utilities into\
+    \ a single small executable. It provides minimalist replacements for most of the\
+    \ utilities you usually find in GNU fileutils, shellutils, etc. The utilities\
+    \ in BusyBox generally have fewer options than their full-featured GNU cousins;\
+    \ however, the options that are included provide the expected functionality and\
+    \ behave very much like their GNU counterparts. BusyBox provides a fairly complete\
+    \ POSIX environment for any small or embedded system."
+  homepage_url: "https://www.busybox.net"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::bzip2-1.0.8.tar.gz:"
+  purl: "pkg:generic/bzip2-1.0.8.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Apache-2.0 AND BSD-3-Clause AND bzip2-1.0.6 AND GPL-3.0-or-later\
+    \ AND MS-PL AND Zlib"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz"
+    hash:
+      value: "ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::ca-certificates_20250419.tar.xz:"
+  purl: "pkg:generic/ca-certificates_20250419.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND MPL-2.0"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://ftp.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_20250419.tar.xz"
+    hash:
+      value: "33b44ef78653ecd3f0f2f13e5bba6be466be2e7da72182f737912b81798ba5d2"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::cmake-3.28.3.tar.gz:"
+  purl: "pkg:generic/cmake-3.28.3.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND curl AND\
+    \ MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://cmake.org/files/v3.28/cmake-3.28.3.tar.gz"
+    hash:
+      value: "72b7570e5c8593de6ac4ab433b73eab18c5fb328880460c86ce32608141ad5c1"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::core-image-minimal:"
+  purl: "pkg:generic/core-image-minimal"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::curl-8.7.1.tar.xz:"
+  purl: "pkg:generic/curl-8.7.1.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "curl"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://curl.se/download/curl-8.7.1.tar.xz"
+    hash:
+      value: "6fea2aac6a4610fbd0400afb0bcddbe7258a64c63f1f68e5855ebc0c659710cd"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::elfutils-0.191.tar.bz2:"
+  purl: "pkg:generic/elfutils-0.191.tar.bz2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "(GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://sourceware.org/elfutils/ftp/0.191/elfutils-0.191.tar.bz2"
+    hash:
+      value: "df76db71366d1d708365fc7a6c60ca48398f14367eb2b8954efc8897147ad871"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::eudev:3.2.14"
+  purl: "pkg:generic/eudev@3.2.14"
+  cpe: "cpe:2.3:*:*:eudev:3.2.14:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: "eudev is Gentoo's fork of udev, systemd's device file manager for\
+    \ the Linux kernel. It manages device nodes in /dev and handles all user space\
+    \ actions when adding or removing devices."
+  homepage_url: "https://github.com/eudev-project/eudev"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::eudev-3.2.14.tar.gz:"
+  purl: "pkg:generic/eudev-3.2.14.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/eudev-project/eudev/releases/download/v3.2.14/eudev-3.2.14.tar.gz"
+    hash:
+      value: "8da4319102f24abbf7fff5ce9c416af848df163b29590e666d334cc1927f006f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::expat-2.6.4.tar.bz2:"
+  purl: "pkg:generic/expat-2.6.4.tar.bz2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/libexpat/libexpat/releases//download/R_2_6_4/expat-2.6.4.tar.bz2"
+    hash:
+      value: "8dc480b796163d4436e6f1352e71800a774f73dbae213f1860b60607d2a83ada"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::flex-2.6.4.tar.gz:"
+  purl: "pkg:generic/flex-2.6.4.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause AND LGPL-2.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz"
+    hash:
+      value: "e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::gdbm-1.23.tar.gz:"
+  purl: "pkg:generic/gdbm-1.23.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/gdbm/gdbm-1.23.tar.gz"
+    hash:
+      value: "74b1081d21fff13ae4bd7c16e5d6e504a4c26f7cde1dca0d963a484174bbcacd"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::gettext-0.22.5.tar.gz:"
+  purl: "pkg:generic/gettext-0.22.5.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later AND LicenseRef-FSF-Unlimited\
+    \ AND MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/gettext/gettext-0.22.5.tar.gz"
+    hash:
+      value: "ec1705b1e969b83a9f073144ec806151db88127f5e40fe5a94cb6c8fa48996a0"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git-2.44.4.tar.gz:"
+  purl: "pkg:generic/git-2.44.4.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause AND BSL-1.0 AND GPL-2.0-only AND GPL-2.0-or-later\
+    \ AND LGPL-2.1-or-later AND MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://cdn.kernel.org/pub/software/scm/git/git-2.44.4.tar.gz"
+    hash:
+      value: "302ebe0f4b1c5d1ee477b5ee74f7f2f69efd8fa7f27481e45087ba9a4bb4851c"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git.kernel.org.pub.scm.fs.ext2.e2fsprogs.git:"
+  purl: "pkg:generic/git.kernel.org.pub.scm.fs.ext2.e2fsprogs.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause AND GPL-2.0-only AND LGPL-2.0-only AND MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git@f4c9cc4bedacde8408edda3520a32d3842290112"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git.kernel.org.pub.scm.utils.kernel.kmod.kmod.git:"
+  purl: "pkg:generic/git.kernel.org.pub.scm.utils.kernel.kmod.kmod.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git@aff617ea871d0568cc491bd116c0be1e857463bb"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git.savannah.gnu.org.git.config.git:"
+  purl: "pkg:generic/git.savannah.gnu.org.git.config.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-with-autoconf-exception"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://git.savannah.gnu.org/git/config.git@948ae97ca5703224bd3eada06b7a69f40dd15a02"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git.yoctoproject.org.linux-yocto.git:"
+  purl: "pkg:generic/git.yoctoproject.org.linux-yocto.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://git.yoctoproject.org/linux-yocto.git@2a17dc587afe4e133deef4d8c9ec98724aee785b"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git.yoctoproject.org.opkg-utils:"
+  purl: "pkg:generic/git.yoctoproject.org.opkg-utils"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://git.yoctoproject.org/opkg-utils@589880d01969eb9af1e66120e731d43193504718"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git.yoctoproject.org.update-rc.d:"
+  purl: "pkg:generic/git.yoctoproject.org.update-rc.d"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://git.yoctoproject.org/update-rc.d@b8f950105010270a768aa12245d6abf166346015"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git.yoctoproject.org.yocto-kernel-cache:"
+  purl: "pkg:generic/git.yoctoproject.org.yocto-kernel-cache"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://git.yoctoproject.org/yocto-kernel-cache@50530c858c90f124629dadce78f696b590747ea5"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git.yoctoproject.org.yocto-kernel-tools.git:"
+  purl: "pkg:generic/git.yoctoproject.org.yocto-kernel-tools.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://git.yoctoproject.org/yocto-kernel-tools.git@7160ebe8b865dd6028aef278efa219433db93f7e"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::github.com.ThomasDickey.ncurses-snapshots.git:"
+  purl: "pkg:generic/github.com.ThomasDickey.ncurses-snapshots.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://github.com/ThomasDickey/ncurses-snapshots.git@1003914e200fd622a27237abca155ce6bf2e6030"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::github.com.besser82.libxcrypt.git:"
+  purl: "pkg:generic/github.com.besser82.libxcrypt.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LGPL-2.1-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://github.com/besser82/libxcrypt.git@f531a36aa916a22ef2ce7d270ba381e264250cbf"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::github.com.facebook.zstd.git:"
+  purl: "pkg:generic/github.com.facebook.zstd.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause OR GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://github.com/facebook/zstd.git@63779c798237346c2b245c546c40b72a5a5913fe"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::github.com.ibm-s390-linux.s390-tools:"
+  purl: "pkg:generic/github.com.ibm-s390-linux.s390-tools"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://github.com/ibm-s390-linux/s390-tools@6f15ed326491a17d83ca60cd2bda47fb5e8a0175"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::github.com.ninja-build.ninja.git:"
+  purl: "pkg:generic/github.com.ninja-build.ninja.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Apache-2.0"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://github.com/ninja-build/ninja.git@a524bf3f6bacd1b4ad85d719eed2737d8562f27a"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::github.com.stevegrubb.libcap-ng.git:"
+  purl: "pkg:generic/github.com.stevegrubb.libcap-ng.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://github.com/stevegrubb/libcap-ng.git@f5d39702622208b3ada064d7b2eaeaf1454c9bd3"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::github.com.thkukuk.libnsl:"
+  purl: "pkg:generic/github.com.thkukuk.libnsl"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LGPL-2.1-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://github.com/thkukuk/libnsl@d4b22e54b5e6637a69b26eab5faad2a326c9b182"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::gitlab.freedesktop.org.pkg-config.pkg-config.git:"
+  purl: "pkg:generic/gitlab.freedesktop.org.pkg-config.pkg-config.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://gitlab.freedesktop.org/pkg-config/pkg-config.git@d97db4fae4c1cd099b506970b285dc2afd818ea2"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::gmp-6.3.0.tar.bz2:"
+  purl: "pkg:generic/gmp-6.3.0.tar.bz2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://gmplib.org/download/gmp/gmp-6.3.0.tar.bz2"
+    hash:
+      value: "ac28211a7cfb609bae2e2c8d6058d66c8fe96434f740cf6fe2e47b000d1c20cb"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::gnutls-3.8.4.tar.xz:"
+  purl: "pkg:generic/gnutls-3.8.4.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.4.tar.xz"
+    hash:
+      value: "2bea4e154794f3f00180fa2a5c51fe8b005ac7a31cd58bd44cdfa7f36ebc3a9b"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::gperf-3.1.tar.gz:"
+  purl: "pkg:generic/gperf-3.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/gperf/gperf-3.1.tar.gz"
+    hash:
+      value: "588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::gtk-doc-1.33.2.tar.xz:"
+  purl: "pkg:generic/gtk-doc-1.33.2.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://download.gnome.org/sources//gtk-doc/1.33/gtk-doc-1.33.2.tar.xz"
+    hash:
+      value: "cc1b709a20eb030a278a1f9842a362e00402b7f834ae1df4c1998a723152bf43"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::init-ifupdown:1.0"
+  purl: "pkg:generic/init-ifupdown@1.0"
+  cpe: "cpe:2.3:*:*:init-ifupdown:1.0:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "This package provides high level tools to configure network interfaces"
+  homepage_url: "http://packages.debian.org/ifupdown"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::init-system-helpers-service:1.66"
+  purl: "pkg:generic/init-system-helpers-service@1.66"
+  cpe: "cpe:2.3:*:*:init-system-helpers:1.66:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause AND GPL-2.0-only"
+  description: "This package contains helper tools that are necessary for switching\
+    \ between the various init systems that Debian contains (e. g. sysvinit or systemd).\
+    \ An example is deb-systemd-helper, a script that enables systemd unit files without\
+    \ depending on a running systemd. It also includes the \\\"service\\\", \\\"invoke-rc.d\\\
+    \", and \\\"update-rc.d\\\" scripts which provide an abstraction for enabling,\
+    \ disabling, starting, and stopping services for all supported Debian init systems\
+    \ as specified by the policy. While this package is maintained by pkg-systemd-maintainers,\
+    \ it is NOT specific to systemd at all. Maintainers of other init systems are\
+    \ welcome to include their helpers in this package."
+  homepage_url: "https://salsa.debian.org/debian/init-system-helpers"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::initscripts:1.0"
+  purl: "pkg:generic/initscripts@1.0"
+  cpe: "cpe:2.3:*:*:initscripts:1.0:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "Initscripts provide the basic system startup initialization scripts\
+    \ for the system.  These scripts include actions such as filesystem mounting,\
+    \ fsck, RTC manipulation and other actions routinely performed at system startup.\
+    \  In addition, the scripts are also used during system shutdown to reverse the\
+    \ actions performed at startup."
+  homepage_url: "https://github.com/fedora-sysv/initscripts"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::initscripts-functions:1.0"
+  purl: "pkg:generic/initscripts-functions@1.0"
+  cpe: "cpe:2.3:*:*:initscripts:1.0:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "Initscripts provide the basic system startup initialization scripts\
+    \ for the system.  These scripts include actions such as filesystem mounting,\
+    \ fsck, RTC manipulation and other actions routinely performed at system startup.\
+    \  In addition, the scripts are also used during system shutdown to reverse the\
+    \ actions performed at startup."
+  homepage_url: "https://github.com/fedora-sysv/initscripts"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::kernel-6.6.111-yocto-standard:6.6.111+git"
+  purl: "pkg:generic/kernel-6.6.111-yocto-standard@6.6.111%2Bgit"
+  cpe: "cpe:2.3:*:*:linux_kernel:6.6.111:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "Linux kernel."
+  homepage_url: "https://www.yoctoproject.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::kernel-image-6.6.111-yocto-standard:6.6.111+git"
+  purl: "pkg:generic/kernel-image-6.6.111-yocto-standard@6.6.111%2Bgit"
+  cpe: "cpe:2.3:*:*:linux_kernel:6.6.111:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "Linux kernel."
+  homepage_url: "https://www.yoctoproject.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::kernel-image-bzimage-6.6.111-yocto-standard:6.6.111+git"
+  purl: "pkg:generic/kernel-image-bzimage-6.6.111-yocto-standard@6.6.111%2Bgit"
+  cpe: "cpe:2.3:*:*:linux_kernel:6.6.111:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "Linux kernel."
+  homepage_url: "https://www.yoctoproject.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::kernel-module-uvesafb-6.6.111-yocto-standard:6.6.111+git"
+  purl: "pkg:generic/kernel-module-uvesafb-6.6.111-yocto-standard@6.6.111%2Bgit"
+  cpe: "cpe:2.3:*:*:linux_kernel:6.6.111:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "uvesafb kernel module; Framebuffer driver for VBE2.0+ compliant graphics\
+    \ boards"
+  homepage_url: "https://www.yoctoproject.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::kmod:31"
+  purl: "pkg:generic/kmod@31"
+  cpe: "cpe:2.3:*:*:kmod:31:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: "kmod is a set of tools to handle common tasks with Linux kernel modules\
+    \ like                insert, remove, list, check properties, resolve dependencies\
+    \ and aliases."
+  homepage_url: "http://kernel.org/pub/linux/utils/kernel/kmod/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::ldconfig:2.39+git"
+  purl: "pkg:generic/ldconfig@2.39%2Bgit"
+  cpe: "cpe:2.3:*:*:glibc:2.39:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LGPL-2.1-or-later"
+  description: "The GNU C Library is used as the system C library in most systems\
+    \ with the Linux kernel."
+  homepage_url: "http://www.gnu.org/software/libc/libc.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libarchive-3.7.9.tar.gz:"
+  purl: "pkg:generic/libarchive-3.7.9.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-2-Clause"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://libarchive.org/downloads/libarchive-3.7.9.tar.gz"
+    hash:
+      value: "aa90732c5a6bdda52fda2ad468ac98d75be981c15dde263d7b5cf6af66fd009f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libblkid1:2.39.3"
+  purl: "pkg:generic/libblkid1@2.39.3"
+  cpe: "cpe:2.3:*:*:util-linux:2.39.3:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LGPL-2.1-or-later"
+  description: "util-linux libblkid"
+  homepage_url: "https://en.wikipedia.org/wiki/Util-linux"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libc6:2.39+git"
+  purl: "pkg:generic/libc6@2.39%2Bgit"
+  cpe: "cpe:2.3:*:*:glibc:2.39:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LGPL-2.1-or-later"
+  description: "The GNU C Library is used as the system C library in most systems\
+    \ with the Linux kernel."
+  homepage_url: "http://www.gnu.org/software/libc/libc.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libcap-2.69.tar.xz:"
+  purl: "pkg:generic/libcap-2.69.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause OR GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://cdn.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.69.tar.xz"
+    hash:
+      value: "f311f8f3dad84699d0566d1d6f7ec943a9298b28f714cae3c931dfd57492d7eb"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libcrypto3:3.2.6"
+  purl: "pkg:generic/libcrypto3@3.2.6"
+  cpe: "cpe:2.3:*:openssl:openssl:3.2.6:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Apache-2.0"
+  description: "Secure Socket Layer (SSL) binary and related cryptographic tools."
+  homepage_url: "http://www.openssl.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libedit-20230828-3.1.tar.gz:"
+  purl: "pkg:generic/libedit-20230828-3.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://www.thrysoee.dk/editline/libedit-20230828-3.1.tar.gz"
+    hash:
+      value: "4ee8182b6e569290e7d1f44f0f78dac8716b35f656b76528f699c69c98814dad"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libffi-3.4.6.tar.gz:"
+  purl: "pkg:generic/libffi-3.4.6.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/libffi/libffi/releases//download/v3.4.6/libffi-3.4.6.tar.gz"
+    hash:
+      value: "b0dea9df23c863a7a50e825440f3ebffabd65df1497108e5d437747843895a4e"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libgcrypt-1.10.3.tar.bz2:"
+  purl: "pkg:generic/libgcrypt-1.10.3.tar.bz2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.3.tar.bz2"
+    hash:
+      value: "8b0870897ac5ac67ded568dcfadf45969cfa8a6beb0fd60af2a9eadc2a3272aa"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libgpg-error-1.48.tar.bz2:"
+  purl: "pkg:generic/libgpg-error-1.48.tar.bz2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.48.tar.bz2"
+    hash:
+      value: "89ce1ae893e122924b858de84dc4f67aae29ffa610ebf668d5aa539045663d6f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libidn2-2.3.7.tar.gz:"
+  purl: "pkg:generic/libidn2-2.3.7.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "(GPL-2.0-or-later OR LGPL-3.0-only) AND GPL-3.0-or-later AND\
+    \ Unicode-DFS-2016"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/libidn/libidn2-2.3.7.tar.gz"
+    hash:
+      value: "4c21a791b610b9519b9d0e12b8097bf2f359b12f8dd92647611a929e6bfd7d64"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libkmod2:31"
+  purl: "pkg:generic/libkmod2@31"
+  cpe: "cpe:2.3:*:*:kmod:31:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LGPL-2.1-or-later"
+  description: "kmod is a set of tools to handle common tasks with Linux kernel modules\
+    \ like                insert, remove, list, check properties, resolve dependencies\
+    \ and aliases."
+  homepage_url: "http://kernel.org/pub/linux/utils/kernel/kmod/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::liblzma5:5.4.7"
+  purl: "pkg:generic/liblzma5@5.4.7"
+  cpe: "cpe:2.3:*:*:xz:5.4.7:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LicenseRef-PD"
+  description: "XZ Utils is free general-purpose data compression software with a\
+    \ high compression ratio. XZ Utils were written for POSIX-like systems, but also\
+    \ work on some not-so-POSIX systems. XZ Utils are the successor to LZMA Utils."
+  homepage_url: "https://tukaani.org/xz/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libmicrohttpd-1.0.1.tar.gz:"
+  purl: "pkg:generic/libmicrohttpd-1.0.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/libmicrohttpd/libmicrohttpd-1.0.1.tar.gz"
+    hash:
+      value: "a89e09fc9b4de34dde19f4fcb4faaa1ce10299b9908db1132bbfa1de47882b94"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libtasn1-4.20.0.tar.gz:"
+  purl: "pkg:generic/libtasn1-4.20.0.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/libtasn1/libtasn1-4.20.0.tar.gz"
+    hash:
+      value: "92e0e3bd4c02d4aeee76036b2ddd83f0c732ba4cda5cb71d583272b23587a76c"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libtirpc-1.3.4.tar.bz2:"
+  purl: "pkg:generic/libtirpc-1.3.4.tar.bz2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://downloads.sourceforge.net/libtirpc/libtirpc-1.3.4.tar.bz2"
+    hash:
+      value: "1e0b0c7231c5fa122e06c0609a76723664d068b0dba3b8219b63e6340b347860"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libtool-2.4.7.tar.gz:"
+  purl: "pkg:generic/libtool-2.4.7.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LGPL-2.1-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/libtool/libtool-2.4.7.tar.gz"
+    hash:
+      value: "04e96c2404ea70c590c546eba4202a4e12722c640016c12b9b2f1ce3d481e9a8"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libunistring-1.2.tar.gz:"
+  purl: "pkg:generic/libunistring-1.2.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/libunistring/libunistring-1.2.tar.gz"
+    hash:
+      value: "fd6d5662fa706487c48349a758b57bc149ce94ec6c30624ec9fdc473ceabbc8e"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libz1:1.3.1"
+  purl: "pkg:generic/libz1@1.3.1"
+  cpe: "cpe:2.3:*:*:zlib:1.3.1:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Zlib"
+  description: "Zlib is a general-purpose, patent-free, lossless data compression\
+    \ library which is used by many different programs."
+  homepage_url: "http://zlib.net/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::linux-6.6.tar.xz:"
+  purl: "pkg:generic/linux-6.6.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.tar.xz"
+    hash:
+      value: "d926a06c63dd8ac7df3f86ee1ffc2ce2a3b81a2d168484e76b5b389aba8e56d0"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::m4-1.4.19.tar.gz:"
+  purl: "pkg:generic/m4-1.4.19.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/m4/m4-1.4.19.tar.gz"
+    hash:
+      value: "3be4a26d825ffdfda52a56fc43246456989a3630093cced3fbddf4771ee58a70"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::make-4.4.1.tar.gz:"
+  purl: "pkg:generic/make-4.4.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/make/make-4.4.1.tar.gz"
+    hash:
+      value: "dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::modutils-initscripts:1.0"
+  purl: "pkg:generic/modutils-initscripts@1.0"
+  cpe: "cpe:2.3:*:*:modutils-initscripts:1.0:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "MIT"
+  description: "Initscript for auto-loading kernel modules on boot."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::mpc-1.3.1.tar.gz:"
+  purl: "pkg:generic/mpc-1.3.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LGPL-3.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz"
+    hash:
+      value: "ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::mpfr-4.2.1.tar.xz:"
+  purl: "pkg:generic/mpfr-4.2.1.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LGPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://www.mpfr.org/mpfr-4.2.1/mpfr-4.2.1.tar.xz"
+    hash:
+      value: "277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::netbase:6.4"
+  purl: "pkg:generic/netbase@6.4"
+  cpe: "cpe:2.3:*:*:netbase:6.4:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "This package provides the necessary infrastructure for basic TCP/IP\
+    \ based networking"
+  homepage_url: "http://packages.debian.org/netbase"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::netbase_6.4.tar.xz:"
+  purl: "pkg:generic/netbase_6.4.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://ftp.debian.org/debian/pool/main/n/netbase/netbase_6.4.tar.xz"
+    hash:
+      value: "fa6621826ff1150e581bd90bc3c8a4ecafe5df90404f207db6dcdf2c75f26ad7"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::nettle-3.9.1.tar.gz:"
+  purl: "pkg:generic/nettle-3.9.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/nettle/nettle-3.9.1.tar.gz"
+    hash:
+      value: "ccfeff981b0ca71bbd6fbcb054f407c60ffb644389a5be80d6716d5b550c6ce3"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::openssl-3.2.6.tar.gz:"
+  purl: "pkg:generic/openssl-3.2.6.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Apache-2.0"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/openssl/openssl/releases/download/openssl-3.2.6/openssl-3.2.6.tar.gz"
+    hash:
+      value: "89681a9ddaa9ed7cf25ea8ef61338db805200bae47d00510490623547380c148"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::openssl-conf:3.2.6"
+  purl: "pkg:generic/openssl-conf@3.2.6"
+  cpe: "cpe:2.3:*:openssl:openssl:3.2.6:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Apache-2.0"
+  description: "Secure Socket Layer (SSL) binary and related cryptographic tools."
+  homepage_url: "http://www.openssl.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::openssl-ossl-module-legacy:3.2.6"
+  purl: "pkg:generic/openssl-ossl-module-legacy@3.2.6"
+  cpe: "cpe:2.3:*:openssl:openssl:3.2.6:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Apache-2.0"
+  description: "Secure Socket Layer (SSL) binary and related cryptographic tools."
+  homepage_url: "http://www.openssl.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::packagegroup-core-boot:1.0"
+  purl: "pkg:generic/packagegroup-core-boot@1.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "MIT"
+  description: "The minimal set of packages required to boot the system"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::pcre2-10.43.tar.bz2:"
+  purl: "pkg:generic/pcre2-10.43.tar.bz2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.43/pcre2-10.43.tar.bz2"
+    hash:
+      value: "e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::perl-5.38.4.tar.gz:"
+  purl: "pkg:generic/perl-5.38.4.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Artistic-1.0 OR GPL-1.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://www.cpan.org/src/5.0/perl-5.38.4.tar.gz"
+    hash:
+      value: "fb888accf8b50b5180e91166e5153608be294c57c19878e95f7659c1f1f12758"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::perl-cross-1.6.2.tar.gz:"
+  purl: "pkg:generic/perl-cross-1.6.2.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Artistic-1.0 OR GPL-1.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/arsv/perl-cross/releases//download/1.6.2/perl-cross-1.6.2.tar.gz"
+    hash:
+      value: "131f7496152ee32067dbac2bc9b44b2f582fc778140e545701b3b2faee782f1d"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::popt-1.19.tar.gz:"
+  purl: "pkg:generic/popt-1.19.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.19.tar.gz"
+    hash:
+      value: "c25a4838fc8e4c1c8aacb8bd620edb3084a3d63bf8987fdad3ca2758c63240f9"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::re2c-3.1.tar.xz:"
+  purl: "pkg:generic/re2c-3.1.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LicenseRef-PD"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/skvadrik/re2c/releases/download/3.1/re2c-3.1.tar.xz"
+    hash:
+      value: "0ac299ad359e3f512b06a99397d025cfff81d3be34464ded0656f8a96676c029"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::readline-8.2.tar.gz:"
+  purl: "pkg:generic/readline-8.2.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/readline/readline-8.2.tar.gz"
+    hash:
+      value: "3feb7171f16a84ee82ca18a36d7b9be109a52c04f492a053331d7d1095007c35"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::rsync-3.2.7.tar.gz:"
+  purl: "pkg:generic/rsync-3.2.7.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://download.samba.org/pub/rsync/src/rsync-3.2.7.tar.gz"
+    hash:
+      value: "4e7d9d3f6ed10878c58c5fb724a67dacf4b6aac7340b13e488fb2dc41346f2bb"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::salsa.debian.org.debian.init-system-helpers.git:"
+  purl: "pkg:generic/salsa.debian.org.debian.init-system-helpers.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause AND GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://salsa.debian.org/debian/init-system-helpers.git@a5439f465dc1d1d4e12329208dc321fb806009f4"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::sourceware.org.git.binutils-gdb.git:"
+  purl: "pkg:generic/sourceware.org.git.binutils-gdb.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://sourceware.org/git/binutils-gdb.git@f9488b0d92b591bdf3ff8cce485cb0e1b3727cc0"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::sourceware.org.git.bzip2-tests.git:"
+  purl: "pkg:generic/sourceware.org.git.bzip2-tests.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Apache-2.0 AND BSD-3-Clause AND bzip2-1.0.6 AND GPL-3.0-or-later\
+    \ AND MS-PL AND Zlib"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://sourceware.org/git/bzip2-tests.git@f9061c030a25de5b6829e1abf373057309c734c0"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::sourceware.org.git.glibc.git:"
+  purl: "pkg:generic/sourceware.org.git.glibc.git"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LGPL-2.1-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "git+https://sourceware.org/git/glibc.git@58cbbd43fe82910cf8ae9008351b0b0665104500"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::sqlite-autoconf-3450300.tar.gz:"
+  purl: "pkg:generic/sqlite-autoconf-3450300.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LicenseRef-PD"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://www.sqlite.org/2024/sqlite-autoconf-3450300.tar.gz"
+    hash:
+      value: "b2809ca53124c19c60f42bf627736eae011afdcc205bb48270a5ee9a38191531"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::sysvinit:3.04"
+  purl: "pkg:generic/sysvinit@3.04"
+  cpe: "cpe:2.3:*:*:sysvinit:3.04:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later"
+  description: "This package is required to boot in most configurations.  It provides\
+    \ the /sbin/init program.  This is the first process started on boot, and the\
+    \ last process terminated before the system halts."
+  homepage_url: "http://savannah.nongnu.org/projects/sysvinit/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::sysvinit-3.04.tar.xz:"
+  purl: "pkg:generic/sysvinit-3.04.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/slicer69/sysvinit/releases//download/3.04/sysvinit-3.04.tar.xz"
+    hash:
+      value: "2a621fe6e4528bc91308b74867ddaaebbdf7753f02395c0c5bae817bd2b7e3a5"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::sysvinit-inittab:2.88dsf"
+  purl: "pkg:generic/sysvinit-inittab@2.88dsf"
+  cpe: "cpe:2.3:*:*:sysvinit-inittab:2.88dsf:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "Inittab configuration for SysVinit."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::sysvinit-pidof:3.04"
+  purl: "pkg:generic/sysvinit-pidof@3.04"
+  cpe: "cpe:2.3:*:*:sysvinit:3.04:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later"
+  description: "This package is required to boot in most configurations.  It provides\
+    \ the /sbin/init program.  This is the first process started on boot, and the\
+    \ last process terminated before the system halts."
+  homepage_url: "http://savannah.nongnu.org/projects/sysvinit/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::ttyrun:2.31.0"
+  purl: "pkg:generic/ttyrun@2.31.0"
+  cpe: "cpe:2.3:*:*:s390-tools:2.31.0:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "MIT"
+  description: "ttyrun is typically used to prevent a respawn through the init(8)\
+    \ program when a terminal is not available."
+  homepage_url: "https://github.com/ibm-s390-linux/s390-tools"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::unifdef-2.12.tar.xz:"
+  purl: "pkg:generic/unifdef-2.12.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-2-Clause"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://dotat.at/prog/unifdef/unifdef-2.12.tar.xz"
+    hash:
+      value: "43ce0f02ecdcdc723b2475575563ddb192e988c886d368260bc0a63aee3ac400"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::update-alternatives-opkg:0.6.3"
+  purl: "pkg:generic/update-alternatives-opkg@0.6.3"
+  cpe: "cpe:2.3:*:*:opkg-utils:0.6.3:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later"
+  description: "Additional utilities for the opkg package manager."
+  homepage_url: "http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::update-rc.d:0.8+git"
+  purl: "pkg:generic/update-rc.d@0.8%2Bgit"
+  cpe: "cpe:2.3:*:*:update-rc.d:0.8:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later"
+  description: "update-rc.d is a utility that allows the management of symlinks to\
+    \ the initscripts in the /etc/rcN.d directory structure."
+  homepage_url: "http://github.com/philb/update-rc.d/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::util-linux-2.39.3.tar.xz:"
+  purl: "pkg:generic/util-linux-2.39.3.tar.xz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-1.0-or-later\
+    \ AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://cdn.kernel.org/pub/linux/utils/util-linux/v2.39/util-linux-2.39.3.tar.xz"
+    hash:
+      value: "7b6605e48d1a49f43cc4b4cfc59f313d0dd5402fa40b96810bd572e167dfed0f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::v86d:0.1.10"
+  purl: "pkg:generic/v86d@0.1.10"
+  cpe: "cpe:2.3:*:*:v86d:0.1.10:*:*:*:*:*:*:*"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: "v86d provides a backend for kernel drivers that need to execute x86\
+    \ BIOS code. The code is executed in a controlled environment and the results\
+    \ are passed back to the kernel via the netlink interface."
+  homepage_url: "https://tracker.debian.org/pkg/v86d"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::v86d_0.1.10.orig.tar.gz:"
+  purl: "pkg:generic/v86d_0.1.10.orig.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://snapshot.debian.org/archive/debian/20110427T035506Z/pool/main/v/v86d/v86d_0.1.10.orig.tar.gz"
+    hash:
+      value: "93575c82e4307d8c4c370ec6b767f5cf87e527b2378146d652a6d8e25d5bdbc5"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::xz-5.4.7.tar.gz:"
+  purl: "pkg:generic/xz-5.4.7.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND GPL-3.0-with-autoconf-exception AND LGPL-2.1-or-later\
+    \ AND LicenseRef-PD"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/tukaani-project/xz/releases/download/v5.4.7/xz-5.4.7.tar.gz"
+    hash:
+      value: "8db6664c48ca07908b92baedcfe7f3ba23f49ef2476864518ab5db6723836e71"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::zlib-1.3.1.tar.gz:"
+  purl: "pkg:generic/zlib-1.3.1.tar.gz"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Zlib"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://zlib.net/zlib-1.3.1.tar.gz"
+    hash:
+      value: "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""

@@ -73,6 +73,7 @@ class PackageManagerFunTest : WordSpec({
         "rebar3/rebar.config",
         "pub/pubspec.yaml",
         "sbt/build.sbt",
+        "spdx/document.spdx.jsonld",
         "spdx-package/package.spdx.yml",
         "spdx-project/project.spdx.yml",
         "spm-app/Package.resolved",
@@ -133,6 +134,7 @@ class PackageManagerFunTest : WordSpec({
                 managedFilesById["Pub"] should containExactly("pub/pubspec.yaml")
                 managedFilesById["Rebar3"] should containExactly("rebar3/rebar.config")
                 managedFilesById["SBT"] should containExactly("sbt/build.sbt")
+                managedFilesById["Spdx"] should containExactly("spdx/document.spdx.jsonld")
                 managedFilesById["SpdxDocumentFile"] should containExactlyInAnyOrder(
                     "spdx-package/package.spdx.yml",
                     "spdx-project/project.spdx.yml"
