@@ -83,7 +83,7 @@ class OrtMainFunTest : StringSpec() {
 
             val result = OrtMain().test(
                 "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
+                "-P", "ort.analyzer.enabledPackageManagers=Unmanaged",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path
@@ -97,7 +97,7 @@ class OrtMainFunTest : StringSpec() {
 
             withClue(result.stderr) {
                 iterator.hasNext() shouldBe true
-                iterator.next().trim() shouldBe "Gradle"
+                iterator.next().trim() shouldBe "Unmanaged"
             }
         }
 
@@ -134,8 +134,8 @@ class OrtMainFunTest : StringSpec() {
 
             val result = OrtMain().test(
                 "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
-                "-P", "ort.analyzer.disabledPackageManagers=Gradle",
+                "-P", "ort.analyzer.enabledPackageManagers=Bundler,NPM",
+                "-P", "ort.analyzer.disabledPackageManagers=Bundler",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path
@@ -178,7 +178,7 @@ class OrtMainFunTest : StringSpec() {
 
             OrtMain().test(
                 "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
+                "-P", "ort.analyzer.enabledPackageManagers=Bundler,NPM",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path
@@ -196,7 +196,7 @@ class OrtMainFunTest : StringSpec() {
 
             val result = OrtMain().test(
                 "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
+                "-P", "ort.analyzer.enabledPackageManagers=Bundler",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path,
