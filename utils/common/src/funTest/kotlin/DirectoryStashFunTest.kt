@@ -181,5 +181,17 @@ class DirectoryStashFunTest : StringSpec() {
 
             sandboxDirShouldBeInOriginalState()
         }
+
+        "copying works and modified files get restored" {
+            stashDirectories(aNestedFile, bNestedFile, sandboxDir / "non-existing-file", copy = true).use {
+                aNestedFile shouldBe aFile()
+                bNestedFile shouldBe aFile()
+
+                aNestedFile.writeText("Hello")
+                bNestedFile.writeText("World")
+            }
+
+            sandboxDirShouldBeInOriginalState()
+        }
     }
 }
