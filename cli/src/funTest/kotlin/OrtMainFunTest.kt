@@ -103,7 +103,7 @@ class OrtMainFunTest : StringSpec() {
 
         "Disabling only a single package manager works" {
             val expectedPackageManagers = AnalyzerConfiguration().determineEnabledPackageManagers().filterNot {
-                it.descriptor.id == "Gradle"
+                it.descriptor.id == "Unmanaged"
             }
 
             val markerLine = "The following ${expectedPackageManagers.size} package manager(s) are enabled:"
@@ -111,7 +111,7 @@ class OrtMainFunTest : StringSpec() {
 
             val result = OrtMain().test(
                 "-c", configFile.path,
-                "-P", "ort.analyzer.disabledPackageManagers=Gradle",
+                "-P", "ort.analyzer.disabledPackageManagers=Unmanaged",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path
