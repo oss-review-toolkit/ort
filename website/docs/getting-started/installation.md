@@ -119,7 +119,7 @@ Depending on how ORT was installed, it can be run in the following ways:
 * If running directly from sources via Gradle, use
 
   ```shell
-  ./gradlew cli:run --args="--help"
+  ./gradlew -q cli:run --args="--help"
   ```
 
   Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is located in (see https://github.com/gradle/gradle/issues/6074).
