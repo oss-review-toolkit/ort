@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.getIdentifierType
@@ -309,4 +310,4 @@ private fun createRemoteArtifact(
 private fun parseChecksum(checksum: String, algorithm: String) =
     checksum.splitOnWhitespace().firstNotNullOfOrNull {
         runCatching { Hash(it, algorithm) }.getOrNull()
-    } ?: Hash.NONE
+    }.orNone()

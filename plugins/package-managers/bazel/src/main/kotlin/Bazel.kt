@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginConfig
@@ -453,7 +454,7 @@ class Bazel(
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
                     url = archiveOverride.urls.first().toString(),
-                    hash = hash ?: Hash.NONE
+                    hash = hash.orNone()
                 ),
                 vcs = VcsInfo.EMPTY,
                 isModified = archiveOverride.patches?.isNotEmpty() == true

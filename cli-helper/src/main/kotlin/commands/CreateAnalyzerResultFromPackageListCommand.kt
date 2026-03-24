@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -203,7 +204,7 @@ private fun Dependency.toPackage(): Package {
         id = id,
         purl = purl ?: id.toPurl(),
         authors = authors,
-        sourceArtifact = sourceArtifact?.let { RemoteArtifact(url = it.url, it.hash ?: Hash.NONE) }.orEmpty(),
+        sourceArtifact = sourceArtifact?.let { RemoteArtifact(url = it.url, it.hash.orNone()) }.orEmpty(),
         vcs = vcsInfo,
         declaredLicenses = declaredLicenses,
         concludedLicense = concludedLicense,
