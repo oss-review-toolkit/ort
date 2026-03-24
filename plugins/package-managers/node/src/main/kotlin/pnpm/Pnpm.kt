@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NPM_RUNTIME_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodeCommand
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
@@ -115,7 +116,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
     ): List<ProjectAnalyzerResult> =
         // Handle file creation or changes caused by executing 'pnpm config set'.
         stashFiles(
-            definitionFile.resolveSibling(".npmrc"),
+            definitionFile.resolveSibling(NPM_RUNTIME_CONFIGURATION_FILENAME),
             definitionFile.resolveSibling("pnpm-workspace.yaml"),
             copy = true
         ).use {
