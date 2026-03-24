@@ -24,6 +24,7 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.StandardCopyOption
 
+import kotlin.io.path.copyToRecursively
 import kotlin.io.path.createTempDirectory
 import kotlin.io.path.moveTo
 
@@ -32,11 +33,11 @@ import org.apache.logging.log4j.kotlin.logger
 typealias FileStash = DirectoryStash
 
 /**
- * A [Closeable] class which temporarily moves away directories / [files] and moves them back on close. Any conflicting
- * directory / file created at the location of an original directory / file is deleted before the original state is
- * restored. If a specified directory / file did not exist on initialization, it will also not exist on close.
+ * A [Closeable] class which temporarily moves away or copies directories / [files] and moves them back on close. Any
+ * conflicting directory / file created at the location of an original directory / file is deleted before the original
+ * state is restored. If a specified directory / file did not exist on initialization, it will also not exist on close.
  */
-class DirectoryStash(files: Set<File>) : Closeable {
+class DirectoryStash(files: Set<File>, copy: Boolean = false) : Closeable {
     private val stash: Map<File, File?> = files.associateWith { original ->
         // Check this on each iteration instead of filtering beforehand to properly handle parent / child directories.
         if (!original.exists()) return@associateWith null
@@ -52,7 +53,11 @@ class DirectoryStash(files: Set<File>) : Closeable {
             "Temporarily moving $thing from '${original.absolutePath}' to '${stash.absolutePath}'."
         }
 
-        original.toPath().moveTo(stash.toPath(), StandardCopyOption.ATOMIC_MOVE)
+        if (copy) {
+            original.toPath().copyToRecursively(stash.toPath(), followLinks = false)
+        } else {
+            original.toPath().moveTo(stash.toPath(), StandardCopyOption.ATOMIC_MOVE)
+        }
 
         stash
     }
@@ -82,9 +87,9 @@ class DirectoryStash(files: Set<File>) : Closeable {
 /**
  * A convenience function that stashes directories / files using a [DirectoryStash] instance.
  */
-fun stashDirectories(vararg files: File): Closeable = DirectoryStash(setOf(*files))
+fun stashDirectories(vararg files: File, copy: Boolean = false): Closeable = DirectoryStash(setOf(*files), copy)
 
 /**
  * A convenience function that stashes directories / files using a [DirectoryStash] instance.
  */
-fun stashFiles(vararg files: File): Closeable = FileStash(setOf(*files))
+fun stashFiles(vararg files: File, copy: Boolean = false): Closeable = FileStash(setOf(*files), copy)
