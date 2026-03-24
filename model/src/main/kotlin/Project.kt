@@ -82,6 +82,7 @@ data class Project(
 
     /**
      * Processed VCS-related information about the [Project] that has e.g. common mistakes corrected.
+     * The information originates from [vcs], and optionally also from the code repository of the project.
      */
     val vcsProcessed: VcsInfo = vcs.normalize(),
 
