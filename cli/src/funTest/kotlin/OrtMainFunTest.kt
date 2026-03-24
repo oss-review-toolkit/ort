@@ -78,7 +78,7 @@ class OrtMainFunTest : StringSpec() {
     }
 
     init {
-        "Enabling only Gradle works" {
+        "Enabling only a single package manager works" {
             val inputDir = tempdir()
 
             val result = OrtMain().test(
@@ -101,7 +101,7 @@ class OrtMainFunTest : StringSpec() {
             }
         }
 
-        "Disabling only Gradle works" {
+        "Disabling only a single package manager works" {
             val expectedPackageManagers = AnalyzerConfiguration().determineEnabledPackageManagers().filterNot {
                 it.descriptor.id == "Gradle"
             }
