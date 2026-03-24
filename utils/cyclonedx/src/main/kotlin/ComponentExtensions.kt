@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.utils.toIdentifier
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -178,7 +179,7 @@ internal fun Component.extractSourceArtifact(): RemoteArtifact {
     }
 
     // Use size as a heuristic to pick the strongest hash (larger size = lower collision likelihood).
-    val hash = hashes?.maxByOrNull { it.algorithm.size } ?: Hash.NONE
+    val hash = hashes?.maxByOrNull { it.algorithm.size }.orNone()
 
     return RemoteArtifact(url = url, hash = hash)
 }

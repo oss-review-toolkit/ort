@@ -105,6 +105,11 @@ data class Hash(
         }
 }
 
+/**
+ * Return this [Hash] if not null or else [Hash.NONE].
+ */
+fun Hash?.orNone(): Hash = this ?: Hash.NONE
+
 private class StringLowercaseConverter : StdConverter<String, String>() {
     override fun convert(value: String): String = value.lowercase()
 }

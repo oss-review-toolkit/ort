@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -179,7 +180,7 @@ internal class P2RepositoryContentLoader : AutoCloseable {
                 key.withoutPrefix(CHECKSUM_PROPERTY_PREFIX)?.let { algorithm ->
                     Hash(value, algorithm)
                 }
-            }.maxByOrNull { it.value.length } ?: Hash.NONE
+            }.maxByOrNull { it.value.length }.orNone()
 
         /**
          * Generate an identifier for an OSGi bundle artifact based on the given [artifactId] and [version].

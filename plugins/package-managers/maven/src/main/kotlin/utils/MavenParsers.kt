@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -150,7 +151,7 @@ internal fun parseAuthors(mavenProject: MavenProject): Set<String> =
 internal fun parseChecksum(checksum: String, algorithm: String) =
     checksum.splitOnWhitespace().firstNotNullOfOrNull {
         runCatching { Hash(it, algorithm) }.getOrNull()
-    } ?: Hash.NONE
+    }.orNone()
 
 internal fun parseLicenses(mavenProject: MavenProject): Set<String> =
     mavenProject.licenses.mapNotNullTo(mutableSetOf()) { license ->
