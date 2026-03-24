@@ -92,7 +92,7 @@ internal data class OrtProject(
     @Serializable
     data class SourceArtifact(
         val url: String,
-        val hash: Hash
+        val hash: Hash?
     )
 
     @Serializable
