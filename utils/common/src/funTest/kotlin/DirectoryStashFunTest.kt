@@ -48,11 +48,11 @@ class DirectoryStashFunTest : StringSpec() {
     override suspend fun beforeTest(testCase: TestCase) {
         sandboxDir = tempdir()
 
-        a = sandboxDir / "a"
+        a = sandboxDir / "a-dir"
         aSubdir = a / "a-subdir"
         aNestedFile = aSubdir / "a-file"
 
-        b = sandboxDir / "b"
+        b = sandboxDir / "b-dir"
         bSubdir = b / "b-subdir"
         bNestedFile = bSubdir / "b-file"
 
