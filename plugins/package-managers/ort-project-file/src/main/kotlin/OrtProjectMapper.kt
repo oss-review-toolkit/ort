@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.utils.toIdentifier
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -93,7 +94,7 @@ private fun Vcs.toVcsInfo(): VcsInfo =
 private fun SourceArtifact.toRemoteArtifact(): RemoteArtifact =
     RemoteArtifact(
         url = url,
-        hash = Hash(hash.value.lowercase(), hash.algorithm)
+        hash = hash?.let { Hash(it.value.lowercase(), it.algorithm) }.orNone()
     )
 
 private fun Dependency.toId(): Identifier = id ?: checkNotNull(purl?.toPackageUrl()?.toIdentifier())
