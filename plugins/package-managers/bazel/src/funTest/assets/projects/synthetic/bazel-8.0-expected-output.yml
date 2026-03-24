@@ -769,12 +769,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/bazelbuild/rules_shell"
+    url: "https://github.com/bazel-contrib/rules_shell"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/bazelbuild/rules_shell.git"
+    url: "https://github.com/bazel-contrib/rules_shell.git"
     revision: ""
     path: ""
 - id: "Bazel::stardoc:0.7.1"
