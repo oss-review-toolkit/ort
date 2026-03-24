@@ -86,4 +86,12 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
+normalization {
+    runtimeClasspath {
+        metaInf {
+            ignoreAttribute("Implementation-Version")
+        }
+    }
+}
+
 if (project != rootProject) version = rootProject.version
