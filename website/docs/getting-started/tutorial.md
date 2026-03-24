@@ -47,7 +47,7 @@ To build the command line interface run:
 
 ```shell
 cd ort
-./gradlew installDist
+./gradlew :cli:installDist
 ```
 
 This will create the script to run ORT at `cli/build/install/ort/bin/ort`.

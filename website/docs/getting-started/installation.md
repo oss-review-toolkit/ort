@@ -96,7 +96,7 @@ Install these additional prerequisites:
 
 * Java Development Kit (JDK) version 21 or later; also remember to set the `JAVA_HOME` environment variable accordingly.
 
-Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap Gradle and download all required dependencies).
+Change into the directory with ORT's source code and run `./gradlew :cli:installDist` (on the first run this will bootstrap Gradle and download all required dependencies).
 
 ## Basic usage
 
@@ -119,7 +119,7 @@ Depending on how ORT was installed, it can be run in the following ways:
 * If running directly from sources via Gradle, use
 
   ```shell
-  ./gradlew -q cli:run --args="--help"
+  ./gradlew -q :cli:run --args="--help"
   ```
 
   Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is located in (see https://github.com/gradle/gradle/issues/6074).
