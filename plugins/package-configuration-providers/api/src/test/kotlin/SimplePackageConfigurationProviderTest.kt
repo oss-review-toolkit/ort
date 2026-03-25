@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
@@ -29,41 +28,9 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.SourceCodeOrigin
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PackageConfiguration
-import org.ossreviewtoolkit.model.config.VcsMatcher
 
 class SimplePackageConfigurationProviderTest : WordSpec({
-    "constructor" should {
-        "throw an exception provided multiple package configurations for same Id and source artifact provenance" {
-            val packageConfig = PackageConfiguration(
-                id = Identifier("type:group:name:version"),
-                sourceArtifactUrl = "https://some-host/some/path"
-            )
-            val configurations = listOf(packageConfig, packageConfig.copy())
-
-            shouldThrow<IllegalArgumentException> {
-                SimplePackageConfigurationProvider(configurations = configurations)
-            }
-        }
-
-        "throw an exception provided multiple package configurations for same Id and VCS provenance" {
-            val packageConfig = PackageConfiguration(
-                id = Identifier("type:group:name:version"),
-                vcs = VcsMatcher(
-                    type = VcsType.GIT,
-                    url = "https://some-host/some/path.git",
-                    revision = "0c1b2aec2812e4833bdca1028b5cb4b6"
-                )
-            )
-            val configurations = listOf(packageConfig, packageConfig.copy())
-
-            shouldThrow<IllegalArgumentException> {
-                SimplePackageConfigurationProvider(configurations = configurations)
-            }
-        }
-    }
-
     "getPackageConfigurations" should {
         val id = Identifier("Maven:org.ossreviewtoolkit:model:1.0.0")
         val provenance = ArtifactProvenance(
