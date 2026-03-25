@@ -40,4 +40,5 @@ dependencies {
 
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(testFixtures(projects.analyzer))
+    funTestImplementation("io.github.classgraph:classgraph:4.8.184")
 }

@@ -19,28 +19,37 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.sbt
 
+import io.github.classgraph.ClassGraph
+
+import io.kotest.core.TestConfiguration
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
+
+import java.io.File
+import java.nio.file.Files
 
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitCommand
+import org.ossreviewtoolkit.utils.common.div
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
 @Tags("RequiresExternalTool")
 class SbtFunTest : StringSpec({
-    "Dependencies of the external 'multi-project' should be detected correctly" {
-        val definitionFile = getAssetFile("projects/external/multi-project/build.sbt")
-        val expectedResultFile = getAssetFile("projects/external/multi-project-expected-output.yml")
-        val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
+    val extractor = createResourceExtractor("projects")
 
-        // Clean any previously generated POM files / target directories.
-        GitCommand.run(definitionFile.parentFile, "clean", "-fd").requireSuccess()
+    "Dependencies of the external 'multi-project' should be detected correctly" {
+        val externalDir = extractor.extractDirectory("external")
+        val definitionFile = externalDir / "multi-project" / "build.sbt"
+        val expectedResultFile = externalDir / "multi-project-expected-output.yml"
+        val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         val result = analyze(
             definitionFile.parentFile,
@@ -72,3 +81,26 @@ class SbtFunTest : StringSpec({
         patchActualResult(result.toYaml()) shouldBe expectedResult
     }
 })
+
+private fun interface ResourceExtractor {
+    fun extractDirectory(directoryName: String): File
+}
+
+private fun TestConfiguration.createResourceExtractor(rootPath: String): ResourceExtractor {
+    val scanResult = ClassGraph().acceptPaths(rootPath).scan()
+
+    afterSpec { scanResult.close() }
+
+    return ResourceExtractor { directoryName ->
+        val outputDir = tempdir()
+
+        scanResult.getResourcesMatchingWildcard("$rootPath/$directoryName/**").forEach { resource ->
+            resource.open().use { input ->
+                val outputFile = outputDir.resolve(resource.path).apply { parentFile.safeMkdirs() }
+                Files.copy(input, outputFile.toPath())
+            }
+        }
+
+        return@ResourceExtractor outputDir / rootPath / directoryName
+    }
+}
