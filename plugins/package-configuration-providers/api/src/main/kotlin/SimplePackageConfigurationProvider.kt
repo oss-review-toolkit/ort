@@ -46,11 +46,7 @@ open class SimplePackageConfigurationProvider(
      * A map that stores all package configurations by their [Identifier] for fast lookup. The version of the
      * [Identifier]s must be ignored because it could be a version range.
      */
-    private val configurationsById: Map<Identifier, List<PackageConfiguration>>
-
-    init {
-        configurationsById = configurations.groupBy { it.id.copy(version = "") }
-    }
+    private val configurationsById = configurations.groupBy { it.id.copy(version = "") }
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
         configurationsById[packageId.copy(version = "")]?.filter { it.matches(packageId, provenance) }.orEmpty()
