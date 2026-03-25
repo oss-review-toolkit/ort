@@ -36,11 +36,11 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    api(jacksonLibs.jacksonDatabind)
-
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
+
+    implementation(jacksonLibs.jacksonDatabind)
 
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.core)
