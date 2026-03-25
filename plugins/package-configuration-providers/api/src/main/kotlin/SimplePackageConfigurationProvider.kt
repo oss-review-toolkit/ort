@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
-import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
 /**
@@ -50,24 +49,9 @@ open class SimplePackageConfigurationProvider(
     private val configurationsById: Map<Identifier, List<PackageConfiguration>>
 
     init {
-        configurations.checkAtMostOneConfigurationPerIdAndProvenance()
-
         configurationsById = configurations.groupBy { it.id.copy(version = "") }
     }
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
         configurationsById[packageId.copy(version = "")]?.filter { it.matches(packageId, provenance) }.orEmpty()
-}
-
-private fun Collection<PackageConfiguration>.checkAtMostOneConfigurationPerIdAndProvenance() {
-    data class Key(val id: Identifier, val sourceArtifactUrl: String?, val vcsMatcher: VcsMatcher?)
-
-    fun PackageConfiguration.key() = Key(id, sourceArtifactUrl, vcs)
-
-    val configurationsWithSameMatcher = groupBy { it.key() }.filter { it.value.size > 1 }
-
-    require(configurationsWithSameMatcher.isEmpty()) {
-        "There must be at most one package configuration per Id and provenance, but found multiple for:\n" +
-            "${configurationsWithSameMatcher.keys.joinToString(prefix = "  ", separator = "\n  ")}."
-    }
 }

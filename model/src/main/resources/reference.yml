@@ -52,10 +52,9 @@ ort:
     otherLicenseFilenames: ['readme*']
 
   # Package configuration providers are listed from highest to lowest priority. If multiple providers return
-  # configurations for the same package ID and provenance, the configuration from the higher-priority provider
-  # (listed first) takes precedence. Configurations must be unique by ID and provenance within a single provider.
-  # Ensure that different providers do not provide conflicting configurations for the same package, see
-  # https://github.com/oss-review-toolkit/ort/issues/6972 for details.
+  # configurations for the same package ID and provenance, the configuration from the higher-priority provider (listed
+  # first) takes precedence. Ensure that different providers do not provide conflicting configurations for the same
+  # package, see https://github.com/oss-review-toolkit/ort/issues/6972 for details.
   packageConfigurationProviders:
   - type: DefaultDir
   - type: Dir
