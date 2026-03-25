@@ -111,7 +111,7 @@ class GoMod(
         }
     }
 
-    fun runGo(projectDir: File, vararg args: CharSequence) =
+    private fun runGo(projectDir: File, vararg args: CharSequence) =
         GoCommand.run(*args, workingDir = projectDir, environment = goEnvironment).requireSuccess()
 
     override val globsForDefinitionFiles = listOf("go.mod")
