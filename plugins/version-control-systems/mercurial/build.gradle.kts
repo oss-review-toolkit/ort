@@ -33,7 +33,5 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    implementation(projects.utils.ortUtils)
-
     ksp(projects.downloader)
 }

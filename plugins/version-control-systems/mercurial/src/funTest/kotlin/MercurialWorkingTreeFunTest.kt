@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.common.unpack
-import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 @Tags("RequiresExternalTool")
 class MercurialWorkingTreeFunTest : StringSpec({
@@ -53,7 +52,7 @@ class MercurialWorkingTreeFunTest : StringSpec({
     }
 
     "Mercurial detects non-working-trees" {
-        hg.getWorkingTree(ortDataDirectory).isValid() shouldBe false
+        hg.getWorkingTree(tempdir()).isValid() shouldBe false
     }
 
     "Mercurial correctly detects URLs to remote repositories" {
