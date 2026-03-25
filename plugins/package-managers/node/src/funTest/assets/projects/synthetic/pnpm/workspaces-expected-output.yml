@@ -15,8 +15,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app"
   homepage_url: ""
   scopes:
@@ -51,8 +51,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces"
   description: "PNPM workspaces test"
   homepage_url: ""
@@ -85,8 +85,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a"
   homepage_url: ""
   scopes:
@@ -126,8 +126,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b"
   homepage_url: ""
   scopes:
@@ -158,8 +158,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/non-workspace/package-c"
   homepage_url: ""
   scopes:

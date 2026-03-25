@@ -86,10 +86,10 @@ private val REPLACE_PATTERN_REPLACEMENTS = listOf(
     "\"<REPLACE_MAX_MEMORY>\"" to "33445504",
     "<REPLACE_DEFINITION_FILE_PATH>" to "33445505",
     "<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>" to "33445506",
-    "<REPLACE_URL>" to "http://replace/url/non/processed",
-    "<REPLACE_REVISION>" to "33445507",
-    "<REPLACE_PATH>" to "replace/path",
-    "<REPLACE_URL_PROCESSED>" to "http://replace/url/processed"
+    "<REPLACE_VCS_URL>" to "http://replace/url/non/processed",
+    "<REPLACE_VCS_REVISION>" to "33445507",
+    "<REPLACE_VCS_PATH>" to "replace/path",
+    "<REPLACE_VCS_PROCESSED_URL>" to "http://replace/url/processed"
 )
 
 private val TARGET_CLASSES = setOf(

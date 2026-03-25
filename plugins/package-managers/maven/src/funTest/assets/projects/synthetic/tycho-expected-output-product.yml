@@ -19,8 +19,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.bundle"
   homepage_url: "http://maven.apache.org/org.ossreviewtoolkit.tycho.test.bundle"
   scopes:
@@ -46,8 +46,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.feature"
   homepage_url: "http://maven.apache.org/org.ossreviewtoolkit.tycho.test.feature"
   scopes:
@@ -78,8 +78,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product"
   homepage_url: "http://maven.apache.org"
   scopes: []
@@ -101,8 +101,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/tycho-product/org.ossreviewtoolkit.tycho.product"
   homepage_url: "http://maven.apache.org/tychoTestProduct"
   scopes:

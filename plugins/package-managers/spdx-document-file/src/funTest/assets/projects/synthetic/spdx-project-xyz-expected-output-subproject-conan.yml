@@ -16,8 +16,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/spdx-document-file/src/funTest/assets/projects/synthetic/subproject-conan/subproject"
   homepage_url: ""
   scopes:
@@ -36,13 +36,13 @@ projects:
     spdx_expression: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   vcs:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/spdx-document-file/src/funTest/assets/projects/synthetic/subproject-conan"
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/spdx-document-file/src/funTest/assets/projects/synthetic/subproject-conan"
   homepage_url: "https://example.com/products/xyz"
   scopes:
