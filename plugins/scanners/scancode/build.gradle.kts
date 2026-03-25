@@ -29,16 +29,13 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
-    api(libs.semver4j) {
-        because("This is a CommandLineTool.")
-    }
-
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.semver4j)
 
     ksp(projects.scanner)
 
