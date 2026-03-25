@@ -1,6 +1,6 @@
 ---
 project:
-  id: "SwiftPM::Package.resolved:<REPLACE_REVISION>"
+  id: "SwiftPM::Package.resolved:<REPLACE_VCS_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -11,9 +11,9 @@ project:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
   homepage_url: ""
   scopes:
   - name: "dependencies"

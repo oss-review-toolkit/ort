@@ -1,7 +1,7 @@
 ---
 projects:
 - id: "otp::child_app:0.0.0-dev"
-  definition_file_path: "<REPLACE_PATH>/apps/child_app/mix.exs"
+  definition_file_path: "<REPLACE_VCS_PATH>/apps/child_app/mix.exs"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
@@ -11,9 +11,9 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/apps/child_app"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/apps/child_app"
   homepage_url: ""
   scopes:
   - name: "required"
@@ -30,9 +30,9 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
   homepage_url: ""
   scopes:
   - name: "required"
