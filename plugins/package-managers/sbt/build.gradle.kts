@@ -25,16 +25,12 @@ plugins {
 dependencies {
     api(projects.analyzer)
     api(projects.model)
-    api(projects.utils.commonUtils) {
-        because("This is a CommandLineTool.")
-    }
-
-    api(libs.semver4j) {
-        because("This is a CommandLineTool.")
-    }
 
     implementation(projects.plugins.packageManagers.mavenPackageManager)
+    implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+
+    implementation(libs.semver4j)
 
     ksp(projects.analyzer)
 
