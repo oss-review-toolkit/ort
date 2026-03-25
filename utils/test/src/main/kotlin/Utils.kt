@@ -89,23 +89,28 @@ fun patchExpectedResult(
 
         if (definitionFile != null) {
             val projectDir = definitionFile.parentFile
-            val vcsDir = checkNotNull(VersionControlSystem.forDirectory(projectDir))
-            val url = vcsDir.getRemoteUrl()
-            val path = vcsDir.getPathToRoot(projectDir)
+            val vcsDir = VersionControlSystem.forDirectory(projectDir)
+            val vcsUrl = vcsDir?.getRemoteUrl()
+            val vcsRevision = vcsDir?.getRevision()
+            val vcsPath = vcsDir?.getPathToRoot(projectDir)
 
-            put("<REPLACE_DEFINITION_FILE_PATH>", "$path/${definitionFile.name}")
+            put("<REPLACE_DEFINITION_FILE_PATH>", "$vcsPath/${definitionFile.name}")
             put("<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>", definitionFile.absoluteFile.invariantSeparatorsPath)
-            put("<REPLACE_VCS_URL>", url)
-            put("<REPLACE_VCS_REVISION>", vcsDir.getRevision())
-            put("<REPLACE_VCS_PATH>", path)
-            put("<REPLACE_VCS_PROCESSED_URL>", normalizeVcsUrl(url))
+            put("<REPLACE_VCS_URL>", vcsUrl)
+            put("<REPLACE_VCS_REVISION>", vcsRevision)
+            put("<REPLACE_VCS_PATH>", vcsPath)
+            put("<REPLACE_VCS_PROCESSED_URL>", vcsUrl?.let(::normalizeVcsUrl))
         }
 
         putAll(custom)
     }
 
     return replacements.entries.fold(expectedResult) { text, (pattern, replacement) ->
-        text.replace(pattern.toRegex(), replacement)
+        if (replacement != null) {
+            text.replace(pattern.toRegex(), replacement)
+        } else {
+            text
+        }
     }
 }
 
