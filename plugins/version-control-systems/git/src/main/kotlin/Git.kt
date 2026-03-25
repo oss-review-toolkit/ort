@@ -62,7 +62,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
-object GitCommand : CommandLineTool {
+internal object GitCommand : CommandLineTool {
     private val versionRegex = Regex("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
     override fun command(workingDir: File?) = "git"
