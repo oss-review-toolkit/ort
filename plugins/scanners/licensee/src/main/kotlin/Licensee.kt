@@ -53,7 +53,7 @@ private val JSON = Json {
     namingStrategy = JsonNamingStrategy.SnakeCase
 }
 
-object LicenseeCommand : CommandLineTool {
+internal object LicenseeCommand : CommandLineTool {
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "licensee.bat" else "licensee").joinToString(File.separator)
 

@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.common.Os
 
 private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for any known license"
 
-object AskalonoCommand : CommandLineTool {
+internal object AskalonoCommand : CommandLineTool {
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
 
