@@ -90,15 +90,16 @@ fun patchExpectedResult(
         if (definitionFile != null) {
             val projectDir = definitionFile.parentFile
             val vcsDir = checkNotNull(VersionControlSystem.forDirectory(projectDir))
-            val url = vcsDir.getRemoteUrl()
-            val path = vcsDir.getPathToRoot(projectDir)
+            val vcsUrl = vcsDir.getRemoteUrl()
+            val vcsRevision = vcsDir.getRevision()
+            val vcsPath = vcsDir.getPathToRoot(projectDir)
 
-            put("<REPLACE_DEFINITION_FILE_PATH>", "$path/${definitionFile.name}")
+            put("<REPLACE_DEFINITION_FILE_PATH>", "$vcsPath/${definitionFile.name}")
             put("<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>", definitionFile.absoluteFile.invariantSeparatorsPath)
-            put("<REPLACE_VCS_URL>", url)
-            put("<REPLACE_VCS_REVISION>", vcsDir.getRevision())
-            put("<REPLACE_VCS_PATH>", path)
-            put("<REPLACE_VCS_PROCESSED_URL>", normalizeVcsUrl(url))
+            put("<REPLACE_VCS_URL>", vcsUrl)
+            put("<REPLACE_VCS_REVISION>", vcsRevision)
+            put("<REPLACE_VCS_PATH>", vcsPath)
+            put("<REPLACE_VCS_PROCESSED_URL>", normalizeVcsUrl(vcsUrl))
         }
 
         putAll(custom)
