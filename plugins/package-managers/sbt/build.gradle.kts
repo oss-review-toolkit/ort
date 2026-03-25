@@ -38,6 +38,5 @@ dependencies {
 
     ksp(projects.analyzer)
 
-    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(testFixtures(projects.analyzer))
 }
