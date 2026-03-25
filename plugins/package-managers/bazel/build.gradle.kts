@@ -50,7 +50,8 @@ dependencies {
     testImplementation(libs.mockk)
 
     funTestImplementation(testFixtures(projects.analyzer))
-    funTestImplementation(projects.plugins.packageManagers.conanPackageManager)
+
+    funTestRuntimeOnly(projects.plugins.packageManagers.conanPackageManager)
 }
 
 tasks.named<Test>("funTest") {
