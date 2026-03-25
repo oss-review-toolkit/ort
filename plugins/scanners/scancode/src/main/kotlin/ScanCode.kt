@@ -45,7 +45,7 @@ import org.semver4j.Semver
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
-object ScanCodeCommand : CommandLineTool {
+internal object ScanCodeCommand : CommandLineTool {
     override fun command(workingDir: File?): String {
         val executable = if (Os.isWindows) {
             // Installing ScanCode as a developer from the distribution archive provides a "scancode.bat", while
