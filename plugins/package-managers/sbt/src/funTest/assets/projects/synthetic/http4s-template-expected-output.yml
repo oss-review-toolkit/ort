@@ -13,8 +13,8 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/sbt/src/funTest/assets/projects/synthetic/http4s-template"
   homepage_url: ""
   scopes:

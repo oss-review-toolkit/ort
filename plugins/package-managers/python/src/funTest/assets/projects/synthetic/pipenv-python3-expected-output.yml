@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Pipenv::requirements-from-pipenv.txt:<REPLACE_REVISION>"
+  id: "Pipenv::requirements-from-pipenv.txt:<REPLACE_VCS_REVISION>"
   definition_file_path: "plugins/package-managers/python/src/funTest/assets/projects/synthetic/pipenv-python3/requirements-from-pipenv.txt"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -11,9 +11,9 @@ project:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
   homepage_url: ""
   scopes:
   - name: "install"

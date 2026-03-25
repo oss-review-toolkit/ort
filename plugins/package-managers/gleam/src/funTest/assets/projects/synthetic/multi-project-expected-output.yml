@@ -1,7 +1,7 @@
 ---
 projects:
 - id: "Gleam::child_pkg:1.0.0"
-  definition_file_path: "<REPLACE_PATH>/child/gleam.toml"
+  definition_file_path: "<REPLACE_VCS_PATH>/child/gleam.toml"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -13,9 +13,9 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/child"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/child"
   homepage_url: ""
   scopes:
   - name: "dependencies"
@@ -39,9 +39,9 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
   homepage_url: ""
   scopes:
   - name: "dependencies"
@@ -56,7 +56,7 @@ projects:
           dependencies:
           - id: "Hex::gleam_stdlib:0.34.0"
 - id: "Gleam::sibling_pkg:1.0.0"
-  definition_file_path: "<REPLACE_PATH>/sibling/gleam.toml"
+  definition_file_path: "<REPLACE_VCS_PATH>/sibling/gleam.toml"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -68,9 +68,9 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/sibling"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/sibling"
   homepage_url: ""
   scopes:
   - name: "dependencies"

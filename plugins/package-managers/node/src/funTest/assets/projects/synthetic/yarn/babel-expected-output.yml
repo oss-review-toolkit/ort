@@ -13,9 +13,9 @@ project:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
   description: "A dummy NPM project that depends on Babel"
   homepage_url: ""
   scopes:

@@ -95,10 +95,10 @@ fun patchExpectedResult(
 
             put("<REPLACE_DEFINITION_FILE_PATH>", "$path/${definitionFile.name}")
             put("<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>", definitionFile.absoluteFile.invariantSeparatorsPath)
-            put("<REPLACE_URL>", url)
-            put("<REPLACE_REVISION>", vcsDir.getRevision())
-            put("<REPLACE_PATH>", path)
-            put("<REPLACE_URL_PROCESSED>", normalizeVcsUrl(url))
+            put("<REPLACE_VCS_URL>", url)
+            put("<REPLACE_VCS_REVISION>", vcsDir.getRevision())
+            put("<REPLACE_VCS_PATH>", path)
+            put("<REPLACE_VCS_PROCESSED_URL>", normalizeVcsUrl(url))
         }
 
         putAll(custom)
