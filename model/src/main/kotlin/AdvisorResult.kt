@@ -19,16 +19,15 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 
 /**
  * The result of a specific advisor execution for a single package.
- *
- * Different advisor implementations may produce findings of different types. To reflect this, this class has multiple
- * fields for findings of these types. It is up to a concrete advisor, which of these fields it populates.
  */
+@JsonIgnoreProperties("defects")
 data class AdvisorResult(
     /**
      * Details about the used advisor.
@@ -39,12 +38,6 @@ data class AdvisorResult(
      * A summary of the advisor results.
      */
     val summary: AdvisorSummary,
-
-    /**
-     * The defects.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val defects: List<Defect> = emptyList(),
 
     /**
      * The vulnerabilities.

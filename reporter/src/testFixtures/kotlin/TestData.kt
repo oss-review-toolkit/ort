@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.reporter
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
@@ -58,7 +57,6 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
-import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.scannerRunOf
@@ -436,7 +434,7 @@ private val ADVISOR_WITH_VULNERABILITIES = AdvisorRun(
     results = mapOf(
         Identifier("NPM:@ort:declared-license:1.0") to listOf(
             AdvisorResult(
-                advisor = AdvisorDetails("VulnerableCode", enumSetOf(AdvisorCapability.VULNERABILITIES)),
+                advisor = AdvisorDetails("VulnerableCode"),
                 summary = AdvisorSummary(Instant.now(), Instant.now()),
                 vulnerabilities = listOf(VULNERABILITY)
             )

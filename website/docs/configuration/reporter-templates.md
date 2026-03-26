@@ -13,7 +13,6 @@ If no options are provided, the "disclosure_document" template is used, and if s
   Currently, the following IDs are supported:
   * "[disclosure_document](../../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/disclosure_document.ftl)"
   * "[vulnerability_report](../../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/vulnerability_report.ftl)"
-  * "[defect_report](../../../plugins/reporters/asciidoc/src/main/resources/templates/asciidoc/defect_report.ftl)"
 * `template.path`:
   A comma-separated list of paths to template files provided by the user.
 

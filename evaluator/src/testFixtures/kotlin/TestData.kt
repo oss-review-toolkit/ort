@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.evaluator
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
@@ -53,7 +52,6 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
-import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -223,7 +221,7 @@ val ortResult = OrtResult(
         results = mapOf(
             packageWithVulnerabilities.id to listOf(
                 AdvisorResult(
-                    advisor = AdvisorDetails("Advisor", enumSetOf(AdvisorCapability.VULNERABILITIES)),
+                    advisor = AdvisorDetails("Advisor"),
                     summary = AdvisorSummary(startTime = Instant.EPOCH, endTime = Instant.EPOCH),
                     vulnerabilities = listOf(
                         Vulnerability(

@@ -29,7 +29,6 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
 import org.ossreviewtoolkit.clients.osv.Vulnerability
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -41,7 +40,6 @@ import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
@@ -58,7 +56,7 @@ class Osv(
     override val descriptor: PluginDescriptor = OsvFactory.descriptor,
     config: OsvConfiguration
 ) : AdviceProvider {
-    override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
+    override val details = AdvisorDetails(descriptor.id)
 
     private val service = OsvServiceWrapper(
         serverUrl = config.serverUrl,

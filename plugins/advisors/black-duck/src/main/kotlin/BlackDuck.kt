@@ -32,7 +32,6 @@ import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -50,7 +49,6 @@ import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.enumSetOf
 
 /**
  * This advice provider by default retrieves vulnerabilities by the purl corresponding to the package. If a package has
@@ -74,7 +72,7 @@ class BlackDuck(
         const val PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID = "black-duck:origin-id"
     }
 
-    override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
+    override val details = AdvisorDetails(descriptor.id)
 
     constructor(descriptor: PluginDescriptor = BlackDuckFactory.descriptor, config: BlackDuckConfiguration) : this(
         descriptor, ExtendedComponentService.create(config.serverUrl, config.apiToken.value)

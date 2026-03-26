@@ -31,7 +31,6 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
-import org.ossreviewtoolkit.utils.common.enumSetOf
 
 class AdvisorResultTest : WordSpec({
     "collectIssues" should {
@@ -133,37 +132,11 @@ class AdvisorResultTest : WordSpec({
         }
     }
 
-    "getDefects" should {
-        "return an empty list for an unknown package" {
-            val run = advisorRunOf()
-
-            run.getDefects(langId) should beEmpty()
-        }
-
-        "return the combined defects detected for a specific package" {
-            val defect1 = createDefect("d1")
-            val defect2 = createDefect("d2")
-            val defect3 = createDefect("d3")
-            val defect4 = createDefect("d4")
-            val defect5 = createDefect("d5")
-
-            val run = advisorRunOf(
-                queryId to listOf(
-                    createResult(advisorIndex = 1, defects = listOf(defect1, defect2)),
-                    createResult(advisorIndex = 2, defects = listOf(defect3, defect4, defect5))
-                )
-            )
-
-            run.getDefects(queryId) should containExactlyInAnyOrder(defect1, defect2, defect3, defect4, defect5)
-        }
-    }
-
     "filterResults" should {
         "return only results matching a filter" {
             val matchingResult = createResult(
                 advisorIndex = 1,
-                vulnerabilities = listOf(createVulnerability("CVE-1")),
-                defects = listOf(createDefect("bug1"))
+                vulnerabilities = listOf(createVulnerability("CVE-1"))
             )
 
             val run = advisorRunOf(
@@ -179,34 +152,17 @@ class AdvisorResultTest : WordSpec({
 
         "provide a predefined filter for results with vulnerabilities" {
             val result1 = createResult(advisorIndex = 1, vulnerabilities = listOf(createVulnerability("CVE-1")))
-            val result2 = createResult(advisorIndex = 2, defects = listOf(createDefect("BUG-1")))
-            val result3 = createResult(advisorIndex = 3)
-            val result4 = createResult(advisorIndex = 4, vulnerabilities = listOf(createVulnerability("CVE-2")))
+            val result2 = createResult(advisorIndex = 2)
+            val result3 = createResult(advisorIndex = 3, vulnerabilities = listOf(createVulnerability("CVE-2")))
 
             val run = advisorRunOf(
-                queryId to listOf(result1, result2, result3, result4)
+                queryId to listOf(result1, result2, result3)
             )
 
             val filteredResults = run.filterResults(AdvisorRun.RESULTS_WITH_VULNERABILITIES)
 
             filteredResults.keys should containExactly(queryId)
-            filteredResults.getValue(queryId) should containExactlyInAnyOrder(result1, result4)
-        }
-
-        "provide a predefined filter for results with defects" {
-            val result1 = createResult(advisorIndex = 1, vulnerabilities = listOf(createVulnerability("CVE-1")))
-            val result2 = createResult(advisorIndex = 2, defects = listOf(createDefect("BUG-1")))
-            val result3 = createResult(advisorIndex = 3)
-            val result4 = createResult(advisorIndex = 4, vulnerabilities = listOf(createVulnerability("CVE-2")))
-
-            val run = advisorRunOf(
-                queryId to listOf(result1, result2, result3, result4)
-            )
-
-            val filteredResults = run.filterResults(AdvisorRun.RESULTS_WITH_DEFECTS)
-
-            filteredResults.keys should containExactly(queryId)
-            filteredResults.getValue(queryId) should containExactly(result2)
+            filteredResults.getValue(queryId) should containExactlyInAnyOrder(result1, result3)
         }
 
         "provide a predefined filter for results with issues" {
@@ -234,8 +190,7 @@ class AdvisorResultTest : WordSpec({
             )
             val result2 = createResult(
                 advisorIndex = 2,
-                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.WARNING)),
-                capability = AdvisorCapability.DEFECTS
+                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.WARNING))
             )
 
             val run = advisorRunOf(
@@ -244,32 +199,6 @@ class AdvisorResultTest : WordSpec({
             )
 
             val filteredResults = run.filterResults(AdvisorRun.resultsWithIssues(minSeverity = Severity.ERROR))
-
-            filteredResults.keys should containExactly(queryId)
-            filteredResults.getValue(queryId) should containExactly(result1)
-        }
-
-        "provide a predefined filter for results with issues for a given advisor capability" {
-            val result1 = createResult(
-                advisorIndex = 1,
-                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.ERROR))
-            )
-            val result2 = createResult(
-                advisorIndex = 2,
-                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.WARNING)),
-                capability = AdvisorCapability.DEFECTS
-            )
-
-            val run = advisorRunOf(
-                queryId to listOf(result1), langId to listOf(result2)
-            )
-
-            val filteredResults = run.filterResults(
-                AdvisorRun.resultsWithIssues(
-                    minSeverity = Severity.WARNING,
-                    capability = AdvisorCapability.VULNERABILITIES
-                )
-            )
 
             filteredResults.keys should containExactly(queryId)
             filteredResults.getValue(queryId) should containExactly(result1)
@@ -300,29 +229,22 @@ private fun createVulnerability(
     )
 
 /**
- * Construct a [Defect] based on the given [id].
- */
-private fun createDefect(id: String): Defect = Defect(id, URI("https://defects.example.org/$id"), "Defect $id")
-
-/**
- * Create an [AdvisorResult] for an advisor with the given [advisorIndex] which has the given [capability], with the
- * passed in [issues], [vulnerabilities], and [defects].
+ * Create an [AdvisorResult] for an advisor with the given [advisorIndex], with the passed in [issues] and
+ * [vulnerabilities].
  */
 private fun createResult(
     advisorIndex: Int = 1,
     issues: List<Issue> = emptyList(),
-    vulnerabilities: List<Vulnerability> = emptyList(),
-    defects: List<Defect> = emptyList(),
-    capability: AdvisorCapability = AdvisorCapability.VULNERABILITIES
+    vulnerabilities: List<Vulnerability> = emptyList()
 ): AdvisorResult {
-    val details = AdvisorDetails("advisor$advisorIndex", enumSetOf(capability))
+    val details = AdvisorDetails("advisor$advisorIndex")
     val summary = AdvisorSummary(
         startTime = Instant.parse("2021-04-06T13:26:05.123Z"),
         endTime = Instant.parse("2021-04-06T13:26:47.456Z"),
         issues = issues
     )
 
-    return AdvisorResult(details, summary, defects, vulnerabilities)
+    return AdvisorResult(details, summary, vulnerabilities)
 }
 
 private fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>) =

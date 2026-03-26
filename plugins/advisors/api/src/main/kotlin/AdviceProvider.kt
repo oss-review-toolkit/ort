@@ -25,9 +25,8 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.plugins.api.Plugin
 
 /**
- * An abstract class that represents a service that can retrieve any kind of advice information
- * for a list of given [Package]s. Examples of such information can be security vulnerabilities, known defects,
- * or code analysis results.
+ * An abstract class that represents a service that can retrieve security vulnerabilities for a list of given
+ * [Package]s.
  */
 interface AdviceProvider : Plugin {
     /**

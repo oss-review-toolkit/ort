@@ -32,7 +32,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -47,7 +46,6 @@ import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
@@ -79,7 +77,7 @@ class VulnerableCode(
      * The details returned with each [AdvisorResult] produced by this instance. As this is constant, it can be
      * created once beforehand.
      */
-    override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
+    override val details = AdvisorDetails(descriptor.id)
 
     private val service by lazy {
         val client = OkHttpClientHelper.buildClient {

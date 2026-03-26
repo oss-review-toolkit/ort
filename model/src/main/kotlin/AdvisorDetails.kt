@@ -19,26 +19,15 @@
 
 package org.ossreviewtoolkit.model
 
-import java.util.EnumSet
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 /**
  * Details about the used provider of vulnerability information.
  */
+@JsonIgnoreProperties("capabilities")
 data class AdvisorDetails(
     /**
      * The name of the used advisor.
      */
-    val name: String,
-
-    /**
-     * The capabilities of the used advisor. This property indicates, which kind of findings are retrieved by the
-     * advisor.
-     */
-    val capabilities: EnumSet<AdvisorCapability>
-) {
-    init {
-        require(capabilities.isNotEmpty()) {
-            "An advisor must have at least one capability."
-        }
-    }
-}
+    val name: String
+)
