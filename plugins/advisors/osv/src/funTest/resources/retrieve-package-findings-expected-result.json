@@ -1,8 +1,7 @@
 {
   "NPM::find-my-way:3.0.0" : {
     "advisor" : {
-      "name" : "OSV",
-      "capabilities" : [ "VULNERABILITIES" ]
+      "name" : "OSV"
     },
     "summary" : {
       "start_time" : "2024-10-08T15:05:07.107271709Z",

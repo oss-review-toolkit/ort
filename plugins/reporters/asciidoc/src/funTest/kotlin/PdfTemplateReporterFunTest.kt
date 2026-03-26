@@ -81,7 +81,6 @@ class PdfTemplateReporterFunTest : StringSpec({
 
         val reportFiles = reportFileResults.map { it.shouldBeSuccess() }
         reportFiles should containExactlyInAnyOrder(
-            outputDir / "AsciiDoc_defect_report.pdf",
             outputDir / "AsciiDoc_disclosure_document.pdf",
             outputDir / "AsciiDoc_vulnerability_report.pdf"
         )

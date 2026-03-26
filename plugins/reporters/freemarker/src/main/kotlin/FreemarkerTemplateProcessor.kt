@@ -29,7 +29,6 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorResultFilter
 import org.ossreviewtoolkit.model.AdvisorRun
@@ -358,45 +357,25 @@ class FreemarkerTemplateProcessor(
                 .mapTo(mutableSetOf()) { snippet -> snippet.license.toString() }
 
         /**
-         * Return a flag indicating that issues have been encountered during the run of an advisor with the given
-         * [capability] with at least the given [severity]. This typically means that the report is incomplete;
-         * therefore, it should contain a corresponding warning.
+         * Return a flag indicating that issues have been encountered during the run of an advisor with at least the
+         * given [severity]. This typically means that the report is incomplete; therefore, it should contain a
+         * corresponding warning.
          */
-        fun hasAdvisorIssues(capability: AdvisorCapability, severity: Severity): Boolean =
-            input.ortResult.advisor?.filterResults(
-                AdvisorRun.resultsWithIssues(
-                    capability = capability,
-                    minSeverity = severity
-                )
-            )?.isNotEmpty() == true
+        fun hasAdvisorIssues(severity: Severity): Boolean =
+            input.ortResult.advisor?.filterResults(AdvisorRun.resultsWithIssues(severity))?.isNotEmpty() == true
 
         /**
-         * Return the subset of the available advisor results produced by an advisor with the given [capability] that
-         * have an issue with at least the given [severity]. With this function packages can be identified whose
-         * results may be incomplete.
+         * Return the subset of the available advisor results that have an issue with at least the given [severity].
+         * With this function packages can be identified whose results may be incomplete.
          */
-        fun advisorResultsWithIssues(
-            capability: AdvisorCapability,
-            severity: Severity
-        ): Map<Identifier, List<AdvisorResult>> =
-            input.filteredAdvisorResults(
-                AdvisorRun.resultsWithIssues(
-                    capability = capability,
-                    minSeverity = severity
-                )
-            )
+        fun advisorResultsWithIssues(severity: Severity): Map<Identifier, List<AdvisorResult>> =
+            input.filteredAdvisorResults(AdvisorRun.resultsWithIssues(minSeverity = severity))
 
         /**
          * Return the subset of the available advisor results that contain vulnerabilities.
          */
         fun advisorResultsWithVulnerabilities(): Map<Identifier, List<AdvisorResult>> =
             input.filteredAdvisorResults(AdvisorRun.RESULTS_WITH_VULNERABILITIES)
-
-        /**
-         * Return the subset of the available advisor results that contain defects.
-         */
-        fun advisorResultsWithDefects(): Map<Identifier, List<AdvisorResult>> =
-            input.filteredAdvisorResults(AdvisorRun.RESULTS_WITH_DEFECTS)
 
         /**
          * Return the package from the current [OrtResult] with the given [id] or the empty package if the ID cannot be
@@ -423,10 +402,7 @@ private fun enumModel(): Map<String, Any> {
     val beansWrapper = BeansWrapperBuilder(Configuration.VERSION_2_3_30).build()
     val enumModels = beansWrapper.enumModels
 
-    return listOf(
-        AdvisorCapability::class.java,
-        Severity::class.java
-    ).associate { it.simpleName to enumModels.get(it.name) }
+    return listOf(Severity::class.java).associate { it.simpleName to enumModels.get(it.name) }
 }
 
 private fun createDataModel(input: ReporterInput): Map<String, Any> {

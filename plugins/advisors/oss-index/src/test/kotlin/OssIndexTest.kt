@@ -39,13 +39,11 @@ import io.kotest.matchers.shouldBe
 
 import java.net.URI
 
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.api.Secret
-import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.identifierToPackage
 
 class OssIndexTest : WordSpec({
@@ -142,7 +140,7 @@ class OssIndexTest : WordSpec({
         "be correct" {
             val ossIndex = createOssIndex()
 
-            ossIndex.details shouldBe AdvisorDetails(ADVISOR_NAME, enumSetOf(AdvisorCapability.VULNERABILITIES))
+            ossIndex.details shouldBe AdvisorDetails(ADVISOR_NAME)
         }
     }
 })

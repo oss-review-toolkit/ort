@@ -33,7 +33,7 @@ data class PdfTemplateReporterConfig(
     /**
      * A comma-separated list of IDs of templates provided by ORT.
      * If no template id or path is provided, the "disclosure_document" template is used, and if the ORT result contains
-     * an advisor run, the "vulnerability_report" and "defect_report" templates are used as well.
+     * an advisor run, the "vulnerability_report" template is used as well.
      */
     @OrtPluginOption(aliases = ["template.id"])
     val templateIds: List<String>?,

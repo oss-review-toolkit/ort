@@ -41,7 +41,6 @@ import io.kotest.matchers.shouldNot
 
 import java.net.URI
 
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
@@ -51,7 +50,6 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
-import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class VulnerableCodeTest : WordSpec({
@@ -276,10 +274,7 @@ class VulnerableCodeTest : WordSpec({
         "provide correct AdvisorDetails" {
             val vulnerableCode = createVulnerableCode(server)
 
-            vulnerableCode.details shouldBe AdvisorDetails(
-                ADVISOR_NAME,
-                enumSetOf(AdvisorCapability.VULNERABILITIES)
-            )
+            vulnerableCode.details shouldBe AdvisorDetails(ADVISOR_NAME)
         }
     }
 

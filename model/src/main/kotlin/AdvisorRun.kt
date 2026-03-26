@@ -84,26 +84,11 @@ data class AdvisorRun(
         val RESULTS_WITH_VULNERABILITIES: AdvisorResultFilter = { it.vulnerabilities.isNotEmpty() }
 
         /**
-         * A filter for [AdvisorResult]s that matches only results that contain defects.
-         */
-        val RESULTS_WITH_DEFECTS: AdvisorResultFilter = { it.defects.isNotEmpty() }
-
-        /**
          * Return a filter for [AdvisorResult]s that contain issues. Match only results with an issue whose severity
-         * is greater or equal than [minSeverity]. Often, issues are only relevant for certain types of advisors. For
-         * instance, when processing vulnerability information, it is not of interest if an advisor for defects had
-         * encountered problems. Therefore, support an optional filter for a [capability] of the advisor that produced
-         * a result.
+         * is greater or equal than [minSeverity].
          */
-        fun resultsWithIssues(
-            minSeverity: Severity = Severity.HINT,
-            capability: AdvisorCapability? = null
-        ): AdvisorResultFilter =
-            { result ->
-                (capability == null || capability in result.advisor.capabilities) && result.summary.issues.any {
-                    it.severity >= minSeverity
-                }
-            }
+        fun resultsWithIssues(minSeverity: Severity = Severity.HINT): AdvisorResultFilter =
+            { result -> result.summary.issues.any { it.severity >= minSeverity } }
     }
 
     @JsonIgnore
@@ -133,13 +118,6 @@ data class AdvisorRun(
      */
     fun getVulnerabilities(pkgId: Identifier): List<Vulnerability> =
         getFindings(pkgId) { it.vulnerabilities }.mergeVulnerabilities()
-
-    /**
-     * Return a list with all [Defect] objects that have been found for the given [package][pkgId]. If there are
-     * results from different advisors, a union list is constructed. No merging is done, as it is expected that the
-     * results from different advisors cannot be combined.
-     */
-    fun getDefects(pkgId: Identifier): List<Defect> = getFindings(pkgId) { it.defects }
 
     /**
      * Apply the given [filter] to the results stored in this record and return a map with the results that pass the

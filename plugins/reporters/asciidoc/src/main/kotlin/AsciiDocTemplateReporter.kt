@@ -37,7 +37,7 @@ data class AsciiDocTemplateReporterConfig(
     /**
      * A comma-separated list of IDs of templates provided by ORT.
      * If no template id or path is provided, the "disclosure_document" template is used, and if the ORT result contains
-     * an advisor run, the "vulnerability_report" and "defect_report" templates are used as well.
+     * an advisor run, the "vulnerability_report" template is used as well.
      */
     @OrtPluginOption(aliases = ["template.id"])
     val templateIds: List<String>?,
@@ -66,7 +66,6 @@ abstract class AsciiDocTemplateReporter(private val config: AsciiDocTemplateRepo
 
         private const val DISCLOSURE_TEMPLATE_ID = "disclosure_document"
         private const val VULNERABILITY_TEMPLATE_ID = "vulnerability_report"
-        private const val DEFECT_TEMPLATE_ID = "defect_report"
 
         internal val ASCIIDOCTOR by lazy { Asciidoctor.Factory.create() }
     }
@@ -108,7 +107,6 @@ abstract class AsciiDocTemplateReporter(private val config: AsciiDocTemplateRepo
 
                 if (input.ortResult.getAdvisorResults().isNotEmpty()) {
                     add(VULNERABILITY_TEMPLATE_ID)
-                    add(DEFECT_TEMPLATE_ID)
                 }
             },
             templatePaths = null

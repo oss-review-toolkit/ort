@@ -32,7 +32,6 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService.ComponentReport
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService.ComponentReportRequest
-import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -46,7 +45,6 @@ import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
@@ -67,7 +65,7 @@ class OssIndex(
     override val descriptor: PluginDescriptor = OssIndexFactory.descriptor,
     config: OssIndexConfiguration
 ) : AdviceProvider {
-    override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
+    override val details = AdvisorDetails(descriptor.id)
 
     private val service by lazy {
         OssIndexService.create(
