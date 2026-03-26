@@ -31,7 +31,6 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxDeclaredLicenseMapping
@@ -54,11 +53,11 @@ class DeclaredLicenseProcessorTest : StringSpec() {
     init {
         "Declared licenses can be processed" {
             declaredLicenses.forAll { declaredLicense ->
-                val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
-
-                // Include the declared license in the comparison to see where a failure comes from.
-                "$processedLicense from $declaredLicense" shouldNotBe "null from $declaredLicense"
-                processedLicense!!.validate(SpdxExpression.Strictness.ALLOW_CURRENT)
+                withClue(declaredLicense) {
+                    DeclaredLicenseProcessor.process(declaredLicense).shouldNotBeNull {
+                        validate(SpdxExpression.Strictness.ALLOW_CURRENT)
+                    }
+                }
             }
         }
 
