@@ -2,7 +2,7 @@
 buildConfigPlugin = "6.0.9"
 dependencyAnalysisPlugin = "3.6.1"
 detektPlugin = "2.0.0-alpha.2"
-dokkaPlugin = "2.2.0-Beta"
+dokkaPlugin = "2.2.0"
 downloadPlugin = "5.7.0"
 gitSemverPlugin = "0.18.0"
 graalVmNativeImagePlugin = "0.11.5"
