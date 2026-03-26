@@ -504,17 +504,13 @@ private fun Collection<DependencyReference>.toGraph(
 }
 
 private fun Collection<DependencyReference>.visitEach(visit: (ref: DependencyReference) -> Unit) {
-    val visited = mutableSetOf<NodeKey>()
     val queue = LinkedList(this)
 
     while (queue.isNotEmpty()) {
         val ref = queue.removeFirst()
 
-        if (ref.key !in visited) {
-            visit(ref)
-            visited += ref.key
-            queue += ref.dependencies
-        }
+        visit(ref)
+        queue += ref.dependencies
     }
 }
 
