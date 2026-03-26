@@ -81,7 +81,7 @@ class DownloaderFunTest : WordSpec({
             val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
             val tslibDir = outputDir / "tslib-1.10.0"
 
-            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+            with(provenance.shouldBeTypeOf<ArtifactProvenance>()) {
                 sourceArtifact.url shouldBe pkg.sourceArtifact.url
                 sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
@@ -257,7 +257,7 @@ class DownloaderFunTest : WordSpec({
             val provenance = Downloader(downloaderConfiguration).download(pkg, outputDir)
             val licenseFile = outputDir / "LICENSE-junit.txt"
 
-            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+            with(provenance.shouldBeTypeOf<ArtifactProvenance>()) {
                 sourceArtifact.url shouldBe pkg.sourceArtifact.url
                 sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
@@ -306,7 +306,7 @@ class DownloaderFunTest : WordSpec({
             val workingTree = VersionControlSystem.forDirectory(outputDir)
             val babelCliDir = outputDir / "packages" / "babel-cli"
 
-            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+            with(provenance.shouldBeTypeOf<RepositoryProvenance>()) {
                 vcsInfo.type shouldBe pkg.vcsProcessed.type
                 vcsInfo.url shouldBe pkg.vcsProcessed.url
                 vcsInfo.revision shouldBe "master"
@@ -349,7 +349,7 @@ class DownloaderFunTest : WordSpec({
 
             outputDir.walk().onEnter { it.name !in VCS_DIRECTORIES }.count() shouldBe 302
 
-            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+            with(provenance.shouldBeTypeOf<RepositoryProvenance>()) {
                 vcsInfo.type shouldBe VcsType.SUBVERSION
                 vcsInfo.url shouldBe vcsFromCuration.url
                 vcsInfo.revision shouldBe ""
@@ -388,7 +388,7 @@ class DownloaderFunTest : WordSpec({
             val provenance = Downloader(downloaderConfiguration).download(pkg, outputDir)
             val licenseFile = outputDir / "LICENSE-junit.txt"
 
-            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+            with(provenance.shouldBeTypeOf<RepositoryProvenance>()) {
                 vcsInfo.url shouldBe pkg.vcs.url
                 vcsInfo.revision shouldBe pkg.vcs.revision
             }
