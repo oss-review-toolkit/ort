@@ -138,6 +138,9 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = emptySet(),
             declaredLicenses = emptySet(),
+            // Do not derive the (processed) VCS information from the working directory as done for several other
+            // package managers, including SpdxDocumentFile, because the location of the SPDX file usually does not
+            // match the location of the project it describes.
             vcs = VcsInfo.EMPTY,
             homepageUrl = "",
             scopeDependencies = scopes
