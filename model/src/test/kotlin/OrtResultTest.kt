@@ -202,6 +202,23 @@ class OrtResultTest : WordSpec({
             ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project3) shouldBe "path/2/project3/build.gradle"
         }
 
+        "return the path to the definition file if an SPDX project has no VCS information" {
+            val project = Project.EMPTY.copy(
+                id = Identifier("SPDX::core-image-minimal-qemux86-64.rootfs-20260321090222"),
+                definitionFilePath = "project/spdx.json"
+            )
+            val ortResult = OrtResult(
+                Repository(
+                    vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
+                ),
+                AnalyzerRun.EMPTY.copy(
+                    result = AnalyzerResult.EMPTY.copy(projects = setOf(project))
+                )
+            )
+
+            ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project) shouldBe "project/spdx.json"
+        }
+
         "fail if no repository matches" {
             val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
             val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")

@@ -267,6 +267,10 @@ data class OrtResult(
      * analyzer root is the input directory of the analyzer.
      */
     fun getFilePathRelativeToAnalyzerRoot(project: Project, path: String): String {
+        if (project.id.type.startsWith("SPDX", ignoreCase = true) && project.vcsProcessed == VcsInfo.EMPTY) {
+            return project.definitionFilePath
+        }
+
         val vcsPath = relativeProjectVcsPath.getValue(project.id)
 
         requireNotNull(vcsPath) {
