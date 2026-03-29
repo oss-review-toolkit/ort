@@ -162,7 +162,7 @@ class OrtResultTest : WordSpec({
     }
 
     "getDefinitionFilePathRelativeToAnalyzerRoot()" should {
-        "use the correct vcs" {
+        "use the correct repository" {
             val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
             val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
             val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
@@ -202,7 +202,7 @@ class OrtResultTest : WordSpec({
             ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project3) shouldBe "path/2/project3/build.gradle"
         }
 
-        "fail if no vcs matches" {
+        "fail if no repository matches" {
             val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
             val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
             val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
