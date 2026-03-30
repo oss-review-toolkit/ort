@@ -39,9 +39,9 @@ data class IssueResolution(
     val reason: IssueResolutionReason,
 
     /**
-     * A comment to further explain why the [reason] is applicable here.
+     * An optional comment to further explain why the [reason] is applicable here.
      */
-    val comment: String
+    val comment: String = ""
 ) {
     private val regex = Regex(message.collapseWhitespace(), RegexOption.DOT_MATCHES_ALL)
 
