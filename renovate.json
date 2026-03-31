@@ -1,19 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    "docker:disable",
-    "helpers:pinGitHubActionDigestsToSemver",
-    ":semanticCommitScopeDisabled",
-    ":semanticCommitTypeAll(deps)"
+    "github>oss-review-toolkit/.github//renovate-config",
+    "docker:disable"
   ],
-  "dependencyDashboard": false,
   "ignorePaths": [
     "plugins/reporters/web-app-template",
     "**/src/funTest/assets/**",
     "**/src/test/assets/**"
   ],
-  "labels": ["dependencies"],
   "packageRules": [
     {
       "description": "Automerge non-major updates",
