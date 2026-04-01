@@ -20,6 +20,8 @@
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 
+import kotlin.Pair
+
 import javax.inject.Inject
 
 import org.gradle.api.internal.artifacts.DefaultProjectComponentIdentifier
@@ -29,6 +31,8 @@ import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactReposi
 import org.gradle.internal.build.BuildState
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
+
+import java.util.concurrent.ConcurrentHashMap
 
 def maxMemInMib = Runtime.getRuntime().maxMemory() / (1024 * 1024)
 logger.quiet("Gradle may use a maximum of $maxMemInMib MiB of memory.")
@@ -458,6 +462,8 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             return result
         }
 
+        private Map<Pair<OrtDependency, String>, Boolean> dependencyTreeEqualsCache = new ConcurrentHashMap<>();
+
         /**
          * Checks whether the given dependency and the dependency result spawn the same dependency trees. This is
          * used to test whether the dependency result can be represented by this dependency.
@@ -471,7 +477,15 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
         private boolean dependencyTreeEquals(OrtDependency dependency, DependencyResult dependencyResult,
                                                     Project project, Set<String> visited) {
             def displayName = dependencyResult.requested.displayName
+            def cacheKey = new Pair(dependency, displayName)
+
+            def cachedResult = dependencyTreeEqualsCache.get(cacheKey)
+            if (null != cachedResult) {
+                return cachedResult
+            }
+
             if (displayName in visited) {
+                cache.put(cacheKey, true)
                 return true  // We visited this node already.
             }
 
@@ -480,6 +494,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             // Ignore constraints and BOM dependencies for calculating the count since they are skipped by
             // `fetchDependency`.
             if (dependency.dependencies.size() != resultDependencies.count { !it.constraint && !isBom(it) }) {
+                dependencyTreeEqualsCache.put(cacheKey, false)
                 return false
             }
 
@@ -487,11 +502,13 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             def resultMap = resultDependencies.collectEntries { [identifierFor(it, project), it] }
             def nextVisited = visited + displayName
 
-            return dependencyMap.every { entry ->
+            def result = dependencyMap.every { entry ->
                 def matchingResult = resultMap[entry.key]
                 matchingResult != null && dependencyTreeEquals(entry.value as OrtDependency,
                         matchingResult as DependencyResult, project, nextVisited)
             }
+            dependencyTreeEqualsCache.put(cacheKey, result)
+            return result
         }
 
         /**
