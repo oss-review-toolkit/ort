@@ -90,13 +90,16 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
     ): List<ProjectAnalyzerResult> {
         val spdxDocument = parseSpdx3File(definitionFile)
 
-        val spdxPackages = spdxDocument.elements.filterIsInstance<SpdxPackage>()
-        val relationships = spdxDocument.elements.filterIsInstance<Relationship>()
+        val counts = spdxDocument.elements.groupingBy { it.type }.eachCount().toSortedMap()
 
         logger.debug {
-            "Found ${spdxDocument.elements.size} SPDX elements:" +
-                " ${spdxPackages.size} package(s), ${relationships.size} relationship(s)."
+            counts.entries.joinToString("\n", prefix = "Found ${spdxDocument.elements.size} SPDX element(s):\n") {
+                "\t${it.key}: ${it.value}"
+            }
         }
+
+        val spdxPackages = spdxDocument.elements.filterIsInstance<SpdxPackage>()
+        val relationships = spdxDocument.elements.filterIsInstance<Relationship>()
 
         val packagesByScope = spdxPackages.groupBy { pkg ->
             pkg.primaryPurpose.getOrNull()?.name?.lowercase() ?: "other"
