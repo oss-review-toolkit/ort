@@ -163,9 +163,8 @@ packages:
   purl: "pkg:conan/lz4@1.9.4"
   declared_licenses:
   - "BSD-2-Clause"
-  - "BSD-3-Clause"
   declared_licenses_processed:
-    spdx_expression: "BSD-2-Clause AND BSD-3-Clause"
+    spdx_expression: "BSD-2-Clause"
   description: "Extremely Fast Compression algorithm"
   homepage_url: "https://github.com/lz4/lz4"
   binary_artifact:
