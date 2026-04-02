@@ -90,7 +90,7 @@ packages:
     revision: ""
     path: ""
 - id: "Conan::conanfile.txt:"
-  purl: "pkg:conan/conanfile.txt"
+  purl: ""
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
