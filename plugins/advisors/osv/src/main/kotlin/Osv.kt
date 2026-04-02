@@ -95,15 +95,26 @@ class Osv(
     }
 
     private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
-        val requests = packages.map { pkg ->
-            // TODO: Support querying vulnerabilities by Git commit hash as described at
-            //       https://google.github.io/osv.dev/post-v1-query/. That would allow to generally support e.g. C / C++
-            //       projects that do not use a dedicated package manager, like Conan.
-            val request = VulnerabilitiesForPackageRequest(
-                pkg = org.ossreviewtoolkit.clients.osv.Package(purl = pkg.purl)
-            )
+        val requests = packages.mapNotNull { pkg ->
+            when {
+                pkg.purl.isNotEmpty() -> pkg to VulnerabilitiesForPackageRequest(
+                    pkg = org.ossreviewtoolkit.clients.osv.Package(purl = pkg.purl)
+                )
 
-            pkg to request
+                // TODO: Consider doing this in more cases, like for the upcoming generic "git" type of PURLs, see
+                //       https://github.com/package-url/purl-spec/issues/780.
+                pkg.vcsProcessed.revision.isNotEmpty() -> pkg to VulnerabilitiesForPackageRequest(
+                    commit = pkg.vcsProcessed.revision
+                )
+
+                else -> {
+                    logger.warn {
+                        "${pkg.id.toCoordinates()} does not provide any metadata to identify vulnerabilities."
+                    }
+
+                    null
+                }
+            }
         }
 
         val result = service.getVulnerabilityIdsForPackages(requests.map { it.second })
