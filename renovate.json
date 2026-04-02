@@ -11,11 +11,6 @@
   ],
   "packageRules": [
     {
-      "description": "Automerge non-major updates",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    },
-    {
       "matchManagers": ["gradle"],
       "commitMessageTopic": "{{depName}}",
       "recreateWhen": "never"
