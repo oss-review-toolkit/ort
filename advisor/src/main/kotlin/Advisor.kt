@@ -63,9 +63,10 @@ class Advisor(
             return ortResult
         }
 
-        val packages = ortResult.getPackages(skipExcluded).mapTo(mutableSetOf()) { it.metadata }
-        val advisorRun = advise(packages)
-        return ortResult.copy(advisor = advisorRun)
+        val packages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() } +
+            ortResult.getPackages(skipExcluded).mapTo(mutableSetOf()) { it.metadata }
+
+        return ortResult.copy(advisor = advise(packages))
     }
 
     /**
