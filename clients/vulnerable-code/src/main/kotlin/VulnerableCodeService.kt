@@ -36,6 +36,7 @@ import retrofit2.http.POST
 /**
  * Interface for a REST service that allows interaction with the VulnerableCode API to query information about
  * vulnerabilities detected for specific packages.
+ * The list of data sources is documented at https://github.com/aboutcode-org/vulnerablecode/blob/main/SOURCES.rst.
  */
 interface VulnerableCodeService {
     companion object {
