@@ -64,11 +64,11 @@ class AdvisorTest : WordSpec({
 
         "return an ORT result with an empty advisor run if there are no packages" {
             val provider = mockkAdviceProvider()
-            val originResult = createOrtResultWithPackages(emptySet())
+            val ortResult = createOrtResultWithPackages(emptySet())
 
             val advisor = createAdvisor(listOf(provider))
 
-            val result = advisor.advise(originResult)
+            val result = advisor.advise(ortResult)
 
             result.advisor shouldNotBeNull {
                 results should beEmpty()
@@ -83,7 +83,7 @@ class AdvisorTest : WordSpec({
             val pkg1 = createPackage(1)
             val pkg2 = createPackage(2)
             val packages = setOf(pkg1, pkg2)
-            val originResult = createOrtResultWithPackages(packages)
+            val ortResult = createOrtResultWithPackages(packages)
 
             val advisorResult1 = mockkAdvisorResult()
             val advisorResult2 = mockkAdvisorResult()
@@ -109,7 +109,7 @@ class AdvisorTest : WordSpec({
 
             val advisor = createAdvisor(listOf(provider1, provider2))
 
-            val result = advisor.advise(originResult)
+            val result = advisor.advise(ortResult)
 
             result.advisor shouldNotBeNull {
                 results shouldBe expectedResults
@@ -119,7 +119,7 @@ class AdvisorTest : WordSpec({
         "continue with other providers when a provider fails to be created" {
             val pkg = createPackage(1)
             val packages = setOf(pkg)
-            val originResult = createOrtResultWithPackages(packages)
+            val ortResult = createOrtResultWithPackages(packages)
 
             val successfulResult = mockkAdvisorResult()
             val successfulProvider = mockkAdviceProvider("SuccessfulProvider")
@@ -136,7 +136,7 @@ class AdvisorTest : WordSpec({
 
             val advisor = Advisor(listOf(failingFactory, successfulFactory), AdvisorConfiguration())
 
-            val result = advisor.advise(originResult)
+            val result = advisor.advise(ortResult)
 
             result.advisor shouldNotBeNull {
                 results should containExactly(pkg.id to listOf(successfulResult))
@@ -154,7 +154,7 @@ class AdvisorTest : WordSpec({
         "continue with results from other providers when a provider fails to fetch findings" {
             val pkg = createPackage(1)
             val packages = setOf(pkg)
-            val originResult = createOrtResultWithPackages(packages)
+            val ortResult = createOrtResultWithPackages(packages)
 
             val successfulResult = mockkAdvisorResult()
 
@@ -167,7 +167,7 @@ class AdvisorTest : WordSpec({
 
             val advisor = createAdvisor(listOf(failingProvider, successfulProvider))
 
-            val result = advisor.advise(originResult)
+            val result = advisor.advise(ortResult)
 
             result.advisor shouldNotBeNull {
                 results should containExactly(pkg.id to listOf(successfulResult))
@@ -186,7 +186,7 @@ class AdvisorTest : WordSpec({
         "collect provider issues from all providers that fail to fetch findings" {
             val pkg = createPackage(1)
             val packages = setOf(pkg)
-            val originResult = createOrtResultWithPackages(packages)
+            val ortResult = createOrtResultWithPackages(packages)
 
             val failingProvider1 = mockkAdviceProvider("FailingProvider1")
             val failingProvider2 = mockkAdviceProvider("FailingProvider2")
@@ -198,7 +198,7 @@ class AdvisorTest : WordSpec({
 
             val advisor = createAdvisor(listOf(failingProvider1, failingProvider2))
 
-            val result = advisor.advise(originResult)
+            val result = advisor.advise(ortResult)
 
             result.advisor shouldNotBeNull {
                 results should beEmpty()
