@@ -74,8 +74,9 @@ class AdvisorTest : WordSpec({
                 results should beEmpty()
             }
 
-            coVerify(exactly = 0) {
-                provider.retrievePackageFindings(any())
+            coVerify(exactly = 1) {
+                val projectPackages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
+                provider.retrievePackageFindings(projectPackages)
             }
         }
 
@@ -84,6 +85,7 @@ class AdvisorTest : WordSpec({
             val pkg2 = createPackage(2)
             val packages = setOf(pkg1, pkg2)
             val ortResult = createOrtResultWithPackages(packages)
+            val projectPackages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
 
             val advisorResult1 = mockkAdvisorResult()
             val advisorResult2 = mockkAdvisorResult()
@@ -93,11 +95,11 @@ class AdvisorTest : WordSpec({
             val provider1 = mockkAdviceProvider()
             val provider2 = mockkAdviceProvider()
 
-            coEvery { provider1.retrievePackageFindings(packages) } returns mapOf(
+            coEvery { provider1.retrievePackageFindings(projectPackages + packages) } returns mapOf(
                 pkg1 to advisorResult1,
                 pkg2 to advisorResult3
             )
-            coEvery { provider2.retrievePackageFindings(packages) } returns mapOf(
+            coEvery { provider2.retrievePackageFindings(projectPackages + packages) } returns mapOf(
                 pkg1 to advisorResult2,
                 pkg2 to advisorResult4
             )
@@ -120,10 +122,13 @@ class AdvisorTest : WordSpec({
             val pkg = createPackage(1)
             val packages = setOf(pkg)
             val ortResult = createOrtResultWithPackages(packages)
+            val projectPackages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
 
             val successfulResult = mockkAdvisorResult()
             val successfulProvider = mockkAdviceProvider("SuccessfulProvider")
-            coEvery { successfulProvider.retrievePackageFindings(packages) } returns mapOf(pkg to successfulResult)
+            coEvery { successfulProvider.retrievePackageFindings(projectPackages + packages) } returns mapOf(
+                pkg to successfulResult
+            )
 
             val failingFactory = mockk<AdviceProviderFactory> {
                 every { descriptor } returns PluginDescriptor("failing-provider", "FailingProvider", "", emptyList())
@@ -147,7 +152,7 @@ class AdvisorTest : WordSpec({
             }
 
             coVerify(exactly = 1) {
-                successfulProvider.retrievePackageFindings(packages)
+                successfulProvider.retrievePackageFindings(projectPackages + packages)
             }
         }
 
@@ -155,15 +160,18 @@ class AdvisorTest : WordSpec({
             val pkg = createPackage(1)
             val packages = setOf(pkg)
             val ortResult = createOrtResultWithPackages(packages)
+            val projectPackages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
 
             val successfulResult = mockkAdvisorResult()
 
             val failingProvider = mockkAdviceProvider("FailingProvider")
             val successfulProvider = mockkAdviceProvider("SuccessfulProvider")
 
-            coEvery { failingProvider.retrievePackageFindings(packages) } throws
+            coEvery { failingProvider.retrievePackageFindings(projectPackages + packages) } throws
                 IllegalStateException("Could not query provider service")
-            coEvery { successfulProvider.retrievePackageFindings(packages) } returns mapOf(pkg to successfulResult)
+            coEvery { successfulProvider.retrievePackageFindings(projectPackages + packages) } returns mapOf(
+                pkg to successfulResult
+            )
 
             val advisor = createAdvisor(listOf(failingProvider, successfulProvider))
 
@@ -178,8 +186,8 @@ class AdvisorTest : WordSpec({
             }
 
             coVerify(exactly = 1) {
-                failingProvider.retrievePackageFindings(packages)
-                successfulProvider.retrievePackageFindings(packages)
+                failingProvider.retrievePackageFindings(projectPackages + packages)
+                successfulProvider.retrievePackageFindings(projectPackages + packages)
             }
         }
 
@@ -187,13 +195,14 @@ class AdvisorTest : WordSpec({
             val pkg = createPackage(1)
             val packages = setOf(pkg)
             val ortResult = createOrtResultWithPackages(packages)
+            val projectPackages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
 
             val failingProvider1 = mockkAdviceProvider("FailingProvider1")
             val failingProvider2 = mockkAdviceProvider("FailingProvider2")
 
-            coEvery { failingProvider1.retrievePackageFindings(packages) } throws
+            coEvery { failingProvider1.retrievePackageFindings(projectPackages + packages) } throws
                 IllegalArgumentException("Failure 1")
-            coEvery { failingProvider2.retrievePackageFindings(packages) } throws
+            coEvery { failingProvider2.retrievePackageFindings(projectPackages + packages) } throws
                 IllegalStateException("Failure 2")
 
             val advisor = createAdvisor(listOf(failingProvider1, failingProvider2))
