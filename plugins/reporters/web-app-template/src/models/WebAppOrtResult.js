@@ -766,7 +766,7 @@ class WebAppOrtResult {
     }
 
     hasEffectiveLicenses() {
-        return this.#effectiveLicensePackages.length > 0;
+        return this.#effectiveLicenses.length > 0;
     }
 
     hasExcludes() {
