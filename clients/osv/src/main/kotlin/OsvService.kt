@@ -41,6 +41,7 @@ import retrofit2.http.Path
 
 /**
  * An interface for the REST API of the Google Open Source Vulnerabilities (OSV) service, see https://osv.dev/.
+ * The list of data sources is documented at https://google.github.io/osv.dev/data/#current-data-sources.
  */
 interface OsvService {
     companion object {
