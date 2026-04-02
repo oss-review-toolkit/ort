@@ -79,9 +79,7 @@ interface OsvService {
         @Body request: VulnerabilitiesForPackageBatchRequest
     ): VulnerabilitiesForPackageBatchResponse
 
-    /**
-     * Return the vulnerability denoted by the given [id].
-     */
+    /** Return the vulnerability denoted by the given [id]. */
     @GET("v1/vulns/{id}")
     suspend fun getVulnerabilityForId(@Path("id") id: String): Vulnerability
 }
