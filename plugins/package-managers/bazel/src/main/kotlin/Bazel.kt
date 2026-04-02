@@ -611,11 +611,9 @@ class Bazel(
         val conanProjectWithDependencies = mutableSetOf<PackageReference>()
         val conanProjectWithTestDependencies = mutableSetOf<PackageReference>()
 
-        conanPackages += conanAnalyzerResults.map { it.project.toPackage() }
-
         conanAnalyzerResults.forEach { conanAnalyzerResult ->
-            val projectReference = conanAnalyzerResult.project.toPackage().toReference()
-            conanProjectReferences += projectReference
+            val projectPackage = conanAnalyzerResult.project.toPackage().also { conanPackages += it }
+            val projectReference = projectPackage.toReference().also { conanProjectReferences += it }
 
             val dependenciesPerScopes = conanAnalyzerResult.project.scopes.associate {
                 // Only include the packages reported by Bazel.
