@@ -63,11 +63,8 @@ class OsvFunTest : WordSpec({
         }
 
         "return the expected result for the given package(s)" {
-            val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
-                "/retrieve-package-findings-expected-result.json"
-            )
-
             val osv = createOsv()
+
             // The following packages have been chosen because they have only one vulnerability with the oldest possible
             // modified date from the current OSV database, in order to hopefully minimize the flakiness.
             val packages = setOf(
@@ -82,6 +79,10 @@ class OsvFunTest : WordSpec({
             }
 
             val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }
+
+            val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
+                "/retrieve-package-findings-expected-result.json"
+            )
 
             packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
         }
