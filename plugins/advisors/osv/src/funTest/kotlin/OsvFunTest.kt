@@ -30,6 +30,8 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
 import org.ossreviewtoolkit.utils.test.identifierToPackage
 import org.ossreviewtoolkit.utils.test.readResourceValue
@@ -82,6 +84,21 @@ class OsvFunTest : WordSpec({
 
             val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
                 "/retrieve-package-findings-expected-result.json"
+            )
+
+            packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
+        }
+
+        "return the vulnerabilities for the commit of Hadoop 3.4.1" {
+            val osv = createOsv()
+            val pkg = Package.EMPTY.copy(
+                vcsProcessed = VcsInfo.EMPTY.copy(revision = "4d7825309348956336b8f06a08322b78422849b1")
+            )
+
+            val packageFindings = osv.retrievePackageFindings(setOf(pkg)).mapKeys { it.key.id }
+
+            val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
+                "/hadoop-commit-has-expected-result.json"
             )
 
             packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
