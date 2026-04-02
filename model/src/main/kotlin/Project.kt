@@ -164,6 +164,7 @@ data class Project(
     fun toPackage() =
         Package(
             id = id,
+            purl = "",
             authors = authors,
             declaredLicenses = declaredLicenses,
             description = description,
