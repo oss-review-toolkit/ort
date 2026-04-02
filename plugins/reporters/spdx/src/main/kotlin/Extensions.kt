@@ -157,6 +157,8 @@ internal fun Package.toSpdxPackage(
         .applyChoices(ortResult.getPackageLicenseChoices(id))
         .applyChoices(ortResult.getRepositoryLicenseChoices())
 
+    val licenseDeclared = resolvedLicenseInfo.mainLicense()?.simplify()
+
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
         checksums = when (type) {
@@ -186,8 +188,7 @@ internal fun Package.toSpdxPackage(
 
             else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
         },
-        licenseDeclared = resolvedLicenseInfo.mainLicense()
-            ?.simplify()
+        licenseDeclared = licenseDeclared
             ?.sorted()
             ?.nullOrBlankToSpdxNoassertionOrNone()
             ?: SpdxConstants.NONE,
