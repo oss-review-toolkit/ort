@@ -87,17 +87,17 @@ data class SpdxDocumentReporterConfig(
     val documentName: String?,
 
     /**
-     * The list of file formats to generate.
-     */
-    @OrtPluginOption(defaultValue = "YAML", aliases = ["output.file.formats"])
-    val outputFileFormats: List<FileFormat>,
-
-    /**
      * Toggle whether the output document should contain information on file granularity about files containing
      * findings.
      */
     @OrtPluginOption(defaultValue = "true", aliases = ["file.information.enabled"])
-    val fileInformationEnabled: Boolean
+    val fileInformationEnabled: Boolean,
+
+    /**
+     * The list of file formats to generate.
+     */
+    @OrtPluginOption(defaultValue = "YAML", aliases = ["output.file.formats"])
+    val outputFileFormats: List<FileFormat>
 )
 
 /**
