@@ -202,7 +202,7 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
         }.firstNotNullOfOrNull { it.identifier }
 
         // Prefer a PURL as it might contain proper type and namespace information.
-        val id = purl?.toPackageUrl()?.toIdentifier() ?: Identifier(
+        val ortId = purl?.toPackageUrl()?.toIdentifier() ?: Identifier(
             type = PACKAGE_TYPE_SPDX,
             namespace = "",
             name = pkgName,
@@ -233,8 +233,8 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
         val description = description.getOrNull() ?: summary.getOrNull()
 
         return Package(
-            id = id,
-            purl = purl ?: id.toPurl(),
+            id = ortId,
+            purl = purl ?: ortId.toPurl(),
             cpe = cpe,
             authors = emptySet(),
             declaredLicenses = declaredLicenses,
