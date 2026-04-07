@@ -90,9 +90,9 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
     ): List<ProjectAnalyzerResult> {
         val spdxDocument = parseSpdx3File(definitionFile)
 
-        val counts = spdxDocument.elements.groupingBy { it.type }.eachCount().toSortedMap()
-
         logger.debug {
+            val counts = spdxDocument.elements.groupingBy { it.type }.eachCount().toSortedMap()
+
             counts.entries.joinToString("\n", prefix = "Found ${spdxDocument.elements.size} SPDX element(s):\n") {
                 "\t${it.key}: ${it.value}"
             }
