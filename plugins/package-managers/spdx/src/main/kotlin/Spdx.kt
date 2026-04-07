@@ -51,7 +51,6 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.toExpression
-import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxOrNull
 
 import org.spdx.library.SpdxModelFactory
@@ -239,8 +238,8 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
             authors = emptySet(),
             declaredLicenses = declaredLicenses,
             concludedLicense = if (concludedLicenses.size > 1) {
-                logger.warn { "Multiple concluded licenses found for package '$name', using only the first one." }
-                concludedLicenses.first().toSpdx()
+                logger.warn { "Multiple concluded licenses found for ID $id, using their conjunction." }
+                concludedLicenses.mapNotNull { it.toSpdxOrNull() }.toExpression()
             } else {
                 concludedLicenses.singleOrNull()?.toSpdxOrNull()
             },
