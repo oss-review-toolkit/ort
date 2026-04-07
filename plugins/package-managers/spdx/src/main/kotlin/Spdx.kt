@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 
 import java.io.File
 
+import kotlin.jvm.optionals.getOrDefault
 import kotlin.jvm.optionals.getOrNull
 
 import org.apache.logging.log4j.kotlin.logger
@@ -48,6 +49,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.enumSetOf
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.toExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdxOrNull
@@ -60,9 +62,11 @@ import org.spdx.library.model.v3_0_1.core.Relationship
 import org.spdx.library.model.v3_0_1.core.RelationshipType
 import org.spdx.library.model.v3_0_1.core.SpdxDocument
 import org.spdx.library.model.v3_0_1.simplelicensing.LicenseExpression
+import org.spdx.library.model.v3_0_1.software.SoftwarePurpose
 import org.spdx.library.model.v3_0_1.software.SpdxPackage as SpdxPackage
 import org.spdx.storage.simple.InMemSpdxStore
 import org.spdx.v3jsonldstore.JsonLDStore
+import kotlin.jvm.optionals.getOrElse
 
 private const val PROJECT_TYPE = "SPDX"
 private const val PACKAGE_TYPE_SPDX = "SPDX"
@@ -197,12 +201,16 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
         }.firstNotNullOfOrNull { it.identifier }
 
         // Prefer a PURL as it might contain proper type and namespace information.
-        val ortId = purl?.toPackageUrl()?.toIdentifier() ?: Identifier(
-            type = PACKAGE_TYPE_SPDX,
-            namespace = "",
-            name = pkgName,
-            version = pkgVersion
-        )
+        val ortId = purl?.toPackageUrl()?.toIdentifier()
+            // Yocto does not set a package version for source packages, so try to derive it from the name, and to get
+            // a distinguishing name based on the ID.
+            ?: primaryPurpose.getOrNull()?.takeIf { it == SoftwarePurpose.SOURCE }
+                ?.let { getOrtIdFromSpdxId() } ?: Identifier(
+                    type = PACKAGE_TYPE_SPDX,
+                    namespace = "",
+                    name = pkgName,
+                    version = pkgVersion
+                )
 
         val url = downloadLocation.getOrNull()
         val sourceArtifact = if (!url.isNullOrBlank()) {
@@ -246,6 +254,30 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
             vcs = VcsInfo.EMPTY
         )
     }
+}
+
+private fun SpdxPackage.getOrtIdFromSpdxId(): Identifier? {
+    val nameSections = name.get().split('-', '_')
+    if (nameSections.size < 2) return null
+
+    val (namePrefix, version) = nameSections.let {
+        it.dropLast(1).joinToString("-") to it.last().substringBefore(".tar.")
+    }
+
+    val nameFromId = id.withoutPrefix("http://spdx.org/spdxdocs/")
+        ?.substringBefore('/')
+        ?.split('-')
+        ?.dropLast(5) // Drop the UUID.
+        ?.joinToString("-")
+
+    return Identifier(
+        type = PACKAGE_TYPE_SPDX,
+        namespace = "",
+        name = nameFromId ?: namePrefix,
+        version = packageVersion.getOrElse {
+            version.takeIf { it.first().isDigit() }.orEmpty()
+        }
+    )
 }
 
 private fun Package.mergeLicenses(other: Package): Package {
