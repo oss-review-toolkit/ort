@@ -42,6 +42,10 @@ source_code_origin: VCS
 id: "NPM::ansi-styles:[4.0,4.2.1]"
 source_code_origin: ARTIFACT
 
+# Apply to all versions.
+id: "NPM::ansi-styles:"
+source_code_origin: VCS
+
 # Apply only to version 4.2.1, regardless whether
 # code repository or source artifact was scanned.
 id: "NPM::ansi-styles:4.2.1"
