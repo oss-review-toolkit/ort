@@ -45,7 +45,7 @@ dependencies {
 
 // Classes that are sent to the build via custom build actions need to target the lowest supported Java version, which
 // is Java 8 for Gradle 5 and above, see
-// https://docs.gradle.org/current/userguide/third_party_integration.html#sec:embedding_compatibility
+// https://docs.gradle.org/current/userguide/tooling_api.html#sec:embedding_compatibility
 val gradleToolingApiLowestSupportedJavaVersion = JvmTarget.JVM_1_8
 
 tasks.named<JavaCompile>("compileJava") {
