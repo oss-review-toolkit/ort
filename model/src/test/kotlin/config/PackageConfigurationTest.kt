@@ -184,6 +184,22 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(config.id.copy(version = "6"), ARTIFACT_PROVENANCE) shouldBe false
         }
+
+        "return true for any version if the id version is blank" {
+            val config = PackageConfiguration(id = Identifier.EMPTY.copy(name = "some-name"))
+
+            config.matches(config.id.copy(version = "1.0.0"), ARTIFACT_PROVENANCE) shouldBe true
+            config.matches(config.id.copy(version = "2.0.0-alpha1"), REPOSITORY_PROVENANCE) shouldBe true
+        }
+
+        "return true if the package version is blank regardless of the configured version" {
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name", version = "1.0.0")
+            )
+
+            config.matches(config.id.copy(version = ""), ARTIFACT_PROVENANCE) shouldBe true
+            config.matches(config.id.copy(version = ""), REPOSITORY_PROVENANCE) shouldBe true
+        }
     }
 
     "init()" should {

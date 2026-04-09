@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.hasIvyVersionRange
 import org.ossreviewtoolkit.model.utils.isApplicableIvyVersion
+import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
@@ -43,8 +44,11 @@ import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 data class PackageConfiguration(
     /**
      * The [Identifier] which must match with the identifier of the package in order for this package curation to apply.
-     * The [version][Identifier.version] can be either a plain version string matched for equality, or an
-     * [Ivy-style version matchers](https://ant.apache.org/ivy/history/2.5.0/settings/version-matchers.html).
+     * The [version][Identifier.version] can be either:
+     * - blank, to match any version,
+     * - a plain version string matched for equality,
+     * - an [Ivy-style version matcher](https://ant.apache.org/ivy/history/2.5.0/settings/version-matchers.html).
+     * If the package's version is blank, it matches regardless of the version set here.
      * The other components of the [identifier][id] are matched by equality.
      */
     val id: Identifier,
@@ -98,7 +102,7 @@ data class PackageConfiguration(
         if (!id.type.equals(otherId.type, ignoreCase = true) ||
             id.namespace != otherId.namespace ||
             id.name != otherId.name ||
-            !id.isApplicableIvyVersion(otherId)
+            !(id.version.equalsOrIsBlank(otherId.version) || id.isApplicableIvyVersion(otherId))
         ) {
             return false
         }
