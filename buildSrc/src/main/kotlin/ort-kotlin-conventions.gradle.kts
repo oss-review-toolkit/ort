@@ -145,7 +145,7 @@ tasks.withType<JavaExec>().configureEach {
 
     // Work around https://youtrack.jetbrains.com/issue/KTIJ-34755.
     if (normalizedName.endsWith("main") || normalizedName.endsWith("run")) {
-        doNotTrackState("Interactive Java execution tasks are never supposed to be UP-TO-DATE.")
+        outputs.upToDateWhen { false }
     }
 }
 
