@@ -36,6 +36,7 @@ jiraRestClient = "7.0.1"
 jruby = "9.4.14.0"
 jslt = "0.1.14"
 jsonSchemaValidator = "1.5.9"
+junitPlatformLauncher = "6.0.3"
 kaml = "0.104.0"
 kotest = "6.1.11"
 kotlinPoet = "2.3.0"
@@ -128,6 +129,7 @@ jiraRestClient-app = { module = "com.atlassian.jira:jira-rest-java-client-app", 
 jruby = { module = "org.jruby:jruby", version.ref = "jruby" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
+junit-platform-console = { module = "org.junit.platform:junit-platform-console", version.ref = "junitPlatformLauncher" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
 kotest-assertions-table = { module = "io.kotest:kotest-assertions-table", version.ref = "kotest" }

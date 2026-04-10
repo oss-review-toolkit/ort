@@ -24,7 +24,7 @@ plugins {
 
 application {
     applicationName = "ort-test-launcher"
-    mainClass = "io.kotest.engine.launcher.MainKt"
+    mainClass = "org.junit.platform.console.ConsoleLauncher"
 }
 
 val Project.hasFunTests
@@ -32,6 +32,8 @@ val Project.hasFunTests
     get() = projectDir.resolve("src/funTest").isDirectory
 
 dependencies {
+    implementation(libs.junit.platform.console)
+
     rootProject.subprojects.filter { it.hasFunTests }.forEach {
         implementation(project(it.path)) {
             capabilities {
