@@ -89,10 +89,10 @@ class OsvFunTest : WordSpec({
             packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
         }
 
-        "return the vulnerabilities for the commit of Hadoop 3.4.1" {
+        "return the vulnerabilities for the commit of Hadoop 3.3.1" {
             val osv = createOsv()
             val pkg = Package.EMPTY.copy(
-                vcsProcessed = VcsInfo.EMPTY.copy(revision = "4d7825309348956336b8f06a08322b78422849b1")
+                vcsProcessed = VcsInfo.EMPTY.copy(revision = "a3b9c37a397ad4188041dd80621bdeefc46885f2")
             )
 
             val packageFindings = osv.retrievePackageFindings(setOf(pkg)).mapKeys { it.key.id }
