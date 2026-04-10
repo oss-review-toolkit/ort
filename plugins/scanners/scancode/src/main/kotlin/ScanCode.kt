@@ -77,11 +77,11 @@ internal object ScanCodeCommand : CommandLineTool {
     description = "A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).",
     factory = ScannerWrapperFactory::class
 )
-class ScanCode(
+open class ScanCode(
     override val descriptor: PluginDescriptor = ScanCodeFactory.descriptor,
     private val config: ScanCodeConfig
 ) : LocalPathScannerWrapper() {
-    private val commandLineOptions by lazy { getCommandLineOptions(version) }
+    protected val commandLineOptions by lazy { getCommandLineOptions(version) }
 
     internal fun getCommandLineOptions(version: String) =
         buildList {
