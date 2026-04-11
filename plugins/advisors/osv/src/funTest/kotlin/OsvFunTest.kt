@@ -26,13 +26,10 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
-import java.time.Instant
-
-import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.test.identifierToPackage
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
@@ -80,13 +77,15 @@ class OsvFunTest : WordSpec({
                 identifierToPackage(it)
             }
 
-            val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }
+            val packageFindings = osv.retrievePackageFindings(packages).entries.associate {
+                it.key.id to it.value.vulnerabilities
+            }
 
-            val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
+            val expectedResult = readResourceValue<Map<Identifier, List<Vulnerability>>>(
                 "/retrieve-package-findings-expected-result.yml"
             )
 
-            packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
+            packageFindings shouldBe expectedResult
         }
 
         "return the vulnerabilities for the commit of Hadoop 3.3.1" {
@@ -95,25 +94,17 @@ class OsvFunTest : WordSpec({
                 vcsProcessed = VcsInfo.EMPTY.copy(revision = "a3b9c37a397ad4188041dd80621bdeefc46885f2")
             )
 
-            val packageFindings = osv.retrievePackageFindings(setOf(pkg)).mapKeys { it.key.id }
+            val packageFindings = osv.retrievePackageFindings(setOf(pkg)).entries.associate {
+                it.key.id to it.value.vulnerabilities
+            }
 
-            val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
+            val expectedResult = readResourceValue<Map<Identifier, List<Vulnerability>>>(
                 "/hadoop-commit-has-expected-result.yml"
             )
 
-            packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
+            packageFindings shouldBe expectedResult
         }
     }
 })
 
 private fun createOsv(): Osv = OsvFactory.create()
-
-private fun Map<Identifier, AdvisorResult>.patchTimes(): Map<Identifier, AdvisorResult> =
-    mapValues { (_, advisorResult) ->
-        advisorResult.normalizeVulnerabilityData().copy(
-            summary = advisorResult.summary.copy(
-                startTime = Instant.EPOCH,
-                endTime = Instant.EPOCH
-            )
-        )
-    }
