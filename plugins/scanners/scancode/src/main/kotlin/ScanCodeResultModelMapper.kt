@@ -89,7 +89,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
         // Only keep those licenses that originate from the current file, i.e. that are not references to other files.
         val licensesFromCurrentFile = file.licenses.filter {
             when (val fromFile = it.fromFile) {
-                null, inputPath.name -> true
+                null, file.path, inputPath.name -> true
 
                 else -> when {
                     // Note that "fromFile" contains the name of the input directory, see
