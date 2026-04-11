@@ -86,20 +86,26 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
         ?: files.flatMap { it.scanCodeKeyToSpdxIdMappings }.toMap()
 
     filesOfTypeFile.forEach { file ->
-        val licensesWithoutReferences = file.licenses.filter {
-            val fromFile = it.fromFile
-            fromFile == null
-                // Note that "fromFile" contains the name of the input directory, see
-                // https://github.com/aboutcode-org/scancode-toolkit/issues/3712.
-                || inputPath.resolveSibling(fromFile) == inputPath / file.path
-                || (inputPath.path == "." && fromFile.substringAfter('/') == file.path)
-                // Check if input is a single file.
-                || fromFile == inputPath.name
+        // Only keep those licenses that originate from the current file, i.e. that are not references to other files.
+        val licensesFromCurrentFile = file.licenses.filter {
+            when (val fromFile = it.fromFile) {
+                null, inputPath.name -> true
+
+                else -> when {
+                    // Note that "fromFile" contains the name of the input directory, see
+                    // https://github.com/aboutcode-org/scancode-toolkit/issues/3712.
+                    inputPath.resolveSibling(fromFile) == inputPath / file.path -> true
+
+                    inputPath.path == "." && fromFile.substringAfter('/') == file.path -> true
+
+                    else -> false
+                }
+            }
         }
 
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
         // the same expression.
-        val licenses = licensesWithoutReferences.groupBy {
+        val licenses = licensesFromCurrentFile.groupBy {
             LicenseMatch(it.licenseExpression, it.startLine, it.endLine, it.score)
         }.map {
             // Arbitrarily take the first of the duplicate license entries.
