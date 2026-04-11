@@ -83,7 +83,7 @@ class OsvFunTest : WordSpec({
             val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }
 
             val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
-                "/retrieve-package-findings-expected-result.json"
+                "/retrieve-package-findings-expected-result.yml"
             )
 
             packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
@@ -98,7 +98,7 @@ class OsvFunTest : WordSpec({
             val packageFindings = osv.retrievePackageFindings(setOf(pkg)).mapKeys { it.key.id }
 
             val expectedResult = readResourceValue<Map<Identifier, AdvisorResult>>(
-                "/hadoop-commit-has-expected-result.json"
+                "/hadoop-commit-has-expected-result.yml"
             )
 
             packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
