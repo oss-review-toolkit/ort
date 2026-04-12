@@ -10,6 +10,7 @@ ideaExtPlugin = "1.4.1"
 kotlinPlugin = "2.3.20"
 ksp = "2.3.6"
 mavenPublishPlugin = "0.36.0"
+tapmocPlugin = "0.4.2"
 
 aeSecurity = "0.153.2"
 asciidoctorj = "3.0.1"
@@ -90,6 +91,7 @@ plugin-graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plu
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
 plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 plugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
+plugin-tapmoc = { module = "com.gradleup.tapmoc:tapmoc-gradle-plugin", version.ref = "tapmocPlugin" }
 
 aeSecurity = { module = "org.metaeffekt.core:ae-security", version.ref = "aeSecurity" }
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }

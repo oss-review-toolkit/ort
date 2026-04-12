@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.plugin.kotlin)
     implementation(libs.plugin.ksp)
     implementation(libs.plugin.mavenPublish)
+    implementation(libs.plugin.tapmoc)
 }
 
 version = rootProject.version
