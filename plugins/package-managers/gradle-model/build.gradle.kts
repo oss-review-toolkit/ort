@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -26,17 +25,19 @@ plugins {
     id("ort-publication-conventions")
 }
 
-// Classes that are sent to the build via custom build actions need to target the lowest supported Java version, which
-// is Java 8 for Gradle 5 and above, see
-// https://docs.gradle.org/current/userguide/tooling_api.html#sec:embedding_compatibility
-val gradleToolingApiLowestSupportedJavaVersion = JvmTarget.JVM_1_8
+tapmoc {
+    // Classes that are sent to the build via custom build actions need to target the lowest supported Java version,
+    // which is Java 8 for Gradle 5 and above, see
+    // https://docs.gradle.org/current/userguide/tooling_api.html#sec:embedding_compatibility
+    java(8)
 
-tasks.named<JavaCompile>("compileJava") {
-    targetCompatibility = gradleToolingApiLowestSupportedJavaVersion.target
+    // This is the lowest version supported by the current Kotlin plugin.
+    kotlin("1.9.0")
 }
 
 tasks.named<KotlinCompile>("compileKotlin") {
     compilerOptions {
-        jvmTarget = gradleToolingApiLowestSupportedJavaVersion
+        // See https://docs.gradle.org/current/userguide/compatibility.html#kotlin.
+        freeCompilerArgs.add("-Xsuppress-version-warnings")
     }
 }

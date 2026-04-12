@@ -44,10 +44,20 @@ plugins {
 
     // Apply third-party plugins.
     id("com.autonomousapps.dependency-analysis")
+    id("com.gradleup.tapmoc")
     id("dev.detekt")
     id("org.jetbrains.dokka")
 
     kotlin("jvm")
+}
+
+val maxKotlinJvmTarget = runCatching { JvmTarget.fromTarget(javaLanguageVersion) }
+    .getOrDefault(enumEntries<JvmTarget>().max())
+
+tapmoc {
+    java(maxKotlinJvmTarget.target.toInt())
+
+    checkDependencies()
 }
 
 testing {
@@ -155,9 +165,6 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-val maxKotlinJvmTarget = runCatching { JvmTarget.fromTarget(javaLanguageVersion) }
-    .getOrDefault(enumEntries<JvmTarget>().max())
-
 val mergeDetektReportsTaskName = "mergeDetektReports"
 val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTaskName) != null) {
     rootProject.tasks.named<ReportMergeTask>(mergeDetektReportsTaskName)
@@ -209,7 +216,6 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         allWarningsAsErrors = true
         freeCompilerArgs.addAll("-Xannotation-default-target=param-property", "-Xconsistent-data-class-copy-visibility")
-        jvmTarget = maxKotlinJvmTarget
         optIn = optInRequirements
     }
 }
