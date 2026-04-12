@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
 
 @Tags("RequiresExternalTool")
-class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest() {
+class ScanCodeFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = ScanCodeFactory.create()
 
     override val expectedFileLicenses = listOf(
