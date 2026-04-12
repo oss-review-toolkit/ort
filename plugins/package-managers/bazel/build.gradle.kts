@@ -42,11 +42,12 @@ dependencies {
 
     ksp(projects.analyzer)
 
-    testImplementation(libs.mockk)
-
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
 
     funTestRuntimeOnly(projects.plugins.packageManagers.conanPackageManager)
+
+    testImplementation(libs.mockk)
 }
 
 tasks.named<Test>("funTest") {

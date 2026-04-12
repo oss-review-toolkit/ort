@@ -34,7 +34,11 @@ dependencies {
 
     implementation(projects.utils.commonUtils)
 
+    funTestImplementation(projects.utils.testUtils)
+
     funTestImplementation(libs.gson)
+
+    testImplementation(projects.utils.testUtils)
 
     testImplementation(libs.gson)
 }

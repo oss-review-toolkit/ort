@@ -37,9 +37,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
-    funTestImplementation(testFixtures(projects.reporter))
-
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
+    funTestImplementation(projects.utils.testUtils)
+    funTestImplementation(testFixtures(projects.reporter))
 
     funTestImplementation(libs.kotest.assertions.json)
 }

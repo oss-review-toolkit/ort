@@ -32,4 +32,5 @@ dependencies {
     runtimeOnly(libs.xz)
 
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
+    funTestImplementation(projects.utils.testUtils)
 }

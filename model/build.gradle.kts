@@ -45,7 +45,11 @@ dependencies {
     implementation(libs.semver4j)
     implementation(libs.tika)
 
+    funTestImplementation(projects.utils.testUtils)
+
     testFixturesImplementation(projects.utils.testUtils)
+
+    testImplementation(projects.utils.testUtils)
 
     testImplementation(libs.jsonSchemaValidator)
     testImplementation(libs.mockk)

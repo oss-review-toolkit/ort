@@ -39,4 +39,6 @@ dependencies {
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise, the formatting of
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.
     runtimeOnly(libs.saxonHe)
+
+    funTestImplementation(projects.utils.testUtils)
 }

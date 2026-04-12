@@ -37,5 +37,6 @@ dependencies {
     implementation(jacksonLibs.jacksonCore)
     implementation(jacksonLibs.jacksonDataformatYaml)
 
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.reporter))
 }

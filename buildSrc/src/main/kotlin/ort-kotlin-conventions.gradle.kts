@@ -56,11 +56,11 @@ testing {
             useJUnitJupiter()
 
             dependencies {
-                implementation(project(":utils:test-utils"))
+                // See https://kotest.io/docs/framework/project-setup.html.
+                implementation(libs.kotest.runner.junit5)
 
                 implementation(libs.kotest.assertions.core)
                 implementation(libs.kotest.property)
-                implementation(libs.kotest.runner.junit5)
             }
         }
 

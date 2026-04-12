@@ -41,6 +41,7 @@ dependencies {
 
     ksp(projects.analyzer)
 
-    funTestImplementation(testFixtures(projects.analyzer))
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(projects.plugins.packageManagers.nodePackageManager)
+    funTestImplementation(testFixtures(projects.analyzer))
 }

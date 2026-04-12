@@ -38,10 +38,12 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.postgres)
 
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(platform(projects.plugins.scanners))
     funTestImplementation(platform(projects.plugins.versionControlSystems))
     funTestImplementation(testFixtures(projects.scanner))
 
+    testImplementation(projects.utils.testUtils)
     testImplementation(platform(projects.plugins.scanners))
 
     testImplementation(libs.kotlinx.serialization.core)

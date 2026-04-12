@@ -66,6 +66,7 @@ dependencies {
     funTestImplementation(projects.evaluator)
     funTestImplementation(projects.notifier)
     funTestImplementation(projects.reporter)
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
 
     funTestImplementation(libs.greenmail)

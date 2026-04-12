@@ -37,6 +37,7 @@ dependencies {
     funTestImplementation(testFixtures(projects.reporter))
 
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
+    funTestImplementation(projects.utils.testUtils)
 
     funTestImplementation(libs.kotest.assertions.json)
 }

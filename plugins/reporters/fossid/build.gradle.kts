@@ -35,5 +35,9 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines)
 
+    funTestImplementation(projects.utils.testUtils)
+
+    testImplementation(projects.utils.testUtils)
+
     testImplementation(libs.mockk)
 }

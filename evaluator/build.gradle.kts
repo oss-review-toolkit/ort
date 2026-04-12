@@ -47,6 +47,9 @@ dependencies {
     testFixturesImplementation(libs.kotlinx.serialization.core)
     testFixturesImplementation(projects.utils.testUtils)
 
+    funTestImplementation(projects.utils.testUtils)
+
+    testImplementation(projects.utils.testUtils)
     testImplementation(libs.mockk)
 }
 

@@ -51,4 +51,8 @@ dependencies {
     implementation(libs.xz)
 
     "pluginClasspath"(platform(projects.plugins.versionControlSystems))
+
+    funTestImplementation(projects.utils.testUtils)
+
+    testImplementation(projects.utils.testUtils)
 }

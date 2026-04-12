@@ -33,4 +33,6 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+
+    funTestImplementation(projects.utils.testUtils)
 }
