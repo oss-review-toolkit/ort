@@ -24,8 +24,6 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 
-import org.ossreviewtoolkit.utils.test.readResource
-
 class ModelTest : StringSpec({
     "Deserializing and serializing any vulnerability is idempotent for all official examples" {
         getVulnerabilityExamplesJson().forAll { vulnerabilityJson ->
@@ -39,4 +37,4 @@ class ModelTest : StringSpec({
 })
 
 private fun TestConfiguration.getVulnerabilityExamplesJson(): List<String> =
-    (1..7).map { i -> readResource("/vulnerability-example-$i.json") }
+    (1..7).map { i -> javaClass.getResource("/vulnerability-example-$i.json").readText() }

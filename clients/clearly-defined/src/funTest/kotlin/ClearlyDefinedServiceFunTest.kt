@@ -34,13 +34,13 @@ import io.kotest.matchers.string.shouldStartWith
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.utils.test.readResource
 
 class ClearlyDefinedServiceFunTest : WordSpec({
     "A contribution patch" should {
         "be correctly deserialized when using empty facet arrays" {
             // See https://github.com/clearlydefined/curated-data/blob/0b2db78/curations/maven/mavencentral/com.google.code.gson/gson.yaml#L10-L11.
-            val curation = ClearlyDefinedService.JSON.decodeFromString<Curation>(readResource("/gson.json"))
+            val gsonJson = javaClass.getResource("/gson.json").readText()
+            val curation = ClearlyDefinedService.JSON.decodeFromString<Curation>(gsonJson)
 
             curation.described?.facets shouldNotBeNull {
                 dev.shouldNotBeNull() should beEmpty()
