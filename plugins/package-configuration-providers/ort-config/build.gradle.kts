@@ -29,4 +29,6 @@ dependencies {
     implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
 
     ksp(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
+
+    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
 }
