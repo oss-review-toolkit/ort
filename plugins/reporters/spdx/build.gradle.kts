@@ -38,9 +38,9 @@ dependencies {
 
     implementation(jacksonLibs.jacksonDatabind)
 
-    funTestImplementation(testFixtures(projects.plugins.reporters.spdxReporter))
-
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(projects.plugins.licenseFactProviders.scancodeLicenseFactProvider)
+    funTestImplementation(testFixtures(projects.plugins.reporters.spdxReporter))
 
     testFixturesImplementation(projects.utils.testUtils)
 }

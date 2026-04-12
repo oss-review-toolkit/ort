@@ -39,6 +39,7 @@ dependencies {
     ksp(projects.analyzer)
 
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
 
     funTestImplementation(libs.kotest.assertions.table)

@@ -36,7 +36,7 @@ dependencies {
 
     runtimeOnly(libs.asciidoctorj.pdf)
 
-    funTestImplementation(testFixtures(projects.reporter))
-
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
+    funTestImplementation(projects.utils.testUtils)
+    funTestImplementation(testFixtures(projects.reporter))
 }

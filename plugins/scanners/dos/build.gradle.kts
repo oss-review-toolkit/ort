@@ -42,6 +42,8 @@ dependencies {
 
     ksp(projects.scanner)
 
+    testImplementation(projects.utils.testUtils)
+
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
 }

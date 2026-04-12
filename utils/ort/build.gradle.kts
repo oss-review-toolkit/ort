@@ -46,5 +46,7 @@ dependencies {
 
     funTestImplementation(libs.mockk)
 
+    testImplementation(projects.utils.testUtils)
+
     testImplementation(libs.mockk)
 }

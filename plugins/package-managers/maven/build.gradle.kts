@@ -54,6 +54,7 @@ dependencies {
     // TODO: Remove this once https://issues.apache.org/jira/browse/MNG-6561 is resolved.
     runtimeOnly(libs.maven.compat)
 
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
 
     testImplementation(libs.mockk)

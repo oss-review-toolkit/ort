@@ -50,4 +50,6 @@ dependencies {
     implementation(projects.plugins.reporters.evaluatedModelReporter)
 
     implementation(libs.commonsCompress)
+
+    funTestImplementation(projects.utils.testUtils)
 }

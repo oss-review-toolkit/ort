@@ -40,6 +40,7 @@ dependencies {
 
     ksp(projects.analyzer)
 
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
 
     funTestRuntimeOnly(projects.plugins.packageManagers.gradleInspector)

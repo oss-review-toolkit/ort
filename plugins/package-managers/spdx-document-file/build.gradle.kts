@@ -39,6 +39,7 @@ dependencies {
     ksp(projects.analyzer)
 
     funTestImplementation(projects.plugins.packageManagers.conanPackageManager)
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
 
     testImplementation(libs.mockk)

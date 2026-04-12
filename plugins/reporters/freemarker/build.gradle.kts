@@ -34,9 +34,11 @@ dependencies {
 
     implementation(libs.freemarker)
 
+    funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
+    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.reporter))
 
-    funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
+    testImplementation(projects.utils.testUtils)
 
     testImplementation(libs.mockk)
 }
