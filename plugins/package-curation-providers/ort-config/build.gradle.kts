@@ -28,4 +28,6 @@ dependencies {
     ksp(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
     implementation(projects.downloader)
+
+    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
 }
