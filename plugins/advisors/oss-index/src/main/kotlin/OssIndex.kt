@@ -135,7 +135,9 @@ class OssIndex(
         externalReferences?.mapTo(references) { reference.copy(url = URI(it)) }
         return Vulnerability(
             id = cve ?: displayName ?: title,
-            summary = title,
+            summary = title.removePrefix("[$cve]").trimStart()
+                .removePrefix(cwe.orEmpty()).trimStart()
+                .removePrefix(":").trimStart(),
             description = description,
             references = references
         )

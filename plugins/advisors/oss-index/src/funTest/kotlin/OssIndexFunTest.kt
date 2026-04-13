@@ -60,8 +60,7 @@ class OssIndexFunTest : WordSpec({
                 )
 
                 val vulnerability = getValue("CVE-2023-2976")
-                vulnerability.summary shouldBe
-                    "[CVE-2023-2976] CWE-552: Files or Directories Accessible to External Parties"
+                vulnerability.summary shouldBe "Files or Directories Accessible to External Parties"
 
                 vulnerability.references.find {
                     it.url.toString() == "http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2023-2976"
@@ -87,7 +86,7 @@ class OssIndexFunTest : WordSpec({
                 )
 
                 val vulnerability = getValue("CVE-2023-42503")
-                vulnerability.summary shouldBe "[CVE-2023-42503] CWE-20: Improper Input Validation"
+                vulnerability.summary shouldBe "Improper Input Validation"
 
                 vulnerability.references.find {
                     it.url.toString() == "http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2023-42503"
@@ -115,8 +114,7 @@ class OssIndexFunTest : WordSpec({
                 )
 
                 val vulnerability = getValue("CVE-2024-48948")
-                vulnerability.summary shouldBe
-                    "[CVE-2024-48948] CWE-347: Improper Verification of Cryptographic Signature"
+                vulnerability.summary shouldBe "Improper Verification of Cryptographic Signature"
 
                 vulnerability.references.find {
                     it.url.toString() == "https://github.com/indutny/elliptic/pull/322"
