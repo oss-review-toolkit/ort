@@ -89,9 +89,9 @@ data class OrtConfiguration(
      * [ORT_CUSTOM_LICENSE_TEXTS_DIRNAME].
      */
     val licenseFactProviders: LinkedHashMap<String, PluginConfig> = linkedMapOf(
+        "DefaultDir" to PluginConfig.EMPTY,
         "SPDX" to PluginConfig.EMPTY,
-        "ScanCode" to PluginConfig.EMPTY,
-        "DefaultDir" to PluginConfig.EMPTY
+        "ScanCode" to PluginConfig.EMPTY
     ),
 
     /**
