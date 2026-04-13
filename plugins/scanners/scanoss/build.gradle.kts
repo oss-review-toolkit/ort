@@ -39,6 +39,8 @@ dependencies {
 
     funTestApi(testFixtures(projects.scanner))
 
+    funTestImplementation(projects.utils.testUtils)
+
     testImplementation(projects.utils.testUtils)
 
     testImplementation(libs.mockk)
