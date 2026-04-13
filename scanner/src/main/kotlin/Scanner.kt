@@ -119,8 +119,13 @@ class Scanner(
             )
         )
 
-        val packages = ortResult.getPackages(skipExcluded).map { it.metadata }.filterNotConcluded()
-            .filterNotMetadataOnly().toSet()
+        val packages = ortResult.getPackages(skipExcluded)
+            .map { it.metadata }
+            .filterNotConcluded()
+            .filterNotEmptySourceCodeOrigins()
+            .filterNotMetadataOnly()
+            .toSet()
+
         val packageResults = scan(
             packages,
             ScanContext(
@@ -491,6 +496,17 @@ class Scanner(
 
                 keep
             }
+
+    private fun Collection<Package>.filterNotEmptySourceCodeOrigins(): List<Package> =
+        partition { it.sourceCodeOrigins?.isEmpty() == true }.let { (skip, keep) ->
+            if (skip.isNotEmpty()) {
+                logger.debug {
+                    "Not scanning the following package(s) with empty source code origins: $skip"
+                }
+            }
+
+            keep
+        }
 
     private fun Collection<Package>.filterNotMetadataOnly(): List<Package> =
         partition { it.isMetadataOnly }.let { (skip, keep) ->

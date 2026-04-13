@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
-import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
+import org.ossreviewtoolkit.model.utils.requireNoDuplicates
 
 /**
  * The configuration model of the downloader. This class is (de-)serialized in the following places:
@@ -45,8 +45,8 @@ data class DownloaderConfiguration(
     val skipExcluded: Boolean = false,
 
     /**
-     * Configuration of the considered source code origins and their priority order. This must not be empty and not
-     * contain any duplicates.
+     * Configuration of the considered source code origins and their priority order. This must not contain any
+     * duplicates.
      */
     val sourceCodeOrigins: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT),
 
@@ -58,6 +58,6 @@ data class DownloaderConfiguration(
     val enablePreemptiveAuthentication: Boolean = false
 ) {
     init {
-        sourceCodeOrigins.requireNotEmptyNoDuplicates()
+        sourceCodeOrigins.requireNoDuplicates()
     }
 }
