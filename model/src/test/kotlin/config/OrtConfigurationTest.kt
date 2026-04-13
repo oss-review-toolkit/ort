@@ -175,7 +175,7 @@ class OrtConfigurationTest : WordSpec({
 
                     postgresStorage shouldNotBeNull {
                         with(connection) {
-                            url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                            url shouldBe "jdbc:postgresql://your-postgresql-server:5432/your-database"
                             schema shouldBe "public"
                             username shouldBe "username"
                             password shouldBe "password"
@@ -205,7 +205,7 @@ class OrtConfigurationTest : WordSpec({
 
                     postgresStorage shouldNotBeNull {
                         with(connection) {
-                            url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                            url shouldBe "jdbc:postgresql://your-postgresql-server:5432/your-database"
                             schema shouldBe "public"
                             username shouldBe "username"
                             password shouldBe "password"
@@ -299,7 +299,7 @@ class OrtConfigurationTest : WordSpec({
                     val postgresStorage = this["postgres"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     with(postgresStorage.connection) {
-                        url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                        url shouldBe "jdbc:postgresql://your-postgresql-server:5432/your-database"
                         schema shouldBe "public"
                         username shouldBe "username"
                         password shouldBe "password"
@@ -329,7 +329,7 @@ class OrtConfigurationTest : WordSpec({
 
                     postgresStorage shouldNotBeNull {
                         with(connection) {
-                            url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                            url shouldBe "jdbc:postgresql://your-postgresql-server:5432/your-database"
                             schema shouldBe "public"
                             username shouldBe "username"
                             password shouldBe "password"
@@ -398,14 +398,14 @@ class OrtConfigurationTest : WordSpec({
                     storages:
                       postgres:
                         connection:
-                          url: "postgresql://your-postgresql-server:5444/your-database"
+                          url: "postgresql://your-postgresql-server:5432/your-database"
                           schema: public
                           username: username
                           password: password
                     provenanceStorage:
                       postgresStorage:
                         connection:
-                          url: "postgresql://your-postgresql-server:5444/your-database"
+                          url: "postgresql://your-postgresql-server:5432/your-database"
                           schema: public
                           username: username
                           password: password
@@ -490,7 +490,7 @@ class OrtConfigurationTest : WordSpec({
                     storages:
                       postgresStorage:
                         connection:
-                          url: "postgresql://your-postgresql-server:5444/your-database"
+                          url: "postgresql://your-postgresql-server:5432/your-database"
                           schema: public
                           username: ${'$'}{POSTGRES_USERNAME}
                           password: ${'$'}{POSTGRES_PASSWORD}
