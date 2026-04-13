@@ -89,11 +89,7 @@ fun String.parseRepoManifestPath() =
             ?.takeUnless { it.isEmpty() }
     }.getOrNull()
 
-internal fun List<SourceCodeOrigin>.requireNotEmptyNoDuplicates() {
-    require(isNotEmpty()) {
-        "'sourceCodeOrigins' must not be empty."
-    }
-
+internal fun List<SourceCodeOrigin>.requireNoDuplicates() {
     val duplicates = getDuplicates()
     require(duplicates.isEmpty()) {
         "'sourceCodeOrigins' must not contain duplicates. Duplicates: $duplicates"

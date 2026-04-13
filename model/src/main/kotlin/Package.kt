@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
+import org.ossreviewtoolkit.model.utils.requireNoDuplicates
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
@@ -137,7 +137,7 @@ data class Package(
 
     /**
      * The considered source code origins and their priority order to use for this package. If null, the configured
-     * default is used. If not null, this must not be empty and not contain any duplicates.
+     * default is used. The list must not contain any duplicates.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val sourceCodeOrigins: List<SourceCodeOrigin>? = null,
@@ -172,7 +172,7 @@ data class Package(
     }
 
     init {
-        sourceCodeOrigins?.requireNotEmptyNoDuplicates()
+        sourceCodeOrigins?.requireNoDuplicates()
     }
 
     /**
