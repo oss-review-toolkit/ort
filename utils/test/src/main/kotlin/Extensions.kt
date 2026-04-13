@@ -22,9 +22,13 @@ package org.ossreviewtoolkit.utils.test
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.core.TestConfiguration
+import io.kotest.engine.spec.tempfile
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
+
+fun TestConfiguration.extractResource(name: String) =
+    tempfile(name.substringAfterLast('/')).apply { writeText(readResource(name)) }
 
 fun TestConfiguration.getResource(name: String) = checkNotNull(javaClass.getResource(name))
 
