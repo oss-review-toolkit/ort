@@ -29,6 +29,18 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 val JSON = Json { ignoreUnknownKeys = true }
 
 @Serializable
+data class VersionsResponseBody(
+    val dosVersion: String,
+    val scannerInfo: ScannerInfo
+) {
+    @Serializable
+    data class ScannerInfo(
+        val name: String,
+        val version: String
+    )
+}
+
+@Serializable
 data class UploadUrlRequestBody(
     /** The desired key name for the file to upload to S3. */
     val key: String
