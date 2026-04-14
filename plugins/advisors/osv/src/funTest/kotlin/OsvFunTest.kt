@@ -37,7 +37,9 @@ class OsvFunTest : WordSpec({
     "retrievePackageFindings()" should {
         "return the vulnerabilities for the supported ecosystems" {
             val osv = createOsv()
-            val packages = setOf(
+            val dummyPackage = "A:dummy:package:1.2.3"
+            val packageCoordinates = setOf(
+                dummyPackage,
                 "Crate::sys-info:0.7.0",
                 "Composer:thorsten:phpmyfaq:3.0.7",
                 "Gem::rack:2.0.4",
@@ -49,13 +51,12 @@ class OsvFunTest : WordSpec({
                 "Pub::http:0.13.1",
                 "PyPI::django:3.2",
                 "Swift::github.com/apple/swift-nio:2.41.0"
-            ).mapTo(mutableSetOf()) {
-                identifierToPackage(it)
-            }
+            )
+            val packages = packageCoordinates.mapTo(mutableSetOf()) { identifierToPackage(it) }
 
             val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id.toCoordinates() }
 
-            packageFindings.keys shouldContainExactlyInAnyOrder packages.map { it.id.toCoordinates() }
+            packageFindings.keys shouldContainExactlyInAnyOrder packageCoordinates - dummyPackage
             packageFindings.keys.forAll { coordinates ->
                 packageFindings.getValue(coordinates).vulnerabilities shouldNot beEmpty()
             }
