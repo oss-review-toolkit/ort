@@ -22,11 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import org.ossreviewtoolkit.model.utils.isApplicableIvyVersion
-
-/**
- * Return true if this string equals the [other] string, or if either string is blank.
- */
-private fun String.equalsOrIsBlank(other: String) = equals(other) || isBlank() || other.isBlank()
+import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
 
 /**
  * This class assigns a [PackageCurationData] object to a [Package] identified by the [id].

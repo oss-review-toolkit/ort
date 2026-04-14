@@ -143,6 +143,36 @@ class StringUtilsTest : WordSpec({
         }
     }
 
+    "equalsOrIsBlank()" should {
+        "return true if both strings are equal" {
+            "foo".equalsOrIsBlank("foo") shouldBe true
+        }
+
+        "return true if the receiver is empty" {
+            "".equalsOrIsBlank("foo") shouldBe true
+        }
+
+        "return true if the receiver is blank" {
+            "   ".equalsOrIsBlank("foo") shouldBe true
+        }
+
+        "return true if the other string is empty" {
+            "foo".equalsOrIsBlank("") shouldBe true
+        }
+
+        "return true if the other string is blank" {
+            "foo".equalsOrIsBlank("   ") shouldBe true
+        }
+
+        "return true if both strings are blank" {
+            "   ".equalsOrIsBlank("") shouldBe true
+        }
+
+        "return false if the strings differ and neither is blank" {
+            "foo".equalsOrIsBlank("bar") shouldBe false
+        }
+    }
+
     "unquote()" should {
         "remove surrounding quotes" {
             "'single'".unquote() shouldBe "single"

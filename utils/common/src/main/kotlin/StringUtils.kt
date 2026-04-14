@@ -42,6 +42,11 @@ fun String.encodeOr(emptyValue: String): String {
 fun String.encodeOrUnknown(): String = encodeOr("unknown")
 
 /**
+ * Return true if this string equals the [other] string, or if either string is blank.
+ */
+fun String.equalsOrIsBlank(other: String) = equals(other) || isBlank() || other.isBlank()
+
+/**
  * Return the string encoded for safe use as a file name. Also limit the length to 255 characters which is the maximum
  * length in most modern filesystems, see
  * [comparison of file system limits](https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits).
