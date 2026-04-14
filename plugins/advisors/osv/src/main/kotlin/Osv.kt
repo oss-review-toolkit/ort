@@ -66,30 +66,18 @@ class Osv(
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
-        val vulnerabilitiesForPackage = getVulnerabilitiesForPackages(packages)
-
-        return packages.mapNotNull { pkg ->
-            vulnerabilitiesForPackage[pkg.id]?.let { vulnerabilities ->
-                pkg to AdvisorResult(
-                    advisor = details,
-                    summary = AdvisorSummary(
-                        startTime = startTime,
-                        endTime = Instant.now()
-                    ),
-                    vulnerabilities = vulnerabilities.map { it.toOrtVulnerability() }
-                )
-            }
-        }.toMap()
-    }
-
-    private fun getVulnerabilitiesForPackages(packages: Set<Package>): Map<Identifier, List<Vulnerability>> {
         val vulnerabilityIdsForPackageId = getVulnerabilityIdsForPackages(packages)
         val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.flatten().toSet()
         val vulnerabilityForId = getVulnerabilitiesForIds(allVulnerabilityIds).associateBy { it.id }
 
         return packages.mapNotNull { pkg ->
-            val vulnerabilities = vulnerabilityIdsForPackageId[pkg.id]?.map { vulnerabilityForId.getValue(it) }
-            vulnerabilities?.let { pkg.id to it }
+            vulnerabilityIdsForPackageId[pkg.id]?.let { ids ->
+                pkg to AdvisorResult(
+                    advisor = details,
+                    summary = AdvisorSummary(startTime = startTime, endTime = Instant.now()),
+                    vulnerabilities = ids.map { vulnerabilityForId.getValue(it).toOrtVulnerability() }
+                )
+            }
         }.toMap()
     }
 
