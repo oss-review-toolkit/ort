@@ -27,4 +27,4 @@ fi
 ENV_DIR="$(dirname "$SELF")/$1"
 shift
 
-env -i "$(which flox)" activate -d "$ENV_DIR" -- "$@"
+env -i CI=$CI "$(which flox)" activate -d "$ENV_DIR" -- "$@"
