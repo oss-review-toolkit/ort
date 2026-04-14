@@ -79,6 +79,12 @@ interface DosService {
     }
 
     /**
+     * Get the versions of DOS and the scanner used. This endpoint does not require authorization.
+     */
+    @GET("versions")
+    suspend fun getVersions(): VersionsResponseBody
+
+    /**
      * Get the package configuration for specified [purl][PackageConfigurationRequestBody.purl].
      */
     @POST("package-configuration")

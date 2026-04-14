@@ -78,8 +78,11 @@ class DosScanner(
     private val service = with(config) { DosService.create(url, token.value, timeout?.let { Duration.ofSeconds(it) }) }
     internal val client = DosClient(service)
 
-    // TODO: Introduce a DOS version and expose it through the API to use it here.
-    override val version = "1.0.0"
+    override val version
+        get() = runCatching {
+            val versions = runBlocking { service.getVersions() }
+            with(versions) { "$dosVersion (${scannerInfo.name} ${scannerInfo.version})" }
+        }.getOrDefault("1.0.0")
 
     override val configuration = ""
 
