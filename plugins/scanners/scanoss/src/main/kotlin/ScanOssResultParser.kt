@@ -159,7 +159,7 @@ private fun createSnippetFindings(details: ScanFileDetails, localFilePath: Strin
 
     val additionalData = buildMap {
         put("file_hash", details.fileHash)
-        put("file_url", details.fileUrl)
+        if (details.fileUrl.isNotBlank()) put("file_url", details.fileUrl)
         put("source_hash", details.sourceHash)
 
         // Purls can be empty if only one entry is provided which is used as the primary purl.
