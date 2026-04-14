@@ -75,6 +75,9 @@ class DosScanner(
     override val descriptor: PluginDescriptor = DosScannerFactory.descriptor,
     private val config: DosScannerConfig
 ) : PackageScannerWrapper {
+    private val service = with(config) { DosService.create(url, token.value, timeout?.let { Duration.ofSeconds(it) }) }
+    internal val client = DosClient(service)
+
     // TODO: Introduce a DOS version and expose it through the API to use it here.
     override val version = "1.0.0"
 
@@ -84,10 +87,6 @@ class DosScanner(
 
     override val readFromStorage = false
     override val writeToStorage = config.writeToStorage
-
-    private val service =
-        DosService.create(config.url, config.token.value, config.timeout?.let { Duration.ofSeconds(it) })
-    internal val client = DosClient(service)
 
     override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val startTime = Instant.now()
