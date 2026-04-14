@@ -13,7 +13,7 @@ The most important tasks for this project are:
 | Task        | Purpose                                                           |
 |-------------|-------------------------------------------------------------------|
 | assemble    | Build the JAR artifacts for all projects                          |
-| detekt(All) | Run static code analysis on all projects                          |
+| detekt      | Run static code analysis on all projects                          |
 | test        | Run unit tests for all projects                                   |
 | funTest     | Run functional tests for all projects                             |
 | installDist | Build all projects and install the start scripts for distribution |
@@ -86,7 +86,7 @@ npx commitlint --from=HEAD~2
 It can be executed locally using the Gradle tasks for each source set:
 
 ```shell
-./gradlew detektAll
+./gradlew detekt
 ```
 
 The above task can be slow because it uses [type resolution](https://detekt.dev/docs/gettingstarted/type-resolution/).
