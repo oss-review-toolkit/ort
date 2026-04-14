@@ -21,12 +21,17 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import com.scanoss.rest.ScanApi
 
+import io.kotest.core.annotation.Condition
+import io.kotest.core.annotation.EnabledIf
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+
+import kotlin.reflect.KClass
 
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -38,6 +43,7 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.extractResource
 
+@EnabledIf(CloudCheck::class)
 class ScanOssFunTest : StringSpec({
     val apiKey = System.getenv("SCANOSS_API_KEY")
     val scanner = if (apiKey != null) {
@@ -102,3 +108,7 @@ class ScanOssFunTest : StringSpec({
         }
     }
 })
+
+internal class CloudCheck : Condition {
+    override fun evaluate(kclass: KClass<out Spec>): Boolean = System.getenv("CI") != "true"
+}
