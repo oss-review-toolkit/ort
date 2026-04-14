@@ -87,9 +87,10 @@ class Osv(
         val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.flatten().toSet()
         val vulnerabilityForId = getVulnerabilitiesForIds(allVulnerabilityIds).associateBy { it.id }
 
-        return packages.associate { pkg ->
-            pkg.id to vulnerabilityIdsForPackageId[pkg.id].orEmpty().map { vulnerabilityForId.getValue(it) }
-        }
+        return packages.mapNotNull { pkg ->
+            val vulnerabilities = vulnerabilityIdsForPackageId[pkg.id]?.map { vulnerabilityForId.getValue(it) }
+            vulnerabilities?.let { pkg.id to it }
+        }.toMap()
     }
 
     private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
