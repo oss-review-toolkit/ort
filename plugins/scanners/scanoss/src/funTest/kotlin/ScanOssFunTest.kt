@@ -95,7 +95,6 @@ class ScanOssFunTest : StringSpec({
                 } else {
                     mapOf(
                         "file_hash" to "38e743a8566d3df4a2dc4432f8d6b091",
-                        "file_url" to " ",
                         "source_hash" to "21f8df5092922255fd8b42be5e6b59a7"
                     )
                 }
