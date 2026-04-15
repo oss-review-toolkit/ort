@@ -24,6 +24,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.TestConfiguration
 import io.kotest.engine.spec.tempfile
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 
@@ -40,3 +42,16 @@ fun TestConfiguration.readOrtResult(name: String) =
 
 inline fun <reified T : Any> TestConfiguration.readResourceValue(name: String): T =
     FileFormat.forExtension(name.substringAfterLast('.')).mapper.readValue<T>(getResource(name))
+
+/**
+ * Return the corresponding [File] location in the source tree. The function is for development only, and can help
+ * to update expected result files. This function can be used to update expected results by inserting on lines into
+ * the test code, for example: `getResourceAsFileInSourceTree("/expected-output.yml").writeText(result)`.
+ */
+@Suppress("unused") // This is intended to be used for development.
+fun TestConfiguration.getResourceAsFileInSourceTree(name: String): File? {
+    val path = getResource(name).takeIf { it.protocol == "file" }?.path ?: return null
+    // Convert subpaths like e.g. "/build/resources/funTest/" to "/src/funTest/resources/".
+    val newPath = path.replace(Regex("/build/resources/(\\w+)/"), "/src/$1/resources/")
+    return File(newPath).takeIf { newPath != path }
+}
