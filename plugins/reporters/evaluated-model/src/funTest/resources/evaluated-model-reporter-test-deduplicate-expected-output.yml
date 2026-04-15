@@ -461,6 +461,7 @@ packages:
   - 4
   detected_excluded_licenses:
   - 4
+  effective_license: "Apache-2.0 AND CC-BY-NC-3.0 AND GPL-3.0-only WITH GCC-exception-3.1"
   binary_artifact:
     url: ""
     hash:
@@ -545,6 +546,10 @@ packages:
   - 5
   - 6
   - 7
+  effective_license: "(BSD-3-Clause AND GPL-2.0-only WITH Classpath-exception-2.0\
+    \ AND LicenseRef-test-Apache-2.0-multi-line AND LicenseRef-test-Apache-2.0-single-line)\
+    \ OR (LicenseRef-test-Apache-2.0-multi-line AND LicenseRef-test-Apache-2.0-single-line\
+    \ AND MIT)"
   binary_artifact:
     url: ""
     hash:
