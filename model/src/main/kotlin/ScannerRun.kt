@@ -163,7 +163,7 @@ data class ScannerRun(
 
         (scannedProvenances - resolvedProvenances).also {
             require(it.isEmpty()) {
-                "Found scan results which do not correspond to any resolved provenances, which is not allowed: \n" +
+                "Found scan results which do not correspond to any resolved provenances, which is not allowed:\n" +
                     it.toYaml()
             }
         }
@@ -171,7 +171,7 @@ data class ScannerRun(
         val fileListProvenances = files.mapTo(mutableSetOf()) { it.provenance }
         (fileListProvenances - resolvedProvenances).also {
             require(it.isEmpty()) {
-                "Found file lists which do not correspond to any resolved provenances, which is not allowed: \n" +
+                "Found file lists which do not correspond to any resolved provenances, which is not allowed:\n" +
                     it.toYaml()
             }
         }
