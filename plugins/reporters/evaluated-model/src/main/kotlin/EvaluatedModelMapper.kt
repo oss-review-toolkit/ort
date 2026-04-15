@@ -294,6 +294,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             declaredLicensesProcessed = project.declaredLicensesProcessed.evaluate(),
             detectedLicenses = detectedLicenses,
             detectedExcludedLicenses = detectedExcludedLicenses,
+            effectiveLicense = input.getEffectiveLicenseForId(project.id),
             description = "",
             homepageUrl = project.homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
