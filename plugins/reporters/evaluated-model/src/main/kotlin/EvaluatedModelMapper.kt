@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 /**
@@ -363,11 +364,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             detectedLicenses = detectedLicenses,
             detectedExcludedLicenses = detectedExcludedLicenses,
             concludedLicense = pkg.concludedLicense,
-            effectiveLicense = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded().effectiveLicense(
-                LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
-                input.ortResult.getPackageLicenseChoices(pkg.id),
-                input.ortResult.getRepositoryLicenseChoices()
-            )?.sorted(),
+            effectiveLicense = input.getEffectiveLicenseForId(pkg.id),
             description = pkg.description,
             homepageUrl = pkg.homepageUrl,
             binaryArtifact = pkg.binaryArtifact,
@@ -827,3 +824,10 @@ private fun OrtResult.getPackageConfigurations(id: Identifier): List<PackageConf
     getScanResultsForId(id).flatMap { scanResult ->
         getPackageConfigurations(id, scanResult.provenance)
     }
+
+private fun ReporterInput.getEffectiveLicenseForId(id: Identifier): SpdxExpression? =
+    licenseInfoResolver.resolveLicenseInfo(id).filterExcluded().effectiveLicense(
+        LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+        ortResult.getPackageLicenseChoices(id),
+        ortResult.getRepositoryLicenseChoices()
+    )?.sorted()
