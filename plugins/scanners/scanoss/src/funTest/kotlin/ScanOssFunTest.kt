@@ -45,12 +45,9 @@ import org.ossreviewtoolkit.utils.test.extractResource
 
 @EnabledIf(CloudCheck::class)
 class ScanOssFunTest : StringSpec({
-    val apiKey = System.getenv("SCANOSS_API_KEY")
-    val scanner = if (apiKey != null) {
-        ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL2, Secret(apiKey))
-    } else {
+    val scanner = CloudCheck.getOsskbApiKey()?.let { ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL, Secret(it)) } ?:
+        CloudCheck.getScanOssApiKey()?.let { ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL2, Secret(it)) } ?:
         ScanOssFactory.create()
-    }
 
     val scanContext = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
 
@@ -67,7 +64,7 @@ class ScanOssFunTest : StringSpec({
         summary.snippetFindings should beEmpty()
 
         // Copyrights (and vulnerabilities) are commercial features.
-        if (apiKey != null) {
+        if (CloudCheck.getScanOssApiKey() != null) {
             summary.copyrightFindings.shouldBeSingleton {
                 it.statement shouldBe "Copyright 2007-2010 Dag Wieers <dag@wieers.com>"
             }
@@ -92,7 +89,7 @@ class ScanOssFunTest : StringSpec({
                 )
                 snippet.purl shouldBe "pkg:github/unoconv/unoconv"
                 snippet.license shouldBe "GPL-2.0-only".toSpdx()
-                snippet.additionalData shouldContainExactly if (apiKey != null) {
+                snippet.additionalData shouldContainExactly if (CloudCheck.getScanOssApiKey() != null) {
                     mapOf(
                         "file_hash" to "38e743a8566d3df4a2dc4432f8d6b091",
                         "file_url" to "https://api.scanoss.com/file_contents/38e743a8566d3df4a2dc4432f8d6b091",
@@ -110,5 +107,11 @@ class ScanOssFunTest : StringSpec({
 })
 
 internal class CloudCheck : Condition {
-    override fun evaluate(kclass: KClass<out Spec>): Boolean = System.getenv("CI") != "true"
+    companion object {
+        fun getOsskbApiKey(): String? = System.getenv("OSSKB_API_KEY")
+        fun getScanOssApiKey(): String? = System.getenv("SCANOSS_API_KEY")
+    }
+
+    override fun evaluate(kclass: KClass<out Spec>): Boolean =
+        System.getenv("CI") != "true" || getOsskbApiKey() != null || getScanOssApiKey() != null
 }
