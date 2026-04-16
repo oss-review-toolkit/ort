@@ -244,12 +244,13 @@ private fun ModuleInfo.undoDeduplication(): ModuleInfo {
 
     fun ModuleInfo.undoDeduplicationRec(ancestorsIds: Set<String> = emptySet()): ModuleInfo {
         val dependencyAncestorIds = ancestorsIds + setOfNotNull(id)
-        val dependencies = (replacements[id] ?: this)
-            .dependencies
-            .filter { it.value.id !in dependencyAncestorIds } // break cycles.
-            .mapValues { it.value.undoDeduplicationRec(dependencyAncestorIds) }
+        val replacement = replacements[id] ?: this
 
-        return copy(dependencies = dependencies)
+        return replacement.copy(
+            dependencies = replacement.dependencies
+                .filter { it.value.id !in dependencyAncestorIds } // break cycles.
+                .mapValues { it.value.undoDeduplicationRec(dependencyAncestorIds) }
+        )
     }
 
     return undoDeduplicationRec()
