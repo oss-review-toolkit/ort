@@ -129,11 +129,9 @@ class OssIndexFunTest : WordSpec({
     }
 })
 
-internal class OssIndexCredentials : Condition {
-    companion object {
-        fun getUsername(): String? = System.getenv("OSS_INDEX_USERNAME")
-        fun getToken(): String? = System.getenv("OSS_INDEX_PASSWORD")
-    }
+internal object OssIndexCredentials : Condition {
+    fun getUsername(): String? = System.getenv("OSS_INDEX_USERNAME")
+    fun getToken(): String? = System.getenv("OSS_INDEX_PASSWORD")
 
     override fun evaluate(kclass: KClass<out Spec>): Boolean = getUsername() != null && getToken() != null
 }
