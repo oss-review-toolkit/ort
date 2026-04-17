@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.ort
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 import java.io.File
 import java.util.jar.JarFile
@@ -66,6 +67,7 @@ data class Environment(
     /**
      * Map of selected environment variables that might be relevant for debugging.
      */
+    @JsonPropertyOrder(alphabetic = true)
     val variables: Map<String, String> = RELEVANT_VARIABLES.mapNotNull { key ->
         Os.env[key]?.let { value -> key to value }
     }.toMap()
