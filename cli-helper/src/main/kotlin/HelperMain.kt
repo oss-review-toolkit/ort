@@ -96,6 +96,7 @@ internal class HelperMain : CliktCommand(ORTH_NAME) {
             ListStoredScanResultsCommand(),
             MapCopyrightsCommand(),
             MergeRepositoryConfigurationsCommand(),
+            MergeScannerRunsCommand(),
             PackageConfigurationCommand(),
             PackageCurationsCommand(),
             ProvenanceStorageCommand(),
