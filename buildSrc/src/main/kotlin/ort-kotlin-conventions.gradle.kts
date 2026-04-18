@@ -184,11 +184,8 @@ tasks.withType<Detekt>().configureEach detekt@{
     }
 
     reports {
+        // Disable these as they have issues with Gradle task output caching due to contained timestamps.
         html.required = false
-
-        // TODO: Enable this once https://github.com/detekt/detekt/issues/5034 is resolved and use the merged
-        //       Markdown file as a GitHub Action job summary, see
-        //       https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/.
         markdown.required = false
 
         sarif.required = true
