@@ -27,9 +27,11 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
 import org.ossreviewtoolkit.utils.common.enumSetOf
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
@@ -61,6 +63,23 @@ class PackageRuleTest : WordSpec() {
         )
 
     init {
+        "getEffectiveLicense()" should {
+            "return the effective license corresponding to the given license view" {
+                val declaredLicenses = setOf("Apache-2.0")
+                val rule = createPackageRule(
+                    pkg = Package.EMPTY.copy(
+                        id = Identifier("Maven:some:package:0.0.1"),
+                        concludedLicense = "MIT".toSpdx(Strictness.ALLOW_ANY),
+                        declaredLicenses = declaredLicenses,
+                        declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
+                    )
+                )
+
+                rule.getEffectiveLicense(LicenseView.ONLY_DECLARED) shouldBe "Apache-2.0".toSpdx()
+                rule.getEffectiveLicense(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) shouldBe "MIT".toSpdx()
+            }
+        }
+
         "hasLicense()" should {
             "return true if the package has concluded licenses" {
                 val rule = createPackageRule(packageWithOnlyConcludedLicense)
