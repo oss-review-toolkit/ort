@@ -59,6 +59,7 @@ open class PackageRule(
     val resolvedLicenseInfo: ResolvedLicenseInfo
 ) : Rule(ruleSet, name) {
     private val licenseRules = mutableListOf<LicenseRule>()
+    private val effectiveLicenseForLicenseView = mutableMapOf<LicenseView, SpdxExpression?>()
 
     @Suppress("unused") // This is intended to be used by rule implementations.
     val uncuratedPkg: Package by lazy {
@@ -73,6 +74,18 @@ open class PackageRule(
     override fun runInternal() {
         licenseRules.forEach { it.evaluate() }
     }
+
+    /**
+     * Return the effective license of [pkg] for the given [licenseView].
+     */
+    fun getEffectiveLicense(licenseView: LicenseView): SpdxExpression? =
+        effectiveLicenseForLicenseView.getOrPut(licenseView) {
+            resolvedLicenseInfo.filterExcluded().effectiveLicense(
+                licenseView,
+                ruleSet.ortResult.getPackageLicenseChoices(pkg.metadata.id),
+                ruleSet.ortResult.getRepositoryLicenseChoices()
+            )?.sorted()
+        }
 
     /**
      * A [RuleMatcher] that checks whether any vulnerability was found for the [package][pkg].
