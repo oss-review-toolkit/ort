@@ -58,10 +58,13 @@ class FossIdLicenseMappingTest : WordSpec({
         }
 
         "map non-SPDX compliant FossID licenses in a snippet to snippet findings" {
-            val rawResults = createSnippet("Apache 2.0")
+            val rawResults = createSnippet("The Apache License, Version 2.0")
             val issues = mutableListOf<Issue>()
 
-            val mapping = mapOf("Apache 2.0" to "Apache-2.0")
+            val mapping = mapOf(
+                "Apache License, Version 2.0" to "Apache-2.0",
+                "The Apache License, Version 2.0" to "Apache-2.0"
+            )
             val findings = mapSnippetFindings(
                 rawResults,
                 500,
@@ -169,6 +172,40 @@ class FossIdLicenseMappingTest : WordSpec({
                 issues should beEmpty()
                 findings.licenseFindings.map { it.license.toString() } should containExactly(license)
             }
+        }
+
+        "apply the license mapping" {
+            val mapping = mapOf(
+                "BSD (3-Clause)" to "BSD-3-Clause"
+            )
+            val sampleFile = createMarkAsIdentifiedFile(
+                "BSD (3-Clause)", FILE_PATH, includeLicensesWithComment = true
+            )
+            val issues = mutableListOf<Issue>()
+
+            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, mapping)
+
+            issues should beEmpty()
+            findings.licenseFindings.map { it.license.toString() } should containExactly("BSD-3-Clause")
+        }
+
+        "handle license mappings included in others" {
+            val mapping = mapOf(
+                "Apache 2.0" to "Apache-2.0",
+                "Apache License 2.0" to "Apache-2.0",
+                "Apache License, Version 2.0" to "Apache-2.0",
+                "Apache version 2.0" to "Apache-2.0",
+                "The Apache License, Version 2.0" to "Apache-2.0"
+            )
+            val sampleFile = createMarkAsIdentifiedFile(
+                "The Apache License, Version 2.0", FILE_PATH, includeLicensesWithComment = true
+            )
+            val issues = mutableListOf<Issue>()
+
+            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, mapping)
+
+            issues should beEmpty()
+            findings.licenseFindings.map { it.license.toString() } should containExactly("Apache-2.0")
         }
     }
 })

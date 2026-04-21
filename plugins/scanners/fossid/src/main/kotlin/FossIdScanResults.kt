@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.scanners.fossid
 
 import java.lang.invoke.MethodHandles
+import java.util.SortedMap
 
 import kotlin.collections.map
 import kotlin.text.removePrefix
@@ -164,15 +165,16 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 
         val defaultLocation = TextLocation(summary.path, TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
 
+        val orderedLicenseMapping = createOrderedLicenseMapping(detectedLicenseMapping)
         summary.licences.forEach { licenseAddedInTheUI ->
-            mapLicense(licenseAddedInTheUI.identifier, defaultLocation, issues, detectedLicenseMapping)?.let {
+            mapLicense(licenseAddedInTheUI.identifier, defaultLocation, issues, orderedLicenseMapping)?.let {
                 licenseFindings += it
             }
         }
 
         fileComment?.ort?.licenses?.forEach { (licenseInORTComment, locations) ->
             locations.forEach { location ->
-                mapLicense(licenseInORTComment, location, issues, detectedLicenseMapping)?.let {
+                mapLicense(licenseInORTComment, location, issues, orderedLicenseMapping)?.let {
                     licenseFindings += it
                 }
             }
@@ -192,20 +194,30 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 }
 
 /**
+ * Order the mappings in [detectedLicenseMapping] by their length descending to make sure that longer matches are
+ * handled first. Otherwise, there could be unexpected results if a replacement is included in another one.
+ */
+private fun createOrderedLicenseMapping(detectedLicenseMapping: Map<String, String>): SortedMap<String, String> =
+    detectedLicenseMapping.toSortedMap(
+        compareByDescending<String> { it.length }.thenBy { it }
+    )
+
+/**
  * Convert a [license] at [location] from FossID to a valid [LicenseFinding]. If the license cannot be mapped, null is
- * returned and an issue is added to [issues].
+ * returned and an issue is added to [issues]. Use [orderedDetectedLicenseMapping] for the license mapping. This
+ * function applies the replacements for license mappings in the iteration order; so they must be sorted properly.
  */
 private fun mapLicense(
     license: String,
     location: TextLocation,
     issues: MutableList<Issue>,
-    detectedLicenseMapping: Map<String, String>
+    orderedDetectedLicenseMapping: Map<String, String>
 ): LicenseFinding? =
     runCatching {
         // TODO: The detected license mapping must be applied here, because FossID can return license strings
         //       which cannot be parsed to an SpdxExpression. A better solution could be to automatically
         //       convert the strings into a form that can be parsed, then the mapping could be applied globally.
-        LicenseFinding(license.mapLicense(detectedLicenseMapping), location)
+        LicenseFinding(license.mapLicense(orderedDetectedLicenseMapping), location)
     }.map { licenseFinding ->
         licenseFinding.copy(license = licenseFinding.license.normalize())
     }.onFailure { spdxException ->
@@ -228,6 +240,7 @@ internal suspend fun mapSnippetFindings(
     snippetChoices: List<SnippetChoice>,
     snippetLicenseFindings: MutableSet<LicenseFinding>
 ): Set<SnippetFinding> {
+    val orderedLicenseMapping = createOrderedLicenseMapping(detectedLicenseMapping)
     val remainingSnippetChoices = snippetChoices.toMutableList()
     val results = mutableSetOf<SnippetFinding>()
     var runningSnippetCount = 0
@@ -240,7 +253,7 @@ internal suspend fun mapSnippetFindings(
             file,
             rawResults.snippetMatchedLines,
             issues,
-            detectedLicenseMapping,
+            orderedLicenseMapping,
             snippetChoices,
             remainingSnippetChoices,
             snippetLicenseFindings
@@ -286,16 +299,16 @@ internal suspend fun mapSnippetFindings(
 
 /**
  * Map the snippets (@receiver]) of a single pending [file] to ORT [SnippetFinding]s. [snippetMatchedLines] contains the
- * matching lines for those snippets. The licenses are mapped using the [detectedLicenseMapping]. Snippet choices are
- * enforced using [snippetChoices] and [remainingSnippetChoices], the latter being the list of pending choices to be
- * made.
+ * matching lines for those snippets. The licenses are mapped using the [orderedDetectedLicenseMapping]. Snippet
+ * choices are enforced using [snippetChoices] and [remainingSnippetChoices], the latter being the list of pending
+ * choices to be made.
  * If any error occurs, an issue is added to [issues].
  */
 private fun Set<Snippet>.mapSnippetFindingsForFile(
     file: String,
     snippetMatchedLines: Map<Int, MatchedLines>,
     issues: MutableList<Issue>,
-    detectedLicenseMapping: Map<String, String>,
+    orderedDetectedLicenseMapping: Map<String, String>,
     snippetChoices: List<SnippetChoice>,
     remainingSnippetChoices: MutableList<SnippetChoice>,
     snippetLicenseFindings: MutableSet<LicenseFinding>
@@ -349,7 +362,7 @@ private fun Set<Snippet>.mapSnippetFindingsForFile(
         val ortSnippetLocation = snippetLocation ?: TextLocation(snippet.file, TextLocation.UNKNOWN_LINE)
 
         val license = snippet.artifactLicense?.let { artifactLicense ->
-            mapLicense(artifactLicense, ortSnippetLocation, issues, detectedLicenseMapping)?.license
+            mapLicense(artifactLicense, ortSnippetLocation, issues, orderedDetectedLicenseMapping)?.license
         } ?: SpdxConstants.NOASSERTION.toSpdx()
 
         val ortSnippet = OrtSnippet(
