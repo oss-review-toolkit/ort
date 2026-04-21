@@ -195,7 +195,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
             homepageUrl = pkgInfo.homepage.orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = conan.parseVcsInfo(pkgInfo)
+            vcs = pkgInfo.toVcsInfo()
         )
     }
 

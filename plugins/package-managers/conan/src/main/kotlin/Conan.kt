@@ -319,16 +319,6 @@ class Conan(
     }
 
     /**
-     * Return the [VcsInfo] contained in [pkgInfo].
-     */
-    internal fun parseVcsInfo(pkgInfo: PackageInfo): VcsInfo {
-        val revision = pkgInfo.revision.orEmpty()
-        val url = pkgInfo.url.orEmpty()
-        val vcsInfo = VcsHost.parseUrl(url)
-        return if (revision == "0") vcsInfo else vcsInfo.copy(revision = revision)
-    }
-
-    /**
      * Return the source artifact contained in [conanData], or [RemoteArtifact.EMPTY] if no source artifact is
      * available.
      */
@@ -386,4 +376,12 @@ internal data class ConanData(
     companion object {
         val EMPTY = ConanData(url = null, sha256 = null, hasPatches = false)
     }
+}
+
+/**
+ * Return the [VcsInfo] contained in [PackageInfo].
+ */
+internal fun PackageInfo.toVcsInfo(): VcsInfo {
+    val vcsInfo = VcsHost.parseUrl(url.orEmpty())
+    return if (revision == "0") vcsInfo else vcsInfo.copy(revision = revision.orEmpty())
 }
