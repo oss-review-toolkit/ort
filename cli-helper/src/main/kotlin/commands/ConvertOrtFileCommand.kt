@@ -49,7 +49,7 @@ internal class ConvertOrtFileCommand : OrtHelperCommand(
         .required()
 
     override fun run() {
-        val ortResult = readOrtResult(inputOrtFile)
+        val ortResult = readOrtResult(inputOrtFile, resolveScopes = false)
 
         writeOrtResult(ortResult, outputOrtFile)
     }
