@@ -264,9 +264,12 @@ internal fun importLicenseFindingCurations(
 
 /**
  * Read [ortFile] into an [OrtResult] and return it. Make sure that information about project scopes is available
- * (by calling [OrtResult.withResolvedScopes]), so that it can be processed.
+ * (by calling [OrtResult.withResolvedScopes]), if [resolveScopes] is true, so that it can be processed.
  */
-internal fun readOrtResult(ortFile: File): OrtResult = ortFile.readValue<OrtResult>().withResolvedScopes()
+internal fun readOrtResult(ortFile: File, resolveScopes: Boolean = true): OrtResult {
+    val ortResult = ortFile.readValue<OrtResult>()
+    return ortResult.takeUnless { resolveScopes } ?: ortResult.withResolvedScopes()
+}
 
 /**
  * Write the [ortResult] to [file].
