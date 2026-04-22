@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.slf4j)
     implementation(libs.xz)
 
+    "pluginClasspath"(platform(projects.plugins.packageManagers))
     "pluginClasspath"(platform(projects.plugins.versionControlSystems))
 
     funTestImplementation(projects.utils.testUtils)
