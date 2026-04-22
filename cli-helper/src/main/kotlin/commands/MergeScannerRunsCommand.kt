@@ -44,7 +44,7 @@ internal class MergeScannerRunsCommand : OrtHelperCommand(
 ) {
     private val ortFile by option(
         "--ort-file",
-        help = "The left-hand-side input ORT file into which the scanner run is to be merged."
+        help = "The input ORT file into which the scanner run is to be merged."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -52,7 +52,7 @@ internal class MergeScannerRunsCommand : OrtHelperCommand(
 
     private val otherOrtFile by option(
         "--other-ort-file",
-        help = "The right-hand-side input ORT file from which to take the scanner run from."
+        help = "The other input ORT file from which to take the scanner run from."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
