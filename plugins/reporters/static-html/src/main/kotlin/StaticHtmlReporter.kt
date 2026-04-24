@@ -632,7 +632,17 @@ class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlR
         val markdownParser = Parser.builder().build()
         val document = markdownParser.parse(markdown)
         val renderer = HtmlRenderer.builder().build()
-        unsafe { +renderer.render(document) }
+
+        // Escape bare '&' in URLs (e.g. <a href="example.com?foo=1&bar=2">) to prevent SAXParseException.
+        // Only matches URLs to avoid false positives; negative lookahead prevents double-escaping entities.
+        // Loop handles multiple bare '&' in a single URL (e.g. query params: ?foo=1&bar=2&baz=3).
+        var html = renderer.render(document)
+        val regex = Regex("((?:https?://|href=\"|src=\")[^\"]*?)&(?![a-zA-Z][a-zA-Z0-9]*;|#\\d+;|#[xX][0-9a-fA-F]+;)")
+        while (regex.containsMatchIn(html)) {
+            html = html.replace(regex, "$1&amp;")
+        }
+
+        unsafe { +html }
     }
 
     private fun DIV.licenseLink(license: String) {

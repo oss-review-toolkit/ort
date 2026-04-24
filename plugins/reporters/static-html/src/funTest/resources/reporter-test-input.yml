@@ -849,6 +849,14 @@ evaluator:
     message: "BSD-3-Clause warning"
     how_to_fix: "* *Step 1*\n* __Step 2__\n* ***Step 3***\n```\nSome long text verify\
       \ that overflow:scroll is working as expected.\n```"
+  - rule: "rule 4"
+    pkg: "Maven:com.example:example:1.0"
+    license: "MIT"
+    license_sources: ["DETECTED"]
+    severity: "WARNING"
+    message: "URL with multiple query parameters"
+    how_to_fix: "See the <a href=\"https://example.com/api?foo=1&bar=2&baz=3\">API\
+      \ documentation</a> for details."
 resolved_configuration:
   package_curations:
   - provider:
