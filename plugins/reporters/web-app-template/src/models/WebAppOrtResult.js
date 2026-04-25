@@ -155,16 +155,6 @@ class WebAppOrtResult {
                 }
             }
 
-            if (obj.licenses) {
-                const { licenses } = obj;
-                this.#licensesIndexesByNameMap.clear();
-
-                for (let i = 0, len = licenses.length; i < len; i++) {
-                    this.#licensesIndexesByNameMap.set(licenses[i].id, i);
-                    this.#licenses.push(new WebAppLicense(licenses[i]));
-                }
-            }
-
             if (obj.tools_metadata || obj.toolsMetadata) {
                 this.#toolsMetadata = new ToolsMetadata(obj.tools_metadata || obj.toolsMetadata);
             }
@@ -330,6 +320,23 @@ class WebAppOrtResult {
                     for (let i = 0, len = totalTreeDepth; i < len; i++) {
                         this.#levels.push(i);
                     }
+                }
+
+                const licenses = [
+                    ...new Set(
+                        [
+                            ...this.#declaredLicensesProcessed,
+                            ...this.#detectedLicensesProcessed,
+                            ...this.#effectiveLicenses,
+                        ]
+                    )
+                ];
+
+                this.#licensesIndexesByNameMap.clear();
+
+                for (let i = 0, len = licenses.length; i < len; i++) {
+                    this.#licensesIndexesByNameMap.set(licenses[i], i);
+                    this.#licenses.push(new WebAppLicense(licenses[i]));
                 }
             }
 
