@@ -72,7 +72,9 @@ internal class ElementHandler<S : Any>(initialState: S) : DefaultHandler() {
 
     override fun endElement(uri: String?, localName: String?, qName: String?) {
         val attributes = attributesStack.removeFirst()
-        elementFunctions[qName]?.also { f ->
+
+        val f = elementFunctions[qName]
+        if (f != null) {
             currentState = f(currentState, attributes, bodyContent.toString())
         }
 
