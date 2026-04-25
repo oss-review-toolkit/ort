@@ -87,7 +87,7 @@ style:
     excludes: ["**/clients/github-graphql/build/generated/**"]
   ReturnCount:
     active: false
-  SpacingAfterPackageDeclaration:
+  SpacingAfterPackageAndImports:
     active: true
   ThrowsCount:
     max: 5

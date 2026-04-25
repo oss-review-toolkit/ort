@@ -31,9 +31,10 @@ dependencies {
     compileOnly(libs.detekt.api)
     compileOnly(libs.detekt.psiUtils)
 
+    runtimeOnly(libs.detekt.core)
+
     testImplementation(projects.utils.testUtils)
 
-    testImplementation(libs.detekt.api)
     testImplementation(libs.detekt.test)
 }
 
