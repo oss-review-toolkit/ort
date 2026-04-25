@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 /**
  * A dependency graph node to represent a dependency between different package managers.
  */
-sealed class ResolvableDependencyNode : DependencyNode
+sealed interface ResolvableDependencyNode : DependencyNode
 
 /**
  * A dependency graph node to represent a dependency on a project with the given [id] and [linkage], where only the
@@ -37,7 +37,7 @@ class ProjectScopeDependencyNode(
     override val id: Identifier,
     override val linkage: PackageLinkage,
     private val dependencies: Sequence<DependencyNode>
-) : ResolvableDependencyNode() {
+) : ResolvableDependencyNode {
     override val issues: List<Issue> = emptyList()
 
     override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = block(dependencies)
@@ -47,7 +47,7 @@ class ProjectScopeDependencyNode(
  * A dependency graph node that wraps a regular non-package-manager-dependency in a [ResolvableDependencyNode] to be
  * representable in a common dependency graph.
  */
-class DependencyNodeDelegate(private val node: DependencyNode) : ResolvableDependencyNode() {
+class DependencyNodeDelegate(private val node: DependencyNode) : ResolvableDependencyNode {
     override val id: Identifier = node.id
     override val linkage = node.linkage
     override val issues = node.issues

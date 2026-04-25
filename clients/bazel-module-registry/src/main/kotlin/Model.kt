@@ -53,7 +53,7 @@ data class ModuleMetadata(
  * An abstraction of a module source info.
  */
 @Serializable
-sealed class ModuleSourceInfo
+sealed interface ModuleSourceInfo
 
 /**
  * A module source info with type 'archive'.
@@ -67,7 +67,7 @@ class ArchiveSourceInfo(
     val patches: Map<String, String>? = null,
     val stripPrefix: String? = null,
     val url: UriAsString
-) : ModuleSourceInfo()
+) : ModuleSourceInfo
 
 /**
  * A module source info with type 'git_repository'.
@@ -82,7 +82,7 @@ class GitRepositorySourceInfo(
     val initSubmodules: Boolean? = null,
     val verbose: Boolean? = null,
     val stripPrefix: String? = null
-) : ModuleSourceInfo()
+) : ModuleSourceInfo
 
 /**
  * A module source info with type 'local_path'.
@@ -95,7 +95,7 @@ class LocalRepositorySourceInfo(
     // [LocalBazelModuleRegistryService].
     @Transient
     var vcs: VcsInfo? = null
-) : ModuleSourceInfo()
+) : ModuleSourceInfo
 
 /**
  * See https://bazel.build/rules/lib/globals/module#archive_override.

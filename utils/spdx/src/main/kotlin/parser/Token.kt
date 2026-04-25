@@ -22,24 +22,24 @@ package org.ossreviewtoolkit.utils.spdx.parser
 /**
  * The tokens created by the [SpdxExpressionLexer] and consumed by the [SpdxExpressionParser].
  */
-sealed class Token {
-    data class OPEN(val position: Int) : Token()
+sealed interface Token {
+    data class OPEN(val position: Int) : Token
 
-    data class CLOSE(val position: Int) : Token()
+    data class CLOSE(val position: Int) : Token
 
-    data class PLUS(val position: Int) : Token()
+    data class PLUS(val position: Int) : Token
 
-    data class COLON(val position: Int) : Token()
+    data class COLON(val position: Int) : Token
 
-    data class AND(val position: Int) : Token()
+    data class AND(val position: Int) : Token
 
-    data class OR(val position: Int) : Token()
+    data class OR(val position: Int) : Token
 
-    data class WITH(val position: Int) : Token()
+    data class WITH(val position: Int) : Token
 
-    data class IDENTIFIER(val start: Int, val end: Int, val value: String) : Token()
+    data class IDENTIFIER(val start: Int, val end: Int, val value: String) : Token
 
-    data class LICENSEREF(val start: Int, val end: Int, val value: String) : Token()
+    data class LICENSEREF(val start: Int, val end: Int, val value: String) : Token
 
-    data class DOCUMENTREF(val start: Int, val end: Int, val value: String) : Token()
+    data class DOCUMENTREF(val start: Int, val end: Int, val value: String) : Token
 }
