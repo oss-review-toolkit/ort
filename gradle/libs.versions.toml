@@ -104,7 +104,6 @@ clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
 detekt-api = { module = "dev.detekt:detekt-api", version.ref = "detektPlugin" }
-detekt-core = { module = "dev.detekt:detekt-core", version.ref = "detektPlugin" }
 detekt-psiUtils = { module = "dev.detekt:detekt-psi-utils", version.ref = "detektPlugin" }
 detekt-test = { module = "dev.detekt:detekt-test", version.ref = "detektPlugin" }
 diffUtils = { module = "io.github.java-diff-utils:java-diff-utils", version.ref = "diffUtils" }
