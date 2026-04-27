@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
+    implementation(libs.commonsCompress)
     implementation(libs.spdx.library)
     implementation(libs.spdx.store.v3jsonld)
 

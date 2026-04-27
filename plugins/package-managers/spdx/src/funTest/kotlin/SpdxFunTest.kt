@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class SpdxFunTest : WordSpec({
-    "Yocto SPDX 3 input" should {
+    "Uncompressed Yocto SPDX 3 input" should {
         "get parsed to the expected ORT result output" {
             val basename = "core-image-minimal-qemux86-64.rootfs"
             val spdx3File = getAssetFile("yocto/input/$basename.spdx.json")
@@ -36,7 +36,22 @@ class SpdxFunTest : WordSpec({
             val result = SpdxFactory.create().resolveSingleProject(spdx3File)
 
             result.toYaml() should matchExpectedResult(
-                getAssetFile("yocto/output/$basename.ortresult.yml")
+                getAssetFile("yocto/output/$basename.ortresult.yml"),
+                spdx3File
+            )
+        }
+    }
+
+    "Compressed Yocto SPDX 3 input" should {
+        "get parsed to the expected ORT result output" {
+            val basename = "core-image-minimal-qemux86-64.rootfs"
+            val spdx3File = getAssetFile("yocto/input/$basename.spdx.json.zst")
+
+            val result = SpdxFactory.create().resolveSingleProject(spdx3File)
+
+            result.toYaml() should matchExpectedResult(
+                getAssetFile("yocto/output/$basename.ortresult.yml"),
+                spdx3File
             )
         }
     }
