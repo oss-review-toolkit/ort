@@ -33,7 +33,7 @@ class SpdxFunTest : WordSpec({
             val basename = "core-image-minimal-qemux86-64.rootfs"
             val spdx3File = getAssetFile("yocto/input/$basename.spdx.json")
 
-            val result = SpdxFactory.create().resolveSingleProject(spdx3File)
+            val result = SpdxFactory.create().resolveSingleProject(spdx3File, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(
                 getAssetFile("yocto/output/$basename.ortresult.yml")

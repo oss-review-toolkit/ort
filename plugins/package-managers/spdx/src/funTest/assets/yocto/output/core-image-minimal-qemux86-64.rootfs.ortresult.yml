@@ -58,28 +58,28 @@ project:
     - id: "SPDX::v86d:0.1.10"
   - name: "source"
     dependencies:
-    - id: "SPDX::Python-3.12.12.tar.xz:"
-    - id: "SPDX::acl-2.3.2.tar.gz:"
-    - id: "SPDX::attr-2.5.1.tar.gz:"
-    - id: "SPDX::autoconf-2.72e.tar.gz:"
-    - id: "SPDX::autoconf-archive-2023.02.20.tar.xz:"
-    - id: "SPDX::automake-1.16.5.tar.gz:"
-    - id: "SPDX::base-passwd_3.6.3.tar.xz:"
-    - id: "SPDX::bash-completion-2.12.0.tar.xz:"
-    - id: "SPDX::bc-1.07.1.tar.gz:"
-    - id: "SPDX::bison-3.8.2.tar.xz:"
-    - id: "SPDX::busybox-1.36.1.tar.bz2:"
-    - id: "SPDX::bzip2-1.0.8.tar.gz:"
-    - id: "SPDX::ca-certificates_20250419.tar.xz:"
-    - id: "SPDX::cmake-3.28.3.tar.gz:"
-    - id: "SPDX::curl-8.7.1.tar.xz:"
-    - id: "SPDX::elfutils-0.191.tar.bz2:"
-    - id: "SPDX::eudev-3.2.14.tar.gz:"
-    - id: "SPDX::expat-2.6.4.tar.bz2:"
-    - id: "SPDX::flex-2.6.4.tar.gz:"
-    - id: "SPDX::gdbm-1.23.tar.gz:"
-    - id: "SPDX::gettext-0.22.5.tar.gz:"
-    - id: "SPDX::git-2.44.4.tar.gz:"
+    - id: "SPDX::acl-native:2.3.2"
+    - id: "SPDX::attr-native:2.5.1"
+    - id: "SPDX::autoconf-archive-native:2023.02.20"
+    - id: "SPDX::autoconf-native:2.72e"
+    - id: "SPDX::automake-native:1.16.5"
+    - id: "SPDX::base-passwd:3.6.3"
+    - id: "SPDX::bash-completion:2.12.0"
+    - id: "SPDX::bc-native:1.07.1"
+    - id: "SPDX::bison-native:3.8.2"
+    - id: "SPDX::busybox:1.36.1"
+    - id: "SPDX::bzip2-native:1.0.8"
+    - id: "SPDX::ca-certificates-native:20250419"
+    - id: "SPDX::cmake-native:3.28.3"
+    - id: "SPDX::curl-native:8.7.1"
+    - id: "SPDX::elfutils-native:0.191"
+    - id: "SPDX::eudev:3.2.14"
+    - id: "SPDX::expat-native:2.6.4"
+    - id: "SPDX::flex-native:2.6.4"
+    - id: "SPDX::gdbm-native:1.23"
+    - id: "SPDX::gettext-minimal-native:0.22.5"
+    - id: "SPDX::gettext-native:0.22.5"
+    - id: "SPDX::git-native:2.44.4"
     - id: "SPDX::git.kernel.org.pub.scm.fs.ext2.e2fsprogs.git:"
     - id: "SPDX::git.kernel.org.pub.scm.utils.kernel.kmod.kmod.git:"
     - id: "SPDX::git.savannah.gnu.org.git.config.git:"
@@ -96,78 +96,59 @@ project:
     - id: "SPDX::github.com.stevegrubb.libcap-ng.git:"
     - id: "SPDX::github.com.thkukuk.libnsl:"
     - id: "SPDX::gitlab.freedesktop.org.pkg-config.pkg-config.git:"
-    - id: "SPDX::gmp-6.3.0.tar.bz2:"
-    - id: "SPDX::gnutls-3.8.4.tar.xz:"
-    - id: "SPDX::gperf-3.1.tar.gz:"
-    - id: "SPDX::gtk-doc-1.33.2.tar.xz:"
-    - id: "SPDX::libarchive-3.7.9.tar.gz:"
-    - id: "SPDX::libcap-2.69.tar.xz:"
-    - id: "SPDX::libedit-20230828-3.1.tar.gz:"
-    - id: "SPDX::libffi-3.4.6.tar.gz:"
-    - id: "SPDX::libgcrypt-1.10.3.tar.bz2:"
-    - id: "SPDX::libgpg-error-1.48.tar.bz2:"
-    - id: "SPDX::libidn2-2.3.7.tar.gz:"
-    - id: "SPDX::libmicrohttpd-1.0.1.tar.gz:"
-    - id: "SPDX::libtasn1-4.20.0.tar.gz:"
-    - id: "SPDX::libtirpc-1.3.4.tar.bz2:"
-    - id: "SPDX::libtool-2.4.7.tar.gz:"
-    - id: "SPDX::libunistring-1.2.tar.gz:"
-    - id: "SPDX::linux-6.6.tar.xz:"
-    - id: "SPDX::m4-1.4.19.tar.gz:"
-    - id: "SPDX::make-4.4.1.tar.gz:"
-    - id: "SPDX::mpc-1.3.1.tar.gz:"
-    - id: "SPDX::mpfr-4.2.1.tar.xz:"
-    - id: "SPDX::netbase_6.4.tar.xz:"
-    - id: "SPDX::nettle-3.9.1.tar.gz:"
-    - id: "SPDX::openssl-3.2.6.tar.gz:"
-    - id: "SPDX::pcre2-10.43.tar.bz2:"
-    - id: "SPDX::perl-5.38.4.tar.gz:"
-    - id: "SPDX::perl-cross-1.6.2.tar.gz:"
-    - id: "SPDX::popt-1.19.tar.gz:"
-    - id: "SPDX::re2c-3.1.tar.xz:"
-    - id: "SPDX::readline-8.2.tar.gz:"
-    - id: "SPDX::rsync-3.2.7.tar.gz:"
+    - id: "SPDX::gmp-native:6.3.0"
+    - id: "SPDX::gnutls-native:3.8.4"
+    - id: "SPDX::gperf-native:3.1"
+    - id: "SPDX::gtk-doc-native:1.33.2"
+    - id: "SPDX::libarchive-native:3.7.9"
+    - id: "SPDX::libcap-native:2.69"
+    - id: "SPDX::libedit-native:3.1"
+    - id: "SPDX::libffi-native:3.4.6"
+    - id: "SPDX::libgcrypt-native:1.10.3"
+    - id: "SPDX::libgpg-error-native:1.48"
+    - id: "SPDX::libidn2-native:2.3.7"
+    - id: "SPDX::libmicrohttpd-native:1.0.1"
+    - id: "SPDX::libmpc-native:1.3.1"
+    - id: "SPDX::libpcre2-native:10.43"
+    - id: "SPDX::libtasn1-native:4.20.0"
+    - id: "SPDX::libtirpc-native:1.3.4"
+    - id: "SPDX::libtool-cross:2.4.7"
+    - id: "SPDX::libtool-native:2.4.7"
+    - id: "SPDX::libunistring-native:1.2"
+    - id: "SPDX::linux-libc-headers:6.6"
+    - id: "SPDX::m4-native:1.4.19"
+    - id: "SPDX::make-native:4.4.1"
+    - id: "SPDX::mpfr-native:4.2.1"
+    - id: "SPDX::netbase:6.4"
+    - id: "SPDX::nettle-native:3.9.1"
+    - id: "SPDX::openssl:3.2.6"
+    - id: "SPDX::openssl-native:3.2.6"
+    - id: "SPDX::perl-native:5.38.4"
+    - id: "SPDX::perlcross-native:1.6.2"
+    - id: "SPDX::popt-native:1.19"
+    - id: "SPDX::python3-native:3.12.12"
+    - id: "SPDX::re2c-native:3.1"
+    - id: "SPDX::readline-native:8.2"
+    - id: "SPDX::rsync-native:3.2.7"
     - id: "SPDX::salsa.debian.org.debian.init-system-helpers.git:"
     - id: "SPDX::sourceware.org.git.binutils-gdb.git:"
     - id: "SPDX::sourceware.org.git.bzip2-tests.git:"
     - id: "SPDX::sourceware.org.git.glibc.git:"
-    - id: "SPDX::sqlite-autoconf-3450300.tar.gz:"
-    - id: "SPDX::sysvinit-3.04.tar.xz:"
-    - id: "SPDX::unifdef-2.12.tar.xz:"
-    - id: "SPDX::util-linux-2.39.3.tar.xz:"
-    - id: "SPDX::v86d_0.1.10.orig.tar.gz:"
-    - id: "SPDX::xz-5.4.7.tar.gz:"
-    - id: "SPDX::zlib-1.3.1.tar.gz:"
+    - id: "SPDX::sqlite3-native:3450300"
+    - id: "SPDX::sysvinit:3.04"
+    - id: "SPDX::unifdef-native:2.12"
+    - id: "SPDX::util-linux:2.39.3"
+    - id: "SPDX::util-linux-libuuid:2.39.3"
+    - id: "SPDX::util-linux-libuuid-native:2.39.3"
+    - id: "SPDX::util-linux-native:2.39.3"
+    - id: "SPDX::v86d:0.1.10.orig"
+    - id: "SPDX::xz:5.4.7"
+    - id: "SPDX::xz-native:5.4.7"
+    - id: "SPDX::zlib:1.3.1"
+    - id: "SPDX::zlib-native:1.3.1"
 packages:
-- id: "SPDX::Python-3.12.12.tar.xz:"
-  purl: "pkg:generic/Python-3.12.12.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "PSF-2.0"
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "http://www.python.org/ftp/python/3.12.12/Python-3.12.12.tar.xz"
-    hash:
-      value: "fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4"
-      algorithm: "SHA-256"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::acl-2.3.2.tar.gz:"
-  purl: "pkg:generic/acl-2.3.2.tar.gz"
+- id: "SPDX::acl-native:2.3.2"
+  purl: "pkg:generic/acl-native@2.3.2"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
@@ -193,8 +174,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::attr-2.5.1.tar.gz:"
-  purl: "pkg:generic/attr-2.5.1.tar.gz"
+- id: "SPDX::attr-native:2.5.1"
+  purl: "pkg:generic/attr-native@2.5.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
@@ -220,35 +201,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::autoconf-2.72e.tar.gz:"
-  purl: "pkg:generic/autoconf-2.72e.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "GPL-3.0-or-later"
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://alpha.gnu.org/gnu/autoconf/autoconf-2.72e.tar.gz"
-    hash:
-      value: "f3478d3b597d51f5d61596fb2f6f6aba49cdd974b4b05ff0bac57f56b5cfdb39"
-      algorithm: "SHA-256"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::autoconf-archive-2023.02.20.tar.xz:"
-  purl: "pkg:generic/autoconf-archive-2023.02.20.tar.xz"
+- id: "SPDX::autoconf-archive-native:2023.02.20"
+  purl: "pkg:generic/autoconf-archive-native@2023.02.20"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-with-autoconf-exception"
@@ -274,8 +228,35 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::automake-1.16.5.tar.gz:"
-  purl: "pkg:generic/automake-1.16.5.tar.gz"
+- id: "SPDX::autoconf-native:2.72e"
+  purl: "pkg:generic/autoconf-native@2.72e"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://alpha.gnu.org/gnu/autoconf/autoconf-2.72e.tar.gz"
+    hash:
+      value: "f3478d3b597d51f5d61596fb2f6f6aba49cdd974b4b05ff0bac57f56b5cfdb39"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::automake-native:1.16.5"
+  purl: "pkg:generic/automake-native@1.16.5"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only"
@@ -332,36 +313,6 @@ packages:
     path: ""
 - id: "SPDX::base-passwd:3.6.3"
   purl: "pkg:generic/base-passwd@3.6.3"
-  cpe: "cpe:2.3:*:*:base-passwd:3.6.3:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "GPL-2.0-only"
-  description: "The master copies of the user database files (/etc/passwd and /etc/group).\
-    \  The update-passwd tool is also provided to keep the system databases synchronized\
-    \ with these master files."
-  homepage_url: "https://launchpad.net/base-passwd"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::base-passwd_3.6.3.tar.xz:"
-  purl: "pkg:generic/base-passwd_3.6.3.tar.xz"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only"
@@ -387,8 +338,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::bash-completion-2.12.0.tar.xz:"
-  purl: "pkg:generic/bash-completion-2.12.0.tar.xz"
+- id: "SPDX::bash-completion:2.12.0"
+  purl: "pkg:generic/bash-completion@2.12.0"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only"
@@ -414,8 +365,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::bc-1.07.1.tar.gz:"
-  purl: "pkg:generic/bc-1.07.1.tar.gz"
+- id: "SPDX::bc-native:1.07.1"
+  purl: "pkg:generic/bc-native@1.07.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-or-later"
@@ -441,8 +392,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::bison-3.8.2.tar.xz:"
-  purl: "pkg:generic/bison-3.8.2.tar.xz"
+- id: "SPDX::bison-native:3.8.2"
+  purl: "pkg:generic/bison-native@3.8.2"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-only"
@@ -470,40 +421,6 @@ packages:
     path: ""
 - id: "SPDX::busybox:1.36.1"
   purl: "pkg:generic/busybox@1.36.1"
-  cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
-  description: "BusyBox combines tiny versions of many common UNIX utilities into\
-    \ a single small executable. It provides minimalist replacements for most of the\
-    \ utilities you usually find in GNU fileutils, shellutils, etc. The utilities\
-    \ in BusyBox generally have fewer options than their full-featured GNU cousins;\
-    \ however, the options that are included provide the expected functionality and\
-    \ behave very much like their GNU counterparts. BusyBox provides a fairly complete\
-    \ POSIX environment for any small or embedded system."
-  homepage_url: "https://www.busybox.net"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::busybox-1.36.1.tar.bz2:"
-  purl: "pkg:generic/busybox-1.36.1.tar.bz2"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
@@ -631,8 +548,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::bzip2-1.0.8.tar.gz:"
-  purl: "pkg:generic/bzip2-1.0.8.tar.gz"
+- id: "SPDX::bzip2-native:1.0.8"
+  purl: "pkg:generic/bzip2-native@1.0.8"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "Apache-2.0 AND BSD-3-Clause AND bzip2-1.0.6 AND GPL-3.0-or-later\
@@ -659,8 +576,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::ca-certificates_20250419.tar.xz:"
-  purl: "pkg:generic/ca-certificates_20250419.tar.xz"
+- id: "SPDX::ca-certificates-native:20250419"
+  purl: "pkg:generic/ca-certificates-native@20250419"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later AND MPL-2.0"
@@ -686,8 +603,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::cmake-3.28.3.tar.gz:"
-  purl: "pkg:generic/cmake-3.28.3.tar.gz"
+- id: "SPDX::cmake-native:3.28.3"
+  purl: "pkg:generic/cmake-native@3.28.3"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND curl AND\
@@ -740,8 +657,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::curl-8.7.1.tar.xz:"
-  purl: "pkg:generic/curl-8.7.1.tar.xz"
+- id: "SPDX::curl-native:8.7.1"
+  purl: "pkg:generic/curl-native@8.7.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "curl"
@@ -767,8 +684,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::elfutils-0.191.tar.bz2:"
-  purl: "pkg:generic/elfutils-0.191.tar.bz2"
+- id: "SPDX::elfutils-native:0.191"
+  purl: "pkg:generic/elfutils-native@0.191"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "(GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later"
@@ -796,36 +713,6 @@ packages:
     path: ""
 - id: "SPDX::eudev:3.2.14"
   purl: "pkg:generic/eudev@3.2.14"
-  cpe: "cpe:2.3:*:*:eudev:3.2.14:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
-  description: "eudev is Gentoo's fork of udev, systemd's device file manager for\
-    \ the Linux kernel. It manages device nodes in /dev and handles all user space\
-    \ actions when adding or removing devices."
-  homepage_url: "https://github.com/eudev-project/eudev"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::eudev-3.2.14.tar.gz:"
-  purl: "pkg:generic/eudev-3.2.14.tar.gz"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
@@ -851,8 +738,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::expat-2.6.4.tar.bz2:"
-  purl: "pkg:generic/expat-2.6.4.tar.bz2"
+- id: "SPDX::expat-native:2.6.4"
+  purl: "pkg:generic/expat-native@2.6.4"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "MIT"
@@ -878,8 +765,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::flex-2.6.4.tar.gz:"
-  purl: "pkg:generic/flex-2.6.4.tar.gz"
+- id: "SPDX::flex-native:2.6.4"
+  purl: "pkg:generic/flex-native@2.6.4"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-3-Clause AND LGPL-2.0-or-later"
@@ -905,8 +792,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::gdbm-1.23.tar.gz:"
-  purl: "pkg:generic/gdbm-1.23.tar.gz"
+- id: "SPDX::gdbm-native:1.23"
+  purl: "pkg:generic/gdbm-native@1.23"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-only"
@@ -932,12 +819,11 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::gettext-0.22.5.tar.gz:"
-  purl: "pkg:generic/gettext-0.22.5.tar.gz"
+- id: "SPDX::gettext-minimal-native:0.22.5"
+  purl: "pkg:generic/gettext-minimal-native@0.22.5"
   declared_licenses: []
   declared_licenses_processed: {}
-  concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later AND LicenseRef-FSF-Unlimited\
-    \ AND MIT"
+  concluded_license: "LicenseRef-FSF-Unlimited"
   description: ""
   homepage_url: ""
   binary_artifact:
@@ -960,8 +846,35 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::git-2.44.4.tar.gz:"
-  purl: "pkg:generic/git-2.44.4.tar.gz"
+- id: "SPDX::gettext-native:0.22.5"
+  purl: "pkg:generic/gettext-native@0.22.5"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/gettext/gettext-0.22.5.tar.gz"
+    hash:
+      value: "ec1705b1e969b83a9f073144ec806151db88127f5e40fe5a94cb6c8fa48996a0"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::git-native:2.44.4"
+  purl: "pkg:generic/git-native@2.44.4"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-3-Clause AND BSL-1.0 AND GPL-2.0-only AND GPL-2.0-or-later\
@@ -1420,8 +1333,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::gmp-6.3.0.tar.bz2:"
-  purl: "pkg:generic/gmp-6.3.0.tar.bz2"
+- id: "SPDX::gmp-native:6.3.0"
+  purl: "pkg:generic/gmp-native@6.3.0"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
@@ -1447,8 +1360,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::gnutls-3.8.4.tar.xz:"
-  purl: "pkg:generic/gnutls-3.8.4.tar.xz"
+- id: "SPDX::gnutls-native:3.8.4"
+  purl: "pkg:generic/gnutls-native@3.8.4"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later"
@@ -1474,8 +1387,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::gperf-3.1.tar.gz:"
-  purl: "pkg:generic/gperf-3.1.tar.gz"
+- id: "SPDX::gperf-native:3.1"
+  purl: "pkg:generic/gperf-native@3.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-or-later"
@@ -1501,8 +1414,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::gtk-doc-1.33.2.tar.xz:"
-  purl: "pkg:generic/gtk-doc-1.33.2.tar.xz"
+- id: "SPDX::gtk-doc-native:1.33.2"
+  purl: "pkg:generic/gtk-doc-native@1.33.2"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only"
@@ -1828,8 +1741,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libarchive-3.7.9.tar.gz:"
-  purl: "pkg:generic/libarchive-3.7.9.tar.gz"
+- id: "SPDX::libarchive-native:3.7.9"
+  purl: "pkg:generic/libarchive-native@3.7.9"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-2-Clause"
@@ -1912,8 +1825,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libcap-2.69.tar.xz:"
-  purl: "pkg:generic/libcap-2.69.tar.xz"
+- id: "SPDX::libcap-native:2.69"
+  purl: "pkg:generic/libcap-native@2.69"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-3-Clause OR GPL-2.0-only"
@@ -1967,8 +1880,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libedit-20230828-3.1.tar.gz:"
-  purl: "pkg:generic/libedit-20230828-3.1.tar.gz"
+- id: "SPDX::libedit-native:3.1"
+  purl: "pkg:generic/libedit-native@3.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-3-Clause"
@@ -1994,8 +1907,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libffi-3.4.6.tar.gz:"
-  purl: "pkg:generic/libffi-3.4.6.tar.gz"
+- id: "SPDX::libffi-native:3.4.6"
+  purl: "pkg:generic/libffi-native@3.4.6"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "MIT"
@@ -2021,8 +1934,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libgcrypt-1.10.3.tar.bz2:"
-  purl: "pkg:generic/libgcrypt-1.10.3.tar.bz2"
+- id: "SPDX::libgcrypt-native:1.10.3"
+  purl: "pkg:generic/libgcrypt-native@1.10.3"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
@@ -2048,8 +1961,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libgpg-error-1.48.tar.bz2:"
-  purl: "pkg:generic/libgpg-error-1.48.tar.bz2"
+- id: "SPDX::libgpg-error-native:1.48"
+  purl: "pkg:generic/libgpg-error-native@1.48"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
@@ -2075,8 +1988,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libidn2-2.3.7.tar.gz:"
-  purl: "pkg:generic/libidn2-2.3.7.tar.gz"
+- id: "SPDX::libidn2-native:2.3.7"
+  purl: "pkg:generic/libidn2-native@2.3.7"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "(GPL-2.0-or-later OR LGPL-3.0-only) AND GPL-3.0-or-later AND\
@@ -2163,8 +2076,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libmicrohttpd-1.0.1.tar.gz:"
-  purl: "pkg:generic/libmicrohttpd-1.0.1.tar.gz"
+- id: "SPDX::libmicrohttpd-native:1.0.1"
+  purl: "pkg:generic/libmicrohttpd-native@1.0.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "LGPL-2.1-or-later"
@@ -2190,8 +2103,62 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libtasn1-4.20.0.tar.gz:"
-  purl: "pkg:generic/libtasn1-4.20.0.tar.gz"
+- id: "SPDX::libmpc-native:1.3.1"
+  purl: "pkg:generic/libmpc-native@1.3.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "LGPL-3.0-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz"
+    hash:
+      value: "ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libpcre2-native:10.43"
+  purl: "pkg:generic/libpcre2-native@10.43"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.43/pcre2-10.43.tar.bz2"
+    hash:
+      value: "e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libtasn1-native:4.20.0"
+  purl: "pkg:generic/libtasn1-native@4.20.0"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later"
@@ -2217,8 +2184,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libtirpc-1.3.4.tar.bz2:"
-  purl: "pkg:generic/libtirpc-1.3.4.tar.bz2"
+- id: "SPDX::libtirpc-native:1.3.4"
+  purl: "pkg:generic/libtirpc-native@1.3.4"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-3-Clause"
@@ -2244,8 +2211,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libtool-2.4.7.tar.gz:"
-  purl: "pkg:generic/libtool-2.4.7.tar.gz"
+- id: "SPDX::libtool-cross:2.4.7"
+  purl: "pkg:generic/libtool-cross@2.4.7"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only AND LGPL-2.1-only"
@@ -2271,8 +2238,35 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::libunistring-1.2.tar.gz:"
-  purl: "pkg:generic/libunistring-1.2.tar.gz"
+- id: "SPDX::libtool-native:2.4.7"
+  purl: "pkg:generic/libtool-native@2.4.7"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-only AND LGPL-2.1-only"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftpmirror.gnu.org/gnu/libtool/libtool-2.4.7.tar.gz"
+    hash:
+      value: "04e96c2404ea70c590c546eba4202a4e12722c640016c12b9b2f1ce3d481e9a8"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::libunistring-native:1.2"
+  purl: "pkg:generic/libunistring-native@1.2"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
@@ -2327,8 +2321,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::linux-6.6.tar.xz:"
-  purl: "pkg:generic/linux-6.6.tar.xz"
+- id: "SPDX::linux-libc-headers:6.6"
+  purl: "pkg:generic/linux-libc-headers@6.6"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only"
@@ -2354,8 +2348,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::m4-1.4.19.tar.gz:"
-  purl: "pkg:generic/m4-1.4.19.tar.gz"
+- id: "SPDX::m4-native:1.4.19"
+  purl: "pkg:generic/m4-native@1.4.19"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-only"
@@ -2381,8 +2375,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::make-4.4.1.tar.gz:"
-  purl: "pkg:generic/make-4.4.1.tar.gz"
+- id: "SPDX::make-native:4.4.1"
+  purl: "pkg:generic/make-native@4.4.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-only"
@@ -2436,35 +2430,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::mpc-1.3.1.tar.gz:"
-  purl: "pkg:generic/mpc-1.3.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "LGPL-3.0-only"
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://ftpmirror.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz"
-    hash:
-      value: "ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8"
-      algorithm: "SHA-256"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::mpfr-4.2.1.tar.xz:"
-  purl: "pkg:generic/mpfr-4.2.1.tar.xz"
+- id: "SPDX::mpfr-native:4.2.1"
+  purl: "pkg:generic/mpfr-native@4.2.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "LGPL-3.0-or-later"
@@ -2492,35 +2459,6 @@ packages:
     path: ""
 - id: "SPDX::netbase:6.4"
   purl: "pkg:generic/netbase@6.4"
-  cpe: "cpe:2.3:*:*:netbase:6.4:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "GPL-2.0-only"
-  description: "This package provides the necessary infrastructure for basic TCP/IP\
-    \ based networking"
-  homepage_url: "http://packages.debian.org/netbase"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::netbase_6.4.tar.xz:"
-  purl: "pkg:generic/netbase_6.4.tar.xz"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only"
@@ -2546,8 +2484,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::nettle-3.9.1.tar.gz:"
-  purl: "pkg:generic/nettle-3.9.1.tar.gz"
+- id: "SPDX::nettle-native:3.9.1"
+  purl: "pkg:generic/nettle-native@3.9.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
@@ -2573,8 +2511,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::openssl-3.2.6.tar.gz:"
-  purl: "pkg:generic/openssl-3.2.6.tar.gz"
+- id: "SPDX::openssl:3.2.6"
+  purl: "pkg:generic/openssl@3.2.6"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "Apache-2.0"
@@ -2618,6 +2556,33 @@ packages:
     hash:
       value: ""
       algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::openssl-native:3.2.6"
+  purl: "pkg:generic/openssl-native@3.2.6"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Apache-2.0"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/openssl/openssl/releases/download/openssl-3.2.6/openssl-3.2.6.tar.gz"
+    hash:
+      value: "89681a9ddaa9ed7cf25ea8ef61338db805200bae47d00510490623547380c148"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -2683,35 +2648,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::pcre2-10.43.tar.bz2:"
-  purl: "pkg:generic/pcre2-10.43.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "BSD-3-Clause"
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.43/pcre2-10.43.tar.bz2"
-    hash:
-      value: "e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb"
-      algorithm: "SHA-256"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::perl-5.38.4.tar.gz:"
-  purl: "pkg:generic/perl-5.38.4.tar.gz"
+- id: "SPDX::perl-native:5.38.4"
+  purl: "pkg:generic/perl-native@5.38.4"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "Artistic-1.0 OR GPL-1.0-or-later"
@@ -2737,8 +2675,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::perl-cross-1.6.2.tar.gz:"
-  purl: "pkg:generic/perl-cross-1.6.2.tar.gz"
+- id: "SPDX::perlcross-native:1.6.2"
+  purl: "pkg:generic/perlcross-native@1.6.2"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "Artistic-1.0 OR GPL-1.0-or-later"
@@ -2764,8 +2702,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::popt-1.19.tar.gz:"
-  purl: "pkg:generic/popt-1.19.tar.gz"
+- id: "SPDX::popt-native:1.19"
+  purl: "pkg:generic/popt-native@1.19"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "MIT"
@@ -2791,8 +2729,35 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::re2c-3.1.tar.xz:"
-  purl: "pkg:generic/re2c-3.1.tar.xz"
+- id: "SPDX::python3-native:3.12.12"
+  purl: "pkg:generic/python3-native@3.12.12"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "PSF-2.0"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://www.python.org/ftp/python/3.12.12/Python-3.12.12.tar.xz"
+    hash:
+      value: "fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::re2c-native:3.1"
+  purl: "pkg:generic/re2c-native@3.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "LicenseRef-PD"
@@ -2818,8 +2783,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::readline-8.2.tar.gz:"
-  purl: "pkg:generic/readline-8.2.tar.gz"
+- id: "SPDX::readline-native:8.2"
+  purl: "pkg:generic/readline-native@8.2"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-or-later"
@@ -2845,8 +2810,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::rsync-3.2.7.tar.gz:"
-  purl: "pkg:generic/rsync-3.2.7.tar.gz"
+- id: "SPDX::rsync-native:3.2.7"
+  purl: "pkg:generic/rsync-native@3.2.7"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-3.0-or-later"
@@ -2981,8 +2946,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::sqlite-autoconf-3450300.tar.gz:"
-  purl: "pkg:generic/sqlite-autoconf-3450300.tar.gz"
+- id: "SPDX::sqlite3-native:3450300"
+  purl: "pkg:generic/sqlite3-native@3450300"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "LicenseRef-PD"
@@ -3010,36 +2975,6 @@ packages:
     path: ""
 - id: "SPDX::sysvinit:3.04"
   purl: "pkg:generic/sysvinit@3.04"
-  cpe: "cpe:2.3:*:*:sysvinit:3.04:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  concluded_license: "GPL-2.0-or-later"
-  description: "This package is required to boot in most configurations.  It provides\
-    \ the /sbin/init program.  This is the first process started on boot, and the\
-    \ last process terminated before the system halts."
-  homepage_url: "http://savannah.nongnu.org/projects/sysvinit/"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "SPDX::sysvinit-3.04.tar.xz:"
-  purl: "pkg:generic/sysvinit-3.04.tar.xz"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later"
@@ -3152,8 +3087,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::unifdef-2.12.tar.xz:"
-  purl: "pkg:generic/unifdef-2.12.tar.xz"
+- id: "SPDX::unifdef-native:2.12"
+  purl: "pkg:generic/unifdef-native@2.12"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-2-Clause"
@@ -3236,8 +3171,90 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::util-linux-2.39.3.tar.xz:"
-  purl: "pkg:generic/util-linux-2.39.3.tar.xz"
+- id: "SPDX::util-linux:2.39.3"
+  purl: "pkg:generic/util-linux@2.39.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-1.0-or-later\
+    \ AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://cdn.kernel.org/pub/linux/utils/util-linux/v2.39/util-linux-2.39.3.tar.xz"
+    hash:
+      value: "7b6605e48d1a49f43cc4b4cfc59f313d0dd5402fa40b96810bd572e167dfed0f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::util-linux-libuuid:2.39.3"
+  purl: "pkg:generic/util-linux-libuuid@2.39.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://cdn.kernel.org/pub/linux/utils/util-linux/v2.39/util-linux-2.39.3.tar.xz"
+    hash:
+      value: "7b6605e48d1a49f43cc4b4cfc59f313d0dd5402fa40b96810bd572e167dfed0f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::util-linux-libuuid-native:2.39.3"
+  purl: "pkg:generic/util-linux-libuuid-native@2.39.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "BSD-3-Clause"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://cdn.kernel.org/pub/linux/utils/util-linux/v2.39/util-linux-2.39.3.tar.xz"
+    hash:
+      value: "7b6605e48d1a49f43cc4b4cfc59f313d0dd5402fa40b96810bd572e167dfed0f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::util-linux-native:2.39.3"
+  purl: "pkg:generic/util-linux-native@2.39.3"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-1.0-or-later\
@@ -3294,8 +3311,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::v86d_0.1.10.orig.tar.gz:"
-  purl: "pkg:generic/v86d_0.1.10.orig.tar.gz"
+- id: "SPDX::v86d:0.1.10.orig"
+  purl: "pkg:generic/v86d@0.1.10.orig"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-only"
@@ -3321,8 +3338,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::xz-5.4.7.tar.gz:"
-  purl: "pkg:generic/xz-5.4.7.tar.gz"
+- id: "SPDX::xz:5.4.7"
+  purl: "pkg:generic/xz@5.4.7"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "GPL-2.0-or-later AND GPL-3.0-with-autoconf-exception AND LGPL-2.1-or-later\
@@ -3349,8 +3366,63 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "SPDX::zlib-1.3.1.tar.gz:"
-  purl: "pkg:generic/zlib-1.3.1.tar.gz"
+- id: "SPDX::xz-native:5.4.7"
+  purl: "pkg:generic/xz-native@5.4.7"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "GPL-2.0-or-later AND GPL-3.0-with-autoconf-exception AND LGPL-2.1-or-later\
+    \ AND LicenseRef-PD"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/tukaani-project/xz/releases/download/v5.4.7/xz-5.4.7.tar.gz"
+    hash:
+      value: "8db6664c48ca07908b92baedcfe7f3ba23f49ef2476864518ab5db6723836e71"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::zlib:1.3.1"
+  purl: "pkg:generic/zlib@1.3.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  concluded_license: "Zlib"
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://zlib.net/zlib-1.3.1.tar.gz"
+    hash:
+      value: "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "SPDX::zlib-native:1.3.1"
+  purl: "pkg:generic/zlib-native@1.3.1"
   declared_licenses: []
   declared_licenses_processed: {}
   concluded_license: "Zlib"
