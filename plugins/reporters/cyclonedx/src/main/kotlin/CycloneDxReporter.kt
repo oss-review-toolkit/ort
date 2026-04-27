@@ -195,7 +195,6 @@ class CycloneDxReporter(
         val reportFileResults = mutableListOf<Result<File>>()
 
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
-        val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
 
         val outputFormats = config.outputFileFormats.toSet()
 
@@ -252,10 +251,13 @@ class CycloneDxReporter(
                 input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
             }
 
-            packages.forEach { (pkg, _) ->
-                val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
-                bom.addComponent(input, pkg, dependencyType)
-            }
+            input.ortResult.getPackages(omitExcluded = true)
+                .map { it.metadata }
+                .sortedBy { it.id }
+                .forEach { pkg ->
+                    val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
+                    bom.addComponent(input, pkg, dependencyType)
+                }
 
             bom.addDependencies(input, bom.metadata.component.bomRef, allDirectDependencies)
 
@@ -317,10 +319,10 @@ class CycloneDxReporter(
                     "Package-URL of the project"
                 )
 
-                val dependencies = input.ortResult.dependencyNavigator.projectDependencies(project)
-                val dependencyPackages = packages.mapNotNull { (pkg, _) ->
-                    pkg.takeIf { it.id in dependencies }
-                }
+                val dependencyPackages = input.ortResult.dependencyNavigator
+                    .projectDependencies(project, matcher = { !input.ortResult.isExcluded(it.id) })
+                    .mapNotNull { input.ortResult.getPackage(it)?.metadata }
+                    .sortedBy { it.id }
 
                 val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
                 dependencyPackages.forEach { pkg ->
