@@ -308,8 +308,8 @@ class CycloneDxReporter(
             addVulnerabilities(input.ortResult.getVulnerabilities())
         }
 
-    private fun createSingleBom(projects: List<Project>, input: ReporterInput): Bom {
-        val bom = Bom().apply {
+    private fun createSingleBom(projects: List<Project>, input: ReporterInput): Bom =
+        Bom().apply {
             serialNumber = "urn:uuid:${UUID.randomUUID()}"
 
             metadata = createBomMetadata().apply {
@@ -317,43 +317,40 @@ class CycloneDxReporter(
             }
 
             components = mutableListOf()
-        }
 
-        // In case of multiple projects it is not always clear for which project to create the BOM:
-        //
-        // - If a multi-module project only produces a single application that gets distributed, then usually only a
-        //   single BOM for that application is generated.
-        // - If a multi-module project produces multiple applications (e.g. if there is one module per independent
-        //   microservice), then usually for each project a BOM is generated as there are multiple things being
-        //   distributed.
-        //
-        // As this distinction is hard to make programmatically (without additional information about the
-        // distributable), just create a single BOM for all projects in that case for now. As there also is no
-        // single correct project to pick for adding external references in that case, simply only use the global
-        // repository VCS information here.
-        val vcs = input.ortResult.repository.vcsProcessed
-        bom.addExternalReference(
-            ExternalReference.Type.VCS,
-            vcs.url,
-            "URL to the ${vcs.type} repository of the projects"
-        )
+            // In case of multiple projects it is not always clear for which project to create the BOM:
+            //
+            // - If a multi-module project only produces a single application that gets distributed, then usually only a
+            //   single BOM for that application is generated.
+            // - If a multi-module project produces multiple applications (e.g. if there is one module per independent
+            //   microservice), then usually for each project a BOM is generated as there are multiple things being
+            //   distributed.
+            //
+            // As this distinction is hard to make programmatically (without additional information about the
+            // distributable), just create a single BOM for all projects in that case for now. As there also is no
+            // single correct project to pick for adding external references in that case, simply only use the global
+            // repository VCS information here.
+            val vcs = input.ortResult.repository.vcsProcessed
+            addExternalReference(
+                ExternalReference.Type.VCS,
+                vcs.url,
+                "URL to the ${vcs.type} repository of the projects"
+            )
 
-        val allDirectDependencies = projects.flatMapTo(mutableSetOf()) { project ->
-            input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
-        }
-
-        input.ortResult.getPackages(omitExcluded = true)
-            .map { it.metadata }
-            .sortedBy { it.id }
-            .forEach { pkg ->
-                val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
-                bom.addComponent(input, pkg, dependencyType)
+            val allDirectDependencies = projects.flatMapTo(mutableSetOf()) { project ->
+                input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
             }
 
-        bom.addDependencies(input, bom.metadata.component.bomRef, allDirectDependencies)
+            input.ortResult.getPackages(omitExcluded = true)
+                .map { it.metadata }
+                .sortedBy { it.id }
+                .forEach { pkg ->
+                    val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
+                    addComponent(input, pkg, dependencyType)
+                }
 
-        bom.addVulnerabilities(input.ortResult.getVulnerabilities())
+            addDependencies(input, metadata.component.bomRef, allDirectDependencies)
 
-        return bom
-    }
+            addVulnerabilities(input.ortResult.getVulnerabilities())
+        }
 }
