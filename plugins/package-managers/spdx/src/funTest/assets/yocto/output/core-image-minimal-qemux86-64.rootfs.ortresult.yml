@@ -1,7 +1,7 @@
 ---
 project:
   id: "SPDX::core-image-minimal-qemux86-64.rootfs-20251202091030:"
-  definition_file_path: "plugins/package-managers/spdx/src/funTest/assets/yocto/input/core-image-minimal-qemux86-64.rootfs.spdx.json"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:

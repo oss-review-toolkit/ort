@@ -23,6 +23,7 @@ import java.io.File
 
 import kotlin.jvm.optionals.getOrNull
 
+import org.apache.commons.compress.compressors.zstandard.ZstdCompressorInputStream
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -78,7 +79,10 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
         SpdxModelFactory.init()
     }
 
-    override val globsForDefinitionFiles = listOf("*.spdx.json", "*.spdx.jsonld")
+    override val globsForDefinitionFiles = listOf(
+        "*.spdx.json", "*.spdx.jsonld",
+        "*.spdx.json.zst", "*.spdx.jsonld.zst" // Zstandard-compressed variants.
+    )
 
     override fun resolveDependencies(
         analysisRoot: File,
@@ -263,5 +267,13 @@ private fun Package.mergeLicenses(other: Package): Package {
 private fun parseSpdx3File(spdxFile: File): SpdxDocument {
     val baseStore = InMemSpdxStore()
     val store = JsonLDStore(baseStore)
-    return spdxFile.inputStream().use { store.deSerialize(it, /* overwrite = */ false) }
+    return spdxFile.inputStream().use { rawStream ->
+        when (spdxFile.extension) {
+            "zst" -> ZstdCompressorInputStream(rawStream).use { uncompressedStream ->
+                store.deSerialize(uncompressedStream, /* overwrite = */ false)
+            }
+
+            else -> store.deSerialize(rawStream, /* overwrite = */ false)
+        }
+    }
 }
