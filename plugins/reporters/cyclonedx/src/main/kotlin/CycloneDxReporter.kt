@@ -192,15 +192,14 @@ class CycloneDxReporter(
     }
 
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
-        val reportFileResults = mutableListOf<Result<File>>()
-
-        val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
-
         val outputFormats = config.outputFileFormats.toSet()
 
         require(outputFormats.isNotEmpty()) {
             "No valid CycloneDX output formats specified."
         }
+
+        val reportFileResults = mutableListOf<Result<File>>()
+        val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
 
         if (config.singleBom) {
             val bom = createSingleBom(projects, input)
