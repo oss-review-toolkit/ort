@@ -95,12 +95,13 @@ class RuleSet(
             project: Project,
             visitedPackages: MutableSet<DependencyNode>
         ) {
-            if (node in visitedPackages) {
+            val stableNode = node.getStableReference()
+            if (stableNode in visitedPackages) {
                 logger.debug { "Skipping rule $name for already visited dependency ${node.id.toCoordinates()}." }
                 return
             }
 
-            visitedPackages += node
+            visitedPackages += stableNode
 
             val curatedPackage = ortResult.getPackage(node.id)
                 ?: ortResult.getProject(node.id)?.toPackage()?.toCuratedPackage()
