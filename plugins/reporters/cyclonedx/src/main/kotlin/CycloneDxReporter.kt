@@ -287,8 +287,8 @@ class CycloneDxReporter(
             licenses = LicenseChoice().apply { expression = Expression(config.dataLicense) }
         }
 
-    private fun createProjectBom(project: Project, input: ReporterInput): Bom {
-        val bom = Bom().apply {
+    private fun createProjectBom(project: Project, input: ReporterInput): Bom =
+        Bom().apply {
             serialNumber = "urn:uuid:${UUID.randomUUID()}"
 
             metadata = createBomMetadata().apply {
@@ -312,45 +312,42 @@ class CycloneDxReporter(
             }
 
             components = mutableListOf()
+
+            // Add information about projects as external references at the BOM level.
+            addExternalReference(
+                ExternalReference.Type.VCS,
+                project.vcsProcessed.url,
+                "URL to the project's ${project.vcsProcessed.type} repository"
+            )
+
+            addExternalReference(ExternalReference.Type.WEBSITE, project.homepageUrl)
+
+            val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
+                .getLicenseNames(LicenseSource.DECLARED, LicenseSource.DETECTED)
+
+            addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString())
+
+            addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
+
+            addExternalReference(
+                ExternalReference.Type.OTHER,
+                project.id.toPurl(),
+                "Package-URL of the project"
+            )
+
+            val dependencyPackages = input.ortResult.dependencyNavigator
+                .projectDependencies(project, matcher = { !input.ortResult.isExcluded(it.id) })
+                .mapNotNull { input.ortResult.getPackage(it)?.metadata }
+                .sortedBy { it.id }
+
+            val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
+            dependencyPackages.forEach { pkg ->
+                val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
+                addComponent(input, pkg, dependencyType)
+            }
+
+            addDependencies(input, metadata.component.bomRef, directDependencies)
+
+            addVulnerabilities(input.ortResult.getVulnerabilities())
         }
-
-        // Add information about projects as external references at the BOM level.
-        bom.addExternalReference(
-            ExternalReference.Type.VCS,
-            project.vcsProcessed.url,
-            "URL to the project's ${project.vcsProcessed.type} repository"
-        )
-
-        bom.addExternalReference(ExternalReference.Type.WEBSITE, project.homepageUrl)
-
-        val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
-            .getLicenseNames(LicenseSource.DECLARED, LicenseSource.DETECTED)
-
-        bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString())
-
-        bom.addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
-
-        bom.addExternalReference(
-            ExternalReference.Type.OTHER,
-            project.id.toPurl(),
-            "Package-URL of the project"
-        )
-
-        val dependencyPackages = input.ortResult.dependencyNavigator
-            .projectDependencies(project, matcher = { !input.ortResult.isExcluded(it.id) })
-            .mapNotNull { input.ortResult.getPackage(it)?.metadata }
-            .sortedBy { it.id }
-
-        val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
-        dependencyPackages.forEach { pkg ->
-            val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
-            bom.addComponent(input, pkg, dependencyType)
-        }
-
-        bom.addDependencies(input, bom.metadata.component.bomRef, directDependencies)
-
-        bom.addVulnerabilities(input.ortResult.getVulnerabilities())
-
-        return bom
-    }
 }
