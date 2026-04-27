@@ -202,26 +202,11 @@ class CycloneDxReporter(
             "No valid CycloneDX output formats specified."
         }
 
-        val metadata = Metadata().apply {
-            timestamp = Date()
-            toolChoice = ToolInformation().apply {
-                components = listOf(
-                    Component().apply {
-                        type = Component.Type.APPLICATION
-                        name = ORT_FULL_NAME
-                        version = ORT_VERSION
-                    }
-                )
-            }
-
-            licenses = LicenseChoice().apply { expression = Expression(config.dataLicense) }
-        }
-
         if (config.singleBom) {
             val bom = Bom().apply {
                 serialNumber = "urn:uuid:${UUID.randomUUID()}"
 
-                this.metadata = metadata.apply {
+                metadata = createBomMetadata().apply {
                     component = getSingleBomMetadataComponent(projects, input.ortResult, config)
                 }
 
@@ -274,7 +259,7 @@ class CycloneDxReporter(
                 val bom = Bom().apply {
                     serialNumber = "urn:uuid:${UUID.randomUUID()}"
 
-                    this.metadata = metadata.apply {
+                    metadata = createBomMetadata().apply {
                         component = Component().apply {
                             // Actually the project could be a library as well, but there is no automatic way to tell.
                             type = Component.Type.APPLICATION
@@ -346,4 +331,20 @@ class CycloneDxReporter(
 
         return reportFileResults
     }
+
+    private fun createBomMetadata(): Metadata =
+        Metadata().apply {
+            timestamp = Date()
+            toolChoice = ToolInformation().apply {
+                components = listOf(
+                    Component().apply {
+                        type = Component.Type.APPLICATION
+                        name = ORT_FULL_NAME
+                        version = ORT_VERSION
+                    }
+                )
+            }
+
+            licenses = LicenseChoice().apply { expression = Expression(config.dataLicense) }
+        }
 }
