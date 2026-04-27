@@ -256,70 +256,9 @@ class CycloneDxReporter(
             )
         } else {
             projects.forEach { project ->
-                val bom = Bom().apply {
-                    serialNumber = "urn:uuid:${UUID.randomUUID()}"
-
-                    metadata = createBomMetadata().apply {
-                        component = Component().apply {
-                            // Actually the project could be a library as well, but there is no automatic way to tell.
-                            type = Component.Type.APPLICATION
-
-                            bomRef = project.id.toCoordinates()
-
-                            group = project.id.namespace
-                            name = project.id.name
-                            version = project.id.version
-
-                            authors = project.authors.map { OrganizationalContact().apply { name = it } }
-                            supplier = authors.takeUnless { it.isEmpty() }?.let {
-                                OrganizationalEntity().apply { contacts = authors }
-                            }
-
-                            description = project.description
-                        }
-                    }
-
-                    components = mutableListOf()
-                }
-
-                // Add information about projects as external references at the BOM level.
-                bom.addExternalReference(
-                    ExternalReference.Type.VCS,
-                    project.vcsProcessed.url,
-                    "URL to the project's ${project.vcsProcessed.type} repository"
-                )
-
-                bom.addExternalReference(ExternalReference.Type.WEBSITE, project.homepageUrl)
-
-                val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
-                    .getLicenseNames(LicenseSource.DECLARED, LicenseSource.DETECTED)
-
-                bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString())
-
-                bom.addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
-
-                bom.addExternalReference(
-                    ExternalReference.Type.OTHER,
-                    project.id.toPurl(),
-                    "Package-URL of the project"
-                )
-
-                val dependencyPackages = input.ortResult.dependencyNavigator
-                    .projectDependencies(project, matcher = { !input.ortResult.isExcluded(it.id) })
-                    .mapNotNull { input.ortResult.getPackage(it)?.metadata }
-                    .sortedBy { it.id }
-
-                val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
-                dependencyPackages.forEach { pkg ->
-                    val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
-                    bom.addComponent(input, pkg, dependencyType)
-                }
-
-                bom.addDependencies(input, bom.metadata.component.bomRef, directDependencies)
-
-                bom.addVulnerabilities(input.ortResult.getVulnerabilities())
-
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
+                val bom = createProjectBom(project, input)
+
                 reportFileResults += bom.writeFormats(
                     config.schemaVersion.version,
                     outputDir,
@@ -347,4 +286,71 @@ class CycloneDxReporter(
 
             licenses = LicenseChoice().apply { expression = Expression(config.dataLicense) }
         }
+
+    private fun createProjectBom(project: Project, input: ReporterInput): Bom {
+        val bom = Bom().apply {
+            serialNumber = "urn:uuid:${UUID.randomUUID()}"
+
+            metadata = createBomMetadata().apply {
+                component = Component().apply {
+                    // Actually the project could be a library as well, but there is no automatic way to tell.
+                    type = Component.Type.APPLICATION
+
+                    bomRef = project.id.toCoordinates()
+
+                    group = project.id.namespace
+                    name = project.id.name
+                    version = project.id.version
+
+                    authors = project.authors.map { OrganizationalContact().apply { name = it } }
+                    supplier = authors.takeUnless { it.isEmpty() }?.let {
+                        OrganizationalEntity().apply { contacts = authors }
+                    }
+
+                    description = project.description
+                }
+            }
+
+            components = mutableListOf()
+        }
+
+        // Add information about projects as external references at the BOM level.
+        bom.addExternalReference(
+            ExternalReference.Type.VCS,
+            project.vcsProcessed.url,
+            "URL to the project's ${project.vcsProcessed.type} repository"
+        )
+
+        bom.addExternalReference(ExternalReference.Type.WEBSITE, project.homepageUrl)
+
+        val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
+            .getLicenseNames(LicenseSource.DECLARED, LicenseSource.DETECTED)
+
+        bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString())
+
+        bom.addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
+
+        bom.addExternalReference(
+            ExternalReference.Type.OTHER,
+            project.id.toPurl(),
+            "Package-URL of the project"
+        )
+
+        val dependencyPackages = input.ortResult.dependencyNavigator
+            .projectDependencies(project, matcher = { !input.ortResult.isExcluded(it.id) })
+            .mapNotNull { input.ortResult.getPackage(it)?.metadata }
+            .sortedBy { it.id }
+
+        val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
+        dependencyPackages.forEach { pkg ->
+            val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
+            bom.addComponent(input, pkg, dependencyType)
+        }
+
+        bom.addDependencies(input, bom.metadata.component.bomRef, directDependencies)
+
+        bom.addVulnerabilities(input.ortResult.getVulnerabilities())
+
+        return bom
+    }
 }
