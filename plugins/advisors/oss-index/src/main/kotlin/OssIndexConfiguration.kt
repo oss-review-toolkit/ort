@@ -24,7 +24,8 @@ import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.Secret
 
 /**
- * The configuration for the OSS Index provider.
+ * The configuration for the OSS Index provider. Authentication can either happen via OSS Index username and password or
+ * Sonatype Guide personal access token.
  */
 data class OssIndexConfiguration(
     /**
@@ -34,12 +35,14 @@ data class OssIndexConfiguration(
     val serverUrl: String,
 
     /**
-     * The username to use for authentication towards the API.
+     * The optional username is null when using Sonatype Guide authentication, or the username when using OSS Index
+     * authentication.
      */
-    val username: String,
+    val username: String?,
 
     /**
-     * The token to use for authentication towards the API.
+     * The personal access token when using Sonatype Guide authentication, or the password when using OSS Index
+     * authentication.
      */
     val token: Secret
 )
