@@ -48,21 +48,28 @@ interface OssIndexService {
         val JSON = Json.Default
 
         /**
-         * Create an OSS Index service instance for communicating with a server running at the given [url], optionally
-         * using [username] and [password] for basic authentication, and / or a pre-built OkHttp [client].
+         * Create an OSS Index service instance for communicating with a server running at the given [url].
+         * Authentication happens either via a Sonatype Guide personal access [token], or OSS Index [username] and
+         * [password][token]. Optionally, a custom HTTP [client] can be used.
          */
         fun create(
             url: String? = null,
             username: String? = null,
-            password: String? = null,
+            token: String,
             client: OkHttpClient? = null
         ): OssIndexService {
             val ossIndexClient = (client?.newBuilder() ?: OkHttpClient.Builder()).addInterceptor { chain ->
                 val request = chain.request()
                 val requestBuilder = request.newBuilder()
 
-                if (username != null && password != null) {
-                    requestBuilder.header("Authorization", Credentials.basic(username, password))
+                if (username == null) {
+                    require(token.startsWith("sonatype_pat_")) {
+                        "The token is not a valid Sonatype Guide PAT."
+                    }
+
+                    requestBuilder.header("Authorization", "Bearer $token")
+                } else {
+                    requestBuilder.header("Authorization", Credentials.basic(username, token))
                 }
 
                 chain.proceed(requestBuilder.build())

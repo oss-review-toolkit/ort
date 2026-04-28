@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.plugins.api.Secret
 @EnabledIf(OssIndexCredentials::class)
 class OssIndexFunTest : WordSpec({
     val oi = OssIndexFactory.create(
-        username = checkNotNull(OssIndexCredentials.getUsername()),
+        username = OssIndexCredentials.getUsername(),
         token = Secret(checkNotNull(OssIndexCredentials.getToken()))
     )
 
@@ -131,7 +131,9 @@ class OssIndexFunTest : WordSpec({
 
 internal object OssIndexCredentials : Condition {
     fun getUsername(): String? = System.getenv("OSS_INDEX_USERNAME")
-    fun getToken(): String? = System.getenv("OSS_INDEX_PASSWORD")
+    fun getToken(): String? = System.getenv("OSS_INDEX_PASSWORD") ?: System.getenv("SONATYPE_PAT")
 
-    override fun evaluate(kclass: KClass<out Spec>): Boolean = getUsername() != null && getToken() != null
+    override fun evaluate(kclass: KClass<out Spec>): Boolean =
+        // Authentication can either happen via OSS Index username and password or Sonatype Guide personal access token.
+        getToken()?.let { it.startsWith("sonatype_pat_") || getUsername() != null } == true
 }
