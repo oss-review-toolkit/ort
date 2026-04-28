@@ -57,7 +57,7 @@ class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
     val outputDir = tempdir()
 
-    "BOM generation with single option" should {
+    "Generating a single BOM for all projects" should {
         "create just one file" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
@@ -311,7 +311,7 @@ class CycloneDxReporterFunTest : WordSpec({
         }
     }
 
-    "BOM generation with multi option" should {
+    "Generating a separate BOM for each project" should {
         "create one file per project" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = false,
