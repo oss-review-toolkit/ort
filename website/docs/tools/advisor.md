@@ -40,8 +40,8 @@ To enable this provider, pass `-a BlackDuck` on the command line.
 
 ## OSS Index
 
-This vulnerability provider does not require any further configuration as it uses the public service at https://ossindex.sonatype.org/.
-Before using this provider, please ensure to comply with its [Terms of Service](https://ossindex.sonatype.org/tos).
+The OSS Index vulnerability provider by now is part of [Sonatype Guide](https://guide.sonatype.com/) and requires free registration to obtain an API token.
+Before using this provider, please ensure to comply with its [Terms of Service](https://www.sonatype.com/terms-of-service).
 
 To enable this provider, pass `-a OssIndex` on the command line.
 

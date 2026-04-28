@@ -32,14 +32,15 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 /**
- * Interface for the OSS Index REST API, based on the documentation from https://ossindex.sonatype.org/rest.
+ * Interface for the OSS Index REST API, based on the documentation from
+ * https://guide.sonatype.com/api#/OSS%20Index%20Compatibility.
  */
 interface OssIndexService {
     companion object {
         /**
          * The default base URL for the REST API of the public OSS Index service.
          */
-        const val DEFAULT_BASE_URL = "https://ossindex.sonatype.org/"
+        const val DEFAULT_BASE_URL = "https://api.guide.sonatype.com/"
 
         /**
          * The JSON (de-)serialization object used by this service.
@@ -78,13 +79,11 @@ interface OssIndexService {
         }
     }
 
-    // See https://ossindex.sonatype.org/rest#model-ComponentReportRequest.
     @Serializable
     data class ComponentReportRequest(
         val coordinates: List<String>
     )
 
-    // See https://ossindex.sonatype.org/rest#model-ComponentReport.
     @Serializable
     data class ComponentReport(
         /** The Package URL coordinates. */
@@ -100,7 +99,6 @@ interface OssIndexService {
         val vulnerabilities: List<Vulnerability>
     )
 
-    // See https://ossindex.sonatype.org/rest#model-ComponentReportVulnerability.
     @Serializable
     data class Vulnerability(
         /** A UUID */
@@ -139,6 +137,7 @@ interface OssIndexService {
 
     /**
      * Request vulnerability reports for [components] (requires basic authentication; rate limits are relaxed).
+     * See https://guide.sonatype.com/api#/OSS%20Index%20Compatibility/getComponentReports_1.
      */
     @POST("api/v3/authorized/component-report")
     suspend fun getAuthorizedComponentReport(@Body components: ComponentReportRequest): List<ComponentReport>

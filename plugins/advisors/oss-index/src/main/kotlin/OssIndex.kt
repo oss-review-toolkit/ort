@@ -53,7 +53,8 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 private const val BULK_REQUEST_SIZE = 128
 
 /**
- * A wrapper for Sonatype's [OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
+ * A wrapper for Sonatype's [OSS Index](https://www.sonatype.com/products/sonatype-guide/oss-index-users/) security
+ * vulnerability data.
  */
 @OrtPlugin(
     id = "OSSIndex",

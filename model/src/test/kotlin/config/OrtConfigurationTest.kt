@@ -125,7 +125,7 @@ class OrtConfigurationTest : WordSpec({
                 advisors shouldNotBeNull {
                     get("OssIndex") shouldNotBeNull {
                         options should containExactlyEntries(
-                            "serverUrl" to "https://ossindex.sonatype.org/"
+                            "serverUrl" to "https://api.guide.sonatype.com/"
                         )
 
                         secrets should containExactlyEntries(
