@@ -1,51 +1,51 @@
 {
-  "bomFormat": "CycloneDX",
-  "specVersion": "1.6",
-  "serialNumber": "urn:uuid:12345678-1234-1234-1234-123456789012",
-  "version": 1,
-  "metadata": {
-    "timestamp": "1970-01-01T00:00:00Z",
-    "tools": {
-      "components": [
+  "bomFormat" : "CycloneDX",
+  "specVersion" : "1.6",
+  "serialNumber" : "urn:uuid:12345678-1234-1234-1234-123456789012",
+  "version" : 1,
+  "metadata" : {
+    "timestamp" : "1970-01-01T00:00:00Z",
+    "tools" : {
+      "components" : [
         {
-          "type": "application",
-          "name": "OSS Review Toolkit",
-          "version": "deadbeef"
+          "type" : "application",
+          "name" : "OSS Review Toolkit",
+          "version" : "deadbeef"
         }
       ]
     },
-    "component": {
-      "type": "application",
-      "bom-ref": "NPM:@ort:project-without-findings:1.0",
-      "group": "@ort",
-      "name": "project-without-findings",
-      "version": "1.0",
-      "description": ""
+    "component" : {
+      "type" : "application",
+      "bom-ref" : "NPM:@ort:project-without-findings:1.0",
+      "group" : "@ort",
+      "name" : "project-without-findings",
+      "version" : "1.0",
+      "description" : ""
     },
-    "licenses": [
+    "licenses" : [
       {
-        "expression": "CC0-1.0"
+        "expression" : "CC0-1.0"
       }
     ]
   },
-  "externalReferences": [
+  "externalReferences" : [
     {
-      "type": "vcs",
-      "url": "https://github.com/oss-review-toolkit/ort.git",
-      "comment": "URL to the project's Git repository"
+      "type" : "vcs",
+      "url" : "https://github.com/oss-review-toolkit/ort.git",
+      "comment" : "URL to the project's Git repository"
     },
     {
-      "type": "website",
-      "url": "https://github.com/oss-review-toolkit/ort"
+      "type" : "website",
+      "url" : "https://github.com/oss-review-toolkit/ort"
     },
     {
-      "type": "build-system",
-      "url": "NPM"
+      "type" : "build-system",
+      "url" : "NPM"
     },
     {
-      "type": "other",
-      "url": "pkg:npm/%40ort/project-without-findings@1.0",
-      "comment": "Package-URL of the project"
+      "type" : "other",
+      "url" : "pkg:npm/%40ort/project-without-findings@1.0",
+      "comment" : "Package-URL of the project"
     }
   ]
 }
