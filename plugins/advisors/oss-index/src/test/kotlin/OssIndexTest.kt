@@ -31,17 +31,19 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldStartWith
 
 import java.net.URI
 
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.utils.test.identifierToPackage
@@ -83,34 +85,38 @@ class OssIndexTest : WordSpec({
             result.keys should containExactly(PKG_JUNIT.id)
             result[PKG_JUNIT.id] shouldNotBeNull {
                 advisor shouldBe ossIndex.details
-                vulnerabilities should containExactly(
-                    Vulnerability(
-                        id = "CVE-2020-15250",
-                        summary = "In JUnit4 from version 4.7 and before 4.13.1,...",
-                        description = "In JUnit4 from version 4.7 and before 4.13.1, the test...",
-                        references = listOf(
-                            VulnerabilityReference(
-                                url = URI(
-                                    "https://ossindex.sonatype.org/vulnerability/" +
-                                        "7ea56ad4-8a8b-4e51-8ed9-5aad83d8efb1?component-type=maven" +
-                                        "&component-name=junit.junit&utm_source=mozilla&utm_medium=integration" +
-                                        "&utm_content=5.0"
-                                ),
-                                scoringSystem = "CVSS:3.0",
-                                severity = "MEDIUM",
-                                score = 5.5f,
-                                vector = "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
+                vulnerabilities.shouldBeSingleton {
+                    it.id shouldBe "CVE-2020-15250"
+                    it.summary shouldBe "Information Exposure"
+                    it.description shouldStartWith "In JUnit4 from version 4.7 and before 4.13.1, the test rule "
+                    it.references should containExactlyInAnyOrder(
+                        VulnerabilityReference(
+                            url = URI(
+                                "https://guide.sonatype.com/vulnerability/CVE-2020-15250?component-type=maven" +
+                                    "&component-name=junit%2Fjunit&utm_source=intellij&utm_medium=integration" +
+                                    "&utm_content=HTTP"
                             ),
-                            VulnerabilityReference(
-                                url = URI("https://nvd.nist.gov/vuln/detail/CVE-2020-15250"),
-                                scoringSystem = "CVSS:3.0",
-                                severity = "MEDIUM",
-                                score = 5.5f,
-                                vector = "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
-                            )
+                            scoringSystem = "CVSS:3.1",
+                            severity = "MEDIUM",
+                            score = 5.5f,
+                            vector = "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
+                        ),
+                        VulnerabilityReference(
+                            url = URI("http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2020-15250"),
+                            scoringSystem = "CVSS:3.1",
+                            severity = "MEDIUM",
+                            score = 5.5f,
+                            vector = "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
+                        ),
+                        VulnerabilityReference(
+                            url = URI("https://github.com/advisories/GHSA-269g-pwp5-87pp"),
+                            scoringSystem = "CVSS:3.1",
+                            severity = "MEDIUM",
+                            score = 5.5f,
+                            vector = "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
                         )
                     )
-                )
+                }
             }
         }
 

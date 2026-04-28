@@ -772,7 +772,7 @@ advisor:
     config:
       OssIndex:
         options:
-          serverUrl: "https://ossindex.sonatype.org"
+          serverUrl: "https://api.guide.sonatype.com/"
         secrets:
           username: "username"
           password: "password"
