@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_SERVER_ENV_FILENAME
 
 /**
  * This class generates path excludes based on the set of file paths present in the source tree.
@@ -216,6 +217,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     ".gitlab-ci.yml" to BUILD_TOOL_OF,
     ".jitpack.yml" to BUILD_TOOL_OF,
     ".mailmap" to PathExcludeReason.OTHER,
+    ORT_SERVER_ENV_FILENAME to BUILD_TOOL_OF,
     ORT_REPO_CONFIG_FILENAME to BUILD_TOOL_OF,
     ".travis.yml" to BUILD_TOOL_OF,
     ".zuul.yml" to BUILD_TOOL_OF,
