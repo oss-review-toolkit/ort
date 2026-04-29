@@ -156,6 +156,11 @@ SPDX-FileCopyrightText = "2021-2022 OSV Schema Authors"
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
+path = "clients/scanoss/swagger/**"
+SPDX-FileCopyrightText = "Copyright (c) 2022 SCANOSS"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
 path = "evaluator/src/main/resources/rules/matrixseqexpl.json"
 SPDX-FileCopyrightText = "2021 Open Source Automation Development Lab (OSADL) eG"
 SPDX-License-Identifier = "CC-BY-4.0"
