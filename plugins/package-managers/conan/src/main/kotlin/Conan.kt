@@ -24,7 +24,6 @@ import com.charleskorn.kaml.YamlList
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
 import com.charleskorn.kaml.YamlScalar
-import com.charleskorn.kaml.yamlList
 import com.charleskorn.kaml.yamlMap
 import com.charleskorn.kaml.yamlScalar
 
@@ -319,16 +318,14 @@ class Conan(
     }
 
     /**
-     * Return the source artifact contained in [conanData], or [RemoteArtifact.EMPTY] if no source artifact is
-     * available.
+     * Return the source artifacts contained in [conanData].
      */
-    internal fun parseSourceArtifact(conanData: ConanData): RemoteArtifact {
-        val url = conanData.url ?: return RemoteArtifact.EMPTY
-        val hashValue = conanData.sha256.orEmpty()
-        val hash = Hash.NONE.takeIf { hashValue.isEmpty() } ?: Hash(hashValue, HashAlgorithm.SHA256)
-
-        return RemoteArtifact(url, hash)
-    }
+    internal fun parseSourceArtifacts(conanData: ConanData): List<RemoteArtifact> =
+        conanData.sources.map { entry ->
+            val hashValue = entry.sha256.orEmpty()
+            val hash = Hash.NONE.takeIf { hashValue.isEmpty() } ?: Hash(hashValue, HashAlgorithm.SHA256)
+            RemoteArtifact(entry.url.orEmpty(), hash)
+        }
 
     /**
      * Parse information about the package author from the given [package info][pkgInfo]. If present, return a set
@@ -349,38 +346,70 @@ class Conan(
             return ConanData.EMPTY
         }
 
-        val root = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap
-
-        val patchesForVersion = root.get<YamlMap>("patches")?.get<YamlList>(id.version)
-        val hasPatches = !patchesForVersion?.items.isNullOrEmpty()
-
-        val sourceForVersion = root.get<YamlMap>("sources")?.get<YamlMap>(id.version)
-        val sha256 = sourceForVersion?.get<YamlScalar>("sha256")?.content
-
-        val url = sourceForVersion?.get<YamlNode>("url")?.let {
-            when {
-                it is YamlList -> it.yamlList.items.firstOrNull()?.yamlScalar?.content
-                else -> it.yamlScalar.content
-            }
-        }
-
-        val scm = root.get<YamlMap>("scm")
-        val scmUrl = scm?.get<YamlScalar>("url")?.content
-        val scmCommit = scm?.get<YamlScalar>("commit")?.content
-
-        return ConanData(url, sha256, scmUrl, scmCommit, hasPatches)
+        return parseConanDataYaml(conanDataFile.readText(), id.version)
     }
 }
 
-internal data class ConanData(
+/**
+ * Parse a [conandata.yml][yaml] file for the given [version] and return a [ConanData] object.
+ *
+ * The YAML format has two variants for the `sources` section:
+ * - Single source: the version maps directly to a `{url, sha256}` map.
+ * - Multiple sources: the version maps to a list of `{url, sha256}` maps.
+ */
+internal fun parseConanDataYaml(yaml: String, version: String): ConanData {
+    val root = Yaml.default.parseToYamlNode(yaml).yamlMap
+
+    val patchesForVersion = root.get<YamlMap>("patches")?.get<YamlList>(version)
+    val hasPatches = !patchesForVersion?.items.isNullOrEmpty()
+
+    val sources = when (val sourcesForVersion = root.get<YamlMap>("sources")?.get<YamlNode>(version)) {
+        is YamlMap -> listOf(sourcesForVersion.toConanSourceEntry())
+        is YamlList -> sourcesForVersion.items.mapNotNull { (it as? YamlMap)?.toConanSourceEntry() }
+        else -> emptyList()
+    }
+
+    val scm = root.get<YamlMap>("scm")
+    val scmUrl = scm?.get<YamlScalar>("url")?.content
+    val scmCommit = scm?.get<YamlScalar>("commit")?.content
+
+    return ConanData(sources, scmUrl, scmCommit, hasPatches)
+}
+
+private fun YamlMap.toConanSourceEntry(): ConanSourceEntry {
+    val url = get<YamlNode>("url")?.let {
+        when (it) {
+            is YamlList -> it.items.firstOrNull()?.yamlScalar?.content
+            else -> it.yamlScalar.content
+        }
+    }
+
+    val sha256 = get<YamlScalar>("sha256")?.content
+    return ConanSourceEntry(url, sha256)
+}
+
+/**
+ * A single source entry from a `conandata.yml` file.
+ */
+internal data class ConanSourceEntry(
     val url: String?,
-    val sha256: String?,
+    val sha256: String?
+)
+
+/**
+ * Parsed content from a `conandata.yml` file for a specific package version.
+ *
+ * [sources] holds one entry per source archive. Most packages have exactly one entry. Packages built from
+ * multiple co-equal archives (e.g. conan-center-index packages with multiple assets) have more than one.
+ */
+internal data class ConanData(
+    val sources: List<ConanSourceEntry>,
     val scmUrl: String?,
     val scmCommit: String?,
     val hasPatches: Boolean
 ) {
     companion object {
-        val EMPTY = ConanData(url = null, sha256 = null, scmUrl = null, scmCommit = null, hasPatches = false)
+        val EMPTY = ConanData(sources = emptyList(), scmUrl = null, scmCommit = null, hasPatches = false)
     }
 
     /**
