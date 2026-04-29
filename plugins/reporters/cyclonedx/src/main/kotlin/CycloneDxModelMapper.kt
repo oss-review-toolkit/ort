@@ -68,8 +68,10 @@ internal class CycloneDxModelMapper(
     private val input: ReporterInput,
     private val config: CycloneDxReporterConfig
 ) {
-    fun createSingleBom(projects: List<Project>): Bom =
+    fun createSingleBom(): Bom =
         Bom().apply {
+            val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
+
             serialNumber = "urn:uuid:${UUID.randomUUID()}"
 
             metadata = createBomMetadata().apply {
