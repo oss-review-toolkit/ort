@@ -143,10 +143,9 @@ class CycloneDxReporter(
 
         val modelMapper = CycloneDxModelMapper(input, config)
         val reportFileResults = mutableListOf<Result<File>>()
-        val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
 
         if (config.singleBom) {
-            val bom = modelMapper.createSingleBom(projects)
+            val bom = modelMapper.createSingleBom()
 
             reportFileResults += bom.writeFormats(
                 config.schemaVersion.version,
@@ -155,7 +154,7 @@ class CycloneDxReporter(
                 outputFormats
             )
         } else {
-            projects.forEach { project ->
+            input.ortResult.getProjects(omitExcluded = true).forEach { project ->
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
                 val bom = modelMapper.createProjectBom(project)
 
