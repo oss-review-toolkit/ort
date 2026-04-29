@@ -151,7 +151,14 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
             description = conan.inspectField(pkgInfo.displayName, workingDir, "description").orEmpty(),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            sourceArtifact = conan.parseSourceArtifact(conanData),
+            sourceArtifact = conan.parseSourceArtifacts(conanData).also {
+                if (it.size > 1) {
+                    logger.warn {
+                        "Package '${id.toCoordinates()}' has ${it.size} source archives. " +
+                            "Only the first one will be used as the source artifact."
+                    }
+                }
+            }.firstOrNull() ?: RemoteArtifact.EMPTY,
             vcs = processPackageVcs(
                 conanData.toVcsInfo(),
                 homepageUrl
