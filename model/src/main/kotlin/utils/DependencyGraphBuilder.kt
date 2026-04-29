@@ -30,6 +30,8 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.RootDependencyIndex
+import org.ossreviewtoolkit.model.extractFragment
+import org.ossreviewtoolkit.model.isCycleIndicatorIndex
 
 /**
  * Internal class to represent the result of a search in the dependency graph. The outcome of the search
@@ -139,6 +141,12 @@ class DependencyGraphBuilder<D>(
     private val references = mutableMapOf<DependencyReference, D>()
 
     /**
+     * A map for generating fragment indices for marker nodes that are added to the graph if cycles are detected. The
+     * key is a fragment index, the value is the number of cycles found in this fragment.
+     */
+    private val cycleCounts = mutableMapOf<Int, Int>()
+
+    /**
      * Add the given [dependency] for the scope with the given [scopeName] to this builder. This function needs to be
      * called for all direct dependencies of all scopes. That way the builder gets sufficient information to construct
      * the [DependencyGraph].
@@ -232,7 +240,8 @@ class DependencyGraphBuilder<D>(
         scopeName: String,
         dependency: D,
         transitive: Boolean,
-        processed: Set<D>
+        processed: Set<D>,
+        inCycle: Boolean = false
     ): DependencyReference? {
         val id = dependencyHandler.identifierFor(dependency)
         val issues = dependencyHandler.issuesFor(dependency).toMutableList()
@@ -248,13 +257,13 @@ class DependencyGraphBuilder<D>(
                     scopeName,
                     dependency,
                     issues,
-                    transitive,
-                    processed
+                    processed,
+                    inCycle
                 )
             }
 
             is DependencyGraphSearchResult.Incompatible ->
-                insertIntoNewFragment(id, index, scopeName, dependency, issues, transitive, processed)
+                insertIntoNewFragment(id, index, scopeName, dependency, issues, processed, inCycle)
         }
 
         return updateScopeMapping(scopeName, ref, transitive)
@@ -321,11 +330,10 @@ class DependencyGraphBuilder<D>(
     }
 
     /**
-     * Add a new fragment to the dependency graph for the [dependency] with the given [id] and [index], which may be
-     * [transitive] and belongs to the scope with the given [scopeName]. This function is called for dependencies that
-     * cannot be added to already existing fragments. Therefore, create a new fragment and add the [dependency] to it,
-     * together with its own dependencies. Store the given [issues] for the dependency. Use [processed] to detect
-     * cycles.
+     * Add a new fragment to the dependency graph for the [dependency] with the given [id] and [index], which belongs
+     * to the scope with the given [scopeName]. This function is called for dependencies that cannot be added to
+     * already existing fragments. Therefore, create a new fragment and add the [dependency] to it, together with its
+     * own dependencies. Store the given [issues] for the dependency. Use [processed] and [inCycle] to detect cycles.
      */
     private fun insertIntoNewFragment(
         id: Identifier,
@@ -333,22 +341,23 @@ class DependencyGraphBuilder<D>(
         scopeName: String,
         dependency: D,
         issues: List<Issue>,
-        transitive: Boolean,
-        processed: Set<D>
+        processed: Set<D>,
+        inCycle: Boolean
     ): DependencyReference? {
         val fragmentMapping = mutableMapOf<Int, DependencyReference>()
         val dependencyIndex = RootDependencyIndex(index, referenceMappings.size)
         referenceMappings += fragmentMapping
 
-        return insertIntoGraph(id, dependencyIndex, scopeName, dependency, issues, transitive, processed)
+        return insertIntoGraph(id, dependencyIndex, scopeName, dependency, issues, processed, inCycle)
     }
 
     /**
      * Insert the [dependency] with the given [id] and [RootDependencyIndex][index], which belongs to the scope with
-     * the given [scopeName] and may be [transitive] into the dependency graph. Insert the dependencies of this
-     * [dependency] recursively. Create a new [DependencyReference] for the dependency and initialize it with the list
-     * of [issues]. Use the given [processed] set to figure out cycles in the dependency graph. If such a cycle is
-     * detected, stop processing of further dependencies and return *null*.
+     * the given [scopeName] into the dependency graph. Insert the dependencies of this [dependency] recursively.
+     * Create a new [DependencyReference] for the dependency and initialize it with the list of [issues]. Use the given
+     * [processed] set and the [inCycle] flag to deal with cycles in the dependency graph. If such a cycle is detected,
+     * add a marker node for the affected package (with a special fragment index) that does not have further
+     * dependencies.
      */
     private fun insertIntoGraph(
         id: Identifier,
@@ -356,32 +365,47 @@ class DependencyGraphBuilder<D>(
         scopeName: String,
         dependency: D,
         issues: List<Issue>,
-        transitive: Boolean,
-        processed: Set<D>
+        processed: Set<D>,
+        inCycle: Boolean
     ): DependencyReference? {
         val nextProcessed = processed + dependency
-        val transitiveDependencies = dependencyHandler.dependenciesFor(dependency)
-            .mapNotNullTo(mutableSetOf()) { dep ->
-                dep.takeUnless { it in nextProcessed }?.let {
-                    addDependencyToGraph(scopeName, dep, transitive = true, nextProcessed + dep)
+        val transitiveDependencies = if (inCycle) {
+            emptySet()
+        } else {
+            dependencyHandler.dependenciesFor(dependency)
+                .mapNotNullTo(mutableSetOf()) { dep ->
+                    addDependencyToGraph(
+                        scopeName,
+                        dep,
+                        transitive = true,
+                        nextProcessed + dep,
+                        inCycle = dep in nextProcessed
+                    )
                 }
-            }
+        }
+
+        val fragmentIndex = if (inCycle) {
+            fragmentIndexForCycle(index.fragment)
+        } else {
+            index.fragment
+        }
 
         val fragmentMapping = referenceMappings[index.fragment]
-        if (index.root in fragmentMapping) {
-            // If this point is reached, the package has already been inserted when processing its dependencies.
-            // This means that there is a cyclic dependency. To handle this case correctly, the insert operation has
-            // to be started anew.
-            return addDependencyToGraph(scopeName, dependency, transitive, nextProcessed)
+        if (index.root in fragmentMapping && !startOfCycle(index)) {
+            // If this point is reached, the package has already been inserted when processing its dependencies, but
+            // no cycle has been found. To handle this case correctly, the insert operation has to be restarted; this
+            // should then find the already inserted node in the graph.
+            return addDependencyToGraph(scopeName, dependency, transitive = true, processed + dependency)
         }
 
         val ref = DependencyReference(
             pkg = index.root,
-            fragment = index.fragment,
+            fragment = fragmentIndex,
             dependencies = transitiveDependencies,
             linkage = dependencyHandler.linkageFor(dependency),
             issues = issues
         )
+
         fragmentMapping[index.root] = ref
         references[ref] = dependency
 
@@ -391,6 +415,16 @@ class DependencyGraphBuilder<D>(
 
         return ref
     }
+
+    /**
+     * Check whether the given [index] refers to a node that is the starting point of a cycle. This is the case if
+     * there is a corresponding cycle indicator node.
+     */
+    private fun startOfCycle(index: RootDependencyIndex): Boolean =
+        references.keys.any {
+            it.pkg == index.root && isCycleIndicatorIndex(it.fragment) &&
+                extractFragment(it.fragment) == index.fragment
+        }
 
     /**
      * Construct a [Package] for the given [id] that corresponds to the given [dependency]. If the package is already
@@ -418,6 +452,20 @@ class DependencyGraphBuilder<D>(
         }
 
         return ref
+    }
+
+    /**
+     * Generate a special fragment index for a node that indicates a cycle in the dependency graph. The combination of
+     * package ID and fragment index must be unique for all nodes in the graph. Therefore, marker nodes to indicate
+     * cycles require some special values here. Cycle indicator nodes have a fragment index greater than 65536 where
+     * the upper bits are just a counter to generate a unique value. Use the provided original [fragmentIndex] to
+     * obtain the corresponding counter. To find the fragment index of the original node (that starts the cycle), the
+     * upper 16 bits just have to be masked out.
+     */
+    private fun fragmentIndexForCycle(fragmentIndex: Int): Int {
+        val counter = cycleCounts.getOrDefault(fragmentIndex, 0) + 1
+        cycleCounts[fragmentIndex] = counter
+        return fragmentIndex + (counter shl 16)
     }
 }
 
@@ -451,17 +499,13 @@ private fun Collection<DependencyReference>.toGraph(
 }
 
 private fun Collection<DependencyReference>.visitEach(visit: (ref: DependencyReference) -> Unit) {
-    val visited = mutableSetOf<NodeKey>()
     val queue = LinkedList(this)
 
     while (queue.isNotEmpty()) {
         val ref = queue.removeFirst()
 
-        if (ref.key !in visited) {
-            visit(ref)
-            visited += ref.key
-            queue += ref.dependencies
-        }
+        visit(ref)
+        queue += ref.dependencies
     }
 }
 
