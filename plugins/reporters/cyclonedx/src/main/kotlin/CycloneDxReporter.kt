@@ -179,16 +179,6 @@ class CycloneDxReporter(
                     version = versions.singleOrNull() ?: revision
                 }
             }
-
-        /**
-         * Try to obtain a single top-level project in [projects]. The top-level project is identified based on the
-         * number of components in the definition file path. If there are multiple projects with a minimum number of
-         * path components, there is no single top-level project, and the function returns *null*.
-         */
-        private fun findTopLevelProject(projects: Collection<Project>): Project? =
-            projects.groupBy { project ->
-                project.definitionFilePath.count { it == '/' }
-            }.minByOrNull { it.key }?.value?.singleOrNull()
     }
 
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
@@ -353,3 +343,13 @@ class CycloneDxReporter(
             addVulnerabilities(input.ortResult.getVulnerabilities())
         }
 }
+
+/**
+ * Try to obtain a single top-level project in [projects]. The top-level project is identified based on the
+ * number of components in the definition file path. If there are multiple projects with a minimum number of
+ * path components, there is no single top-level project, and the function returns *null*.
+ */
+private fun findTopLevelProject(projects: Collection<Project>): Project? =
+    projects.groupBy { project ->
+        project.definitionFilePath.count { it == '/' }
+    }.minByOrNull { it.key }?.value?.singleOrNull()
