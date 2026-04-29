@@ -754,25 +754,34 @@ class Scanner(
 
         if (provenancesWithMissingArchives.isEmpty()) return
 
-        logger.info { "Creating file archives for ${provenancesWithMissingArchives.size} package(s)." }
+        val packagesByProvenance = provenancesWithMissingArchives.entries.groupBy { it.value }
+            .mapValues { e -> e.value.map { it.key } }
+        logger.info {
+            "Creating file archives for ${provenancesWithMissingArchives.size} package(s) in " +
+                "${packagesByProvenance.size} provenance(s)."
+        }
 
         val duration = measureTime {
-            provenancesWithMissingArchives.forEach { (pkg, nestedProvenance) ->
+            packagesByProvenance.forEach { (nestedProvenance, packages) ->
                 var dir: File? = null
 
                 // runCatching has a bug with smart-cast, see https://youtrack.jetbrains.com/issue/KT-27748.
                 try {
                     dir = provenanceDownloader.downloadRecursively(nestedProvenance)
-                    archiver.archive(dir, nestedProvenance.root, pkg.id)
+                    packages.forEach { pkg ->
+                        archiver.archive(dir, nestedProvenance.root, pkg.id)
+                    }
                 } catch (e: DownloadException) {
-                    controller.addIssue(
-                        pkg.id,
-                        Issue(
-                            source = "Scanner",
-                            message = "Could not create file archive for '${pkg.id.toCoordinates()}': "
-                                + e.collectMessages()
+                    packages.forEach { pkg ->
+                        controller.addIssue(
+                            pkg.id,
+                            Issue(
+                                source = "Scanner",
+                                message = "Could not create file archive for '${pkg.id.toCoordinates()}': "
+                                    + e.collectMessages()
+                            )
                         )
-                    )
+                    }
                 } finally {
                     dir?.safeDeleteRecursively()
                 }
