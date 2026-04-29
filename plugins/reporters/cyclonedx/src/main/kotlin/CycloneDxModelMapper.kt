@@ -108,7 +108,7 @@ internal class CycloneDxModelMapper(
                 .sortedBy { it.id }
                 .forEach { pkg ->
                     val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
-                    addComponent(input, pkg, dependencyType)
+                    addComponent(pkg, dependencyType)
                 }
 
             addDependencies(input, metadata.component.bomRef, allDirectDependencies)
@@ -167,7 +167,7 @@ internal class CycloneDxModelMapper(
             val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
             dependencyPackages.forEach { pkg ->
                 val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
-                addComponent(input, pkg, dependencyType)
+                addComponent(pkg, dependencyType)
             }
 
             addDependencies(input, metadata.component.bomRef, directDependencies)
@@ -213,6 +213,80 @@ internal class CycloneDxModelMapper(
                 version = versions.singleOrNull() ?: revision
             }
         }
+
+    /**
+     * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metadata
+     * from [input]. The [dependencyType] is added as a [Property] to indicate "direct" vs "transitive" dependencies.
+     */
+    private fun Bom.addComponent(pkg: Package, dependencyType: String) {
+        val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
+            .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.id))
+            .applyChoices(input.ortResult.getRepositoryLicenseChoices())
+
+        val concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
+        val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
+        val detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
+
+        // Get all licenses, but note down their origins inside an extensible type.
+        val licenseObjects = concludedLicenseNames.mapNamesToLicenses("concluded license", input) +
+            declaredLicenseNames.mapNamesToLicenses("declared license", input) +
+            detectedLicenseNames.mapNamesToLicenses("detected license", input)
+
+        val binaryHash = pkg.binaryArtifact.hash.toCycloneDx()
+        val sourceHash = pkg.sourceArtifact.hash.toCycloneDx()
+
+        val (hash, purlQualifier) = if (binaryHash == null && sourceHash != null) {
+            Pair(sourceHash, "?classifier=sources")
+        } else {
+            Pair(binaryHash, "")
+        }
+
+        val component = Component().apply {
+            // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
+            type = Component.Type.LIBRARY
+
+            bomRef = pkg.id.toCoordinates()
+
+            group = pkg.id.namespace
+            name = pkg.id.name
+            version = pkg.id.version
+
+            authors = pkg.authors.map { OrganizationalContact().apply { name = it } }
+            supplier = authors.takeUnless { it.isEmpty() }?.let {
+                OrganizationalEntity().apply { contacts = authors }
+            }
+
+            description = pkg.description
+
+            // TODO: Map package-manager-specific OPTIONAL scopes.
+            scope = if (input.ortResult.isExcluded(pkg.id)) {
+                Component.Scope.EXCLUDED
+            } else {
+                Component.Scope.REQUIRED
+            }
+
+            hashes = listOfNotNull(hash)
+
+            if (licenseObjects.isNotEmpty()) licenses = LicenseChoice().apply { licenses = licenseObjects }
+
+            // TODO: Find a way to associate copyrights to the license they belong to, see
+            //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
+            copyright = resolvedLicenseInfo.getCopyrights().joinToString {
+                it.filterNot { character ->
+                    character.isIdentifierIgnorable()
+                }
+            }.takeUnless { it.isEmpty() }
+
+            purl = pkg.purl + purlQualifier
+            isModified = pkg.isModified
+
+            addProperty(Property("$ORT_NAME:dependencyType", dependencyType))
+        }
+
+        component.addExternalReference(ExternalReference.Type.WEBSITE, pkg.homepageUrl)
+
+        addComponent(component)
+    }
 }
 
 /**
@@ -267,80 +341,6 @@ private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, 
             ref.comment = comment?.takeUnless { it.isBlank() }
         }
     )
-}
-
-/**
- * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metadata from
- * [input]. The [dependencyType] is added as a [Property] to indicate "direct" vs "transitive" dependencies.
- */
-private fun Bom.addComponent(input: ReporterInput, pkg: Package, dependencyType: String) {
-    val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
-        .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.id))
-        .applyChoices(input.ortResult.getRepositoryLicenseChoices())
-
-    val concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
-    val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
-    val detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
-
-    // Get all licenses, but note down their origins inside an extensible type.
-    val licenseObjects = concludedLicenseNames.mapNamesToLicenses("concluded license", input) +
-        declaredLicenseNames.mapNamesToLicenses("declared license", input) +
-        detectedLicenseNames.mapNamesToLicenses("detected license", input)
-
-    val binaryHash = pkg.binaryArtifact.hash.toCycloneDx()
-    val sourceHash = pkg.sourceArtifact.hash.toCycloneDx()
-
-    val (hash, purlQualifier) = if (binaryHash == null && sourceHash != null) {
-        Pair(sourceHash, "?classifier=sources")
-    } else {
-        Pair(binaryHash, "")
-    }
-
-    val component = Component().apply {
-        // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
-        type = Component.Type.LIBRARY
-
-        bomRef = pkg.id.toCoordinates()
-
-        group = pkg.id.namespace
-        name = pkg.id.name
-        version = pkg.id.version
-
-        authors = pkg.authors.map { OrganizationalContact().apply { name = it } }
-        supplier = authors.takeUnless { it.isEmpty() }?.let {
-            OrganizationalEntity().apply { contacts = authors }
-        }
-
-        description = pkg.description
-
-        // TODO: Map package-manager-specific OPTIONAL scopes.
-        scope = if (input.ortResult.isExcluded(pkg.id)) {
-            Component.Scope.EXCLUDED
-        } else {
-            Component.Scope.REQUIRED
-        }
-
-        hashes = listOfNotNull(hash)
-
-        if (licenseObjects.isNotEmpty()) licenses = LicenseChoice().apply { licenses = licenseObjects }
-
-        // TODO: Find a way to associate copyrights to the license they belong to, see
-        //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
-        copyright = resolvedLicenseInfo.getCopyrights().joinToString {
-            it.filterNot { character ->
-                character.isIdentifierIgnorable()
-            }
-        }.takeUnless { it.isEmpty() }
-
-        purl = pkg.purl + purlQualifier
-        isModified = pkg.isModified
-
-        addProperty(Property("$ORT_NAME:dependencyType", dependencyType))
-    }
-
-    component.addExternalReference(ExternalReference.Type.WEBSITE, pkg.homepageUrl)
-
-    addComponent(component)
 }
 
 /**
