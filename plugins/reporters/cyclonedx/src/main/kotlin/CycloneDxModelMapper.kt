@@ -146,6 +146,13 @@ internal class CycloneDxModelMapper(
                     }
 
                     description = project.description
+
+                    val resolvedLicenseInfo = getResolvedLicenseForId(project.id)
+
+                    setLicenses(
+                        declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED),
+                        detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
+                    )
                 }
             }
 
