@@ -68,6 +68,15 @@ internal class CycloneDxModelMapper(
     private val input: ReporterInput,
     private val config: CycloneDxReporterConfig
 ) {
+    val resolvedLicenseForId = mutableMapOf<Identifier, ResolvedLicenseInfo>()
+
+    private fun getResolvedLicenseForId(id: Identifier): ResolvedLicenseInfo =
+        resolvedLicenseForId.getOrPut(id) {
+            input.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
+                .applyChoices(input.ortResult.getPackageLicenseChoices(id))
+                .applyChoices(input.ortResult.getRepositoryLicenseChoices())
+        }
+
     fun createSingleBom(): Bom =
         Bom().apply {
             val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
@@ -214,23 +223,27 @@ internal class CycloneDxModelMapper(
             }
         }
 
+    private fun Component.setLicenses(
+        concludedLicenseNames: Collection<String> = emptySet(),
+        declaredLicenseNames: Collection<String> = emptySet(),
+        detectedLicenseNames: Collection<String> = emptySet()
+    ) {
+        // Get all licenses, but note down their origins inside an extensible type.
+        val licenseObjects = concludedLicenseNames.mapNamesToLicenses("concluded license", input) +
+            declaredLicenseNames.mapNamesToLicenses("declared license", input) +
+            detectedLicenseNames.mapNamesToLicenses("detected license", input)
+
+        if (licenseObjects.isNotEmpty()) {
+            licenses = LicenseChoice().apply { licenses = licenseObjects }
+        }
+    }
+
     /**
      * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metadata
      * from [input]. The [dependencyType] is added as a [Property] to indicate "direct" vs "transitive" dependencies.
      */
     private fun Bom.addComponent(pkg: Package, dependencyType: String) {
-        val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
-            .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.id))
-            .applyChoices(input.ortResult.getRepositoryLicenseChoices())
-
-        val concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
-        val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
-        val detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
-
-        // Get all licenses, but note down their origins inside an extensible type.
-        val licenseObjects = concludedLicenseNames.mapNamesToLicenses("concluded license", input) +
-            declaredLicenseNames.mapNamesToLicenses("declared license", input) +
-            detectedLicenseNames.mapNamesToLicenses("detected license", input)
+        val resolvedLicenseInfo = getResolvedLicenseForId(pkg.id)
 
         val binaryHash = pkg.binaryArtifact.hash.toCycloneDx()
         val sourceHash = pkg.sourceArtifact.hash.toCycloneDx()
@@ -267,7 +280,11 @@ internal class CycloneDxModelMapper(
 
             hashes = listOfNotNull(hash)
 
-            if (licenseObjects.isNotEmpty()) licenses = LicenseChoice().apply { licenses = licenseObjects }
+            setLicenses(
+                concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED),
+                declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED),
+                detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
+            )
 
             // TODO: Find a way to associate copyrights to the license they belong to, see
             //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
