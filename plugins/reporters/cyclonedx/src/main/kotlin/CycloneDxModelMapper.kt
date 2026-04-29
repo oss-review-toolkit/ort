@@ -300,13 +300,7 @@ internal class CycloneDxModelMapper(
                 detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
             )
 
-            // TODO: Find a way to associate copyrights to the license they belong to, see
-            //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
-            copyright = resolvedLicenseInfo.getCopyrights().joinToString {
-                it.filterNot { character ->
-                    character.isIdentifierIgnorable()
-                }
-            }.takeUnless { it.isEmpty() }
+            setCopyright(resolvedLicenseInfo.getCopyrights())
 
             purl = pkg.purl + purlQualifier
             isModified = pkg.isModified
@@ -490,4 +484,14 @@ private fun Component.addExternalReference(type: ExternalReference.Type, url: St
             ref.comment = comment?.takeUnless { it.isBlank() }
         }
     )
+}
+
+private fun Component.setCopyright(copyrights: Set<String>) {
+    // TODO: Find a way to associate copyrights to the license they belong to, see
+    //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
+    copyright = copyrights.joinToString {
+        it.filterNot { character ->
+            character.isIdentifierIgnorable()
+        }
+    }.takeUnless { it.isEmpty() }
 }
