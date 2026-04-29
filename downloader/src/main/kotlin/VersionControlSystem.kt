@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.titlecase
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_SERVER_ENV_FILENAME
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.Semver
@@ -148,7 +149,7 @@ abstract class VersionControlSystem : Plugin {
          * Return glob patterns for files that should be checkout out in addition to explicit sparse checkout paths.
          */
         fun getSparseCheckoutGlobPatterns(): List<String> {
-            val globPatterns = mutableListOf("*$ORT_REPO_CONFIG_FILENAME")
+            val globPatterns = mutableListOf("*$ORT_REPO_CONFIG_FILENAME", "*$ORT_SERVER_ENV_FILENAME")
             val licensePatterns = LicenseFilePatterns.getInstance()
             return licensePatterns.allLicenseFilenames.generateCapitalizationVariants().mapTo(globPatterns) { "**/$it" }
         }

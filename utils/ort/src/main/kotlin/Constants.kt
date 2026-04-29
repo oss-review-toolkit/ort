@@ -110,6 +110,11 @@ const val ORT_PACKAGE_CONFIGURATION_FILENAME = "package-configuration.yml"
 const val ORT_REPO_CONFIG_FILENAME = ".ort.yml"
 
 /**
+ * The name of the ORT Server environment configuration file.
+ */
+const val ORT_SERVER_ENV_FILENAME = ".ort.env.yml"
+
+/**
  * The name of the ORT resolutions configuration file.
  */
 const val ORT_RESOLUTIONS_FILENAME = "resolutions.yml"
