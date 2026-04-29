@@ -23,6 +23,8 @@ import java.io.File
 
 import org.cyclonedx.Format
 import org.cyclonedx.Version
+import org.cyclonedx.generators.BomGeneratorFactory
+import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
 
 import org.ossreviewtoolkit.model.Project
@@ -169,3 +171,32 @@ class CycloneDxReporter(
         return reportFileResults
     }
 }
+
+/**
+ * Return the string representation for this [Bom], [schemaVersion] and [format].
+ */
+private fun Bom.createFormat(schemaVersion: Version, format: Format): String =
+    when (format) {
+        Format.XML -> BomGeneratorFactory.createXml(schemaVersion, this).toXmlString()
+        Format.JSON -> BomGeneratorFactory.createJson(schemaVersion, this).toJsonString()
+    }
+
+/**
+ * Write this [Bom] at the given [schemaVersion] in all [outputFormats] to the [outputDir] with [outputName] as
+ * prefixes.
+ */
+private fun Bom.writeFormats(
+    schemaVersion: Version,
+    outputDir: File,
+    outputName: String,
+    outputFormats: Set<Format>
+): List<Result<File>> =
+    outputFormats.map { format ->
+        runCatching {
+            val bomString = createFormat(schemaVersion, format)
+
+            outputDir.resolve("$outputName.${format.extension}").apply {
+                bufferedWriter().use { it.write(bomString) }
+            }
+        }
+    }
