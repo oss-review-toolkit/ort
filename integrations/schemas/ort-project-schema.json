@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oss-review-toolkit.org/ort-project.yml",
+  "title": "ORT project",
+  "description": "The OSS-Review-Toolkit (ORT) project package manager uses definition files to manually define projects and their dependencies. A full list of all available options can be found at https://oss-review-toolkit.org/ort/docs/guides/ort-project-package-manager.",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "description": "The name of the project.",
+      "type": "string"
+    },
+    "description": {
+      "description": "A brief description of the project.",
+      "type": "string"
+    },
+    "homepageUrl": {
+      "description": "The URL of the project homepage.",
+      "type": "string",
+      "format": "uri"
+    },
+    "declaredLicenses": {
+      "description": "List of declared licenses for the project in SPDX format.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "authors": {
+      "description": "List of authors of the project.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependencies": {
+      "description": "List of dependency packages for the project.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/dependency"
+      }
+    }
+  },
+  "required": [
+    "dependencies"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "dependency": {
+      "description": "A dependency package.",
+      "type": "object",
+      "anyOf": [
+        {
+          "required": ["purl"]
+        },
+        {
+          "required": ["id"]
+        }
+      ],
+      "properties": {
+        "purl": {
+          "description": "The package URL in PURL format. Must start with 'pkg:'. Qualifier and subpath components are not supported.",
+          "type": "string",
+          "pattern": "^pkg:"
+        },
+        "id": {
+          "description": "The package identifier in ORT format: '<package-manager>/<namespace>/<name>/<version>'.",
+          "type": "string",
+          "pattern": "^[^:]+:[^:]*:[^:]*:[^:]*$"
+        },
+        "description": {
+          "description": "A brief description of the package.",
+          "type": "string"
+        },
+        "vcs": {
+          "$ref": "#/definitions/vcs"
+        },
+        "sourceArtifact": {
+          "$ref": "#/definitions/sourceArtifact"
+        },
+        "declaredLicenses": {
+          "description": "List of declared licenses for the dependency in SPDX format.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "homepageUrl": {
+          "description": "The URL of the package homepage.",
+          "type": "string",
+          "format": "uri"
+        },
+        "labels": {
+          "description": "User-defined labels associated with this package as key-value pairs.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "authors": {
+          "description": "List of authors of the dependency.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scopes": {
+          "description": "List of scopes the package belongs to.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isModified": {
+          "description": "Flag indicating whether the source code of the package has been modified compared to the original source code. Default is false.",
+          "type": "boolean",
+          "default": false
+        },
+        "isMetadataOnly": {
+          "description": "Flag indicating whether the package is just metadata, like Maven BOM artifacts which only define constraints for dependency versions. Default is false.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "vcs": {
+      "description": "The version control system location of the package.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "The VCS type, e.g., 'Git', 'Subversion', 'Mercurial'.",
+          "type": "string"
+        },
+        "url": {
+          "description": "The VCS repository URL.",
+          "type": "string",
+          "format": "uri"
+        },
+        "revision": {
+          "description": "The VCS revision (branch, tag, or commit).",
+          "type": "string"
+        },
+        "path": {
+          "description": "The VCS path within the repository. Default is empty string.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "sourceArtifact": {
+      "description": "The remote artifact where the source package can be downloaded.",
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "The URL to the source artifact.",
+          "type": "string",
+          "format": "uri"
+        },
+        "hash": {
+          "$ref": "#/definitions/hash"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false
+    },
+    "hash": {
+      "description": "The hash of an artifact.",
+      "type": "object",
+      "properties": {
+        "value": {
+          "description": "The hash value.",
+          "type": "string"
+        },
+        "algorithm": {
+          "description": "The hash algorithm.",
+          "type": "string",
+          "enum": [
+            "MD5",
+            "SHA-1",
+            "SHA-256",
+            "SHA-384",
+            "SHA-512",
+            "SHA-1-GIT"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "algorithm"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
