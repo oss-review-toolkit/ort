@@ -7,6 +7,7 @@ downloadPlugin = "5.7.0"
 gitSemverPlugin = "0.19.0"
 graalVmNativeImagePlugin = "1.1.0"
 ideaExtPlugin = "1.4.1"
+kfxPlugin = "0.2.5"
 kotlinPlugin = "2.3.21"
 ksp = "2.3.7"
 mavenPublishPlugin = "0.36.0"
@@ -79,6 +80,7 @@ buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig
 download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
 gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSemverPlugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
+kfx = { id = "io.github.hfhbd.kfx", version.ref = "kfxPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
 
 [libraries]

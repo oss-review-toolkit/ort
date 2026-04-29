@@ -95,4 +95,10 @@ dependencyResolutionManagement {
             aliasPrefixGenerator = GeneratorConfig.NO_PREFIX
         }
     }
+
+    versionCatalogs {
+        create("ktorLibs") {
+            from("io.ktor:ktor-version-catalog:3.4.3")
+        }
+    }
 }
