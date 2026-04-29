@@ -35,7 +35,6 @@ import org.cyclonedx.model.OrganizationalEntity
 import org.cyclonedx.model.license.Expression
 import org.cyclonedx.model.metadata.ToolInformation
 
-import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -233,11 +232,6 @@ class CycloneDxReporter(
             )
 
             addExternalReference(ExternalReference.Type.WEBSITE, project.homepageUrl)
-
-            val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
-                .getLicenseNames(LicenseSource.DECLARED, LicenseSource.DETECTED)
-
-            addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString())
 
             addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
 
