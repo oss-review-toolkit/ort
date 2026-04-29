@@ -310,15 +310,8 @@ class CycloneDxReporter(
         }
 
     /**
-     * Return a [Component] object to be placed in the metadata of the generated BOM if `singleBom` is enabled.
-     * The function tries to find meaningful values for the component's properties based on the current list of
-     * [projects] and the given [result] object. This works best for a multi-module project where the single
-     * subprojects share common properties. The following properties are set:
-     * - If all projects have the same namespace, this is used for the `group` property.
-     * - If all projects have the same version, this is used for the `version` property; otherwise, the version is
-     *   set to the VCS revision.
-     * - To derive the component `name`, the function tries to find a single top-level project and obtains the name
-     *   from this project. If this is not possible, it uses the URL from the VCS information.
+     * Return a [Component] which represents the union of the given [projects] as a single component. The component is
+     * derived by a heuristic which works best for multi-module projects in which the modules share common properties.
      *
      * If these default values are not suitable, it is possible to override some of them via the reporter [config].
      */
