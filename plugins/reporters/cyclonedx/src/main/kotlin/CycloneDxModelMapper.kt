@@ -221,6 +221,13 @@ internal class CycloneDxModelMapper(
                     ?: findTopLevelProject(projects)?.id?.name ?: url
                 version = versions.singleOrNull() ?: revision
             }
+
+            val resolvedLicenseInfos = projects.mapTo(mutableSetOf()) { getResolvedLicenseForId(it.id) }
+
+            setLicenses(
+                declaredLicenseNames = resolvedLicenseInfos.getLicenseNames(LicenseSource.DECLARED),
+                detectedLicenseNames = resolvedLicenseInfos.getLicenseNames(LicenseSource.DETECTED)
+            )
         }
 
     private fun Component.setLicenses(
@@ -452,6 +459,9 @@ private fun Collection<String>.mapNamesToLicenses(origin: String, input: Reporte
  */
 private fun ResolvedLicenseInfo.getLicenseNames(vararg sources: LicenseSource): SortedSet<String> =
     licenses.filter { license -> sources.any { it in license.sources } }.mapTo(sortedSetOf()) { it.license.toString() }
+
+private fun Collection<ResolvedLicenseInfo>.getLicenseNames(vararg sources: LicenseSource): SortedSet<String> =
+    flatMapTo(sortedSetOf()) { it.getLicenseNames(*sources) }
 
 /**
  * Map an ORT hash object to a CycloneDX hash object.
