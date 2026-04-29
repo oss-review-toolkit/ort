@@ -145,40 +145,6 @@ class CycloneDxReporter(
 ) : Reporter {
     companion object {
         const val REPORT_BASE_FILENAME = "bom.cyclonedx"
-
-        /**
-         * Return a [Component] object to be placed in the metadata of the generated BOM if `singleBom` is enabled.
-         * The function tries to find meaningful values for the component's properties based on the current list of
-         * [projects] and the given [result] object. This works best for a multi-module project where the single
-         * subprojects share common properties. The following properties are set:
-         * - If all projects have the same namespace, this is used for the `group` property.
-         * - If all projects have the same version, this is used for the `version` property; otherwise, the version is
-         *   set to the VCS revision.
-         * - To derive the component `name`, the function tries to find a single top-level project and obtains the name
-         *   from this project. If this is not possible, it uses the URL from the VCS information.
-         *
-         * If these default values are not suitable, it is possible to override some of them via the reporter [config].
-         */
-        internal fun getSingleBomMetadataComponent(
-            projects: Collection<Project>,
-            result: OrtResult,
-            config: CycloneDxReporterConfig
-        ): Component =
-            Component().apply {
-                type = config.singleBomComponentType
-
-                val namespaces = projects.mapTo(mutableSetOf()) { it.id.namespace }
-                val versions = projects.mapTo(mutableSetOf()) { it.id.version }
-
-                with(result.repository.vcsProcessed) {
-                    bomRef = "$url@$revision"
-
-                    group = namespaces.singleOrNull()
-                    name = config.singleBomComponentName.takeUnless { it.isEmpty() }
-                        ?: findTopLevelProject(projects)?.id?.name ?: url
-                    version = versions.singleOrNull() ?: revision
-                }
-            }
     }
 
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
@@ -302,7 +268,7 @@ class CycloneDxReporter(
             serialNumber = "urn:uuid:${UUID.randomUUID()}"
 
             metadata = createBomMetadata().apply {
-                component = getSingleBomMetadataComponent(projects, input.ortResult, config)
+                component = getSingleBomMetadataComponent(projects, input.ortResult)
             }
 
             components = mutableListOf()
@@ -341,6 +307,36 @@ class CycloneDxReporter(
             addDependencies(input, metadata.component.bomRef, allDirectDependencies)
 
             addVulnerabilities(input.ortResult.getVulnerabilities())
+        }
+
+    /**
+     * Return a [Component] object to be placed in the metadata of the generated BOM if `singleBom` is enabled.
+     * The function tries to find meaningful values for the component's properties based on the current list of
+     * [projects] and the given [result] object. This works best for a multi-module project where the single
+     * subprojects share common properties. The following properties are set:
+     * - If all projects have the same namespace, this is used for the `group` property.
+     * - If all projects have the same version, this is used for the `version` property; otherwise, the version is
+     *   set to the VCS revision.
+     * - To derive the component `name`, the function tries to find a single top-level project and obtains the name
+     *   from this project. If this is not possible, it uses the URL from the VCS information.
+     *
+     * If these default values are not suitable, it is possible to override some of them via the reporter [config].
+     */
+    private fun getSingleBomMetadataComponent(projects: Collection<Project>, result: OrtResult): Component =
+        Component().apply {
+            type = config.singleBomComponentType
+
+            val namespaces = projects.mapTo(mutableSetOf()) { it.id.namespace }
+            val versions = projects.mapTo(mutableSetOf()) { it.id.version }
+
+            with(result.repository.vcsProcessed) {
+                bomRef = "$url@$revision"
+
+                group = namespaces.singleOrNull()
+                name = config.singleBomComponentName.takeUnless { it.isEmpty() }
+                    ?: findTopLevelProject(projects)?.id?.name ?: url
+                version = versions.singleOrNull() ?: revision
+            }
         }
 }
 
