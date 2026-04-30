@@ -384,7 +384,7 @@ internal data class ConanData(
     }
 
     /**
-     * Return the [VcsInfo] for this [ConanData], or null if no VCS information is available.
+     * Return the [VcsInfo] for this [ConanData], or [VcsInfo.EMPTY] if no VCS information is available.
      */
     fun toVcsInfo(): VcsInfo {
         val url = scmUrl ?: return VcsInfo.EMPTY
