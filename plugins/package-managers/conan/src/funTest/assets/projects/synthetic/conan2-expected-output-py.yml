@@ -28,19 +28,19 @@ project:
       - id: "Conan::lz4:1.9.4"
       - id: "Conan::openssl:3.6.2"
         dependencies:
-        - id: "Conan::zlib:1.3.1"
-      - id: "Conan::zlib:1.3.1"
+        - id: "Conan::zlib:1.3.2"
+      - id: "Conan::zlib:1.3.2"
       - id: "Conan::zstd:1.5.7"
     - id: "Conan::libpq:15.4"
     - id: "Conan::openssl:3.6.2"
       dependencies:
-      - id: "Conan::zlib:1.3.1"
+      - id: "Conan::zlib:1.3.2"
     - id: "Conan::pcre2:10.42"
       dependencies:
       - id: "Conan::bzip2:1.0.8"
-      - id: "Conan::zlib:1.3.1"
+      - id: "Conan::zlib:1.3.2"
     - id: "Conan::sqlite3:3.45.0"
-    - id: "Conan::zlib:1.3.1"
+    - id: "Conan::zlib:1.3.2"
 packages:
 - id: "Conan::bzip2:1.0.8"
   purl: "pkg:conan/bzip2@1.0.8"
@@ -274,8 +274,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "Conan::zlib:1.3.1"
-  purl: "pkg:conan/zlib@1.3.1"
+- id: "Conan::zlib:1.3.2"
+  purl: "pkg:conan/zlib@1.3.2"
   declared_licenses:
   - "Zlib"
   declared_licenses_processed:
@@ -289,9 +289,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://zlib.net/fossils/zlib-1.3.1.tar.gz"
+    url: "https://zlib.net/fossils/zlib-1.3.2.tar.gz"
     hash:
-      value: "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23"
+      value: "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16"
       algorithm: "SHA-256"
   vcs:
     type: ""
