@@ -153,6 +153,8 @@ internal class CycloneDxModelMapper(
                         declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED),
                         detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
                     )
+
+                    setCopyright(resolvedLicenseInfo.getCopyrights())
                 }
             }
 
@@ -235,6 +237,8 @@ internal class CycloneDxModelMapper(
                 declaredLicenseNames = resolvedLicenseInfos.getLicenseNames(LicenseSource.DECLARED),
                 detectedLicenseNames = resolvedLicenseInfos.getLicenseNames(LicenseSource.DETECTED)
             )
+
+            setCopyright(resolvedLicenseInfos.flatMapTo(mutableSetOf()) { it.getCopyrights() })
         }
 
     private fun Component.setLicenses(
