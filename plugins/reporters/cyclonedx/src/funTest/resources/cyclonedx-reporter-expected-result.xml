@@ -41,6 +41,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           </properties>
         </license>
       </licenses>
+      <copyright>Copyright 1</copyright>
     </component>
     <licenses>
       <expression>CC0-1.0</expression>
