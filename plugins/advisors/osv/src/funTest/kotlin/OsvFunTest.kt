@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
@@ -58,7 +59,10 @@ class OsvFunTest : WordSpec({
 
             packageFindings.keys shouldContainExactlyInAnyOrder packageCoordinates - dummyPackage
             packageFindings.keys.forAll { coordinates ->
-                packageFindings.getValue(coordinates).vulnerabilities shouldNot beEmpty()
+                with(packageFindings.getValue(coordinates)) {
+                    vulnerabilities shouldNot beEmpty()
+                    summary.issues should beEmpty()
+                }
             }
         }
 
