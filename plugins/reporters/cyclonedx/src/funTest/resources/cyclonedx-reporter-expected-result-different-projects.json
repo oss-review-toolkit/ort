@@ -1,359 +1,377 @@
 {
-  "bomFormat": "CycloneDX",
-  "specVersion": "1.6",
-  "serialNumber": "urn:uuid:12345678-1234-1234-1234-123456789012",
-  "version": 1,
-  "metadata": {
-    "timestamp": "1970-01-01T00:00:00Z",
-    "tools": {
-      "components": [
+  "bomFormat" : "CycloneDX",
+  "specVersion" : "1.6",
+  "serialNumber" : "urn:uuid:12345678-1234-1234-1234-123456789012",
+  "version" : 1,
+  "metadata" : {
+    "timestamp" : "1970-01-01T00:00:00Z",
+    "tools" : {
+      "components" : [
         {
-          "type": "application",
-          "name": "OSS Review Toolkit",
-          "version": "deadbeef"
+          "type" : "application",
+          "name" : "OSS Review Toolkit",
+          "version" : "deadbeef"
         }
       ]
     },
-    "component": {
-      "type": "application",
-      "bom-ref": "https://github.com/oss-review-toolkit/ort.git@main",
-      "name": "https://github.com/oss-review-toolkit/ort.git",
-      "version": "main"
+    "component" : {
+      "type" : "application",
+      "bom-ref" : "https://github.com/oss-review-toolkit/ort.git@main",
+      "name" : "https://github.com/oss-review-toolkit/ort.git",
+      "version" : "main",
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "MIT",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+            },
+            "properties" : [
+              {
+                "name" : "ort:origin",
+                "value" : "detected license"
+              }
+            ]
+          }
+        }
+      ],
+      "copyright" : "Copyright 1"
     },
-    "licenses": [
+    "licenses" : [
       {
-        "expression": "CC0-1.0"
+        "expression" : "CC0-1.0"
       }
     ]
   },
-  "components": [
+  "components" : [
     {
-      "type": "library",
-      "bom-ref": "NPM:@ort:concluded-license:1.0",
-      "group": "@ort",
-      "name": "concluded-license",
-      "version": "1.0",
-      "description": "",
-      "scope": "required",
-      "hashes": [
+      "type" : "library",
+      "bom-ref" : "NPM:@ort:concluded-license:1.0",
+      "group" : "@ort",
+      "name" : "concluded-license",
+      "version" : "1.0",
+      "description" : "",
+      "scope" : "required",
+      "hashes" : [
         {
-          "alg": "SHA-1",
-          "content": "0000000000000000000000000000000000000000"
+          "alg" : "SHA-1",
+          "content" : "0000000000000000000000000000000000000000"
         }
       ],
-      "licenses": [
+      "licenses" : [
         {
-          "license": {
-            "id": "MIT",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+          "license" : {
+            "id" : "MIT",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "concluded license"
+                "name" : "ort:origin",
+                "value" : "concluded license"
               }
             ]
           }
         },
         {
-          "license": {
-            "name": "MIT WITH Libtool-exception",
-            "properties": [
+          "license" : {
+            "name" : "MIT WITH Libtool-exception",
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "concluded license"
+                "name" : "ort:origin",
+                "value" : "concluded license"
               }
             ]
           }
         },
         {
-          "license": {
-            "id": "BSD-3-Clause",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. Neither the name of the ORGANIZATION nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+          "license" : {
+            "id" : "BSD-3-Clause",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. Neither the name of the ORGANIZATION nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "declared license"
+                "name" : "ort:origin",
+                "value" : "declared license"
               }
             ]
           }
         },
         {
-          "license": {
-            "id": "BSD-2-Clause",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+          "license" : {
+            "id" : "BSD-2-Clause",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "detected license"
+                "name" : "ort:origin",
+                "value" : "detected license"
               }
             ]
           }
         },
         {
-          "license": {
-            "id": "MIT",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+          "license" : {
+            "id" : "MIT",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "detected license"
+                "name" : "ort:origin",
+                "value" : "detected license"
               }
             ]
           }
         }
       ],
-      "copyright": "Copyright 1, Copyright 2",
-      "purl": "pkg:npm/%40ort/concluded-license@1.0?classifier=sources",
-      "modified": false,
-      "externalReferences": [
+      "copyright" : "Copyright 1, Copyright 2",
+      "purl" : "pkg:npm/%40ort/concluded-license@1.0?classifier=sources",
+      "modified" : false,
+      "externalReferences" : [
         {
-          "type": "website",
-          "url": "https://github.com/oss-review-toolkit/ort"
+          "type" : "website",
+          "url" : "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "properties": [
+      "properties" : [
         {
-          "name": "ort:dependencyType",
-          "value": "direct"
+          "name" : "ort:dependencyType",
+          "value" : "direct"
         }
       ]
     },
     {
-      "type": "library",
-      "bom-ref": "NPM:@ort:declared-license:1.0",
-      "group": "@ort",
-      "name": "declared-license",
-      "version": "1.0",
-      "description": "",
-      "scope": "required",
-      "hashes": [
+      "type" : "library",
+      "bom-ref" : "NPM:@ort:declared-license:1.0",
+      "group" : "@ort",
+      "name" : "declared-license",
+      "version" : "1.0",
+      "description" : "",
+      "scope" : "required",
+      "hashes" : [
         {
-          "alg": "SHA-1",
-          "content": "0000000000000000000000000000000000000000"
+          "alg" : "SHA-1",
+          "content" : "0000000000000000000000000000000000000000"
         }
       ],
-      "licenses": [
+      "licenses" : [
         {
-          "license": {
-            "id": "MIT",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+          "license" : {
+            "id" : "MIT",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "declared license"
+                "name" : "ort:origin",
+                "value" : "declared license"
               }
             ]
           }
         },
         {
-          "license": {
-            "id": "BSD-3-Clause",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. Neither the name of the ORGANIZATION nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+          "license" : {
+            "id" : "BSD-3-Clause",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. Neither the name of the ORGANIZATION nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "detected license"
+                "name" : "ort:origin",
+                "value" : "detected license"
               }
             ]
           }
         }
       ],
-      "copyright": "Copyright 1",
-      "purl": "pkg:npm/%40ort/declared-license@1.0?classifier=sources",
-      "modified": false,
-      "externalReferences": [
+      "copyright" : "Copyright 1",
+      "purl" : "pkg:npm/%40ort/declared-license@1.0?classifier=sources",
+      "modified" : false,
+      "externalReferences" : [
         {
-          "type": "website",
-          "url": "https://github.com/oss-review-toolkit/ort"
+          "type" : "website",
+          "url" : "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "properties": [
+      "properties" : [
         {
-          "name": "ort:dependencyType",
-          "value": "direct"
+          "name" : "ort:dependencyType",
+          "value" : "direct"
         }
       ]
     },
     {
-      "type": "library",
-      "bom-ref": "NPM:@ort:license-file:1.0",
-      "group": "@ort",
-      "name": "license-file",
-      "version": "1.0",
-      "description": "",
-      "scope": "required",
-      "hashes": [
+      "type" : "library",
+      "bom-ref" : "NPM:@ort:license-file:1.0",
+      "group" : "@ort",
+      "name" : "license-file",
+      "version" : "1.0",
+      "description" : "",
+      "scope" : "required",
+      "hashes" : [
         {
-          "alg": "SHA-1",
-          "content": "0000000000000000000000000000000000000000"
+          "alg" : "SHA-1",
+          "content" : "0000000000000000000000000000000000000000"
         }
       ],
-      "licenses": [
+      "licenses" : [
         {
-          "license": {
-            "id": "MIT",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+          "license" : {
+            "id" : "MIT",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "detected license"
+                "name" : "ort:origin",
+                "value" : "detected license"
               }
             ]
           }
         }
       ],
-      "copyright": "Copyright 1, Copyright 2",
-      "purl": "pkg:npm/%40ort/license-file@1.0?classifier=sources",
-      "modified": false,
-      "externalReferences": [
+      "copyright" : "Copyright 1, Copyright 2",
+      "purl" : "pkg:npm/%40ort/license-file@1.0?classifier=sources",
+      "modified" : false,
+      "externalReferences" : [
         {
-          "type": "website",
-          "url": "https://github.com/oss-review-toolkit/ort"
+          "type" : "website",
+          "url" : "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "properties": [
+      "properties" : [
         {
-          "name": "ort:dependencyType",
-          "value": "direct"
+          "name" : "ort:dependencyType",
+          "value" : "direct"
         }
       ]
     },
     {
-      "type": "library",
-      "bom-ref": "NPM:@ort:license-file-and-additional-licenses:1.0",
-      "group": "@ort",
-      "name": "license-file-and-additional-licenses",
-      "version": "1.0",
-      "description": "",
-      "scope": "required",
-      "hashes": [
+      "type" : "library",
+      "bom-ref" : "NPM:@ort:license-file-and-additional-licenses:1.0",
+      "group" : "@ort",
+      "name" : "license-file-and-additional-licenses",
+      "version" : "1.0",
+      "description" : "",
+      "scope" : "required",
+      "hashes" : [
         {
-          "alg": "SHA-1",
-          "content": "0000000000000000000000000000000000000000"
+          "alg" : "SHA-1",
+          "content" : "0000000000000000000000000000000000000000"
         }
       ],
-      "licenses": [
+      "licenses" : [
         {
-          "license": {
-            "id": "BSD-3-Clause",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. Neither the name of the ORGANIZATION nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+          "license" : {
+            "id" : "BSD-3-Clause",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. Neither the name of the ORGANIZATION nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "detected license"
+                "name" : "ort:origin",
+                "value" : "detected license"
               }
             ]
           }
         },
         {
-          "license": {
-            "id": "MIT",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+          "license" : {
+            "id" : "MIT",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "detected license"
+                "name" : "ort:origin",
+                "value" : "detected license"
               }
             ]
           }
         }
       ],
-      "copyright": "Copyright 1, Copyright 2, Copyright 3",
-      "purl": "pkg:npm/%40ort/license-file-and-additional-licenses@1.0?classifier=sources",
-      "modified": false,
-      "externalReferences": [
+      "copyright" : "Copyright 1, Copyright 2, Copyright 3",
+      "purl" : "pkg:npm/%40ort/license-file-and-additional-licenses@1.0?classifier=sources",
+      "modified" : false,
+      "externalReferences" : [
         {
-          "type": "website",
-          "url": "https://github.com/oss-review-toolkit/ort"
+          "type" : "website",
+          "url" : "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "properties": [
+      "properties" : [
         {
-          "name": "ort:dependencyType",
-          "value": "direct"
+          "name" : "ort:dependencyType",
+          "value" : "direct"
         }
       ]
     },
     {
-      "type": "library",
-      "bom-ref": "NPM:@ort:no-license-file:1.0",
-      "group": "@ort",
-      "name": "no-license-file",
-      "version": "1.0",
-      "description": "",
-      "scope": "required",
-      "licenses": [
+      "type" : "library",
+      "bom-ref" : "NPM:@ort:no-license-file:1.0",
+      "group" : "@ort",
+      "name" : "no-license-file",
+      "version" : "1.0",
+      "description" : "",
+      "scope" : "required",
+      "licenses" : [
         {
-          "license": {
-            "id": "MIT",
-            "text": {
-              "contentType": "plain/text",
-              "content": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+          "license" : {
+            "id" : "MIT",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
             },
-            "properties": [
+            "properties" : [
               {
-                "name": "ort:origin",
-                "value": "detected license"
+                "name" : "ort:origin",
+                "value" : "detected license"
               }
             ]
           }
         }
       ],
-      "copyright": "Copyright 1",
-      "purl": "pkg:npm/%40ort/no-license-file@1.0",
-      "modified": false,
-      "externalReferences": [
+      "copyright" : "Copyright 1",
+      "purl" : "pkg:npm/%40ort/no-license-file@1.0",
+      "modified" : false,
+      "externalReferences" : [
         {
-          "type": "website",
-          "url": "https://github.com/oss-review-toolkit/ort"
+          "type" : "website",
+          "url" : "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "properties": [
+      "properties" : [
         {
-          "name": "ort:dependencyType",
-          "value": "direct"
+          "name" : "ort:dependencyType",
+          "value" : "direct"
         }
       ]
     }
   ],
-  "externalReferences": [
+  "externalReferences" : [
     {
-      "type": "vcs",
-      "url": "https://github.com/oss-review-toolkit/ort.git",
-      "comment": "URL to the Git repository of the projects"
+      "type" : "vcs",
+      "url" : "https://github.com/oss-review-toolkit/ort.git",
+      "comment" : "URL to the Git repository of the projects"
     }
   ],
-  "dependencies": [
+  "dependencies" : [
     {
-      "ref": "https://github.com/oss-review-toolkit/ort.git@main",
-      "dependsOn": [
+      "ref" : "https://github.com/oss-review-toolkit/ort.git@main",
+      "dependsOn" : [
         "NPM:@ort:no-license-file:1.0",
         "NPM:@ort:license-file:1.0",
         "NPM:@ort:license-file-and-additional-licenses:1.0",
@@ -362,24 +380,24 @@
       ]
     }
   ],
-  "vulnerabilities": [
+  "vulnerabilities" : [
     {
-      "id": "CVE-2021-1234",
-      "ratings": [
+      "id" : "CVE-2021-1234",
+      "ratings" : [
         {
-          "source": {
-            "url": "https://cves.example.org/cve1"
+          "source" : {
+            "url" : "https://cves.example.org/cve1"
           },
-          "score": 6.0,
-          "severity": "medium",
-          "method": "CVSSv2"
+          "score" : 6.0,
+          "severity" : "medium",
+          "method" : "CVSSv2"
         }
       ],
-      "description": "A vulnerability description",
-      "detail": "A vulnerability summary",
-      "affects": [
+      "description" : "A vulnerability description",
+      "detail" : "A vulnerability summary",
+      "affects" : [
         {
-          "ref": "NPM:@ort:declared-license:1.0"
+          "ref" : "NPM:@ort:declared-license:1.0"
         }
       ]
     }
