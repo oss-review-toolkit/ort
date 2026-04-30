@@ -686,6 +686,11 @@ data class OrtResult(
     fun isProject(id: Identifier): Boolean = getProject(id) != null
 
     /**
+     * Return true if and only if the given [scopeName] is excluded.
+     */
+    fun isScopeExcluded(scopeName: String): Boolean = !isScopeIncluded(scopeName, getExcludes(), getIncludes())
+
+    /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config]. The package curations
      * within the given config only take effect in case the corresponding feature was enabled during the initial
      * creation of this [OrtResult].
