@@ -212,7 +212,7 @@ internal fun VulnerabilityView.toOrtVulnerability(): Vulnerability {
 }
 
 private fun VulnerabilityCvss3View.getScoringSystemAndVector(): Pair<String, String> {
-    val scoringSystem = vector.substringBefore('/', "").ifEmpty { Cvss3Rating.PREFIXES.first() }
+    val scoringSystem = vector.substringBefore('/', Cvss3Rating.PREFIXES.first())
     return scoringSystem to vector
 }
 
