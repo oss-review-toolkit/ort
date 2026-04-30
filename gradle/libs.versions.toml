@@ -1,6 +1,6 @@
 [versions]
 buildConfigPlugin = "6.0.9"
-dependencyAnalysisPlugin = "3.9.0"
+dependencyAnalysisPlugin = "3.10.0"
 detektPlugin = "2.0.0-alpha.3"
 dokkaPlugin = "2.2.0"
 downloadPlugin = "5.7.0"
