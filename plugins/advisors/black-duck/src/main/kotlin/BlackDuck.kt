@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 )
 class BlackDuck(
     override val descriptor: PluginDescriptor = BlackDuckFactory.descriptor,
+    override val details: AdvisorDetails = AdvisorDetails(descriptor.id),
     private val blackDuckApi: ComponentServiceClient
 ) : AdviceProvider {
     companion object {
@@ -71,8 +72,6 @@ class BlackDuck(
          */
         const val PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID = "black-duck:origin-id"
     }
-
-    override val details = AdvisorDetails(descriptor.id)
 
     constructor(descriptor: PluginDescriptor = BlackDuckFactory.descriptor, config: BlackDuckConfiguration) : this(
         descriptor, ExtendedComponentService.create(config.serverUrl, config.apiToken.value)

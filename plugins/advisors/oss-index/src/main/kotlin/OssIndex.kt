@@ -64,10 +64,9 @@ private const val BULK_REQUEST_SIZE = 128
 )
 class OssIndex(
     override val descriptor: PluginDescriptor = OssIndexFactory.descriptor,
+    override val details: AdvisorDetails = AdvisorDetails(descriptor.id),
     config: OssIndexConfiguration
 ) : AdviceProvider {
-    override val details = AdvisorDetails(descriptor.id)
-
     private val service by lazy {
         OssIndexService.create(
             config.serverUrl,

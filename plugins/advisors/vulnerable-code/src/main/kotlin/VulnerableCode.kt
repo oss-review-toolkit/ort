@@ -71,14 +71,9 @@ private const val MAX_SUMMARY_LENGTH = 64
 )
 class VulnerableCode(
     override val descriptor: PluginDescriptor = VulnerableCodeFactory.descriptor,
+    override val details: AdvisorDetails = AdvisorDetails(descriptor.id),
     config: VulnerableCodeConfiguration
 ) : AdviceProvider {
-    /**
-     * The details returned with each [AdvisorResult] produced by this instance. As this is constant, it can be
-     * created once beforehand.
-     */
-    override val details = AdvisorDetails(descriptor.id)
-
     private val service by lazy {
         val client = OkHttpClientHelper.buildClient {
             if (config.readTimeout != null) readTimeout(config.readTimeout, TimeUnit.SECONDS)

@@ -54,10 +54,9 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 )
 class Osv(
     override val descriptor: PluginDescriptor = OsvFactory.descriptor,
+    override val details: AdvisorDetails = AdvisorDetails(descriptor.id),
     config: OsvConfiguration
 ) : AdviceProvider {
-    override val details = AdvisorDetails(descriptor.id)
-
     private val service = OsvServiceWrapper(
         serverUrl = config.serverUrl,
         httpClient = OkHttpClientHelper.buildClient()
