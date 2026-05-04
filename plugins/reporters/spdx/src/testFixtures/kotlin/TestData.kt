@@ -75,7 +75,7 @@ val ORT_RESULT = OrtResult(
                 Project(
                     id = Identifier("Maven:proj1-grp:proj1:0.0.1"),
                     declaredLicenses = setOf("MIT"),
-                    definitionFilePath = "",
+                    definitionFilePath = "proj1/pom.xml",
                     homepageUrl = "https://example.com/proj1/homepage",
                     scopeDependencies = setOf(
                         Scope(
