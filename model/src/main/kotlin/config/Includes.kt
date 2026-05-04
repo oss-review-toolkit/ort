@@ -53,3 +53,5 @@ data class Includes(
      */
     fun isScopeIncluded(scopeName: String): Boolean = scopes.isEmpty() || scopes.any { it.matches(scopeName) }
 }
+
+fun Includes?.orEmpty(): Includes = this ?: Includes.EMPTY
