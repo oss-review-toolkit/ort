@@ -24,6 +24,7 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.SourceCodeOrigin.ARTIFACT
 import org.ossreviewtoolkit.model.SourceCodeOrigin.VCS
@@ -54,6 +55,14 @@ internal object SpdxDocumentModelMapper {
         val relationships = mutableListOf<SpdxRelationship>()
         val files = mutableListOf<SpdxFile>()
 
+        fun addDependencyRelationships(fromSpdxId: String, toOrtId: Identifier) {
+            relationships += SpdxRelationship(
+                spdxElementId = fromSpdxId,
+                relationshipType = SpdxRelationship.Type.DEPENDS_ON,
+                relatedSpdxElement = toOrtId.toSpdxId()
+            )
+        }
+
         val projects = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).sortedBy { it.id }
         val projectPackages = projects.map { project ->
             val filesForProject = if (config.fileInformationEnabled) {
@@ -72,12 +81,8 @@ internal object SpdxDocumentModelMapper {
                 id = project.id,
                 maxLevel = 1,
                 omitExcluded = true
-            ).mapTo(relationships) { dependency ->
-                SpdxRelationship(
-                    spdxElementId = spdxProjectPackage.spdxId,
-                    relationshipType = SpdxRelationship.Type.DEPENDS_ON,
-                    relatedSpdxElement = dependency.toSpdxId()
-                )
+            ).forEach { dependency ->
+                addDependencyRelationships(spdxProjectPackage.spdxId, dependency)
             }
 
             files += filesForProject
@@ -96,12 +101,8 @@ internal object SpdxDocumentModelMapper {
                 id = pkg.id,
                 maxLevel = 1,
                 omitExcluded = true
-            ).mapTo(relationships) { dependency ->
-                SpdxRelationship(
-                    spdxElementId = binaryPackage.spdxId,
-                    relationshipType = SpdxRelationship.Type.DEPENDS_ON,
-                    relatedSpdxElement = dependency.toSpdxId()
-                )
+            ).forEach { dependency ->
+                addDependencyRelationships(binaryPackage.spdxId, dependency)
             }
 
             packages += binaryPackage
