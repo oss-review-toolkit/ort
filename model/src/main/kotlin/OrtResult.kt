@@ -137,10 +137,9 @@ data class OrtResult(
         projects.forEach { project ->
             dependencyNavigator.scopeNames(project).forEach { scopeName ->
                 dependencyNavigator.scopeDependencies(project, scopeName).forEach { dependencies ->
-                    val isScopeIncluded = isScopeIncluded(scopeName, getExcludes(), getIncludes())
                     allDependencies += dependencies
 
-                    if (!isProjectExcluded(project.id) && isScopeIncluded) {
+                    if (!isProjectExcluded(project.id) && !isScopeExcluded(scopeName)) {
                         includedDependencies += dependencies
                     }
                 }
