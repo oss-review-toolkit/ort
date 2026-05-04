@@ -196,7 +196,7 @@ data class OrtResult(
             { project -> project.id },
             { project ->
                 val definitionFilePath = getDefinitionFilePathRelativeToAnalyzerRoot(project)
-                val isExcluded = !isPathIncluded(definitionFilePath, getExcludes(), getIncludes())
+                val isExcluded = isPathExcluded(definitionFilePath)
 
                 ProjectEntry(
                     project = project,
@@ -674,6 +674,11 @@ data class OrtResult(
      * Return true if the given [id] denotes a [Package] contained in this [OrtResult].
      */
     fun isPackage(id: Identifier): Boolean = getPackage(id) != null
+
+    /**
+     * Return true if the given [path] is excluded in the project's source tree. For details see [isPathIncluded].
+     */
+    fun isPathExcluded(path: String): Boolean = !isPathIncluded(path, getExcludes(), getIncludes())
 
     /**
      * Return true if the given [id] denotes a [Project] contained in this [OrtResult].
