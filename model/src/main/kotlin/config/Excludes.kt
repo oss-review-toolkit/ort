@@ -72,3 +72,5 @@ data class Excludes(
      */
     fun isScopeExcluded(scopeName: String): Boolean = findScopeExcludes(scopeName).isNotEmpty()
 }
+
+fun Excludes?.orEmpty(): Excludes = this ?: Excludes.EMPTY
