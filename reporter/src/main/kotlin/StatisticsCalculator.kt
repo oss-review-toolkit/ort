@@ -110,8 +110,7 @@ object StatisticsCalculator {
             .getProjects()
             .filterNot { project -> ortResult.isExcluded(project.id) }
             .flatMap { project -> ortResult.dependencyNavigator.scopeNames(project) }
-            .filterNot { scope -> ortResult.isScopeExcluded(scope) }
-            .toSet()
+            .filterNotTo(mutableSetOf()) { scope -> ortResult.isScopeExcluded(scope) }
 
     private fun getExcludedScopes(ortResult: OrtResult): Set<String> =
         ortResult
