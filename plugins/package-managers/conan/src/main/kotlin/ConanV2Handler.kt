@@ -79,6 +79,8 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
             workingDir,
             "graph",
             "info",
+            "-cc",
+            "core:non_interactive=True",
             "-f",
             "json",
             "--out-file",
