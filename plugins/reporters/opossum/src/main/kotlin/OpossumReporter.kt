@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
@@ -310,8 +309,8 @@ class OpossumReporter(
 
             addSignal(signalFromProject, setOf(definitionFilePath))
 
-            val scopeNames = ortResult.dependencyNavigator.scopeNames(project).filter {
-                isScopeIncluded(it, ortResult.getExcludes(), ortResult.getIncludes())
+            val scopeNames = ortResult.dependencyNavigator.scopeNames(project).filterNot {
+                ortResult.isScopeExcluded(it)
             }
 
             scopeNames.forEach { scopeName ->
