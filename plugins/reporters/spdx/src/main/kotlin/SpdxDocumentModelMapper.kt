@@ -21,11 +21,14 @@ package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit
+import java.util.LinkedList
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
+import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.SourceCodeOrigin.ARTIFACT
 import org.ossreviewtoolkit.model.SourceCodeOrigin.VCS
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -54,13 +57,30 @@ internal object SpdxDocumentModelMapper {
         val packages = mutableListOf<SpdxPackage>()
         val relationships = mutableListOf<SpdxRelationship>()
         val files = mutableListOf<SpdxFile>()
+        val linkageTypesForDependencyRelationships = ortResult.getLinkageTypesForDependencyRelationships()
 
-        fun addDependencyRelationships(fromSpdxId: String, toOrtId: Identifier) {
+        /**
+         * Add relationships representing a directed relationship from the package or project denoted by [fromOrtId] to
+         * the one denoted by [toOrtId]. The [fromSpdxId] must correspond to the SPDX package corresponding to
+         * [fromOrtId].
+         */
+        fun addDependencyRelationships(fromOrtId: Identifier, fromSpdxId: String, toOrtId: Identifier) {
             relationships += SpdxRelationship(
                 spdxElementId = fromSpdxId,
                 relationshipType = SpdxRelationship.Type.DEPENDS_ON,
                 relatedSpdxElement = toOrtId.toSpdxId()
             )
+
+            linkageTypesForDependencyRelationships.getValue(fromOrtId to toOrtId)
+                .mapTo(mutableSetOf()) { it.toSpdxRelationshipType() }
+                .sorted()
+                .forEach { relationshipType ->
+                    relationships += SpdxRelationship(
+                        spdxElementId = fromSpdxId,
+                        relationshipType = relationshipType,
+                        relatedSpdxElement = toOrtId.toSpdxId()
+                    )
+                }
         }
 
         val projects = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).sortedBy { it.id }
@@ -82,7 +102,7 @@ internal object SpdxDocumentModelMapper {
                 maxLevel = 1,
                 omitExcluded = true
             ).forEach { dependency ->
-                addDependencyRelationships(spdxProjectPackage.spdxId, dependency)
+                addDependencyRelationships(project.id, spdxProjectPackage.spdxId, dependency)
             }
 
             files += filesForProject
@@ -102,7 +122,7 @@ internal object SpdxDocumentModelMapper {
                 maxLevel = 1,
                 omitExcluded = true
             ).forEach { dependency ->
-                addDependencyRelationships(binaryPackage.spdxId, dependency)
+                addDependencyRelationships(pkg.id, binaryPackage.spdxId, dependency)
             }
 
             packages += binaryPackage
@@ -190,3 +210,49 @@ private fun SpdxDocument.filterChecksums(wantSpdx23: Boolean): SpdxDocument =
 
 private fun SpdxPackage.filterChecksums(wantSpdx23: Boolean): SpdxPackage =
     takeIf { wantSpdx23 } ?: copy(checksums = checksums.filterNot { it.algorithm.isSpdx23 })
+
+/**
+ * Return a map containing a key for any pair of ids which are directly connected with at least one edge, associated
+ * with the linkage types of the interconnecting edges.
+ */
+private fun OrtResult.getLinkageTypesForDependencyRelationships():
+    Map<Pair<Identifier, Identifier>, Set<PackageLinkage>> {
+    val result = mutableMapOf<Pair<Identifier, Identifier>, MutableSet<PackageLinkage>>()
+
+    // Traverse all non-excluded edges and collect the linkage types used in between any pair of ids.
+    getProjects(omitExcluded = true, includeSubProjects = false).forEach { project ->
+        val scopeNames = dependencyNavigator.scopeNames(project).filterNot { isScopeExcluded(it) }
+
+        scopeNames.forEach { scopeName ->
+            val queue = LinkedList<DependencyNode>()
+
+            dependencyNavigator.directDependencies(project, scopeName).forEach { node ->
+                result.getOrPut(project.id to node.id) { mutableSetOf() } += node.linkage
+
+                queue.add(node.getStableReference())
+            }
+
+            while (queue.isNotEmpty()) {
+                val parent = queue.removeFirst()
+
+                val children = parent.visitDependencies { children -> children.map { it.getStableReference() } }
+
+                children.forEach { child ->
+                    result.getOrPut(parent.id to child.id) { mutableSetOf() } += child.linkage
+                }
+
+                queue += children
+            }
+        }
+    }
+
+    return result
+}
+
+private fun PackageLinkage.toSpdxRelationshipType(): SpdxRelationship.Type =
+    when (this) {
+        PackageLinkage.STATIC -> SpdxRelationship.Type.STATIC_LINK
+        PackageLinkage.PROJECT_STATIC -> SpdxRelationship.Type.STATIC_LINK
+        PackageLinkage.PROJECT_DYNAMIC -> SpdxRelationship.Type.DYNAMIC_LINK
+        PackageLinkage.DYNAMIC -> SpdxRelationship.Type.DYNAMIC_LINK
+    }
