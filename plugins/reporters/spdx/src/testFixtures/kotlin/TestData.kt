@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -101,7 +102,8 @@ val ORT_RESULT = OrtResult(
                                     id = Identifier("Maven:pkg4-grp:pkg4:0.0.1"),
                                     dependencies = setOf(
                                         PackageReference(
-                                            id = Identifier("Maven:pkg7-grp:pkg7:0.0.1")
+                                            id = Identifier("Maven:pkg7-grp:pkg7:0.0.1"),
+                                            linkage = PackageLinkage.STATIC
                                         )
                                     )
                                 ),
@@ -115,6 +117,42 @@ val ORT_RESULT = OrtResult(
                             dependencies = setOf(
                                 PackageReference(
                                     id = Identifier("Maven:pkg-grp:pkg5:0.0.1")
+                                )
+                            )
+                        )
+                    ),
+                    vcs = ANALYZED_VCS
+                ),
+                Project(
+                    id = Identifier("Maven:proj2-grp:proj2:0.0.1"),
+                    declaredLicenses = emptySet(),
+                    definitionFilePath = "proj2/pom.xml",
+                    homepageUrl = "",
+                    scopeDependencies = setOf(
+                        Scope(
+                            name = "compile",
+                            dependencies = setOf(
+                                PackageReference(
+                                    id = Identifier("Maven:pkg1-grp:pkg1:0.0.1"),
+                                    linkage = PackageLinkage.PROJECT_STATIC
+                                )
+                            )
+                        )
+                    ),
+                    vcs = ANALYZED_VCS
+                ),
+                Project(
+                    id = Identifier("Maven:proj3-grp:proj3:0.0.1"),
+                    declaredLicenses = emptySet(),
+                    definitionFilePath = "proj3/pom.xml",
+                    homepageUrl = "",
+                    scopeDependencies = setOf(
+                        Scope(
+                            name = "compile",
+                            dependencies = setOf(
+                                PackageReference(
+                                    id = Identifier("Maven:pkg1-grp:pkg1:0.0.1"),
+                                    linkage = PackageLinkage.PROJECT_DYNAMIC
                                 )
                             )
                         )
