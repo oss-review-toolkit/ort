@@ -42,6 +42,7 @@ import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.Metadata
 import org.cyclonedx.model.OrganizationalContact
 import org.cyclonedx.model.OrganizationalEntity
+import org.cyclonedx.model.Pedigree
 import org.cyclonedx.model.Property
 import org.cyclonedx.model.license.Expression
 import org.cyclonedx.model.metadata.ToolInformation
@@ -311,7 +312,12 @@ internal class CycloneDxModelMapper(
             setCopyright(resolvedLicenseInfo.getCopyrights())
 
             purl = pkg.purl + purlQualifier
-            isModified = pkg.isModified
+
+            if (pkg.isModified) {
+                pedigree = Pedigree().apply {
+                    notes = "This package's sources has been modified compared to its upstream original."
+                }
+            }
 
             addProperty(dependencyType.toProperty())
         }

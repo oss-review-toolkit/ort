@@ -174,7 +174,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       </licenses>
       <copyright>Copyright 1, Copyright 2</copyright>
       <purl>pkg:npm/%40ort/concluded-license@1.0?classifier=sources</purl>
-      <modified>false</modified>
       <externalReferences>
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
@@ -252,7 +251,9 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       </licenses>
       <copyright>Copyright 1</copyright>
       <purl>pkg:npm/%40ort/declared-license@1.0?classifier=sources</purl>
-      <modified>true</modified>
+      <pedigree>
+        <notes>This package's sources has been modified compared to its upstream original.</notes>
+      </pedigree>
       <externalReferences>
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
@@ -299,7 +300,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       </licenses>
       <copyright>Copyright 1, Copyright 2</copyright>
       <purl>pkg:npm/%40ort/license-file@1.0?classifier=sources</purl>
-      <modified>false</modified>
       <externalReferences>
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
@@ -377,7 +377,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       </licenses>
       <copyright>Copyright 1, Copyright 2, Copyright 3</copyright>
       <purl>pkg:npm/%40ort/license-file-and-additional-licenses@1.0?classifier=sources</purl>
-      <modified>false</modified>
       <externalReferences>
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
@@ -421,7 +420,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       </licenses>
       <copyright>Copyright 1</copyright>
       <purl>pkg:npm/%40ort/no-license-file@1.0</purl>
-      <modified>false</modified>
       <externalReferences>
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>

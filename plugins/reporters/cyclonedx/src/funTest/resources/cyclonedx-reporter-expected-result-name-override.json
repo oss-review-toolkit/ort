@@ -135,7 +135,6 @@
       ],
       "copyright" : "Copyright 1, Copyright 2",
       "purl" : "pkg:npm/%40ort/concluded-license@1.0?classifier=sources",
-      "modified" : false,
       "externalReferences" : [
         {
           "type" : "website",
@@ -197,7 +196,9 @@
       ],
       "copyright" : "Copyright 1",
       "purl" : "pkg:npm/%40ort/declared-license@1.0?classifier=sources",
-      "modified" : true,
+      "pedigree" : {
+        "notes" : "This package's sources has been modified compared to its upstream original."
+      },
       "externalReferences" : [
         {
           "type" : "website",
@@ -244,7 +245,6 @@
       ],
       "copyright" : "Copyright 1, Copyright 2",
       "purl" : "pkg:npm/%40ort/license-file@1.0?classifier=sources",
-      "modified" : false,
       "externalReferences" : [
         {
           "type" : "website",
@@ -306,7 +306,6 @@
       ],
       "copyright" : "Copyright 1, Copyright 2, Copyright 3",
       "purl" : "pkg:npm/%40ort/license-file-and-additional-licenses@1.0?classifier=sources",
-      "modified" : false,
       "externalReferences" : [
         {
           "type" : "website",
@@ -347,7 +346,6 @@
       ],
       "copyright" : "Copyright 1",
       "purl" : "pkg:npm/%40ort/no-license-file@1.0",
-      "modified" : false,
       "externalReferences" : [
         {
           "type" : "website",
