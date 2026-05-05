@@ -192,7 +192,8 @@ val ORT_RESULT = OrtResult(
                     description = "",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo.EMPTY
+                    vcs = VcsInfo.EMPTY,
+                    isModified = true
                 ),
                 // A package with only unmapped declared license.
                 Package(
