@@ -116,7 +116,9 @@ internal class CycloneDxModelMapper(
                 .map { it.metadata }
                 .sortedBy { it.id }
                 .forEach { pkg ->
-                    val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
+                    val dependencyType = DependencyType.DIRECT.takeIf { pkg.id in allDirectDependencies }
+                        ?: DependencyType.TRANSITIVE
+
                     addComponent(pkg, dependencyType)
                 }
 
@@ -184,7 +186,9 @@ internal class CycloneDxModelMapper(
 
             val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
             dependencyPackages.forEach { pkg ->
-                val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
+                val dependencyType = DependencyType.DIRECT.takeIf { pkg.id in directDependencies }
+                    ?: DependencyType.TRANSITIVE
+
                 addComponent(pkg, dependencyType)
             }
 
@@ -260,7 +264,7 @@ internal class CycloneDxModelMapper(
      * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metadata
      * from [input]. The [dependencyType] is added as a [Property] to indicate "direct" vs "transitive" dependencies.
      */
-    private fun Bom.addComponent(pkg: Package, dependencyType: String) {
+    private fun Bom.addComponent(pkg: Package, dependencyType: DependencyType) {
         val resolvedLicenseInfo = getResolvedLicenseForId(pkg.id)
 
         val binaryHash = pkg.binaryArtifact.hash.toCycloneDx()
@@ -309,7 +313,7 @@ internal class CycloneDxModelMapper(
             purl = pkg.purl + purlQualifier
             isModified = pkg.isModified
 
-            addProperty(Property("$ORT_NAME:dependencyType", dependencyType))
+            addProperty(dependencyType.toProperty())
         }
 
         component.addExternalReference(ExternalReference.Type.WEBSITE, pkg.homepageUrl)
@@ -498,4 +502,11 @@ private fun Component.setCopyright(copyrights: Set<String>) {
             character.isIdentifierIgnorable()
         }
     }.takeUnless { it.isEmpty() }
+}
+
+private enum class DependencyType(val type: String) {
+    DIRECT("direct"),
+    TRANSITIVE("transitive");
+
+    fun toProperty() = Property("$ORT_NAME:dependencyType", type)
 }
