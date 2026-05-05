@@ -32,7 +32,7 @@
       "componentName": "declared-license",
       "componentVersion": "1.0",
       "scmUrl": "https://github.com/oss-review-toolkit/ort",
-      "modified": false,
+      "modified": true,
       "linking": null,
       "transitiveDependencies": [],
       "subcomponents": [

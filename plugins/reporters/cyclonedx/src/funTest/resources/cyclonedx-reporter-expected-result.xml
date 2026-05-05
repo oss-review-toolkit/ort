@@ -252,7 +252,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       </licenses>
       <copyright>Copyright 1</copyright>
       <purl>pkg:npm/%40ort/declared-license@1.0?classifier=sources</purl>
-      <modified>false</modified>
+      <modified>true</modified>
       <externalReferences>
         <reference type="website">
           <url>https://github.com/oss-review-toolkit/ort</url>
