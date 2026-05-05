@@ -201,6 +201,9 @@ internal fun Package.toSpdxPackage(
         name = id.name,
         originator = authors.takeUnless { it.isEmpty() }?.joinToString(prefix = "${SpdxConstants.PERSON} "),
         packageVerificationCode = packageVerificationCode,
+        sourceInfo = "This package's sources has been modified compared to its upstream original.".takeIf {
+            isModified
+        }.orEmpty(),
         supplier = authors.takeUnless { it.isEmpty() }?.joinToString(prefix = "${SpdxConstants.PERSON} "),
         versionInfo = id.version
     ).also { spdxPackage ->

@@ -159,6 +159,7 @@
     "licenseConcluded" : "NOASSERTION",
     "licenseDeclared" : "NONE",
     "name" : "pkg2",
+    "sourceInfo" : "This package's sources has been modified compared to its upstream original.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-pkg3-grp-pkg3-0.0.1",
