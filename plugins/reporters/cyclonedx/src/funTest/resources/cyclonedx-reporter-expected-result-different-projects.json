@@ -196,7 +196,7 @@
       ],
       "copyright" : "Copyright 1",
       "purl" : "pkg:npm/%40ort/declared-license@1.0?classifier=sources",
-      "modified" : false,
+      "modified" : true,
       "externalReferences" : [
         {
           "type" : "website",
