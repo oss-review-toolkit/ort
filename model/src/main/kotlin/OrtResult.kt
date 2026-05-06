@@ -512,13 +512,13 @@ data class OrtResult(
     fun getResolutions(): Resolutions = resolvedConfiguration.resolutions.orEmpty()
 
     /**
-     * Return true if and only if [violation] is resolved in this [OrtResult].
+     * Return true if [violation] is resolved in this [OrtResult].
      */
     override fun isResolved(violation: RuleViolation): Boolean =
         getResolutions().ruleViolations.any { it.matches(violation) }
 
     /**
-     * Return true if and only if [vulnerability] is resolved in this [OrtResult].
+     * Return true if [vulnerability] is resolved in this [OrtResult].
      */
     override fun isResolved(vulnerability: Vulnerability): Boolean =
         getResolutions().vulnerabilities.any { it.matches(vulnerability) }
@@ -641,7 +641,7 @@ data class OrtResult(
         }
 
     /**
-     * Return `true` if and only if the given [issue] is excluded in context of the given [id]. This is the case when
+     * Return `true` if the given [issue] is excluded in context of the given [id]. This is the case when
      * either [id] is excluded, or the [affected path][Issue.affectedPath] of [issue] is matched by a path exclude.
      */
     fun isExcluded(issue: Issue, id: Identifier): Boolean =
@@ -671,12 +671,12 @@ data class OrtResult(
     fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded == true
 
     /**
-     * Return true if and only if the given [id] denotes a [Package] contained in this [OrtResult].
+     * Return true if the given [id] denotes a [Package] contained in this [OrtResult].
      */
     fun isPackage(id: Identifier): Boolean = getPackage(id) != null
 
     /**
-     * Return true if and only if the given [id] denotes a [Project] contained in this [OrtResult].
+     * Return true if the given [id] denotes a [Project] contained in this [OrtResult].
      */
     fun isProject(id: Identifier): Boolean = getProject(id) != null
 

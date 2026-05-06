@@ -173,7 +173,7 @@ private data class QueueItem(
  * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes].
  */
 private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Identifier, List<Identifier>> {
-    // A node is visited if and only if it is a key in this map.
+    // A node is visited if it is a key in this map.
     val predecessorForVisitedNode = mutableMapOf<DependencyNode, DependencyNode?>()
     // Keep track of the end-points of the shortest paths to speed up the re-construction.
     val firstVisitedNodeForId = mutableMapOf<Identifier, DependencyNode>()

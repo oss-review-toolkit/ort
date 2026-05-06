@@ -86,8 +86,8 @@ data class ScannerMatcher(
     }
 
     /**
-     * Check whether the specified [details] match this [ScannerMatcher]. Return true if and only if the result
-     * described by the [details] fulfills all the requirements expressed by the properties of this instance.
+     * Check whether the specified [details] match this [ScannerMatcher]. Return true if the result described by the
+     * [details] fulfills all the requirements expressed by the properties of this instance.
      */
     fun matches(details: ScannerDetails): Boolean {
         if (!nameRegex.matches(details.name)) return false

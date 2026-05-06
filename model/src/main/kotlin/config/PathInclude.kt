@@ -46,7 +46,7 @@ data class PathInclude(
     val comment: String = ""
 ) {
     /**
-     * Return true if and only if this [PathInclude] matches the given [path].
+     * Return true if this [PathInclude] matches the given [path].
      */
     fun matches(path: String) =
         FileMatcher.matches(

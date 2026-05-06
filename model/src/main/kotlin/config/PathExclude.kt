@@ -46,7 +46,7 @@ data class PathExclude(
     val comment: String = ""
 ) {
     /**
-     * Return true if and only if this [PathExclude] matches the given [path].
+     * Return true if this [PathExclude] matches the given [path].
      */
     fun matches(path: String) =
         FileMatcher.matches(

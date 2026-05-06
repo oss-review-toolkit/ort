@@ -152,7 +152,7 @@ class ProjectSourceRuleTest : WordSpec({
     }
 
     "projectSourceHasVcsType" should {
-        "return true if and only if any of the given VCS types match the VCS type of the project's code repository" {
+        "return true if any of the given VCS types match the VCS type of the project's code repository" {
             val rule = createRule(
                 tempdir(),
                 createOrtResult(projectVcsType = VcsType.GIT)

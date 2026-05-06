@@ -81,12 +81,12 @@ object SpdxConstants {
     private val NOT_PRESENT_VALUES = setOf(null, NONE, NOASSERTION)
 
     /**
-     * Return true if and only if the given value is null or equals [NONE] or [NOASSERTION].
+     * Return true if the given value is null or equals [NONE] or [NOASSERTION].
      */
     fun isNotPresent(value: String?) = value in NOT_PRESENT_VALUES
 
     /**
-     * Return true if and only if the given value is not null and does not equal [NONE] or [NOASSERTION].
+     * Return true if the given value is not null and does not equal [NONE] or [NOASSERTION].
      */
     fun isPresent(value: String?) = !isNotPresent(value)
 }
