@@ -68,6 +68,15 @@ internal class CycloneDxModelMapper(
     private val input: ReporterInput,
     private val config: CycloneDxReporterConfig
 ) {
+    val resolvedLicenseForId = mutableMapOf<Identifier, ResolvedLicenseInfo>()
+
+    private fun getResolvedLicenseForId(id: Identifier): ResolvedLicenseInfo =
+        resolvedLicenseForId.getOrPut(id) {
+            input.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
+                .applyChoices(input.ortResult.getPackageLicenseChoices(id))
+                .applyChoices(input.ortResult.getRepositoryLicenseChoices())
+        }
+
     fun createSingleBom(): Bom =
         Bom().apply {
             val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
@@ -219,9 +228,7 @@ internal class CycloneDxModelMapper(
      * from [input]. The [dependencyType] is added as a [Property] to indicate "direct" vs "transitive" dependencies.
      */
     private fun Bom.addComponent(pkg: Package, dependencyType: String) {
-        val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
-            .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.id))
-            .applyChoices(input.ortResult.getRepositoryLicenseChoices())
+        val resolvedLicenseInfo = getResolvedLicenseForId(pkg.id)
 
         val concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
         val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
