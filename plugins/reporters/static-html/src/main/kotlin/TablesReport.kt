@@ -201,7 +201,7 @@ internal data class ProjectTable(
         val excludes: List<ScopeExclude>
     ) {
         /**
-         * Return true if an only if this scope is matched by any [ScopeExclude]'s.
+         * Return true if and only if this scope is matched by any [ScopeExclude]'s.
          */
         fun isExcluded(): Boolean = excludes.isNotEmpty()
     }
