@@ -38,7 +38,7 @@ import org.apache.logging.log4j.kotlin.logger
  * So in order to determine whether a specific variable "E" can be passed to a child process, this filter applies the
  * following steps:
  * - If E is contained in the allow list, it is included.
- * - Otherwise, E is included if and only if its name does not contain one of the exclusion substrings (ignoring case).
+ * - Otherwise, E is included if its name does not contain one of the exclusion substrings (ignoring case).
  *
  * TODO: Find an alternative mechanism to initialize this object from the ORT configuration (maybe using dependency
  *       injection) which does not require this object to be public.

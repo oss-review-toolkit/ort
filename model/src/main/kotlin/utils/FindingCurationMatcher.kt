@@ -49,8 +49,8 @@ class FindingCurationMatcher {
         curation.detectedLicense == null || curation.detectedLicense == finding.license
 
     /**
-     * Return true if and only if the given [curation] is applicable to the given [finding]. The [relativeFindingPath]
-     * path is the path from the directory the [curation] is relative to, to the directory the [finding] is relative to.
+     * Return true if the given [curation] is applicable to the given [finding]. The [relativeFindingPath] path is the
+     * path from the directory the [curation] is relative to, to the directory the [finding] is relative to.
      */
     fun matches(finding: LicenseFinding, curation: LicenseFindingCuration, relativeFindingPath: String = ""): Boolean =
         isPathMatching(finding, curation, relativeFindingPath) &&
@@ -60,7 +60,7 @@ class FindingCurationMatcher {
 
     /**
      * Return the curated finding if the given [curation] is applicable to the given [finding] or the given [finding]
-     * otherwise. Null is returned if and only if the given curation is applicable and its concluded license equals
+     * otherwise. Null is returned if the given curation is applicable and its concluded license equals
      * [SpdxConstants.NONE]. If the finding is relative to a subdirectory of the path that the curations are relative
      * to, this needs to be set in the [relativeFindingPath].
      */

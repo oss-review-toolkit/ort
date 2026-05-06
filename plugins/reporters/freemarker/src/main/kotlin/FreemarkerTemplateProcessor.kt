@@ -282,7 +282,7 @@ class FreemarkerTemplateProcessor(
                 .sortedBy { it.license.toString() }
 
         /**
-         * Return true if and only if the given [license] is not one of the special cases _NONE_ or _NOASSERTION_.
+         * Return true if the given [license] is not one of the special cases _NONE_ or _NOASSERTION_.
          */
         @Suppress("MemberVisibilityCanBePrivate") // This function is used in the templates.
         fun isLicensePresent(license: ResolvedLicense): Boolean = SpdxConstants.isPresent(license.license.toString())

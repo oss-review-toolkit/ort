@@ -155,7 +155,7 @@ internal fun OrtResult.processAllCopyrightStatements(
 
 /**
  * Return all license findings for the project or package associated with the given [id]. The license
- * [LicenseFindingCuration]s contained in this [OrtResult] are applied if and only if [applyCurations] is true.
+ * [LicenseFindingCuration]s contained in this [OrtResult] are applied if [applyCurations] is true.
  */
 internal fun OrtResult.getLicenseFindingsById(
     id: Identifier,

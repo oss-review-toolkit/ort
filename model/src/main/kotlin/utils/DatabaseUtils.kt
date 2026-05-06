@@ -114,7 +114,7 @@ object DatabaseUtils {
         }
 
     /**
-     * Return true if and only if a table named [tableName] exists.
+     * Return true if a table named [tableName] exists.
      */
     fun Transaction.tableExists(tableName: String): Boolean =
         tableName in currentDialectMetadata.allTablesNames().map { it.substringAfterLast(".") }

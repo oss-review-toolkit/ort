@@ -85,7 +85,7 @@ val File.formatSizeInMib: String
     get() = "${length().bytesToMib().format()} MiB"
 
 /**
- * Return true if and only if this file is a symbolic link.
+ * Return true if this file is a symbolic link.
  */
 val File.isSymbolicLink: Boolean
     get() = runCatching {

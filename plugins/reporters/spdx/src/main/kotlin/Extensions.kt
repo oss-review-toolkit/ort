@@ -423,7 +423,7 @@ private fun Findings.getLicensesByFilePath(): Map<String, Set<SpdxExpression>> {
 }
 
 /**
- * Return true if and only if this provenance is of the type specified by [sourceCodeOrigin].
+ * Return true if this provenance is of the type specified by [sourceCodeOrigin].
  */
 private fun Provenance.matches(sourceCodeOrigin: SourceCodeOrigin): Boolean =
     when (sourceCodeOrigin) {
