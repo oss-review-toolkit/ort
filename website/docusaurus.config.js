@@ -133,6 +133,10 @@ const config = {
                 label: 'Slack',
                 href: 'http://slack.oss-review-toolkit.org',
               },
+              {
+                label: 'Team',
+                href: 'mailto:ort@oss-review-toolkit.org',
+              },
             ],
           },
           {
