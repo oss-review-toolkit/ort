@@ -57,6 +57,13 @@ internal data class Token(val type: TokenType, val value: String)
 
 internal class Lexer(private val input: String) {
     private var pos = 0
+
+    fun locationInfo(): String {
+        val lines = input.take(pos - 1).lines()
+        val column = lines.last().length + 1
+        return "line ${lines.size}, column $column: '${lines.last()}'"
+    }
+
     private val length = input.length
 
     private fun peek(offset: Int = 0): Char = if (pos + offset < length) input[pos + offset] else '\u0000'
@@ -188,7 +195,10 @@ internal class Parser(input: String) {
     private var currentToken: Token = lexer.nextToken()
 
     private fun eat(type: TokenType) {
-        require(currentToken.type == type) { "Unexpected token: ${currentToken.type}, expected: $type" }
+        require(currentToken.type == type) {
+            "Unexpected token '${currentToken.value}' (${currentToken.type})" +
+                " at ${lexer.locationInfo()}, expected: $type"
+        }
         currentToken = lexer.nextToken()
     }
 
