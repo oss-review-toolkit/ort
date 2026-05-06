@@ -136,11 +136,15 @@ const config = {
             ],
           },
           {
-            title: 'More',
+            title: 'GitHub',
             items: [
               {
-                label: 'GitHub',
+                label: 'Project',
                 href: 'https://github.com/oss-review-toolkit/ort',
+              },
+              {
+                label: 'Governance',
+                href: 'https://github.com/oss-review-toolkit/ort-governance',
               },
             ],
           },
