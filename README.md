@@ -57,6 +57,7 @@ Also see the [list of related tools](https://oss-review-toolkit.org/ort/docs/rel
 ## Documentation
 
 For detailed information, see the documentation on the [ORT Website](https://oss-review-toolkit.org/ort/).
+If you have further questions, reach out to the ORT community on [Slack][2] or contact the team by [email](mailto:ort@oss-review-toolkit.org).
 
 # Installation
 
