@@ -20,15 +20,18 @@
 package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.net.PasswordAuthentication
+
 class NetRcAuthenticatorTest : WordSpec({
-    "getNetrcAuthentication()" should {
+    "parseNetrc" should {
         "correctly parse single-line contents" {
-            val authentication = getNetrcAuthentication(
+            val authentication = checkParseNetrc(
                 "machine github.com login foo password bar",
                 "github.com"
             )
@@ -40,7 +43,7 @@ class NetRcAuthenticatorTest : WordSpec({
         }
 
         "correctly parse multi-line contents" {
-            val authentication = getNetrcAuthentication(
+            val authentication = checkParseNetrc(
                 """
                 machine gitlab.com
                 login foo
@@ -56,14 +59,14 @@ class NetRcAuthenticatorTest : WordSpec({
         }
 
         "recognize the default machine" {
-            val authentication = getNetrcAuthentication(
+            val authentication = checkParseNetrc(
                 """
                 machine github.com
                 login git
                 password hub
                 default login foo password bar
                 """.trimIndent(),
-                "gitlab.com"
+                "default"
             )
 
             authentication shouldNotBeNull {
@@ -73,7 +76,7 @@ class NetRcAuthenticatorTest : WordSpec({
         }
 
         "ignore superfluous statements" {
-            val authentication = getNetrcAuthentication(
+            val authentication = checkParseNetrc(
                 """
                 machine "# A funky way to add comments."
                 login funkyLogin
@@ -94,7 +97,7 @@ class NetRcAuthenticatorTest : WordSpec({
         }
 
         "ignore superfluous whitespace" {
-            val authentication = getNetrcAuthentication(
+            val authentication = checkParseNetrc(
                 "machine github.com\t login \tfoo password bar \n",
                 "github.com"
             )
@@ -105,13 +108,71 @@ class NetRcAuthenticatorTest : WordSpec({
             }
         }
 
-        "ignore irrelevant machines" {
-            val authentication = getNetrcAuthentication(
-                "machine bitbucket.com login foo password bar",
-                "github.com"
-            )
+        "ignore incomplete entries" {
+            val credentials = parseNetrc("machine bitbucket.com login foo machine github.com password bar")
 
-            authentication should beNull()
+            credentials should beEmpty()
+        }
+    }
+
+    "NetRcAuthenticator" should {
+        "return null for an unknown machine" {
+            val authenticator = NetRcAuthenticator(emptyMap())
+
+            authenticator.requestPasswordAuthenticationInstance(
+                "github.com",
+                null,
+                -1,
+                null,
+                null,
+                null,
+                null,
+                null
+            ) should beNull()
+        }
+
+        "return the credentials for a known machine" {
+            val machine = "github.com"
+            val passwordAuthentication = PasswordAuthentication("foo", "bar".toCharArray())
+            val credentials = mapOf(
+                machine to passwordAuthentication
+            )
+            val authenticator = NetRcAuthenticator(credentials)
+
+            authenticator.requestPasswordAuthenticationInstance(
+                machine,
+                null,
+                -1,
+                null,
+                null,
+                null,
+                null,
+                null
+            ) shouldBe passwordAuthentication
+        }
+
+        "return the default credentials for an unknown machine" {
+            val passwordAuthentication = PasswordAuthentication("foo", "bar".toCharArray())
+            val credentials = mapOf(
+                "default" to passwordAuthentication
+            )
+            val authenticator = NetRcAuthenticator(credentials)
+
+            authenticator.requestPasswordAuthenticationInstance(
+                "github.com",
+                null,
+                -1,
+                null,
+                null,
+                null,
+                null,
+                null
+            ) shouldBe passwordAuthentication
         }
     }
 })
+
+/**
+ * Call the function to parse a `netrc` file with the given [contents] and query the credentials for [machine].
+ */
+private fun checkParseNetrc(contents: String, machine: String): PasswordAuthentication? = parseNetrc(contents)[machine]
