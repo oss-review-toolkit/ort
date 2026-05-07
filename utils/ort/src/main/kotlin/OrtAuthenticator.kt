@@ -24,7 +24,6 @@ import java.net.InetSocketAddress
 import java.net.PasswordAuthentication
 import java.net.Proxy
 import java.net.ProxySelector
-import java.util.concurrent.ConcurrentHashMap
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -33,10 +32,7 @@ import org.apache.logging.log4j.kotlin.logger
  * required to also be installed.
  */
 open class OrtAuthenticator(
-    private val original: Authenticator? = null,
-
-    /** A flag whether resolved authentication credentials should be cached. */
-    private val cacheAuthentication: Boolean = true
+    private val original: Authenticator? = null
 ) : Authenticator() {
     companion object {
         /**
@@ -84,8 +80,6 @@ open class OrtAuthenticator(
         original
     )
 
-    private val serverAuthentication: ConcurrentHashMap<String, PasswordAuthentication> = ConcurrentHashMap()
-
     override fun getPasswordAuthentication(): PasswordAuthentication? {
         when (requestorType) {
             RequestorType.PROXY -> {
@@ -98,8 +92,6 @@ open class OrtAuthenticator(
             }
 
             RequestorType.SERVER -> {
-                serverAuthentication[requestingHost]?.let { return it }
-
                 delegateAuthenticators.forEach { authenticator ->
                     authenticator.requestPasswordAuthenticationInstance(
                         requestingHost,
@@ -111,10 +103,6 @@ open class OrtAuthenticator(
                         requestingURL,
                         requestorType
                     )?.let {
-                        if (cacheAuthentication) {
-                            serverAuthentication[requestingHost] = it
-                        }
-
                         return it
                     }
                 }
