@@ -57,6 +57,8 @@ import org.spdx.library.SpdxModelFactory
 import org.spdx.library.model.v3_0_1.core.Element
 import org.spdx.library.model.v3_0_1.core.ExternalIdentifierType
 import org.spdx.library.model.v3_0_1.core.Hash as SpdxHash
+import org.spdx.library.model.v3_0_1.core.LifecycleScopedRelationship
+import org.spdx.library.model.v3_0_1.core.LifecycleScopeType
 import org.spdx.library.model.v3_0_1.core.Relationship
 import org.spdx.library.model.v3_0_1.core.RelationshipType
 import org.spdx.library.model.v3_0_1.core.SpdxDocument
@@ -182,6 +184,35 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
             licenseElements.filter { it.objectUri in toIds }.mapNotNull { it.licenseExpression }.forEach { licenses ->
                 licenseMap.getOrPut(fromId) { mutableMapOf() }
                     .getOrPut(checkNotNull(rel.relationshipType)) { mutableSetOf() } += licenses
+            }
+        }
+
+        // Yocto SPDX files use hasConcludedLicense where hasDeclaredLicense is semantically
+        // correct: the recipe's LICENSE variable is a declaration by the upstream author, not a
+        // conclusion from scanning. Detect the Yocto pattern by checking for build-scope
+        // LifecycleScopedRelationships (build_Build --[hasOutput/hasInput, scope=build]--> pkg)
+        // and, when found, copy every HAS_CONCLUDED_LICENSE entry to HAS_DECLARED_LICENSE so that
+        // ORT populates declaredLicenses for both install and source packages.
+        val isYoctoDocument = relationships.filterIsInstance<LifecycleScopedRelationship>().any {
+            it.scope.getOrNull() == LifecycleScopeType.BUILD &&
+                it.relationshipType.let { rt ->
+                    rt == RelationshipType.HAS_OUTPUT || rt == RelationshipType.HAS_INPUT
+                }
+        }
+
+        if (isYoctoDocument) {
+            var remappedCount = 0
+            licenseMap.values.forEach { licTypes ->
+                val concludedLicenses = licTypes[RelationshipType.HAS_CONCLUDED_LICENSE]
+                if (!concludedLicenses.isNullOrEmpty()) {
+                    licTypes.getOrPut(RelationshipType.HAS_DECLARED_LICENSE) { mutableSetOf() } += concludedLicenses
+                    remappedCount++
+                }
+            }
+
+            logger.debug {
+                "Remapped hasConcludedLicense to hasDeclaredLicense for $remappedCount element(s) " +
+                    "(Yocto pattern detected)."
             }
         }
 
