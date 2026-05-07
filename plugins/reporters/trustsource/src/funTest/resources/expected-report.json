@@ -59,6 +59,13 @@
           {
             "name": "BSD-3-Clause",
             "url": "https://spdx.org/licenses/BSD-3-Clause"
+          },
+          {
+            "name": "LicenseRef-scancode-truecrypt-3.1"
+          },
+          {
+            "name": "LGPL-3.0-or-later WITH openvpn-openssl-exception",
+            "url": "https://spdx.org/licenses/LGPL-3.0-or-later"
           }
         ],
         "package": {

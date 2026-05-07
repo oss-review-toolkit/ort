@@ -350,6 +350,18 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           </properties>
         </license>
         <license>
+          <name>LGPL-3.0-or-later WITH openvpn-openssl-exception</name>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
+        </license>
+        <license>
+          <name>LicenseRef-scancode-truecrypt-3.1</name>
+          <properties>
+            <property name="ort:origin">detected license</property>
+          </properties>
+        </license>
+        <license>
           <id>MIT</id>
           <text content-type="plain/text">Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

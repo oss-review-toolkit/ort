@@ -53,7 +53,7 @@ class PdfTemplateReporterFunTest : StringSpec({
                     String(header) shouldBe "%PDF"
                 }
 
-                reportFile.length() should beInRange(111000L..115000L)
+                reportFile.length() should beInRange(152000L..156000L)
             }
         }
     }
