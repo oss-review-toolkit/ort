@@ -235,7 +235,11 @@ private fun OrtResult.getLinkageTypesForDependencyRelationships():
             while (queue.isNotEmpty()) {
                 val parent = queue.removeFirst()
 
-                val children = parent.visitDependencies { children -> children.map { it.getStableReference() } }
+                val children = parent.visitDependencies { children ->
+                    // Map to a list instead of to a sequence, so that the conversion to the stable reference is done
+                    // within this code block. After leaving the block, the node reference are not valid anymore.
+                    children.mapTo(mutableListOf()) { it.getStableReference() }
+                }
 
                 children.forEach { child ->
                     result.getOrPut(parent.id to child.id) { mutableSetOf() } += child.linkage
