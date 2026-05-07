@@ -71,7 +71,7 @@ internal object SpdxDocumentModelMapper {
                 relatedSpdxElement = toOrtId.toSpdxId()
             )
 
-            linkageTypesForDependencyRelationships.getValue(fromOrtId to toOrtId)
+            linkageTypesForDependencyRelationships.getOrElse(fromOrtId to toOrtId) { emptySet() }
                 .mapTo(mutableSetOf()) { it.toSpdxRelationshipType() }
                 .sorted()
                 .forEach { relationshipType ->
