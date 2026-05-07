@@ -19,14 +19,19 @@
 
 package org.ossreviewtoolkit.utils.ort
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempfile
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.net.PasswordAuthentication
+
 class NetRcAuthenticatorTest : WordSpec({
-    "getNetrcAuthentication()" should {
+    "NetRcAuthenticator" should {
         "correctly parse single-line contents" {
             val authentication = getNetrcAuthentication(
                 "machine github.com login foo password bar",
@@ -63,7 +68,7 @@ class NetRcAuthenticatorTest : WordSpec({
                 password hub
                 default login foo password bar
                 """.trimIndent(),
-                "gitlab.com"
+                "default"
             )
 
             authentication shouldNotBeNull {
@@ -105,13 +110,37 @@ class NetRcAuthenticatorTest : WordSpec({
             }
         }
 
-        "ignore irrelevant machines" {
-            val authentication = getNetrcAuthentication(
-                "machine bitbucket.com login foo password bar",
-                "github.com"
-            )
+        "ignore incomplete entries" {
+            val credentials = parseNetrc("machine bitbucket.com login foo machine github.com password bar")
+
+            credentials should beEmpty()
+        }
+
+        "return null for an unknown machine" {
+            val authentication = getNetrcAuthentication("", "github.com")
 
             authentication should beNull()
         }
     }
 })
+
+/**
+ * Invoke the authenticator under test for a .netrc file with the given [contents] and query it for the given
+ * [machine].
+ */
+private fun TestConfiguration.getNetrcAuthentication(contents: String, machine: String): PasswordAuthentication? {
+    val netrcFile = tempfile().apply { writeText(contents) }
+
+    val authenticator = NetRcAuthenticator(listOf(netrcFile))
+
+    return authenticator.requestPasswordAuthenticationInstance(
+        machine,
+        null,
+        -1,
+        null,
+        null,
+        null,
+        null,
+        null
+    )
+}
