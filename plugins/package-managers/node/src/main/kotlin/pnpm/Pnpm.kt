@@ -51,7 +51,7 @@ import org.semver4j.range.RangeListFactory
 internal object PnpmCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
 
-    override fun getVersionRequirement(): RangeList = RangeListFactory.create("5.* - 10.*")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=5.0.2")
 
     override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
         super.run(
