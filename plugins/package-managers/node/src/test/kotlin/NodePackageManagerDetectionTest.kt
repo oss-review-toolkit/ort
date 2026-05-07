@@ -278,6 +278,7 @@ class NodePackageManagerDetectionTest : WordSpec({
 
             filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath } should containExactlyInAnyOrder(
                 "yarn2/dependency-with-patch/package.json",
+                "yarn2/project-with-circular-dependencies/package.json",
                 "yarn2/project-with-lockfile/package.json",
                 "yarn2/workspaces/package.json"
             )
