@@ -42,6 +42,17 @@ import org.ossreviewtoolkit.utils.test.readResource
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class JsonSchemaTest : StringSpec({
+    val schemaV7 = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
+
+    val repositoryConfigurationSchema =
+        File("../integrations/schemas/repository-configuration-schema.json").toURI()
+
+    val repositoryConfigurationAnalyzerConfiguration =
+        File("../integrations/schemas/repository-configurations/analyzer-configuration-schema.json").toURI()
+
+    val repositoryConfigurationPackageManagerConfiguration =
+        File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").toURI()
+
     "ORT's own repository configuration file validates successfully" {
         val repositoryConfiguration = File("../$ORT_REPO_CONFIG_FILENAME").readText()
 
@@ -264,14 +275,3 @@ class JsonSchemaTest : StringSpec({
         errors shouldNot beEmpty()
     }
 })
-
-private val schemaV7 = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
-
-private val repositoryConfigurationSchema =
-    File("../integrations/schemas/repository-configuration-schema.json").toURI()
-
-private val repositoryConfigurationAnalyzerConfiguration =
-    File("../integrations/schemas/repository-configurations/analyzer-configuration-schema.json").toURI()
-
-private val repositoryConfigurationPackageManagerConfiguration =
-    File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").toURI()
