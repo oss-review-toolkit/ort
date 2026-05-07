@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.plugins.reporters.aosd.AOSD20.ExternalDependency
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 @OrtPlugin(
     id = "AOSD2.0",
@@ -110,7 +109,7 @@ private fun Package.toLicenses(input: ReporterInput): List<AOSD20.License> {
 
             AOSD20.License(
                 name = name,
-                spdxId = SpdxLicense.forId(name)?.id,
+                spdxId = licenseExpression.toString(),
                 text = text.orEmpty(),
                 copyrights = copyrights.takeUnless { it.isEmpty() }?.let { AOSD20.Copyrights(copyrights) },
                 origin = origin

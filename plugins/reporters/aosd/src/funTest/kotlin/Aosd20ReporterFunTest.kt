@@ -38,14 +38,14 @@ import org.ossreviewtoolkit.utils.test.readResource
 class Aosd20ReporterFunTest : WordSpec({
     "The example JSON report" should {
         "be valid according to the schema" {
-            val schemaJson = readResource("/aosd20/aosd.schema.json")
-            val example = readResource("/aosd20/aosd.example.json")
+            val schemaJson = readResource("/aosd20/aosd-schema.json")
+            val example = readResource("/aosd20/aosd-example.json")
 
             example should matchJsonSchema(schemaJson)
         }
 
         "deserialize correctly" {
-            val aosd = getResource("/aosd20/aosd.example.json").readAosd20Report()
+            val aosd = getResource("/aosd20/aosd-example.json").readAosd20Report()
 
             with(aosd) {
                 directDependencies shouldHaveSize 1
@@ -64,7 +64,7 @@ class Aosd20ReporterFunTest : WordSpec({
         )
 
         "be valid according to the schema" {
-            val schemaJson = readResource("/aosd20/aosd.schema.json")
+            val schemaJson = readResource("/aosd20/aosd-schema.json")
 
             reportFiles.forAll {
                 it shouldBeSuccess { reportFile ->
@@ -79,14 +79,14 @@ class Aosd20ReporterFunTest : WordSpec({
             assertSoftly {
                 with(reportFiles[0]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedResult = readResource("/aosd20/aosd.NPM-%40ort-project-with-findings-1.0.json")
+                        val expectedResult = readResource("/aosd20/project-with-findings-expected-result.json")
                         actualFile.readText() shouldEqualJson expectedResult
                     }
                 }
 
                 with(reportFiles[1]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedResult = readResource("/aosd20/aosd.NPM-%40ort-project-without-findings-1.0.json")
+                        val expectedResult = readResource("/aosd20/project-without-findings-expected-result.json")
                         actualFile.readText() shouldEqualJson expectedResult
                     }
                 }

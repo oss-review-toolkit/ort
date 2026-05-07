@@ -336,8 +336,16 @@ val ORT_RESULT = OrtResult(
                             location = TextLocation("file", 1)
                         ),
                         LicenseFinding(
-                            license = "BSD-3-Clause",
-                            location = TextLocation("file", 50)
+                            license = "Apache-2.0 OR BSD-3-Clause",
+                            location = TextLocation("file2", 1)
+                        ),
+                        LicenseFinding(
+                            license = "LicenseRef-scancode-truecrypt-3.1",
+                            location = TextLocation("file3", 1)
+                        ),
+                        LicenseFinding(
+                            license = "LGPL-3.0-or-later WITH openvpn-openssl-exception",
+                            location = TextLocation("file4", 1)
                         )
                     ),
                     copyrightFindings = setOf(
