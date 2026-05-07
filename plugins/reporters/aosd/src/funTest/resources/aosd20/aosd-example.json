@@ -1,5 +1,5 @@
 {
-  "$schema": "./aosd.schema.json",
+  "$schema": "aosd-schema.json",
   "directDependencies": [
     "1"
   ],
