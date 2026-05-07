@@ -39,14 +39,14 @@ import org.ossreviewtoolkit.utils.test.readResource
 class Aosd21ReporterFunTest : WordSpec({
     "The example JSON report" should {
         "be valid according to the schema" {
-            val schemaJson = readResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")
-            val example = readResource("/aosd21/AOSD2.1_Example_Json_Import_File_V2.1.0.json")
+            val schemaJson = readResource("/aosd21/aosd-schema.json")
+            val example = readResource("/aosd21/aosd-example.json")
 
             example should matchJsonSchema(schemaJson)
         }
 
         "deserialize correctly" {
-            val aosd = getResource("/aosd21/AOSD2.1_Example_Json_Import_File_V2.1.0.json").readAosd21Report()
+            val aosd = getResource("/aosd21/aosd-example.json").readAosd21Report()
 
             with(aosd) {
                 schemaVersion shouldBe "2.1.0"
@@ -68,7 +68,7 @@ class Aosd21ReporterFunTest : WordSpec({
         )
 
         "be valid according to the schema" {
-            val schemaJson = readResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")
+            val schemaJson = readResource("/aosd21/aosd-schema.json")
 
             reportFiles.forAll {
                 it shouldBeSuccess { reportFile ->
@@ -83,14 +83,14 @@ class Aosd21ReporterFunTest : WordSpec({
             assertSoftly {
                 with(reportFiles[0]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedResult = readResource("/aosd21/aosd.NPM-%40ort-project-with-findings-1.0.json")
+                        val expectedResult = readResource("/aosd21/project-with-findings-expected-result.json")
                         actualFile.readText() shouldEqualJson expectedResult
                     }
                 }
 
                 with(reportFiles[1]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedResult = readResource("/aosd21/aosd.NPM-%40ort-project-without-findings-1.0.json")
+                        val expectedResult = readResource("/aosd21/project-without-findings-expected-result.json")
                         actualFile.readText() shouldEqualJson expectedResult
                     }
                 }
