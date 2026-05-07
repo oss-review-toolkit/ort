@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.model
 
 import com.networknt.schema.InputFormat
-import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
+import com.networknt.schema.SchemaRegistry
+import com.networknt.schema.dialect.Dialects
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
@@ -42,7 +42,11 @@ import org.ossreviewtoolkit.utils.test.readResource
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class JsonSchemaTest : StringSpec({
-    val schemaV7 = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
+    val registry = SchemaRegistry.withDialect(Dialects.getDraft7()) { builder ->
+        builder.schemaLoader { loader ->
+            loader.fetchRemoteResources()
+        }
+    }
 
     val repositoryConfigurationSchema =
         File("../integrations/schemas/repository-configuration-schema.json").readText()
@@ -55,17 +59,17 @@ class JsonSchemaTest : StringSpec({
 
     fun validate(input: Any?, schema: String) =
         when (input) {
-            is File -> schemaV7.getSchema(schema).validate(
+            is File -> registry.getSchema(schema).validate(
                 input.readText(),
                 if (input.extension == "json") InputFormat.JSON else InputFormat.YAML
             )
 
-            is String -> schemaV7.getSchema(schema).validate(
+            is String -> registry.getSchema(schema).validate(
                 input,
                 InputFormat.YAML
             )
 
-            else -> schemaV7.getSchema(schema).validate(
+            else -> registry.getSchema(schema).validate(
                 input.toYaml(),
                 InputFormat.YAML
             )
