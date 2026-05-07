@@ -618,6 +618,22 @@ FROM scratch AS cargo-credential-netrc
 COPY --from=cargo-credential-netrc-build /opt/cargo-credential-netrc /opt/cargo-credential-netrc
 
 #------------------------------------------------------------------------
+# Provenant
+FROM rustbuild AS provenantbuild
+
+ARG PROVENANT_VERSION
+
+ENV PATH=$PATH:$CARGO_HOME/bin
+
+RUN mkdir -p /opt/provenant && \
+    if [ "$(arch)" = "aarch64" ]; then \
+        PROVENANT_ARCHIVE="provenant-linux-aarch64.tar.gz"; \
+    else \
+        PROVENANT_ARCHIVE="provenant-linux-x86_64.tar.gz"; \
+    fi \
+    && curl -LSs "https://github.com/mstykow/provenant/releases/download/v$PROVENANT_VERSION/$PROVENANT_ARCHIVE" | tar -xz -C /opt/provenant
+
+#------------------------------------------------------------------------
 # Container with minimal selection of supported package managers.
 FROM base AS minimal-tools
 
@@ -754,6 +770,10 @@ COPY --from=elixir --chown=$USER:$USER $MIX_SBOM_HOME $MIX_SBOM_HOME
 ENV BOMBOM_HOME=/opt/bombom
 ENV PATH=$PATH:$BOMBOM_HOME/bin
 COPY --from=erlang --chown=$USER:$USER $BOMBOM_HOME $BOMBOM_HOME
+
+# Provenant
+COPY --from=provenantbuild --chown=$USER:$USER /opt/provenant /opt/provenant
+ENV PATH=$PATH:/opt/provenant
 
 #------------------------------------------------------------------------
 # Runtime container with minimal selection of supported package managers pre-installed.
