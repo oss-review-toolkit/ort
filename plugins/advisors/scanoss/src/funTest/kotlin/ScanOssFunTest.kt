@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.test.identifierToPackage
 
 @EnabledIf(ScanOssCheck::class)
 class ScanOssFunTest : WordSpec({
-    val apiKey = checkNotNull(ScanOssCheck.getApiKey())
+    val apiKey = checkNotNull(ScanOssCheck.getScanOssApiKey())
     val scanoss = ScanOssFactory.create(apiKey = Secret(apiKey))
 
     "retrievePackageFindings()" should {
@@ -135,7 +135,8 @@ class ScanOssFunTest : WordSpec({
 })
 
 internal object ScanOssCheck : Condition {
-    fun getApiKey(): String? = System.getenv("SCANOSS_API_KEY")
+    fun getScanOssApiKey(): String? = System.getenv("SCANOSS_API_KEY")
 
-    override fun evaluate(kclass: KClass<out Spec>): Boolean = getApiKey() != null
+    // Vulnerabilities (and copyrights) are commercial features.
+    override fun evaluate(kclass: KClass<out Spec>): Boolean = getScanOssApiKey() != null
 }
