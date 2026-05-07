@@ -50,6 +50,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.LicenseChoices
+import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -58,6 +60,7 @@ import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.scannerRunOf
 
@@ -81,6 +84,20 @@ val ORT_RESULT = OrtResult(
                     ScopeExclude(
                         pattern = "devDependencies",
                         reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF
+                    )
+                )
+            ),
+            licenseChoices = LicenseChoices(
+                packageLicenseChoices = listOf(
+                    PackageLicenseChoice(
+                        packageId = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
+                        licenseChoices = listOf(
+                            SpdxLicenseChoice(
+                                given = "Apache-2.0 OR BSD-3-Clause".toSpdx(),
+                                choice = "BSD-3-Clause".toSpdx()
+                            )
+                        )
+
                     )
                 )
             )
@@ -336,8 +353,16 @@ val ORT_RESULT = OrtResult(
                             location = TextLocation("file", 1)
                         ),
                         LicenseFinding(
-                            license = "BSD-3-Clause",
-                            location = TextLocation("file", 50)
+                            license = "Apache-2.0 OR BSD-3-Clause",
+                            location = TextLocation("file2", 1)
+                        ),
+                        LicenseFinding(
+                            license = "LicenseRef-scancode-truecrypt-3.1",
+                            location = TextLocation("file3", 1)
+                        ),
+                        LicenseFinding(
+                            license = "LGPL-3.0-or-later WITH openvpn-openssl-exception",
+                            location = TextLocation("file4", 1)
                         )
                     ),
                     copyrightFindings = setOf(

@@ -290,6 +290,28 @@
         },
         {
           "license" : {
+            "name" : "LGPL-3.0-or-later WITH openvpn-openssl-exception",
+            "properties" : [
+              {
+                "name" : "ort:origin",
+                "value" : "detected license"
+              }
+            ]
+          }
+        },
+        {
+          "license" : {
+            "name" : "LicenseRef-scancode-truecrypt-3.1",
+            "properties" : [
+              {
+                "name" : "ort:origin",
+                "value" : "detected license"
+              }
+            ]
+          }
+        },
+        {
+          "license" : {
             "id" : "MIT",
             "text" : {
               "contentType" : "plain/text",
