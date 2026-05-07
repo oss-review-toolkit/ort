@@ -51,10 +51,10 @@ class JsonSchemaTest : StringSpec({
     val repositoryConfigurationSchema =
         File("../integrations/schemas/repository-configuration-schema.json").readText()
 
-    val repositoryConfigurationAnalyzerConfiguration =
+    val repositoryConfigurationAnalyzerConfigurationSchema =
         File("../integrations/schemas/repository-configurations/analyzer-configuration-schema.json").readText()
 
-    val repositoryConfigurationPackageManagerConfiguration =
+    val repositoryConfigurationPackageManagerConfigurationSchema =
         File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").readText()
 
     fun validate(input: Any?, schema: String) =
@@ -102,7 +102,7 @@ class JsonSchemaTest : StringSpec({
             "/analyzer-repository-configuration.ort.yml"
         ).analyzer
 
-        val errors = validate(analyzerConfiguration, repositoryConfigurationAnalyzerConfiguration)
+        val errors = validate(analyzerConfiguration, repositoryConfigurationAnalyzerConfigurationSchema)
 
         errors should beEmpty()
     }
@@ -112,7 +112,7 @@ class JsonSchemaTest : StringSpec({
             "/package-manager-repository-configuration.ort.yml"
         ).analyzer?.packageManagers
 
-        val errors = validate(packageManagerConfiguration, repositoryConfigurationPackageManagerConfiguration)
+        val errors = validate(packageManagerConfiguration, repositoryConfigurationPackageManagerConfigurationSchema)
 
         errors should beEmpty()
     }
