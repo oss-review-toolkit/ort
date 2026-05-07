@@ -23,7 +23,6 @@ import java.lang.invoke.MethodHandles
 import java.net.Authenticator
 import java.net.PasswordAuthentication
 
-import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.utils.common.Os
@@ -31,62 +30,79 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.nextOrNull
 
 /**
- * A simple non-caching authenticator that reads credentials from .netrc-style files.
+ * A simple authenticator that reads credentials from .netrc-style files. The files are loaded when an instance is
+ * created, and the credentials they contain are extracted. This information is then used to answer authentication
+ * requests.
  */
-class NetRcAuthenticator : Authenticator() {
-    // TODO: Add support for ".authinfo" files (which use the same syntax as .netrc files) once Git.kt does not call the
-    //       Git CLI anymore which only supports ".netrc" (and "_netrc") files.
-    private val netrcFileNames = listOf(".netrc", "_netrc")
-
-    override fun getPasswordAuthentication(): PasswordAuthentication? {
-        netrcFileNames.forEach { name ->
-            val netrcFile = Os.userHomeDirectory / name
-            if (netrcFile.isFile) {
-                logger.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
-
-                // Read the file on each function call to be up-to-date with any changes.
-                val netrcText = netrcFile.readText()
-
-                return getNetrcAuthentication(netrcText, requestingHost)?.let { return it }
-            } else {
-                logger.debug { "No netrc file found at '$netrcFile'." }
-            }
-        }
-
-        return super.getPasswordAuthentication()
-    }
+class NetRcAuthenticator(
+    /** The map with known credentials keyed by host names. */
+    private val credentials: Map<String, PasswordAuthentication> = loadCredentials()
+) : Authenticator() {
+    override fun getPasswordAuthentication(): PasswordAuthentication? =
+        credentials[requestingHost] ?: credentials["default"] ?: super.getPasswordAuthentication()
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
  * Parse the [contents] of a [.netrc](https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html)
- * file for a login / password matching [machine].
+ * and extract a [Map] with the credentials using the machine names as keys.
  */
-internal fun getNetrcAuthentication(contents: String, machine: String): PasswordAuthentication? {
+internal fun parseNetrc(contents: String): Map<String, PasswordAuthentication> {
     val lines = contents.lines().mapNotNull { line ->
         line.trim().takeUnless { it.startsWith('#') }
     }
 
     val iterator = lines.joinToString(" ").split(Regex("\\s+")).iterator()
 
+    val credentials = mutableMapOf<String, PasswordAuthentication>()
     var machineFound: String? = null
     var login: String? = null
     var password: String? = null
 
     while (iterator.hasNext()) {
         when (val token = iterator.next()) {
-            "machine" -> machineFound = token.takeIf { iterator.nextOrNull() == machine }
+            "machine" -> {
+                machineFound = iterator.nextOrNull()
+                login = null
+                password = null
+            }
+
             "login" -> login = machineFound?.let { iterator.nextOrNull() }
+
             "password" -> password = machineFound?.let { iterator.nextOrNull() }
+
             "default" -> machineFound = token
         }
 
-        if (login != null && password != null) {
-            logger.debug { "Found a '$machineFound' entry for '$machine'." }
-            return PasswordAuthentication(login, password.toCharArray())
+        if (login != null && password != null && machineFound != null) {
+            logger.debug { "Found a '$machineFound' entry." }
+            credentials[machineFound] = PasswordAuthentication(login, password.toCharArray())
         }
     }
 
-    return null
+    return credentials
+}
+
+/**
+ * Parse all available files with credentials and return a [Map] with the found credentials.
+ */
+private fun loadCredentials(): Map<String, PasswordAuthentication> {
+    // TODO: Add support for ".authinfo" files (which use the same syntax as .netrc files) once Git.kt does not call the
+    //       Git CLI anymore which only supports ".netrc" (and "_netrc") files.
+    val netrcFileNames = listOf(".netrc", "_netrc")
+
+    return netrcFileNames.fold(emptyMap()) { credentials, name ->
+        val netrcFile = Os.userHomeDirectory / name
+        if (netrcFile.isFile) {
+            logger.debug { "Parsing '$netrcFile'." }
+
+            val netrcText = netrcFile.readText()
+
+            credentials + parseNetrc(netrcText)
+        } else {
+            logger.debug { "No netrc file found at '$netrcFile'." }
+            credentials
+        }
+    }
 }
