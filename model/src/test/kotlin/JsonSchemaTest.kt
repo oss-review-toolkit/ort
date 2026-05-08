@@ -51,12 +51,6 @@ class JsonSchemaTest : StringSpec({
     val repositoryConfigurationSchema =
         File("../integrations/schemas/repository-configuration-schema.json").readText()
 
-    val repositoryConfigurationAnalyzerConfigurationSchema =
-        File("../integrations/schemas/repository-configurations/analyzer-configuration-schema.json").readText()
-
-    val repositoryConfigurationPackageManagerConfigurationSchema =
-        File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").readText()
-
     fun validate(input: Any?, schema: String) =
         when (input) {
             is File -> registry.getSchema(schema).validate(
@@ -101,8 +95,11 @@ class JsonSchemaTest : StringSpec({
         val analyzerConfiguration = readResourceValue<RepositoryConfiguration>(
             "/analyzer-repository-configuration.ort.yml"
         ).analyzer
+        val analyzerConfigurationSchema = File(
+            "../integrations/schemas/repository-configurations/analyzer-configuration-schema.json"
+        )
 
-        val errors = validate(analyzerConfiguration, repositoryConfigurationAnalyzerConfigurationSchema)
+        val errors = validate(analyzerConfiguration, analyzerConfigurationSchema)
 
         errors should beEmpty()
     }
@@ -111,8 +108,11 @@ class JsonSchemaTest : StringSpec({
         val packageManagerConfiguration = readResourceValue<RepositoryConfiguration>(
             "/package-manager-repository-configuration.ort.yml"
         ).analyzer?.packageManagers
+        val packageManagerConfigurationSchema = File(
+            "../integrations/schemas/repository-configurations/package-manager-configuration-schema.json"
+        )
 
-        val errors = validate(packageManagerConfiguration, repositoryConfigurationPackageManagerConfigurationSchema)
+        val errors = validate(packageManagerConfiguration, packageManagerConfigurationSchema)
 
         errors should beEmpty()
     }
