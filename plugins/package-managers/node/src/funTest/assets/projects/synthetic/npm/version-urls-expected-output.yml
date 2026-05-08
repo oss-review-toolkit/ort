@@ -5194,6 +5194,12 @@ issues:
   severity: "HINT"
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
+  message: "gitignore-fallback No .npmignore file found, using .gitignore for file\
+    \ exclusion. Consider creating a .npmignore file to explicitly control published\
+    \ files."
+  severity: "HINT"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
   message: "skipping integrity check for git dependency ssh://git@github.com/jonschlinkert/gulp-format-md.git"
   severity: "HINT"
 - timestamp: "1970-01-01T00:00:00Z"
