@@ -75,7 +75,7 @@ class JsonSchemaTest : StringSpec({
             )
         }
 
-    fun validate(input: Any, schema: File) = validate(input, schema.readText())
+    fun validate(input: Any?, schema: File) = validate(input, schema.readText())
 
     "ORT's own repository configuration file validates successfully" {
         val repositoryConfiguration = File("../$ORT_REPO_CONFIG_FILENAME")
