@@ -55,8 +55,7 @@ class NpmFunTest : StringSpec({
             expectedResultFile,
             definitionFile,
             custom = mapOf(
-                "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
-                "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
+                "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}"
             )
         )
     }
@@ -127,8 +126,7 @@ class NpmFunTest : StringSpec({
 
         patchActualResult(result.toYaml()) should matchExpectedResult(
             expectedResultFile,
-            definitionFile,
-            custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "package-lock.json")
+            definitionFile
         )
     }
 
