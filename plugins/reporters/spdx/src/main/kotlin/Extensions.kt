@@ -157,6 +157,12 @@ internal fun Package.toSpdxPackage(
         .applyChoices(ortResult.getPackageLicenseChoices(id))
         .applyChoices(ortResult.getRepositoryLicenseChoices())
 
+    val effectiveLicense = resolvedLicenseInfo.effectiveLicense(
+        LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+        ortResult.getPackageLicenseChoices(id),
+        ortResult.getRepositoryLicenseChoices()
+    )
+
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
         checksums = when (type) {
@@ -175,6 +181,7 @@ internal fun Package.toSpdxPackage(
         externalRefs = if (type == SpdxPackageType.PROJECT) emptyList() else toSpdxExternalReferences(),
         filesAnalyzed = packageVerificationCode != null,
         homepage = homepageUrl.nullOrBlankToSpdxNone(),
+        licenseComments = "effectiveLicense: ${effectiveLicense?.toString().nullOrBlankToSpdxNone()}",
         licenseConcluded = when (type) {
             // Clear the concluded license as it might need to be different for the source artifact.
             SpdxPackageType.SOURCE_PACKAGE -> SpdxConstants.NOASSERTION
