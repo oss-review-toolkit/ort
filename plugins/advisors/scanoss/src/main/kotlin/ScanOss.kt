@@ -102,10 +102,10 @@ class ScanOss(
             }
         }
 
-        purls.mapTo(issues) { purl ->
+        purls.mapTo(issues) { (purl, _) ->
             Issue(
                 source = descriptor.displayName,
-                message = "The PURL '$purl' could not be mapped to a package."
+                message = "The PURL '$purl' could not be mapped to a component."
             )
         }
 
