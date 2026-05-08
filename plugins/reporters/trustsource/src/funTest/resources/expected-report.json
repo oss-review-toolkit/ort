@@ -5,8 +5,7 @@
       {
         "name": "no-license-file",
         "purl": "pkg:npm/%40ort/no-license-file@1.0",
-        "dependencies": [
-        ],
+        "dependencies": [],
         "homepageUrl": "https://github.com/oss-review-toolkit/ort",
         "checksum": {
           "NONE": ""
@@ -26,8 +25,7 @@
       {
         "name": "license-file",
         "purl": "pkg:npm/%40ort/license-file@1.0",
-        "dependencies": [
-        ],
+        "dependencies": [],
         "homepageUrl": "https://github.com/oss-review-toolkit/ort",
         "checksum": {
           "NONE": ""
@@ -48,8 +46,7 @@
       {
         "name": "license-file-and-additional-licenses",
         "purl": "pkg:npm/%40ort/license-file-and-additional-licenses@1.0",
-        "dependencies": [
-        ],
+        "dependencies": [],
         "homepageUrl": "https://github.com/oss-review-toolkit/ort",
         "checksum": {
           "NONE": ""
@@ -74,8 +71,7 @@
       {
         "name": "concluded-license",
         "purl": "pkg:npm/%40ort/concluded-license@1.0",
-        "dependencies": [
-        ],
+        "dependencies": [],
         "homepageUrl": "https://github.com/oss-review-toolkit/ort",
         "checksum": {
           "NONE": ""
@@ -100,8 +96,7 @@
       {
         "name": "declared-license",
         "purl": "pkg:npm/%40ort/declared-license@1.0",
-        "dependencies": [
-        ],
+        "dependencies": [],
         "homepageUrl": "https://github.com/oss-review-toolkit/ort",
         "checksum": {
           "NONE": ""
@@ -126,8 +121,7 @@
       {
         "name": "declared-license",
         "purl": "pkg:npm/%40ort/declared-license@1.0",
-        "dependencies": [
-        ],
+        "dependencies": [],
         "homepageUrl": "https://github.com/oss-review-toolkit/ort",
         "checksum": {
           "NONE": ""
@@ -153,12 +147,10 @@
   },
   {
     "module": "project-without-findings",
-    "dependencies": [
-    ]
+    "dependencies": []
   },
   {
     "module": "excluded-project",
-    "dependencies": [
-    ]
+    "dependencies": []
   }
 ]
