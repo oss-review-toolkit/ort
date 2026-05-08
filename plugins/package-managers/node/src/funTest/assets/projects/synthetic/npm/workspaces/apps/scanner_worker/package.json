@@ -4,5 +4,6 @@
     "license": "MIT",
     "dependencies": {
         "is-windows": "1.0.2"
-    }
+    },
+    "packageManager": "npm@11.6.2"
 }

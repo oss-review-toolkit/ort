@@ -9,5 +9,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-vis": "1.12.1"
-  }
+  },
+  "packageManager": "npm@11.6.2"
 }
