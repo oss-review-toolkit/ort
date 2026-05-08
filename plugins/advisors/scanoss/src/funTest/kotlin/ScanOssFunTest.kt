@@ -97,10 +97,10 @@ class ScanOssFunTest : WordSpec({
                 vulnerability.references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
                 } shouldNotBeNull {
-                    scoringSystem should beNull()
-                    severity shouldBe "MEDIUM"
-                    score should beNull()
-                    vector should beNull()
+                    scoringSystem shouldBe "EPSS"
+                    severity should beNull()
+                    score shouldBe 6.5E-4f
+                    vector shouldBe "0.20002"
                 }
             }
         }
@@ -124,10 +124,10 @@ class ScanOssFunTest : WordSpec({
                 vulnerability.references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2024-48948"
                 } shouldNotBeNull {
-                    scoringSystem should beNull()
-                    severity shouldBe "MEDIUM"
-                    score should beNull()
-                    vector should beNull()
+                    scoringSystem shouldBe "EPSS"
+                    severity should beNull()
+                    score shouldBe 0.00162f
+                    vector shouldBe "0.3665"
                 }
             }
         }

@@ -121,19 +121,31 @@ private fun V2Vulnerability.toOrtVulnerability(): Vulnerability? {
     val vulnId = id ?: cve ?: return null
     val infoUrl = url?.let { URI(it) } ?: return null
 
+    val references = cvss.mapTo(mutableListOf()) { info ->
+        VulnerabilityReference(
+            url = infoUrl,
+            scoringSystem = info.cvss?.substringBefore('/', "")?.ifEmpty { null },
+            severity = info.cvss_severity,
+            score = info.cvss_score,
+            vector = info.cvss
+        )
+    }
+
+    epss?.also {
+        references += VulnerabilityReference(
+            url = infoUrl,
+            scoringSystem = "EPSS",
+            severity = null,
+            score = it.probability,
+            vector = it.percentile?.toString()
+        )
+    }
+
     return Vulnerability(
         id = vulnId,
         summary = summary,
         // TODO: Get a more detailed description.
-        references = cvss.map { info ->
-            VulnerabilityReference(
-                url = infoUrl,
-                scoringSystem = info.cvss?.substringBefore('/', "")?.ifEmpty { null },
-                severity = info.cvss_severity,
-                score = info.cvss_score,
-                vector = info.cvss
-            )
-        }.ifEmpty {
+        references = references.ifEmpty {
             listOf(
                 VulnerabilityReference(
                     url = infoUrl,
