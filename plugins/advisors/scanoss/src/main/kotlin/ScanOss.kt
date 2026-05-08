@@ -86,7 +86,7 @@ class ScanOss(
         val startTime = Instant.now()
         val issues = mutableListOf<Issue>()
 
-        val purls = packages.associateByTo(mutableMapOf()) { it.purl }
+        val purls = packages.filter { it.purl.isNotEmpty() }.associateByTo(mutableMapOf()) { it.purl }
         val input = V2ComponentsRequest(purls.keys.map { V2ComponentRequest(it) })
         val response = client.vulnerabilities_GetComponentsVulnerabilities(input)
             ?: throw IOException("The API endpoint was not found.")
