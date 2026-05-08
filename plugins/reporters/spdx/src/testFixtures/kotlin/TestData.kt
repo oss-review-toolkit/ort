@@ -42,9 +42,12 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.LicenseChoices
+import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.scannerRunOf
 
@@ -63,6 +66,19 @@ val ORT_RESULT = OrtResult(
                         pattern = "test",
                         reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                         comment = "Packages for testing only."
+                    )
+                )
+            ),
+            licenseChoices = LicenseChoices(
+                packageLicenseChoices = listOf(
+                    PackageLicenseChoice(
+                        packageId = Identifier("Maven:pkg7-grp:pkg7:0.0.1"),
+                        licenseChoices = listOf(
+                            SpdxLicenseChoice(
+                                given = "BSD-3-Clause OR MIT".toSpdx(),
+                                choice = "BSD-3-Clause".toSpdx()
+                            )
+                        )
                     )
                 )
             )
@@ -238,11 +254,11 @@ val ORT_RESULT = OrtResult(
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
                 ),
-                // A package with a source artifact scan result.
+                // A package with a source artifact scan result with a license choice.
                 Package(
                     id = Identifier("Maven:pkg7-grp:pkg7:0.0.1"),
                     binaryArtifact = RemoteArtifact.EMPTY,
-                    declaredLicenses = setOf(),
+                    declaredLicenses = setOf("Apache-2.0"),
                     description = "",
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact(
@@ -344,6 +360,10 @@ val ORT_RESULT = OrtResult(
                         LicenseFinding(
                             license = "GPL-2.0-only WITH NOASSERTION",
                             location = TextLocation("LICENSE", 1)
+                        ),
+                        LicenseFinding(
+                            license = "BSD-3-Clause OR MIT",
+                            location = TextLocation("some/other/file", 1)
                         )
                     ),
                     copyrightFindings = setOf(

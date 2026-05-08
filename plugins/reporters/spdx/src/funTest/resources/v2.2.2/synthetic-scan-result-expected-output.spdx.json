@@ -218,7 +218,7 @@
     "filesAnalyzed" : false,
     "homepage" : "NONE",
     "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "GPL-2.0-only WITH NOASSERTION",
+    "licenseDeclared" : "Apache-2.0 AND GPL-2.0-only WITH NOASSERTION",
     "name" : "pkg7",
     "versionInfo" : "0.0.1"
   }, {
@@ -235,14 +235,14 @@
       "referenceLocator" : "pkg:maven/pkg7-grp/pkg7@0.0.1"
     } ],
     "filesAnalyzed" : true,
-    "hasFiles" : [ "SPDXRef-File-4", "SPDXRef-File-5" ],
+    "hasFiles" : [ "SPDXRef-File-4", "SPDXRef-File-5", "SPDXRef-File-6" ],
     "homepage" : "NONE",
     "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "GPL-2.0-only WITH NOASSERTION",
-    "licenseInfoFromFiles" : [ "GPL-2.0-only WITH NOASSERTION" ],
+    "licenseDeclared" : "Apache-2.0 AND GPL-2.0-only WITH NOASSERTION",
+    "licenseInfoFromFiles" : [ "BSD-3-Clause", "GPL-2.0-only WITH NOASSERTION" ],
     "name" : "pkg7",
     "packageVerificationCode" : {
-      "packageVerificationCodeValue" : "e14acc46fad3a38a1ef2830067619812b51cb4bc"
+      "packageVerificationCodeValue" : "b3ed5c0c343054d728700820f564a62fad4469ba"
     },
     "versionInfo" : "0.0.1"
   } ],
@@ -296,6 +296,16 @@
     "fileName" : "some/file",
     "licenseConcluded" : "NOASSERTION",
     "licenseInfoInFiles" : [ "NONE" ]
+  }, {
+    "SPDXID" : "SPDXRef-File-6",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "c927b088c3dd41fad44ef8397b3263c04aed87a0"
+    } ],
+    "copyrightText" : "NONE",
+    "fileName" : "some/other/file",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseInfoInFiles" : [ "BSD-3-Clause OR MIT" ]
   } ],
   "relationships" : [ {
     "spdxElementId" : "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1",
