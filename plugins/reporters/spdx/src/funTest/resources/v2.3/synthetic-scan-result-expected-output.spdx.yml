@@ -39,6 +39,7 @@ packages:
   downloadLocation: "https://github.com/path/proj1-repo.git"
   filesAnalyzed: false
   homepage: "https://example.com/proj1/homepage"
+  licenseComments: "effectiveLicense: MIT"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "MIT"
   name: "proj1"
@@ -48,6 +49,7 @@ packages:
   downloadLocation: "https://github.com/path/proj1-repo.git"
   filesAnalyzed: false
   homepage: "NONE"
+  licenseComments: "effectiveLicense: NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NONE"
   name: "proj2"
@@ -57,6 +59,7 @@ packages:
   downloadLocation: "https://github.com/path/proj1-repo.git"
   filesAnalyzed: false
   homepage: "NONE"
+  licenseComments: "effectiveLicense: NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NONE"
   name: "proj3"
@@ -70,6 +73,7 @@ packages:
     referenceLocator: "pkg:golang/gopkg.in/yaml.v3@3.0.1"
   filesAnalyzed: false
   homepage: "NONE"
+  licenseComments: "effectiveLicense: Apache-2.0 AND MIT"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND MIT"
   name: "gopkg.in/yaml.v3"
@@ -86,6 +90,7 @@ packages:
   - "SPDXRef-File-1"
   - "SPDXRef-File-2"
   homepage: "NONE"
+  licenseComments: "effectiveLicense: Apache-2.0 AND MIT"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND MIT"
   licenseInfoFromFiles:
@@ -110,6 +115,7 @@ packages:
     referenceLocator: "pkg:maven/pkg1-grp/pkg1@0.0.1"
   filesAnalyzed: false
   homepage: "https://example.com/pkg1/homepage"
+  licenseComments: "effectiveLicense: BSD-2-Clause AND BSD-3-Clause AND MIT"
   licenseConcluded: "BSD-2-Clause AND BSD-3-Clause AND MIT"
   licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
     \ OR MIT) AND MIT"
@@ -129,6 +135,7 @@ packages:
   hasFiles:
   - "SPDXRef-File-3"
   homepage: "https://example.com/pkg1/homepage"
+  licenseComments: "effectiveLicense: BSD-2-Clause AND BSD-3-Clause AND MIT"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
     \ OR MIT) AND MIT"
@@ -154,6 +161,7 @@ packages:
     referenceLocator: "pkg:maven/pkg1-grp/pkg1@0.0.1"
   filesAnalyzed: false
   homepage: "https://example.com/pkg1/homepage"
+  licenseComments: "effectiveLicense: BSD-2-Clause AND BSD-3-Clause AND MIT"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
     \ OR MIT) AND MIT"
@@ -168,6 +176,7 @@ packages:
     referenceLocator: "pkg:maven/pkg2-grp/pkg2@0.0.1"
   filesAnalyzed: false
   homepage: "NONE"
+  licenseComments: "effectiveLicense: NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NONE"
   name: "pkg2"
@@ -182,6 +191,7 @@ packages:
     referenceLocator: "pkg:maven/pkg3-grp/pkg3@0.0.1"
   filesAnalyzed: false
   homepage: "NONE"
+  licenseComments: "effectiveLicense: NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NONE"
   name: "pkg3"
@@ -195,6 +205,7 @@ packages:
     referenceLocator: "pkg:maven/pkg4-grp/pkg4@0.0.1"
   filesAnalyzed: false
   homepage: "NONE"
+  licenseComments: "effectiveLicense: MIT"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "MIT"
   name: "pkg4"
@@ -208,6 +219,7 @@ packages:
     referenceLocator: "pkg:maven/pkg6-grp/pkg6@0.0.1"
   filesAnalyzed: false
   homepage: "NONE"
+  licenseComments: "effectiveLicense: LicenseRef-scancode-srgb"
   licenseConcluded: "LicenseRef-scancode-srgb"
   licenseDeclared: "LicenseRef-scancode-asmus"
   name: "pkg6"
@@ -221,6 +233,8 @@ packages:
     referenceLocator: "pkg:maven/pkg7-grp/pkg7@0.0.1"
   filesAnalyzed: false
   homepage: "NONE"
+  licenseComments: "effectiveLicense: Apache-2.0 AND GPL-2.0-only WITH NOASSERTION\
+    \ AND BSD-3-Clause"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND GPL-2.0-only WITH NOASSERTION"
   name: "pkg7"
@@ -241,6 +255,8 @@ packages:
   - "SPDXRef-File-5"
   - "SPDXRef-File-6"
   homepage: "NONE"
+  licenseComments: "effectiveLicense: Apache-2.0 AND GPL-2.0-only WITH NOASSERTION\
+    \ AND BSD-3-Clause"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND GPL-2.0-only WITH NOASSERTION"
   licenseInfoFromFiles:
