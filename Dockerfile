@@ -124,7 +124,7 @@ ENTRYPOINT [ "/bin/bash" ]
 
 #------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
-FROM base AS pythonbuild
+FROM base AS python-build
 
 ARG CONAN_VERSION
 ARG CONAN2_VERSION
@@ -196,7 +196,7 @@ RUN find /opt/python -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null |
 
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
-FROM base AS nodejsbuild
+FROM base AS nodejs-build
 
 ARG BOWER_VERSION
 ARG NODEJS_VERSION
@@ -217,7 +217,7 @@ RUN --mount=type=cache,target=/opt/nvm/.cache,uid=$USER_ID,gid=$USER_GID \
 
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
-FROM base AS rubybuild
+FROM base AS ruby-build
 
 # hadolint ignore=DL3004
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -252,7 +252,7 @@ RUN rbenv install $RUBY_VERSION -v \
 
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
-FROM base AS rustbuild
+FROM base AS rust-build
 
 ARG RUST_VERSION
 
@@ -263,7 +263,7 @@ RUN curl -ksSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-to
 
 #------------------------------------------------------------------------
 # GOLANG - Build as a separate component
-FROM base AS gobuild
+FROM base AS go-build
 
 ARG GO_VERSION
 
@@ -276,7 +276,7 @@ RUN ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
 
 #------------------------------------------------------------------------
 # HASKELL STACK
-FROM base AS haskellbuild
+FROM base AS haskell-build
 
 ARG HASKELL_STACK_VERSION
 
@@ -288,7 +288,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTR
 
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
-FROM base AS androidbuild
+FROM base AS android-build
 
 ARG ANDROID_CMD_VERSION
 
@@ -321,7 +321,7 @@ RUN chmod -R o+rw "$ANDROID_HOME"
 
 #------------------------------------------------------------------------
 # Dart
-FROM base AS dartbuild
+FROM base AS dart-build
 
 ARG DART_VERSION
 
@@ -340,7 +340,7 @@ RUN --mount=type=tmpfs,target=/tmp/dart \
 
 #------------------------------------------------------------------------
 # SBT
-FROM base AS scalabuild
+FROM base AS scala-build
 
 ARG SBT_VERSION
 
@@ -351,7 +351,7 @@ RUN curl -L https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_
 
 #------------------------------------------------------------------------
 # SWIFT
-FROM base AS swiftbuild
+FROM base AS swift-build
 
 ARG SWIFT_VERSION
 
@@ -379,7 +379,7 @@ RUN mkdir -p $SWIFT_HOME \
 
 #------------------------------------------------------------------------
 # DOTNET
-FROM base AS dotnetbuild
+FROM base AS dotnet-build
 
 ARG DOTNET_VERSION
 ARG NUGET_INSPECTOR_VERSION
@@ -408,7 +408,7 @@ RUN mkdir -p $DOTNET_HOME/bin \
 
 #------------------------------------------------------------------------
 # BAZEL
-FROM base AS bazelbuild
+FROM base AS bazel-build
 
 ARG BAZELISK_VERSION
 
@@ -423,7 +423,7 @@ RUN mkdir -p $BAZEL_HOME/bin \
     fi \
     && chmod a+x $BAZEL_HOME/bin/bazel
 
-COPY --from=gobuild /opt/go /opt/go
+COPY --from=go-build /opt/go /opt/go
 
 RUN $GOBIN/go install github.com/bazelbuild/buildtools/buildozer@latest && chmod a+x $GOBIN/buildozer
 
@@ -433,7 +433,7 @@ FROM ghcr.io/sigstore/cosign/cosign:v$COSIGN_VERSION AS cosign
 
 #------------------------------------------------------------------------
 # Elixir (Mix SBoM)
-FROM base AS mix_sbom_build
+FROM base AS mix-sbom-build
 
 COPY --from=cosign /ko-app/cosign /usr/local/bin/cosign
 
@@ -459,7 +459,7 @@ RUN mkdir -p $MIX_SBOM_HOME/bin \
 
 #------------------------------------------------------------------------
 # Erlang (Rebar3 SBoM wrapped in Bombom)
-FROM base AS rebar3_sbom_build
+FROM base AS rebar3-sbom-build
 
 COPY --from=cosign /ko-app/cosign /usr/local/bin/cosign
 
@@ -484,7 +484,7 @@ RUN mkdir -p $BOMBOM_HOME/bin \
 
 #------------------------------------------------------------------------
 # ORT
-FROM base AS ortbuild
+FROM base AS ort-build
 
 # Set this to the version ORT should report.
 ARG ORT_VERSION="DOCKER-SNAPSHOT"
@@ -509,7 +509,7 @@ RUN --mount=type=cache,target=/var/tmp/gradle \
 
 #------------------------------------------------------------------------
 # Gleam
-FROM base AS gleambuild
+FROM base AS gleam-build
 
 COPY --from=cosign /ko-app/cosign /usr/local/bin/cosign
 
@@ -536,7 +536,7 @@ RUN mkdir -p $GLEAM_HOME/bin \
 
 #------------------------------------------------------------------------
 # Askalono
-FROM rustbuild AS askalonobuild
+FROM rust-build AS askalono-build
 
 ARG ASKALONO_VERSION
 
@@ -553,7 +553,7 @@ RUN mkdir -p /opt/askalono && \
 
 #------------------------------------------------------------------------
 # cargo-credential-netrc
-FROM rustbuild AS cargo-credential-netrc-build
+FROM rust-build AS cargo-credential-netrc-build
 
 ENV PATH=$PATH:$CARGO_HOME/bin
 
@@ -561,7 +561,7 @@ RUN cargo install cargo-credential-netrc --root /opt/cargo-credential-netrc
 
 #------------------------------------------------------------------------
 # Provenant
-FROM rustbuild AS provenantbuild
+FROM rust-build AS provenant-build
 
 ARG PROVENANT_VERSION
 
@@ -596,19 +596,19 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
 # Python
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
-COPY --from=pythonbuild --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
+COPY --from=python-build --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
 
 # NodeJS
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
-COPY --from=nodejsbuild --chown=$USER:$USER $NVM_DIR $NVM_DIR
+COPY --from=nodejs-build --chown=$USER:$USER $NVM_DIR $NVM_DIR
 
 # Rust
 ENV RUST_HOME=/opt/rust
 ENV CARGO_HOME=$RUST_HOME/cargo
 ENV RUSTUP_HOME=$RUST_HOME/rustup
 ENV PATH=$PATH:$CARGO_HOME/bin:$RUSTUP_HOME/bin
-COPY --from=rustbuild --chown=$USER:$USER $RUST_HOME $RUST_HOME
+COPY --from=rust-build --chown=$USER:$USER $RUST_HOME $RUST_HOME
 RUN chmod o+rwx $CARGO_HOME
 
 # cargo-credential-netrc
@@ -618,15 +618,15 @@ COPY --from=cargo-credential-netrc-build $CARGO_CREDENTIAL_NETRC_HOME $CARGO_CRE
 
 # Golang
 ENV PATH=$PATH:/opt/go/bin
-COPY --from=gobuild --chown=$USER:$USER /opt/go /opt/go
+COPY --from=go-build --chown=$USER:$USER /opt/go /opt/go
 
 # Ruby
 ENV RBENV_ROOT=/opt/rbenv
 ENV GEM_HOME=/var/tmp/gem
 ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
-COPY --from=rubybuild --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
+COPY --from=ruby-build --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
 
-COPY --from=pythonbuild --chown=$USER:$USER /opt/scancode-license-data /opt/scancode-license-data
+COPY --from=python-build --chown=$USER:$USER /opt/scancode-license-data /opt/scancode-license-data
 
 #------------------------------------------------------------------------
 # Container with all supported package managers.
@@ -642,30 +642,30 @@ ENV ANDROID_SDK_ROOT=$ANDROID_HOME
 ENV ANDROID_USER_HOME=$HOME/.android
 ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/bin
 ENV PATH=$PATH:$ANDROID_HOME/platform-tools
-COPY --from=androidbuild --chown=$USER:$USER $ANDROID_HOME $ANDROID_HOME
+COPY --from=android-build --chown=$USER:$USER $ANDROID_HOME $ANDROID_HOME
 RUN chmod o+rw $ANDROID_HOME
 
 # Swift
 ENV SWIFT_HOME=/opt/swift
 ENV PATH=$PATH:$SWIFT_HOME/bin
-COPY --from=swiftbuild --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
+COPY --from=swift-build --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
 
 # Scala
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:$SBT_HOME/bin
-COPY --from=scalabuild --chown=$USER:$USER $SBT_HOME $SBT_HOME
+COPY --from=scala-build --chown=$USER:$USER $SBT_HOME $SBT_HOME
 
 # Dart
 ENV DART_SDK=/opt/dart-sdk
 ENV PATH=$PATH:$DART_SDK/bin
-COPY --from=dartbuild --chown=$USER:$USER $DART_SDK $DART_SDK
+COPY --from=dart-build --chown=$USER:$USER $DART_SDK $DART_SDK
 
 # Dotnet
 ENV DOTNET_HOME=/opt/dotnet
 ENV NUGET_INSPECTOR_HOME=$DOTNET_HOME
 ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
 
-COPY --from=dotnetbuild --chown=$USER:$USER $DOTNET_HOME $DOTNET_HOME
+COPY --from=dotnet-build --chown=$USER:$USER $DOTNET_HOME $DOTNET_HOME
 
 # PHP
 RUN --mount=type=cache,target=/var/cache,sharing=locked \
@@ -685,36 +685,36 @@ ENV PATH=$PATH:/opt/php/bin
 ENV HASKELL_HOME=/opt/haskell
 ENV PATH=$PATH:$HASKELL_HOME/bin
 
-COPY --from=haskellbuild /opt/haskell /opt/haskell
+COPY --from=haskell-build /opt/haskell /opt/haskell
 
 # Bazel
 ENV BAZEL_HOME=/opt/bazel
 ENV PATH=$PATH:$BAZEL_HOME/bin
 
-COPY --from=bazelbuild $BAZEL_HOME $BAZEL_HOME
-COPY --from=bazelbuild --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
+COPY --from=bazel-build $BAZEL_HOME $BAZEL_HOME
+COPY --from=bazel-build --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
 
 # Askalono
-COPY --from=askalonobuild --chown=$USER:$USER /opt/askalono /opt/askalono
+COPY --from=askalono-build --chown=$USER:$USER /opt/askalono /opt/askalono
 ENV PATH=$PATH:/opt/askalono/bin
 
 # Gleam
 ENV GLEAM_HOME=/opt/gleam
 ENV PATH=$PATH:$GLEAM_HOME/bin
-COPY --from=gleambuild --chown=$USER:$USER $GLEAM_HOME $GLEAM_HOME
+COPY --from=gleam-build --chown=$USER:$USER $GLEAM_HOME $GLEAM_HOME
 
 # Elixir (Mix SBoM)
 ENV MIX_SBOM_HOME=/opt/mix_sbom
 ENV PATH=$PATH:$MIX_SBOM_HOME/bin
-COPY --from=mix_sbom_build --chown=$USER:$USER $MIX_SBOM_HOME $MIX_SBOM_HOME
+COPY --from=mix-sbom-build --chown=$USER:$USER $MIX_SBOM_HOME $MIX_SBOM_HOME
 
 # Erlang (Rebar3 SBoM wrapped in Bombom)
 ENV BOMBOM_HOME=/opt/bombom
 ENV PATH=$PATH:$BOMBOM_HOME/bin
-COPY --from=rebar3_sbom_build --chown=$USER:$USER $BOMBOM_HOME $BOMBOM_HOME
+COPY --from=rebar3-sbom-build --chown=$USER:$USER $BOMBOM_HOME $BOMBOM_HOME
 
 # Provenant
-COPY --from=provenantbuild --chown=$USER:$USER /opt/provenant /opt/provenant
+COPY --from=provenant-build --chown=$USER:$USER /opt/provenant /opt/provenant
 ENV PATH=$PATH:/opt/provenant
 
 #------------------------------------------------------------------------
@@ -722,7 +722,7 @@ ENV PATH=$PATH:/opt/provenant
 FROM minimal-tools AS minimal
 
 # ORT
-COPY --from=ortbuild --chown=$USER:$USER /opt/ort /opt/ort
+COPY --from=ort-build --chown=$USER:$USER /opt/ort /opt/ort
 ENV PATH=$PATH:/opt/ort/bin
 
 USER $USER
@@ -742,7 +742,7 @@ ARG USER_ID=1000
 ARG USER_GID=$USER_ID
 
 # ORT
-COPY --from=ortbuild --chown=$USER:$USER /opt/ort /opt/ort
+COPY --from=ort-build --chown=$USER:$USER /opt/ort /opt/ort
 ENV PATH=$PATH:/opt/ort/bin
 
 USER $USER
