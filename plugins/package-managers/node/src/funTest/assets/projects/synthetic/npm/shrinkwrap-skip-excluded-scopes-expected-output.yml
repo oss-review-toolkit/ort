@@ -760,9 +760,7 @@ packages:
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
-  message: "The npm-shrinkwrap.json file was created with an old version of npm, so\
-    \ supplemental metadata must be fetched from the registry. This is a one-time\
-    \ fix-up, please be patient..."
+  message: "skipping integrity check for git dependency ssh://git@github.com/web-animations/web-animations-js.git"
   severity: "HINT"
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
