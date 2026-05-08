@@ -15,5 +15,6 @@
   "devDependencies": {
     "gulp-format-md": "jonschlinkert/gulp-format-md#1.0.0",
     "mocha": "https://github.com/mochajs/mocha.git#5bd33a0ba201d227159759e8ced86756595b0c54"
-  }
+  },
+  "packageManager": "npm@11.6.2"
 }

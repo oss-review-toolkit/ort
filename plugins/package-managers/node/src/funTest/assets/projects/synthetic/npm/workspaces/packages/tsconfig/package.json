@@ -1,4 +1,5 @@
 {
     "name": "tsconfig",
-    "license": "MIT"
+    "license": "MIT",
+    "packageManager": "npm@11.6.2"
 }

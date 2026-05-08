@@ -13,5 +13,5 @@
         "node": "18.15.0",
         "npm": "9.5.0"
     },
-    "packageManager": "npm@9.5.0"
+    "packageManager": "npm@11.6.2"
 }
