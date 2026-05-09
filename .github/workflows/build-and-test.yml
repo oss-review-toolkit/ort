@@ -80,7 +80,7 @@ jobs:
       run: ./gradlew --scan test jacocoTestReport
       if: runner.os == 'Windows'
     - name: Create Test Summary
-      uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
+      uses: test-summary/action@37b508cfee6d4d080eedd00b5bb240a6a784a6a5 # v2
       with:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
@@ -104,7 +104,7 @@ jobs:
     - name: Run functional tests that do not require external tools
       run: ./flox/run_isolated.sh minimal ./gradlew --scan -Dkotest.tags=!RequiresExternalTool funTest jacocoFunTestReport
     - name: Create Test Summary
-      uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
+      uses: test-summary/action@37b508cfee6d4d080eedd00b5bb240a6a784a6a5 # v2
       with:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
@@ -149,7 +149,7 @@ jobs:
           ${{ env.TEST_IMAGE_TAG }} \
           -c "./gradlew --scan -Dkotest.tags=RequiresExternalTool funTest jacocoFunTestReport"
     - name: Create Test Summary
-      uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
+      uses: test-summary/action@37b508cfee6d4d080eedd00b5bb240a6a784a6a5 # v2
       with:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
