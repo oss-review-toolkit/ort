@@ -28,11 +28,13 @@ import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileList
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.zipWithSets
 
@@ -131,12 +133,38 @@ private fun merge(result: Set<ScanResult>, otherResult: Set<ScanResult>): Set<Sc
 @JvmName("mergeFileLists")
 private fun merge(list: Set<FileList>, otherList: Set<FileList>): Set<FileList> {
     val distinctFileListsForProvenance = (list + otherList).groupBy { it.provenance }.mapValues { it.value.distinct() }
-    val provenancesForConflicts = distinctFileListsForProvenance.filter { it.value.size > 1 }.keys
+    val provenancesForConflicts = mutableSetOf<KnownProvenance>()
+
+    val result = distinctFileListsForProvenance.mapNotNullTo(mutableSetOf()) { (provenance, fileLists) ->
+        fileLists.singleOrNull() ?: mergeFileListsWithSameProvenance(fileLists).alsoIfNull {
+            provenancesForConflicts += provenance
+        }
+    }
 
     require(provenancesForConflicts.isEmpty()) {
         "The file lists contain conflicting entries for the following provenances: \n" +
             "${provenancesForConflicts.toYaml()}\n."
     }
 
-    return distinctFileListsForProvenance.values.mapTo(mutableSetOf()) { it.single() }
+    return result
+}
+
+private fun mergeFileListsWithSameProvenance(fileLists: Collection<FileList>): FileList? {
+    // File lists contained in ORT files are filtered by the set of corresponding VCS paths. Merge the file lists, as
+    // long as there are no conflicting file lists, to tolerate differing sets of corresponding VCS paths in the two
+    // input files. This can happen in case packages have been skipped differently, in the scans contained in the input
+    // files.
+    val provenance = fileLists.map { it.provenance }.distinct().single()
+
+    val filesByPath = fileLists.flatMap { it.files }.groupBy { it.path }.mapValues { it.value.distinct() }
+    val pathForConflicts = filesByPath.filter { it.value.size > 1 }.keys
+
+    return if (pathForConflicts.isNotEmpty()) {
+        null
+    } else {
+        FileList(
+            provenance = provenance,
+            files = filesByPath.values.mapTo(mutableSetOf()) { it.single() }
+        )
+    }
 }
