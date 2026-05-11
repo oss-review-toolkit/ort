@@ -83,6 +83,11 @@ fun String.isSpdxExpressionOrNotPresent(strictness: Strictness = Strictness.ALLO
     SpdxConstants.isNotPresent(this) || isSpdxExpression(strictness)
 
 /**
+ * Convert a null or blank [String] to `NONE`.
+ */
+fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this
+
+/**
  * Parse this string as an [SpdxExpression] of the given [strictness] and return the result on success, or throw an
  * [SpdxException] if the string cannot be parsed.
  */

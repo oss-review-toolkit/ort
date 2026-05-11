@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
+import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNone
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
@@ -263,11 +264,6 @@ internal fun SpdxDocument.addExtractedLicenseInfo(licenseFactProvider: LicenseFa
 
     return copy(hasExtractedLicensingInfos = extractedLicenseInfo)
 }
-
-/**
- * Convert a null or blank [String] to `NONE`.
- */
-internal fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this
 
 /**
  * Create an SPDX download location string from [VcsInfo] and an optional [resolvedRevision].
