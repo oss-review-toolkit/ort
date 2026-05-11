@@ -247,9 +247,9 @@ internal class CycloneDxModelMapper(
         }
 
     private fun Component.setLicenses(
-        concludedLicenseNames: Collection<String> = emptySet(),
-        declaredLicenseNames: Collection<String> = emptySet(),
-        detectedLicenseNames: Collection<String> = emptySet()
+        declaredLicenseNames: Collection<String>,
+        detectedLicenseNames: Collection<String>,
+        concludedLicenseNames: Collection<String> = emptySet()
     ) {
         // Get all licenses, but note down their origins inside an extensible type.
         val licenseObjects = concludedLicenseNames.mapNamesToLicenses("concluded license", input) +
@@ -304,9 +304,9 @@ internal class CycloneDxModelMapper(
             hashes = listOfNotNull(hash)
 
             setLicenses(
-                concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED),
                 declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED),
-                detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
+                detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED),
+                concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
             )
 
             setCopyright(resolvedLicenseInfo.getCopyrights())
