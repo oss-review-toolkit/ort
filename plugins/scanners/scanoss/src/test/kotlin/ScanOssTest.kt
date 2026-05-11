@@ -25,6 +25,7 @@ import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.snippet.Choice
 import org.ossreviewtoolkit.model.config.snippet.Given
@@ -32,6 +33,7 @@ import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
 import org.ossreviewtoolkit.model.config.snippet.SnippetProvenance
+import org.ossreviewtoolkit.scanner.ScanContext
 
 // Sample files in the results.
 private const val FILE_1 = "a.java"
@@ -173,6 +175,32 @@ class ScanOssTest : WordSpec({
             rules.includeRules should beEmpty()
             rules.ignoreRules should beEmpty()
             rules.replaceRules should beEmpty()
+        }
+    }
+
+    "buildSettingsFromORTContext()" should {
+        "forward snippet tuning config values to FileSnippet" {
+            val config = createScanOssConfig(
+                minSnippetHits = 8,
+                minSnippetLines = 4,
+                honourFileExts = false,
+                rankingEnabled = true,
+                rankingThreshold = 60,
+                skipHeaders = true,
+                skipHeadersLimit = 100
+            )
+            val scanoss = createScanOss(config)
+            val context = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
+
+            val fileSnippet = scanoss.buildSettingsFromORTContext(context).settings.fileSnippet
+
+            fileSnippet.minSnippetHits shouldBe 8
+            fileSnippet.minSnippetLines shouldBe 4
+            fileSnippet.honourFileExts shouldBe false
+            fileSnippet.rankingEnabled shouldBe true
+            fileSnippet.rankingThreshold shouldBe 60
+            fileSnippet.skipHeaders shouldBe true
+            fileSnippet.skipHeadersLimit shouldBe 100
         }
     }
 })

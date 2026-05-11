@@ -39,17 +39,32 @@ internal fun createScanOss(config: ScanOssConfig): ScanOss = ScanOss(config = co
 /**
  * Create a standard [ScanOssConfig] whose properties can be partly specified.
  */
+@Suppress("LongParameterList")
 internal fun createScanOssConfig(
     apiUrl: String = ScanApi.DEFAULT_BASE_URL,
     apiKey: Secret = Secret(""),
     writeToStorage: Boolean = true,
-    enablePathObfuscation: Boolean = false
+    enablePathObfuscation: Boolean = false,
+    minSnippetHits: Int = 5,
+    minSnippetLines: Int = 3,
+    honourFileExts: Boolean = true,
+    rankingEnabled: Boolean = false,
+    rankingThreshold: Int = 0,
+    skipHeaders: Boolean = false,
+    skipHeadersLimit: Int = 0
 ): ScanOssConfig =
     ScanOssConfig(
         apiUrl = apiUrl,
         apiKey = apiKey,
         writeToStorage = writeToStorage,
-        enablePathObfuscation = enablePathObfuscation
+        enablePathObfuscation = enablePathObfuscation,
+        minSnippetHits = minSnippetHits,
+        minSnippetLines = minSnippetLines,
+        honourFileExts = honourFileExts,
+        rankingEnabled = rankingEnabled,
+        rankingThreshold = rankingThreshold,
+        skipHeaders = skipHeaders,
+        skipHeadersLimit = skipHeadersLimit
     )
 
 /**

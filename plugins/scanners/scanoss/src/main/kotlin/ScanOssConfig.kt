@@ -44,5 +44,61 @@ data class ScanOssConfig(
      * When enabled, the actual file paths will be obfuscated in the requests to protect sensitive information.
      */
     @OrtPluginOption(defaultValue = "false")
-    val enablePathObfuscation: Boolean
+    val enablePathObfuscation: Boolean,
+
+    /**
+     * The minimum number of snippet matches required to report a snippet finding.
+     * This parameter controls the quality filter for snippet detection results.
+     * A higher value reduces false positives but may miss some legitimate matches.
+     */
+    @OrtPluginOption(defaultValue = "5")
+    val minSnippetHits: Int,
+
+    /**
+     * The minimum number of lines required in a snippet match to report a finding.
+     * This parameter controls the minimum length threshold for snippet detections.
+     * Snippets shorter than this will be filtered out.
+     */
+    @OrtPluginOption(defaultValue = "3")
+    val minSnippetLines: Int,
+
+    /**
+     * Whether to honour file extension matching when detecting snippets.
+     * If enabled, snippet matches must be within files with matching extension to the source file.
+     * Set to false to allow matches across different file types.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val honourFileExts: Boolean,
+
+    /**
+     * Whether to enable ranking-based filtering for snippet results.
+     * When enabled, snippets are filtered based on the ranking threshold value.
+     * Set to false to disable ranking-based filtering.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val rankingEnabled: Boolean,
+
+    /**
+     * The ranking threshold used to filter snippet results when ranking is enabled.
+     * Snippets with a ranking score below this threshold will be filtered out.
+     * This value is typically between 0 and 100. Only used when rankingEnabled is true.
+     */
+    @OrtPluginOption(defaultValue = "0")
+    val rankingThreshold: Int,
+
+    /**
+     * Whether to skip header files (files with common header extensions) when detecting snippets.
+     * When enabled, files matching standard header patterns will be excluded from snippet matching.
+     * Set to false to include header files in snippet detection.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val skipHeaders: Boolean,
+
+    /**
+     * The maximum number of lines to skip in header files when skipHeaders is enabled.
+     * This limits how many lines at the beginning of a file are considered "headers" for skipping.
+     * Set to 0 to skip the entire header file if skipHeaders is enabled.
+     */
+    @OrtPluginOption(defaultValue = "0")
+    val skipHeadersLimit: Int
 )
