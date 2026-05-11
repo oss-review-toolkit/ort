@@ -257,7 +257,18 @@ class OrtConfigurationTest : WordSpec({
                     }
 
                     get("SCANOSS") shouldNotBeNull {
-                        options should containExactlyEntries("apiUrl" to "https://api.osskb.org/")
+                        options should containExactlyEntries(
+                            "apiUrl" to "https://api.osskb.org/",
+                            "writeToStorage" to "true",
+                            "enablePathObfuscation" to "false",
+                            "minSnippetHits" to "5",
+                            "minSnippetLines" to "3",
+                            "honourFileExts" to "true",
+                            "rankingEnabled" to "false",
+                            "rankingThreshold" to "0",
+                            "skipHeaders" to "false",
+                            "skipHeadersLimit" to "0"
+                        )
                         secrets should containExactlyEntries("apiKey" to "your API key")
                     }
                 }

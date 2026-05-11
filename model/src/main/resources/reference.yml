@@ -282,6 +282,16 @@ ort:
       SCANOSS:
         options:
           apiUrl: 'https://api.osskb.org/'
+          writeToStorage: true
+          enablePathObfuscation: false
+          # Snippet tuning parameters (all optional, these are the defaults):
+          minSnippetHits: 5
+          minSnippetLines: 3
+          honourFileExts: true
+          rankingEnabled: false
+          rankingThreshold: 0
+          skipHeaders: false
+          skipHeadersLimit: 0
         secrets:
           apiKey: 'your API key'
 
