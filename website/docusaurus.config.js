@@ -131,7 +131,7 @@ const config = {
               },
               {
                 label: 'Slack',
-                href: 'http://slack.oss-review-toolkit.org',
+                href: 'https://oss-review-toolkit.slack.com',
               },
               {
                 label: 'Team',

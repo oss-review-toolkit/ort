@@ -9,7 +9,7 @@
 [![REUSE status][9]][10] [![OpenSSF Best Practices][11]][12] [![OpenSSF Scorecard][13]][14]
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
-[2]: http://slack.oss-review-toolkit.org
+[2]: https://oss-review-toolkit.slack.com
 [3]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg
 [4]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml
 [5]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml/badge.svg
