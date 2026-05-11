@@ -130,13 +130,13 @@ private fun merge(result: Set<ScanResult>, otherResult: Set<ScanResult>): Set<Sc
 
 @JvmName("mergeFileLists")
 private fun merge(list: Set<FileList>, otherList: Set<FileList>): Set<FileList> {
-    val distinctFileListForProvenance = (list + otherList).groupBy { it.provenance }.mapValues { it.value.distinct() }
-    val provenancesForConflicts = distinctFileListForProvenance.filter { it.value.size > 1 }.keys
+    val distinctFileListsForProvenance = (list + otherList).groupBy { it.provenance }.mapValues { it.value.distinct() }
+    val provenancesForConflicts = distinctFileListsForProvenance.filter { it.value.size > 1 }.keys
 
     require(provenancesForConflicts.isEmpty()) {
         "The file lists contain conflicting entries for the following provenances: \n" +
             "${provenancesForConflicts.toYaml()}\n."
     }
 
-    return distinctFileListForProvenance.values.mapTo(mutableSetOf()) { it.single() }
+    return distinctFileListsForProvenance.values.mapTo(mutableSetOf()) { it.single() }
 }
