@@ -69,7 +69,7 @@ internal class CycloneDxModelMapper(
     private val input: ReporterInput,
     private val config: CycloneDxReporterConfig
 ) {
-    val resolvedLicenseForId = mutableMapOf<Identifier, ResolvedLicenseInfo>()
+    private val resolvedLicenseForId = mutableMapOf<Identifier, ResolvedLicenseInfo>()
 
     private fun getResolvedLicenseForId(id: Identifier): ResolvedLicenseInfo =
         resolvedLicenseForId.getOrPut(id) {
