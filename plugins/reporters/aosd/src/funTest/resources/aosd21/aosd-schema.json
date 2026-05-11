@@ -8,7 +8,7 @@
             "type": "string",
             "minLength": 5,
             "pattern": "[0-99].[0-99].[0-99]",
-            "description": "Field and value are mandatory - Version of the schema according to SemVer."
+            "description": "Field and value are mandatory - Version of the schema according to SemVer. - Latest version is 2.1.0."
         },
         "externalId": {
             "type": "string",
@@ -24,7 +24,7 @@
             "uniqueItems": true,
             "description": "Field and value are mandatory - Array with ID's of top level dependencies directly related to the product. However, transitive dependencies, i.e. components that are only included via direct dependencies, do not have to be listed here but as transitiveDependencies. - A product must at least contain one direct dependency.",
             "items": {
-                "type": "integer"
+                "type": "number"
             }
         },
         "components": {
@@ -134,12 +134,12 @@
                                 },
                                 "selectedLicense": {
                                     "type": "string",
-                                    "description": "Field is mandatory and value is optional, default is empty string - in case of alternative licensing for the subcomponent you should include the license identifier of the license you elect. Otherwise you have to elect the license in the tool later on. - If used please choose one of the license identifiers you provided in spdxId of this subcomponent.",
+                                    "description": "Field is mandatory and value is optional, default is empty string - in case of alternative licensing for the subcomponent you have to include the license identifier of the license you elect. - If used please choose one of the license identifiers you provided in spdxId of this subcomponent.",
                                     "default": ""
                                 },
                                 "additionalLicenseInfos": {
                                     "type": "string",
-                                    "description": "Field is mandatory and value is optional, default is empty string - the field is not for any specific information but can be used for notes regarding the licenses. (e.g. text is a permission note)",
+                                    "description": "Field is mandatory and value is optional, default is empty string - this field is for additional information such as the text from a notice file or other data",
                                     "default": ""
                                 }
                             }
