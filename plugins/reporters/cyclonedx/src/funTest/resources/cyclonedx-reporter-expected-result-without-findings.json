@@ -20,7 +20,13 @@
       "group" : "@ort",
       "name" : "project-without-findings",
       "version" : "1.0",
-      "description" : ""
+      "description" : "",
+      "properties" : [
+        {
+          "name" : "ort:effectiveLicense",
+          "value" : "NONE"
+        }
+      ]
     },
     "licenses" : [
       {
