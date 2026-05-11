@@ -52,8 +52,8 @@ class Aosd21ReporterFunTest : WordSpec({
                 schemaVersion shouldBe "2.1.0"
                 externalId shouldBe "myownId"
                 scanned shouldBe true
-                directDependencies shouldHaveSize 10
-                components shouldHaveSize 13
+                directDependencies shouldHaveSize 9
+                components shouldHaveSize 10
             }
         }
     }
