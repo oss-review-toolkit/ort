@@ -8,7 +8,6 @@ The *reporter* generates a wide variety of documents in different formats from O
 Currently, the following formats are supported (reporter names are case-insensitive):
 
 * [Audi Open Source Diagnostics (AOSD)](https://www.aosd.cloud.audi/help)
-  * Version 2.0 (`-f AOSD2.0`)
   * Version 2.1 (`-f AOSD2.1`)
 * [AsciiDoc Template](../configuration/reporter-templates.md#asciidoc-templates) (`-f AsciiDocTemplate`)
   * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
