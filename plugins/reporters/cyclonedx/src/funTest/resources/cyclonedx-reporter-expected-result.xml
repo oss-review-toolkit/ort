@@ -42,6 +42,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         </license>
       </licenses>
       <copyright>Copyright 1</copyright>
+      <properties>
+        <property name="ort:effectiveLicense">MIT</property>
+      </properties>
     </component>
     <licenses>
       <expression>CC0-1.0</expression>
@@ -180,6 +183,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         </reference>
       </externalReferences>
       <properties>
+        <property name="ort:effectiveLicense">MIT AND MIT WITH Libtool-exception</property>
         <property name="ort:dependencyType">direct</property>
       </properties>
     </component>
@@ -260,6 +264,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </reference>
       </externalReferences>
       <properties>
+        <property name="ort:effectiveLicense">MIT AND BSD-3-Clause</property>
         <property name="ort:dependencyType">direct</property>
       </properties>
     </component>
@@ -306,6 +311,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         </reference>
       </externalReferences>
       <properties>
+        <property name="ort:effectiveLicense">MIT</property>
         <property name="ort:dependencyType">direct</property>
       </properties>
     </component>
@@ -395,6 +401,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         </reference>
       </externalReferences>
       <properties>
+        <property name="ort:effectiveLicense">MIT AND BSD-3-Clause AND LicenseRef-scancode-truecrypt-3.1 AND LGPL-3.0-or-later WITH openvpn-openssl-exception</property>
         <property name="ort:dependencyType">direct</property>
       </properties>
     </component>
@@ -438,6 +445,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         </reference>
       </externalReferences>
       <properties>
+        <property name="ort:effectiveLicense">MIT</property>
         <property name="ort:dependencyType">direct</property>
       </properties>
     </component>

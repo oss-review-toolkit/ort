@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.plugins.reporters.cyclonedx
 
 import java.util.Date
@@ -53,6 +55,7 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Cvss2Rating
@@ -63,19 +66,32 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNone
+import org.ossreviewtoolkit.utils.spdx.toExpression
 
 internal class CycloneDxModelMapper(
     private val input: ReporterInput,
     private val config: CycloneDxReporterConfig
 ) {
     private val resolvedLicenseForId = mutableMapOf<Identifier, ResolvedLicenseInfo>()
+    private val effectiveLicenseForId = mutableMapOf<Identifier, SpdxExpression?>()
 
     private fun getResolvedLicenseForId(id: Identifier): ResolvedLicenseInfo =
         resolvedLicenseForId.getOrPut(id) {
             input.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
                 .applyChoices(input.ortResult.getPackageLicenseChoices(id))
                 .applyChoices(input.ortResult.getRepositoryLicenseChoices())
+        }
+
+    private fun getEffectiveLicenseForId(id: Identifier): SpdxExpression? =
+        effectiveLicenseForId.getOrPut(id) {
+            getResolvedLicenseForId(id).effectiveLicense(
+                LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+                input.ortResult.getPackageLicenseChoices(id),
+                input.ortResult.getRepositoryLicenseChoices()
+            )
         }
 
     fun createSingleBom(): Bom =
@@ -153,6 +169,7 @@ internal class CycloneDxModelMapper(
                     val resolvedLicenseInfo = getResolvedLicenseForId(project.id)
 
                     setLicenses(
+                        effectiveLicense = getEffectiveLicenseForId(project.id),
                         declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED),
                         detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
                     )
@@ -237,8 +254,14 @@ internal class CycloneDxModelMapper(
             }
 
             val resolvedLicenseInfos = projects.mapTo(mutableSetOf()) { getResolvedLicenseForId(it.id) }
+            val effectiveLicense = projects
+                .mapNotNull { getEffectiveLicenseForId(it.id) }
+                .filter { it.isPresent() }
+                .toExpression()
+                ?.simplify()
 
             setLicenses(
+                effectiveLicense = effectiveLicense,
                 declaredLicenseNames = resolvedLicenseInfos.getLicenseNames(LicenseSource.DECLARED),
                 detectedLicenseNames = resolvedLicenseInfos.getLicenseNames(LicenseSource.DETECTED)
             )
@@ -247,6 +270,7 @@ internal class CycloneDxModelMapper(
         }
 
     private fun Component.setLicenses(
+        effectiveLicense: SpdxExpression?,
         declaredLicenseNames: Collection<String>,
         detectedLicenseNames: Collection<String>,
         concludedLicenseNames: Collection<String> = emptySet()
@@ -259,6 +283,13 @@ internal class CycloneDxModelMapper(
         if (licenseObjects.isNotEmpty()) {
             licenses = LicenseChoice().apply { licenses = licenseObjects }
         }
+
+        addProperty(
+            Property(
+                "$ORT_NAME:effectiveLicense",
+                effectiveLicense?.toString().nullOrBlankToSpdxNone()
+            )
+        )
     }
 
     /**
@@ -304,6 +335,7 @@ internal class CycloneDxModelMapper(
             hashes = listOfNotNull(hash)
 
             setLicenses(
+                effectiveLicense = getEffectiveLicenseForId(pkg.id),
                 declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED),
                 detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED),
                 concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)

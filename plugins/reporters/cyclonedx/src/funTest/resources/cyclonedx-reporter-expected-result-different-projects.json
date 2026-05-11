@@ -36,7 +36,13 @@
           }
         }
       ],
-      "copyright" : "Copyright 1"
+      "copyright" : "Copyright 1",
+      "properties" : [
+        {
+          "name" : "ort:effectiveLicense",
+          "value" : "MIT"
+        }
+      ]
     },
     "licenses" : [
       {
@@ -142,6 +148,10 @@
       ],
       "properties" : [
         {
+          "name" : "ort:effectiveLicense",
+          "value" : "MIT AND MIT WITH Libtool-exception"
+        },
+        {
           "name" : "ort:dependencyType",
           "value" : "direct"
         }
@@ -206,6 +216,10 @@
       ],
       "properties" : [
         {
+          "name" : "ort:effectiveLicense",
+          "value" : "MIT AND BSD-3-Clause"
+        },
+        {
           "name" : "ort:dependencyType",
           "value" : "direct"
         }
@@ -251,6 +265,10 @@
         }
       ],
       "properties" : [
+        {
+          "name" : "ort:effectiveLicense",
+          "value" : "MIT"
+        },
         {
           "name" : "ort:dependencyType",
           "value" : "direct"
@@ -335,6 +353,10 @@
       ],
       "properties" : [
         {
+          "name" : "ort:effectiveLicense",
+          "value" : "MIT AND BSD-3-Clause AND LicenseRef-scancode-truecrypt-3.1 AND LGPL-3.0-or-later WITH openvpn-openssl-exception"
+        },
+        {
           "name" : "ort:dependencyType",
           "value" : "direct"
         }
@@ -374,6 +396,10 @@
         }
       ],
       "properties" : [
+        {
+          "name" : "ort:effectiveLicense",
+          "value" : "MIT"
+        },
         {
           "name" : "ort:dependencyType",
           "value" : "direct"
