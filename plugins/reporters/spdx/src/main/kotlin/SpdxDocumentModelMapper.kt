@@ -220,7 +220,7 @@ private fun OrtResult.getLinkageTypesForDependencyRelationships():
     val result = mutableMapOf<Pair<Identifier, Identifier>, MutableSet<PackageLinkage>>()
 
     // Traverse all non-excluded edges and collect the linkage types used in between any pair of ids.
-    getProjects(omitExcluded = true, includeSubProjects = false).forEach { project ->
+    getProjects(omitExcluded = true, includeSubProjects = true).forEach { project ->
         val scopeNames = dependencyNavigator.scopeNames(project).filterNot { isScopeExcluded(it) }
 
         scopeNames.forEach { scopeName ->
