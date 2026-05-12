@@ -190,7 +190,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
         val homepageUrl = pkgInfo.homepage.orEmpty()
 
         val id = parsePackageId(pkgInfo)
-        val conanData = conan.readConanData(id, conan.conanStoragePath, pkgInfo.recipeFolder)
+        val conanData = conan.readConanData(id, getConanPackageStoragePath(), pkgInfo.recipeFolder)
 
         return Package(
             id = id,
