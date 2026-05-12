@@ -57,7 +57,7 @@ class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
     val outputDir = tempdir()
 
-    "Generating a single BOM for all projects" should {
+    "Requesting a single BOM for all projects" should {
         "create just one file" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
@@ -69,7 +69,7 @@ class CycloneDxReporterFunTest : WordSpec({
             }
         }
 
-        "be valid XML according to schema version $defaultSchemaVersion" {
+        "create valid XML according to schema version $defaultSchemaVersion" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf(Format.XML)
@@ -109,7 +109,7 @@ class CycloneDxReporterFunTest : WordSpec({
             }
         }
 
-        "the expected XML file even if some copyrights contain non printable characters" {
+        "create the expected XML file even if some copyrights contain non-printable characters" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf(Format.XML)
@@ -123,7 +123,7 @@ class CycloneDxReporterFunTest : WordSpec({
             }
         }
 
-        "be valid JSON according to schema version $defaultSchemaVersion" {
+        "create valid JSON according to schema version $defaultSchemaVersion" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf(Format.JSON)
@@ -311,7 +311,7 @@ class CycloneDxReporterFunTest : WordSpec({
         }
     }
 
-    "Generating a separate BOM for each project" should {
+    "Requesting separate BOMs per project" should {
         "create one file per project" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = false,
@@ -322,7 +322,7 @@ class CycloneDxReporterFunTest : WordSpec({
             bomFileResults.forAll { it.shouldBeSuccess() }
         }
 
-        "generate valid XML files according to schema version $defaultSchemaVersion" {
+        "create valid XML files according to schema version $defaultSchemaVersion" {
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
@@ -344,7 +344,7 @@ class CycloneDxReporterFunTest : WordSpec({
             }
         }
 
-        "generate valid JSON files according to schema version $defaultSchemaVersion" {
+        "create valid JSON files according to schema version $defaultSchemaVersion" {
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
@@ -366,7 +366,7 @@ class CycloneDxReporterFunTest : WordSpec({
             }
         }
 
-        "generate expected JSON files" {
+        "create expected JSON files" {
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
