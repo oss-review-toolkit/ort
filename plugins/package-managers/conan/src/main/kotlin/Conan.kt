@@ -147,15 +147,6 @@ class Conan(
         }
     }
 
-    // This is where Conan caches downloaded packages [1]. Note that the package cache is not concurrent, and its
-    // layout does not support packages from different remotes that are named (and versioned) the same.
-    //
-    // TODO: Consider using the experimental (and by default disabled) download cache [2] to lift these limitations.
-    //
-    // [1]: https://docs.conan.io/en/latest/reference/config_files/conan.conf.html#storage
-    // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
-    internal val conanStoragePath by lazy { handler.getConanPackageStoragePath() }
-
     private val pkgInspectResults = mutableMapOf<String, JsonObject>()
 
     private fun hasLockfile(file: String) = File(file).isFile
@@ -215,7 +206,7 @@ class Conan(
         val conanConfig = sequenceOf(workingDir, analysisRoot).map { it / "conan_config" }
             .find { it.isDirectory }
 
-        val directoryToStash = conanConfig?.let { handler.getConanHome() } ?: conanStoragePath
+        val directoryToStash = conanConfig?.let { handler.getConanHome() } ?: handler.getConanPackageStoragePath()
 
         stashDirectories(directoryToStash).use {
             configureRemoteAuthentication(conanConfig)
