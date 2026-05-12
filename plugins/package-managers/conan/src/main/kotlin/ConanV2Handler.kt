@@ -49,7 +49,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
     override fun getConanHome(): File =
         Os.env["CONAN_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".conan2")
 
-    override fun getConanStoragePath(): File = getConanHome().resolve("p")
+    override fun getConanPackageStoragePath(): File = getConanHome().resolve("p")
 
     override fun process(definitionFile: File, lockfileName: String?, conanProfile: File?): HandlerResults {
         val workingDir = definitionFile.parentFile
