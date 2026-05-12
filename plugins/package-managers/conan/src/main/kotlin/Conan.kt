@@ -208,7 +208,7 @@ class Conan(
 
         val directoryToStash = conanConfig?.let { handler.getConanHome() } ?: handler.getConanPackageStoragePath()
 
-        stashDirectories(directoryToStash).use {
+        stashDirectories(directoryToStash, handler.getConanCacheDatabasePath()).use {
             configureRemoteAuthentication(conanConfig)
 
             // TODO: Support lockfiles which are located in a different directory than the definition file.
