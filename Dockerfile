@@ -83,8 +83,9 @@ ARG HOMEDIR=/home/ort
 
 # Non privileged user
 RUN --mount=type=tmpfs,target=/var/log \
-    groupadd --gid $USER_GID $USERNAME \
-    && useradd \
+    userdel -r ubuntu && \
+    groupadd --gid $USER_GID $USERNAME && \
+    useradd \
     --uid $USER_ID \
     --gid $USER_GID \
     --shell /bin/bash \
