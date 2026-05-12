@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  * commands or call common functions.
  */
 internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
-    override fun getConanHome(): File = Os.userHomeDirectory.resolve(".conan")
+    override fun getConanHome(): File = Os.env["CONAN_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".conan")
 
     override fun getConanStoragePath(): File = getConanHome().resolve("data")
 
