@@ -154,7 +154,7 @@ class Conan(
     //
     // [1]: https://docs.conan.io/en/latest/reference/config_files/conan.conf.html#storage
     // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
-    internal val conanStoragePath by lazy { handler.getConanStoragePath() }
+    internal val conanStoragePath by lazy { handler.getConanPackageStoragePath() }
 
     private val pkgInspectResults = mutableMapOf<String, JsonObject>()
 

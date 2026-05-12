@@ -37,9 +37,9 @@ internal interface ConanVersionHandler {
     fun getConanHome(): File
 
     /**
-     * Get the Conan storage path, i.e. the location where Conan caches downloaded packages.
+     * Get the Conan package storage path, i.e. the location where Conan caches downloaded packages.
      */
-    fun getConanStoragePath(): File
+    fun getConanPackageStoragePath(): File
 
     /**
      * Resolve the dependencies defined in the [definitionFile], with optional [lockfileName] / [conanProfile], and
