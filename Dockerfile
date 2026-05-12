@@ -597,7 +597,7 @@ RUN mkdir -p /opt/askalono && \
     if [ "$(arch)" = "aarch64" ]; then \
     cargo install --git https://github.com/jpeddicord/askalono.git --tag $ASKALONO_VERSION --root /opt/askalono; \
     else \
-    curl -LOs https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
+    curl -LOs https://github.com/jpeddicord/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
     unzip askalono-Linux.zip -d /opt/askalono/bin && \
     rm askalono-Linux.zip; \
     fi
