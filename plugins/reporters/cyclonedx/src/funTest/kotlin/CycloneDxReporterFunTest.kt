@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.reporters.cyclonedx
 
+import com.networknt.schema.InputFormat
+import com.networknt.schema.SchemaRegistry
+import com.networknt.schema.dialect.Dialects
+
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
@@ -33,9 +37,10 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
+import java.io.File
+
 import org.cyclonedx.Format
 import org.cyclonedx.model.Component
-import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
 import org.ossreviewtoolkit.model.Identifier
@@ -56,6 +61,15 @@ import org.ossreviewtoolkit.utils.test.readResource
 class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
     val outputDir = tempdir()
+
+    val registry = SchemaRegistry.withDialect(Dialects.getDraft7()) { builder ->
+        builder.schemaLoader { loader ->
+            loader.fetchRemoteResources()
+        }
+    }
+
+    fun validateJson(input: File, schema: String) =
+        registry.getSchema(schema).validate(input.readText(), InputFormat.JSON)
 
     "Requesting a single BOM for all projects" should {
         "create just one file" {
@@ -124,6 +138,8 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "create valid JSON according to schema version $defaultSchemaVersion" {
+            val schema = readResource("/bom-$defaultSchemaVersion.schema.json")
+
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf(Format.JSON)
@@ -133,7 +149,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 it shouldBeSuccess { bomFile ->
                     bomFile shouldBe aFile()
                     bomFile shouldNotBe emptyFile()
-                    JsonParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
+                    validateJson(bomFile, schema) should beEmpty()
                 }
             }
         }
@@ -345,6 +361,8 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "create valid JSON files according to schema version $defaultSchemaVersion" {
+            val schema = readResource("/bom-$defaultSchemaVersion.schema.json")
+
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
@@ -356,13 +374,13 @@ class CycloneDxReporterFunTest : WordSpec({
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                JsonParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
+                validateJson(bomFile, schema) should beEmpty()
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                JsonParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
+                validateJson(bomFile, schema) should beEmpty()
             }
         }
 
