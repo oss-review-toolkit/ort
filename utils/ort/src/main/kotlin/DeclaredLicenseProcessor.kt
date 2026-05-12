@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.utils.ort
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
@@ -31,6 +30,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.spdx.toSpdxOrNull
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 object DeclaredLicenseProcessor {
     private val urlPrefixesToRemove = listOf(

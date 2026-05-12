@@ -19,14 +19,14 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.util.StdConverter
-
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.scanner.FileList.FileEntry
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
+
+import tools.jackson.databind.annotation.JsonSerialize
+import tools.jackson.databind.util.StdConverter
 
 /**
  * The model to store a file list for a resolved provenance.

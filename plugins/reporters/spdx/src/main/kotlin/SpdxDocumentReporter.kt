@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.reporters.spdx
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-
 import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
@@ -39,6 +37,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+
+import tools.jackson.databind.node.ObjectNode
 
 @Suppress("EnumEntryNameCase", "EnumNaming")
 enum class SpdxVersion {

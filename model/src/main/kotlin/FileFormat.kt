@@ -19,14 +19,14 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValues
-
 import java.io.File
 import java.io.IOException
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValues
 
 /**
  * An enumeration of supported file formats for (de-)serialization, their primary [fileExtension] and optional aliases
@@ -103,7 +103,7 @@ inline fun <reified T : Any> File.readValue(): T =
 inline fun <reified T : Any> File.readValueOrNull(): T? {
     val mapper = mapper()
 
-    val values = mapper.factory.createParser(this).use { parser ->
+    val values = mapper.createParser(this).use { parser ->
         mapper.readValues<T>(parser).readAll().also {
             if (it.isEmpty()) return null
             if (it.size > 1) throw IOException("Multiple top-level objects found in file '$this'.")
