@@ -351,8 +351,11 @@ class Conan(
 internal fun parseConanDataYaml(yaml: String, version: String): ConanData {
     val root = Yaml.default.parseToYamlNode(yaml).yamlMap
 
-    val patchesForVersion = root.get<YamlMap>("patches")?.get<YamlList>(version)
-    val hasPatches = !patchesForVersion?.items.isNullOrEmpty()
+    val hasPatches = when (val patchesNode = root.get<YamlNode>("patches")) {
+        is YamlMap -> !patchesNode.get<YamlList>(version)?.items.isNullOrEmpty()
+        is YamlList -> patchesNode.items.isNotEmpty()
+        else -> false
+    }
 
     val sources = when (val sourcesForVersion = root.get<YamlMap>("sources")?.get<YamlNode>(version)) {
         is YamlMap -> listOf(sourcesForVersion.toConanSourceEntry())
