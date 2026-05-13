@@ -27,12 +27,9 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.file.aFile
-import io.kotest.matchers.file.emptyFile
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import org.cyclonedx.Format
 import org.cyclonedx.Version
@@ -76,8 +73,6 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
                     bomFile.readText() should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
                 }
             }
@@ -99,9 +94,6 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
-
                     val actualBom = bomFile.readText().patchCycloneDxResult().normalizeLineBreaks()
                     actualBom shouldBe expectedBom
                 }
@@ -116,8 +108,7 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
+                    bomFile.readText() should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
                 }
             }
         }
@@ -130,8 +121,6 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
                     bomFile.readText() should matchJsonSchema(schemaJson)
                 }
             }
@@ -153,9 +142,6 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
-
                     val actualBom = bomFile.readText().patchCycloneDxResult()
                     actualBom shouldEqualJson expectedBom
                 }
@@ -193,9 +179,6 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
-
                     val actualBom = bomFile.readText().patchCycloneDxResult()
                     actualBom shouldEqualJson expectedBom
                 }
@@ -233,9 +216,6 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
-
                     val actualBom = bomFile.readText().patchCycloneDxResult()
                     actualBom shouldEqualJson expectedBom
                 }
@@ -259,9 +239,6 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
-
                     val actualBom = bomFile.readText().patchCycloneDxResult()
                     actualBom shouldEqualJson expectedBom
                 }
@@ -300,9 +277,6 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
-                    bomFile shouldBe aFile()
-                    bomFile shouldNotBe emptyFile()
-
                     val actualBom = bomFile.readText().patchCycloneDxResult()
                     actualBom shouldEqualJson expectedBom
                 }
@@ -331,14 +305,10 @@ class CycloneDxReporterFunTest : WordSpec({
                 }
 
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
-                bomFile shouldBe aFile()
-                bomFile shouldNotBe emptyFile()
                 bomFile.readText() should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
-                bomFile shouldBe aFile()
-                bomFile shouldNotBe emptyFile()
                 bomFile.readText() should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
             }
         }
@@ -353,14 +323,10 @@ class CycloneDxReporterFunTest : WordSpec({
                 }
 
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
-                bomFile shouldBe aFile()
-                bomFile shouldNotBe emptyFile()
                 bomFile.readText() should matchJsonSchema(schemaJson)
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
-                bomFile shouldBe aFile()
-                bomFile shouldNotBe emptyFile()
                 bomFile.readText() should matchJsonSchema(schemaJson)
             }
         }
