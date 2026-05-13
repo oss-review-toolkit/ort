@@ -54,16 +54,7 @@ class CycloneDxReporterFunTest : WordSpec({
     val schemaJson by lazy { readResource("/bom-$DEFAULT_SCHEMA_VERSION_NAME.schema.json") }
 
     "Requesting a single BOM for all projects" should {
-        "create valid XML according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
-            val bom = generateSingleBomReport(
-                ortResult = ORT_RESULT,
-                format = Format.XML
-            )
-
-            bom should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
-        }
-
-        "create the expected XML file" {
+        "create the expected XML file according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val expectedBom = readResource("/cyclonedx-reporter-expected-result.xml")
 
             val bom = generateSingleBomReport(
@@ -72,6 +63,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 licenseFactProvider = SpdxLicenseFactProviderFactory.create()
             )
 
+            bom should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
             bom.patchCycloneDxResult() shouldBe expectedBom
         }
 
@@ -84,16 +76,7 @@ class CycloneDxReporterFunTest : WordSpec({
             bom should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
         }
 
-        "create valid JSON according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
-            val bom = generateSingleBomReport(
-                ortResult = ORT_RESULT_WITH_VULNERABILITIES,
-                format = Format.JSON
-            )
-
-            bom should matchJsonSchema(schemaJson)
-        }
-
-        "create the expected JSON file" {
+        "create the expected JSON file according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val expectedBom = readResource("/cyclonedx-reporter-expected-result.json")
 
             val bom = generateSingleBomReport(
@@ -102,6 +85,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 licenseFactProvider = SpdxLicenseFactProviderFactory.create()
             )
 
+            bom should matchJsonSchema(schemaJson)
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
         }
 
@@ -211,24 +195,17 @@ class CycloneDxReporterFunTest : WordSpec({
             }
         }
 
-        "create valid JSON files according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
-            val boms = generateMultiBomReport(
-                ortResult = ORT_RESULT_WITH_VULNERABILITIES,
-                format = Format.JSON
-            )
-
-            boms shouldHaveSize 2
-            boms.forAll { bom ->
-                bom should matchJsonSchema(schemaJson)
-            }
-        }
-
-        "create expected JSON files" {
+        "create expected JSON files according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val (bomWithFindings, bomWithoutFindings) = generateMultiBomReport(
                 ortResult = ORT_RESULT,
                 format = Format.JSON,
                 licenseFactProvider = SpdxLicenseFactProviderFactory.create()
-            ).also { it shouldHaveSize 2 }
+            ).also {
+                it shouldHaveSize 2
+                it.forAll { bom ->
+                    bom should matchJsonSchema(schemaJson)
+                }
+            }
 
             bomWithFindings.patchCycloneDxResult() shouldBe readResource(
                 "/cyclonedx-reporter-expected-result-with-findings.json"
