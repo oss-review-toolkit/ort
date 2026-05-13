@@ -163,11 +163,11 @@ RUN curl -kSs https://pyenv.run | bash \
     && pyenv global $PYTHON_VERSION
 
 RUN if [ "$(arch)" = "aarch64" ]; then \
-    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION licensedcode-data setuptools==$PYTHON_SETUPTOOLS_VERSION; \
+        pip install -U scancode-toolkit-mini==$SCANCODE_VERSION licensedcode-data setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     else \
-    curl -Os https://raw.githubusercontent.com/aboutcode-org/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION setuptools==$PYTHON_SETUPTOOLS_VERSION; \
-    rm requirements.txt; \
+        curl -Os https://raw.githubusercontent.com/aboutcode-org/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+        pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION setuptools==$PYTHON_SETUPTOOLS_VERSION; \
+        rm requirements.txt; \
     fi
 
 # Extract ScanCode license texts to a directory.
@@ -309,8 +309,8 @@ RUN --mount=type=tmpfs,target=/tmp/android \
     && PROXY_HOST_AND_PORT=${https_proxy#*://} \
     && PROXY_HOST_AND_PORT=${PROXY_HOST_AND_PORT%/} \
     && if [ -n "$PROXY_HOST_AND_PORT" ]; then \
-    # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
-    SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
+        # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
+        SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi \
     && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
 
@@ -361,9 +361,9 @@ ENV PATH=$PATH:$SWIFT_HOME/bin
 RUN mkdir -p $SWIFT_HOME \
     && echo $SWIFT_VERSION \
     && if [ "$(arch)" = "aarch64" ]; then \
-    SWIFT_PACKAGE="ubuntu2204-aarch64/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04-aarch64.tar.gz"; \
+        SWIFT_PACKAGE="ubuntu2204-aarch64/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04-aarch64.tar.gz"; \
     else \
-    SWIFT_PACKAGE="ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz"; \
+        SWIFT_PACKAGE="ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz"; \
     fi \
     && curl -L https://download.swift.org/swift-$SWIFT_VERSION-release/$SWIFT_PACKAGE \
     | tar -xz -C $SWIFT_HOME --strip-components=2 \
@@ -394,9 +394,9 @@ ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
 RUN mkdir -p $DOTNET_HOME \
     && echo $DOTNET_VERSION \
     && if [ "$(arch)" = "aarch64" ]; then \
-    curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-arm64.tar.gz | tar -C $DOTNET_HOME -xz; \
+        curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-arm64.tar.gz | tar -C $DOTNET_HOME -xz; \
     else \
-    curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-x64.tar.gz | tar -C $DOTNET_HOME -xz; \
+        curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-x64.tar.gz | tar -C $DOTNET_HOME -xz; \
     fi
 
 RUN mkdir -p $DOTNET_HOME/bin \
@@ -417,9 +417,9 @@ ENV GOBIN=/opt/go/bin
 
 RUN mkdir -p $BAZEL_HOME/bin \
     && if [ "$(arch)" = "aarch64" ]; then \
-    curl -L https://github.com/bazelbuild/bazelisk/releases/download/v$BAZELISK_VERSION/bazelisk-linux-arm64 -o $BAZEL_HOME/bin/bazel; \
+        curl -L https://github.com/bazelbuild/bazelisk/releases/download/v$BAZELISK_VERSION/bazelisk-linux-arm64 -o $BAZEL_HOME/bin/bazel; \
     else \
-    curl -L https://github.com/bazelbuild/bazelisk/releases/download/v$BAZELISK_VERSION/bazelisk-linux-amd64 -o $BAZEL_HOME/bin/bazel; \
+        curl -L https://github.com/bazelbuild/bazelisk/releases/download/v$BAZELISK_VERSION/bazelisk-linux-amd64 -o $BAZEL_HOME/bin/bazel; \
     fi \
     && chmod a+x $BAZEL_HOME/bin/bazel
 
@@ -544,11 +544,11 @@ ENV PATH=$PATH:$CARGO_HOME/bin
 
 RUN mkdir -p /opt/askalono && \
     if [ "$(arch)" = "aarch64" ]; then \
-    cargo install --git https://github.com/jpeddicord/askalono.git --tag $ASKALONO_VERSION --root /opt/askalono; \
+        cargo install --git https://github.com/jpeddicord/askalono.git --tag $ASKALONO_VERSION --root /opt/askalono; \
     else \
-    curl -LOs https://github.com/jpeddicord/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
-    unzip askalono-Linux.zip -d /opt/askalono/bin && \
-    rm askalono-Linux.zip; \
+        curl -LOs https://github.com/jpeddicord/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
+        unzip askalono-Linux.zip -d /opt/askalono/bin && \
+        rm askalono-Linux.zip; \
     fi
 
 #------------------------------------------------------------------------
