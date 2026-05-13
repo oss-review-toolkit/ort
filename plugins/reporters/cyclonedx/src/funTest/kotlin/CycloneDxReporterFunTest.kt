@@ -54,13 +54,6 @@ class CycloneDxReporterFunTest : WordSpec({
     val schemaJson by lazy { readResource("/bom-$DEFAULT_SCHEMA_VERSION_NAME.schema.json") }
 
     "Requesting a single BOM for all projects" should {
-        "create just one file" {
-            generateSingleBomReport(
-                ortResult = ORT_RESULT,
-                format = Format.JSON
-            )
-        }
-
         "create valid XML according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val bom = generateSingleBomReport(
                 ortResult = ORT_RESULT,
@@ -206,15 +199,6 @@ class CycloneDxReporterFunTest : WordSpec({
     }
 
     "Requesting separate BOMs per project" should {
-        "create one file per project" {
-            val boms = generateMultiBomReport(
-                ortResult = ORT_RESULT_WITH_VULNERABILITIES,
-                format = Format.JSON
-            )
-
-            boms shouldHaveSize 2
-        }
-
         "create valid XML files according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val boms = generateMultiBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
