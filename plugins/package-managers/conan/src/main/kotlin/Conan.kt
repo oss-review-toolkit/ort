@@ -60,7 +60,7 @@ import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.masked
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.common.stashDirectories
+import org.ossreviewtoolkit.utils.common.stashFiles
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -208,7 +208,7 @@ class Conan(
 
         val directoryToStash = conanConfig?.let { handler.getConanHome() } ?: handler.getConanPackageStoragePath()
 
-        stashDirectories(directoryToStash, handler.getConanCacheDatabasePath()).use {
+        stashFiles(directoryToStash, handler.getConanCacheDatabasePath()).use {
             configureRemoteAuthentication(conanConfig)
 
             // TODO: Support lockfiles which are located in a different directory than the definition file.
