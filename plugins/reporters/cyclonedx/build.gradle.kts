@@ -39,6 +39,5 @@ dependencies {
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
     funTestImplementation(projects.utils.testUtils)
 
-    funTestImplementation(libs.jsonSchemaValidator)
     funTestImplementation(libs.kotest.assertions.json)
 }

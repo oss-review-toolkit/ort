@@ -19,10 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.reporters.cyclonedx
 
-import com.networknt.schema.InputFormat
-import com.networknt.schema.SchemaRegistry
-import com.networknt.schema.dialect.Dialects
-
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
@@ -36,8 +32,6 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-
-import java.io.File
 
 import org.cyclonedx.Format
 import org.cyclonedx.model.Component
@@ -56,21 +50,13 @@ import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.readResource
 
 class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
     val schema by lazy { readResource("/bom-$defaultSchemaVersion.schema.json") }
     val outputDir = tempdir()
-
-    val registry = SchemaRegistry.withDialect(Dialects.getDraft7()) { builder ->
-        builder.schemaLoader { loader ->
-            loader.fetchRemoteResources()
-        }
-    }
-
-    fun validateJson(input: File, schema: String) =
-        registry.getSchema(schema).validate(input.readText(), InputFormat.JSON)
 
     "Requesting a single BOM for all projects" should {
         "create just one file" {
@@ -148,7 +134,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 it shouldBeSuccess { bomFile ->
                     bomFile shouldBe aFile()
                     bomFile shouldNotBe emptyFile()
-                    validateJson(bomFile, schema) should beEmpty()
+                    bomFile.readText() should matchJsonSchema(schema)
                 }
             }
         }
@@ -371,13 +357,13 @@ class CycloneDxReporterFunTest : WordSpec({
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                validateJson(bomFile, schema) should beEmpty()
+                bomFile.readText() should matchJsonSchema(schema)
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                validateJson(bomFile, schema) should beEmpty()
+                bomFile.readText() should matchJsonSchema(schema)
             }
         }
 
