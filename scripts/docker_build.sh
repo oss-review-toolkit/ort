@@ -25,8 +25,9 @@ DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 echo "ORT_VERSION was set to: $ORT_VERSION"
 
-# shellcheck disable=SC2046
-export $(cat "$GIT_ROOT/.env.versions" | xargs)
+set -o allexport
+source .env.versions
+set +o allexport
 
 # ---------------------------
 # image_build function
