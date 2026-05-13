@@ -361,9 +361,9 @@ ENV PATH=$PATH:$SWIFT_HOME/bin
 RUN mkdir -p $SWIFT_HOME \
     && echo $SWIFT_VERSION \
     && if [ "$(arch)" = "aarch64" ]; then \
-        SWIFT_PACKAGE="ubuntu2204-aarch64/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04-aarch64.tar.gz"; \
+        SWIFT_PACKAGE="ubuntu2404-aarch64/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu24.04-aarch64.tar.gz"; \
     else \
-        SWIFT_PACKAGE="ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz"; \
+        SWIFT_PACKAGE="ubuntu2404/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu24.04.tar.gz"; \
     fi \
     && curl -L https://download.swift.org/swift-$SWIFT_VERSION-release/$SWIFT_PACKAGE \
     | tar -xz -C $SWIFT_HOME --strip-components=2 \
