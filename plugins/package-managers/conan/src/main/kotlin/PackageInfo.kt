@@ -110,7 +110,7 @@ private data class PackageInfoV2Raw(
                 license = it.license,
                 homepage = it.homepage,
                 label = it.label,
-                requires = directDependencies.mapNotNull { dep -> dep.ref.takeIf { dep.visible } },
+                requires = directDependencies.mapNotNull { dep -> dep.ref.takeUnless { dep.build || dep.test } },
                 buildRequires = directDependencies.mapNotNull { dep -> dep.ref.takeIf { dep.build } },
                 testRequires = directDependencies.mapNotNull { dep -> dep.ref.takeIf { dep.test } },
                 recipeFolder = it.recipeFolder,
