@@ -184,11 +184,31 @@ internal data class DependencyReference(
     val direct: Boolean = false,
 
     /**
+     * This requires will force its version in the dependency graph upstream, overriding other existing versions even of
+     * transitive dependencies, and also solving potential existing conflicts. The downstream consumer's force traits
+     * always have higher priority.
+     */
+    val force: Boolean = false,
+
+    /**
+     * Indicates that there are headers that are going to be included from this package at compile time. The dependency
+     * will be in the host context.
+     */
+    val headers: Boolean = false,
+
+    /**
      * The dependency contains some library or artifact that will be used at link time of the consumer. This trait will
      * typically be true for direct shared and static libraries, but could be false for indirect static libraries that
      * are consumed via a shared library. The dependency will be in the host context.
      */
     val libs: Boolean = false,
+
+    /**
+     * The same as the force trait, but not adding a direct dependency. If there is no transitive dependency to
+     * override, this "requires" will be discarded. This trait only exists at the time of defining a "requires", but it
+     * will not exist as an actual "requires" once the graph is fully evaluated.
+     */
+    val override: Boolean = false,
 
     /**
      * This dependency contains some executables, either apps or shared libraries that need to be available to execute
