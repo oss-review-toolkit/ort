@@ -60,6 +60,7 @@ import org.ossreviewtoolkit.utils.test.readResource
 
 class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
+    val schema by lazy { readResource("/bom-$defaultSchemaVersion.schema.json") }
     val outputDir = tempdir()
 
     val registry = SchemaRegistry.withDialect(Dialects.getDraft7()) { builder ->
@@ -138,8 +139,6 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "create valid JSON according to schema version $defaultSchemaVersion" {
-            val schema = readResource("/bom-$defaultSchemaVersion.schema.json")
-
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf(Format.JSON)
@@ -361,8 +360,6 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "create valid JSON files according to schema version $defaultSchemaVersion" {
-            val schema = readResource("/bom-$defaultSchemaVersion.schema.json")
-
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
