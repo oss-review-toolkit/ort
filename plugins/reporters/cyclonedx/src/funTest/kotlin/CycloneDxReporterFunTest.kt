@@ -23,7 +23,8 @@ import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.file.aFile
@@ -34,6 +35,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 import org.cyclonedx.Format
+import org.cyclonedx.Version
 import org.cyclonedx.model.Component
 import org.cyclonedx.parsers.XmlParser
 
@@ -80,7 +82,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 it shouldBeSuccess { bomFile ->
                     bomFile shouldBe aFile()
                     bomFile shouldNotBe emptyFile()
-                    XmlParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
+                    bomFile.readText() should matchCycloneDxXmlSchema(defaultSchemaVersion)
                 }
             }
         }
@@ -335,13 +337,13 @@ class CycloneDxReporterFunTest : WordSpec({
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                XmlParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
+                bomFile.readText() should matchCycloneDxXmlSchema(defaultSchemaVersion)
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                XmlParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
+                bomFile.readText() should matchCycloneDxXmlSchema(defaultSchemaVersion)
             }
         }
 
@@ -420,3 +422,15 @@ private fun createResultWithAdditionalProject(project: Project): OrtResult =
             )
         )
     )
+
+private fun matchCycloneDxXmlSchema(schemaVersion: String): Matcher<String> =
+    Matcher { actual ->
+        val version = Version.entries.single { it.versionString == schemaVersion }
+        val parseExceptions = XmlParser().validate(actual.byteInputStream(), version)
+
+        MatcherResult(
+            parseExceptions.isEmpty(),
+            { parseExceptions.joinToString(separator = "\n") { it.message.orEmpty() } },
+            { "Expected some parse exception against XML schema, but everything matched" }
+        )
+    }
