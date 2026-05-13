@@ -110,6 +110,7 @@ private data class PackageInfoV2Raw(
                 license = it.license,
                 homepage = it.homepage,
                 label = it.label,
+                // See https://docs.conan.io/2/reference/conanfile/methods/requirements.html#default-traits-for-each-kind-of-requires.
                 requires = directDependencies.mapNotNull { dep -> dep.ref.takeUnless { dep.build || dep.test } },
                 buildRequires = directDependencies.mapNotNull { dep -> dep.ref.takeIf { dep.build } },
                 testRequires = directDependencies.mapNotNull { dep -> dep.ref.takeIf { dep.test } },
@@ -163,14 +164,54 @@ internal enum class PackageType {
     @SerialName("unknown") UNKNOWN
 }
 
+/**
+ * See https://docs.conan.io/2/reference/conanfile/methods/requirements.html#requirement-traits.
+ */
 @Serializable
 internal data class DependencyReference(
-    val build: Boolean = false,
-    val direct: Boolean = false,
-    val libs: Boolean = false,
     val ref: String,
+
+    /**
+     * This dependency is a build tool, an application or executable, like cmake, that is used exclusively at build
+     * time. It is not linked/embedded into binaries, and will be in the build context.
+     */
+    val build: Boolean = false,
+
+    /**
+     * If the dependency is a direct one, that is, it has explicitly been declared by the current recipe, or if it is a
+     * transitive one.
+     */
+    val direct: Boolean = false,
+
+    /**
+     * The dependency contains some library or artifact that will be used at link time of the consumer. This trait will
+     * typically be true for direct shared and static libraries, but could be false for indirect static libraries that
+     * are consumed via a shared library. The dependency will be in the host context.
+     */
+    val libs: Boolean = false,
+
+    /**
+     * This dependency contains some executables, either apps or shared libraries that need to be available to execute
+     * (typically in the path, or other system env-vars). This trait can be true if [build] is false. In that case, the
+     * package will contain some executables that can run in the host system when installing it, typically like an
+     * end-user application. This trait can be true if [build] is true, then the package will contain executables that
+     * will run in the build context, typically while being used to build other packages.
+     */
     val run: Boolean = false,
+
+    /**
+     * This requirement is a test library or framework, like Catch2 or gtest. It is mostly a library that needs to be
+     * included and linked, but that will not be propagated downstream.
+     */
     val test: Boolean = false,
+
+    /**
+     * This require will be propagated downstream, even if it does not propagate headers, libs or run traits.
+     * Requirements that propagate downstream can cause version conflicts. This is typically true, because in most
+     * cases, having two different versions of the same library in the same dependency graph is at least complicated, if
+     * not directly violating ODR or causing linking errors. It can be set to false in advanced scenarios, when we want
+     * to use different versions of the same package during the build.
+     */
     val visible: Boolean = false
 )
 
