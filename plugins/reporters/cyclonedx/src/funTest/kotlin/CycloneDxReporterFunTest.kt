@@ -197,7 +197,7 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "create expected JSON files according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val (bomWithFindings, bomWithoutFindings) = generateMultiBomReport(
-                ortResult = ORT_RESULT,
+                ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
                 licenseFactProvider = SpdxLicenseFactProviderFactory.create()
             ).also {
