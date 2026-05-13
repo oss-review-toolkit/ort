@@ -448,7 +448,13 @@ private val VULNERABILITY = Vulnerability(
     summary = "A vulnerability summary",
     description = "A vulnerability description",
     references = listOf(
-        VulnerabilityReference(URI("https://cves.example.org/cve1"), "CVSSv2", "MEDIUM", 6.0f, null)
+        VulnerabilityReference(
+            url = URI("https://cves.example.org/cve1"),
+            scoringSystem = "CVSSv2",
+            severity = "MEDIUM",
+            score = 6.0f,
+            vector = null
+        )
     )
 )
 
