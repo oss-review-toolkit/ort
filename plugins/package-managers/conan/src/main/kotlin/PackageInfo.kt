@@ -101,6 +101,7 @@ private data class PackageInfoV2Raw(
 ) {
     fun toPackageInfoV2() =
         graph.nodes.values.map {
+            val directDependencies = it.dependencies.values.filter { dep -> dep.direct }
             PackageInfoV2(
                 author = it.author,
                 revision = it.rrev,
@@ -109,15 +110,9 @@ private data class PackageInfoV2Raw(
                 license = it.license,
                 homepage = it.homepage,
                 label = it.label,
-                requires = it.dependencies.values.filter { dep ->
-                    dep.direct && dep.visible
-                }.map { dep2 -> dep2.ref },
-                buildRequires = it.dependencies.values.filter { dep ->
-                    dep.build && dep.direct
-                }.map { dep2 -> dep2.ref },
-                testRequires = it.dependencies.values.filter { dep ->
-                    dep.test && dep.direct
-                }.map { dep2 -> dep2.ref },
+                requires = directDependencies.mapNotNull { dep -> dep.ref.takeIf { dep.visible } },
+                buildRequires = directDependencies.mapNotNull { dep -> dep.ref.takeIf { dep.build } },
+                testRequires = directDependencies.mapNotNull { dep -> dep.ref.takeIf { dep.test } },
                 recipeFolder = it.recipeFolder,
                 description = it.description,
                 name = it.name.orEmpty(),
