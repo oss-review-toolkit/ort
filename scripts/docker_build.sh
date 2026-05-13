@@ -23,7 +23,7 @@ GIT_ROOT=$(git rev-parse --show-toplevel)
 ORT_VERSION=$("$GIT_ROOT/gradlew" -q properties --property version | sed -nr "s/version: (.+)/\1/p")
 DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
-echo "Setting ORT_VERSION to $ORT_VERSION."
+echo "ORT_VERSION was set to: $ORT_VERSION"
 
 # shellcheck disable=SC2046
 export $(cat "$GIT_ROOT/.env.versions" | xargs)
