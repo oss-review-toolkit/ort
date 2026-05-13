@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.utils.test.readResource
 
 class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
-    val schema by lazy { readResource("/bom-$defaultSchemaVersion.schema.json") }
+    val schemaJson by lazy { readResource("/bom-$defaultSchemaVersion.schema.json") }
     val outputDir = tempdir()
 
     "Requesting a single BOM for all projects" should {
@@ -134,7 +134,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 it shouldBeSuccess { bomFile ->
                     bomFile shouldBe aFile()
                     bomFile shouldNotBe emptyFile()
-                    bomFile.readText() should matchJsonSchema(schema)
+                    bomFile.readText() should matchJsonSchema(schemaJson)
                 }
             }
         }
@@ -357,13 +357,13 @@ class CycloneDxReporterFunTest : WordSpec({
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                bomFile.readText() should matchJsonSchema(schema)
+                bomFile.readText() should matchJsonSchema(schemaJson)
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                bomFile.readText() should matchJsonSchema(schema)
+                bomFile.readText() should matchJsonSchema(schemaJson)
             }
         }
 
