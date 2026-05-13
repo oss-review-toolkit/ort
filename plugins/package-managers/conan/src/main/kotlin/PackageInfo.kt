@@ -212,7 +212,7 @@ internal data class DependencyReference(
      * not directly violating ODR or causing linking errors. It can be set to false in advanced scenarios, when we want
      * to use different versions of the same package during the build.
      */
-    val visible: Boolean = false
+    val visible: Boolean = true
 )
 
 /**
