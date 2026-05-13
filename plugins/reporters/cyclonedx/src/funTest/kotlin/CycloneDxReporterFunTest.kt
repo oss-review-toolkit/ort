@@ -56,8 +56,7 @@ import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.readResource
 
 class CycloneDxReporterFunTest : WordSpec({
-    val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
-    val schemaJson by lazy { readResource("/bom-$defaultSchemaVersion.schema.json") }
+    val schemaJson by lazy { readResource("/bom-$DEFAULT_SCHEMA_VERSION_NAME.schema.json") }
     val outputDir = tempdir()
 
     "Requesting a single BOM for all projects" should {
@@ -72,7 +71,7 @@ class CycloneDxReporterFunTest : WordSpec({
             }
         }
 
-        "create valid XML according to schema version $defaultSchemaVersion" {
+        "create valid XML according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf(Format.XML)
@@ -82,7 +81,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 it shouldBeSuccess { bomFile ->
                     bomFile shouldBe aFile()
                     bomFile shouldNotBe emptyFile()
-                    bomFile.readText() should matchCycloneDxXmlSchema(defaultSchemaVersion)
+                    bomFile.readText() should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
                 }
             }
         }
@@ -126,7 +125,7 @@ class CycloneDxReporterFunTest : WordSpec({
             }
         }
 
-        "create valid JSON according to schema version $defaultSchemaVersion" {
+        "create valid JSON according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val bomFileResults = CycloneDxReporterFactory.create(
                 singleBom = true,
                 outputFileFormats = listOf(Format.JSON)
@@ -325,7 +324,7 @@ class CycloneDxReporterFunTest : WordSpec({
             bomFileResults.forAll { it.shouldBeSuccess() }
         }
 
-        "create valid XML files according to schema version $defaultSchemaVersion" {
+        "create valid XML files according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,
@@ -337,17 +336,17 @@ class CycloneDxReporterFunTest : WordSpec({
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                bomFile.readText() should matchCycloneDxXmlSchema(defaultSchemaVersion)
+                bomFile.readText() should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                bomFile.readText() should matchCycloneDxXmlSchema(defaultSchemaVersion)
+                bomFile.readText() should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
             }
         }
 
-        "create valid JSON files according to schema version $defaultSchemaVersion" {
+        "create valid JSON files according to schema version $DEFAULT_SCHEMA_VERSION_NAME" {
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
                 CycloneDxReporterFactory.create(
                     singleBom = false,

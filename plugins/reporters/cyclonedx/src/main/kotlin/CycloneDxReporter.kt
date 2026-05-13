@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 internal const val DEFAULT_SCHEMA_VERSION_NAME = "1.6" // Version.VERSION_16.versionString
-internal val DEFAULT_SCHEMA_VERSION = Version.entries.single { it.versionString == DEFAULT_SCHEMA_VERSION_NAME }
 
 @Suppress("EnumEntryNameCase", "EnumNaming")
 enum class SchemaVersion(val version: Version) {
