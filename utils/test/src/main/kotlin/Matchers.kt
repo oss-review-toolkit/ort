@@ -135,7 +135,12 @@ enum class InputFormat(internal val networkNtInputformat: NetworkNtInputFormat) 
 
 fun matchJsonSchema(schemaJson: String, inputFormat: InputFormat = InputFormat.JSON): Matcher<String> =
     Matcher { actual ->
-        val schema = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_7).getSchema(schemaJson)
+        val schema = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_7) { builder ->
+            builder.schemaLoader { loader ->
+                loader.fetchRemoteResources()
+            }
+        }.getSchema(schemaJson)
+
         val violations = schema.validate(actual, inputFormat.networkNtInputformat)
 
         MatcherResult(
