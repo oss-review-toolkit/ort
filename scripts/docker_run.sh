@@ -17,13 +17,17 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-# Usage:
-#
-# The first argument to this script is passed as-is to `docker run`. If multiple arguments shall be passed, they must
-# be quoted, like `scripts/docker_run.sh "-it --entrypoint /bin/sh"`.
-#
-# Any following arguments are passed as-is to `ort`. If no Docker arguments shall be passed, use empty quotes like
-# `scripts/docker_run.sh "" analyze --help`.
+if [ $# -lt 1 ]; then
+    SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+    echo "Usage: $SCRIPT_NAME <docker run args> [ort args]"
+    echo
+    echo 'The first argument to this script is passed as-is to `docker run`. If multiple arguments shall be passed,'
+    echo 'they must be quoted, like `scripts/docker_run.sh "-it --entrypoint /bin/sh"`.'
+    echo
+    echo 'Any following arguments are passed as-is to `ort`. If no Docker arguments shall be passed, use empty quotes'
+    echo 'like `scripts/docker_run.sh "" analyze --help`.'
+    exit 1
+fi
 
 DOCKER_ARGS=$1
 shift 2> /dev/null
