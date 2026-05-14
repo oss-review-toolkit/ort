@@ -113,6 +113,7 @@ java {
     // https://docs.gradle.org/current/userguide/how_to_create_feature_variants_of_a_library.html.
     registerFeature("funTest") {
         usingSourceSet(sourceSets["funTest"])
+        disablePublication()
     }
 
     toolchain {
