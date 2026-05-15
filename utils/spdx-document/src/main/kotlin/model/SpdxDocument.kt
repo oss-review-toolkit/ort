@@ -48,7 +48,7 @@ data class SpdxDocument(
     val spdxId: String = SPDX_ID,
 
     /**
-     * The SPDX version of this document, must equal [SPDX_VERSION_MAJOR_MINOR].
+     * The SPDX version of this document.
      */
     val spdxVersion: String = SPDX_VERSION_2_3,
 

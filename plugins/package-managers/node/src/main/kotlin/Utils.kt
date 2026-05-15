@@ -244,7 +244,7 @@ internal val PackageJson.moduleId: String
     }
 
 /**
- * Return the directories of all modules which have been installed in the 'node_modules' dir within [moduleDir].
+ * Return the directories of all modules which have been installed in the 'node_modules' dir within [projectDir].
  */
 internal fun getInstalledModulesDirs(projectDir: File): Set<File> {
     val modulesDirsToProcess = LinkedList<File>().apply { add(projectDir.realFile) }
