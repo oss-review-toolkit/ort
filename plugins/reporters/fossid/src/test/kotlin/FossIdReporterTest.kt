@@ -36,6 +36,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
+import org.ossreviewtoolkit.clients.fossid.SCAN_CODE_KEY
 import org.ossreviewtoolkit.clients.fossid.generateReport
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
@@ -279,5 +280,5 @@ private fun createScanResult(scanCode: String): ScanResult =
         provenance = UnknownProvenance,
         scanner = ScannerDetails.EMPTY,
         summary = ScanSummary.EMPTY,
-        additionalData = mapOf(FossIdReporter.SCAN_CODE_KEY to scanCode)
+        additionalData = mapOf(SCAN_CODE_KEY to scanCode)
     )

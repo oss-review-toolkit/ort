@@ -47,6 +47,9 @@ import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.MapResponseBody
 import org.ossreviewtoolkit.clients.fossid.PolymorphicData
+import org.ossreviewtoolkit.clients.fossid.SCAN_CODE_KEY
+import org.ossreviewtoolkit.clients.fossid.SCAN_ID_KEY
+import org.ossreviewtoolkit.clients.fossid.SERVER_URL_KEY
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
 import org.ossreviewtoolkit.clients.fossid.createProject
@@ -73,9 +76,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
-import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
-import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_ID_KEY
-import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.extractRepositoryName
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
