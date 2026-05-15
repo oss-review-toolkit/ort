@@ -27,7 +27,7 @@ import kotlinx.serialization.json.decodeToSequence
 private val JSON = Json { ignoreUnknownKeys = true }
 
 /** A regular expression to match locators that point to virtual packages and capture their package name and version. */
-private val VIRTUAL_PACKAGE_REGEX = Regex("""^(@[^@]+)@.*#npm:([0-9]+\.[0-9]+\.[0-9]+)""")
+private val VIRTUAL_PACKAGE_REGEX = Regex("""^((?:@[^/]+/)?.+)@.+#npm:([0-9]+\.[0-9]+\.[0-9]+)""")
 
 internal fun parsePackageInfos(info: String): List<PackageInfo> =
     info.byteInputStream().use { JSON.decodeToSequence<PackageInfo>(it) }.toList()

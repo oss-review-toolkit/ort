@@ -97,6 +97,64 @@ class Yarn2Test : WordSpec({
             checkExecutableFromYarnRc(workingDir, corepackEnabled = false)
         }
     }
+
+    "Dependency.realLocator" should {
+        "return the locator unchanged if it does not refer to a virtual package" {
+            val dep = PackageInfo.Dependency(
+                descriptor = "lodash@npm:4.17.21",
+                locator = "lodash@npm:4.17.21"
+            )
+
+            dep.realLocator shouldBe "lodash@npm:4.17.21"
+        }
+
+        "return the real locator for a scoped virtual package" {
+            val dep = PackageInfo.Dependency(
+                descriptor = "@scope/pkg@npm:1.2.3",
+                locator = "@scope/pkg@virtual:abc123#npm:1.2.3"
+            )
+
+            dep.realLocator shouldBe "@scope/pkg@npm:1.2.3"
+        }
+
+        "return the real locator for a virtual package without a scope" {
+            val dep = PackageInfo.Dependency(
+                descriptor = "pkg@npm:1.2.3",
+                locator = "pkg@virtual:abc123#npm:1.2.3"
+            )
+
+            dep.realLocator shouldBe "pkg@npm:1.2.3"
+        }
+
+        "return the real locator for a virtual package with a long hash" {
+            val dep = PackageInfo.Dependency(
+                descriptor = "some-package@npm:2.0.0",
+                locator = "some-package@virtual:1a2b3c4d5e6f7890abcdef#npm:2.0.0"
+            )
+
+            dep.realLocator shouldBe "some-package@npm:2.0.0"
+        }
+
+        "return the real locator for a scoped virtual package with a long hash" {
+            val dep = PackageInfo.Dependency(
+                descriptor = "@org/utils@npm:0.9.1",
+                locator = "@org/utils@virtual:1a2b3c4d5e6f7890abcdef#npm:0.9.1"
+            )
+
+            dep.realLocator shouldBe "@org/utils@npm:0.9.1"
+        }
+
+        "return the locator unchanged if there is no segment between '@' and '#npm:'" {
+            // A locator like "pkg@#npm:1.0.0" is not a valid virtual package locator because the middle
+            // segment (e.g. "virtual:<hash>") is missing. The regex must not match in this case.
+            val dep = PackageInfo.Dependency(
+                descriptor = "pkg@npm:1.0.0",
+                locator = "pkg@#npm:1.0.0"
+            )
+
+            dep.realLocator shouldBe "pkg@#npm:1.0.0"
+        }
+    }
 })
 
 /**
