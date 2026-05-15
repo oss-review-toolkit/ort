@@ -28,10 +28,10 @@ import kotlinx.coroutines.awaitAll
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
+import org.ossreviewtoolkit.clients.fossid.SCAN_CODE_KEY
 import org.ossreviewtoolkit.clients.fossid.generateReport
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -82,16 +82,6 @@ class FossIdReporter(
     override val descriptor: PluginDescriptor = FossIdReporterFactory.descriptor,
     private val config: FossIdReporterConfig
 ) : Reporter {
-    companion object {
-        /**
-         * Name of key in [ScanResult.additionalData] containing the scancode.
-         *
-         * TODO: The below should be unified with [FossId.SCAN_CODE_KEY], without creating a dependency between scanner
-         *       and reporter.
-         */
-        const val SCAN_CODE_KEY = "scancode"
-    }
-
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> =
         runBlocking(Dispatchers.IO.limitedParallelism(20)) {
             val service = FossIdRestService.create(config.serverUrl)

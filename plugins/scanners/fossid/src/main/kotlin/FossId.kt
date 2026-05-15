@@ -40,6 +40,9 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.PolymorphicList
+import org.ossreviewtoolkit.clients.fossid.SCAN_CODE_KEY
+import org.ossreviewtoolkit.clients.fossid.SCAN_ID_KEY
+import org.ossreviewtoolkit.clients.fossid.SERVER_URL_KEY
 import org.ossreviewtoolkit.clients.fossid.addComponentIdentification
 import org.ossreviewtoolkit.clients.fossid.addFileComment
 import org.ossreviewtoolkit.clients.fossid.checkResponse
@@ -129,15 +132,6 @@ class FossId internal constructor(
 
         @JvmStatic
         internal val WAIT_DELAY = 10.seconds
-
-        @JvmStatic
-        internal val SCAN_CODE_KEY = "scancode"
-
-        @JvmStatic
-        internal val SCAN_ID_KEY = "scanid"
-
-        @JvmStatic
-        internal val SERVER_URL_KEY = "serverurl"
 
         @JvmStatic
         internal val PROJECT_REVISION_LABEL = "projectVcsRevision"
