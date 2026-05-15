@@ -98,7 +98,7 @@ import org.semver4j.Semver
 /**
  * A wrapper for the [FossID](https://fossid.com/) snippet scanner.
  *
- * This scanner can be configured in [ScannerConfiguration.config]. For the available options see [FossIdConfig].
+ * This scanner can be configured in [ScannerConfiguration.scanners]. For the available options see [FossIdConfig].
  *
  * This scanner was implemented before the introduction of [provenance based scanning][ProvenanceScannerWrapper].
  * Therefore, it implements the [PackageScannerWrapper] interface for backward compatibility, even though FossID itself
