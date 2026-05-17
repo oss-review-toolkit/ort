@@ -69,7 +69,6 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
     uuid-dev \
     unzip \
     xz-utils \
-    && rm -rf /var/lib/apt/lists/* \
     && git lfs install
 
 RUN echo $LANG > /etc/locale.gen \
@@ -153,8 +152,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libssl-dev \
     libbz2-dev \
     liblzma-dev \
-    tk-dev \
-    && sudo rm -rf /var/lib/apt/lists/*
+    tk-dev
 
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
@@ -231,8 +229,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     make \
     pkg-config \
     xvfb \
-    zlib1g-dev \
-    && sudo rm -rf /var/lib/apt/lists/*
+    zlib1g-dev
 
 ARG COCOAPODS_VERSION
 ARG LICENSEE_VERSION
@@ -296,8 +293,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    unzip \
-    && sudo rm -rf /var/lib/apt/lists/*
+    unzip
 
 ENV ANDROID_HOME=/opt/android-sdk
 
@@ -590,8 +586,7 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
     --mount=type=tmpfs,target=/var/log \
     sudo apt-get update && \
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    subversion \
-    && sudo rm -rf /var/lib/apt/lists/*
+    subversion
 
 # Python
 ENV PYENV_ROOT=/opt/python
