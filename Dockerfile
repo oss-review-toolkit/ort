@@ -649,6 +649,11 @@ RUN chmod o+rw $ANDROID_HOME
 ENV SWIFT_HOME=/opt/swift
 ENV PATH=$PATH:$SWIFT_HOME/bin
 COPY --from=swift-build --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
+RUN --mount=type=cache,target=/var/cache,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=tmpfs,target=/var/log \
+    sudo apt-get update \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends libncurses6
 
 # Scala
 ENV SBT_HOME=/opt/sbt
