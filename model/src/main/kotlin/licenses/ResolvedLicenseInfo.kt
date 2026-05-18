@@ -115,17 +115,28 @@ data class ResolvedLicenseInfo(
     }
 
     /**
-     * Return the effective [SpdxExpression] of this [ResolvedLicenseInfo] based on their [licenses] filtered by the
-     * [licenseView] and the applied [licenseChoices]. Effective, in this context, refers to an [SpdxExpression] that
-     * can be used as a final license of this [ResolvedLicenseInfo]. [licenseChoices] will be applied in the order they
-     * are given to the function.
+     * Convenience function which returns the first coordinate from [effectiveLicenseAndAppliedChoices].
      */
-    fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<SpdxLicenseChoice>): SpdxExpression? {
-        val resolvedLicenseInfo = filter(licenseView, filterSources = true)
-        val resolvedLicenses = resolvedLicenseInfo.toExpression() ?: return null
-        val choices = licenseChoices.asList().flatten().takeUnless { it.isEmpty() } ?: return resolvedLicenses
+    fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<SpdxLicenseChoice>): SpdxExpression? =
+        effectiveLicenseAndAppliedChoices(licenseView, *licenseChoices).first
 
-        return resolvedLicenses.applyChoices(choices).validChoices().toExpression(SpdxOperator.OR)
+    /**
+     * Return the effective [SpdxExpression] of this [ResolvedLicenseInfo] based on their [licenses] filtered by the
+     * [licenseView] and the applied [licenseChoices] along with applied choices in the order they have been applied.
+     * Effective, in this context, refers to an [SpdxExpression] that can be used as a final license of this
+     * [ResolvedLicenseInfo]. [licenseChoices] will be applied in the order they are given to the function.
+     */
+    fun effectiveLicenseAndAppliedChoices(
+        licenseView: LicenseView,
+        vararg licenseChoices: List<SpdxLicenseChoice>
+    ): Pair<SpdxExpression?, List<SpdxLicenseChoice>> {
+        val resolvedLicenseInfo = filter(licenseView, filterSources = true)
+        val resolvedLicenses = resolvedLicenseInfo.toExpression() ?: return null to emptyList()
+        val choices = licenseChoices.asList().flatten().takeUnless { it.isEmpty() }
+            ?: return resolvedLicenses to emptyList()
+
+        val (expression, appliedChoices) = resolvedLicenses.applyAndGetChoices(choices)
+        return expression.validChoices().toExpression(SpdxOperator.OR) to appliedChoices
     }
 
     /**
