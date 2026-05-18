@@ -122,16 +122,10 @@ data class ResolvedLicenseInfo(
      */
     fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<SpdxLicenseChoice>): SpdxExpression? {
         val resolvedLicenseInfo = filter(licenseView, filterSources = true)
+        val resolvedLicenses = resolvedLicenseInfo.toExpression() ?: return null
+        val choices = licenseChoices.asList().flatten().takeUnless { it.isEmpty() } ?: return resolvedLicenses
 
-        val resolvedLicenses = resolvedLicenseInfo.toExpression()
-
-        val choices = licenseChoices.asList().flatten()
-
-        return if (choices.isEmpty()) {
-            resolvedLicenses
-        } else {
-            resolvedLicenses?.applyChoices(choices)?.validChoices()?.toExpression(SpdxOperator.OR)
-        }
+        return resolvedLicenses.applyChoices(choices).validChoices().toExpression(SpdxOperator.OR)
     }
 
     /**
