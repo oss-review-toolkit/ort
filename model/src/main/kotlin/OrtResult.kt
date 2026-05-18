@@ -254,6 +254,12 @@ data class OrtResult(
         return dependencies
     }
 
+    /**
+     * Return the identifiers of all projects and packages contained in this [OrtResult].
+     */
+    @JsonIgnore
+    fun getIdentifiers(): Set<Identifier> = projects.keys + packages.keys
+
     @JsonIgnore
     fun getIncludes(): Includes = repository.config.includes
 
