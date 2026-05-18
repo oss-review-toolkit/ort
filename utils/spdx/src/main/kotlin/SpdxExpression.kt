@@ -186,21 +186,30 @@ sealed class SpdxExpression {
     /**
      * Apply [licenseChoices] in the given order to [this][SpdxExpression].
      */
-    fun applyChoices(licenseChoices: List<SpdxLicenseChoice>): SpdxExpression {
-        if (validChoices().size == 1) return this
+    fun applyChoices(licenseChoices: List<SpdxLicenseChoice>): SpdxExpression = applyAndGetChoices(licenseChoices).first
+
+    /**
+     * Apply [licenseChoices] in the given order to [this][SpdxExpression] and return the resulting SPDX expression
+     * along with the applied license choices in the order they were applied.
+     */
+    fun applyAndGetChoices(licenseChoices: List<SpdxLicenseChoice>): Pair<SpdxExpression, List<SpdxLicenseChoice>> {
+        if (validChoices().size == 1) return this to emptyList()
 
         var currentExpression = this
+        val appliedChoices = mutableListOf<SpdxLicenseChoice>()
 
         licenseChoices.forEach {
             if (it.given == null && currentExpression.isValidChoice(it.choice)) {
                 currentExpression = currentExpression.applyChoice(it.choice)
+                appliedChoices += it
             } else if (currentExpression.isSubExpression(it.given)) {
                 @Suppress("UnsafeCallOnNullableType")
                 currentExpression = currentExpression.applyChoice(it.choice, it.given!!)
+                appliedChoices += it
             }
         }
 
-        return currentExpression
+        return currentExpression to appliedChoices
     }
 
     /**
