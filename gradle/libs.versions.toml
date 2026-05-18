@@ -13,7 +13,7 @@ ksp = "2.3.8"
 mavenPublishPlugin = "0.36.0"
 tapmocPlugin = "0.4.2"
 
-aeSecurity = "0.154.0"
+aeSecurity = "0.155.0"
 asciidoctorj = "3.0.1"
 asciidoctorjPdf = "2.3.23"
 blackduckCommon = "68.0.1"
