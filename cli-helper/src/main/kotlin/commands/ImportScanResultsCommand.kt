@@ -52,9 +52,8 @@ internal class ImportScanResultsCommand : OrtHelperCommand(
     override fun run() {
         val ortResult = readOrtResult(ortFile)
         val scanResultsStorage = PackageBasedFileStorage(LocalFileStorage(scanResultsStorageDir))
-        val ids = ortResult.getProjects().map { it.id } + ortResult.getPackages().map { it.metadata.id }
 
-        ids.forEach { id ->
+        ortResult.getIdentifiers().forEach { id ->
             ortResult.getScanResultsForId(id).forEach { scanResult ->
                 scanResultsStorage.add(id, scanResult)
             }
