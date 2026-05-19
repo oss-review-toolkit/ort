@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -148,17 +149,22 @@ private fun OrtResult.createOrtResultRule(): OrtResultRule =
     )
 
 private fun OrtResult.setPackageLicenseChoices(vararg choices: Pair<String, List<SpdxLicenseChoice>>): OrtResult =
+    setLicenseChoices(
+        repository.config.licenseChoices.copy(
+            packageLicenseChoices = choices.map {
+                PackageLicenseChoice(
+                    packageId = Identifier(it.first),
+                    licenseChoices = it.second
+                )
+            }
+        )
+    )
+
+private fun OrtResult.setLicenseChoices(licenseChoices: LicenseChoices): OrtResult =
     copy(
         repository = repository.copy(
             config = repository.config.copy(
-                licenseChoices = repository.config.licenseChoices.copy(
-                    packageLicenseChoices = choices.map {
-                        PackageLicenseChoice(
-                            packageId = Identifier(it.first),
-                            licenseChoices = it.second
-                        )
-                    }
-                )
+                licenseChoices = licenseChoices
             )
         )
     )
