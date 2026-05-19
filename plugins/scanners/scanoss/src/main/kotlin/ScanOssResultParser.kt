@@ -160,8 +160,16 @@ private fun createSnippetFindings(details: ScanFileDetails, localFilePath: Strin
     val provenance = RepositoryProvenance(vcsInfo, ".")
 
     val additionalData = buildMap {
+        put("component", details.component)
+        put("vendor", details.vendor)
+        put("version", details.version)
+        put("latest", details.latest)
+
         put("file_hash", details.fileHash)
         if (details.fileUrl.isNotBlank()) put("file_url", details.fileUrl)
+
+        put("url_hash", details.urlHash)
+        put("release_date", details.releaseDate)
         put("source_hash", details.sourceHash)
 
         // Purls can be empty if only one entry is provided which is used as the primary purl.
