@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.spdx
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 /**
  * An individual license choice.
  *
@@ -49,7 +51,8 @@ package org.ossreviewtoolkit.utils.spdx
  * ```
  */
 data class SpdxLicenseChoice(
-    val given: SpdxExpression?,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val given: SpdxExpression? = null,
     val choice: SpdxExpression
 ) {
     init {
