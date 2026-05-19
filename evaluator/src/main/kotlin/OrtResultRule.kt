@@ -99,4 +99,22 @@ open class OrtResultRule(
                 getOrPut(id) { mutableSetOf() } += (choices.toSet() - appliedChoices)
             }
         }
+
+    /**
+     * Return the set of non-applicable repository license choices.
+     */
+    fun getNonApplicableRepositoryLicenseChoices(licenseView: LicenseView): Set<SpdxLicenseChoice> {
+        val repositoryLicenseChoices = ortResult.repository.config.licenseChoices.repositoryLicenseChoices
+        val appliedRepositoryLicenseChoices = mutableSetOf<SpdxLicenseChoice>()
+
+        ortResult.getIdentifiers().forEach { id ->
+            val appliedChoices = ruleSet.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
+                .effectiveLicenseAndAppliedChoices(licenseView, repositoryLicenseChoices)
+                .second.toSet()
+
+            appliedRepositoryLicenseChoices += appliedChoices
+        }
+
+        return repositoryLicenseChoices.toSet() - appliedRepositoryLicenseChoices
+    }
 }
