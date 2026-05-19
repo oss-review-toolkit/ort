@@ -28,7 +28,6 @@ import com.scanoss.settings.ReplaceRule
 import com.scanoss.settings.Rule
 import com.scanoss.settings.ScanossSettings
 import com.scanoss.utils.JsonUtils
-import com.scanoss.utils.PackageDetails
 
 import java.io.File
 import java.time.Instant
@@ -65,8 +64,16 @@ class ScanOss(
         .obfuscate(config.enablePathObfuscation)
 
     override val version: String by lazy {
-        // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
-        PackageDetails.getVersion()
+        val dummyWfp = """
+            file=232512a681d2488f61ade07516f899b5,155473,sigmod03.pdf
+            fh2=ce5e3f3670aafa0f84aa7168290c9fcf
+
+        """.trimIndent()
+
+        val dummyScan = scanossBuilder.build().scanApi.scan(dummyWfp, "", 1)
+        val serverDetails = JsonUtils.toScanFileResults(listOf(dummyScan)).first().fileDetails.first().serverDetails
+
+        with(serverDetails) { "$version (KB: ${kbVersion.monthly}-${kbVersion.daily})" }
     }
 
     override val configuration = ""
