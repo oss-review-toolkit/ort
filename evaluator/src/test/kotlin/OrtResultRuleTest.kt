@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.evaluator
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.AnalyzerResult
@@ -110,6 +111,40 @@ class OrtResultRuleTest : WordSpec({
             )
         }
     }
+
+    "getNonApplicableRepositoryLicenseChoices()" should {
+        "return all repository SPDX license choices which are not applicable" {
+            val rule = createAnalyzerResult(
+                "NPM::some-package:1.0.0" to "BSD-3-Clause OR MIT"
+            ).setRepositoryLicenseChoices(
+                SpdxLicenseChoice(
+                    given = "BSD-3-Clause OR MIT".toSpdx(),
+                    choice = "BSD-3-Clause".toSpdx()
+                ),
+                SpdxLicenseChoice(
+                    given = "Apache-2.0 OR MIT".toSpdx(),
+                    choice = "MIT".toSpdx()
+                ),
+                SpdxLicenseChoice(
+                    given = "A OR B".toSpdx(),
+                    choice = "B".toSpdx()
+                )
+            ).createOrtResultRule()
+
+            val choices = rule.getNonApplicableRepositoryLicenseChoices(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
+
+            choices.shouldContainExactlyInAnyOrder(
+                SpdxLicenseChoice(
+                    given = "Apache-2.0 OR MIT".toSpdx(),
+                    choice = "MIT".toSpdx()
+                ),
+                SpdxLicenseChoice(
+                    given = "A OR B".toSpdx(),
+                    choice = "B".toSpdx()
+                )
+            )
+        }
+    }
 })
 
 private fun createAnalyzerResult(vararg idsWithDeclaredLicenses: Pair<String, String>): OrtResult =
@@ -157,6 +192,13 @@ private fun OrtResult.setPackageLicenseChoices(vararg choices: Pair<String, List
                     licenseChoices = it.second
                 )
             }
+        )
+    )
+
+private fun OrtResult.setRepositoryLicenseChoices(vararg choices: SpdxLicenseChoice): OrtResult =
+    setLicenseChoices(
+        repository.config.licenseChoices.copy(
+            repositoryLicenseChoices = choices.toList()
         )
     )
 
