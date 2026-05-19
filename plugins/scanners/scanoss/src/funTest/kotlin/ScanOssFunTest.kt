@@ -91,13 +91,25 @@ class ScanOssFunTest : StringSpec({
                 snippet.license shouldBe "GPL-2.0-only".toSpdx()
                 snippet.additionalData shouldContainExactly if (CloudCheck.getScanOssApiKey() != null) {
                     mapOf(
+                        "component" to "unoconv",
+                        "vendor" to "unoconv",
+                        "version" to "0.6",
+                        "latest" to "0.6",
                         "file_hash" to "38e743a8566d3df4a2dc4432f8d6b091",
                         "file_url" to "https://api.scanoss.com/file_contents/38e743a8566d3df4a2dc4432f8d6b091",
+                        "url_hash" to "2b5b8e4c1c62f2b3cba48ceabc1f3671",
+                        "release_date" to "2012-09-10",
                         "source_hash" to "21f8df5092922255fd8b42be5e6b59a7"
                     )
                 } else {
                     mapOf(
+                        "component" to "unoconv",
+                        "vendor" to "unoconv",
+                        "version" to "0.6",
+                        "latest" to "0.6",
                         "file_hash" to "38e743a8566d3df4a2dc4432f8d6b091",
+                        "url_hash" to "2b5b8e4c1c62f2b3cba48ceabc1f3671",
+                        "release_date" to "2012-09-10",
                         "source_hash" to "21f8df5092922255fd8b42be5e6b59a7"
                     )
                 }

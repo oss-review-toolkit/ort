@@ -130,8 +130,14 @@ class ScanOssResultParserTest : WordSpec({
                             "pkg:github/vdurmont/semver4j",
                             SpdxExpression.parse("CC-BY-SA-2.0"),
                             mapOf(
+                                "component" to "semver4j",
+                                "vendor" to "vdurmont",
+                                "version" to "3.1.0",
+                                "latest" to "3.1.0",
                                 "file_hash" to "6ff2427335b985212c9b79dfa795799f",
                                 "file_url" to "https://osskb.org/api/file_contents/6ff2427335b985212c9b79dfa795799f",
+                                "url_hash" to "b92cd7e4d588747588d1b5fe1f8c664c",
+                                "release_date" to "2019-09-13",
                                 "source_hash" to "bd4bff27f540f4f2c9de012acc4b48a3"
                             )
                         )
@@ -162,8 +168,14 @@ class ScanOssResultParserTest : WordSpec({
                 // Verify related PURLs to be stored as additional data.
                 snippets.first().additionalData shouldBe
                     mapOf(
+                        "component" to "proton_bluecross",
+                        "vendor" to "kdrag0n",
+                        "version" to "15",
+                        "latest" to "17",
                         "file_hash" to "581734935cfbe570d280a1265aaa2a6b",
                         "file_url" to "https://api.scanoss.com/file_contents/581734935cfbe570d280a1265aaa2a6b",
+                        "url_hash" to "a9c1c67f0930dc42dbd40c29e565bcdd",
+                        "release_date" to "2019-02-21",
                         "source_hash" to "45dd1e50621a8a32f88fbe0251a470ab",
                         "related_purls" to "pkg:github/fake/fake_repository"
                     )
