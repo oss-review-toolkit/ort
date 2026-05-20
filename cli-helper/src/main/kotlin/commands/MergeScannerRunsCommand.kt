@@ -70,8 +70,8 @@ internal class MergeScannerRunsCommand : OrtHelperCommand(
 
     override fun run() {
         val result = mergeScannerRuns(
-            result = readOrtResult(ortFile),
-            otherResult = readOrtResult(otherOrtFile)
+            result = readOrtResult(ortFile, resolveScopes = false),
+            otherResult = readOrtResult(otherOrtFile, resolveScopes = false)
         )
 
         writeOrtResult(result, outputOrtFile)
