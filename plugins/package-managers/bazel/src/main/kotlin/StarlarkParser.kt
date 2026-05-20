@@ -22,6 +22,8 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
+import org.ossreviewtoolkit.utils.common.enumSetOf
+
 internal data class ModuleMetadata(
     val module: ModuleDirective? = null,
     val dependencies: List<BazelDepDirective>
@@ -193,13 +195,17 @@ internal class Lexer(private val input: String) {
 internal class Parser(input: String) {
     private val lexer = Lexer(input)
     private var currentToken: Token = lexer.nextToken()
+    private var lookaheadToken: Token = lexer.nextToken()
+    private val variables = mutableMapOf<String, String>()
 
     private fun eat(type: TokenType) {
         require(currentToken.type == type) {
             "Unexpected token '${currentToken.value}' (${currentToken.type})" +
                 " at ${lexer.locationInfo()}, expected: $type"
         }
-        currentToken = lexer.nextToken()
+
+        currentToken = lookaheadToken
+        lookaheadToken = lexer.nextToken()
     }
 
     private fun parseKeyValue(): Pair<String, String> {
@@ -210,6 +216,9 @@ internal class Parser(input: String) {
 
         if (currentToken.type in setOf(TokenType.STRING, TokenType.NUMBER, TokenType.BOOLEAN)) {
             eat(currentToken.type)
+        } else if (currentToken.type == TokenType.IDENTIFIER) {
+            value = variables[currentToken.value] ?: currentToken.value
+            eat(TokenType.IDENTIFIER)
         } else if (currentToken.type == TokenType.LBRACKET) { // Skip lists for now.
             while (currentToken.type != TokenType.RBRACKET) {
                 eat(currentToken.type)
@@ -220,6 +229,16 @@ internal class Parser(input: String) {
         }
 
         return key to value
+    }
+
+    private fun parseVariableAssignment() {
+        val name = currentToken.value
+        eat(TokenType.IDENTIFIER)
+        eat(TokenType.EQUALS)
+        if (currentToken.type in enumSetOf(TokenType.STRING, TokenType.NUMBER, TokenType.BOOLEAN)) {
+            variables[name] = currentToken.value
+            eat(currentToken.type)
+        }
     }
 
     private fun parseBazelDepDirective(): BazelDepDirective {
@@ -267,9 +286,14 @@ internal class Parser(input: String) {
         var moduleDirective: ModuleDirective? = null
 
         while (currentToken.type != TokenType.EOF) {
-            when (currentToken.value) {
-                "module" -> moduleDirective = parseModuleDirective()
-                "bazel_dep" -> dependencies.add(parseBazelDepDirective())
+            when {
+                currentToken.value == "module" -> moduleDirective = parseModuleDirective()
+
+                currentToken.value == "bazel_dep" -> dependencies += parseBazelDepDirective()
+
+                currentToken.type == TokenType.IDENTIFIER && lookaheadToken.type == TokenType.EQUALS ->
+                    parseVariableAssignment()
+
                 else -> eat(currentToken.type) // Skip unknown tokens.
             }
         }
