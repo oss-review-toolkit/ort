@@ -49,8 +49,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 class ResolvedLicenseInfoTest : WordSpec({
     "mainLicense()" should {
         "return declared and detected licenses, but no concluded license" {
-            RESOLVED_LICENSE_INFO.mainLicense() shouldBe
-                "($APACHE OR $MIT) AND ($MIT OR $GPL) AND ($BSD OR $GPL)".toSpdx()
+            RESOLVED_LICENSE_INFO.mainLicense() shouldBe "($APACHE OR $MIT) AND ($MIT OR $GPL)".toSpdx()
         }
     }
 

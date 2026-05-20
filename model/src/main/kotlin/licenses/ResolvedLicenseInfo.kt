@@ -28,6 +28,8 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
+import org.ossreviewtoolkit.model.utils.vcsPath
+import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
@@ -83,31 +85,32 @@ data class ResolvedLicenseInfo(
      * in any of the configured [LicenseFilePatterns] matched against the root path of the package (or project).
      */
     fun mainLicense(): SpdxExpression? {
-        val matcher = PathLicenseMatcher(LicenseFilePatterns.getInstance())
-        val licensePaths = flatMap { resolvedLicense ->
+        val licenseFilePatterns = LicenseFilePatterns.getInstance()
+        val licenseMatcher = PathLicenseMatcher(licenseFilePatterns)
+
+        val declaredLicenses = filter(LicenseView.ONLY_DECLARED, filterSources = true)
+        val detectedLicenses = filter(LicenseView.ONLY_DETECTED, filterSources = true)
+
+        val licensePaths = detectedLicenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.map { it.location.path }
         }
 
-        val applicablePathsCache = mutableMapOf<String, Map<String, Set<String>>>()
-        val detectedLicenses = filterTo(mutableSetOf()) { resolvedLicense ->
+        val packageRoot = detectedLicenses.firstOrNull()?.locations?.firstOrNull()?.provenance.vcsPath
+
+        val applicableLicensePaths = licenseMatcher.getApplicableLicenseFilesForDirectories(
+            licensePaths,
+            listOf(packageRoot)
+        )
+
+        val applicableLicenseFiles = applicableLicensePaths[packageRoot].orEmpty()
+
+        val relevantDetectedLicenses = detectedLicenses.filterTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.any {
-                val rootPath = (it.provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
-
-                val applicableLicensePaths = applicablePathsCache.getOrPut(rootPath) {
-                    matcher.getApplicableLicenseFilesForDirectories(
-                        licensePaths,
-                        listOf(rootPath)
-                    )
-                }
-
-                val applicableLicenseFiles = applicableLicensePaths[rootPath].orEmpty()
-
                 it.location.path in applicableLicenseFiles
             }
         }
 
-        val declaredLicenses = filter(LicenseView.ONLY_DECLARED)
-        val mainLicenses = (detectedLicenses + declaredLicenses.licenses)
+        val mainLicenses = (declaredLicenses.licenses + relevantDetectedLicenses)
             .flatMap { it.originalExpressions }
             .map { it.expression }
 
