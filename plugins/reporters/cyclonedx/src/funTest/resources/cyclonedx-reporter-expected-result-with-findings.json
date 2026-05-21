@@ -440,5 +440,27 @@
         "NPM:@ort:declared-license:1.0"
       ]
     }
+  ],
+  "vulnerabilities" : [
+    {
+      "id" : "CVE-2021-1234",
+      "ratings" : [
+        {
+          "source" : {
+            "url" : "https://cves.example.org/cve1"
+          },
+          "score" : 6.0,
+          "severity" : "medium",
+          "method" : "CVSSv2"
+        }
+      ],
+      "description" : "A vulnerability description",
+      "detail" : "A vulnerability summary",
+      "affects" : [
+        {
+          "ref" : "NPM:@ort:declared-license:1.0"
+        }
+      ]
+    }
   ]
 }
