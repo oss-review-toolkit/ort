@@ -57,6 +57,13 @@ internal data class Token(val type: TokenType, val value: String)
 
 internal class Lexer(private val input: String) {
     private var pos = 0
+
+    fun locationInfo(): String {
+        val lines = input.take(pos - 1).lines()
+        val column = lines.last().length + 1
+        return "line ${lines.size}, column $column: '${lines.last()}'"
+    }
+
     private val length = input.length
 
     private fun peek(offset: Int = 0): Char = if (pos + offset < length) input[pos + offset] else '\u0000'
@@ -186,10 +193,17 @@ internal class Lexer(private val input: String) {
 internal class Parser(input: String) {
     private val lexer = Lexer(input)
     private var currentToken: Token = lexer.nextToken()
+    private var lookaheadToken: Token = lexer.nextToken()
+    private val variables = mutableMapOf<String, String>()
 
     private fun eat(type: TokenType) {
-        require(currentToken.type == type) { "Unexpected token: ${currentToken.type}, expected: $type" }
-        currentToken = lexer.nextToken()
+        require(currentToken.type == type) {
+            "Unexpected token '${currentToken.value}' (${currentToken.type})" +
+                " at ${lexer.locationInfo()}, expected: $type"
+        }
+
+        currentToken = lookaheadToken
+        lookaheadToken = lexer.nextToken()
     }
 
     private fun parseKeyValue(): Pair<String, String> {
@@ -200,6 +214,9 @@ internal class Parser(input: String) {
 
         if (currentToken.type in setOf(TokenType.STRING, TokenType.NUMBER, TokenType.BOOLEAN)) {
             eat(currentToken.type)
+        } else if (currentToken.type == TokenType.IDENTIFIER) {
+            value = variables[currentToken.value] ?: currentToken.value
+            eat(TokenType.IDENTIFIER)
         } else if (currentToken.type == TokenType.LBRACKET) { // Skip lists for now.
             while (currentToken.type != TokenType.RBRACKET) {
                 eat(currentToken.type)
@@ -210,6 +227,16 @@ internal class Parser(input: String) {
         }
 
         return key to value
+    }
+
+    private fun parseVariableAssignment() {
+        val name = currentToken.value
+        eat(TokenType.IDENTIFIER)
+        eat(TokenType.EQUALS)
+        if (currentToken.type in setOf(TokenType.STRING, TokenType.NUMBER, TokenType.BOOLEAN)) {
+            variables[name] = currentToken.value
+            eat(currentToken.type)
+        }
     }
 
     private fun parseBazelDepDirective(): BazelDepDirective {
@@ -257,9 +284,14 @@ internal class Parser(input: String) {
         var moduleDirective: ModuleDirective? = null
 
         while (currentToken.type != TokenType.EOF) {
-            when (currentToken.value) {
-                "module" -> moduleDirective = parseModuleDirective()
-                "bazel_dep" -> dependencies.add(parseBazelDepDirective())
+            when {
+                currentToken.value == "module" -> moduleDirective = parseModuleDirective()
+
+                currentToken.value == "bazel_dep" -> dependencies.add(parseBazelDepDirective())
+
+                currentToken.type == TokenType.IDENTIFIER && lookaheadToken.type == TokenType.EQUALS ->
+                    parseVariableAssignment()
+
                 else -> eat(currentToken.type) // Skip unknown tokens.
             }
         }
