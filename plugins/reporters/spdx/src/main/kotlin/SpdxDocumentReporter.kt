@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.model.SPDX_VERSION_2_2
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 
 @Suppress("EnumEntryNameCase", "EnumNaming")
 enum class SpdxVersion {
@@ -87,17 +88,26 @@ data class SpdxDocumentReporterConfig(
     val documentName: String?,
 
     /**
-     * The list of file formats to generate.
+     * Set the [SpdxPackage.licenseConcluded] to the effective license as determined by ORT if there is no concluded
+     * license from a package curation. This is useful in workflows where it is discouraged to set a concluded license
+     * as it unconditionally overwrites any other license, in instead liense findings should be curated to make the
+     * effective license match the license conclusion.
      */
-    @OrtPluginOption(defaultValue = "YAML", aliases = ["output.file.formats"])
-    val outputFileFormats: List<FileFormat>,
+    @OrtPluginOption(defaultValue = "false")
+    val autoConcludeToEffectiveLicense: Boolean,
 
     /**
      * Toggle whether the output document should contain information on file granularity about files containing
      * findings.
      */
     @OrtPluginOption(defaultValue = "true", aliases = ["file.information.enabled"])
-    val fileInformationEnabled: Boolean
+    val fileInformationEnabled: Boolean,
+
+    /**
+     * The list of file formats to generate.
+     */
+    @OrtPluginOption(defaultValue = "YAML", aliases = ["output.file.formats"])
+    val outputFileFormats: List<FileFormat>
 )
 
 /**
