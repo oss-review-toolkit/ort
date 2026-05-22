@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-private val DEFAULT_PATTERNS = LicenseFilePatterns.DEFAULT.allLicenseFilenames
+private val DEFAULT_PATTERNS = LicenseFilePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" }
 
 private val REPOSITORY_PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
