@@ -184,6 +184,17 @@ class FileArchiverTest : StringSpec() {
             targetDir shouldNot containFile("License")
         }
 
+        "exclude a file which does not match the default patterns" {
+            createFile("build.gradle")
+
+            val archiver = FileArchiver(LicenseFilePatterns.DEFAULT.allLicenseFilenames, storage)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
+
+            result shouldBe true
+            targetDir shouldNot containFile("build.gradle")
+        }
+
         "include utf8 file with japanese chars" {
             createFile("License") { writeText("ぁあぃいぅうぇえぉおかが") }
 
