@@ -214,9 +214,7 @@ class FileArchiverTest : StringSpec() {
             val result = archiver.unarchive(targetDir, ARTIFACT_PROVENANCE)
 
             result shouldBe true
-            with(targetDir) {
-                shouldContainFileWithContent("LICENSE")
-            }
+            targetDir.shouldContainFileWithContent("LICENSE")
         }
 
         "LICENSE files from Maven artifacts with META-INF are archived" {
@@ -227,9 +225,7 @@ class FileArchiverTest : StringSpec() {
             val result = archiver.unarchive(targetDir, ARTIFACT_PROVENANCE)
 
             result shouldBe true
-            with(targetDir) {
-                shouldContainFileWithContent("META-INF/LICENSE")
-            }
+            targetDir.shouldContainFileWithContent("META-INF/LICENSE")
         }
     }
 }
