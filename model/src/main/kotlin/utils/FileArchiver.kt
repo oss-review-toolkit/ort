@@ -71,40 +71,35 @@ class FileArchiver(
     fun hasArchive(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
 
     /**
-     * Archive the files matching [patterns] inside [rootDirectory] and put them to the [storage]. The archive is
-     * associated with the given [provenance] and [id].
+     * Archive all files in [directory] matching any of the configured patterns in the [storage].
      */
-    fun archive(rootDirectory: File, provenance: KnownProvenance, id: Identifier) {
-        val subdirectory = getSubdirectoryForProvenance(provenance, id)
-        val directories = setOf(rootDirectory, rootDirectory / subdirectory)
-
-        logger.info { "Archiving files matching ${matcher.patterns} from '$rootDirectory'..." }
+    fun archive(directory: File, provenance: KnownProvenance) {
+        logger.info { "Archiving files matching ${matcher.patterns} from '$directory'..." }
 
         val zipFile = createOrtTempFile(suffix = ".zip")
         val tika = Tika()
 
         val zipDuration = measureTime {
-            rootDirectory.packZip(zipFile, overwrite = true) { file ->
-                val matchingFile = directories.find {
-                    val relativePath = file.relativeTo(it).invariantSeparatorsPath
-                    matcher.matches(relativePath)
-                } ?: return@packZip false
+            directory.packZip(zipFile, overwrite = true) { file ->
+                val relativePath = file.relativeTo(directory).invariantSeparatorsPath
+
+                if (!matcher.matches(relativePath)) return@packZip false
 
                 if (!tika.detect(file).startsWith("text/")) {
-                    logger.info { "Not adding file '$matchingFile' to archive because it is not a text file." }
+                    logger.info { "Not adding file '$relativePath' to archive because it is not a text file." }
                     return@packZip false
                 }
 
-                logger.debug { "Adding '$matchingFile' to archive." }
+                logger.debug { "Adding '$relativePath' to archive." }
                 true
             }
         }
 
-        logger.info { "Archived directory '$rootDirectory' in $zipDuration." }
+        logger.info { "Archived directory '$directory' in $zipDuration." }
 
         val writeDuration = measureTime { storage.putData(provenance, zipFile.inputStream(), zipFile.length()) }
 
-        logger.info { "Wrote archive of directory '$rootDirectory' to storage in $writeDuration." }
+        logger.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
         zipFile.parentFile.safeDeleteRecursively()
     }

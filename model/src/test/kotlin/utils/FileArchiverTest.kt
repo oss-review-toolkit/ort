@@ -33,7 +33,6 @@ import io.kotest.matchers.shouldNot
 import java.io.File
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
@@ -93,7 +92,7 @@ class FileArchiverTest : StringSpec() {
             createFile("path/LICENSE")
 
             val archiver = FileArchiver(setOf("**/LICENSE"), storage)
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
             val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
 
             result shouldBe true
@@ -110,7 +109,7 @@ class FileArchiverTest : StringSpec() {
             createFile("d/LiCeNsE")
 
             val archiver = FileArchiver(setOf("**/LICENSE"), storage)
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
             val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
 
             result shouldBe true
@@ -130,7 +129,7 @@ class FileArchiverTest : StringSpec() {
 
             val archiver = FileArchiver(setOf("a", "**/a"), storage)
 
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
             val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
 
             result shouldBe true
@@ -153,7 +152,7 @@ class FileArchiverTest : StringSpec() {
             createFile("c/b")
 
             val archiver = FileArchiver(setOf("**"), storage)
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
 
             val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
 
@@ -169,7 +168,7 @@ class FileArchiverTest : StringSpec() {
         "Empty archives can be handled" {
             val archiver = FileArchiver(DEFAULT_PATTERNS, storage)
 
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
 
             archiver.unarchive(targetDir, REPOSITORY_PROVENANCE) shouldBe true
             targetDir shouldContainNFiles 0
@@ -179,7 +178,7 @@ class FileArchiverTest : StringSpec() {
             createFile("License") { writeBytes(byteArrayOf(0xFF.toByte(), 0xD8.toByte())) }
 
             val archiver = FileArchiver(DEFAULT_PATTERNS, storage)
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
             val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
 
             result shouldBe true
@@ -190,7 +189,7 @@ class FileArchiverTest : StringSpec() {
             createFile("build.gradle")
 
             val archiver = FileArchiver(DEFAULT_PATTERNS, storage)
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
             val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
 
             result shouldBe true
@@ -201,7 +200,7 @@ class FileArchiverTest : StringSpec() {
             createFile("License") { writeText("ぁあぃいぅうぇえぉおかが") }
 
             val archiver = FileArchiver(DEFAULT_PATTERNS, storage)
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
             val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
 
             result shouldBe true
@@ -212,7 +211,7 @@ class FileArchiverTest : StringSpec() {
             createFile("License.md") { writeText("# Heading level 1") }
 
             val archiver = FileArchiver(DEFAULT_PATTERNS, storage)
-            archiver.archive(workingDir, REPOSITORY_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, REPOSITORY_PROVENANCE)
             val result = archiver.unarchive(targetDir, REPOSITORY_PROVENANCE)
 
             result shouldBe true
@@ -223,7 +222,8 @@ class FileArchiverTest : StringSpec() {
             createFile("LICENSE")
 
             val archiver = FileArchiver(DEFAULT_PATTERNS, storage)
-            archiver.archive(workingDir, ARTIFACT_PROVENANCE, Identifier.EMPTY)
+            archiver.archive(workingDir, ARTIFACT_PROVENANCE)
+
             val result = archiver.unarchive(targetDir, ARTIFACT_PROVENANCE)
 
             result shouldBe true
@@ -234,7 +234,7 @@ class FileArchiverTest : StringSpec() {
             createFile("META-INF/LICENSE")
 
             val archiver = FileArchiver(DEFAULT_PATTERNS, storage)
-            archiver.archive(workingDir, ARTIFACT_PROVENANCE, Identifier("Maven:::"))
+            archiver.archive(workingDir, ARTIFACT_PROVENANCE)
             val result = archiver.unarchive(targetDir, ARTIFACT_PROVENANCE)
 
             result shouldBe true
