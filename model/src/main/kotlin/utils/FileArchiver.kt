@@ -27,10 +27,7 @@ import kotlin.time.measureTimedValue
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.tika.Tika
 
-import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
@@ -132,21 +129,3 @@ class FileArchiver(
         }.isSuccess
     }
 }
-
-/**
- * Get the (potentially [id]-type specific) nested path directory for the given [provenance].
- */
-fun getSubdirectoryForProvenance(provenance: KnownProvenance, id: Identifier): String =
-    when (provenance) {
-        // In case of a repository, match paths relative to the VCS path.
-        is RepositoryProvenance -> provenance.vcsInfo.path
-
-        // In case of a source artifact, match paths relative to the archive root or a type-specific directory.
-        is ArtifactProvenance -> {
-            // Java Archives (JARs) by convention (see e.g. the Apache Release Policy) often contain licensing
-            // information as part of the "META-INF" directory.
-            if (id.type == "Maven") "META-INF" else ""
-
-            // TODO: Check if more types need special handling.
-        }
-    }

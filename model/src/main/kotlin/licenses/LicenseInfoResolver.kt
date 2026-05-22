@@ -21,11 +21,13 @@ package org.ossreviewtoolkit.model.licenses
 
 import java.util.concurrent.ConcurrentHashMap
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
@@ -35,7 +37,6 @@ import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
-import org.ossreviewtoolkit.model.utils.getSubdirectoryForProvenance
 import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.utils.common.DeleteOnExitHook
 import org.ossreviewtoolkit.utils.common.div
@@ -315,3 +316,21 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
 }
 
 private val UNDEFINED_TEXT_LOCATION = TextLocation(".", TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
+
+/**
+ * Get the (potentially [id]-type specific) nested path directory for the given [provenance].
+ */
+private fun getSubdirectoryForProvenance(provenance: KnownProvenance, id: Identifier): String =
+    when (provenance) {
+        // In case of a repository, match paths relative to the VCS path.
+        is RepositoryProvenance -> provenance.vcsInfo.path
+
+        // In case of a source artifact, match paths relative to the archive root or a type-specific directory.
+        is ArtifactProvenance -> {
+            // Java Archives (JARs) by convention (see e.g. the Apache Release Policy) often contain licensing
+            // information as part of the "META-INF" directory.
+            if (id.type == "Maven") "META-INF" else ""
+
+            // TODO: Check if more types need special handling.
+        }
+    }
