@@ -112,7 +112,7 @@ data class DetectedLicenseInfo(
  */
 data class Findings(
     /**
-     * The [Provenance] of the scanned source code.
+     * The root [Provenance] of the scanned source code.
      */
     val provenance: Provenance,
 
