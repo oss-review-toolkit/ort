@@ -37,6 +37,8 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.getSubdirectoryForProvenance
 import org.ossreviewtoolkit.model.utils.prependedPath
+import org.ossreviewtoolkit.utils.common.DeleteOnExitHook
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
@@ -259,8 +261,7 @@ class LicenseInfoResolver(
                 return@forEach
             }
 
-            // Register the (empty) `archiveDir` for deletion on JVM exit.
-            archiveDir.deleteOnExit()
+            DeleteOnExitHook.scheduleDeletion(archiveDir)
 
             val directory = getSubdirectoryForProvenance(provenance, id)
             val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
@@ -271,9 +272,7 @@ class LicenseInfoResolver(
             ).getValue(directory)
 
             licenseFiles += rootLicenseFiles.map { relativePath ->
-                // Register files in `archiveDir` for deletion. Because files are deleted in reverse order than
-                // registered, this will leave `archiveDir` empty to get properly deleted by the registration above.
-                val file = archiveDir.resolve(relativePath).apply { deleteOnExit() }
+                val file = archiveDir / relativePath
 
                 ResolvedLicenseFile(
                     provenance = provenance,
