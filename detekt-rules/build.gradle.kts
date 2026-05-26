@@ -39,14 +39,6 @@ dependencies {
     testImplementation(libs.detekt.test)
 }
 
-configurations.all {
-    resolutionStrategy.dependencySubstitution {
-        substitute(project(":utils:test-utils"))
-            .using(project(":utils:common-utils"))
-            .because("detekt 1.23.0 triggers an issue with logging in org.apache.sshd on Linux")
-    }
-}
-
 // A provider to get a StyledTextOutputFactory via dependency injection.
 interface StyledTextOutputProvider {
     @get:Inject
