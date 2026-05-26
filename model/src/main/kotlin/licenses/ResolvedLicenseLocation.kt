@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
  */
 data class ResolvedLicenseLocation(
     /**
-     * The provenance of the file.
+     * The root provenance of the file.
      */
     val provenance: Provenance,
 
