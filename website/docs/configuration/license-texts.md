@@ -53,6 +53,7 @@ See the [`reference.yml`](https://github.com/oss-review-toolkit/ort/blob/main/mo
 #### License File Patterns
 
 To decide which files to archive, ORT has a [predefined set of license file patterns](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFilePatterns.kt).
+The prefix '**/' will be prepended prior to their usage.
 To overwrite these patterns, you can add the `licenseFilePatterns` section to the `config.yml` file:
 
 ```yaml

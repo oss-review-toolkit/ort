@@ -23,27 +23,27 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 
 /**
  * A class that holds various filename patterns for files that typically contain license-related information. All
- * patterns are supposed to be used case-insensitively.
+ * patterns are supposed to be used case-insensitively. The prefix '*​*​/' will be prepended before usage.
  */
 data class LicenseFilePatterns(
     /**
-     * A set of globs that match typical license filenames.
+     * A set of globs that match typical license filenames. The prefix '*​*​/' will be prepended before usage.
      */
     val licenseFilenames: Set<String>,
 
     /**
-     * A set of globs that match typical notice filenames.
+     * A set of globs that match typical notice filenames. The prefix '*​*​/' will be prepended before usage.
      */
     val noticeFilenames: Set<String>,
 
     /**
-     * A set of globs that match typical patent filenames.
+     * A set of globs that match typical patent filenames. The prefix '*​*​/' will be prepended before usage.
      */
     val patentFilenames: Set<String>,
 
     /**
      * A set of globs that match files that often contain the license of a project, but that are no license files and
-     * are therefore not contained in [licenseFilenames].
+     * are therefore not contained in [licenseFilenames]. The prefix '*​*​/' will be prepended before usage.
      */
     val otherLicenseFilenames: Set<String>
 ) {
