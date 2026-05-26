@@ -253,8 +253,8 @@ class LicenseInfoResolver(
         val licenseFiles = mutableListOf<ResolvedLicenseFile>()
 
         licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
-            resolvedLicense.locations.map { it.provenance }
-        }.filterIsInstance<KnownProvenance>().forEach { provenance ->
+            resolvedLicense.locations.mapNotNull { it.provenance as? KnownProvenance }
+        }.forEach { provenance ->
             val archiveDir = createOrtTempDir("archive")
 
             if (!archiver.unarchive(archiveDir, provenance)) {
