@@ -62,13 +62,12 @@ class ProcessCapture(
         }
     }
 
-    // Note that the `tempDir` must be empty for `deleteOnExit()` to succeed, but that should be the case as the below
-    // `stdoutFile` and `stderrFile` are deleted earlier because files / directories are deleted in the reverse order
-    // that they are registered via `deleteOnExit()`.
-    private val tempDir = createTempDirectory(javaClass.simpleName).toFile().apply { deleteOnExit() }
+    private val tempDir = createTempDirectory(javaClass.simpleName).toFile()
+        .also { DeleteOnExitHook.scheduleDeletion(it) }
+
     private val commandName = command.first().toString().substringAfterLast(File.separatorChar)
-    private val stdoutFile = tempDir.resolve("$commandName.stdout").apply { deleteOnExit() }
-    private val stderrFile = tempDir.resolve("$commandName.stderr").apply { deleteOnExit() }
+    private val stdoutFile = tempDir / "$commandName.stdout"
+    private val stderrFile = tempDir / "$commandName.stderr"
 
     /**
      * Get the standard output stream of the terminated process as a string.
