@@ -145,22 +145,30 @@ class DefaultPackageProvenanceResolver(
             }
         }
 
-        // Try a cheap HEAD request to probe for the artifact first, and fall back to a GET request only if necessary,
-        // like for servers that do not properly implement HEAD requests for redirected URLs.
-        val responseCode = requestSourceArtifact(pkg, "HEAD")
-            .takeUnless { it == HttpURLConnection.HTTP_BAD_METHOD || it == HttpURLConnection.HTTP_NOT_FOUND }
-            ?: requestSourceArtifact(pkg, "GET")
+        return runCatching {
+            // Try a cheap HEAD request to probe for the artifact first, and fall back to a GET request only if
+            // necessary, like for servers that do not properly implement HEAD requests for redirected URLs.
+            val responseCode = requestSourceArtifact(pkg, "HEAD")
+                .takeUnless { it == HttpURLConnection.HTTP_BAD_METHOD || it == HttpURLConnection.HTTP_NOT_FOUND }
+                ?: requestSourceArtifact(pkg, "GET")
 
-        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
-            val artifactProvenance = ArtifactProvenance(pkg.sourceArtifact)
-            storage.writeProvenance(pkg.id, pkg.sourceArtifact, ResolvedArtifactProvenance(artifactProvenance))
-            return artifactProvenance
-        }
-
-        throw IOException(
-            "Could not verify existence of source artifact at ${pkg.sourceArtifact.url}. " +
-                "HTTP request got response $responseCode."
-        )
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+                val artifactProvenance = ArtifactProvenance(pkg.sourceArtifact)
+                storage.writeProvenance(pkg.id, pkg.sourceArtifact, ResolvedArtifactProvenance(artifactProvenance))
+                artifactProvenance
+            } else {
+                throw IOException(
+                    "Could not verify existence of source artifact at ${pkg.sourceArtifact.url}. " +
+                        "HTTP request got response $responseCode."
+                )
+            }
+        }.onFailure { exception ->
+            storage.writeProvenance(
+                pkg.id,
+                pkg.sourceArtifact,
+                UnresolvedPackageProvenance(exception.collectMessages())
+            )
+        }.getOrThrow()
     }
 
     /**
