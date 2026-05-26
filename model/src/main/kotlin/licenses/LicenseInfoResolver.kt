@@ -245,46 +245,50 @@ class LicenseInfoResolver(
         }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
-        if (archiver == null) {
-            return ResolvedLicenseFileInfo(id, emptyList())
+        val licenseInfo = resolveLicenseInfo(id)
+
+        val provenances = licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
+            resolvedLicense.locations.mapNotNull { it.provenance as? KnownProvenance }
         }
 
-        val licenseInfo = resolveLicenseInfo(id)
-        val licenseFiles = mutableListOf<ResolvedLicenseFile>()
-
-        licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
-            resolvedLicense.locations.mapNotNull { it.provenance as? KnownProvenance }
-        }.forEach { provenance ->
-            val archiveDir = createOrtTempDir("archive")
-
-            if (!archiver.unarchive(archiveDir, provenance)) {
-                archiveDir.safeDeleteRecursively()
-                return@forEach
-            }
-
-            DeleteOnExitHook.scheduleDeletion(archiveDir)
-
-            val directory = getSubdirectoryForProvenance(provenance, id)
-            val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
-                relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
-                    it.relativeTo(archiveDir).invariantSeparatorsPath
-                },
-                directories = listOf(directory)
-            ).getValue(directory)
-
-            licenseFiles += rootLicenseFiles.map { relativePath ->
-                val file = archiveDir / relativePath
-
-                ResolvedLicenseFile(
-                    provenance = provenance,
-                    licenseInfo.filter(provenance, relativePath),
-                    relativePath,
-                    file
-                )
-            }
+        val licenseFiles = provenances.flatMap { provenance ->
+            resolveLicenseFiles(id, provenance)
         }
 
         return ResolvedLicenseFileInfo(id, licenseFiles)
+    }
+
+    private fun resolveLicenseFiles(id: Identifier, provenance: KnownProvenance): List<ResolvedLicenseFile> {
+        if (archiver == null) return emptyList()
+        val archiveDir = createOrtTempDir("archive")
+
+        val licenseInfo = resolveLicenseInfo(id)
+
+        if (!archiver.unarchive(archiveDir, provenance)) {
+            archiveDir.safeDeleteRecursively()
+            return emptyList()
+        }
+
+        DeleteOnExitHook.scheduleDeletion(archiveDir)
+
+        val directory = getSubdirectoryForProvenance(provenance, id)
+        val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
+            relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
+                it.relativeTo(archiveDir).invariantSeparatorsPath
+            },
+            directories = listOf(directory)
+        ).getValue(directory)
+
+        return rootLicenseFiles.map { relativePath ->
+            val file = archiveDir / relativePath
+
+            ResolvedLicenseFile(
+                provenance = provenance,
+                licenseInfo.filter(provenance, relativePath),
+                relativePath,
+                file
+            )
+        }
     }
 
     private fun resolveCopyrightFromAuthors(authors: Set<String>): ResolvedLicenseLocation =
