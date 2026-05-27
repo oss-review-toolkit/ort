@@ -275,7 +275,7 @@ class LicenseInfoResolver(
                 it.relativeTo(archiveDir).invariantSeparatorsPath
             },
             directories = listOf(directory)
-        ).getValue(directory)
+        ).values.single()
 
         return rootLicenseFiles.map { relativePath ->
             val file = archiveDir / relativePath
