@@ -120,7 +120,8 @@ internal object BazelCommand : CommandLineTool {
             environment + mapOf(
                 // Disable the optional wrapper script under `tools/bazel` only for the "--version" call.
                 "BAZELISK_SKIP_WRAPPER" to "${args[0] == getVersionArguments()}",
-                "USE_BAZEL_FALLBACK_VERSION" to BAZEL_FALLBACK_VERSION
+                // See https://github.com/bazelbuild/bazelisk#how-does-bazelisk-know-which-bazel-version-to-run.
+                "USE_BAZEL_FALLBACK_VERSION" to "warn:$BAZEL_FALLBACK_VERSION"
             )
         )
 
