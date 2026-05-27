@@ -117,8 +117,8 @@ internal object BazelCommand : CommandLineTool {
         super.run(
             args = args,
             workingDir,
-            // Disable the optional wrapper script under `tools/bazel` only for the "--version" call.
             environment + mapOf(
+                // Disable the optional wrapper script under `tools/bazel` only for the "--version" call.
                 "BAZELISK_SKIP_WRAPPER" to "${args[0] == getVersionArguments()}",
                 "USE_BAZEL_FALLBACK_VERSION" to BAZEL_FALLBACK_VERSION
             )
