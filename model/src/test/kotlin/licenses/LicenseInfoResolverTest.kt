@@ -694,6 +694,18 @@ class LicenseInfoResolverTest : WordSpec({
                 "LICENSE_2"
             )
         }
+
+        "prefer the license files with path depth 1, if there is no license file in the root directory" {
+            val archiver = createArchiver(ARTIFACT_PROVENANCE, "path1/LICENSE", "path1/subdir/LICENSE", "path2/LICENSE")
+            val licenseInfo = createLicenseInfo(ID, ARTIFACT_PROVENANCE)
+
+            val result = createResolver(data = listOf(licenseInfo), archiver = archiver).resolveLicenseFiles(ID)
+
+            result.files.map { it.path }.shouldContainExactlyInAnyOrder(
+                "path1/LICENSE",
+                "path2/LICENSE"
+            )
+        }
     }
 
     "resolveLicenseFiles()" should {
