@@ -82,7 +82,7 @@ import org.semver4j.range.RangeListFactory
 private const val PROJECT_TYPE = "Bazel"
 private const val PACKAGE_TYPE = "Bazel"
 
-private const val BAZEL_FALLBACK_VERSION = "7.0.1"
+private const val BAZEL_FALLBACK_VERSION = "8.7.0"
 private const val BAZEL_RC_FILE = ".bazelrc"
 private const val BAZEL_RC_REGISTRY_PATTERN = "common --registry="
 private const val LOCKFILE_NAME = "MODULE.bazel.lock"
