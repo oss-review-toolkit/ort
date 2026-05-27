@@ -30,6 +30,7 @@ import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -634,6 +635,36 @@ class LicenseInfoResolverTest : WordSpec({
         }
     }
 
+    "resolveLicenseFiles() for VCS provenance" should {
+        "include both license files, even if one of them does not have any findings" {
+            val archiver = createArchiver(REPOSITORY_PROVENANCE, "LICENSE", "LICENSE_WITHOUT_FINDINGS")
+            val licenseInfo = createLicenseInfo(ID, REPOSITORY_PROVENANCE, "LICENSE" to "MIT")
+
+            val result = createResolver(data = listOf(licenseInfo), archiver = archiver).resolveLicenseFiles(ID)
+
+            result.files.map { it.path }.shouldContainExactlyInAnyOrder(
+                "LICENSE",
+                "LICENSE_WITHOUT_FINDINGS"
+            )
+        }
+
+        "prefer the LICENSE file in the VCS path over the ones in the root and in subdir" {
+            val provenance = REPOSITORY_PROVENANCE.setVcsPath("path1")
+            val archiver = createArchiver(provenance, "LICENSE", "path1/LICENSE", "path1/subdir/LICENSE")
+            val licenseInfo = createLicenseInfo(
+                ID,
+                provenance,
+                "LICENSE" to "MIT",
+                "path1/LICENSE" to "Apache-2.0",
+                "path1/subdir/LICENSE" to "BSD-3-Clause"
+            )
+
+            val result = createResolver(data = listOf(licenseInfo), archiver = archiver).resolveLicenseFiles(ID)
+
+            result.files.map { it.path }.shouldContainExactlyInAnyOrder("path1/LICENSE")
+        }
+    }
+
     "resolveLicenseFiles()" should {
         "create the expected result" {
             val licenseInfos = listOf(
@@ -736,6 +767,27 @@ private fun createResolver(
     copyrightGarbage = CopyrightGarbage(copyrightGarbage),
     addAuthorsToCopyrights = addAuthorsToCopyrights,
     archiver = archiver
+)
+
+private fun createLicenseInfo(
+    id: Identifier,
+    provenance: KnownProvenance,
+    vararg pathAndLicense: Pair<String, String>,
+    pathExcludes: Collection<PathExclude> = emptyList()
+) = createLicenseInfo(
+    id = id,
+    detectedLicenses = listOf(
+        Findings(
+            provenance = provenance,
+            licenses = pathAndLicense.associate { (path, license) ->
+                license to listOf(TextLocation(path, 1))
+            }.toFindingsSet(),
+            copyrights = emptySet(),
+            pathExcludes = pathExcludes.toList(),
+            licenseFindingCurations = emptyList(),
+            relativeFindingsPath = ""
+        )
+    )
 )
 
 private fun createLicenseInfo(
@@ -893,3 +945,5 @@ private fun ResolvedLicenseInfo.pathExcludesForCopyright(
     .find { it.statement == copyright && it.location == location }
     ?.matchingPathExcludes
     ?.toSet().orEmpty()
+
+private fun RepositoryProvenance.setVcsPath(path: String) = copy(vcsInfo = vcsInfo.copy(path = path))
