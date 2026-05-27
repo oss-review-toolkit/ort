@@ -75,13 +75,12 @@ import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class LicenseInfoResolverTest : WordSpec({
     val pkgId = Identifier("Gradle:org.ossreviewtoolkit:ort:1.0.0")
-    val vcsInfo = VcsInfo(
-        type = VcsType.GIT,
-        url = "https://github.com/oss-review-toolkit/ort.git",
-        revision = "master"
-    )
     val provenance = RepositoryProvenance(
-        vcsInfo = vcsInfo,
+        vcsInfo = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/oss-review-toolkit/ort.git",
+            revision = "master"
+        ),
         resolvedRevision = "0000000000000000000000000000000000000000"
     )
 
