@@ -24,6 +24,7 @@ import io.kotest.matchers.collections.beEmpty as beEmptyCollection
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeSingleton
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -41,6 +42,7 @@ import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
@@ -57,6 +59,22 @@ class OrtProjectFileFunTest : WordSpec({
         "return properly resolved packages list based on yaml file" {
             val definitionFile = getAssetFile("projects/ortproject.yml")
             verifyBasicProject(OrtProjectFileFactory.create().resolveSingleProject(definitionFile))
+        }
+
+        "return the expected linkage types" {
+            val definitionFile = getAssetFile("projects/linkage.ortproject.yml")
+
+            val result = OrtProjectFileFactory.create().resolveSingleProject(definitionFile)
+
+            result.project.scopes.shouldBeSingleton { scope ->
+                scope.dependencies.map {
+                    it.id.toCoordinates() to it.linkage
+                }.shouldContainExactly(
+                    "Maven:com.example:default-linkage:0.1.0" to PackageLinkage.DYNAMIC,
+                    "Maven:com.example:dynamic-linkage:0.1.0" to PackageLinkage.DYNAMIC,
+                    "Maven:com.example:static-linkage:0.1.0" to PackageLinkage.STATIC
+                )
+            }
         }
 
         "return properly resolved package list for minimal project definition using purl" {
@@ -228,11 +246,11 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
         project.homepageUrl shouldBe "https://project_x.example.com"
 
         project.scopeDependencies.orEmpty().associate { scope ->
-            scope.name to scope.dependencies.mapTo(mutableSetOf()) { it.id.name }
+            scope.name to scope.dependencies.mapTo(mutableSetOf()) { it.id.name to it.linkage }
         } shouldContainExactly mapOf(
-            "main" to setOf("full"),
-            "some_scope" to setOf("full"),
-            "unnamed" to setOf("minimal")
+            "main" to setOf("full" to PackageLinkage.DYNAMIC),
+            "some_scope" to setOf("full" to PackageLinkage.DYNAMIC),
+            "unnamed" to setOf("minimal" to PackageLinkage.DYNAMIC)
         )
 
         packages.map { it.purl } should containExactlyInAnyOrder(

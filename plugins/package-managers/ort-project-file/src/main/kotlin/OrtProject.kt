@@ -35,6 +35,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 
 @Serializable
@@ -59,6 +60,7 @@ internal data class OrtProject(
         val labels: Map<String, String> = emptyMap(),
         val authors: Set<String> = emptySet(),
         val scopes: Set<String>? = null,
+        val linkage: PackageLinkage? = null,
         val isModified: Boolean? = null,
         val isMetadataOnly: Boolean? = null
     ) {

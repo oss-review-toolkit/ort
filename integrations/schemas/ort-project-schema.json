@@ -107,6 +107,15 @@
             "type": "string"
           }
         },
+        "linkage": {
+          "description": "The linkage type used be the dependent to link this package.",
+          "type": "string",
+          "enum": [
+            "DYNAMIC",
+            "STATIC"
+          ],
+          "default": "DYNAMIC"
+        },
         "isModified": {
           "description": "Flag indicating whether the source code of the package has been modified compared to the original source code. Default is false.",
           "type": "boolean",

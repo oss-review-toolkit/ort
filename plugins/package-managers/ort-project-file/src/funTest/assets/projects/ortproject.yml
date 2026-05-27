@@ -32,6 +32,7 @@ dependencies:
     scopes:
       - "main"
       - "some_scope"
+    linkage: "DYNAMIC"
     isModified: true
     isMetadataOnly: true
 

@@ -66,6 +66,7 @@ dependencies:
     scopes:
       - "main"
       - "some_scope"
+    linkage: "DYNAMIC"
     isModified: false
     isMetadataOnly: false
   - purl: "pkg:maven/com.example/minimal@0.1.0"
@@ -135,6 +136,7 @@ authors:
 # (optional) List of scopes the package belongs to.
 scopes: 
   - String Package's scope.
+linkage: String (optional) linkage type, if set must be either "STATIC" or "DYNAMIC". If not set defaults to "DYNAMIC".
 isModified: Boolean (optional) Flag indicating whether the source code of the package has been modified compared to
   the original source code, e.g., in case of a fork of an upstream Open Source project. Default is false.
 isMetadataOnly: Boolean (optional) Flag indicating whether the package is just metadata, like e.g. Maven BOM artifacts
