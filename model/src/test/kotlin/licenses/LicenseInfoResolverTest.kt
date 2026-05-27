@@ -19,8 +19,10 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
 import io.kotest.matchers.collections.beEmpty
@@ -33,10 +35,13 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
@@ -56,12 +61,13 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.declaredLicenses
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
+import org.ossreviewtoolkit.model.utils.clearVcsPath
 import org.ossreviewtoolkit.utils.common.div
-import org.ossreviewtoolkit.utils.common.extractResource
+import org.ossreviewtoolkit.utils.common.packZip
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.transformingCollectionEmptyMatcher
@@ -656,15 +662,7 @@ class LicenseInfoResolverTest : WordSpec({
                 )
             )
 
-            val archiveDir = tempdir() / "archive"
-            extractResource("/archive.zip", archiveDir / "88dce74b694866af2a5e380206b119f5e38aad5f" / "archive.zip")
-            val archiver = FileArchiver(
-                patterns = LicenseFilePatterns.DEFAULT.licenseFilenames,
-                storage = FileProvenanceFileStorage(
-                    LocalFileStorage(archiveDir),
-                    FileArchiverConfiguration.ARCHIVE_FILENAME
-                )
-            )
+            val archiver = createArchiver(provenance, "LICENSE")
             val resolver = createResolver(licenseInfos, archiver = archiver)
 
             val result = resolver.resolveLicenseFiles(pkgId)
@@ -675,7 +673,7 @@ class LicenseInfoResolverTest : WordSpec({
             val file = result.files.first()
             file.provenance shouldBe provenance
             file.path shouldBe "LICENSE"
-            file.file.readText() shouldBe "Copyright 2020 Holder\n\n${SpdxLicense.MIT.text}"
+            file.file.readText() shouldBe "content of: LICENSE"
             file.licenses should containLicensesExactly("MIT")
             file.licenses should containLocationForLicense(
                 license = "MIT",
@@ -692,6 +690,42 @@ class LicenseInfoResolverTest : WordSpec({
         }
     }
 })
+
+private fun TestConfiguration.createArchiver(
+    provenance: KnownProvenance,
+    vararg relativeFilePaths: String
+): FileArchiver {
+    val storage = FileProvenanceFileStorage(
+        LocalFileStorage(tempdir("storage") / "archive"),
+        FileArchiverConfiguration.ARCHIVE_FILENAME
+    )
+
+    createArchive(*relativeFilePaths).also { archiveFile ->
+        storage.putData(
+            provenance = (provenance as? RepositoryProvenance)?.clearVcsPath() ?: provenance,
+            data = archiveFile.inputStream(),
+            size = archiveFile.length()
+        )
+    }
+
+    return FileArchiver(LicenseFilePatterns.DEFAULT.licenseFilenames, storage)
+}
+
+private fun TestConfiguration.createArchive(vararg relativeFilePaths: String): File {
+    val tempDir = tempdir("archive")
+
+    relativeFilePaths.forEach { path ->
+        val file = tempDir / path
+        file.parentFile.safeMkdirs()
+        file.writeText("content of: $path")
+    }
+
+    return tempfile("archive", suffix = ".zip").also {
+        // tempfile() guarantees to return a newly create file which did not exist before. Therefore, using
+        // 'overwrite = true' is required to overwrite the empty file.
+        tempDir.packZip(it, overwrite = true)
+    }
+}
 
 private fun createResolver(
     data: List<LicenseInfo>,
