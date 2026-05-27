@@ -41,6 +41,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -82,6 +83,13 @@ private val REPOSITORY_PROVENANCE = RepositoryProvenance(
         revision = "master"
     ),
     resolvedRevision = "0000000000000000000000000000000000000000"
+)
+
+private val ARTIFACT_PROVENANCE = ArtifactProvenance(
+    sourceArtifact = RemoteArtifact(
+        url = "http://example.com/pkg-1.0.0-sources.zip",
+        hash = Hash("0000000000000000000000000000000000000000", HashAlgorithm.UNKNOWN)
+    )
 )
 
 class LicenseInfoResolverTest : WordSpec({
@@ -671,6 +679,20 @@ class LicenseInfoResolverTest : WordSpec({
             val result = createResolver(data = listOf(licenseInfo), archiver = archiver).resolveLicenseFiles(ID)
 
             result.files.map { it.path }.shouldContainExactlyInAnyOrder("path1/LICENSE")
+        }
+    }
+
+    "resolveLicenseFiles() for artifact provenance" should {
+        "prefer the license files in the root directory over the one in subdir" {
+            val archiver = createArchiver(ARTIFACT_PROVENANCE, "LICENSE", "LICENSE_2", "subdir/LICENSE")
+            val licenseInfo = createLicenseInfo(ID, ARTIFACT_PROVENANCE)
+
+            val result = createResolver(data = listOf(licenseInfo), archiver = archiver).resolveLicenseFiles(ID)
+
+            result.files.map { it.path }.shouldContainExactlyInAnyOrder(
+                "LICENSE",
+                "LICENSE_2"
+            )
         }
     }
 
