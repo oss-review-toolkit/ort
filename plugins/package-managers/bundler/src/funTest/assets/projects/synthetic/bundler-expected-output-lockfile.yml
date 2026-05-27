@@ -23,6 +23,31 @@ project:
       - id: "Gem::mini_portile2:2.8.9"
       - id: "Gem::racc:1.8.1"
     - id: "Gem::rack:2.2.23"
+  - name: "maintenance"
+    dependencies:
+    - id: "Gem::rubocop:1.86.2"
+      dependencies:
+      - id: "Gem::json:2.19.5"
+      - id: "Gem::language_server-protocol:3.17.0.5"
+      - id: "Gem::lint_roller:1.1.0"
+      - id: "Gem::parallel:1.28.0"
+      - id: "Gem::parser:3.3.11.1"
+        dependencies:
+        - id: "Gem::ast:2.4.3"
+        - id: "Gem::racc:1.8.1"
+      - id: "Gem::rainbow:3.1.1"
+      - id: "Gem::regexp_parser:2.12.0"
+      - id: "Gem::rubocop-ast:1.49.1"
+        dependencies:
+        - id: "Gem::parser:3.3.11.1"
+          dependencies:
+          - id: "Gem::ast:2.4.3"
+          - id: "Gem::racc:1.8.1"
+        - id: "Gem::prism:1.9.0"
+      - id: "Gem::ruby-progressbar:1.13.0"
+      - id: "Gem::unicode-display_width:3.2.0"
+        dependencies:
+        - id: "Gem::unicode-emoji:4.2.0"
   - name: "test"
     dependencies:
     - id: "Gem::elasticsearch-rails:7.2.1"
@@ -40,6 +65,36 @@ project:
         - id: "Gem::diff-lcs:1.6.2"
         - id: "Gem::rspec-support:3.13.7"
 packages:
+- id: "Gem::ast:2.4.3"
+  purl: "pkg:gem/ast@2.4.3"
+  authors:
+  - "whitequark"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A library for working with Abstract Syntax Trees."
+  homepage_url: "https://whitequark.github.io/ast/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/ast-2.4.3.gem"
+    hash:
+      value: "954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/whitequark/ast.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/whitequark/ast.git"
+    revision: ""
+    path: ""
 - id: "Gem::diff-lcs:1.6.2"
   purl: "pkg:gem/diff-lcs@1.6.2"
   authors:
@@ -111,6 +166,96 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/elastic/elasticsearch-rails.git"
+    revision: ""
+    path: ""
+- id: "Gem::json:2.19.5"
+  purl: "pkg:gem/json@2.19.5"
+  authors:
+  - "Florian Frank"
+  declared_licenses:
+  - "Ruby"
+  declared_licenses_processed:
+    spdx_expression: "Ruby"
+  description: "This is a JSON implementation as a Ruby extension in C."
+  homepage_url: "https://github.com/ruby/json"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/json-2.19.5.gem"
+    hash:
+      value: "218a18553e4801d579ca7e0f5bc72bafd776d7397238a1fb4e74db5b0a812c59"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/ruby/json.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ruby/json.git"
+    revision: ""
+    path: ""
+- id: "Gem::language_server-protocol:3.17.0.5"
+  purl: "pkg:gem/language_server-protocol@3.17.0.5"
+  authors:
+  - "Fumiaki MATSUSHIMA"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A Language Server Protocol SDK"
+  homepage_url: "https://github.com/mtsmfm/language_server-protocol-ruby"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/language_server-protocol-3.17.0.5.gem"
+    hash:
+      value: "fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/mtsmfm/language_server-protocol-ruby.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mtsmfm/language_server-protocol-ruby.git"
+    revision: ""
+    path: ""
+- id: "Gem::lint_roller:1.1.0"
+  purl: "pkg:gem/lint_roller@1.1.0"
+  authors:
+  - "Justin Searls"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A plugin specification for linter and formatter rulesets"
+  homepage_url: "https://github.com/standardrb/lint_roller"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/lint_roller-1.1.0.gem"
+    hash:
+      value: "2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/standardrb/lint_roller.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/standardrb/lint_roller.git"
     revision: ""
     path: ""
 - id: "Gem::mini_portile2:2.8.9"
@@ -193,6 +338,96 @@ packages:
     url: "https://github.com/sparklemotion/nokogiri.git"
     revision: ""
     path: ""
+- id: "Gem::parallel:1.28.0"
+  purl: "pkg:gem/parallel@1.28.0"
+  authors:
+  - "Michael Grosser"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Run any kind of code in parallel processes"
+  homepage_url: "https://github.com/grosser/parallel"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/parallel-1.28.0.gem"
+    hash:
+      value: "33e6de1484baf2524792d178b0913fc8eb94c628d6cfe45599ad4458c638c970"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/grosser/parallel.git"
+    revision: "v1.28.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/grosser/parallel.git"
+    revision: "v1.28.0"
+    path: ""
+- id: "Gem::parser:3.3.11.1"
+  purl: "pkg:gem/parser@3.3.11.1"
+  authors:
+  - "whitequark"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A Ruby parser written in pure Ruby."
+  homepage_url: "https://github.com/whitequark/parser"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/parser-3.3.11.1.gem"
+    hash:
+      value: "d17ace7aabe3e72c3cc94043714be27cc6f852f104d81aa284c2281aecc65d54"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/whitequark/parser.git"
+    revision: "v3.3.11.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/whitequark/parser.git"
+    revision: "v3.3.11.1"
+    path: ""
+- id: "Gem::prism:1.9.0"
+  purl: "pkg:gem/prism@1.9.0"
+  authors:
+  - "Shopify"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Prism Ruby parser"
+  homepage_url: "https://github.com/ruby/prism"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/prism-1.9.0.gem"
+    hash:
+      value: "7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/ruby/prism.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ruby/prism.git"
+    revision: ""
+    path: ""
 - id: "Gem::racc:1.8.1"
   purl: "pkg:gem/racc@1.8.1"
   authors:
@@ -258,6 +493,68 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/rack/rack.git"
+    revision: ""
+    path: ""
+- id: "Gem::rainbow:3.1.1"
+  purl: "pkg:gem/rainbow@3.1.1"
+  authors:
+  - "Marcin Kulik"
+  - "Olle Jonsson"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Colorize printed text on ANSI terminals"
+  homepage_url: "https://github.com/sickill/rainbow"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rainbow-3.1.1.gem"
+    hash:
+      value: "039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "http://github.com/sickill/rainbow.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sickill/rainbow.git"
+    revision: ""
+    path: ""
+- id: "Gem::regexp_parser:2.12.0"
+  purl: "pkg:gem/regexp_parser@2.12.0"
+  authors:
+  - "Ammar Ali"
+  - "Janosch Müller"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A library for tokenizing, lexing, and parsing Ruby regular expressions."
+  homepage_url: "https://github.com/ammar/regexp_parser"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/regexp_parser-2.12.0.gem"
+    hash:
+      value: "35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/ammar/regexp_parser.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ammar/regexp_parser.git"
     revision: ""
     path: ""
 - id: "Gem::rspec:3.13.2"
@@ -425,3 +722,165 @@ packages:
     url: "https://github.com/rspec/rspec.git"
     revision: "rspec-support-v3.13.7"
     path: "rspec-support"
+- id: "Gem::rubocop:1.86.2"
+  purl: "pkg:gem/rubocop@1.86.2"
+  authors:
+  - "Bozhidar Batsov"
+  - "Jonas Arvidsson"
+  - "Yuji Nakayama"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "RuboCop is a Ruby code style checking and code formatting tool.\n\
+    It aims to enforce the community-driven Ruby Style Guide.\n"
+  homepage_url: "https://rubocop.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rubocop-1.86.2.gem"
+    hash:
+      value: "bb2e97f635eda42c448f2588f4a6ff78f221b8bdfdf65b1e9b07fbd57521b45d"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/rubocop/rubocop.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rubocop/rubocop.git"
+    revision: ""
+    path: ""
+- id: "Gem::rubocop-ast:1.49.1"
+  purl: "pkg:gem/rubocop-ast@1.49.1"
+  authors:
+  - "Bozhidar Batsov"
+  - "Jonas Arvidsson"
+  - "Yuji Nakayama"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "    RuboCop's Node and NodePattern classes.\n"
+  homepage_url: "https://www.rubocop.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rubocop-ast-1.49.1.gem"
+    hash:
+      value: "4412f3ee70f6fe4546cc489548e0f6fcf76cafcfa80fa03af67098ffed755035"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/rubocop/rubocop-ast.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rubocop/rubocop-ast.git"
+    revision: ""
+    path: ""
+- id: "Gem::ruby-progressbar:1.13.0"
+  purl: "pkg:gem/ruby-progressbar@1.13.0"
+  authors:
+  - "jfelchner"
+  - "thekompanee"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Ruby/ProgressBar is an extremely flexible text progress bar library\
+    \ for Ruby. The output can be customized with a flexible formatting system including:\
+    \ percentage, bars of various formats, elapsed time and estimated time remaining."
+  homepage_url: "https://github.com/jfelchner/ruby-progressbar"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/ruby-progressbar-1.13.0.gem"
+    hash:
+      value: "80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jfelchner/ruby-progressbar.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jfelchner/ruby-progressbar.git"
+    revision: ""
+    path: ""
+- id: "Gem::unicode-display_width:3.2.0"
+  purl: "pkg:gem/unicode-display_width@3.2.0"
+  authors:
+  - "Jan Lelis"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "[Unicode 17.0.0] Determines the monospace display width of a string\
+    \ using EastAsianWidth.txt, Unicode general category, Emoji specification, and\
+    \ other data."
+  homepage_url: "https://github.com/janlelis/unicode-display_width"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/unicode-display_width-3.2.0.gem"
+    hash:
+      value: "0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/janlelis/unicode-display_width.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/janlelis/unicode-display_width.git"
+    revision: ""
+    path: ""
+- id: "Gem::unicode-emoji:4.2.0"
+  purl: "pkg:gem/unicode-emoji@4.2.0"
+  authors:
+  - "Jan Lelis"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "[Emoji 17.0] Provides Unicode Emoji data and regexes, incorporating\
+    \ the latest Unicode and Emoji standards. Includes a categorized list of recommended\
+    \ Emoji."
+  homepage_url: "https://github.com/janlelis/unicode-emoji"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/unicode-emoji-4.2.0.gem"
+    hash:
+      value: "519e69150f75652e40bf736106cfbc8f0f73aa3fb6a65afe62fefa7f80b0f80f"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/janlelis/unicode-emoji.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/janlelis/unicode-emoji.git"
+    revision: ""
+    path: ""

@@ -32,6 +32,10 @@ require 'yaml'
 # Resolve dependencies independently of the Ruby interpreter.
 Bundler.settings.set_global(:force_ruby_platform, true)
 
+# Resolve all groups including optional ones.
+all_groups = Bundler.definition.dependencies.flat_map(&:groups)
+Bundler.settings.set_global(:with, all_groups)
+
 # This command tries to resolve dependencies that are specified in the Gemfile of the current working directory.
 # Explicitly enable resolution of remote `gem` or `git` dependencies. `path` dependencies are still resolved locally.
 Bundler.ui.silence {

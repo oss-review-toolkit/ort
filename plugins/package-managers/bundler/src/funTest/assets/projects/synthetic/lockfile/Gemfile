@@ -5,6 +5,10 @@ source "https://rubygems.org"
 gem 'nokogiri'
 gem 'rack', '~>2.1'
 
+group :maintenance, optional: true do
+  gem "rubocop", require: false
+end
+
 group :test do
     gem 'rspec', :require => 'spec'
     gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', ref: 'v7.2.1'
