@@ -25,6 +25,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.ArtifactRepository
 import org.gradle.api.artifacts.repositories.AuthenticationSupported
+import org.gradle.api.artifacts.repositories.PasswordCredentials
 import org.gradle.api.artifacts.repositories.UrlArtifactRepository
 import org.gradle.api.attributes.AttributeContainer
 import org.gradle.internal.deprecation.DeprecatableConfiguration
@@ -71,7 +72,10 @@ internal fun RepositoryHandler.associateNamesWithUrlsTo(repositories: MutableMap
  * Convert this [UrlArtifactRepository] to an [OrtRepository] by extracting the relevant properties.
  */
 internal fun UrlArtifactRepository.toOrtRepository(): OrtRepository {
-    val credentials = (this as? AuthenticationSupported)?.credentials
+    val credentials = (this as? AuthenticationSupported)?.let { authSupported ->
+        runCatching { authSupported.getCredentials(PasswordCredentials::class.java) }.getOrNull()
+    }
+
     return OrtRepositoryImpl(
         url = url.toString(),
         username = credentials?.username,
