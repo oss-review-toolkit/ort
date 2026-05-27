@@ -1,0 +1,6 @@
+dependencies:
+  - id: "Maven:com.example:default-linkage:0.1.0"
+  - id: "Maven:com.example:dynamic-linkage:0.1.0"
+    linkage: DYNAMIC
+  - id: "Maven:com.example:static-linkage:0.1.0"
+    linkage: STATIC

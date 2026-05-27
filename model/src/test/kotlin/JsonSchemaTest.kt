@@ -314,6 +314,7 @@ class JsonSchemaTest : StringSpec({
                 scopes:
                   - "main"
                   - "some_scope"
+                linkage: DYNAMIC  
                 isModified: false
                 isMetadataOnly: false
               - purl: "pkg:maven/com.example/minimal@0.1.0"
