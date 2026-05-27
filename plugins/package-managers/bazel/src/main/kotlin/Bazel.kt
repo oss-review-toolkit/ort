@@ -92,6 +92,12 @@ private const val CONAN_BUILD_TEST_SCOPE_NAME = "conan_test_requires"
 
 data class BazelConfig(
     /**
+     * The optional Bazel version to use. If unset, Bazelisk tries to auto-detect the version, and eventually falls back
+     * to [BAZEL_FALLBACK_VERSION].
+     */
+    val bazelVersion: String?,
+
+    /**
      * The default name of the lockfile for the Conan package manager.
      */
     @OrtPluginOption(defaultValue = "conan.lock")
@@ -510,7 +516,8 @@ class Bazel(
             "--disk_cache=",
             "--lockfile_mode=update",
             "--extension_info=all",
-            workingDir = projectDir
+            workingDir = projectDir,
+            environment = config.bazelVersion?.let { mapOf("USE_BAZEL_VERSION" to it) }.orEmpty()
         ).requireSuccess()
 
         if (process.stderr.isNotEmpty()) {
