@@ -92,6 +92,7 @@ private val ARTIFACT_PROVENANCE = ArtifactProvenance(
     )
 )
 
+@Suppress("LargeClass")
 class LicenseInfoResolverTest : WordSpec({
     "resolveLicenseInfo()" should {
         "resolve declared licenses" {
@@ -680,6 +681,15 @@ class LicenseInfoResolverTest : WordSpec({
 
             result.files.map { it.path }.shouldContainExactlyInAnyOrder("path1/LICENSE")
         }
+
+        "return only non-excluded license files" {
+            val archiver = createArchiver(REPOSITORY_PROVENANCE, "LICENSE", "LICENSE2")
+            val licenseInfo = createLicenseInfo(ID, REPOSITORY_PROVENANCE, pathExcludes = listOf("LICENSE"))
+
+            val result = createResolver(data = listOf(licenseInfo), archiver = archiver).resolveLicenseFiles(ID)
+
+            result.files.map { it.path }.shouldContainExactlyInAnyOrder("LICENSE2")
+        }
     }
 
     "resolveLicenseFiles() for artifact provenance" should {
@@ -705,6 +715,15 @@ class LicenseInfoResolverTest : WordSpec({
                 "path1/LICENSE",
                 "path2/LICENSE"
             )
+        }
+
+        "return only non-excluded license files" {
+            val archiver = createArchiver(ARTIFACT_PROVENANCE, "LICENSE", "LICENSE2")
+            val licenseInfo = createLicenseInfo(ID, ARTIFACT_PROVENANCE, pathExcludes = listOf("LICENSE"))
+
+            val result = createResolver(data = listOf(licenseInfo), archiver = archiver).resolveLicenseFiles(ID)
+
+            result.files.map { it.path }.shouldContainExactlyInAnyOrder("LICENSE2")
         }
     }
 
@@ -816,7 +835,7 @@ private fun createLicenseInfo(
     id: Identifier,
     provenance: KnownProvenance,
     vararg pathAndLicense: Pair<String, String>,
-    pathExcludes: Collection<PathExclude> = emptyList()
+    pathExcludes: Collection<String> = emptyList()
 ) = createLicenseInfo(
     id = id,
     detectedLicenses = listOf(
@@ -826,7 +845,7 @@ private fun createLicenseInfo(
                 license to listOf(TextLocation(path, 1))
             }.toFindingsSet(),
             copyrights = emptySet(),
-            pathExcludes = pathExcludes.toList(),
+            pathExcludes = pathExcludes.map { PathExclude(pattern = it, reason = PathExcludeReason.OTHER) },
             licenseFindingCurations = emptyList(),
             relativeFindingsPath = ""
         )

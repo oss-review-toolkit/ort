@@ -77,8 +77,8 @@ class LicenseInfoResolver(
     /**
      * Get the [ResolvedLicenseFileInfo] for the project or package identified by [id]. Requires an [archiver] to be
      * configured, otherwise always returns empty results. To determine the applicable license files the files in
-     * the archive are matched against the configured license and patent file patterns (see [LicenseFilePatterns]) as
-     * follows:
+     * the archive are matched against path excludes and the configured license and patent file patterns (see
+     * [LicenseFilePatterns]) as follows:
      *
      * 1. For a repository provenance, all filenames in the VCS path are matched. If there are matches, then these are
      *    used as the result, otherwise that search is repeated recursively in the parent directory.
@@ -260,18 +260,19 @@ class LicenseInfoResolver(
         }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
-        val provenances = provider.get(id).detectedLicenseInfo.findings.mapNotNull {
-            it.provenance as? KnownProvenance
-        }
-
-        val licenseFiles = provenances.flatMap { provenance ->
-            resolveLicenseFiles(id, provenance)
+        val licenseFiles = provider.get(id).detectedLicenseInfo.findings.flatMap { findings ->
+            val provenance = findings.provenance as? KnownProvenance ?: return@flatMap emptySet()
+            resolveLicenseFiles(id, provenance, findings.pathExcludes)
         }
 
         return ResolvedLicenseFileInfo(id, licenseFiles)
     }
 
-    private fun resolveLicenseFiles(id: Identifier, provenance: KnownProvenance): List<ResolvedLicenseFile> {
+    private fun resolveLicenseFiles(
+        id: Identifier,
+        provenance: KnownProvenance,
+        pathExcludes: Collection<PathExclude>
+    ): List<ResolvedLicenseFile> {
         if (archiver == null) return emptyList()
         val archiveDir = createOrtTempDir("archive")
 
@@ -286,6 +287,8 @@ class LicenseInfoResolver(
 
         val relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
             it.relativeTo(archiveDir).invariantSeparatorsPath
+        }.filterNot { path ->
+            pathExcludes.any { it.matches(path) }
         }
 
         val rootLicenseFiles = when (provenance) {
