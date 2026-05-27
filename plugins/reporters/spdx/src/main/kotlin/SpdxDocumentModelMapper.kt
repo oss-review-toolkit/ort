@@ -218,40 +218,46 @@ private fun SpdxPackage.filterChecksums(wantSpdx23: Boolean): SpdxPackage =
 private fun OrtResult.getLinkageTypesForDependencyRelationships():
     Map<Pair<Identifier, Identifier>, Set<PackageLinkage>> {
     val result = mutableMapOf<Pair<Identifier, Identifier>, MutableSet<PackageLinkage>>()
-    val visitedNodeReferenceKeys = mutableSetOf<Any>()
 
     // Traverse all non-excluded edges and collect the linkage types used in between any pair of ids.
-    getProjects(omitExcluded = true, includeSubProjects = true).forEach { project ->
-        val scopeNames = dependencyNavigator.scopeNames(project).filterNot { isScopeExcluded(it) }
+    val projectsByType = getProjects(omitExcluded = true).groupBy { it.id.type }
 
-        scopeNames.forEach { scopeName ->
-            val queue = LinkedList<DependencyNode>()
+    projectsByType.forEach { (_, projects) ->
+        // Track visited nodes only within the same project type as nodes are only unique in that domain.
+        val visitedNodeReferenceKeys = mutableSetOf<Any>()
 
-            dependencyNavigator.directDependencies(project, scopeName).forEach { node ->
-                result.getOrPut(project.id to node.id) { mutableSetOf() } += node.linkage
+        projects.forEach { project ->
+            val scopeNames = dependencyNavigator.scopeNames(project).filterNot { isScopeExcluded(it) }
 
-                queue.add(node.getStableReference())
-            }
+            scopeNames.forEach { scopeName ->
+                val queue = LinkedList<DependencyNode>()
 
-            while (queue.isNotEmpty()) {
-                val parent = queue.removeFirst()
+                dependencyNavigator.directDependencies(project, scopeName).forEach { node ->
+                    result.getOrPut(project.id to node.id) { mutableSetOf() } += node.linkage
 
-                when (val key = parent.getInternalId()) {
-                    in visitedNodeReferenceKeys -> continue
-                    else -> visitedNodeReferenceKeys += key
+                    queue.add(node.getStableReference())
                 }
 
-                val children = parent.visitDependencies { children ->
-                    // Map to a list instead of to a sequence, so that the conversion to the stable reference is done
-                    // within this code block. After leaving the block, the node reference are not valid anymore.
-                    children.mapTo(mutableListOf()) { it.getStableReference() }
-                }
+                while (queue.isNotEmpty()) {
+                    val parent = queue.removeFirst()
 
-                children.forEach { child ->
-                    result.getOrPut(parent.id to child.id) { mutableSetOf() } += child.linkage
-                }
+                    when (val key = parent.getInternalId()) {
+                        in visitedNodeReferenceKeys -> continue
+                        else -> visitedNodeReferenceKeys += key
+                    }
 
-                queue += children
+                    val children = parent.visitDependencies { children ->
+                        // Map to a list instead of a sequence, so that the conversion to the stable reference is done
+                        // within this code block. After leaving the block, the node reference are not valid anymore.
+                        children.mapTo(mutableListOf()) { it.getStableReference() }
+                    }
+
+                    children.forEach { child ->
+                        result.getOrPut(parent.id to child.id) { mutableSetOf() } += child.linkage
+                    }
+
+                    queue += children
+                }
             }
         }
     }
