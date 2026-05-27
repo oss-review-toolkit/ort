@@ -245,10 +245,8 @@ class LicenseInfoResolver(
         }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
-        val licenseInfo = resolveLicenseInfo(id)
-
-        val provenances = licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
-            resolvedLicense.locations.mapNotNull { it.provenance as? KnownProvenance }
+        val provenances = provider.get(id).detectedLicenseInfo.findings.mapNotNull {
+            it.provenance as? KnownProvenance
         }
 
         val licenseFiles = provenances.flatMap { provenance ->

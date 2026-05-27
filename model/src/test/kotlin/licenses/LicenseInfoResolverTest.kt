@@ -648,6 +648,15 @@ class LicenseInfoResolverTest : WordSpec({
             )
         }
 
+        "include a single license file, even if there a no findings at all" {
+            val archiver = createArchiver(REPOSITORY_PROVENANCE, "LICENSE")
+            val licenseInfo = createLicenseInfo(ID, REPOSITORY_PROVENANCE)
+
+            val result = createResolver(data = listOf(licenseInfo), archiver = archiver).resolveLicenseFiles(ID)
+
+            result.files.map { it.path }.shouldContainExactlyInAnyOrder("LICENSE")
+        }
+
         "prefer the LICENSE file in the VCS path over the ones in the root and in subdir" {
             val provenance = REPOSITORY_PROVENANCE.setVcsPath("path1")
             val archiver = createArchiver(provenance, "LICENSE", "path1/LICENSE", "path1/subdir/LICENSE")
