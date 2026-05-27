@@ -18,46 +18,48 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "Gem::nokogiri:1.10.8"
+    - id: "Gem::nokogiri:1.18.10"
       dependencies:
-      - id: "Gem::mini_portile2:2.4.0"
-    - id: "Gem::rack:2.1.4"
+      - id: "Gem::mini_portile2:2.8.9"
+      - id: "Gem::racc:1.8.1"
+    - id: "Gem::rack:2.2.23"
   - name: "test"
     dependencies:
     - id: "Gem::elasticsearch-rails:7.2.1"
-    - id: "Gem::rspec:3.7.0"
+    - id: "Gem::rspec:3.13.2"
       dependencies:
-      - id: "Gem::rspec-core:3.7.1"
+      - id: "Gem::rspec-core:3.13.6"
         dependencies:
-        - id: "Gem::rspec-support:3.7.1"
-      - id: "Gem::rspec-expectations:3.7.0"
+        - id: "Gem::rspec-support:3.13.7"
+      - id: "Gem::rspec-expectations:3.13.5"
         dependencies:
-        - id: "Gem::diff-lcs:1.3"
-        - id: "Gem::rspec-support:3.7.1"
-      - id: "Gem::rspec-mocks:3.7.0"
+        - id: "Gem::diff-lcs:1.6.2"
+        - id: "Gem::rspec-support:3.13.7"
+      - id: "Gem::rspec-mocks:3.13.8"
         dependencies:
-        - id: "Gem::diff-lcs:1.3"
-        - id: "Gem::rspec-support:3.7.1"
+        - id: "Gem::diff-lcs:1.6.2"
+        - id: "Gem::rspec-support:3.13.7"
 packages:
-- id: "Gem::diff-lcs:1.3"
-  purl: "pkg:gem/diff-lcs@1.3"
+- id: "Gem::diff-lcs:1.6.2"
+  purl: "pkg:gem/diff-lcs@1.6.2"
   authors:
   - "Austin Ziegler"
   declared_licenses:
-  - "Artistic-2.0"
-  - "GPL-2.0+"
+  - "Artistic-1.0-Perl"
+  - "GPL-2.0-or-later"
   - "MIT"
   declared_licenses_processed:
-    spdx_expression: "Artistic-2.0 AND GPL-2.0-or-later AND MIT"
-    mapped:
-      GPL-2.0+: "GPL-2.0-or-later"
+    spdx_expression: "Artistic-1.0-Perl AND GPL-2.0-or-later AND MIT"
   description: "Diff::LCS computes the difference between two Enumerable sequences\
     \ using the\nMcIlroy-Hunt longest common subsequence (LCS) algorithm. It includes\
     \ utilities\nto create a simple HTML diff output format and a standard diff-like\
-    \ tool.\n\nThis is release 1.3, providing a tentative fix to a long-standing issue\
-    \ related\nto incorrect detection of a patch direction. Also modernizes the gem\n\
-    infrastructure, testing infrastructure, and provides a warning-free experience\n\
-    to Ruby 2.4 users."
+    \ tool.\n\nThis is release 1.6.1, providing a simple extension that allows for\n\
+    Diff::LCS::Change objects to be treated implicitly as arrays and fixes a number\n\
+    of formatting issues.\n\nRuby versions below 2.5 are soft-deprecated, which means\
+    \ that older versions are\nno longer part of the CI test suite. If any changes\
+    \ have been introduced that\nbreak those versions, bug reports and patches will\
+    \ be accepted, but it will be\nup to the reporter to verify any fixes prior to\
+    \ release. The next major release\nwill completely break compatibility."
   homepage_url: "https://github.com/halostatue/diff-lcs"
   binary_artifact:
     url: ""
@@ -65,9 +67,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/diff-lcs-1.3.gem"
+    url: "https://rubygems.org/gems/diff-lcs-1.6.2.gem"
     hash:
-      value: "ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3"
+      value: "9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -111,8 +113,8 @@ packages:
     url: "https://github.com/elastic/elasticsearch-rails.git"
     revision: ""
     path: ""
-- id: "Gem::mini_portile2:2.4.0"
-  purl: "pkg:gem/mini_portile2@2.4.0"
+- id: "Gem::mini_portile2:2.8.9"
+  purl: "pkg:gem/mini_portile2@2.8.9"
   authors:
   - "Lars Kanis"
   - "Luis Lavena"
@@ -121,9 +123,10 @@ packages:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "Simplistic port-like solution for developers. It provides a standard\
-    \ and simplified way to compile against dependency libraries without messing up\
-    \ your system."
+  description: "Simple autoconf and cmake builder for developers. It provides a standard\
+    \ way to compile against\ndependency libraries without requiring system-wide installation.\
+    \ It also simplifies\nvendoring and cross-compilation by providing a consistent\
+    \ build interface.\n"
   homepage_url: "https://github.com/flavorjones/mini_portile"
   binary_artifact:
     url: ""
@@ -131,9 +134,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/mini_portile2-2.4.0.gem"
+    url: "https://rubygems.org/gems/mini_portile2-2.8.9.gem"
     hash:
-      value: "7e178a397ad62bb8a96977986130dc81f1b13201c6dd95a48bd8cec1dda5f797"
+      value: "0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -145,22 +148,30 @@ packages:
     url: "https://github.com/flavorjones/mini_portile.git"
     revision: ""
     path: ""
-- id: "Gem::nokogiri:1.10.8"
-  purl: "pkg:gem/nokogiri@1.10.8"
+- id: "Gem::nokogiri:1.18.10"
+  purl: "pkg:gem/nokogiri@1.18.10"
   authors:
   - "Aaron Patterson"
   - "Akinori MUSHA"
+  - "Craig Barnes"
   - "John Shahid"
+  - "Karol Bucek"
   - "Lars Kanis"
   - "Mike Dalessio"
-  - "Tim Elliott"
+  - "Nobuyoshi Nakada"
+  - "Sam Ruby"
+  - "Sergio Arbeo"
+  - "Stephen Checkoway"
+  - "Timothy Elliott"
   - "Yoko Harada"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
-    \ many features is the ability to search documents via XPath\nor CSS3 selectors."
+  description: "Nokogiri (鋸) makes it easy and painless to work with XML and HTML\
+    \ from Ruby. It provides a\nsensible, easy-to-understand API for reading, writing,\
+    \ modifying, and querying documents. It is\nfast and standards-compliant by relying\
+    \ on native parsers like libxml2, libgumbo, or xerces.\n"
   homepage_url: "https://nokogiri.org"
   binary_artifact:
     url: ""
@@ -168,9 +179,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/nokogiri-1.10.8.gem"
+    url: "https://rubygems.org/gems/nokogiri-1.18.10.gem"
     hash:
-      value: "0806b8b0541850b59c4f588c53cff42ef2da6c7fa2f0b1cbcb83d1cc219228fa"
+      value: "d5cc0731008aa3b3a87b361203ea3d19b2069628cb55e46ac7d84a0445e69cc1"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -182,8 +193,42 @@ packages:
     url: "https://github.com/sparklemotion/nokogiri.git"
     revision: ""
     path: ""
-- id: "Gem::rack:2.1.4"
-  purl: "pkg:gem/rack@2.1.4"
+- id: "Gem::racc:1.8.1"
+  purl: "pkg:gem/racc@1.8.1"
+  authors:
+  - "Aaron Patterson"
+  - "Minero Aoki"
+  declared_licenses:
+  - "BSD-2-Clause"
+  - "Ruby"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause AND Ruby"
+  description: "Racc is an LALR(1) parser generator.\n  It is written in Ruby itself,\
+    \ and generates Ruby program.\n\n  NOTE: Ruby 1.8.x comes with Racc runtime module.\
+    \  You\n  can run your parsers generated by racc 1.4.x out of the\n  box.\n"
+  homepage_url: "https://github.com/ruby/racc"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/racc-1.8.1.gem"
+    hash:
+      value: "4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/ruby/racc.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ruby/racc.git"
+    revision: ""
+    path: ""
+- id: "Gem::rack:2.2.23"
+  purl: "pkg:gem/rack@2.2.23"
   authors:
   - "Leah Neukirchen"
   declared_licenses:
@@ -191,20 +236,19 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Rack provides a minimal, modular and adaptable interface for developing\n\
-    web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
+    web applications in Ruby. By wrapping HTTP requests and responses in\nthe simplest\
     \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
-    \ and software in between (the so-called\nmiddleware) into a single method call.\n\
-    \nAlso see https://rack.github.io/.\n"
-  homepage_url: "https://rack.github.io"
+    \ and software in between (the so-called\nmiddleware) into a single method call.\n"
+  homepage_url: "https://github.com/rack/rack"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/rack-2.1.4.gem"
+    url: "https://rubygems.org/gems/rack-2.2.23.gem"
     hash:
-      value: "bfae1fd43aab62bb60b268329c860f214d2ffb15c4bca48931135a2dea52e2f4"
+      value: "a8fe9d7e07064770b8ec123663fded8a59ef7e2b6db5cda7173d45a5718ab69c"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -216,8 +260,8 @@ packages:
     url: "https://github.com/rack/rack.git"
     revision: ""
     path: ""
-- id: "Gem::rspec:3.7.0"
-  purl: "pkg:gem/rspec@3.7.0"
+- id: "Gem::rspec:3.13.2"
+  purl: "pkg:gem/rspec@3.13.2"
   authors:
   - "David Chelimsky"
   - "Myron Marston"
@@ -234,22 +278,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/rspec-3.7.0.gem"
+    url: "https://rubygems.org/gems/rspec-3.13.2.gem"
     hash:
-      value: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
+      value: "206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "http://github.com/rspec/rspec.git"
-    revision: ""
-    path: ""
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-v3.13.2"
+    path: "rspec"
   vcs_processed:
     type: "Git"
     url: "https://github.com/rspec/rspec.git"
-    revision: ""
-    path: ""
-- id: "Gem::rspec-core:3.7.1"
-  purl: "pkg:gem/rspec-core@3.7.1"
+    revision: "rspec-v3.13.2"
+    path: "rspec"
+- id: "Gem::rspec-core:3.13.6"
+  purl: "pkg:gem/rspec-core@3.13.6"
   authors:
   - "Chad Humphries"
   - "David Chelimsky"
@@ -267,22 +311,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/rspec-core-3.7.1.gem"
+    url: "https://rubygems.org/gems/rspec-core-3.13.6.gem"
     hash:
-      value: "526e0b2d22feae638eb99bd746bbb25b18a4869a8f6ce4e8a87dabd1ab5f727f"
+      value: "a8823c6411667b60a8bca135364351dda34cd55e44ff94c4be4633b37d828b2d"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "http://github.com/rspec/rspec-core.git"
-    revision: ""
-    path: ""
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-core-v3.13.6"
+    path: "rspec-core"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/rspec/rspec-core.git"
-    revision: ""
-    path: ""
-- id: "Gem::rspec-expectations:3.7.0"
-  purl: "pkg:gem/rspec-expectations@3.7.0"
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-core-v3.13.6"
+    path: "rspec-core"
+- id: "Gem::rspec-expectations:3.13.5"
+  purl: "pkg:gem/rspec-expectations@3.13.5"
   authors:
   - "David Chelimsky"
   - "Myron Marston"
@@ -300,22 +344,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/rspec-expectations-3.7.0.gem"
+    url: "https://rubygems.org/gems/rspec-expectations-3.13.5.gem"
     hash:
-      value: "7e571848a5cbdb1661187d04e5c1f29287ec80fcb5a395f9994836892a3780bb"
+      value: "33a4d3a1d95060aea4c94e9f237030a8f9eae5615e9bd85718fe3a09e4b58836"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "http://github.com/rspec/rspec-expectations.git"
-    revision: ""
-    path: ""
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-expectations-v3.13.5"
+    path: "rspec-expectations"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/rspec/rspec-expectations.git"
-    revision: ""
-    path: ""
-- id: "Gem::rspec-mocks:3.7.0"
-  purl: "pkg:gem/rspec-mocks@3.7.0"
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-expectations-v3.13.5"
+    path: "rspec-expectations"
+- id: "Gem::rspec-mocks:3.13.8"
+  purl: "pkg:gem/rspec-mocks@3.13.8"
   authors:
   - "David Chelimsky"
   - "Myron Marston"
@@ -332,22 +376,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/rspec-mocks-3.7.0.gem"
+    url: "https://rubygems.org/gems/rspec-mocks-3.13.8.gem"
     hash:
-      value: "23f7f0039e17f2841edfb51d678ac9e06c056903a7908db967f5618887f2022c"
+      value: "086ad3d3d17533f4237643de0b5c42f04b66348c28bf6b9c2d3f4a3b01af1d47"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "http://github.com/rspec/rspec-mocks.git"
-    revision: ""
-    path: ""
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-mocks-v3.13.8"
+    path: "rspec-mocks"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/rspec/rspec-mocks.git"
-    revision: ""
-    path: ""
-- id: "Gem::rspec-support:3.7.1"
-  purl: "pkg:gem/rspec-support@3.7.1"
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-mocks-v3.13.8"
+    path: "rspec-mocks"
+- id: "Gem::rspec-support:3.13.7"
+  purl: "pkg:gem/rspec-support@3.13.7"
   authors:
   - "Bradley Schaefer"
   - "David Chelimsky"
@@ -367,17 +411,17 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/rspec-support-3.7.1.gem"
+    url: "https://rubygems.org/gems/rspec-support-3.13.7.gem"
     hash:
-      value: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
+      value: "0640e5570872aafefd79867901deeeeb40b0c9875a36b983d85f54fb7381c47c"
       algorithm: "SHA-256"
   vcs:
-    type: ""
-    url: "https://rspec.info"
-    revision: ""
-    path: ""
+    type: "Git"
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-support-v3.13.7"
+    path: "rspec-support"
   vcs_processed:
-    type: ""
-    url: "https://rspec.info"
-    revision: ""
-    path: ""
+    type: "Git"
+    url: "https://github.com/rspec/rspec.git"
+    revision: "rspec-support-v3.13.7"
+    path: "rspec-support"
