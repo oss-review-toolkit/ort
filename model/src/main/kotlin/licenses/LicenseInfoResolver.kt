@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.utils.common.DeleteOnExitHook
+import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -53,13 +54,19 @@ class LicenseInfoResolver(
 ) {
     private val resolvedLicenseInfo = ConcurrentHashMap<Identifier, ResolvedLicenseInfo>()
     private val resolvedLicenseFiles = ConcurrentHashMap<Identifier, ResolvedLicenseFileInfo>()
-    private val pathLicenseMatcher = PathLicenseMatcher(
-        licenseFilePatterns = licenseFilePatterns.copy(
+    private val findingsMatcher = FindingsMatcher(PathLicenseMatcher(licenseFilePatterns))
+    private val pathLicenseMatcher: PathLicenseMatcher
+    private val licenseFileMatcher: FileMatcher
+
+    init {
+        val patterns = licenseFilePatterns.copy(
             noticeFilenames = emptySet(),
             otherLicenseFilenames = emptySet()
         )
-    )
-    private val findingsMatcher = FindingsMatcher(PathLicenseMatcher(licenseFilePatterns))
+
+        pathLicenseMatcher = PathLicenseMatcher(licenseFilePatterns = patterns)
+        licenseFileMatcher = FileMatcher(patterns.allLicenseFilenames.map { "**/$it" }, ignoreCase = true)
+    }
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
@@ -69,7 +76,15 @@ class LicenseInfoResolver(
 
     /**
      * Get the [ResolvedLicenseFileInfo] for the project or package identified by [id]. Requires an [archiver] to be
-     * configured, otherwise always returns empty results.
+     * configured, otherwise always returns empty results. To determine the applicable license files the files in
+     * the archive are matched against the configured license and patent file patterns (see [LicenseFilePatterns]) as
+     * follows:
+     *
+     * 1. For a repository provenance, all filenames in the VCS path are matched. If there are matches, then these are
+     *    used as the result, otherwise that search is repeated recursively in the parent directory.
+     * 2. For an artifact provenance, all filenames in the root directory are matched. If there are matches, then these
+     *    are used as the result, otherwise that search is repeated in all child directories of the root directory, and
+     *    the matching files in all these child directories are the result.
      */
     fun resolveLicenseFiles(id: Identifier): ResolvedLicenseFileInfo =
         resolvedLicenseFiles.getOrPut(id) { createLicenseFileInfo(id) }
@@ -269,13 +284,26 @@ class LicenseInfoResolver(
 
         DeleteOnExitHook.scheduleDeletion(archiveDir)
 
-        val directory = getSubdirectoryForProvenance(provenance, id)
-        val rootLicenseFiles = pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
-            relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
-                it.relativeTo(archiveDir).invariantSeparatorsPath
-            },
-            directories = listOf(directory)
-        ).values.single()
+        val relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
+            it.relativeTo(archiveDir).invariantSeparatorsPath
+        }
+
+        val rootLicenseFiles = when (provenance) {
+            is RepositoryProvenance -> pathLicenseMatcher.getApplicableLicenseFilesForDirectories(
+                relativeFilePaths = relativeFilePaths,
+                directories = listOf(provenance.vcsInfo.path)
+            ).values.single()
+
+            is ArtifactProvenance ->
+                // Limit the search to the root directory and one level below, to not deviate too far from the previous
+                // behavior (root level only), but still being able to match license files in artifacts which have
+                // all their files in a single top level directory, or in the META-INF directory in case of Maven.
+                relativeFilePaths.filter { licenseFileMatcher.matches(it) }
+                    .groupBy { path -> path.count { char -> char == '/' } }
+                    .filter { it.key < 2 }
+                    .minByOrNull { it.key }
+                    ?.value.orEmpty()
+        }
 
         return rootLicenseFiles.map { relativePath ->
             val file = archiveDir / relativePath
@@ -318,21 +346,3 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
 }
 
 private val UNDEFINED_TEXT_LOCATION = TextLocation(".", TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
-
-/**
- * Get the (potentially [id]-type specific) nested path directory for the given [provenance].
- */
-private fun getSubdirectoryForProvenance(provenance: KnownProvenance, id: Identifier): String =
-    when (provenance) {
-        // In case of a repository, match paths relative to the VCS path.
-        is RepositoryProvenance -> provenance.vcsInfo.path
-
-        // In case of a source artifact, match paths relative to the archive root or a type-specific directory.
-        is ArtifactProvenance -> {
-            // Java Archives (JARs) by convention (see e.g. the Apache Release Policy) often contain licensing
-            // information as part of the "META-INF" directory.
-            if (id.type == "Maven") "META-INF" else ""
-
-            // TODO: Check if more types need special handling.
-        }
-    }
