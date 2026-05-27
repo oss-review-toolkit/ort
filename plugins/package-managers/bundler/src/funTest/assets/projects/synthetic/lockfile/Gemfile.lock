@@ -1,32 +1,43 @@
+GIT
+  remote: https://github.com/elastic/elasticsearch-rails.git
+  revision: df46286dbd86c1ec9371edf727cded94779a2377
+  ref: v7.2.1
+  specs:
+    elasticsearch-rails (7.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    diff-lcs (1.3)
-    mini_portile2 (2.4.0)
-    nokogiri (1.10.8)
-      mini_portile2 (~> 2.4.0)
-    nokogiri (1.10.8-x64-mingw32)
-      mini_portile2 (~> 2.4.0)
-    rack (2.1.4)
-    rspec (3.7.0)
-      rspec-core (~> 3.7.0)
-      rspec-expectations (~> 3.7.0)
-      rspec-mocks (~> 3.7.0)
-    rspec-core (3.7.1)
-      rspec-support (~> 3.7.0)
-    rspec-expectations (3.7.0)
+    diff-lcs (1.6.2)
+    mini_portile2 (2.8.9)
+    nokogiri (1.19.3)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
+    racc (1.8.1)
+    rack (2.2.23)
+    rspec (3.13.2)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.6)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.7.0)
-    rspec-mocks (3.7.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.8)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.7.0)
-    rspec-support (3.7.1)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.7)
 
 PLATFORMS
   ruby
   x64-mingw32
 
 DEPENDENCIES
+  elasticsearch-rails!
   nokogiri
   rack (~> 2.1)
   rspec
+
+BUNDLED WITH
+  4.0.3
