@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.parser
+package org.ossreviewtoolkit.utils.spdxexpression.parser
 
 import org.ossreviewtoolkit.utils.common.nextOrNull
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseReferenceExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxOperator
-import org.ossreviewtoolkit.utils.spdx.toExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseReferenceExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
+import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
 /**
  * A parser for SPDX expressions. It consumes a sequence of [Token]s and produces an [SpdxExpression].

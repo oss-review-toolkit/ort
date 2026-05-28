@@ -37,7 +37,6 @@ dependencies {
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)

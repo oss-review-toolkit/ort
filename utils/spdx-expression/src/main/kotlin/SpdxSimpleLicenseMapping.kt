@@ -17,9 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx
+package org.ossreviewtoolkit.utils.spdxexpression
 
 import com.fasterxml.jackson.module.kotlin.readValue
+
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 /**
  * A mapping from simple license names to valid SPDX license IDs. This mapping only contains license strings which *can*

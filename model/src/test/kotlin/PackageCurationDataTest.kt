@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class PackageCurationDataTest : WordSpec({
     val original = PackageCurationData(

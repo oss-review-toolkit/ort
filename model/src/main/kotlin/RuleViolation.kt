@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model
 
 import java.util.EnumSet
 
-import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
 
 data class RuleViolation(
     /**

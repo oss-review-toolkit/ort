@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.packageWithDeclaredAndDetectedLicense
 import org.ossreviewtoolkit.model.packageWithDeclaredLicense
 import org.ossreviewtoolkit.model.packageWithDetectedLicense
 import org.ossreviewtoolkit.model.packageWithoutLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class LicenseViewTest : WordSpec() {

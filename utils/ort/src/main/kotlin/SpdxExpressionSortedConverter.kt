@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.utils.ort
 
 import com.fasterxml.jackson.databind.util.StdConverter
 
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 class SpdxExpressionSortedConverter : StdConverter<SpdxExpression, SpdxExpression>() {
     override fun convert(value: SpdxExpression) = value.sorted()

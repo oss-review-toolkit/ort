@@ -36,7 +36,7 @@ dependencies {
     api(projects.clients.clearlyDefinedClient)
     api(projects.plugins.api)
     api(projects.utils.ortUtils)
-    api(projects.utils.spdxUtils)
+    api(projects.utils.spdxExpressionUtils)
 
     implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.semver4j)
     implementation(libs.tika)
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(projects.utils.testUtils)
 

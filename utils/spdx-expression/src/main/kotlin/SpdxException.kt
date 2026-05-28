@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx
+package org.ossreviewtoolkit.utils.spdxexpression
 
 open class SpdxException : RuntimeException {
     constructor(message: String?, cause: Throwable?) : super(message, cause)

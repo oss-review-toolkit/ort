@@ -33,7 +33,6 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxDocumentUtils)
-    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.plugins.packageManagers.conanPackageManager)

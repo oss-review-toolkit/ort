@@ -104,7 +104,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
 @OrtPlugin(
     displayName = "Download",

@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.common.enumSetOf
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
 
 class RuleTest : WordSpec() {
     private val ruleSet = ruleSet(ortResult)

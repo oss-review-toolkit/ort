@@ -24,8 +24,8 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.neverNullMatcher
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
 
 fun containLicensesExactly(vararg licenses: String): Matcher<Iterable<ResolvedLicense>?> =
     neverNullMatcher { value ->

@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.toExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
 internal class GetPackageLicensesCommand : OrtHelperCommand(
     help = "Shows the root license and the detected license for a package denoted by the given package identifier."

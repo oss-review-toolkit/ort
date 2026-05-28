@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.parser
+package org.ossreviewtoolkit.utils.spdxexpression.parser
 
 import kotlin.reflect.KClass
 
-import org.ossreviewtoolkit.utils.spdx.SpdxException
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxException
 
 /**
  * An exception to indicate that an [SpdxExpressionLexer] error occurred.

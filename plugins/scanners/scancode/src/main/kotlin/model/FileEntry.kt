@@ -24,9 +24,9 @@ import kotlin.collections.orEmpty
 
 import kotlinx.serialization.Serializable
 
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 /**
  * An interface to be able to treat all versions of file entries the same.

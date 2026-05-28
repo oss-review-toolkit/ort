@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.utils.LicenseFindingSortedSetConverter
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.SnippetFindingSortedSetConverter
 import org.ossreviewtoolkit.utils.common.FileMatcher
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 /**
  * A short summary of the scan results.

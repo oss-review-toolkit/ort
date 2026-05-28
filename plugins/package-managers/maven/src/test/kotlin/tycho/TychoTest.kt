@@ -70,7 +70,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 class TychoTest : WordSpec({
     afterEach {

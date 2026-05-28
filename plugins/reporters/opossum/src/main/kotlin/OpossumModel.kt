@@ -37,7 +37,7 @@ import kotlinx.serialization.json.encodeToStream
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 internal val JSON = Json {
     explicitNulls = false

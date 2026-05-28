@@ -39,12 +39,12 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.PACKAGE_TYPE_SPDX
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 private val SPDX_VCS_PREFIXES = mapOf(
     "git+" to VcsType.GIT,

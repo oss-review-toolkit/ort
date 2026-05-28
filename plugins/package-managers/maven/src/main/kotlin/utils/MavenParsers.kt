@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
 // See http://maven.apache.org/pom.html#SCM.
 private val SCM_REGEX = Regex("scm:(?<type>[^:@]+):(?<url>.+)")

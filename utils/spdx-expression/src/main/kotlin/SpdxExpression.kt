@@ -17,15 +17,18 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx
+package org.ossreviewtoolkit.utils.spdxexpression
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.DOCUMENT_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
-import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionParser
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
+import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionParser
 
 /**
  * An SPDX expression as defined by version 2.2 of the [SPDX specification, annex D][1].

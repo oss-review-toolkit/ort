@@ -35,12 +35,13 @@ dependencies {
     api(libs.commonsCompress)
     api(libs.kotlinx.coroutines)
     api(libs.okhttp)
-    api(projects.utils.spdxUtils)
+    api(projects.utils.spdxExpressionUtils)
 
     implementation(libs.awsS3)
     implementation(libs.xz)
     implementation(projects.clients.foojayClient)
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(libs.mockk)
 

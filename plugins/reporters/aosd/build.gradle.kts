@@ -32,7 +32,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ks3.standard)
     implementation(projects.model)
-    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(testFixtures(projects.reporter))
     funTestImplementation(libs.kotest.assertions.json)

@@ -49,6 +49,8 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxExpressionUtils)
+    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(projects.utils.testUtils)
 

@@ -38,9 +38,9 @@ import org.ossreviewtoolkit.model.Snippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdx.toExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 

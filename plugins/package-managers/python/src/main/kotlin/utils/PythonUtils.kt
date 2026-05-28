@@ -26,7 +26,7 @@ import org.apache.logging.log4j.kotlin.loggerOf
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 

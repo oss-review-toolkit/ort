@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx
+package org.ossreviewtoolkit.utils.spdxexpression
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
@@ -33,9 +33,11 @@ import io.kotest.matchers.shouldNotBe
 
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression.Strictness
 
 class SpdxExpressionTest : WordSpec({
     "A dummy SpdxExpression" should {

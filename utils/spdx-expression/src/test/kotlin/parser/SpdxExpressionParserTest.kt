@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.parser
+package org.ossreviewtoolkit.utils.spdxexpression.parser
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
@@ -25,12 +25,12 @@ import io.kotest.core.spec.style.scopes.FunSpecContainerScope
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseReferenceExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxCompoundExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseReferenceExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
 class SpdxExpressionParserTest : FunSpec({
     context("identifiers") {

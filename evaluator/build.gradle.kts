@@ -36,13 +36,14 @@ dependencies {
     api(libs.kotlinx.serialization.core)
     api(projects.model)
     api(projects.utils.scriptingUtils)
-    api(projects.utils.spdxUtils)
+    api(projects.utils.spdxExpressionUtils)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(libs.kotlinx.serialization.json)
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     testFixturesImplementation(libs.kotlinx.serialization.core)
     testFixturesImplementation(projects.utils.testUtils)

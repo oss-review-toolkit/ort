@@ -36,8 +36,7 @@ plugins {
 }
 
 dependencies {
-    api(jacksonLibs.jacksonDatabind)
-
+    implementation(jacksonLibs.jacksonDatabind)
     implementation(jacksonLibs.jacksonDataformatYaml)
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(projects.utils.commonUtils)

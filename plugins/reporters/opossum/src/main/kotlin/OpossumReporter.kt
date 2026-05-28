@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.toExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
 private const val ISSUE_PRIORITY = 900
 

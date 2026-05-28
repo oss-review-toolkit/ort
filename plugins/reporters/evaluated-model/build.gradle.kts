@@ -28,10 +28,10 @@ dependencies {
     api(projects.model)
     api(projects.reporter)
     api(projects.utils.ortUtils)
-    api(projects.utils.spdxUtils)
 
     implementation(jacksonLibs.jacksonCore)
     implementation(jacksonLibs.jacksonDataformatYaml)
+    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(projects.utils.commonUtils)
     funTestImplementation(projects.utils.testUtils)

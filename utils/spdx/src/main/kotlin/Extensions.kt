@@ -19,91 +19,10 @@
 
 package org.ossreviewtoolkit.utils.spdx
 
-import java.lang.invoke.MethodHandles
-
-import org.apache.logging.log4j.kotlin.loggerOf
-
-import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
-
-private val logger = loggerOf(MethodHandles.lookup().lookupClass())
-
-/**
- * Convert an [SpdxExpression] to `NOASSERTION` if null, to `NONE` if blank, or to its string representation otherwise.
- */
-fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
-    when {
-        this == null -> SpdxConstants.NOASSERTION
-        toString().isBlank() -> SpdxConstants.NONE
-        else -> toString()
-    }
-
-/**
- * Combine this collection of [SpdxExpression]s into one using the [operator], or return null if the collection is
- * empty.
- */
-fun Collection<SpdxExpression>.toExpression(operator: SpdxOperator = SpdxOperator.AND): SpdxExpression? =
-    distinct().run {
-        when (size) {
-            0 -> null
-            1 -> first()
-            else -> SpdxCompoundExpression(operator, this)
-        }
-    }
-
-/**
- * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
- */
-fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
-    var expressionId = id
-
-    // While in the current SPDX standard the "or later version" semantic is part of the id string itself, it is a
-    // generic "+" operator for deprecated licenses.
-    val orLaterVersion = if (deprecated) {
-        expressionId = id.removeSuffix("+")
-        id != expressionId
-    } else {
-        id.endsWith("-or-later")
-    }
-
-    return SpdxLicenseIdExpression(expressionId, orLaterVersion)
-}
-
-/**
- * Return true if this string can be successfully parsed to a [SpdxExpression] of the given [strictness].
- */
-fun String.isSpdxExpression(strictness: Strictness = Strictness.ALLOW_DEPRECATED): Boolean =
-    runCatching { SpdxExpression.parse(this, strictness) }.isSuccess
-
-/**
- * Return true if this String can be successfully parsed to an [SpdxExpression] with the given [strictness],
- * or if it equals [SpdxConstants.NONE] or [SpdxConstants.NOASSERTION].
- */
-fun String.isSpdxExpressionOrNotPresent(strictness: Strictness = Strictness.ALLOW_DEPRECATED): Boolean =
-    SpdxConstants.isNotPresent(this) || isSpdxExpression(strictness)
-
 /**
  * Convert a null or blank [String] to `NONE`.
  */
 fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this
-
-/**
- * Parse this string as an [SpdxExpression] of the given [strictness] and return the result on success, or throw an
- * [SpdxException] if the string cannot be parsed.
- */
-fun String.toSpdx(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpression =
-    SpdxExpression.parse(this, strictness)
-
-/**
- * Parse this string as an [SpdxExpression] of the given [strictness] and return the result on success, or null if this
- * string cannot be parsed.
- */
-fun String.toSpdxOrNull(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpression? =
-    runCatching {
-        toSpdx(strictness)
-    }.onFailure {
-        logger.debug { "Could not parse '$this' as an SPDX license: ${it.collectMessages()}" }
-    }.getOrNull()
 
 /**
  * Convert a [String] to an SPDX "idstring" (like license IDs, package IDs, etc.) which may only contain letters,

@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.seconds
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
     "The production server" should {

@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.zipWithSets
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the

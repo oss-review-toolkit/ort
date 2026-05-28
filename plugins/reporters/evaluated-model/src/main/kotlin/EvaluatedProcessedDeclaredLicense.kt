@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 /**
  * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].

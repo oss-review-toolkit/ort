@@ -37,7 +37,6 @@ dependencies {
     implementation(projects.plugins.packageManagers.gradleModel)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)

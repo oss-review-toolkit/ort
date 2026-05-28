@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
 private const val PROJECT_TYPE = "Cargo"
 private const val PACKAGE_TYPE = "Crate"

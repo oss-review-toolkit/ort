@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx
+package org.ossreviewtoolkit.utils.spdxexpression
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
@@ -29,7 +29,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.string.shouldContain
 
-import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionLexer
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionLexer
 
 class SpdxDeclaredLicenseMappingTest : WordSpec({
     "The list" should {

@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 internal class ListLicensesCommand : OrtHelperCommand(
     help = "Lists the license findings for a given package as distinct text locations."
