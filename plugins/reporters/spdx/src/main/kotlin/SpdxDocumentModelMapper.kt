@@ -218,7 +218,7 @@ private fun SpdxPackage.filterChecksums(wantSpdx23: Boolean): SpdxPackage =
 private fun OrtResult.getLinkageTypesForDependencyRelationships():
     Map<Pair<Identifier, Identifier>, Set<PackageLinkage>> {
     val result = mutableMapOf<Pair<Identifier, Identifier>, MutableSet<PackageLinkage>>()
-    val visitedNodeReferenceKeys = mutableSetOf<Any>()
+    val visitedNodeReferenceKeys = mutableSetOf<Pair<String, Any>>()
 
     // Traverse all non-excluded edges and collect the linkage types used in between any pair of ids.
     getProjects(omitExcluded = true, includeSubProjects = true).forEach { project ->
@@ -236,7 +236,7 @@ private fun OrtResult.getLinkageTypesForDependencyRelationships():
             while (queue.isNotEmpty()) {
                 val parent = queue.removeFirst()
 
-                when (val key = parent.getInternalId()) {
+                when (val key = project.id.type to parent.getInternalId()) {
                     in visitedNodeReferenceKeys -> continue
                     else -> visitedNodeReferenceKeys += key
                 }
