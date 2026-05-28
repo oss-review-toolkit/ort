@@ -38,6 +38,8 @@ dependencies {
 
     implementation(jacksonLibs.jacksonDatabind)
 
+    testImplementation(libs.mockk)
+
     funTestImplementation(projects.utils.testUtils)
     funTestImplementation(projects.plugins.licenseFactProviders.scancodeLicenseFactProvider)
     funTestImplementation(testFixtures(projects.plugins.reporters.spdxReporter))
