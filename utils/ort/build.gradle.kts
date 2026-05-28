@@ -42,7 +42,8 @@ dependencies {
 
     implementation(libs.awsS3)
     implementation(libs.commonsCompress)
-    implementation(libs.xz)
+
+    runtimeOnly(libs.xz)
 
     funTestImplementation(libs.mockk)
 
