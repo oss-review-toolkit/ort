@@ -26,8 +26,6 @@ dependencies {
     api(projects.model)
     api(projects.utils.scriptingUtils)
 
-    implementation(projects.utils.ortUtils)
-
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 

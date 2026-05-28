@@ -37,8 +37,6 @@ dependencies {
 
     ksp(projects.scanner)
 
-    funTestApi(testFixtures(projects.scanner))
-
     funTestImplementation(projects.utils.testUtils)
 
     testImplementation(projects.utils.testUtils)

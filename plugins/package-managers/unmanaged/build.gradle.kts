@@ -30,6 +30,4 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     ksp(projects.analyzer)
-
-    funTestImplementation(testFixtures(projects.analyzer))
 }
