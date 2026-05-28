@@ -189,8 +189,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
      */
     private fun RepositorySystemSession.initializeRequest(request: MavenExecutionRequest) {
         with(containerLookup<MavenRepositorySystem>()) {
-            injectProxy(this@initializeRequest, request.remoteRepositories)
             injectMirror(this@initializeRequest, request.remoteRepositories)
+            injectProxy(this@initializeRequest, request.remoteRepositories)
             injectAuthentication(this@initializeRequest, request.remoteRepositories)
         }
     }
