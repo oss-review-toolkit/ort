@@ -33,7 +33,7 @@ dependencies {
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
+    implementation(projects.utils.spdxExpressionUtils)
 
     ksp(projects.plugins.commands.commandApi)
 }

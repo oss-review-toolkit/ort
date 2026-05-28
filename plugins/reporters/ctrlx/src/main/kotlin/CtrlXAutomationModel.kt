@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.plugins.reporters.ctrlx
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
-import org.ossreviewtoolkit.utils.spdx.isSpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression.Strictness
+import org.ossreviewtoolkit.utils.spdxexpression.isSpdxExpression
 
 /**
  * The root element of "fossinfo.json" files, see https://github.com/boschrexroth/json-schema.

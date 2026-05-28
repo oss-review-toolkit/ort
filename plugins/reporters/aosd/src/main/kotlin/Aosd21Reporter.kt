@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.plugins.reporters.aosd.AOSD21.Component
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
+import org.ossreviewtoolkit.utils.spdxexpression.nullOrBlankToSpdxNoassertionOrNone
 
 @OrtPlugin(
     id = "AOSD2.1",

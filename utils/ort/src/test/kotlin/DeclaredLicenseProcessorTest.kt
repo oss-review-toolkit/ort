@@ -33,14 +33,14 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxDeclaredLicenseMapping
-import org.ossreviewtoolkit.utils.spdx.SpdxException
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxSimpleLicenseMapping
-import org.ossreviewtoolkit.utils.spdx.toExpression
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxException
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleLicenseMapping
+import org.ossreviewtoolkit.utils.spdxexpression.toExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class DeclaredLicenseProcessorTest : StringSpec() {
     /**

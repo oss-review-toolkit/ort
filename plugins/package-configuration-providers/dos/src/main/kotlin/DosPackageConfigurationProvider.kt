@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.utils.ort.runBlocking
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 data class DosPackageConfigurationProviderConfig(
     /** The URL where the DOS backend is running. */

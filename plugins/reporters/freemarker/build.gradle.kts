@@ -25,10 +25,10 @@ plugins {
 dependencies {
     api(projects.model)
     api(projects.reporter)
-    api(projects.utils.spdxUtils)
 
     implementation(libs.freemarker)
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(testFixtures(projects.reporter))
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)

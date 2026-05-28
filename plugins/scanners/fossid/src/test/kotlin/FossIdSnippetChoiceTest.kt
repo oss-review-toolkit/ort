@@ -70,7 +70,7 @@ import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
 import org.ossreviewtoolkit.model.config.snippet.SnippetProvenance
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 /** Sample files in the results. **/
 private const val FILE_1 = "a.java"

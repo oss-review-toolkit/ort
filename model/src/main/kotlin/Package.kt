@@ -29,8 +29,8 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.ort.SpdxExpressionSortedConverter
 import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
 /**
  * A generic descriptor for a software package. It contains all relevant metadata about a package like the name,

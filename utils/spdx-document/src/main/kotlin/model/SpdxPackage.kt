@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS
-import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS
+import org.ossreviewtoolkit.utils.spdxexpression.isSpdxExpressionOrNotPresent
 
 /**
  * Information about a package used in an [SpdxDocument].

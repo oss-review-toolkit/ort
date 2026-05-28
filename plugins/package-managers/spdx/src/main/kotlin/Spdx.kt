@@ -50,8 +50,8 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.spdx.toExpression
-import org.ossreviewtoolkit.utils.spdx.toSpdxOrNull
+import org.ossreviewtoolkit.utils.spdxexpression.toExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdxOrNull
 
 import org.spdx.library.SpdxModelFactory
 import org.spdx.library.model.v3_0_1.core.Element

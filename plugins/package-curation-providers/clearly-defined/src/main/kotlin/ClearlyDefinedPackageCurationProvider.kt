@@ -49,8 +49,8 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
-import org.ossreviewtoolkit.utils.spdx.toSpdxOrNull
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression.Strictness
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdxOrNull
 
 import retrofit2.HttpException
 

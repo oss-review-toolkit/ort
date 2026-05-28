@@ -56,7 +56,8 @@ class RulesScriptCompilationConfiguration : ScriptCompilationConfiguration(
             "org.ossreviewtoolkit.model.config.*",
             "org.ossreviewtoolkit.model.licenses.*",
             "org.ossreviewtoolkit.model.utils.*",
-            "org.ossreviewtoolkit.utils.spdx.*"
+            "org.ossreviewtoolkit.utils.spdx.*",
+            "org.ossreviewtoolkit.utils.spdxexpression.*"
         )
     }
 )

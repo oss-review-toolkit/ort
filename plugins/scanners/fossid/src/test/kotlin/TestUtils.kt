@@ -93,7 +93,7 @@ import org.ossreviewtoolkit.plugins.scanners.fossid.events.CloneRepositoryHandle
 import org.ossreviewtoolkit.plugins.scanners.fossid.events.UploadArchiveHandler
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 /** A test user ID. */
 internal const val USER = "fossIdTestUser"

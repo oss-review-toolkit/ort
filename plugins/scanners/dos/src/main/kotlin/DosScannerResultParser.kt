@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 internal fun generateSummary(startTime: Instant, endTime: Instant, result: JsonObject): ScanSummary {
     val issues = mutableListOf<Issue>()

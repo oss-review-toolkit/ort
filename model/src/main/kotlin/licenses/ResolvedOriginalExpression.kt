@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.model.licenses
 
 import org.ossreviewtoolkit.model.LicenseSource
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 /**
  * A resolved original expression.

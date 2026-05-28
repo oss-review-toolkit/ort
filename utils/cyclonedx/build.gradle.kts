@@ -29,5 +29,4 @@ dependencies {
 
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
 }

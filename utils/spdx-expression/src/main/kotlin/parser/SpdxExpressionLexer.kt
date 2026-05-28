@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.parser
+package org.ossreviewtoolkit.utils.spdxexpression.parser
 
 import org.ossreviewtoolkit.utils.common.nextOrNull
 

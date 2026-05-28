@@ -27,6 +27,8 @@ dependencies {
 
     implementation(projects.clients.clearlyDefinedClient)
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxExpressionUtils)
 
     testImplementation(libs.wiremock)
 

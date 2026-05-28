@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
 /**
  * The license choices configured for a repository.

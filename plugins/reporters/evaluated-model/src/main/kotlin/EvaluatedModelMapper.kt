@@ -57,8 +57,8 @@ import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 /**
  * Maps the [reporter input][input] to an [EvaluatedModel].

@@ -32,7 +32,6 @@ dependencies {
 
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
-    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(testFixtures(projects.reporter))
     funTestImplementation(libs.kotest.assertions.json)

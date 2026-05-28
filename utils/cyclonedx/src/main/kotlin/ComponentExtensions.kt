@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 internal const val DEFAULT_ORT_TYPE = "CycloneDX"
 

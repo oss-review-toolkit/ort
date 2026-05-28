@@ -40,7 +40,6 @@ dependencies {
     funTestImplementation(projects.utils.testUtils)
 
     testImplementation(libs.mockk)
-    testImplementation(projects.utils.spdxUtils)
 
     ksp(projects.analyzer)
 }

@@ -31,6 +31,7 @@ dependencies {
     implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxExpressionUtils)
     implementation(projects.utils.spdxUtils)
 
     testImplementation(libs.kotest.assertions.json)

@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.fromYaml
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class RepositoryConfigurationTest : WordSpec({
     "RepositoryConfiguration" should {

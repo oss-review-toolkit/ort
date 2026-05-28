@@ -28,8 +28,8 @@ import io.mockk.every
 import io.mockk.spyk
 
 import org.ossreviewtoolkit.model.licenses.LicenseView
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class RuleSetTest : WordSpec({
     val errorMessage = "error message"

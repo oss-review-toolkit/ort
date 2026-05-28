@@ -17,7 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx
+package org.ossreviewtoolkit.utils.spdxexpression
+
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 
 /**
  * An SPDX operator for composite expressions as defined by version 2.2 of the [SPDX specification, annex D.4][1].

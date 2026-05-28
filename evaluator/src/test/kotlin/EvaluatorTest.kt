@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 import org.ossreviewtoolkit.utils.test.getResource
 import org.ossreviewtoolkit.utils.test.ortResult
 import org.ossreviewtoolkit.utils.test.readResource

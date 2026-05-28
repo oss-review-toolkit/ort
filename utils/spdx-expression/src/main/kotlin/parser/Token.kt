@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.parser
+package org.ossreviewtoolkit.utils.spdxexpression.parser
 
 /**
  * The tokens created by the [SpdxExpressionLexer] and consumed by the [SpdxExpressionParser].

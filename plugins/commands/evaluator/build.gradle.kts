@@ -38,7 +38,6 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
 
     ksp(projects.plugins.commands.commandApi)
 }

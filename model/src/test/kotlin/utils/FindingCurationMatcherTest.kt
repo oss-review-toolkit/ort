@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason.INCORRECT
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class FindingCurationMatcherTest : WordSpec() {
     private val matcher = FindingCurationMatcher()

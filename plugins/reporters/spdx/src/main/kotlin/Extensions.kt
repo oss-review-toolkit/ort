@@ -47,10 +47,8 @@ import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
 import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNone
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxChecksum
@@ -60,6 +58,8 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExtractedLicenseInfo
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxFile
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackageVerificationCode
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.nullOrBlankToSpdxNoassertionOrNone
 
 /**
  * Convert an ORT [Hash] to an [SpdxChecksum], or return null if a conversion is not possible.
