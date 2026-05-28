@@ -43,7 +43,6 @@ plugins {
     id("ort-base-conventions")
 
     // Apply third-party plugins.
-    id("com.autonomousapps.dependency-analysis")
     id("com.gradleup.tapmoc")
     id("dev.detekt")
     id("org.jetbrains.dokka")

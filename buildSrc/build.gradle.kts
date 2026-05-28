@@ -39,7 +39,6 @@ repositories {
 
 dependencies {
     implementation(libs.jgit)
-    implementation(libs.plugin.dependencyAnalysis)
     implementation(libs.plugin.detekt)
     implementation(libs.plugin.dokka)
     implementation(libs.plugin.graalVmNativeImage)
