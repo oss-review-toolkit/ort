@@ -1,6 +1,5 @@
 [versions]
 buildConfigPlugin = "6.0.9"
-dependencyAnalysisPlugin = "3.14.0"
 detektPlugin = "2.0.0-alpha.3"
 dokkaPlugin = "2.2.0"
 downloadPlugin = "5.7.0"
@@ -85,7 +84,6 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 
 [libraries]
 # These are Maven coordinates for Gradle plugins, which are required for use in precompiled plugin scripts.
-plugin-dependencyAnalysis = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysisPlugin" }
 plugin-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
 plugin-detekt-formatting = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detektPlugin" }
 plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokkaPlugin" }

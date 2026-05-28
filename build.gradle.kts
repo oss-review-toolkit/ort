@@ -31,6 +31,14 @@ plugins {
     alias(libs.plugins.ideaExt)
 }
 
+dependencyAnalysis {
+    reporting {
+        printBuildHealth(true)
+    }
+
+    useTypesafeProjectAccessors(true)
+}
+
 semver {
     // Do not create an empty release commit when running the "releaseVersion" task.
     createReleaseCommit = false
