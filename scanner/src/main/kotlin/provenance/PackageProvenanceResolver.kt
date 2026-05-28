@@ -276,8 +276,6 @@ class DefaultPackageProvenanceResolver(
             val message = "Could not resolve revision for package '${pkg.id.toCoordinates()}' with " +
                 "${pkg.vcsProcessed}:\n${messages.joinToString("\n") { "\t$it" }}"
 
-            storage.writeProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
-
             throw IOException(message)
         }
     }
