@@ -294,11 +294,9 @@ packages:
 - id: "hex::meck:0.8.13"
   purl: "pkg:hex/meck@0.8.13?checksum=sha256:d34f013c156db51ad57cc556891b9720e6a1c1df5fe2e15af999c84d6cebeb1a&download_url=https://repo.hex.pm/tarballs/meck-0.8.13.tar&vcs_url=https://github.com/eproxus/meck"
   declared_licenses:
-  - "Apache 2.0"
+  - "Apache-2.0"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
-    mapped:
-      Apache 2.0: "Apache-2.0"
   description: ""
   homepage_url: "https://hex.pm/packages/meck/0.8.13"
   binary_artifact:
