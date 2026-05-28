@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.util.StdConverter
-
 import java.io.File
 
 import kotlin.io.encoding.Base64
+
+import tools.jackson.databind.annotation.JsonSerialize
+import tools.jackson.databind.util.StdConverter
 
 /**
  * A class that bundles a hash algorithm with its hash value.

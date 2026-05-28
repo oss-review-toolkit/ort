@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.clients.fossid.model
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import tools.jackson.databind.annotation.JsonDeserialize
 
 data class Scan(
     val id: Int,

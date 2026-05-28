@@ -198,7 +198,7 @@ fun Task.generateEnumClass(
     if (description == "license exception") {
         enumFile.appendText(
             """
-            |import com.fasterxml.jackson.module.kotlin.readValue
+            |import tools.jackson.module.kotlin.readValue
             |
             """.trimMargin()
         )

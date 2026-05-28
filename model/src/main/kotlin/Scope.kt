@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-
 import org.ossreviewtoolkit.model.utils.PackageReferenceSortedSetConverter
+
+import tools.jackson.databind.annotation.JsonSerialize
 
 /**
  * The scope class puts package dependencies into context.

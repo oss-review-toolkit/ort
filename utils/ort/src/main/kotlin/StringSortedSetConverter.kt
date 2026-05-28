@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.utils.ort
 
-import com.fasterxml.jackson.databind.util.StdConverter
-
 import java.util.SortedSet
+
+import tools.jackson.databind.util.StdConverter
 
 class StringSortedSetConverter : StdConverter<Set<String>, SortedSet<String>>() {
     override fun convert(value: Set<String>) = value.toSortedSet()

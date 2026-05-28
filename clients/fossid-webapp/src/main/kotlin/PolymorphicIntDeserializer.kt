@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.deser.std.StdDeserializer
 
 /**
  * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
@@ -39,7 +39,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 internal class PolymorphicIntDeserializer :
     StdDeserializer<PolymorphicInt>(PolymorphicInt::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicInt =
-        when (p.currentToken) {
+        when (p.currentToken()) {
             JsonToken.VALUE_STRING -> {
                 val value = ctxt.readValue(p, String::class.java)
                 PolymorphicInt(value.toInt())

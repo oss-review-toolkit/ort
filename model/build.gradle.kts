@@ -36,7 +36,6 @@ dependencies {
     api(libs.log4j.api)
     api(libs.packageurl)
 
-    implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.hoplite)

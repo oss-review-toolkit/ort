@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-
 import org.ossreviewtoolkit.clients.fossid.model.IntBooleanDeserializer
+
+import tools.jackson.databind.annotation.JsonDeserialize
 
 data class LicenseFile(
     val licenseIdentifier: String?,
