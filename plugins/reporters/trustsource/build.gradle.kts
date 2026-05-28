@@ -30,10 +30,8 @@ dependencies {
 
     ksp(projects.reporter)
 
-    implementation(projects.downloader)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
     implementation(libs.kotlinx.serialization.core)

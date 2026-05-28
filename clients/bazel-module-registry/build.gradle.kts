@@ -31,7 +31,7 @@ dependencies {
 
     implementation(projects.downloader)
 
-    implementation(libs.bundles.ks3)
+    implementation(libs.ks3.jdk)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.converter.kotlinxSerialization)

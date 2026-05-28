@@ -42,8 +42,6 @@ dependencies {
     funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
 
-    funTestImplementation(libs.kotest.assertions.table)
-
     testImplementation(projects.utils.spdxUtils)
 
     testImplementation(libs.mockk)

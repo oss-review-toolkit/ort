@@ -32,6 +32,64 @@ plugins {
 }
 
 dependencyAnalysis {
+    issues {
+        all {
+            onUnusedDependencies {
+                severity("fail")
+
+                // Exclude modules which are automatically added by the "ort-kotlin-conventions".
+                exclude("org.junit.jupiter:junit-jupiter")
+                exclude(libs.kotest.runner.junit5)
+                exclude(libs.kotest.assertions.core)
+                exclude(libs.kotest.property)
+                exclude(libs.log4j.api.kotlin)
+            }
+
+            onUsedTransitiveDependencies { severity("ignore") }
+            onIncorrectConfiguration { severity("ignore") }
+            onCompileOnly { severity("ignore") }
+            onRuntimeOnly { severity("ignore") }
+            onUnusedAnnotationProcessors { severity("ignore") }
+            onRedundantPlugins { severity("ignore") }
+        }
+
+        val cliCommandRegex = Regex("^cli.*|.*-command$")
+        subprojects.forEach { subproject ->
+            if (subproject.name.matches(cliCommandRegex)) {
+                project(subproject.path) {
+                    onUnusedDependencies {
+                        exclude(libs.clikt)
+                        exclude(libs.mordant)
+                    }
+                }
+            }
+        }
+
+        project(projects.cliHelper) {
+            onUnusedDependencies {
+                exclude(libs.xz)
+            }
+        }
+
+        project(projects.cliTestLauncher) {
+            onUnusedDependencies {
+                severity("ignore")
+            }
+        }
+
+        project(projects.notifier) {
+            onUnusedDependencies {
+                exclude(libs.jiraRestClient.app)
+            }
+        }
+
+        project(projects.plugins.packageManagers.bundlerPackageManager) {
+            onUnusedDependencies {
+                exclude(libs.jruby)
+            }
+        }
+    }
+
     reporting {
         printBuildHealth(true)
     }

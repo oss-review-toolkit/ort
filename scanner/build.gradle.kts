@@ -34,7 +34,10 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation(jacksonLibs.jacksonModuleKotlin)
-    implementation(libs.bundles.exposed)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.json)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.postgres)
 
@@ -49,7 +52,6 @@ dependencies {
     testImplementation(libs.kotlinx.serialization.core)
     testImplementation(libs.kotlinx.serialization.json)
     testImplementation(libs.mockk)
-    testImplementation(libs.retrofit.converter.kotlinxSerialization)
     testImplementation(libs.wiremock)
 
     testFixturesImplementation(projects.utils.testUtils)

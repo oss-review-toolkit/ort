@@ -38,8 +38,10 @@ dependencies {
 
     implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
-    implementation(libs.bundles.exposed)
     implementation(libs.bundles.hoplite)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
     implementation(libs.hikari)
     implementation(libs.postgres)
     implementation(libs.semver4j)

@@ -27,7 +27,6 @@ dependencies {
 
     ksp(projects.plugins.commands.commandApi)
 
-    implementation(projects.advisor)
     implementation(projects.analyzer)
     implementation(projects.downloader)
     implementation(projects.plugins.advisors.advisorApi)

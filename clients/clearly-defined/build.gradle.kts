@@ -29,7 +29,8 @@ dependencies {
     api(libs.okhttp)
     api(libs.retrofit)
 
-    implementation(libs.bundles.ks3)
+    implementation(libs.ks3.jdk)
+    implementation(libs.ks3.standard)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)

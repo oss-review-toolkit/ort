@@ -41,7 +41,6 @@ dependencies {
     funTestImplementation(testFixtures(project))
 
     testFixturesImplementation(platform(projects.plugins.packageCurationProviders))
-    testFixturesImplementation(projects.utils.testUtils)
 
     testFixturesImplementation(libs.kotest.assertions.core)
     testFixturesImplementation(libs.kotest.runner.junit5)

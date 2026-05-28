@@ -27,10 +27,7 @@ dependencies {
 
     ksp(projects.plugins.commands.commandApi)
 
-    implementation(projects.analyzer)
-    implementation(projects.model)
     implementation(projects.utils.commonUtils)
-    implementation(projects.utils.spdxUtils)
 
     // Changing this to "runtimeOnly" triggers "Call uses reflection API which is not found in compilation classpath".
     implementation("org.jetbrains.kotlin:kotlin-reflect")

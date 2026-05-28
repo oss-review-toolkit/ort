@@ -36,7 +36,7 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.bundles.ks3)
+    implementation(libs.ks3.jdk)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
