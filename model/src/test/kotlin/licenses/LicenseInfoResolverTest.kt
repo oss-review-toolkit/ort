@@ -73,8 +73,8 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.transformingCollectionEmptyMatcher
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
-private val PKG_ID = Identifier("Gradle:org.ossreviewtoolkit:ort:1.0.0")
-private val PROVENANCE = RepositoryProvenance(
+private val ID = Identifier("Gradle:org.ossreviewtoolkit:ort:1.0.0")
+private val REPOSITORY_PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort.git",
@@ -88,15 +88,15 @@ class LicenseInfoResolverTest : WordSpec({
         "resolve declared licenses" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     declaredLicenses = setOf("Apache-2.0 WITH LLVM-exception", "MIT")
                 )
             )
             val resolver = createResolver(licenseInfos)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
 
-            result.id shouldBe PKG_ID
+            result.id shouldBe ID
             result should containOnlyLicenseSources(LicenseSource.DECLARED)
             result should containLicensesExactly("Apache-2.0 WITH LLVM-exception", "MIT")
             result should containNoLicenseLocations()
@@ -106,10 +106,10 @@ class LicenseInfoResolverTest : WordSpec({
         "resolve detected licenses" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     detectedLicenses = listOf(
                         Findings(
-                            provenance = PROVENANCE,
+                            provenance = REPOSITORY_PROVENANCE,
                             licenses = mapOf(
                                 "Apache-2.0 WITH LLVM-exception" to listOf(
                                     TextLocation("LICENSE", 1),
@@ -134,15 +134,15 @@ class LicenseInfoResolverTest : WordSpec({
 
             val resolver = createResolver(licenseInfos)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
 
-            result.id shouldBe PKG_ID
+            result.id shouldBe ID
             result should containOnlyLicenseSources(LicenseSource.DETECTED)
             result should containLicensesExactly("Apache-2.0 WITH LLVM-exception", "MIT")
             result should containNumberOfLocationsForLicense("Apache-2.0 WITH LLVM-exception", 2)
             result should containLocationForLicense(
                 license = "Apache-2.0 WITH LLVM-exception",
-                provenance = PROVENANCE,
+                provenance = REPOSITORY_PROVENANCE,
                 location = TextLocation("LICENSE", 1),
                 copyrights = setOf(
                     ResolvedCopyrightFinding(
@@ -154,13 +154,13 @@ class LicenseInfoResolverTest : WordSpec({
             )
             result should containLocationForLicense(
                 license = "Apache-2.0 WITH LLVM-exception",
-                provenance = PROVENANCE,
+                provenance = REPOSITORY_PROVENANCE,
                 location = TextLocation("LICENSE", 21)
             )
             result should containNumberOfLocationsForLicense("MIT", 2)
             result should containLocationForLicense(
                 license = "MIT",
-                provenance = PROVENANCE,
+                provenance = REPOSITORY_PROVENANCE,
                 location = TextLocation("LICENSE", 31),
                 copyrights = setOf(
                     ResolvedCopyrightFinding(
@@ -172,7 +172,7 @@ class LicenseInfoResolverTest : WordSpec({
             )
             result should containLocationForLicense(
                 license = "MIT",
-                provenance = PROVENANCE,
+                provenance = REPOSITORY_PROVENANCE,
                 location = TextLocation("LICENSE", 41)
             )
 
@@ -188,15 +188,15 @@ class LicenseInfoResolverTest : WordSpec({
         "resolve concluded licenses" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     concludedLicense = SpdxExpression.parse("Apache-2.0 WITH LLVM-exception AND MIT")
                 )
             )
             val resolver = createResolver(licenseInfos)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
 
-            result.id shouldBe PKG_ID
+            result.id shouldBe ID
             result should containOnlyLicenseSources(LicenseSource.CONCLUDED)
             result should containLicensesExactly("Apache-2.0 WITH LLVM-exception", "MIT")
             result should containNoLicenseLocations()
@@ -206,10 +206,10 @@ class LicenseInfoResolverTest : WordSpec({
         "resolve copyright statements" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     detectedLicenses = listOf(
                         Findings(
-                            provenance = PROVENANCE,
+                            provenance = REPOSITORY_PROVENANCE,
                             licenses = mapOf(
                                 "Apache-2.0" to listOf(
                                     TextLocation("LICENSE", 1)
@@ -230,7 +230,7 @@ class LicenseInfoResolverTest : WordSpec({
 
             val resolver = createResolver(licenseInfos)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
 
             result should containCopyrightsExactly("(c) 2009 Holder 1", "(c) 2010 Holder 1", "(c) 2010 Holder 2")
             result should containFindingsForCopyrightExactly("(c) 2009 Holder 1", TextLocation("LICENSE", 1))
@@ -241,10 +241,10 @@ class LicenseInfoResolverTest : WordSpec({
         "process copyrights by license" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     detectedLicenses = listOf(
                         Findings(
-                            provenance = PROVENANCE,
+                            provenance = REPOSITORY_PROVENANCE,
                             licenses = mapOf(
                                 "Apache-2.0" to listOf(
                                     TextLocation("LICENSE", 1)
@@ -269,7 +269,7 @@ class LicenseInfoResolverTest : WordSpec({
 
             val resolver = createResolver(licenseInfos)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
 
             result should containCopyrightStatementsForLicenseExactly(
                 "Apache-2.0",
@@ -297,10 +297,10 @@ class LicenseInfoResolverTest : WordSpec({
         "mark copyright garbage as garbage" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     detectedLicenses = listOf(
                         Findings(
-                            provenance = PROVENANCE,
+                            provenance = REPOSITORY_PROVENANCE,
                             licenses = mapOf(
                                 "Apache-2.0" to listOf(
                                     TextLocation("LICENSE", 1)
@@ -326,12 +326,12 @@ class LicenseInfoResolverTest : WordSpec({
                 copyrightGarbage = setOf("(c) 2009 Holder 1", "(c) 2010 Holder 1", "(c) 2009 Holder 2")
             )
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
 
             result should containCopyrightsExactly("(c) 2010 Holder 2", "(c) 2010 Holder 3")
             result should containFindingsForCopyrightExactly("(c) 2010 Holder 2", TextLocation("LICENSE", 4))
             result should containCopyrightGarbageForProvenanceExactly(
-                PROVENANCE,
+                REPOSITORY_PROVENANCE,
                 "(c) 2009 Holder 1" to TextLocation("LICENSE", 1),
                 "(c) 2010 Holder 1" to TextLocation("LICENSE", 2),
                 "(c) 2009 Holder 2" to TextLocation("LICENSE", 3)
@@ -357,10 +357,10 @@ class LicenseInfoResolverTest : WordSpec({
 
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     detectedLicenses = listOf(
                         Findings(
-                            provenance = PROVENANCE,
+                            provenance = REPOSITORY_PROVENANCE,
                             licenses = mapOf(
                                 "Apache-2.0" to listOf(
                                     TextLocation("LICENSE", 1),
@@ -400,13 +400,13 @@ class LicenseInfoResolverTest : WordSpec({
 
             val resolver = createResolver(licenseInfos)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
 
             result.pathExcludesForLicense(
-                "Apache-2.0", PROVENANCE, TextLocation("LICENSE", 1)
+                "Apache-2.0", REPOSITORY_PROVENANCE, TextLocation("LICENSE", 1)
             ) should beEmpty()
             result.pathExcludesForLicense(
-                "Apache-2.0", PROVENANCE, TextLocation("a/b", 1)
+                "Apache-2.0", REPOSITORY_PROVENANCE, TextLocation("a/b", 1)
             ) should containExactly(vcsPathExclude)
             result.pathExcludesForLicense(
                 "Apache-2.0", sourceArtifactProvenance, TextLocation("LICENSE", 1)
@@ -416,10 +416,10 @@ class LicenseInfoResolverTest : WordSpec({
             ) should beEmpty()
 
             result.pathExcludesForCopyright(
-                "(c) 2010 Holder", PROVENANCE, TextLocation("LICENSE", 1)
+                "(c) 2010 Holder", REPOSITORY_PROVENANCE, TextLocation("LICENSE", 1)
             ) should beEmpty()
             result.pathExcludesForCopyright(
-                "(c) 2010 Holder", PROVENANCE, TextLocation("a/b", 1)
+                "(c) 2010 Holder", REPOSITORY_PROVENANCE, TextLocation("a/b", 1)
             ) should containExactly(vcsPathExclude)
             result.pathExcludesForCopyright(
                 "(c) 2010 Holder", sourceArtifactProvenance, TextLocation("LICENSE", 1)
@@ -446,10 +446,10 @@ class LicenseInfoResolverTest : WordSpec({
 
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     detectedLicenses = listOf(
                         Findings(
-                            provenance = PROVENANCE,
+                            provenance = REPOSITORY_PROVENANCE,
                             licenses = mapOf(
                                 "Apache-2.0" to listOf(
                                     TextLocation("LICENSE", 1)
@@ -468,12 +468,12 @@ class LicenseInfoResolverTest : WordSpec({
 
             val resolver = createResolver(licenseInfos)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
 
             result should containLicensesExactly("MIT")
             result should containLocationForLicense(
                 license = "MIT",
-                provenance = PROVENANCE,
+                provenance = REPOSITORY_PROVENANCE,
                 location = TextLocation("LICENSE", 1),
                 appliedCuration = curation,
                 copyrights = setOf(
@@ -497,11 +497,11 @@ class LicenseInfoResolverTest : WordSpec({
 
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     declaredLicenses = setOf("$apacheLicense or $gplLicense", mitLicense),
                     detectedLicenses = listOf(
                         Findings(
-                            provenance = PROVENANCE,
+                            provenance = REPOSITORY_PROVENANCE,
                             licenses = mapOf(
                                 "$gplLicense OR $bsdLicense" to listOf(
                                     TextLocation("LICENSE", 1),
@@ -535,7 +535,7 @@ class LicenseInfoResolverTest : WordSpec({
                 arrayOf("$gplLicense OR $bsdLicense".toSpdx(), bsdLicense.toSpdx())
             val expectedConcludedSpdxExpression = "$apacheLicense OR $gplLicense".toSpdx()
 
-            val result: ResolvedLicenseInfo = resolver.resolveLicenseInfo(PKG_ID)
+            val result: ResolvedLicenseInfo = resolver.resolveLicenseInfo(ID)
             result should containOnlyLicenseSources(
                 LicenseSource.DECLARED,
                 LicenseSource.DETECTED,
@@ -561,14 +561,14 @@ class LicenseInfoResolverTest : WordSpec({
         "resolve copyrights from authors if enabled" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     authors = authors,
                     declaredLicenses = declaredLicenses
                 )
             )
             val resolver = createResolver(licenseInfos, addAuthorsToCopyrights = true)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
             result should containCopyrightStatementsForLicenseExactly(
                 "LicenseRef-a",
                 "Copyright (C) The Author", "Copyright (C) The Other Author"
@@ -582,14 +582,14 @@ class LicenseInfoResolverTest : WordSpec({
         "not resolve copyrights from authors if disabled" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     authors = authors,
                     declaredLicenses = declaredLicenses
                 )
             )
             val resolver = createResolver(licenseInfos, addAuthorsToCopyrights = false)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
             result should containCopyrightStatementsForLicenseExactly("LicenseRef-a")
             result should containCopyrightStatementsForLicenseExactly("LicenseRef-b")
         }
@@ -599,7 +599,7 @@ class LicenseInfoResolverTest : WordSpec({
             // in the package curation are added as copyright statement under the concluded license.
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     // In the curation file, authors might or might not have a "Copyright" prefix.
                     authors = setOf("Copyright (C) 2024 The Author", "The Other Author"),
                     declaredLicenses = setOf("MIT"),
@@ -609,7 +609,7 @@ class LicenseInfoResolverTest : WordSpec({
 
             val resolver = createResolver(licenseInfos, addAuthorsToCopyrights = true)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
             result should containCopyrightStatementsForLicenseExactly(
                 "BSD-2-Clause",
                 // A "Copyright" prefix is added to the author (if it did not already exist).
@@ -620,7 +620,7 @@ class LicenseInfoResolverTest : WordSpec({
         "not resolve copyrights from authors in concluded license if disabled" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     authors = authors,
                     declaredLicenses = setOf("MIT"),
                     concludedLicense = SpdxExpression.parse("BSD-2-Clause")
@@ -629,7 +629,7 @@ class LicenseInfoResolverTest : WordSpec({
 
             val resolver = createResolver(licenseInfos, addAuthorsToCopyrights = false)
 
-            val result = resolver.resolveLicenseInfo(PKG_ID)
+            val result = resolver.resolveLicenseInfo(ID)
             result should containCopyrightStatementsForLicenseExactly("BSD-2-Clause")
         }
     }
@@ -638,10 +638,10 @@ class LicenseInfoResolverTest : WordSpec({
         "create the expected result" {
             val licenseInfos = listOf(
                 createLicenseInfo(
-                    id = PKG_ID,
+                    id = ID,
                     detectedLicenses = listOf(
                         Findings(
-                            provenance = PROVENANCE,
+                            provenance = REPOSITORY_PROVENANCE,
                             licenses = mapOf(
                                 "Apache-2.0" to listOf(
                                     TextLocation("other", 1)
@@ -661,22 +661,22 @@ class LicenseInfoResolverTest : WordSpec({
                 )
             )
 
-            val archiver = createArchiver(PROVENANCE, "LICENSE")
+            val archiver = createArchiver(REPOSITORY_PROVENANCE, "LICENSE")
             val resolver = createResolver(licenseInfos, archiver = archiver)
 
-            val result = resolver.resolveLicenseFiles(PKG_ID)
+            val result = resolver.resolveLicenseFiles(ID)
 
-            result.id shouldBe PKG_ID
+            result.id shouldBe ID
             result.files should haveSize(1)
 
             val file = result.files.first()
-            file.provenance shouldBe PROVENANCE
+            file.provenance shouldBe REPOSITORY_PROVENANCE
             file.path shouldBe "LICENSE"
             file.file.readText() shouldBe "content of: LICENSE"
             file.licenses should containLicensesExactly("MIT")
             file.licenses should containLocationForLicense(
                 license = "MIT",
-                provenance = PROVENANCE,
+                provenance = REPOSITORY_PROVENANCE,
                 location = TextLocation("LICENSE", 3, 20),
                 copyrights = setOf(
                     ResolvedCopyrightFinding(
