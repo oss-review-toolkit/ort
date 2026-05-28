@@ -33,17 +33,6 @@ jobs:
         uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
         with:
           dependency-graph: generate-and-submit
-      - name: Publish to Maven Central
-        env:
-          GITHUB_DEPENDENCY_GRAPH_REF: refs/heads/main
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          ORG_GRADLE_PROJECT_signAllPublications: true
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
-          ORG_GRADLE_PROJECT_SONATYPE_CONNECT_TIMEOUT_SECONDS: 300
-          ORG_GRADLE_PROJECT_SONATYPE_CLOSE_TIMEOUT_SECONDS: 3600
-        run: ./gradlew publishAndReleaseToMavenCentral
       - name: Build ORT Distributions
         env:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
@@ -66,3 +55,14 @@ jobs:
             ./cli/build/distributions/ort-${{ env.ORT_VERSION }}.zip
             ./cli-helper/build/distributions/orth-${{ env.ORT_VERSION }}.tgz
             ./cli-helper/build/distributions/orth-${{ env.ORT_VERSION }}.zip
+      - name: Publish to Maven Central
+        env:
+          GITHUB_DEPENDENCY_GRAPH_REF: refs/heads/main
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signAllPublications: true
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_SONATYPE_CONNECT_TIMEOUT_SECONDS: 300
+          ORG_GRADLE_PROJECT_SONATYPE_CLOSE_TIMEOUT_SECONDS: 3600
+        run: ./gradlew publishAndReleaseToMavenCentral
