@@ -26,17 +26,16 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.packageurl)
     implementation(projects.clients.fossidWebappClient)
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.packageurl)
-
-    ksp(projects.scanner)
-
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
+
+    ksp(projects.scanner)
 }

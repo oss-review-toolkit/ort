@@ -29,25 +29,22 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    implementation(projects.downloader)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
-
     implementation(jacksonLibs.jacksonDatabind)
-
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.yaml)
     implementation(libs.semver4j)
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
-    ksp(projects.analyzer)
-
-    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
-
-    testImplementation(projects.utils.testUtils)
+    funTestImplementation(projects.utils.testUtils)
 
     testImplementation(libs.mockk)
+    testImplementation(projects.utils.testUtils)
+
+    ksp(projects.analyzer)
 }

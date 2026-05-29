@@ -26,15 +26,14 @@ plugins {
 }
 
 dependencies {
-    api(projects.clients.clearlyDefinedClient)
-    api(projects.plugins.api)
-    api(projects.utils.ortUtils)
-    api(projects.utils.spdxUtils)
-
     api(jacksonLibs.jacksonDatabind)
     api(jacksonLibs.jacksonDataformatYaml)
     api(libs.log4j.api)
     api(libs.packageurl)
+    api(projects.clients.clearlyDefinedClient)
+    api(projects.plugins.api)
+    api(projects.utils.ortUtils)
+    api(projects.utils.spdxUtils)
 
     implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
@@ -51,8 +50,7 @@ dependencies {
 
     testFixturesImplementation(projects.utils.testUtils)
 
-    testImplementation(projects.utils.testUtils)
-
     testImplementation(libs.jsonSchemaValidator)
     testImplementation(libs.mockk)
+    testImplementation(projects.utils.testUtils)
 }

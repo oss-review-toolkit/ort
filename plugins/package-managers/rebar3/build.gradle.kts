@@ -30,8 +30,8 @@ dependencies {
 
     implementation(projects.utils.commonUtils)
 
-    ksp(projects.analyzer)
-
-    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
+    funTestImplementation(projects.utils.testUtils)
+
+    ksp(projects.analyzer)
 }

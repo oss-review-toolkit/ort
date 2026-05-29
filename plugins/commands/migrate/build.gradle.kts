@@ -25,12 +25,11 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
+    implementation(jacksonLibs.jacksonModuleKotlin)
+    implementation(libs.clikt)
     implementation(projects.plugins.packageCurationProviders.ortConfigPackageCurationProvider)
     implementation(projects.plugins.packageManagers.nugetPackageManager)
     implementation(projects.utils.commonUtils)
 
-    implementation(jacksonLibs.jacksonModuleKotlin)
-    implementation(libs.clikt)
+    ksp(projects.plugins.commands.commandApi)
 }

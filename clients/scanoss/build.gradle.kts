@@ -45,9 +45,8 @@ kfx {
 }
 
 dependencies {
-    api(libs.kotlinx.serialization.core)
-
     api(ktorLibs.client.core)
+    api(libs.kotlinx.serialization.core)
 
     implementation(ktorLibs.http)
     implementation(ktorLibs.utils)

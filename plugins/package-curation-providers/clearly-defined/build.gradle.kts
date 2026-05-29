@@ -26,7 +26,7 @@ dependencies {
     api(projects.clients.clearlyDefinedClient)
     api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
-    ksp(projects.plugins.packageCurationProviders.packageCurationProviderApi)
-
     testImplementation(libs.wiremock)
+
+    ksp(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 }

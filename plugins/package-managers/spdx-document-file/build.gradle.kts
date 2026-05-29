@@ -26,22 +26,21 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
+    implementation(jacksonLibs.jacksonCore)
+    implementation(jacksonLibs.jacksonDatabind)
+    implementation(libs.okhttp)
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxDocumentUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(jacksonLibs.jacksonCore)
-    implementation(jacksonLibs.jacksonDatabind)
-    implementation(libs.okhttp)
-
-    ksp(projects.analyzer)
-
+    funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.plugins.packageManagers.conanPackageManager)
     funTestImplementation(projects.utils.testUtils)
-    funTestImplementation(testFixtures(projects.analyzer))
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
+
+    ksp(projects.analyzer)
 }

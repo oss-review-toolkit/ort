@@ -25,9 +25,9 @@ plugins {
 dependencies {
     api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
-    ksp(projects.plugins.packageCurationProviders.packageCurationProviderApi)
-
     implementation(projects.downloader)
 
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
+
+    ksp(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 }

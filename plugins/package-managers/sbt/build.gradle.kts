@@ -26,14 +26,13 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
+    implementation(libs.semver4j)
     implementation(projects.plugins.packageManagers.mavenPackageManager)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.semver4j)
+    funTestImplementation(testFixtures(projects.analyzer))
+    funTestImplementation(projects.utils.testUtils)
 
     ksp(projects.analyzer)
-
-    funTestImplementation(projects.utils.testUtils)
-    funTestImplementation(testFixtures(projects.analyzer))
 }

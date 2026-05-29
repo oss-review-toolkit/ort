@@ -25,20 +25,19 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
-    implementation(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
+    implementation(libs.clikt)
+    implementation(libs.kotlinx.coroutines)
+    implementation(projects.model)
 
     // TODO: Get rid of these hard-coded dependencies on plugins.
     implementation(projects.plugins.licenseFactProviders.dirLicenseFactProvider)
     implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
+    implementation(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 
-    implementation(projects.model)
     implementation(projects.reporter)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.clikt)
-    implementation(libs.kotlinx.coroutines)
+    ksp(projects.plugins.commands.commandApi)
 }

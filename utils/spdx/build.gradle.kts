@@ -38,10 +38,9 @@ plugins {
 dependencies {
     api(jacksonLibs.jacksonDatabind)
 
-    implementation(projects.utils.commonUtils)
-
     implementation(jacksonLibs.jacksonDataformatYaml)
     implementation(jacksonLibs.jacksonModuleKotlin)
+    implementation(projects.utils.commonUtils)
 
     testImplementation(projects.model)
 }

@@ -26,21 +26,20 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
-    implementation(projects.downloader)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.spdxUtils)
-
     implementation(libs.scanoss) {
         exclude(group = "org.slf4j", module = "slf4j-simple")
             .because("the logging provider conflicts with ORT's")
     }
 
-    ksp(projects.scanner)
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(projects.utils.testUtils)
 
-    testImplementation(projects.utils.testUtils)
-
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
+    testImplementation(projects.utils.testUtils)
+
+    ksp(projects.scanner)
 }

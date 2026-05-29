@@ -25,13 +25,12 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
-    implementation(projects.model)
-    implementation(projects.utils.commonUtils)
-
     implementation(jacksonLibs.jacksonDatabind)
     implementation(jacksonLibs.jacksonDataformatYaml)
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.clikt)
+    implementation(projects.model)
+    implementation(projects.utils.commonUtils)
+
+    ksp(projects.plugins.commands.commandApi)
 }

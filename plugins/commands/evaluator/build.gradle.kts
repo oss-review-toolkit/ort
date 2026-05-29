@@ -25,21 +25,20 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
-    implementation(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
-    implementation(projects.plugins.packageCurationProviders.packageCurationProviderApi)
+    implementation(libs.clikt)
+    implementation(projects.evaluator)
+    implementation(projects.model)
 
     // TODO: Get rid of these hard-coded dependencies on plugins.
     implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
+    implementation(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
     implementation(projects.plugins.packageCurationProviders.filePackageCurationProvider)
+    implementation(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
-    implementation(projects.evaluator)
-    implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.clikt)
+    ksp(projects.plugins.commands.commandApi)
 }

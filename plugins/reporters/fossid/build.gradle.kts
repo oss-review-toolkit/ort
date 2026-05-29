@@ -25,17 +25,15 @@ plugins {
 dependencies {
     api(projects.reporter)
 
-    ksp(projects.reporter)
-
+    implementation(libs.kotlinx.coroutines)
     implementation(projects.clients.fossidWebappClient)
     implementation(projects.model)
     implementation(projects.plugins.reporters.asciidocReporter)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.kotlinx.coroutines)
-
+    testImplementation(libs.mockk)
     testImplementation(projects.utils.testUtils)
 
-    testImplementation(libs.mockk)
+    ksp(projects.reporter)
 }

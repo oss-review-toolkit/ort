@@ -25,14 +25,12 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
-    implementation(projects.plugins.packageCurationProviders.packageCurationProviderApi)
-
+    implementation(libs.clikt)
     implementation(projects.analyzer)
     implementation(projects.model)
+    implementation(projects.plugins.packageCurationProviders.packageCurationProviderApi)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.clikt)
+    ksp(projects.plugins.commands.commandApi)
 }

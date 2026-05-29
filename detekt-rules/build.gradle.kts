@@ -31,12 +31,11 @@ dependencies {
     compileOnly(libs.detekt.api)
     compileOnly(libs.detekt.psiUtils)
 
-    testRuntimeOnly(libs.detekt.psiUtils)
-
-    testImplementation(projects.utils.commonUtils)
-
     testImplementation(libs.detekt.api)
     testImplementation(libs.detekt.test)
+    testImplementation(projects.utils.commonUtils)
+
+    testRuntimeOnly(libs.detekt.psiUtils)
 }
 
 // A provider to get a StyledTextOutputFactory via dependency injection.

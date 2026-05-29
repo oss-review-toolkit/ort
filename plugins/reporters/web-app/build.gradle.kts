@@ -45,11 +45,10 @@ sourceSets.main.get().output.dir(mapOf("builtBy" to copyWebAppTemplate), generat
 dependencies {
     api(projects.reporter)
 
-    ksp(projects.reporter)
-
+    implementation(libs.commonsCompress)
     implementation(projects.plugins.reporters.evaluatedModelReporter)
 
-    implementation(libs.commonsCompress)
-
     funTestImplementation(projects.utils.testUtils)
+
+    ksp(projects.reporter)
 }

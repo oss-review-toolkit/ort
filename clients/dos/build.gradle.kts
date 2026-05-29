@@ -29,14 +29,13 @@ dependencies {
     api(libs.okhttp)
     api(libs.retrofit)
 
-    implementation(projects.model)
-    implementation(projects.utils.commonUtils)
-
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.log4j.api.kotlin)
     implementation(libs.okhttp.loggingInterceptor)
     implementation(libs.retrofit.converter.kotlinxSerialization)
+    implementation(projects.model)
+    implementation(projects.utils.commonUtils)
 }
 
 description = "A client to communicate with the API of a Double Open Server instance."

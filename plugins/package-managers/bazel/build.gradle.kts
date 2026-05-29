@@ -29,25 +29,24 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    implementation(projects.downloader)
-    implementation(projects.clients.bazelModuleRegistryClient)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
-
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.semver4j)
+    implementation(projects.clients.bazelModuleRegistryClient)
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
-    ksp(projects.analyzer)
-
-    funTestImplementation(projects.utils.testUtils)
     funTestImplementation(testFixtures(projects.analyzer))
+    funTestImplementation(projects.utils.testUtils)
 
     funTestRuntimeOnly(projects.plugins.packageManagers.conanPackageManager)
 
     testImplementation(libs.mockk)
+
+    ksp(projects.analyzer)
 }
 
 tasks.named<Test>("funTest") {

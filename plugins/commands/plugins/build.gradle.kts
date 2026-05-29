@@ -25,8 +25,8 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
+    implementation(libs.clikt)
+    implementation(libs.mordant)
     implementation(projects.analyzer)
     implementation(projects.downloader)
     implementation(projects.plugins.advisors.advisorApi)
@@ -36,6 +36,5 @@ dependencies {
     implementation(projects.reporter)
     implementation(projects.scanner)
 
-    implementation(libs.clikt)
-    implementation(libs.mordant)
+    ksp(projects.plugins.commands.commandApi)
 }
