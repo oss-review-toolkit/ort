@@ -17,6 +17,11 @@
  * License-Filename: LICENSE
  */
 
+plugins {
+    // Apply third-party plugins.
+    id("com.squareup.sort-dependencies")
+}
+
 repositories {
     mavenCentral()
 
