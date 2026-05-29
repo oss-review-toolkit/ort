@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
  * license files if there isn't any match for [LicenseFilePatterns.licenseFilenames].
  *
  * To determine the (root) license files applicable for a specific directory, all filenames in that directory are
- * matched against [LicenseFilePatterns.licenseFilenames]. If there are matches then these are used as result,
+ * matched against [LicenseFilePatterns.licenseFilenames]. If there are matches then these are used as the result,
  * otherwise that search is repeated recursively in the parent directory. If there is no parent directory (because the
  * root was already searched but no result was found) then start from scratch using the fallback pattern
  * [LicenseFilePatterns.otherLicenseFilenames].
