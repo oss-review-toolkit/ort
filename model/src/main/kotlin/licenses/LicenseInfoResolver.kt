@@ -59,8 +59,10 @@ class LicenseInfoResolver(
     private val licenseFileMatcher: FileMatcher
 
     init {
-        val patterns = licenseFilePatterns.copy(
+        val patterns = LicenseFilePatterns(
+            licenseFilenames = licenseFilePatterns.licenseFilenames,
             noticeFilenames = emptySet(),
+            patentFilenames = licenseFilePatterns.patentFilenames,
             otherLicenseFilenames = emptySet()
         )
 
