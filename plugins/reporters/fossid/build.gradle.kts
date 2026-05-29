@@ -23,10 +23,10 @@ plugins {
 }
 
 dependencies {
+    api(projects.clients.fossidWebappClient)
     api(projects.reporter)
 
     implementation(libs.kotlinx.coroutines)
-    implementation(projects.clients.fossidWebappClient)
     implementation(projects.model)
     implementation(projects.plugins.reporters.asciidocReporter)
     implementation(projects.utils.commonUtils)

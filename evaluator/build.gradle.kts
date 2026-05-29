@@ -32,16 +32,17 @@ plugins {
 }
 
 dependencies {
+    api("org.jetbrains.kotlin:kotlin-scripting-common")
+    api(libs.kotlinx.serialization.core)
     api(projects.model)
     api(projects.utils.scriptingUtils)
+    api(projects.utils.spdxUtils)
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
-    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
 
     testFixturesImplementation(libs.kotlinx.serialization.core)
     testFixturesImplementation(projects.utils.testUtils)

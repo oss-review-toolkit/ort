@@ -23,7 +23,8 @@ plugins {
 }
 
 dependencies {
-    api(libs.aeSecurity)
     api(projects.model)
     api(projects.plugins.api)
+
+    implementation(libs.aeSecurity)
 }

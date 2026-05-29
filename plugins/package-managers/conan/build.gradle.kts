@@ -26,10 +26,10 @@ plugins {
 }
 
 dependencies {
+    api(libs.kotlinx.serialization.core)
     api(projects.analyzer)
     api(projects.model)
 
-    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.yaml)
     implementation(libs.semver4j)

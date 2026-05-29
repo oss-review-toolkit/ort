@@ -29,5 +29,6 @@ dependencies {
 
     implementation(jacksonLibs.jacksonCore)
     implementation(jacksonLibs.jacksonDatabind)
+    implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 }

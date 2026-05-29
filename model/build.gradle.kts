@@ -28,6 +28,9 @@ plugins {
 dependencies {
     api(jacksonLibs.jacksonDatabind)
     api(jacksonLibs.jacksonDataformatYaml)
+    api(libs.bundles.hoplite)
+    api(libs.exposed.core)
+    api(libs.exposed.jdbc)
     api(libs.log4j.api)
     api(libs.packageurl)
     api(projects.clients.clearlyDefinedClient)
@@ -37,14 +40,12 @@ dependencies {
 
     implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
-    implementation(libs.bundles.hoplite)
-    implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
-    implementation(libs.exposed.jdbc)
     implementation(libs.hikari)
     implementation(libs.postgres)
     implementation(libs.semver4j)
     implementation(libs.tika)
+    implementation(projects.utils.commonUtils)
 
     funTestImplementation(projects.utils.testUtils)
 

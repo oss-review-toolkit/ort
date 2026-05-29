@@ -26,6 +26,7 @@ dependencies {
     api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
     implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
 
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
 

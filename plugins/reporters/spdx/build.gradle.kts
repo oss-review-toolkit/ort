@@ -27,12 +27,12 @@ plugins {
 
 dependencies {
     api(projects.reporter)
+    api(projects.utils.spdxDocumentUtils)
 
     implementation(jacksonLibs.jacksonDatabind)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxDocumentUtils)
     implementation(projects.utils.spdxUtils)
 
     funTestImplementation(testFixtures(projects.plugins.reporters.spdxReporter))

@@ -26,10 +26,10 @@ plugins {
 }
 
 dependencies {
+    api(libs.kotlinx.serialization.core)
+    api(libs.kotlinx.serialization.json)
     api(projects.reporter)
 
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)

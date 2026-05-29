@@ -32,15 +32,15 @@ buildConfig {
 }
 
 dependencies {
+    api(libs.commonsCompress)
     api(libs.kotlinx.coroutines)
     api(libs.okhttp)
-    api(projects.utils.commonUtils)
     api(projects.utils.spdxUtils)
 
     implementation(libs.awsS3)
-    implementation(libs.commonsCompress)
     implementation(libs.xz)
     implementation(projects.clients.foojayClient)
+    implementation(projects.utils.commonUtils)
 
     funTestImplementation(libs.mockk)
 

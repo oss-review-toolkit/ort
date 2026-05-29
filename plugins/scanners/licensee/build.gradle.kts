@@ -26,13 +26,14 @@ plugins {
 }
 
 dependencies {
+    api(libs.kotlinx.serialization.core)
     api(projects.model)
     api(projects.scanner)
 
     funTestApi(testFixtures(projects.scanner))
 
-    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(projects.utils.commonUtils)
 
     ksp(projects.scanner)
 }

@@ -25,5 +25,7 @@ plugins {
 dependencies {
     api(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 
+    implementation(projects.utils.commonUtils)
+
     ksp(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 }

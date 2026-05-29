@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.spdx.library)
     implementation(libs.spdx.store.v3jsonld)
     implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
