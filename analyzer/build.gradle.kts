@@ -31,6 +31,7 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines)
     implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
     implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
 
@@ -40,4 +41,5 @@ dependencies {
     testFixturesImplementation(platform(projects.plugins.packageCurationProviders))
     testFixturesImplementation(libs.kotest.assertions.core)
     testFixturesImplementation(libs.kotest.runner.junit5)
+    testFixturesImplementation(projects.utils.commonUtils)
 }

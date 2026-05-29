@@ -26,11 +26,11 @@ plugins {
 }
 
 dependencies {
+    api("org.jetbrains.kotlin:kotlin-scripting-common")
     api(projects.model)
     api(projects.plugins.api)
     api(projects.plugins.licenseFactProviders.licenseFactProviderApi)
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(projects.utils.scriptingUtils)
     implementation(projects.utils.spdxUtils)

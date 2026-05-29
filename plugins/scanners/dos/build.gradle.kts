@@ -26,6 +26,7 @@ plugins {
 }
 
 dependencies {
+    api(projects.clients.dosClient)
     api(projects.model)
     api(projects.scanner)
 
@@ -33,7 +34,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.log4j.api)
-    implementation(projects.clients.dosClient)
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)

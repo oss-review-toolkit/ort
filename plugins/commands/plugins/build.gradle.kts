@@ -23,6 +23,7 @@ plugins {
 }
 
 dependencies {
+    api(projects.plugins.api)
     api(projects.plugins.commands.commandApi)
 
     implementation(libs.clikt)
@@ -30,7 +31,6 @@ dependencies {
     implementation(projects.analyzer)
     implementation(projects.downloader)
     implementation(projects.plugins.advisors.advisorApi)
-    implementation(projects.plugins.api)
     implementation(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
     implementation(projects.plugins.packageCurationProviders.packageCurationProviderApi)
     implementation(projects.reporter)

@@ -26,6 +26,7 @@ plugins {
 }
 
 dependencies {
+    api(libs.kottage)
     api(libs.maven.core)
     api(libs.maven.resolver.api)
     api(projects.analyzer)
@@ -34,7 +35,6 @@ dependencies {
     implementation(libs.bouncyCastle)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kottage)
     implementation(libs.maven.embedder)
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)

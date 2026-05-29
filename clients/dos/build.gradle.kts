@@ -26,15 +26,15 @@ plugins {
 }
 
 dependencies {
+    api(libs.kotlinx.serialization.core)
+    api(libs.kotlinx.serialization.json)
     api(libs.okhttp)
     api(libs.retrofit)
+    api(projects.model)
 
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.log4j.api.kotlin)
     implementation(libs.okhttp.loggingInterceptor)
     implementation(libs.retrofit.converter.kotlinxSerialization)
-    implementation(projects.model)
     implementation(projects.utils.commonUtils)
 }
 

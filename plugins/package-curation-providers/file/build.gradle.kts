@@ -25,5 +25,7 @@ plugins {
 dependencies {
     api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
+    implementation(projects.utils.commonUtils)
+
     ksp(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 }

@@ -27,6 +27,8 @@ val webAppTemplateConfiguration by configurations.creating {
 }
 
 dependencies {
+    implementation(projects.utils.commonUtils)
+
     webAppTemplateConfiguration(project(":plugins:reporters:web-app-template", "webAppTemplateConfiguration"))
 }
 

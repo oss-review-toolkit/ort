@@ -26,19 +26,20 @@ plugins {
 }
 
 dependencies {
+    api(libs.exposed.core)
+    api(libs.exposed.dao)
+    api(projects.downloader)
     api(projects.model)
     api(projects.plugins.api)
+    api(projects.utils.ortUtils)
 
     implementation(jacksonLibs.jacksonModuleKotlin)
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.json)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.postgres)
     implementation(projects.clients.clearlyDefinedClient)
-    implementation(projects.downloader)
-    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.commonUtils)
 
     funTestImplementation(platform(projects.plugins.scanners))
     funTestImplementation(platform(projects.plugins.versionControlSystems))
@@ -47,6 +48,7 @@ dependencies {
 
     testFixturesImplementation(libs.kotest.assertions.core)
     testFixturesImplementation(libs.kotest.runner.junit5)
+    testFixturesImplementation(projects.utils.commonUtils)
     testFixturesImplementation(projects.utils.testUtils)
 
     testImplementation(platform(projects.plugins.scanners))

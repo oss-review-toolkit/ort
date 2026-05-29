@@ -26,14 +26,15 @@ plugins {
 }
 
 dependencies {
+    api(libs.kotlinx.serialization.core)
     api(libs.okhttp)
     api(libs.retrofit)
 
-    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ks3.jdk)
     implementation(libs.retrofit.converter.kotlinxSerialization)
     implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
 }
 
 description = "A client to communicate with the API of a Bazel module registry."

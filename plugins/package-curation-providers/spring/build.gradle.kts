@@ -23,11 +23,11 @@ plugins {
 }
 
 dependencies {
+    api(projects.model)
     api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.semver4j)
-    implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 

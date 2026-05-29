@@ -29,13 +29,13 @@ dependencies {
 
     implementation(libs.freemarker)
     implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
 
     funTestImplementation(testFixtures(projects.reporter))
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
     funTestImplementation(projects.utils.testUtils)
 
     testImplementation(libs.mockk)
+    testImplementation(projects.utils.ortUtils)
     testImplementation(projects.utils.testUtils)
 
     ksp(projects.reporter)

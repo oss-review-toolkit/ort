@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.plugins.packageCurationProviders.filePackageCurationProvider)
 
     implementation(projects.scanner)
+    implementation(projects.utils.commonUtils)
     implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
 

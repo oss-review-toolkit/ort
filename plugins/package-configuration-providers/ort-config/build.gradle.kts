@@ -27,6 +27,7 @@ dependencies {
 
     implementation(projects.downloader)
     implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
+    implementation(projects.utils.commonUtils)
 
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
 

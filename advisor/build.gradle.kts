@@ -23,10 +23,10 @@ plugins {
 }
 
 dependencies {
-    api(projects.utils.commonUtils)
+    api(projects.plugins.advisors.advisorApi)
 
     implementation(libs.kotlinx.coroutines)
-    implementation(projects.plugins.advisors.advisorApi)
+    implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
     testImplementation(libs.mockk)
