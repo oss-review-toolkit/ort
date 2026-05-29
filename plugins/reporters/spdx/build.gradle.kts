@@ -28,19 +28,18 @@ plugins {
 dependencies {
     api(projects.reporter)
 
-    ksp(projects.reporter)
-
+    implementation(jacksonLibs.jacksonDatabind)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxDocumentUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(jacksonLibs.jacksonDatabind)
-
-    funTestImplementation(projects.utils.testUtils)
-    funTestImplementation(projects.plugins.licenseFactProviders.scancodeLicenseFactProvider)
     funTestImplementation(testFixtures(projects.plugins.reporters.spdxReporter))
+    funTestImplementation(projects.plugins.licenseFactProviders.scancodeLicenseFactProvider)
+    funTestImplementation(projects.utils.testUtils)
 
     testFixturesImplementation(projects.utils.testUtils)
+
+    ksp(projects.reporter)
 }

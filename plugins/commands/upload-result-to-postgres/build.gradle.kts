@@ -25,18 +25,17 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
+    implementation(libs.clikt)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.json)
     implementation(projects.model)
     implementation(projects.scanner)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.dao)
-    implementation(libs.exposed.jdbc)
-    implementation(libs.exposed.json)
-    implementation(libs.clikt)
-
     runtimeOnly(libs.postgres)
+
+    ksp(projects.plugins.commands.commandApi)
 }

@@ -32,19 +32,18 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
+    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
     implementation(projects.downloader)
     implementation(projects.plugins.packageManagers.gradleModel)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-
-    ksp(projects.analyzer)
-
+    funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(projects.utils.testUtils)
-    funTestImplementation(testFixtures(projects.analyzer))
+
+    ksp(projects.analyzer)
 }
 
 val processResources = tasks.named<Copy>("processResources") {

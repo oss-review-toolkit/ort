@@ -25,7 +25,7 @@ plugins {
 dependencies {
     api(projects.plugins.licenseFactProviders.licenseFactProviderApi)
 
-    ksp(projects.plugins.licenseFactProviders.licenseFactProviderApi)
-
     implementation(projects.utils.ortUtils)
+
+    ksp(projects.plugins.licenseFactProviders.licenseFactProviderApi)
 }

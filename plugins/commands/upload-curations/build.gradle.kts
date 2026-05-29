@@ -25,14 +25,13 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
+    implementation(libs.clikt)
+    implementation(libs.okhttp)
     implementation(projects.clients.clearlyDefinedClient)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.clikt)
-    implementation(libs.okhttp)
+    ksp(projects.plugins.commands.commandApi)
 }

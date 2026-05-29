@@ -25,8 +25,8 @@ plugins {
 dependencies {
     api(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 
-    implementation(projects.clients.dosClient)
     implementation(libs.kotlinx.coroutines)
+    implementation(projects.clients.dosClient)
 
     ksp(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 }

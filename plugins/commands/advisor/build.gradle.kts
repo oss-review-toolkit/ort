@@ -25,14 +25,13 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    ksp(projects.plugins.commands.commandApi)
-
+    implementation(libs.clikt)
+    implementation(libs.kotlinx.coroutines)
     implementation(projects.advisor)
     implementation(projects.model)
     implementation(projects.plugins.advisors.advisorApi)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.clikt)
-    implementation(libs.kotlinx.coroutines)
+    ksp(projects.plugins.commands.commandApi)
 }

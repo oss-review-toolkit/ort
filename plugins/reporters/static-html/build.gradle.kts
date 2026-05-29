@@ -25,20 +25,19 @@ plugins {
 dependencies {
     api(projects.reporter)
 
-    ksp(projects.reporter)
-
+    implementation(libs.flexmark)
+    implementation(libs.kotlinx.html)
     implementation(projects.downloader)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.flexmark)
-    implementation(libs.kotlinx.html)
+    funTestImplementation(projects.utils.testUtils)
 
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise, the formatting of
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.
     runtimeOnly(libs.saxonHe)
 
-    funTestImplementation(projects.utils.testUtils)
+    ksp(projects.reporter)
 }

@@ -29,19 +29,17 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
+    funTestApi(testFixtures(projects.scanner))
 
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.semver4j)
-
-    ksp(projects.scanner)
-
-    funTestApi(testFixtures(projects.scanner))
-
-    testImplementation(projects.utils.testUtils)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     testImplementation(libs.mockk)
+    testImplementation(projects.utils.testUtils)
+
+    ksp(projects.scanner)
 }

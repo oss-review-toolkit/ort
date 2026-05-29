@@ -26,9 +26,8 @@ dependencies {
     api(projects.downloader)
     api(projects.model)
 
-    implementation(projects.utils.commonUtils)
-
     implementation(libs.semver4j)
+    implementation(projects.utils.commonUtils)
 
     ksp(projects.downloader)
 }

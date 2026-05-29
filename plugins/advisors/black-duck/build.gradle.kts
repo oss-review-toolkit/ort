@@ -24,21 +24,17 @@ plugins {
 
 dependencies {
     api(libs.blackduck.common.api)
-
     api(projects.plugins.advisors.advisorApi)
-
-    ksp(projects.plugins.advisors.advisorApi)
 
     implementation(libs.blackduck.common)
     implementation(libs.kotlinx.coroutines)
-
     implementation(projects.utils.commonUtils)
 
+    funTestImplementation(libs.gson)
     funTestImplementation(projects.utils.testUtils)
 
-    funTestImplementation(libs.gson)
-
+    testImplementation(libs.gson)
     testImplementation(projects.utils.testUtils)
 
-    testImplementation(libs.gson)
+    ksp(projects.plugins.advisors.advisorApi)
 }

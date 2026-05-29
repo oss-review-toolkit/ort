@@ -29,10 +29,10 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
+    funTestApi(testFixtures(projects.scanner))
+
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
     ksp(projects.scanner)
-
-    funTestApi(testFixtures(projects.scanner))
 }

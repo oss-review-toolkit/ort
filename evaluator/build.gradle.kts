@@ -35,20 +35,19 @@ dependencies {
     api(projects.model)
     api(projects.utils.scriptingUtils)
 
-    implementation(projects.downloader)
-    implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
-
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(projects.downloader)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     testFixturesImplementation(libs.kotlinx.serialization.core)
     testFixturesImplementation(projects.utils.testUtils)
 
-    testImplementation(projects.utils.testUtils)
     testImplementation(libs.mockk)
+    testImplementation(projects.utils.testUtils)
 }
 
 tasks.register<Download>("updateOsadlMatrix") {

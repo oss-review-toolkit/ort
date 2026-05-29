@@ -26,37 +26,35 @@ plugins {
 }
 
 dependencies {
+    api(libs.maven.core)
+    api(libs.maven.resolver.api)
     api(projects.analyzer)
     api(projects.model)
 
-    api(libs.maven.core)
-    api(libs.maven.resolver.api)
-
-    implementation(projects.downloader)
-    implementation(projects.utils.commonUtils)
-
     implementation(libs.bouncyCastle)
-    implementation(libs.maven.embedder)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kottage)
+    implementation(libs.maven.embedder)
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
 
-    ksp(projects.analyzer)
+    funTestImplementation(testFixtures(projects.analyzer))
+    funTestImplementation(projects.utils.testUtils)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.
     runtimeOnly(libs.bundles.mavenResolver)
 
+    // TODO: Remove this once https://issues.apache.org/jira/browse/MNG-6561 is resolved.
+    runtimeOnly(libs.maven.compat)
+
     // Under certain circumstances, Tycho uses Wagon to download metadata for SNAPSHOT artifacts. Therefore, at
     // least the wagon-http dependency should be available on the classpath.
     runtimeOnly(libs.wagon.http)
 
-    // TODO: Remove this once https://issues.apache.org/jira/browse/MNG-6561 is resolved.
-    runtimeOnly(libs.maven.compat)
-
-    funTestImplementation(projects.utils.testUtils)
-    funTestImplementation(testFixtures(projects.analyzer))
-
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
+
+    ksp(projects.analyzer)
 }
