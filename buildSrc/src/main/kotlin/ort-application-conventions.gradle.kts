@@ -25,7 +25,10 @@ import java.nio.file.Files
 
 import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
+
 val javaLanguageVersion: String by project
+val libsCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 plugins {
     // Apply core plugins.
@@ -79,7 +82,8 @@ graalvmNative {
                 mapOf(
                     // JLine is shaded into kotlin-compiler-embeddable, rendering the configuration invalid. See
                     // https://youtrack.jetbrains.com/issue/KT-68829.
-                    "org.jetbrains.kotlin:kotlin-compiler-embeddable:${libs.plugin.kotlin.get().version}" to
+                    @OptIn(ExperimentalBuildToolsApi::class)
+                    "org.jetbrains.kotlin:kotlin-compiler-embeddable:${kotlin.compilerVersion.get()}" to
                         listOf("^/META-INF/native-image/org.jline/.*"),
                     // The contained "reflect-config.json" does not match the code of the AWS flavor of the Apache HTTP
                     // client.
@@ -96,10 +100,10 @@ graalvmNative {
 }
 
 dependencies {
-    implementation(enforcedPlatform(libs.kotlin.bom))
-    implementation(libs.logbackClassic)
+    implementation(enforcedPlatform(libsCatalog.findLibrary("kotlin-bom").get()))
+    implementation(libsCatalog.findLibrary("logbackClassic").get())
 
-    runtimeOnly(libs.log4j.api.slf4j)
+    runtimeOnly(libsCatalog.findLibrary("log4j-api-slf4j").get())
 }
 
 tasks.withType<GenerateModuleMetadata>().configureEach {
