@@ -36,8 +36,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
 
     funTestImplementation(platform(projects.plugins.packageManagers))
-
-    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
     funTestImplementation(testFixtures(project))
 
     testFixturesImplementation(platform(projects.plugins.packageCurationProviders))
