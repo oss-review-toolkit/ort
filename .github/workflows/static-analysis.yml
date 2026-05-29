@@ -57,6 +57,15 @@ jobs:
           echo "./scripts/generate_completion_scripts.sh"
           exit 1
         fi
+  build-health:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
+    - name: Check Build Health
+      run: ./gradlew buildHealth
   detekt-issues:
     runs-on: ubuntu-24.04
     permissions:
