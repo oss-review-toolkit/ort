@@ -47,10 +47,10 @@ dependencyAnalysis {
 
             onUsedTransitiveDependencies { severity("ignore") }
             onIncorrectConfiguration { severity("fail") }
-            onCompileOnly { severity("ignore") }
-            onRuntimeOnly { severity("ignore") }
-            onUnusedAnnotationProcessors { severity("ignore") }
-            onRedundantPlugins { severity("ignore") }
+            onCompileOnly { severity("fail") }
+            onRuntimeOnly { severity("fail") }
+            onUnusedAnnotationProcessors { severity("fail") }
+            onRedundantPlugins { severity("fail") }
         }
 
         val cliCommandRegex = Regex("^cli.*|.*-command$")
