@@ -45,7 +45,11 @@ dependencyAnalysis {
                 exclude(libs.log4j.api.kotlin)
             }
 
-            onUsedTransitiveDependencies { severity("ignore") }
+            onUsedTransitiveDependencies {
+                // Ignore this rule for now as it creates a massive amount of findings.
+                severity("ignore")
+            }
+
             onIncorrectConfiguration { severity("fail") }
             onCompileOnly { severity("fail") }
             onRuntimeOnly { severity("fail") }
