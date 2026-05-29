@@ -94,8 +94,9 @@ internal object SpdxDocumentModelMapper {
             val spdxProjectPackage = project.toPackage().toSpdxPackage(
                 SpdxPackageType.PROJECT,
                 licenseInfoResolver,
-                ortResult
-            ).copy(hasFiles = filesForProject.map { it.spdxId })
+                ortResult,
+                filesForProject
+            )
 
             ortResult.getDependencies(
                 id = project.id,
@@ -138,8 +139,9 @@ internal object SpdxDocumentModelMapper {
                 val vcsPackage = pkg.toSpdxPackage(
                     SpdxPackageType.VCS_PACKAGE,
                     licenseInfoResolver,
-                    ortResult
-                ).copy(hasFiles = filesForPackage.map { it.spdxId })
+                    ortResult,
+                    filesForPackage
+                )
 
                 val vcsPackageRelationShip = SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
@@ -163,8 +165,9 @@ internal object SpdxDocumentModelMapper {
                 val sourceArtifactPackage = pkg.toSpdxPackage(
                     SpdxPackageType.SOURCE_PACKAGE,
                     licenseInfoResolver,
-                    ortResult
-                ).copy(hasFiles = filesForPackage.map { it.spdxId })
+                    ortResult,
+                    filesForPackage
+                )
 
                 val sourceArtifactPackageRelationship = SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,

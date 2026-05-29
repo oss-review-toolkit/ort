@@ -143,15 +143,23 @@ internal enum class SpdxPackageType(val infix: String, val suffix: String = "") 
 /**
  * Convert this ORT package to an SPDX package. As an ORT package can hold more metadata about its associated artifacts
  * and origin than an SPDX package, the [type] is used to specify which kind of SPDX package should be created from the
- * respective ORT package metadata.
+ * respective ORT package metadata. Also, the list of [files] contained in the package can be provided which has an
+ * impact on some properties.
  */
 internal fun Package.toSpdxPackage(
     type: SpdxPackageType,
     licenseInfoResolver: LicenseInfoResolver,
-    ortResult: OrtResult
+    ortResult: OrtResult,
+    files: List<SpdxFile> = emptyList()
 ): SpdxPackage {
-    val packageVerificationCode = ortResult.getPackageVerificationCode(id, type)?.let {
-        SpdxPackageVerificationCode(packageVerificationCodeValue = it)
+    val packageVerificationCode = if (files.isNotEmpty()) {
+        ortResult.getPackageVerificationCode(id, type)?.let {
+            SpdxPackageVerificationCode(packageVerificationCodeValue = it)
+        }
+    } else {
+        // A package verification code is only allowed if files are present. Some other properties are derived from
+        // this as well.
+        null
     }
 
     val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
@@ -181,6 +189,7 @@ internal fun Package.toSpdxPackage(
         },
         externalRefs = if (type == SpdxPackageType.PROJECT) emptyList() else toSpdxExternalReferences(),
         filesAnalyzed = packageVerificationCode != null,
+        hasFiles = files.map { it.spdxId },
         homepage = homepageUrl.nullOrBlankToSpdxNone(),
         licenseComments = "effectiveLicense: ${effectiveLicense?.toString().nullOrBlankToSpdxNone()}",
         licenseConcluded = when (type) {
