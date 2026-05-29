@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.plugin.kotlin)
     implementation(libs.plugin.ksp)
     implementation(libs.plugin.mavenPublish)
+    implementation(libs.plugin.sortDependencies)
     implementation(libs.plugin.tapmoc)
 }
 
