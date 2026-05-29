@@ -34,6 +34,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val javaLanguageVersion: String by project
+val libsCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 plugins {
     // Apply core plugins.
@@ -66,10 +67,10 @@ testing {
 
             dependencies {
                 // See https://kotest.io/docs/framework/project-setup.html.
-                implementation(libs.kotest.runner.junit5)
+                implementation(libsCatalog.findLibrary("kotest-runner-junit5").get())
 
-                implementation(libs.kotest.assertions.core)
-                implementation(libs.kotest.property)
+                implementation(libsCatalog.findLibrary("kotest-assertions-core").get())
+                implementation(libsCatalog.findLibrary("kotest-property").get())
             }
         }
 
@@ -86,12 +87,12 @@ kotlin.target.compilations.apply {
 dependencies {
     detektPlugins(project(":detekt-rules"))
 
-    detektPlugins(libs.plugin.detekt.formatting)
+    detektPlugins(libsCatalog.findLibrary("plugin-detekt-formatting").get())
 
-    implementation(libs.log4j.api.kotlin)
+    implementation(libsCatalog.findLibrary("log4j-api-kotlin").get())
 
     constraints {
-        implementation(libs.jruby) {
+        implementation(libsCatalog.findLibrary("jruby").get()) {
             because("JRuby used by Bundler directly and by AsciidoctorJ transitively must match.")
         }
     }
@@ -199,7 +200,7 @@ tasks.withType<Detekt>().configureEach detekt@{
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    val hasSerializationPlugin = plugins.hasPlugin(libs.plugins.kotlinSerialization.get().pluginId)
+    val hasSerializationPlugin = plugins.hasPlugin("org.jetbrains.kotlin.plugin.serialization")
 
     val optInRequirements = listOfNotNull(
         "kotlin.ExperimentalStdlibApi",
