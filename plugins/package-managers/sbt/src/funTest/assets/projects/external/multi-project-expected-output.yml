@@ -758,9 +758,8 @@ packages:
   declared_licenses:
   - "CC0"
   declared_licenses_processed:
-    spdx_expression: "CC0-1.0"
-    mapped:
-      CC0: "CC0-1.0"
+    unmapped:
+    - "CC0"
   description: "A Protocol for Asynchronous Non-Blocking Data Sequence"
   homepage_url: "http://www.reactive-streams.org/"
   binary_artifact:
@@ -993,9 +992,8 @@ packages:
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    unmapped:
+    - "BSD"
   description: "Uniform test interface to Scala/Java test frameworks (specs, ScalaCheck,\
     \ ScalaTest, JUnit and other)"
   homepage_url: "http://www.scala-sbt.org"
@@ -1027,9 +1025,8 @@ packages:
   declared_licenses:
   - "BSD-style"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD-style: "BSD-3-Clause"
+    unmapped:
+    - "BSD-style"
   description: "scalacheck"
   homepage_url: "http://www.scalacheck.org"
   binary_artifact:
@@ -1139,9 +1136,8 @@ packages:
   declared_licenses:
   - "BSD-style"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD-style: "BSD-3-Clause"
+    unmapped:
+    - "BSD-style"
   description: "scalaz-core"
   homepage_url: "http://scalaz.org"
   binary_artifact:
