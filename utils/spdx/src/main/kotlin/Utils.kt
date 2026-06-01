@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.utils.spdx
 
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-
 import java.io.File
 import java.security.MessageDigest
 
@@ -29,11 +26,6 @@ import org.ossreviewtoolkit.utils.common.PATH_STRING_COMPARATOR
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.calculateHash
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
-
-/**
- * A mapper to read license mapping from YAML resource files.
- */
-internal val yamlMapper = YAMLMapper().registerKotlinModule()
 
 /**
  * Calculate the [SPDX package verification code][1] for a list of [known SHA1s][sha1sums] of files and [excludes].
