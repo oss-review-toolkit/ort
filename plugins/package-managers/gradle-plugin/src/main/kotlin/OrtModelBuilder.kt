@@ -203,87 +203,83 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             return ortDependencyCache[selected]
         }
 
-        when (id) {
-            is ModuleComponentIdentifier -> {
-                val pomFile = selected.getPomFile()
+        if (id is ModuleComponentIdentifier) {
+            val pomFile = selected.getPomFile()
 
-                val modelBuildingResult = poms[id.toString()]
-                if (modelBuildingResult == null) {
-                    val message = "No POM found for component '$id'."
-                    logger.warn(message)
-                    warnings += message
-                }
-
-                // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
-                val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
-                    selected.dependencies.toOrtDependencies(poms, visited + id)
-                }
-
-                return OrtDependencyImpl(
-                    groupId = id.group,
-                    artifactId = id.module,
-                    version = id.version,
-                    classifier = "",
-                    extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
-                    variants = selected.variants.associate {
-                        it.displayName to it.attributes.keySet().associate { key ->
-                            key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
-                        }
-                    },
-                    dependencies = dependencies,
-                    error = null,
-                    warning = null,
-                    pomFile = pomFile,
-                    mavenModel = modelBuildingResult?.run {
-                        OrtMavenModelImpl(
-                            licenses = effectiveModel.collectLicenses(),
-                            authors = effectiveModel.collectAuthors(),
-                            description = effectiveModel.description.orEmpty(),
-                            homepageUrl = effectiveModel.url.orEmpty(),
-                            vcs = getVcsModel()
-                        )
-                    },
-                    localPath = null
-                ).also {
-                    ortDependencyCache[selected] = it
-                }
+            val modelBuildingResult = poms[id.toString()]
+            if (modelBuildingResult == null) {
+                val message = "No POM found for component '$id'."
+                logger.warn(message)
+                warnings += message
             }
 
-            is ProjectComponentIdentifier -> {
-                val moduleId = selected.moduleVersion ?: return null
-                val dependencies = selected.dependencies.toOrtDependencies(poms, visited + id)
-
-                return OrtDependencyImpl(
-                    groupId = moduleId.group,
-                    artifactId = moduleId.name,
-                    version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
-                    classifier = "",
-                    extension = "",
-                    variants = selected.variants.associate {
-                        it.displayName to it.attributes.keySet().associate { key ->
-                            key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
-                        }
-                    },
-                    dependencies = dependencies,
-                    error = null,
-                    warning = null,
-                    pomFile = null,
-                    mavenModel = null,
-                    localPath = id.projectPath
-                ).also {
-                    ortDependencyCache[selected] = it
-                }
+            // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
+            val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
+                selected.dependencies.toOrtDependencies(poms, visited + id)
             }
 
-            else -> {
-                val message = "Unhandled dependency result type '$this' in '$from'."
-
-                logger.error(message)
-                errors += message
-
-                return null
+            return OrtDependencyImpl(
+                groupId = id.group,
+                artifactId = id.module,
+                version = id.version,
+                classifier = "",
+                extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
+                variants = selected.variants.associate {
+                    it.displayName to it.attributes.keySet().associate { key ->
+                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                    }
+                },
+                dependencies = dependencies,
+                error = null,
+                warning = null,
+                pomFile = pomFile,
+                mavenModel = modelBuildingResult?.run {
+                    OrtMavenModelImpl(
+                        licenses = effectiveModel.collectLicenses(),
+                        authors = effectiveModel.collectAuthors(),
+                        description = effectiveModel.description.orEmpty(),
+                        homepageUrl = effectiveModel.url.orEmpty(),
+                        vcs = getVcsModel()
+                    )
+                },
+                localPath = null
+            ).also {
+                ortDependencyCache[selected] = it
             }
         }
+
+        if (id is ProjectComponentIdentifier) {
+            val moduleId = selected.moduleVersion ?: return null
+            val dependencies = selected.dependencies.toOrtDependencies(poms, visited + id)
+
+            return OrtDependencyImpl(
+                groupId = moduleId.group,
+                artifactId = moduleId.name,
+                version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
+                classifier = "",
+                extension = "",
+                variants = selected.variants.associate {
+                    it.displayName to it.attributes.keySet().associate { key ->
+                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                    }
+                },
+                dependencies = dependencies,
+                error = null,
+                warning = null,
+                pomFile = null,
+                mavenModel = null,
+                localPath = id.projectPath
+            ).also {
+                ortDependencyCache[selected] = it
+            }
+        }
+
+        val message = "Unhandled component identifier type $id."
+
+        logger.error(message)
+        errors += message
+
+        return null
     }
 
     private fun ResolvedComponentResult.getPomFile(): String? {
