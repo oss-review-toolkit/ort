@@ -160,124 +160,120 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         poms: Map<String, ModelBuildingResult>,
         visited: Set<ComponentIdentifier>
     ): OrtDependency? {
-        when (this) {
-            is ResolvedDependencyResult -> {
-                val selectedComponent = selected
-                val id = selectedComponent.id
+        if (this is UnresolvedDependencyResult) {
+            if (attempted is ProjectComponentSelector) {
+                // Ignore unresolved project dependencies. For example for complex Android projects, Gradle's
+                // own "dependencies" task runs into "AmbiguousConfigurationSelectionException", but the project
+                // still builds fine, probably due to some Android plugin magic. Omitting a project dependency
+                // is uncritical in terms of resolving dependencies, as for the project itself dependencies will
+                // still get resolved.
+                return null
+            }
 
-                // Cut the graph on cyclic dependencies.
-                if (id in visited) return null
+            val message = buildString {
+                append(failure.message?.removeSuffix("."))
+                append(" from ")
+                append(from)
+                append(".")
 
-                if (selectedComponent in ortDependencyCache) {
-                    return ortDependencyCache[selectedComponent]
+                appendCauses(failure)
+            }
+
+            logger.error(message)
+            errors += message
+
+            return null
+        }
+
+        if (this !is ResolvedDependencyResult) {
+            val message = "Unhandled dependency result type '$this' in '$from'."
+
+            logger.error(message)
+            errors += message
+
+            return null
+        }
+
+        val selectedComponent = selected
+        val id = selectedComponent.id
+
+        // Cut the graph on cyclic dependencies.
+        if (id in visited) return null
+
+        if (selectedComponent in ortDependencyCache) {
+            return ortDependencyCache[selectedComponent]
+        }
+
+        when (id) {
+            is ModuleComponentIdentifier -> {
+                val pomFile = selectedComponent.getPomFile()
+
+                val modelBuildingResult = poms[id.toString()]
+                if (modelBuildingResult == null) {
+                    val message = "No POM found for component '$id'."
+                    logger.warn(message)
+                    warnings += message
                 }
 
-                when (id) {
-                    is ModuleComponentIdentifier -> {
-                        val pomFile = selectedComponent.getPomFile()
+                // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
+                val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
+                    selectedComponent.dependencies.toOrtDependencies(poms, visited + id)
+                }
 
-                        val modelBuildingResult = poms[id.toString()]
-                        if (modelBuildingResult == null) {
-                            val message = "No POM found for component '$id'."
-                            logger.warn(message)
-                            warnings += message
+                return OrtDependencyImpl(
+                    groupId = id.group,
+                    artifactId = id.module,
+                    version = id.version,
+                    classifier = "",
+                    extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
+                    variants = selectedComponent.variants.associate {
+                        it.displayName to it.attributes.keySet().associate { key ->
+                            key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
                         }
-
-                        // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
-                        val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
-                            selectedComponent.dependencies.toOrtDependencies(poms, visited + id)
-                        }
-
-                        return OrtDependencyImpl(
-                            groupId = id.group,
-                            artifactId = id.module,
-                            version = id.version,
-                            classifier = "",
-                            extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
-                            variants = selectedComponent.variants.associate {
-                                it.displayName to it.attributes.keySet().associate { key ->
-                                    key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
-                                }
-                            },
-                            dependencies = dependencies,
-                            error = null,
-                            warning = null,
-                            pomFile = pomFile,
-                            mavenModel = modelBuildingResult?.run {
-                                OrtMavenModelImpl(
-                                    licenses = effectiveModel.collectLicenses(),
-                                    authors = effectiveModel.collectAuthors(),
-                                    description = effectiveModel.description.orEmpty(),
-                                    homepageUrl = effectiveModel.url.orEmpty(),
-                                    vcs = getVcsModel()
-                                )
-                            },
-                            localPath = null
-                        ).also {
-                            ortDependencyCache[selectedComponent] = it
-                        }
-                    }
-
-                    is ProjectComponentIdentifier -> {
-                        val moduleId = selectedComponent.moduleVersion ?: return null
-                        val dependencies = selectedComponent.dependencies.toOrtDependencies(poms, visited + id)
-
-                        return OrtDependencyImpl(
-                            groupId = moduleId.group,
-                            artifactId = moduleId.name,
-                            version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
-                            classifier = "",
-                            extension = "",
-                            variants = selectedComponent.variants.associate {
-                                it.displayName to it.attributes.keySet().associate { key ->
-                                    key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
-                                }
-                            },
-                            dependencies = dependencies,
-                            error = null,
-                            warning = null,
-                            pomFile = null,
-                            mavenModel = null,
-                            localPath = id.projectPath
-                        ).also {
-                            ortDependencyCache[selectedComponent] = it
-                        }
-                    }
-
-                    else -> {
-                        val message = "Unhandled component identifier type $id."
-
-                        logger.error(message)
-                        errors += message
-
-                        return null
-                    }
+                    },
+                    dependencies = dependencies,
+                    error = null,
+                    warning = null,
+                    pomFile = pomFile,
+                    mavenModel = modelBuildingResult?.run {
+                        OrtMavenModelImpl(
+                            licenses = effectiveModel.collectLicenses(),
+                            authors = effectiveModel.collectAuthors(),
+                            description = effectiveModel.description.orEmpty(),
+                            homepageUrl = effectiveModel.url.orEmpty(),
+                            vcs = getVcsModel()
+                        )
+                    },
+                    localPath = null
+                ).also {
+                    ortDependencyCache[selectedComponent] = it
                 }
             }
 
-            is UnresolvedDependencyResult -> {
-                if (attempted is ProjectComponentSelector) {
-                    // Ignore unresolved project dependencies. For example for complex Android projects, Gradle's
-                    // own "dependencies" task runs into "AmbiguousConfigurationSelectionException", but the project
-                    // still builds fine, probably due to some Android plugin magic. Omitting a project dependency
-                    // is uncritical in terms of resolving dependencies, as for the project itself dependencies will
-                    // still get resolved.
-                    return null
+            is ProjectComponentIdentifier -> {
+                val moduleId = selectedComponent.moduleVersion ?: return null
+                val dependencies = selectedComponent.dependencies.toOrtDependencies(poms, visited + id)
+
+                return OrtDependencyImpl(
+                    groupId = moduleId.group,
+                    artifactId = moduleId.name,
+                    version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
+                    classifier = "",
+                    extension = "",
+                    variants = selectedComponent.variants.associate {
+                        it.displayName to it.attributes.keySet().associate { key ->
+                            key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                        }
+                    },
+                    dependencies = dependencies,
+                    error = null,
+                    warning = null,
+                    pomFile = null,
+                    mavenModel = null,
+                    localPath = id.projectPath
+                ).also {
+                    ortDependencyCache[selectedComponent] = it
                 }
-
-                val message = buildString {
-                    append(failure.message?.removeSuffix("."))
-                    append(" from ")
-                    append(from)
-                    append(".")
-
-                    appendCauses(failure)
-                }
-
-                logger.error(message)
-                errors += message
-
-                return null
             }
 
             else -> {
