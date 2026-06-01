@@ -174,37 +174,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
                 when (id) {
                     is ModuleComponentIdentifier -> {
-                        val pomFile = if (selectedComponent is ResolvedComponentResultInternal) {
-                            val repositoryId = runCatching {
-                                selectedComponent.repositoryId
-                            }.recoverCatching {
-                                @Suppress("DEPRECATION")
-                                selectedComponent.repositoryName
-                            }.map {
-                                // Work around https://github.com/gradle/gradle/issues/25674.
-                                if (it == "26c913274550a0b2221f47a0fe2d2358") "MavenRepo" else it
-                            }.getOrNull()
-
-                            repositories[repositoryId]?.let { repository ->
-                                // Note: Only Maven-style layout is supported for now.
-                                buildString {
-                                    append(repository.url.toString().removeSuffix("/"))
-                                    append('/')
-                                    append(id.group.replace('.', '/'))
-                                    append('/')
-                                    append(id.module)
-                                    append('/')
-                                    append(id.version)
-                                    append('/')
-                                    append(id.module)
-                                    append('-')
-                                    append(id.version)
-                                    append(".pom")
-                                }
-                            }
-                        } else {
-                            null
-                        }
+                        val pomFile = selectedComponent.getPomFile()
 
                         val modelBuildingResult = poms[id.toString()]
                         if (modelBuildingResult == null) {
@@ -317,6 +287,39 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                 errors += message
 
                 return null
+            }
+        }
+    }
+
+    private fun ResolvedComponentResult.getPomFile(): String? {
+        if (this !is ResolvedComponentResultInternal) return null
+        val id = this.id as? ModuleComponentIdentifier ?: return null
+
+        val repositoryId = runCatching {
+            repositoryId
+        }.recoverCatching {
+            @Suppress("DEPRECATION")
+            repositoryName
+        }.map {
+            // Work around https://github.com/gradle/gradle/issues/25674.
+            if (it == "26c913274550a0b2221f47a0fe2d2358") "MavenRepo" else it
+        }.getOrNull()
+
+        return repositories[repositoryId]?.let { repository ->
+            // Note: Only Maven-style layout is supported for now.
+            buildString {
+                append(repository.url.toString().removeSuffix("/"))
+                append('/')
+                append(id.group.replace('.', '/'))
+                append('/')
+                append(id.module)
+                append('/')
+                append(id.version)
+                append('/')
+                append(id.module)
+                append('-')
+                append(id.version)
+                append(".pom")
             }
         }
     }
