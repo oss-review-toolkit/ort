@@ -101,3 +101,16 @@ fun String.toSpdxOrNull(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpr
     }.onFailure {
         logger.debug { "Could not parse '$this' as an SPDX license: ${it.collectMessages()}" }
     }.getOrNull()
+
+/**
+ * Parse a YAML string which contains a top-level sequence of key-value pairs.
+ */
+internal fun String.parseYamlKeyValueLines(): Map<String, String> =
+    lineSequence()
+        .map { it.trim() }
+        .filterNot { it.isEmpty() || it.startsWith('#') || it == "---" || ':' !in it }
+        .associate {
+            // Values must not contain ":", so if there are more than one, they must be part of the key.
+            it.substringBeforeLast(':').trim().removeSurrounding("\"") to
+                it.substringAfterLast(':').trim()
+        }
