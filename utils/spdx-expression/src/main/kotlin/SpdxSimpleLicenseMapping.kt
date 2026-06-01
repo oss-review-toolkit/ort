@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.utils.spdxexpression
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 /**
@@ -34,7 +32,11 @@ object SpdxSimpleLicenseMapping {
      */
     internal val simpleLicenseMapping: Map<String, SpdxLicense> by lazy {
         val resource = checkNotNull(javaClass.getResource("/simple-license-mapping.yml"))
-        yamlMapper.readValue(resource)
+        resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
+            checkNotNull(SpdxLicense.forId(value)) {
+                "No SPDX license found for ID '$value'."
+            }
+        }
     }
 
     /**
@@ -50,7 +52,10 @@ object SpdxSimpleLicenseMapping {
      */
     val deprecatedExpressionMapping: Map<String, SpdxSingleLicenseExpression> by lazy {
         val resource = checkNotNull(javaClass.getResource("/deprecated-license-mapping.yml"))
-        val mapping = yamlMapper.readValue<Map<String, SpdxSingleLicenseExpression>>(resource)
+        val mapping = resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
+            SpdxSingleLicenseExpression.parse(value)
+        }
+
         mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
     }
 
