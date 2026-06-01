@@ -194,19 +194,18 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             return null
         }
 
-        val selectedComponent = selected
-        val id = selectedComponent.id
+        val id = selected.id
 
         // Cut the graph on cyclic dependencies.
         if (id in visited) return null
 
-        if (selectedComponent in ortDependencyCache) {
-            return ortDependencyCache[selectedComponent]
+        if (selected in ortDependencyCache) {
+            return ortDependencyCache[selected]
         }
 
         when (id) {
             is ModuleComponentIdentifier -> {
-                val pomFile = selectedComponent.getPomFile()
+                val pomFile = selected.getPomFile()
 
                 val modelBuildingResult = poms[id.toString()]
                 if (modelBuildingResult == null) {
@@ -217,7 +216,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
                 // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
                 val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
-                    selectedComponent.dependencies.toOrtDependencies(poms, visited + id)
+                    selected.dependencies.toOrtDependencies(poms, visited + id)
                 }
 
                 return OrtDependencyImpl(
@@ -226,7 +225,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                     version = id.version,
                     classifier = "",
                     extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
-                    variants = selectedComponent.variants.associate {
+                    variants = selected.variants.associate {
                         it.displayName to it.attributes.keySet().associate { key ->
                             key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
                         }
@@ -246,13 +245,13 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                     },
                     localPath = null
                 ).also {
-                    ortDependencyCache[selectedComponent] = it
+                    ortDependencyCache[selected] = it
                 }
             }
 
             is ProjectComponentIdentifier -> {
-                val moduleId = selectedComponent.moduleVersion ?: return null
-                val dependencies = selectedComponent.dependencies.toOrtDependencies(poms, visited + id)
+                val moduleId = selected.moduleVersion ?: return null
+                val dependencies = selected.dependencies.toOrtDependencies(poms, visited + id)
 
                 return OrtDependencyImpl(
                     groupId = moduleId.group,
@@ -260,7 +259,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                     version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
                     classifier = "",
                     extension = "",
-                    variants = selectedComponent.variants.associate {
+                    variants = selected.variants.associate {
                         it.displayName to it.attributes.keySet().associate { key ->
                             key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
                         }
@@ -272,7 +271,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                     mavenModel = null,
                     localPath = id.projectPath
                 ).also {
-                    ortDependencyCache[selectedComponent] = it
+                    ortDependencyCache[selected] = it
                 }
             }
 
