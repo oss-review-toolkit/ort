@@ -19,7 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.PrintStream
 import java.util.concurrent.atomic.AtomicReference
 import java.util.jar.Manifest
 
@@ -225,12 +227,23 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
             // using a system property.
             System.setProperty(MavenCli.MULTIMODULE_PROJECT_DIRECTORY, projectRoot.absolutePath)
 
-            val exitCode = cli.doMain(
-                generateMavenOptions(buildLog),
-                projectRoot.path,
-                null,
-                null
-            ).also { logger.info { "Tycho analysis completed. Exit code: $it." } }
+            val errorStream = ByteArrayOutputStream()
+
+            val exitCode = PrintStream(errorStream).use { stderr ->
+                cli.doMain(
+                    generateMavenOptions(buildLog),
+                    projectRoot.path,
+                    null,
+                    stderr
+                ).also {
+                    logger.info { "Tycho analysis completed. Exit code: $it." }
+                }
+            }
+
+            val errorMessage = errorStream.toString().trim()
+            if (errorMessage.isNotEmpty()) {
+                logger.error(errorMessage)
+            }
 
             return exitCode to buildLog
         } finally {
