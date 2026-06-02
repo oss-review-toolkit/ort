@@ -243,7 +243,7 @@ data class OrtResult(
         val dependencies = mutableSetOf<Identifier>()
         val matcher = DependencyNavigator.MATCH_ALL.takeUnless { omitExcluded } ?: { !isExcluded(it.id) }
 
-        getProjects().forEach { project ->
+        getProjects(omitExcluded).forEach { project ->
             if (project.id == id) {
                 dependencies += dependencyNavigator.projectDependencies(project, maxLevel, matcher)
             }
