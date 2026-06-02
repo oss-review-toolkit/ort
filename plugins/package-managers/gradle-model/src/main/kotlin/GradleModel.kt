@@ -70,4 +70,6 @@ interface OrtRepository {
     val url: String
     val username: String?
     val password: String?
+    val headerName: String?
+    val headerValue: String?
 }

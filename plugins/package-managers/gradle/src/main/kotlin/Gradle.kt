@@ -338,7 +338,13 @@ private fun getGradleProperties(): Map<String, String> =
  */
 private fun OrtRepository.toRemoteRepository(): RemoteRepository =
     RemoteRepository.Builder(url, "default", url).apply {
-        if (username != null) {
+        if (headerName != null && headerValue != null) {
+            setAuthentication(
+                AuthenticationBuilder().apply {
+                    addString(headerName, headerValue)
+                }.build()
+            )
+        } else if (username != null) {
             setAuthentication(
                 AuthenticationBuilder().apply {
                     addUsername(username)
