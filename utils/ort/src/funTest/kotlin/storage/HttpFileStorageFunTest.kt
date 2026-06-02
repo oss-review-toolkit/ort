@@ -45,8 +45,8 @@ class HttpFileStorageFunTest : WordSpec() {
         override fun handle(exchange: HttpExchange) {
             when (exchange.requestMethod) {
                 "PUT" -> {
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_CREATED, 0)
                     requests[exchange.requestURI.toString()] = exchange.requestBody.reader().use { it.readText() }
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_CREATED, 0)
                 }
 
                 "GET" -> {
