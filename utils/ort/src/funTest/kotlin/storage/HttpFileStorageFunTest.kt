@@ -34,12 +34,13 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.util.concurrent.ConcurrentHashMap
 
 class HttpFileStorageFunTest : WordSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
 
     private val handler = object : HttpHandler {
-        val requests = mutableMapOf<String, String>()
+        val requests = ConcurrentHashMap<String, String>()
 
         override fun handle(exchange: HttpExchange) {
             when (exchange.requestMethod) {
