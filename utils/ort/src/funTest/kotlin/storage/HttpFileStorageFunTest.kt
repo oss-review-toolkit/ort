@@ -46,7 +46,7 @@ class HttpFileStorageFunTest : WordSpec() {
             when (exchange.requestMethod) {
                 "PUT" -> {
                     requests[exchange.requestURI.toString()] = exchange.requestBody.reader().use { it.readText() }
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_CREATED, 0)
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_CREATED, -1)
                 }
 
                 "GET" -> {
@@ -55,7 +55,7 @@ class HttpFileStorageFunTest : WordSpec() {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0)
                             exchange.responseBody.writer().use { it.write(data) }
                         } else {
-                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0)
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, -1)
                         }
                     }
                 }
