@@ -178,9 +178,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             }
 
             return OrtComponentImpl(
-                groupId = id.group,
-                artifactId = id.module,
-                version = id.version,
+                componentId = OrtComponentIdentifierImpl(id.group, id.module, id.version),
                 classifier = "",
                 extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
                 variants = selected.variants.associate {
@@ -212,9 +210,11 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             val dependencies = selected.dependencies.toOrtComponents(poms, visited + id)
 
             return OrtComponentImpl(
-                groupId = moduleId.group,
-                artifactId = moduleId.name,
-                version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
+                componentId = OrtComponentIdentifierImpl(
+                    groupId = moduleId.group,
+                    artifactId = moduleId.name,
+                    version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty()
+                ),
                 classifier = "",
                 extension = "",
                 variants = selected.variants.associate {

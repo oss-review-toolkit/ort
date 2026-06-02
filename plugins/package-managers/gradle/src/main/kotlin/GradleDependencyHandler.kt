@@ -59,7 +59,9 @@ internal class GradleDependencyHandler(
     var repositories = emptyList<RemoteRepository>()
 
     override fun identifierFor(dependency: OrtComponent): Identifier =
-        with(dependency) { Identifier(getIdentifierType(projectType), groupId, artifactId, version) }
+        with(dependency.componentId) {
+            Identifier(dependency.getIdentifierType(projectType), groupId, artifactId, version)
+        }
 
     override fun dependenciesFor(dependency: OrtComponent): List<OrtComponent> = dependency.dependencies
 
@@ -90,8 +92,8 @@ internal class GradleDependencyHandler(
         if (dependency.error != null || dependency.isProjectDependency) return null
 
         val artifact = DefaultArtifact(
-            dependency.groupId, dependency.artifactId, dependency.classifier,
-            dependency.extension, dependency.version
+            dependency.componentId.groupId, dependency.componentId.artifactId, dependency.classifier,
+            dependency.extension, dependency.componentId.version
         )
 
         return runCatching {
