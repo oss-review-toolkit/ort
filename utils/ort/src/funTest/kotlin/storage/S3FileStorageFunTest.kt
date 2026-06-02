@@ -34,6 +34,7 @@ import io.kotest.matchers.shouldBe
 import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.util.concurrent.ConcurrentHashMap
 
 class S3FileStorageFunTest : WordSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
@@ -42,7 +43,7 @@ class S3FileStorageFunTest : WordSpec() {
     private val bucket = "ort-scan-results"
 
     private val handler = object : HttpHandler {
-        val requests = mutableMapOf<String, String>()
+        val requests = ConcurrentHashMap<String, String>()
 
         override fun handle(exchange: HttpExchange) {
             when (exchange.requestMethod) {
