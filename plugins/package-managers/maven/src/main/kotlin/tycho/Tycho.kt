@@ -323,6 +323,9 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
             add("-DoutputFile=${dependencyTreeFile.absolutePath}")
             add("-DappendOutput=true")
             add("-Dverbose=true")
+            // Use pre-Java-24 unlimited JAXP XML processing.
+            add("-Djdk.xml.maxGeneralEntitySizeLimit=0")
+            add("-Djdk.xml.totalEntitySizeLimit=0")
         }.toTypedArray()
 }
 
