@@ -69,10 +69,14 @@ interface OrtConfiguration {
     List<OrtComponent> getDependencies()
 }
 
-interface OrtComponent {
+interface OrtComponentIdentifier {
     String getGroupId()
     String getArtifactId()
     String getVersion()
+}
+
+interface OrtComponent {
+    OrtComponentIdentifier getComponentId()
     String getClassifier()
     String getExtension()
     Map<String, Map<String, String>> getVariants()
@@ -112,10 +116,16 @@ class OrtConfigurationImpl implements OrtConfiguration, Serializable {
 
 @ToString(includeNames = true)
 @TupleConstructor
-class OrtComponentImpl implements OrtComponent, Serializable {
+class OrtComponentIdentifierImpl implements OrtComponentIdentifier, Serializable {
     String groupId = ''
     String artifactId = ''
     String version = ''
+}
+
+@ToString(includeNames = true)
+@TupleConstructor
+class OrtComponentImpl implements OrtComponent, Serializable {
+    OrtComponentIdentifier componentId
     String classifier = ''
     String extension = ''
     Map<String, Map<String, String>> variants = [:]
@@ -396,25 +406,31 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
 
                     def classifier = artifact?.classifier ?: ''
                     def extension = artifact?.extension ?: ''
+                    def componentId = new OrtComponentIdentifierImpl(groupId: id.group, artifactId: id.module, version: id.version)
 
-                    return new OrtComponentImpl(id.group, id.module, id.version, classifier, extension, [:], dependencies,
-                            error, warning, pomFile, null)
+                    return new OrtComponentImpl(componentId, classifier, extension, [:], dependencies, error, warning,
+                            pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     if (isCurrentBuild(id.build, project) || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
                         def dependencyProject = project.rootProject.findProject(id.projectPath)
-                        return new OrtComponentImpl(groupId: dependencyProject.group.toString(),
-                                artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
-                                dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
+
+                        def componentId = new OrtComponentIdentifierImpl(groupId: dependencyProject.group.toString(),
+                                artifactId: dependencyProject.name, version: dependencyProject.version.toString())
+
+                        return new OrtComponentImpl(componentId: componentId, dependencies: dependencies,
+                                localPath: dependencyProject.projectDir.absolutePath)
                     } else {
                         project.logger.quiet("Project '$id' is not part of current build. Assuming included build.")
 
                         def includedProject = findRootProjectOfIncludedBuild(project, id)
                         def dependencyProject = id.projectPath == ":" ? includedProject
                                 : includedProject.findProject(id.projectName)
+                        def componentId = new OrtComponentIdentifierImpl(groupId: dependencyProject.group.toString(),
+                                artifactId: dependencyProject.name, version: dependencyProject.version.toString())
 
-                        return new OrtComponentImpl(groupId: dependencyProject.group.toString(),
-                                artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
-                                dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
+
+                        return new OrtComponentImpl(componentId: componentId, dependencies: dependencies,
+                                localPath: dependencyProject.projectDir.absolutePath)
                     }
                 } else {
                     return dependencyFromDisplayName(id.displayName, dependencies,
@@ -584,7 +600,8 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
          * @return the identifier for this OrtComponent
          */
         private static String identifierFor(OrtComponent dependency) {
-            return toIdentifier(dependency.groupId, dependency.artifactId, dependency.version)
+            def componentId = dependency.componentId
+            return toIdentifier(componentId.groupId, componentId.artifactId, componentId.version)
         }
 
         /**
@@ -601,8 +618,10 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
         private static OrtComponentImpl dependencyFromDisplayName(String displayName, List<OrtComponent> dependencies,
                                                                   String error, String warning) {
             def coordinates = displayNameToCoordinates(displayName)
-            return new OrtComponentImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
-                    dependencies: dependencies, error: error?.toString(), warning: warning?.toString())
+            def componentId = new OrtComponentIdentifierImpl(groupId: coordinates[0], artifactId: coordinates[1],
+                    version: coordinates[2])
+            return new OrtComponentImpl(componentId: componentId, dependencies: dependencies, error: error?.toString(),
+                    warning: warning?.toString())
         }
 
         /**

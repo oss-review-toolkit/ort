@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
 import OrtComponent
+import OrtComponentIdentifier
 import OrtConfiguration
 import OrtDependencyTreeModel
 import OrtMavenModel
@@ -45,11 +46,16 @@ internal class OrtConfigurationImpl(
     override val dependencies: List<OrtComponent>
 ) : OrtConfiguration, Serializable
 
-@Suppress("LongParameterList", "SerialVersionUIDInSerializableClass")
-internal class OrtComponentImpl(
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtComponentIdentifierImpl(
     override val groupId: String,
     override val artifactId: String,
-    override val version: String,
+    override val version: String
+) : OrtComponentIdentifier, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtComponentImpl(
+    override val componentId: OrtComponentIdentifier,
     override val classifier: String,
     override val extension: String,
     override val variants: Map<String, Map<String, String>>,

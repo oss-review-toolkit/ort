@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
 import OrtComponent
+import OrtComponentIdentifier
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
@@ -315,7 +316,9 @@ class GradleDependencyHandlerTest : WordSpec({
             with(issues.first()) {
                 source shouldBe GradleFactory.descriptor.displayName
                 severity shouldBe Severity.ERROR
-                message should contain("${dep.groupId}:${dep.artifactId}:${dep.version}")
+                with(dep.componentId) {
+                    message should contain("$groupId:$artifactId:$version")
+                }
             }
         }
     }
@@ -334,10 +337,13 @@ private fun createDependency(
     path: String? = null,
     dependencies: List<OrtComponent> = emptyList()
 ): OrtComponent {
+    val componentId = mockk<OrtComponentIdentifier>()
+    every { componentId.groupId } returns group
+    every { componentId.artifactId } returns artifact
+    every { componentId.version } returns version
+
     val dependency = mockk<OrtComponent>()
-    every { dependency.groupId } returns group
-    every { dependency.artifactId } returns artifact
-    every { dependency.version } returns version
+    every { dependency.componentId } returns componentId
     every { dependency.localPath } returns path
     every { dependency.pomFile } returns "pom.xml"
     every { dependency.dependencies } returns dependencies
@@ -384,7 +390,10 @@ private fun createMavenSupport(): MavenSupport {
 /**
  * Returns an [Identifier] for this [OrtComponent].
  */
-private fun OrtComponent.toId() = Identifier(getIdentifierType(PROJECT_TYPE), groupId, artifactId, version)
+private fun OrtComponent.toId() =
+    with(componentId) {
+        Identifier(getIdentifierType(PROJECT_TYPE), groupId, artifactId, version)
+    }
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].

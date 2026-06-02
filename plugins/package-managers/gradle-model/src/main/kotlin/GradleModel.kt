@@ -37,10 +37,14 @@ interface OrtConfiguration {
     val dependencies: List<OrtComponent>
 }
 
-interface OrtComponent {
+interface OrtComponentIdentifier {
     val groupId: String
     val artifactId: String
     val version: String
+}
+
+interface OrtComponent {
+    val componentId: OrtComponentIdentifier
     val classifier: String
     val extension: String
     val variants: Map<String, Map<String, String>>

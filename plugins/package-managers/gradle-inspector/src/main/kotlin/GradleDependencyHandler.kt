@@ -60,7 +60,9 @@ internal class GradleDependencyHandler(
     private val projectType: String
 ) : DependencyHandler<OrtComponent> {
     override fun identifierFor(dependency: OrtComponent): Identifier =
-        with(dependency) { Identifier(getIdentifierType(projectType), groupId, artifactId, version) }
+        with(dependency.componentId) {
+            Identifier(dependency.getIdentifierType(projectType), groupId, artifactId, version)
+        }
 
     override fun dependenciesFor(dependency: OrtComponent): List<OrtComponent> = dependency.dependencies
 
@@ -208,8 +210,10 @@ private fun OrtComponent.handleValidScmInfo(type: String, url: String, tag: Stri
 
             // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or special URL paths.
             VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
-                logger.info {
-                    "Fixed up invalid SCM connection without a provider in '$groupId:$artifactId:$version' to $it."
+                with(componentId) {
+                    logger.info {
+                        "Fixed up invalid SCM connection without a provider in '$groupId:$artifactId:$version' to $it."
+                    }
                 }
             }
         }
@@ -244,7 +248,7 @@ private fun OrtComponent.handleInvalidScmInfo(connection: String, tag: String): 
             VcsInfo.EMPTY
         }
     } ?: run {
-        val dep = "$groupId:$artifactId:$version"
+        val dep = with(componentId) { "$groupId:$artifactId:$version" }
 
         if (connection.startsWith("git://") || connection.endsWith(".git")) {
             // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless clear
