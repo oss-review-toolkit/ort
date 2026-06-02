@@ -193,5 +193,4 @@ wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
 xz = { module = "org.tukaani:xz", version.ref = "xz" }
 
 [bundles]
-hoplite = ["hoplite-core", "hoplite-yaml"]
 mavenResolver = ["maven-resolver-connector-basic", "maven-resolver-transport-file", "maven-resolver-transport-http", "maven-resolver-transport-wagon"]
