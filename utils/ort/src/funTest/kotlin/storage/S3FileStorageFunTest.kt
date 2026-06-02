@@ -35,15 +35,9 @@ import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.InetSocketAddress
 
-import kotlin.random.Random
-
-import org.apache.logging.log4j.kotlin.logger
-
 class S3FileStorageFunTest : WordSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
     private val protocol = "http"
-    private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
-        .also { logger.debug { "Using port $it for S3 Mock server." } }
 
     private val bucket = "ort-scan-results"
 
@@ -95,7 +89,7 @@ class S3FileStorageFunTest : WordSpec() {
     }
 
     // Start a local HTTP server to mock S3 with the system default value for queued incoming connections.
-    private val server = HttpServer.create(InetSocketAddress(loopback, port), 0).apply {
+    private val server = HttpServer.create(InetSocketAddress(loopback, 0), 0).apply {
         createContext("/", handler)
         start()
     }
@@ -105,7 +99,7 @@ class S3FileStorageFunTest : WordSpec() {
         awsRegion = "us-east-1",
         bucketName = bucket,
         compression = false,
-        customEndpoint = "$protocol://${loopback.hostAddress}:$port",
+        customEndpoint = "$protocol://${loopback.hostAddress}:${server.address.port}",
         secretAccessKey = "secret"
     )
 

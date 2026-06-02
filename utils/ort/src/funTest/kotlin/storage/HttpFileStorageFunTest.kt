@@ -35,14 +35,8 @@ import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.InetSocketAddress
 
-import kotlin.random.Random
-
-import org.apache.logging.log4j.kotlin.logger
-
 class HttpFileStorageFunTest : WordSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
-    private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
-        .also { logger.debug { "Using port $it for HTTP server." } }
 
     private val handler = object : HttpHandler {
         val requests = mutableMapOf<String, String>()
@@ -69,12 +63,12 @@ class HttpFileStorageFunTest : WordSpec() {
     }
 
     // Start the local HTTP server with the system default value for queued incoming connections.
-    private val server = HttpServer.create(InetSocketAddress(loopback, port), 0).apply {
+    private val server = HttpServer.create(InetSocketAddress(loopback, 0), 0).apply {
         createContext("/", handler)
         start()
     }
 
-    private val storage = HttpFileStorage("http://${loopback.hostAddress}:$port")
+    private val storage = HttpFileStorage("http://${loopback.hostAddress}:${server.address.port}")
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
         handler.requests.clear()
