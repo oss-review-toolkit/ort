@@ -60,7 +60,7 @@ class S3FileStorageFunTest : WordSpec() {
                 "PUT" -> {
                     val key = exchange.requestURI.toString().removePrefix("/$bucket/")
                     requests[key] = exchange.requestBody.reader().use { it.readText() }.split('\n')[1].trimEnd()
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0)
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1)
                 }
 
                 "GET" -> {
