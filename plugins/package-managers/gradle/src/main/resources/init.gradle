@@ -26,6 +26,8 @@ import org.gradle.api.internal.artifacts.DefaultProjectComponentIdentifier
 import org.gradle.api.internal.artifacts.repositories.DefaultFlatDirArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultIvyArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactRepository
+import org.gradle.authentication.http.HttpHeaderAuthentication
+import org.gradle.api.credentials.HttpHeaderCredentials
 import org.gradle.internal.build.BuildState
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
@@ -85,6 +87,8 @@ interface OrtRepository {
     String getUrl()
     String getUsername()
     String getPassword()
+    String getHeaderName()
+    String getHeaderValue()
 }
 
 @ToString(includeNames = true)
@@ -127,6 +131,8 @@ class OrtRepositoryImpl implements OrtRepository, Serializable {
     String url = ''
     String username = null
     String password = null
+    String headerName = null
+    String headerValue = null
 }
 
 class OrtDependencyTreeGradlePlugin extends AbstractOrtDependencyTreePlugin<Gradle> {
@@ -239,7 +245,13 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
 
             List<OrtRepository> repositories = project.repositories.findResults {
                 if (it instanceof DefaultMavenArtifactRepository) {
-                    new OrtRepositoryImpl(it.url.toString(), it.credentials?.username, it.credentials?.password)
+                    def isHttpHeader = it.authentication.any { auth -> auth instanceof HttpHeaderAuthentication }
+                    if (isHttpHeader) {
+                        def headerCreds = it.getCredentials(HttpHeaderCredentials)
+                        new OrtRepositoryImpl(it.url.toString(), null, null, headerCreds?.name, headerCreds?.value)
+                    } else {
+                        new OrtRepositoryImpl(it.url.toString(), it.credentials?.username, it.credentials?.password, null, null)
+                    }
                 } else if (it instanceof DefaultFlatDirArtifactRepository) {
                     warnings.add('Project uses a flat dir repository which is not supported by the analyzer. ' +
                             "Dependencies from this repository will be ignored: ${it.dirs}".toString())

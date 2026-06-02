@@ -81,5 +81,7 @@ internal class OrtVcsModelImpl(
 internal class OrtRepositoryImpl(
     override val url: String,
     override val username: String?,
-    override val password: String?
+    override val password: String?,
+    override val headerName: String?,
+    override val headerValue: String?
 ) : OrtRepository, Serializable
