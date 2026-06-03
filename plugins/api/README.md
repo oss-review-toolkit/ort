@@ -75,6 +75,16 @@ class ExampleAdvisor(override val descriptor: PluginDescriptor, val config: Exam
 }
 ```
 
+The KDoc of the plugin class is used as the description of the plugin when generating the `PluginDescriptor`.
+Therefore, it should be written with the intention to be read by users of the plugin.
+For example, for package managers, it should document requirements and limitations of the plugin, helping users to successfully analyze their projects.
+As the description is also used for the website, certain limitations apply:
+
+* It should not use reference-style links (like `[some website][1]`).
+* It should not use footnotes (like `[^1]`).
+* It should only use headings of level 3 or higher (like `### Heading`).
+* KDoc symbol references (like `[SomeClass]`) are replaced with inline-code blocks.
+
 ### Plugin Configuration Class
 
 The configuration class must be a data class with a single constructor that takes all configuration options as arguments.
