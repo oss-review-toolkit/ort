@@ -103,47 +103,6 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         )
     }
 
-    /**
-     * Resolve the POM files for all dependences in the given [Gradle configuration][config] incl. their parent POMs.
-     */
-    private fun Project.resolvePoms(config: Configuration): Map<String, ModelBuildingResult> {
-        val allComponentIds = config.incoming.resolutionResult.allDependencies
-            .filterIsInstance<ResolvedDependencyResult>()
-            .map { it.selected.id }
-            .distinct()
-
-        // Get the POM files for all resolved dependencies.
-        val pomFiles = resolvePoms(allComponentIds)
-
-        val fileModelBuilder = FileModelBuilder { groupId, artifactId, version ->
-            val moduleId = DefaultModuleIdentifier.newId(groupId, artifactId)
-            val componentId = DefaultModuleComponentIdentifier.newId(moduleId, version)
-
-            val pomFile = resolvePoms(listOf(componentId)).single().file
-
-            FileModelSource(pomFile)
-        }
-
-        return pomFiles.associate {
-            // Trigger resolution of parent POMs by building the POM model.
-            it.id.componentIdentifier.toString() to fileModelBuilder.buildModel(it.file)
-        }
-    }
-
-    /**
-     * Resolve the POM files for the given [componentIds] and return them.
-     */
-    private fun Project.resolvePoms(componentIds: List<ComponentIdentifier>): List<ResolvedArtifactResult> {
-        val resolutionResult = dependencies.createArtifactResolutionQuery()
-            .forComponents(componentIds)
-            .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
-            .execute()
-
-        return resolutionResult.resolvedComponents.flatMap {
-            it.getArtifacts(MavenPomArtifact::class.java)
-        }.filterIsInstance<ResolvedArtifactResult>()
-    }
-
     private fun Collection<DependencyResult>.toOrtDependencies(
         poms: Map<String, ModelBuildingResult>,
         visited: Set<ComponentIdentifier>
@@ -314,6 +273,47 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             }
         }
     }
+}
+
+/**
+ * Resolve the POM files for all dependences in the given [Gradle configuration][config] incl. their parent POMs.
+ */
+private fun Project.resolvePoms(config: Configuration): Map<String, ModelBuildingResult> {
+    val allComponentIds = config.incoming.resolutionResult.allDependencies
+        .filterIsInstance<ResolvedDependencyResult>()
+        .map { it.selected.id }
+        .distinct()
+
+    // Get the POM files for all resolved dependencies.
+    val pomFiles = resolvePoms(allComponentIds)
+
+    val fileModelBuilder = FileModelBuilder { groupId, artifactId, version ->
+        val moduleId = DefaultModuleIdentifier.newId(groupId, artifactId)
+        val componentId = DefaultModuleComponentIdentifier.newId(moduleId, version)
+
+        val pomFile = resolvePoms(listOf(componentId)).single().file
+
+        FileModelSource(pomFile)
+    }
+
+    return pomFiles.associate {
+        // Trigger resolution of parent POMs by building the POM model.
+        it.id.componentIdentifier.toString() to fileModelBuilder.buildModel(it.file)
+    }
+}
+
+/**
+ * Resolve the POM files for the given [componentIds] and return them.
+ */
+private fun Project.resolvePoms(componentIds: List<ComponentIdentifier>): List<ResolvedArtifactResult> {
+    val resolutionResult = dependencies.createArtifactResolutionQuery()
+        .forComponents(componentIds)
+        .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
+        .execute()
+
+    return resolutionResult.resolvedComponents.flatMap {
+        it.getArtifacts(MavenPomArtifact::class.java)
+    }.filterIsInstance<ResolvedArtifactResult>()
 }
 
 /**
