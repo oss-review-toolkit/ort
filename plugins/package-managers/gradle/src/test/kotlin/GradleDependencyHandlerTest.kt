@@ -56,7 +56,6 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.getIdentifierType
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 
 /**

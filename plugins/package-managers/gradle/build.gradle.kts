@@ -30,7 +30,6 @@ dependencies {
     implementation(libs.maven.core)
     implementation(libs.maven.resolver.api)
     implementation(projects.downloader)
-    implementation(projects.plugins.packageManagers.gradleModel)
     implementation(projects.plugins.packageManagers.mavenPackageManager)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
