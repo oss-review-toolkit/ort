@@ -79,13 +79,13 @@ internal fun UrlArtifactRepository.toOrtRepository(): OrtRepository {
         ?.any { it is HttpHeaderAuthentication } == true
 
     return if (isHttpHeaderAuth) {
-        val headerCredentials = authSupported?.getCredentials(HttpHeaderCredentials::class.java)
+        val headerCredentials = authSupported.getCredentials(HttpHeaderCredentials::class.java)
         OrtRepositoryImpl(
             url = url.toString(),
             username = null,
             password = null,
-            headerName = headerCredentials?.name,
-            headerValue = headerCredentials?.value
+            headerName = headerCredentials.name,
+            headerValue = headerCredentials.value
         )
     } else {
         val credentials = authSupported?.credentials
