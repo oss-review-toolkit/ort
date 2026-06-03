@@ -30,6 +30,9 @@ data class PluginDescriptor(
     /** The short description of the plugin. */
     val summary: String,
 
+    /** The detailed description of the plugin. */
+    val description: String? = null,
+
     /** The configuration options supported by the plugin. */
     val options: List<PluginOption> = emptyList()
 )
