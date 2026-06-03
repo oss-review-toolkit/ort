@@ -34,9 +34,9 @@ data class PluginDescriptor(
     val displayName: String,
 
     /**
-     * The description of the plugin.
+     * The short description of the plugin.
      */
-    val description: String,
+    val summary: String,
 
     /**
      * The configuration options supported by the plugin.

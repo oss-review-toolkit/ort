@@ -109,7 +109,7 @@ data class GradleConfig(
  */
 @OrtPlugin(
     displayName = "Gradle",
-    description = "The Gradle package manager for Java.",
+    summary = "The Gradle package manager for Java.",
     factory = PackageManagerFactory::class
 )
 class Gradle(

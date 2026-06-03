@@ -73,7 +73,7 @@ data class ClearlyDefinedPackageCurationProviderConfig(
  */
 @OrtPlugin(
     displayName = "ClearlyDefined",
-    description = "Provides package curation data from the ClearlyDefined service.",
+    summary = "Provides package curation data from the ClearlyDefined service.",
     factory = PackageCurationProviderFactory::class
 )
 class ClearlyDefinedPackageCurationProvider(

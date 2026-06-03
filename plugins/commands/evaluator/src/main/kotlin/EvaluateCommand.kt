@@ -88,7 +88,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
     displayName = "Evaluate",
-    description = "Evaluate ORT result files against policy rules.",
+    summary = "Evaluate ORT result files against policy rules.",
     factory = OrtCommandFactory::class
 )
 class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.descriptor) : OrtCommand(descriptor) {

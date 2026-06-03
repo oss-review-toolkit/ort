@@ -54,7 +54,7 @@ private const val MANIFEST_TOML = "manifest.toml"
  */
 @OrtPlugin(
     displayName = "Gleam",
-    description = "The package manager for Gleam.",
+    summary = "The package manager for Gleam.",
     factory = PackageManagerFactory::class
 )
 class Gleam internal constructor(

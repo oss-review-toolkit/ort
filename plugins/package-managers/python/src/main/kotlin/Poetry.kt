@@ -66,7 +66,7 @@ internal object PoetryCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Poetry",
-    description = "The Poetry package manager for Python.",
+    summary = "The Poetry package manager for Python.",
     factory = PackageManagerFactory::class
 )
 class Poetry(

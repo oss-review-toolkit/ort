@@ -90,7 +90,7 @@ private val SHA1_REGEX = Regex("^[0-9a-fA-F]{40}$")
  */
 @OrtPlugin(
     displayName = "Git",
-    description = "A VCS implementation to interact with Git repositories.",
+    summary = "A VCS implementation to interact with Git repositories.",
     factory = VersionControlSystemFactory::class
 )
 class Git(

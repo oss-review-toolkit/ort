@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
 @OrtPlugin(
     displayName = "ORT Project File",
-    description = "A package manager that uses an ORT-specific file format as package list source.",
+    summary = "A package manager that uses an ORT-specific file format as package list source.",
     factory = PackageManagerFactory::class
 )
 class OrtProjectFile(override val descriptor: PluginDescriptor = OrtProjectFileFactory.descriptor) :

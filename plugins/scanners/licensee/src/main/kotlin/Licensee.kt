@@ -62,7 +62,7 @@ internal object LicenseeCommand : CommandLineTool {
 
 @OrtPlugin(
     displayName = "Licensee",
-    description = "Licensee is a command line tool to detect licenses in a given project.",
+    summary = "Licensee is a command line tool to detect licenses in a given project.",
     factory = ScannerWrapperFactory::class
 )
 class Licensee(

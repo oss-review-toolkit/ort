@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
  */
 @OrtPlugin(
     displayName = "DocBook Template",
-    description = "Generates DocBook from AsciiDoc files from Apache Freemarker templates.",
+    summary = "Generates DocBook from AsciiDoc files from Apache Freemarker templates.",
     factory = ReporterFactory::class
 )
 class DocBookTemplateReporter(

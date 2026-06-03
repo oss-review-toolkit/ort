@@ -112,7 +112,7 @@ data class GradleInspectorConfig(
  */
 @OrtPlugin(
     displayName = "Gradle Inspector",
-    description = "The Gradle package manager for Java.",
+    summary = "The Gradle package manager for Java.",
     factory = PackageManagerFactory::class
 )
 class GradleInspector(

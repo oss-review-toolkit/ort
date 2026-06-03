@@ -54,7 +54,7 @@ internal object ProvenantCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Provenant",
-    description = "A wrapper for [Provenant](https://github.com/mstykow/provenant).",
+    summary = "A wrapper for [Provenant](https://github.com/mstykow/provenant).",
     factory = ScannerWrapperFactory::class
 )
 class Provenant(

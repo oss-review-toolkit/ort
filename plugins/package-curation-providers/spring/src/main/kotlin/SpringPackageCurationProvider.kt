@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCuration
  */
 @OrtPlugin(
     displayName = "Spring",
-    description = "A package curation provider for Spring packages.",
+    summary = "A package curation provider for Spring packages.",
     factory = PackageCurationProviderFactory::class
 )
 open class SpringPackageCurationProvider(

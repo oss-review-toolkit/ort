@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
  */
 @OrtPlugin(
     displayName = "SCANOSS",
-    description = "An advisor that uses a SCANOSS instance to determine vulnerabilities in dependencies.",
+    summary = "An advisor that uses a SCANOSS instance to determine vulnerabilities in dependencies.",
     factory = AdviceProviderFactory::class
 )
 class ScanOss(

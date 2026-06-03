@@ -49,7 +49,7 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 @OrtPlugin(
     id = "OSV",
     displayName = "OSV",
-    description = "An advisor that retrieves vulnerability information from the Open Source Vulnerabilities database.",
+    summary = "An advisor that retrieves vulnerability information from the Open Source Vulnerabilities database.",
     factory = AdviceProviderFactory::class
 )
 class Osv(

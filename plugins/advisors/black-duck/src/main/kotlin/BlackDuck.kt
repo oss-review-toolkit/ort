@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
  */
 @OrtPlugin(
     displayName = "Black Duck",
-    description = "An advisor that retrieves vulnerability information from a Black Duck instance.",
+    summary = "An advisor that retrieves vulnerability information from a Black Duck instance.",
     factory = AdviceProviderFactory::class
 )
 class BlackDuck(

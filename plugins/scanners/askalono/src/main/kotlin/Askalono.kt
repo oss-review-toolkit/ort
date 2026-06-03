@@ -56,7 +56,7 @@ internal object AskalonoCommand : CommandLineTool {
 
 @OrtPlugin(
     displayName = "askalono",
-    description = "askalono is a library and command-line tool to help detect license texts. It's designed to be " +
+    summary = "askalono is a library and command-line tool to help detect license texts. It's designed to be " +
         "fast, accurate, and to support a wide variety of license texts.",
     factory = ScannerWrapperFactory::class
 )

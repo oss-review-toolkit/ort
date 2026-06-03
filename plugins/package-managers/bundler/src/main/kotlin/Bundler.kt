@@ -116,7 +116,7 @@ data class BundlerConfig(
  */
 @OrtPlugin(
     displayName = "Bundler",
-    description = "The Bundler package manager for Ruby.",
+    summary = "The Bundler package manager for Ruby.",
     factory = PackageManagerFactory::class
 )
 class Bundler(

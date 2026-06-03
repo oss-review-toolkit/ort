@@ -47,7 +47,7 @@ private const val PROJECT_TYPE = "Unmanaged"
  */
 @OrtPlugin(
     displayName = "Unmanaged",
-    description = "The Unmanaged package manager for projects that do not use any package manager.",
+    summary = "The Unmanaged package manager for projects that do not use any package manager.",
     factory = PackageManagerFactory::class
 )
 class Unmanaged(

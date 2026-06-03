@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 class DummyPathScannerWrapper(id: String = "Dummy") : PathScannerWrapper {
-    override val descriptor = PluginDescriptor(id = id, displayName = id, description = "")
+    override val descriptor = PluginDescriptor(id = id, displayName = id, summary = "")
     override val version = "1.0.0"
     override val configuration = ""
 

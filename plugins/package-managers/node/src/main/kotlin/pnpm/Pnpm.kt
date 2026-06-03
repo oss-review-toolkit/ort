@@ -74,7 +74,7 @@ internal object PnpmCommand : CommandLineTool {
 @OrtPlugin(
     id = "PNPM",
     displayName = "PNPM",
-    description = "The PNPM package manager for Node.js.",
+    summary = "The PNPM package manager for Node.js.",
     factory = PackageManagerFactory::class
 )
 class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :

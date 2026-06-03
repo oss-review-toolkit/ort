@@ -88,7 +88,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 appendLine()
                 appendLine("![${descriptor["id"]}](https://img.shields.io/badge/Plugin_ID-${descriptor["id"]}-gold)")
                 appendLine()
-                appendLine(descriptor["description"])
+                appendLine(descriptor["summary"])
                 appendLine()
 
                 val allOptions = ((descriptor["options"]) as List<*>).map { it as Map<*, *> }

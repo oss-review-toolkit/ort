@@ -74,7 +74,7 @@ class PluginSpecFactory {
             descriptor = PluginDescriptor(
                 id = pluginId,
                 displayName = ortPlugin.displayName,
-                description = ortPlugin.description,
+                summary = ortPlugin.summary,
                 options = pluginOptions
             ),
             packageName = pluginClass.packageName.asString(),

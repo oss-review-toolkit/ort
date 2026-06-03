@@ -36,7 +36,7 @@ class CompositePackageConfigurationProvider(
     override val descriptor = PluginDescriptor(
         id = "Composite",
         displayName = "Composite Package Configuration Provider",
-        description = "A package configuration provider that combines multiple package configuration providers."
+        summary = "A package configuration provider that combines multiple package configuration providers."
     )
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =

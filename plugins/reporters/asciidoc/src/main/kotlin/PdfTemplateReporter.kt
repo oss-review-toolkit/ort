@@ -79,7 +79,7 @@ data class PdfTemplateReporterConfig(
  */
 @OrtPlugin(
     displayName = "PDF Template",
-    description = "Generates PDF from AsciiDoc files from Apache Freemarker templates.",
+    summary = "Generates PDF from AsciiDoc files from Apache Freemarker templates.",
     factory = ReporterFactory::class
 )
 class PdfTemplateReporter(

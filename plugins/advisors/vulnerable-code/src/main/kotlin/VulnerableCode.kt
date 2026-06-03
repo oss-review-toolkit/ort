@@ -66,7 +66,7 @@ private const val MAX_SUMMARY_LENGTH = 64
  */
 @OrtPlugin(
     displayName = "VulnerableCode",
-    description = "An advisor that uses a VulnerableCode instance to determine vulnerabilities in dependencies.",
+    summary = "An advisor that uses a VulnerableCode instance to determine vulnerabilities in dependencies.",
     factory = AdviceProviderFactory::class
 )
 class VulnerableCode(

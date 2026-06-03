@@ -46,7 +46,7 @@ data class CtrlXAutomationReporterConfig(
 
 @OrtPlugin(
     displayName = "CtrlX Automation",
-    description = "A reporter for the ctrlX Automation format.",
+    summary = "A reporter for the ctrlX Automation format.",
     factory = ReporterFactory::class
 )
 class CtrlXAutomationReporter(

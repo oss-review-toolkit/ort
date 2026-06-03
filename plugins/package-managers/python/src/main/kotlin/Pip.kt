@@ -79,7 +79,7 @@ data class PipConfig(
 @OrtPlugin(
     id = "PIP",
     displayName = "PIP",
-    description = "The PIP package manager for Python.",
+    summary = "The PIP package manager for Python.",
     factory = PackageManagerFactory::class
 )
 class Pip internal constructor(

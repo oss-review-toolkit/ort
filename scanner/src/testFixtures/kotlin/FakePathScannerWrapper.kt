@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
  * An implementation of [PathScannerWrapper] that creates scan results with one license finding for each file.
  */
 class FakePathScannerWrapper : PathScannerWrapper {
-    override val descriptor = PluginDescriptor(id = "fake", displayName = "fake", description = "")
+    override val descriptor = PluginDescriptor(id = "fake", displayName = "fake", summary = "")
     override val version = "1.0.0"
     override val configuration = "config"
 

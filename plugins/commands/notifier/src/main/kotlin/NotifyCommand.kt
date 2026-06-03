@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
     displayName = "Notify",
-    description = "Create notifications based on an ORT result.",
+    summary = "Create notifications based on an ORT result.",
     factory = OrtCommandFactory::class
 )
 class NotifyCommand(descriptor: PluginDescriptor = NotifyCommandFactory.descriptor) : OrtCommand(descriptor) {

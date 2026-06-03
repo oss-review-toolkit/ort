@@ -67,7 +67,7 @@ private const val RULE_VIOLATION_TABLE_ID = "rule-violation-summary"
 @OrtPlugin(
     id = "StaticHTML",
     displayName = "Static HTML",
-    description = "Generates a static HTML report.",
+    summary = "Generates a static HTML report.",
     factory = ReporterFactory::class
 )
 class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlReporterFactory.descriptor) : Reporter {

@@ -53,7 +53,7 @@ data class WebAppReporterConfig(
  */
 @OrtPlugin(
     displayName = "WebApp",
-    description = "Generates a web application to browse an ORT result interactively.",
+    summary = "Generates a web application to browse an ORT result interactively.",
     factory = ReporterFactory::class
 )
 class WebAppReporter(

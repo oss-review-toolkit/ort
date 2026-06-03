@@ -58,7 +58,7 @@ internal object PipenvCommand : CommandLineTool {
 
 @OrtPlugin(
     displayName = "Pipenv",
-    description = "The Pipenv package manager for Python.",
+    summary = "The Pipenv package manager for Python.",
     factory = PackageManagerFactory::class
 )
 class Pipenv(

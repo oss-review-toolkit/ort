@@ -74,7 +74,7 @@ internal object ScanCodeCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "ScanCode",
-    description = "A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).",
+    summary = "A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).",
     factory = ScannerWrapperFactory::class
 )
 open class ScanCode(

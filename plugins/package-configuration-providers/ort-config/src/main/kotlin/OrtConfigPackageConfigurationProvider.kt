@@ -49,7 +49,7 @@ private const val PACKAGE_CONFIGURATIONS_DIR = "package-configurations"
 @OrtPlugin(
     id = "ORTConfig",
     displayName = "ORT Config Repository",
-    description = "A package configuration provider that loads package configurations from the ort-config repository.",
+    summary = "A package configuration provider that loads package configurations from the ort-config repository.",
     factory = PackageConfigurationProviderFactory::class
 )
 class OrtConfigPackageConfigurationProvider(

@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 
 @OrtPlugin(
     displayName = "FossID Snippet",
-    description = "Generates a detailed report of the FossID snippet findings.",
+    summary = "Generates a detailed report of the FossID snippet findings.",
     factory = ReporterFactory::class
 )
 class FossIdSnippetReporter(override val descriptor: PluginDescriptor = FossIdSnippetReporterFactory.descriptor) :

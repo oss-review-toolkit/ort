@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.common.div
 
 @OrtPlugin(
     displayName = "TrustSource",
-    description = "Generates a report in the TrustSource format.",
+    summary = "Generates a report in the TrustSource format.",
     factory = ReporterFactory::class
 )
 class TrustSourceReporter(override val descriptor: PluginDescriptor = TrustSourceReporterFactory.descriptor) :

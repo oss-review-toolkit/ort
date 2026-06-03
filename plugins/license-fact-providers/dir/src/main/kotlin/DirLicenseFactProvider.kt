@@ -39,7 +39,7 @@ data class DirLicenseFactProviderConfig(
 
 @OrtPlugin(
     displayName = "Default Directory License Fact Provider",
-    description = "A license fact provider that reads license information from the default directory.",
+    summary = "A license fact provider that reads license information from the default directory.",
     factory = LicenseFactProviderFactory::class
 )
 class DefaultDirLicenseFactProvider(descriptor: PluginDescriptor = DefaultDirLicenseFactProviderFactory.descriptor) :
@@ -53,7 +53,7 @@ class DefaultDirLicenseFactProvider(descriptor: PluginDescriptor = DefaultDirLic
 @OrtPlugin(
     id = "Dir",
     displayName = "Directory License Fact Provider",
-    description = "A license fact provider that reads license information from a local directory. The files must be " +
+    summary = "A license fact provider that reads license information from a local directory. The files must be " +
         "named after the SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.",
     factory = LicenseFactProviderFactory::class
 )

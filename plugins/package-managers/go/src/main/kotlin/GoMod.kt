@@ -94,7 +94,7 @@ data class GoModConfig(
  */
 @OrtPlugin(
     displayName = "GoMod",
-    description = "The Go Modules package manager for Go.",
+    summary = "The Go Modules package manager for Go.",
     factory = PackageManagerFactory::class
 )
 class GoMod(

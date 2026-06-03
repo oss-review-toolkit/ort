@@ -59,7 +59,7 @@ private const val BULK_REQUEST_SIZE = 128
 @OrtPlugin(
     id = "OSSIndex",
     displayName = "OSS Index",
-    description = "An advisor that uses Sonatype's OSS Index to determine vulnerabilities in dependencies.",
+    summary = "An advisor that uses Sonatype's OSS Index to determine vulnerabilities in dependencies.",
     factory = AdviceProviderFactory::class
 )
 class OssIndex(

@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 @OrtPlugin(
     displayName = "Upload Result to Postgres",
-    description = "Upload an ORT result to a PostgreSQL database.",
+    summary = "Upload an ORT result to a PostgreSQL database.",
     factory = OrtCommandFactory::class
 )
 class UploadResultToPostgresCommand(

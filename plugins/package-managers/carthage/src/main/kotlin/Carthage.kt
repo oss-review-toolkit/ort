@@ -55,7 +55,7 @@ internal const val PACKAGE_TYPE = "Carthage"
  */
 @OrtPlugin(
     displayName = "Carthage",
-    description = "The Carthage package manager for Objective-C / Swift.",
+    summary = "The Carthage package manager for Objective-C / Swift.",
     factory = PackageManagerFactory::class
 )
 class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descriptor) : PackageManager(PROJECT_TYPE) {

@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
  */
 @Suppress("RedundantNullableReturnType")
 class FakePackageScannerWrapper(id: String = "fake") : PackageScannerWrapper {
-    override val descriptor = PluginDescriptor(id = id, displayName = id, description = "")
+    override val descriptor = PluginDescriptor(id = id, displayName = id, summary = "")
     override val version = "1.0.0"
     override val configuration = "config"
 

@@ -74,7 +74,7 @@ internal object CocoaPodsCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "CocoaPods",
-    description = "The CocoaPods package manager for Objective-C.",
+    summary = "The CocoaPods package manager for Objective-C.",
     factory = PackageManagerFactory::class
 )
 class CocoaPods(

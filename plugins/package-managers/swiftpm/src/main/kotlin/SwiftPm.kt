@@ -75,7 +75,7 @@ internal object SwiftCommand : CommandLineTool {
 @OrtPlugin(
     id = "SwiftPM",
     displayName = "Swift Package Manager",
-    description = "The Swift Package Manager for Swift.",
+    summary = "The Swift Package Manager for Swift.",
     factory = PackageManagerFactory::class
 )
 class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descriptor) : PackageManager(PROJECT_TYPE) {

@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 
 @OrtPlugin(
     displayName = "Config",
-    description = "Show different ORT configurations.",
+    summary = "Show different ORT configurations.",
     factory = OrtCommandFactory::class
 )
 class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descriptor) : OrtCommand(descriptor) {

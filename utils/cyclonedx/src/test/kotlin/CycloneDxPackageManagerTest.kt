@@ -47,7 +47,7 @@ private class TestCycloneDxPackageManager : CycloneDxPackageManager("TestCyclone
     override val descriptor = PluginDescriptor(
         id = "TestCycloneDX",
         displayName = "Test CycloneDX",
-        description = "Test implementation of CycloneDX package manager"
+        summary = "Test implementation of CycloneDX package manager"
     )
     override val globsForDefinitionFiles = listOf("bom.cdx.json")
 

@@ -109,7 +109,7 @@ import org.semver4j.Semver
  */
 @OrtPlugin(
     displayName = "FossID",
-    description = "The FossID scanner plugin.",
+    summary = "The FossID scanner plugin.",
     factory = ScannerWrapperFactory::class
 )
 @Suppress("LargeClass", "TooManyFunctions")

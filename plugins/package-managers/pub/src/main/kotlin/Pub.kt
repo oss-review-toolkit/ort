@@ -166,7 +166,7 @@ data class PubConfig(
  */
 @OrtPlugin(
     displayName = "Pub",
-    description = "The Pub package manager for Dart / Flutter.",
+    summary = "The Pub package manager for Dart / Flutter.",
     factory = PackageManagerFactory::class
 )
 @Suppress("TooManyFunctions")
