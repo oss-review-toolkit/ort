@@ -24,6 +24,7 @@ plugins {
     id("ort-application-conventions")
 }
 
+// See https://docs.gradle.org/current/userguide/declaring_configurations.html#sec:configuration-flags-roles.
 configurations.dependencyScope("pluginClasspath")
 configurations["runtimeOnly"].extendsFrom(configurations["pluginClasspath"])
 
