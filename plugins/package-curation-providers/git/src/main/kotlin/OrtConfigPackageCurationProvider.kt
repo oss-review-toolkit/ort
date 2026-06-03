@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagecurationproviders.ortconfig
+package org.ossreviewtoolkit.plugins.packagecurationproviders.git
 
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
