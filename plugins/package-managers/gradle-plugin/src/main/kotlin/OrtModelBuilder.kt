@@ -279,9 +279,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
  * Resolve the POM files for all dependences in the given [Gradle configuration][config] incl. their parent POMs.
  */
 private fun Project.resolvePoms(config: Configuration): Map<String, ModelBuildingResult> {
-    val allComponentIds = config.incoming.resolutionResult.allDependencies
-        .filterIsInstance<ResolvedDependencyResult>()
-        .map { it.selected.id }
+    val allComponentIds = config.incoming.resolutionResult.allComponents.map { it.id }
 
     // Get the POM files for all resolved dependencies.
     val pomFiles = resolvePoms(allComponentIds)
