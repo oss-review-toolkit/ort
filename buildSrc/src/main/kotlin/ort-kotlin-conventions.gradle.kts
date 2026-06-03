@@ -213,7 +213,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
     compilerOptions {
         allWarningsAsErrors = true
-        freeCompilerArgs.addAll("-Xannotation-default-target=param-property", "-Xconsistent-data-class-copy-visibility")
+        freeCompilerArgs.addAll("-Xconsistent-data-class-copy-visibility")
         optIn = optInRequirements
     }
 }
