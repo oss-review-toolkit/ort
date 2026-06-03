@@ -27,7 +27,7 @@ dependencies {
 
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.clikt)
-    implementation(projects.plugins.packageCurationProviders.ortConfigPackageCurationProvider)
+    implementation(projects.plugins.packageCurationProviders.gitPackageCurationProvider)
     implementation(projects.plugins.packageManagers.nugetPackageManager)
     implementation(projects.utils.commonUtils)
 
