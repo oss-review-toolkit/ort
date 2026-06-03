@@ -72,8 +72,8 @@ the generic fallbacks can be used:
 
 ### ORT Project package manager
 
-The [ORT Project package manager](../guides/ort-project-package-manager.md) can be used to manually define projects and
-their dependencies in an ORT Project definition file.
+The [ORT Project package manager](../plugins/package-managers/ORT%20Project%20File.md) can be used to manually define
+projects and their dependencies in an ORT Project definition file.
 
 ### SPDX
 
