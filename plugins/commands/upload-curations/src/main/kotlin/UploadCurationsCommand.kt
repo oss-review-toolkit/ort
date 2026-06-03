@@ -61,7 +61,7 @@ import org.ossreviewtoolkit.utils.ort.runBlocking
 
 @OrtPlugin(
     displayName = "Upload Curations",
-    description = "Upload ORT package curations to ClearlyDefined.",
+    summary = "Upload ORT package curations to ClearlyDefined.",
     factory = OrtCommandFactory::class
 )
 class UploadCurationsCommand(

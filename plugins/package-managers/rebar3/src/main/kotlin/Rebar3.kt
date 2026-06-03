@@ -38,7 +38,7 @@ private const val PROJECT_TYPE = "otp"
 
 @OrtPlugin(
     displayName = "Rebar3",
-    description = "The Rebar3 build tool for Erlang, using bombom for SBOM generation.",
+    summary = "The Rebar3 build tool for Erlang, using bombom for SBOM generation.",
     factory = PackageManagerFactory::class
 )
 class Rebar3(

@@ -90,7 +90,7 @@ internal object ComposerCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Composer",
-    description = "The Composer package manager for PHP.",
+    summary = "The Composer package manager for PHP.",
     factory = PackageManagerFactory::class
 )
 class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descriptor) : PackageManager(PROJECT_TYPE) {

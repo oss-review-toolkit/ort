@@ -628,7 +628,7 @@ private fun createFactory(option: PluginOption) =
         private val pluginDescriptor = PluginDescriptor(
             id = "test",
             displayName = "Test",
-            description = "Test plugin",
+            summary = "Test plugin",
             options = listOf(option)
         )
 

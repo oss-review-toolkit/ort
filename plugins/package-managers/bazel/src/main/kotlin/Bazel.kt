@@ -157,7 +157,7 @@ internal object BuildozerCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Bazel",
-    description = "The Bazel package manager.",
+    summary = "The Bazel package manager.",
     factory = PackageManagerFactory::class
 )
 class Bazel(

@@ -95,7 +95,7 @@ data class SbtConfig(
 @OrtPlugin(
     id = "SBT",
     displayName = "SBT",
-    description = "The SBT package manager for Scala.",
+    summary = "The SBT package manager for Scala.",
     factory = PackageManagerFactory::class
 )
 class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, private val config: SbtConfig) :

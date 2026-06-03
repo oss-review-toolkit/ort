@@ -46,7 +46,7 @@ private val SUCCESS_PREFIX = "\t${Theme.Default.success("*")} "
 
 @OrtPlugin(
     displayName = "Requirements",
-    description = "Check for the command line tools required by ORT.",
+    summary = "Check for the command line tools required by ORT.",
     factory = OrtCommandFactory::class
 )
 class RequirementsCommand(

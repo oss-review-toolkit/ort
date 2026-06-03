@@ -61,7 +61,7 @@ data class EvaluatedModelReporterConfig(
  */
 @OrtPlugin(
     displayName = "Evaluated Model",
-    description = "Generates an evaluated model of the ORT result.",
+    summary = "Generates an evaluated model of the ORT result.",
     factory = ReporterFactory::class
 )
 class EvaluatedModelReporter(

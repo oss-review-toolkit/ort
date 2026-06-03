@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.nullOrBlankToSpdxNoassertionOrN
 @OrtPlugin(
     id = "AOSD2.1",
     displayName = "Audi Open Source Diagnostics 2.1",
-    description = "A reporter for the Audi Open Source Diagnostics (AOSD) 2.1 format.",
+    summary = "A reporter for the Audi Open Source Diagnostics (AOSD) 2.1 format.",
     factory = ReporterFactory::class
 )
 class Aosd21Reporter(override val descriptor: PluginDescriptor = Aosd21ReporterFactory.descriptor) : Reporter {

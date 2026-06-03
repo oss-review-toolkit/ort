@@ -51,7 +51,7 @@ data class FilePackageCurationProviderConfig(
 
 @OrtPlugin(
     displayName = "Default File",
-    description = "A package curation provider that loads package curations from the default file.",
+    summary = "A package curation provider that loads package curations from the default file.",
     factory = PackageCurationProviderFactory::class
 )
 class DefaultFilePackageCurationProvider(descriptor: PluginDescriptor) : FilePackageCurationProvider(
@@ -64,7 +64,7 @@ class DefaultFilePackageCurationProvider(descriptor: PluginDescriptor) : FilePac
 
 @OrtPlugin(
     displayName = "Default Directory",
-    description = "A package curation provider that loads package curations from the default directory.",
+    summary = "A package curation provider that loads package curations from the default directory.",
     factory = PackageCurationProviderFactory::class
 )
 class DefaultDirPackageCurationProvider(descriptor: PluginDescriptor) : FilePackageCurationProvider(
@@ -81,7 +81,7 @@ class DefaultDirPackageCurationProvider(descriptor: PluginDescriptor) : FilePack
  */
 @OrtPlugin(
     displayName = "File",
-    description = "A package curation provider that loads package curations from files.",
+    summary = "A package curation provider that loads package curations from files.",
     factory = PackageCurationProviderFactory::class
 )
 open class FilePackageCurationProvider(descriptor: PluginDescriptor, vararg paths: File?) :

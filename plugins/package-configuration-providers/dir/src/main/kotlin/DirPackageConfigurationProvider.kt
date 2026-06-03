@@ -50,7 +50,7 @@ data class DirPackageConfigurationProviderConfig(
 
 @OrtPlugin(
     displayName = "Default Directory",
-    description = "A package configuration provider that loads package curations from the default directory.",
+    summary = "A package configuration provider that loads package curations from the default directory.",
     factory = PackageConfigurationProviderFactory::class
 )
 class DefaultDirPackageConfigurationProvider(descriptor: PluginDescriptor) : DirPackageConfigurationProvider(
@@ -67,7 +67,7 @@ class DefaultDirPackageConfigurationProvider(descriptor: PluginDescriptor) : Dir
  */
 @OrtPlugin(
     displayName = "Directory",
-    description = "Provides package configurations from a directory.",
+    summary = "Provides package configurations from a directory.",
     factory = PackageConfigurationProviderFactory::class
 )
 open class DirPackageConfigurationProvider(

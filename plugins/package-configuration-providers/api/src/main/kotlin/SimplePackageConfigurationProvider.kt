@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 private val pluginDescriptor = PluginDescriptor(
     id = "Simple",
     displayName = "Simple",
-    description = "A simple package configuration provider, which provides a fixed set of package configurations."
+    summary = "A simple package configuration provider, which provides a fixed set of package configurations."
 )
 
 /**

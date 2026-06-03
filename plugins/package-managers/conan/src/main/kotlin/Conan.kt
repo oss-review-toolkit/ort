@@ -115,7 +115,7 @@ data class ConanConfig(
  */
 @OrtPlugin(
     displayName = "Conan",
-    description = "The Conan package manager for C / C++.",
+    summary = "The Conan package manager for C / C++.",
     factory = PackageManagerFactory::class
 )
 @Suppress("TooManyFunctions")

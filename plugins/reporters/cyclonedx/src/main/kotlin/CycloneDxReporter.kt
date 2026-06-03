@@ -122,7 +122,7 @@ data class CycloneDxReporterConfig(
 @OrtPlugin(
     id = "CycloneDX",
     displayName = "CycloneDX SBOM",
-    description = "Creates software bills of materials (SBOM) in the CycloneDX format.",
+    summary = "Creates software bills of materials (SBOM) in the CycloneDX format.",
     factory = ReporterFactory::class
 )
 class CycloneDxReporter(

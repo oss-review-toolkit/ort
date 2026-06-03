@@ -94,7 +94,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
  */
 @OrtPlugin(
     displayName = "Tycho",
-    description = "The Tycho package manager for Maven projects.",
+    summary = "The Tycho package manager for Maven projects.",
     factory = PackageManagerFactory::class
 )
 class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor) : PackageManager("Tycho") {

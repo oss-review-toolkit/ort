@@ -34,7 +34,7 @@ class CompositeLicenseFactProvider(
     override val descriptor = PluginDescriptor(
         id = "Composite",
         displayName = "Composite License Fact Provider",
-        description = "A license fact provider that aggregates multiple license fact providers."
+        summary = "A license fact provider that aggregates multiple license fact providers."
     )
 
     override fun getLicenseText(licenseId: String) = providers.firstNotNullOfOrNull { it.getLicenseText(licenseId) }

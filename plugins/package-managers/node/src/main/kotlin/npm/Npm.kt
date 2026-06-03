@@ -97,7 +97,7 @@ data class NpmConfig(
 @OrtPlugin(
     id = "NPM",
     displayName = "NPM",
-    description = "The Node package manager for Node.js.",
+    summary = "The Node package manager for Node.js.",
     factory = PackageManagerFactory::class
 )
 class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, private val config: NpmConfig) :

@@ -52,7 +52,7 @@ data class NuGetConfig(
  */
 @OrtPlugin(
     displayName = "NuGet",
-    description = "The NuGet package manager for .NET.",
+    summary = "The NuGet package manager for .NET.",
     factory = PackageManagerFactory::class
 )
 class NuGet(override val descriptor: PluginDescriptor = NuGetFactory.descriptor, config: NuGetConfig) :

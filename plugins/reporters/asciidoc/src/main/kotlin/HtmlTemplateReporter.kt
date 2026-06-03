@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
  */
 @OrtPlugin(
     displayName = "HTML Template",
-    description = "Generates HTML from AsciiDoc files from Apache Freemarker templates.",
+    summary = "Generates HTML from AsciiDoc files from Apache Freemarker templates.",
     factory = ReporterFactory::class
 )
 class HtmlTemplateReporter(

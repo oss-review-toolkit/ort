@@ -52,7 +52,7 @@ internal fun MercurialWorkingTree.runHg(vararg args: String) =
 
 @OrtPlugin(
     displayName = "Mercurial",
-    description = "A VCS implementation to interact with Mercurial repositories.",
+    summary = "A VCS implementation to interact with Mercurial repositories.",
     factory = VersionControlSystemFactory::class
 )
 class Mercurial(override val descriptor: PluginDescriptor = MercurialFactory.descriptor) : VersionControlSystem() {

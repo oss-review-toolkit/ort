@@ -54,7 +54,7 @@ internal const val PACKAGE_TYPE = "Maven"
  */
 @OrtPlugin(
     displayName = "Maven",
-    description = "The Maven package manager for Java.",
+    summary = "The Maven package manager for Java.",
     factory = PackageManagerFactory::class
 )
 class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor, private val sbtMode: Boolean) :

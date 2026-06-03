@@ -58,7 +58,7 @@ import org.tmatesoft.svn.util.Version
 
 @OrtPlugin(
     displayName = "Subversion",
-    description = "A VCS implementation to interact with Subversion repositories.",
+    summary = "A VCS implementation to interact with Subversion repositories.",
     factory = VersionControlSystemFactory::class
 )
 class Subversion(override val descriptor: PluginDescriptor = SubversionFactory.descriptor) : VersionControlSystem() {

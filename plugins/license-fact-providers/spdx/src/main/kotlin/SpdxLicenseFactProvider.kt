@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 @OrtPlugin(
     id = "SPDX",
     displayName = "SPDX License Fact Provider",
-    description = "A provider for SPDX license facts.",
+    summary = "A provider for SPDX license facts.",
     factory = LicenseFactProviderFactory::class
 )
 class SpdxLicenseFactProvider(

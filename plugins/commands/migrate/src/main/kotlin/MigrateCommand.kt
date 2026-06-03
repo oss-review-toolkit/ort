@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 @OrtPlugin(
     displayName = "Migrate",
-    description = "Assist with migrating ORT configuration to newer ORT versions.",
+    summary = "Assist with migrating ORT configuration to newer ORT versions.",
     factory = OrtCommandFactory::class
 )
 class MigrateCommand(descriptor: PluginDescriptor = MigrateCommandFactory.descriptor) : OrtCommand(descriptor) {

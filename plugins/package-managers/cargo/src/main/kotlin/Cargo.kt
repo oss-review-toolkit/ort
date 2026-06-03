@@ -76,7 +76,7 @@ internal object CargoCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Cargo",
-    description = "The Cargo package manager for Rust.",
+    summary = "The Cargo package manager for Rust.",
     factory = PackageManagerFactory::class
 )
 class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager(PROJECT_TYPE) {

@@ -70,7 +70,7 @@ private const val PACKAGE_TYPE_SPDX = "SPDX"
 
 @OrtPlugin(
     displayName = "SPDX",
-    description = "A package manager that uses SPDX version 3 documents as definition files.",
+    summary = "A package manager that uses SPDX version 3 documents as definition files.",
     factory = PackageManagerFactory::class
 )
 class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) : PackageManager(PROJECT_TYPE) {

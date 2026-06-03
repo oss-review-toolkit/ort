@@ -63,7 +63,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
     displayName = "Advise",
-    description = "Check dependencies for security vulnerabilities.",
+    summary = "Check dependencies for security vulnerabilities.",
     factory = OrtCommandFactory::class
 )
 class AdviseCommand(descriptor: PluginDescriptor = AdviseCommandFactory.descriptor) : OrtCommand(descriptor) {

@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 
 @OrtPlugin(
     displayName = "Plugins",
-    description = "Print information about the installed ORT plugins.",
+    summary = "Print information about the installed ORT plugins.",
     factory = OrtCommandFactory::class
 )
 class PluginsCommand(descriptor: PluginDescriptor = PluginsCommandFactory.descriptor) : OrtCommand(descriptor) {
@@ -67,7 +67,7 @@ class PluginsCommand(descriptor: PluginDescriptor = PluginsCommandFactory.descri
             echo("ID: ${plugin.id}")
             echo()
 
-            echo("Description: ${plugin.description}")
+            echo("Summary: ${plugin.summary}")
             echo()
 
             if (plugin.options.isNotEmpty()) {

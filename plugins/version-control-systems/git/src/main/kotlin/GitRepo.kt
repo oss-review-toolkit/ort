@@ -88,7 +88,7 @@ internal object GitRepoCommand : CommandLineTool {
 
 @OrtPlugin(
     displayName = "Git-Repo",
-    description = "A VCS implementation to interact with Git-Repo repositories.",
+    summary = "A VCS implementation to interact with Git-Repo repositories.",
     factory = VersionControlSystemFactory::class
 )
 class GitRepo(

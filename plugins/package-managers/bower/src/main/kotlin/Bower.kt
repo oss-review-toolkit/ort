@@ -54,7 +54,7 @@ internal object BowerCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Bower",
-    description = "The Bower package manager for JavaScript.",
+    summary = "The Bower package manager for JavaScript.",
     factory = PackageManagerFactory::class
 )
 class Bower(override val descriptor: PluginDescriptor = BowerFactory.descriptor) : PackageManager(PROJECT_TYPE) {

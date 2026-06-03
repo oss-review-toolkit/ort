@@ -85,7 +85,7 @@ internal object StackCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Stack",
-    description = "The Stack package manager for Haskell.",
+    summary = "The Stack package manager for Haskell.",
     factory = PackageManagerFactory::class
 )
 class Stack(override val descriptor: PluginDescriptor = StackFactory.descriptor) : PackageManager(PROJECT_TYPE) {

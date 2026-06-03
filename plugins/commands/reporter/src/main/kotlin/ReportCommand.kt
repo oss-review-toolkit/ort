@@ -88,7 +88,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 @OrtPlugin(
     displayName = "Report",
-    description = "Present Analyzer, Scanner and Evaluator results in various formats.",
+    summary = "Present Analyzer, Scanner and Evaluator results in various formats.",
     factory = OrtCommandFactory::class
 )
 class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descriptor) : OrtCommand(descriptor) {

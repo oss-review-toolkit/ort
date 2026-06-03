@@ -44,7 +44,7 @@ data class MixConfig(
 
 @OrtPlugin(
     displayName = "Mix",
-    description = "The Mix package manager for Elixir, using mix_sbom for SBOM generation.",
+    summary = "The Mix package manager for Elixir, using mix_sbom for SBOM generation.",
     factory = PackageManagerFactory::class
 )
 class Mix(

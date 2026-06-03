@@ -41,8 +41,8 @@ annotation class OrtPlugin(
     /** The display name of the plugin. */
     val displayName: String,
 
-    /** The description of the plugin. */
-    val description: String,
+    /** The short description of the plugin. */
+    val summary: String,
 
     /** The factory class that represents the ORT extension point for this plugin. */
     val factory: KClass<*>

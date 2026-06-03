@@ -83,7 +83,7 @@ internal object YarnCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Yarn",
-    description = "The Yarn package manager for Node.js.",
+    summary = "The Yarn package manager for Node.js.",
     factory = PackageManagerFactory::class
 )
 class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
