@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
-import OrtDependency
+import OrtComponent
 
 import org.apache.maven.project.ProjectBuildingException
 
@@ -50,7 +50,7 @@ internal class GradleDependencyHandler(
 
     /** The helper object to resolve packages via Maven. */
     private val maven: MavenSupport
-) : DependencyHandler<OrtDependency> {
+) : DependencyHandler<OrtComponent> {
     /**
      * A list with repositories to use when resolving packages. This list must be set before using this handler for
      * constructing the dependency graph of a project. As different projects may use different repositories, this
@@ -58,12 +58,12 @@ internal class GradleDependencyHandler(
      */
     var repositories = emptyList<RemoteRepository>()
 
-    override fun identifierFor(dependency: OrtDependency): Identifier =
+    override fun identifierFor(dependency: OrtComponent): Identifier =
         with(dependency) { Identifier(getIdentifierType(projectType), groupId, artifactId, version) }
 
-    override fun dependenciesFor(dependency: OrtDependency): List<OrtDependency> = dependency.dependencies
+    override fun dependenciesFor(dependency: OrtComponent): List<OrtComponent> = dependency.dependencies
 
-    override fun issuesFor(dependency: OrtDependency): List<Issue> =
+    override fun issuesFor(dependency: OrtComponent): List<Issue> =
         listOfNotNull(
             dependency.error?.let {
                 createAndLogIssue(
@@ -82,10 +82,10 @@ internal class GradleDependencyHandler(
             }
         )
 
-    override fun linkageFor(dependency: OrtDependency): PackageLinkage =
+    override fun linkageFor(dependency: OrtComponent): PackageLinkage =
         if (dependency.isProjectDependency) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: OrtDependency, issues: MutableCollection<Issue>): Package? {
+    override fun createPackage(dependency: OrtComponent, issues: MutableCollection<Issue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error != null || dependency.isProjectDependency) return null
 

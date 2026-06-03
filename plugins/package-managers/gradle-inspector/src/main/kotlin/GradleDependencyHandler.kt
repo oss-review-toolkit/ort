@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradleinspector
 
-import OrtDependency
+import OrtComponent
 
 import java.lang.invoke.MethodHandles
 
@@ -58,16 +58,16 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 internal class GradleDependencyHandler(
     /** The type of projects to handle. */
     private val projectType: String
-) : DependencyHandler<OrtDependency> {
-    override fun identifierFor(dependency: OrtDependency): Identifier =
+) : DependencyHandler<OrtComponent> {
+    override fun identifierFor(dependency: OrtComponent): Identifier =
         with(dependency) { Identifier(getIdentifierType(projectType), groupId, artifactId, version) }
 
-    override fun dependenciesFor(dependency: OrtDependency): List<OrtDependency> = dependency.dependencies
+    override fun dependenciesFor(dependency: OrtComponent): List<OrtComponent> = dependency.dependencies
 
-    override fun linkageFor(dependency: OrtDependency): PackageLinkage =
+    override fun linkageFor(dependency: OrtComponent): PackageLinkage =
         if (dependency.isProjectDependency) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: OrtDependency, issues: MutableCollection<Issue>): Package? {
+    override fun createPackage(dependency: OrtComponent, issues: MutableCollection<Issue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error != null || dependency.isProjectDependency) return null
 
@@ -136,7 +136,7 @@ internal class GradleDependencyHandler(
         )
     }
 
-    override fun areDependenciesEqual(dependenciesA: List<OrtDependency>, dependenciesB: List<OrtDependency>): Boolean {
+    override fun areDependenciesEqual(dependenciesA: List<OrtComponent>, dependenciesB: List<OrtComponent>): Boolean {
         if (dependenciesA === dependenciesB) return true
         if (dependenciesA.isEmpty() && dependenciesB.isEmpty()) return true
 
@@ -167,7 +167,7 @@ private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<pa
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
-private fun OrtDependency.toVcsInfo(): VcsInfo =
+private fun OrtComponent.toVcsInfo(): VcsInfo =
     mavenModel?.vcs?.run {
         @Suppress("UnsafeCallOnNullableType")
         SCM_REGEX.matchEntire(connection)?.let { match ->
@@ -178,7 +178,7 @@ private fun OrtDependency.toVcsInfo(): VcsInfo =
         } ?: handleInvalidScmInfo(connection, tag)
     }.orEmpty()
 
-private fun OrtDependency.handleValidScmInfo(type: String, url: String, tag: String): VcsInfo =
+private fun OrtComponent.handleValidScmInfo(type: String, url: String, tag: String): VcsInfo =
     when {
         // Maven does not officially support git-repo as an SCM, see http://maven.apache.org/scm/scms-overview.html, so
         // come up with the convention to use the "manifest" query parameter for the path to the manifest inside the
@@ -229,7 +229,7 @@ private fun OrtDependency.handleValidScmInfo(type: String, url: String, tag: Str
         }
     }
 
-private fun OrtDependency.handleInvalidScmInfo(connection: String, tag: String): VcsInfo =
+private fun OrtComponent.handleInvalidScmInfo(connection: String, tag: String): VcsInfo =
     @Suppress("UnsafeCallOnNullableType")
     USER_HOST_REGEX.matchEntire(connection)?.let { match ->
         // Some projects omit the provider and use the SCP-like Git URL syntax, for example

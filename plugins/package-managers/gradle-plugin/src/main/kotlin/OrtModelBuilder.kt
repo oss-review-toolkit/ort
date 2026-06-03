@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
-import OrtDependency
+import OrtComponent
 import OrtDependencyTreeModel
 
 import org.apache.maven.model.building.FileModelSource
@@ -54,10 +54,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     private val logger = Logging.getLogger(OrtModelBuilder::class.java)
     private val errors = mutableListOf<String>()
     private val warnings = mutableListOf<String>()
-    private val globalDependencySubtrees = mutableMapOf<String, List<OrtDependency>>()
+    private val globalDependencySubtrees = mutableMapOf<String, List<OrtComponent>>()
 
-    // Only create one "OrtDependency" for each "ResolvedComponentResult".
-    private val ortDependencyCache = mutableMapOf<ResolvedComponentResult, OrtDependency>()
+    // Only create one "OrtComponent" for each "ResolvedComponentResult".
+    private val ortComponentCache = mutableMapOf<ResolvedComponentResult, OrtComponent>()
 
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
@@ -88,7 +88,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
             // Omit configurations without dependencies.
             root.dependencies.takeUnless { it.isEmpty() }?.let { dep ->
-                OrtConfigurationImpl(name = config.name, dependencies = dep.toOrtDependencies(poms, emptySet()))
+                OrtConfigurationImpl(name = config.name, dependencies = dep.toOrtComponents(poms, emptySet()))
             }
         }
 
@@ -103,22 +103,22 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         )
     }
 
-    private fun Collection<DependencyResult>.toOrtDependencies(
+    private fun Collection<DependencyResult>.toOrtComponents(
         poms: Map<String, ModelBuildingResult>,
         visited: Set<ComponentIdentifier>
-    ): List<OrtDependency> =
+    ): List<OrtComponent> =
         if (GradleVersion.current() < GradleVersion.version("5.1")) {
             this
         } else {
             filterNot { it.isConstraint }
         }.mapNotNull {
-            it.toOrtDependency(poms, visited)
+            it.toOrtComponent(poms, visited)
         }
 
-    private fun DependencyResult.toOrtDependency(
+    private fun DependencyResult.toOrtComponent(
         poms: Map<String, ModelBuildingResult>,
         visited: Set<ComponentIdentifier>
-    ): OrtDependency? {
+    ): OrtComponent? {
         if (this is UnresolvedDependencyResult) {
             if (attempted is ProjectComponentSelector) {
                 // Ignore unresolved project dependencies. For example for complex Android projects, Gradle's
@@ -158,8 +158,8 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         // Cut the graph on cyclic dependencies.
         if (id in visited) return null
 
-        if (selected in ortDependencyCache) {
-            return ortDependencyCache[selected]
+        if (selected in ortComponentCache) {
+            return ortComponentCache[selected]
         }
 
         if (id is ModuleComponentIdentifier) {
@@ -174,10 +174,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
             // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
             val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
-                selected.dependencies.toOrtDependencies(poms, visited + id)
+                selected.dependencies.toOrtComponents(poms, visited + id)
             }
 
-            return OrtDependencyImpl(
+            return OrtComponentImpl(
                 groupId = id.group,
                 artifactId = id.module,
                 version = id.version,
@@ -203,15 +203,15 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                 },
                 localPath = null
             ).also {
-                ortDependencyCache[selected] = it
+                ortComponentCache[selected] = it
             }
         }
 
         if (id is ProjectComponentIdentifier) {
             val moduleId = selected.moduleVersion ?: return null
-            val dependencies = selected.dependencies.toOrtDependencies(poms, visited + id)
+            val dependencies = selected.dependencies.toOrtComponents(poms, visited + id)
 
-            return OrtDependencyImpl(
+            return OrtComponentImpl(
                 groupId = moduleId.group,
                 artifactId = moduleId.name,
                 version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
@@ -229,7 +229,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                 mavenModel = null,
                 localPath = id.projectPath
             ).also {
-                ortDependencyCache[selected] = it
+                ortComponentCache[selected] = it
             }
         }
 
