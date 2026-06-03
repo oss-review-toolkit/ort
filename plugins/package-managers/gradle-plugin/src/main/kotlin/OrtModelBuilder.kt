@@ -282,7 +282,6 @@ private fun Project.resolvePoms(config: Configuration): Map<String, ModelBuildin
     val allComponentIds = config.incoming.resolutionResult.allDependencies
         .filterIsInstance<ResolvedDependencyResult>()
         .map { it.selected.id }
-        .distinct()
 
     // Get the POM files for all resolved dependencies.
     val pomFiles = resolvePoms(allComponentIds)
@@ -307,7 +306,7 @@ private fun Project.resolvePoms(config: Configuration): Map<String, ModelBuildin
  */
 private fun Project.resolvePoms(componentIds: List<ComponentIdentifier>): List<ResolvedArtifactResult> {
     val resolutionResult = dependencies.createArtifactResolutionQuery()
-        .forComponents(componentIds)
+        .forComponents(componentIds.distinct())
         .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
         .execute()
 
