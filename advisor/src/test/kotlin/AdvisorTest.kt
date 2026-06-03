@@ -131,7 +131,8 @@ class AdvisorTest : WordSpec({
             )
 
             val failingFactory = mockk<AdviceProviderFactory> {
-                every { descriptor } returns PluginDescriptor("failing-provider", "FailingProvider", "", emptyList())
+                every { descriptor } returns
+                    PluginDescriptor("failing-provider", "FailingProvider", "", options = emptyList())
                 every { create(any()) } throws IllegalStateException("Could not initialize provider")
             }
 
@@ -259,7 +260,7 @@ private fun createPackage(index: Int): Package =
 
 private fun mockkAdviceProvider(displayName: String = "Provider"): AdviceProvider =
     mockk<AdviceProvider>().apply {
-        every { descriptor } returns PluginDescriptor(displayName, displayName, "", emptyList())
+        every { descriptor } returns PluginDescriptor(displayName, displayName, "", options = emptyList())
     }
 
 private fun mockkAdvisorResult(): AdvisorResult =

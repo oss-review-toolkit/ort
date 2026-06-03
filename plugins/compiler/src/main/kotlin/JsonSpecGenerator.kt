@@ -44,6 +44,7 @@ class JsonSpecGenerator(private val codeGenerator: CodeGenerator) {
                 put("id", pluginSpec.descriptor.id)
                 put("displayName", pluginSpec.descriptor.displayName)
                 put("summary", pluginSpec.descriptor.summary)
+                put("description", pluginSpec.descriptor.description)
 
                 putJsonArray("options") {
                     pluginSpec.descriptor.options.forEach {
