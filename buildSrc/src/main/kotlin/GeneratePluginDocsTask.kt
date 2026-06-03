@@ -88,8 +88,15 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 appendLine()
                 appendLine("![${descriptor["id"]}](https://img.shields.io/badge/Plugin_ID-${descriptor["id"]}-gold)")
                 appendLine()
-                appendLine(descriptor["summary"])
+                appendLine("***${descriptor["summary"]}***")
                 appendLine()
+
+                descriptor["description"].takeIf { it != null && it != descriptor["summary"]}?.also {
+                    appendLine("## Description")
+                    appendLine()
+                    appendLine(convertKdocLinks(it as String))
+                    appendLine()
+                }
 
                 val allOptions = ((descriptor["options"]) as List<*>).map { it as Map<*, *> }
 
@@ -230,4 +237,12 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
             outputFile.writeText(markdown)
         }
     }
+}
+
+private val KDOC_LINK_REGEX = Regex("""\[([^]]+)](?:\[([^]]+)])?(?!\()""")
+
+/** Convert KDoc symbol links into inline code blocks. */
+fun convertKdocLinks(input: String) = input.replace(KDOC_LINK_REGEX) {
+    val (text, target) = it.destructured
+    if (target.isNotEmpty()) "$text (`$target`)" else "`$text`"
 }
