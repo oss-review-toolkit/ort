@@ -23,13 +23,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 
 import org.ossreviewtoolkit.utils.common.Options
 
-/**
- * The configuration of a plugin, used as input for [PluginFactory.create].
- */
+/** The configuration of a plugin, used as input for [PluginFactory.create]. */
 data class PluginConfig(
-    /**
-     * The configuration options of the plugin.
-     */
+    /** The configuration options of the plugin. */
     val options: Options = emptyMap(),
 
     /**
@@ -41,19 +37,13 @@ data class PluginConfig(
     val secrets: Options = emptyMap()
 ) {
     companion object {
-        /**
-         * Constant for an empty [PluginConfig].
-         */
+        /** Constant for an empty [PluginConfig]. */
         val EMPTY = PluginConfig()
     }
 
-    /**
-     * Return a string representation that does not contain the [secrets].
-     */
+    /** Return a string representation that does not contain the [secrets]. */
     override fun toString() = "${this::class.simpleName}(options=$options, secrets=[***])"
 }
 
-/**
- * Returns this [PluginConfig] if it is not `null`, or the [empty][PluginConfig.EMPTY] [PluginConfig] otherwise.
- */
+/** Returns this [PluginConfig] if it is not `null`, or the [empty][PluginConfig.EMPTY] [PluginConfig] otherwise. */
 fun PluginConfig?.orEmpty() = this ?: PluginConfig.EMPTY
