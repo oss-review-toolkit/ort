@@ -28,17 +28,20 @@ application {
 }
 
 val Project.hasFunTests
-    // Do not dig into sourceSets to avoid coupling between projects.
-    get() = projectDir.resolve("src/funTest").isDirectory
+    // Registering a feature automatically creates several configurations, see
+    // https://docs.gradle.org/current/userguide/how_to_create_feature_variants_of_a_library.html#sec::declare_feature_variants
+    get() = configurations.findByName("funTestRuntimeElements") != null
 
-dependencies {
-    rootProject.subprojects.filter { it.hasFunTests }.forEach {
-        implementation(project(it.path)) {
-            capabilities {
-                // Note that this uses kebab-case although "registerFeature()" uses camelCase, see
-                // https://github.com/gradle/gradle/issues/31362.
-                @Suppress("UnstableApiUsage")
-                requireFeature("fun-test")
+gradle.projectsEvaluated {
+    dependencies {
+        rootProject.subprojects.filter { it.hasFunTests }.forEach {
+            runtimeOnly(project(it.path)) {
+                capabilities {
+                    // Note that this uses kebab-case although "registerFeature()" uses camelCase, see
+                    // https://github.com/gradle/gradle/issues/31362.
+                    @Suppress("UnstableApiUsage")
+                    requireFeature("fun-test")
+                }
             }
         }
     }
