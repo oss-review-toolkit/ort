@@ -169,5 +169,41 @@ class StarlarkParserTest : WordSpec({
                 )
             }
         }
+
+        "resolve variables in directives" {
+            val moduleFileContent = """
+                MODULE_NAME = "yaml-cpp"
+                MODULE_VERSION = "0.8.0"
+                COMPAT_LEVEL = 1
+                SKYLIB_VERSION = "1.4.2"
+                IS_DEV = True
+
+                # Assignments whose value is not a literal are silently ignored.
+                COMPAT_VERSIONS = [">=7.0.0"]
+
+                module(
+                    name = MODULE_NAME,
+                    version = MODULE_VERSION,
+                    compatibility_level = COMPAT_LEVEL,
+                )
+
+                bazel_dep(name = "bazel_skylib", version = SKYLIB_VERSION)
+                bazel_dep(name = "googletest", version = "1.14.0", dev_dependency = IS_DEV)
+            """.trimIndent()
+
+            val result = Parser(moduleFileContent).parse()
+            result.module shouldNotBeNull {
+                name shouldBe "yaml-cpp"
+                version shouldBe "0.8.0"
+                compatibilityLevel shouldBe 1
+            }
+
+            result.dependencies.run {
+                shouldContainExactly(
+                    BazelDepDirective(name = "bazel_skylib", version = "1.4.2", devDependency = false),
+                    BazelDepDirective(name = "googletest", version = "1.14.0", devDependency = true)
+                )
+            }
+        }
     }
 })
