@@ -34,8 +34,6 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.getIdentifierType
-import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.isProjectDependency
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.common.collectMessages
