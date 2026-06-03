@@ -41,7 +41,7 @@ tapmoc {
     java(8)
 
     // This is the lowest version supported by the current Kotlin plugin.
-    kotlin("1.9.0")
+    kotlin("2.0.0")
 }
 
 dependencies {
