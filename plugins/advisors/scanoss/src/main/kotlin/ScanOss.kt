@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
 
 /**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
- * [SCANOSS][https://github.com/aboutcode-org/vulnerablecode] instance.
+ * [SCANOSS](https://github.com/aboutcode-org/vulnerablecode) instance.
  */
 @OrtPlugin(
     displayName = "SCANOSS",

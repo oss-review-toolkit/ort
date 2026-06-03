@@ -59,16 +59,14 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
 /**
- * The DOS scanner wrapper is a client for the scanner API implemented as part of the Double Open Server project at
- * https://github.com/doubleopen-project/dos. The server runs ScanCode in the backend and stores / reuses scan results
- * on a per-file basis and thus uses its own scan storage.
+ * The DOS scanner wrapper is a client for the scanner API implemented as part of the
+ * [Double Open Server](https://github.com/doubleopen-project/dos). The server runs ScanCode in the backend and stores /
+ * reuses scan results on a per-file basis and thus uses its own scan storage.
  */
 @OrtPlugin(
     id = "DOS",
     displayName = "Double Open Server",
-    summary = "The DOS scanner wrapper is a client for the scanner API implemented as part of the Double Open " +
-        "Server project at https://github.com/doubleopen-project/dos. The server runs ScanCode in the backend and " +
-        "stores / reuses scan results on a per-file basis and thus uses its own scan storage.",
+    summary = "A wrapper for the [Double Open Server](https://github.com/doubleopen-project/dos).",
     factory = ScannerWrapperFactory::class
 )
 class DosScanner(

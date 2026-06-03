@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
- * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
+ * An advice provider that obtains vulnerability information from [Open Source Vulnerabilities](https://osv.dev/).
  */
 @OrtPlugin(
     id = "OSV",

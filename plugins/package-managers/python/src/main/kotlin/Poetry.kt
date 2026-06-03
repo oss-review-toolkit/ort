@@ -62,7 +62,7 @@ internal object PoetryCommand : CommandLineTool {
 }
 
 /**
- * [Poetry](https://python-poetry.org/) package manager for Python.
+ * The [Poetry](https://python-poetry.org/) package manager for Python.
  */
 @OrtPlugin(
     displayName = "Poetry",
