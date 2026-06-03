@@ -26,9 +26,7 @@ package org.ossreviewtoolkit.plugins.api
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.SOURCE)
 annotation class OrtPluginOption(
-    /**
-     * The default value of the option.
-     */
+    /** The default value of the option. */
     val defaultValue: String = NO_DEFAULT_VALUE,
 
     /**

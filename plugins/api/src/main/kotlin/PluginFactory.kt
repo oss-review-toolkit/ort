@@ -27,9 +27,7 @@ import java.util.ServiceLoader
  */
 interface PluginFactory<out PLUGIN : Plugin> {
     companion object {
-        /**
-         * Return all plugin factories of type [FACTORY].
-         */
+        /** Return all plugin factories of type [FACTORY]. */
         inline fun <reified FACTORY : PluginFactory<PLUGIN>, PLUGIN : Plugin> getAll() =
             getLoaderFor<FACTORY>()
                 .iterator()
@@ -39,25 +37,17 @@ interface PluginFactory<out PLUGIN : Plugin> {
                 }
     }
 
-    /**
-     * The descriptor of the plugin
-     */
+    /** The descriptor of the plugin */
     val descriptor: PluginDescriptor
 
-    /**
-     * Create a new instance of [PLUGIN] from [config].
-     */
+    /** Create a new instance of [PLUGIN] from [config]. */
     fun create(config: PluginConfig): PLUGIN
 }
 
-/**
- * A plugin that ORT can use. Each plugin extension point of ORT must inherit from this interface.
- */
+/** A plugin that ORT can use. Each plugin extension point of ORT must inherit from this interface. */
 interface Plugin {
     val descriptor: PluginDescriptor
 }
 
-/**
- * Return a [ServiceLoader] that is capable of loading services of type [T].
- */
+/** Return a [ServiceLoader] that is capable of loading services of type [T]. */
 inline fun <reified T : Any> getLoaderFor(): ServiceLoader<T> = ServiceLoader.load(T::class.java)

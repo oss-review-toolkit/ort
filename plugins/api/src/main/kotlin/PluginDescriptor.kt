@@ -19,34 +19,22 @@
 
 package org.ossreviewtoolkit.plugins.api
 
-/**
- * A descriptor holding the metadata of a plugin.
- */
+/** A descriptor holding the metadata of a plugin. */
 data class PluginDescriptor(
-    /**
-     * The id of the plugin class. Must be unique among all plugins for the same factory class.
-     */
+    /** The id of the plugin class. Must be unique among all plugins for the same factory class. */
     val id: String,
 
-    /**
-     * The display name of the plugin.
-     */
+    /** The display name of the plugin. */
     val displayName: String,
 
-    /**
-     * The short description of the plugin.
-     */
+    /** The short description of the plugin. */
     val summary: String,
 
-    /**
-     * The configuration options supported by the plugin.
-     */
+    /** The configuration options supported by the plugin. */
     val options: List<PluginOption> = emptyList()
 )
 
-/**
- * The supported types of plugin options.
- */
+/** The supported types of plugin options. */
 enum class PluginOptionType(val typeName: String) {
     /** A [Boolean] option. */
     BOOLEAN("Boolean"),
@@ -75,53 +63,33 @@ enum class PluginOptionType(val typeName: String) {
     override fun toString() = typeName
 }
 
-/**
- * A configuration option for a plugin.
- */
+/** A configuration option for a plugin. */
 data class PluginOption(
-    /**
-     * The name of the option. Must be unique among all options of the same plugin.
-     */
+    /** The name of the option. Must be unique among all options of the same plugin. */
     val name: String,
 
-    /**
-     * The description of the option.
-     */
+    /** The description of the option. */
     val description: String,
 
-    /**
-     * The [type][PluginOptionType] of the option.
-     */
+    /** The [type][PluginOptionType] of the option. */
     val type: PluginOptionType,
 
-    /**
-     * The enum type name if [type] is [PluginOptionType.ENUM] or [PluginOptionType.ENUM_LIST], `null` otherwise.
-     */
+    /** The enum type name if [type] is [PluginOptionType.ENUM] or [PluginOptionType.ENUM_LIST], `null` otherwise. */
     val enumType: String?,
 
-    /**
-     * The enum entries if [type] is [PluginOptionType.ENUM] or [PluginOptionType.ENUM_LIST], `null` otherwise.
-     */
+    /** The enum entries if [type] is [PluginOptionType.ENUM] or [PluginOptionType.ENUM_LIST], `null` otherwise. */
     val enumEntries: List<EnumEntry>?,
 
-    /**
-     * The default value of the option, or `null` if the option is required.
-     */
+    /** The default value of the option, or `null` if the option is required. */
     val defaultValue: String?,
 
-    /**
-     * A list of alternative names for the option.
-     */
+    /** A list of alternative names for the option. */
     val aliases: List<String>,
 
-    /**
-     * Whether the option is nullable.
-     */
+    /** Whether the option is nullable. */
     val isNullable: Boolean,
 
-    /**
-     * Whether the option is required.
-     */
+    /** Whether the option is required. */
     val isRequired: Boolean
 )
 
@@ -137,9 +105,7 @@ data class EnumEntry(
     val aliases: List<String>
 )
 
-/**
- * A secret value that should not be printed in logs.
- */
+/** A secret value that should not be printed in logs. */
 @JvmInline
 value class Secret(val value: String) {
     override fun toString() = "***"
