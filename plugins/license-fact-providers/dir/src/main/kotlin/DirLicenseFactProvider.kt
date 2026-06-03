@@ -37,6 +37,10 @@ data class DirLicenseFactProviderConfig(
     val licenseTextDir: String
 )
 
+/**
+ * A license fact provider that reads license information from the default directory. The files must be named after the
+ * SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.
+ */
 @OrtPlugin(
     displayName = "Default Directory License Fact Provider",
     summary = "A license fact provider that reads license information from the default directory.",
@@ -50,11 +54,14 @@ class DefaultDirLicenseFactProvider(descriptor: PluginDescriptor = DefaultDirLic
         )
     )
 
+/**
+ * A license fact provider that reads license information from a local directory. The files must be named after the
+ * SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.
+ */
 @OrtPlugin(
     id = "Dir",
     displayName = "Directory License Fact Provider",
-    summary = "A license fact provider that reads license information from a local directory. The files must be " +
-        "named after the SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.",
+    summary = "A license fact provider that reads license information from a local directory.",
     factory = LicenseFactProviderFactory::class
 )
 open class DirLicenseFactProvider(

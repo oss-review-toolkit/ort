@@ -86,8 +86,8 @@ data class GoModConfig(
 )
 
 /**
- * The [Go Modules](https://go.dev/ref/mod) package manager for Go. Also see the [usage and troubleshooting guide]
- * (https://github.com/golang/go/wiki/Modules).
+ * The [Go Modules](https://go.dev/ref/mod) package manager for Go. Also see the
+ * [usage and troubleshooting guide](https://github.com/golang/go/wiki/Modules).
  *
  * Note: The file `go.sum` is not a lockfile as Go modules already allows for reproducible builds without that file.
  * Thus, no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.

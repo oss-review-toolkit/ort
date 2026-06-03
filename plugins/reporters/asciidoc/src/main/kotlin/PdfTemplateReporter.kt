@@ -58,24 +58,19 @@ data class PdfTemplateReporterConfig(
 )
 
 /**
- * A [Reporter] that creates PDF files using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
- * with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator.
+ * A [Reporter] that creates PDF files using a combination of [Apache Freemarker](https://freemarker.apache.org)
+ * templates and [AsciiDoc](https://asciidoc.org/) with [AsciidoctorJ](https://github.com/asciidoctor/asciidoctorj) as
+ * Java interface and [AsciidoctorJ PDF](https://github.com/asciidoctor/asciidoctorj-pdf) as PDF file generator.
  * For each Freemarker template provided using the options described below, a separate intermediate file is created
  * that can be processed by AsciidoctorJ. If no options are provided, the "disclosure_document" template is used, and if
  * security vulnerability information is available also the "vulnerability_report" template.
  *
  * After the intermediate files are generated, they are processed by AsciidoctorJ PDF.
  * A PDF theme can be handed over to AsciidoctorJ PDF in which properties like fonts or images displayed in the PDF can
- * be adjusted; see the [Theme Guide][5].
+ * be adjusted; see the [Theme Guide](https://docs.asciidoctor.org/pdf-converter/latest/theme/).
  * The path to this theme can be set in the options as described below.
  * Note that only one theme can be set that is used for all given templates. If no theme is given, a default built-in
  * theme of AsciidoctorJ PDF is used.
- *
- * [1]: https://freemarker.apache.org
- * [2]: https://asciidoc.org/
- * [3]: https://github.com/asciidoctor/asciidoctorj
- * [4]: https://github.com/asciidoctor/asciidoctorj-pdf
- * [5]: https://docs.asciidoctor.org/pdf-converter/latest/theme/
  */
 @OrtPlugin(
     displayName = "PDF Template",

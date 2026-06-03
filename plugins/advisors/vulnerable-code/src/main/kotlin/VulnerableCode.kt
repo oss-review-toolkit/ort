@@ -62,7 +62,7 @@ private const val MAX_SUMMARY_LENGTH = 64
 
 /**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
- * [VulnerableCode][https://github.com/aboutcode-org/vulnerablecode] instance.
+ * [VulnerableCode](https://github.com/aboutcode-org/vulnerablecode) instance.
  */
 @OrtPlugin(
     displayName = "VulnerableCode",

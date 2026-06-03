@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCuration
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 
 /**
- * A [PackageCurationProvider] that provides [PackageCuration]s for Spring (https://spring.io/) packages.
+ * A [PackageCurationProvider] that provides [PackageCuration]s for [Spring](https://spring.io/) packages.
  */
 @OrtPlugin(
     displayName = "Spring",

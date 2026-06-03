@@ -52,12 +52,11 @@ data class PlainTextTemplateReporterConfig(
 }
 
 /**
- * A [Reporter] that creates plain text files using [Apache Freemarker][1] templates. For each template provided in the
- * [config], a separate output file is created. If no templates are provided, the "NOTICE_DEFAULT" template is used.
+ * A [Reporter] that creates plain text files using [Apache Freemarker](https://freemarker.apache.org) templates. For
+ * each template provided in the [config], a separate output file is created. If no templates are provided, the
+ * "NOTICE_DEFAULT" template is used.
  * The name of the template id or template path (without extension) is used for the generated file, so be careful to not
  * use two different templates with the same name.
- *
- * [1]: https://freemarker.apache.org
  */
 @OrtPlugin(
     displayName = "Plain Text Template",
