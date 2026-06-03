@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
-import OrtDependency
+import OrtComponent
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
@@ -332,9 +332,9 @@ private fun createDependency(
     artifact: String,
     version: String,
     path: String? = null,
-    dependencies: List<OrtDependency> = emptyList()
-): OrtDependency {
-    val dependency = mockk<OrtDependency>()
+    dependencies: List<OrtComponent> = emptyList()
+): OrtComponent {
+    val dependency = mockk<OrtComponent>()
     every { dependency.groupId } returns group
     every { dependency.artifactId } returns artifact
     every { dependency.version } returns version
@@ -352,7 +352,7 @@ private fun createDependency(
  * Create a [DependencyGraphBuilder] equipped with a [GradleDependencyHandler] that is used by the test cases in
  * this class.
  */
-private fun createGraphBuilder(): DependencyGraphBuilder<OrtDependency> {
+private fun createGraphBuilder(): DependencyGraphBuilder<OrtComponent> {
     val dependencyHandler = GradleDependencyHandler(PROJECT_TYPE, createMavenSupport())
     dependencyHandler.repositories = remoteRepositories
     return DependencyGraphBuilder(dependencyHandler)
@@ -382,9 +382,9 @@ private fun createMavenSupport(): MavenSupport {
 }
 
 /**
- * Returns an [Identifier] for this [OrtDependency].
+ * Returns an [Identifier] for this [OrtComponent].
  */
-private fun OrtDependency.toId() = Identifier(getIdentifierType(PROJECT_TYPE), groupId, artifactId, version)
+private fun OrtComponent.toId() = Identifier(getIdentifierType(PROJECT_TYPE), groupId, artifactId, version)
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
@@ -400,7 +400,7 @@ private fun Collection<PackageReference>.identifiers(): List<Identifier> = map {
 /**
  * Find the package corresponding to the given [dependency] in this collection.
  */
-private fun Collection<PackageReference>.findDependency(dependency: OrtDependency): PackageReference =
+private fun Collection<PackageReference>.findDependency(dependency: OrtComponent): PackageReference =
     findId(dependency.toId())
 
 /**
@@ -412,7 +412,7 @@ private fun Collection<PackageReference>.findId(id: Identifier): PackageReferenc
 /**
  * Check whether this [PackageReference] contains exactly the given [dependencies][expectedDependencies].
  */
-private fun PackageReference.checkDependencies(vararg expectedDependencies: OrtDependency): Set<PackageReference> {
+private fun PackageReference.checkDependencies(vararg expectedDependencies: OrtComponent): Set<PackageReference> {
     val ids = expectedDependencies.map { it.toId() }
     dependencies.identifiers() should containExactlyInAnyOrder(ids)
     return dependencies

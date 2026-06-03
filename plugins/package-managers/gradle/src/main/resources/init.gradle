@@ -66,17 +66,17 @@ interface OrtDependencyTreeModel {
 
 interface OrtConfiguration {
     String getName()
-    List<OrtDependency> getDependencies()
+    List<OrtComponent> getDependencies()
 }
 
-interface OrtDependency {
+interface OrtComponent {
     String getGroupId()
     String getArtifactId()
     String getVersion()
     String getClassifier()
     String getExtension()
     Map<String, Map<String, String>> getVariants()
-    List<OrtDependency> getDependencies()
+    List<OrtComponent> getDependencies()
     String getError()
     String getWarning()
     String getPomFile()
@@ -107,19 +107,19 @@ class OrtDependencyTreeModelImpl implements OrtDependencyTreeModel, Serializable
 @TupleConstructor
 class OrtConfigurationImpl implements OrtConfiguration, Serializable {
     String name
-    List<OrtDependency> dependencies
+    List<OrtComponent> dependencies
 }
 
 @ToString(includeNames = true)
 @TupleConstructor
-class OrtDependencyImpl implements OrtDependency, Serializable {
+class OrtComponentImpl implements OrtComponent, Serializable {
     String groupId = ''
     String artifactId = ''
     String version = ''
     String classifier = ''
     String extension = ''
     Map<String, Map<String, String>> variants = [:]
-    List<OrtDependency> dependencies = []
+    List<OrtComponent> dependencies = []
     String error
     String warning
     String pomFile
@@ -162,15 +162,15 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
 
     private static class OrtDependencyTreeModelBuilder implements ToolingModelBuilder {
         /**
-         * Stores the OrtDependency objects created by this builder, so that they can be reused when the same
+         * Stores the OrtComponent objects created by this builder, so that they can be reused when the same
          * dependency is encountered again in the dependency graph. As dependencies can occur many times in large
          * dependency graphs, de-duplicating these objects can save a significant amount of memory.
          *
          * Note, however, that packages can be referenced in the graph multiple times with a different set of
-         * dependencies. Therefore, for a package with a given identifier, there can be different OrtDependency
+         * dependencies. Therefore, for a package with a given identifier, there can be different OrtComponent
          * objects; hence the values of the map are lists.
          */
-        private final Map<String, List<OrtDependency>> dependencies = new HashMap<>()
+        private final Map<String, List<OrtComponent>> dependencies = new HashMap<>()
 
         /**
          * All root projects of included builds, mapped by included build name.
@@ -232,7 +232,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                                 "available: ${collectCauses(e)}")
                     }
 
-                    List<OrtDependency> dependencies = result.getRoot().getDependencies().findResults {
+                    List<OrtComponent> dependencies = result.getRoot().getDependencies().findResults {
                         fetchDependency(it, project, resolvedArtifacts, [] as Set<String>)
                     }
 
@@ -273,17 +273,17 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
         }
 
         /**
-         * Returns an OrtDependency for the given DependencyResult. The function checks whether there is already an
-         * OrtDependency instance in the cache compatible with the result. If this is not the case, parseDependency()
+         * Returns an OrtComponent for the given DependencyResult. The function checks whether there is already an
+         * OrtComponent instance in the cache compatible with the result. If this is not the case, parseDependency()
          * is called to generate a new instance.
          *
          * @param dependencyResult represents the package to be processed
          * @param project the current project
          * @param resolvedArtifacts the set of resolved artifacts
          * @param visited a set with dependency nodes already visited to detect cycles in the graph
-         * @return the OrtDependency representing this result
+         * @return the OrtComponent representing this result
          */
-        private OrtDependency fetchDependency(DependencyResult dependencyResult, Project project,
+        private OrtComponent fetchDependency(DependencyResult dependencyResult, Project project,
                                            Set<ResolvedArtifact> resolvedArtifacts, Set<String> visited) {
             // Ignore version constraints, because they are not real dependencies but only document why a certain
             // version of their parent was chosen.
@@ -330,19 +330,19 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
         }
 
         /**
-         * Creates a new OrtDependency object to represent the given DependencyResult. The different types of
+         * Creates a new OrtComponent object to represent the given DependencyResult. The different types of
          * dependencies are evaluated. The (transitive) dependencies of this dependency are processed recursively.
          *
          * @param dependencyResult represents the package to be processed
          * @param project the current project
          * @param resolvedArtifacts the set of resolved artifacts
          * @param parents a set with dependency nodes already visited to detect cycles in the graph
-         * @return the newly created OrtDependency
+         * @return the newly created OrtComponent
          */
-        private OrtDependency parseDependency(DependencyResult dependencyResult, Project project,
+        private OrtComponent parseDependency(DependencyResult dependencyResult, Project project,
                                            Set<ResolvedArtifact> resolvedArtifacts, Set<String> parents) {
             if (dependencyResult instanceof ResolvedDependencyResult) {
-                List<OrtDependency> dependencies = dependencyResult.selected.dependencies.findResults { dependency ->
+                List<OrtComponent> dependencies = dependencyResult.selected.dependencies.findResults { dependency ->
                     // Do not follow constraints, because they are not real dependencies but only document why a certain
                     // version of their parent was chosen.
                     // Do not follow circular dependencies, these can exist for project dependencies.
@@ -397,12 +397,12 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                     def classifier = artifact?.classifier ?: ''
                     def extension = artifact?.extension ?: ''
 
-                    return new OrtDependencyImpl(id.group, id.module, id.version, classifier, extension, [:], dependencies,
+                    return new OrtComponentImpl(id.group, id.module, id.version, classifier, extension, [:], dependencies,
                             error, warning, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     if (isCurrentBuild(id.build, project) || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
                         def dependencyProject = project.rootProject.findProject(id.projectPath)
-                        return new OrtDependencyImpl(groupId: dependencyProject.group.toString(),
+                        return new OrtComponentImpl(groupId: dependencyProject.group.toString(),
                                 artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
                                 dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
                     } else {
@@ -412,7 +412,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
                         def dependencyProject = id.projectPath == ":" ? includedProject
                                 : includedProject.findProject(id.projectName)
 
-                        return new OrtDependencyImpl(groupId: dependencyProject.group.toString(),
+                        return new OrtComponentImpl(groupId: dependencyProject.group.toString(),
                                 artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
                                 dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
                     }
@@ -480,7 +480,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
          * @param visited stores the name of already visited dependencies to deal with cycles
          * @return a flag whether the dependency trees are equal
          */
-        private boolean dependencyTreeEquals(OrtDependency dependency, DependencyResult dependencyResult,
+        private boolean dependencyTreeEquals(OrtComponent dependency, DependencyResult dependencyResult,
                                                     Project project, Set<String> visited) {
             def displayName = dependencyResult.requested.displayName
             if (displayName in visited) {
@@ -501,7 +501,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
 
             return dependencyMap.every { entry ->
                 def matchingResult = resultMap[entry.key]
-                matchingResult != null && dependencyTreeEquals(entry.value as OrtDependency,
+                matchingResult != null && dependencyTreeEquals(entry.value as OrtComponent,
                         matchingResult as DependencyResult, project, nextVisited)
             }
         }
@@ -578,12 +578,12 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
         }
 
         /**
-         * Generates a unique identifier for the given OrtDependency.
+         * Generates a unique identifier for the given OrtComponent.
          *
-         * @param dependency the OrtDependency
-         * @return the identifier for this OrtDependency
+         * @param dependency the OrtComponent
+         * @return the identifier for this OrtComponent
          */
-        private static String identifierFor(OrtDependency dependency) {
+        private static String identifierFor(OrtComponent dependency) {
             return toIdentifier(dependency.groupId, dependency.artifactId, dependency.version)
         }
 
@@ -598,10 +598,10 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
          * @param warning an optional warning message
          * @return the newly created dependency representation
          */
-        private static OrtDependencyImpl dependencyFromDisplayName(String displayName, List<OrtDependency> dependencies,
-                                                        String error, String warning) {
+        private static OrtComponentImpl dependencyFromDisplayName(String displayName, List<OrtComponent> dependencies,
+                                                                  String error, String warning) {
             def coordinates = displayNameToCoordinates(displayName)
-            return new OrtDependencyImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
+            return new OrtComponentImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
                     dependencies: dependencies, error: error?.toString(), warning: warning?.toString())
         }
 
