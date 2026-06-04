@@ -77,7 +77,6 @@ class OrtPackageNaming(config: Config) : Rule(
         val projectName = when (projectDir) {
             "detekt-rules" -> ".detekt"
             "fossid-webapp" -> ".fossid"
-            "github-graphql" -> ".github"
             "cli-helper" -> ".helper"
             else -> ".${projectDir.replace("-", "")}"
         }
