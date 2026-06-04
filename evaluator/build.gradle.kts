@@ -35,7 +35,7 @@ dependencies {
     api("org.jetbrains.kotlin:kotlin-scripting-common")
     api(libs.kotlinx.serialization.core)
     api(projects.model)
-    api(projects.utils.scriptingUtils)
+    api(projects.utils.scriptUtils)
     api(projects.utils.spdxExpressionUtils)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")

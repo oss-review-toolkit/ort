@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.scripting
+package org.ossreviewtoolkit.utils.script
 
 import java.security.MessageDigest
 

@@ -24,7 +24,7 @@ import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.defaultImports
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
+import org.ossreviewtoolkit.utils.script.OrtScriptCompilationConfiguration
 
 @KotlinScript(
     displayName = "ORT Notifications Script",
