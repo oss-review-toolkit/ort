@@ -24,6 +24,7 @@ plugins {
 
 dependencies {
     api("org.jetbrains.kotlin:kotlin-scripting-common")
+    api(projects.model)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")

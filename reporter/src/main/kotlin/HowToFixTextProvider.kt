@@ -28,6 +28,7 @@ import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromT
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.utils.script.HowToFixTextProviderScriptTemplate
 import org.ossreviewtoolkit.utils.script.ScriptRunner
 
 /**

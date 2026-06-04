@@ -26,7 +26,6 @@ plugins {
 }
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-scripting-common")
     api(projects.model)
     api(projects.plugins.api)
     api(projects.plugins.licenseFactProviders.licenseFactProviderApi)
@@ -37,4 +36,6 @@ dependencies {
     funTestImplementation(testFixtures(project))
 
     testFixturesImplementation(projects.utils.testUtils)
+
+    kotlinScriptDef(projects.utils.scriptUtils)
 }

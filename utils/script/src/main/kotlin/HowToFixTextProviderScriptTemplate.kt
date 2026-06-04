@@ -17,25 +17,24 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.notifier
+package org.ossreviewtoolkit.utils.script
 
 import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.defaultImports
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.utils.script.OrtScriptCompilationConfiguration
 
 @KotlinScript(
-    displayName = "ORT Notifications Script",
-    fileExtension = "notifications.kts",
-    compilationConfiguration = NotificationsScriptCompilationConfiguration::class
+    displayName = "ORT How-To-Fix-Text-Provider Script",
+    fileExtension = "how-to-fix-text-provider.kts",
+    compilationConfiguration = HowToFixTextProviderScriptCompilationConfiguration::class
 )
-open class NotificationsScriptTemplate(
+open class HowToFixTextProviderScriptTemplate(
     val ortResult: OrtResult
 )
 
-class NotificationsScriptCompilationConfiguration : ScriptCompilationConfiguration(
+class HowToFixTextProviderScriptCompilationConfiguration : ScriptCompilationConfiguration(
     OrtScriptCompilationConfiguration(),
     body = {
         defaultImports(
@@ -43,7 +42,7 @@ class NotificationsScriptCompilationConfiguration : ScriptCompilationConfigurati
             "org.ossreviewtoolkit.model.config.*",
             "org.ossreviewtoolkit.model.licenses.*",
             "org.ossreviewtoolkit.model.utils.*",
-            "org.ossreviewtoolkit.notifier.modules.*"
+            "org.ossreviewtoolkit.reporter.HowToFixTextProvider"
         )
     }
 )
