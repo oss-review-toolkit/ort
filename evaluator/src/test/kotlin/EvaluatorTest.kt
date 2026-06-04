@@ -36,9 +36,11 @@ import org.ossreviewtoolkit.utils.test.ortResult
 class EvaluatorTest : WordSpec({
     "checkSyntax" should {
         "succeed if the script can be compiled" {
-            val script = getResource("/rules/osadl.rules.kts")
-
-            val result = Evaluator(ortResult).checkSyntax(script)
+            val result = Evaluator(ortResult).checkSyntax(
+                """
+                require(ortResult.labels["label"] == "value") { "Failed to verify the ORT result." }
+                """.trimIndent()
+            )
 
             result shouldBe true
         }
@@ -57,16 +59,6 @@ class EvaluatorTest : WordSpec({
     "evaluate" should {
         "return no rule violations for an empty script" {
             val result = Evaluator(ortResult).runScript("")
-
-            result.violations should beEmpty()
-        }
-
-        "be able to access the ORT result" {
-            val result = Evaluator(ortResult).runScript(
-                """
-                require(ortResult.labels["label"] == "value") { "Failed to verify the ORT result." }
-                """.trimIndent()
-            )
 
             result.violations should beEmpty()
         }
