@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.evaluator
+package org.ossreviewtoolkit.utils.script
 
 import java.time.Instant
 
@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.utils.script.OrtScriptCompilationConfiguration
 
 @KotlinScript(
     displayName = "ORT Evaluator Rules Script",

@@ -23,14 +23,12 @@ plugins {
 }
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-scripting-common")
     api(libs.jiraRestClient.api)
     api(projects.model)
     api(projects.utils.scriptUtils)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(libs.jakartaMail)
-    implementation(libs.jerseyCommon)
 
     implementation(libs.jiraRestClient.app) {
         exclude("org.apache.logging.log4j", "log4j-slf4j2-impl")
@@ -39,7 +37,11 @@ dependencies {
 
     implementation(projects.utils.commonUtils)
 
+    runtimeOnly(libs.jerseyCommon)
+
     testImplementation(libs.greenmail)
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
+
+    kotlinScriptDef(projects.utils.scriptUtils)
 }

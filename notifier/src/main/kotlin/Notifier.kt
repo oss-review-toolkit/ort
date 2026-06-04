@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.notifier.modules.JiraNotifier
 import org.ossreviewtoolkit.notifier.modules.MailNotifier
+import org.ossreviewtoolkit.utils.script.NotificationsScriptTemplate
 import org.ossreviewtoolkit.utils.script.ScriptRunner
 
 class Notifier(

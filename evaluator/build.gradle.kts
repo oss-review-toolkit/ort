@@ -32,7 +32,6 @@ plugins {
 }
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-scripting-common")
     api(libs.kotlinx.serialization.core)
     api(projects.model)
     api(projects.utils.scriptUtils)
@@ -50,6 +49,8 @@ dependencies {
 
     testImplementation(libs.mockk)
     testImplementation(projects.utils.testUtils)
+
+    kotlinScriptDef(projects.utils.scriptUtils)
 }
 
 tasks.register<Download>("updateOsadlMatrix") {
