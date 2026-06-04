@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
+import org.ossreviewtoolkit.utils.script.OrtScriptCompilationConfiguration
 
 @KotlinScript(
     displayName = "ORT Evaluator Rules Script",

@@ -28,7 +28,7 @@ import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromT
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.utils.scripting.ScriptRunner
+import org.ossreviewtoolkit.utils.script.ScriptRunner
 
 /**
  * Provides how-to-fix texts in Markdown format for any given [Issue].

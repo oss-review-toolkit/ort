@@ -26,7 +26,7 @@ dependencies {
     api("org.jetbrains.kotlin:kotlin-scripting-common")
     api(libs.jiraRestClient.api)
     api(projects.model)
-    api(projects.utils.scriptingUtils)
+    api(projects.utils.scriptUtils)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(libs.jakartaMail)
