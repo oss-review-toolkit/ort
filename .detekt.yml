@@ -83,8 +83,6 @@ style:
     active: false
   MagicNumber:
     active: false
-  MaxLineLength:
-    excludes: ["**/clients/github-graphql/build/generated/**"]
   ReturnCount:
     active: false
   SpacingAfterPackageAndImports:
@@ -110,6 +108,5 @@ ORT:
   OrtImportOrder:
     active: true
     autoCorrect: true
-    excludes: ["**/clients/github-graphql/build/generated/**"]
   OrtPackageNaming:
     active: true

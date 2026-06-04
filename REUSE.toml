@@ -81,11 +81,6 @@ SPDX-FileCopyrightText = "2020 The ORT Project Copyright Holders <https://github
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
-path = "clients/github-graphql/src/main/resources/**"
-SPDX-FileCopyrightText = "2021 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>"
-SPDX-License-Identifier = "Apache-2.0"
-
-[[annotations]]
 path = ".env.versions"
 SPDX-FileCopyrightText = "2024 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>"
 SPDX-License-Identifier = "Apache-2.0"
@@ -144,11 +139,6 @@ SPDX-License-Identifier = "Apache-2.0"
 path = "gradle/**"
 SPDX-FileCopyrightText = "2007-2020 The original author or authors <info@gradle.com>"
 SPDX-License-Identifier = "Apache-2.0"
-
-[[annotations]]
-path = "clients/github-graphql/src/main/resources/schema.graphql"
-SPDX-FileCopyrightText = "2017 Gregor Martynus"
-SPDX-License-Identifier = "MIT"
 
 [[annotations]]
 path = "clients/osv/src/test/resources/vulnerability/examples/**"
