@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 import org.ossreviewtoolkit.utils.test.getResource
 import org.ossreviewtoolkit.utils.test.ortResult
-import org.ossreviewtoolkit.utils.test.readResource
 
 class EvaluatorTest : WordSpec({
     "checkSyntax" should {
@@ -122,6 +121,8 @@ class EvaluatorTest : WordSpec({
     }
 
     "OSADL compliance rules" should {
+        val script = getResource("/rules/osadl.rules.kts")
+
         "return no violation for compatible licenses" {
             val compatibleOrtResult = ortResult {
                 project("Maven:group:project-foo:1") {
@@ -148,8 +149,6 @@ class EvaluatorTest : WordSpec({
                     }
                 }
             }
-
-            val script = readResource("/rules/osadl.rules.kts")
 
             val result = Evaluator(compatibleOrtResult).runScript(script)
 
@@ -183,8 +182,6 @@ class EvaluatorTest : WordSpec({
                 }
             }
 
-            val script = readResource("/rules/osadl.rules.kts")
-
             val result = Evaluator(incompatibleOrtResult).runScript(script)
 
             result.violations.map { it.message } should containExactlyInAnyOrder(
@@ -216,8 +213,6 @@ class EvaluatorTest : WordSpec({
                     }
                 }
             }
-
-            val script = readResource("/rules/osadl.rules.kts")
 
             val result = Evaluator(incompatibleOrtResult).runScript(script)
 
