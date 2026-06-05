@@ -931,11 +931,11 @@
           {}
         ],
         "responses": {
-          "201": {
+          "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PackageV3"
+                  "$ref": "#/components/schemas/PaginatedPurlList"
                 }
               }
             },
@@ -1911,11 +1911,8 @@
             "maxLength": 50
           },
           "scoring_system": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ScoringSystemEnum"
-              }
-            ],
+            "type": "string",
+            "nullable": true,
             "description": "Identifier for the scoring system used. Available choices are: cvssv2: CVSSv2 Base Score,\ncvssv3: CVSSv3 Base Score,\ncvssv3.1: CVSSv3.1 Base Score,\ncvssv4: CVSSv4 Base Score,\nrhbs: RedHat Bugzilla severity,\nrhas: RedHat Aggregate severity,\narchlinux: Archlinux Vulnerability Group Severity,\ncvssv3.1_qr: CVSSv3.1 Qualitative Severity Rating,\ngeneric_textual: Generic textual severity rating,\napache_httpd: Apache Httpd Severity,\napache_tomcat: Apache Tomcat Severity,\nepss: Exploit Prediction Scoring System,\nssvc: Stakeholder-Specific Vulnerability Categorization,\nopenssl: OpenSSL Severity,\nubuntu-priority: Ubuntu Priority "
           },
           "scoring_elements": {
@@ -1930,14 +1927,7 @@
             "nullable": true,
             "description": "UTC Date of publication of the vulnerability severity"
           }
-        },
-        "required": [
-          "published_at",
-          "scoring_elements",
-          "scoring_system",
-          "url",
-          "value"
-        ]
+        }
       },
       "AdvisoryV3": {
         "type": "object",
@@ -2098,11 +2088,17 @@
             "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
           },
           "related_ssvc_trees": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedSSVCTree"
+            },
             "readOnly": true
           },
           "fixed_by_packages": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "readOnly": true
           }
         },
@@ -2613,9 +2609,7 @@
         },
         "required": [
           "affected_by_vulnerabilities",
-          "affected_by_vulnerabilities_url",
           "fixing_vulnerabilities",
-          "fixing_vulnerabilities_url",
           "latest_non_vulnerable_version",
           "next_non_vulnerable_version",
           "purl",
@@ -2853,6 +2847,34 @@
             }
           }
         }
+      },
+      "PaginatedPurlList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "next": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "previous": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "count",
+          "results"
+        ]
       },
       "PaginatedVulnerabilityList": {
         "type": "object",
@@ -3092,6 +3114,32 @@
             "description": "Number hours before pipeline execution is forcefully terminated."
           }
         }
+      },
+      "RelatedSSVCTree": {
+        "type": "object",
+        "properties": {
+          "vector": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "source_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision",
+          "options",
+          "source_url",
+          "vector"
+        ]
       },
       "ScoringSystemEnum": {
         "enum": [
