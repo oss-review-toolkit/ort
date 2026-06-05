@@ -65,7 +65,7 @@
         "version": "5.2.5"
       },
       "source_hash": "8b917844b6bb13a7a377d091cac9e231",
-      "status": "pending",
+      "status": "identified",
       "url": "https://mvnrepository.com/artifact/org.graylog.repackaged/semver4j",
       "url_hash": "9b0606cb3068e838edb89aeb2158d3be",
       "vendor": "org.graylog.repackaged",
@@ -147,7 +147,7 @@
         "version": "5.2.5"
       },
       "source_hash": "a51addd1e051f8ff4feb0fc879726e2c",
-      "status": "pending",
+      "status": "identified",
       "url": "https://github.com/vdurmont/semver4j",
       "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
       "vendor": "vdurmont",
@@ -200,7 +200,7 @@
         "version": "5.2.5"
       },
       "source_hash": "72189e2d96994bde6483571eb6bf1825",
-      "status": "pending",
+      "status": "identified",
       "url": "https://github.com/vdurmont/semver4j",
       "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
       "vendor": "vdurmont",
@@ -241,7 +241,7 @@
         "version": "5.2.5"
       },
       "source_hash": "8fa5ef7baab5071e49b2393905231420",
-      "status": "pending",
+      "status": "identified",
       "url": "https://github.com/vdurmont/semver4j",
       "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
       "vendor": "vdurmont",
@@ -282,7 +282,7 @@
         "version": "5.2.5"
       },
       "source_hash": "7069133e87c482fe935a7a54ca5b5a5d",
-      "status": "pending",
+      "status": "identified",
       "url": "https://github.com/vdurmont/semver4j",
       "url_hash": "7cc91d1fce4275d9ef74fb5ae1bd4f63",
       "vendor": "vdurmont",
@@ -323,7 +323,7 @@
         "version": "5.2.5"
       },
       "source_hash": "5e9fbaa3bde70a3a5a077fe6d65e36de",
-      "status": "pending",
+      "status": "identified",
       "url": "https://github.com/vdurmont/semver4j",
       "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
       "vendor": "vdurmont",
@@ -364,7 +364,7 @@
         "version": "5.2.5"
       },
       "source_hash": "ef32d9061afb0be4d07285813321e306",
-      "status": "pending",
+      "status": "identified",
       "url": "https://github.com/vdurmont/semver4j",
       "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
       "vendor": "vdurmont",
@@ -405,7 +405,7 @@
         "version": "5.2.5"
       },
       "source_hash": "4498810681d4cbdc111ddbf4015b351e",
-      "status": "pending",
+      "status": "identified",
       "url": "https://github.com/vdurmont/semver4j",
       "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
       "vendor": "vdurmont",

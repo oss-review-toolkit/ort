@@ -54,32 +54,22 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
     val snippetFindings = mutableSetOf<SnippetFinding>()
 
     results.forEach { result ->
-        result.fileDetails.forEach { details ->
+        result.fileDetails.filterNot { it.matchType == MatchType.none }.forEach { details ->
+            val localFile = requireNotNull(result.filePath)
+
             when (details.matchType) {
-                MatchType.file -> {
-                    val localFile = requireNotNull(result.filePath)
-                    logger.info { "File '$localFile' was matched completely, not including in snippet findings." }
-                    licenseFindings += getLicenseFindings(details, localFile)
-                    copyrightFindings += getCopyrightFindings(details, localFile)
-                }
+                MatchType.file -> logger.info { "File '$localFile' was matched fully." }
+                MatchType.snippet -> logger.info { "File '$localFile' was matched partially." }
+                else -> logger.warn { "Unknown match type '${details.matchType}'." }
+            }
 
-                MatchType.snippet -> {
-                    val localFile = requireNotNull(result.filePath)
-                    if (details.status == StatusType.pending) {
-                        logger.info { "Adding snippet for '$localFile' as identification is pending." }
-                        snippetFindings += createSnippetFindings(details, localFile)
-                    } else {
-                        logger.info { "File '$localFile' was identified, not including in snippet findings." }
-                        licenseFindings += getLicenseFindings(details, result.filePath)
-                        copyrightFindings += getCopyrightFindings(details, result.filePath)
-                    }
-                }
-
-                MatchType.none -> {
-                    // Skip if no details are available.
-                }
-
-                else -> throw IllegalArgumentException("Unsupported file match type '${details.matchType}'.")
+            if (details.status == StatusType.pending) {
+                logger.info { "Adding snippet for '$localFile' as identification is pending." }
+                snippetFindings += createSnippetFindings(details, localFile)
+            } else {
+                logger.info { "File '$localFile' was identified, not including in snippet findings." }
+                licenseFindings += getLicenseFindings(details, result.filePath)
+                copyrightFindings += getCopyrightFindings(details, result.filePath)
             }
         }
     }
@@ -204,12 +194,13 @@ private fun createSnippetFindings(details: ScanFileDetails, localFilePath: Strin
  * Split [lineRanges] returned by SCANOSS such as "32-105,117-199" into [TextLocation]s for the given [file].
  */
 private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
-    lineRanges.split(',').map { lineRange ->
-        val splitLines = lineRange.split('-')
+    lineRanges.split(',').map {
+        when {
+            // TODO: Try to get the line range also for full file matches.
+            it == "all" -> TextLocation(file, TextLocation.UNKNOWN_LINE)
 
-        when (splitLines.size) {
-            1 -> TextLocation(file, splitLines.first().toInt())
-            2 -> TextLocation(file, splitLines.first().toInt(), splitLines.last().toInt())
-            else -> throw IllegalArgumentException("Unsupported line range '$lineRange'.")
+            '-' in it -> TextLocation(file, it.substringBefore('-').toInt(), it.substringAfter('-').toInt())
+
+            else -> TextLocation(file, it.toInt())
         }
     }
