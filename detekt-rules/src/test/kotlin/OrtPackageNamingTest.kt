@@ -151,7 +151,7 @@ class OrtPackageNamingTest : WordSpec({
 })
 
 private fun TestConfiguration.createFile(dir: String, content: String): KtFile {
-    val projectDir = tempdir().apply { resolve("build.gradle.kts").createNewFile() }
+    val projectDir = tempdir().apply { resolve("settings.gradle.kts").createNewFile() }
     val parent = projectDir.resolve(dir).safeMkdirs()
     val file = parent.resolve("Test.kt").apply { writeText(content) }
     return compileForTest(file.toPath())
