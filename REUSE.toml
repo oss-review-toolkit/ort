@@ -182,6 +182,12 @@ SPDX-License-Identifier = "Apache-2.0"
 precedence = "override"
 
 [[annotations]]
+path = "plugins/scanners/scanoss/src/funTest/resources/unoconv*"
+SPDX-FileCopyrightText = "2007 Dag Wieers <dag@wieers.com>"
+SPDX-License-Identifier = "GPL-2.0-only"
+precedence = "override"
+
+[[annotations]]
 path = "reporter/src/main/resources/prismjs/**"
 SPDX-FileCopyrightText = "2012 Lea Verou"
 SPDX-License-Identifier = "MIT"
