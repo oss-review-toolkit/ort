@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spdx
+package org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile
 
 import java.io.File
 
@@ -49,17 +49,17 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxDocumentCache
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocument
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.extractScopeFromExternalReferences
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.isExternalDocumentReferenceId
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.locateCpe
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.locateExternalReference
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.mapNotPresentToEmpty
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.projectPackage
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.toIdentifier
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.toPackage
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.wrapPresentInSet
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.SpdxDocumentCache
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.SpdxResolvedDocument
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.extractScopeFromExternalReferences
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.isExternalDocumentReferenceId
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.locateCpe
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.locateExternalReference
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.mapNotPresentToEmpty
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.projectPackage
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.toIdentifier
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.toPackage
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.wrapPresentInSet
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
@@ -48,7 +48,7 @@ import java.net.URI
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.SpdxDocumentFileFactory
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.SpdxDocumentFileFactory
 import org.ossreviewtoolkit.utils.common.calculateHash
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
