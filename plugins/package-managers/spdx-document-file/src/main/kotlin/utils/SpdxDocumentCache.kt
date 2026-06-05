@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils
 
 import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.SpdxDocumentFile
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.SpdxDocumentFile
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 

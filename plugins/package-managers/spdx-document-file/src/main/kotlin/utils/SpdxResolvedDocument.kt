@@ -19,7 +19,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils
 
 import java.io.File
 import java.net.URI
@@ -30,8 +30,8 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.SpdxDocumentFile
-import org.ossreviewtoolkit.plugins.packagemanagers.spdx.SpdxDocumentFileFactory
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.SpdxDocumentFile
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.SpdxDocumentFileFactory
 import org.ossreviewtoolkit.utils.authentication.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively

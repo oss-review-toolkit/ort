@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should

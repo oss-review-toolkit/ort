@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
+package org.ossreviewtoolkit.plugins.packagemanagers.ortprojectfile
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty as beEmptyCollection

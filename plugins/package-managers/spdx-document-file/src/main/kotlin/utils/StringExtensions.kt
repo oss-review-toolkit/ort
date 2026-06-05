@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.common.collapseWhitespace

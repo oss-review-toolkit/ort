@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
+package org.ossreviewtoolkit.plugins.packagemanagers.ortprojectfile
 
 import com.charleskorn.kaml.Yaml
 

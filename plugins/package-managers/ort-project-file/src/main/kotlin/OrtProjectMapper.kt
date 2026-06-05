@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.ortproject
+package org.ossreviewtoolkit.plugins.packagemanagers.ortprojectfile
 
 import java.io.File
 
@@ -39,9 +39,9 @@ import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.utils.toIdentifier
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Dependency
-import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.SourceArtifact
-import org.ossreviewtoolkit.plugins.packagemanagers.ortproject.OrtProject.Vcs
+import org.ossreviewtoolkit.plugins.packagemanagers.ortprojectfile.OrtProject.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.ortprojectfile.OrtProject.SourceArtifact
+import org.ossreviewtoolkit.plugins.packagemanagers.ortprojectfile.OrtProject.Vcs
 
 private const val DEFAULT_SCOPE_NAME = "unnamed"
 private const val PROJECT_TYPE = "OrtProjectFile"
