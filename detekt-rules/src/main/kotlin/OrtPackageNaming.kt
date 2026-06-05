@@ -51,7 +51,7 @@ class OrtPackageNaming(config: Config) : Rule(
 
         // TODO: Find a better way to determine the project path. Unfortunately, `KtFile.project.basePath` is null.
         projectPath = generateSequence(root.absolutePath()) { it.parent }.find {
-            it.resolve("build.gradle.kts").isRegularFile()
+            it.resolve("settings.gradle.kts").isRegularFile()
         }
     }
 
