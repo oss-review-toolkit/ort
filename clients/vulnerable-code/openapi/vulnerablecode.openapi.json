@@ -52,11 +52,11 @@
           {}
         ],
         "responses": {
-          "201": {
+          "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PackageV3"
+                  "$ref": "#/components/schemas/PaginatedPackageV3List"
                 }
               }
             },
@@ -100,11 +100,11 @@
           {}
         ],
         "responses": {
-          "201": {
+          "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AdvisoryV3"
+                  "$ref": "#/components/schemas/PaginatedAdvisoryV3List"
                 }
               }
             },
@@ -381,12 +381,7 @@
             "maxLength": 50
           },
           "scoring_system": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ScoringSystemEnum"
-              }
-            ],
-            "description": "Identifier for the scoring system used. Available choices are: cvssv2: CVSSv2 Base Score,\ncvssv3: CVSSv3 Base Score,\ncvssv3.1: CVSSv3.1 Base Score,\ncvssv4: CVSSv4 Base Score,\nrhbs: RedHat Bugzilla severity,\nrhas: RedHat Aggregate severity,\narchlinux: Archlinux Vulnerability Group Severity,\ncvssv3.1_qr: CVSSv3.1 Qualitative Severity Rating,\ngeneric_textual: Generic textual severity rating,\napache_httpd: Apache Httpd Severity,\napache_tomcat: Apache Tomcat Severity,\nepss: Exploit Prediction Scoring System,\nssvc: Stakeholder-Specific Vulnerability Categorization,\nopenssl: OpenSSL Severity,\nubuntu-priority: Ubuntu Priority "
+            "$ref": "#/components/schemas/ScoringSystemEnum"
           },
           "scoring_elements": {
             "type": "string",
@@ -402,11 +397,7 @@
           }
         },
         "required": [
-          "published_at",
-          "scoring_elements",
-          "scoring_system",
-          "url",
-          "value"
+          "scoring_system"
         ]
       },
       "AdvisoryV3": {
@@ -477,7 +468,10 @@
             "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
           },
           "related_ssvc_trees": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedSSVCTree"
+            },
             "readOnly": true
           }
         },
@@ -579,11 +573,17 @@
             "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
           },
           "related_ssvc_trees": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedSSVCTree"
+            },
             "readOnly": true
           },
           "fixed_by_packages": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "readOnly": true
           }
         },
@@ -638,44 +638,120 @@
             "type": "string"
           },
           "affected_by_vulnerabilities": {
-            "type": "string",
-            "readOnly": true
-          },
-          "affected_by_vulnerabilities_url": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageVulnerabilityV3"
+            },
             "readOnly": true
           },
           "fixing_vulnerabilities": {
-            "type": "string",
-            "readOnly": true
-          },
-          "fixing_vulnerabilities_url": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageVulnerabilityV3"
+            },
             "readOnly": true
           },
           "next_non_vulnerable_version": {
             "type": "string",
+            "nullable": true,
             "readOnly": true
           },
           "latest_non_vulnerable_version": {
             "type": "string",
+            "nullable": true,
             "readOnly": true
           },
           "risk_score": {
             "type": "number",
             "format": "double",
+            "nullable": true,
             "readOnly": true
           }
         },
         "required": [
           "affected_by_vulnerabilities",
-          "affected_by_vulnerabilities_url",
           "fixing_vulnerabilities",
-          "fixing_vulnerabilities_url",
-          "latest_non_vulnerable_version",
-          "next_non_vulnerable_version",
-          "purl",
-          "risk_score"
+          "purl"
+        ]
+      },
+      "PackageVulnerabilityV3": {
+        "type": "object",
+        "properties": {
+          "advisory_id": {
+            "type": "string",
+            "description": "An advisory is a unique vulnerability identifier in some database, such as PYSEC-2020-2233",
+            "maxLength": 200
+          },
+          "advisory_uid": {
+            "type": "string",
+            "readOnly": true
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string"
+          },
+          "exploitability": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Exploitability indicates the likelihood that a vulnerability in a software package could be used by malicious actors to compromise systems, applications, or networks. This metric is determined automatically based on the discovery of known exploits."
+          },
+          "weighted_severity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Weighted severity is the highest value calculated by multiplying each severity by its corresponding weight, divided by 10."
+          },
+          "risk_score": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
+          },
+          "fixed_by_packages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "introduced_in_patches": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "fixed_in_patches": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "ssvc_trees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedSSVCTree"
+            },
+            "readOnly": true
+          },
+          "resource_url": {
+            "type": "string",
+            "format": "uri",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "advisory_id",
+          "advisory_uid",
+          "resource_url"
         ]
       },
       "PaginatedAdvisoryV3List": {
@@ -739,6 +815,63 @@
             }
           }
         }
+      },
+      "PaginatedPackageV3List": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageV3"
+            }
+          }
+        }
+      },
+      "RelatedSSVCTree": {
+        "type": "object",
+        "properties": {
+          "vector": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "source_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision",
+          "options",
+          "source_url",
+          "vector"
+        ]
       },
       "ScoringSystemEnum": {
         "enum": [
