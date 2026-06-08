@@ -107,6 +107,17 @@ internal data class SpdxResolvedDocument(
         }
     }
 
+    private val relationshipsByIdsWithoutPrefix: Map<Pair<String, String>, List<SpdxRelationship>> by lazy {
+        relationships.groupBy {
+            it.spdxElementId.removeDocumentRefPrefix() to it.relatedSpdxElement.removeDocumentRefPrefix()
+        }
+    }
+
+    fun getRelationships(spdxElementId: String, relatedSpdxElementId: String): List<SpdxRelationship> {
+        val key = spdxElementId.removeDocumentRefPrefix() to relatedSpdxElementId.removeDocumentRefPrefix()
+        return relationshipsByIdsWithoutPrefix[key].orEmpty()
+    }
+
     /**
      * Get the [SpdxPackage] for the given [identifier] by resolving against packages or external document references
      * contained in this document. If the package cannot be resolved, add an issue to [issues].
