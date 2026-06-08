@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
 import OrtComponent
+import OrtComponentIdentifier
+import OrtComponentReference
 import OrtDependencyTreeModel
 
 import org.apache.maven.model.building.FileModelSource
@@ -54,10 +56,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     private val logger = Logging.getLogger(OrtModelBuilder::class.java)
     private val errors = mutableListOf<String>()
     private val warnings = mutableListOf<String>()
-    private val globalDependencySubtrees = mutableMapOf<String, List<OrtComponent>>()
+    private val globalDependencySubtrees = mutableMapOf<String, List<OrtComponentReference>>()
 
     // Only create one "OrtComponent" for each "ResolvedComponentResult".
-    private val ortComponentCache = mutableMapOf<ResolvedComponentResult, OrtComponent>()
+    private val ortComponentCache = mutableMapOf<ResolvedComponentResult, OrtComponentReference>()
 
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
@@ -73,6 +75,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         project.repositories.associateNamesWithUrlsTo(repositories)
 
         val relevantConfigurations = project.configurations.filter { it.isRelevant() }
+        val componentsForId = mutableMapOf<OrtComponentIdentifier, OrtComponent>()
 
         val ortConfigurations = relevantConfigurations.mapNotNull { config ->
             // Explicitly resolve all POM files and their parents, as the latter otherwise may get resolved in Gradle's
@@ -86,9 +89,18 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             // [1]: https://docs.gradle.org/current/userguide/dependency_management.html#obtaining_module_metadata
             val root = config.incoming.resolutionResult.root
 
+            config.incoming.resolutionResult.allComponents.forEach { component ->
+                val ortComponent = component.toOrtComponent(poms) ?: return@forEach
+
+                componentsForId.putIfAbsent(ortComponent.componentId, ortComponent)
+            }
+
             // Omit configurations without dependencies.
             root.dependencies.takeUnless { it.isEmpty() }?.let { dependencies ->
-                OrtConfigurationImpl(name = config.name, dependencies = dependencies.toOrtComponents(poms, emptySet()))
+                OrtConfigurationImpl(
+                    name = config.name,
+                    dependencies = dependencies.toOrtComponentReferences(emptySet())
+                )
             }
         }
 
@@ -96,6 +108,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             group = project.group.toString(),
             name = project.name,
             version = project.version.toString().takeUnless { it == "unspecified" }.orEmpty(),
+            components = componentsForId.values.toList(),
             configurations = ortConfigurations,
             repositories = repositories.values.map { it.toOrtRepository() },
             errors = errors,
@@ -103,22 +116,88 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         )
     }
 
-    private fun Collection<DependencyResult>.toOrtComponents(
-        poms: Map<String, ModelBuildingResult>,
+    private fun ResolvedComponentResult.toOrtComponent(poms: Map<String, ModelBuildingResult>): OrtComponent? {
+        val componentId = id
+
+        if (componentId is ModuleComponentIdentifier) {
+            val pomFile = getPomFile()
+
+            val modelBuildingResult = poms[id.toString()]
+            if (modelBuildingResult == null) {
+                val message = "No POM found for component '$id'."
+                logger.warn(message)
+                warnings += message
+            }
+
+            return OrtComponentImpl(
+                componentId = OrtComponentIdentifierImpl(componentId.group, componentId.module, componentId.version),
+                classifier = "",
+                extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
+                variants = variants.associate {
+                    it.displayName to it.attributes.keySet().associate { key ->
+                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                    }
+                },
+                error = null,
+                warning = null,
+                pomFile = pomFile,
+                mavenModel = modelBuildingResult?.run {
+                    OrtMavenModelImpl(
+                        licenses = effectiveModel.collectLicenses(),
+                        authors = effectiveModel.collectAuthors(),
+                        description = effectiveModel.description.orEmpty(),
+                        homepageUrl = effectiveModel.url.orEmpty(),
+                        vcs = getVcsModel()
+                    )
+                },
+                localPath = null
+            )
+        }
+
+        if (componentId is ProjectComponentIdentifier) {
+            val moduleId = moduleVersion ?: return null
+
+            return OrtComponentImpl(
+                componentId = OrtComponentIdentifierImpl(
+                    groupId = moduleId.group,
+                    artifactId = moduleId.name,
+                    version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty()
+                ),
+                classifier = "",
+                extension = "",
+                variants = variants.associate {
+                    it.displayName to it.attributes.keySet().associate { key ->
+                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                    }
+                },
+                error = null,
+                warning = null,
+                pomFile = null,
+                mavenModel = null,
+                localPath = componentId.projectPath
+            )
+        }
+
+        val message = "Unhandled component identifier type $id."
+
+        logger.error(message)
+        errors += message
+
+        return null
+    }
+
+    private fun Collection<DependencyResult>.toOrtComponentReferences(
         visited: Set<ComponentIdentifier>
-    ): List<OrtComponent> =
+    ): List<OrtComponentReference> =
         if (GradleVersion.current() < GradleVersion.version("5.1")) {
             this
         } else {
             filterNot { it.isConstraint }
         }.mapNotNull {
-            it.toOrtComponent(poms, visited)
+            it.toOrtComponentReference(visited)
         }
 
-    private fun DependencyResult.toOrtComponent(
-        poms: Map<String, ModelBuildingResult>,
-        visited: Set<ComponentIdentifier>
-    ): OrtComponent? {
+    private fun DependencyResult.toOrtComponentReference(visited: Set<ComponentIdentifier>): OrtComponentReference? {
         if (this is UnresolvedDependencyResult) {
             if (attempted is ProjectComponentSelector) {
                 // Ignore unresolved project dependencies. For example for complex Android projects, Gradle's
@@ -163,43 +242,14 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         }
 
         if (id is ModuleComponentIdentifier) {
-            val pomFile = selected.getPomFile()
-
-            val modelBuildingResult = poms[id.toString()]
-            if (modelBuildingResult == null) {
-                val message = "No POM found for component '$id'."
-                logger.warn(message)
-                warnings += message
-            }
-
             // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
             val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
-                selected.dependencies.toOrtComponents(poms, visited + id)
+                selected.dependencies.toOrtComponentReferences(visited + id)
             }
 
-            return OrtComponentImpl(
+            return OrtComponentReferenceImpl(
                 componentId = OrtComponentIdentifierImpl(id.group, id.module, id.version),
-                classifier = "",
-                extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
-                variants = selected.variants.associate {
-                    it.displayName to it.attributes.keySet().associate { key ->
-                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
-                    }
-                },
-                dependencies = dependencies,
-                error = null,
-                warning = null,
-                pomFile = pomFile,
-                mavenModel = modelBuildingResult?.run {
-                    OrtMavenModelImpl(
-                        licenses = effectiveModel.collectLicenses(),
-                        authors = effectiveModel.collectAuthors(),
-                        description = effectiveModel.description.orEmpty(),
-                        homepageUrl = effectiveModel.url.orEmpty(),
-                        vcs = getVcsModel()
-                    )
-                },
-                localPath = null
+                dependencies = dependencies
             ).also {
                 ortComponentCache[selected] = it
             }
@@ -207,27 +257,15 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
         if (id is ProjectComponentIdentifier) {
             val moduleId = selected.moduleVersion ?: return null
-            val dependencies = selected.dependencies.toOrtComponents(poms, visited + id)
+            val dependencies = selected.dependencies.toOrtComponentReferences(visited + id)
 
-            return OrtComponentImpl(
+            return OrtComponentReferenceImpl(
                 componentId = OrtComponentIdentifierImpl(
                     groupId = moduleId.group,
                     artifactId = moduleId.name,
                     version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty()
                 ),
-                classifier = "",
-                extension = "",
-                variants = selected.variants.associate {
-                    it.displayName to it.attributes.keySet().associate { key ->
-                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
-                    }
-                },
-                dependencies = dependencies,
-                error = null,
-                warning = null,
-                pomFile = null,
-                mavenModel = null,
-                localPath = id.projectPath
+                dependencies = dependencies
             ).also {
                 ortComponentCache[selected] = it
             }

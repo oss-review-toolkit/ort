@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
 import OrtComponent
 import OrtComponentIdentifier
+import OrtComponentReference
 import OrtConfiguration
 import OrtDependencyTreeModel
 import OrtMavenModel
@@ -34,6 +35,7 @@ internal class OrtDependencyTreeModelImpl(
     override val group: String,
     override val name: String,
     override val version: String,
+    override val components: List<OrtComponent>,
     override val configurations: List<OrtConfiguration>,
     override val repositories: List<OrtRepository>,
     override val errors: List<String>,
@@ -43,15 +45,21 @@ internal class OrtDependencyTreeModelImpl(
 @Suppress("SerialVersionUIDInSerializableClass")
 internal class OrtConfigurationImpl(
     override val name: String,
-    override val dependencies: List<OrtComponent>
+    override val dependencies: List<OrtComponentReference>
 ) : OrtConfiguration, Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
-internal class OrtComponentIdentifierImpl(
+internal data class OrtComponentIdentifierImpl(
     override val groupId: String,
     override val artifactId: String,
     override val version: String
 ) : OrtComponentIdentifier, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtComponentReferenceImpl(
+    override val componentId: OrtComponentIdentifier,
+    override val dependencies: List<OrtComponentReference>
+) : OrtComponentReference, Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
 internal class OrtComponentImpl(
@@ -59,7 +67,6 @@ internal class OrtComponentImpl(
     override val classifier: String,
     override val extension: String,
     override val variants: Map<String, Map<String, String>>,
-    override val dependencies: List<OrtComponent>,
     override val error: String?,
     override val warning: String?,
     override val pomFile: String?,

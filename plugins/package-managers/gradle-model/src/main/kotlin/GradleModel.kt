@@ -26,6 +26,7 @@ interface OrtDependencyTreeModel {
     val group: String
     val name: String
     val version: String
+    val components: List<OrtComponent>
     val configurations: List<OrtConfiguration>
     val repositories: List<OrtRepository>
     val errors: List<String>
@@ -34,7 +35,7 @@ interface OrtDependencyTreeModel {
 
 interface OrtConfiguration {
     val name: String
-    val dependencies: List<OrtComponent>
+    val dependencies: List<OrtComponentReference>
 }
 
 interface OrtComponentIdentifier {
@@ -43,12 +44,16 @@ interface OrtComponentIdentifier {
     val version: String
 }
 
+interface OrtComponentReference {
+    val componentId: OrtComponentIdentifier
+    val dependencies: List<OrtComponentReference>
+}
+
 interface OrtComponent {
     val componentId: OrtComponentIdentifier
     val classifier: String
     val extension: String
     val variants: Map<String, Map<String, String>>
-    val dependencies: List<OrtComponent>
     val error: String?
     val warning: String?
     val pomFile: String?
