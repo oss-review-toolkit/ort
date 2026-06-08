@@ -243,8 +243,13 @@ class GradleInspector(
         }
 
         val issues = mutableListOf<Issue>()
+
+        logger.info { "Resolving the dependency tree model via IPC from the Gradle Daemon..." }
+
         val dependencyTreeModel = gradleConnector.getOrtDependencyTreeModel(projectDir, issues)
         dependencyHandler.setTreeModel(dependencyTreeModel)
+
+        logger.info { "Successfully retrieved the dependency tree model from the Gradle Daemon." }
 
         dependencyTreeModel.errors.distinct().mapTo(issues) {
             createAndLogIssue(it, Severity.ERROR)
