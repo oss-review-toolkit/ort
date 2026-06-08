@@ -56,7 +56,7 @@ internal data class OrtComponentIdentifierImpl(
 ) : OrtComponentIdentifier, Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
-internal class OrtComponentReferenceImpl(
+internal data class OrtComponentReferenceImpl(
     override val componentId: OrtComponentIdentifier,
     override val dependencies: List<OrtComponentReference>
 ) : OrtComponentReference, Serializable
