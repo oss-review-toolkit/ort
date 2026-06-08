@@ -56,7 +56,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.locat
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.locateExternalReference
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.mapNotPresentToEmpty
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.projectPackage
-import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.removeDocumentRefPrefix
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.toIdentifier
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.toPackage
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.wrapPresentInSet
@@ -141,7 +140,7 @@ class SpdxDocumentFile(
                     PackageReference(
                         id = ortPackage.id,
                         dependencies = getDependencies(target, doc, packages, ancestorIds, analyzerConfig),
-                        linkage = getLinkageForDependency(dependency, pkgId, doc.relationships),
+                        linkage = getLinkageForDependency(dependency, pkgId, doc),
                         issues = issues
                     )
                 }
@@ -187,7 +186,7 @@ class SpdxDocumentFile(
                                 id = ortPackage.id,
                                 dependencies = getDependencies(source, doc, packages, ancestorIds, analyzerConfig),
                                 issues = issues,
-                                linkage = getLinkageForDependency(dependency, target, doc.relationships)
+                                linkage = getLinkageForDependency(dependency, target, doc)
                             )
                         }
                 }
@@ -364,14 +363,10 @@ internal fun getPackageManagerDependency(
 private fun getLinkageForDependency(
     dependency: SpdxPackage,
     dependant: String,
-    relationships: List<SpdxRelationship>
+    doc: SpdxResolvedDocument
 ): PackageLinkage =
-    relationships.mapNotNull { relation ->
-        SPDX_LINKAGE_RELATIONSHIPS[relation.relationshipType]?.takeIf {
-            val relationId = relation.relatedSpdxElement.removeDocumentRefPrefix()
-
-            relationId == dependency.spdxId && relation.spdxElementId == dependant
-        }
+    doc.getRelationships(dependant, dependency.spdxId).mapNotNullTo(mutableSetOf()) {
+        SPDX_LINKAGE_RELATIONSHIPS[it.relationshipType]
     }.singleOrNull() ?: PackageLinkage.DYNAMIC
 
 /**
