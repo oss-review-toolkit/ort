@@ -87,8 +87,8 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             val root = config.incoming.resolutionResult.root
 
             // Omit configurations without dependencies.
-            root.dependencies.takeUnless { it.isEmpty() }?.let { dep ->
-                OrtConfigurationImpl(name = config.name, dependencies = dep.toOrtComponents(poms, emptySet()))
+            root.dependencies.takeUnless { it.isEmpty() }?.let { dependencies ->
+                OrtConfigurationImpl(name = config.name, dependencies = dependencies.toOrtComponents(poms, emptySet()))
             }
         }
 
