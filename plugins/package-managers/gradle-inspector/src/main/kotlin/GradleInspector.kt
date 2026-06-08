@@ -124,7 +124,8 @@ class GradleInspector(
     // "build" file.
     override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
-    private val graphBuilder = DependencyGraphBuilder(GradleDependencyHandler(projectType))
+    private val dependencyHandler = GradleDependencyHandler(projectType)
+    private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
     private val initScriptFile by lazy { extractInitScript() }
 
     private fun extractInitScript(): File {
@@ -243,6 +244,7 @@ class GradleInspector(
 
         val issues = mutableListOf<Issue>()
         val dependencyTreeModel = gradleConnector.getOrtDependencyTreeModel(projectDir, issues)
+        dependencyHandler.setTreeModel(dependencyTreeModel)
 
         dependencyTreeModel.errors.distinct().mapTo(issues) {
             createAndLogIssue(it, Severity.ERROR)

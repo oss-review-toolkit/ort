@@ -20,6 +20,9 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.gradleinspector
 
 import OrtComponent
+import OrtComponentIdentifier
+import OrtComponentReference
+import OrtDependencyTreeModel
 
 import java.lang.invoke.MethodHandles
 
@@ -58,23 +61,42 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 internal class GradleDependencyHandler(
     /** The type of projects to handle. */
     private val projectType: String
-) : DependencyHandler<OrtComponent> {
-    override fun identifierFor(dependency: OrtComponent): Identifier =
+) : DependencyHandler<OrtComponentReference> {
+    private val componentForId = mutableMapOf<OrtComponentIdentifier, OrtComponent>()
+
+    private fun OrtComponentReference.component(): OrtComponent = componentForId.getValue(componentId)
+
+    fun setTreeModel(treeModel: OrtDependencyTreeModel) {
+        componentForId.apply {
+            clear()
+            treeModel.components.associateByTo(this) { it.componentId }
+        }
+    }
+
+    override fun identifierFor(dependency: OrtComponentReference): Identifier =
         with(dependency.componentId) {
-            Identifier(dependency.getIdentifierType(projectType), groupId, artifactId, version)
+            Identifier(
+                type = dependency.component().getIdentifierType(projectType),
+                namespace = groupId,
+                name = artifactId,
+                version = version
+            )
         }
 
-    override fun dependenciesFor(dependency: OrtComponent): List<OrtComponent> = dependency.dependencies
+    override fun dependenciesFor(dependency: OrtComponentReference): List<OrtComponentReference> =
+        dependency.dependencies
 
-    override fun linkageFor(dependency: OrtComponent): PackageLinkage =
-        if (dependency.isProjectDependency) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
+    override fun linkageFor(dependency: OrtComponentReference): PackageLinkage =
+        if (dependency.component().isProjectDependency) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: OrtComponent, issues: MutableCollection<Issue>): Package? {
+    override fun createPackage(dependency: OrtComponentReference, issues: MutableCollection<Issue>): Package? {
+        val component = dependency.component()
+
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
-        if (dependency.error != null || dependency.isProjectDependency) return null
+        if (component.error != null || component.isProjectDependency) return null
 
         val id = identifierFor(dependency)
-        val model = dependency.mavenModel ?: run {
+        val model = component.mavenModel ?: run {
             issues += createAndLogIssue(
                 source = GradleInspectorFactory.descriptor.displayName,
                 message = "No Maven model available for '${id.toCoordinates()}'."
@@ -83,26 +105,26 @@ internal class GradleDependencyHandler(
             return null
         }
 
-        val hasNoArtifacts = dependency.pomFile == null
-        val isPomArtifact = dependency.extension == "pom"
+        val hasNoArtifacts = component.pomFile == null
+        val isPomArtifact = component.extension == "pom"
 
-        val isPlatformDependency = dependency.variants.keys.any {
+        val isPlatformDependency = component.variants.keys.any {
             it.startsWith("platform-") || it.startsWith("enforced-platform-")
         }
 
-        val isKotlinMultiPlatform = dependency.variants.values.any {
+        val isKotlinMultiPlatform = component.variants.values.any {
             "org.jetbrains.kotlin.platform.type" in it.keys
         }
 
         val binaryArtifact = when {
             hasNoArtifacts -> RemoteArtifact.EMPTY
 
-            isKotlinMultiPlatform -> with(dependency) {
+            isKotlinMultiPlatform -> with(component) {
                 // TODO: Support more than just "jvm" targets for KMP projects.
                 createRemoteArtifact(pomFile, classifier, "jar")
             }
 
-            else -> with(dependency) {
+            else -> with(component) {
                 createRemoteArtifact(pomFile, classifier, extension.takeUnless { it == "bundle" })
             }
         }
@@ -110,10 +132,10 @@ internal class GradleDependencyHandler(
         val sourceArtifact = when {
             hasNoArtifacts -> RemoteArtifact.EMPTY
             isPomArtifact && !isKotlinMultiPlatform -> binaryArtifact
-            else -> createRemoteArtifact(dependency.pomFile, "sources", "jar")
+            else -> createRemoteArtifact(component.pomFile, "sources", "jar")
         }
 
-        val vcs = dependency.toVcsInfo()
+        val vcs = component.toVcsInfo()
         val vcsFallbackUrls = listOfNotNull(model.vcs?.browsableUrl, model.homepageUrl).toTypedArray()
         val vcsProcessed = processPackageVcs(vcs, *vcsFallbackUrls)
 
@@ -138,7 +160,10 @@ internal class GradleDependencyHandler(
         )
     }
 
-    override fun areDependenciesEqual(dependenciesA: List<OrtComponent>, dependenciesB: List<OrtComponent>): Boolean {
+    override fun areDependenciesEqual(
+        dependenciesA: List<OrtComponentReference>,
+        dependenciesB: List<OrtComponentReference>
+    ): Boolean {
         if (dependenciesA === dependenciesB) return true
         if (dependenciesA.isEmpty() && dependenciesB.isEmpty()) return true
 
@@ -152,8 +177,8 @@ internal class GradleDependencyHandler(
 
         // Gradle guarantees dependencies to be same for Identifiers of the same variant, so exit early to skip deep
         // comparison of transitive dependencies in that case.
-        val idVariantPairsA = idToDepA.map { (id, dep) -> id to dep.variants }
-        val idVariantPairsB = idToDepB.map { (id, dep) -> id to dep.variants }
+        val idVariantPairsA = idToDepA.map { (id, dep) -> id to dep.component().variants }
+        val idVariantPairsB = idToDepB.map { (id, dep) -> id to dep.component().variants }
         if (idVariantPairsA == idVariantPairsB) return true
 
         return idToDepA.all { (id, depA) ->
