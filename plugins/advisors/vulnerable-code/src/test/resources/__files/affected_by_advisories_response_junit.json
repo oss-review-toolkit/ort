@@ -1,0 +1,34 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-269g-pwp5-87pp",
+      "url": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2020/10/GHSA-269g-pwp5-87pp/GHSA-269g-pwp5-87pp.json",
+      "aliases": [
+        "CVE-2020-15250",
+        "GHSA-269g-pwp5-87pp"
+      ],
+      "summary": null,
+      "severities": [
+        {
+          "url": "http://people.canonical.com/~ubuntu-security/cve/2020/CVE-2020-15250.html",
+          "value": "Medium",
+          "scoring_system": "generic_textual",
+          "scoring_elements": ""
+        },
+        {
+          "url": "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2020-15250.json",
+          "value": "4.0",
+          "scoring_system": "cvssv3",
+          "scoring_elements": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    }
+  ]
+}

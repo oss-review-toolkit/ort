@@ -1,0 +1,57 @@
+
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-2cxf-6567-7pp6",
+      "url": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2021/03/GHSA-2cxf-6567-7pp6/GHSA-2cxf-6567-7pp6.json",
+      "aliases": [
+        "CVE-2014-8242"
+      ],
+      "severities": [
+        {
+          "url": "https://github.com/apache/commons-lang/security/advisories/GHSA-2cxf-6567-7pp6",
+          "value": "LOW",
+          "scoring_system": "cvssv3.1_qr",
+          "scoring_elements": null
+        }
+      ],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-8242",
+          "reference_type": "",
+          "reference_id": "CVE-2014-8242"
+        }
+      ],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    },
+    {
+      "advisory_id": "gitlab_importer_v2/maven/org.apache.commons/commons-lang3/CVE-2014-8242",
+      "url": "https://gitlab.com/gitlab-org/advisories-community/-/blob/main/maven/org.apache.commons/commons-lang3/CVE-2014-8242.yml",
+      "aliases": [
+        "CVE-2014-8242",
+        "GHSA-2cxf-6567-7pp6"
+      ],
+      "severities": [],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-8242",
+          "reference_type": "",
+          "reference_id": "CVE-2014-8242"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2cxf-6567-7pp6",
+          "reference_type": "",
+          "reference_id": "GHSA-2cxf-6567-7pp6"
+        }
+      ],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    }
+  ]
+}

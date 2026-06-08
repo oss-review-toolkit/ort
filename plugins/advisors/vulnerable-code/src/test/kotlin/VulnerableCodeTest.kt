@@ -23,6 +23,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
+import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
@@ -33,11 +34,15 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeSingleton
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldStartWith
 
 import java.net.URI
 
@@ -72,12 +77,16 @@ class VulnerableCodeTest : WordSpec({
 
     "VulnerableCode" should {
         "return vulnerability information" {
-            server.stubPackagesRequest("response_packages.json")
+            server.stubPackagesRequest("packages_response_packages.json")
+            server.stubAffectedByAdvisoriesRequest(idLang, "affected_by_advisories_response_lang.json")
+            server.stubAffectedByAdvisoriesRequest(idStruts, "affected_by_advisories_response_struts.json")
+
             val vulnerableCode = createVulnerableCode(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
             val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
+            result.values.flatMap { it.summary.issues } should beEmpty()
             result shouldNot beEmptyMap()
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
 
@@ -153,7 +162,9 @@ class VulnerableCodeTest : WordSpec({
         }
 
         "extract the CVE ID from an alias" {
-            server.stubPackagesRequest("response_junit.json", request = generatePackagesRequest(idJUnit))
+            server.stubPackagesRequest("packages_response_junit.json", request = generatePackagesRequest(idJUnit))
+            server.stubAffectedByAdvisoriesRequest(idJUnit, "affected_by_advisories_response_junit.json")
+
             val vulnerableCode = createVulnerableCode(server)
             val packagesToAdvise = inputPackagesFromIdentifiers(idJUnit)
 
@@ -182,8 +193,9 @@ class VulnerableCodeTest : WordSpec({
                 containExactly(expJunitVulnerability)
         }
 
-        "extract other official identifiers from aliases" {
-            server.stubPackagesRequest("response_log4j.json", generatePackagesRequest(idLog4j))
+        "extract other official identifiers from the advisory ID" {
+            server.stubPackagesRequest("packages_response_log4j.json", generatePackagesRequest(idLog4j))
+            server.stubAffectedByAdvisoriesRequest(idLog4j, "affected_by_advisories_response_log4j_no_aliases.json")
             val vulnerableCode = createVulnerableCode(server)
             val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
 
@@ -191,24 +203,41 @@ class VulnerableCodeTest : WordSpec({
 
             val expLog4jVulnerabilities = listOf(
                 Vulnerability(
-                    id = "GHSA-jfh8-c2jp-5v3q",
-                    summary = "Remote code injection in Log4j",
-                    description = "Remote code injection in Log4j",
+                    id = "GHSA-8489-44mv-ggj8",
                     references = listOf(
                         VulnerabilityReference(
-                            URI("http://ref.com/files/165225/Apache-Log4j2-2.14.1-Remote-Code-Execution.html"),
+                            URI("https://github.com/advisories/GHSA-8489-44mv-ggj8.json"),
                             scoringSystem = null,
                             severity = null,
                             score = null,
                             vector = null
                         )
                     )
-                ),
+                )
+            )
+            result.getValue(idLog4j).vulnerabilities.normalizeVulnerabilityData() should
+                containExactlyInAnyOrder(expLog4jVulnerabilities)
+        }
+
+        "prefer CVE ID from the advisory ID over aliases" {
+            server.stubPackagesRequest("packages_response_log4j.json", generatePackagesRequest(idLog4j))
+            server.stubAffectedByAdvisoriesRequest(idLog4j, "affected_by_advisories_response_log4j.json")
+            val vulnerableCode = createVulnerableCode(server)
+            val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
+
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+
+            val expLog4jVulnerabilities = listOf(
                 Vulnerability(
                     id = "CVE-2021-44832",
-                    summary = "Improper Input Validation and Injection in Apache Log4j2",
-                    description = "Improper Input Validation and Injection in Apache Log4j2",
                     references = listOf(
+                        VulnerabilityReference(
+                            URI("https://github.com/advisories/GHSA-8489-44mv-ggj8.json"),
+                            scoringSystem = null,
+                            severity = null,
+                            score = null,
+                            vector = null
+                        ),
                         VulnerabilityReference(
                             URI("https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2021-44832.json"),
                             scoringSystem = "cvssv3",
@@ -223,9 +252,156 @@ class VulnerableCodeTest : WordSpec({
                 containExactlyInAnyOrder(expLog4jVulnerabilities)
         }
 
+        "gather vulnerability references from advisory severities and references" {
+            server.stubPackagesRequest("packages_response_log4j.json", generatePackagesRequest(idLog4j))
+            server.stubAffectedByAdvisoriesRequest(
+                idLog4j,
+                "affected_by_advisories_response_severities_references.json"
+            )
+            val vulnerableCode = createVulnerableCode(server)
+            val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
+
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+
+            val expLog4jVulnerabilities = listOf(
+                Vulnerability(
+                    id = "CVE-2026-34480",
+                    summary = "Apache Log4j Core: Silent log event loss in XmlLayout due to une...",
+                    description = "Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 " +
+                        "forbidden characters",
+                    references = listOf(
+                        VulnerabilityReference(
+                            URI("https://github.com/apache/logging-log4j2/pull/4077"),
+                            scoringSystem = null,
+                            severity = null,
+                            score = null,
+                            vector = null
+                        ),
+                        VulnerabilityReference(
+                            URI("https://github.com/advisories/GHSA-3pxv-7cmr-fjr4/GHSA-3pxv-7cmr-fjr4.json"),
+                            scoringSystem = "cvssv4",
+                            severity = "MEDIUM",
+                            score = 6.9f,
+                            vector = "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N"
+                        ),
+                        VulnerabilityReference(
+                            URI("https://github.com/advisories/GHSA-3pxv-7cmr-fjr4/GHSA-3pxv-7cmr-fjr4.json"),
+                            scoringSystem = "generic_textual",
+                            severity = "MEDIUM",
+                            score = null,
+                            vector = null
+                        )
+                    )
+                )
+            )
+            result.getValue(idLog4j).vulnerabilities.normalizeVulnerabilityData() should
+                containExactlyInAnyOrder(expLog4jVulnerabilities)
+        }
+
+        "combine and deduplicate results from multiple advisories for the same vulnerability" {
+            server.stubPackagesRequest("packages_response_log4j.json", generatePackagesRequest(idLog4j))
+            server.stubAffectedByAdvisoriesRequest(idLog4j, "affected_by_advisories_response_multiple_advisories.json")
+            val vulnerableCode = createVulnerableCode(server)
+            val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
+
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+
+            val expLog4jVulnerabilities = listOf(
+                Vulnerability(
+                    id = "CVE-2026-34480",
+                    summary = "Apache Log4j Core: Silent log event loss in XmlLayout due to une...",
+                    description = "Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 " +
+                        "forbidden characters",
+                    references = listOf(
+                        VulnerabilityReference(
+                            URI("https://logging.apache.org/cyclonedx/vdr.xml"),
+                            scoringSystem = null,
+                            severity = null,
+                            score = null,
+                            vector = null
+                        ),
+                        VulnerabilityReference(
+                            URI("https://github.com/advisories/GHSA-3pxv-7cmr-fjr4.json"),
+                            scoringSystem = "cvssv4",
+                            severity = "MEDIUM",
+                            score = 6.9f,
+                            vector = "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N"
+                        ),
+                        VulnerabilityReference(
+                            URI("https://gitlab.com/advisories-community/CVE-2026-34480.yml"),
+                            scoringSystem = "cvssv3.1",
+                            severity = "None",
+                            score = 5.3f,
+                            vector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+                        )
+                    )
+                )
+            )
+
+            result.getValue(idLog4j).vulnerabilities.normalizeVulnerabilityData() should
+                containExactlyInAnyOrder(expLog4jVulnerabilities)
+        }
+
+        "gather purls from paginated response" {
+            server.stubPackagesRequest("packages_response_page1.json")
+            server.stubFor(
+                post(urlPathEqualTo("/api/v3/packages/"))
+                    .withQueryParam("page", equalTo("2"))
+                    .withRequestBody(equalToJson(packagesRequestJson, true, false))
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withHeader("Content-Type", "application/json")
+                            .withBodyFile("packages_response_page2.json")
+                    )
+            )
+
+            server.stubAffectedByAdvisoriesRequest(idJUnit, "affected_by_advisories_response_junit.json")
+            server.stubAffectedByAdvisoriesRequest(idLang, "affected_by_advisories_response_lang.json")
+            server.stubAffectedByAdvisoriesRequest(idStruts, "affected_by_advisories_response_struts.json")
+
+            val vulnerableCode = createVulnerableCode(server)
+            val packagesToAdvise = inputPackagesFromAnalyzerResult()
+
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+
+            result.values.flatMap { it.summary.issues } should beEmpty()
+            result shouldNot beEmptyMap()
+            result.keys should containExactlyInAnyOrder(idJUnit, idLang, idStruts)
+        }
+
+        "gather vulnerabilities from paginated advisories" {
+            server.stubPackagesRequest("packages_response_log4j.json", generatePackagesRequest(idLog4j))
+            server.stubAffectedByAdvisoriesRequest(idLog4j, "affected_by_advisories_response_page1.json")
+            server.stubFor(
+                get(urlPathEqualTo("/api/v3/affected-by-advisories/"))
+                    .withQueryParam("purl", equalTo(idLog4j.toPurl()))
+                    .withQueryParam("page", equalTo("2"))
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withHeader("Content-Type", "application/json")
+                            .withBodyFile("affected_by_advisories_response_page2.json")
+                    )
+            )
+
+            val vulnerableCode = createVulnerableCode(server)
+            val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
+
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+
+            result.keys shouldBe setOf(idLog4j)
+            result.getValue(idLog4j).vulnerabilities shouldHaveSize 3
+
+            with(result.getValue(idLog4j)) {
+                vulnerabilities shouldHaveSize 3
+                vulnerabilities.map {
+                    it.id
+                } shouldContainExactlyInAnyOrder setOf("CVE-2026-34480", "CVE-2026-34477", "CVE-2021-44832")
+            }
+        }
+
         "handle a failure response from the server" {
             server.stubFor(
-                post(urlPathEqualTo("/packages/bulk_search"))
+                post(urlPathEqualTo("/api/v3/packages/"))
                     .willReturn(
                         aResponse().withStatus(500)
                     )
@@ -244,7 +420,8 @@ class VulnerableCodeTest : WordSpec({
                         vulnerabilities should beEmpty()
                         summary.issues.shouldBeSingleton { issue ->
                             issue.severity shouldBe Severity.ERROR
-                            issue.message shouldBe "HttpException: HTTP 500 Server Error"
+                            issue.message shouldStartWith "ServerResponseException"
+                            issue.message shouldContain "500 Server Error"
                         }
                     }
                 }
@@ -252,7 +429,9 @@ class VulnerableCodeTest : WordSpec({
         }
 
         "filter out packages without vulnerabilities" {
-            server.stubPackagesRequest("response_packages_no_vulnerabilities.json")
+            server.stubPackagesRequest("packages_response_packages.json")
+            server.stubAffectedByAdvisoriesRequest(idLang, "affected_by_advisories_response_lang_no_results.json")
+            server.stubAffectedByAdvisoriesRequest(idStruts, "affected_by_advisories_response_struts.json")
             val vulnerableCode = createVulnerableCode(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
@@ -262,7 +441,9 @@ class VulnerableCodeTest : WordSpec({
         }
 
         "handle unexpected packages in the query result" {
-            server.stubPackagesRequest("response_unexpected_packages.json")
+            server.stubPackagesRequest("packages_response_unexpected_packages.json")
+            server.stubAffectedByAdvisoriesRequest(idLang, "affected_by_advisories_response_lang.json")
+            server.stubAffectedByAdvisoriesRequest(idStruts, "affected_by_advisories_response_struts.json")
             val vulnerableCode = createVulnerableCode(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
@@ -335,13 +516,26 @@ private val packagesRequestJson = generatePackagesRequest()
  */
 private fun WireMockServer.stubPackagesRequest(responseFile: String, request: String = packagesRequestJson) {
     stubFor(
-        post(urlPathEqualTo("/packages/bulk_search"))
+        post(urlPathEqualTo("/api/v3/packages/"))
             .withRequestBody(
                 equalToJson(request, /* ignoreArrayOrder = */ true, /* ignoreExtraElements = */ false)
             )
-            .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
+            .withHeader("Content-Type", equalTo("application/json"))
             .willReturn(
                 aResponse().withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile(responseFile)
+            )
+    )
+}
+
+private fun WireMockServer.stubAffectedByAdvisoriesRequest(id: Identifier, responseFile: String) {
+    stubFor(
+        get(urlPathEqualTo("/api/v3/affected-by-advisories/"))
+            .withQueryParam("purl", equalTo(id.toPurl()))
+            .willReturn(
+                aResponse().withStatus(200)
+                    .withHeader("Content-Type", "application/json")
                     .withBodyFile(responseFile)
             )
     )
@@ -378,7 +572,7 @@ private fun inputPackagesFromIdentifiers(vararg identifiers: Identifier): Set<Pa
  * The request mainly consists of an array with the package URLs.
  */
 private fun generatePackagesRequest(purls: Collection<String> = packages): String =
-    purls.joinToString(prefix = "{ \"purls\": [", postfix = "] }") { "\"$it\"" }
+    purls.joinToString(prefix = "{ \"purls\": [", postfix = "],\"details\":false }") { "\"$it\"" }
 
 /**
  * Generate the JSON body of the request to query vulnerability information about the [Package] with the given [id].

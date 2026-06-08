@@ -1,0 +1,18 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-8489-44mv-ggj8",
+      "url": "https://github.com/advisories/GHSA-8489-44mv-ggj8.json",
+      "aliases": [],
+      "summary": null,
+      "severities": [],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-3pxv-7cmr-fjr4",
+      "url": "https://github.com/advisories/GHSA-3pxv-7cmr-fjr4/GHSA-3pxv-7cmr-fjr4.json",
+      "aliases": [
+        "CVE-2026-34480"
+      ],
+      "summary": "Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 forbidden characters",
+      "severities": [
+        {
+          "url": "https://github.com/advisories/GHSA-3pxv-7cmr-fjr4/GHSA-3pxv-7cmr-fjr4.json",
+          "value": "6.9",
+          "scoring_system": "cvssv4",
+          "scoring_elements": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N"
+        },
+        {
+          "url": null,
+          "value": "MODERATE",
+          "scoring_system": "generic_textual",
+          "scoring_elements": ""
+        }
+      ],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://github.com/apache/logging-log4j2/pull/4077",
+          "reference_type": "other",
+          "reference_id": "4077"
+        }
+      ],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    }
+  ]
+}

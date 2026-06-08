@@ -1,0 +1,60 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-3pxv-7cmr-fjr4",
+      "url": "https://github.com/advisories/GHSA-3pxv-7cmr-fjr4.json",
+      "aliases": [
+        "CVE-2026-34480"
+      ],
+      "summary": "Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 forbidden characters",
+      "severities": [
+        {
+          "url": "https://github.com/advisories/GHSA-3pxv-7cmr-fjr4.json",
+          "value": "6.9",
+          "scoring_system": "cvssv4",
+          "scoring_elements": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N"
+        }
+      ],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://logging.apache.org/cyclonedx/vdr.xml",
+          "reference_type": "",
+          "reference_id": ""
+        }
+      ],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    },
+    {
+      "advisory_id": "gitlab_importer_v2/maven/org.apache.logging.log4j/log4j-core/CVE-2026-34480",
+      "url": "https://gitlab.com/advisories-community/CVE-2026-34480.yml",
+      "aliases": [
+        "CVE-2026-34480",
+        "GHSA-3pxv-7cmr-fjr4"
+      ],
+      "summary": "Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 forbidden characters",
+      "severities": [
+        {
+          "url": "https://gitlab.com/advisories-community/CVE-2026-34480.yml",
+          "value": "None",
+          "scoring_system": "cvssv3.1",
+          "scoring_elements": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        }
+      ],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://logging.apache.org/cyclonedx/vdr.xml",
+          "reference_type": "",
+          "reference_id": ""
+        }
+      ],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    }
+  ]
+}

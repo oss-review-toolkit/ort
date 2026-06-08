@@ -1,0 +1,8 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": "/api/v3/packages/?page=1",
+  "results": [
+    "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1"
+  ]
+}

@@ -49,11 +49,8 @@ dependencies {
     api(libs.kotlinx.datetime)
     api(libs.kotlinx.serialization.core)
     api(libs.kotlinx.serialization.json)
-    api(libs.okhttp)
-    api(libs.retrofit)
 
     implementation(ktorLibs.http)
-    implementation(libs.retrofit.converter.kotlinxSerialization)
 }
 
 description = "A client to communicate with the API of a VulnerableCode instance."

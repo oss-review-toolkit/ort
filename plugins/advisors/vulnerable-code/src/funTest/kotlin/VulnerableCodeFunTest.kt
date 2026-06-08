@@ -22,13 +22,19 @@ package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containAll
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.net.URI
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
 import org.ossreviewtoolkit.plugins.api.Secret
 
@@ -36,7 +42,8 @@ class VulnerableCodeFunTest : WordSpec({
     val vc = VulnerableCodeFactory.create(apiKey = System.getenv("VULNERABLECODE_API_KEY")?.let { Secret(it) })
 
     "Vulnerable Go packages" should {
-        "return findings for QUIC" {
+        // VulnerableCode v3 API doesn't currently have results for this package.
+        "return findings for QUIC".config(enabled = false) {
             val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -64,9 +71,7 @@ class VulnerableCodeFunTest : WordSpec({
     }
 
     "Vulnerable Maven packages" should {
-        // TODO: The test consistently fails with "unexpected end of stream".
-        //       This should be investigated and the test be re-enabled again.
-        "return findings for Guava".config(enabled = false) {
+        "return findings for Guava" {
             val id = Identifier("Maven:com.google.guava:guava:19.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -81,16 +86,46 @@ class VulnerableCodeFunTest : WordSpec({
                 )
 
                 val vulnerability = getValue("CVE-2023-2976")
-                vulnerability.summary shouldBe "Use of Java's default temporary directory for file creation in `..."
+                vulnerability.summary shouldBe "Guava vulnerable to insecure use of temporary directory\nUse of J..."
 
                 vulnerability.references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
                 } shouldNotBeNull {
-                    scoringSystem shouldBe "cvssv3"
-                    severity shouldBe "HIGH"
-                    score shouldBe 7.1f
-                    vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N"
+                    scoringSystem should beNull()
+                    severity should beNull()
+                    score should beNull()
+                    vector should beNull()
                 }
+
+                val refs = vulnerability.references.filter {
+                    it.url.toString() == "https://github.com/github/advisory-database/blob/main/advisories/github-" +
+                        "reviewed/2023/06/GHSA-7g45-4rm6-3mm3/GHSA-7g45-4rm6-3mm3.json"
+                }
+
+                refs shouldHaveSize 2
+
+                refs shouldContainExactlyInAnyOrder listOf(
+                    VulnerabilityReference(
+                        URI(
+                            "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/" +
+                                "2023/06/GHSA-7g45-4rm6-3mm3/GHSA-7g45-4rm6-3mm3.json"
+                        ),
+                        scoringSystem = "cvssv3.1",
+                        severity = "MEDIUM",
+                        score = 5.5f,
+                        vector = "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N"
+                    ),
+                    VulnerabilityReference(
+                        URI(
+                            "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/" +
+                                "2023/06/GHSA-7g45-4rm6-3mm3/GHSA-7g45-4rm6-3mm3.json"
+                        ),
+                        scoringSystem = "generic_textual",
+                        severity = "MEDIUM",
+                        score = null,
+                        vector = null
+                    )
+                )
             }
         }
 
@@ -103,20 +138,52 @@ class VulnerableCodeFunTest : WordSpec({
             results.flatMap { it.summary.issues } should beEmpty()
             with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
                 keys should containAll(
+                    "CVE-2024-26308",
+                    "CVE-2024-25710",
                     "CVE-2023-42503"
                 )
 
                 val vulnerability = getValue("CVE-2023-42503")
-                vulnerability.summary shouldBe "Improper Input Validation, Uncontrolled Resource Consumption vul..."
+                vulnerability.summary shouldBe "Apache Commons Compress denial of service vulnerability\nImproper..."
 
                 vulnerability.references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-42503"
                 } shouldNotBeNull {
-                    scoringSystem shouldBe "cvssv3"
-                    severity shouldBe "MEDIUM"
-                    score shouldBe 5.5f
-                    vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+                    scoringSystem should beNull()
+                    severity should beNull()
+                    score should beNull()
+                    vector should beNull()
                 }
+
+                val refs = vulnerability.references.filter {
+                    it.url.toString() == "https://github.com/github/advisory-database/blob/main/advisories/github-" +
+                        "reviewed/2023/09/GHSA-cgwf-w82q-5jrr/GHSA-cgwf-w82q-5jrr.json"
+                }
+
+                refs shouldHaveSize 2
+
+                refs shouldContainExactlyInAnyOrder listOf(
+                    VulnerabilityReference(
+                        URI(
+                            "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/" +
+                                "2023/09/GHSA-cgwf-w82q-5jrr/GHSA-cgwf-w82q-5jrr.json"
+                        ),
+                        scoringSystem = "cvssv3.1",
+                        severity = "MEDIUM",
+                        score = 5.5f,
+                        vector = "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+                    ),
+                    VulnerabilityReference(
+                        URI(
+                            "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/" +
+                                "2023/09/GHSA-cgwf-w82q-5jrr/GHSA-cgwf-w82q-5jrr.json"
+                        ),
+                        scoringSystem = "generic_textual",
+                        severity = "MEDIUM",
+                        score = null,
+                        vector = null
+                    )
+                )
             }
         }
     }
@@ -131,20 +198,62 @@ class VulnerableCodeFunTest : WordSpec({
             results.flatMap { it.summary.issues } should beEmpty()
             with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
                 keys should containAll(
-                    "CVE-2024-48948"
+                    "CVE-2025-14505",
+                    "CVE-2024-48948",
+                    "GHSA-vjh7-7g9h-fjfh"
                 )
 
                 val vulnerability = getValue("CVE-2024-48948")
-                vulnerability.summary shouldBe "The Elliptic package 6.5.7 for Node.js, in its for ECDSA impleme..."
+                vulnerability.summary shouldBe "Valid ECDSA signatures erroneously rejected in Elliptic\nThe Elli..."
 
                 vulnerability.references.find {
                     it.url.toString() == "https://github.com/indutny/elliptic"
                 } shouldNotBeNull {
-                    scoringSystem shouldBe "cvssv3.1"
-                    severity shouldBe "MEDIUM"
-                    score shouldBe 4.8f
-                    vector shouldBe "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+                    scoringSystem should beNull()
+                    severity should beNull()
+                    score should beNull()
+                    vector should beNull()
                 }
+
+                val refs = vulnerability.references.filter {
+                    it.url.toString() == "https://github.com/github/advisory-database/blob/main/advisories/github-" +
+                        "reviewed/2024/10/GHSA-fc9h-whq2-v747/GHSA-fc9h-whq2-v747.json"
+                }
+
+                refs shouldHaveSize 3
+
+                refs shouldContainExactlyInAnyOrder listOf(
+                    VulnerabilityReference(
+                        URI(
+                            "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/" +
+                                "2024/10/GHSA-fc9h-whq2-v747/GHSA-fc9h-whq2-v747.json"
+                        ),
+                        scoringSystem = "cvssv3.1",
+                        severity = "MEDIUM",
+                        score = 4.8f,
+                        vector = "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+                    ),
+                    VulnerabilityReference(
+                        URI(
+                            "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/" +
+                                "2024/10/GHSA-fc9h-whq2-v747/GHSA-fc9h-whq2-v747.json"
+                        ),
+                        scoringSystem = "cvssv4",
+                        severity = "LOW",
+                        score = 2.3f,
+                        vector = "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:P/VC:N/VI:L/VA:L/SC:N/SI:N/SA:N"
+                    ),
+                    VulnerabilityReference(
+                        URI(
+                            "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/" +
+                                "2024/10/GHSA-fc9h-whq2-v747/GHSA-fc9h-whq2-v747.json"
+                        ),
+                        scoringSystem = "generic_textual",
+                        severity = "LOW",
+                        score = null,
+                        vector = null
+                    )
+                )
             }
         }
     }

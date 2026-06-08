@@ -1,0 +1,9 @@
+{
+  "count": 3,
+  "next": "/api/v3/packages/?page=2",
+  "previous": null,
+  "results": [
+    "pkg:maven/junit/junit@4.12",
+    "pkg:maven/org.apache.commons/commons-lang3@3.5"
+  ]
+}

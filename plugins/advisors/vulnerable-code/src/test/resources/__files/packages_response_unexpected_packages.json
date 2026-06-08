@@ -1,0 +1,10 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    "pkg:maven/org.apache.commons/commons-lang3@3.5",
+    "pkg:maven/org.unknown/unexpected@4.2",
+    "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1"
+  ]
+}
