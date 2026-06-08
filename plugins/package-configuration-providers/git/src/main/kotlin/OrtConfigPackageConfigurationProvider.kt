@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packageconfigurationproviders.ortconfig
+package org.ossreviewtoolkit.plugins.packageconfigurationproviders.git
 
 import java.io.File
 
