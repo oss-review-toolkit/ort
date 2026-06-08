@@ -56,10 +56,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     private val logger = Logging.getLogger(OrtModelBuilder::class.java)
     private val errors = mutableListOf<String>()
     private val warnings = mutableListOf<String>()
-    private val globalDependencySubtrees = mutableMapOf<String, List<OrtComponentReference>>()
-
-    // Only create one "OrtComponent" for each "ResolvedComponentResult".
-    private val ortComponentCache = mutableMapOf<ResolvedComponentResult, OrtComponentReference>()
+    private val ortComponentReferenceCache = mutableMapOf<OrtComponentReference, OrtComponentReference>()
 
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
@@ -237,21 +234,13 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         // Cut the graph on cyclic dependencies.
         if (id in visited) return null
 
-        if (selected in ortComponentCache) {
-            return ortComponentCache[selected]
-        }
-
         if (id is ModuleComponentIdentifier) {
-            // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
-            val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
-                selected.dependencies.toOrtComponentReferences(visited + id)
-            }
-
             return OrtComponentReferenceImpl(
                 componentId = OrtComponentIdentifierImpl(id.group, id.module, id.version),
-                dependencies = dependencies
-            ).also {
-                ortComponentCache[selected] = it
+                dependencies = selected.dependencies.toOrtComponentReferences(visited + id)
+            ).run {
+                // Use the same instance for identical subtrees to reduce main memory consumption.
+                ortComponentReferenceCache.getOrPut(this) { this }
             }
         }
 
@@ -266,8 +255,9 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                     version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty()
                 ),
                 dependencies = dependencies
-            ).also {
-                ortComponentCache[selected] = it
+            ).run {
+                // Use the same instance for identical subtrees to reduce main memory consumption.
+                ortComponentReferenceCache.getOrPut(this) { this }
             }
         }
 
