@@ -25,11 +25,9 @@ plugins {
 dependencies {
     api(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 
-    implementation(projects.downloader)
     implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
+    implementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     implementation(projects.utils.commonUtils)
-
-    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
 
     ksp(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 }

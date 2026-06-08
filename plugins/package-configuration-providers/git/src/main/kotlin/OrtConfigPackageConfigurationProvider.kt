@@ -19,27 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.packageconfigurationproviders.git
 
-import java.io.File
-
-import org.apache.logging.log4j.kotlin.logger
-
-import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
-import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
-import org.ossreviewtoolkit.utils.common.div
-import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 private const val ORT_CONFIG_REPOSITORY_BRANCH = "main"
-private const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-toolkit/ort-config.git"
+internal const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-toolkit/ort-config.git"
 private const val PACKAGE_CONFIGURATIONS_DIR = "package-configurations"
 
 /**
@@ -54,34 +41,11 @@ private const val PACKAGE_CONFIGURATIONS_DIR = "package-configurations"
 )
 class OrtConfigPackageConfigurationProvider(
     override val descriptor: PluginDescriptor = OrtConfigPackageConfigurationProviderFactory.descriptor
-) : PackageConfigurationProvider {
-    private val configurationsDir by lazy {
-        ortDataDirectory.resolve("ort-config").also {
-            updateOrtConfig(it)
-        }
-    }
-
-    private val provider by lazy {
-        DirPackageConfigurationProvider(configurationsDir / PACKAGE_CONFIGURATIONS_DIR)
-    }
-
-    override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance) =
-        provider.getPackageConfigurations(packageId, provenance)
-}
-
-private fun updateOrtConfig(dir: File) {
-    val vcsInfo = VcsInfo.EMPTY.copy(type = VcsType.GIT, url = ORT_CONFIG_REPOSITORY_URL)
-    val vcs = checkNotNull(VersionControlSystem.forType(vcsInfo.type)) {
-        "No applicable VersionControlSystem implementation found for ${vcsInfo.type}."
-    }
-
-    dir.safeMkdirs()
-
-    vcs.apply {
-        val workingTree = initWorkingTree(dir, vcsInfo)
-        val revision = updateWorkingTree(workingTree, ORT_CONFIG_REPOSITORY_BRANCH).getOrThrow()
-        logger.info {
-            "Successfully cloned $revision from $ORT_CONFIG_REPOSITORY_URL."
-        }
-    }
-}
+) : GitPackageConfigurationProvider(
+    descriptor = descriptor,
+    config = GitPackageConfigurationProviderConfig(
+        repositoryUrl = ORT_CONFIG_REPOSITORY_URL,
+        revision = ORT_CONFIG_REPOSITORY_BRANCH,
+        path = PACKAGE_CONFIGURATIONS_DIR
+    )
+)
