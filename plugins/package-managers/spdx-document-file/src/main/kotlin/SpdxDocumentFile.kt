@@ -69,6 +69,7 @@ internal const val PACKAGE_TYPE_SPDX = "SpdxDocumentFile"
 private const val DEFAULT_SCOPE_NAME = "default"
 
 private val SPDX_LINKAGE_RELATIONSHIPS = mapOf(
+    SpdxRelationship.Type.CONTAINS to PackageLinkage.STATIC,
     SpdxRelationship.Type.DYNAMIC_LINK to PackageLinkage.DYNAMIC,
     SpdxRelationship.Type.STATIC_LINK to PackageLinkage.STATIC
 )
