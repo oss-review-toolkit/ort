@@ -26,10 +26,10 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalDocumentReference
 
 /**
- * Return whether the string has the format of an [SpdxExternalDocumentReference], with or without an additional
- * package id.
+ * Remove an [SpdxExternalDocumentReference] prefix from this SPDX identifier, if present.
  */
-internal fun String.isExternalDocumentReferenceId(): Boolean = startsWith(SpdxConstants.DOCUMENT_REF_PREFIX)
+internal fun String.removeDocumentRefPrefix(): String =
+    takeUnless { startsWith(SpdxConstants.DOCUMENT_REF_PREFIX) } ?: substringAfter(":")
 
 /**
  * Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string.

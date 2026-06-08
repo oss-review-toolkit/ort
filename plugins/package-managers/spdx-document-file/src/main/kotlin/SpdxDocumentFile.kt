@@ -52,11 +52,11 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.SpdxDocumentCache
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.extractScopeFromExternalReferences
-import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.isExternalDocumentReferenceId
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.locateCpe
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.locateExternalReference
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.mapNotPresentToEmpty
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.projectPackage
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.removeDocumentRefPrefix
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.toIdentifier
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.toPackage
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.wrapPresentInSet
@@ -368,11 +368,7 @@ private fun getLinkageForDependency(
 ): PackageLinkage =
     relationships.mapNotNull { relation ->
         SPDX_LINKAGE_RELATIONSHIPS[relation.relationshipType]?.takeIf {
-            val relationId = if (relation.relatedSpdxElement.isExternalDocumentReferenceId()) {
-                relation.relatedSpdxElement.substringAfter(":")
-            } else {
-                relation.relatedSpdxElement
-            }
+            val relationId = relation.relatedSpdxElement.removeDocumentRefPrefix()
 
             relationId == dependency.spdxId && relation.spdxElementId == dependant
         }
