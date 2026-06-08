@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packageconfigurationproviders.ortconfig
+package org.ossreviewtoolkit.plugins.packageconfigurationproviders.git
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
