@@ -30,11 +30,13 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
+import org.ossreviewtoolkit.plugins.api.Secret
 
 class VulnerableCodeFunTest : WordSpec({
+    val vc = VulnerableCodeFactory.create(apiKey = System.getenv("VULNERABLECODE_API_KEY")?.let { Secret(it) })
+
     "Vulnerable Go packages" should {
         "return findings for QUIC" {
-            val vc = VulnerableCodeFactory.create()
             val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -65,7 +67,6 @@ class VulnerableCodeFunTest : WordSpec({
         // TODO: The test consistently fails with "unexpected end of stream".
         //       This should be investigated and the test be re-enabled again.
         "return findings for Guava".config(enabled = false) {
-            val vc = VulnerableCodeFactory.create()
             val id = Identifier("Maven:com.google.guava:guava:19.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -94,7 +95,6 @@ class VulnerableCodeFunTest : WordSpec({
         }
 
         "return findings for Commons-Compress" {
-            val vc = VulnerableCodeFactory.create()
             val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -123,7 +123,6 @@ class VulnerableCodeFunTest : WordSpec({
 
     "Vulnerable NPM packages" should {
         "return findings for Elliptic" {
-            val vc = VulnerableCodeFactory.create()
             val id = Identifier("NPM::elliptic:6.5.7")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
