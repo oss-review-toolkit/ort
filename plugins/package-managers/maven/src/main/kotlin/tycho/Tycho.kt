@@ -30,7 +30,6 @@ import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.AbstractMavenLifecycleParticipant
 import org.apache.maven.cli.MavenCli
 import org.apache.maven.execution.MavenSession
-import org.apache.maven.model.Dependency
 import org.apache.maven.model.Scm
 import org.apache.maven.project.MavenProject
 
@@ -441,7 +440,7 @@ private fun resolveMavenArtifacts(
 
 /**
  * Return a [Package] with the same properties as this [Package], but with an [Identifier] derived from the given
- * [Dependency]. This is necessary for artifacts referenced by Tycho under alternative IDs. Here it must be ensured
+ * [Artifact]. This is necessary for artifacts referenced by Tycho under alternative IDs. Here it must be ensured
  * that this alternative ID is set for the package, even if it has been resolved using Maven's standard mechanism.
  * Otherwise, there could be conflicts if the standard Maven packages are listed in the dependencies as well.
  */
