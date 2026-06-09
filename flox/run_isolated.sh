@@ -27,4 +27,5 @@ fi
 ENV_DIR="$(dirname "$SELF")/$1"
 shift
 
-env -i CI=$CI "$(which flox)" activate -d "$ENV_DIR" -- "$@"
+# shellcheck disable=SC2046
+env -i CI=$CI $(env | grep -E '_API_KEY=|_PAT=' | tr '\n' ' ') "$(which flox)" activate -d "$ENV_DIR" -- "$@"
