@@ -155,7 +155,7 @@ private fun createSnippetFindings(details: ScanFileDetails, localFilePath: Strin
         .map { license -> SpdxExpression.parse(license.name) }
         .toExpression()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
 
-    // TODO: No resolved revision is available. Should a ArtifactProvenance be created instead?
+    // TODO: No resolved revision is available. Should an ArtifactProvenance be created instead?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
     val provenance = RepositoryProvenance(vcsInfo, ".")
 
