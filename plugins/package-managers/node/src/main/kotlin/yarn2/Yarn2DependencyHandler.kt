@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -65,7 +67,7 @@ internal class Yarn2DependencyHandler(
         )
 
     override fun dependenciesFor(dependency: PackageInfo): List<PackageInfo> =
-        dependency.children.dependencies.map { packageInfoForLocator.getValue(it.realLocator) }
+        dependency.children.dependencies.map(::packageInfoFor)
 
     override fun linkageFor(dependency: PackageInfo): PackageLinkage =
         if (dependency.isProject) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
@@ -76,10 +78,61 @@ internal class Yarn2DependencyHandler(
 
         return parsePackage(packageJson, moduleInfoResolver)
     }
+
+    /**
+     * Obtain the [PackageInfo] object for the given [dependency].
+     *
+     * Try the `realLocator` first to correctly handle virtual packages. If that fails, try to construct the real
+     * locator from the virtual package's actual resolved version (handles virtual packages whose `children.version`
+     * was overridden by Yarn's `resolutions` feature).
+     *
+     * If both targeted lookups fail, fall back to searching the map for all installed versions of the same module
+     * by name. This handles the case where Yarn's `resolutions` feature (or similar mechanisms) cause a non-virtual
+     * dependency locator to reference a version that is not present in the map, while a different version of the
+     * same module was actually installed. If exactly one candidate is found, it is used. If multiple candidates are
+     * found, the resolution is ambiguous and an exception is thrown.
+     */
+    internal fun packageInfoFor(dependency: PackageInfo.Dependency): PackageInfo {
+        packageInfoForLocator[dependency.realLocator]?.let { return it }
+
+        // Fallback for virtual packages: derive the real locator from the virtual package's resolved version.
+        packageInfoForLocator[dependency.locator]?.let { virtualInfo ->
+            val moduleName = Locator.parse(dependency.locator).moduleName
+            packageInfoForLocator["$moduleName@npm:${virtualInfo.children.version}"]?.let { return it }
+        }
+
+        // Fallback for version mismatches caused by Yarn's `resolutions` feature: find the single installed version
+        // of the same module by name, ignoring the exact version in the locator.
+        val moduleName = Locator.parse(dependency.realLocator).moduleName
+        val candidates = packageInfoForLocator.values.filter {
+            it.moduleName == moduleName && !it.isProject && !it.isVirtual
+        }
+
+        candidates.singleOrNull()?.also {
+            logger.debug {
+                "Resolved locator '${dependency.realLocator}' to '${it.value}' via module name lookup."
+            }
+
+            return it
+        }
+
+        if (candidates.isEmpty()) {
+            error(
+                "Could not find a PackageInfo for locator '${dependency.realLocator}'. No entry for module " +
+                    "'$moduleName' exists in ${packageInfoForLocator.keys}."
+            )
+        }
+
+        error("Could not unambiguously resolve locator '${dependency.realLocator}'. Found ${candidates.size} " +
+            "installed versions of module '$moduleName': ${candidates.map { it.value }}.")
+    }
 }
 
 internal val PackageInfo.isProject: Boolean
     get() = Locator.parse(value).isProject
+
+internal val PackageInfo.isVirtual: Boolean
+    get() = Locator.parse(value).isVirtual
 
 internal val PackageInfo.moduleName: String
     // TODO: Handle patched packages different than non-patched ones.
@@ -113,4 +166,6 @@ internal data class Locator(
 
     val isProject: Boolean = remainder.startsWith("workspace:") ||
         (remainder.startsWith("virtual:") && "#workspace:" in remainder)
+
+    val isVirtual: Boolean = remainder.startsWith("virtual:") && !isProject
 }
