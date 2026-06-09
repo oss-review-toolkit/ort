@@ -384,15 +384,17 @@ class TychoTest : WordSpec({
         }
 
         "handle Tycho identifiers that need to be mapped to Maven dependencies" {
-            val originalArtifact = mockk<Artifact>()
-            val mappedArtifact = mockk<Artifact>()
+            val wrappedId = Identifier(PACKAGE_TYPE, "wrapped", "test", "23")
+            val originalArtifact = createArtifactMock(wrappedId)
+            val mappedArtifact = createArtifactMock(testArtifactIdentifier)
             val repo1 = mockk<RemoteRepository>()
             val repo2 = mockk<RemoteRepository>()
             val dependency = DefaultDependencyNode(originalArtifact).apply {
                 repositories = listOf(repo1, repo2)
             }
 
-            val pkg = mockk<Package>()
+            val pkg = Package.EMPTY.copy(id = testArtifactIdentifier, homepageUrl = "https://example.com/package")
+            val expectedPkg = pkg.copy(id = wrappedId)
             val delegate: PackageResolverFun = { node ->
                 if (node == dependency) {
                     throw IOException("Test exception: Unresolvable dependency.")
@@ -410,11 +412,12 @@ class TychoTest : WordSpec({
 
             val resolver = tychoPackageResolverFun(delegate, mockk(), mockk(), targetHandler, mockk(relaxed = true))
 
-            resolver(dependency) shouldBe pkg
+            resolver(dependency) shouldBe expectedPkg
         }
 
         "test all candidates for a wrapped artifact" {
-            val originalArtifact = mockk<Artifact>()
+            val wrappedId = Identifier(PACKAGE_TYPE, "wrapped", "multitest", "11")
+            val originalArtifact = createArtifactMock(wrappedId)
             val mappedArtifact1 = mockk<Artifact>()
             val mappedArtifact2 = mockk<Artifact>()
             val mappedArtifact3 = mockk<Artifact>()
@@ -422,7 +425,8 @@ class TychoTest : WordSpec({
             val dependency = DefaultDependencyNode(originalArtifact)
 
             var delegateCount = 0
-            val pkg = mockk<Package>()
+            val pkg = Package.EMPTY.copy(id = testArtifactIdentifier, homepageUrl = "https://example.com/org-package")
+            val expectedPkg = pkg.copy(id = wrappedId)
             val delegate: PackageResolverFun = { node ->
                 delegateCount++
                 if (node.artifact != mappedArtifact3) {
@@ -443,7 +447,7 @@ class TychoTest : WordSpec({
 
             val resolver = tychoPackageResolverFun(delegate, mockk(), mockk(), targetHandler, mockk(relaxed = true))
 
-            resolver(dependency) shouldBe pkg
+            resolver(dependency) shouldBe expectedPkg
             delegateCount shouldBe 4
         }
 
@@ -748,3 +752,13 @@ private fun createResolverMock(
         every { isBinary(any()) } returns false
     }
 }
+
+/**
+ * Create a mock for an [Artifact] that returns coordinates from the given [id].
+ */
+private fun createArtifactMock(id: Identifier): Artifact =
+    mockk {
+        every { groupId } returns id.namespace
+        every { artifactId } returns id.name
+        every { version } returns id.version
+    }

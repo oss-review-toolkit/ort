@@ -30,6 +30,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.AbstractMavenLifecycleParticipant
 import org.apache.maven.cli.MavenCli
 import org.apache.maven.execution.MavenSession
+import org.apache.maven.model.Dependency
 import org.apache.maven.model.Scm
 import org.apache.maven.project.MavenProject
 
@@ -428,7 +429,7 @@ private fun resolveMavenArtifacts(
                     repositories = dependency.repositories
                 }
 
-                resolver(mappedDependency)
+                resolver(mappedDependency).withOriginalId(dependency.artifact)
             }.onFailure { exception ->
                 logger.debug(exception) { "Failed to resolve Maven artifact candidate." }
             }.getOrNull()
@@ -437,6 +438,22 @@ private fun resolveMavenArtifacts(
         "Failed to resolve ${candidates.size} candidates for dependency " +
             "'${dependency.artifact.identifier()}'."
     }
+
+/**
+ * Return a [Package] with the same properties as this [Package], but with an [Identifier] derived from the given
+ * [Dependency]. This is necessary for artifacts referenced by Tycho under alternative IDs. Here it must be ensured
+ * that this alternative ID is set for the package, even if it has been resolved using Maven's standard mechanism.
+ * Otherwise, there could be conflicts if the standard Maven packages are listed in the dependencies as well.
+ */
+private fun Package.withOriginalId(dependency: Artifact): Package =
+    copy(
+        id = Identifier(
+            type = id.type,
+            namespace = dependency.groupId,
+            name = dependency.artifactId,
+            version = dependency.version
+        )
+    )
 
 /**
  * Create a [Package] for the given [artifact] obtaining metadata from the given [manifest] and [resolver]. This
