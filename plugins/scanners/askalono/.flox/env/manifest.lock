@@ -1,7 +1,7 @@
 {
   "lockfile-version": 1,
   "manifest": {
-    "version": 1,
+    "schema-version": "1.10.0",
     "install": {
       "askalono": {
         "pkg-path": "askalono",
