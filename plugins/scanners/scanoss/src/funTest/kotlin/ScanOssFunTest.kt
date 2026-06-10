@@ -51,7 +51,8 @@ class ScanOssFunTest : StringSpec({
 
     val scanContext = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
 
-    "File matches contain the expected findings" {
+    // Disabled as SCANOSS by now returns ORT itself as the original source of the file.
+    "File matches contain the expected findings".config(enabled = false) {
         val unoconv = extractResource("/unoconv")
 
         val summary = scanner.scanPath(unoconv, scanContext)
@@ -71,7 +72,8 @@ class ScanOssFunTest : StringSpec({
         }
     }
 
-    "Snippet matches contain the expected findings" {
+    // Disabled as SCANOSS by now returns ORT itself as the original source of the snippet.
+    "Snippet matches contain the expected findings".config(enabled = false) {
         val unoconv = extractResource("/unoconv-snippet")
 
         val summary = scanner.scanPath(unoconv, scanContext)
