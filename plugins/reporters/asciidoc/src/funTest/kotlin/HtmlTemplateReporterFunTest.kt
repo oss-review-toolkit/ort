@@ -23,7 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
+import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_SPDX
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -37,7 +37,7 @@ class HtmlTemplateReporterFunTest : StringSpec({
         val reportContent = reporter.generateReport(
             ReporterInput(
                 ORT_RESULT,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             ),
             tempdir()
         ).single().getOrThrow().readText()

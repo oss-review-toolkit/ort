@@ -36,7 +36,7 @@ dependencies {
     implementation(projects.utils.spdxUtils)
 
     funTestImplementation(testFixtures(projects.plugins.reporters.spdxReporter))
-    funTestImplementation(projects.plugins.licenseFactProviders.scancodeLicenseFactProvider)
+    funTestImplementation(testFixtures(projects.reporter))
     funTestImplementation(projects.utils.testUtils)
 
     testFixturesImplementation(projects.utils.testUtils)

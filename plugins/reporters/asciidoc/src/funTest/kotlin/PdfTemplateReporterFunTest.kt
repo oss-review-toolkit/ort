@@ -29,7 +29,7 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
+import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_SPDX
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -40,7 +40,7 @@ class PdfTemplateReporterFunTest : StringSpec({
         val reportFileResults = PdfTemplateReporterFactory.create().generateReport(
             ReporterInput(
                 ORT_RESULT,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             ),
             tempdir()
         )
