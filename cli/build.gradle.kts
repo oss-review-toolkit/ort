@@ -58,15 +58,12 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    funTestImplementation(platform(projects.plugins.commands))
-    funTestImplementation(platform(projects.plugins.packageCurationProviders))
-    funTestImplementation(platform(projects.plugins.packageManagers))
-    funTestImplementation(platform(projects.plugins.reporters))
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(libs.greenmail)
     funTestImplementation(projects.downloader)
     funTestImplementation(projects.evaluator)
     funTestImplementation(projects.notifier)
+    funTestImplementation(projects.plugins.packageManagers.gradleInspector)
     funTestImplementation(projects.reporter)
     funTestImplementation(projects.utils.testUtils)
 }
