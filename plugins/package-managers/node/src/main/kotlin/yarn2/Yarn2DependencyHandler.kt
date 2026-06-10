@@ -32,6 +32,10 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
+import org.ossreviewtoolkit.utils.common.withoutPrefix
+
+import org.semver4j.Semver
+import org.semver4j.range.RangeListFactory
 
 internal class Yarn2DependencyHandler(
     private val moduleInfoResolver: ModuleInfoResolver
@@ -86,11 +90,12 @@ internal class Yarn2DependencyHandler(
      * locator from the virtual package's actual resolved version (handles virtual packages whose `children.version`
      * was overridden by Yarn's `resolutions` feature).
      *
-     * If both targeted lookups fail, fall back to searching the map for all installed versions of the same module
-     * by name. This handles the case where Yarn's `resolutions` feature (or similar mechanisms) cause a non-virtual
-     * dependency locator to reference a version that is not present in the map, while a different version of the
-     * same module was actually installed. If exactly one candidate is found, it is used. If multiple candidates are
-     * found, the resolution is ambiguous and an exception is thrown.
+     * If both targeted lookups fail, fall back to searching the map for all installed non-virtual, non-project
+     * versions of the same module by name. This handles the case where Yarn's `resolutions` feature (or similar
+     * mechanisms) cause a non-virtual dependency locator to reference a version that is not present in the map,
+     * while a different version of the same module was actually installed. If exactly one candidate is found, it
+     * is used. If multiple candidates are found, the semver range from the [dependency]'s descriptor is used to
+     * narrow down the candidates. If after all fallbacks the result is still not unique, an exception is thrown.
      */
     internal fun packageInfoFor(dependency: PackageInfo.Dependency): PackageInfo {
         packageInfoForLocator[dependency.realLocator]?.let { return it }
@@ -101,8 +106,8 @@ internal class Yarn2DependencyHandler(
             packageInfoForLocator["$moduleName@npm:${virtualInfo.children.version}"]?.let { return it }
         }
 
-        // Fallback for version mismatches caused by Yarn's `resolutions` feature: find the single installed version
-        // of the same module by name, ignoring the exact version in the locator.
+        // Fallback for version mismatches caused by Yarn's `resolutions` feature: find installed versions of the
+        // same module by name, ignoring the exact version in the locator.
         val moduleName = Locator.parse(dependency.realLocator).moduleName
         val candidates = packageInfoForLocator.values.filter {
             it.moduleName == moduleName && !it.isProject && !it.isVirtual
@@ -123,8 +128,12 @@ internal class Yarn2DependencyHandler(
             )
         }
 
-        error("Could not unambiguously resolve locator '${dependency.realLocator}'. Found ${candidates.size} " +
-            "installed versions of module '$moduleName': ${candidates.map { it.value }}.")
+        candidates.matchVersionRange(dependency)?.let { return it }
+
+        error(
+            "Could not unambiguously resolve locator '${dependency.realLocator}'. Found ${candidates.size} " +
+                "installed versions of module '$moduleName': ${candidates.map { it.value }}."
+        )
     }
 }
 
@@ -168,4 +177,26 @@ internal data class Locator(
         (remainder.startsWith("virtual:") && "#workspace:" in remainder)
 
     val isVirtual: Boolean = remainder.startsWith("virtual:") && !isProject
+}
+
+/**
+ * Try to find a single [PackageInfo] from this collection that matches the given [dependency] taking semantic
+ * version ranges into account.
+ */
+private fun Collection<PackageInfo>.matchVersionRange(dependency: PackageInfo.Dependency): PackageInfo? {
+    val descriptorRemainder = Locator.parse(dependency.descriptor).remainder
+    return descriptorRemainder.withoutPrefix("npm:")?.let { rangeSpec ->
+        runCatching { RangeListFactory.create(rangeSpec) }.getOrNull()?.let { range ->
+            val matchingCandidates = filter { candidate ->
+                Semver.coerce(candidate.children.version)?.let { range.isSatisfiedBy(it) } == true
+            }
+
+            matchingCandidates.singleOrNull()?.also {
+                logger.debug {
+                    "Resolved locator '${dependency.realLocator}' to '${it.value}' via semver range " +
+                        "matching on descriptor '${dependency.descriptor}'."
+                }
+            }
+        }
+    }
 }
