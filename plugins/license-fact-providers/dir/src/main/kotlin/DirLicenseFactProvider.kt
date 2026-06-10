@@ -67,7 +67,7 @@ class DefaultDirLicenseFactProvider(descriptor: PluginDescriptor = DefaultDirLic
 open class DirLicenseFactProvider(
     override val descriptor: PluginDescriptor = DirLicenseFactProviderFactory.descriptor,
     config: DirLicenseFactProviderConfig
-) : LicenseFactProvider() {
+) : LicenseFactProvider {
     private val licenseTextDir = File(config.licenseTextDir).also {
         if (!it.isDirectory) {
             logger.warn { "The license text directory '${it.absolutePath}' does not exist or is not a directory." }

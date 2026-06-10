@@ -20,18 +20,17 @@
 package org.ossreviewtoolkit.reporter
 
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
-import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.scancode.ScanCodeLicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 
-val LICENSE_FACT_PROVIDER_EMPTY: LicenseFactProvider by lazy {
+val LICENSE_FACT_PROVIDER_EMPTY: CompositeLicenseFactProvider by lazy {
     CompositeLicenseFactProvider(emptyList())
 }
 
-val LICENSE_FACT_PROVIDER_SCAN_CODE: LicenseFactProvider by lazy {
-    ScanCodeLicenseFactProviderFactory.create()
+val LICENSE_FACT_PROVIDER_SCAN_CODE: CompositeLicenseFactProvider by lazy {
+    CompositeLicenseFactProvider(listOf(ScanCodeLicenseFactProviderFactory.create()))
 }
 
-val LICENSE_FACT_PROVIDER_SPDX: LicenseFactProvider by lazy {
-    SpdxLicenseFactProviderFactory.create()
+val LICENSE_FACT_PROVIDER_SPDX: CompositeLicenseFactProvider by lazy {
+    CompositeLicenseFactProvider(listOf(SpdxLicenseFactProviderFactory.create()))
 }

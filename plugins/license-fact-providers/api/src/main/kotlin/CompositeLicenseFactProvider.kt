@@ -19,10 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.licensefactproviders.api
 
-import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-
 /**
- * A [LicenseFactProvider] that aggregates multiple [LicenseFactProvider]s.
+ * A composition of multiple [LicenseFactProvider]s.
  */
 class CompositeLicenseFactProvider(
     /**
@@ -30,14 +28,16 @@ class CompositeLicenseFactProvider(
      *  providers: the first provider in the list that has a fact for a given license ID will be used.
      */
     private val providers: List<LicenseFactProvider>
-) : LicenseFactProvider() {
-    override val descriptor = PluginDescriptor(
-        id = "Composite",
-        displayName = "Composite License Fact Provider",
-        summary = "A license fact provider that aggregates multiple license fact providers."
-    )
+) {
+    /** Return the [LicenseText] for the given [licenseId], or `null` if no valid text is available. */
+    fun getLicenseText(licenseId: String): LicenseText? =
+        providers.firstNotNullOfOrNull { it.getLicenseText(licenseId) }
 
-    override fun getLicenseText(licenseId: String) = providers.firstNotNullOfOrNull { it.getLicenseText(licenseId) }
+    /** Return a non-blank license text for the given [licenseId], or `null` if no valid text is available. */
+    @Deprecated("Java-only API", level = DeprecationLevel.HIDDEN)
+    @JvmName("getLicenseText")
+    fun getNonBlankLicenseText(licenseId: String): String? = getLicenseText(licenseId)?.text
 
-    override fun hasLicenseText(licenseId: String) = providers.any { it.hasLicenseText(licenseId) }
+    /** Return `true´ if this provider has a license text for the given [licenseId]. */
+    fun hasLicenseText(licenseId: String): Boolean = providers.any { it.hasLicenseText(licenseId) }
 }

@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_EMPTY
 import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_SPDX
@@ -259,7 +259,7 @@ private fun TestConfiguration.generateSingleBomReport(
     format: Format,
     singleBomComponentName: String = "",
     singleBomComponentType: Component.Type = Component.Type.APPLICATION,
-    licenseFactProvider: LicenseFactProvider = LICENSE_FACT_PROVIDER_EMPTY
+    licenseFactProvider: CompositeLicenseFactProvider = LICENSE_FACT_PROVIDER_EMPTY
 ): String {
     val reporter = CycloneDxReporterFactory.create(
         schemaVersion = SchemaVersion.entries.single { it.version.versionString == DEFAULT_SCHEMA_VERSION_NAME },
@@ -279,7 +279,7 @@ private fun TestConfiguration.generateSingleBomReport(
 private fun TestConfiguration.generateMultiBomReport(
     ortResult: OrtResult,
     format: Format,
-    licenseFactProvider: LicenseFactProvider = LICENSE_FACT_PROVIDER_EMPTY
+    licenseFactProvider: CompositeLicenseFactProvider = LICENSE_FACT_PROVIDER_EMPTY
 ): List<String> {
     val reporter = CycloneDxReporterFactory.create(
         schemaVersion = SchemaVersion.entries.single { it.version.versionString == DEFAULT_SCHEMA_VERSION_NAME },

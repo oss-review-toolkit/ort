@@ -56,7 +56,7 @@ data class ScanCodeLicenseFactProviderConfig(
 class ScanCodeLicenseFactProvider(
     override val descriptor: PluginDescriptor = ScanCodeLicenseFactProviderFactory.descriptor,
     private val config: ScanCodeLicenseFactProviderConfig
-) : LicenseFactProvider() {
+) : LicenseFactProvider {
     /**
      * The directory that contains the ScanCode license texts. This is located using a heuristic based on the path of
      * the ScanCode binary.
