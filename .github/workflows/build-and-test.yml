@@ -93,9 +93,6 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     steps:
-    - name: Debug
-      run: |
-        echo "VULNERABLECODE_API_KEY: $VULNERABLECODE_API_KEY"
     - name: Checkout Repository
       uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
     - name: Setup Gradle
@@ -105,6 +102,10 @@ jobs:
       with:
         disable-metrics: true
     - name: Run functional tests that do not require external tools
+      env:
+        OSSKB_API_KEY: ${{ secrets.OSSKB_API_KEY }}
+        SONATYPE_PAT: ${{ secrets.SONATYPE_PAT }}
+        VULNERABLECODE_API_KEY: ${{ secrets.VULNERABLECODE_API_KEY }}
       run: |
         echo "VULNERABLECODE_API_KEY: $VULNERABLECODE_API_KEY"
         ./flox/run_isolated.sh minimal ./gradlew --scan -Dkotest.tags=!RequiresExternalTool -p plugins/advisors/vulnerable-code/ funTest
