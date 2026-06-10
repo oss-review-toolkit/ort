@@ -33,7 +33,6 @@ dependencies {
     }
 
     api(projects.model)
-    api(projects.plugins.versionControlSystems.gitVersionControlSystem)
 
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.diffUtils)
