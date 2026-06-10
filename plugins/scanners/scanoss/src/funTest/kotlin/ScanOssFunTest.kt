@@ -51,27 +51,64 @@ class ScanOssFunTest : StringSpec({
 
     val scanContext = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
 
-    "File matches contain the expected findings" {
+    "Pending file matches create snippet findings" {
         val unoconv = extractResource("/unoconv")
 
         val summary = scanner.scanPath(unoconv, scanContext)
 
-        summary.licenseFindings.shouldBeSingleton {
-            it.license shouldBe "GPL-2.0-only".toSpdx()
-            it.score shouldBe 100.0f
-        }
+        summary.licenseFindings should beEmpty()
+        summary.copyrightFindings should beEmpty()
 
-        summary.snippetFindings should beEmpty()
+        summary.snippetFindings.shouldBeSingleton {
+            it.snippets.shouldBeSingleton { snippet ->
+                snippet.score shouldBe 100.0f
 
-        // Copyrights (and vulnerabilities) are commercial features.
-        if (CloudCheck.getScanOssApiKey() != null) {
-            summary.copyrightFindings.shouldBeSingleton {
-                it.statement shouldBe "Copyright 2007-2010 Dag Wieers <dag@wieers.com>"
+                // TODO: The below shold point to https://github.com/unoconv/unoconv.git instead of ORT.
+                snippet.location shouldBe TextLocation(
+                    "plugins/scanners/scanoss/src/funTest/resources/unoconv",
+                    TextLocation.UNKNOWN_LINE
+                )
+                snippet.provenance shouldBe RepositoryProvenance(
+                    vcsInfo = VcsInfo(VcsType.GIT, "https://github.com/oss-review-toolkit/ort.git", ""),
+                    resolvedRevision = "."
+                )
+                snippet.purl shouldBe "pkg:github/oss-review-toolkit/ort"
+
+                // TODO: This simply is the project's declared license, which is wriong in case of individual files
+                //       in a repository being licensed differently, also see https://reuse.software/.
+                snippet.license shouldBe "Apache-2.0".toSpdx()
+
+                snippet.additionalData shouldContainExactly if (CloudCheck.getScanOssApiKey() != null) {
+                    mapOf(
+                        "component" to "ort",
+                        "vendor" to "oss-review-toolkit",
+                        "version" to "84.1.0",
+                        "latest" to "85.0.0",
+                        "file_hash" to "0f55e083dcc72a11334eb1a77137e2c4",
+                        "file_url" to "https://api.scanoss.com/file_contents/0f55e083dcc72a11334eb1a77137e2c4",
+                        "url_hash" to "4a95cb23b73bb80cfaeab9feb4a286bc",
+                        "release_date" to "2026-04-23",
+                        "source_hash" to "0f55e083dcc72a11334eb1a77137e2c4",
+                        "related_purls" to "pkg:golang/github.com/oss-review-toolkit/ort,pkg:maven/org.ossreviewtoolkit/advisor"
+                    )
+                } else {
+                    mapOf(
+                        "component" to "ort",
+                        "vendor" to "oss-review-toolkit",
+                        "version" to "84.1.0",
+                        "latest" to "85.0.0",
+                        "file_hash" to "0f55e083dcc72a11334eb1a77137e2c4",
+                        "url_hash" to "4a95cb23b73bb80cfaeab9feb4a286bc",
+                        "release_date" to "2026-04-23",
+                        "source_hash" to "0f55e083dcc72a11334eb1a77137e2c4",
+                        "related_purls" to "pkg:golang/github.com/oss-review-toolkit/ort,pkg:maven/org.ossreviewtoolkit/advisor"
+                    )
+                }
             }
         }
     }
 
-    "Snippet matches contain the expected findings" {
+    "Pending snippet matches create findings".config(enabled = false) {
         val unoconv = extractResource("/unoconv-snippet")
 
         val summary = scanner.scanPath(unoconv, scanContext)
