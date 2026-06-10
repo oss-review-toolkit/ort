@@ -224,7 +224,7 @@ tasks.withType<Test>().configureEach {
     // Work-around for "--tests" only being able to include tests, see https://github.com/gradle/gradle/issues/6505.
     properties["tests.exclude"]?.also { excludes ->
         filter {
-            excludes.toString().split(',').map { excludeTestsMatching(it) }
+            excludes.toString().split(',').forEach { excludeTestsMatching(it) }
             isFailOnNoMatchingTests = false
         }
     }
@@ -233,7 +233,7 @@ tasks.withType<Test>().configureEach {
     // implement this, see https://github.com/gradle/gradle/issues/5719.
     properties["tests.include"]?.also { includes ->
         filter {
-            includes.toString().split(',').map { includeTestsMatching(it) }
+            includes.toString().split(',').forEach { includeTestsMatching(it) }
             isFailOnNoMatchingTests = false
         }
     }
