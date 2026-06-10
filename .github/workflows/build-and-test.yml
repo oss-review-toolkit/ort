@@ -102,6 +102,10 @@ jobs:
       with:
         disable-metrics: true
     - name: Run functional tests that do not require external tools
+      env:
+        OSSKB_API_KEY: ${{ secrets.OSSKB_API_KEY }}
+        SONATYPE_PAT: ${{ secrets.SONATYPE_PAT }}
+        VULNERABLECODE_API_KEY: ${{ secrets.VULNERABLECODE_API_KEY }}
       run: ./flox/run_isolated.sh minimal ./gradlew --scan -Dkotest.tags=!RequiresExternalTool funTest jacocoFunTestReport
     - name: Create Test Summary
       uses: test-summary/action@37b508cfee6d4d080eedd00b5bb240a6a784a6a5 # v2
