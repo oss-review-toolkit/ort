@@ -10,12 +10,8 @@ systems = ["x86_64-linux"]
 
 [install]
 jdk25.pkg-path = "jdk25"
-jdk25.outputs = "all"
 
 # Required to run the Gradle wrapper:
 coreutils.pkg-path = "coreutils"
-coreutils.outputs = "all"
 findutils.pkg-path = "findutils"
-findutils.outputs = "all"
 gnused.pkg-path = "gnused"
-gnused.outputs = "all"

@@ -1,4 +1,3 @@
-# Flox manifest version managed by Flox CLI
 schema-version = "1.10.0"
 
 [vars]

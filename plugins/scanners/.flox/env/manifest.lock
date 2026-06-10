@@ -1,7 +1,7 @@
 {
   "lockfile-version": 1,
   "manifest": {
-    "version": 1,
+    "schema-version": "1.10.0",
     "install": {
       "askalono": {
         "pkg-path": "askalono",
@@ -124,7 +124,7 @@
   ],
   "compose": {
     "composer": {
-      "version": 1,
+      "schema-version": "1.10.0",
       "vars": {
         "FLOX_DISABLE_METRICS": "true"
       },
@@ -154,7 +154,7 @@
     "include": [
       {
         "manifest": {
-          "version": 1,
+          "schema-version": "1.10.0",
           "install": {
             "askalono": {
               "pkg-path": "askalono",
@@ -181,7 +181,7 @@
       },
       {
         "manifest": {
-          "version": 1,
+          "schema-version": "1.10.0",
           "install": {
             "licensee": {
               "pkg-path": "licensee",
@@ -208,7 +208,7 @@
       },
       {
         "manifest": {
-          "version": 1,
+          "schema-version": "1.10.0",
           "install": {
             "scancode": {
               "pkg-path": "python314Packages.scancode-toolkit",

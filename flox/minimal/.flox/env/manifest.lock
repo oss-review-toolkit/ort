@@ -4,20 +4,16 @@
     "schema-version": "1.10.0",
     "install": {
       "coreutils": {
-        "pkg-path": "coreutils",
-        "outputs": "all"
+        "pkg-path": "coreutils"
       },
       "findutils": {
-        "pkg-path": "findutils",
-        "outputs": "all"
+        "pkg-path": "findutils"
       },
       "gnused": {
-        "pkg-path": "gnused",
-        "outputs": "all"
+        "pkg-path": "gnused"
       },
       "jdk25": {
-        "pkg-path": "jdk25",
-        "outputs": "all"
+        "pkg-path": "jdk25"
       }
     },
     "vars": {
