@@ -64,6 +64,7 @@ dependencies {
     funTestImplementation(projects.evaluator)
     funTestImplementation(projects.notifier)
     funTestImplementation(projects.plugins.packageManagers.gradleInspector)
+    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(projects.reporter)
     funTestImplementation(projects.utils.testUtils)
 }
