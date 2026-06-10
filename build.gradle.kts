@@ -145,31 +145,6 @@ if (System.getenv("CI") == "true") {
     }
 }
 
-// Gradle's "dependencies" task selector only executes on a single / the current project [1]. However, sometimes viewing
-// all dependencies at once is beneficial, e.g. for debugging version conflict resolution.
-// [1]: https://docs.gradle.org/current/userguide/viewing_debugging_dependencies.html#sec:listing_dependencies
-tasks.register("allDependencies") {
-    group = "Help"
-    description = "Displays all dependencies declared in all projects."
-
-    val dependenciesTasks = getTasksByName("dependencies", /* recursive = */ true)
-    dependsOn(dependenciesTasks)
-
-    // Ensure deterministic output by requiring to run tasks after each other in always the same order.
-    dependenciesTasks.sorted().zipWithNext().forEach { (a, b) ->
-        b.mustRunAfter(a)
-    }
-}
-
-open class OrtPrintTask : PrintTask({ "" }, "Prints the current project version", "") {
-    private val projectVersion = project.version.toString()
-
-    @TaskAction
-    fun printVersion() = println(projectVersion)
-}
-
-tasks.replace("printVersion", OrtPrintTask::class.java)
-
 val checkCopyrightsInNoticeFile by tasks.registering {
     val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
     val files = CopyrightableFiles.filter(gitFilesProvider)
@@ -286,6 +261,22 @@ val checkGitAttributes by tasks.registering {
     }
 }
 
+// Gradle's "dependencies" task selector only executes on a single / the current project [1]. However, sometimes viewing
+// all dependencies at once is beneficial, e.g. for debugging version conflict resolution.
+// [1]: https://docs.gradle.org/current/userguide/viewing_debugging_dependencies.html#sec:listing_dependencies
+tasks.register("allDependencies") {
+    group = "Help"
+    description = "Displays all dependencies declared in all projects."
+
+    val dependenciesTasks = getTasksByName("dependencies", /* recursive = */ true)
+    dependsOn(dependenciesTasks)
+
+    // Ensure deterministic output by requiring to run tasks after each other in always the same order.
+    dependenciesTasks.sorted().zipWithNext().forEach { (a, b) ->
+        b.mustRunAfter(a)
+    }
+}
+
 tasks.register<GeneratePluginDocsTask>("generatePluginDocs") {
     val kspKotlinTasks = getTasksByName("kspKotlin", /* recursive = */ true)
     val outputFiles = kspKotlinTasks.flatMap { it.outputs.files }
@@ -296,3 +287,12 @@ tasks.register<GeneratePluginDocsTask>("generatePluginDocs") {
     //       larger refactorings.
     dependsOn(kspKotlinTasks)
 }
+
+open class OrtPrintTask : PrintTask({ "" }, "Prints the current project version", "") {
+    private val projectVersion = project.version.toString()
+
+    @TaskAction
+    fun printVersion() = println(projectVersion)
+}
+
+tasks.replace("printVersion", OrtPrintTask::class.java)
