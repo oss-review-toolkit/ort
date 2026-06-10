@@ -133,3 +133,8 @@ PyPI::donfig:0.2.0:
     severity: null
     score: null
     vector: null
+  - url: "https://github.com/advisories/GHSA-3qr5-h7w4-3gx3"
+    scoring_system: null
+    severity: null
+    score: null
+    vector: null
