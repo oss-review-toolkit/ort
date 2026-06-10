@@ -177,6 +177,33 @@ class Yarn2DependencyHandlerTest : WordSpec({
             exception.message shouldContain "2"
             exception.message shouldContain "cookie"
         }
+
+        "use the semver range from the descriptor to disambiguate multiple candidates" {
+            // Two real versions are installed. The descriptor's range matches only one of them.
+            val info100 = packageInfo("cookie@npm:1.0.0", "1.0.0")
+            val info200 = packageInfo("cookie@npm:2.0.0", "2.0.0")
+            // Descriptor "cookie@npm:^1.0.0" matches 1.0.0 but not 2.0.0.
+            val dependency = PackageInfo.Dependency(descriptor = "cookie@npm:^1.0.0", locator = "cookie@npm:1.0.2")
+            val handler = handlerWith(mapOf("cookie@npm:1.0.0" to info100, "cookie@npm:2.0.0" to info200))
+
+            handler.packageInfoFor(dependency) shouldBe info100
+        }
+
+        "throw when the semver range from the descriptor still matches multiple candidates" {
+            // Both installed versions satisfy the descriptor range.
+            val info440 = packageInfo("debug@npm:4.4.0", "4.4.0")
+            val info443 = packageInfo("debug@npm:4.4.3", "4.4.3")
+            // Descriptor "debug@npm:^4.3.0" matches both 4.4.0 and 4.4.3.
+            val dependency = PackageInfo.Dependency(descriptor = "debug@npm:^4.3.0", locator = "debug@npm:4.3.6")
+            val handler = handlerWith(mapOf("debug@npm:4.4.0" to info440, "debug@npm:4.4.3" to info443))
+
+            val exception = shouldThrow<IllegalStateException> {
+                handler.packageInfoFor(dependency)
+            }
+
+            exception.message shouldContain "2"
+            exception.message shouldContain "debug"
+        }
     }
 })
 
@@ -192,7 +219,7 @@ private fun packageInfo(locator: String, version: String, deps: List<PackageInfo
 /**
  * Create a [PackageInfo.Dependency] with the given [locator]. The descriptor is set to a dummy value.
  */
-private fun dep(locator: String) = PackageInfo.Dependency(descriptor = "dummy", locator = locator)
+private fun dep(locator: String) = PackageInfo.Dependency(descriptor = "dummy@npm:^1.2.3", locator = locator)
 
 /**
  * Create a [Yarn2DependencyHandler] with the given [packageInfoForLocator] map set via
