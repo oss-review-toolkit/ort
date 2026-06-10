@@ -25,6 +25,8 @@ import org.jetbrains.gradle.ext.Gradle
 import org.jetbrains.gradle.ext.runConfigurations
 import org.jetbrains.gradle.ext.settings
 
+val javaLanguageVersion: String by project
+
 plugins {
     // Apply third-party plugins.
     alias(libs.plugins.gitSemver)
@@ -259,6 +261,11 @@ val checkGitAttributes by tasks.registering {
 
         if (hasErrors) throw GradleException("There were stale '.gitattribute' entries.")
     }
+}
+
+tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
+    languageVersion = JavaLanguageVersion.of(javaLanguageVersion)
+    vendor = JvmVendorSpec.ADOPTIUM
 }
 
 // Gradle's "dependencies" task selector only executes on a single / the current project [1]. However, sometimes viewing
