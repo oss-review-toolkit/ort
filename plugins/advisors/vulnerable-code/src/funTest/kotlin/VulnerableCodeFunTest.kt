@@ -33,9 +33,10 @@ import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
 import org.ossreviewtoolkit.plugins.api.Secret
 
 class VulnerableCodeFunTest : WordSpec({
-    val vc = VulnerableCodeFactory.create(apiKey = System.getenv("VULNERABLECODE_API_KEY")?.let { Secret(it) })
+    val apiKey = System.getenv("VULNERABLECODE_API_KEY")
+    val vc = VulnerableCodeFactory.create(apiKey = apiKey?.let { Secret(it) })
 
-    "Vulnerable Go packages" should {
+    "Vulnerable Go packages '$apiKey'" should {
         "return findings for QUIC" {
             val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
