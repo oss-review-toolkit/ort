@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.api.PluginConfig
-import org.ossreviewtoolkit.plugins.packagemanagers.gradle.GradleFactory
+import org.ossreviewtoolkit.plugins.packagemanagers.gradleinspector.GradleInspectorFactory
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitRepoFactory
 import org.ossreviewtoolkit.utils.test.readResourceValue
 
@@ -62,11 +62,13 @@ class AnalyzerFunTest : WordSpec({
             val gradleDefinitionFile = inputDir.resolve("gradle.build").apply { writeText("// Dummy file") }
 
             val gradleConfig = PackageManagerConfiguration(mustRunAfter = listOf("NPM"))
-            val analyzerConfig = AnalyzerConfiguration().copy(packageManagers = mapOf("Gradle" to gradleConfig))
+            val analyzerConfig = AnalyzerConfiguration().copy(
+                packageManagers = mapOf("GradleInspector" to gradleConfig)
+            )
             val repoConfig = RepositoryConfiguration()
 
             val analyzer = Analyzer(analyzerConfig)
-            val gradle = GradleFactory.create()
+            val gradle = GradleInspectorFactory.create()
             val info = Analyzer.ManagedFileInfo(
                 inputDir,
                 mapOf(gradle to listOf(gradleDefinitionFile)),
