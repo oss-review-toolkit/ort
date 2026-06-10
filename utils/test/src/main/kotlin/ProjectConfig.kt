@@ -20,15 +20,12 @@
 package org.ossreviewtoolkit.utils.test
 
 import io.kotest.core.config.AbstractProjectConfig
-import io.kotest.core.spec.SpecExecutionOrder
 import io.kotest.extensions.junitxml.JunitXmlReporter
 
 import org.ossreviewtoolkit.utils.authentication.OrtProxySelector
 import org.ossreviewtoolkit.utils.common.Os
 
 class ProjectConfig : AbstractProjectConfig() {
-    override val specExecutionOrder = SpecExecutionOrder.Annotated
-
     init {
         Os.fixupUserHomeProperty()
         OrtProxySelector.install()
