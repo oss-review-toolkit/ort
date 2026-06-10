@@ -238,13 +238,11 @@ tasks.withType<Test>().configureEach {
         }
     }
 
-    val testSystemProperties = mutableListOf("gradle.build.dir" to project.layout.buildDirectory.get().asFile.path)
-
-    listOf(
+    val testSystemProperties = listOf(
         "java.io.tmpdir",
         "kotest.assertions.multi-line-diff",
         "kotest.tags"
-    ).mapNotNullTo(testSystemProperties) { key ->
+    ).mapNotNull { key ->
         System.getProperty(key)?.let { key to it }
     }
 

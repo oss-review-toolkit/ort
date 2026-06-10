@@ -25,7 +25,6 @@ plugins {
 dependencies {
     api(libs.hikari)
     api(libs.kotest.assertions.core)
-    api(libs.kotest.extensions.junitXml)
     api(libs.kotest.framework.engine)
 
     api(libs.logbackClassic) {
