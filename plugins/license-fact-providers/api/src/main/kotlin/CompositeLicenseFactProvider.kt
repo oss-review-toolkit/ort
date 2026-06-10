@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.licensefactproviders.api
 
+import org.ossreviewtoolkit.model.Identifier
+
 /**
  * A composition of multiple [LicenseFactProvider]s.
  */
@@ -29,15 +31,30 @@ class CompositeLicenseFactProvider(
      */
     private val providers: List<LicenseFactProvider>
 ) {
-    /** Return the [LicenseText] for the given [licenseId], or `null` if no valid text is available. */
-    fun getLicenseText(licenseId: String): LicenseText? =
-        providers.firstNotNullOfOrNull { it.getLicenseText(licenseId) }
+    /** Return the [LicenseText] for the given [licenseId] and [id], or `null` if no valid text is available. */
+    fun getLicenseText(licenseId: String, id: Identifier? = null): LicenseText? {
+        val idSpecificLicenseText = if (id != null) {
+            providers.firstNotNullOfOrNull { it.getIdSpecificLicenseText(licenseId, id) }
+        } else {
+            null
+        }
 
-    /** Return a non-blank license text for the given [licenseId], or `null` if no valid text is available. */
+        return idSpecificLicenseText ?: providers.firstNotNullOfOrNull { it.getLicenseText(licenseId) }
+    }
+
+    /** Return a non-blank license text for the given [licenseId] and [id], or `null` if no valid text is available. */
     @Deprecated("Java-only API", level = DeprecationLevel.HIDDEN)
     @JvmName("getLicenseText")
-    fun getNonBlankLicenseText(licenseId: String): String? = getLicenseText(licenseId)?.text
+    fun getNonBlankLicenseText(licenseId: String, id: Identifier? = null): String? = getLicenseText(licenseId, id)?.text
 
-    /** Return `true´ if this provider has a license text for the given [licenseId]. */
-    fun hasLicenseText(licenseId: String): Boolean = providers.any { it.hasLicenseText(licenseId) }
+    /** Return `true´ if this provider has a license text for the given [licenseId] and [id]. */
+    fun hasLicenseText(licenseId: String, id: Identifier? = null): Boolean {
+        val hasIdSpecificLicenseText = if (id != null) {
+            providers.any { it.hasIdSpecificLicenseText(licenseId, id) }
+        } else {
+            false
+        }
+
+        return hasIdSpecificLicenseText || providers.any { it.hasLicenseText(licenseId) }
+    }
 }

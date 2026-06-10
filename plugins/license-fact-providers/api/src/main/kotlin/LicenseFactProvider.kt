@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.licensefactproviders.api
 
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.plugins.api.Plugin
 
 /** A provider for license facts. */
@@ -28,4 +29,14 @@ interface LicenseFactProvider : Plugin {
 
     /** Return `true´ if this provider has a license text for the given [licenseId]. */
     fun hasLicenseText(licenseId: String): Boolean
+
+    /**
+     * Return the id-specific [LicenseText] for the given [licenseId] and [id], or `null` if no such text is
+     * available.
+     **/
+    fun getIdSpecificLicenseText(licenseId: String, id: Identifier): LicenseText? = null
+
+    /** Return `true´ if this provider has an id-specific license text for the given [licenseId] and [id]. */
+    fun hasIdSpecificLicenseText(licenseId: String, id: Identifier): Boolean =
+        getIdSpecificLicenseText(licenseId, id) != null
 }
