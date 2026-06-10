@@ -25,7 +25,7 @@ import io.kotest.engine.spec.tempdir
 
 import java.time.LocalDateTime
 
-import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
+import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_SPDX
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -42,7 +42,7 @@ class OpossumReporterFunTest : WordSpec({
     "The generated report" should {
         "match the expected result" {
             val ortResult = readOrtResult("/reporter-test-input.yml")
-            val input = ReporterInput(ortResult, licenseFactProvider = SpdxLicenseFactProviderFactory.create())
+            val input = ReporterInput(ortResult, licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX)
             val outputDir = tempdir()
             val expectedResult = readResource("/reporter-test-output.json")
 

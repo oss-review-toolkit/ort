@@ -28,7 +28,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.plugins.licensefactproviders.scancode.ScanCodeLicenseFactProviderFactory
+import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_SPDX
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
@@ -159,7 +159,7 @@ private fun TestConfiguration.generateReport(
 
     return SpdxDocumentReporter(config = config)
         .generateReport(
-            input = ReporterInput(ortResult, licenseFactProvider = ScanCodeLicenseFactProviderFactory.create()),
+            input = ReporterInput(ortResult, licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX),
             outputDir = tempdir()
         )
         .single()

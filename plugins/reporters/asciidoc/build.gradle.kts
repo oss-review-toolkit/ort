@@ -32,7 +32,6 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     funTestImplementation(testFixtures(projects.reporter))
-    funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
     funTestImplementation(projects.utils.testUtils)
 
     runtimeOnly(libs.asciidoctorj.pdf)
