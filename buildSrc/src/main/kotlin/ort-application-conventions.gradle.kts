@@ -27,7 +27,7 @@ import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
 
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 
-val javaLanguageVersion: String by project
+val javaLanguageVersion = project.property("javaLanguageVersion") as String
 val libsCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 plugins {
@@ -162,7 +162,7 @@ val appJar = tasks.named<Jar>("jar") {
     }
 }
 
-val pathingJar by tasks.registering(Jar::class) {
+val pathingJar = tasks.register("pathingJar", Jar::class) {
     archiveClassifier = "pathing"
 
     manifest {
@@ -211,8 +211,8 @@ val distTar = tasks.named<Tar>("distTar") {
 val distZip = tasks.named<Zip>("distZip")
 
 signing {
-    val signingInMemoryKey: String? by project
-    val signingInMemoryKeyPassword: String? by project
+    val signingInMemoryKey = project.findProperty("signingInMemoryKey") as String?
+    val signingInMemoryKeyPassword = project.findProperty("signingInMemoryKeyPassword") as String?
 
     if (signingInMemoryKey != null && signingInMemoryKeyPassword != null) {
         useInMemoryPgpKeys(signingInMemoryKey, signingInMemoryKeyPassword)

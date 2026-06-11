@@ -40,19 +40,19 @@ rootProject.plugins.withType<NodeJsPlugin>().configureEach {
     rootProject.the<NodeJsEnvSpec>().version = "22.13.0"
 }
 
-val kotlinNodeJsSetup by rootProject.tasks.existing(NodeJsSetupTask::class)
+val kotlinNodeJsSetup = rootProject.tasks.withType(NodeJsSetupTask::class).single()
 
 rootProject.plugins.withType<YarnPlugin>().configureEach {
     rootProject.the<YarnRootEnvSpec>().version = "1.22.22"
 }
 
-val kotlinYarnSetup by rootProject.tasks.existing(YarnSetupTask::class)
+val kotlinYarnSetup = rootProject.tasks.withType(YarnSetupTask::class).single()
 
-val nodeDir = kotlinNodeJsSetup.get().destinationProvider.asFile.get()
+val nodeDir = kotlinNodeJsSetup.destinationProvider.asFile.get()
 val nodeBinDir = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeDir else nodeDir.resolve("bin")
 val nodeExecutable = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeBinDir.resolve("node.exe") else nodeBinDir.resolve("node")
 
-val yarnDir = kotlinYarnSetup.get().destinationProvider.asFile.get()
+val yarnDir = kotlinYarnSetup.destinationProvider.asFile.get()
 val yarnJs = yarnDir.resolve("bin/yarn.js")
 
 tasks.addRule("Pattern: yarn<Command>") {
@@ -130,7 +130,7 @@ tasks.register<Delete>("clean") {
     delete("yarn-error.log")
 }
 
-val webAppTemplateConfiguration by configurations.creating {
+val webAppTemplateConfiguration = configurations.create("webAppTemplateConfiguration") {
     isCanBeResolved = false
 }
 
