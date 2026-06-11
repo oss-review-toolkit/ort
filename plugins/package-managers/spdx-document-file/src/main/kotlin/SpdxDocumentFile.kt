@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
@@ -82,7 +83,13 @@ data class SpdxDocumentFileConfig(
      * [Identifier] is deduced from that PURL instead of from the [SpdxPackage]'s [ID][SpdxPackage.spdxId].
      */
     @OrtPluginOption(defaultValue = "false")
-    val deduceOrtIdFromPurl: Boolean
+    val deduceOrtIdFromPurl: Boolean,
+
+    /**
+     * If this option is enabled, issues will be created for relationships with unspecified or ambiguous linkage types.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val warnAboutUnclearLinkage: Boolean
 )
 
 /**
@@ -141,7 +148,7 @@ class SpdxDocumentFile(
                     PackageReference(
                         id = ortPackage.id,
                         dependencies = getDependencies(target, doc, packages, ancestorIds, analyzerConfig),
-                        linkage = getLinkageForDependency(dependency, pkgId, doc),
+                        linkage = getLinkageForDependency(dependency, pkgId, doc, issues),
                         issues = issues
                     )
                 }
@@ -187,7 +194,7 @@ class SpdxDocumentFile(
                                 id = ortPackage.id,
                                 dependencies = getDependencies(source, doc, packages, ancestorIds, analyzerConfig),
                                 issues = issues,
-                                linkage = getLinkageForDependency(dependency, target, doc)
+                                linkage = getLinkageForDependency(dependency, target, doc, issues)
                             )
                         }
                 }
@@ -213,11 +220,32 @@ class SpdxDocumentFile(
     private fun getLinkageForDependency(
         dependency: SpdxPackage,
         dependant: String,
-        doc: SpdxResolvedDocument
-    ): PackageLinkage =
-        doc.getRelationships(dependant, dependency.spdxId).mapNotNullTo(mutableSetOf()) {
-            SPDX_LINKAGE_RELATIONSHIPS[it.relationshipType]
-        }.singleOrNull() ?: PackageLinkage.DYNAMIC
+        doc: SpdxResolvedDocument,
+        issues: MutableCollection<Issue>
+    ): PackageLinkage {
+        val packageLinkages = doc.getRelationships(dependant, dependency.spdxId)
+            .mapNotNullTo(mutableSetOf()) { SPDX_LINKAGE_RELATIONSHIPS[it.relationshipType] }
+
+        if (config.warnAboutUnclearLinkage) {
+            when {
+                packageLinkages.isEmpty() -> issues += Issue(
+                    message = "The linkage type for the relationship from '$dependant' to '${dependency.spdxId}' is " +
+                        "missing.",
+                    severity = Severity.WARNING,
+                    source = descriptor.displayName
+                )
+
+                packageLinkages.size > 1 -> issues += Issue(
+                    message = "The linkage type for the relationship from '$dependant' to '${dependency.spdxId}' is " +
+                        "ambiguous: ${packageLinkages.joinToString()}.",
+                    severity = Severity.WARNING,
+                    source = descriptor.displayName
+                )
+            }
+        }
+
+        return packageLinkages.singleOrNull() ?: PackageLinkage.DYNAMIC
+    }
 
     /**
      * Return a [Scope] created from the given type of [relation] for the [projectPackage][projectPackageId] in
