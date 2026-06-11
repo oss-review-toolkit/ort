@@ -22,7 +22,7 @@ plugins {
     id("ort-plugin-conventions")
 }
 
-val webAppTemplateConfiguration by configurations.creating {
+val webAppTemplateConfiguration = configurations.create("webAppTemplateConfiguration") {
     isCanBeConsumed = false
 }
 
@@ -33,7 +33,7 @@ dependencies {
 }
 
 val generatedResourcesDir = layout.buildDirectory.dir("generated-resources/main")
-val copyWebAppTemplate by tasks.registering(Copy::class) {
+val copyWebAppTemplate = tasks.register("copyWebAppTemplate", Copy::class) {
     from(webAppTemplateConfiguration) {
         include("scan-report-template.html")
     }

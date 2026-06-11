@@ -25,7 +25,7 @@ import java.net.Authenticator
 import java.net.PasswordAuthentication
 import java.net.URI
 
-val spdxLicenseListVersion: String by project
+val spdxLicenseListVersion = project.property("spdxLicenseListVersion") as String
 
 plugins {
     // Apply precompiled plugins.
@@ -340,7 +340,7 @@ fun Task.generateEnumClass(
     return info
 }
 
-val fixupLicenseTextResources by tasks.registering {
+val fixupLicenseTextResources = tasks.register("fixupLicenseTextResources") {
     doLast {
         val resourcePaths = listOf(licensesResourcePath, exceptionsResourcePath).map {
             file("src/main/resources/$it")
@@ -357,7 +357,7 @@ val fixupLicenseTextResources by tasks.registering {
     }
 }
 
-val generateSpdxLicenseEnum by tasks.registering(Download::class) {
+val generateSpdxLicenseEnum = tasks.register("generateSpdxLicenseEnum", Download::class) {
     description = "Generates the enum class of SPDX license ids and their associated texts as resources."
     group = "SPDX"
 
@@ -390,7 +390,7 @@ val generateSpdxLicenseEnum by tasks.registering(Download::class) {
     finalizedBy(fixupLicenseTextResources)
 }
 
-val generateSpdxLicenseExceptionEnum by tasks.registering(Download::class) {
+val generateSpdxLicenseExceptionEnum = tasks.register("generateSpdxLicenseExceptionEnum", Download::class) {
     description = "Generates the enum class of SPDX license exception ids and their associated texts as resources."
     group = "SPDX"
 
@@ -423,7 +423,7 @@ val generateSpdxLicenseExceptionEnum by tasks.registering(Download::class) {
     finalizedBy(fixupLicenseTextResources)
 }
 
-val generateSpdxEnums by tasks.registering {
+val generateSpdxEnums = tasks.register("generateSpdxEnums") {
     description = "Generates the enums for SPDX license and exception ids and their associated texts."
     group = "SPDX"
 

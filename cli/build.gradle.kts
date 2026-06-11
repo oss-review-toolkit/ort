@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-val cliAnalyzerOnly: String? by project
+val cliAnalyzerOnly = project.findProperty("cliAnalyzerOnly")?.toString().toBoolean()
 
 plugins {
     // Apply precompiled plugins.
@@ -34,7 +34,7 @@ application {
 }
 
 dependencies {
-    if (cliAnalyzerOnly.toBoolean()) {
+    if (cliAnalyzerOnly) {
         "pluginClasspath"(projects.plugins.commands.analyzerCommand)
         "pluginClasspath"(platform(projects.plugins.packageCurationProviders))
         "pluginClasspath"(platform(projects.plugins.packageManagers))

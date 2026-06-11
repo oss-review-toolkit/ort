@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val javaLanguageVersion: String by project
+val javaLanguageVersion = project.property("javaLanguageVersion") as String
 val libsCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 plugins {
@@ -123,29 +123,27 @@ java {
     }
 }
 
-val globalJvmArgs by extra {
+val globalJvmArgs = buildList {
     val javaVersion = JavaVersion.toVersion(javaLanguageVersion.toInt())
 
-    buildList {
-        // See https://kotest.io/docs/next/extensions/system_extensions.html#system-environment.
-        if (javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
-            add("--add-opens")
-            add("java.base/java.io=ALL-UNNAMED")
+    // See https://kotest.io/docs/next/extensions/system_extensions.html#system-environment.
+    if (javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
+        add("--add-opens")
+        add("java.base/java.io=ALL-UNNAMED")
 
-            add("--add-opens")
-            add("java.base/java.lang=ALL-UNNAMED")
+        add("--add-opens")
+        add("java.base/java.lang=ALL-UNNAMED")
 
-            add("--add-opens")
-            add("java.base/java.util=ALL-UNNAMED")
+        add("--add-opens")
+        add("java.base/java.util=ALL-UNNAMED")
 
-            add("--add-opens")
-            add("java.base/sun.nio.ch=ALL-UNNAMED")
-        }
+        add("--add-opens")
+        add("java.base/sun.nio.ch=ALL-UNNAMED")
+    }
 
-        // See https://openjdk.org/jeps/424.
-        if (javaVersion.isCompatibleWith(JavaVersion.VERSION_19)) {
-            add("--enable-native-access=ALL-UNNAMED")
-        }
+    // See https://openjdk.org/jeps/424.
+    if (javaVersion.isCompatibleWith(JavaVersion.VERSION_19)) {
+        add("--enable-native-access=ALL-UNNAMED")
     }
 }
 

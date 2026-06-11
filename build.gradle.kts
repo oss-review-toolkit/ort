@@ -25,7 +25,7 @@ import org.jetbrains.gradle.ext.Gradle
 import org.jetbrains.gradle.ext.runConfigurations
 import org.jetbrains.gradle.ext.settings
 
-val javaLanguageVersion: String by project
+val javaLanguageVersion = project.property("javaLanguageVersion") as String
 
 plugins {
     // Apply third-party plugins.
@@ -147,7 +147,7 @@ if (System.getenv("CI") == "true") {
     }
 }
 
-val checkCopyrightsInNoticeFile by tasks.registering {
+val checkCopyrightsInNoticeFile = tasks.register("checkCopyrightsInNoticeFile") {
     val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
     val files = CopyrightableFiles.filter(gitFilesProvider)
     val noticeFile = rootDir.resolve("NOTICE")
@@ -181,7 +181,7 @@ val checkCopyrightsInNoticeFile by tasks.registering {
     }
 }
 
-val checkLicenseHeaders by tasks.registering {
+val checkLicenseHeaders = tasks.register("checkLicenseHeaders") {
     val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
     val files = CopyrightableFiles.filter(gitFilesProvider)
 
@@ -212,7 +212,7 @@ val checkLicenseHeaders by tasks.registering {
     }
 }
 
-val checkGitAttributes by tasks.registering {
+val checkGitAttributes = tasks.register("checkGitAttributes") {
     val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
 
     inputs.files(gitFilesProvider)
