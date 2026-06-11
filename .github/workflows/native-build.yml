@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  GRADLE_OPTS: -Dorg.gradle.daemon=false
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.logging.stacktrace=all
 
 permissions: read-all
 
