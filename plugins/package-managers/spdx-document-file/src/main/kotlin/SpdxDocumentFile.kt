@@ -207,6 +207,19 @@ class SpdxDocumentFile(
         }
 
     /**
+     * Return the [PackageLinkage] between [dependency] and [dependant] as specified in [relationships]. If no
+     * relationship is found, return [PackageLinkage.DYNAMIC].
+     */
+    private fun getLinkageForDependency(
+        dependency: SpdxPackage,
+        dependant: String,
+        doc: SpdxResolvedDocument
+    ): PackageLinkage =
+        doc.getRelationships(dependant, dependency.spdxId).mapNotNullTo(mutableSetOf()) {
+            SPDX_LINKAGE_RELATIONSHIPS[it.relationshipType]
+        }.singleOrNull() ?: PackageLinkage.DYNAMIC
+
+    /**
      * Return a [Scope] created from the given type of [relation] for the [projectPackage][projectPackageId] in
      * [spdxDocument], or `null` if there are no such relations. Identified dependencies are mapped to ORT [Package]s
      * and then added to [packages].
@@ -356,19 +369,6 @@ internal fun getPackageManagerDependency(
 
     return null
 }
-
-/**
- * Return the [PackageLinkage] between [dependency] and [dependant] as specified in [relationships]. If no
- * relationship is found, return [PackageLinkage.DYNAMIC].
- */
-private fun getLinkageForDependency(
-    dependency: SpdxPackage,
-    dependant: String,
-    doc: SpdxResolvedDocument
-): PackageLinkage =
-    doc.getRelationships(dependant, dependency.spdxId).mapNotNullTo(mutableSetOf()) {
-        SPDX_LINKAGE_RELATIONSHIPS[it.relationshipType]
-    }.singleOrNull() ?: PackageLinkage.DYNAMIC
 
 /**
  * Return true if the [relation] as defined in [relationships] describes an [SPDX_LINKAGE_RELATIONSHIPS] in the
