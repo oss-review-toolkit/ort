@@ -553,7 +553,7 @@ FROM rust-build AS cargo-credential-netrc-build
 
 ENV PATH=$PATH:$CARGO_HOME/bin
 
-RUN cargo install cargo-credential-netrc --root /opt/cargo-credential-netrc
+RUN cargo install cargo-credential-netrc --locked --root /opt/cargo-credential-netrc
 
 #------------------------------------------------------------------------
 # Provenant
