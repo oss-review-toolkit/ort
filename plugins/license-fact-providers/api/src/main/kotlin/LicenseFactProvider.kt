@@ -23,6 +23,9 @@ import org.ossreviewtoolkit.plugins.api.Plugin
 
 /** A provider for license facts. */
 abstract class LicenseFactProvider : Plugin {
+    /** Return `true´ if this provider has a license text for the given [licenseId]. */
+    abstract fun hasLicenseText(licenseId: String): Boolean
+
     /** Return a [LicenseText] for the given [licenseId], or `null` if no valid text is available. */
     abstract fun getLicenseText(licenseId: String): LicenseText?
 
@@ -30,7 +33,4 @@ abstract class LicenseFactProvider : Plugin {
     @Deprecated("Java-only API", level = DeprecationLevel.HIDDEN)
     @JvmName("getLicenseText")
     fun getNonBlankLicenseText(licenseId: String): String? = getLicenseText(licenseId)?.text
-
-    /** Return `true´ if this provider has a license text for the given [licenseId]. */
-    abstract fun hasLicenseText(licenseId: String): Boolean
 }
