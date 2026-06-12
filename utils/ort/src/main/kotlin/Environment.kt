@@ -105,6 +105,7 @@ data class Environment(
             "HOSTTYPE",
             "SHELL",
             "TERM",
+            "COLORTERM",
             // General variables.
             "http_proxy",
             "https_proxy",
