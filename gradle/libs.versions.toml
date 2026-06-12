@@ -42,6 +42,7 @@ kaml = "0.104.0"
 kotest = "6.1.11"
 kotlinPoet = "2.3.0"
 kotlinxCoroutines = "1.11.0"
+kotlinxDatetime = "0.8.0"
 kotlinxHtml = "0.12.0"
 kotlinxSerialization = "1.11.0"
 kottage = "1.11.0"
@@ -142,6 +143,7 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinPoet"}
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinPoet"}
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-toml = { module = "net.peanuuutz.tomlkt:tomlkt", version.ref = "tomlkt" }

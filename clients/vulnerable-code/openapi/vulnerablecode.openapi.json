@@ -1,0 +1,3467 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "VulnerableCode API",
+    "version": "38.6.0",
+    "description": "\n<div>\n    <p><strong>VulnerableCode</strong> is open data and free software by\n    <a href=\"https://github.com/nexB/vulnerablecode\"> nexB Inc. and others.</a>\n    </p>\n    <p>The VulnerableCode API exposes these endpoints:</p>\n    <ul>\n        <li>\n            <strong>packages/</strong>: main endpoint to lookup for vulnerable packages.\n        </li>\n        <li>\n            <strong>vulnerabilities/</strong>: secondary endpoint to lookup by vulnerabilities.\n        </li>\n        <li>\n            <strong>alias/</strong>: secondary endpoint to lookup vulnerabilities by aliases (e.g., CVE)\n        </li>\n        <li>\n            <strong>cpes/</strong>: secondary endpoint to lookup vulnerabilities by CPE.\n        </li>\n    </ul>\n</div>\n",
+    "termsOfService": "/tos/",
+    "contact": {
+      "name": "nexB Inc.",
+      "url": "https://public.vulnerablecode.io",
+      "email": "mailto:info@nexb.com"
+    },
+    "license": {
+      "name": "Source code: Apache-2.0 | Data: CC-BY-SA-4.0",
+      "url": "https://github.com/nexb/vulnerablecode#license"
+    }
+  },
+  "paths": {
+    "/api/v2/packages/": {
+      "get": {
+        "operationId": "v2_packages_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "affected_by_vulnerability",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fixing_vulnerability",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "purl",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedPackageV2List"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/packages/all/": {
+      "get": {
+        "operationId": "v2_packages_all_retrieve",
+        "description": "Return a list of Package URLs of vulnerable packages.",
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageV2"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/packages/bulk_lookup/": {
+      "post": {
+        "operationId": "v2_packages_bulk_lookup_create",
+        "description": "Return the response for exact PackageURLs requested for.",
+        "tags": [
+          "v2"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageurlList"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageurlList"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageurlList"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PackageV2"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/packages/bulk_search/": {
+      "post": {
+        "operationId": "v2_packages_bulk_search_create",
+        "description": "Lookup for vulnerable packages using many Package URLs at once.",
+        "tags": [
+          "v2"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageBulkSearchRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageBulkSearchRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageBulkSearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PackageV2"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/packages/lookup/": {
+      "post": {
+        "operationId": "v2_packages_lookup_create",
+        "description": "Return the response for exact PackageURL requested for.",
+        "tags": [
+          "v2"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PackageV2"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/packages/{id}/": {
+      "get": {
+        "operationId": "v2_packages_retrieve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this package.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageV2"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/vulnerabilities/": {
+      "get": {
+        "operationId": "v2_vulnerabilities_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "alias",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Filter by alias (CVE or other unique identifier)"
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "vulnerability_id",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Filter by one or more vulnerability IDs"
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVulnerabilityListList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/vulnerabilities/{vulnerability_id}/": {
+      "get": {
+        "operationId": "v2_vulnerabilities_retrieve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "vulnerability_id",
+            "schema": {
+              "type": "string",
+              "description": "Unique identifier for a vulnerability in the external representation. It is prefixed with VCID-"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VulnerabilityV2"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/codefixes/": {
+      "get": {
+        "operationId": "v2_codefixes_list",
+        "description": "API endpoint that allows viewing CodeFix entries.",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedCodeFixList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/codefixes/{id}/": {
+      "get": {
+        "operationId": "v2_codefixes_retrieve",
+        "description": "API endpoint that allows viewing CodeFix entries.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this code fix.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeFix"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/pipelines/": {
+      "post": {
+        "operationId": "v2_pipelines_create",
+        "description": "A viewset that provides `create`, `list, `retrieve`, and `update` actions.\nTo use it, override the class and set the `.queryset` and\n`.serializer_class` attributes.",
+        "tags": [
+          "v2"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PipelineScheduleCreate"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PipelineScheduleCreate"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PipelineScheduleCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PipelineScheduleCreate"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "v2_pipelines_list",
+        "description": "A viewset that provides `create`, `list, `retrieve`, and `update` actions.\nTo use it, override the class and set the `.queryset` and\n`.serializer_class` attributes.",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedPipelineScheduleAPIList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/pipelines/{pipeline_id}/": {
+      "put": {
+        "operationId": "v2_pipelines_update",
+        "description": "A viewset that provides `create`, `list, `retrieve`, and `update` actions.\nTo use it, override the class and set the `.queryset` and\n`.serializer_class` attributes.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pipeline_id",
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w.]+$"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PipelineScheduleUpdate"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PipelineScheduleUpdate"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PipelineScheduleUpdate"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PipelineScheduleUpdate"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "v2_pipelines_retrieve",
+        "description": "A viewset that provides `create`, `list, `retrieve`, and `update` actions.\nTo use it, override the class and set the `.queryset` and\n`.serializer_class` attributes.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pipeline_id",
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w.]+$"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PipelineScheduleAPI"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "operationId": "v2_pipelines_partial_update",
+        "description": "A viewset that provides `create`, `list, `retrieve`, and `update` actions.\nTo use it, override the class and set the `.queryset` and\n`.serializer_class` attributes.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pipeline_id",
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w.]+$"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedPipelineScheduleAPI"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedPipelineScheduleAPI"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedPipelineScheduleAPI"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PipelineScheduleAPI"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/advisory-codefixes/": {
+      "get": {
+        "operationId": "v2_advisory_codefixes_list",
+        "description": "API endpoint that allows viewing CodeFix entries.",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedCodeFixV2List"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v2/advisory-codefixes/{id}/": {
+      "get": {
+        "operationId": "v2_advisory_codefixes_retrieve",
+        "description": "API endpoint that allows viewing CodeFix entries.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this code fix v2.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "v2"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeFixV2"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/packages/": {
+      "post": {
+        "operationId": "v3_packages_create",
+        "tags": [
+          "v3"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageQuery"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageQuery"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageQuery"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedPurlList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/advisories/": {
+      "post": {
+        "operationId": "v3_advisories_create",
+        "tags": [
+          "v3"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdvisoryQuery"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/AdvisoryQuery"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/AdvisoryQuery"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdvisoryV3"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/affected-by-advisories/": {
+      "get": {
+        "operationId": "v3_affected_by_advisories_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAffectedByAdvisoryV3List"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/affected-by-advisories/{id}/": {
+      "get": {
+        "operationId": "v3_affected_by_advisories_retrieve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this advisory v2.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AffectedByAdvisoryV3"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/fixing-advisories/": {
+      "get": {
+        "operationId": "v3_fixing_advisories_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAdvisoryV3List"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/fixing-advisories/{id}/": {
+      "get": {
+        "operationId": "v3_fixing_advisories_retrieve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this advisory v2.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdvisoryV3"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/packages/": {
+      "get": {
+        "operationId": "packages_list",
+        "description": "Lookup for vulnerable packages by Package URL.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "namespace",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "purl",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "qualifiers",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "subpath",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "version",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "packages"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedPackageList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/packages/all/": {
+      "get": {
+        "operationId": "packages_all_retrieve",
+        "description": "Return a list of Package URLs of vulnerable packages.",
+        "tags": [
+          "packages"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Package"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/packages/bulk_lookup/": {
+      "post": {
+        "operationId": "packages_bulk_lookup_create",
+        "description": "Return the response for exact PackageURLs requested for.",
+        "tags": [
+          "packages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageurlList"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageurlList"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageurlList"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/packages/bulk_search/": {
+      "post": {
+        "operationId": "packages_bulk_search_create",
+        "description": "Lookup for vulnerable packages using many Package URLs at once.",
+        "tags": [
+          "packages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageBulkSearchRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageBulkSearchRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageBulkSearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/packages/lookup/": {
+      "post": {
+        "operationId": "packages_lookup_create",
+        "description": "Return the response for exact PackageURL requested for.",
+        "tags": [
+          "packages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/packages/{id}/": {
+      "get": {
+        "operationId": "packages_retrieve",
+        "description": "Lookup for vulnerable packages by Package URL.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this package.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "packages"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Package"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/vulnerabilities/": {
+      "get": {
+        "operationId": "vulnerabilities_list",
+        "description": "Lookup for vulnerabilities affecting packages.",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "vulnerability_id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "vulnerabilities"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVulnerabilityList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/vulnerabilities/{id}/": {
+      "get": {
+        "operationId": "vulnerabilities_retrieve",
+        "description": "Lookup for vulnerabilities affecting packages.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this vulnerability.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "vulnerabilities"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vulnerability"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/cpes/": {
+      "get": {
+        "operationId": "cpes_list",
+        "description": "Lookup for vulnerabilities by CPE (https://nvd.nist.gov/products/cpe)",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cpe",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "cpes"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVulnerabilityList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/cpes/bulk_search/": {
+      "post": {
+        "operationId": "cpes_bulk_search_create",
+        "description": "Lookup for vulnerabilities using many CPEs at once.",
+        "tags": [
+          "cpes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Vulnerability"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Vulnerability"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Vulnerability"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vulnerability"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/cpes/{id}/": {
+      "get": {
+        "operationId": "cpes_retrieve",
+        "description": "Lookup for vulnerabilities by CPE (https://nvd.nist.gov/products/cpe)",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this vulnerability.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "cpes"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vulnerability"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/aliases/": {
+      "get": {
+        "operationId": "aliases_list",
+        "description": "Lookup for vulnerabilities by vulnerability aliases such as a CVE\n(https://nvd.nist.gov/general/cve-process).",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "alias",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "aliases"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVulnerabilityList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/aliases/{id}/": {
+      "get": {
+        "operationId": "aliases_retrieve",
+        "description": "Lookup for vulnerabilities by vulnerability aliases such as a CVE\n(https://nvd.nist.gov/general/cve-process).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this vulnerability.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "aliases"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vulnerability"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdvisoryQuery": {
+        "type": "object",
+        "properties": {
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AdvisoryReference": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "reference_type": {
+            "type": "string"
+          },
+          "reference_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference_id",
+          "reference_type",
+          "url"
+        ]
+      },
+      "AdvisorySeverity": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "URL to the vulnerability severity",
+            "maxLength": 1024
+          },
+          "value": {
+            "type": "string",
+            "nullable": true,
+            "description": "Example: 9.0, Important, High",
+            "maxLength": 50
+          },
+          "scoring_system": {
+            "type": "string",
+            "nullable": true,
+            "description": "Identifier for the scoring system used. Available choices are: cvssv2: CVSSv2 Base Score,\ncvssv3: CVSSv3 Base Score,\ncvssv3.1: CVSSv3.1 Base Score,\ncvssv4: CVSSv4 Base Score,\nrhbs: RedHat Bugzilla severity,\nrhas: RedHat Aggregate severity,\narchlinux: Archlinux Vulnerability Group Severity,\ncvssv3.1_qr: CVSSv3.1 Qualitative Severity Rating,\ngeneric_textual: Generic textual severity rating,\napache_httpd: Apache Httpd Severity,\napache_tomcat: Apache Tomcat Severity,\nepss: Exploit Prediction Scoring System,\nssvc: Stakeholder-Specific Vulnerability Categorization,\nopenssl: OpenSSL Severity,\nubuntu-priority: Ubuntu Priority "
+          },
+          "scoring_elements": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supporting scoring elements used to compute the score values. For example a CVSS vector string as used to compute a CVSS score.",
+            "maxLength": 250
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "UTC Date of publication of the vulnerability severity"
+          }
+        }
+      },
+      "AdvisoryV3": {
+        "type": "object",
+        "properties": {
+          "advisory_id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to the advisory on the upstream website",
+            "maxLength": 200
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string"
+          },
+          "severities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisorySeverity"
+            }
+          },
+          "weaknesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryWeakness"
+            }
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryReference"
+            }
+          },
+          "exploitability": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,1}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Exploitability indicates the likelihood that a vulnerability in a software package could be used by malicious actors to compromise systems, applications, or networks. This metric is determined automatically based on the discovery of known exploits."
+          },
+          "weighted_severity": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Weighted severity is the highest value calculated by multiplying each severity by its corresponding weight, divided by 10."
+          },
+          "risk_score": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
+          },
+          "related_ssvc_trees": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "advisory_id",
+          "aliases",
+          "references",
+          "related_ssvc_trees",
+          "severities",
+          "url",
+          "weaknesses"
+        ]
+      },
+      "AdvisoryWeakness": {
+        "type": "object",
+        "properties": {
+          "cwe_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cwe_id",
+          "description",
+          "name"
+        ]
+      },
+      "AffectedByAdvisoryV3": {
+        "type": "object",
+        "properties": {
+          "advisory_id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to the advisory on the upstream website",
+            "maxLength": 200
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string"
+          },
+          "severities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisorySeverity"
+            }
+          },
+          "weaknesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryWeakness"
+            }
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryReference"
+            }
+          },
+          "exploitability": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,1}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Exploitability indicates the likelihood that a vulnerability in a software package could be used by malicious actors to compromise systems, applications, or networks. This metric is determined automatically based on the discovery of known exploits."
+          },
+          "weighted_severity": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Weighted severity is the highest value calculated by multiplying each severity by its corresponding weight, divided by 10."
+          },
+          "risk_score": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
+          },
+          "related_ssvc_trees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedSSVCTree"
+            },
+            "readOnly": true
+          },
+          "fixed_by_packages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          }
+        },
+        "required": [
+          "advisory_id",
+          "aliases",
+          "fixed_by_packages",
+          "references",
+          "related_ssvc_trees",
+          "severities",
+          "url",
+          "weaknesses"
+        ]
+      },
+      "Alias": {
+        "type": "object",
+        "description": "Used for nesting inside package focused APIs.",
+        "properties": {
+          "alias": {
+            "type": "string",
+            "description": "An alias is a unique vulnerability identifier in some database, such as CVE-2020-2233",
+            "maxLength": 50
+          }
+        },
+        "required": [
+          "alias"
+        ]
+      },
+      "CodeFix": {
+        "type": "object",
+        "description": "Serializer for the CodeFix model.\nProvides detailed information about a code fix.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "commits": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "List of commit identifiers using VCS URLs associated with the code change."
+          },
+          "pulls": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "List of pull request URLs associated with the code change."
+          },
+          "downloads": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "List of download URLs for the patched code."
+          },
+          "patch": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code change as a patch in unified diff format."
+          },
+          "affected_vulnerability_id": {
+            "type": "string",
+            "readOnly": true,
+            "description": "ID of the affected vulnerability."
+          },
+          "affected_package_purl": {
+            "type": "string",
+            "readOnly": true,
+            "description": "PURL of the affected package."
+          },
+          "fixed_package_purl": {
+            "type": "string",
+            "readOnly": true,
+            "description": "PURL of the fixing package (if available)."
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Notes or instructions about this code change."
+          },
+          "references": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "URL references related to this code change."
+          },
+          "is_reviewed": {
+            "type": "boolean",
+            "description": "Indicates if this code change has been reviewed."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Timestamp when the code fix was created."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Timestamp when the code fix was last updated."
+          }
+        },
+        "required": [
+          "affected_package_purl",
+          "affected_vulnerability_id",
+          "created_at",
+          "fixed_package_purl",
+          "id",
+          "updated_at"
+        ]
+      },
+      "CodeFixV2": {
+        "type": "object",
+        "description": "Serializer for the CodeFix model.\nProvides detailed information about a code fix.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "commits": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "List of commit identifiers using VCS URLs associated with the code change."
+          },
+          "pulls": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "List of pull request URLs associated with the code change."
+          },
+          "downloads": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "List of download URLs for the patched code."
+          },
+          "patch": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code change as a patch in unified diff format."
+          },
+          "affected_advisory_id": {
+            "type": "string",
+            "readOnly": true,
+            "description": "ID of the advisory affecting the package."
+          },
+          "affected_package_purl": {
+            "type": "string",
+            "readOnly": true,
+            "description": "PURL of the affected package."
+          },
+          "fixed_package_purl": {
+            "type": "string",
+            "readOnly": true,
+            "description": "PURL of the fixing package (if available)."
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Notes or instructions about this code change."
+          },
+          "references": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "URL references related to this code change."
+          },
+          "is_reviewed": {
+            "type": "boolean",
+            "description": "Indicates if this code change has been reviewed."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Timestamp when the code fix was created."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Timestamp when the code fix was last updated."
+          }
+        },
+        "required": [
+          "affected_advisory_id",
+          "affected_package_purl",
+          "created_at",
+          "fixed_package_purl",
+          "id",
+          "updated_at"
+        ]
+      },
+      "Exploit": {
+        "type": "object",
+        "properties": {
+          "date_added": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "The date the vulnerability was added to an exploit catalog."
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the vulnerability in an exploit catalog, often a refinement of the original CVE description"
+          },
+          "required_action": {
+            "type": "string",
+            "nullable": true,
+            "description": "The required action to address the vulnerability, typically to apply vendor updates or apply vendor mitigations or to discontinue use."
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "The date the required action is due, which applies to all USA federal civilian executive branch (FCEB) agencies, but all organizations are strongly encouraged to execute the required action"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Additional notes and resources about the vulnerability, often a URL to vendor instructions."
+          },
+          "known_ransomware_campaign_use": {
+            "type": "boolean",
+            "description": "Known' if this vulnerability is known to have been leveraged as part of a ransomware campaign; \n        or 'Unknown' if there is no confirmation that the vulnerability has been utilized for ransomware."
+          },
+          "source_date_published": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "The date that the exploit was published or disclosed."
+          },
+          "exploit_type": {
+            "type": "string",
+            "nullable": true,
+            "description": "The type of the exploit as provided by the original upstream data source."
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true,
+            "description": "The platform associated with the exploit as provided by the original upstream data source."
+          },
+          "source_date_updated": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "The date the exploit was updated in the original upstream data source."
+          },
+          "data_source": {
+            "type": "string",
+            "nullable": true,
+            "description": "The source of the exploit information, such as CISA KEV, exploitdb, metaspoit, or others."
+          },
+          "source_url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "The URL to the exploit as provided in the original upstream data source.",
+            "maxLength": 200
+          }
+        }
+      },
+      "LookupRequest": {
+        "type": "object",
+        "properties": {
+          "purl": {
+            "type": "string",
+            "description": "PackageURL strings in canonical form."
+          }
+        },
+        "required": [
+          "purl"
+        ]
+      },
+      "MinimalPackage": {
+        "type": "object",
+        "description": "Used for nesting inside vulnerability focused APIs.",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "readOnly": true
+          },
+          "purl": {
+            "type": "string"
+          },
+          "is_vulnerable": {
+            "type": "boolean"
+          },
+          "affected_by_vulnerabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VulnVulnID"
+            }
+          },
+          "resource_url": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "affected_by_vulnerabilities",
+          "is_vulnerable",
+          "purl",
+          "resource_url",
+          "url"
+        ]
+      },
+      "Package": {
+        "type": "object",
+        "description": "Lookup software package using Package URLs",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "readOnly": true
+          },
+          "purl": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "A short code to identify the type of this package. For example: gem for a Rubygem, docker for a container, pypi for a Python Wheel or Egg, maven for a Maven Jar, deb for a Debian package, etc.",
+            "maxLength": 16
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Package name prefix, such as Maven groupid, Docker image owner, GitHub user or organization, etc.",
+            "maxLength": 255
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the package.",
+            "maxLength": 100
+          },
+          "version": {
+            "type": "string",
+            "description": "Version of the package.",
+            "maxLength": 100
+          },
+          "qualifiers": {
+            "type": "string",
+            "readOnly": true
+          },
+          "subpath": {
+            "type": "string",
+            "description": "Extra subpath within a package, relative to the package root.",
+            "maxLength": 200
+          },
+          "is_vulnerable": {
+            "type": "boolean"
+          },
+          "next_non_vulnerable_version": {
+            "type": "string",
+            "readOnly": true
+          },
+          "latest_non_vulnerable_version": {
+            "type": "string",
+            "readOnly": true
+          },
+          "affected_by_vulnerabilities": {
+            "type": "object",
+            "additionalProperties": {},
+            "readOnly": true
+          },
+          "fixing_vulnerabilities": {
+            "type": "object",
+            "additionalProperties": {},
+            "readOnly": true
+          },
+          "risk_score": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Risk score between 0.00 and 10.00, where higher values indicate greater vulnerability risk for the package."
+          },
+          "resource_url": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "affected_by_vulnerabilities",
+          "fixing_vulnerabilities",
+          "is_vulnerable",
+          "latest_non_vulnerable_version",
+          "name",
+          "namespace",
+          "next_non_vulnerable_version",
+          "purl",
+          "qualifiers",
+          "resource_url",
+          "subpath",
+          "type",
+          "url",
+          "version"
+        ]
+      },
+      "PackageBulkSearchRequest": {
+        "type": "object",
+        "properties": {
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of PackageURL strings in canonical form."
+          },
+          "purl_only": {
+            "type": "boolean",
+            "default": false
+          },
+          "plain_purl": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "purls"
+        ]
+      },
+      "PackageQuery": {
+        "type": "object",
+        "properties": {
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "boolean",
+            "default": false
+          },
+          "ignore_qualifiers_subpath": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "PackageV2": {
+        "type": "object",
+        "properties": {
+          "purl": {
+            "type": "string"
+          },
+          "affected_by_vulnerabilities": {
+            "type": "string",
+            "readOnly": true
+          },
+          "fixing_vulnerabilities": {
+            "type": "string",
+            "readOnly": true
+          },
+          "next_non_vulnerable_version": {
+            "type": "string",
+            "readOnly": true
+          },
+          "latest_non_vulnerable_version": {
+            "type": "string",
+            "readOnly": true
+          },
+          "risk_score": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "affected_by_vulnerabilities",
+          "fixing_vulnerabilities",
+          "latest_non_vulnerable_version",
+          "next_non_vulnerable_version",
+          "purl",
+          "risk_score"
+        ]
+      },
+      "PackageV3": {
+        "type": "object",
+        "properties": {
+          "purl": {
+            "type": "string"
+          },
+          "affected_by_vulnerabilities": {
+            "type": "string",
+            "readOnly": true
+          },
+          "affected_by_vulnerabilities_url": {
+            "type": "string",
+            "readOnly": true
+          },
+          "fixing_vulnerabilities": {
+            "type": "string",
+            "readOnly": true
+          },
+          "fixing_vulnerabilities_url": {
+            "type": "string",
+            "readOnly": true
+          },
+          "next_non_vulnerable_version": {
+            "type": "string",
+            "readOnly": true
+          },
+          "latest_non_vulnerable_version": {
+            "type": "string",
+            "readOnly": true
+          },
+          "risk_score": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "affected_by_vulnerabilities",
+          "fixing_vulnerabilities",
+          "latest_non_vulnerable_version",
+          "next_non_vulnerable_version",
+          "purl",
+          "risk_score"
+        ]
+      },
+      "PackageurlList": {
+        "type": "object",
+        "properties": {
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of PackageURL strings in canonical form."
+          }
+        },
+        "required": [
+          "purls"
+        ]
+      },
+      "PaginatedAdvisoryV3List": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryV3"
+            }
+          }
+        }
+      },
+      "PaginatedAffectedByAdvisoryV3List": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AffectedByAdvisoryV3"
+            }
+          }
+        }
+      },
+      "PaginatedCodeFixList": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CodeFix"
+            }
+          }
+        }
+      },
+      "PaginatedCodeFixV2List": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CodeFixV2"
+            }
+          }
+        }
+      },
+      "PaginatedPackageList": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Package"
+            }
+          }
+        }
+      },
+      "PaginatedPackageV2List": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageV2"
+            }
+          }
+        }
+      },
+      "PaginatedPipelineScheduleAPIList": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PipelineScheduleAPI"
+            }
+          }
+        }
+      },
+      "PaginatedPurlList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "next": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "previous": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "count",
+          "results"
+        ]
+      },
+      "PaginatedVulnerabilityList": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vulnerability"
+            }
+          }
+        }
+      },
+      "PaginatedVulnerabilityListList": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VulnerabilityList"
+            }
+          }
+        }
+      },
+      "PatchedPipelineScheduleAPI": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "readOnly": true
+          },
+          "pipeline_id": {
+            "type": "string",
+            "description": "Identify a registered Pipeline class.",
+            "maxLength": 600
+          },
+          "is_active": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "When set to True, this Pipeline is active. When set to False, this Pipeline is inactive and not run."
+          },
+          "live_logging": {
+            "type": "boolean",
+            "description": "When enabled logs will be streamed live during pipeline execution. For legacy importers and improvers, logs are always made available only after execution completes."
+          },
+          "run_interval": {
+            "type": "integer",
+            "maximum": 8760,
+            "minimum": 1,
+            "description": "Number of hours to wait between run of this pipeline."
+          },
+          "execution_timeout": {
+            "type": "integer",
+            "maximum": 72,
+            "minimum": 1,
+            "description": "Number hours before pipeline execution is forcefully terminated."
+          },
+          "created_date": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "schedule_work_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Identifier used to manage the periodic run job.",
+            "maxLength": 255
+          },
+          "next_run_date": {
+            "type": "string",
+            "readOnly": true
+          },
+          "latest_run": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "PipelineScheduleAPI": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "readOnly": true
+          },
+          "pipeline_id": {
+            "type": "string",
+            "description": "Identify a registered Pipeline class.",
+            "maxLength": 600
+          },
+          "is_active": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "When set to True, this Pipeline is active. When set to False, this Pipeline is inactive and not run."
+          },
+          "live_logging": {
+            "type": "boolean",
+            "description": "When enabled logs will be streamed live during pipeline execution. For legacy importers and improvers, logs are always made available only after execution completes."
+          },
+          "run_interval": {
+            "type": "integer",
+            "maximum": 8760,
+            "minimum": 1,
+            "description": "Number of hours to wait between run of this pipeline."
+          },
+          "execution_timeout": {
+            "type": "integer",
+            "maximum": 72,
+            "minimum": 1,
+            "description": "Number hours before pipeline execution is forcefully terminated."
+          },
+          "created_date": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "schedule_work_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Identifier used to manage the periodic run job.",
+            "maxLength": 255
+          },
+          "next_run_date": {
+            "type": "string",
+            "readOnly": true
+          },
+          "latest_run": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "created_date",
+          "latest_run",
+          "next_run_date",
+          "pipeline_id",
+          "url"
+        ]
+      },
+      "PipelineScheduleCreate": {
+        "type": "object",
+        "properties": {
+          "pipeline_id": {
+            "type": "string",
+            "description": "Identify a registered Pipeline class.",
+            "maxLength": 600
+          },
+          "is_active": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "When set to True, this Pipeline is active. When set to False, this Pipeline is inactive and not run."
+          },
+          "run_interval": {
+            "type": "integer",
+            "maximum": 8760,
+            "minimum": 1,
+            "description": "Number of hours to wait between run of this pipeline."
+          },
+          "live_logging": {
+            "type": "boolean",
+            "description": "When enabled logs will be streamed live during pipeline execution. For legacy importers and improvers, logs are always made available only after execution completes."
+          },
+          "execution_timeout": {
+            "type": "integer",
+            "maximum": 72,
+            "minimum": 1,
+            "description": "Number hours before pipeline execution is forcefully terminated."
+          }
+        },
+        "required": [
+          "pipeline_id"
+        ]
+      },
+      "PipelineScheduleUpdate": {
+        "type": "object",
+        "properties": {
+          "is_active": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "When set to True, this Pipeline is active. When set to False, this Pipeline is inactive and not run."
+          },
+          "run_interval": {
+            "type": "integer",
+            "maximum": 8760,
+            "minimum": 1,
+            "description": "Number of hours to wait between run of this pipeline."
+          },
+          "live_logging": {
+            "type": "boolean",
+            "description": "When enabled logs will be streamed live during pipeline execution. For legacy importers and improvers, logs are always made available only after execution completes."
+          },
+          "execution_timeout": {
+            "type": "integer",
+            "maximum": 72,
+            "minimum": 1,
+            "description": "Number hours before pipeline execution is forcefully terminated."
+          }
+        }
+      },
+      "RelatedSSVCTree": {
+        "type": "object",
+        "properties": {
+          "vector": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "source_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision",
+          "options",
+          "source_url",
+          "vector"
+        ]
+      },
+      "ScoringSystemEnum": {
+        "enum": [
+          "cvssv2",
+          "cvssv3",
+          "cvssv3.1",
+          "cvssv4",
+          "rhbs",
+          "rhas",
+          "archlinux",
+          "cvssv3.1_qr",
+          "generic_textual",
+          "apache_httpd",
+          "apache_tomcat",
+          "epss",
+          "ssvc",
+          "openssl",
+          "ubuntu-priority"
+        ],
+        "type": "string"
+      },
+      "VulnVulnID": {
+        "type": "object",
+        "description": "Serializer for the series of vulnerability IDs.",
+        "properties": {
+          "vulnerability": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "vulnerability"
+        ]
+      },
+      "Vulnerability": {
+        "type": "object",
+        "description": "Base serializer containing common methods.",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "readOnly": true
+          },
+          "vulnerability_id": {
+            "type": "string",
+            "description": "Unique identifier for a vulnerability in the external representation. It is prefixed with VCID-",
+            "maxLength": 20
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the vulnerability"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Alias"
+            }
+          },
+          "fixed_packages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MinimalPackage"
+            },
+            "readOnly": true
+          },
+          "affected_packages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MinimalPackage"
+            },
+            "readOnly": true
+          },
+          "references": {
+            "type": "string",
+            "readOnly": true
+          },
+          "weaknesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Weakness"
+            }
+          },
+          "exploits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Exploit"
+            },
+            "readOnly": true
+          },
+          "severity_range_score": {
+            "type": "string",
+            "readOnly": true
+          },
+          "exploitability": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,1}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Exploitability indicates the likelihood that a vulnerability in a software package could be used by malicious actors to compromise systems, applications, or networks. This metric is determined automatically based on the discovery of known exploits."
+          },
+          "weighted_severity": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Weighted severity is the highest value calculated by multiplying each severity by its corresponding weight, divided by 10."
+          },
+          "risk_score": {
+            "type": "string",
+            "readOnly": true
+          },
+          "resource_url": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "affected_packages",
+          "aliases",
+          "exploits",
+          "fixed_packages",
+          "references",
+          "resource_url",
+          "risk_score",
+          "severity_range_score",
+          "url",
+          "weaknesses"
+        ]
+      },
+      "VulnerabilityList": {
+        "type": "object",
+        "properties": {
+          "vulnerability_id": {
+            "type": "string",
+            "description": "Unique identifier for a vulnerability in the external representation. It is prefixed with VCID-",
+            "maxLength": 20
+          },
+          "url": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "VulnerabilityReferenceV2": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "reference_type": {
+            "type": "string"
+          },
+          "reference_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference_id",
+          "reference_type",
+          "url"
+        ]
+      },
+      "VulnerabilitySeverityV2": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "URL to the vulnerability severity",
+            "maxLength": 1024
+          },
+          "value": {
+            "type": "string",
+            "description": "Example: 9.0, Important, High",
+            "maxLength": 50
+          },
+          "scoring_system": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScoringSystemEnum"
+              }
+            ],
+            "description": "Identifier for the scoring system used. Available choices are: cvssv2: CVSSv2 Base Score,\ncvssv3: CVSSv3 Base Score,\ncvssv3.1: CVSSv3.1 Base Score,\ncvssv4: CVSSv4 Base Score,\nrhbs: RedHat Bugzilla severity,\nrhas: RedHat Aggregate severity,\narchlinux: Archlinux Vulnerability Group Severity,\ncvssv3.1_qr: CVSSv3.1 Qualitative Severity Rating,\ngeneric_textual: Generic textual severity rating,\napache_httpd: Apache Httpd Severity,\napache_tomcat: Apache Tomcat Severity,\nepss: Exploit Prediction Scoring System,\nssvc: Stakeholder-Specific Vulnerability Categorization,\nopenssl: OpenSSL Severity,\nubuntu-priority: Ubuntu Priority "
+          },
+          "scoring_elements": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supporting scoring elements used to compute the score values. For example a CVSS vector string as used to compute a CVSS score.",
+            "maxLength": 250
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "UTC Date of publication of the vulnerability severity"
+          }
+        },
+        "required": [
+          "scoring_system",
+          "value"
+        ]
+      },
+      "VulnerabilityV2": {
+        "type": "object",
+        "properties": {
+          "vulnerability_id": {
+            "type": "string",
+            "description": "Unique identifier for a vulnerability in the external representation. It is prefixed with VCID-",
+            "maxLength": 20
+          },
+          "aliases": {
+            "type": "string",
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the vulnerability"
+          },
+          "severities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VulnerabilitySeverityV2"
+            }
+          },
+          "weaknesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeaknessV2"
+            }
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VulnerabilityReferenceV2"
+            }
+          },
+          "exploitability": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "weighted_severity": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "risk_score": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "aliases",
+          "exploitability",
+          "references",
+          "risk_score",
+          "severities",
+          "weaknesses",
+          "weighted_severity"
+        ]
+      },
+      "Weakness": {
+        "type": "object",
+        "description": "Used for nesting inside weakness focused APIs.",
+        "properties": {
+          "cwe_id": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "description": "CWE id"
+          },
+          "name": {
+            "type": "string",
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "cwe_id",
+          "description",
+          "name"
+        ]
+      },
+      "WeaknessV2": {
+        "type": "object",
+        "properties": {
+          "cwe_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cwe_id",
+          "description",
+          "name"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionid"
+      },
+      "tokenAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Token-based authentication with required prefix \"Token\""
+      }
+    }
+  }
+}

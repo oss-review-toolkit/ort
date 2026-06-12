@@ -17,21 +17,40 @@
  * License-Filename: LICENSE
  */
 
+import io.github.hfhbd.kfx.openapi.OpenApi
+
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
 
     // Apply third-party plugins.
+    alias(libs.plugins.kfx)
     alias(libs.plugins.kotlinSerialization)
 }
 
+kfx {
+    register<OpenApi>("VulnerableCodeApi") {
+        files.from("openapi/vulnerablecode.openapi.json")
+
+        packageName = "org.ossreviewtoolkit.clients.vulnerablecode"
+
+        dependencies {
+            compiler(kotlinClasses())
+            compiler(kotlinxJson())
+            compiler(ktorClient())
+        }
+
+        usingKotlinSourceSet(kotlin.sourceSets.main)
+    }
+}
+
 dependencies {
+    api(ktorLibs.client.core)
+    api(libs.kotlinx.datetime)
     api(libs.kotlinx.serialization.core)
     api(libs.kotlinx.serialization.json)
-    api(libs.okhttp)
-    api(libs.retrofit)
 
-    implementation(libs.retrofit.converter.kotlinxSerialization)
+    implementation(ktorLibs.http)
 }
 
 description = "A client to communicate with the API of a VulnerableCode instance."

@@ -1,0 +1,104 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": "/api/v3/affected-by-advisories/?purl=pkg:maven%2Forg.apache.logging.log4j%2Flog4j-core%402.17.0&page=1",
+  "results": [
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-8489-44mv-ggj8",
+      "url": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2022/01/GHSA-8489-44mv-ggj8/GHSA-8489-44mv-ggj8.json",
+      "aliases": [
+        "CVE-2021-44832"
+      ],
+      "summary": "Improper Input Validation and Injection in Apache Log4j2",
+      "severities": [
+        {
+          "url": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2022/01/GHSA-8489-44mv-ggj8/GHSA-8489-44mv-ggj8.json",
+          "value": "6.6",
+          "scoring_system": "cvssv3.1",
+          "scoring_elements": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "url": null,
+          "value": "MODERATE",
+          "scoring_system": "generic_textual",
+          "scoring_elements": ""
+        }
+      ],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://cert-portal.siemens.com/productcert/pdf/ssa-784507.pdf",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://github.com/apache/logging-log4j2",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://issues.apache.org/jira/browse/LOG4J2-3293",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://lists.apache.org/thread/s1o5vlo78ypqxnzn6p8zf6t9shtq5143",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://lists.debian.org/debian-lts-announce/2021/12/msg00036.html",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/EVV25FXL4FU5X6X5BSL7RLQ7T6F65MRA",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/T57MPJUW3MA6QGWZRTMCHHMMPQNVKGFC",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-apache-log4j-qRuKNEbd",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20220104-0001",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2021/12/28/1",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuapr2022.html",
+          "reference_type": "other",
+          "reference_id": "cpuapr2022.html"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujan2022.html",
+          "reference_type": "other",
+          "reference_id": "cpujan2022.html"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2022.html",
+          "reference_type": "other",
+          "reference_id": "cpujul2022.html"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44832",
+          "reference_type": "",
+          "reference_id": "CVE-2021-44832"
+        }
+      ],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    }
+  ]
+}

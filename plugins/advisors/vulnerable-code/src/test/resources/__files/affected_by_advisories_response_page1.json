@@ -1,0 +1,136 @@
+{
+  "count": 3,
+  "next": "/api/v3/affected-by-advisories/?purl=pkg:maven%2Forg.apache.logging.log4j%2Flog4j-core%402.17.0&page=2",
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-3pxv-7cmr-fjr4",
+      "url": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2026/04/GHSA-3pxv-7cmr-fjr4/GHSA-3pxv-7cmr-fjr4.json",
+      "aliases": [
+        "CVE-2026-34480"
+      ],
+      "summary": "Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 forbidden characters",
+      "severities": [
+        {
+          "url": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2026/04/GHSA-3pxv-7cmr-fjr4/GHSA-3pxv-7cmr-fjr4.json",
+          "value": "6.9",
+          "scoring_system": "cvssv4",
+          "scoring_elements": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N"
+        },
+        {
+          "url": null,
+          "value": "MODERATE",
+          "scoring_system": "generic_textual",
+          "scoring_elements": ""
+        }
+      ],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://github.com/apache/logging-log4j2",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://logging.apache.org/cyclonedx/vdr.xml",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2026/04/10/9",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://github.com/apache/logging-log4j2/pull/4077",
+          "reference_type": "other",
+          "reference_id": "4077"
+        },
+        {
+          "url": "https://lists.apache.org/thread/5x0hcnng0chhghp6jgjdp3qmbbhfjzhb",
+          "reference_type": "advisory",
+          "reference_id": "5x0hcnng0chhghp6jgjdp3qmbbhfjzhb"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34480",
+          "reference_type": "",
+          "reference_id": "CVE-2026-34480"
+        },
+        {
+          "url": "https://logging.apache.org/log4j/2.x/manual/layouts.html#XmlLayout",
+          "reference_type": "other",
+          "reference_id": "layouts.html#XmlLayout"
+        },
+        {
+          "url": "https://logging.apache.org/security.html#CVE-2026-34480",
+          "reference_type": "advisory",
+          "reference_id": "security.html#CVE-2026-34480"
+        }
+      ],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    },
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-6hg6-v5c8-fphq",
+      "url": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2026/04/GHSA-6hg6-v5c8-fphq/GHSA-6hg6-v5c8-fphq.json",
+      "aliases": [
+        "CVE-2026-34477"
+      ],
+      "summary": "Apache Log4j Core: `verifyHostName` attribute silently ignored in TLS configuration",
+      "severities": [
+        {
+          "url": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2026/04/GHSA-6hg6-v5c8-fphq/GHSA-6hg6-v5c8-fphq.json",
+          "value": "6.3",
+          "scoring_system": "cvssv4",
+          "scoring_elements": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:L/SA:N"
+        },
+        {
+          "url": null,
+          "value": "MODERATE",
+          "scoring_system": "generic_textual",
+          "scoring_elements": ""
+        }
+      ],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://github.com/apache/logging-log4j2",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://logging.apache.org/cyclonedx/vdr.xml",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName",
+          "reference_type": "",
+          "reference_id": ""
+        },
+        {
+          "url": "https://github.com/apache/logging-log4j2/pull/4075",
+          "reference_type": "other",
+          "reference_id": "4075"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34477",
+          "reference_type": "",
+          "reference_id": "CVE-2026-34477"
+        },
+        {
+          "url": "https://lists.apache.org/thread/lkx8cl46t2bvkcwfcb2pd43ygc097lq4",
+          "reference_type": "advisory",
+          "reference_id": "lkx8cl46t2bvkcwfcb2pd43ygc097lq4"
+        },
+        {
+          "url": "https://logging.apache.org/security.html#CVE-2026-34477",
+          "reference_type": "advisory",
+          "reference_id": "security.html#CVE-2026-34477"
+        }
+      ],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    }
+  ]
+}

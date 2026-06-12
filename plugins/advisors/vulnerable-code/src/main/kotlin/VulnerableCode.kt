@@ -19,19 +19,40 @@
 
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.serialization.kotlinx.json.json
+
 import java.net.URI
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
+import kotlin.collections.orEmpty
 import kotlin.coroutines.cancellation.CancellationException
 
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.serialization.json.Json
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
-import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
+import org.ossreviewtoolkit.clients.vulnerablecode.AdvisoryReference
+import org.ossreviewtoolkit.clients.vulnerablecode.AdvisorySeverity
+import org.ossreviewtoolkit.clients.vulnerablecode.AffectedByAdvisoryV3
+import org.ossreviewtoolkit.clients.vulnerablecode.PackageQuery
+import org.ossreviewtoolkit.clients.vulnerablecode.PaginatedPurlList
+import org.ossreviewtoolkit.clients.vulnerablecode.client.v3AffectedByAdvisoriesList
+import org.ossreviewtoolkit.clients.vulnerablecode.client.v3PackagesCreate
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -50,10 +71,12 @@ import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
- * The number of elements to request at once in a bulk request. This value was chosen more or less randomly to keep the
- * size of responses reasonably small.
+ * The number of elements to request at once in a bulk request for the v3/packages endpoint. The request uses
+ * "details=false", so the response only contains a list of matching PURLs that are affected by/fixing vulnerabilities.
+ * A relatively large chunk size reduces the number of top-level bulk requests while still keeping individual request
+ * bodies reasonably small.
  */
-private const val BULK_REQUEST_SIZE = 100
+private const val BULK_REQUEST_SIZE = 1000
 
 /**
  * The maximum length for the summary as derived from the description of a vulnerability.
@@ -79,12 +102,29 @@ class VulnerableCode(
      */
     override val details = AdvisorDetails(descriptor.id)
 
-    private val service by lazy {
-        val client = OkHttpClientHelper.buildClient {
-            if (config.readTimeout != null) readTimeout(config.readTimeout, TimeUnit.SECONDS)
-        }
+    private val client by lazy {
+        HttpClient(OkHttp) {
+            expectSuccess = true
 
-        VulnerableCodeService.create(config.serverUrl, config.apiKey?.value, client)
+            engine {
+                preconfigured = OkHttpClientHelper.buildClient {
+                    if (config.readTimeout != null) readTimeout(config.readTimeout, TimeUnit.SECONDS)
+                }
+            }
+
+            install(DefaultRequest) {
+                url(config.serverUrl)
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
+
+                config.apiKey?.value?.also {
+                    header(HttpHeaders.Authorization, "Token $it")
+                }
+            }
+
+            install(ContentNegotiation) {
+                json(Json { ignoreUnknownKeys = true })
+            }
+        }
     }
 
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
@@ -93,16 +133,28 @@ class VulnerableCode(
         val purls = packages.mapNotNull { pkg -> pkg.purl.ifEmpty { null } }
         val chunks = purls.chunked(BULK_REQUEST_SIZE)
 
-        val allVulnerabilities = mutableMapOf<String, List<VulnerableCodeService.Vulnerability>>()
+        val allVulnerabilities = mutableMapOf<String, List<AffectedByAdvisoryV3>>()
         val issues = mutableListOf<Issue>()
 
         chunks.forEachIndexed { index, chunk ->
             runCatching {
-                val chunkVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(chunk)).filter {
-                    it.affectedByVulnerabilities.isNotEmpty()
+                val request = PackageQuery(chunk, details = false)
+                var page = client.v3PackagesCreate(request)
+                val queriedPurls = page.results.toMutableSet()
+
+                while (true) {
+                    val nextUrl = page.next ?: break
+
+                    page = client.post(nextUrl) {
+                        setBody(request)
+                    }.body<PaginatedPurlList>()
+
+                    queriedPurls += page.results
                 }
 
-                allVulnerabilities += chunkVulnerabilities.associate { it.purl to it.affectedByVulnerabilities }
+                val chunkVulnerabilities = client.getAffectedByAdvisories(queriedPurls.filter { it in chunk })
+
+                allVulnerabilities += chunkVulnerabilities
             }.onFailure {
                 if (it is CancellationException) currentCoroutineContext().ensureActive()
 
@@ -125,7 +177,7 @@ class VulnerableCode(
 
         return packages.mapNotNullTo(mutableListOf()) { pkg ->
             allVulnerabilities[pkg.purl]?.let { packageVulnerabilities ->
-                val vulnerabilities = packageVulnerabilities.map { it.toModel(issues) }
+                val vulnerabilities = packageVulnerabilities.map { it.toModel(issues) }.mergeVulnerabilities()
                 val summary = AdvisorSummary(startTime, endTime, issues)
                 pkg to AdvisorResult(details, summary, vulnerabilities = vulnerabilities)
             }
@@ -133,64 +185,127 @@ class VulnerableCode(
     }
 
     /**
-     * Convert this vulnerability from the VulnerableCode data model to a [Vulnerability]. Populate [issues] if this
+     * Retrieve all advisories affecting the given [purls]. Filter out packages that are not affected by any advisory.
+     */
+    private suspend fun HttpClient.getAffectedByAdvisories(
+        purls: Collection<String>
+    ): Map<String, List<AffectedByAdvisoryV3>> =
+        purls.associateWith { purl -> getAllAffectedByAdvisories(purl) }
+            .filterValues { advisories -> advisories.isNotEmpty() }
+
+    /**
+     * Retrieve all advisories affecting the given [purl].
+     */
+    private suspend fun HttpClient.getAllAffectedByAdvisories(purl: String): List<AffectedByAdvisoryV3> {
+        var page = v3AffectedByAdvisoriesList {
+            parameter("purl", purl)
+        }
+
+        val advisories = page.results.toMutableList()
+
+        while (true) {
+            val nextUrl = page.next ?: break
+
+            page = get(nextUrl).body()
+            advisories += page.results
+        }
+
+        return advisories
+    }
+
+    /**
+     * Convert this advisory from the VulnerableCode data model to a [Vulnerability]. Populate [issues] if this
      * fails.
      */
-    private fun VulnerableCodeService.Vulnerability.toModel(issues: MutableList<Issue>): Vulnerability {
-        val description = description?.ifBlank { null }
+    private fun AffectedByAdvisoryV3.toModel(issues: MutableList<Issue>): Vulnerability {
+        val normalizedSummary = summary?.ifBlank { null }
+
         return Vulnerability(
             id = preferredCommonId(),
-            // VulnerableCode API v1 has no dedicated summary field (its summary actually is the description), so try to
-            // summarize the description.
-            summary = description?.take(MAX_SUMMARY_LENGTH)?.let {
-                if (it.length < description.length) "$it..." else it
+            // The VulnerableCode API v3 summary is actually a more detailed description of the vulnerability, so use it
+            // as description and derive a shorter summary from it.
+            summary = normalizedSummary?.take(MAX_SUMMARY_LENGTH)?.let {
+                if (it.length < normalizedSummary.length) "$it..." else it
             },
-            description = description,
-            references = references.flatMap { it.toModel(issues) }
+            description = normalizedSummary,
+            references = toReferences(issues)
         )
     }
 
     /**
-     * Convert this reference from the VulnerableCode data model to a list of [VulnerabilityReference] objects.
-     * In the VulnerableCode model, the reference can be assigned multiple scores in different scoring systems.
-     * For each of these scores, a single [VulnerabilityReference] is created. If no score is available, return a
-     * list with a single [VulnerabilityReference] with limited data. Populate [issues] in case of a failure,
-     * e.g. if the conversion to a URI fails.
+     * Convert this advisory from the VulnerableCode data model to a list of [VulnerabilityReference] objects. The
+     * advisory contains two fields that contain the relevant information, references and severities, which are both
+     * converted to [VulnerabilityReference] objects. If there are no entries in either of these fields, a reference is
+     * created from the advisory's URL. Populate [issues] if this fails.
      */
-    private fun VulnerableCodeService.VulnerabilityReference.toModel(
-        issues: MutableList<Issue>
-    ): List<VulnerabilityReference> =
-        runCatching {
-            val sourceUri = URI(url.fixupUrlEscaping())
+    private fun AffectedByAdvisoryV3.toReferences(issues: MutableList<Issue>): List<VulnerabilityReference> {
+        val advisoryReferences = references.mapNotNull { it.toModel(issues) }
+        val scoredReferences = severities.mapNotNull { it.toModel(url, issues) }
 
-            if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null, null, null))
-
-            return scores.map {
-                // In VulnerableCode's data model, a Score class's value is either a numeric score or a severity string.
-                val score = it.value.toFloatOrNull()
-                val severity = it.value.takeUnless { score != null }
-
-                val vector = it.scoringElements?.ifEmpty { null }
-
-                VulnerabilityReference(sourceUri, it.scoringSystem, severity, score, vector)
-            }
-        }.onFailure {
-            issues += createAndLogIssue("Failed to map $this to ORT model due to $it.", Severity.HINT)
-        }.getOrElse { emptyList() }
+        return (advisoryReferences + scoredReferences).ifEmpty {
+            url.toUri(issues)?.let { listOf(VulnerabilityReference(it, null, null, null, null)) }.orEmpty()
+        }
+    }
 
     /**
-     * Return a meaningful identifier for this vulnerability that can be used in reports. Obtain this identifier from
-     * the defined aliases if there are any. The data model of VulnerableCode supports multiple aliases while ORT's
-     * [Vulnerability] has just one identifier. To resolve this discrepancy, prefer CVEs over other identifiers. If
-     * there are no aliases referencing CVEs, use an arbitrary alias, assuming that every alias is preferable over
-     * the provider-specific ID of VulnerableCode. Only if no aliases are defined, use the latter as fallback. Note
-     * that it should still be possible via the references to find mentions of aliases that have been dropped.
+     * Convert this advisory reference from the VulnerableCode data model to a [VulnerabilityReference] object.
+     * Populate [issues] if this fails.
      */
-    private fun VulnerableCodeService.Vulnerability.preferredCommonId(): String {
-        if (aliases.isEmpty()) return vulnerabilityId
+    private fun AdvisoryReference.toModel(issues: MutableList<Issue>): VulnerabilityReference? =
+        url.toUri(issues)?.let { VulnerabilityReference(it, null, null, null, null) }
 
-        return aliases.firstOrNull { it.startsWith("cve", ignoreCase = true) } ?: aliases.first()
+    /**
+     * Convert this advisory severity from the VulnerableCode data model to a [VulnerabilityReference] object.
+     * Populate [issues] if this fails.
+     */
+    private fun AdvisorySeverity.toModel(fallbackUrl: String, issues: MutableList<Issue>): VulnerabilityReference? {
+        val score = value?.toFloatOrNull()
+        val textualSeverity = value.takeUnless { score != null }
+        val vector = scoring_elements?.ifEmpty { null }
+        val sourceUrl = url?.takeUnless { it.isBlank() } ?: fallbackUrl
+
+        return sourceUrl.toUri(issues)?.let {
+            VulnerabilityReference(it, scoring_system, textualSeverity, score, vector)
+        }
     }
+
+    /**
+     * Return a meaningful identifier for this vulnerability that can be used in reports. Consider the defined aliases
+     * and the last path segment of the advisory ID as candidate identifiers, because the advisory ID often embeds a
+     * public identifier such as a GHSA or CVE in its final path segment. To resolve the discrepancy between
+     * VulnerableCode's multiple identifiers and ORT's single [Vulnerability] identifier, prefer a CVE if one is
+     * available. Otherwise, use the last path segment of the advisory ID.
+     */
+    private fun AffectedByAdvisoryV3.preferredCommonId(): String {
+        val advisoryIdSegment = advisory_id.substringAfterLast('/')
+        val allIds = buildList {
+            addAll(aliases)
+            add(advisoryIdSegment)
+        }
+
+        return allIds.firstOrNull { it.startsWith("cve", ignoreCase = true) }
+            ?: advisoryIdSegment
+    }
+
+    /**
+     * Merge vulnerabilities with the same ID into a single vulnerability, combining their references.
+     */
+    private fun Collection<Vulnerability>.mergeVulnerabilities(): List<Vulnerability> =
+        groupBy { it.id }.values.map { vulnerabilitiesWithSameId ->
+            val references = vulnerabilitiesWithSameId.flatMapTo(mutableSetOf()) { it.references }
+            val entry = vulnerabilitiesWithSameId.find { it.summary != null || it.description != null }
+                ?: vulnerabilitiesWithSameId.first()
+
+            entry.copy(references = references.toList())
+        }
+
+    /**
+     * Convert this string to a [URI] object. Populate [issues] if this fails.
+     */
+    private fun String.toUri(issues: MutableList<Issue>): URI? =
+        runCatching { URI(fixupUrlEscaping()) }.onFailure {
+            issues += createAndLogIssue("Failed to map $this to ORT model due to $it.", Severity.HINT)
+        }.getOrNull()
 }
 
 private val BACKSLASH_ESCAPE_REGEX = """\\\\?(.)""".toRegex()

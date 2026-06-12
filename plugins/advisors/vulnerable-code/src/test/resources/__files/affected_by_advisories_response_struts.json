@@ -1,0 +1,51 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-v7xh-cg3m-mx2g",
+      "url": "https://example.org/advisories/GHSA-v7xh-cg3m-mx2g",
+      "aliases": [
+        "CVE-2009-1382"
+      ],
+      "severities": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2009-1382",
+          "value": "7.0",
+          "scoring_system": "cvssv2",
+          "scoring_elements": null
+        }
+      ],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    },
+    {
+      "advisory_id": "github_osv_importer_v2/GHSA-struts-2019-cov19",
+      "url": "https://example.org/advisories/GHSA-struts-2019-cov19",
+      "aliases": [
+        "CVE-2019-CoV19"
+      ],
+      "severities": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19",
+          "value": "10.0",
+          "scoring_system": "cvssv3",
+          "scoring_elements": null
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19",
+          "value": "HIGH",
+          "scoring_system": "cvssv3.1_qr",
+          "scoring_elements": null
+        }
+      ],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": [],
+      "fixed_by_packages": []
+    }
+  ]
+}

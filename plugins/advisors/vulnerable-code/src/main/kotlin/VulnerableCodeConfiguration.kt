@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
-import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
+import org.ossreviewtoolkit.clients.vulnerablecode.VULNERABLE_CODE_BASE_URL
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.Secret
 
@@ -30,7 +30,7 @@ data class VulnerableCodeConfiguration(
     /**
      * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
      */
-    @OrtPluginOption(defaultValue = VulnerableCodeService.PUBLIC_SERVER_URL)
+    @OrtPluginOption(defaultValue = VULNERABLE_CODE_BASE_URL)
     val serverUrl: String,
 
     /**

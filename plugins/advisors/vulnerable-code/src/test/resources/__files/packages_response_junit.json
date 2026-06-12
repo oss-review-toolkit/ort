@@ -1,0 +1,8 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    "pkg:maven/junit/junit@4.12"
+  ]
+}
