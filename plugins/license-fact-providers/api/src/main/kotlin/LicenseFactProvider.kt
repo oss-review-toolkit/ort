@@ -23,7 +23,7 @@ import org.ossreviewtoolkit.plugins.api.Plugin
 
 /** A provider for license facts. */
 abstract class LicenseFactProvider : Plugin {
-    /** Return the [LicenseText] for the given [licenseId], or `null` if no valid text is available. */
+    /** Return a [LicenseText] for the given [licenseId], or `null` if no valid text is available. */
     abstract fun getLicenseText(licenseId: String): LicenseText?
 
     /** Return a non-blank license text for the given [licenseId], or `null` if no valid text is available. */
