@@ -141,8 +141,10 @@ project:
 packages:
 - id: "SPDX::Python-3.12.12.tar.xz:"
   purl: "pkg:generic/Python-3.12.12.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "PSF-2.0"
+  declared_licenses_processed:
+    spdx_expression: "PSF-2.0"
   concluded_license: "PSF-2.0"
   description: ""
   homepage_url: ""
@@ -168,8 +170,10 @@ packages:
     path: ""
 - id: "SPDX::acl-2.3.2.tar.gz:"
   purl: "pkg:generic/acl-2.3.2.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-2.1-or-later AND GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -195,8 +199,10 @@ packages:
     path: ""
 - id: "SPDX::attr-2.5.1.tar.gz:"
   purl: "pkg:generic/attr-2.5.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-2.1-or-later AND GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -222,8 +228,10 @@ packages:
     path: ""
 - id: "SPDX::autoconf-2.72e.tar.gz:"
   purl: "pkg:generic/autoconf-2.72e.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-or-later"
   concluded_license: "GPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -249,8 +257,12 @@ packages:
     path: ""
 - id: "SPDX::autoconf-archive-2023.02.20.tar.xz:"
   purl: "pkg:generic/autoconf-archive-2023.02.20.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-with-autoconf-exception"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-only WITH Autoconf-exception-3.0"
+    mapped:
+      GPL-3.0-with-autoconf-exception: "GPL-3.0-only WITH Autoconf-exception-3.0"
   concluded_license: "GPL-3.0-with-autoconf-exception"
   description: ""
   homepage_url: ""
@@ -276,8 +288,10 @@ packages:
     path: ""
 - id: "SPDX::automake-1.16.5.tar.gz:"
   purl: "pkg:generic/automake-1.16.5.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -304,8 +318,10 @@ packages:
 - id: "SPDX::base-files:3.0.14"
   purl: "pkg:generic/base-files@3.0.14"
   cpe: "cpe:2.3:*:*:base-files:3.0.14:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "The base-files package creates the basic system directory structure\
     \ and provides a small set of key configuration files for the system."
@@ -333,8 +349,10 @@ packages:
 - id: "SPDX::base-passwd:3.6.3"
   purl: "pkg:generic/base-passwd@3.6.3"
   cpe: "cpe:2.3:*:*:base-passwd:3.6.3:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "The master copies of the user database files (/etc/passwd and /etc/group).\
     \  The update-passwd tool is also provided to keep the system databases synchronized\
@@ -362,8 +380,10 @@ packages:
     path: ""
 - id: "SPDX::base-passwd_3.6.3.tar.xz:"
   purl: "pkg:generic/base-passwd_3.6.3.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -389,8 +409,10 @@ packages:
     path: ""
 - id: "SPDX::bash-completion-2.12.0.tar.xz:"
   purl: "pkg:generic/bash-completion-2.12.0.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -416,8 +438,10 @@ packages:
     path: ""
 - id: "SPDX::bc-1.07.1.tar.gz:"
   purl: "pkg:generic/bc-1.07.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-or-later"
   concluded_license: "GPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -443,8 +467,10 @@ packages:
     path: ""
 - id: "SPDX::bison-3.8.2.tar.xz:"
   purl: "pkg:generic/bison-3.8.2.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-only"
   concluded_license: "GPL-3.0-only"
   description: ""
   homepage_url: ""
@@ -471,8 +497,10 @@ packages:
 - id: "SPDX::busybox:1.36.1"
   purl: "pkg:generic/busybox@1.36.1"
   cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   description: "BusyBox combines tiny versions of many common UNIX utilities into\
     \ a single small executable. It provides minimalist replacements for most of the\
@@ -504,8 +532,10 @@ packages:
     path: ""
 - id: "SPDX::busybox-1.36.1.tar.bz2:"
   purl: "pkg:generic/busybox-1.36.1.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   description: ""
   homepage_url: ""
@@ -532,8 +562,10 @@ packages:
 - id: "SPDX::busybox-hwclock:1.36.1"
   purl: "pkg:generic/busybox-hwclock@1.36.1"
   cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   description: "BusyBox combines tiny versions of many common UNIX utilities into\
     \ a single small executable. It provides minimalist replacements for most of the\
@@ -566,8 +598,10 @@ packages:
 - id: "SPDX::busybox-syslog:1.36.1"
   purl: "pkg:generic/busybox-syslog@1.36.1"
   cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   description: "BusyBox combines tiny versions of many common UNIX utilities into\
     \ a single small executable. It provides minimalist replacements for most of the\
@@ -600,8 +634,10 @@ packages:
 - id: "SPDX::busybox-udhcpc:1.36.1"
   purl: "pkg:generic/busybox-udhcpc@1.36.1"
   cpe: "cpe:2.3:*:*:busybox:1.36.1:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   concluded_license: "GPL-2.0-only AND LicenseRef-bzip2-1.0.4"
   description: "BusyBox combines tiny versions of many common UNIX utilities into\
     \ a single small executable. It provides minimalist replacements for most of the\
@@ -633,8 +669,12 @@ packages:
     path: ""
 - id: "SPDX::bzip2-1.0.8.tar.gz:"
   purl: "pkg:generic/bzip2-1.0.8.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "bzip2-1.0.6 AND GPL-3.0-or-later AND Apache-2.0 AND MS-PL AND BSD-3-Clause AND\
+    \ Zlib"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND BSD-3-Clause AND bzip2-1.0.6 AND GPL-3.0-or-later\
+      \ AND MS-PL AND Zlib"
   concluded_license: "Apache-2.0 AND BSD-3-Clause AND bzip2-1.0.6 AND GPL-3.0-or-later\
     \ AND MS-PL AND Zlib"
   description: ""
@@ -661,8 +701,10 @@ packages:
     path: ""
 - id: "SPDX::ca-certificates_20250419.tar.xz:"
   purl: "pkg:generic/ca-certificates_20250419.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND MPL-2.0"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND MPL-2.0"
   concluded_license: "GPL-2.0-or-later AND MPL-2.0"
   description: ""
   homepage_url: ""
@@ -688,8 +730,11 @@ packages:
     path: ""
 - id: "SPDX::cmake-3.28.3.tar.gz:"
   purl: "pkg:generic/cmake-3.28.3.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause AND BSD-1-Clause AND MIT AND BSD-2-Clause AND curl"
+  declared_licenses_processed:
+    spdx_expression: "BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND curl AND\
+      \ MIT"
   concluded_license: "BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND curl AND\
     \ MIT"
   description: ""
@@ -742,8 +787,10 @@ packages:
     path: ""
 - id: "SPDX::curl-8.7.1.tar.xz:"
   purl: "pkg:generic/curl-8.7.1.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "curl"
+  declared_licenses_processed:
+    spdx_expression: "curl"
   concluded_license: "curl"
   description: ""
   homepage_url: ""
@@ -769,8 +816,13 @@ packages:
     path: ""
 - id: "SPDX::elfutils-0.191.tar.bz2:"
   purl: "pkg:generic/elfutils-0.191.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "( GPL-2.0-or-later OR LGPL-3.0-or-later ) AND GPL-3.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "(GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later"
+    mapped:
+      ( GPL-2.0-or-later OR LGPL-3.0-or-later ) AND GPL-3.0-or-later: "(GPL-2.0-or-later\
+        \ OR LGPL-3.0-or-later) AND GPL-3.0-or-later"
   concluded_license: "(GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -797,8 +849,10 @@ packages:
 - id: "SPDX::eudev:3.2.14"
   purl: "pkg:generic/eudev@3.2.14"
   cpe: "cpe:2.3:*:*:eudev:3.2.14:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: "eudev is Gentoo's fork of udev, systemd's device file manager for\
     \ the Linux kernel. It manages device nodes in /dev and handles all user space\
@@ -826,8 +880,10 @@ packages:
     path: ""
 - id: "SPDX::eudev-3.2.14.tar.gz:"
   purl: "pkg:generic/eudev-3.2.14.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -853,8 +909,10 @@ packages:
     path: ""
 - id: "SPDX::expat-2.6.4.tar.bz2:"
   purl: "pkg:generic/expat-2.6.4.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
   concluded_license: "MIT"
   description: ""
   homepage_url: ""
@@ -880,8 +938,10 @@ packages:
     path: ""
 - id: "SPDX::flex-2.6.4.tar.gz:"
   purl: "pkg:generic/flex-2.6.4.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause AND LGPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause AND LGPL-2.0-or-later"
   concluded_license: "BSD-3-Clause AND LGPL-2.0-or-later"
   description: ""
   homepage_url: ""
@@ -907,8 +967,10 @@ packages:
     path: ""
 - id: "SPDX::gdbm-1.23.tar.gz:"
   purl: "pkg:generic/gdbm-1.23.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-only"
   concluded_license: "GPL-3.0-only"
   description: ""
   homepage_url: ""
@@ -934,8 +996,12 @@ packages:
     path: ""
 - id: "SPDX::gettext-0.22.5.tar.gz:"
   purl: "pkg:generic/gettext-0.22.5.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT"
+  - "LicenseRef-FSF-Unlimited"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-or-later AND LGPL-2.1-or-later AND LicenseRef-FSF-Unlimited\
+      \ AND MIT"
   concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later AND LicenseRef-FSF-Unlimited\
     \ AND MIT"
   description: ""
@@ -962,8 +1028,11 @@ packages:
     path: ""
 - id: "SPDX::git-2.44.4.tar.gz:"
   purl: "pkg:generic/git-2.44.4.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND GPL-2.0-or-later AND BSD-3-Clause AND MIT AND BSL-1.0 AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause AND BSL-1.0 AND GPL-2.0-only AND GPL-2.0-or-later\
+      \ AND LGPL-2.1-or-later AND MIT"
   concluded_license: "BSD-3-Clause AND BSL-1.0 AND GPL-2.0-only AND GPL-2.0-or-later\
     \ AND LGPL-2.1-or-later AND MIT"
   description: ""
@@ -990,8 +1059,10 @@ packages:
     path: ""
 - id: "SPDX::git.kernel.org.pub.scm.fs.ext2.e2fsprogs.git:"
   purl: "pkg:generic/git.kernel.org.pub.scm.fs.ext2.e2fsprogs.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LGPL-2.0-only AND BSD-3-Clause AND MIT"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause AND GPL-2.0-only AND LGPL-2.0-only AND MIT"
   concluded_license: "BSD-3-Clause AND GPL-2.0-only AND LGPL-2.0-only AND MIT"
   description: ""
   homepage_url: ""
@@ -1017,8 +1088,10 @@ packages:
     path: ""
 - id: "SPDX::git.kernel.org.pub.scm.utils.kernel.kmod.kmod.git:"
   purl: "pkg:generic/git.kernel.org.pub.scm.utils.kernel.kmod.kmod.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -1044,8 +1117,12 @@ packages:
     path: ""
 - id: "SPDX::git.savannah.gnu.org.git.config.git:"
   purl: "pkg:generic/git.savannah.gnu.org.git.config.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-with-autoconf-exception"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-only WITH Autoconf-exception-3.0"
+    mapped:
+      GPL-3.0-with-autoconf-exception: "GPL-3.0-only WITH Autoconf-exception-3.0"
   concluded_license: "GPL-3.0-with-autoconf-exception"
   description: ""
   homepage_url: ""
@@ -1071,8 +1148,10 @@ packages:
     path: ""
 - id: "SPDX::git.yoctoproject.org.linux-yocto.git:"
   purl: "pkg:generic/git.yoctoproject.org.linux-yocto.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -1098,8 +1177,10 @@ packages:
     path: ""
 - id: "SPDX::git.yoctoproject.org.opkg-utils:"
   purl: "pkg:generic/git.yoctoproject.org.opkg-utils"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
   concluded_license: "GPL-2.0-or-later"
   description: ""
   homepage_url: ""
@@ -1125,8 +1206,10 @@ packages:
     path: ""
 - id: "SPDX::git.yoctoproject.org.update-rc.d:"
   purl: "pkg:generic/git.yoctoproject.org.update-rc.d"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
   concluded_license: "GPL-2.0-or-later"
   description: ""
   homepage_url: ""
@@ -1152,8 +1235,10 @@ packages:
     path: ""
 - id: "SPDX::git.yoctoproject.org.yocto-kernel-cache:"
   purl: "pkg:generic/git.yoctoproject.org.yocto-kernel-cache"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -1179,8 +1264,10 @@ packages:
     path: ""
 - id: "SPDX::git.yoctoproject.org.yocto-kernel-tools.git:"
   purl: "pkg:generic/git.yoctoproject.org.yocto-kernel-tools.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND MIT"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND MIT"
   concluded_license: "GPL-2.0-only AND MIT"
   description: ""
   homepage_url: ""
@@ -1206,8 +1293,10 @@ packages:
     path: ""
 - id: "SPDX::github.com.ThomasDickey.ncurses-snapshots.git:"
   purl: "pkg:generic/github.com.ThomasDickey.ncurses-snapshots.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
   concluded_license: "MIT"
   description: ""
   homepage_url: ""
@@ -1233,8 +1322,10 @@ packages:
     path: ""
 - id: "SPDX::github.com.besser82.libxcrypt.git:"
   purl: "pkg:generic/github.com.besser82.libxcrypt.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-2.1-only"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-only"
   concluded_license: "LGPL-2.1-only"
   description: ""
   homepage_url: ""
@@ -1260,8 +1351,10 @@ packages:
     path: ""
 - id: "SPDX::github.com.facebook.zstd.git:"
   purl: "pkg:generic/github.com.facebook.zstd.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause OR GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause OR GPL-2.0-only"
   concluded_license: "BSD-3-Clause OR GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -1287,8 +1380,10 @@ packages:
     path: ""
 - id: "SPDX::github.com.ibm-s390-linux.s390-tools:"
   purl: "pkg:generic/github.com.ibm-s390-linux.s390-tools"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
   concluded_license: "MIT"
   description: ""
   homepage_url: ""
@@ -1314,8 +1409,10 @@ packages:
     path: ""
 - id: "SPDX::github.com.ninja-build.ninja.git:"
   purl: "pkg:generic/github.com.ninja-build.ninja.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
   concluded_license: "Apache-2.0"
   description: ""
   homepage_url: ""
@@ -1341,8 +1438,10 @@ packages:
     path: ""
 - id: "SPDX::github.com.stevegrubb.libcap-ng.git:"
   purl: "pkg:generic/github.com.stevegrubb.libcap-ng.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -1368,8 +1467,10 @@ packages:
     path: ""
 - id: "SPDX::github.com.thkukuk.libnsl:"
   purl: "pkg:generic/github.com.thkukuk.libnsl"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-2.1-only"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-only"
   concluded_license: "LGPL-2.1-only"
   description: ""
   homepage_url: ""
@@ -1395,8 +1496,10 @@ packages:
     path: ""
 - id: "SPDX::gitlab.freedesktop.org.pkg-config.pkg-config.git:"
   purl: "pkg:generic/gitlab.freedesktop.org.pkg-config.pkg-config.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
   concluded_license: "GPL-2.0-or-later"
   description: ""
   homepage_url: ""
@@ -1422,8 +1525,10 @@ packages:
     path: ""
 - id: "SPDX::gmp-6.3.0.tar.bz2:"
   purl: "pkg:generic/gmp-6.3.0.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later OR LGPL-3.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later OR LGPL-3.0-or-later"
   concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -1449,8 +1554,10 @@ packages:
     path: ""
 - id: "SPDX::gnutls-3.8.4.tar.xz:"
   purl: "pkg:generic/gnutls-3.8.4.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -1476,8 +1583,10 @@ packages:
     path: ""
 - id: "SPDX::gperf-3.1.tar.gz:"
   purl: "pkg:generic/gperf-3.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-or-later"
   concluded_license: "GPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -1503,8 +1612,10 @@ packages:
     path: ""
 - id: "SPDX::gtk-doc-1.33.2.tar.xz:"
   purl: "pkg:generic/gtk-doc-1.33.2.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -1531,8 +1642,10 @@ packages:
 - id: "SPDX::init-ifupdown:1.0"
   purl: "pkg:generic/init-ifupdown@1.0"
   cpe: "cpe:2.3:*:*:init-ifupdown:1.0:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "This package provides high level tools to configure network interfaces"
   homepage_url: "http://packages.debian.org/ifupdown"
@@ -1559,8 +1672,10 @@ packages:
 - id: "SPDX::init-system-helpers-service:1.66"
   purl: "pkg:generic/init-system-helpers-service@1.66"
   cpe: "cpe:2.3:*:*:init-system-helpers:1.66:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause AND GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause AND GPL-2.0-only"
   concluded_license: "BSD-3-Clause AND GPL-2.0-only"
   description: "This package contains helper tools that are necessary for switching\
     \ between the various init systems that Debian contains (e. g. sysvinit or systemd).\
@@ -1595,8 +1710,10 @@ packages:
 - id: "SPDX::initscripts:1.0"
   purl: "pkg:generic/initscripts@1.0"
   cpe: "cpe:2.3:*:*:initscripts:1.0:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "Initscripts provide the basic system startup initialization scripts\
     \ for the system.  These scripts include actions such as filesystem mounting,\
@@ -1627,8 +1744,10 @@ packages:
 - id: "SPDX::initscripts-functions:1.0"
   purl: "pkg:generic/initscripts-functions@1.0"
   cpe: "cpe:2.3:*:*:initscripts:1.0:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "Initscripts provide the basic system startup initialization scripts\
     \ for the system.  These scripts include actions such as filesystem mounting,\
@@ -1659,8 +1778,10 @@ packages:
 - id: "SPDX::kernel-6.6.111-yocto-standard:6.6.111+git"
   purl: "pkg:generic/kernel-6.6.111-yocto-standard@6.6.111%2Bgit"
   cpe: "cpe:2.3:*:*:linux_kernel:6.6.111:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "Linux kernel."
   homepage_url: "https://www.yoctoproject.org/"
@@ -1687,8 +1808,10 @@ packages:
 - id: "SPDX::kernel-image-6.6.111-yocto-standard:6.6.111+git"
   purl: "pkg:generic/kernel-image-6.6.111-yocto-standard@6.6.111%2Bgit"
   cpe: "cpe:2.3:*:*:linux_kernel:6.6.111:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "Linux kernel."
   homepage_url: "https://www.yoctoproject.org/"
@@ -1715,8 +1838,10 @@ packages:
 - id: "SPDX::kernel-image-bzimage-6.6.111-yocto-standard:6.6.111+git"
   purl: "pkg:generic/kernel-image-bzimage-6.6.111-yocto-standard@6.6.111%2Bgit"
   cpe: "cpe:2.3:*:*:linux_kernel:6.6.111:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "Linux kernel."
   homepage_url: "https://www.yoctoproject.org/"
@@ -1743,8 +1868,10 @@ packages:
 - id: "SPDX::kernel-module-uvesafb-6.6.111-yocto-standard:6.6.111+git"
   purl: "pkg:generic/kernel-module-uvesafb-6.6.111-yocto-standard@6.6.111%2Bgit"
   cpe: "cpe:2.3:*:*:linux_kernel:6.6.111:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "uvesafb kernel module; Framebuffer driver for VBE2.0+ compliant graphics\
     \ boards"
@@ -1772,8 +1899,10 @@ packages:
 - id: "SPDX::kmod:31"
   purl: "pkg:generic/kmod@31"
   cpe: "cpe:2.3:*:*:kmod:31:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: "kmod is a set of tools to handle common tasks with Linux kernel modules\
     \ like                insert, remove, list, check properties, resolve dependencies\
@@ -1802,8 +1931,10 @@ packages:
 - id: "SPDX::ldconfig:2.39+git"
   purl: "pkg:generic/ldconfig@2.39%2Bgit"
   cpe: "cpe:2.3:*:*:glibc:2.39:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-only AND LGPL-2.1-or-later"
   description: "The GNU C Library is used as the system C library in most systems\
     \ with the Linux kernel."
@@ -1830,8 +1961,10 @@ packages:
     path: ""
 - id: "SPDX::libarchive-3.7.9.tar.gz:"
   purl: "pkg:generic/libarchive-3.7.9.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
   concluded_license: "BSD-2-Clause"
   description: ""
   homepage_url: ""
@@ -1858,8 +1991,10 @@ packages:
 - id: "SPDX::libblkid1:2.39.3"
   purl: "pkg:generic/libblkid1@2.39.3"
   cpe: "cpe:2.3:*:*:util-linux:2.39.3:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-or-later"
   concluded_license: "LGPL-2.1-or-later"
   description: "util-linux libblkid"
   homepage_url: "https://en.wikipedia.org/wiki/Util-linux"
@@ -1886,8 +2021,10 @@ packages:
 - id: "SPDX::libc6:2.39+git"
   purl: "pkg:generic/libc6@2.39%2Bgit"
   cpe: "cpe:2.3:*:*:glibc:2.39:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-only AND LGPL-2.1-or-later"
   description: "The GNU C Library is used as the system C library in most systems\
     \ with the Linux kernel."
@@ -1914,8 +2051,10 @@ packages:
     path: ""
 - id: "SPDX::libcap-2.69.tar.xz:"
   purl: "pkg:generic/libcap-2.69.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause OR GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause OR GPL-2.0-only"
   concluded_license: "BSD-3-Clause OR GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -1942,8 +2081,10 @@ packages:
 - id: "SPDX::libcrypto3:3.2.6"
   purl: "pkg:generic/libcrypto3@3.2.6"
   cpe: "cpe:2.3:*:openssl:openssl:3.2.6:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
   concluded_license: "Apache-2.0"
   description: "Secure Socket Layer (SSL) binary and related cryptographic tools."
   homepage_url: "http://www.openssl.org/"
@@ -1969,8 +2110,10 @@ packages:
     path: ""
 - id: "SPDX::libedit-20230828-3.1.tar.gz:"
   purl: "pkg:generic/libedit-20230828-3.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
   concluded_license: "BSD-3-Clause"
   description: ""
   homepage_url: ""
@@ -1996,8 +2139,10 @@ packages:
     path: ""
 - id: "SPDX::libffi-3.4.6.tar.gz:"
   purl: "pkg:generic/libffi-3.4.6.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
   concluded_license: "MIT"
   description: ""
   homepage_url: ""
@@ -2023,8 +2168,10 @@ packages:
     path: ""
 - id: "SPDX::libgcrypt-1.10.3.tar.bz2:"
   purl: "pkg:generic/libgcrypt-1.10.3.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -2050,8 +2197,10 @@ packages:
     path: ""
 - id: "SPDX::libgpg-error-1.48.tar.bz2:"
   purl: "pkg:generic/libgpg-error-1.48.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -2077,8 +2226,14 @@ packages:
     path: ""
 - id: "SPDX::libidn2-2.3.7.tar.gz:"
   purl: "pkg:generic/libidn2-2.3.7.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "( GPL-2.0-or-later OR LGPL-3.0-only ) AND GPL-3.0-or-later AND Unicode-DFS-2016"
+  declared_licenses_processed:
+    spdx_expression: "(GPL-2.0-or-later OR LGPL-3.0-only) AND GPL-3.0-or-later AND\
+      \ Unicode-DFS-2016"
+    mapped:
+      ( GPL-2.0-or-later OR LGPL-3.0-only ) AND GPL-3.0-or-later AND Unicode-DFS-2016: "(GPL-2.0-or-later\
+        \ OR LGPL-3.0-only) AND GPL-3.0-or-later AND Unicode-DFS-2016"
   concluded_license: "(GPL-2.0-or-later OR LGPL-3.0-only) AND GPL-3.0-or-later AND\
     \ Unicode-DFS-2016"
   description: ""
@@ -2106,8 +2261,10 @@ packages:
 - id: "SPDX::libkmod2:31"
   purl: "pkg:generic/libkmod2@31"
   cpe: "cpe:2.3:*:*:kmod:31:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-or-later"
   concluded_license: "LGPL-2.1-or-later"
   description: "kmod is a set of tools to handle common tasks with Linux kernel modules\
     \ like                insert, remove, list, check properties, resolve dependencies\
@@ -2136,8 +2293,10 @@ packages:
 - id: "SPDX::liblzma5:5.4.7"
   purl: "pkg:generic/liblzma5@5.4.7"
   cpe: "cpe:2.3:*:*:xz:5.4.7:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LicenseRef-PD"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-PD"
   concluded_license: "LicenseRef-PD"
   description: "XZ Utils is free general-purpose data compression software with a\
     \ high compression ratio. XZ Utils were written for POSIX-like systems, but also\
@@ -2165,8 +2324,10 @@ packages:
     path: ""
 - id: "SPDX::libmicrohttpd-1.0.1.tar.gz:"
   purl: "pkg:generic/libmicrohttpd-1.0.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-or-later"
   concluded_license: "LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -2192,8 +2353,10 @@ packages:
     path: ""
 - id: "SPDX::libtasn1-4.20.0.tar.gz:"
   purl: "pkg:generic/libtasn1-4.20.0.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-or-later AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-or-later AND LGPL-2.1-or-later"
   concluded_license: "GPL-3.0-or-later AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -2219,8 +2382,10 @@ packages:
     path: ""
 - id: "SPDX::libtirpc-1.3.4.tar.bz2:"
   purl: "pkg:generic/libtirpc-1.3.4.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
   concluded_license: "BSD-3-Clause"
   description: ""
   homepage_url: ""
@@ -2246,8 +2411,10 @@ packages:
     path: ""
 - id: "SPDX::libtool-2.4.7.tar.gz:"
   purl: "pkg:generic/libtool-2.4.7.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LGPL-2.1-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LGPL-2.1-only"
   concluded_license: "GPL-2.0-only AND LGPL-2.1-only"
   description: ""
   homepage_url: ""
@@ -2273,8 +2440,10 @@ packages:
     path: ""
 - id: "SPDX::libunistring-1.2.tar.gz:"
   purl: "pkg:generic/libunistring-1.2.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-3.0-or-later OR GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later OR LGPL-3.0-or-later"
   concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -2301,8 +2470,10 @@ packages:
 - id: "SPDX::libz1:1.3.1"
   purl: "pkg:generic/libz1@1.3.1"
   cpe: "cpe:2.3:*:*:zlib:1.3.1:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Zlib"
+  declared_licenses_processed:
+    spdx_expression: "Zlib"
   concluded_license: "Zlib"
   description: "Zlib is a general-purpose, patent-free, lossless data compression\
     \ library which is used by many different programs."
@@ -2329,8 +2500,10 @@ packages:
     path: ""
 - id: "SPDX::linux-6.6.tar.xz:"
   purl: "pkg:generic/linux-6.6.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -2356,8 +2529,10 @@ packages:
     path: ""
 - id: "SPDX::m4-1.4.19.tar.gz:"
   purl: "pkg:generic/m4-1.4.19.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-only"
   concluded_license: "GPL-3.0-only"
   description: ""
   homepage_url: ""
@@ -2383,8 +2558,10 @@ packages:
     path: ""
 - id: "SPDX::make-4.4.1.tar.gz:"
   purl: "pkg:generic/make-4.4.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-only"
   concluded_license: "GPL-3.0-only"
   description: ""
   homepage_url: ""
@@ -2411,8 +2588,10 @@ packages:
 - id: "SPDX::modutils-initscripts:1.0"
   purl: "pkg:generic/modutils-initscripts@1.0"
   cpe: "cpe:2.3:*:*:modutils-initscripts:1.0:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
   concluded_license: "MIT"
   description: "Initscript for auto-loading kernel modules on boot."
   homepage_url: ""
@@ -2438,8 +2617,10 @@ packages:
     path: ""
 - id: "SPDX::mpc-1.3.1.tar.gz:"
   purl: "pkg:generic/mpc-1.3.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-3.0-only"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-3.0-only"
   concluded_license: "LGPL-3.0-only"
   description: ""
   homepage_url: ""
@@ -2465,8 +2646,10 @@ packages:
     path: ""
 - id: "SPDX::mpfr-4.2.1.tar.xz:"
   purl: "pkg:generic/mpfr-4.2.1.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-3.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-3.0-or-later"
   concluded_license: "LGPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -2493,8 +2676,10 @@ packages:
 - id: "SPDX::netbase:6.4"
   purl: "pkg:generic/netbase@6.4"
   cpe: "cpe:2.3:*:*:netbase:6.4:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "This package provides the necessary infrastructure for basic TCP/IP\
     \ based networking"
@@ -2521,8 +2706,10 @@ packages:
     path: ""
 - id: "SPDX::netbase_6.4.tar.xz:"
   purl: "pkg:generic/netbase_6.4.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -2548,8 +2735,10 @@ packages:
     path: ""
 - id: "SPDX::nettle-3.9.1.tar.gz:"
   purl: "pkg:generic/nettle-3.9.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LGPL-3.0-or-later OR GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later OR LGPL-3.0-or-later"
   concluded_license: "GPL-2.0-or-later OR LGPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -2575,8 +2764,10 @@ packages:
     path: ""
 - id: "SPDX::openssl-3.2.6.tar.gz:"
   purl: "pkg:generic/openssl-3.2.6.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
   concluded_license: "Apache-2.0"
   description: ""
   homepage_url: ""
@@ -2603,8 +2794,10 @@ packages:
 - id: "SPDX::openssl-conf:3.2.6"
   purl: "pkg:generic/openssl-conf@3.2.6"
   cpe: "cpe:2.3:*:openssl:openssl:3.2.6:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
   concluded_license: "Apache-2.0"
   description: "Secure Socket Layer (SSL) binary and related cryptographic tools."
   homepage_url: "http://www.openssl.org/"
@@ -2631,8 +2824,10 @@ packages:
 - id: "SPDX::openssl-ossl-module-legacy:3.2.6"
   purl: "pkg:generic/openssl-ossl-module-legacy@3.2.6"
   cpe: "cpe:2.3:*:openssl:openssl:3.2.6:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
   concluded_license: "Apache-2.0"
   description: "Secure Socket Layer (SSL) binary and related cryptographic tools."
   homepage_url: "http://www.openssl.org/"
@@ -2658,8 +2853,10 @@ packages:
     path: ""
 - id: "SPDX::packagegroup-core-boot:1.0"
   purl: "pkg:generic/packagegroup-core-boot@1.0"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
   concluded_license: "MIT"
   description: "The minimal set of packages required to boot the system"
   homepage_url: ""
@@ -2685,8 +2882,10 @@ packages:
     path: ""
 - id: "SPDX::pcre2-10.43.tar.bz2:"
   purl: "pkg:generic/pcre2-10.43.tar.bz2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
   concluded_license: "BSD-3-Clause"
   description: ""
   homepage_url: ""
@@ -2712,8 +2911,10 @@ packages:
     path: ""
 - id: "SPDX::perl-5.38.4.tar.gz:"
   purl: "pkg:generic/perl-5.38.4.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Artistic-1.0 OR GPL-1.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "Artistic-1.0 OR GPL-1.0-or-later"
   concluded_license: "Artistic-1.0 OR GPL-1.0-or-later"
   description: ""
   homepage_url: ""
@@ -2739,8 +2940,10 @@ packages:
     path: ""
 - id: "SPDX::perl-cross-1.6.2.tar.gz:"
   purl: "pkg:generic/perl-cross-1.6.2.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Artistic-1.0 OR GPL-1.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "Artistic-1.0 OR GPL-1.0-or-later"
   concluded_license: "Artistic-1.0 OR GPL-1.0-or-later"
   description: ""
   homepage_url: ""
@@ -2766,8 +2969,10 @@ packages:
     path: ""
 - id: "SPDX::popt-1.19.tar.gz:"
   purl: "pkg:generic/popt-1.19.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
   concluded_license: "MIT"
   description: ""
   homepage_url: ""
@@ -2793,8 +2998,10 @@ packages:
     path: ""
 - id: "SPDX::re2c-3.1.tar.xz:"
   purl: "pkg:generic/re2c-3.1.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LicenseRef-PD"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-PD"
   concluded_license: "LicenseRef-PD"
   description: ""
   homepage_url: ""
@@ -2820,8 +3027,10 @@ packages:
     path: ""
 - id: "SPDX::readline-8.2.tar.gz:"
   purl: "pkg:generic/readline-8.2.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-or-later"
   concluded_license: "GPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -2847,8 +3056,10 @@ packages:
     path: ""
 - id: "SPDX::rsync-3.2.7.tar.gz:"
   purl: "pkg:generic/rsync-3.2.7.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-or-later"
   concluded_license: "GPL-3.0-or-later"
   description: ""
   homepage_url: ""
@@ -2874,8 +3085,10 @@ packages:
     path: ""
 - id: "SPDX::salsa.debian.org.debian.init-system-helpers.git:"
   purl: "pkg:generic/salsa.debian.org.debian.init-system-helpers.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause AND GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause AND GPL-2.0-only"
   concluded_license: "BSD-3-Clause AND GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -2901,8 +3114,10 @@ packages:
     path: ""
 - id: "SPDX::sourceware.org.git.binutils-gdb.git:"
   purl: "pkg:generic/sourceware.org.git.binutils-gdb.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-3.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-only"
   concluded_license: "GPL-3.0-only"
   description: ""
   homepage_url: ""
@@ -2928,8 +3143,12 @@ packages:
     path: ""
 - id: "SPDX::sourceware.org.git.bzip2-tests.git:"
   purl: "pkg:generic/sourceware.org.git.bzip2-tests.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "bzip2-1.0.6 AND GPL-3.0-or-later AND Apache-2.0 AND MS-PL AND BSD-3-Clause AND\
+    \ Zlib"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND BSD-3-Clause AND bzip2-1.0.6 AND GPL-3.0-or-later\
+      \ AND MS-PL AND Zlib"
   concluded_license: "Apache-2.0 AND BSD-3-Clause AND bzip2-1.0.6 AND GPL-3.0-or-later\
     \ AND MS-PL AND Zlib"
   description: ""
@@ -2956,8 +3175,10 @@ packages:
     path: ""
 - id: "SPDX::sourceware.org.git.glibc.git:"
   purl: "pkg:generic/sourceware.org.git.glibc.git"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only AND LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND LGPL-2.1-or-later"
   concluded_license: "GPL-2.0-only AND LGPL-2.1-or-later"
   description: ""
   homepage_url: ""
@@ -2983,8 +3204,10 @@ packages:
     path: ""
 - id: "SPDX::sqlite-autoconf-3450300.tar.gz:"
   purl: "pkg:generic/sqlite-autoconf-3450300.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "LicenseRef-PD"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-PD"
   concluded_license: "LicenseRef-PD"
   description: ""
   homepage_url: ""
@@ -3011,8 +3234,10 @@ packages:
 - id: "SPDX::sysvinit:3.04"
   purl: "pkg:generic/sysvinit@3.04"
   cpe: "cpe:2.3:*:*:sysvinit:3.04:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
   concluded_license: "GPL-2.0-or-later"
   description: "This package is required to boot in most configurations.  It provides\
     \ the /sbin/init program.  This is the first process started on boot, and the\
@@ -3040,8 +3265,10 @@ packages:
     path: ""
 - id: "SPDX::sysvinit-3.04.tar.xz:"
   purl: "pkg:generic/sysvinit-3.04.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
   concluded_license: "GPL-2.0-or-later"
   description: ""
   homepage_url: ""
@@ -3068,8 +3295,10 @@ packages:
 - id: "SPDX::sysvinit-inittab:2.88dsf"
   purl: "pkg:generic/sysvinit-inittab@2.88dsf"
   cpe: "cpe:2.3:*:*:sysvinit-inittab:2.88dsf:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "Inittab configuration for SysVinit."
   homepage_url: ""
@@ -3096,8 +3325,10 @@ packages:
 - id: "SPDX::sysvinit-pidof:3.04"
   purl: "pkg:generic/sysvinit-pidof@3.04"
   cpe: "cpe:2.3:*:*:sysvinit:3.04:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
   concluded_license: "GPL-2.0-or-later"
   description: "This package is required to boot in most configurations.  It provides\
     \ the /sbin/init program.  This is the first process started on boot, and the\
@@ -3126,8 +3357,10 @@ packages:
 - id: "SPDX::ttyrun:2.31.0"
   purl: "pkg:generic/ttyrun@2.31.0"
   cpe: "cpe:2.3:*:*:s390-tools:2.31.0:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
   concluded_license: "MIT"
   description: "ttyrun is typically used to prevent a respawn through the init(8)\
     \ program when a terminal is not available."
@@ -3154,8 +3387,10 @@ packages:
     path: ""
 - id: "SPDX::unifdef-2.12.tar.xz:"
   purl: "pkg:generic/unifdef-2.12.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
   concluded_license: "BSD-2-Clause"
   description: ""
   homepage_url: ""
@@ -3182,8 +3417,10 @@ packages:
 - id: "SPDX::update-alternatives-opkg:0.6.3"
   purl: "pkg:generic/update-alternatives-opkg@0.6.3"
   cpe: "cpe:2.3:*:*:opkg-utils:0.6.3:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
   concluded_license: "GPL-2.0-or-later"
   description: "Additional utilities for the opkg package manager."
   homepage_url: "http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils"
@@ -3210,8 +3447,10 @@ packages:
 - id: "SPDX::update-rc.d:0.8+git"
   purl: "pkg:generic/update-rc.d@0.8%2Bgit"
   cpe: "cpe:2.3:*:*:update-rc.d:0.8:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
   concluded_license: "GPL-2.0-or-later"
   description: "update-rc.d is a utility that allows the management of symlinks to\
     \ the initscripts in the /etc/rcN.d directory structure."
@@ -3238,8 +3477,13 @@ packages:
     path: ""
 - id: "SPDX::util-linux-2.39.3.tar.xz:"
   purl: "pkg:generic/util-linux-2.39.3.tar.xz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause"
+  - "GPL-1.0-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause\
+    \ AND BSD-3-Clause AND BSD-4-Clause AND MIT"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-1.0-or-later\
+      \ AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT"
   concluded_license: "BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-1.0-or-later\
     \ AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT"
   description: ""
@@ -3267,8 +3511,10 @@ packages:
 - id: "SPDX::v86d:0.1.10"
   purl: "pkg:generic/v86d@0.1.10"
   cpe: "cpe:2.3:*:*:v86d:0.1.10:*:*:*:*:*:*:*"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: "v86d provides a backend for kernel drivers that need to execute x86\
     \ BIOS code. The code is executed in a controlled environment and the results\
@@ -3296,8 +3542,10 @@ packages:
     path: ""
 - id: "SPDX::v86d_0.1.10.orig.tar.gz:"
   purl: "pkg:generic/v86d_0.1.10.orig.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-only"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
   concluded_license: "GPL-2.0-only"
   description: ""
   homepage_url: ""
@@ -3323,8 +3571,15 @@ packages:
     path: ""
 - id: "SPDX::xz-5.4.7.tar.gz:"
   purl: "pkg:generic/xz-5.4.7.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "GPL-2.0-or-later AND GPL-3.0-with-autoconf-exception AND LGPL-2.1-or-later AND\
+    \ LicenseRef-PD"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND GPL-3.0-only WITH Autoconf-exception-3.0\
+      \ AND LGPL-2.1-or-later AND LicenseRef-PD"
+    mapped:
+      GPL-2.0-or-later AND GPL-3.0-with-autoconf-exception AND LGPL-2.1-or-later AND LicenseRef-PD: "GPL-2.0-or-later\
+        \ AND GPL-3.0-only WITH Autoconf-exception-3.0 AND LGPL-2.1-or-later AND LicenseRef-PD"
   concluded_license: "GPL-2.0-or-later AND GPL-3.0-with-autoconf-exception AND LGPL-2.1-or-later\
     \ AND LicenseRef-PD"
   description: ""
@@ -3351,8 +3606,10 @@ packages:
     path: ""
 - id: "SPDX::zlib-1.3.1.tar.gz:"
   purl: "pkg:generic/zlib-1.3.1.tar.gz"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "Zlib"
+  declared_licenses_processed:
+    spdx_expression: "Zlib"
   concluded_license: "Zlib"
   description: ""
   homepage_url: ""
