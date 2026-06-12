@@ -18,9 +18,11 @@
 # License-Filename: LICENSE
 
 SELF="${BASH_SOURCE[0]}"
+GIT_ROOT="$(git rev-parse --show-toplevel)"
 
 if [ "$#" -lt 2 ]; then
-    echo "Usage: $SELF <environment directory> <command to run>" >&2
+    echo "Usage   : $SELF <environment directory> <command to run>" >&2
+    echo "Example : $SELF external-tools $GIT_ROOT/gradlew -q :cli:run --args=requirements"
     exit 1
 fi
 
