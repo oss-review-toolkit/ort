@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#
+
 # Copyright (C) 2024 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
