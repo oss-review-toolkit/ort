@@ -67,7 +67,7 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
             }
         }
 
-        "not contain single ID strings" {
+        "not contain undiscarded single ID strings" {
             val licenseIdMapping = mapping.filter { (_, expression) ->
                 expression is SpdxLicenseIdExpression
             }
