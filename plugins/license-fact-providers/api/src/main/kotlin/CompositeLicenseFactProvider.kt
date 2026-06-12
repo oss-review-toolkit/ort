@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.licensefactproviders.api
 
-import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.model.Identifier
 
 /**
- * A [LicenseFactProvider] that aggregates multiple [LicenseFactProvider]s.
+ * A composition of multiple [LicenseFactProvider]s.
  */
 class CompositeLicenseFactProvider(
     /**
@@ -30,14 +30,31 @@ class CompositeLicenseFactProvider(
      *  providers: the first provider in the list that has a fact for a given license ID will be used.
      */
     private val providers: List<LicenseFactProvider>
-) : LicenseFactProvider() {
-    override val descriptor = PluginDescriptor(
-        id = "Composite",
-        displayName = "Composite License Fact Provider",
-        summary = "A license fact provider that aggregates multiple license fact providers."
-    )
+) {
+    /** Return the [LicenseText] for the given [licenseId] and [id], or `null` if no valid text is available. */
+    fun getLicenseText(licenseId: String, id: Identifier? = null): LicenseText? {
+        val idSpecificLicenseText = if (id != null) {
+            providers.firstNotNullOfOrNull { it.getIdSpecificLicenseText(licenseId, id) }
+        } else {
+            null
+        }
 
-    override fun getLicenseText(licenseId: String) = providers.firstNotNullOfOrNull { it.getLicenseText(licenseId) }
+        return idSpecificLicenseText ?: providers.firstNotNullOfOrNull { it.getLicenseText(licenseId) }
+    }
 
-    override fun hasLicenseText(licenseId: String) = providers.any { it.hasLicenseText(licenseId) }
+    /** Return a non-blank license text for the given [licenseId] and [id], or `null` if no valid text is available. */
+    @Deprecated("Java-only API", level = DeprecationLevel.HIDDEN)
+    @JvmName("getLicenseText")
+    fun getNonBlankLicenseText(licenseId: String, id: Identifier? = null): String? = getLicenseText(licenseId, id)?.text
+
+    /** Return `true´ if this provider has a license text for the given [licenseId] and [id]. */
+    fun hasLicenseText(licenseId: String, id: Identifier? = null): Boolean {
+        val hasIdSpecificLicenseText = if (id != null) {
+            providers.any { it.hasIdSpecificLicenseText(licenseId, id) }
+        } else {
+            false
+        }
+
+        return hasIdSpecificLicenseText || providers.any { it.hasLicenseText(licenseId) }
+    }
 }

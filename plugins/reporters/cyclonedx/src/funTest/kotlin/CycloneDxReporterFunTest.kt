@@ -42,9 +42,9 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
-import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
-import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
+import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_EMPTY
+import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_SPDX
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.matchJsonSchema
@@ -60,7 +60,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.XML,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             )
 
             bom should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
@@ -82,7 +82,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             )
 
             bom should matchJsonSchema(schemaJson)
@@ -109,7 +109,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = createResultWithAdditionalProject(otherProject),
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             )
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
@@ -135,7 +135,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = createResultWithAdditionalProject(otherProject),
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             )
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
@@ -148,7 +148,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
                 singleBomComponentType = Component.Type.LIBRARY,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             )
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
@@ -175,7 +175,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 ortResult = createResultWithAdditionalProject(topLevelProject),
                 format = Format.JSON,
                 singleBomComponentName = "eric",
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             )
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
@@ -199,7 +199,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val (bomWithFindings, bomWithoutFindings) = generateMultiBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             ).also {
                 it shouldHaveSize 2
                 it.forAll { bom ->
@@ -259,7 +259,7 @@ private fun TestConfiguration.generateSingleBomReport(
     format: Format,
     singleBomComponentName: String = "",
     singleBomComponentType: Component.Type = Component.Type.APPLICATION,
-    licenseFactProvider: LicenseFactProvider = CompositeLicenseFactProvider(emptyList())
+    licenseFactProvider: CompositeLicenseFactProvider = LICENSE_FACT_PROVIDER_EMPTY
 ): String {
     val reporter = CycloneDxReporterFactory.create(
         schemaVersion = SchemaVersion.entries.single { it.version.versionString == DEFAULT_SCHEMA_VERSION_NAME },
@@ -279,7 +279,7 @@ private fun TestConfiguration.generateSingleBomReport(
 private fun TestConfiguration.generateMultiBomReport(
     ortResult: OrtResult,
     format: Format,
-    licenseFactProvider: LicenseFactProvider = CompositeLicenseFactProvider(emptyList())
+    licenseFactProvider: CompositeLicenseFactProvider = LICENSE_FACT_PROVIDER_EMPTY
 ): List<String> {
     val reporter = CycloneDxReporterFactory.create(
         schemaVersion = SchemaVersion.entries.single { it.version.versionString == DEFAULT_SCHEMA_VERSION_NAME },

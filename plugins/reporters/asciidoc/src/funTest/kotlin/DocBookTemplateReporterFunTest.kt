@@ -25,7 +25,7 @@ import io.kotest.matchers.shouldBe
 
 import java.time.LocalDate
 
-import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
+import org.ossreviewtoolkit.reporter.LICENSE_FACT_PROVIDER_SPDX
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -38,7 +38,7 @@ class DocBookTemplateReporterFunTest : StringSpec({
         val reportContent = DocBookTemplateReporterFactory.create().generateReport(
             ReporterInput(
                 ORT_RESULT,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = LICENSE_FACT_PROVIDER_SPDX
             ),
             tempdir()
         ).single().getOrThrow().readText()
