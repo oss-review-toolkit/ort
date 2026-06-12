@@ -58,21 +58,20 @@ internal object SpdxDocumentModelMapper {
         val relationships = mutableListOf<SpdxRelationship>()
         val files = mutableListOf<SpdxFile>()
         val linkageTypesForDependencyRelationships = ortResult.getLinkageTypesForDependencyRelationships()
+        val spdxIdsForDependencyRelationshipSources = mutableMapOf<Identifier, String>()
 
         /**
-         * Add relationships representing a directed relationship from the package or project denoted by [fromOrtId] to
-         * the one denoted by [toOrtId]. The [fromSpdxId] must correspond to the SPDX package corresponding to
-         * [fromOrtId].
+         * Add relationships representing a directed relationship from the SPDX package denoted by [fromSpdxId] to the
+         * package or project denoted by [toOrtId].
          */
-        fun addDependencyRelationships(fromOrtId: Identifier, fromSpdxId: String, toOrtId: Identifier) {
+        fun addDependencyRelationships(fromSpdxId: String, toOrtId: Identifier, linkageTypes: Set<PackageLinkage>) {
             relationships += SpdxRelationship(
                 spdxElementId = fromSpdxId,
                 relationshipType = SpdxRelationship.Type.DEPENDS_ON,
                 relatedSpdxElement = toOrtId.toSpdxId()
             )
 
-            linkageTypesForDependencyRelationships.getValue(fromOrtId to toOrtId)
-                .mapTo(mutableSetOf()) { it.toSpdxRelationshipType() }
+            linkageTypes.mapTo(mutableSetOf()) { it.toSpdxRelationshipType() }
                 .sorted()
                 .forEach { relationshipType ->
                     relationships += SpdxRelationship(
@@ -97,13 +96,7 @@ internal object SpdxDocumentModelMapper {
                 ortResult
             ).copy(hasFiles = filesForProject.map { it.spdxId })
 
-            ortResult.getDependencies(
-                id = project.id,
-                maxLevel = 1,
-                omitExcluded = true
-            ).forEach { dependency ->
-                addDependencyRelationships(project.id, spdxProjectPackage.spdxId, dependency)
-            }
+            spdxIdsForDependencyRelationshipSources[project.id] = spdxProjectPackage.spdxId
 
             files += filesForProject
             spdxProjectPackage
@@ -117,15 +110,8 @@ internal object SpdxDocumentModelMapper {
                 ortResult
             )
 
-            ortResult.getDependencies(
-                id = pkg.id,
-                maxLevel = 1,
-                omitExcluded = true
-            ).forEach { dependency ->
-                addDependencyRelationships(pkg.id, binaryPackage.spdxId, dependency)
-            }
-
             packages += binaryPackage
+            spdxIdsForDependencyRelationshipSources[pkg.id] = binaryPackage.spdxId
 
             if (pkg.vcsProcessed.url.isNotBlank()) {
                 val filesForPackage = if (config.fileInformationEnabled) {
@@ -178,6 +164,21 @@ internal object SpdxDocumentModelMapper {
             }
         }
 
+        linkageTypesForDependencyRelationships.mapNotNull { (ortIds, linkageTypes) ->
+            val (fromOrtId, toOrtId) = ortIds
+            val fromSpdxId = spdxIdsForDependencyRelationshipSources[fromOrtId] ?: return@mapNotNull null
+
+            if (ortResult.isExcluded(toOrtId)) {
+                null
+            } else {
+                DependencyRelationship(fromSpdxId, toOrtId, linkageTypes)
+            }
+        }.sortedWith(
+            compareBy<DependencyRelationship>({ it.fromSpdxId }, { it.toOrtId.toSpdxId() })
+        ).forEach { (fromSpdxId, toOrtId, linkageTypes) ->
+            addDependencyRelationships(fromSpdxId, toOrtId, linkageTypes)
+        }
+
         val creators = listOfNotNull(
             config.creationInfoPerson?.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.PERSON} $it" },
             config.creationInfoOrganization?.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.ORGANIZATION} $it" },
@@ -204,6 +205,12 @@ internal object SpdxDocumentModelMapper {
             .filterChecksums(config.wantSpdx23)
     }
 }
+
+private data class DependencyRelationship(
+    val fromSpdxId: String,
+    val toOrtId: Identifier,
+    val linkageTypes: Set<PackageLinkage>
+)
 
 private fun SpdxDocument.filterChecksums(wantSpdx23: Boolean): SpdxDocument =
     takeIf { wantSpdx23 } ?: copy(packages = packages.map { it.filterChecksums(wantSpdx23) })
