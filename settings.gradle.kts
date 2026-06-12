@@ -85,7 +85,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention").version("1.0.0")
 
     // Required for the build-health plugin. Keep the version in sync with the one from the version catalog.
-    id("org.jetbrains.kotlin.jvm").version("2.3.21").apply(false)
+    id("org.jetbrains.kotlin.jvm").version("2.4.0").apply(false)
 }
 
 dependencyResolutionManagement {
