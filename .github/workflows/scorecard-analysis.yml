@@ -12,7 +12,7 @@ permissions: read-all
 
 jobs:
   scorecard-analysis:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       # Needed for SARIF scanning upload.
       security-events: write
