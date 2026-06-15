@@ -19,55 +19,55 @@
 
 // As it is not possible to declare a package in "init.gradle" also no package is declared here.
 
-internal interface OrtDependencyTreeModel {
+internal interface LegacyOrtDependencyTreeModel {
     val group: String
     val name: String
     val version: String
-    val configurations: List<OrtConfiguration>
-    val repositories: List<OrtRepository>
+    val configurations: List<LegacyOrtConfiguration>
+    val repositories: List<LegacyOrtRepository>
     val errors: List<String>
     val warnings: List<String>
 }
 
-internal interface OrtConfiguration {
+internal interface LegacyOrtConfiguration {
     val name: String
-    val dependencies: List<OrtComponent>
+    val dependencies: List<LegacyOrtComponent>
 }
 
-internal interface OrtComponentIdentifier {
+internal interface LegacyOrtComponentIdentifier {
     val groupId: String
     val artifactId: String
     val version: String
 }
 
-internal interface OrtComponent {
-    val componentId: OrtComponentIdentifier
+internal interface LegacyOrtComponent {
+    val componentId: LegacyOrtComponentIdentifier
     val classifier: String
     val extension: String
     val variants: Map<String, Map<String, String>>
-    val dependencies: List<OrtComponent>
+    val dependencies: List<LegacyOrtComponent>
     val error: String?
     val warning: String?
     val pomFile: String?
-    val mavenModel: OrtMavenModel?
+    val mavenModel: LegacyOrtMavenModel?
     val localPath: String?
 }
 
-internal interface OrtMavenModel {
+internal interface LegacyOrtMavenModel {
     val licenses: Set<String>
     val authors: Set<String>
     val description: String?
     val homepageUrl: String?
-    val vcs: OrtVcsModel?
+    val vcs: LegacyOrtVcsModel?
 }
 
-internal interface OrtVcsModel {
+internal interface LegacyOrtVcsModel {
     val connection: String
     val tag: String
     val browsableUrl: String
 }
 
-internal interface OrtRepository {
+internal interface LegacyOrtRepository {
     val url: String
     val username: String?
     val password: String?

@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
-import OrtComponent
+import LegacyOrtComponent
 
 import org.apache.maven.project.ProjectBuildingException
 
@@ -48,7 +48,7 @@ internal class GradleDependencyHandler(
 
     /** The helper object to resolve packages via Maven. */
     private val maven: MavenSupport
-) : DependencyHandler<OrtComponent> {
+) : DependencyHandler<LegacyOrtComponent> {
     /**
      * A list with repositories to use when resolving packages. This list must be set before using this handler for
      * constructing the dependency graph of a project. As different projects may use different repositories, this
@@ -56,14 +56,14 @@ internal class GradleDependencyHandler(
      */
     var repositories = emptyList<RemoteRepository>()
 
-    override fun identifierFor(dependency: OrtComponent): Identifier =
+    override fun identifierFor(dependency: LegacyOrtComponent): Identifier =
         with(dependency.componentId) {
             Identifier(dependency.getIdentifierType(projectType), groupId, artifactId, version)
         }
 
-    override fun dependenciesFor(dependency: OrtComponent): List<OrtComponent> = dependency.dependencies
+    override fun dependenciesFor(dependency: LegacyOrtComponent): List<LegacyOrtComponent> = dependency.dependencies
 
-    override fun issuesFor(dependency: OrtComponent): List<Issue> =
+    override fun issuesFor(dependency: LegacyOrtComponent): List<Issue> =
         listOfNotNull(
             dependency.error?.let {
                 createAndLogIssue(
@@ -82,10 +82,10 @@ internal class GradleDependencyHandler(
             }
         )
 
-    override fun linkageFor(dependency: OrtComponent): PackageLinkage =
+    override fun linkageFor(dependency: LegacyOrtComponent): PackageLinkage =
         if (dependency.isProjectDependency) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: OrtComponent, issues: MutableCollection<Issue>): Package? {
+    override fun createPackage(dependency: LegacyOrtComponent, issues: MutableCollection<Issue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error != null || dependency.isProjectDependency) return null
 

@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
-import OrtComponent
+import LegacyOrtComponent
 
 /**
  * The type of this Gradle dependency. In case of a project, it is [projectType]. Otherwise it is "Maven" unless there
  * is no POM, then it is "Unknown".
  */
-internal fun OrtComponent.getIdentifierType(projectType: String) =
+internal fun LegacyOrtComponent.getIdentifierType(projectType: String) =
     when {
         isProjectDependency -> projectType
         pomFile != null -> "Maven"
@@ -35,5 +35,5 @@ internal fun OrtComponent.getIdentifierType(projectType: String) =
 /**
  * A flag to indicate whether this Gradle dependency refers to a project, or to a package.
  */
-internal val OrtComponent.isProjectDependency: Boolean
+internal val LegacyOrtComponent.isProjectDependency: Boolean
     get() = localPath != null
