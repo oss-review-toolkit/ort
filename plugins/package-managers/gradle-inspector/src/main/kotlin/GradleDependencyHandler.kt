@@ -45,8 +45,6 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
-import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.getIdentifierType
-import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.isProjectDependency
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -183,6 +181,23 @@ internal class GradleDependencyHandler(
             areDependenciesEqual(dependenciesFor(depA), dependenciesFor(depB))
         }
     }
+
+    /**
+     * The type of this Gradle dependency. In case of a project, it is [projectType]. Otherwise it is "Maven" unless
+     * there is no POM, then it is "Unknown".
+     */
+    fun OrtComponent.getIdentifierType(projectType: String) =
+        when {
+            isProjectDependency -> projectType
+            pomFile != null -> "Maven"
+            else -> "Unknown"
+        }
+
+    /**
+     * A flag to indicate whether this Gradle dependency refers to a project, or to a package.
+     */
+    val OrtComponent.isProjectDependency: Boolean
+        get() = localPath != null
 }
 
 // See http://maven.apache.org/pom.html#SCM.
