@@ -105,3 +105,11 @@ internal fun Identifier.matchesDisregardingVersion(other: Identifier) =
     type.equals(other.type, ignoreCase = true)
         && namespace == other.namespace
         && name.equalsOrIsBlank(other.name)
+
+/**
+ * Return true if this [Identifier] is matched by the given [matcher]. The [matcher]s version may be an
+ * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
+ */
+internal fun Identifier.isMatchedBy(matcher: Identifier): Boolean =
+    matchesDisregardingVersion(matcher)
+        && (matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this))
