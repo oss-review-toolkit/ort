@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import org.ossreviewtoolkit.model.utils.idMatchesDisregardingVersion
-import org.ossreviewtoolkit.model.utils.isApplicableIvyVersion
-import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
+import org.ossreviewtoolkit.model.utils.idMatches
 
 /**
  * This class assigns a [PackageCurationData] object to a [Package] identified by the [id].
@@ -45,9 +43,7 @@ data class PackageCuration(
      * curation's version may be an
      * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
      */
-    fun isApplicable(pkgId: Identifier): Boolean =
-        idMatchesDisregardingVersion(id, pkgId)
-            && (id.version.equalsOrIsBlank(pkgId.version) || id.isApplicableIvyVersion(pkgId))
+    fun isApplicable(pkgId: Identifier): Boolean = idMatches(id, pkgId)
 
     /**
      * Apply the curation [data] to the provided [basePackage] by calling [PackageCurationData.apply], if applicable.
