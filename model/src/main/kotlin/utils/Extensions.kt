@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import java.net.URI
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
@@ -29,6 +30,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 fun String.prependPath(prefix: String): String = if (prefix.isBlank()) this else "${prefix.removeSuffix("/")}/$this"
@@ -95,3 +97,11 @@ internal fun List<SourceCodeOrigin>.requireNoDuplicates() {
         "'sourceCodeOrigins' must not contain duplicates. Duplicates: $duplicates"
     }
 }
+
+/**
+ * Return true if this [Identifier] matches the given [other] identifier, disregarding the version.
+ */
+internal fun Identifier.matchesDisregardingVersion(other: Identifier) =
+    type.equals(other.type, ignoreCase = true)
+        && namespace == other.namespace
+        && name.equalsOrIsBlank(other.name)
