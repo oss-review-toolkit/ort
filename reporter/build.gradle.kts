@@ -35,7 +35,11 @@ dependencies {
 
     funTestImplementation(testFixtures(project))
 
+    testFixturesApi(projects.plugins.licenseFactProviders.licenseFactProviderApi)
+
     testFixturesImplementation(projects.utils.testUtils)
+    testFixturesImplementation(projects.plugins.licenseFactProviders.scancodeLicenseFactProvider)
+    testFixturesImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
 
     kotlinScriptDef(projects.utils.scriptUtils)
 }
