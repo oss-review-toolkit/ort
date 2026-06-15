@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 import org.ossreviewtoolkit.utils.test.InputFormat
 import org.ossreviewtoolkit.utils.test.matchJsonSchema
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -136,6 +137,79 @@ class SpdxDocumentReporterFunTest : WordSpec({
             jsonSpdxDocument should matchJsonSchema(schemaJson)
             document.files should beEmpty()
         }
+
+        "not create dependency relationships for a project without dependencies" {
+            val document = generateJsonSpdxDocument(ORT_RESULT_WITHOUT_DEPENDENCIES)
+
+            document.documentDescribes shouldBe listOf(
+                PROJECT_WITHOUT_DEPENDENCIES_ID.toSpdxId(SpdxPackageType.PROJECT)
+            )
+            document.relationships should beEmpty()
+        }
+
+        "not create dependency relationships from excluded scopes" {
+            val document = generateJsonSpdxDocument(ORT_RESULT_WITH_DEPENDENCY_IN_INCLUDED_AND_EXCLUDED_SCOPES)
+
+            document.relationships.toTriples() shouldBe setOf(
+                Triple(
+                    EXCLUDED_SCOPE_PROJECT_ID.toSpdxId(SpdxPackageType.PROJECT),
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    EXCLUDED_SCOPE_ROOT_PACKAGE_ID.toSpdxId()
+                ),
+                Triple(
+                    EXCLUDED_SCOPE_PROJECT_ID.toSpdxId(SpdxPackageType.PROJECT),
+                    SpdxRelationship.Type.DYNAMIC_LINK,
+                    EXCLUDED_SCOPE_ROOT_PACKAGE_ID.toSpdxId()
+                ),
+                Triple(
+                    EXCLUDED_SCOPE_ROOT_PACKAGE_ID.toSpdxId(),
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    EXCLUDED_SCOPE_TRANSITIVE_PACKAGE_ID.toSpdxId()
+                ),
+                Triple(
+                    EXCLUDED_SCOPE_ROOT_PACKAGE_ID.toSpdxId(),
+                    SpdxRelationship.Type.DYNAMIC_LINK,
+                    EXCLUDED_SCOPE_TRANSITIVE_PACKAGE_ID.toSpdxId()
+                )
+            )
+        }
+
+        "not hang on a cyclic dependency graph" {
+            val document = generateJsonSpdxDocument(ORT_RESULT_WITH_CYCLIC_DEPENDENCY_GRAPH)
+
+            document.relationships.toTriples() shouldBe setOf(
+                Triple(
+                    CYCLIC_GRAPH_PROJECT_ID.toSpdxId(SpdxPackageType.PROJECT),
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    CYCLIC_GRAPH_PACKAGE_A_ID.toSpdxId()
+                ),
+                Triple(
+                    CYCLIC_GRAPH_PROJECT_ID.toSpdxId(SpdxPackageType.PROJECT),
+                    SpdxRelationship.Type.DYNAMIC_LINK,
+                    CYCLIC_GRAPH_PACKAGE_A_ID.toSpdxId()
+                ),
+                Triple(
+                    CYCLIC_GRAPH_PACKAGE_A_ID.toSpdxId(),
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    CYCLIC_GRAPH_PACKAGE_B_ID.toSpdxId()
+                ),
+                Triple(
+                    CYCLIC_GRAPH_PACKAGE_A_ID.toSpdxId(),
+                    SpdxRelationship.Type.DYNAMIC_LINK,
+                    CYCLIC_GRAPH_PACKAGE_B_ID.toSpdxId()
+                ),
+                Triple(
+                    CYCLIC_GRAPH_PACKAGE_B_ID.toSpdxId(),
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    CYCLIC_GRAPH_PACKAGE_A_ID.toSpdxId()
+                ),
+                Triple(
+                    CYCLIC_GRAPH_PACKAGE_B_ID.toSpdxId(),
+                    SpdxRelationship.Type.DYNAMIC_LINK,
+                    CYCLIC_GRAPH_PACKAGE_A_ID.toSpdxId()
+                )
+            )
+        }
     }
 })
 
@@ -168,6 +242,16 @@ private fun TestConfiguration.generateReport(
         .normalizeLineBreaks()
 }
 
+private fun TestConfiguration.generateJsonSpdxDocument(ortResult: OrtResult): SpdxDocument =
+    fromJson<SpdxDocument>(
+        generateReport(
+            ortResult,
+            FileFormat.JSON,
+            SpdxVersion.SPDX_2_3,
+            fileInformationEnabled = false
+        )
+    )
+
 private fun SpdxDocument.getCustomReplacements() =
     mapOf(
         "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.split('.').take(2).joinToString("."),
@@ -175,3 +259,6 @@ private fun SpdxDocument.getCustomReplacements() =
         "<REPLACE_CREATION_DATE_AND_TIME>" to creationInfo.created.toString(),
         "<REPLACE_DOCUMENT_NAMESPACE>" to documentNamespace
     )
+
+private fun List<SpdxRelationship>.toTriples() =
+    mapTo(mutableSetOf()) { Triple(it.spdxElementId, it.relationshipType, it.relatedSpdxElement) }
