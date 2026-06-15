@@ -57,31 +57,6 @@ internal object SpdxDocumentModelMapper {
         val packages = mutableListOf<SpdxPackage>()
         val relationships = mutableListOf<SpdxRelationship>()
         val files = mutableListOf<SpdxFile>()
-        val linkageTypesForDependencyRelationships = ortResult.getLinkageTypesForDependencyRelationships()
-
-        /**
-         * Add relationships representing a directed relationship from the package or project denoted by [fromOrtId] to
-         * the one denoted by [toOrtId]. The [fromSpdxId] must correspond to the SPDX package corresponding to
-         * [fromOrtId].
-         */
-        fun addDependencyRelationships(fromOrtId: Identifier, fromSpdxId: String, toOrtId: Identifier) {
-            relationships += SpdxRelationship(
-                spdxElementId = fromSpdxId,
-                relationshipType = SpdxRelationship.Type.DEPENDS_ON,
-                relatedSpdxElement = toOrtId.toSpdxId()
-            )
-
-            linkageTypesForDependencyRelationships.getValue(fromOrtId to toOrtId)
-                .mapTo(mutableSetOf()) { it.toSpdxRelationshipType() }
-                .sorted()
-                .forEach { relationshipType ->
-                    relationships += SpdxRelationship(
-                        spdxElementId = fromSpdxId,
-                        relationshipType = relationshipType,
-                        relatedSpdxElement = toOrtId.toSpdxId()
-                    )
-                }
-        }
 
         val projects = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).sortedBy { it.id }
         val projectPackages = projects.map { project ->
@@ -97,14 +72,6 @@ internal object SpdxDocumentModelMapper {
                 ortResult
             ).copy(hasFiles = filesForProject.map { it.spdxId })
 
-            ortResult.getDependencies(
-                id = project.id,
-                maxLevel = 1,
-                omitExcluded = true
-            ).forEach { dependency ->
-                addDependencyRelationships(project.id, spdxProjectPackage.spdxId, dependency)
-            }
-
             files += filesForProject
             spdxProjectPackage
         }
@@ -116,14 +83,6 @@ internal object SpdxDocumentModelMapper {
                 licenseInfoResolver,
                 ortResult
             )
-
-            ortResult.getDependencies(
-                id = pkg.id,
-                maxLevel = 1,
-                omitExcluded = true
-            ).forEach { dependency ->
-                addDependencyRelationships(pkg.id, binaryPackage.spdxId, dependency)
-            }
 
             packages += binaryPackage
 
@@ -176,6 +135,38 @@ internal object SpdxDocumentModelMapper {
                 packages += sourceArtifactPackage
                 relationships += sourceArtifactPackageRelationship
             }
+        }
+
+        // Add the dependency tree:
+        ortResult.getLinkageTypesForDependencyRelationships().forEach { (fromId, toId), linkages ->
+            fun Identifier.toSpdxId(): String {
+                val type = if (ortResult.isProject(this)) {
+                    SpdxPackageType.PROJECT
+                } else {
+                    SpdxPackageType.BINARY_PACKAGE
+                }
+
+                return toSpdxId(type)
+            }
+
+            val fromSpdxId = fromId.toSpdxId()
+            val toSpdxId = toId.toSpdxId()
+
+            relationships += SpdxRelationship(
+                spdxElementId = fromSpdxId,
+                relationshipType = SpdxRelationship.Type.DEPENDS_ON,
+                relatedSpdxElement = toSpdxId
+            )
+
+            linkages.mapTo(mutableSetOf()) { it.toSpdxRelationshipType() }
+                .sorted()
+                .forEach { relationshipType ->
+                    relationships += SpdxRelationship(
+                        spdxElementId = fromSpdxId,
+                        relationshipType = relationshipType,
+                        relatedSpdxElement = toSpdxId
+                    )
+                }
         }
 
         val creators = listOfNotNull(
