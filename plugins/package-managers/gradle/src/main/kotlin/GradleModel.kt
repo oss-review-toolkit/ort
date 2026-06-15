@@ -19,9 +19,6 @@
 
 // As it is not possible to declare a package in "init.gradle" also no package is declared here.
 
-// The following interfaces have to match those in "plugins/package-managers/gradle/src/main/resources/init.gradle"
-// because they are used to deserialize the model produced there.
-
 internal interface OrtDependencyTreeModel {
     val group: String
     val name: String
