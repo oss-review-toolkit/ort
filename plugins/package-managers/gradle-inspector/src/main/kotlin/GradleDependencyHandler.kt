@@ -71,7 +71,7 @@ internal class GradleDependencyHandler(
     override fun identifierFor(dependency: OrtComponentReference): Identifier =
         with(dependency.componentId) {
             Identifier(
-                type = dependency.component().getIdentifierType(projectType),
+                type = dependency.getIdentifierType(projectType),
                 namespace = groupId,
                 name = artifactId,
                 version = version
@@ -82,13 +82,13 @@ internal class GradleDependencyHandler(
         dependency.dependencies
 
     override fun linkageFor(dependency: OrtComponentReference): PackageLinkage =
-        if (dependency.component().isProjectDependency) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
+        if (dependency.isProjectDependency) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: OrtComponentReference, issues: MutableCollection<Issue>): Package? {
         val component = dependency.component()
 
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
-        if (component.error != null || component.isProjectDependency) return null
+        if (component.error != null || dependency.isProjectDependency) return null
 
         val id = identifierFor(dependency)
         val model = component.mavenModel ?: run {
@@ -186,18 +186,18 @@ internal class GradleDependencyHandler(
      * The type of this Gradle dependency. In case of a project, it is [projectType]. Otherwise it is "Maven" unless
      * there is no POM, then it is "Unknown".
      */
-    fun OrtComponent.getIdentifierType(projectType: String) =
+    fun OrtComponentReference.getIdentifierType(projectType: String): String =
         when {
             isProjectDependency -> projectType
-            pomFile != null -> "Maven"
+            component().pomFile != null -> "Maven"
             else -> "Unknown"
         }
 
     /**
      * A flag to indicate whether this Gradle dependency refers to a project, or to a package.
      */
-    val OrtComponent.isProjectDependency: Boolean
-        get() = localPath != null
+    val OrtComponentReference.isProjectDependency: Boolean
+        get() = component().localPath != null
 }
 
 // See http://maven.apache.org/pom.html#SCM.
