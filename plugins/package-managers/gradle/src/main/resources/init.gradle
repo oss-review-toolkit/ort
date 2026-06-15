@@ -189,7 +189,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
 
         @Override
         boolean canBuild(String modelName) {
-            return modelName == OrtDependencyTreeModel.name
+            return modelName == "LegacyOrtDependencyTreeModel"
         }
 
         @Override

@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
-import OrtComponent
-import OrtComponentIdentifier
+import LegacyOrtComponent
+import LegacyOrtComponentIdentifier
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
@@ -334,14 +334,14 @@ private fun createDependency(
     artifact: String,
     version: String,
     path: String? = null,
-    dependencies: List<OrtComponent> = emptyList()
-): OrtComponent {
-    val componentId = mockk<OrtComponentIdentifier>()
+    dependencies: List<LegacyOrtComponent> = emptyList()
+): LegacyOrtComponent {
+    val componentId = mockk<LegacyOrtComponentIdentifier>()
     every { componentId.groupId } returns group
     every { componentId.artifactId } returns artifact
     every { componentId.version } returns version
 
-    val dependency = mockk<OrtComponent>()
+    val dependency = mockk<LegacyOrtComponent>()
     every { dependency.componentId } returns componentId
     every { dependency.localPath } returns path
     every { dependency.pomFile } returns "pom.xml"
@@ -357,7 +357,7 @@ private fun createDependency(
  * Create a [DependencyGraphBuilder] equipped with a [GradleDependencyHandler] that is used by the test cases in
  * this class.
  */
-private fun createGraphBuilder(): DependencyGraphBuilder<OrtComponent> {
+private fun createGraphBuilder(): DependencyGraphBuilder<LegacyOrtComponent> {
     val dependencyHandler = GradleDependencyHandler(PROJECT_TYPE, createMavenSupport())
     dependencyHandler.repositories = remoteRepositories
     return DependencyGraphBuilder(dependencyHandler)
@@ -387,9 +387,9 @@ private fun createMavenSupport(): MavenSupport {
 }
 
 /**
- * Returns an [Identifier] for this [OrtComponent].
+ * Returns an [Identifier] for this [LegacyOrtComponent].
  */
-private fun OrtComponent.toId() =
+private fun LegacyOrtComponent.toId() =
     with(componentId) {
         Identifier(getIdentifierType(PROJECT_TYPE), groupId, artifactId, version)
     }
@@ -408,7 +408,7 @@ private fun Collection<PackageReference>.identifiers(): List<Identifier> = map {
 /**
  * Find the package corresponding to the given [dependency] in this collection.
  */
-private fun Collection<PackageReference>.findDependency(dependency: OrtComponent): PackageReference =
+private fun Collection<PackageReference>.findDependency(dependency: LegacyOrtComponent): PackageReference =
     findId(dependency.toId())
 
 /**
@@ -420,7 +420,7 @@ private fun Collection<PackageReference>.findId(id: Identifier): PackageReferenc
 /**
  * Check whether this [PackageReference] contains exactly the given [dependencies][expectedDependencies].
  */
-private fun PackageReference.checkDependencies(vararg expectedDependencies: OrtComponent): Set<PackageReference> {
+private fun PackageReference.checkDependencies(vararg expectedDependencies: LegacyOrtComponent): Set<PackageReference> {
     val ids = expectedDependencies.map { it.toId() }
     dependencies.identifiers() should containExactlyInAnyOrder(ids)
     return dependencies

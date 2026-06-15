@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
-import OrtDependencyTreeModel
-import OrtRepository
+import LegacyOrtDependencyTreeModel
+import LegacyOrtRepository
 
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -228,7 +228,7 @@ class Gradle(
 
                 val issues = mutableListOf<Issue>()
 
-                val dependencyTreeModel = connection.model(OrtDependencyTreeModel::class.java)
+                val dependencyTreeModel = connection.model(LegacyOrtDependencyTreeModel::class.java)
                     .apply {
                         // Work around https://github.com/gradle/gradle/issues/28464.
                         if (logger.delegate.isDebugEnabled && buildGradleVersion?.isEqualTo("8.5.0") != true) {
@@ -333,10 +333,10 @@ private fun getGradleProperties(): Map<String, String> =
         .orEmpty()
 
 /**
- * Convert this [OrtRepository] to a [RemoteRepository] taking the known properties into account.
+ * Convert this [LegacyOrtRepository] to a [RemoteRepository] taking the known properties into account.
  * TODO: Also handle snapshot policy.
  */
-private fun OrtRepository.toRemoteRepository(): RemoteRepository =
+private fun LegacyOrtRepository.toRemoteRepository(): RemoteRepository =
     RemoteRepository.Builder(url, "default", url).apply {
         if (headerName != null && headerValue != null) {
             setAuthentication(
