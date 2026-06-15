@@ -17,6 +17,10 @@
  * License-Filename: LICENSE
  */
 
+import groovy.json.JsonOutput
+
+import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
+
 import org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin.OrtModelPlugin
 
 initscript {
@@ -27,4 +31,18 @@ initscript {
 
 allprojects {
     apply plugin: OrtModelPlugin
+}
+
+def dumpOrtModel = gradle.startParameter.projectProperties['dumpOrtModel'] != null
+
+if (dumpOrtModel) {
+    projectsEvaluated { gradle ->
+        def project = gradle.rootProject
+        def registry = project.services.get(ToolingModelBuilderRegistry.class)
+        def builder = registry.getBuilder('OrtDependencyTreeModel')
+        def model = builder.buildAll('OrtDependencyTreeModel', project) as OrtDependencyTreeModel
+
+        def json = JsonOutput.toJson(model)
+        println(JsonOutput.prettyPrint(json))
+    }
 }
