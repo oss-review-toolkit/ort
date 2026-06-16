@@ -47,7 +47,7 @@ data class GitPackageConfigurationProviderConfig(
     /** The optional revision to use. If not specified, the default branch is used. */
     val revision: String?,
 
-    /** The path that contains the package configurations. */
+    /** The path relative to the repository root that contains the package configurations. */
     @OrtPluginOption(defaultValue = "package-configurations")
     val path: String
 )
