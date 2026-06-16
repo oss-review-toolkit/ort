@@ -24,7 +24,7 @@ plugins {
 
 application {
     applicationName = "ort-test-launcher"
-    mainClass = "io.kotest.engine.launcher.MainKt"
+    mainClass = "org.ossreviewtoolkit.clitestlauncher.TestMainKt"
 }
 
 val Project.hasFunTests
@@ -34,6 +34,9 @@ val Project.hasFunTests
 
 gradle.projectsEvaluated {
     dependencies {
+        implementation(libs.kotest.framework.engine)
+        implementation(projects.utils.commonUtils)
+
         rootProject.subprojects.filter { it.hasFunTests }.forEach {
             runtimeOnly(project(it.path)) {
                 capabilities {
