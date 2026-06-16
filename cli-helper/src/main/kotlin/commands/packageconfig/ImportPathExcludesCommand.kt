@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands.packageconfig
+package org.ossreviewtoolkit.clihelper.commands.packageconfig
 
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
@@ -25,15 +25,15 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
-import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
-import org.ossreviewtoolkit.helper.utils.findFilesRecursive
-import org.ossreviewtoolkit.helper.utils.findRepositoryPaths
-import org.ossreviewtoolkit.helper.utils.importPathExcludes
-import org.ossreviewtoolkit.helper.utils.mergePathExcludes
-import org.ossreviewtoolkit.helper.utils.orEmpty
-import org.ossreviewtoolkit.helper.utils.sortPathExcludes
-import org.ossreviewtoolkit.helper.utils.write
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.VcsUrlMapping
+import org.ossreviewtoolkit.clihelper.utils.findFilesRecursive
+import org.ossreviewtoolkit.clihelper.utils.findRepositoryPaths
+import org.ossreviewtoolkit.clihelper.utils.importPathExcludes
+import org.ossreviewtoolkit.clihelper.utils.mergePathExcludes
+import org.ossreviewtoolkit.clihelper.utils.orEmpty
+import org.ossreviewtoolkit.clihelper.utils.sortPathExcludes
+import org.ossreviewtoolkit.clihelper.utils.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde

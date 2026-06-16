@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.utils
+package org.ossreviewtoolkit.clihelper.utils
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
@@ -26,10 +26,10 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.createExcludePatterns
-import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateDirectoryExcludes
-import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateFileExcludes
-import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generatePathExcludes
+import org.ossreviewtoolkit.clihelper.utils.PathExcludeGenerator.createExcludePatterns
+import org.ossreviewtoolkit.clihelper.utils.PathExcludeGenerator.generateDirectoryExcludes
+import org.ossreviewtoolkit.clihelper.utils.PathExcludeGenerator.generateFileExcludes
+import org.ossreviewtoolkit.clihelper.utils.PathExcludeGenerator.generatePathExcludes
 import org.ossreviewtoolkit.utils.test.readResource
 
 class PathExcludeGeneratorTest : WordSpec({

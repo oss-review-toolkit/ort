@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.utils
+package org.ossreviewtoolkit.clihelper.utils
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands.repoconfig
+package org.ossreviewtoolkit.clihelper.commands.repoconfig
 
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
@@ -25,16 +25,16 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
-import org.ossreviewtoolkit.helper.utils.RepositoryPathExcludes
-import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
-import org.ossreviewtoolkit.helper.utils.getRepositoryPathExcludes
-import org.ossreviewtoolkit.helper.utils.mapPathExcludesVcsUrls
-import org.ossreviewtoolkit.helper.utils.mergePathExcludes
-import org.ossreviewtoolkit.helper.utils.orEmpty
-import org.ossreviewtoolkit.helper.utils.readOrtResult
-import org.ossreviewtoolkit.helper.utils.replaceConfig
-import org.ossreviewtoolkit.helper.utils.write
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.RepositoryPathExcludes
+import org.ossreviewtoolkit.clihelper.utils.VcsUrlMapping
+import org.ossreviewtoolkit.clihelper.utils.getRepositoryPathExcludes
+import org.ossreviewtoolkit.clihelper.utils.mapPathExcludesVcsUrls
+import org.ossreviewtoolkit.clihelper.utils.mergePathExcludes
+import org.ossreviewtoolkit.clihelper.utils.orEmpty
+import org.ossreviewtoolkit.clihelper.utils.readOrtResult
+import org.ossreviewtoolkit.clihelper.utils.replaceConfig
+import org.ossreviewtoolkit.clihelper.utils.write
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands.provenancestorage
+package org.ossreviewtoolkit.clihelper.commands.provenancestorage
 
 import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
@@ -30,7 +30,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.mordant.rendering.Theme
 import com.github.ajalt.mordant.terminal.YesNoPrompt
 
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.scanner.ScanStorages

@@ -28,7 +28,7 @@ configurations["runtimeOnly"].extendsFrom(configurations["pluginClasspath"])
 
 application {
     applicationName = "orth"
-    mainClass = "org.ossreviewtoolkit.helper.HelperMainKt"
+    mainClass = "org.ossreviewtoolkit.clihelper.HelperMainKt"
 }
 
 dependencies {
