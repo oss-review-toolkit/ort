@@ -21,15 +21,20 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.git
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
 
 @Tags("RequiresExternalTool")
 class OrtConfigPackageCurationProviderFunTest : StringSpec({
+    Os.env[ORT_DATA_DIR_ENV_NAME] = tempdir().absolutePath
+
     fun createProvider() = OrtConfigPackageCurationProviderFactory.create()
 
     "The provider succeeds to return known curations for packages" {
