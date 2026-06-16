@@ -67,10 +67,7 @@ internal class GradleDependencyHandler(
     private fun OrtComponentReference.component(): OrtComponent = componentForId.getValue(componentId)
 
     fun setTreeModel(treeModel: OrtDependencyTreeModel) {
-        componentForId.apply {
-            clear()
-            treeModel.components.associateByTo(this) { it.componentId }
-        }
+        treeModel.components.associateByTo(componentForId) { it.componentId }
     }
 
     override fun identifierFor(dependency: OrtComponentReference): Identifier =
