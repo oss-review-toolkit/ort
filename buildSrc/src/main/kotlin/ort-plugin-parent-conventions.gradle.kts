@@ -38,6 +38,6 @@ dependencies {
     childProjects.values.filter {
         it.name !in embeddedProjects
     }.forEach {
-        api(it)
+        api(project(it.name))
     }
 }
