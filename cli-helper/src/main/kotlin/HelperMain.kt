@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper
+package org.ossreviewtoolkit.clihelper
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
@@ -37,14 +37,14 @@ import com.github.ajalt.mordant.terminal.Terminal
 
 import kotlin.system.exitProcess
 
-import org.ossreviewtoolkit.helper.commands.*
-import org.ossreviewtoolkit.helper.commands.classifications.LicenseClassificationsCommand
-import org.ossreviewtoolkit.helper.commands.dev.DevCommand
-import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCommand
-import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsCommand
-import org.ossreviewtoolkit.helper.commands.provenancestorage.ProvenanceStorageCommand
-import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
-import org.ossreviewtoolkit.helper.utils.ORTH_NAME
+import org.ossreviewtoolkit.clihelper.commands.*
+import org.ossreviewtoolkit.clihelper.commands.classifications.LicenseClassificationsCommand
+import org.ossreviewtoolkit.clihelper.commands.dev.DevCommand
+import org.ossreviewtoolkit.clihelper.commands.packageconfig.PackageConfigurationCommand
+import org.ossreviewtoolkit.clihelper.commands.packagecuration.PackageCurationsCommand
+import org.ossreviewtoolkit.clihelper.commands.provenancestorage.ProvenanceStorageCommand
+import org.ossreviewtoolkit.clihelper.commands.repoconfig.RepositoryConfigurationCommand
+import org.ossreviewtoolkit.clihelper.utils.ORTH_NAME
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.printStackTrace
 

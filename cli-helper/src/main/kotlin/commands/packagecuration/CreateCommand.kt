@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands.packagecuration
+package org.ossreviewtoolkit.clihelper.commands.packagecuration
 
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
@@ -26,11 +26,11 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
-import org.ossreviewtoolkit.helper.utils.formatComment
-import org.ossreviewtoolkit.helper.utils.getSplitCurationFile
-import org.ossreviewtoolkit.helper.utils.readPackageCurations
-import org.ossreviewtoolkit.helper.utils.writeAsYaml
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.formatComment
+import org.ossreviewtoolkit.clihelper.utils.getSplitCurationFile
+import org.ossreviewtoolkit.clihelper.utils.readPackageCurations
+import org.ossreviewtoolkit.clihelper.utils.writeAsYaml
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration

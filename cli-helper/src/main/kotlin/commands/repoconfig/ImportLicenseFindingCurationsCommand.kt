@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands.repoconfig
+package org.ossreviewtoolkit.clihelper.commands.repoconfig
 
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
@@ -25,16 +25,16 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
-import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
-import org.ossreviewtoolkit.helper.utils.getRepositoryPaths
-import org.ossreviewtoolkit.helper.utils.importLicenseFindingCurations
-import org.ossreviewtoolkit.helper.utils.mergeLicenseFindingCurations
-import org.ossreviewtoolkit.helper.utils.orEmpty
-import org.ossreviewtoolkit.helper.utils.readOrtResult
-import org.ossreviewtoolkit.helper.utils.replaceLicenseFindingCurations
-import org.ossreviewtoolkit.helper.utils.sortLicenseFindingCurations
-import org.ossreviewtoolkit.helper.utils.write
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.VcsUrlMapping
+import org.ossreviewtoolkit.clihelper.utils.getRepositoryPaths
+import org.ossreviewtoolkit.clihelper.utils.importLicenseFindingCurations
+import org.ossreviewtoolkit.clihelper.utils.mergeLicenseFindingCurations
+import org.ossreviewtoolkit.clihelper.utils.orEmpty
+import org.ossreviewtoolkit.clihelper.utils.readOrtResult
+import org.ossreviewtoolkit.clihelper.utils.replaceLicenseFindingCurations
+import org.ossreviewtoolkit.clihelper.utils.sortLicenseFindingCurations
+import org.ossreviewtoolkit.clihelper.utils.write
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands
+package org.ossreviewtoolkit.clihelper.commands
 
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.arguments.argument
@@ -26,7 +26,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.collectMessages

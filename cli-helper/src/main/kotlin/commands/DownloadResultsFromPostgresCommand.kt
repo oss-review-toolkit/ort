@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands
+package org.ossreviewtoolkit.clihelper.commands
 
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -33,8 +33,8 @@ import kotlin.time.measureTime
 
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 
-import org.ossreviewtoolkit.helper.utils.ORTH_NAME
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.ORTH_NAME
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
