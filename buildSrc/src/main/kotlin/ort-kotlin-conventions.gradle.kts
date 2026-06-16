@@ -220,18 +220,18 @@ tasks.withType<Test>().configureEach {
     jvmArgs = globalJvmArgs
 
     // Work-around for "--tests" only being able to include tests, see https://github.com/gradle/gradle/issues/6505.
-    properties["tests.exclude"]?.also { excludes ->
+    providers.gradleProperty("tests.exclude").orNull?.also { excludes ->
         filter {
-            excludes.toString().split(',').forEach { excludeTestsMatching(it) }
+            excludes.split(',').forEach { excludeTestsMatching(it) }
             isFailOnNoMatchingTests = false
         }
     }
 
     // Convenience alternative to "--tests" that can take multiple patterns at once as Gradle is not planning to
     // implement this, see https://github.com/gradle/gradle/issues/5719.
-    properties["tests.include"]?.also { includes ->
+    providers.gradleProperty("tests.include").orNull?.also { includes ->
         filter {
-            includes.toString().split(',').forEach { includeTestsMatching(it) }
+            includes.split(',').forEach { includeTestsMatching(it) }
             isFailOnNoMatchingTests = false
         }
     }
