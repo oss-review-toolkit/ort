@@ -49,7 +49,7 @@ data class GitPackageCurationProviderConfig(
     /** The optional revision to use. If not specified, the default branch is used. */
     val revision: String?,
 
-    /** The path that contains the package curations. */
+    /** The path relative to the repository root that contains the package curations. */
     @OrtPluginOption(defaultValue = "curations")
     val path: String
 )
