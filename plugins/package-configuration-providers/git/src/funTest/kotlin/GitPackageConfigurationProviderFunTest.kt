@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.git
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldBeSingleton
@@ -36,12 +37,16 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitFactory
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
 
 /** A fixed revision to ensure that the test is not affected by changes to the repository. */
 private const val REVISION = "f7f6970433f3eb908da514fc118c109f8f119b3e"
 
 @Tags("RequiresExternalTool")
 class GitPackageConfigurationProviderFunTest : WordSpec({
+    Os.env[ORT_DATA_DIR_ENV_NAME] = tempdir().absolutePath
+
     "create()" should {
         "clone the correct revision" {
             val provider = GitPackageConfigurationProviderFactory.create(

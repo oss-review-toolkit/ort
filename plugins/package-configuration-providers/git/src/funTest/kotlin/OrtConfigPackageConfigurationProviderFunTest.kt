@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.git
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
@@ -29,9 +30,13 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
 
 @Tags("RequiresExternalTool")
 class OrtConfigPackageConfigurationProviderFunTest : StringSpec({
+    Os.env[ORT_DATA_DIR_ENV_NAME] = tempdir().absolutePath
+
     "provider can load package-configurations from the ort-config repository" {
         val id = Identifier("Maven:net.java.dev.jna:jna-platform:5.8.0")
         val provenance = ArtifactProvenance(

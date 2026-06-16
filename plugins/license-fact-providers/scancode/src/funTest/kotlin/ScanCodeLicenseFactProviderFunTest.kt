@@ -28,10 +28,14 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.startWith
 
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.div
+import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
 
 @Tags("RequiresExternalTool")
 class ScanCodeLicenseFactProviderFunTest : WordSpec({
+    Os.env[ORT_DATA_DIR_ENV_NAME] = tempdir().absolutePath
+
     "getLicenseText()" should {
         "read license texts from the configured directory" {
             val licenseDir = tempdir()
