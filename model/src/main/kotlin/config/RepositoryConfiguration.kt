@@ -84,3 +84,5 @@ data class RepositoryConfiguration(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val snippetChoices: List<SnippetChoices> = emptyList()
 )
+
+fun RepositoryConfiguration?.orEmpty() = this ?: RepositoryConfiguration()

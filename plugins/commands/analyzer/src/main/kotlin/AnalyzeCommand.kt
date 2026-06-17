@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.readValueOrNull
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -145,8 +146,8 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
         echo("Looking for analyzer-specific configuration in the following files and directories:")
         echo("\t" + configurationInfo)
 
-        val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
-            ?: RepositoryConfiguration()
+        val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }
+            ?.readValueOrNull<RepositoryConfiguration>().orEmpty()
 
         val analyzerConfiguration = repositoryConfiguration.analyzer?.let { ortConfig.analyzer.merge(it) }
             ?: ortConfig.analyzer
