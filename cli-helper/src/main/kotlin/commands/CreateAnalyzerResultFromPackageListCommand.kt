@@ -49,9 +49,11 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.orNone
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -88,6 +90,13 @@ internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory.resolve(ORT_CONFIG_FILENAME))
 
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "The path to the repository configuration file to use in the output ORT file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+
     override fun run() {
         val packageList = packageListFile.mapper().copy().apply {
             // Use camel case already now (even if in all places snake case is used), because there is a plan
@@ -122,13 +131,8 @@ internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
             ),
             repository = Repository(
                 vcs = projectVcs.normalize(),
-                config = RepositoryConfiguration(
-                    excludes = Excludes(
-                        scopes = listOf(
-                            ScopeExclude(EXCLUDED_SCOPE_NAME, ScopeExcludeReason.DEV_DEPENDENCY_OF)
-                        )
-                    )
-                )
+                config = repositoryConfigurationFile?.readValue<RepositoryConfiguration>().orEmpty()
+                    .addScopeExcludeForExcludedScope()
             )
         ).setPackageCurations(packageCurationProviders)
 
@@ -214,3 +218,16 @@ private fun Dependency.toPackage(): Package {
         labels = labels
     )
 }
+
+private fun RepositoryConfiguration.addScopeExcludeForExcludedScope() =
+    if (excludes.scopes.any { it.pattern == EXCLUDED_SCOPE_NAME }) {
+        this
+    } else {
+        copy(
+            excludes = Excludes(
+                scopes = listOf(
+                    ScopeExclude(EXCLUDED_SCOPE_NAME, ScopeExcludeReason.DEV_DEPENDENCY_OF)
+                )
+            )
+        )
+    }
