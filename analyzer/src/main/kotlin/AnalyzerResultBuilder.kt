@@ -46,7 +46,7 @@ class AnalyzerResultBuilder {
     fun build(excludes: Excludes = Excludes.EMPTY, includes: Includes = Includes.EMPTY): AnalyzerResult {
         val duplicates = (projects.map { it.toPackage() } + packages).getDuplicates { it.id }
         require(duplicates.isEmpty()) {
-            "Unable to create the AnalyzerResult as it contains packages and projects with the same ids: " +
+            "Unable to create the AnalyzerResult as it contains projects and / or packages with the same ids: " +
                 duplicates.values
         }
 
