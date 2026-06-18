@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 
 import io.kotest.core.annotation.Tags
 
+import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
@@ -37,5 +38,13 @@ class ScanCodeFunTest : AbstractPathScannerWrapperFunTest() {
         LicenseFinding("Apache-2.0", TextLocation("COPYING", 1, 201), 99.37f),
         LicenseFinding("Apache-2.0", TextLocation("LICENCE", 1, 201), 99.94f),
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 201), 99.94f)
+    )
+
+    // TODO: This demonstrates https://github.com/aboutcode-org/scancode-toolkit/issues/5125.
+    override val expectedFileCopyrights = listOf(
+        CopyrightFinding(
+            "Copyright (c) 2007",
+            TextLocation("LICENSE", 189)
+        )
     )
 }
