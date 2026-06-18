@@ -50,7 +50,7 @@ abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()
     override suspend fun beforeSpec(spec: Spec) {
         inputDir = tempdir()
 
-        // Create variants of the Apache-2.0 license text in a temporary directory, so we have something to operate on.
+        // Create variants of the Apache-2.0 license text in a temporary directory, so there is something to operate on.
         val licenseText = readResource("/LICENSE")
         commonlyDetectedFiles.forEach {
             inputDir.resolve(it).writeText(licenseText.replace("license", it))
