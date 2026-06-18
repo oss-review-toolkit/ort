@@ -626,7 +626,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/bazelbuild/rules_kotlin"
+  homepage_url: "https://github.com/bazel-contrib/rules_kotlin"
   binary_artifact:
     url: ""
     hash:
@@ -639,12 +639,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/bazelbuild/rules_kotlin"
+    url: "https://github.com/bazel-contrib/rules_kotlin"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/bazelbuild/rules_kotlin.git"
+    url: "https://github.com/bazel-contrib/rules_kotlin.git"
     revision: ""
     path: ""
 - id: "Bazel::rules_license:1.0.0"
