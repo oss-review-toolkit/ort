@@ -20,39 +20,6 @@
   "documentNamespace" : "<REPLACE_DOCUMENT_NAMESPACE>",
   "documentDescribes" : [ "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1", "SPDXRef-Project-Maven-proj2-grp-proj2-0.0.1", "SPDXRef-Project-Maven-proj3-grp-proj3-0.0.1" ],
   "packages" : [ {
-    "SPDXID" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
-    "copyrightText" : "NONE",
-    "downloadLocation" : "https://github.com/path/proj1-repo.git",
-    "filesAnalyzed" : false,
-    "homepage" : "https://example.com/proj1/homepage",
-    "licenseComments" : "effectiveLicense: MIT",
-    "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "MIT",
-    "name" : "proj1",
-    "versionInfo" : "0.0.1"
-  }, {
-    "SPDXID" : "SPDXRef-Project-Maven-proj2-grp-proj2-0.0.1",
-    "copyrightText" : "NONE",
-    "downloadLocation" : "https://github.com/path/proj1-repo.git",
-    "filesAnalyzed" : false,
-    "homepage" : "NONE",
-    "licenseComments" : "effectiveLicense: NONE",
-    "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "NONE",
-    "name" : "proj2",
-    "versionInfo" : "0.0.1"
-  }, {
-    "SPDXID" : "SPDXRef-Project-Maven-proj3-grp-proj3-0.0.1",
-    "copyrightText" : "NONE",
-    "downloadLocation" : "https://github.com/path/proj1-repo.git",
-    "filesAnalyzed" : false,
-    "homepage" : "NONE",
-    "licenseComments" : "effectiveLicense: NONE",
-    "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "NONE",
-    "name" : "proj3",
-    "versionInfo" : "0.0.1"
-  }, {
     "SPDXID" : "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1",
     "copyrightText" : "Copyright (c) 2006-2010 Kirill Simonov",
     "downloadLocation" : "NONE",
@@ -111,6 +78,27 @@
     "name" : "pkg1",
     "versionInfo" : "0.0.1"
   }, {
+    "SPDXID" : "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1-source-artifact",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0000000000000000000000000000000000000000"
+    } ],
+    "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
+    "description" : "Description of pkg1.",
+    "downloadLocation" : "https://example.com/pkg1-sources.jar",
+    "externalRefs" : [ {
+      "referenceCategory" : "PACKAGE_MANAGER",
+      "referenceType" : "purl",
+      "referenceLocator" : "pkg:maven/pkg1-grp/pkg1@0.0.1"
+    } ],
+    "filesAnalyzed" : false,
+    "homepage" : "https://example.com/pkg1/homepage",
+    "licenseComments" : "effectiveLicense: BSD-2-Clause AND BSD-3-Clause AND MIT",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND MIT",
+    "name" : "pkg1",
+    "versionInfo" : "0.0.1"
+  }, {
     "SPDXID" : "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1-vcs",
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "description" : "Description of pkg1.",
@@ -131,27 +119,6 @@
     "packageVerificationCode" : {
       "packageVerificationCodeValue" : "3700a1e8575c082653af662ac024337faf78990f"
     },
-    "versionInfo" : "0.0.1"
-  }, {
-    "SPDXID" : "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1-source-artifact",
-    "checksums" : [ {
-      "algorithm" : "SHA1",
-      "checksumValue" : "0000000000000000000000000000000000000000"
-    } ],
-    "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
-    "description" : "Description of pkg1.",
-    "downloadLocation" : "https://example.com/pkg1-sources.jar",
-    "externalRefs" : [ {
-      "referenceCategory" : "PACKAGE_MANAGER",
-      "referenceType" : "purl",
-      "referenceLocator" : "pkg:maven/pkg1-grp/pkg1@0.0.1"
-    } ],
-    "filesAnalyzed" : false,
-    "homepage" : "https://example.com/pkg1/homepage",
-    "licenseComments" : "effectiveLicense: BSD-2-Clause AND BSD-3-Clause AND MIT",
-    "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND MIT",
-    "name" : "pkg1",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-pkg2-grp-pkg2-0.0.1",
@@ -258,6 +225,39 @@
     "packageVerificationCode" : {
       "packageVerificationCodeValue" : "b3ed5c0c343054d728700820f564a62fad4469ba"
     },
+    "versionInfo" : "0.0.1"
+  }, {
+    "SPDXID" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
+    "copyrightText" : "NONE",
+    "downloadLocation" : "https://github.com/path/proj1-repo.git",
+    "filesAnalyzed" : false,
+    "homepage" : "https://example.com/proj1/homepage",
+    "licenseComments" : "effectiveLicense: MIT",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "MIT",
+    "name" : "proj1",
+    "versionInfo" : "0.0.1"
+  }, {
+    "SPDXID" : "SPDXRef-Project-Maven-proj2-grp-proj2-0.0.1",
+    "copyrightText" : "NONE",
+    "downloadLocation" : "https://github.com/path/proj1-repo.git",
+    "filesAnalyzed" : false,
+    "homepage" : "NONE",
+    "licenseComments" : "effectiveLicense: NONE",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "NONE",
+    "name" : "proj2",
+    "versionInfo" : "0.0.1"
+  }, {
+    "SPDXID" : "SPDXRef-Project-Maven-proj3-grp-proj3-0.0.1",
+    "copyrightText" : "NONE",
+    "downloadLocation" : "https://github.com/path/proj1-repo.git",
+    "filesAnalyzed" : false,
+    "homepage" : "NONE",
+    "licenseComments" : "effectiveLicense: NONE",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "NONE",
+    "name" : "proj3",
     "versionInfo" : "0.0.1"
   } ],
   "files" : [ {

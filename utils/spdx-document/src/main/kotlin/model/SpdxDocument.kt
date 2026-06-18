@@ -77,18 +77,21 @@ data class SpdxDocument(
      * A listing of any external [SpdxDocument] referenced from within this [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = SortedSpdxExternalDocumentRefConverter::class)
     val externalDocumentRefs: List<SpdxExternalDocumentReference> = emptyList(),
 
     /**
      * Information about any licenses which are not on the SPDX license list.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = SortedSpdxExtractedLicenseInfoConverter::class)
     val hasExtractedLicensingInfos: List<SpdxExtractedLicenseInfo> = emptyList(),
 
     /**
      * The [SpdxAnnotation]s for the [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = SortedSpdxAnnotationConverter::class)
     val annotations: List<SpdxAnnotation> = emptyList(),
 
     /**
@@ -107,31 +110,35 @@ data class SpdxDocument(
      * All SPDX identifiers of all packages and files contained in [packages] and [files].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = SortedSpdxDocumentDescribesConverter::class)
     val documentDescribes: List<String> = emptyList(),
 
     /**
      * All packages described in this [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = SortedSpdxPackageConverter::class)
     val packages: List<SpdxPackage> = emptyList(),
 
     /**
      * All files described in this [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = SortedSpdxFileConverter::class)
     val files: List<SpdxFile> = emptyList(),
 
     /**
      * All snippets described in this [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = SortedSpdxSnippetConverter::class)
     val snippets: List<SpdxSnippet> = emptyList(),
 
     /**
      * All relationships described in this [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(converter = SpdxRelationshipSortedSetConverter::class)
+    @JsonSerialize(converter = SortedSpdxRelationshipConverter::class)
     val relationships: List<SpdxRelationship> = emptyList()
 ) {
     init {

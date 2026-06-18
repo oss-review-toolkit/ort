@@ -23,17 +23,52 @@ package org.ossreviewtoolkit.utils.spdxdocument.model
 
 import com.fasterxml.jackson.databind.util.StdConverter
 
-import java.util.SortedSet
+internal class SortedSpdxAnnotationConverter :
+    StdConverter<Collection<SpdxAnnotation>, List<SpdxAnnotation>>() {
+    override fun convert(value: Collection<SpdxAnnotation>) =
+        value.sortedWith(
+            compareBy<SpdxAnnotation> { it.annotationDate }
+                .thenBy { it.annotator }
+                .thenBy { it.annotationType }
+        )
+}
 
-internal class SpdxRelationshipSortedSetConverter :
-    StdConverter<List<SpdxRelationship>, SortedSet<SpdxRelationship>>() {
-    override fun convert(value: List<SpdxRelationship>) =
-        value.toSortedSet(
+internal class SortedSpdxDocumentDescribesConverter :
+    StdConverter<Collection<String>, List<String>>() {
+    override fun convert(value: Collection<String>) = value.sorted()
+}
+
+internal class SortedSpdxExternalDocumentRefConverter :
+    StdConverter<Collection<SpdxExternalDocumentReference>, List<SpdxExternalDocumentReference>>() {
+    override fun convert(value: Collection<SpdxExternalDocumentReference>) = value.sortedBy { it.externalDocumentId }
+}
+
+internal class SortedSpdxExtractedLicenseInfoConverter :
+    StdConverter<Collection<SpdxExtractedLicenseInfo>, List<SpdxExtractedLicenseInfo>>() {
+    override fun convert(value: Collection<SpdxExtractedLicenseInfo>) = value.sortedBy { it.licenseId }
+}
+
+internal class SortedSpdxFileConverter :
+    StdConverter<Collection<SpdxFile>, List<SpdxFile>>() {
+    override fun convert(value: Collection<SpdxFile>) = value.sortedBy { it.spdxId }
+}
+
+internal class SortedSpdxPackageConverter :
+    StdConverter<Collection<SpdxPackage>, List<SpdxPackage>>() {
+    override fun convert(value: Collection<SpdxPackage>) = value.sortedBy { it.spdxId }
+}
+
+internal class SortedSpdxRelationshipConverter :
+    StdConverter<Collection<SpdxRelationship>, List<SpdxRelationship>>() {
+    override fun convert(value: Collection<SpdxRelationship>) =
+        value.sortedWith(
             compareBy<SpdxRelationship> { it.spdxElementId }
                 .thenBy { it.relatedSpdxElement }
                 .thenBy { it.relationshipType }
         )
 }
 
-// TODO: Add more converters for SpdxDocument to improve serialization, see
-//       https://github.com/oss-review-toolkit/ort/issues/7023.
+internal class SortedSpdxSnippetConverter :
+    StdConverter<Collection<SpdxSnippet>, List<SpdxSnippet>>() {
+    override fun convert(value: Collection<SpdxSnippet>) = value.sortedBy { it.spdxId }
+}
