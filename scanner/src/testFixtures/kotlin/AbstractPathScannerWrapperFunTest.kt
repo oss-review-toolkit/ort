@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import io.kotest.core.Tag
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
@@ -35,7 +34,7 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.test.readResource
 
-abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
+abstract class AbstractPathScannerWrapperFunTest : StringSpec() {
     // This is loosely based on the patterns from
     // https://github.com/licensee/licensee/blob/6c0f803/lib/licensee/project_files/license_file.rb#L6-L43.
     private val commonlyDetectedFiles = listOf("LICENSE", "LICENCE", "COPYING")
@@ -58,7 +57,7 @@ abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()
     }
 
     init {
-        "Scanning a single file succeeds".config(tags = testTags) {
+        "Scanning a single file succeeds" {
             val result = scanner.scanPath(inputDir / "LICENSE", scanContext)
             val findings = result.licenseFindings.map { it.copy(location = it.location.withRelativePath(inputDir)) }
 
@@ -68,7 +67,7 @@ abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()
             }
         }
 
-        "Scanning a directory succeeds".config(tags = testTags) {
+        "Scanning a directory succeeds" {
             val result = scanner.scanPath(inputDir, scanContext)
             val findings = result.licenseFindings.map { it.copy(location = it.location.withRelativePath(inputDir)) }
 
