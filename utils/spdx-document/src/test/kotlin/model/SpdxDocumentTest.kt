@@ -25,7 +25,10 @@ import io.kotest.assertions.json.ArrayOrder
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+
+import java.time.Instant
 
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 import org.ossreviewtoolkit.utils.test.readResource
@@ -81,6 +84,36 @@ class SpdxDocumentTest : WordSpec({
 
             // Account for the fact that ORT serializes SPDX 2.3 now.
             reSerializedJson.replace("PACKAGE-MANAGER", "PACKAGE_MANAGER") lenientShouldEqualJson json
+        }
+    }
+
+    "Serializing an SPDX document" should {
+        "sort collections deterministically regardless of the input order" {
+            val shuffledIds = listOf("SPDXRef-Package-C", "SPDXRef-Package-A", "SPDXRef-Package-B")
+            val sortedIds = shuffledIds.sorted()
+
+            val document = SpdxDocument(
+                creationInfo = SpdxCreationInfo(created = Instant.EPOCH, creators = listOf("Tool: ort")),
+                name = "deterministic-document",
+                documentNamespace = "spdx://deterministic",
+                documentDescribes = shuffledIds,
+                packages = shuffledIds.map { id ->
+                    SpdxPackage(spdxId = id, name = id.removePrefix("SPDXRef-"), downloadLocation = "NOASSERTION")
+                },
+                relationships = shuffledIds.map { id ->
+                    SpdxRelationship(
+                        spdxElementId = "SPDXRef-DOCUMENT",
+                        relationshipType = SpdxRelationship.Type.DESCRIBES,
+                        relatedSpdxElement = id
+                    )
+                }
+            )
+
+            val root = SpdxModelMapper.jsonMapper.readTree(SpdxModelMapper.toJson(document))
+
+            root["packages"].map { it["SPDXID"].asText() } shouldBe sortedIds
+            root["documentDescribes"].map { it.asText() } shouldBe sortedIds
+            root["relationships"].map { it["relatedSpdxElement"].asText() } shouldBe sortedIds
         }
     }
 
