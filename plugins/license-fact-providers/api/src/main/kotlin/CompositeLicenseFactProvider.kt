@@ -44,9 +44,9 @@ class CompositeLicenseFactProvider(
     override fun getLicenseText(licenseOrExceptionId: String) =
         providers.firstNotNullOfOrNull { it.getLicenseText(licenseOrExceptionId) }
 
-    override fun hasLicenseTextForId(singleLicenseExpression: String, id: Identifier): Boolean =
-        providers.any { it.hasLicenseTextForId(singleLicenseExpression, id) }
+    override fun hasLicenseTextsForId(singleLicenseExpression: String, id: Identifier): Boolean =
+        providers.any { it.hasLicenseTextsForId(singleLicenseExpression, id) }
 
-    override fun getLicenseTextForId(singleLicenseExpression: String, id: Identifier): LicenseText? =
-        providers.firstNotNullOfOrNull { it.getLicenseTextForId(singleLicenseExpression, id) }
+    override fun getLicenseTextsForId(singleLicenseExpression: String, id: Identifier): Set<LicenseText> =
+        providers.flatMapTo(mutableSetOf()) { it.getLicenseTextsForId(singleLicenseExpression, id) }
 }
