@@ -13,6 +13,12 @@
       "findutils": {
         "pkg-path": "findutils"
       },
+      "git": {
+        "pkg-path": "git"
+      },
+      "git-repo": {
+        "pkg-path": "git-repo"
+      },
       "gnused": {
         "pkg-path": "gnused"
       },
@@ -22,6 +28,9 @@
       "licensee": {
         "pkg-path": "licensee",
         "version": "9.18.0"
+      },
+      "mercurial": {
+        "pkg-path": "mercurial"
       },
       "scancode": {
         "pkg-path": "python314Packages.scancode-toolkit",
@@ -57,8 +66,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:05:45.496996Z",
       "stabilities": [
-        "unstable",
-        "staging"
+        "staging",
+        "unstable"
       ],
       "unfree": false,
       "version": "0.5.0",
@@ -87,8 +96,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:05:46.098477Z",
       "stabilities": [
-        "unstable",
-        "staging"
+        "staging",
+        "unstable"
       ],
       "unfree": false,
       "version": "9.9",
@@ -130,8 +139,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:05:46.893708Z",
       "stabilities": [
-        "unstable",
-        "staging"
+        "staging",
+        "unstable"
       ],
       "unfree": false,
       "version": "4.10.0",
@@ -142,6 +151,68 @@
         "info": "/nix/store/r7ij2k3ps4jzj68yisgxis2bq5f7lacf-findutils-4.10.0-info",
         "locate": "/nix/store/p99ac3k0wfj0l79wxrhym8viyk6h1d73-findutils-4.10.0-locate",
         "out": "/nix/store/16wfacfgap3chf7mcjnd8dwi85dj4qqi-findutils-4.10.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "git",
+      "broken": false,
+      "derivation": "/nix/store/b5a7flvc1aq2h7pfgr756p7wpyjydzv9-git-2.52.0.drv",
+      "description": "Distributed version control system",
+      "install_id": "git",
+      "license": "GPL-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "name": "git-2.52.0",
+      "pname": "git",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:05:47.318442Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.52.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/zd8di23fmzjwrhb5ij1bjnlfqkx9j7d6-git-2.52.0-debug",
+        "doc": "/nix/store/d8kc4kqzcrbcj92msxrpdsdjglh2q5gp-git-2.52.0-doc",
+        "out": "/nix/store/ipwndaag56mm8g8gn8j98z0jvn8x4mk1-git-2.52.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "git-repo",
+      "broken": false,
+      "derivation": "/nix/store/wr6fxjyjpn8pzwijnkapb9j4n7gdzbia-git-repo-2.59.drv",
+      "description": "Android's repo management tool",
+      "install_id": "git-repo",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "name": "git-repo-2.59",
+      "pname": "git-repo",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:05:47.355319Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.59",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/r23ikf10rb1w0ksfm9xiyk0d6fa82hyq-git-repo-2.59"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -162,8 +233,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:05:47.951430Z",
       "stabilities": [
-        "unstable",
-        "staging"
+        "staging",
+        "unstable"
       ],
       "unfree": false,
       "version": "4.9",
@@ -197,8 +268,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:06:07.099284Z",
       "stabilities": [
-        "unstable",
-        "staging"
+        "staging",
+        "unstable"
       ],
       "unfree": false,
       "version": "25.0.2+10",
@@ -228,8 +299,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:06:11.687132Z",
       "stabilities": [
-        "unstable",
-        "staging"
+        "staging",
+        "unstable"
       ],
       "unfree": false,
       "version": "9.18.0",
@@ -238,6 +309,36 @@
       ],
       "outputs": {
         "out": "/nix/store/m40zxbr0qqb59p9i9i1zkshybq67ra0k-licensee-9.18.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "mercurial",
+      "broken": false,
+      "derivation": "/nix/store/a3rkskc5g82clk55d1h6dkasq9zlvsch-mercurial-7.1.drv",
+      "description": "Fast, lightweight SCM system for very large distributed projects",
+      "install_id": "mercurial",
+      "license": "GPL-2.0-or-later",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "name": "mercurial-7.1",
+      "pname": "mercurial",
+      "rev": "00c21e4c93d963c50d4c0c89bfa84ed6e0694df2",
+      "rev_count": 940249,
+      "rev_date": "2026-02-04T09:32:58Z",
+      "scrape_date": "2026-02-06T06:06:21.223946Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "7.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/6816abc3ky6byb0hz6r49kcbyd218xdj-mercurial-7.1"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -258,8 +359,8 @@
       "rev_date": "2026-02-04T09:32:58Z",
       "scrape_date": "2026-02-06T06:07:34.528433Z",
       "stabilities": [
-        "unstable",
-        "staging"
+        "staging",
+        "unstable"
       ],
       "unfree": false,
       "version": "32.5.0",
@@ -297,6 +398,9 @@
           },
           {
             "dir": "../../plugins/scanners"
+          },
+          {
+            "dir": "../../plugins/version-control-systems"
           }
         ]
       }
@@ -371,6 +475,38 @@
         "descriptor": {
           "dir": "../../plugins/scanners"
         }
+      },
+      {
+        "manifest": {
+          "schema-version": "1.10.0",
+          "install": {
+            "git": {
+              "pkg-path": "git"
+            },
+            "git-repo": {
+              "pkg-path": "git-repo"
+            },
+            "mercurial": {
+              "pkg-path": "mercurial"
+            }
+          },
+          "vars": {
+            "FLOX_DISABLE_METRICS": "true"
+          },
+          "options": {
+            "systems": [
+              "x86_64-linux"
+            ],
+            "cuda-detection": false,
+            "activate": {
+              "mode": "run"
+            }
+          }
+        },
+        "name": "version-control-systems",
+        "descriptor": {
+          "dir": "../../plugins/version-control-systems"
+        }
       }
     ],
     "warnings": [
@@ -410,6 +546,43 @@
           ]
         },
         "higher_priority_name": "scanners"
+      },
+      {
+        "warning": {
+          "Overriding": [
+            "vars",
+            "FLOX_DISABLE_METRICS"
+          ]
+        },
+        "higher_priority_name": "version-control-systems"
+      },
+      {
+        "warning": {
+          "Overriding": [
+            "options",
+            "activate",
+            "mode"
+          ]
+        },
+        "higher_priority_name": "version-control-systems"
+      },
+      {
+        "warning": {
+          "Overriding": [
+            "options",
+            "cuda-detection"
+          ]
+        },
+        "higher_priority_name": "version-control-systems"
+      },
+      {
+        "warning": {
+          "Overriding": [
+            "options",
+            "systems"
+          ]
+        },
+        "higher_priority_name": "version-control-systems"
       },
       {
         "warning": {
