@@ -8,9 +8,5 @@ activate.mode = "run"
 cuda-detection = false
 systems = ["x86_64-linux"]
 
-[include]
-environments = [
-  { dir = "../minimal" },
-  { dir = "../../plugins/scanners" },
-  { dir = "../../plugins/version-control-systems" }
-]
+[install]
+mercurial.pkg-path = "mercurial"
