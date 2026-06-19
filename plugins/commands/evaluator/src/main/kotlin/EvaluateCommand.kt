@@ -216,7 +216,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
                 scriptUris += defaultRulesFile.toURI()
             } else {
                 echo(Theme.Default.danger("No rules specified."))
-                throw ProgramResult(1)
+                throw ProgramResult(STATUS_CODE_FATAL_ERROR)
             }
         }
 
@@ -264,7 +264,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
                 }
             }
 
-            if (allChecksSucceeded) return else throw ProgramResult(2)
+            if (allChecksSucceeded) return else throw ProgramResult(STATUS_CODE_FAILURE)
         }
 
         val existingOrtFile = requireNotNull(ortFile) {

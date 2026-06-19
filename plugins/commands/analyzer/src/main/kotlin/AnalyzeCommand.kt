@@ -218,7 +218,7 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
         val analyzerRun = ortResult.analyzer
         if (analyzerRun == null) {
             echo(Theme.Default.danger("No analyzer run was created."))
-            throw ProgramResult(1)
+            throw ProgramResult(STATUS_CODE_FATAL_ERROR)
         }
 
         val duration = with(analyzerRun) { Duration.between(startTime, endTime).toKotlinDuration() }

@@ -114,7 +114,7 @@ class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descript
             }.onFailure {
                 val message = "The file '$canonicalPath' neither contains valid global nor repository ORT configuration"
                 echo(Theme.Default.danger("$message: ${it.collectMessages()}"))
-                throw ProgramResult(2)
+                throw ProgramResult(STATUS_CODE_FAILURE)
             }
         }
     }

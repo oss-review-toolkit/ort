@@ -342,6 +342,6 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
         val successCount = reportFormats.size - failureCount
         echo("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration}.")
 
-        if (failureCount > 0) throw ProgramResult(2)
+        if (failureCount > 0) throw ProgramResult(STATUS_CODE_FAILURE)
     }
 }

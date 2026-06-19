@@ -249,7 +249,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
             val message = failureMessages.joinToString(separator, separator) { Theme.Default.danger(it) }
             echo(message)
 
-            throw ProgramResult(1)
+            throw ProgramResult(STATUS_CODE_FATAL_ERROR)
         }
     }
 
@@ -264,7 +264,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
                 )
             )
 
-            throw ProgramResult(0)
+            throw ProgramResult(STATUS_CODE_SUCCESS)
         }
 
         val verb = if (dryRun) "Verifying" else "Downloading"

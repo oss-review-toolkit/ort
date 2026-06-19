@@ -39,6 +39,15 @@ abstract class OrtCommand(override val descriptor: PluginDescriptor) : CliktComm
         const val OPTION_GROUP_CONFIGURATION = "Configuration Options"
         const val OPTION_GROUP_INPUT = "Input Options"
         const val OPTION_GROUP_OUTPUT = "Output Options"
+
+        /** A status code to indicate success. */
+        const val STATUS_CODE_SUCCESS = 0
+
+        /** A status code for fundamental errors that prevented a command from running properly. */
+        const val STATUS_CODE_FATAL_ERROR = 1
+
+        /** A status code to indicate that the program did run properly but discovered issues. */
+        const val STATUS_CODE_FAILURE = 2
     }
 
     override fun help(context: Context) = descriptor.summary
