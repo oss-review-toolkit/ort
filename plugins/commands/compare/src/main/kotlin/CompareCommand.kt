@@ -108,12 +108,12 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
     override fun run() {
         if (fileA == fileB) {
             echo(Theme.Default.success("The arguments point to the same file."))
-            throw ProgramResult(0)
+            throw ProgramResult(STATUS_CODE_SUCCESS)
         }
 
         if (fileA.extension != fileB.extension) {
             echo(Theme.Default.danger("The file arguments need to be of the same type."))
-            throw ProgramResult(1)
+            throw ProgramResult(STATUS_CODE_FATAL_ERROR)
         }
 
         // Arbitrarily determine the mapper from the first file as the file extensions are ensured to be the same.
@@ -140,10 +140,10 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
 
                 if (resultA == resultB) {
                     echo(Theme.Default.success("The ORT results are the same."))
-                    throw ProgramResult(0)
+                    throw ProgramResult(STATUS_CODE_SUCCESS)
                 }
 
-                throw ProgramResult(2)
+                throw ProgramResult(STATUS_CODE_FAILURE)
             }
 
             CompareMethod.TEXT_DIFF -> {
@@ -174,7 +174,7 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
 
                 if (diff.isEmpty()) {
                     echo(Theme.Default.success("The ORT results are the same."))
-                    throw ProgramResult(0)
+                    throw ProgramResult(STATUS_CODE_SUCCESS)
                 }
 
                 echo("The ORT results differ:")
@@ -183,7 +183,7 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
                     echo(it)
                 }
 
-                throw ProgramResult(2)
+                throw ProgramResult(STATUS_CODE_FAILURE)
             }
         }
     }

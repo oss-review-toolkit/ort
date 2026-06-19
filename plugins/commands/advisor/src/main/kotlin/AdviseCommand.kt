@@ -143,7 +143,7 @@ class AdviseCommand(descriptor: PluginDescriptor = AdviseCommandFactory.descript
         val advisorRun = ortResultOutput.advisor
         if (advisorRun == null) {
             echo(Theme.Default.danger("No advisor run was created."))
-            throw ProgramResult(1)
+            throw ProgramResult(STATUS_CODE_FATAL_ERROR)
         }
 
         val duration = with(advisorRun) { Duration.between(startTime, endTime).toKotlinDuration() }

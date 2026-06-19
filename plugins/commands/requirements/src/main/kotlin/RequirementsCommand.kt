@@ -95,7 +95,7 @@ class RequirementsCommand(
 
             echo(Theme.Default.warning(summary))
 
-            throw ProgramResult(2)
+            throw ProgramResult(STATUS_CODE_FAILURE)
         }
     }
 
@@ -150,7 +150,7 @@ class RequirementsCommand(
                 }
             }.onFailure { e ->
                 echo(Theme.Default.danger("There was an error instantiating $cliClass: $e."))
-                throw ProgramResult(1)
+                throw ProgramResult(STATUS_CODE_FATAL_ERROR)
             }
         }
 

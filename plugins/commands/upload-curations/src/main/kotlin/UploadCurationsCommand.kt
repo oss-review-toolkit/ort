@@ -150,7 +150,7 @@ class UploadCurationsCommand(
 
         if (uploadedCurationsCount != count) {
             echo(Theme.Default.danger("At least one curation failed to be uploaded."))
-            throw ProgramResult(2)
+            throw ProgramResult(STATUS_CODE_FAILURE)
         }
     }
 }

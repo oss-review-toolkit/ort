@@ -157,7 +157,7 @@ class ScanCommand(descriptor: PluginDescriptor = ScanCommandFactory.descriptor) 
         val scannerRun = ortResult?.scanner
         if (scannerRun == null) {
             echo(Theme.Default.danger("No scanner run was created."))
-            throw ProgramResult(1)
+            throw ProgramResult(STATUS_CODE_FATAL_ERROR)
         }
 
         outputDir.safeMkdirs()
