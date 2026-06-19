@@ -198,7 +198,7 @@ internal object SpdxDocumentModelMapper {
                 ?: projects.firstOrNull()?.id?.name?.takeIf(String::isNotBlank)
                 ?: "Unnamed document",
             packages = projectPackages + packages,
-            relationships = relationships.sortedBy { it.spdxElementId },
+            relationships = relationships,
             files = files
         ).addExtractedLicenseInfo(licenseFactProvider)
             .filterChecksums(config.wantSpdx23)
