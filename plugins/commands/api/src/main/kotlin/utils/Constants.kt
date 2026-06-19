@@ -22,4 +22,3 @@ package org.ossreviewtoolkit.plugins.commands.api.utils
 const val OPTION_GROUP_CONFIGURATION = "Configuration Options"
 const val OPTION_GROUP_INPUT = "Input Options"
 const val OPTION_GROUP_OUTPUT = "Output Options"
-const val OPTION_GROUP_RULE = "Rule Options"
