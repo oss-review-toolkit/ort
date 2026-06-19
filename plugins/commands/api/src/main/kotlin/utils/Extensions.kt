@@ -34,17 +34,18 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.utils.common.formatSizeInMib
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 fun <T : GroupableOption> T.group(name: String): T = apply { groupName = name }
 
-fun <T : GroupableOption> T.inputGroup(): T = group(OPTION_GROUP_INPUT)
+fun <T : GroupableOption> T.inputGroup(): T = group(OrtCommand.OPTION_GROUP_INPUT)
 
-fun <T : GroupableOption> T.outputGroup(): T = group(OPTION_GROUP_OUTPUT)
+fun <T : GroupableOption> T.outputGroup(): T = group(OrtCommand.OPTION_GROUP_OUTPUT)
 
-fun <T : GroupableOption> T.configurationGroup(): T = group(OPTION_GROUP_CONFIGURATION)
+fun <T : GroupableOption> T.configurationGroup(): T = group(OrtCommand.OPTION_GROUP_CONFIGURATION)
 
 /**
  * Read [ortFile] into an [OrtResult] and return it.

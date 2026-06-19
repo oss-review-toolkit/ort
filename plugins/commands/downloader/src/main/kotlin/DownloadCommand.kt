@@ -88,7 +88,6 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.GroupTypes.FileType
 import org.ossreviewtoolkit.plugins.commands.api.utils.GroupTypes.StringType
-import org.ossreviewtoolkit.plugins.commands.api.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
