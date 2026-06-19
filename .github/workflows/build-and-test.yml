@@ -69,7 +69,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
     - name: Install Flox
-      uses: flox/install-flox-action@f6002ed63e483f134001de7b4b45be891e00b09f # v2.5.1
+      uses: flox/install-flox-action@8c71d71672ea52e1494b168ac0f27d46b96068be # v2.5.2
       with:
         disable-metrics: true
       if: runner.os != 'Windows'
@@ -98,7 +98,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
     - name: Install Flox
-      uses: flox/install-flox-action@f6002ed63e483f134001de7b4b45be891e00b09f # v2.5.1
+      uses: flox/install-flox-action@8c71d71672ea52e1494b168ac0f27d46b96068be # v2.5.2
       with:
         disable-metrics: true
     - name: Run functional tests that do not require external tools
