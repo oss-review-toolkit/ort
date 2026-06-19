@@ -81,6 +81,7 @@ internal object GitRepoCommand : CommandLineTool {
 
     override fun transformVersion(output: String): String =
         output.lineSequence().mapNotNull { line ->
+            // The repo version can only be determined from an initialized working tree, so use the launcher's version.
             line.withoutPrefix("repo launcher version ")
         }.singleOrNull()
             ?: throw IOException("The 'repo' version can only be determined from an initialized working tree.")
