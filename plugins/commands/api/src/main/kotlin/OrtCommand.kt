@@ -35,6 +35,12 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
  * An interface for [CliktCommand]-based ORT commands that come as [Plugin]s.
  */
 abstract class OrtCommand(override val descriptor: PluginDescriptor) : CliktCommand(), Plugin {
+    companion object {
+        const val OPTION_GROUP_CONFIGURATION = "Configuration Options"
+        const val OPTION_GROUP_INPUT = "Input Options"
+        const val OPTION_GROUP_OUTPUT = "Output Options"
+    }
+
     override fun help(context: Context) = descriptor.summary
 
     protected val ortConfig by requireObject<OrtConfiguration>()
