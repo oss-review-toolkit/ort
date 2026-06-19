@@ -214,38 +214,26 @@ RUN --mount=type=cache,target=/opt/nvm/.cache,uid=$USER_ID,gid=$USER_GID \
     && corepack enable
 
 #------------------------------------------------------------------------
-# RUBY - Build Ruby as a separate component with rbenv
+# RUBY - Build Ruby as a separate component
 FROM base AS ruby-build
 
 # hadolint ignore=DL3004
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    cmake \
-    libreadline6-dev \
-    libssl-dev \
-    libz-dev \
-    make \
-    pkg-config \
-    xvfb \
-    zlib1g-dev
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends extrepo \
+    && sudo extrepo enable mise \
+    && sudo apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends mise
 
 ARG COCOAPODS_VERSION
 ARG LICENSEE_VERSION
 ARG RUBY_VERSION
 
-ENV RBENV_ROOT=/opt/rbenv
-ENV PATH=$RBENV_ROOT/bin:$RBENV_ROOT/shims/:$RBENV_ROOT/plugins/ruby-build/bin:$PATH
+ENV RUBY_ROOT=/opt/ruby
+RUN sudo mise install-into ruby@$RUBY_VERSION $RUBY_ROOT
 
-RUN git clone --depth 1 https://github.com/rbenv/rbenv.git $RBENV_ROOT
-RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
-WORKDIR $RBENV_ROOT
-RUN src/configure \
-    && make -C src
-RUN rbenv install $RUBY_VERSION -v \
-    && rbenv global $RUBY_VERSION \
-    && gem install cocoapods:$COCOAPODS_VERSION licensee:$LICENSEE_VERSION
+RUN sudo $RUBY_ROOT/bin/gem install cocoapods:$COCOAPODS_VERSION licensee:$LICENSEE_VERSION
 
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
@@ -616,10 +604,10 @@ ENV PATH=$PATH:/opt/go/bin
 COPY --from=go-build --chown=$USER:$USER /opt/go /opt/go
 
 # Ruby
-ENV RBENV_ROOT=/opt/rbenv
+ENV RUBY_ROOT=/opt/ruby
 ENV GEM_HOME=/var/tmp/gem
-ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
-COPY --from=ruby-build --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
+ENV PATH=$PATH:$RUBY_ROOT/bin
+COPY --from=ruby-build --chown=$USER:$USER $RUBY_ROOT $RUBY_ROOT
 
 COPY --from=python-build --chown=$USER:$USER /opt/scancode-license-data /opt/scancode-license-data
 
