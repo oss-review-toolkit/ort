@@ -249,13 +249,24 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
             val message = failureMessages.joinToString(separator, separator) { Theme.Default.danger(it) }
             echo(message)
 
-            throw ProgramResult(STATUS_CODE_FATAL_ERROR)
+            when (input) {
+                is FileType -> if (failureMessages.any { "Exec failed" in it }) {
+                    // Problems with executing required tools are fatal.
+                    throw ProgramResult(STATUS_CODE_FATAL_ERROR)
+                } else {
+                    throw ProgramResult(STATUS_CODE_FAILURE)
+                }
+
+                // Problems with downloading are fatal if they occur for a single project URL.
+                is StringType -> throw ProgramResult(STATUS_CODE_FATAL_ERROR)
+            }
         }
     }
 
     private fun downloadFromOrtResult(ortFile: File, failureMessages: MutableList<String>) {
         val ortResult = readOrtResult(ortFile)
 
+        // This should never happen as an ORT result is always written with at least an analyzer result.
         if (ortResult.analyzer?.result == null) {
             echo(
                 Theme.Default.warning(
@@ -264,7 +275,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
                 )
             )
 
-            throw ProgramResult(STATUS_CODE_SUCCESS)
+            throw ProgramResult(STATUS_CODE_FAILURE)
         }
 
         val verb = if (dryRun) "Verifying" else "Downloading"
