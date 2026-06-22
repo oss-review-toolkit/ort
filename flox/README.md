@@ -29,6 +29,14 @@ An example is to check whether the external-tools environment provides all requi
 flox/run_isolated.sh external-tools ./gradlew -q :cli:run --args="requirements"
 ```
 
+However, for the case of running ORT commands, there is a dedicated script to use:
+
+```shell
+flox/run_ort.sh requirements
+```
+
+This does the same as the `run_isolated.sh` call above.
+
 ## Maintenance
 
 As manifest files are accompanied by lockfiles they are usually not edited directly, but via the `flox edit` command which automatically updates the lockfile.
