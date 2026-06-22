@@ -22,7 +22,7 @@ GIT_ROOT="$(git rev-parse --show-toplevel)"
 
 if [ "$#" -lt 2 ]; then
     echo "Usage   : $SELF <environment directory> <command to run>" >&2
-    echo "Example : $SELF external-tools $GIT_ROOT/gradlew -q :cli:run --args=requirements"
+    echo "Example : $SELF external-tools $GIT_ROOT/gradlew -q :cli:run --args=requirements" >&2
     exit 1
 fi
 
