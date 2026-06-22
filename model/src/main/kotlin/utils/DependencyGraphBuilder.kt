@@ -94,6 +94,9 @@ private sealed interface DependencyGraphSearchResult {
  * dependencies [D] used by specific package managers. To make this class compatible with such a dependency
  * representation, the package manager implementation has to provide a [DependencyHandler]. Via this handler, all the
  * relevant information about dependencies can be extracted.
+ *
+ * Instances of this class are not thread-safe. They are intended to be used to construct a single [DependencyGraph]
+ * from a package manager implementation running in a single thread.
  */
 class DependencyGraphBuilder<D>(
     /**
