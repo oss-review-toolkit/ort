@@ -81,14 +81,6 @@ class VulnerableCode(
 
     private val service by lazy {
         val client = OkHttpClientHelper.buildClient {
-            addNetworkInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .header("User-Agent", "VCIO_API_AGENT")
-                    .build()
-
-                chain.proceed(request)
-            }
-
             if (config.readTimeout != null) readTimeout(config.readTimeout, TimeUnit.SECONDS)
         }
 

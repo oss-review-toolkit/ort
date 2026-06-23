@@ -58,15 +58,14 @@ interface VulnerableCodeService {
          */
         fun create(url: String? = null, apiKey: String? = null, client: OkHttpClient? = null): VulnerableCodeService {
             val vulnerableCodeClient = (client ?: OkHttpClient()).run {
-                takeIf { apiKey == null } ?: run {
-                    newBuilder().addInterceptor { chain ->
-                        val requestBuilder = chain.request().newBuilder().apply {
-                            header("Authorization", "Token $apiKey")
-                        }
+                newBuilder().addInterceptor { chain ->
+                    val request = chain.request().newBuilder()
+                        .apply { if (apiKey != null) header("Authorization", "Token $apiKey") }
+                        .header("User-Agent", "VCIO_API_AGENT")
+                        .build()
 
-                        chain.proceed(requestBuilder.build())
-                    }.build()
-                }
+                    chain.proceed(request)
+                }.build()
             }
 
             val contentType = "application/json".toMediaType()
