@@ -13,7 +13,7 @@ env:
 
 jobs:
   commit-lint:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -24,7 +24,7 @@ jobs:
         with:
           configFile: .commitlintrc.yml
   code-base-checks:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -33,7 +33,7 @@ jobs:
     - name: Check copyrights, license headers, and .gitattributes
       run: ./gradlew checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   completions:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -58,7 +58,7 @@ jobs:
           exit 1
         fi
   build-health:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -67,7 +67,7 @@ jobs:
     - name: Check Build Health
       run: ./gradlew buildHealth checkSortDependencies
   detekt-issues:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       # Needed for SARIF scanning upload.
       security-events: write
@@ -86,7 +86,7 @@ jobs:
       with:
         sarif_file: build/reports/detekt/merged.sarif
   markdown-links:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       checks: write
       contents: read
@@ -98,7 +98,7 @@ jobs:
       with:
         fail_level: error
   markdownlint:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -111,7 +111,7 @@ jobs:
           npm install -g markdownlint-rule-max-one-sentence-per-line@0.0.2
           npx markdownlint-cli2
   prettier-website:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -128,7 +128,7 @@ jobs:
         working-directory: website
   qodana-scan:
     if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       # Needed for SARIF scanning upload.
       security-events: write
@@ -147,14 +147,14 @@ jobs:
       with:
         sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
   renovate-validation:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
     - name: Validate Renovate Config
       run: npx -y --package renovate@latest -- renovate-config-validator renovate.json
   reuse-tool:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
