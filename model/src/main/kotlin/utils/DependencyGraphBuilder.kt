@@ -136,7 +136,7 @@ class DependencyGraphBuilder<D>(
      * A map storing all [DependencyReference]s that have been created to represent the dependencies of type D known to
      * this builder.
      */
-    private val references = mutableMapOf<DependencyReference, D>()
+    private val referenceToDependencyMap = mutableMapOf<DependencyReference, D>()
 
     /**
      * Add the given [dependency] for the scope with the given [scopeName] to this builder. This function needs to be
@@ -175,7 +175,7 @@ class DependencyGraphBuilder<D>(
         if (checkReferences) checkReferences()
 
         val (sortedDependencyIds, indexMapping) = constructSortedDependencyIds(dependencyIds)
-        val (nodes, edges) = references.keys.toGraph(indexMapping)
+        val (nodes, edges) = referenceToDependencyMap.keys.toGraph(indexMapping)
 
         return DependencyGraph(
             sortedDependencyIds,
@@ -193,9 +193,10 @@ class DependencyGraphBuilder<D>(
                 danglingIds.joinToString(postfix = ".") { "'${it.toCoordinates()}'" }
         }
 
-        val packageReferencesKeysWithMultipleDistinctPackageReferences = references.keys.groupBy { it.key }.filter {
-            it.value.distinct().size > 1
-        }.keys
+        val packageReferencesKeysWithMultipleDistinctPackageReferences =
+            referenceToDependencyMap.keys.groupBy { it.key }.filter {
+                it.value.distinct().size > 1
+            }.keys
 
         require(packageReferencesKeysWithMultipleDistinctPackageReferences.isEmpty()) {
             "Found multiple distinct package references for each of the following package / fragment index tuples " +
@@ -310,7 +311,7 @@ class DependencyGraphBuilder<D>(
      * these have to be placed in separate fragments of the dependency graph.
      */
     private fun dependencyTreeEquals(ref: DependencyReference, dependency: D): Boolean {
-        val refDep = checkNotNull(references[ref]) {
+        val refDep = checkNotNull(referenceToDependencyMap[ref]) {
             "$ref is not known to this builder."
         }
 
@@ -383,7 +384,7 @@ class DependencyGraphBuilder<D>(
             issues = issues
         )
         fragmentMapping[index.root] = ref
-        references[ref] = dependency
+        referenceToDependencyMap[ref] = dependency
 
         if (ref.issues.isEmpty() && ref.linkage !in PackageLinkage.PROJECT_LINKAGE) {
             validPackageDependencies += id
