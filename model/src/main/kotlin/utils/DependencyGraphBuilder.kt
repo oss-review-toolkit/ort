@@ -139,6 +139,13 @@ class DependencyGraphBuilder<D>(
     private val referenceToDependencyMap = mutableMapOf<DependencyReference, D>()
 
     /**
+     * A map serving a cache for search operations in the dependency graph. The map assigns dependency objects to the
+     * references that represent them. This can significantly speed up the construction of the dependency graph when
+     * complex subgraphs are involved that need to be looked up again and again.
+     */
+    private val dependencyToReferenceMap = mutableMapOf<D, DependencyReference>()
+
+    /**
      * Add the given [dependency] for the scope with the given [scopeName] to this builder. This function needs to be
      * called for all direct dependencies of all scopes. That way the builder gets sufficient information to construct
      * the [DependencyGraph].
@@ -239,7 +246,10 @@ class DependencyGraphBuilder<D>(
         val issues = dependencyHandler.issuesFor(dependency).toMutableList()
         val index = updateDependencyMappingAndPackages(id, dependency, issues)
 
-        val ref = when (val result = findDependencyInGraph(index, dependency)) {
+        val result = dependencyToReferenceMap[dependency]?.let { DependencyGraphSearchResult.Found(it) }
+            ?: findDependencyInGraph(index, dependency)
+
+        val ref = when (result) {
             is DependencyGraphSearchResult.Found -> result.ref
 
             is DependencyGraphSearchResult.NotFound -> {
@@ -385,6 +395,7 @@ class DependencyGraphBuilder<D>(
         )
         fragmentMapping[index.root] = ref
         referenceToDependencyMap[ref] = dependency
+        dependencyToReferenceMap[dependency] = ref
 
         if (ref.issues.isEmpty() && ref.linkage !in PackageLinkage.PROJECT_LINKAGE) {
             validPackageDependencies += id
