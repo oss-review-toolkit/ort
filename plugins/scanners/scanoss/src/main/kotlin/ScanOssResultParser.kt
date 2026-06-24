@@ -210,7 +210,7 @@ private fun LicenseDetails.toSpdxExpression(): SpdxExpression? {
     }
 }
 
-private fun Array<LicenseDetails>?.toSpdxExpressions(): List<SpdxExpression> =
+private fun Array<LicenseDetails>?.toSpdxExpressions(): Set<SpdxExpression> =
     orEmpty()
-        .mapNotNull { it.toSpdxExpression() }
-        .ifEmpty { listOf(SpdxExpression.parse(SpdxConstants.NOASSERTION)) }
+        .mapNotNullTo(mutableSetOf()) { it.toSpdxExpression() }
+        .ifEmpty { setOf(SpdxExpression.parse(SpdxConstants.NOASSERTION)) }
