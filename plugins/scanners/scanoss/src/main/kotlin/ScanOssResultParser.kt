@@ -90,17 +90,19 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 internal fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
 
-    return details.licenseDetails.orEmpty().mapTo(mutableSetOf()) { license ->
+    val licenses = details.licenseDetails.orEmpty().map { license ->
         val licenseExpression = runCatching { SpdxExpression.parse(license.name) }.getOrNull()
 
-        val validatedLicense = when {
+        when {
             licenseExpression == null -> SpdxConstants.NOASSERTION
             licenseExpression.isValid() -> license.name
             else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}"
         }
+    }
 
+    return licenses.mapTo(mutableSetOf()) { license ->
         LicenseFinding(
-            license = validatedLicense,
+            license = license,
             location = TextLocation(
                 path = path,
                 startLine = TextLocation.UNKNOWN_LINE,
