@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
+import com.scanoss.dto.LicenseDetails
 import com.scanoss.dto.ScanFileDetails
 import com.scanoss.dto.ScanFileResult
 import com.scanoss.dto.enums.MatchType
@@ -89,15 +90,10 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 private fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
 
-    val licenses = details.licenseDetails.orEmpty().mapNotNull { license ->
-        val licenseExpression = runCatching { SpdxExpression.parse(license.name) }.getOrNull()
-            ?: return@mapNotNull null
-
-        when {
-            licenseExpression.isValid() -> license.name
-            else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}"
-        }
-    }.ifEmpty { listOf(SpdxConstants.NOASSERTION) }
+    val licenses = details.licenseDetails
+        .orEmpty()
+        .mapNotNull { it.toSpdxExpression() }
+        .ifEmpty { listOf(SpdxConstants.NOASSERTION) }
 
     return licenses.mapTo(mutableSetOf()) { license ->
         LicenseFinding(
@@ -206,3 +202,12 @@ private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
             else -> TextLocation(file, it.toInt())
         }
     }
+
+private fun LicenseDetails.toSpdxExpression(): String? {
+    val licenseExpression = runCatching { SpdxExpression.parse(name) }.getOrNull() ?: return null
+
+    return when {
+        licenseExpression.isValid() -> name
+        else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-$name"
+    }
+}
