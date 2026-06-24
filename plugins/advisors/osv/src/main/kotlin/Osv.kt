@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.advisors.osv
 
+import com.github.packageurl.PackageURL
+
 import java.lang.invoke.MethodHandles
 import java.time.Instant
 
@@ -165,9 +167,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
     val purl = pkg.purl.toPackageUrl()
 
     return when {
-        purl != null -> VulnerabilitiesForPackageRequest(
-            pkg = org.ossreviewtoolkit.clients.osv.Package(purl = purl.toString())
-        )
+        purl != null -> createRequestForPurl(purl)
 
         // TODO: Consider doing this in more cases, like for the upcoming generic "git" type of PURLs, see
         //       https://github.com/package-url/purl-spec/issues/780.
@@ -184,3 +184,6 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         }
     }
 }
+
+private fun createRequestForPurl(purl: PackageURL): VulnerabilitiesForPackageRequest =
+    VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = purl.toString()))
