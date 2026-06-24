@@ -86,10 +86,10 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 /**
  * Get the license findings from the given [details].
  */
-private fun getLicenseFindings(details: ScanFileDetails, path: String): List<LicenseFinding> {
+private fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
 
-    return details.licenseDetails.orEmpty().map { license ->
+    return details.licenseDetails.orEmpty().mapTo(mutableSetOf()) { license ->
         val licenseExpression = runCatching { SpdxExpression.parse(license.name) }.getOrNull()
 
         val validatedLicense = when {
@@ -113,8 +113,8 @@ private fun getLicenseFindings(details: ScanFileDetails, path: String): List<Lic
 /**
  * Get the copyright findings from the given [details].
  */
-private fun getCopyrightFindings(details: ScanFileDetails, path: String): List<CopyrightFinding> =
-    details.copyrightDetails.orEmpty().map { copyright ->
+private fun getCopyrightFindings(details: ScanFileDetails, path: String): Set<CopyrightFinding> =
+    details.copyrightDetails.orEmpty().mapTo(mutableSetOf()) { copyright ->
         CopyrightFinding(
             statement = copyright.name,
             location = TextLocation(
