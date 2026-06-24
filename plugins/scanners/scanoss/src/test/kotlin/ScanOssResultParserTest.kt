@@ -59,10 +59,11 @@ class ScanOssResultParserTest : WordSpec({
                 "EPL-1.0",
                 "MIT",
                 "LicenseRef-scancode-free-unknown",
-                "LicenseRef-scanoss-SSPL"
+                "LicenseRef-scanoss-SSPL",
+                "NOASSERTION"
             )
 
-            summary.licenseFindings should haveSize(201)
+            summary.licenseFindings should haveSize(362)
             summary.licenseFindings shouldContain LicenseFinding(
                 license = "Apache-2.0",
                 location = TextLocation(
