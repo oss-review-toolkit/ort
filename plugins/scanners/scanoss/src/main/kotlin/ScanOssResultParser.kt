@@ -65,7 +65,7 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 
             if (details.status == StatusType.pending) {
                 logger.info { "Adding snippet for '$localFile' as identification is pending." }
-                snippetFindings += createSnippetFindings(details, localFile)
+                snippetFindings += getSnippetFindings(details, localFile)
             } else {
                 logger.info { "File '$localFile' was identified, not including in snippet findings." }
                 licenseFindings += getLicenseFindings(details, result.filePath)
@@ -130,7 +130,7 @@ private fun getCopyrightFindings(details: ScanFileDetails, path: String): List<C
  * PURLs the function extracts the first PURL as the primary identifier while storing the remaining PURLs in
  * additionalData to preserve the complete information.
  */
-private fun createSnippetFindings(details: ScanFileDetails, localFilePath: String): Set<SnippetFinding> {
+private fun getSnippetFindings(details: ScanFileDetails, localFilePath: String): Set<SnippetFinding> {
     val matched = requireNotNull(details.matched)
     val ossFile = requireNotNull(details.file)
     val ossLines = requireNotNull(details.ossLines)
