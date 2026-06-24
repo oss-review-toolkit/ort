@@ -19,12 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.advisors.osv
 
+import java.lang.invoke.MethodHandles
 import java.time.Instant
 
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
 import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
@@ -83,25 +85,7 @@ class Osv(
 
     private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
         val requests = packages.mapNotNull { pkg ->
-            when {
-                pkg.purl.isNotEmpty() -> pkg to VulnerabilitiesForPackageRequest(
-                    pkg = org.ossreviewtoolkit.clients.osv.Package(purl = pkg.purl)
-                )
-
-                // TODO: Consider doing this in more cases, like for the upcoming generic "git" type of PURLs, see
-                //       https://github.com/package-url/purl-spec/issues/780.
-                pkg.vcsProcessed.revision.isNotEmpty() -> pkg to VulnerabilitiesForPackageRequest(
-                    commit = pkg.vcsProcessed.revision
-                )
-
-                else -> {
-                    logger.warn {
-                        "${pkg.id.toCoordinates()} does not provide any metadata to identify vulnerabilities."
-                    }
-
-                    null
-                }
-            }
+            createRequest(pkg)?.let { pkg to it }
         }
 
         val result = service.getVulnerabilityIdsForPackages(requests.map { it.second })
@@ -173,3 +157,26 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
         references = ortReferences
     )
 }
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
+private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? =
+    when {
+        pkg.purl.isNotEmpty() -> VulnerabilitiesForPackageRequest(
+            pkg = org.ossreviewtoolkit.clients.osv.Package(purl = pkg.purl)
+        )
+
+        // TODO: Consider doing this in more cases, like for the upcoming generic "git" type of PURLs, see
+        //       https://github.com/package-url/purl-spec/issues/780.
+        pkg.vcsProcessed.revision.isNotEmpty() -> VulnerabilitiesForPackageRequest(
+            commit = pkg.vcsProcessed.revision
+        )
+
+        else -> {
+            logger.warn {
+                "${pkg.id.toCoordinates()} does not provide any metadata to identify vulnerabilities."
+            }
+
+            null
+        }
+    }
