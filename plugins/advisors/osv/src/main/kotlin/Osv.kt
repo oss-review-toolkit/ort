@@ -186,4 +186,22 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
 }
 
 private fun createRequestForPurl(purl: PackageURL): VulnerabilitiesForPackageRequest =
-    VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = purl.toString()))
+    if (purl.type == "github") {
+        // Work around OSV not yet being able to match against GitHub purls.
+        val pkg = org.ossreviewtoolkit.clients.osv.Package(
+            ecosystem = "GIT", // See https://google.github.io/osv.dev/post-v1-query/#queries-for-git-records.
+            name = "https://github.com/${purl.namespace}/${purl.name}.git"
+        )
+
+        if (purl.version.isSha1()) {
+            VulnerabilitiesForPackageRequest(pkg = pkg, commit = purl.version)
+        } else {
+            VulnerabilitiesForPackageRequest(pkg = pkg, version = purl.version)
+        }
+    } else {
+        VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = purl.toString()))
+    }
+
+private val SHA1_REGEX = Regex("^[0-9a-fA-F]{40}$")
+
+private fun String.isSha1(): Boolean = SHA1_REGEX.matches(this)

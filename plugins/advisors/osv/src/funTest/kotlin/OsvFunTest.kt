@@ -109,5 +109,31 @@ class OsvFunTest : WordSpec({
 
             packageFindings shouldBe expectedResult
         }
+
+        "return the vulnerabilities for github purls" {
+            val osv = OsvFactory.create()
+            val purls = listOf(
+                // By SHA1:
+                "pkg:github/madler/zlib@cacf7f1d4e3d44d871b605da3b647f07d718623f",
+                // By Git Tag:
+                "pkg:github/madler/zlib@v1.2.11",
+                // By semantic version. This is an invalid purl as version should be git tag or commit, but works too.
+                "pkg:github/madler/zlib@1.2.11"
+            )
+
+            val packages = purls.mapIndexedTo(mutableSetOf()) { index, purl ->
+                Package.EMPTY.copy(id = Identifier("Unmanaged::pkg-$index:1.0.0"), purl = purl)
+            }
+
+            val packageFindings = osv.retrievePackageFindings(packages).entries.associate {
+                it.key.id to it.value.vulnerabilities
+            }
+
+            val expectedResult = readResourceValue<Map<Identifier, List<Vulnerability>>>(
+                "/github-purls-expected-result.yml"
+            )
+
+            packageFindings shouldBe expectedResult
+        }
     }
 })
