@@ -93,7 +93,7 @@ private fun getLicenseFindings(details: ScanFileDetails, path: String): Set<Lice
     val licenses = details.licenseDetails
         .orEmpty()
         .mapNotNull { it.toSpdxExpression() }
-        .ifEmpty { listOf(SpdxConstants.NOASSERTION) }
+        .ifEmpty { listOf(SpdxExpression.parse(SpdxConstants.NOASSERTION)) }
 
     return licenses.mapTo(mutableSetOf()) { license ->
         LicenseFinding(
@@ -203,11 +203,11 @@ private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
         }
     }
 
-private fun LicenseDetails.toSpdxExpression(): String? {
+private fun LicenseDetails.toSpdxExpression(): SpdxExpression? {
     val licenseExpression = runCatching { SpdxExpression.parse(name) }.getOrNull() ?: return null
 
     return when {
-        licenseExpression.isValid() -> name
-        else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-$name"
+        licenseExpression.isValid() -> licenseExpression
+        else -> SpdxExpression.parse("${SpdxConstants.LICENSE_REF_PREFIX}scanoss-$name")
     }
 }
