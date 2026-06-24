@@ -90,10 +90,7 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 private fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
 
-    val licenses = details.licenseDetails
-        .orEmpty()
-        .mapNotNull { it.toSpdxExpression() }
-        .ifEmpty { listOf(SpdxExpression.parse(SpdxConstants.NOASSERTION)) }
+    val licenses = details.licenseDetails.toSpdxExpressions()
 
     return licenses.mapTo(mutableSetOf()) { license ->
         LicenseFinding(
@@ -211,3 +208,8 @@ private fun LicenseDetails.toSpdxExpression(): SpdxExpression? {
         else -> SpdxExpression.parse("${SpdxConstants.LICENSE_REF_PREFIX}scanoss-$name")
     }
 }
+
+private fun Array<LicenseDetails>?.toSpdxExpressions(): List<SpdxExpression> =
+    orEmpty()
+        .mapNotNull { it.toSpdxExpression() }
+        .ifEmpty { listOf(SpdxExpression.parse(SpdxConstants.NOASSERTION)) }
