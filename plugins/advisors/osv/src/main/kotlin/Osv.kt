@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
@@ -160,10 +161,12 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
-private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? =
-    when {
-        pkg.purl.isNotEmpty() -> VulnerabilitiesForPackageRequest(
-            pkg = org.ossreviewtoolkit.clients.osv.Package(purl = pkg.purl)
+private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
+    val purl = pkg.purl.toPackageUrl()
+
+    return when {
+        purl != null -> VulnerabilitiesForPackageRequest(
+            pkg = org.ossreviewtoolkit.clients.osv.Package(purl = purl.toString())
         )
 
         // TODO: Consider doing this in more cases, like for the upcoming generic "git" type of PURLs, see
@@ -180,3 +183,4 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? =
             null
         }
     }
+}
