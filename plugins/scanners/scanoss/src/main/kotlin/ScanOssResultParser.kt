@@ -87,7 +87,7 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 /**
  * Get the license findings from the given [details].
  */
-private fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
+internal fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
 
     return details.licenseDetails.orEmpty().mapTo(mutableSetOf()) { license ->

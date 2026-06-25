@@ -267,6 +267,32 @@ class ScanOssResultParserTest : WordSpec({
         }
     }
 
+    "getLicenseFindings()" should {
+        "handle unparsable license names" {
+            val detailsWithUnparsableLicense = dummyDetails.toBuilder()
+                .licenseDetails(
+                    arrayOf(LicenseDetails().apply { name = "Not a license name" })
+                )
+                .build()
+
+            getLicenseFindings(detailsWithUnparsableLicense, "dummy").shouldBeSingleton { finding ->
+                finding.license shouldBe SpdxExpression.NOASSERTION
+            }
+        }
+
+        "handle licenses only SCANOSS knows about" {
+            val detailsWithUnparsableLicense = dummyDetails.toBuilder()
+                .licenseDetails(
+                    arrayOf(LicenseDetails().apply { name = "OnlyScanOssKnows" })
+                )
+                .build()
+
+            getLicenseFindings(detailsWithUnparsableLicense, "dummy").shouldBeSingleton { finding ->
+                finding.license.toString() shouldBe "LicenseRef-scanoss-OnlyScanOssKnows"
+            }
+        }
+    }
+
     "getSnippetFindings()" should {
         "use NOASSERTION for empty license findings" {
             getSnippetFindings(dummyDetails, "dummy").shouldBeSingleton { finding ->
