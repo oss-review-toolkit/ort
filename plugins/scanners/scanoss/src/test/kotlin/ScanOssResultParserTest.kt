@@ -19,12 +19,21 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
+import com.scanoss.dto.CopyrightDetails
+import com.scanoss.dto.LicenseDetails
+import com.scanoss.dto.QualityDetails
+import com.scanoss.dto.ScanFileDetails
+import com.scanoss.dto.ServerDetails
+import com.scanoss.dto.VulnerabilityDetails
+import com.scanoss.dto.enums.MatchType
+import com.scanoss.dto.enums.StatusType
 import com.scanoss.utils.JsonUtils
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -257,4 +266,39 @@ class ScanOssResultParserTest : WordSpec({
             summary.snippetFindings should haveSize(1)
         }
     }
+
+    "getSnippetFindings()" should {
+        "use NOASSERTION for empty license findings" {
+            getSnippetFindings(dummyDetails, "dummy").shouldBeSingleton { finding ->
+                finding.snippets.shouldBeSingleton { snippet ->
+                    snippet.license shouldBe SpdxExpression.NOASSERTION
+                }
+            }
+        }
+    }
 })
+
+private val dummyDetails = ScanFileDetails(
+    MatchType.snippet,
+    "component",
+    "vendor",
+    "1.0.0",
+    "2.0.0",
+    "url",
+    StatusType.pending,
+    "100%",
+    "file",
+    "100-200",
+    "200-300",
+    "fileHash",
+    "fileUrl",
+    "urlHash",
+    "releaseDate",
+    "sourceHash",
+    arrayOf("purl1", "purl2"),
+    ServerDetails("version", ServerDetails.KbVersion("monthly", "daily")),
+    arrayOf<LicenseDetails>(),
+    arrayOf<QualityDetails>(),
+    arrayOf<VulnerabilityDetails>(),
+    arrayOf<CopyrightDetails>()
+)
