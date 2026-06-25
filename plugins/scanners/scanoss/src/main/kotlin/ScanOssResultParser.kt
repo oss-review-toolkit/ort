@@ -129,7 +129,7 @@ private fun getCopyrightFindings(details: ScanFileDetails, path: String): Set<Co
  * PURLs the function extracts the first PURL as the primary identifier while storing the remaining PURLs in
  * additionalData to preserve the complete information.
  */
-private fun getSnippetFindings(details: ScanFileDetails, localFilePath: String): Set<SnippetFinding> {
+internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String): Set<SnippetFinding> {
     val matched = requireNotNull(details.matched)
     val ossFile = requireNotNull(details.file)
     val ossLines = requireNotNull(details.ossLines)
