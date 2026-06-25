@@ -20,9 +20,15 @@
 package org.ossreviewtoolkit.plugins.licensefactproviders.dir
 
 import java.io.File
+import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseTextCuration
+import org.ossreviewtoolkit.model.LicenseTextCurations
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.idMatches
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
@@ -74,13 +80,42 @@ open class DirLicenseFactProvider(
         }
     }
 
-    override fun getLicenseText(licenseOrExceptionId: String) =
-        getLicenseTextFile(licenseOrExceptionId)?.readText()?.let { LicenseText(it) }
+    /** A cache with entries for license text curation files to read each file at most once. */
+    private val licenseTextCurationsForIdWithoutVersion = mutableMapOf<Identifier, List<LicenseTextCurations>>()
 
-    override fun hasLicenseText(licenseOrExceptionId: String) = getLicenseTextFile(licenseOrExceptionId) != null
+    private fun getCurationsForId(id: Identifier): List<LicenseTextCuration> =
+        licenseTextCurationsForIdWithoutVersion.getOrPut(id.copy(version = "")) {
+            val relativeCurationFilePath = "${id.toPath(emptyValue = "_").substringBeforeLast("/")}.yml"
+            val curationFile = licenseTextDir.resolve(relativeCurationFilePath).takeIf { it.isFile }
+
+            curationFile?.let { file ->
+                runCatching {
+                    file.readValue<List<LicenseTextCurations>>()
+                }.getOrElse {
+                    throw IOException("Failed reading license text curations from '${file.absolutePath}'.", it)
+                }.also {
+                    logger.info {
+                        "Read ${it.size} license text curations for ${id.toCoordinates()} from ${file.absolutePath}."
+                    }
+                }
+            }.orEmpty()
+        }.filter { idMatches(it.id, id) }.flatMap { it.curations }
 
     private fun getLicenseTextFile(licenseOrExceptionId: String) =
         licenseTextDir.resolve(licenseOrExceptionId).takeIf { it.isFile && it.isNotBlank }
+
+    override fun hasLicenseText(licenseOrExceptionId: String) = getLicenseTextFile(licenseOrExceptionId) != null
+
+    override fun getLicenseText(licenseOrExceptionId: String) =
+        getLicenseTextFile(licenseOrExceptionId)?.readText()?.let { LicenseText(it) }
+
+    override fun hasLicenseTextsForId(singleLicenseExpression: String, id: Identifier): Boolean =
+        getCurationsForId(id).any { curation -> curation.licenseId.toString() == singleLicenseExpression }
+
+    override fun getLicenseTextsForId(singleLicenseExpression: String, id: Identifier): Set<LicenseText> =
+        getCurationsForId(id).mapNotNullTo(mutableSetOf()) { curation ->
+            curation.licenseText.takeIf { curation.licenseId.toString() == singleLicenseExpression }?.let { LicenseText(it) }
+        }
 }
 
 private val File.isNotBlank: Boolean

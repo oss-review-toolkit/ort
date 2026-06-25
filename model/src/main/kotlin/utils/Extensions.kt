@@ -110,6 +110,6 @@ internal fun idMatchesDisregardingVersion(matcher: Identifier, id: Identifier) =
  * Return true if the [matcher] matches  the given [identifier][id]. The [matcher]s version may be an
  * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
  */
-internal fun idMatches(matcher: Identifier, id: Identifier): Boolean =
+fun idMatches(matcher: Identifier, id: Identifier): Boolean =
     idMatchesDisregardingVersion(matcher, id)
         && (matcher.version.equalsOrIsBlank(id.version) || matcher.isApplicableIvyVersion(id))
