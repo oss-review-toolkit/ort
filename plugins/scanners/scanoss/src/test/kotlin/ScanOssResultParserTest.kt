@@ -289,6 +289,20 @@ class ScanOssResultParserTest : WordSpec({
                 }
             }
         }
+
+        "handle licenses only SCANOSS knows about" {
+            val detailsWithUnparsableLicense = dummyDetails.toBuilder()
+                .licenseDetails(
+                    arrayOf(LicenseDetails().apply { name = "OnlyScanOssKnows" })
+                )
+                .build()
+
+            getSnippetFindings(detailsWithUnparsableLicense, "dummy").shouldBeSingleton { finding ->
+                finding.snippets.shouldBeSingleton { snippet ->
+                    snippet.license.toString() shouldBe "LicenseRef-scanoss-OnlyScanOssKnows"
+                }
+            }
+        }
     }
 })
 

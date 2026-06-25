@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdxOrNull
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
@@ -141,9 +142,15 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
     val score = matched.substringBeforeLast("%").toFloat()
     val primaryPurl = purls.removeFirstOrNull().orEmpty()
 
-    val license = details.licenseDetails.orEmpty()
-        .map { license -> license.name.toSpdxOrNull() ?: SpdxExpression.NOASSERTION }
-        .toExpression() ?: SpdxExpression.NOASSERTION
+    val license = details.licenseDetails.orEmpty().map { license ->
+        val expression = license.name.toSpdxOrNull()
+
+        when {
+            expression == null -> SpdxExpression.NOASSERTION
+            expression.isValid() -> expression
+            else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}".toSpdx()
+        }
+    }.toExpression() ?: SpdxExpression.NOASSERTION
 
     // TODO: No resolved revision is available. Should an ArtifactProvenance be created instead?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
