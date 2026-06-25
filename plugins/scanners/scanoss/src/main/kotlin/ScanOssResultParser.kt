@@ -142,7 +142,7 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
 
     val license = details.licenseDetails.orEmpty()
         .map { license -> SpdxExpression.parse(license.name) }
-        .toExpression()?.sorted() ?: SpdxExpression.NOASSERTION
+        .toExpression() ?: SpdxExpression.NOASSERTION
 
     // TODO: No resolved revision is available. Should an ArtifactProvenance be created instead?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
