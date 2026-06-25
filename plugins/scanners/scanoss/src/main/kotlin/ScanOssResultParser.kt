@@ -136,8 +136,6 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
     val score = matched.substringBeforeLast("%").toFloat()
     val primaryPurl = purls.removeFirstOrNull().orEmpty()
 
-    val license = details.licenseDetails.toSpdxExpressions().toExpression() ?: SpdxExpression.NOASSERTION
-
     // TODO: No resolved revision is available. Should an ArtifactProvenance be created instead?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
     val provenance = RepositoryProvenance(vcsInfo, ".")
@@ -173,6 +171,7 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
     }
 
     // Directly pair source locations with their corresponding OSS locations and create a SnippetFinding.
+    val license = checkNotNull(details.licenseDetails.toSpdxExpressions().toExpression())
     return sourceLocations.zip(ossLocations).mapTo(mutableSetOf()) { (sourceLocation, ossLocation) ->
         SnippetFinding(
             sourceLocation,
@@ -210,4 +209,4 @@ private fun Array<LicenseDetails>?.toSpdxExpressions(): Set<SpdxExpression> =
             expression.isValid() -> expression
             else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}".toSpdx()
         }
-    }
+    }.ifEmpty { setOf(SpdxExpression.NOASSERTION) }
