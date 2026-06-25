@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleExpression
@@ -334,7 +333,7 @@ fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpression {
     val orphanExceptions = standAloneExceptionIds - handledExceptions
 
     orphanExceptions.mapTo(associatedLicenses) { exceptionId ->
-        SpdxLicenseWithExceptionExpression(SpdxLicenseIdExpression(SpdxConstants.NOASSERTION), exceptionId)
+        SpdxLicenseWithExceptionExpression(SpdxExpression.NOASSERTION, exceptionId)
     }
 
     // Recreate the compound AND-expression from the associated licenses.

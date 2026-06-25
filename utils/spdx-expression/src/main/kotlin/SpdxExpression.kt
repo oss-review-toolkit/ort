@@ -68,6 +68,16 @@ sealed class SpdxExpression {
 
     companion object {
         /**
+         * A constant for [NONE][SpdxConstants.NONE] as an expression.
+         */
+        val NONE = SpdxLicenseIdExpression(SpdxConstants.NONE)
+
+        /**
+         * A constant for [NOASSERTION][SpdxConstants.NOASSERTION] as an expression.
+         */
+        val NOASSERTION = SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
+
+        /**
          * The "WITH" keyword, used to concatenate a license with an exception.
          */
         const val WITH = "WITH"
