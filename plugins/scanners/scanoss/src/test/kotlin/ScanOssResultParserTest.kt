@@ -275,6 +275,20 @@ class ScanOssResultParserTest : WordSpec({
                 }
             }
         }
+
+        "handle unparsable license names" {
+            val detailsWithUnparsableLicense = dummyDetails.toBuilder()
+                .licenseDetails(
+                    arrayOf(LicenseDetails().apply { name = "Not a license name" })
+                )
+                .build()
+
+            getSnippetFindings(detailsWithUnparsableLicense, "dummy").shouldBeSingleton { finding ->
+                finding.snippets.shouldBeSingleton { snippet ->
+                    snippet.license shouldBe SpdxExpression.NOASSERTION
+                }
+            }
+        }
     }
 })
 
