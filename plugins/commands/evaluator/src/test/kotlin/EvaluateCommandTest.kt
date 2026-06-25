@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.commands.evaluator
 
+import com.github.ajalt.clikt.core.context
+import com.github.ajalt.clikt.core.obj
 import com.github.ajalt.clikt.testing.test
 
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -27,9 +29,12 @@ import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.shouldContain
 
+import java.io.File
 import java.io.FileNotFoundException
 
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
@@ -50,5 +55,16 @@ class EvaluateCommandTest : StringSpec({
         shouldNotThrow<FileNotFoundException> {
             EvaluateCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
         }
+    }
+
+    "A docs link to resolve rule violations is printed when violations are found" {
+        val ortFile = File("src/test/resources/test-ort-result.yml")
+        val rulesFile = File("src/test/resources/test-rules.kts")
+        val args = listOf("--ort-file", ortFile.path, "--rules-file", rulesFile.path)
+
+        val result = EvaluateCommand().context { obj = OrtConfiguration() }
+            .test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
+
+        result.output shouldContain "oss-review-toolkit.org/ort/docs/configuration/resolutions"
     }
 })

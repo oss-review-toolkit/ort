@@ -340,6 +340,8 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
             evaluatorRun.violations.forEach { violation ->
                 echo(violation.format())
             }
+
+            echo(Theme.Default.info(RULE_VIOLATION_RESOLUTION_HINT))
         } else {
             echo("No rule violations have been found.")
         }
@@ -361,6 +363,12 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
             .print().conclude(ortConfig.severeRuleViolationThreshold, 2)
     }
 }
+
+private const val RULE_VIOLATION_RESOLUTION_HINT =
+    "See https://oss-review-toolkit.org/ort/docs/configuration/resolutions for how to resolve rule violations. " +
+        "The WebApp and Static-HTML reports also show context-aware how-to-fix texts when the global ORT " +
+        "configuration from the ort-config repository is used " +
+        "(see https://oss-review-toolkit.org/ort/docs/configuration/how-to-fix-text-provider)."
 
 private fun RuleViolation.format() =
     buildString {
