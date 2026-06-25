@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
+import com.scanoss.dto.LicenseDetails
 import com.scanoss.dto.ScanFileDetails
 import com.scanoss.dto.ScanFileResult
 import com.scanoss.dto.enums.MatchType
@@ -89,16 +90,7 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
  */
 internal fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
-
-    val licenses = details.licenseDetails.orEmpty().map { license ->
-        val licenseExpression = runCatching { SpdxExpression.parse(license.name) }.getOrNull()
-
-        when {
-            licenseExpression == null -> SpdxConstants.NOASSERTION
-            licenseExpression.isValid() -> license.name
-            else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}"
-        }
-    }
+    val licenses = details.licenseDetails.toSpdxExpressions()
 
     return licenses.mapTo(mutableSetOf()) { license ->
         LicenseFinding(
@@ -144,15 +136,7 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
     val score = matched.substringBeforeLast("%").toFloat()
     val primaryPurl = purls.removeFirstOrNull().orEmpty()
 
-    val license = details.licenseDetails.orEmpty().map { license ->
-        val expression = license.name.toSpdxOrNull()
-
-        when {
-            expression == null -> SpdxExpression.NOASSERTION
-            expression.isValid() -> expression
-            else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}".toSpdx()
-        }
-    }.toExpression() ?: SpdxExpression.NOASSERTION
+    val license = details.licenseDetails.toSpdxExpressions().toExpression() ?: SpdxExpression.NOASSERTION
 
     // TODO: No resolved revision is available. Should an ArtifactProvenance be created instead?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
@@ -211,5 +195,19 @@ private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
             '-' in it -> TextLocation(file, it.substringBefore('-').toInt(), it.substringAfter('-').toInt())
 
             else -> TextLocation(file, it.toInt())
+        }
+    }
+
+/**
+ * Turn an array of [LicenseDetails] into a set of [SpdxExpression]s.
+ */
+private fun Array<LicenseDetails>?.toSpdxExpressions(): Set<SpdxExpression> =
+    orEmpty().mapTo(mutableSetOf()) { license ->
+        val expression = license.name.toSpdxOrNull()
+
+        when {
+            expression == null -> SpdxExpression.NOASSERTION
+            expression.isValid() -> expression
+            else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}".toSpdx()
         }
     }
