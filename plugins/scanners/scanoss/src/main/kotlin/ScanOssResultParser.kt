@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
@@ -143,7 +142,7 @@ private fun getSnippetFindings(details: ScanFileDetails, localFilePath: String):
 
     val license = details.licenseDetails.orEmpty()
         .map { license -> SpdxExpression.parse(license.name) }
-        .toExpression()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
+        .toExpression()?.sorted() ?: SpdxExpression.NOASSERTION
 
     // TODO: No resolved revision is available. Should an ArtifactProvenance be created instead?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
