@@ -50,7 +50,8 @@ internal object ProvenantCommand : CommandLineTool {
 }
 
 /**
- * A wrapper for [Provenant](https://github.com/mstykow/provenant).
+ * A wrapper for [Provenant](https://github.com/mstykow/provenant). This is experimental currently while Provenant is
+ * still in the inital development phase and the quality of results needs to be verified.
  */
 @OrtPlugin(
     displayName = "Provenant",
