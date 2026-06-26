@@ -18,5 +18,12 @@
 # License-Filename: LICENSE
 
 SELF="${BASH_SOURCE[0]}"
+GIT_ROOT="$(git rev-parse --show-toplevel)"
 
-"$(dirname "$SELF")/run_gradle.sh" -q :cli-test-launcher:run
+if [ "$#" -lt 1 ]; then
+    echo "Usage   : $SELF <Gradle task to run>" >&2
+    echo "Example : $SELF test" >&2
+    exit 1
+fi
+
+"$(dirname "$SELF")/run_isolated.sh" external-tools "$GIT_ROOT/gradlew" --stacktrace "$@"

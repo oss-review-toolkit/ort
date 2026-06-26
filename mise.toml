@@ -79,15 +79,22 @@ env.PATH_MINIMAL = """
 env.PATH = "{{ env.PATH_MINIMAL | trim }}"
 run = "{{ usage.command }}"
 
+[tasks.gradle]
+description = "Run a Gradle task in isolation from the host."
+usage = "arg '<task>' help = 'The Gradle task to run.'"
+run = """
+    mise run isolated "$MISE_PROJECT_ROOT/gradlew --stacktrace {{ usage.task }}"
+"""
+
 [tasks.ort]
 description = "Run an ORT command in isolation from the host."
 usage = "arg '<command>' help = 'The ORT command to run.'"
 run = """
-    mise run isolated "$MISE_PROJECT_ROOT/gradlew -q :cli:run --args='{{ usage.command }}'"
+    mise run gradle "-q :cli:run --args='{{ usage.command }}'"
 """
 
 [tasks.test]
 description = "Run ORT (functional) tests in isolation from the host."
 run = """
-    mise run isolated "$MISE_PROJECT_ROOT/gradlew -q :cli-test-launcher:run"
+    mise run gradle "-q :cli-test-launcher:run"
 """
