@@ -60,15 +60,15 @@ class OrtConfigurationTest : WordSpec({
             ortConfig.forceOverwrite shouldBe true
 
             ortConfig.licenseFactProviders should containExactly(
-                ProviderPluginConfiguration(type = "SPDX"),
-                ProviderPluginConfiguration(
-                    type = "ScanCode",
-                    options = mapOf("scanCodeLicenseTextDir" to "/path/to/scancode/license/text/dir")
-                ),
                 ProviderPluginConfiguration(type = "DefaultDir"),
                 ProviderPluginConfiguration(
                     type = "Dir",
                     options = mapOf("licenseTextDir" to "/path/to/license/text/dir")
+                ),
+                ProviderPluginConfiguration(type = "SPDX"),
+                ProviderPluginConfiguration(
+                    type = "ScanCode",
+                    options = mapOf("scanCodeLicenseTextDir" to "/path/to/scancode/license/text/dir")
                 )
             )
 

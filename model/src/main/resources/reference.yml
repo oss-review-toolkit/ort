@@ -36,14 +36,14 @@ ort:
 
   # License fact providers, ordered from highest to lowest priority.
   licenseFactProviders:
-  - type: "SPDX"
-  - type: "ScanCode"
-    options:
-      scanCodeLicenseTextDir: '/path/to/scancode/license/text/dir'
   - type: "DefaultDir"
   - type: "Dir"
     options:
       licenseTextDir: '/path/to/license/text/dir'
+  - type: "SPDX"
+  - type: "ScanCode"
+    options:
+      scanCodeLicenseTextDir: '/path/to/scancode/license/text/dir'
 
   licenseFilePatterns:
     licenseFilenames: ['license*']
