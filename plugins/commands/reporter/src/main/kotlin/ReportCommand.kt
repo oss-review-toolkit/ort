@@ -64,7 +64,6 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
-import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.licensefactproviders.dir.DirLicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.CompositePackageConfigurationProvider
@@ -263,16 +262,12 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
             HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult)
         } ?: HowToFixTextProvider.NONE
 
-        val licenseFactProviders = mutableListOf<LicenseFactProvider>()
+        val licenseFactProviders = buildList {
+            customLicenseTextsDir?.also {
+                add(DirLicenseFactProviderFactory.create(it.absolutePath))
+            }
 
-        customLicenseTextsDir?.let {
-            licenseFactProviders += DirLicenseFactProviderFactory.create(it.absolutePath)
-        }
-
-        ortConfig.licenseFactProviders.mapTo(licenseFactProviders) { (id, config) ->
-            requireNotNull(LicenseFactProviderFactory.ALL[id]) {
-                "License fact provider '$id' is not available in the classpath."
-            }.create(config)
+            addAll(LicenseFactProviderFactory.create(ortConfig.licenseFactProviders).map { it.second })
         }
 
         val licenseFactProvider = CompositeLicenseFactProvider(licenseFactProviders)
