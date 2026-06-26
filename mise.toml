@@ -40,6 +40,7 @@ coreutils = {
         ln -s /usr/bin/sed sed
         ln -s /usr/bin/grep grep
         ln -s /usr/bin/git git
+        ln -s /usr/bin/ssh ssh
     """
 }
 
