@@ -23,7 +23,6 @@ import java.io.File
 import java.io.IOException
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
@@ -130,7 +129,7 @@ class GitRepo(
                         // As of repo 2.4, the active manifest is a real file with an include directive instead of a
                         // symbolic link, see https://gerrit-review.googlesource.com/c/git-repo/+/256313.
                         val manifestText = manifestWrapper.readText()
-                        val manifest = XML().decodeFromString<Manifest>(manifestText)
+                        val manifest = XML.v1.decodeFromString<Manifest>(manifestText)
                         workingDir / manifest.include.name
                     }
 
