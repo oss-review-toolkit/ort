@@ -23,6 +23,9 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.DependencyGraphEdge
+import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -34,6 +37,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -55,6 +59,86 @@ private val ANALYZED_VCS = VcsInfo(
     type = VcsType.GIT,
     revision = "master",
     url = "https://github.com/path/proj1-repo.git"
+)
+
+val PROJECT_WITHOUT_DEPENDENCIES_ID = Identifier("Maven:no-deps:project:1.0")
+
+val EXCLUDED_SCOPE_PROJECT_ID = Identifier("Maven:scope-test:project:1.0")
+val EXCLUDED_SCOPE_ROOT_PACKAGE_ID = Identifier("Maven:scope-test:root-package:1.0")
+val EXCLUDED_SCOPE_TRANSITIVE_PACKAGE_ID = Identifier("Maven:scope-test:transitive-package:1.0")
+
+val CYCLIC_GRAPH_PROJECT_ID = Identifier("Maven:cycle:project:1.0")
+val CYCLIC_GRAPH_PACKAGE_A_ID = Identifier("Maven:cycle:package-a:1.0")
+val CYCLIC_GRAPH_PACKAGE_B_ID = Identifier("Maven:cycle:package-b:1.0")
+
+val ORT_RESULT_WITHOUT_DEPENDENCIES = ortResultFor(
+    projects = setOf(
+        projectWithId(PROJECT_WITHOUT_DEPENDENCIES_ID).copy(scopeDependencies = emptySet())
+    ),
+    packages = emptySet()
+)
+
+val ORT_RESULT_WITH_DEPENDENCY_IN_INCLUDED_AND_EXCLUDED_SCOPES = ortResultFor(
+    projects = setOf(
+        projectWithId(EXCLUDED_SCOPE_PROJECT_ID).copy(
+            scopeDependencies = setOf(
+                Scope(
+                    name = "compile",
+                    dependencies = setOf(
+                        PackageReference(
+                            id = EXCLUDED_SCOPE_ROOT_PACKAGE_ID,
+                            dependencies = setOf(PackageReference(id = EXCLUDED_SCOPE_TRANSITIVE_PACKAGE_ID))
+                        )
+                    )
+                ),
+                Scope(
+                    name = "test",
+                    dependencies = setOf(PackageReference(id = EXCLUDED_SCOPE_TRANSITIVE_PACKAGE_ID))
+                )
+            )
+        )
+    ),
+    packages = setOf(
+        packageWithId(EXCLUDED_SCOPE_ROOT_PACKAGE_ID),
+        packageWithId(EXCLUDED_SCOPE_TRANSITIVE_PACKAGE_ID)
+    ),
+    repositoryConfiguration = RepositoryConfiguration(
+        excludes = Excludes(
+            scopes = listOf(
+                ScopeExclude(
+                    pattern = "test",
+                    reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
+                    comment = "Packages for testing only."
+                )
+            )
+        )
+    )
+)
+
+val ORT_RESULT_WITH_CYCLIC_DEPENDENCY_GRAPH = ortResultFor(
+    projects = setOf(
+        projectWithId(CYCLIC_GRAPH_PROJECT_ID).copy(
+            scopeDependencies = null,
+            scopeNames = setOf("compile")
+        )
+    ),
+    packages = setOf(
+        packageWithId(CYCLIC_GRAPH_PACKAGE_A_ID),
+        packageWithId(CYCLIC_GRAPH_PACKAGE_B_ID)
+    ),
+    dependencyGraphs = mapOf(
+        "Maven" to DependencyGraph(
+            packages = listOf(CYCLIC_GRAPH_PACKAGE_A_ID, CYCLIC_GRAPH_PACKAGE_B_ID),
+            scopes = mapOf(
+                DependencyGraph.qualifyScope(CYCLIC_GRAPH_PROJECT_ID, "compile") to listOf(RootDependencyIndex(0))
+            ),
+            nodes = listOf(DependencyGraphNode(0), DependencyGraphNode(1)),
+            edges = setOf(
+                DependencyGraphEdge(0, 1),
+                DependencyGraphEdge(1, 0)
+            )
+        )
+    )
 )
 
 val ORT_RESULT = OrtResult(
@@ -412,3 +496,33 @@ val ORT_RESULT = OrtResult(
         )
     )
 )
+
+private fun ortResultFor(
+    projects: Set<Project>,
+    packages: Set<Package>,
+    repositoryConfiguration: RepositoryConfiguration = RepositoryConfiguration(),
+    dependencyGraphs: Map<String, DependencyGraph> = emptyMap()
+) = OrtResult(
+    repository = Repository(
+        config = repositoryConfiguration,
+        vcs = ANALYZED_VCS,
+        vcsProcessed = ANALYZED_VCS
+    ),
+    analyzer = AnalyzerRun.EMPTY.copy(
+        result = AnalyzerResult(
+            projects = projects,
+            packages = packages,
+            dependencyGraphs = dependencyGraphs
+        )
+    )
+)
+
+private fun projectWithId(id: Identifier) =
+    Project.EMPTY.copy(
+        id = id,
+        definitionFilePath = "${id.name}/pom.xml",
+        vcs = ANALYZED_VCS,
+        vcsProcessed = ANALYZED_VCS
+    )
+
+private fun packageWithId(id: Identifier) = Package.EMPTY.copy(id = id)
