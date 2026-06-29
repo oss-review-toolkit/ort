@@ -106,14 +106,15 @@ class ScanCodeLicenseFactProvider(
         return scanCodeLicenseTextDir?.resolve(filename)?.takeIf { it.isFile && it.isNotBlank }
     }
 
-    override fun getLicenseText(licenseId: String) =
-        getLicenseTextFile(licenseId)?.useLines { lines ->
+    override fun getLicenseText(licenseOrExceptionId: String) =
+        getLicenseTextFile(licenseOrExceptionId)?.useLines { lines ->
             lines.skipYamlFrontMatter().joinToString("\n").trimEnd()
         }?.let {
             LicenseText(it)
         }
 
-    override fun hasLicenseText(licenseId: String): Boolean = getLicenseTextFile(licenseId) != null
+    override fun hasLicenseText(licenseOrExceptionId: String): Boolean =
+        getLicenseTextFile(licenseOrExceptionId) != null
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())

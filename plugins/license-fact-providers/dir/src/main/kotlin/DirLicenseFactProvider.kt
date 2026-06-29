@@ -74,12 +74,13 @@ open class DirLicenseFactProvider(
         }
     }
 
-    override fun getLicenseText(licenseId: String) = getLicenseTextFile(licenseId)?.readText()?.let { LicenseText(it) }
+    override fun getLicenseText(licenseOrExceptionId: String) =
+        getLicenseTextFile(licenseOrExceptionId)?.readText()?.let { LicenseText(it) }
 
-    override fun hasLicenseText(licenseId: String) = getLicenseTextFile(licenseId) != null
+    override fun hasLicenseText(licenseOrExceptionId: String) = getLicenseTextFile(licenseOrExceptionId) != null
 
-    private fun getLicenseTextFile(licenseId: String) =
-        licenseTextDir.resolve(licenseId).takeIf { it.isFile && it.isNotBlank }
+    private fun getLicenseTextFile(licenseOrExceptionId: String) =
+        licenseTextDir.resolve(licenseOrExceptionId).takeIf { it.isFile && it.isNotBlank }
 }
 
 private val File.isNotBlank: Boolean
