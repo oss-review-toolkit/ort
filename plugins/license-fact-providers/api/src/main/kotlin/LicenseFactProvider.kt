@@ -24,11 +24,11 @@ import org.ossreviewtoolkit.plugins.api.Plugin
 
 /** A provider for license facts. */
 abstract class LicenseFactProvider : Plugin {
-    /** Return `true´ if this provider has a license text for the given [licenseId]. */
-    abstract fun hasLicenseText(licenseId: String): Boolean
+    /** Return `true´ if this provider has a license text for the given [licenseOrExceptionId]. */
+    abstract fun hasLicenseText(licenseOrExceptionId: String): Boolean
 
-    /** Return a [LicenseText] for the given [licenseId], or `null` if no valid text is available. */
-    abstract fun getLicenseText(licenseId: String): LicenseText?
+    /** Return a [LicenseText] for the given [licenseOrExceptionId], or `null` if no valid text is available. */
+    abstract fun getLicenseText(licenseOrExceptionId: String): LicenseText?
 
     /** Return `true´ if this provider has an id-specific license text for the given [licenseId] and [id]. */
     open fun hasLicenseTextForId(licenseId: String, id: Identifier): Boolean =
@@ -57,7 +57,7 @@ abstract class LicenseFactProvider : Plugin {
     /** Return a non-blank license text for the given [licenseId], or `null` if no valid text is available. */
     @Deprecated("Java-only API", level = DeprecationLevel.HIDDEN)
     @JvmName("getLicenseText")
-    fun getNonBlankLicenseText(licenseId: String): String? = getLicenseText(licenseId)?.text
+    fun getNonBlankLicenseText(licenseOrExceptionId: String): String? = getLicenseText(licenseOrExceptionId)?.text
 
     /**
      * Return a non-blank id-specific [LicenseText] for the given [licenseId] and [id], or `null` if no such text is

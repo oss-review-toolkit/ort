@@ -94,26 +94,27 @@ class ScanCodeLicenseFactProvider(
         }
     }
 
-    private fun getLicenseTextFile(licenseId: String): File? {
-        val filename = if (licenseId == "LicenseRef-scancode-x11-xconsortium-veillard") {
+    private fun getLicenseTextFile(licenseOrExceptionId: String): File? {
+        val filename = if (licenseOrExceptionId == "LicenseRef-scancode-x11-xconsortium-veillard") {
             // Work around for https://github.com/aboutcode-org/scancode-toolkit/issues/2813 which affects ScanCode
             // versions below 31.0.0.
             "x11-xconsortium_veillard.LICENSE"
         } else {
-            "${licenseId.removePrefix("LicenseRef-scancode-").lowercase()}.LICENSE"
+            "${licenseOrExceptionId.removePrefix("LicenseRef-scancode-").lowercase()}.LICENSE"
         }
 
         return scanCodeLicenseTextDir?.resolve(filename)?.takeIf { it.isFile && it.isNotBlank }
     }
 
-    override fun getLicenseText(licenseId: String) =
-        getLicenseTextFile(licenseId)?.useLines { lines ->
+    override fun getLicenseText(licenseOrExceptionId: String) =
+        getLicenseTextFile(licenseOrExceptionId)?.useLines { lines ->
             lines.skipYamlFrontMatter().joinToString("\n").trimEnd()
         }?.let {
             LicenseText(it)
         }
 
-    override fun hasLicenseText(licenseId: String): Boolean = getLicenseTextFile(licenseId) != null
+    override fun hasLicenseText(licenseOrExceptionId: String): Boolean =
+        getLicenseTextFile(licenseOrExceptionId) != null
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
