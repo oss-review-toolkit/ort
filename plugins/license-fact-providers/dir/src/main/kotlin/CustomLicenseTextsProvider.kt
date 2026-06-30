@@ -34,43 +34,44 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 const val ORT_CUSTOM_LICENSE_TEXTS_DIRNAME = "custom-license-texts"
 
 /** The configuration for the directory-based license fact provider. */
-data class DirLicenseFactProviderConfig(
+data class CustomLicenseTextsProviderConfig(
     /** The directory that contains the license texts. */
-    val licenseTextDir: String
+    val dir: String
 )
 
 /**
- * A license fact provider that reads license information from the default directory. The files must be named after the
- * SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.
+ * A license fact provider that reads license information from the default custom license texts directory. The files
+ * must be named after the SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.
  */
 @OrtPlugin(
-    displayName = "Default Directory License Fact Provider",
-    summary = "A license fact provider that reads license information from the default directory.",
+    displayName = "Default Directory License Texts Provider",
+    summary = "A license fact provider that reads license texts from the default custom license texts directory.",
     factory = LicenseFactProviderFactory::class
 )
-class DefaultDirLicenseFactProvider(descriptor: PluginDescriptor = DefaultDirLicenseFactProviderFactory.descriptor) :
-    DirLicenseFactProvider(
-        descriptor,
-        DirLicenseFactProviderConfig(
-            licenseTextDir = ortConfigDirectory.resolve(ORT_CUSTOM_LICENSE_TEXTS_DIRNAME).absolutePath
-        )
+class DefaultCustomLicenseTextsProvider(
+    descriptor: PluginDescriptor = DefaultCustomLicenseTextsProviderFactory.descriptor
+) : CustomLicenseTextsProvider(
+    descriptor,
+    CustomLicenseTextsProviderConfig(
+        dir = ortConfigDirectory.resolve(ORT_CUSTOM_LICENSE_TEXTS_DIRNAME).absolutePath
     )
+)
 
 /**
  * A license fact provider that reads license information from a local directory. The files must be named after the
  * SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.
  */
 @OrtPlugin(
-    id = "Dir",
-    displayName = "Directory License Fact Provider",
-    summary = "A license fact provider that reads license information from a local directory.",
+    id = "CustomLicenseTexts",
+    displayName = "Custom License Texts Provider",
+    summary = "A license fact provider that reads license texts from a local directory.",
     factory = LicenseFactProviderFactory::class
 )
-open class DirLicenseFactProvider(
-    override val descriptor: PluginDescriptor = DirLicenseFactProviderFactory.descriptor,
-    config: DirLicenseFactProviderConfig
+open class CustomLicenseTextsProvider(
+    override val descriptor: PluginDescriptor = DefaultCustomLicenseTextsProviderFactory.descriptor,
+    config: CustomLicenseTextsProviderConfig
 ) : LicenseFactProvider() {
-    private val licenseTextDir = File(config.licenseTextDir).also {
+    private val licenseTextsDir = File(config.dir).also {
         if (!it.isDirectory) {
             logger.warn { "The license text directory '${it.absolutePath}' does not exist or is not a directory." }
         }
@@ -82,7 +83,7 @@ open class DirLicenseFactProvider(
     override fun hasLicenseText(licenseOrExceptionId: String) = getLicenseTextFile(licenseOrExceptionId) != null
 
     private fun getLicenseTextFile(licenseOrExceptionId: String) =
-        licenseTextDir.resolve(licenseOrExceptionId).takeIf { it.isFile && it.isNotBlank }
+        licenseTextsDir.resolve(licenseOrExceptionId).takeIf { it.isFile && it.isNotBlank }
 }
 
 private val File.isNotBlank: Boolean
