@@ -36,13 +36,13 @@ import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 class SpdxLicenseFactProvider(
     override val descriptor: PluginDescriptor = SpdxLicenseFactProviderFactory.descriptor
 ) : LicenseFactProvider() {
-    override fun getLicenseText(licenseId: String) =
-        getLicenseTextResource(licenseId)?.readText()?.let {
+    override fun getLicenseText(licenseOrExceptionId: String) =
+        getLicenseTextResource(licenseOrExceptionId)?.readText()?.let {
             // It can be safely assumed that the license text is not blank as all SPDX license texts are non-blank.
             LicenseText(it)
         }
 
-    override fun hasLicenseText(licenseId: String) = getLicenseTextResource(licenseId) != null
+    override fun hasLicenseText(licenseOrExceptionId: String) = getLicenseTextResource(licenseOrExceptionId) != null
 
     private fun getLicenseTextResource(licenseId: String): URL? =
         if (licenseId.isNotEmpty()) {

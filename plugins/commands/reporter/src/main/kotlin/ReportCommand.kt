@@ -263,16 +263,12 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
             HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult)
         } ?: HowToFixTextProvider.NONE
 
-        val licenseFactProviders = mutableListOf<LicenseFactProvider>()
+        val licenseFactProviders = buildList<LicenseFactProvider> {
+            customLicenseTextsDir?.let {
+                this += DirLicenseFactProviderFactory.create(it.absolutePath)
+            }
 
-        customLicenseTextsDir?.let {
-            licenseFactProviders += DirLicenseFactProviderFactory.create(it.absolutePath)
-        }
-
-        ortConfig.licenseFactProviders.mapTo(licenseFactProviders) { (id, config) ->
-            requireNotNull(LicenseFactProviderFactory.ALL[id]) {
-                "License fact provider '$id' is not available in the classpath."
-            }.create(config)
+            this += LicenseFactProviderFactory.create2(ortConfig.licenseFactProviders).map { it.second }
         }
 
         val licenseFactProvider = CompositeLicenseFactProvider(licenseFactProviders)

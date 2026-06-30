@@ -21,8 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import org.ossreviewtoolkit.model.utils.isApplicableIvyVersion
-import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
+import org.ossreviewtoolkit.model.utils.idMatches
 
 /**
  * This class assigns a [PackageCurationData] object to a [Package] identified by the [id].
@@ -40,22 +39,11 @@ data class PackageCuration(
     val data: PackageCurationData
 ) {
     /**
-     * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId],
-     * disregarding the version.
-     */
-    private fun isApplicableDisregardingVersion(pkgId: Identifier) =
-        id.type.equals(pkgId.type, ignoreCase = true)
-            && id.namespace == pkgId.namespace
-            && id.name.equalsOrIsBlank(pkgId.name)
-
-    /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId]. The
      * curation's version may be an
      * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
      */
-    fun isApplicable(pkgId: Identifier): Boolean =
-        isApplicableDisregardingVersion(pkgId)
-            && (id.version.equalsOrIsBlank(pkgId.version) || id.isApplicableIvyVersion(pkgId))
+    fun isApplicable(pkgId: Identifier): Boolean = idMatches(id, pkgId)
 
     /**
      * Apply the curation [data] to the provided [basePackage] by calling [PackageCurationData.apply], if applicable.

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import java.net.URI
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
@@ -29,6 +30,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 fun String.prependPath(prefix: String): String = if (prefix.isBlank()) this else "${prefix.removeSuffix("/")}/$this"
@@ -95,3 +97,19 @@ internal fun List<SourceCodeOrigin>.requireNoDuplicates() {
         "'sourceCodeOrigins' must not contain duplicates. Duplicates: $duplicates"
     }
 }
+
+/**
+ * Return true if the [matcher] is matches the given [identifier][id], disregarding the version.
+ */
+internal fun idMatchesDisregardingVersion(matcher: Identifier, id: Identifier) =
+    matcher.type.equals(id.type, ignoreCase = true)
+        && matcher.namespace == id.namespace
+        && matcher.name.equalsOrIsBlank(id.name)
+
+/**
+ * Return true if the [matcher] matches  the given [identifier][id]. The [matcher]s version may be an
+ * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
+ */
+fun idMatches(matcher: Identifier, id: Identifier): Boolean =
+    idMatchesDisregardingVersion(matcher, id)
+        && (matcher.version.equalsOrIsBlank(id.version) || matcher.isApplicableIvyVersion(id))

@@ -34,7 +34,6 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.ort.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
@@ -88,10 +87,10 @@ data class OrtConfiguration(
      * license facts, license facts from a local ScanCode installation, and license facts from the default
      * [ORT_CUSTOM_LICENSE_TEXTS_DIRNAME].
      */
-    val licenseFactProviders: LinkedHashMap<String, PluginConfig> = linkedMapOf(
-        "DefaultDir" to PluginConfig.EMPTY,
-        "SPDX" to PluginConfig.EMPTY,
-        "ScanCode" to PluginConfig.EMPTY
+    val licenseFactProviders: List<ProviderPluginConfiguration> = listOf(
+        ProviderPluginConfiguration(type = "DefaultDir"),
+        ProviderPluginConfiguration(type = "SPDX"),
+        ProviderPluginConfiguration(type = "ScanCode")
     ),
 
     /**

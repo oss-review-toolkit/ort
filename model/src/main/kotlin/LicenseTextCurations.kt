@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ * Copyright (C) 2026 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,22 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-library-conventions")
-}
+package org.ossreviewtoolkit.model
 
-dependencies {
-    api(projects.model)
-    api(projects.plugins.api)
+data class LicenseTextCurations(
+    /**
+     * The identifier of the package, analog to [PackageCuration.id].
+     */
+    val id: Identifier,
 
-    implementation(projects.utils.commonUtils)
+    /**
+     * The curations for [id].
+     */
+    val curations: List<LicenseTextCuration>
+) {
+    init {
+        require(curations.isNotEmpty()) {
+            "The curations must not be empty."
+        }
+    }
 }
