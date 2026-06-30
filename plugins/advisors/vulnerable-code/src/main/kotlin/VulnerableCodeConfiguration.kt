@@ -19,18 +19,26 @@
 
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
-import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
+import org.ossreviewtoolkit.clients.vulnerablecode.VULNERABLE_CODE_BASE_URL
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.Secret
+
+/**
+ * The supported VulnerableCode API versions.
+ */
+enum class VulnerableCodeApiVersion {
+    V1
+}
 
 /**
  * The configuration for VulnerableCode as security vulnerability provider.
  */
 data class VulnerableCodeConfiguration(
     /**
-     * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
+     * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used. The legacy
+     * API URL ending in "/api/" is also accepted.
      */
-    @OrtPluginOption(defaultValue = VulnerableCodeService.PUBLIC_SERVER_URL)
+    @OrtPluginOption(defaultValue = VULNERABLE_CODE_BASE_URL)
     val serverUrl: String,
 
     /**
@@ -41,5 +49,21 @@ data class VulnerableCodeConfiguration(
     /**
      * The read timeout for the server connection in seconds. Defaults to whatever is the HTTP client's default value.
      */
-    val readTimeout: Long?
+    val readTimeout: Long?,
+
+    /**
+     * The VulnerableCode API version to use.
+     */
+    @OrtPluginOption(defaultValue = "V1")
+    val apiVersion: VulnerableCodeApiVersion
 )
+
+/**
+ * Return the base URL expected by the VulnerableCode API v1 Retrofit service.
+ */
+internal fun VulnerableCodeConfiguration.v1BaseUrl(): String =
+    serverUrl.normalizeTrailingSlash().let { url ->
+        if (url.endsWith("/api/")) url else "${url}api/"
+    }
+
+private fun String.normalizeTrailingSlash(): String = trimEnd('/') + "/"

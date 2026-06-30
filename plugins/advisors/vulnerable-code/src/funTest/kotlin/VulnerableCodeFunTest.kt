@@ -33,10 +33,10 @@ import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
 import org.ossreviewtoolkit.plugins.api.Secret
 
 class VulnerableCodeFunTest : WordSpec({
-    val vc = VulnerableCodeFactory.create(apiKey = System.getenv("VULNERABLECODE_API_KEY")?.let { Secret(it) })
+    "VulnerableCode API v1" should {
+        val vc = createVulnerableCode(VulnerableCodeApiVersion.V1)
 
-    "Vulnerable Go packages" should {
-        "return findings for QUIC" {
+        "return findings for Go package QUIC" {
             val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -61,10 +61,8 @@ class VulnerableCodeFunTest : WordSpec({
                 }
             }
         }
-    }
 
-    "Vulnerable Maven packages" should {
-        "return findings for Guava" {
+        "return findings for Maven package Guava" {
             val id = Identifier("Maven:com.google.guava:guava:19.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -92,7 +90,7 @@ class VulnerableCodeFunTest : WordSpec({
             }
         }
 
-        "return findings for Commons-Compress" {
+        "return findings for Maven package Commons-Compress" {
             val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -117,10 +115,8 @@ class VulnerableCodeFunTest : WordSpec({
                 }
             }
         }
-    }
 
-    "Vulnerable NPM packages" should {
-        "return findings for Elliptic" {
+        "return findings for NPM package Elliptic" {
             val id = Identifier("NPM::elliptic:6.5.7")
             val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
 
@@ -147,3 +143,9 @@ class VulnerableCodeFunTest : WordSpec({
         }
     }
 })
+
+private fun createVulnerableCode(apiVersion: VulnerableCodeApiVersion): VulnerableCode =
+    VulnerableCodeFactory.create(
+        apiKey = System.getenv("VULNERABLECODE_API_KEY")?.let { Secret(it) },
+        apiVersion = apiVersion
+    )
