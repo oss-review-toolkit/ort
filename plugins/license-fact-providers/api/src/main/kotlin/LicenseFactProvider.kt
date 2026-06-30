@@ -45,7 +45,7 @@ abstract class LicenseFactProvider : Plugin {
      * license text for [licenseId], or `null` if no such text is available.
      */
     fun hasLicenseText(licenseId: String, id: Identifier): Boolean =
-        hasLicenseText(licenseId, id) || hasLicenseText(licenseId)
+        hasLicenseTextForId(licenseId, id) || hasLicenseText(licenseId)
 
     /**
      * Return an id-specific [LicenseText] for the given [licenseId] and [id] if available, or the non-id-specific
