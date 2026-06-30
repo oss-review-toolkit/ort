@@ -65,7 +65,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
-import org.ossreviewtoolkit.plugins.licensefactproviders.dir.DirLicenseFactProviderFactory
+import org.ossreviewtoolkit.plugins.licensefactproviders.dir.CustomLicenseTextsProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
@@ -264,7 +264,7 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
 
         val licenseFactProviders = buildList {
             customLicenseTextsDir?.also {
-                add(DirLicenseFactProviderFactory.create(it.absolutePath))
+                add(CustomLicenseTextsProviderFactory.create(it.absolutePath))
             }
 
             addAll(LicenseFactProviderFactory.create(ortConfig.licenseFactProviders).map { it.second })

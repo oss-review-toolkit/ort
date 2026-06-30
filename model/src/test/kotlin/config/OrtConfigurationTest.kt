@@ -60,16 +60,16 @@ class OrtConfigurationTest : WordSpec({
             ortConfig.forceOverwrite shouldBe true
 
             ortConfig.licenseFactProviders should containExactly(
-                ProviderPluginConfiguration(type = "DefaultDir"),
+                ProviderPluginConfiguration(type = "DefaultCustomLicenseTexts"),
                 ProviderPluginConfiguration(
-                    type = "Dir",
+                    type = "CustomLicenseTexts",
                     id = "local-custom-license-texts",
-                    options = mapOf("licenseTextDir" to "/project-sources/.ort/custom-license-texts")
+                    options = mapOf("dir" to "/project-sources/.ort/custom-license-texts")
                 ),
                 ProviderPluginConfiguration(
-                    type = "Dir",
+                    type = "CustomLicenseTexts",
                     id = "global-custom-license-texts",
-                    options = mapOf("licenseTextDir" to "/ort-config/custom-license-texts")
+                    options = mapOf("dir" to "/ort-config/custom-license-texts")
                 ),
                 ProviderPluginConfiguration(type = "SPDX"),
                 ProviderPluginConfiguration(
