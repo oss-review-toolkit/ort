@@ -38,8 +38,13 @@ ort:
   licenseFactProviders:
   - type: "DefaultDir"
   - type: "Dir"
+    id: "local-custom-license-texts"
     options:
-      licenseTextDir: '/path/to/license/text/dir'
+      licenseTextDir: '/project-sources/.ort/custom-license-texts'
+  - type: "Dir"
+    id: "global-custom-license-texts"
+    options:
+      licenseTextDir: '/ort-config/custom-license-texts'
   - type: "SPDX"
   - type: "ScanCode"
     options:
