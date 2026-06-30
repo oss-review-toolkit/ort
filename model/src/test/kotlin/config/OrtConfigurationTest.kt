@@ -63,7 +63,13 @@ class OrtConfigurationTest : WordSpec({
                 ProviderPluginConfiguration(type = "DefaultDir"),
                 ProviderPluginConfiguration(
                     type = "Dir",
-                    options = mapOf("licenseTextDir" to "/path/to/license/text/dir")
+                    id = "local-custom-license-texts",
+                    options = mapOf("licenseTextDir" to "/project-sources/.ort/custom-license-texts")
+                ),
+                ProviderPluginConfiguration(
+                    type = "Dir",
+                    id = "global-custom-license-texts",
+                    options = mapOf("licenseTextDir" to "/ort-config/custom-license-texts")
                 ),
                 ProviderPluginConfiguration(type = "SPDX"),
                 ProviderPluginConfiguration(
