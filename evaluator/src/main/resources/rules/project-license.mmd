@@ -1,0 +1,25 @@
+graph TD
+    Root["my-oss-project (outbound license)"]
+
+    Root --> Core[core:1.2.0]
+    Root --> Utils[utils:3.0.1]
+
+    Core --> Auth[auth:2.1.0]
+    Core --> Database[database:4.0.0]
+    Utils --> JSON[json:1.1.5]
+
+    Auth --> Crypto[crypto:1.0.2]
+    Database --> Pool[pool:2.5.0]
+
+    classDef default fill:#5CB85C,stroke:#333,stroke-width:1px,color:#fff;
+    classDef root fill:#4A90E2,stroke:#333,stroke-width:2px,color:#fff;
+
+    class Root root;
+
+    Core -- inbound license --> Root
+    Utils -. inbound license .-> Root
+    Auth -. inbound license .-> Root
+    Database -. inbound license .-> Root
+    JSON -. inbound license .-> Root
+    Crypto -. inbound license .-> Root
+    Pool -. inbound license .-> Root
