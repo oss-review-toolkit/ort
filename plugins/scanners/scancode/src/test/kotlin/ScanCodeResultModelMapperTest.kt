@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.test.readResource
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
-class ScanCodeResultParserTest : FreeSpec({
+class ScanCodeResultModelMapperTest : FreeSpec({
     "toScanSummary()" - {
         "for ScanCode 32.0.8 should" - {
             "get license mappings even without '--license-references'" {
