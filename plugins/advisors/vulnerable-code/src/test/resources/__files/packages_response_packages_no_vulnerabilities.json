@@ -1,0 +1,23 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "purl": "pkg:maven/org.apache.commons/commons-lang3@3.5",
+      "affected_by_vulnerabilities": [],
+      "fixing_vulnerabilities": []
+    },
+    {
+      "purl": "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1",
+      "affected_by_vulnerabilities": [
+        {
+          "advisory_id": "GHSA-v7xh-cg3m-mx2g",
+          "advisory_uid": "github_osv_importer_v2/GHSA-v7xh-cg3m-mx2g",
+          "resource_url": "https://example.org/advisories/github_osv_importer_v2/GHSA-v7xh-cg3m-mx2g"
+        }
+      ],
+      "fixing_vulnerabilities": []
+    }
+  ]
+}

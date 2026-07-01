@@ -1,0 +1,40 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "purl": "pkg:maven/org.apache.commons/commons-lang3@3.5",
+      "affected_by_vulnerabilities": [
+        {
+          "advisory_id": "GHSA-2cxf-6567-7pp6",
+          "advisory_uid": "github_osv_importer_v2/GHSA-2cxf-6567-7pp6",
+          "resource_url": "https://example.org/advisories/github_osv_importer_v2/GHSA-2cxf-6567-7pp6"
+        }
+      ],
+      "fixing_vulnerabilities": []
+    },
+    {
+      "purl": "pkg:maven/org.unknown/unexpected@4.2",
+      "affected_by_vulnerabilities": [
+        {
+          "advisory_id": "CVE-2021-9876",
+          "advisory_uid": "test/CVE-2021-9876",
+          "resource_url": "https://example.org/advisories/test/CVE-2021-9876"
+        }
+      ],
+      "fixing_vulnerabilities": []
+    },
+    {
+      "purl": "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1",
+      "affected_by_vulnerabilities": [
+        {
+          "advisory_id": "GHSA-v7xh-cg3m-mx2g",
+          "advisory_uid": "github_osv_importer_v2/GHSA-v7xh-cg3m-mx2g",
+          "resource_url": "https://example.org/advisories/github_osv_importer_v2/GHSA-v7xh-cg3m-mx2g"
+        }
+      ],
+      "fixing_vulnerabilities": []
+    }
+  ]
+}

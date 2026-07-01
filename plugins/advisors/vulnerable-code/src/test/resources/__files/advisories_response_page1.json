@@ -1,0 +1,33 @@
+{
+  "count": 3,
+  "next": "/api/v3/advisories/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "GHSA-3pxv-7cmr-fjr4",
+      "advisory_uid": "github_osv_importer_v2/GHSA-3pxv-7cmr-fjr4",
+      "url": "https://github.com/advisories/GHSA-3pxv-7cmr-fjr4.json",
+      "aliases": [
+        "CVE-2026-34480"
+      ],
+      "summary": "Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 forbidden characters",
+      "severities": [],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": []
+    },
+    {
+      "advisory_id": "GHSA-6hg6-v5c8-fphq",
+      "advisory_uid": "github_osv_importer_v2/GHSA-6hg6-v5c8-fphq",
+      "url": "https://github.com/advisories/GHSA-6hg6-v5c8-fphq.json",
+      "aliases": [
+        "CVE-2026-34477"
+      ],
+      "summary": "Apache Log4j Core: verifyHostName attribute silently ignored in TLS configuration",
+      "severities": [],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": []
+    }
+  ]
+}

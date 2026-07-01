@@ -27,7 +27,8 @@ import org.ossreviewtoolkit.plugins.api.Secret
  * The supported VulnerableCode API versions.
  */
 enum class VulnerableCodeApiVersion {
-    V1
+    V1,
+    V3
 }
 
 /**

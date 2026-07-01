@@ -49,6 +49,7 @@ class VulnerableCode(
     private val api by lazy {
         when (config.apiVersion) {
             VulnerableCodeApiVersion.V1 -> VulnerableCodeApiV1(descriptor, details, config)
+            VulnerableCodeApiVersion.V3 -> VulnerableCodeApiV3(descriptor, details, config)
         }
     }
 
