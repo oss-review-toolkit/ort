@@ -481,7 +481,7 @@ class SpdxLicenseWithExceptionExpression(
     val exception: String
 ) : SpdxSingleLicenseExpression() {
     companion object {
-        private val EXCEPTION_STRING_PATTERN = Regex(
+        private val EXCEPTION_STRING_REGEX = Regex(
             "\\b(exception|additional-terms|no-patent)\\b",
             RegexOption.IGNORE_CASE
         )
@@ -537,7 +537,7 @@ class SpdxLicenseWithExceptionExpression(
 
         if (strictness == Strictness.ALLOW_LICENSEREF_EXCEPTIONS) {
             val isValidLicenseRef = SpdxLicenseReferenceExpression(exception).isValid(strictness)
-            val isExceptionString = EXCEPTION_STRING_PATTERN in exception
+            val isExceptionString = EXCEPTION_STRING_REGEX in exception
             if (isCurrentLicenseException || (isValidLicenseRef && isExceptionString)) return
         }
 
