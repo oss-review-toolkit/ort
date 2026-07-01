@@ -1,0 +1,96 @@
+{
+  "count": 4,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "GHSA-2cxf-6567-7pp6",
+      "advisory_uid": "github_osv_importer_v2/GHSA-2cxf-6567-7pp6",
+      "url": "https://github.com/advisories/GHSA-2cxf-6567-7pp6",
+      "aliases": [
+        "CVE-2014-8242"
+      ],
+      "severities": [
+        {
+          "url": "https://github.com/apache/commons-lang/security/advisories/GHSA-2cxf-6567-7pp6",
+          "value": "LOW",
+          "scoring_system": "cvssv3.1_qr"
+        }
+      ],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-8242",
+          "reference_type": "",
+          "reference_id": "CVE-2014-8242"
+        }
+      ],
+      "related_ssvc_trees": []
+    },
+    {
+      "advisory_id": "CVE-2014-8242",
+      "advisory_uid": "gitlab_importer_v2/maven/org.apache.commons/commons-lang3/CVE-2014-8242",
+      "url": "https://gitlab.com/advisories-community/CVE-2014-8242.yml",
+      "aliases": [
+        "CVE-2014-8242",
+        "GHSA-2cxf-6567-7pp6"
+      ],
+      "severities": [],
+      "weaknesses": [],
+      "references": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-8242",
+          "reference_type": "",
+          "reference_id": "CVE-2014-8242"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2cxf-6567-7pp6",
+          "reference_type": "",
+          "reference_id": "GHSA-2cxf-6567-7pp6"
+        }
+      ],
+      "related_ssvc_trees": []
+    },
+    {
+      "advisory_id": "GHSA-v7xh-cg3m-mx2g",
+      "advisory_uid": "github_osv_importer_v2/GHSA-v7xh-cg3m-mx2g",
+      "url": "https://example.org/advisories/GHSA-v7xh-cg3m-mx2g",
+      "aliases": [
+        "CVE-2009-1382"
+      ],
+      "severities": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2009-1382",
+          "value": "7.0",
+          "scoring_system": "cvssv2"
+        }
+      ],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": []
+    },
+    {
+      "advisory_id": "GHSA-struts-2019-cov19",
+      "advisory_uid": "github_osv_importer_v2/GHSA-struts-2019-cov19",
+      "url": "https://example.org/advisories/GHSA-struts-2019-cov19",
+      "aliases": [
+        "CVE-2019-CoV19"
+      ],
+      "severities": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19",
+          "value": "10.0",
+          "scoring_system": "cvssv3"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19",
+          "value": "HIGH",
+          "scoring_system": "cvssv3.1_qr"
+        }
+      ],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": []
+    }
+  ]
+}
