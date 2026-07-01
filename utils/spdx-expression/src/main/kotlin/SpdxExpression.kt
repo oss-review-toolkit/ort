@@ -30,6 +30,11 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionParser
 
+private val EXCEPTION_STRING_REGEX = Regex(
+    "\\b(exception|additional-terms|no-patent)\\b",
+    RegexOption.IGNORE_CASE
+)
+
 /**
  * An SPDX expression as defined by version 2.2 of the [SPDX specification, annex D][1].
  *
@@ -481,11 +486,6 @@ class SpdxLicenseWithExceptionExpression(
     val exception: String
 ) : SpdxSingleLicenseExpression() {
     companion object {
-        private val EXCEPTION_STRING_REGEX = Regex(
-            "\\b(exception|additional-terms|no-patent)\\b",
-            RegexOption.IGNORE_CASE
-        )
-
         /**
          * Parse a string into an [SpdxLicenseWithExceptionExpression]. Throws an [SpdxException] if the string cannot
          * be parsed. Throws a [ClassCastException] if the string is not an [SpdxLicenseWithExceptionExpression].
@@ -536,9 +536,7 @@ class SpdxLicenseWithExceptionExpression(
         if (strictness == Strictness.ALLOW_CURRENT && isCurrentLicenseException) return
 
         if (strictness == Strictness.ALLOW_LICENSEREF_EXCEPTIONS) {
-            val isValidLicenseRef = SpdxLicenseReferenceExpression(exception).isValid(strictness)
-            val isExceptionString = EXCEPTION_STRING_REGEX in exception
-            if (isCurrentLicenseException || (isValidLicenseRef && isExceptionString)) return
+            if (isCurrentLicenseException || SpdxLicenseReferenceExpression(exception).isException()) return
         }
 
         throw SpdxException("'$exception' is not a valid SPDX license exception string.")
@@ -659,4 +657,7 @@ data class SpdxLicenseReferenceExpression(
     override fun toString() = id
 
     override fun getLicenseUrl(): String? = null
+
+    /** Return whether this LicenseRef is an exception. */
+    fun isException(): Boolean = isValid(Strictness.ALLOW_LICENSEREF_EXCEPTIONS) && EXCEPTION_STRING_REGEX in id
 }
