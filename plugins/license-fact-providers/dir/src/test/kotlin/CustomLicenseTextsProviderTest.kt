@@ -28,10 +28,10 @@ import io.kotest.matchers.shouldBe
 class CustomLicenseTextsProviderTest : WordSpec({
     "getLicenseText()" should {
         "return the license text from the configured directory" {
-            val licenseDir = tempdir()
-            licenseDir.resolve("LicenseRef-custom-license").writeText("custom license text")
+            val licenseTextsDir = tempdir()
+            licenseTextsDir.resolve("LicenseRef-custom-license").writeText("custom license text")
 
-            val provider = CustomLicenseTextsProviderFactory.create(dir = licenseDir.absolutePath)
+            val provider = CustomLicenseTextsProviderFactory.create(dir = licenseTextsDir.absolutePath)
 
             provider.getLicenseText("LicenseRef-custom-license")?.text shouldBe "custom license text"
         }
@@ -43,10 +43,10 @@ class CustomLicenseTextsProviderTest : WordSpec({
         }
 
         "return null if the license text file is blank" {
-            val licenseDir = tempdir()
-            licenseDir.resolve("LicenseRef-blank-license").writeText("   \n   ")
+            val licenseTextsDir = tempdir()
+            licenseTextsDir.resolve("LicenseRef-blank-license").writeText("   \n   ")
 
-            val provider = CustomLicenseTextsProviderFactory.create(dir = licenseDir.absolutePath)
+            val provider = CustomLicenseTextsProviderFactory.create(dir = licenseTextsDir.absolutePath)
 
             provider.getLicenseText("LicenseRef-blank-license") should beNull()
         }
@@ -54,10 +54,10 @@ class CustomLicenseTextsProviderTest : WordSpec({
 
     "hasLicenseText()" should {
         "return true if the license text exists" {
-            val licenseDir = tempdir()
-            licenseDir.resolve("LicenseRef-custom-license").writeText("custom license text")
+            val licenseTextsDir = tempdir()
+            licenseTextsDir.resolve("LicenseRef-custom-license").writeText("custom license text")
 
-            val provider = CustomLicenseTextsProviderFactory.create(dir = licenseDir.absolutePath)
+            val provider = CustomLicenseTextsProviderFactory.create(dir = licenseTextsDir.absolutePath)
 
             provider.hasLicenseText("LicenseRef-custom-license") shouldBe true
         }
@@ -69,10 +69,10 @@ class CustomLicenseTextsProviderTest : WordSpec({
         }
 
         "return false if the license text file is blank" {
-            val licenseDir = tempdir()
-            licenseDir.resolve("LicenseRef-blank-license").writeText("   \n   ")
+            val licenseTextsDir = tempdir()
+            licenseTextsDir.resolve("LicenseRef-blank-license").writeText("   \n   ")
 
-            val provider = CustomLicenseTextsProviderFactory.create(dir = licenseDir.absolutePath)
+            val provider = CustomLicenseTextsProviderFactory.create(dir = licenseTextsDir.absolutePath)
 
             provider.hasLicenseText("LicenseRef-blank-license") shouldBe false
         }
