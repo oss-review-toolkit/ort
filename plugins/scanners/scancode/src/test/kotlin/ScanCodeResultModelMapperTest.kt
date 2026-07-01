@@ -22,8 +22,10 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
@@ -40,6 +42,29 @@ import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class ScanCodeResultModelMapperTest : FreeSpec({
     "toScanSummary()" - {
+        "should associate LicenseRef exceptions to licenses".config(enabled = false) {
+            val result = readResource("/scancode-32.5.0-j2objc-3.1.json")
+
+            val summary = parseResult(result).toScanSummary()
+
+            with(summary.licenseFindings) {
+                shouldHaveSize(23)
+
+                this shouldContain LicenseFinding(
+                    license = "GPL-2.0-only WITH LicenseRef-scancode-oracle-openjdk-exception-2.0",
+                    location = TextLocation(path = "LICENSE", startLine = 230, endLine = 552),
+                    score = 92.72f
+                )
+
+                // TODO: This currently fails.
+                this shouldNotContain LicenseFinding(
+                    license = "LicenseRef-scancode-oracle-openjdk-exception-2.0",
+                    location = TextLocation(path = "LICENSE", startLine = 555, endLine = 576),
+                    score = 100.0f
+                )
+            }
+        }
+
         "for ScanCode 32.0.8 should" - {
             "get license mappings even without '--license-references'" {
                 val result = readResource("/scancode-32.0.8_spdx-expression-parse_no-license-references.json")
