@@ -87,6 +87,7 @@ data class OrtConfiguration(
      */
     val licenseFactProviders: List<ProviderPluginConfiguration> = listOf(
         ProviderPluginConfiguration(type = "DefaultCustomLicenseTexts"),
+        ProviderPluginConfiguration(type = "DefaultLicenseTextCurationProvider"),
         ProviderPluginConfiguration(type = "SPDX"),
         ProviderPluginConfiguration(type = "ScanCode")
     ),
