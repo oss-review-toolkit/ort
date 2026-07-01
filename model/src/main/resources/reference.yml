@@ -52,7 +52,7 @@ ort:
   - type: "SPDX"
   - type: "ScanCode"
     options:
-      scanCodeLicenseTextDir: '/path/to/scancode/license/text/dir'
+      licenseTextDir: '/path/to/scancode/license/text/dir'
 
   licenseFilePatterns:
     licenseFilenames: ['license*']
