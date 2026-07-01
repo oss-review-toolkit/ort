@@ -91,3 +91,25 @@ internal fun generatePackagesRequest(purls: Collection<String> = packages): Stri
  * Generate the JSON body of the request to query vulnerability information about the [Package] with the given [id].
  */
 internal fun generatePackagesRequest(id: Identifier): String = generatePackagesRequest(listOf(id.toPurl()))
+
+/**
+ * Generate the JSON body of the API v3 packages request for the given [purls].
+ */
+internal fun generateV3PackagesRequest(purls: Collection<String> = packages): String =
+    purls.joinToString(prefix = "{ \"purls\": [", postfix = "], \"details\": true }") { "\"$it\"" }
+
+/**
+ * Generate the JSON body of the API v3 packages request for the [Package] with the given [id].
+ */
+internal fun generateV3PackagesRequest(id: Identifier): String = generateV3PackagesRequest(listOf(id.toPurl()))
+
+/**
+ * Generate the JSON body of the API v3 advisories request for the given [purls].
+ */
+internal fun generateAdvisoriesRequest(purls: Collection<String> = packages): String =
+    purls.joinToString(prefix = "{ \"purls\": [", postfix = "] }") { "\"$it\"" }
+
+/**
+ * Generate the JSON body of the API v3 advisories request for the [Package] with the given [id].
+ */
+internal fun generateAdvisoriesRequest(id: Identifier): String = generateAdvisoriesRequest(listOf(id.toPurl()))

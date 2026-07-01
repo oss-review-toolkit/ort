@@ -25,6 +25,9 @@ plugins {
 dependencies {
     api(projects.plugins.advisors.advisorApi)
 
+    implementation(ktorLibs.client.contentNegotiation)
+    implementation(ktorLibs.client.okhttp)
+    implementation(ktorLibs.serialization.kotlinx.json)
     implementation(projects.clients.vulnerableCodeClient)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
