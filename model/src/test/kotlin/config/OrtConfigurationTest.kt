@@ -71,6 +71,11 @@ class OrtConfigurationTest : WordSpec({
                     id = "global-custom-license-texts",
                     options = mapOf("dir" to "/ort-config/custom-license-texts")
                 ),
+                ProviderPluginConfiguration(type = "DefaultLicenseTextCuration"),
+                ProviderPluginConfiguration(
+                    type = "LicenseTextCuration",
+                    options = mapOf("dir" to "/ort-config/license-text-curations")
+                ),
                 ProviderPluginConfiguration(type = "SPDX"),
                 ProviderPluginConfiguration(
                     type = "ScanCode",

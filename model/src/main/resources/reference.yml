@@ -45,6 +45,10 @@ ort:
     id: "global-custom-license-texts"
     options:
       dir: '/ort-config/custom-license-texts'
+  - type: "DefaultLicenseTextCuration"
+  - type: "LicenseTextCuration"
+    options:
+      dir: '/ort-config/license-text-curations'
   - type: "SPDX"
   - type: "ScanCode"
     options:
