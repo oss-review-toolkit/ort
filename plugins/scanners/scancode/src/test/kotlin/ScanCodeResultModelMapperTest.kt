@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class ScanCodeResultModelMapperTest : FreeSpec({
     "toScanSummary()" - {
-        "should associate LicenseRef exceptions to licenses".config(enabled = false) {
+        "should associate LicenseRef exceptions to licenses" {
             val result = readResource("/scancode-32.5.0-j2objc-3.1.json")
 
             val summary = parseResult(result).toScanSummary()
@@ -56,7 +56,6 @@ class ScanCodeResultModelMapperTest : FreeSpec({
                     score = 92.72f
                 )
 
-                // TODO: This currently fails.
                 this shouldNotContain LicenseFinding(
                     license = "LicenseRef-scancode-oracle-openjdk-exception-2.0",
                     location = TextLocation(path = "LICENSE", startLine = 555, endLine = 576),

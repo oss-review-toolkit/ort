@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseReferenceExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleExpression
@@ -223,7 +224,12 @@ fun associateLicensesWithExceptions(
     findings: Collection<LicenseFinding>,
     toleranceLines: Int = FindingsMatcher.DEFAULT_TOLERANCE_LINES
 ): Set<LicenseFinding> {
-    val (licenses, exceptions) = findings.partition { SpdxLicenseException.forId(it.license.toString()) == null }
+    val (exceptions, licenses) = findings.partition {
+        val isSpdxLicenseException by lazy { SpdxLicenseException.forId(it.license.toString()) != null }
+        val isLicenseRefException by lazy { it.license is SpdxLicenseReferenceExpression && it.license.isException() }
+
+        isSpdxLicenseException || isLicenseRefException
+    }
 
     val fixedLicenses = licenses.toMutableSet()
 
