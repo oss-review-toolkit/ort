@@ -26,6 +26,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
@@ -44,7 +45,8 @@ data class ScanCodeLicenseFactProviderConfig(
      * The directory that contains the ScanCode license texts. If not set, the provider will try to locate the ScanCode
      * license text directory using a heuristic based on the path of the ScanCode binary.
      */
-    val scanCodeLicenseTextDir: String?
+    @OrtPluginOption(aliases = ["scanCodeLicenseTextDir"])
+    val licenseTextDir: String?
 )
 
 @OrtPlugin(
@@ -61,12 +63,12 @@ class ScanCodeLicenseFactProvider(
      * The directory that contains the ScanCode license texts. This is located using a heuristic based on the path of
      * the ScanCode binary.
      */
-    private val scanCodeLicenseTextDir: File? by lazy {
-        if (config.scanCodeLicenseTextDir != null) {
-            return@lazy File(config.scanCodeLicenseTextDir).also {
+    private val licenseTextDir: File? by lazy {
+        if (config.licenseTextDir != null) {
+            return@lazy File(config.licenseTextDir).also {
                 require(it.isDirectory) {
-                    "Configured ScanCode license text directory '${config.scanCodeLicenseTextDir}' does not exist or " +
-                        "is not a directory."
+                    "Configured ScanCode license text directory '${config.licenseTextDir}' does not exist or is not " +
+                        "a directory."
                 }
 
                 logger.debug { "Using configured ScanCode license text directory: ${it.absolutePath}" }
@@ -103,7 +105,7 @@ class ScanCodeLicenseFactProvider(
             "${licenseOrExceptionId.removePrefix("LicenseRef-scancode-").lowercase()}.LICENSE"
         }
 
-        return scanCodeLicenseTextDir?.resolve(filename)?.takeIf { it.isFile && it.isNotBlank }
+        return licenseTextDir?.resolve(filename)?.takeIf { it.isFile && it.isNotBlank }
     }
 
     override fun getLicenseText(licenseOrExceptionId: String) =
