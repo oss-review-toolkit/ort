@@ -35,7 +35,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
-import org.ossreviewtoolkit.utils.ort.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
@@ -83,9 +82,8 @@ data class OrtConfiguration(
     val forceOverwrite: Boolean = false,
 
     /**
-     * The license fact providers, ordered from highest to lowest priority. Defaults to the providers for bundled SPDX
-     * license facts, license facts from a local ScanCode installation, and license facts from the default
-     * [ORT_CUSTOM_LICENSE_TEXTS_DIRNAME].
+     * The license fact providers, ordered from highest to lowest priority. Defaults to the default custom license text
+     * directory, the bundled SPDX license text, and license texts from a local ScanCode installation.
      */
     val licenseFactProviders: List<ProviderPluginConfiguration> = listOf(
         ProviderPluginConfiguration(type = "DefaultDir"),
