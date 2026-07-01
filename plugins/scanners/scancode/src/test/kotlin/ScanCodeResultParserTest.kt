@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.test.readResource
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class ScanCodeResultParserTest : FreeSpec({
-    "generateSummary()" - {
+    "toScanSummary()" - {
         "for ScanCode 32.0.8 should" - {
             "get license mappings even without '--license-references'" {
                 val result = readResource("/scancode-32.0.8_spdx-expression-parse_no-license-references.json")
