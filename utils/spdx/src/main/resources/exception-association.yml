@@ -160,3 +160,5 @@ u-boot-exception-2.0:
 - GPL-2.0-or-later
 - GPL-3.0-only
 - GPL-3.0-or-later
+LicenseRef-scancode-oracle-openjdk-exception-2.0:
+- GPL-2.0-only

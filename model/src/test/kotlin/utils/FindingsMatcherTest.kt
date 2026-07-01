@@ -271,11 +271,11 @@ class FindingsMatcherTest : WordSpec() {
                 associateLicensesWithExceptions(
                     listOf(
                         LicenseFinding("LicenseRef-scancode-unknown", TextLocation("file", 1)),
-                        LicenseFinding("LLVM-exception", TextLocation("file", 5))
+                        LicenseFinding("389-exception", TextLocation("file", 5))
                     )
                 ) should containExactlyInAnyOrder(
                     LicenseFinding("LicenseRef-scancode-unknown", TextLocation("file", 1)),
-                    LicenseFinding("NOASSERTION WITH LLVM-exception", TextLocation("file", 5))
+                    LicenseFinding("NOASSERTION WITH 389-exception", TextLocation("file", 5))
                 )
             }
 
@@ -283,11 +283,11 @@ class FindingsMatcherTest : WordSpec() {
                 associateLicensesWithExceptions(
                     listOf(
                         LicenseFinding("Apache-2.0", TextLocation("fileA", 1)),
-                        LicenseFinding("LLVM-exception", TextLocation("fileB", 5))
+                        LicenseFinding("389-exception", TextLocation("fileB", 5))
                     )
                 ) should containExactlyInAnyOrder(
                     LicenseFinding("Apache-2.0", TextLocation("fileA", 1)),
-                    LicenseFinding("NOASSERTION WITH LLVM-exception", TextLocation("fileB", 5))
+                    LicenseFinding("NOASSERTION WITH 389-exception", TextLocation("fileB", 5))
                 )
             }
 
