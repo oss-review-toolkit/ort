@@ -59,20 +59,37 @@ class VulnerableCodeTest : WordSpec({
             vulnerableCode.details shouldBe AdvisorDetails(ADVISOR_NAME)
         }
 
-        "use the V1 API by default" {
+        "use the V3 API by default" {
             server.stubFor(
-                post(urlPathEqualTo("/api/packages/bulk_search"))
+                post(urlPathEqualTo("/api/v3/packages/"))
                     .withRequestBody(
                         equalToJson(
-                            generatePackagesRequest(idJUnit),
-                            true,
-                            false
+                            generateV3PackagesRequest(idJUnit),
+                            /* ignoreArrayOrder = */ true,
+                            /* ignoreExtraElements = */ false
                         )
                     )
-                    .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
+                    .withHeader("Content-Type", equalTo("application/json"))
                     .willReturn(
                         aResponse().withStatus(200)
-                            .withBodyFile("response_junit.json")
+                            .withHeader("Content-Type", "application/json")
+                            .withBodyFile("packages_response_junit.json")
+                    )
+            )
+            server.stubFor(
+                post(urlPathEqualTo("/api/v3/advisories/"))
+                    .withRequestBody(
+                        equalToJson(
+                            generateAdvisoriesRequest(idJUnit),
+                            /* ignoreArrayOrder = */ true,
+                            /* ignoreExtraElements = */ false
+                        )
+                    )
+                    .withHeader("Content-Type", equalTo("application/json"))
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withHeader("Content-Type", "application/json")
+                            .withBodyFile("advisories_response_junit.json")
                     )
             )
             val vulnerableCode = VulnerableCodeFactory.create(serverUrl = "http://localhost:${server.port()}")

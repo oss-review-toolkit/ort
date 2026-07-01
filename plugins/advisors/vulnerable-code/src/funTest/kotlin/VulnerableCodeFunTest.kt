@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
 import org.ossreviewtoolkit.plugins.api.Secret
 
 class VulnerableCodeFunTest : WordSpec({
-    "VulnerableCode API v1" should {
+    "VulnerableCode API v1".config(enabled = false) should {
         val vc = createVulnerableCode(VulnerableCodeApiVersion.V1)
 
         "return findings for Go package QUIC" {

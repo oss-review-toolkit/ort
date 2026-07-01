@@ -55,6 +55,6 @@ data class VulnerableCodeConfiguration(
     /**
      * The VulnerableCode API version to use.
      */
-    @OrtPluginOption(defaultValue = "V1")
+    @OrtPluginOption(defaultValue = "V3")
     val apiVersion: VulnerableCodeApiVersion
 )
