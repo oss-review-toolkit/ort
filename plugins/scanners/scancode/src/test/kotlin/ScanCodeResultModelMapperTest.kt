@@ -56,6 +56,18 @@ class ScanCodeResultModelMapperTest : FreeSpec({
                     score = 92.72f
                 )
 
+                this shouldContain LicenseFinding(
+                    license = "GPL-2.0-only WITH LicenseRef-scancode-oracle-openjdk-exception-2.0",
+                    location = TextLocation(path = "LICENSE", startLine = 555, endLine = 576),
+                    score = 100.0f
+                )
+
+                this shouldNotContain LicenseFinding(
+                    license = "NOASSERTION WITH LicenseRef-scancode-oracle-openjdk-exception-2.0",
+                    location = TextLocation(path = "LICENSE", startLine = 555, endLine = 576),
+                    score = 100.0f
+                )
+
                 this shouldNotContain LicenseFinding(
                     license = "LicenseRef-scancode-oracle-openjdk-exception-2.0",
                     location = TextLocation(path = "LICENSE", startLine = 555, endLine = 576),

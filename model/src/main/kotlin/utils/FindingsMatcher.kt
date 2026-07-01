@@ -279,10 +279,13 @@ fun associateLicensesWithExceptions(
         }
     }
 
-    // Associate remaining "orphan" exceptions with "NOASSERTION" to turn them into valid SPDX expressions and at the
-    // same time "marking" them for review as "NOASSERTION" is not a real license.
+    // Associate remaining "orphan" exceptions with either the only license the exception can apply to, or with
+    // "NOASSERTION" to turn them into valid SPDX expressions and at the same time "marking" them for review as
+    // "NOASSERTION" is not a real license.
     remainingExceptions.mapTo(fixedLicenses) { exception ->
-        exception.copy(license = "${SpdxConstants.NOASSERTION} ${SpdxExpression.WITH} ${exception.license}".toSpdx())
+        val applicableLicenses = SpdxLicenseException.association[exception.license.toString()].orEmpty().map { it.id }
+        val license = applicableLicenses.singleOrNull() ?: SpdxConstants.NOASSERTION
+        exception.copy(license = "$license ${SpdxExpression.WITH} ${exception.license}".toSpdx())
     }
 
     return fixedLicenses.mapTo(mutableSetOf()) { it.copy(license = associateLicensesWithExceptions(it.license)) }
