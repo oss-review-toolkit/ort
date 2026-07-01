@@ -28,8 +28,10 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
-import org.ossreviewtoolkit.utils.ort.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+
+/** The name of the ORT custom license texts configuration directory. */
+const val ORT_CUSTOM_LICENSE_TEXTS_DIRNAME = "custom-license-texts"
 
 /** The configuration for the directory-based license fact provider. */
 data class DirLicenseFactProviderConfig(
