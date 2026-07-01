@@ -537,7 +537,7 @@ class SpdxLicenseWithExceptionExpression(
 
         if (strictness == Strictness.ALLOW_LICENSEREF_EXCEPTIONS) {
             val isValidLicenseRef = SpdxLicenseReferenceExpression(exception).isValid(strictness)
-            val isExceptionString = exception.contains(EXCEPTION_STRING_PATTERN)
+            val isExceptionString = EXCEPTION_STRING_PATTERN in exception
             if (isCurrentLicenseException || (isValidLicenseRef && isExceptionString)) return
         }
 
