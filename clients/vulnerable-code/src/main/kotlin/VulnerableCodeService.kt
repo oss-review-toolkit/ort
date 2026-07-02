@@ -41,7 +41,7 @@ import retrofit2.http.POST
 interface VulnerableCodeService {
     companion object {
         /**
-         * The URL to version 1 of the API. Version 2 is currently in the works.
+         * The URL to version 1 of the API, which by now is deprecated.
          */
         const val PUBLIC_SERVER_URL = "https://public.vulnerablecode.io/api/"
 
