@@ -1,0 +1,911 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "VulnerableCode API",
+    "version": "40.0.0",
+    "description": "\n<div>\n    <strong>Note:</strong> All API requests must include the following\n    <code>User-Agent</code> header:\n    <pre>User-Agent: VCIO_API_AGENT </pre>\n    Requests without this exact header value will be rejected.\n    <p><strong>VulnerableCode</strong> is open data and free software by\n    <a href=\"https://github.com/nexB/vulnerablecode\"> nexB Inc. and others.</a>\n    </p>\n    <p>The VulnerableCode API exposes these endpoints:</p>\n    <ul>\n        <li>\n            <strong>packages/</strong>: main endpoint to lookup for vulnerable packages.\n        </li>\n        <li>\n            <strong>vulnerabilities/</strong>: secondary endpoint to lookup by vulnerabilities.\n        </li>\n        <li>\n            <strong>alias/</strong>: secondary endpoint to lookup vulnerabilities by aliases (e.g., CVE)\n        </li>\n        <li>\n            <strong>cpes/</strong>: secondary endpoint to lookup vulnerabilities by CPE.\n        </li>\n    </ul>\n</div>\n",
+    "termsOfService": "/tos/",
+    "contact": {
+      "name": "nexB Inc.",
+      "url": "https://public.vulnerablecode.io",
+      "email": "mailto:info@nexb.com"
+    },
+    "license": {
+      "name": "Source code: Apache-2.0 | Data: CC-BY-SA-4.0",
+      "url": "https://github.com/nexb/vulnerablecode#license"
+    }
+  },
+  "paths": {
+    "/api/v3/packages/": {
+      "post": {
+        "operationId": "v3_packages_create",
+        "tags": [
+          "v3"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageQuery"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageQuery"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageQuery"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedPackageV3List"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/advisories/": {
+      "post": {
+        "operationId": "v3_advisories_create",
+        "tags": [
+          "v3"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdvisoryQuery"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/AdvisoryQuery"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/AdvisoryQuery"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAdvisoryV3List"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/affected-by-advisories/": {
+      "get": {
+        "operationId": "v3_affected_by_advisories_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAffectedByAdvisoryV3List"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/affected-by-advisories/{id}/": {
+      "get": {
+        "operationId": "v3_affected_by_advisories_retrieve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this advisory v2.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AffectedByAdvisoryV3"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/fixing-advisories/": {
+      "get": {
+        "operationId": "v3_fixing_advisories_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAdvisoryV3List"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/fixing-advisories/{id}/": {
+      "get": {
+        "operationId": "v3_fixing_advisories_retrieve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this advisory v2.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdvisoryV3"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v3/package-types/": {
+      "get": {
+        "operationId": "v3_package_types_retrieve",
+        "tags": [
+          "v3"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "description": "No response body"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdvisoryQuery": {
+        "type": "object",
+        "properties": {
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AdvisoryReference": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "reference_type": {
+            "type": "string"
+          },
+          "reference_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference_id",
+          "reference_type",
+          "url"
+        ]
+      },
+      "AdvisorySeverity": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "URL to the vulnerability severity",
+            "maxLength": 1024
+          },
+          "value": {
+            "type": "string",
+            "nullable": true,
+            "description": "Example: 9.0, Important, High",
+            "maxLength": 50
+          },
+          "scoring_system": {
+            "$ref": "#/components/schemas/ScoringSystemEnum"
+          },
+          "scoring_elements": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supporting scoring elements used to compute the score values. For example a CVSS vector string as used to compute a CVSS score.",
+            "maxLength": 250
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "UTC Date of publication of the vulnerability severity"
+          }
+        },
+        "required": [
+          "scoring_system"
+        ]
+      },
+      "AdvisoryV3": {
+        "type": "object",
+        "properties": {
+          "advisory_id": {
+            "type": "string",
+            "description": "An advisory is a unique vulnerability identifier in some database, such as PYSEC-2020-2233",
+            "maxLength": 200
+          },
+          "advisory_uid": {
+            "type": "string",
+            "readOnly": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to the advisory on the upstream website",
+            "maxLength": 200
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string"
+          },
+          "severities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisorySeverity"
+            }
+          },
+          "weaknesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryWeakness"
+            }
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryReference"
+            }
+          },
+          "exploitability": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,1}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Exploitability indicates the likelihood that a vulnerability in a software package could be used by malicious actors to compromise systems, applications, or networks. This metric is determined automatically based on the discovery of known exploits."
+          },
+          "weighted_severity": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Weighted severity is the highest value calculated by multiplying each severity by its corresponding weight, divided by 10."
+          },
+          "risk_score": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
+          },
+          "related_ssvc_trees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedSSVCTree"
+            },
+            "readOnly": true
+          }
+        },
+        "required": [
+          "advisory_id",
+          "advisory_uid",
+          "aliases",
+          "references",
+          "related_ssvc_trees",
+          "severities",
+          "url",
+          "weaknesses"
+        ]
+      },
+      "AdvisoryWeakness": {
+        "type": "object",
+        "properties": {
+          "cwe_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cwe_id",
+          "description",
+          "name"
+        ]
+      },
+      "AffectedByAdvisoryV3": {
+        "type": "object",
+        "properties": {
+          "advisory_id": {
+            "type": "string",
+            "description": "An advisory is a unique vulnerability identifier in some database, such as PYSEC-2020-2233",
+            "maxLength": 200
+          },
+          "advisory_uid": {
+            "type": "string",
+            "readOnly": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to the advisory on the upstream website",
+            "maxLength": 200
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string"
+          },
+          "severities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisorySeverity"
+            }
+          },
+          "weaknesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryWeakness"
+            }
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryReference"
+            }
+          },
+          "exploitability": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,1}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Exploitability indicates the likelihood that a vulnerability in a software package could be used by malicious actors to compromise systems, applications, or networks. This metric is determined automatically based on the discovery of known exploits."
+          },
+          "weighted_severity": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Weighted severity is the highest value calculated by multiplying each severity by its corresponding weight, divided by 10."
+          },
+          "risk_score": {
+            "type": "string",
+            "format": "decimal",
+            "pattern": "^-?\\d{0,2}(?:\\.\\d{0,1})?$",
+            "nullable": true,
+            "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
+          },
+          "related_ssvc_trees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedSSVCTree"
+            },
+            "readOnly": true
+          },
+          "fixed_by_packages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          }
+        },
+        "required": [
+          "advisory_id",
+          "advisory_uid",
+          "aliases",
+          "fixed_by_packages",
+          "references",
+          "related_ssvc_trees",
+          "severities",
+          "url",
+          "weaknesses"
+        ]
+      },
+      "PackageQuery": {
+        "type": "object",
+        "properties": {
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "boolean",
+            "default": false
+          },
+          "ignore_qualifiers_subpath": {
+            "type": "boolean",
+            "default": false
+          },
+          "max_advisories": {
+            "type": "integer",
+            "maximum": 10000,
+            "minimum": 1,
+            "default": 100
+          },
+          "reachability": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "purls"
+        ]
+      },
+      "PackageV3": {
+        "type": "object",
+        "properties": {
+          "purl": {
+            "type": "string"
+          },
+          "affected_by_vulnerabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageVulnerabilityV3"
+            },
+            "readOnly": true
+          },
+          "fixing_vulnerabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageVulnerabilityV3"
+            },
+            "readOnly": true
+          },
+          "next_non_vulnerable_version": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "latest_non_vulnerable_version": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "risk_score": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "required": [
+          "affected_by_vulnerabilities",
+          "fixing_vulnerabilities",
+          "purl"
+        ]
+      },
+      "PackageVulnerabilityV3": {
+        "type": "object",
+        "properties": {
+          "advisory_id": {
+            "type": "string",
+            "description": "An advisory is a unique vulnerability identifier in some database, such as PYSEC-2020-2233",
+            "maxLength": 200
+          },
+          "advisory_uid": {
+            "type": "string",
+            "readOnly": true
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string"
+          },
+          "exploitability": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Exploitability indicates the likelihood that a vulnerability in a software package could be used by malicious actors to compromise systems, applications, or networks. This metric is determined automatically based on the discovery of known exploits."
+          },
+          "weighted_severity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Weighted severity is the highest value calculated by multiplying each severity by its corresponding weight, divided by 10."
+          },
+          "risk_score": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Risk expressed as a number ranging from 0 to 10. Risk is calculated from weighted severity and exploitability values. It is the maximum value of (the weighted severity multiplied by its exploitability) or 10. Risk = min(weighted severity * exploitability, 10)"
+          },
+          "fixed_by_packages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "introduced_in_patches": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "fixed_in_patches": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": true
+          },
+          "ssvc_trees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedSSVCTree"
+            },
+            "readOnly": true
+          },
+          "resource_url": {
+            "type": "string",
+            "format": "uri",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "advisory_id",
+          "advisory_uid",
+          "resource_url"
+        ]
+      },
+      "PaginatedAdvisoryV3List": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvisoryV3"
+            }
+          }
+        }
+      },
+      "PaginatedAffectedByAdvisoryV3List": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AffectedByAdvisoryV3"
+            }
+          }
+        }
+      },
+      "PaginatedPackageV3List": {
+        "type": "object",
+        "required": [
+          "count",
+          "results"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageV3"
+            }
+          }
+        }
+      },
+      "RelatedSSVCTree": {
+        "type": "object",
+        "properties": {
+          "vector": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "source_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision",
+          "options",
+          "source_url",
+          "vector"
+        ]
+      },
+      "ScoringSystemEnum": {
+        "enum": [
+          "cvssv2",
+          "cvssv3",
+          "cvssv3.1",
+          "cvssv4",
+          "rhbs",
+          "rhas",
+          "archlinux",
+          "cvssv3.1_qr",
+          "generic_textual",
+          "apache_httpd",
+          "apache_tomcat",
+          "epss",
+          "ssvc",
+          "openssl",
+          "ubuntu-priority"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionid"
+      },
+      "tokenAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Token-based authentication with required prefix \"Token\""
+      }
+    }
+  }
+}
