@@ -36,19 +36,23 @@ ort:
 
   # License fact providers, ordered from highest to lowest priority.
   licenseFactProviders:
-  - type: "DefaultDir"
-  - type: "Dir"
+  - type: "DefaultCustomLicenseTexts"
+  - type: "CustomLicenseTexts"
     id: "local-custom-license-texts"
     options:
-      licenseTextDir: '/project-sources/.ort/custom-license-texts'
-  - type: "Dir"
+      dir: '/project-sources/.ort/custom-license-texts'
+  - type: "CustomLicenseTexts"
     id: "global-custom-license-texts"
     options:
-      licenseTextDir: '/ort-config/custom-license-texts'
+      dir: '/ort-config/custom-license-texts'
+  - type: "DefaultLicenseTextCuration"
+  - type: "LicenseTextCuration"
+    options:
+      dir: '/ort-config/license-text-curations'
   - type: "SPDX"
   - type: "ScanCode"
     options:
-      scanCodeLicenseTextDir: '/path/to/scancode/license/text/dir'
+      licenseTextDir: '/path/to/scancode/license/text/dir'
 
   licenseFilePatterns:
     licenseFilenames: ['license*']

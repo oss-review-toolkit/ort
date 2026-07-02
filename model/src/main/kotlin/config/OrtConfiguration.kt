@@ -86,7 +86,8 @@ data class OrtConfiguration(
      * directory, the bundled SPDX license text, and license texts from a local ScanCode installation.
      */
     val licenseFactProviders: List<ProviderPluginConfiguration> = listOf(
-        ProviderPluginConfiguration(type = "DefaultDir"),
+        ProviderPluginConfiguration(type = "DefaultCustomLicenseTexts"),
+        ProviderPluginConfiguration(type = "DefaultLicenseTextCurationProvider"),
         ProviderPluginConfiguration(type = "SPDX"),
         ProviderPluginConfiguration(type = "ScanCode")
     ),

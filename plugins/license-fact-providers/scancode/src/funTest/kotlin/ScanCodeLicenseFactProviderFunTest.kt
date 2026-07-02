@@ -41,7 +41,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
             val licenseDir = tempdir()
             (licenseDir / "test.LICENSE").writeText("custom license text")
 
-            val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = licenseDir.absolutePath)
+            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
 
             provider.getLicenseText("test")?.text shouldBe "custom license text"
         }
@@ -58,7 +58,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
                 """.trimMargin()
             )
 
-            val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = licenseDir.absolutePath)
+            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
 
             provider.getLicenseText("test")?.text shouldBe "custom license text"
         }
@@ -72,7 +72,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
         }
 
         "return null for an unknown license" {
-            val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = tempdir().absolutePath)
+            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = tempdir().absolutePath)
 
             provider.getLicenseText("UnknownLicense") should beNull()
         }
@@ -88,7 +88,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
                 """.trimMargin()
             )
 
-            val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = licenseDir.absolutePath)
+            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
 
             provider.getLicenseText("test") should beNull()
         }
@@ -102,7 +102,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
         }
 
         "return false for an unknown license" {
-            val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = tempdir().absolutePath)
+            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = tempdir().absolutePath)
 
             provider.hasLicenseText("UnknownLicense") shouldBe false
         }
@@ -118,7 +118,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
                 """.trimMargin()
             )
 
-            val provider = ScanCodeLicenseFactProviderFactory.create(scanCodeLicenseTextDir = licenseDir.absolutePath)
+            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
 
             provider.hasLicenseText("test") shouldBe false
         }
