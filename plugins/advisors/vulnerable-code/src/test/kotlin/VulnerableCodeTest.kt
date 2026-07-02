@@ -27,7 +27,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
-import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
@@ -42,15 +41,10 @@ import io.kotest.matchers.shouldNot
 import java.net.URI
 
 import org.ossreviewtoolkit.model.AdvisorDetails
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
-import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class VulnerableCodeTest : WordSpec({
     val server = WireMockServer(
@@ -277,53 +271,7 @@ class VulnerableCodeTest : WordSpec({
             vulnerableCode.details shouldBe AdvisorDetails(ADVISOR_NAME)
         }
     }
-
-    @Suppress("MaxLineLength")
-    "fixupUrlEscaping()" should {
-        "fixup a wrongly escaped ampersand" {
-            val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:retail_category_management_planning_\\&_optimization:16.0.3:*:*:*:*:*:*:*"""
-
-            URI(u.fixupUrlEscaping()) shouldBe URI(
-                """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:retail_category_management_planning_%26_optimization:16.0.3:*:*:*:*:*:*:*"""
-            )
-        }
-
-        "fixup a wrongly escaped slash" {
-            val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:apple:swiftnio_http\/2:*:*:*:*:*:swift:*:*"""
-
-            URI(u.fixupUrlEscaping()) shouldBe URI(
-                """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:apple:swiftnio_http/2:*:*:*:*:*:swift:*:*"""
-            )
-        }
-
-        "fixup a wrongly escaped plus" {
-            val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:hyperion_bi\+:*:*:*:*:*:*:*:*"""
-
-            URI(u.fixupUrlEscaping()) shouldBe URI(
-                """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:hyperion_bi%2B:*:*:*:*:*:*:*:*"""
-            )
-        }
-    }
 })
-
-private const val ADVISOR_NAME = "VulnerableCode"
-
-private val idLang = Identifier("Maven:org.apache.commons:commons-lang3:3.5")
-private val idText = Identifier("Maven:org.apache.commons:commons-text:1.1")
-private val idStruts = Identifier("Maven:org.apache.struts:struts2-assembly:2.5.14.1")
-private val idJUnit = Identifier("Maven:junit:junit:4.12")
-private val idHamcrest = Identifier("Maven:org.hamcrest:hamcrest-core:1.3")
-private val idLog4j = Identifier("Maven:org.apache.logging.log4j:log4j-core:2.17.0")
-
-/**
- * The list with the identifiers of packages that are referenced in the test result file.
- */
-private val packageIdentifiers = setOf(idJUnit, idLang, idText, idStruts, idHamcrest)
-
-/**
- * The list of packages referenced by the test result. These packages should be requested by the vulnerability provider.
- */
-private val packages = packageIdentifiers.map { it.toPurl() }
 
 /**
  * The JSON request to query the test packages found in the result.
@@ -359,28 +307,3 @@ private fun createConfig(server: WireMockServer): VulnerableCodeConfiguration {
  * Create a test instance of [VulnerableCode] that communicates with the local [server].
  */
 private fun createVulnerableCode(server: WireMockServer): VulnerableCode = VulnerableCode(config = createConfig(server))
-
-/**
- * Return a list with [Package]s from the analyzer result file that serve as input for the [VulnerableCode] advisor.
- */
-private fun TestConfiguration.inputPackagesFromAnalyzerResult(): Set<Package> =
-    readResourceValue<OrtResult>("/ort-analyzer-result.yml").getPackages().mapTo(mutableSetOf()) { it.metadata }
-
-/**
- * Return a set with [Package]s to be used as input for the [VulnerableCode] advisor derived from the given
- * [identifiers].
- */
-private fun inputPackagesFromIdentifiers(vararg identifiers: Identifier): Set<Package> =
-    identifiers.mapTo(mutableSetOf()) { Package.EMPTY.copy(id = it, purl = it.toPurl()) }
-
-/**
- * Generate the JSON body of the request to query information about the packages identified by the given [purls].
- * The request mainly consists of an array with the package URLs.
- */
-private fun generatePackagesRequest(purls: Collection<String> = packages): String =
-    purls.joinToString(prefix = "{ \"purls\": [", postfix = "] }") { "\"$it\"" }
-
-/**
- * Generate the JSON body of the request to query vulnerability information about the [Package] with the given [id].
- */
-private fun generatePackagesRequest(id: Identifier): String = generatePackagesRequest(listOf(id.toPurl()))

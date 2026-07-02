@@ -23,13 +23,6 @@ import java.net.URI
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
-import kotlin.coroutines.cancellation.CancellationException
-
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
-
-import org.apache.logging.log4j.kotlin.logger
-
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -45,20 +38,7 @@ import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-
-/**
- * The number of elements to request at once in a bulk request. This value was chosen more or less randomly to keep the
- * size of responses reasonably small.
- */
-private const val BULK_REQUEST_SIZE = 100
-
-/**
- * The maximum length for the summary as derived from the description of a vulnerability.
- */
-private const val MAX_SUMMARY_LENGTH = 64
 
 /**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
@@ -104,20 +84,14 @@ class VulnerableCode(
 
                 allVulnerabilities += chunkVulnerabilities.associate { it.purl to it.affectedByVulnerabilities }
             }.onFailure {
-                if (it is CancellationException) currentCoroutineContext().ensureActive()
-
-                // Create dummy entries for all packages in the chunk as the current data model does not allow to return
-                // issues that are not associated to any package.
-                allVulnerabilities += chunk.associateWith { emptyList() }
-
-                issues += Issue(source = descriptor.displayName, message = it.collectMessages())
-
-                logger.error {
-                    "The request of chunk ${index + 1} of ${chunks.size} failed for the following ${chunk.size} " +
-                        "PURL(s):"
-                }
-
-                chunk.forEach(logger::error)
+                it.handleChunkRequestFailure(
+                    chunk,
+                    index,
+                    chunks.size,
+                    descriptor.displayName,
+                    allVulnerabilities,
+                    issues
+                )
             }
         }
 
@@ -142,9 +116,7 @@ class VulnerableCode(
             id = preferredCommonId(),
             // VulnerableCode API v1 has no dedicated summary field (its summary actually is the description), so try to
             // summarize the description.
-            summary = description?.take(MAX_SUMMARY_LENGTH)?.let {
-                if (it.length < description.length) "$it..." else it
-            },
+            summary = description.deriveSummary(),
             description = description,
             references = references.flatMap { it.toModel(issues) }
         )
@@ -192,10 +164,3 @@ class VulnerableCode(
         return aliases.firstOrNull { it.startsWith("cve", ignoreCase = true) } ?: aliases.first()
     }
 }
-
-private val BACKSLASH_ESCAPE_REGEX = """\\\\?(.)""".toRegex()
-
-internal fun String.fixupUrlEscaping(): String =
-    replace("""\/""", "/").replace(BACKSLASH_ESCAPE_REGEX) {
-        it.groupValues[1].percentEncode()
-    }
