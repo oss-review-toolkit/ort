@@ -22,7 +22,7 @@ By default, ORT uses the following license fact providers:
 
 * [SPDX License Fact Provider](../plugins/license-fact-providers/SPDX%20License%20Fact%20Provider.md): Provides bundled license texts for all [SPDX licenses](https://spdx.org/licenses/).
 * [ScanCode License Fact Provider](../plugins/license-fact-providers/ScanCode%20License%20Fact%20Provider.md): Provides license texts from a local ScanCode installation.
-* [Default Directory License Fact Provider](../plugins/license-fact-providers/Default%20Directory%20License%20Fact%20Provider.md): Provides license texts from files the `$ORT_CONFIG_DIR/custom-license-texts` directory.
+* [Default Directory License Fact Provider](../plugins/license-fact-providers/Default%20Directory%20License%20Texts%20Provider.md): Provides license texts from files the `$ORT_CONFIG_DIR/custom-license-texts` directory.
 
 The latter can be used to add license texts for licenses that are not provided by the other license fact providers.
 The files must be named according to the license identifier, for example, `LicenseRef-custom-license` for a custom license text.
