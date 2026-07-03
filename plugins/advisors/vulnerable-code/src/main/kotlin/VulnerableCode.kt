@@ -30,6 +30,8 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 /**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
  * [VulnerableCode](https://github.com/aboutcode-org/vulnerablecode) instance.
+ *
+ * For the list of data sources see [here](https://github.com/aboutcode-org/vulnerablecode/blob/main/SOURCES.rst).
  */
 @OrtPlugin(
     displayName = "VulnerableCode",
