@@ -50,6 +50,8 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
  * An advice provider that obtains vulnerability information from [Open Source Vulnerabilities](https://osv.dev/).
+ *
+ * For the list of data sources see [here](https://google.github.io/osv.dev/data/#current-data-sources).
  */
 @OrtPlugin(
     id = "OSV",
