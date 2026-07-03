@@ -267,6 +267,8 @@ class GoMod(
      */
     private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
         // See https://pkg.go.dev/text/template for the format syntax.
+        // TODO: Find a way to efficiently also get test dependencies, which is possible via "-test", but then they are
+        //       not distinguishable from non-test dependencies in the output.
         val list = runGo(projectDir, "list", "-deps", "-json=Module", "-buildvcs=false", "./...")
 
         val depInfos = list.stdout.byteInputStream().use { JSON.decodeToSequence<DepInfo>(it) }
