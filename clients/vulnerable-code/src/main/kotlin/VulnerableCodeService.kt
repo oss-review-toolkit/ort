@@ -41,11 +41,6 @@ import retrofit2.http.POST
 interface VulnerableCodeService {
     companion object {
         /**
-         * The URL to version 1 of the API, which by now is deprecated.
-         */
-        const val PUBLIC_SERVER_URL = "https://public.vulnerablecode.io/api/"
-
-        /**
          * The JSON (de-)serialization object used by this service.
          */
         val JSON = Json {
@@ -61,7 +56,7 @@ interface VulnerableCodeService {
                 newBuilder().addInterceptor { chain ->
                     val request = chain.request().newBuilder()
                         .apply { if (apiKey != null) header("Authorization", "Token $apiKey") }
-                        .header("User-Agent", "VCIO_API_AGENT")
+                        .header("User-Agent", VULNERABLE_CODE_USER_AGENT)
                         .build()
 
                     chain.proceed(request)
@@ -71,7 +66,7 @@ interface VulnerableCodeService {
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .client(vulnerableCodeClient)
-                .baseUrl(url ?: PUBLIC_SERVER_URL)
+                .baseUrl(url ?: VULNERABLE_CODE_BASE_URL)
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
