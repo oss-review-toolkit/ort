@@ -266,7 +266,7 @@ class VulnerableCodeApiV1Test : WordSpec({
     }
 })
 
-private const val PACKAGES_REQUEST_URL = "/packages/bulk_search"
+private const val PACKAGES_REQUEST_URL = "/api/packages/bulk_search"
 
 /**
  * The JSON request to query the test packages found in the result.
