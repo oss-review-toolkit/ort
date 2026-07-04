@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.utils.common.ensureSuffix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
@@ -54,7 +55,12 @@ internal class VulnerableCodeApiV1(
             if (config.readTimeout != null) readTimeout(config.readTimeout, TimeUnit.SECONDS)
         }
 
-        VulnerableCodeService.create(config.serverUrl, config.apiKey?.value, client)
+        // Retrofit requires URLs to end in "/".
+        val urlWithApiSuffix = config.serverUrl.ensureSuffix("/").run {
+            takeIf { it.endsWith("/api/") } ?: "${this}api/"
+        }
+
+        VulnerableCodeService.create(urlWithApiSuffix, config.apiKey?.value, client)
     }
 
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
