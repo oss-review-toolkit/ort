@@ -416,11 +416,10 @@ private fun WireMockServer.stubAdvisoriesRequest(responseFile: String, request: 
 }
 
 /**
- * Create a test instance of [VulnerableCode] that communicates with the local [server].
+ * Create a test instance of [VulnerableCode] for [VulnerableCodeApiV3] that communicates with the local [server].
  */
-private fun createApi(server: WireMockServer, apiUrl: Boolean = false): VulnerableCodeApiV3 =
-    VulnerableCodeApiV3(
-        VulnerableCodeFactory.descriptor,
-        details,
-        createConfig(server, VulnerableCodeApiVersion.V3, apiUrl)
+private fun createApi(server: WireMockServer): VulnerableCode =
+    VulnerableCodeFactory.create(
+        serverUrl = "http://localhost:${server.port()}",
+        apiVersion = VulnerableCodeApiVersion.V3
     )

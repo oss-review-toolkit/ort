@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
-import com.github.tomakehurst.wiremock.WireMockServer
-
 import io.kotest.core.TestConfiguration
 
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -100,16 +98,3 @@ internal fun generateAdvisoriesRequest(id: Identifier): String = generateAdvisor
  * The advisor details expected in results produced by the VulnerableCode test instances.
  */
 internal val details = AdvisorDetails(VulnerableCodeFactory.descriptor.id)
-
-/**
- * Create a configuration for the VulnerableCode implementation with the given [apiVersion] that points to the local
- * [server]. If [apiUrl] is true, append the legacy "/api/" suffix to the server URL.
- */
-internal fun createConfig(
-    server: WireMockServer,
-    apiVersion: VulnerableCodeApiVersion,
-    apiUrl: Boolean = false
-): VulnerableCodeConfiguration {
-    val url = "http://localhost:${server.port()}" + if (apiUrl) "/api/" else ""
-    return VulnerableCodeConfiguration(url, null, null, apiVersion)
-}
