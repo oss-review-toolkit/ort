@@ -44,7 +44,7 @@ data class CustomLicenseTextsProviderConfig(
  * must be named after the SPDX-conform license IDs, e.g., 'Apache-2.0' or 'LicenseRef-custom-license'.
  */
 @OrtPlugin(
-    displayName = "Default Directory License Texts Provider",
+    displayName = "Default Custom License Texts Provider",
     summary = "A license fact provider that reads license texts from the default custom license texts directory.",
     factory = LicenseFactProviderFactory::class
 )
