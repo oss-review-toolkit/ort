@@ -69,6 +69,9 @@ class PluginsCommand(descriptor: PluginDescriptor = PluginsCommandFactory.descri
             echo("Summary: ${plugin.summary}")
             echo()
 
+            echo("Description: ${plugin.description}")
+            echo()
+
             if (plugin.options.isNotEmpty()) {
                 echo("Options:")
                 echo(
