@@ -66,7 +66,7 @@ internal suspend fun <T> Throwable.handleChunkRequestFailure(
 ) {
     if (this is CancellationException) currentCoroutineContext().ensureActive()
 
-    allVulnerabilities += chunk.associateWith { emptyList<T>() }
+    allVulnerabilities += chunk.associateWith { emptyList() }
     issues += Issue(source = issueSource, message = collectMessages())
 
     logger.error {
