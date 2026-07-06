@@ -69,7 +69,7 @@ internal suspend fun <T> Throwable.handleChunkRequestFailure(
     allVulnerabilities += chunk.associateWith { emptyList() }
     issues += Issue(source = issueSource, message = collectMessages())
 
-    logger.error {
+    logger.error(this) {
         "The request of chunk ${chunkIndex + 1} of $chunkCount failed for the following ${chunk.size} PURL(s):"
     }
 
