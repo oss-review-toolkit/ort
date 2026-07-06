@@ -52,7 +52,7 @@ data class LicenseTextCurationProviderConfig(
  */
 @OrtPlugin(
     displayName = "Default License Text Curation Provider",
-    summary = "A license fact provider that reads license information from the default directory.",
+    summary = "Provide project- and / or package-specific license texts from the default directory.",
     factory = LicenseFactProviderFactory::class
 )
 class DefaultLicenseTextCurationProvider(
@@ -71,7 +71,7 @@ class DefaultLicenseTextCurationProvider(
 @OrtPlugin(
     id = "LicenseTextCurationProvider",
     displayName = "License Text Curation Provider",
-    summary = "A license fact provider that reads license text curations from a local directory.",
+    summary = "Provide project- and / or package-specific license texts from a custom directory.",
     factory = LicenseFactProviderFactory::class
 )
 open class LicenseTextCurationProvider(
