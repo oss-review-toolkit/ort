@@ -45,7 +45,7 @@ data class CustomLicenseTextsProviderConfig(
  */
 @OrtPlugin(
     displayName = "Default Custom License Texts Provider",
-    summary = "A license fact provider that reads license texts from the default custom license texts directory.",
+    summary = "Provide license texts from the default custom license texts directory.",
     factory = LicenseFactProviderFactory::class
 )
 class DefaultCustomLicenseTextsProvider(
@@ -64,7 +64,7 @@ class DefaultCustomLicenseTextsProvider(
 @OrtPlugin(
     id = "CustomLicenseTexts",
     displayName = "Custom License Texts Provider",
-    summary = "A license fact provider that reads license texts from a local directory.",
+    summary = "Provide license texts from a custom directory.",
     factory = LicenseFactProviderFactory::class
 )
 open class CustomLicenseTextsProvider(

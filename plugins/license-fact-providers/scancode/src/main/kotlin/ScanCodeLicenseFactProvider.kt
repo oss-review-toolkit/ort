@@ -52,7 +52,7 @@ data class ScanCodeLicenseFactProviderConfig(
 @OrtPlugin(
     id = "ScanCode",
     displayName = "ScanCode License Fact Provider",
-    summary = "A license fact provider that reads license information from a local ScanCode installation.",
+    summary = "Provide license facts from a local ScanCode installation.",
     factory = LicenseFactProviderFactory::class
 )
 class ScanCodeLicenseFactProvider(
