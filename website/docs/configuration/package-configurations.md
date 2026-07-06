@@ -37,7 +37,7 @@ vcs:
 id: "NPM::ansi-styles:(,4.2.1]"
 source_code_origin: VCS
 
-# Apply to versions all versions greater or equal to 4.0 
+# Apply to versions all versions greater or equal to 4.0
 # and lower or equal to 4.2.1 where a source artifact was scanned.
 id: "NPM::ansi-styles:[4.0,4.2.1]"
 source_code_origin: ARTIFACT
