@@ -45,6 +45,7 @@ import io.kotest.matchers.string.shouldStartWith
 import java.net.URI
 
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
@@ -70,7 +71,10 @@ class VulnerableCodeApiV3Test : WordSpec({
     "retrievePackageFindings()" should {
         "return vulnerability information" {
             server.stubPackagesRequest("packages_response_packages.json")
-            server.stubAdvisoriesRequest("advisories_response_packages.json", generateAdvisoriesRequest())
+            server.stubAdvisoriesRequest(
+                "advisories_response_packages.json",
+                generateAdvisoriesRequest(listOf(idLang, idStruts).map { it.toPurl() })
+            )
             val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
@@ -263,7 +267,10 @@ class VulnerableCodeApiV3Test : WordSpec({
                             .withBodyFile("packages_response_page2.json")
                     )
             )
-            server.stubAdvisoriesRequest("advisories_response_packages_paginated.json", generateAdvisoriesRequest())
+            server.stubAdvisoriesRequest(
+                "advisories_response_packages_paginated.json",
+                generateAdvisoriesRequest(listOf(idJUnit, idLang, idStruts).map { it.toPurl() })
+            )
             val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
@@ -337,7 +344,10 @@ class VulnerableCodeApiV3Test : WordSpec({
 
         "filter out packages without vulnerabilities" {
             server.stubPackagesRequest("packages_response_packages_no_vulnerabilities.json")
-            server.stubAdvisoriesRequest("advisories_response_packages.json", generateAdvisoriesRequest())
+            server.stubAdvisoriesRequest(
+                "advisories_response_packages.json",
+                generateAdvisoriesRequest(idStruts)
+            )
             val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
@@ -348,7 +358,12 @@ class VulnerableCodeApiV3Test : WordSpec({
 
         "handle unexpected packages in the query result" {
             server.stubPackagesRequest("packages_response_unexpected_packages.json")
-            server.stubAdvisoriesRequest("advisories_response_unexpected_packages.json", generateAdvisoriesRequest())
+            server.stubAdvisoriesRequest(
+                "advisories_response_unexpected_packages.json",
+                generateAdvisoriesRequest(
+                    listOf(idLang.toPurl(), idStruts.toPurl(), "pkg:maven/org.unknown/unexpected@4.2")
+                )
+            )
             val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
