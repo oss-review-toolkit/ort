@@ -21,7 +21,7 @@ import dev.aga.gradle.versioncatalogs.Generator.generate
 import dev.aga.gradle.versioncatalogs.GeneratorConfig
 
 // Enable type-safe project accessors, see:
-// https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:type-safe-project-accessors
+// https://docs.gradle.org/current/userguide/declaring_dependencies_basics.html#sec:type-safe-project-accessors
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "oss-review-toolkit"
