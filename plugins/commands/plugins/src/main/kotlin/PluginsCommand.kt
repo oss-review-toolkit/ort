@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.reporter.ReporterFactory
@@ -111,6 +112,11 @@ private enum class PluginType(
         "commands",
         "CLI Commands",
         lazy { OrtCommandFactory.ALL.map { it.value.descriptor } }
+    ),
+    LICENSE_FACT_PROVIDERS(
+        "license-fact-providers",
+        "License Fact Providers",
+        lazy { LicenseFactProviderFactory.ALL.map { it.value.descriptor } }
     ),
     PACKAGE_CONFIGURATION_PROVIDERS(
         "package-configuration-providers",

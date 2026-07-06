@@ -140,7 +140,7 @@ complete -c ort -n "__fish_seen_subcommand_from notify" -s h -l help -d 'Show th
 complete -c ort -f -n __fish_use_subcommand -a plugins -d 'Print information about the installed ORT plugins.'
 
 ## Options for plugins
-complete -c ort -n "__fish_seen_subcommand_from plugins" -l types -r -fa "advice-providers commands package-configuration-providers package-curation-providers package-managers reporters scanners version-control-systems" -d 'A comma-separated list of plugin types to show.'
+complete -c ort -n "__fish_seen_subcommand_from plugins" -l types -r -fa "advice-providers commands license-fact-providers package-configuration-providers package-curation-providers package-managers reporters scanners version-control-systems" -d 'A comma-separated list of plugin types to show.'
 complete -c ort -n "__fish_seen_subcommand_from plugins" -s h -l help -d 'Show this message and exit'
 
 
