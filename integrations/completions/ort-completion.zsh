@@ -1115,7 +1115,7 @@ _ort_plugins() {
 
   case "${in_param}" in
     "--types")
-      COMPREPLY=($(compgen -W 'advice-providers commands package-configuration-providers package-curation-providers package-managers reporters scanners version-control-systems' -- "${word}"))
+      COMPREPLY=($(compgen -W 'advice-providers commands license-fact-providers package-configuration-providers package-curation-providers package-managers reporters scanners version-control-systems' -- "${word}"))
       ;;
     "--help")
       ;;
