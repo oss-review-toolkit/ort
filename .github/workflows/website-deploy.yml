@@ -46,4 +46,9 @@ jobs:
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
       - if: steps.deployment.outcome == 'failure'
         id: deployment-retry
+        continue-on-error: true
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+      - if: steps.deployment.outcome == 'failure' && steps.deployment-retry.outcome == 'failure'
+        run: |
+          echo "Both website deployment attempts failed."
+          exit 1
