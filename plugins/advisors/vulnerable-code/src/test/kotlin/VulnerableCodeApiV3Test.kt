@@ -56,6 +56,13 @@ class VulnerableCodeApiV3Test : WordSpec({
             .dynamicPort()
     )
 
+    val vc by lazy {
+        VulnerableCodeFactory.create(
+            serverUrl = "http://localhost:${server.port()}",
+            apiVersion = VulnerableCodeApiVersion.V3
+        )
+    }
+
     beforeSpec {
         server.start()
     }
@@ -75,10 +82,9 @@ class VulnerableCodeApiV3Test : WordSpec({
                 "advisories_response_packages.json",
                 generateAdvisoriesRequest(listOf(idLang, idStruts).map { it.toPurl() })
             )
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.values.flatMap { it.summary.issues } should beEmpty()
             result shouldNot beEmptyMap()
@@ -158,10 +164,9 @@ class VulnerableCodeApiV3Test : WordSpec({
         "extract the CVE ID from an alias" {
             server.stubPackagesRequest("packages_response_junit.json", request = generateV3PackagesRequest(idJUnit))
             server.stubAdvisoriesRequest("advisories_response_junit.json", generateAdvisoriesRequest(idJUnit))
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromIdentifiers(idJUnit)
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             val expJunitVulnerability = Vulnerability(
                 id = "CVE-2020-15250",
@@ -206,10 +211,9 @@ class VulnerableCodeApiV3Test : WordSpec({
                 "advisories_response_log4j_no_aliases.json",
                 generateAdvisoriesRequest(idLog4j)
             )
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             val expLog4jVulnerabilities = listOf(
                 Vulnerability(
@@ -232,10 +236,9 @@ class VulnerableCodeApiV3Test : WordSpec({
         "prefer CVE ID from the advisory ID over aliases" {
             server.stubPackagesRequest("packages_response_log4j_cve.json", generateV3PackagesRequest(idLog4j))
             server.stubAdvisoriesRequest("advisories_response_log4j_cve.json", generateAdvisoriesRequest(idLog4j))
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             val expLog4jVulnerabilities = listOf(
                 Vulnerability(
@@ -271,10 +274,9 @@ class VulnerableCodeApiV3Test : WordSpec({
                 "advisories_response_packages_paginated.json",
                 generateAdvisoriesRequest(listOf(idJUnit, idLang, idStruts).map { it.toPurl() })
             )
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.values.flatMap { it.summary.issues } should beEmpty()
             result shouldNot beEmptyMap()
@@ -297,10 +299,9 @@ class VulnerableCodeApiV3Test : WordSpec({
                             .withBodyFile("advisories_response_page2.json")
                     )
             )
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.keys shouldBe setOf(idLog4j)
             result.getValue(idLog4j).vulnerabilities shouldHaveSize 3
@@ -320,10 +321,9 @@ class VulnerableCodeApiV3Test : WordSpec({
                         aResponse().withStatus(500)
                     )
             )
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result shouldNotBeNull {
                 keys should containExactly(packageIdentifiers)
@@ -348,10 +348,9 @@ class VulnerableCodeApiV3Test : WordSpec({
                 "advisories_response_packages.json",
                 generateAdvisoriesRequest(idStruts)
             )
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.keys should containExactly(idStruts)
         }
@@ -364,10 +363,9 @@ class VulnerableCodeApiV3Test : WordSpec({
                     listOf(idLang.toPurl(), idStruts.toPurl(), "pkg:maven/org.unknown/unexpected@4.2")
                 )
             )
-            val api = createApi(server)
             val packagesToAdvise = inputPackagesFromAnalyzerResult()
 
-            val result = api.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
         }
@@ -414,12 +412,3 @@ private fun WireMockServer.stubAdvisoriesRequest(responseFile: String, request: 
             )
     )
 }
-
-/**
- * Create a test instance of [VulnerableCode] for [VulnerableCodeApiV3] that communicates with the local [server].
- */
-private fun createApi(server: WireMockServer): VulnerableCode =
-    VulnerableCodeFactory.create(
-        serverUrl = "http://localhost:${server.port()}",
-        apiVersion = VulnerableCodeApiVersion.V3
-    )
