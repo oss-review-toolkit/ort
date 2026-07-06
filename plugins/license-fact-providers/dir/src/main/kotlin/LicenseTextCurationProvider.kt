@@ -51,6 +51,7 @@ data class LicenseTextCurationProviderConfig(
  * returns id-specific license texts.
  */
 @OrtPlugin(
+    id = "DefaultLicenseTextCuration",
     displayName = "Default License Text Curation Provider",
     summary = "Provide project- and / or package-specific license texts from the default directory.",
     factory = LicenseFactProviderFactory::class
@@ -69,7 +70,7 @@ class DefaultLicenseTextCurationProvider(
  * texts.
  */
 @OrtPlugin(
-    id = "LicenseTextCurationProvider",
+    id = "LicenseTextCuration",
     displayName = "License Text Curation Provider",
     summary = "Provide project- and / or package-specific license texts from a custom directory.",
     factory = LicenseFactProviderFactory::class
