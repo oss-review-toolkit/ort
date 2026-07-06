@@ -115,10 +115,10 @@ data class ExampleConfiguration(
     /** The REST API server URL. */
     @OrtPluginOption(defaultValue = "https://example.com")
     val serverUrl: String,
-    
+
     /** The timeout in seconds for REST API requests. */
     val timeout: Int,
-    
+
     /** The API token to use for authentication. */
     @OrtPluginOption(aliases = ["apiToken", "authToken"])
     val token: Secret?
