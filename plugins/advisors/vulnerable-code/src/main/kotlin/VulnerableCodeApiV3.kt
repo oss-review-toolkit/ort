@@ -168,7 +168,7 @@ internal class VulnerableCodeApiV3(
 
         if (advisoryUidsByPurl.isEmpty()) return emptyMap()
 
-        val advisoriesByUid = getAllAdvisories(purls).associateBy { it.advisory_uid }
+        val advisoriesByUid = getAllAdvisories(advisoryUidsByPurl.keys.toList()).associateBy { it.advisory_uid }
         val missingAdvisoryUids = advisoryUidsByPurl.values.flatten().toSet() - advisoriesByUid.keys
 
         missingAdvisoryUids.forEach { advisoryUid ->
