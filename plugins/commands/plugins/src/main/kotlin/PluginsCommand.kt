@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.commands.plugins
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.mordant.widgets.HorizontalRule
 import com.github.ajalt.mordant.widgets.UnorderedList
 
@@ -46,13 +47,11 @@ class PluginsCommand(descriptor: PluginDescriptor = PluginsCommandFactory.descri
     private val types by option(
         "--types",
         help = "A comma-separated list of plugin types to show."
-    ).split(",").default(PluginType.entries.map { it.optionName })
+    ).enum<PluginType>(key = { it.optionName }).split(",").default(PluginType.entries)
 
     override fun run() {
         types.forEach { type ->
-            PluginType.entries.find { it.optionName == type }?.let { pluginType ->
-                renderPlugins(pluginType.title, pluginType.descriptors.value)
-            }
+            renderPlugins(type.title, type.descriptors.value)
         }
     }
 
