@@ -57,8 +57,8 @@ coreutils = {
 [tasks.isolate]
 alias = "isolated"
 
-description = "Run a command in isolation from the host with only mise tools available."
-usage = "arg '<command>' help = 'The command to run.'"
+description = "Run commands in isolation from the host with only mise tools available."
+usage = "arg '<commands>' var=#true help='The command to run.'"
 
 # Deny inheriting most environment variables.
 deny_env = true
@@ -77,24 +77,18 @@ env.PATH_MINIMAL = """
 """
 
 env.PATH = "{{ env.PATH_MINIMAL | trim }}"
-run = "{{ usage.command }}"
+run = """{{ usage.commands | join(sep=" ") }}"""
 
 [tasks.gradle]
-description = "Run a Gradle task in isolation from the host."
-usage = "arg '<task>' help = 'The Gradle task to run.'"
-run = """
-    mise run isolated "$MISE_PROJECT_ROOT/gradlew --stacktrace {{ usage.task }}"
-"""
+description = "Run Gradle tasks in isolation from the host."
+usage = "arg '<tasks>' var=#true help='The Gradle task to run.'"
+run = """mise run isolated $MISE_PROJECT_ROOT/gradlew --stacktrace {{ usage.tasks | join(sep=" ") }}"""
 
 [tasks.ort]
 description = "Run an ORT command in isolation from the host."
-usage = "arg '<command>' help = 'The ORT command to run.'"
-run = """
-    mise run gradle "-q :cli:run --args='{{ usage.command }}'"
-"""
+usage = "arg '<command>' var=#true help='The ORT command to run.'"
+run = """mise run gradle -q :cli:run --args='{{ usage.command | join(sep=" ") }}'"""
 
 [tasks.test]
 description = "Run ORT (functional) tests in isolation from the host."
-run = """
-    mise run gradle "-q :cli-test-launcher:run"
-"""
+run = """mise run gradle -q :cli-test-launcher:run"""
