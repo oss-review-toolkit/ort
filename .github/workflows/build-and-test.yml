@@ -68,13 +68,11 @@ jobs:
         java-version: 25
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
-    - name: Install Flox
-      uses: flox/install-flox-action@3b80351ae97bbe063f264dc88fbd505507054963 # v2.5.3
-      with:
-        disable-metrics: true
+    - name: Install mise
+      uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       if: runner.os != 'Windows'
     - name: Run unit tests in a minimal environment
-      run: ./flox/run_isolated.sh minimal ./gradlew --scan test jacocoTestReport
+      run: mise gradle --scan test jacocoTestReport
       if: runner.os != 'Windows'
     - name: Run unit tests
       run: ./gradlew --scan test jacocoTestReport
@@ -97,16 +95,14 @@ jobs:
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
-    - name: Install Flox
-      uses: flox/install-flox-action@3b80351ae97bbe063f264dc88fbd505507054963 # v2.5.3
-      with:
-        disable-metrics: true
+    - name: Install mise
+      uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
     - name: Run functional tests that do not require external tools
       env:
         OSSKB_API_KEY: ${{ secrets.OSSKB_API_KEY }}
         SONATYPE_PAT: ${{ secrets.SONATYPE_PAT }}
         VULNERABLECODE_API_KEY: ${{ secrets.VULNERABLECODE_API_KEY }}
-      run: ./flox/run_isolated.sh minimal ./gradlew --scan -Dkotest.tags=!RequiresExternalTool funTest jacocoFunTestReport
+      run: mise gradle --scan -Dkotest.tags=!RequiresExternalTool funTest jacocoFunTestReport
     - name: Create Test Summary
       uses: test-summary/action@37b508cfee6d4d080eedd00b5bb240a6a784a6a5 # v2
       with:
