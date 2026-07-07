@@ -82,7 +82,7 @@ run = """{{ usage.commands | join(sep=" ") }}"""
 [tasks.gradle]
 description = "Run Gradle tasks in isolation from the host."
 usage = "arg '<tasks>' var=#true help='The Gradle task to run.'"
-run = """mise run isolated $MISE_PROJECT_ROOT/gradlew --stacktrace {{ usage.tasks | join(sep=" ") }}"""
+run = """mise run isolated $MISE_PROJECT_ROOT/gradlew {{ usage.tasks | join(sep=" ") }}"""
 
 [tasks.ort]
 description = "Run an ORT command in isolation from the host."
