@@ -37,7 +37,11 @@ dependencies {
     implementation(libs.commonsCompress)
     implementation(libs.jslt)
     implementation(libs.slf4j)
-    implementation(libs.xz)
+
+    implementation(libs.xz) {
+        because("XZOutputStream is a supertype of XZCompressorOutputStream.")
+    }
+
     implementation(projects.analyzer)
     implementation(projects.downloader)
 
