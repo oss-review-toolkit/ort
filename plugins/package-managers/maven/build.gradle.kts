@@ -32,7 +32,6 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    implementation(libs.bouncyCastle)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.maven.embedder)
@@ -42,6 +41,8 @@ dependencies {
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)
+
+    runtimeOnly(libs.bouncyCastle)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.

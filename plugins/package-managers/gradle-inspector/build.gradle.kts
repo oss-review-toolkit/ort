@@ -39,8 +39,9 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     funTestImplementation(testFixtures(projects.analyzer))
-    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(projects.utils.testUtils)
+
+    funTestRuntimeOnly(projects.plugins.versionControlSystems.gitVersionControlSystem)
 
     ksp(projects.analyzer)
 }
