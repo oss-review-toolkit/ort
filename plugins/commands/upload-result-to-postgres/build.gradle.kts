@@ -27,9 +27,7 @@ dependencies {
 
     implementation(libs.clikt)
     implementation(libs.exposed.core)
-    implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)
-    implementation(libs.exposed.json)
     implementation(projects.model)
     implementation(projects.scanner)
     implementation(projects.utils.commonUtils)

@@ -25,7 +25,6 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    implementation(jacksonLibs.jacksonDataformatYaml)
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.clikt)
     implementation(libs.diffUtils)

@@ -37,7 +37,6 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.json)
     implementation(libs.kotlinx.coroutines)
-    implementation(libs.postgres)
     implementation(projects.clients.clearlyDefinedClient)
     implementation(projects.utils.commonUtils)
 
