@@ -4,22 +4,12 @@ Unmanaged::pkg-0:1.0.0:
   description: "zlib before 1.2.12 allows memory corruption when deflating (i.e.,\
     \ when compressing) if the input has many distant matches."
   references:
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/XOKFMSNQ5D5WGMALBNBXU3GE442V74WU/"
+  - url: "http://seclists.org/fulldisclosure/2022/May/33"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220729-0004/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://support.apple.com/kb/HT213255"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://www.openwall.com/lists/oss-security/2022/03/24/1"
+  - url: "http://seclists.org/fulldisclosure/2022/May/35"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -29,37 +19,22 @@ Unmanaged::pkg-0:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/04/msg00000.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://support.apple.com/kb/HT213257"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.gentoo.org/glsa/202210-42"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://www.openwall.com/lists/oss-security/2022/03/28/3"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2022/03/25/2"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/May/33"
+  - url: "https://cert-portal.siemens.com/productcert/pdf/ssa-333517.pdf"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://cert-portal.siemens.com/productcert/pdf/ssa-333517.pdf"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/04/msg00000.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/05/msg00008.html"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -74,22 +49,7 @@ Unmanaged::pkg-0:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/VOKNP2L734AEL47NRYGVZIKEFOUBQY5Y/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/05/msg00008.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/DF62MVMH3QUGMBDCB3DY2ERQ6EBHTADB/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220526-0009/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -99,17 +59,57 @@ Unmanaged::pkg-0:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NS2D2GFPFGOJUL4WQ3DUAY7HF4VWQ77F/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/VOKNP2L734AEL47NRYGVZIKEFOUBQY5Y/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/XOKFMSNQ5D5WGMALBNBXU3GE442V74WU/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.gentoo.org/glsa/202210-42"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220526-0009/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220729-0004/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://support.apple.com/kb/HT213255"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "https://support.apple.com/kb/HT213256"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/May/35"
+  - url: "https://support.apple.com/kb/HT213257"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NS2D2GFPFGOJUL4WQ3DUAY7HF4VWQ77F/"
+  - url: "https://www.openwall.com/lists/oss-security/2022/03/24/1"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://www.openwall.com/lists/oss-security/2022/03/28/3"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -150,93 +150,28 @@ Unmanaged::pkg-0:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
 - id: "CVE-2022-37434"
-  description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer overflow\
-    \ in inflate in inflate.c via a large gzip header extra field. NOTE: only applications\
-    \ that call inflateGetHeader are affected. Some common applications bundle the\
-    \ affected zlib source code but may be unable to call inflateGetHeader (e.g.,\
-    \ see the nodejs/node reference)."
+  description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer\
+    \ overflow in inflate in inflate.c via a large gzip header extra field.\
+    \ NOTE: only applications that call inflateGetHeader are affected. Some\
+    \ common applications bundle the affected zlib source code but may be unable\
+    \ to call inflateGetHeader (e.g., see the nodejs/node reference)."
   references:
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/JWN4VE3JQR4O2SOUS5TXNLANRPMHWV4I/"
+  - url: "https://github.com/madler/zlib/blob/21767c654d31d2dccdde4330529775c6c5fd5389/zlib.h#L1062-L1063"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/PAVPQNCG3XRLCLNSQRM3KAN5ZFMVXVTY/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/42"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/09/msg00012.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NMBOJ77A7T7PQCARMDUK75TE6LLESZ3O/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/X5U7OTKZSHY2I3ZFJSR2SHFHW72RKGDK/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/YRQAI7H4M4RQZ2IWZUEEXECBE5D56BH2/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20230427-0007/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/37"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/41"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://www.openwall.com/lists/oss-security/2022/08/05/2"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220901-0005/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213489"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213493"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213494"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.debian.org/security/2022/dsa-5218"
+  - url: "https://github.com/nodejs/node/blob/75b68c6e4db515f76df73af476eccf382bbcb00a/deps/zlib/inflate.c#L762-L764"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://support.apple.com/kb/HT213488"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://support.apple.com/kb/HT213489"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -251,7 +186,62 @@ Unmanaged::pkg-0:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/38"
+  - url: "https://support.apple.com/kb/HT213493"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://support.apple.com/kb/HT213494"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2022/37xxx/CVE-2022-37434.json"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/JWN4VE3JQR4O2SOUS5TXNLANRPMHWV4I/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NMBOJ77A7T7PQCARMDUK75TE6LLESZ3O/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/PAVPQNCG3XRLCLNSQRM3KAN5ZFMVXVTY/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/X5U7OTKZSHY2I3ZFJSR2SHFHW72RKGDK/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/YRQAI7H4M4RQZ2IWZUEEXECBE5D56BH2/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2022-37434"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220901-0005/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20230427-0007/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://www.debian.org/security/2022/dsa-5218"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -261,22 +251,12 @@ Unmanaged::pkg-0:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib/commit/eff308af425b67093bab25f80f1ae950166bece1"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://www.openwall.com/lists/oss-security/2022/08/09/1"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib/commit/1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/nodejs/node/blob/75b68c6e4db515f76df73af476eccf382bbcb00a/deps/zlib/inflate.c#L762-L764"
+  - url: "https://github.com/madler/zlib/commit/eff308af425b67093bab25f80f1ae950166bece1"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -286,147 +266,194 @@ Unmanaged::pkg-0:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib/blob/21767c654d31d2dccdde4330529775c6c5fd5389/zlib.h#L1062-L1063"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/37"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/38"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/41"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/42"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://www.openwall.com/lists/oss-security/2022/08/05/2"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://www.openwall.com/lists/oss-security/2022/08/09/1"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/09/msg00012.html"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
 - id: "CVE-2023-45853"
   description: "MiniZip in zlib through 1.3 has an integer overflow and resultant\
-    \ heap-based buffer overflow in zipOpenNewFileInZip4_64 via a long filename, comment,\
-    \ or extra field. NOTE: MiniZip is not a supported part of the zlib product. NOTE:\
-    \ pyminizip through 0.2.6 is also vulnerable because it bundles an affected zlib\
-    \ version, and exposes the applicable MiniZip code through its compress API."
+    \ heap-based buffer overflow in zipOpenNewFileInZip4_64 via a long filename,\
+    \ comment, or extra field. NOTE: MiniZip is not a supported part of the\
+    \ zlib product. NOTE: pyminizip through 0.2.6 is also vulnerable because\
+    \ it bundles an affected zlib version, and exposes the applicable MiniZip\
+    \ code through its compress API."
   references:
-  - url: "https://github.com/madler/zlib/blob/ac8f12c97d1afd9bafa9c710f827d40a407d3266/contrib/README.contrib#L1-L4"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.winimage.com/zLibDll/minizip.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2023/11/msg00026.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://pypi.org/project/pyminizip/#history"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.gentoo.org/glsa/202401-18"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20231130-0009/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://chromium.googlesource.com/chromium/src/+/de29dd6c7151d3cd37cb4cf0036800ddfb1d8b61"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://chromium.googlesource.com/chromium/src/+/d709fb23806858847131027da95ef4c548813356"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://chromium.googlesource.com/chromium/src/+/de29dd6c7151d3cd37cb4cf0036800ddfb1d8b61"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/madler/zlib/blob/ac8f12c97d1afd9bafa9c710f827d40a407d3266/contrib/README.contrib#L1-L4"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://www.winimage.com/zLibDll/minizip.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2023/45xxx/CVE-2023-45853.json"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2023-45853"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://security.gentoo.org/glsa/202401-18"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20231130-0009/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib/pull/843"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://pypi.org/project/pyminizip/#history"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2023/10/20/9"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2024/01/24/10"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2023/11/msg00026.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
 - id: "CVE-2026-22184"
+  summary: "zlib <= 1.3.1.2 untgz Global Buffer Overflow in TGZfname()"
   description: "zlib versions up to and including 1.3.1.2 include a global buffer\
     \ overflow in the untgz utility located under contrib/untgz. The vulnerability\
-    \ is limited to the standalone demonstration utility and does not affect the core\
-    \ zlib compression library. The flaw occurs when a user executes the untgz command\
-    \ with an excessively long archive name supplied via the command line, leading\
-    \ to an out-of-bounds write in a fixed-size global buffer."
+    \ is limited to the standalone demonstration utility and does not affect\
+    \ the core zlib compression library. The flaw occurs when a user executes\
+    \ the untgz command with an excessively long archive name supplied via the\
+    \ command line, leading to an out-of-bounds write in a fixed-size global\
+    \ buffer."
   references:
+  - url: "https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-22184.json"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://zlib.net/"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://access.redhat.com/security/cve/CVE-2026-22184"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/22xxx/CVE-2026-22184.json"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-22184"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://www.vulncheck.com/advisories/zlib-untgz-global-buffer-overflow-in-tgzfname"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://seclists.org/fulldisclosure/2026/Jan/3"
-    scoring_system: "CVSS_V3"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://bugzilla.redhat.com/show_bug.cgi?id=2427688"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://github.com/madler/zlib/issues/1142"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://github.com/madler/zlib"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-- id: "CVE-2026-27171"
-  description: "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64\
-    \ because x2nmodp can do right shifts within a loop that has no termination condition."
-  references:
-  - url: "https://ostif.org/zlib-audit-complete/"
-    scoring_system: "CVSS_V3"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://seclists.org/fulldisclosure/2026/Jan/3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://github.com/madler/zlib/releases/tag/v1.3.2"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://github.com/madler/zlib/issues/904"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://7asecurity.com/reports/pentest-report-zlib-RC1.1.pdf"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
 - id: "CVE-2026-3381"
+  summary: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
+    \ insecure versions of zlib"
   description: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
-    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the zlib\
-    \ library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which addresses\
-    \ findings fron the 7ASecurity audit of zlib. The includes fixs for CVE-2026-27171."
+    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the\
+    \ zlib library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which\
+    \ addresses findings fron the 7ASecurity audit of zlib. The includes fixs\
+    \ for CVE-2026-27171."
   references:
+  - url: "https://cpan.org/modules"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://www.zlib.net/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/3xxx/CVE-2026-3381.json"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -437,6 +464,11 @@ Unmanaged::pkg-0:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://metacpan.org/release/PMQS/Compress-Raw-Zlib-2.221/source/Changes"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-3381"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -452,6 +484,16 @@ Unmanaged::pkg-0:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/pmqs/Compress-Raw-Zlib"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -461,22 +503,12 @@ Unmanaged::pkg-1:1.0.0:
   description: "zlib before 1.2.12 allows memory corruption when deflating (i.e.,\
     \ when compressing) if the input has many distant matches."
   references:
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/XOKFMSNQ5D5WGMALBNBXU3GE442V74WU/"
+  - url: "http://seclists.org/fulldisclosure/2022/May/33"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220729-0004/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://support.apple.com/kb/HT213255"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://www.openwall.com/lists/oss-security/2022/03/24/1"
+  - url: "http://seclists.org/fulldisclosure/2022/May/35"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -486,37 +518,22 @@ Unmanaged::pkg-1:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/04/msg00000.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://support.apple.com/kb/HT213257"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.gentoo.org/glsa/202210-42"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://www.openwall.com/lists/oss-security/2022/03/28/3"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2022/03/25/2"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/May/33"
+  - url: "https://cert-portal.siemens.com/productcert/pdf/ssa-333517.pdf"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://cert-portal.siemens.com/productcert/pdf/ssa-333517.pdf"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/04/msg00000.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/05/msg00008.html"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -531,22 +548,7 @@ Unmanaged::pkg-1:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/VOKNP2L734AEL47NRYGVZIKEFOUBQY5Y/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/05/msg00008.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/DF62MVMH3QUGMBDCB3DY2ERQ6EBHTADB/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220526-0009/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -556,17 +558,57 @@ Unmanaged::pkg-1:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NS2D2GFPFGOJUL4WQ3DUAY7HF4VWQ77F/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/VOKNP2L734AEL47NRYGVZIKEFOUBQY5Y/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/XOKFMSNQ5D5WGMALBNBXU3GE442V74WU/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.gentoo.org/glsa/202210-42"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220526-0009/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220729-0004/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://support.apple.com/kb/HT213255"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "https://support.apple.com/kb/HT213256"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/May/35"
+  - url: "https://support.apple.com/kb/HT213257"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NS2D2GFPFGOJUL4WQ3DUAY7HF4VWQ77F/"
+  - url: "https://www.openwall.com/lists/oss-security/2022/03/24/1"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://www.openwall.com/lists/oss-security/2022/03/28/3"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -607,93 +649,28 @@ Unmanaged::pkg-1:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
 - id: "CVE-2022-37434"
-  description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer overflow\
-    \ in inflate in inflate.c via a large gzip header extra field. NOTE: only applications\
-    \ that call inflateGetHeader are affected. Some common applications bundle the\
-    \ affected zlib source code but may be unable to call inflateGetHeader (e.g.,\
-    \ see the nodejs/node reference)."
+  description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer\
+    \ overflow in inflate in inflate.c via a large gzip header extra field.\
+    \ NOTE: only applications that call inflateGetHeader are affected. Some\
+    \ common applications bundle the affected zlib source code but may be unable\
+    \ to call inflateGetHeader (e.g., see the nodejs/node reference)."
   references:
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/JWN4VE3JQR4O2SOUS5TXNLANRPMHWV4I/"
+  - url: "https://github.com/madler/zlib/blob/21767c654d31d2dccdde4330529775c6c5fd5389/zlib.h#L1062-L1063"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/PAVPQNCG3XRLCLNSQRM3KAN5ZFMVXVTY/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/42"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/09/msg00012.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NMBOJ77A7T7PQCARMDUK75TE6LLESZ3O/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/X5U7OTKZSHY2I3ZFJSR2SHFHW72RKGDK/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/YRQAI7H4M4RQZ2IWZUEEXECBE5D56BH2/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20230427-0007/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/37"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/41"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://www.openwall.com/lists/oss-security/2022/08/05/2"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220901-0005/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213489"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213493"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213494"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.debian.org/security/2022/dsa-5218"
+  - url: "https://github.com/nodejs/node/blob/75b68c6e4db515f76df73af476eccf382bbcb00a/deps/zlib/inflate.c#L762-L764"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://support.apple.com/kb/HT213488"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://support.apple.com/kb/HT213489"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -708,7 +685,62 @@ Unmanaged::pkg-1:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/38"
+  - url: "https://support.apple.com/kb/HT213493"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://support.apple.com/kb/HT213494"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2022/37xxx/CVE-2022-37434.json"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/JWN4VE3JQR4O2SOUS5TXNLANRPMHWV4I/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NMBOJ77A7T7PQCARMDUK75TE6LLESZ3O/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/PAVPQNCG3XRLCLNSQRM3KAN5ZFMVXVTY/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/X5U7OTKZSHY2I3ZFJSR2SHFHW72RKGDK/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/YRQAI7H4M4RQZ2IWZUEEXECBE5D56BH2/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2022-37434"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220901-0005/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20230427-0007/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://www.debian.org/security/2022/dsa-5218"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -718,22 +750,12 @@ Unmanaged::pkg-1:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib/commit/eff308af425b67093bab25f80f1ae950166bece1"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://www.openwall.com/lists/oss-security/2022/08/09/1"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib/commit/1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/nodejs/node/blob/75b68c6e4db515f76df73af476eccf382bbcb00a/deps/zlib/inflate.c#L762-L764"
+  - url: "https://github.com/madler/zlib/commit/eff308af425b67093bab25f80f1ae950166bece1"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -743,147 +765,194 @@ Unmanaged::pkg-1:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib/blob/21767c654d31d2dccdde4330529775c6c5fd5389/zlib.h#L1062-L1063"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/37"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/38"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/41"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/42"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://www.openwall.com/lists/oss-security/2022/08/05/2"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://www.openwall.com/lists/oss-security/2022/08/09/1"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/09/msg00012.html"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
 - id: "CVE-2023-45853"
   description: "MiniZip in zlib through 1.3 has an integer overflow and resultant\
-    \ heap-based buffer overflow in zipOpenNewFileInZip4_64 via a long filename, comment,\
-    \ or extra field. NOTE: MiniZip is not a supported part of the zlib product. NOTE:\
-    \ pyminizip through 0.2.6 is also vulnerable because it bundles an affected zlib\
-    \ version, and exposes the applicable MiniZip code through its compress API."
+    \ heap-based buffer overflow in zipOpenNewFileInZip4_64 via a long filename,\
+    \ comment, or extra field. NOTE: MiniZip is not a supported part of the\
+    \ zlib product. NOTE: pyminizip through 0.2.6 is also vulnerable because\
+    \ it bundles an affected zlib version, and exposes the applicable MiniZip\
+    \ code through its compress API."
   references:
-  - url: "https://github.com/madler/zlib/blob/ac8f12c97d1afd9bafa9c710f827d40a407d3266/contrib/README.contrib#L1-L4"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.winimage.com/zLibDll/minizip.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2023/11/msg00026.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://pypi.org/project/pyminizip/#history"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.gentoo.org/glsa/202401-18"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20231130-0009/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://chromium.googlesource.com/chromium/src/+/de29dd6c7151d3cd37cb4cf0036800ddfb1d8b61"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://chromium.googlesource.com/chromium/src/+/d709fb23806858847131027da95ef4c548813356"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://chromium.googlesource.com/chromium/src/+/de29dd6c7151d3cd37cb4cf0036800ddfb1d8b61"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/madler/zlib/blob/ac8f12c97d1afd9bafa9c710f827d40a407d3266/contrib/README.contrib#L1-L4"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://www.winimage.com/zLibDll/minizip.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2023/45xxx/CVE-2023-45853.json"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2023-45853"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://security.gentoo.org/glsa/202401-18"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20231130-0009/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib/pull/843"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://pypi.org/project/pyminizip/#history"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2023/10/20/9"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2024/01/24/10"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2023/11/msg00026.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
 - id: "CVE-2026-22184"
+  summary: "zlib <= 1.3.1.2 untgz Global Buffer Overflow in TGZfname()"
   description: "zlib versions up to and including 1.3.1.2 include a global buffer\
     \ overflow in the untgz utility located under contrib/untgz. The vulnerability\
-    \ is limited to the standalone demonstration utility and does not affect the core\
-    \ zlib compression library. The flaw occurs when a user executes the untgz command\
-    \ with an excessively long archive name supplied via the command line, leading\
-    \ to an out-of-bounds write in a fixed-size global buffer."
+    \ is limited to the standalone demonstration utility and does not affect\
+    \ the core zlib compression library. The flaw occurs when a user executes\
+    \ the untgz command with an excessively long archive name supplied via the\
+    \ command line, leading to an out-of-bounds write in a fixed-size global\
+    \ buffer."
   references:
+  - url: "https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-22184.json"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://zlib.net/"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://access.redhat.com/security/cve/CVE-2026-22184"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/22xxx/CVE-2026-22184.json"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-22184"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://www.vulncheck.com/advisories/zlib-untgz-global-buffer-overflow-in-tgzfname"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://seclists.org/fulldisclosure/2026/Jan/3"
-    scoring_system: "CVSS_V3"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://bugzilla.redhat.com/show_bug.cgi?id=2427688"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://github.com/madler/zlib/issues/1142"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://github.com/madler/zlib"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-- id: "CVE-2026-27171"
-  description: "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64\
-    \ because x2nmodp can do right shifts within a loop that has no termination condition."
-  references:
-  - url: "https://ostif.org/zlib-audit-complete/"
-    scoring_system: "CVSS_V3"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://seclists.org/fulldisclosure/2026/Jan/3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://github.com/madler/zlib/releases/tag/v1.3.2"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://github.com/madler/zlib/issues/904"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://7asecurity.com/reports/pentest-report-zlib-RC1.1.pdf"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
 - id: "CVE-2026-3381"
+  summary: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
+    \ insecure versions of zlib"
   description: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
-    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the zlib\
-    \ library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which addresses\
-    \ findings fron the 7ASecurity audit of zlib. The includes fixs for CVE-2026-27171."
+    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the\
+    \ zlib library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which\
+    \ addresses findings fron the 7ASecurity audit of zlib. The includes fixs\
+    \ for CVE-2026-27171."
   references:
+  - url: "https://cpan.org/modules"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://www.zlib.net/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/3xxx/CVE-2026-3381.json"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -894,6 +963,11 @@ Unmanaged::pkg-1:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://metacpan.org/release/PMQS/Compress-Raw-Zlib-2.221/source/Changes"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-3381"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -909,6 +983,16 @@ Unmanaged::pkg-1:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/pmqs/Compress-Raw-Zlib"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -918,22 +1002,12 @@ Unmanaged::pkg-2:1.0.0:
   description: "zlib before 1.2.12 allows memory corruption when deflating (i.e.,\
     \ when compressing) if the input has many distant matches."
   references:
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/XOKFMSNQ5D5WGMALBNBXU3GE442V74WU/"
+  - url: "http://seclists.org/fulldisclosure/2022/May/33"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220729-0004/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://support.apple.com/kb/HT213255"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://www.openwall.com/lists/oss-security/2022/03/24/1"
+  - url: "http://seclists.org/fulldisclosure/2022/May/35"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -943,37 +1017,22 @@ Unmanaged::pkg-2:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/04/msg00000.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://support.apple.com/kb/HT213257"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.gentoo.org/glsa/202210-42"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://www.openwall.com/lists/oss-security/2022/03/28/3"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2022/03/25/2"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/May/33"
+  - url: "https://cert-portal.siemens.com/productcert/pdf/ssa-333517.pdf"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://cert-portal.siemens.com/productcert/pdf/ssa-333517.pdf"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/04/msg00000.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/05/msg00008.html"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -988,22 +1047,7 @@ Unmanaged::pkg-2:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/VOKNP2L734AEL47NRYGVZIKEFOUBQY5Y/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/05/msg00008.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/DF62MVMH3QUGMBDCB3DY2ERQ6EBHTADB/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220526-0009/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -1013,17 +1057,57 @@ Unmanaged::pkg-2:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NS2D2GFPFGOJUL4WQ3DUAY7HF4VWQ77F/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/VOKNP2L734AEL47NRYGVZIKEFOUBQY5Y/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/XOKFMSNQ5D5WGMALBNBXU3GE442V74WU/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.gentoo.org/glsa/202210-42"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220526-0009/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220729-0004/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://support.apple.com/kb/HT213255"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "https://support.apple.com/kb/HT213256"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/May/35"
+  - url: "https://support.apple.com/kb/HT213257"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NS2D2GFPFGOJUL4WQ3DUAY7HF4VWQ77F/"
+  - url: "https://www.openwall.com/lists/oss-security/2022/03/24/1"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://www.openwall.com/lists/oss-security/2022/03/28/3"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -1064,93 +1148,28 @@ Unmanaged::pkg-2:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
 - id: "CVE-2022-37434"
-  description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer overflow\
-    \ in inflate in inflate.c via a large gzip header extra field. NOTE: only applications\
-    \ that call inflateGetHeader are affected. Some common applications bundle the\
-    \ affected zlib source code but may be unable to call inflateGetHeader (e.g.,\
-    \ see the nodejs/node reference)."
+  description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer\
+    \ overflow in inflate in inflate.c via a large gzip header extra field.\
+    \ NOTE: only applications that call inflateGetHeader are affected. Some\
+    \ common applications bundle the affected zlib source code but may be unable\
+    \ to call inflateGetHeader (e.g., see the nodejs/node reference)."
   references:
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/JWN4VE3JQR4O2SOUS5TXNLANRPMHWV4I/"
+  - url: "https://github.com/madler/zlib/blob/21767c654d31d2dccdde4330529775c6c5fd5389/zlib.h#L1062-L1063"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/PAVPQNCG3XRLCLNSQRM3KAN5ZFMVXVTY/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/42"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2022/09/msg00012.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NMBOJ77A7T7PQCARMDUK75TE6LLESZ3O/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/X5U7OTKZSHY2I3ZFJSR2SHFHW72RKGDK/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/YRQAI7H4M4RQZ2IWZUEEXECBE5D56BH2/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20230427-0007/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/37"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/41"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://www.openwall.com/lists/oss-security/2022/08/05/2"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20220901-0005/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213489"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213493"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://support.apple.com/kb/HT213494"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.debian.org/security/2022/dsa-5218"
+  - url: "https://github.com/nodejs/node/blob/75b68c6e4db515f76df73af476eccf382bbcb00a/deps/zlib/inflate.c#L762-L764"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://support.apple.com/kb/HT213488"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://support.apple.com/kb/HT213489"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -1165,7 +1184,62 @@ Unmanaged::pkg-2:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://seclists.org/fulldisclosure/2022/Oct/38"
+  - url: "https://support.apple.com/kb/HT213493"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://support.apple.com/kb/HT213494"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2022/37xxx/CVE-2022-37434.json"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/JWN4VE3JQR4O2SOUS5TXNLANRPMHWV4I/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/NMBOJ77A7T7PQCARMDUK75TE6LLESZ3O/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/PAVPQNCG3XRLCLNSQRM3KAN5ZFMVXVTY/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/X5U7OTKZSHY2I3ZFJSR2SHFHW72RKGDK/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/YRQAI7H4M4RQZ2IWZUEEXECBE5D56BH2/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2022-37434"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20220901-0005/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20230427-0007/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://www.debian.org/security/2022/dsa-5218"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -1175,22 +1249,12 @@ Unmanaged::pkg-2:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib/commit/eff308af425b67093bab25f80f1ae950166bece1"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "http://www.openwall.com/lists/oss-security/2022/08/09/1"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib/commit/1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/nodejs/node/blob/75b68c6e4db515f76df73af476eccf382bbcb00a/deps/zlib/inflate.c#L762-L764"
+  - url: "https://github.com/madler/zlib/commit/eff308af425b67093bab25f80f1ae950166bece1"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -1200,147 +1264,194 @@ Unmanaged::pkg-2:1.0.0:
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib/blob/21767c654d31d2dccdde4330529775c6c5fd5389/zlib.h#L1062-L1063"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/37"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/38"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/41"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://seclists.org/fulldisclosure/2022/Oct/42"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://www.openwall.com/lists/oss-security/2022/08/05/2"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "http://www.openwall.com/lists/oss-security/2022/08/09/1"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2022/09/msg00012.html"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
 - id: "CVE-2023-45853"
   description: "MiniZip in zlib through 1.3 has an integer overflow and resultant\
-    \ heap-based buffer overflow in zipOpenNewFileInZip4_64 via a long filename, comment,\
-    \ or extra field. NOTE: MiniZip is not a supported part of the zlib product. NOTE:\
-    \ pyminizip through 0.2.6 is also vulnerable because it bundles an affected zlib\
-    \ version, and exposes the applicable MiniZip code through its compress API."
+    \ heap-based buffer overflow in zipOpenNewFileInZip4_64 via a long filename,\
+    \ comment, or extra field. NOTE: MiniZip is not a supported part of the\
+    \ zlib product. NOTE: pyminizip through 0.2.6 is also vulnerable because\
+    \ it bundles an affected zlib version, and exposes the applicable MiniZip\
+    \ code through its compress API."
   references:
-  - url: "https://github.com/madler/zlib/blob/ac8f12c97d1afd9bafa9c710f827d40a407d3266/contrib/README.contrib#L1-L4"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.winimage.com/zLibDll/minizip.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://lists.debian.org/debian-lts-announce/2023/11/msg00026.html"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://pypi.org/project/pyminizip/#history"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.gentoo.org/glsa/202401-18"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://security.netapp.com/advisory/ntap-20231130-0009/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://chromium.googlesource.com/chromium/src/+/de29dd6c7151d3cd37cb4cf0036800ddfb1d8b61"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://chromium.googlesource.com/chromium/src/+/d709fb23806858847131027da95ef4c548813356"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://chromium.googlesource.com/chromium/src/+/de29dd6c7151d3cd37cb4cf0036800ddfb1d8b61"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/madler/zlib/blob/ac8f12c97d1afd9bafa9c710f827d40a407d3266/contrib/README.contrib#L1-L4"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://www.winimage.com/zLibDll/minizip.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2023/45xxx/CVE-2023-45853.json"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2023-45853"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://security.gentoo.org/glsa/202401-18"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://security.netapp.com/advisory/ntap-20231130-0009/"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib/pull/843"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://pypi.org/project/pyminizip/#history"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2023/10/20/9"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
   - url: "http://www.openwall.com/lists/oss-security/2024/01/24/10"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+  - url: "https://lists.debian.org/debian-lts-announce/2023/11/msg00026.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
 - id: "CVE-2026-22184"
+  summary: "zlib <= 1.3.1.2 untgz Global Buffer Overflow in TGZfname()"
   description: "zlib versions up to and including 1.3.1.2 include a global buffer\
     \ overflow in the untgz utility located under contrib/untgz. The vulnerability\
-    \ is limited to the standalone demonstration utility and does not affect the core\
-    \ zlib compression library. The flaw occurs when a user executes the untgz command\
-    \ with an excessively long archive name supplied via the command line, leading\
-    \ to an out-of-bounds write in a fixed-size global buffer."
+    \ is limited to the standalone demonstration utility and does not affect\
+    \ the core zlib compression library. The flaw occurs when a user executes\
+    \ the untgz command with an excessively long archive name supplied via the\
+    \ command line, leading to an out-of-bounds write in a fixed-size global\
+    \ buffer."
   references:
+  - url: "https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-22184.json"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://zlib.net/"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://access.redhat.com/security/cve/CVE-2026-22184"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/22xxx/CVE-2026-22184.json"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-22184"
+    scoring_system: "CVSS_V4"
+    severity: null
+    score: null
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://www.vulncheck.com/advisories/zlib-untgz-global-buffer-overflow-in-tgzfname"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://seclists.org/fulldisclosure/2026/Jan/3"
-    scoring_system: "CVSS_V3"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://bugzilla.redhat.com/show_bug.cgi?id=2427688"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://github.com/madler/zlib/issues/1142"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
   - url: "https://github.com/madler/zlib"
-    scoring_system: "CVSS_V3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-- id: "CVE-2026-27171"
-  description: "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64\
-    \ because x2nmodp can do right shifts within a loop that has no termination condition."
-  references:
-  - url: "https://ostif.org/zlib-audit-complete/"
-    scoring_system: "CVSS_V3"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
+  - url: "https://seclists.org/fulldisclosure/2026/Jan/3"
+    scoring_system: "CVSS_V4"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://github.com/madler/zlib/releases/tag/v1.3.2"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://github.com/madler/zlib/issues/904"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
-  - url: "https://7asecurity.com/reports/pentest-report-zlib-RC1.1.pdf"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+    vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
 - id: "CVE-2026-3381"
+  summary: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
+    \ insecure versions of zlib"
   description: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
-    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the zlib\
-    \ library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which addresses\
-    \ findings fron the 7ASecurity audit of zlib. The includes fixs for CVE-2026-27171."
+    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the\
+    \ zlib library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which\
+    \ addresses findings fron the 7ASecurity audit of zlib. The includes fixs\
+    \ for CVE-2026-27171."
   references:
+  - url: "https://cpan.org/modules"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://www.zlib.net/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/3xxx/CVE-2026-3381.json"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -1351,6 +1462,11 @@ Unmanaged::pkg-2:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://metacpan.org/release/PMQS/Compress-Raw-Zlib-2.221/source/Changes"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-3381"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
@@ -1366,6 +1482,16 @@ Unmanaged::pkg-2:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
   - url: "https://github.com/madler/zlib"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://github.com/pmqs/Compress-Raw-Zlib"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
