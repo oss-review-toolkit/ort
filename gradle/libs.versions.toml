@@ -97,6 +97,7 @@ plugin-tapmoc = { module = "com.gradleup.tapmoc:tapmoc-gradle-plugin", version.r
 
 aeSecurity = { module = "org.metaeffekt.core:ae-security", version.ref = "aeSecurity" }
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
+asciidoctorj-api = { module = "org.asciidoctor:asciidoctorj-api", version.ref = "asciidoctorj" }
 asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
 awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
 blackduck-common = { module = "com.blackduck.integration:blackduck-common", version.ref = "blackduckCommon" }
