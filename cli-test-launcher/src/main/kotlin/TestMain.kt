@@ -19,14 +19,52 @@
 
 package org.ossreviewtoolkit.clitestlauncher
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.main
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.switch
+
+import kotlin.system.exitProcess
+
 import org.ossreviewtoolkit.utils.common.Os
 
+import org.slf4j.LoggerFactory
+
+/**
+ * The entry point for the application with [args] being the list of arguments.
+ */
 fun main(args: Array<String>) {
     Os.fixupUserHomeProperty()
+    TestMain(args).main(args)
+    exitProcess(0)
+}
 
-    if (args.isEmpty()) {
-        io.kotest.engine.launcher.main(arrayOf("--specs", "scan"))
-    } else {
-        io.kotest.engine.launcher.main(args)
+class TestMain(private val originalArgv: Array<String>) : CliktCommand("ort-test-launcher") {
+    private val logLevel by option(help = "Set the verbosity level of log output.").switch(
+        "--error" to Level.ERROR,
+        "--warn" to Level.WARN,
+        "--info" to Level.INFO,
+        "--debug" to Level.DEBUG
+    ).default(Level.WARN)
+
+    override fun run() {
+        // This is somewhat dirty: ORT uses Log4j as the logging API (because of its nice Kotlin API), but Logback as
+        // the implementation (for its robustness). The Log4j API does not provide a way to get the root logger.
+        // However, the SLF4J API does, and knowing it is Logback the root level can be set. That is why ORT's CLI
+        // additionally depends on the SLF4J API, just to be able to set the root log level.
+        val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
+        rootLogger.level = logLevel
+
+        Os.fixupUserHomeProperty()
+
+        if ("--specs" !in originalArgv) {
+            io.kotest.engine.launcher.main(originalArgv + arrayOf("--specs", "scan"))
+        } else {
+            io.kotest.engine.launcher.main(originalArgv)
+        }
     }
 }

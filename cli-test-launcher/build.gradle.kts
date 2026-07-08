@@ -34,6 +34,7 @@ val Project.hasFunTests
 
 gradle.projectsEvaluated {
     dependencies {
+        implementation(libs.clikt)
         implementation(libs.kotest.framework.engine)
         implementation(projects.utils.commonUtils)
 
