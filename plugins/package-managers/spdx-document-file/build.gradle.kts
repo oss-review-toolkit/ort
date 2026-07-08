@@ -36,8 +36,9 @@ dependencies {
     implementation(projects.utils.spdxDocumentUtils)
 
     funTestImplementation(testFixtures(projects.analyzer))
-    funTestImplementation(projects.plugins.packageManagers.conanPackageManager)
     funTestImplementation(projects.utils.testUtils)
+
+    funTestRuntimeOnly(projects.plugins.packageManagers.conanPackageManager)
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
