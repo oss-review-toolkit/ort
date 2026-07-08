@@ -142,11 +142,10 @@ class OrtMain : CliktCommand(ORT_NAME) {
     override fun helpEpilog(context: Context) = "$REQUIRED_OPTION_MARKER denotes required options."
 
     override fun run() {
-        // This is somewhat dirty: For logging, ORT uses the Log4j API (because of its nice Kotlin API), but Logback as
-        // the implementation (for its robustness). The former API does not provide a way to set the root log level,
-        // only the Log4j implementation does (via org.apache.logging.log4j.core.config.Configurator). However, the
-        // SLF4J API does provide a way to get the root logger and set its level. That is why ORT's CLI additionally
-        // depends on the SLF4J API, just to be able to set the root log level below.
+        // This is somewhat dirty: ORT uses Log4j as the logging API (because of its nice Kotlin API), but Logback as
+        // the implementation (for its robustness). The Log4j API does not provide a way to get the root logger.
+        // However, the SLF4J API does, and knowing it is Logback the root level can be set. That is why ORT's CLI
+        // additionally depends on the SLF4J API, just to be able to set the root log level.
         val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
         rootLogger.level = logLevel
 
