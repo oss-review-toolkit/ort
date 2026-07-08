@@ -23,7 +23,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.log4j.api.kotlin)
     implementation(projects.utils.commonUtils)
 
     testImplementation(libs.mockk)

@@ -32,7 +32,6 @@ dependencies {
     api(libs.retrofit)
     api(projects.model)
 
-    implementation(libs.log4j.api.kotlin)
     implementation(libs.okhttp.loggingInterceptor)
     implementation(libs.retrofit.converter.kotlinxSerialization)
     implementation(projects.utils.commonUtils)

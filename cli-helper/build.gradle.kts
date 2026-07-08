@@ -36,7 +36,6 @@ dependencies {
     implementation(libs.clikt)
     implementation(libs.commonsCompress)
     implementation(libs.jslt)
-    implementation(libs.log4j.api)
     implementation(libs.slf4j)
     implementation(libs.xz)
     implementation(projects.analyzer)
