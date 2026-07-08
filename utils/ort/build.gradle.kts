@@ -38,7 +38,11 @@ dependencies {
     api(projects.utils.spdxExpressionUtils)
 
     implementation(libs.awsS3)
-    implementation(libs.xz)
+
+    implementation(libs.xz) {
+        because("XZOutputStream is a supertype of XZCompressorOutputStream.")
+    }
+
     implementation(projects.clients.foojayClient)
     implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)

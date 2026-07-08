@@ -73,6 +73,7 @@ dependencyAnalysis {
 
         project(projects.cliHelper) {
             onUnusedDependencies {
+                // XZOutputStream is a supertype of XZCompressorOutputStream.
                 exclude(libs.xz)
             }
         }
@@ -92,6 +93,13 @@ dependencyAnalysis {
         project(projects.plugins.packageManagers.bundlerPackageManager) {
             onUnusedDependencies {
                 exclude(libs.jruby)
+            }
+        }
+
+        project(projects.utils.ortUtils) {
+            onUnusedDependencies {
+                // XZOutputStream is a supertype of XZCompressorOutputStream.
+                exclude(libs.xz)
             }
         }
     }
