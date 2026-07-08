@@ -103,7 +103,7 @@ dependencies {
     implementation(enforcedPlatform(libsCatalog.findLibrary("kotlin-bom").get()))
     implementation(libsCatalog.findLibrary("logbackClassic").get())
 
-    runtimeOnly(libsCatalog.findLibrary("log4j-api-slf4j").get())
+    runtimeOnly(libsCatalog.findLibrary("log4j-to-slf4j").get())
 }
 
 tasks.withType<GenerateModuleMetadata>().configureEach {

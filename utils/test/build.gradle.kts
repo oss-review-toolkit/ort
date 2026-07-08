@@ -43,5 +43,5 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    runtimeOnly(libs.log4j.api.slf4j)
+    runtimeOnly(libs.log4j.to.slf4j)
 }
