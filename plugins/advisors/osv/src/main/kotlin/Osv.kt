@@ -195,10 +195,14 @@ private fun createRequestForPurl(purl: PackageURL): VulnerabilitiesForPackageReq
             name = "https://github.com/${purl.namespace}/${purl.name}.git"
         )
 
-        if (purl.version.isSha1()) {
-            VulnerabilitiesForPackageRequest(pkg = pkg, commit = purl.version)
-        } else {
-            VulnerabilitiesForPackageRequest(pkg = pkg, version = purl.version)
+        when {
+            // The version may be missing for packages without a resolved version. In that case, fall back to a
+            // package-only query, which lets OSV return all vulnerabilities for the package regardless of the version.
+            purl.version.isNullOrEmpty() -> VulnerabilitiesForPackageRequest(pkg = pkg)
+
+            purl.version.isSha1() -> VulnerabilitiesForPackageRequest(pkg = pkg, commit = purl.version)
+
+            else -> VulnerabilitiesForPackageRequest(pkg = pkg, version = purl.version)
         }
     } else {
         VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = purl.toString()))
