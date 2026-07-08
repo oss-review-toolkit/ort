@@ -23,11 +23,10 @@ plugins {
 }
 
 dependencies {
+    api(jacksonLibs.jacksonAnnotations)
     api(jacksonLibs.jacksonDatabind)
     api(projects.utils.spdxUtils)
 
-    implementation(jacksonLibs.jacksonDataformatYaml)
-    implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(projects.utils.commonUtils)
 
     testImplementation(projects.model)
