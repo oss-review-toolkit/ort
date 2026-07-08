@@ -25,7 +25,6 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.clikt)
     implementation(projects.plugins.packageCurationProviders.gitPackageCurationProvider)
     implementation(projects.plugins.packageManagers.nugetPackageManager)
