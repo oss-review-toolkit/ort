@@ -536,8 +536,12 @@ private fun Component.setCopyright(copyrights: Set<String>) {
     // TODO: Find a way to associate copyrights to the license they belong to, see
     //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
     copyright = copyrights.joinToString {
-        it.filterNot { character ->
-            character.isIdentifierIgnorable()
+        buildString(it.length) {
+            it.forEach { character ->
+                if (!character.isIdentifierIgnorable()) {
+                    append(if (character.isWhitespace()) ' ' else character)
+                }
+            }
         }
     }.takeUnless { it.isEmpty() }
 }
