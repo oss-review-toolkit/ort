@@ -17,7 +17,7 @@ complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -s h -l he
 
 
 ### Setup for advise
-complete -c ort -f -n __fish_use_subcommand -a advise -d 'Check dependencies for security vulnerabilities.'
+complete -c ort -f -n __fish_use_subcommand -a advise -d 'Check dependencies for security vulnerabilities and project health metrics.'
 
 ## Options for advise
 complete -c ort -n "__fish_seen_subcommand_from advise" -l ort-file -s i -r -F -d 'An ORT result file with an analyzer result to use.'
