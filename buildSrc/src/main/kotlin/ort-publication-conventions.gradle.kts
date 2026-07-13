@@ -36,6 +36,7 @@ mavenPublishing {
             project.description
                 ?: "Part of the OSS Review Toolkit (ORT), a suite to automate software compliance checks."
         }
+
         url = "https://oss-review-toolkit.org/"
 
         developers {

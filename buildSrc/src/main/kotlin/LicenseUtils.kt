@@ -73,13 +73,14 @@ object CopyrightableFiles {
         "woff2"
     )
 
-    fun filter(filesProvider: Provider<List<File>>): List<File> = filesProvider.get().filter { file ->
-        val isHidden = file.toPath().any { it.toString().startsWith(".") }
+    fun filter(filesProvider: Provider<List<File>>): List<File> =
+        filesProvider.get().filter { file ->
+            val isHidden = file.toPath().any { it.toString().startsWith(".") }
 
-        !isHidden
+            !isHidden
                 && excludedPaths.none { it in file.invariantSeparatorsPath }
                 && file.extension !in excludedExtensions
-    }
+        }
 }
 
 object CopyrightUtils {

@@ -100,7 +100,7 @@ style:
 potential-bugs:
   MissingPackageDeclaration:
     active: true
-    excludes: ["**/GradleModel.kt", "**/build.gradle.kts"]
+    excludes: ["**/GradleModel.kt", "**/*.gradle.kts", "**/buildSrc/src/main/kotlin/*.kt"]
 
 ORT:
   OrtEmptyLineAfterBlock:
