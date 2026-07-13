@@ -103,7 +103,14 @@ detekt {
     buildUponDefaultConfig = true
     config = files("$rootDir/.detekt.yml")
 
-    source.from(fileTree(".") { include("*.gradle.kts") }, "src/funTest/kotlin", "src/testFixtures/kotlin")
+    source = fileTree(rootDir) {
+        include("*.gradle.kts")
+        include("buildSrc/src/**/kotlin/**")
+    } + fileTree(projectDir) {
+        include("*.gradle.kts")
+        include("src/**/kotlin/**")
+        exclude("**/funTest/assets/**")
+    }
 
     basePath = rootDir
 }
