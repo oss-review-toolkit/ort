@@ -33,7 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(projects.utils.scriptUtils)
 
-    funTestImplementation(testFixtures(project))
+    funTestImplementation(testFixtures(project(path)))
 
     testFixturesImplementation(projects.utils.testUtils)
 

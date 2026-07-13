@@ -36,7 +36,7 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     funTestImplementation(platform(projects.plugins.packageManagers))
-    funTestImplementation(testFixtures(project))
+    funTestImplementation(testFixtures(project(path)))
 
     testFixturesImplementation(platform(projects.plugins.packageCurationProviders))
     testFixturesImplementation(libs.kotest.assertions.core)
