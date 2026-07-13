@@ -41,6 +41,11 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.SnippetFinding
+import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
+
+class AlphaNumericSortedSetConverter : StdConverter<Set<String>, SortedSet<String>>() {
+    override fun convert(value: Set<String>) = value.toSortedSet(AlphaNumericComparator)
+}
 
 class CopyrightFindingSortedSetConverter : StdConverter<Set<CopyrightFinding>, SortedSet<CopyrightFinding>>() {
     override fun convert(value: Set<CopyrightFinding>) = value.toSortedSet(CopyrightFinding.COMPARATOR)
