@@ -174,7 +174,8 @@ class VulnerableCodeApiV1Test : WordSpec({
                         score = 4.0f,
                         vector = "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
                     )
-                )
+                ),
+                firstFixedVersions = setOf("4.13.1")
             )
             result.getValue(idJUnit).vulnerabilities.normalizeVulnerabilityData() should
                 containExactly(expJunitVulnerability)
@@ -218,6 +219,18 @@ class VulnerableCodeApiV1Test : WordSpec({
             )
             result.getValue(idLog4j).vulnerabilities.normalizeVulnerabilityData() should
                 containExactlyInAnyOrder(expLog4jVulnerabilities)
+        }
+
+        "extract fixed versions from fixed packages" {
+            server.stubPackagesRequest("response_junit_multiple_fixed_versions.json")
+            val packagesToAdvise = inputPackagesFromAnalyzerResult()
+
+            val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+
+            result.getValue(idJUnit).vulnerabilities.normalizeVulnerabilityData().shouldBeSingleton {
+                it.id shouldBe "CVE-2020-15250"
+                it.firstFixedVersions should containExactlyInAnyOrder("4.13.1", "5.0.2", "6.1.3")
+            }
         }
 
         "handle a failure response from the server" {
