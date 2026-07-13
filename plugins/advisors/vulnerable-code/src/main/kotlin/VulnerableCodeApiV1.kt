@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
@@ -114,7 +115,8 @@ internal class VulnerableCodeApiV1(
             // summarize the description.
             summary = description.deriveSummary(),
             description = description,
-            references = references.flatMap { it.toModel(issues) }
+            references = references.flatMap { it.toModel(issues) },
+            firstFixedVersions = fixedPackages.mapNotNullTo(mutableSetOf()) { it.purl.toPackageUrl()?.version }
         )
     }
 

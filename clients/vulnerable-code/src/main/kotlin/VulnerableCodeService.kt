@@ -115,6 +115,15 @@ interface VulnerableCodeService {
     )
 
     /**
+     * Data class describing a package version that fixes a vulnerability.
+     */
+    @Serializable
+    data class FixedPackage(
+        /** The purl identifying this package. */
+        val purl: String
+    )
+
+    /**
      * Data class representing a single vulnerability with its references to detailed information.
      *
      * See https://github.com/aboutcode-org/vulnerablecode/blob/v36.1.3/vulnerabilities/api.py#L176-L188.
@@ -137,7 +146,10 @@ interface VulnerableCodeService {
          * currently only possible to determine the source of a specific identifier from its structure, e.g. if it has
          * a well-known prefix like CVE or GHSA.
          */
-        val aliases: List<String> = emptyList()
+        val aliases: List<String> = emptyList(),
+
+        /** A list with packages that fix this vulnerability. */
+        val fixedPackages: List<FixedPackage> = emptyList()
     )
 
     /**
