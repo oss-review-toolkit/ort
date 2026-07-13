@@ -9,12 +9,21 @@
         {
           "advisory_id": "GHSA-2cxf-6567-7pp6",
           "advisory_uid": "github_osv_importer_v2/GHSA-2cxf-6567-7pp6",
-          "resource_url": "https://example.org/advisories/github_osv_importer_v2/GHSA-2cxf-6567-7pp6"
+          "resource_url": "https://example.org/advisories/github_osv_importer_v2/GHSA-2cxf-6567-7pp6",
+          "fixed_by_packages": [
+            "pkg:maven/org.apache.commons/commons-lang3@3.7",
+            "pkg:maven/org.apache.commons/commons-lang3@4.1"
+          ]
         },
         {
           "advisory_id": "CVE-2014-8242",
           "advisory_uid": "gitlab_importer_v2/maven/org.apache.commons/commons-lang3/CVE-2014-8242",
-          "resource_url": "https://example.org/advisories/gitlab_importer_v2/maven/org.apache.commons/commons-lang3/CVE-2014-8242"
+          "resource_url": "https://example.org/advisories/gitlab_importer_v2/maven/org.apache.commons/commons-lang3/CVE-2014-8242",
+          "fixed_by_packages": [
+            "pkg:maven/org.apache.commons/commons-lang3@3.7",
+            "pkg:maven/org.apache.commons/commons-lang3@4.1",
+            "pkg:maven/org.apache.commons/commons-lang3@5.3"
+          ]
         }
       ],
       "fixing_vulnerabilities": []

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containAll
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -199,6 +200,8 @@ class VulnerableCodeFunTest : WordSpec({
                     score shouldBe 5.5f
                     vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N"
                 }
+
+                vulnerability.firstFixedVersions should containExactly("32.0.0-android")
             }
         }
 
@@ -225,6 +228,8 @@ class VulnerableCodeFunTest : WordSpec({
                     score shouldBe 5.5f
                     vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
                 }
+
+                vulnerability.firstFixedVersions should containExactly("1.24.0")
             }
         }
 
@@ -251,6 +256,8 @@ class VulnerableCodeFunTest : WordSpec({
                     score shouldBe 4.8f
                     vector shouldBe "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
                 }
+
+                vulnerability.firstFixedVersions should containExactly("6.6.0")
             }
         }
     }

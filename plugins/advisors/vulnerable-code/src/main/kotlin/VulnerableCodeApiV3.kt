@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
@@ -113,7 +114,7 @@ internal class VulnerableCodeApiV3(
         val purls = packages.mapNotNull { pkg -> pkg.purl.ifEmpty { null } }
         val chunks = purls.chunked(BULK_REQUEST_SIZE)
 
-        val allVulnerabilities = mutableMapOf<String, List<AdvisoryV3>>()
+        val allVulnerabilities = mutableMapOf<String, List<Vulnerability>>()
         val issues = mutableListOf<Issue>()
 
         chunks.forEachIndexed { index, chunk ->
@@ -135,7 +136,7 @@ internal class VulnerableCodeApiV3(
 
         return packages.mapNotNullTo(mutableListOf()) { pkg ->
             allVulnerabilities[pkg.purl]?.let { packageVulnerabilities ->
-                val vulnerabilities = packageVulnerabilities.map { it.toModel(issues) }.mergeVulnerabilities()
+                val vulnerabilities = packageVulnerabilities.mergeVulnerabilities()
                 val summary = AdvisorSummary(startTime, endTime, issues)
                 pkg to AdvisorResult(details, summary, vulnerabilities = vulnerabilities)
             }
@@ -150,7 +151,7 @@ internal class VulnerableCodeApiV3(
     private suspend fun HttpClient.getAdvisoriesByPackage(
         purls: List<String>,
         issues: MutableList<Issue>
-    ): Map<String, List<AdvisoryV3>> {
+    ): Map<String, List<Vulnerability>> {
         val advisoryUidsByPurl = getAllPackageDetails(purls).associate { packageDetails ->
             if (packageDetails.affected_by_vulnerabilities.size >= DEFAULT_MAX_ADVISORIES) {
                 issues += createAndLogIssue(
@@ -161,15 +162,17 @@ internal class VulnerableCodeApiV3(
                 )
             }
 
-            packageDetails.purl to packageDetails.affected_by_vulnerabilities.mapTo(mutableSetOf()) {
-                it.advisory_uid
+            packageDetails.purl to packageDetails.affected_by_vulnerabilities.associate {
+                it.advisory_uid to it.fixed_by_packages.mapNotNullTo(mutableSetOf()) { purl ->
+                    purl.toPackageUrl()?.version
+                }
             }
         }.filterValues { advisoryUids -> advisoryUids.isNotEmpty() }
 
         if (advisoryUidsByPurl.isEmpty()) return emptyMap()
 
         val advisoriesByUid = getAllAdvisories(advisoryUidsByPurl.keys.toList()).associateBy { it.advisory_uid }
-        val missingAdvisoryUids = advisoryUidsByPurl.values.flatten().toSet() - advisoriesByUid.keys
+        val missingAdvisoryUids = advisoryUidsByPurl.values.flatMapTo(mutableSetOf()) { it.keys } - advisoriesByUid.keys
 
         missingAdvisoryUids.forEach { advisoryUid ->
             issues += createAndLogIssue(
@@ -180,7 +183,9 @@ internal class VulnerableCodeApiV3(
         }
 
         return advisoryUidsByPurl.mapValues { (_, advisoryUids) ->
-            advisoryUids.mapNotNull { advisoriesByUid[it] }
+            advisoryUids.mapNotNull { (advisoryUid, fixedVersions) ->
+                advisoriesByUid[advisoryUid]?.toModel(issues, fixedVersions)
+            }
         }
     }
 
@@ -232,7 +237,7 @@ internal class VulnerableCodeApiV3(
      * Convert this advisory from the VulnerableCode data model to a [Vulnerability]. Populate [issues] if this
      * fails.
      */
-    private fun AdvisoryV3.toModel(issues: MutableList<Issue>): Vulnerability {
+    private fun AdvisoryV3.toModel(issues: MutableList<Issue>, firstFixedVersions: Set<String>): Vulnerability {
         val normalizedSummary = summary?.ifBlank { null }
 
         return Vulnerability(
@@ -241,7 +246,8 @@ internal class VulnerableCodeApiV3(
             // as description and derive a shorter summary from it.
             summary = normalizedSummary.deriveSummary(),
             description = normalizedSummary,
-            references = toReferences(issues)
+            references = toReferences(issues),
+            firstFixedVersions = firstFixedVersions
         )
     }
 
@@ -323,10 +329,11 @@ internal class VulnerableCodeApiV3(
     private fun Collection<Vulnerability>.mergeVulnerabilities(): List<Vulnerability> =
         groupBy { it.id }.values.map { vulnerabilitiesWithSameId ->
             val references = vulnerabilitiesWithSameId.flatMapTo(mutableSetOf()) { it.references }
+            val fixedVersions = vulnerabilitiesWithSameId.flatMapTo(mutableSetOf()) { it.firstFixedVersions }
             val entry = vulnerabilitiesWithSameId.find { it.summary != null || it.description != null }
                 ?: vulnerabilitiesWithSameId.first()
 
-            entry.copy(references = references.toList())
+            entry.copy(references = references.toList(), firstFixedVersions = fixedVersions)
         }
 
     /**
