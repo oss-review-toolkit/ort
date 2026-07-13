@@ -42,13 +42,13 @@ include(":version-catalog")
 
 includeSubprojects("clients", maxDepth = 2)
 includeSubprojects("utils", maxDepth = 2)
-includeSubprojects("plugins", maxDepth = 3, setOf("gradle-inspector", "gradle-model", "gradle-plugin", "web-app-template"))
+includeSubprojects("plugins", maxDepth = 3, "gradle-inspector", "gradle-model", "gradle-plugin", "web-app-template")
 
 /**
  * Add include statements and custom names for the projects hosted inside [directoryName] and up to [maxDepth] directory
  * levels below, with [accompanyingProjects] to be excluded from the custom project naming logic.
  */
-fun includeSubprojects(directoryName: String, maxDepth: Int, accompanyingProjects: Set<String> = emptySet()) {
+fun includeSubprojects(directoryName: String, maxDepth: Int, vararg accompanyingProjects: String) {
     file(directoryName).walk().maxDepth(maxDepth).filter {
         it.isFile && it.name == "build.gradle.kts"
     }.mapTo(mutableListOf()) {
@@ -63,7 +63,7 @@ fun includeSubprojects(directoryName: String, maxDepth: Int, accompanyingProject
             // Convert the plural name for the type of plugin to singular.
             val singularTypeName = parts[maxDepth - 2].let { if (it == "utils") it else it.removeSuffix("s") }
 
-            project(":$projectPath").name = when(projectName) {
+            project(":$projectPath").name = when (projectName) {
                 "api" -> "$singularTypeName-api"
                 else -> "$projectName-$singularTypeName"
             }

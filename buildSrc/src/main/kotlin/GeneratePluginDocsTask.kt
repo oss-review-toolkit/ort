@@ -61,6 +61,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
         logger.lifecycle("Found a total of ${inputFiles.count()} plugins.")
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun generatePluginDocs(pluginType: String, tool: String? = null) {
         val plugins = inputFiles.filter { "plugins/$pluginType" in it.invariantSeparatorsPath }
         val dir = outputDirectory.resolve(pluginType).apply { mkdirs() }
@@ -91,7 +92,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                 appendLine("***${descriptor["summary"]}***")
                 appendLine()
 
-                descriptor["description"].takeIf { it != null && it != descriptor["summary"]}?.also {
+                descriptor["description"].takeIf { it != null && it != descriptor["summary"] }?.also {
                     appendLine("## Description")
                     appendLine()
                     appendLine(convertKdocLinks(it as String))
@@ -139,6 +140,7 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                             } else {
                                 append("<OPTIONAL_$type>")
                             }
+
                             appendLine()
                         }
                     }
@@ -214,17 +216,19 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
                     if (enumEntries?.isNotEmpty() == true) {
                         appendLine()
                         appendLine("**Possible values:**")
-                        appendLine(enumEntries.joinToString { entry ->
-                            buildString {
-                                append("`${entry["alternativeName"] ?: entry["name"]}`")
-                                val aliases = entry["aliases"] as List<*>
-                                if (aliases.isNotEmpty()) {
-                                    append(" (alias")
-                                    if (aliases.size > 1) append("es")
-                                    append(": ${aliases.joinToString { "`$it`" }})")
+                        appendLine(
+                            enumEntries.joinToString { entry ->
+                                buildString {
+                                    append("`${entry["alternativeName"] ?: entry["name"]}`")
+                                    val aliases = entry["aliases"] as List<*>
+                                    if (aliases.isNotEmpty()) {
+                                        append(" (alias")
+                                        if (aliases.size > 1) append("es")
+                                        append(": ${aliases.joinToString { "`$it`" }})")
+                                    }
                                 }
                             }
-                        })
+                        )
                     }
 
                     appendLine()
@@ -242,7 +246,8 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
 private val KDOC_LINK_REGEX = Regex("""\[([^]]+)](?:\[([^]]+)])?(?!\()""")
 
 /** Convert KDoc symbol links into inline code blocks. */
-fun convertKdocLinks(input: String) = input.replace(KDOC_LINK_REGEX) {
-    val (text, target) = it.destructured
-    if (target.isNotEmpty()) "$text (`$target`)" else "`$text`"
-}
+fun convertKdocLinks(input: String) =
+    input.replace(KDOC_LINK_REGEX) {
+        val (text, target) = it.destructured
+        if (target.isNotEmpty()) "$text (`$target`)" else "`$text`"
+    }
