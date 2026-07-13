@@ -93,7 +93,8 @@ class OsvFunTest : WordSpec({
             packageFindings shouldBe expectedResult
         }
 
-        "return the vulnerabilities for the commit of Hadoop 3.3.1" {
+        // TODO: Enable this again once https://github.com/google/osv.dev/issues/5618 is fixed.
+        "return the vulnerabilities for the commit of Hadoop 3.3.1".config(enabled = false) {
             val osv = OsvFactory.create()
             val pkg = Package.EMPTY.copy(
                 vcsProcessed = VcsInfo.EMPTY.copy(revision = "a3b9c37a397ad4188041dd80621bdeefc46885f2")
