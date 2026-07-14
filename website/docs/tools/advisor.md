@@ -38,6 +38,25 @@ ort:
 
 To enable this provider, pass `-a BlackDuck` on the command line.
 
+## CrOSSD
+
+This provider obtains metrics about project health from a [CrOSSD](https://health.crossd.tech/doc) instance.
+The configuration is limited to the server URL and the criticality thresholds, as authentication is not required:
+
+```yaml
+ort:
+  advisor:
+    advisors:
+      Crossd:
+        options:
+          serverUrl: "https://health.crossd.tech"
+          thresholdCriticalityLow: 15
+          thresholdCriticalityMedium: 25
+          thresholdCriticalityHigh: 40
+```
+
+To enable this provider, pass `-a Crossd` on the command line.
+
 ## OSS Index
 
 The OSS Index vulnerability provider by now is part of [Sonatype Guide](https://guide.sonatype.com/) and requires free registration to obtain an API token.
