@@ -70,6 +70,13 @@ internal fun NuGetInspector.Result.toOrtProject(
 
     val packageReferences = nestedPackages.toPackageReferences()
     val scopes = setOf(Scope(headers.first().projectFramework, packageReferences))
+    // nuget-inspector puts the scanned project as the first
+    // item of the packages in the json result
+    // if empty use emptySet
+    // downside a correct OR expression will be get converted to AND, but that
+    // is the same for all other package managers too
+    val declaredLicenses =
+        packages.first().licenseExpression?.split("\\s.*\\s".toRegex())?.filter { it.isNotEmpty() }.orEmpty().toSet()
 
     return Project(
         id = id,
@@ -77,7 +84,7 @@ internal fun NuGetInspector.Result.toOrtProject(
         vcs = VcsInfo.EMPTY,
         authors = emptySet(),
         vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile),
-        declaredLicenses = emptySet(),
+        declaredLicenses = declaredLicenses,
         homepageUrl = "",
         scopeDependencies = scopes
     )
