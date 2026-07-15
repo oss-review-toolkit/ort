@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
@@ -71,6 +72,17 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseScm
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.processDeclaredLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.toOrtProject
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+
+/**
+ * A data class storing the configuration options supported by the [Tycho] package manager implementation.
+ */
+data class TychoConfig(
+    @OrtPluginOption(defaultValue = "true")
+    val skipTests: Boolean,
+
+    @OrtPluginOption(defaultValue = "false")
+    val enableDebugLogs: Boolean
+)
 
 /**
  * A package manager implementation supporting Maven projects using [Tycho](https://github.com/eclipse-tycho/tycho).
@@ -97,7 +109,10 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
     summary = "The Tycho package manager for Maven projects.",
     factory = PackageManagerFactory::class
 )
-class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor) : PackageManager("Tycho") {
+class Tycho(
+    override val descriptor: PluginDescriptor = TychoFactory.descriptor,
+    private val config: TychoConfig
+) : PackageManager("Tycho") {
     override val globsForDefinitionFiles = listOf("pom.xml")
 
     /**
@@ -326,7 +341,15 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
             // Use pre-Java-24 unlimited JAXP XML processing.
             add("-Djdk.xml.maxGeneralEntitySizeLimit=0")
             add("-Djdk.xml.totalEntitySizeLimit=0")
-        }.toTypedArray()
+
+            if (config.skipTests) {
+                add("-Dmaven.test.skip=true")
+            }
+
+            if (config.enableDebugLogs) {
+                add("-X")
+            }
+        }.toTypedArray().also { logger.debug { "Maven CLI options: ${it.joinToString(" ")}" } }
 }
 
 /**
