@@ -4,6 +4,36 @@ Unmanaged::pkg-0:1.0.0:
   description: "zlib before 1.2.12 allows memory corruption when deflating (i.e.,\
     \ when compressing) if the input has many distant matches."
   references:
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-333517.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-398330.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-419740.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-470355.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-565386.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-942865.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "http://seclists.org/fulldisclosure/2022/May/33"
     scoring_system: "CVSS_V3"
     severity: null
@@ -545,6 +575,36 @@ Unmanaged::pkg-1:1.0.0:
   description: "zlib before 1.2.12 allows memory corruption when deflating (i.e.,\
     \ when compressing) if the input has many distant matches."
   references:
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-333517.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-398330.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-419740.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-470355.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-565386.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-942865.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "http://seclists.org/fulldisclosure/2022/May/33"
     scoring_system: "CVSS_V3"
     severity: null
@@ -1086,6 +1146,36 @@ Unmanaged::pkg-2:1.0.0:
   description: "zlib before 1.2.12 allows memory corruption when deflating (i.e.,\
     \ when compressing) if the input has many distant matches."
   references:
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-333517.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-398330.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-419740.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-470355.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-565386.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://cert-portal.siemens.com/productcert/html/ssa-942865.html"
+    scoring_system: "CVSS_V3"
+    severity: null
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   - url: "http://seclists.org/fulldisclosure/2022/May/33"
     scoring_system: "CVSS_V3"
     severity: null
