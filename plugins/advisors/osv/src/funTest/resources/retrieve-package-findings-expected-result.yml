@@ -27,6 +27,9 @@ NPM::find-my-way:3.0.0:
     severity: "MODERATE"
     score: null
     vector: "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  first_fixed_versions:
+  - "2.2.5"
+  - "3.0.5"
 NPM::discord-markdown:2.3.0:
 - id: "GHSA-9r27-994c-4xch"
   summary: "discord-html not escaping HTML code blocks when lacking a language identifier"
@@ -51,6 +54,8 @@ NPM::discord-markdown:2.3.0:
     severity: "HIGH"
     score: null
     vector: null
+  first_fixed_versions:
+  - "2.3.1"
 PyPI::donfig:0.2.0:
 - id: "GHSA-3qr5-h7w4-3gx3"
   summary: "Donfig Command Injection in collect_yaml method"
@@ -118,6 +123,8 @@ PyPI::donfig:0.2.0:
     severity: "CRITICAL"
     score: null
     vector: "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+  first_fixed_versions:
+  - "0.4.0"
 - id: "PYSEC-2019-21"
   description: "An issue was discovered in Donfig 0.3.0. There is a vulnerability\
     \ in the collect_yaml method in config_obj.py. It can execute arbitrary Python\
@@ -138,3 +145,5 @@ PyPI::donfig:0.2.0:
     severity: null
     score: null
     vector: null
+  first_fixed_versions:
+  - "0.4.0"
