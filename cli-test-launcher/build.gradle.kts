@@ -34,10 +34,6 @@ val Project.hasFunTests
 
 gradle.projectsEvaluated {
     dependencies {
-        implementation(libs.clikt)
-        implementation(libs.kotest.framework.engine)
-        implementation(projects.utils.commonUtils)
-
         rootProject.subprojects.filter { it.hasFunTests }.forEach {
             runtimeOnly(project(it.path)) {
                 capabilities {
@@ -48,6 +44,10 @@ gradle.projectsEvaluated {
                 }
             }
         }
+
+        implementation(projects.utils.commonUtils)
+        implementation(libs.clikt)
+        implementation(libs.kotest.framework.engine)
     }
 }
 

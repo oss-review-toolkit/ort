@@ -28,18 +28,18 @@ plugins {
 dependencies {
     api(projects.reporter)
 
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.ks3.jdk)
     implementation(projects.downloader)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ks3.jdk)
 
-    funTestImplementation(libs.kotest.assertions.json)
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
     funTestImplementation(projects.utils.testUtils)
+    funTestImplementation(libs.kotest.assertions.json)
 
     testImplementation(projects.utils.testUtils)
 

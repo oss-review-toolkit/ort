@@ -29,8 +29,8 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    testImplementation(libs.wiremock)
     testImplementation(projects.utils.testUtils)
+    testImplementation(libs.wiremock)
 
     ksp(projects.plugins.advisors.advisorApi)
 }

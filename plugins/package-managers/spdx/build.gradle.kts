@@ -26,12 +26,12 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    implementation(libs.commonsCompress)
-    implementation(libs.spdx.library)
-    implementation(libs.spdx.store.v3jsonld)
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation(libs.commonsCompress)
+    implementation(libs.spdx.library)
+    implementation(libs.spdx.store.v3jsonld)
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)

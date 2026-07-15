@@ -26,34 +26,34 @@ plugins {
 }
 
 dependencies {
-    api(libs.exposed.core)
-    api(libs.exposed.dao)
     api(projects.downloader)
     api(projects.model)
     api(projects.plugins.api)
     api(projects.utils.ortUtils)
+    api(libs.exposed.core)
+    api(libs.exposed.dao)
 
+    implementation(projects.clients.clearlyDefinedClient)
+    implementation(projects.utils.commonUtils)
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.json)
     implementation(libs.kotlinx.coroutines)
-    implementation(projects.clients.clearlyDefinedClient)
-    implementation(projects.utils.commonUtils)
 
     funTestImplementation(platform(projects.plugins.scanners))
     funTestImplementation(platform(projects.plugins.versionControlSystems))
     funTestImplementation(testFixtures(projects.scanner))
     funTestImplementation(projects.utils.testUtils)
 
-    testFixturesImplementation(libs.kotest.assertions.core)
-    testFixturesImplementation(libs.kotest.runner.junit5)
     testFixturesImplementation(projects.utils.commonUtils)
     testFixturesImplementation(projects.utils.testUtils)
+    testFixturesImplementation(libs.kotest.assertions.core)
+    testFixturesImplementation(libs.kotest.runner.junit5)
 
     testImplementation(platform(projects.plugins.scanners))
+    testImplementation(projects.utils.testUtils)
     testImplementation(libs.kotlinx.serialization.core)
     testImplementation(libs.kotlinx.serialization.json)
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
-    testImplementation(projects.utils.testUtils)
 }

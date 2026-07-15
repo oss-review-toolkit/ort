@@ -26,16 +26,16 @@ dependencies {
     api(projects.downloader)
     api(projects.model)
 
+    implementation(projects.utils.authenticationUtils)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+
     implementation(libs.svnkit) {
         exclude(group = "org.apache.sshd", module = "sshd-core")
             .because("it is included in JGit's sshd-osgi dependency")
         exclude(group = "org.apache.sshd", module = "sshd-common")
             .because("it is included in JGit's sshd-osgi dependency")
     }
-
-    implementation(projects.utils.authenticationUtils)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
 
     ksp(projects.downloader)
 }

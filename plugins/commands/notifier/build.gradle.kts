@@ -25,11 +25,11 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    implementation(libs.clikt)
     implementation(projects.model)
     implementation(projects.notifier)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation(libs.clikt)
 
     ksp(projects.plugins.commands.commandApi)
 }

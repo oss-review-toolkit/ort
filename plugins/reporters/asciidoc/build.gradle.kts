@@ -23,8 +23,8 @@ plugins {
 }
 
 dependencies {
-    api(libs.asciidoctorj.api)
     api(projects.reporter)
+    api(libs.asciidoctorj.api)
 
     implementation(projects.model)
     implementation(projects.plugins.reporters.freemarkerReporter)

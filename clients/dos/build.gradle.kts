@@ -26,15 +26,15 @@ plugins {
 }
 
 dependencies {
+    api(projects.model)
     api(libs.kotlinx.serialization.core)
     api(libs.kotlinx.serialization.json)
     api(libs.okhttp)
     api(libs.retrofit)
-    api(projects.model)
 
+    implementation(projects.utils.commonUtils)
     implementation(libs.okhttp.loggingInterceptor)
     implementation(libs.retrofit.converter.kotlinxSerialization)
-    implementation(projects.utils.commonUtils)
 }
 
 description = "A client to communicate with the API of a Double Open Server instance."

@@ -10,7 +10,7 @@ kfxPlugin = "0.2.10"
 kotlinPlugin = "2.3.21"
 ksp = "2.3.10"
 mavenPublishPlugin = "0.37.0"
-sortDependenciesPlugin = "0.19.0"
+sortDependenciesPlugin = "0.20.0"
 tapmocPlugin = "0.4.2"
 
 aeSecurity = "0.156.4"

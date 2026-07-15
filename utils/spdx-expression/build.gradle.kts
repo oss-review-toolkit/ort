@@ -23,9 +23,9 @@ plugins {
 }
 
 dependencies {
+    api(projects.utils.spdxUtils)
     api(jacksonLibs.jacksonAnnotations)
     api(jacksonLibs.jacksonDatabind)
-    api(projects.utils.spdxUtils)
 
     implementation(projects.utils.commonUtils)
 

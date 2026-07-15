@@ -27,13 +27,13 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.packageurl)
     implementation(projects.downloader)
     implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.packageurl)
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)

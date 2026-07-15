@@ -32,16 +32,6 @@ application {
 }
 
 dependencies {
-    implementation(jacksonLibs.jacksonModuleKotlin)
-    implementation(libs.clikt)
-    implementation(libs.commonsCompress)
-    implementation(libs.jslt)
-    implementation(libs.slf4j)
-
-    implementation(libs.xz) {
-        because("XZOutputStream is a supertype of XZCompressorOutputStream.")
-    }
-
     implementation(projects.analyzer)
     implementation(projects.downloader)
 
@@ -55,6 +45,15 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxExpressionUtils)
     implementation(projects.utils.spdxUtils)
+    implementation(jacksonLibs.jacksonModuleKotlin)
+    implementation(libs.clikt)
+    implementation(libs.commonsCompress)
+    implementation(libs.jslt)
+    implementation(libs.slf4j)
+
+    implementation(libs.xz) {
+        because("XZOutputStream is a supertype of XZCompressorOutputStream.")
+    }
 
     funTestImplementation(projects.utils.testUtils)
 

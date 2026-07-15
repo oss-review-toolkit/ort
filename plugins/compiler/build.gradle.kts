@@ -23,9 +23,9 @@ plugins {
 }
 
 dependencies {
+    api(projects.plugins.api)
     api(libs.kotlinpoet)
     api(libs.ksp)
-    api(projects.plugins.api)
 
     implementation(libs.kotlinpoet.ksp)
     implementation(libs.kotlinx.serialization.json)

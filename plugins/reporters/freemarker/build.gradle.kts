@@ -26,17 +26,17 @@ dependencies {
     api(projects.model)
     api(projects.reporter)
 
-    implementation(libs.freemarker)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)
+    implementation(libs.freemarker)
 
     funTestImplementation(testFixtures(projects.reporter))
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
     funTestImplementation(projects.utils.testUtils)
 
-    testImplementation(libs.mockk)
     testImplementation(projects.utils.ortUtils)
     testImplementation(projects.utils.testUtils)
+    testImplementation(libs.mockk)
 
     ksp(projects.reporter)
 }

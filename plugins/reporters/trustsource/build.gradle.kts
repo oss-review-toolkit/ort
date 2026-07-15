@@ -26,16 +26,16 @@ plugins {
 }
 
 dependencies {
+    api(projects.reporter)
     api(libs.kotlinx.serialization.core)
     api(libs.kotlinx.serialization.json)
-    api(projects.reporter)
 
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
 
     funTestImplementation(testFixtures(projects.reporter))
-    funTestImplementation(libs.kotest.assertions.json)
     funTestImplementation(projects.utils.testUtils)
+    funTestImplementation(libs.kotest.assertions.json)
 
     ksp(projects.reporter)
 }

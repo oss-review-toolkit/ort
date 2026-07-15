@@ -30,8 +30,8 @@ dependencies {
     api(projects.plugins.api)
     api(projects.plugins.licenseFactProviders.licenseFactProviderApi)
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(projects.utils.scriptUtils)
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
     funTestImplementation(testFixtures(project(path)))
 
