@@ -30,7 +30,10 @@ import kotlinx.serialization.json.contentOrNull
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf
 
+import org.ossreviewtoolkit.clients.osv.Affected
+import org.ossreviewtoolkit.clients.osv.Event
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
+import org.ossreviewtoolkit.clients.osv.Range
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
 import org.ossreviewtoolkit.clients.osv.Vulnerability
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -45,6 +48,7 @@ import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
@@ -82,7 +86,7 @@ class Osv(
                 pkg to AdvisorResult(
                     advisor = details,
                     summary = AdvisorSummary(startTime = startTime, endTime = Instant.now()),
-                    vulnerabilities = ids.map { vulnerabilityForId.getValue(it).toOrtVulnerability() }
+                    vulnerabilities = ids.map { vulnerabilityForId.getValue(it).toOrtVulnerability(pkg.purl) }
                 )
             }
         }.toMap()
@@ -125,7 +129,7 @@ class Osv(
     }
 }
 
-private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulnerabilities.Vulnerability {
+private fun Vulnerability.toOrtVulnerability(purl: String): org.ossreviewtoolkit.model.vulnerabilities.Vulnerability {
     // The ORT and OSV vulnerability data models are different in that ORT uses a severity for each reference (assuming
     // that different references could use different severities), whereas OSV manages severities and references on the
     // same level, which means it is not possible to identify whether a reference belongs to a specific severity.
@@ -159,9 +163,42 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
         id = id,
         summary = summary,
         description = details,
-        references = ortReferences
+        references = ortReferences,
+        firstFixedVersions = purl.toPackageUrl()?.let { affected.toFirstFixedVersions(it) }.orEmpty()
     )
 }
+
+/**
+ * Extract the first fixed versions from the given [Affected] items that match the given [purl].
+ */
+private fun Collection<Affected>.toFirstFixedVersions(purl: PackageURL): Set<String> {
+    val namespaceNameList = listOfNotNull(purl.namespace, purl.name)
+
+    // In the case of GitHub purls, the package object is null, and the range object contains a repository URL that can
+    // be used to identify the package.
+    if (purl.type == "github") {
+        return flatMapTo(mutableSetOf()) { affected ->
+            affected.ranges.filter { range ->
+                val encodedNamespaceName = namespaceNameList.joinToString("/") { it.percentEncode() }
+                range.repo?.contains(encodedNamespaceName) ?: false
+            }.flatMap { it.getFixedVersions() }
+        }
+    }
+
+    // For other purl types, the package object is used to identify the package. The package name is a required field in
+    // the package object, so it is used to check for a match. The name depends on the ecosystem, and if the ecosystem
+    // supports namespaces, the namespace is prepended to the name. The separator between the namespace and the name
+    // also depends on the ecosystem. See https://ossf.github.io/osv-schema/#affectedpackage-field for details.
+    return filter { affected ->
+        val separator = if (purl.type == "maven") ":" else "/"
+        affected.pkg?.name == namespaceNameList.joinToString(separator) { it }
+    }.flatMapTo(mutableSetOf()) { affected ->
+        affected.ranges.flatMap { it.getFixedVersions() }
+    }
+}
+
+private fun Range.getFixedVersions(): List<String> =
+    events.mapNotNull { event -> event.takeIf { it.type == Event.Type.FIXED }?.value }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
