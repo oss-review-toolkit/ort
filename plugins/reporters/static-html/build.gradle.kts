@@ -25,13 +25,13 @@ plugins {
 dependencies {
     api(projects.reporter)
 
-    implementation(libs.flexmark)
-    implementation(libs.kotlinx.html)
     implementation(projects.downloader)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
+    implementation(libs.flexmark)
+    implementation(libs.kotlinx.html)
 
     funTestImplementation(projects.utils.testUtils)
 

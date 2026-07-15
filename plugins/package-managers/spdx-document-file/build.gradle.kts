@@ -26,14 +26,14 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    implementation(jacksonLibs.jacksonCore)
-    implementation(jacksonLibs.jacksonDatabind)
-    implementation(libs.okhttp)
     implementation(projects.downloader)
     implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxDocumentUtils)
+    implementation(jacksonLibs.jacksonCore)
+    implementation(jacksonLibs.jacksonDatabind)
+    implementation(libs.okhttp)
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)

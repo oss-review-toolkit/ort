@@ -29,14 +29,14 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.semver4j)
     implementation(projects.clients.bazelModuleRegistryClient)
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.semver4j)
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)

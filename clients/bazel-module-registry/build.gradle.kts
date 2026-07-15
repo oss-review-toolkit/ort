@@ -30,11 +30,11 @@ dependencies {
     api(libs.okhttp)
     api(libs.retrofit)
 
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ks3.jdk)
     implementation(libs.retrofit.converter.kotlinxSerialization)
-    implementation(projects.downloader)
-    implementation(projects.utils.commonUtils)
 }
 
 description = "A client to communicate with the API of a Bazel module registry."

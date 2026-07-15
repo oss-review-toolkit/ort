@@ -23,10 +23,11 @@ plugins {
 }
 
 dependencies {
-    api(libs.jiraRestClient.api)
     api(projects.model)
     api(projects.utils.scriptUtils)
+    api(libs.jiraRestClient.api)
 
+    implementation(projects.utils.commonUtils)
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(libs.jakartaMail)
 
@@ -34,8 +35,6 @@ dependencies {
         exclude("org.apache.logging.log4j", "log4j-slf4j2-impl")
             .because("the SLF4J implementation from Log4j 2 is used")
     }
-
-    implementation(projects.utils.commonUtils)
 
     runtimeOnly(libs.jerseyCommon)
 

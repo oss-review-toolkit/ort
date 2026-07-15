@@ -32,11 +32,11 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
     implementation(projects.downloader)
     implementation(projects.plugins.packageManagers.gradleModel)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)

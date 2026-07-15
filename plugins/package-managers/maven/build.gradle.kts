@@ -26,18 +26,18 @@ plugins {
 }
 
 dependencies {
+    api(projects.analyzer)
+    api(projects.model)
     api(libs.kottage)
     api(libs.maven.core)
     api(libs.maven.resolver.api)
-    api(projects.analyzer)
-    api(projects.model)
 
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.maven.embedder)
     implementation(projects.downloader)
     implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.maven.embedder)
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)

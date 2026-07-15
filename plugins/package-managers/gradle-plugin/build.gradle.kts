@@ -45,9 +45,9 @@ tapmoc {
 }
 
 dependencies {
+    api(projects.plugins.packageManagers.gradleModel)
     api(libs.maven.model)
     api(libs.maven.model.builder)
-    api(projects.plugins.packageManagers.gradleModel)
 }
 
 tasks.named<KotlinCompile>("compileKotlin") {

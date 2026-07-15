@@ -25,10 +25,10 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    implementation(libs.clikt)
     implementation(projects.plugins.packageCurationProviders.gitPackageCurationProvider)
     implementation(projects.plugins.packageManagers.nugetPackageManager)
     implementation(projects.utils.commonUtils)
+    implementation(libs.clikt)
 
     ksp(projects.plugins.commands.commandApi)
 }

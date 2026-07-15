@@ -26,13 +26,13 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation(libs.maven.core)
-    implementation(libs.maven.resolver.api)
     implementation(projects.downloader)
     implementation(projects.plugins.packageManagers.mavenPackageManager)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
+    implementation(libs.maven.core)
+    implementation(libs.maven.resolver.api)
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)

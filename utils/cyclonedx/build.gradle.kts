@@ -23,9 +23,9 @@ plugins {
 }
 
 dependencies {
-    api(libs.cyclonedx)
     api(projects.analyzer)
     api(projects.model)
+    api(libs.cyclonedx)
 
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)

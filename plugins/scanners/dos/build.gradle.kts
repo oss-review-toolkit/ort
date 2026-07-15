@@ -30,16 +30,16 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
 
+    testImplementation(projects.utils.testUtils)
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
-    testImplementation(projects.utils.testUtils)
 
     ksp(projects.scanner)
 }

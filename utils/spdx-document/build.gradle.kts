@@ -26,14 +26,14 @@ dependencies {
     api(jacksonLibs.jacksonAnnotations)
     api(jacksonLibs.jacksonDatabind)
 
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxExpressionUtils)
+    implementation(projects.utils.spdxUtils)
     implementation(jacksonLibs.jacksonCore)
     implementation(jacksonLibs.jacksonDataformatYaml)
     implementation(jacksonLibs.jacksonDatatypeJsr310)
     implementation(jacksonLibs.jacksonModuleKotlin)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.spdxExpressionUtils)
-    implementation(projects.utils.spdxUtils)
 
-    testImplementation(libs.kotest.assertions.json)
     testImplementation(projects.utils.testUtils)
+    testImplementation(libs.kotest.assertions.json)
 }

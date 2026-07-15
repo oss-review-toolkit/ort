@@ -39,8 +39,8 @@ plugins {
 dependencies {
     api(libs.kotlinx.serialization.core)
 
-    implementation(libs.kotlinx.serialization.yaml)
     implementation(projects.utils.commonUtils)
+    implementation(libs.kotlinx.serialization.yaml)
 
     testImplementation(projects.model)
 }

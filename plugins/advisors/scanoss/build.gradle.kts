@@ -27,6 +27,8 @@ dependencies {
     api(projects.plugins.advisors.advisorApi)
     api(projects.plugins.api)
 
+    implementation(projects.clients.scanossClient)
+    implementation(projects.utils.ortUtils)
     implementation(ktorLibs.client.contentNegotiation)
     implementation(ktorLibs.client.core)
     implementation(ktorLibs.client.okhttp)
@@ -35,8 +37,6 @@ dependencies {
     implementation(ktorLibs.serialization.kotlinx.json)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp)
-    implementation(projects.clients.scanossClient)
-    implementation(projects.utils.ortUtils)
 
     funTestImplementation(projects.utils.testUtils)
 

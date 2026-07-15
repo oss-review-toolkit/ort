@@ -23,12 +23,12 @@ plugins {
 }
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-scripting-common")
     api(projects.model)
+    api("org.jetbrains.kotlin:kotlin-scripting-common")
 
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(libs.kotlinx.coroutines)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
 }

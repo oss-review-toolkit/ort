@@ -23,6 +23,7 @@ plugins {
 }
 
 dependencies {
+    api(projects.model)
     api(libs.hikari)
     api(libs.kotest.assertions.core)
     api(libs.kotest.framework.engine)
@@ -31,17 +32,15 @@ dependencies {
         because("Transitively export this to consumers so they do not have to declare a logger implementation.")
     }
 
-    api(projects.model)
-
+    implementation(projects.downloader)
+    implementation(projects.utils.authenticationUtils)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
     implementation(jacksonLibs.jacksonModuleKotlin)
     implementation(libs.diffUtils)
     implementation(libs.jsonSchemaValidator)
     implementation(libs.kotest.extensions.testcontainers)
     implementation(libs.testcontainers.postgresql)
-    implementation(projects.downloader)
-    implementation(projects.utils.authenticationUtils)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
 
     runtimeOnly(libs.log4j.to.slf4j)
 }

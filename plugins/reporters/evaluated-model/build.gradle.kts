@@ -23,15 +23,15 @@ plugins {
 }
 
 dependencies {
-    api(jacksonLibs.jacksonAnnotations)
-    api(jacksonLibs.jacksonDatabind)
     api(projects.model)
     api(projects.reporter)
     api(projects.utils.ortUtils)
+    api(jacksonLibs.jacksonAnnotations)
+    api(jacksonLibs.jacksonDatabind)
 
+    implementation(projects.utils.spdxUtils)
     implementation(jacksonLibs.jacksonCore)
     implementation(jacksonLibs.jacksonDataformatYaml)
-    implementation(projects.utils.spdxUtils)
 
     funTestImplementation(projects.utils.commonUtils)
     funTestImplementation(projects.utils.testUtils)

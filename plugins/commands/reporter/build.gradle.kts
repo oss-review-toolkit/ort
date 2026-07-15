@@ -25,8 +25,6 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
-    implementation(libs.clikt)
-    implementation(libs.kotlinx.coroutines)
     implementation(projects.model)
 
     // TODO: Get rid of these hard-coded dependencies on plugins.
@@ -38,6 +36,8 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
+    implementation(libs.clikt)
+    implementation(libs.kotlinx.coroutines)
 
     ksp(projects.plugins.commands.commandApi)
 }

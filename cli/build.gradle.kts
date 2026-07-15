@@ -50,16 +50,15 @@ dependencies {
         "pluginClasspath"(platform(projects.plugins.versionControlSystems))
     }
 
-    implementation(libs.clikt)
-    implementation(libs.mordant)
-    implementation(libs.slf4j)
     implementation(projects.model)
     implementation(projects.plugins.commands.commandApi)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation(libs.clikt)
+    implementation(libs.mordant)
+    implementation(libs.slf4j)
 
     funTestImplementation(testFixtures(projects.analyzer))
-    funTestImplementation(libs.greenmail)
     funTestImplementation(projects.downloader)
     funTestImplementation(projects.evaluator)
     funTestImplementation(projects.notifier)
@@ -67,4 +66,5 @@ dependencies {
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(projects.reporter)
     funTestImplementation(projects.utils.testUtils)
+    funTestImplementation(libs.greenmail)
 }
