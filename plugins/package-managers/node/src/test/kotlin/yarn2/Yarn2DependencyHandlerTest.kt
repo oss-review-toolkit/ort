@@ -23,6 +23,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
@@ -94,12 +95,34 @@ class Yarn2DependencyHandlerTest : WordSpec({
         }
     }
 
+    "Locator.isPatch" should {
+        "return true for a compat-patched package" {
+            val locator = Locator.parse(
+                "resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
+            )
+
+            locator.isPatch shouldBe true
+        }
+
+        "return false for a real npm package" {
+            Locator.parse("resolve@npm:1.22.8").isPatch shouldBe false
+        }
+
+        "return false for a virtual npm package" {
+            val locator = Locator.parse(
+                "cookie@virtual:abc123def456abc123def456abc123def456abc123def456abc123def456abc123de#npm:1.0.2"
+            )
+
+            locator.isPatch shouldBe false
+        }
+    }
+
     "packageInfoFor()" should {
         "resolve a dependency via its realLocator" {
             val info = packageInfo("cookie@npm:1.0.2", "1.0.2")
             val handler = handlerWith(mapOf("cookie@npm:1.0.2" to info))
 
-            handler.packageInfoFor(dep("cookie@npm:1.0.2")) shouldBe info
+            handler.packageInfoFor(dep("cookie@npm:1.0.2")) shouldBe listOf(info)
         }
 
         "resolve a virtual dependency via its realLocator" {
@@ -108,7 +131,7 @@ class Yarn2DependencyHandlerTest : WordSpec({
                 "cookie@virtual:abc123def456abc123def456abc123def456abc123def456abc123def456abc123de#npm:1.0.2"
             val handler = handlerWith(mapOf("cookie@npm:1.0.2" to info))
 
-            handler.packageInfoFor(dep(virtualLocator)) shouldBe info
+            handler.packageInfoFor(dep(virtualLocator)) shouldBe listOf(info)
         }
 
         "use the virtual package fallback when the realLocator is not in the map" {
@@ -125,7 +148,7 @@ class Yarn2DependencyHandlerTest : WordSpec({
                 )
             )
 
-            handler.packageInfoFor(dep(virtualLocator)) shouldBe resolvedInfo
+            handler.packageInfoFor(dep(virtualLocator)) shouldBe listOf(resolvedInfo)
         }
 
         "use the module name fallback when only a different version is installed" {
@@ -134,7 +157,7 @@ class Yarn2DependencyHandlerTest : WordSpec({
             val resolvedInfo = packageInfo("cookie@npm:1.1.1", "1.1.1")
             val handler = handlerWith(mapOf("cookie@npm:1.1.1" to resolvedInfo))
 
-            handler.packageInfoFor(dep("cookie@npm:1.0.2")) shouldBe resolvedInfo
+            handler.packageInfoFor(dep("cookie@npm:1.0.2")) shouldBe listOf(resolvedInfo)
         }
 
         "ignore virtual packages in the module name fallback" {
@@ -149,7 +172,7 @@ class Yarn2DependencyHandlerTest : WordSpec({
                 )
             )
 
-            handler.packageInfoFor(dep("cookie@npm:1.0.2")) shouldBe resolvedInfo
+            handler.packageInfoFor(dep("cookie@npm:1.0.2")) shouldBe listOf(resolvedInfo)
         }
 
         "throw when no entry for the module is found" {
@@ -162,20 +185,33 @@ class Yarn2DependencyHandlerTest : WordSpec({
             exception.message shouldContain "cookie"
         }
 
-        "throw when multiple real versions of the module are found" {
+        "return all candidates when multiple real versions of the module are found" {
+            val info100 = packageInfo("cookie@npm:1.0.0", "1.0.0")
+            val info111 = packageInfo("cookie@npm:1.1.1", "1.1.1")
+            val handler = handlerWith(mapOf("cookie@npm:1.0.0" to info100, "cookie@npm:1.1.1" to info111))
+
+            handler.packageInfoFor(dep("cookie@npm:1.0.2")) shouldContainExactlyInAnyOrder listOf(info100, info111)
+        }
+
+        "resolve an ambiguous virtual locator whose real locator is not installed to all candidates" {
+            // The real locator derived from the virtual locator is not installed, so the module name fallback has to
+            // consider the installed versions, see https://github.com/oss-review-toolkit/ort/issues/12008.
+            val virtualLocator =
+                "debug@virtual:abc123def456abc123def456abc123def456abc123def456abc123def456abc123de#npm:4.4.1"
+            val info327 = packageInfo("debug@npm:3.2.7", "3.2.7")
+            val info437 = packageInfo("debug@npm:4.3.7", "4.3.7")
             val handler = handlerWith(
                 mapOf(
-                    "cookie@npm:1.0.0" to packageInfo("cookie@npm:1.0.0", "1.0.0"),
-                    "cookie@npm:1.1.1" to packageInfo("cookie@npm:1.1.1", "1.1.1")
+                    "debug@npm:3.2.7" to info327,
+                    "debug@npm:4.3.7" to info437,
+                    virtualLocator to packageInfo(virtualLocator, "4.4.1")
                 )
             )
 
-            val exception = shouldThrow<IllegalStateException> {
-                handler.packageInfoFor(dep("cookie@npm:1.0.2"))
-            }
+            // The descriptor's range matches neither installed version, so all candidates have to be considered.
+            val dependency = PackageInfo.Dependency(descriptor = "debug@npm:^4.4.0", locator = virtualLocator)
 
-            exception.message shouldContain "2"
-            exception.message shouldContain "cookie"
+            handler.packageInfoFor(dependency) shouldContainExactlyInAnyOrder listOf(info327, info437)
         }
 
         "use the semver range from the descriptor to disambiguate multiple candidates" {
@@ -186,10 +222,10 @@ class Yarn2DependencyHandlerTest : WordSpec({
             val dependency = PackageInfo.Dependency(descriptor = "cookie@npm:^1.0.0", locator = "cookie@npm:1.0.2")
             val handler = handlerWith(mapOf("cookie@npm:1.0.0" to info100, "cookie@npm:2.0.0" to info200))
 
-            handler.packageInfoFor(dependency) shouldBe info100
+            handler.packageInfoFor(dependency) shouldBe listOf(info100)
         }
 
-        "throw when the semver range from the descriptor still matches multiple candidates" {
+        "return all matching candidates when the semver range still matches multiple candidates" {
             // Both installed versions satisfy the descriptor range.
             val info440 = packageInfo("debug@npm:4.4.0", "4.4.0")
             val info443 = packageInfo("debug@npm:4.4.3", "4.4.3")
@@ -197,12 +233,130 @@ class Yarn2DependencyHandlerTest : WordSpec({
             val dependency = PackageInfo.Dependency(descriptor = "debug@npm:^4.3.0", locator = "debug@npm:4.3.6")
             val handler = handlerWith(mapOf("debug@npm:4.4.0" to info440, "debug@npm:4.4.3" to info443))
 
-            val exception = shouldThrow<IllegalStateException> {
-                handler.packageInfoFor(dependency)
-            }
+            handler.packageInfoFor(dependency) shouldContainExactlyInAnyOrder listOf(info440, info443)
+        }
 
-            exception.message shouldContain "2"
-            exception.message shouldContain "debug"
+        "widen to all installed versions when the descriptor's range cannot be parsed" {
+            val info100 = packageInfo("cookie@npm:1.0.0", "1.0.0")
+            val info111 = packageInfo("cookie@npm:1.1.1", "1.1.1")
+            val info200 = packageInfo("cookie@npm:2.0.0", "2.0.0")
+            // The descriptor's remainder has neither an "npm:" nor a "patch:" prefix, so no range can be extracted.
+            val dependency =
+                PackageInfo.Dependency(descriptor = "cookie@nonsense:whatever", locator = "cookie@npm:1.0.2")
+            val handler = handlerWith(
+                mapOf(
+                    "cookie@npm:1.0.0" to info100,
+                    "cookie@npm:1.1.1" to info111,
+                    "cookie@npm:2.0.0" to info200
+                )
+            )
+
+            handler.packageInfoFor(dependency) shouldContainExactlyInAnyOrder listOf(info100, info111, info200)
+        }
+
+        "resolve a patch locator when only a different patch version is installed" {
+            val patchLocator = "resolve@patch:resolve@npm%3A2.0.0-next.7" +
+                "#optional!builtin<compat/resolve>::version=2.0.0-next.7&hash=c3c19d"
+            val patchInfo = packageInfo(patchLocator, "2.0.0-next.7")
+            val handler = handlerWith(mapOf(patchLocator to patchInfo))
+
+            val depLocator = "resolve@patch:resolve@npm%3A2.0.0-next.5" +
+                "#optional!builtin<compat/resolve>::version=2.0.0-next.5&hash=c3c19d"
+            handler.packageInfoFor(dep(depLocator)) shouldBe listOf(patchInfo)
+        }
+
+        "not confuse npm and patch variants when resolving multi-version packages" {
+            // 4 installed locators for the same module name, see
+            // https://github.com/oss-review-toolkit/ort/issues/12008.
+            val patchLocator1 = "resolve@patch:resolve@npm%3A1.22.12" +
+                "#optional!builtin<compat/resolve>::version=1.22.12&hash=c3c19d"
+            val patchLocator2 = "resolve@patch:resolve@npm%3A2.0.0-next.7" +
+                "#optional!builtin<compat/resolve>::version=2.0.0-next.7&hash=c3c19d"
+            val npmInfo1 = packageInfo("resolve@npm:1.22.12", "1.22.12")
+            val npmInfo2 = packageInfo("resolve@npm:2.0.0-next.7", "2.0.0-next.7")
+            val patchInfo1 = packageInfo(patchLocator1, "1.22.12")
+            val patchInfo2 = packageInfo(patchLocator2, "2.0.0-next.7")
+            val handler = handlerWith(
+                mapOf(
+                    "resolve@npm:1.22.12" to npmInfo1,
+                    "resolve@npm:2.0.0-next.7" to npmInfo2,
+                    patchLocator1 to patchInfo1,
+                    patchLocator2 to patchInfo2
+                )
+            )
+
+            val depLocator = "resolve@patch:resolve@npm%3A2.0.0-next.5" +
+                "#optional!builtin<compat/resolve>::version=2.0.0-next.5&hash=c3c19d"
+            val depDescriptor = "resolve@patch:resolve@npm%3A^2.0.0-next.5#optional!builtin<compat/resolve>"
+            val dependency = PackageInfo.Dependency(descriptor = depDescriptor, locator = depLocator)
+
+            handler.packageInfoFor(dependency) shouldBe listOf(patchInfo2)
+        }
+
+        "resolve an npm locator when both npm and patch variants of the same version are installed" {
+            // When a plain npm dependency is requested, it must not be confused with the patch variant.
+            val patchLocator = "resolve@patch:resolve@npm%3A1.22.12" +
+                "#optional!builtin<compat/resolve>::version=1.22.12&hash=c3c19d"
+            val npmInfo = packageInfo("resolve@npm:1.22.12", "1.22.12")
+            val patchInfo = packageInfo(patchLocator, "1.22.12")
+            val handler = handlerWith(
+                mapOf(
+                    "resolve@npm:1.22.12" to npmInfo,
+                    patchLocator to patchInfo
+                )
+            )
+
+            handler.packageInfoFor(dep("resolve@npm:1.22.11")) shouldBe listOf(npmInfo)
+        }
+
+        "fall back to the opposite locator type when no candidate of the matching type is installed" {
+            // Only a patch variant is installed, so the npm lookup falls back to it instead of failing.
+            val patchLocator = "resolve@patch:resolve@npm%3A1.22.8" +
+                "#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
+            val patchInfo = packageInfo(patchLocator, "1.22.8")
+            val handler = handlerWith(mapOf(patchLocator to patchInfo))
+
+            handler.packageInfoFor(dep("resolve@npm:1.22.9")) shouldBe listOf(patchInfo)
+        }
+
+        "prefer a range-matching candidate of the other type over a wrong-version candidate of the matching type" {
+            // Only a patched variant of the version requested by the descriptor is installed, while the plain npm
+            // variant exists at a different version. The version takes priority over the locator type.
+            val patchLocator =
+                "cookie@patch:cookie@npm%3A2.0.0#optional!builtin<compat/cookie>::version=2.0.0&hash=c3c19d"
+            val npmInfo = packageInfo("cookie@npm:1.0.0", "1.0.0")
+            val patchInfo = packageInfo(patchLocator, "2.0.0")
+            val handler = handlerWith(mapOf("cookie@npm:1.0.0" to npmInfo, patchLocator to patchInfo))
+
+            val dependency = PackageInfo.Dependency(descriptor = "cookie@npm:^2.0.0", locator = "cookie@npm:2.0.0")
+
+            handler.packageInfoFor(dependency) shouldBe listOf(patchInfo)
+        }
+
+        "not cache a failed resolution" {
+            val handler = handlerWith(mapOf("other@npm:1.0.0" to packageInfo("other@npm:1.0.0", "1.0.0")))
+            val dependency = dep("cookie@npm:1.0.2")
+
+            repeat(2) {
+                shouldThrow<IllegalStateException> {
+                    handler.packageInfoFor(dependency)
+                }.message shouldContain "cookie"
+            }
+        }
+
+        "not resolve a dependency from the cache of a previous context" {
+            // The handler instance is reused across definition files, so the cached resolutions of a previous
+            // project must not leak into the next one.
+            val info111 = packageInfo("cookie@npm:1.1.1", "1.1.1")
+            val handler = handlerWith(mapOf("cookie@npm:1.1.1" to info111))
+            val dependency = dep("cookie@npm:1.0.2")
+
+            handler.packageInfoFor(dependency) shouldBe listOf(info111)
+
+            val info200 = packageInfo("cookie@npm:2.0.0", "2.0.0")
+            handler.setContext(tempdir(), emptyMap(), mapOf("cookie@npm:2.0.0" to info200))
+
+            handler.packageInfoFor(dependency) shouldBe listOf(info200)
         }
     }
 })
