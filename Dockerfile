@@ -136,6 +136,7 @@ ARG PYTHON_PIPENV_VERSION
 ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
 ARG PYTHON_POETRY_VERSION
 ARG PYTHON_SETUPTOOLS_VERSION
+ARG PYTHON_SETUPTOOLS_RUST_VERSION=1.13.0
 ARG PYTHON_VERSION
 ARG SCANCODE_VERSION
 
@@ -183,7 +184,8 @@ RUN pip install --no-cache-dir -U \
     poetry=="$PYTHON_POETRY_VERSION" \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
-    setuptools=="$PYTHON_SETUPTOOLS_VERSION"
+    setuptools=="$PYTHON_SETUPTOOLS_VERSION" \
+    setuptools_rust=="$PYTHON_SETUPTOOLS_RUST_VERSION"
 RUN mkdir /tmp/conan2 \
     && curl -L https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-$(arch).tgz | tar -xz -C /tmp/conan2 \
     # Rename the Conan 2 executable to "conan2" to be able to call both Conan version from the package manager.
