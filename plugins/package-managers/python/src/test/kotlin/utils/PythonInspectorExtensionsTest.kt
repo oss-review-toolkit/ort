@@ -20,11 +20,20 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeSameInstanceAs
+
+import java.io.File
+
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.utils.common.div
 
 class PythonInspectorExtensionsTest : WordSpec({
     "toOrtPackages()" should {
@@ -90,6 +99,44 @@ class PythonInspectorExtensionsTest : WordSpec({
             pkg.declaredLicensesProcessed.spdxExpression should beNull()
         }
     }
+
+    "ProjectResults.deduplicate()" should {
+        "return the same result if there are no duplicates" {
+            val resultMap = mapOf(
+                File("foo") to createResult("foo"),
+                File("bar") to createResult("bar")
+            )
+
+            resultMap.deduplicate() shouldBeSameInstanceAs resultMap
+        }
+
+        "return a deduplicated result" {
+            val analysisRoot = tempdir()
+            val definitionFile1 = analysisRoot / "libraries" / "requirements.txt"
+            val definitionFile2 = analysisRoot / "tools" / "requirements.txt"
+            val definitionFile3 = analysisRoot / "app" / "libraries" / "requirements.txt"
+            val definitionFile4 = analysisRoot / "app" / "tools" / "requirements.txt"
+            val definitionFile5 = analysisRoot / "test" / "requirements.txt"
+
+            val resultMap = mapOf(
+                definitionFile1 to createResult("libraries"),
+                definitionFile2 to createResult("tools"),
+                definitionFile3 to createResult("libraries"),
+                definitionFile4 to createResult("tools"),
+                definitionFile5 to createResult("test")
+            )
+
+            val deduplicatedResults = resultMap.deduplicate()
+
+            deduplicatedResults[definitionFile1] shouldContainOnly createResult("libraries/requirements.txt")
+            deduplicatedResults[definitionFile2] shouldContainOnly createResult("tools/requirements.txt")
+            deduplicatedResults[definitionFile3] shouldContainOnly createResult("app/libraries/requirements.txt")
+            deduplicatedResults[definitionFile4] shouldContainOnly createResult("app/tools/requirements.txt")
+            deduplicatedResults[definitionFile5] shouldContainOnly createResult("test")
+
+            deduplicatedResults.deduplicate() shouldBeSameInstanceAs deduplicatedResults
+        }
+    }
 })
 
 private fun createPackage(licenseExpression: String?, declaredLicense: PythonInspector.DeclaredLicense?) =
@@ -120,3 +167,14 @@ private fun createPackage(licenseExpression: String?, declaredLicense: PythonIns
     )
 
 private fun PythonInspector.Package.toOrtPackage() = listOf(this).toOrtPackages().single()
+
+/**
+ * Return a list with a single [ProjectAnalyzerResult] with a project whose identifier has the given [name] component.
+ */
+private fun createResult(name: String): List<ProjectAnalyzerResult> =
+    listOf(
+        ProjectAnalyzerResult(
+            project = Project.EMPTY.copy(id = Project.EMPTY.id.copy(name = name)),
+            packages = emptySet()
+        )
+    )

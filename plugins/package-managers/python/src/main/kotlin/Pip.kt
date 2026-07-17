@@ -25,6 +25,8 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.ProjectResults
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
@@ -34,6 +36,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.DEFAULT_PYTHON_VERSION
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.deduplicate
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtProject
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -107,6 +110,9 @@ class Pip internal constructor(
 
         return listOf(ProjectAnalyzerResult(project, packages))
     }
+
+    override fun createPackageManagerResult(projectResults: ProjectResults): PackageManagerResult =
+        super.createPackageManagerResult(projectResults.deduplicate())
 
     internal fun runPythonInspector(
         definitionFile: File,
