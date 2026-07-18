@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.cyclonedx
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -308,7 +309,7 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            component.extractLicenseInfo().first should containExactlyInAnyOrder("MIT")
+            component.extractLicenseInfo() should containExactlyInAnyOrder("MIT")
         }
 
         "extract license by name when id is missing" {
@@ -318,7 +319,7 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            component.extractLicenseInfo().first should containExactlyInAnyOrder("Custom License")
+            component.extractLicenseInfo() should containExactlyInAnyOrder("Custom License")
         }
 
         "prefer id over name" {
@@ -333,13 +334,13 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            component.extractLicenseInfo().first should containExactlyInAnyOrder("MIT")
+            component.extractLicenseInfo() should containExactlyInAnyOrder("MIT")
         }
 
         "return empty set when no licenses" {
             val component = Component()
 
-            component.extractLicenseInfo().first should beEmpty()
+            component.extractLicenseInfo() should beEmpty()
         }
 
         "extract single license from SPDX expression" {
@@ -349,7 +350,7 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            component.extractLicenseInfo().first should containExactlyInAnyOrder("MIT")
+            component.extractLicenseInfo() should containExactlyInAnyOrder("MIT")
         }
 
         "preserve SPDX expression in declaredLicensesProcessed" {
@@ -359,15 +360,7 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            val (declaredLicenses, declaredLicensesProcessed) = component.extractLicenseInfo()
-
-            declaredLicenses should containExactlyInAnyOrder(
-                "Apache-2.0",
-                "BSD-3-Clause",
-                "LGPL-2.1-only"
-            )
-            declaredLicensesProcessed.spdxExpression?.toString() shouldBe
-                "Apache-2.0 AND (BSD-3-Clause OR LGPL-2.1-only)"
+            component.extractLicenseInfo() should containExactly("Apache-2.0 AND (BSD-3-Clause OR LGPL-2.1-only)")
         }
 
         "process individual licenses with DeclaredLicenseProcessor" {
@@ -380,12 +373,7 @@ class ComponentExtensionsTest : WordSpec({
                 }
             }
 
-            val (declaredLicenses, declaredLicensesProcessed) = component.extractLicenseInfo()
-
-            declaredLicenses should containExactlyInAnyOrder("MIT", "Apache-2.0")
-            // DeclaredLicenseProcessor combines licenses with AND; order may vary.
-            declaredLicensesProcessed.spdxExpression?.decompose()?.map { it.toString() } should
-                containExactlyInAnyOrder("MIT", "Apache-2.0")
+            component.extractLicenseInfo() should containExactlyInAnyOrder("MIT", "Apache-2.0")
         }
     }
 
