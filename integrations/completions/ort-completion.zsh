@@ -1182,6 +1182,12 @@ _ort_report() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='--how-to-fix-text-provider-script' || in_param=''
           continue
           ;;
+        --license-choices-file)
+          __skip_opt_eq
+          (( i = i + 1 ))
+          [[ ${i} -gt COMP_CWORD ]] && in_param='--license-choices-file' || in_param=''
+          continue
+          ;;
         --license-classifications-file)
           __skip_opt_eq
           (( i = i + 1 ))
@@ -1234,7 +1240,7 @@ _ort_report() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --report-formats -f --copyright-garbage-file --custom-license-texts-dir --how-to-fix-text-provider-script --license-classifications-file --package-configurations-dir --refresh-resolutions --repository-configuration-file --resolutions-file --report-option -O -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --report-formats -f --copyright-garbage-file --custom-license-texts-dir --how-to-fix-text-provider-script --license-choices-file --license-classifications-file --package-configurations-dir --refresh-resolutions --repository-configuration-file --resolutions-file --report-option -O -h --help' -- "${word}"))
     return
   fi
 
@@ -1259,6 +1265,9 @@ _ort_report() {
        __complete_files "${word}"
       ;;
     "--how-to-fix-text-provider-script")
+       __complete_files "${word}"
+      ;;
+    "--license-choices-file")
        __complete_files "${word}"
       ;;
     "--license-classifications-file")

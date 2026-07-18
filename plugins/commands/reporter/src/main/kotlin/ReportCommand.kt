@@ -42,6 +42,7 @@ import kotlinx.coroutines.runBlocking
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
@@ -80,6 +81,7 @@ import org.ossreviewtoolkit.utils.config.setPackageConfigurations
 import org.ossreviewtoolkit.utils.config.setResolutions
 import org.ossreviewtoolkit.utils.ort.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CHOICES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -147,6 +149,15 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
         .default(ortConfigDirectory.resolve(ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME))
         .configurationGroup()
 
+    private val licenseChoicesFile by option(
+        "--license-choices-file",
+        help = "A file containing license choices."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory / ORT_LICENSE_CHOICES_FILENAME)
+        .configurationGroup()
+
     private val licenseClassificationsFile by option(
         "--license-classifications-file",
         help = "A file containing the license classifications. This can make the output inconsistent with the " +
@@ -212,6 +223,14 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
         repositoryConfigurationFile?.let {
             val config = it.readValueOrDefault(RepositoryConfiguration())
             ortResult = ortResult.replaceConfig(config)
+        }
+
+        licenseChoicesFile.takeIf { it.isFile }?.let {
+            val globalLicenseChoices = it.readValue<LicenseChoices>()
+            val config = ortResult.repository.config
+            ortResult = ortResult.replaceConfig(
+                config.copy(licenseChoices = config.licenseChoices.merge(globalLicenseChoices))
+            )
         }
 
         if (refreshResolutions || ortResult.resolvedConfiguration.resolutions == null) {
