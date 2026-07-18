@@ -26,6 +26,8 @@ import com.github.ajalt.clikt.testing.test
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -34,11 +36,15 @@ import io.kotest.matchers.string.shouldContain
 import java.io.File
 import java.io.FileNotFoundException
 
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class EvaluateCommandTest : StringSpec({
     "If no rules are specified / exist at all, the status code should be 1" {
@@ -66,5 +72,54 @@ class EvaluateCommandTest : StringSpec({
             .test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
 
         result.output shouldContain "oss-review-toolkit.org/ort/docs/configuration/resolutions"
+    }
+
+    "License choices from the license choices file are merged, with repository choices taking precedence" {
+        val ortFile = File("src/test/resources/test-ort-result.yml")
+        val rulesFile = File("src/test/resources/test-rules.kts")
+        val outputDir = tempdir()
+
+        // A repository choice that overrides the global choice for the same 'given' expression.
+        val repositoryConfigurationFile = tempfile(suffix = ".yml").apply {
+            writeText(
+                """
+                license_choices:
+                  repository_license_choices:
+                  - given: "Apache-2.0 OR MIT"
+                    choice: "Apache-2.0"
+                """.trimIndent()
+            )
+        }
+
+        val licenseChoicesFile = tempfile(suffix = ".yml").apply {
+            writeText(
+                """
+                repository_license_choices:
+                - given: "Apache-2.0 OR MIT"
+                  choice: "MIT"
+                - given: "GPL-2.0-only OR MIT"
+                  choice: "MIT"
+                """.trimIndent()
+            )
+        }
+
+        val args = listOf(
+            "--ort-file", ortFile.path,
+            "--rules-file", rulesFile.path,
+            "--repository-configuration-file", repositoryConfigurationFile.path,
+            "--license-choices-file", licenseChoicesFile.path,
+            "--output-dir", outputDir.path,
+            "--output-formats", "YAML"
+        )
+
+        EvaluateCommand().context { obj = OrtConfiguration() }
+            .test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
+
+        val result = (outputDir / "evaluation-result.yml").readValue<OrtResult>()
+
+        result.repository.config.licenseChoices.repositoryLicenseChoices shouldContainExactly listOf(
+            SpdxLicenseChoice("Apache-2.0 OR MIT".toSpdx(), "Apache-2.0".toSpdx()),
+            SpdxLicenseChoice("GPL-2.0-only OR MIT".toSpdx(), "MIT".toSpdx())
+        )
     }
 })

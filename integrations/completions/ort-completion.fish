@@ -104,6 +104,7 @@ complete -c ort -n "__fish_seen_subcommand_from evaluate" -l output-formats -s f
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l rules-file -s r -r -F -d 'The name of a script file containing rules.'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l rules-resource -r -d 'The name of a script resource on the classpath that contains rules.'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l copyright-garbage-file -r -F -d 'A file containing copyright statements which are marked as garbage.'
+complete -c ort -n "__fish_seen_subcommand_from evaluate" -l license-choices-file -r -F -d 'A file containing license choices.'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l license-classifications-file -r -F -d 'A file containing the license classifications which are passed as parameter to the rules script.'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l package-configurations-dir -r -F -d 'A directory that is searched recursively for package configuration files. Each file must only contain a single package configuration.'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l package-curations-file -r -F -d 'A file containing package curations. This replaces all package curations contained in the given ORT result file with the ones present in the given file and, if enabled, those from the repository configuration.'

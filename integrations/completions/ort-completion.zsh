@@ -792,6 +792,12 @@ _ort_evaluate() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='--copyright-garbage-file' || in_param=''
           continue
           ;;
+        --license-choices-file)
+          __skip_opt_eq
+          (( i = i + 1 ))
+          [[ ${i} -gt COMP_CWORD ]] && in_param='--license-choices-file' || in_param=''
+          continue
+          ;;
         --license-classifications-file)
           __skip_opt_eq
           (( i = i + 1 ))
@@ -856,7 +862,7 @@ _ort_evaluate() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --output-formats -f --rules-file -r --rules-resource --copyright-garbage-file --license-classifications-file --package-configurations-dir --package-curations-file --package-curations-dir --repository-configuration-file --resolutions-file --label -l --check-syntax -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --output-formats -f --rules-file -r --rules-resource --copyright-garbage-file --license-choices-file --license-classifications-file --package-configurations-dir --package-curations-file --package-curations-dir --repository-configuration-file --resolutions-file --label -l --check-syntax -h --help' -- "${word}"))
     return
   fi
 
@@ -881,6 +887,9 @@ _ort_evaluate() {
     "--rules-resource")
       ;;
     "--copyright-garbage-file")
+       __complete_files "${word}"
+      ;;
+    "--license-choices-file")
        __complete_files "${word}"
       ;;
     "--license-classifications-file")
