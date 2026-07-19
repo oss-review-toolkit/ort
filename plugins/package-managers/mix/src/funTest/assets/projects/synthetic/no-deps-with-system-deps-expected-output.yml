@@ -28,8 +28,7 @@ packages:
 - id: "otp::elixir:~> 1.8"
   purl: "pkg:otp/elixir?download_url=https://github.com/elixir-lang/elixir/archive/refs/heads/main.zip&repository_url=https://github.com/elixir-lang/elixir&vcs_url=git%2Bhttps://github.com/elixir-lang/elixir.git#lib/elixir"
   declared_licenses:
-  - "Apache-2.0"
-  - "LicenseRef-scancode-unicode"
+  - "Apache-2.0 AND LicenseRef-scancode-unicode"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 AND LicenseRef-scancode-unicode"
   description: ""
