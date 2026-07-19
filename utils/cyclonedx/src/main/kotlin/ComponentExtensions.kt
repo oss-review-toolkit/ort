@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.cyclonedx
 
 import org.cyclonedx.model.Component
 import org.cyclonedx.model.ExternalReference
+import org.cyclonedx.model.LicenseItem.LicenseItemType
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Hash
@@ -101,11 +102,14 @@ fun Component.toPackage(defaultType: String = DEFAULT_ORT_TYPE): Package =
  * Extract license information for the [Component], preferring a license expression over a list of licenses.
  */
 internal fun Component.extractLicenseInfo(): Set<String> =
-    licenses?.expression?.value?.takeIf { it.isNotBlank() }?.let { expression ->
-        setOf(expression)
-    } ?: licenses?.licenses?.mapNotNullTo(mutableSetOf()) { license ->
-        license.id ?: license.name
-    }.orEmpty()
+    licenses?.items.orEmpty().mapNotNullTo(mutableSetOf()) { licenseItem ->
+        when (licenseItem.type) {
+            LicenseItemType.LICENSE -> licenseItem.license?.id ?: licenseItem.license?.name
+            LicenseItemType.EXPRESSION -> licenseItem.expression?.value
+            LicenseItemType.EXPRESSION_DETAILED -> licenseItem.expressionDetailed?.expression
+            LicenseItemType.NONE -> null
+        }?.takeUnless { it.isBlank() }
+    }
 
 /**
  * Extract authors from the component.

@@ -41,6 +41,7 @@ import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
+import org.cyclonedx.model.LicenseItem
 import org.cyclonedx.model.Metadata
 import org.cyclonedx.model.OrganizationalContact
 import org.cyclonedx.model.OrganizationalEntity
@@ -228,7 +229,10 @@ internal class CycloneDxModelMapper(
                 )
             }
 
-            licenses = LicenseChoice().apply { expression = Expression(config.dataLicense) }
+            licenses = LicenseChoice().apply {
+                val expression = Expression(config.dataLicense)
+                items = listOf(LicenseItem.ofExpression(expression))
+            }
         }
 
     /**
@@ -281,7 +285,9 @@ internal class CycloneDxModelMapper(
             detectedLicenseNames.mapNamesToLicenses("detected license", input)
 
         if (licenseObjects.isNotEmpty()) {
-            licenses = LicenseChoice().apply { licenses = licenseObjects }
+            licenses = LicenseChoice().apply {
+                items = licenseObjects.map { LicenseItem.ofLicense(it) }
+            }
         }
 
         addProperty(
