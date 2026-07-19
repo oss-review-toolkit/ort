@@ -64,9 +64,13 @@ class Rebar3(
         val bomFile = createOrtTempFile("cyclonedx", ".json")
 
         return try {
-            // Use --force because createTempFile creates an empty file and bombom prompts for overwrite confirmation.
-            BombomCommand.run(workingDir, "--output", bomFile.absolutePath, "--format", "json", "--force")
-                .requireSuccess()
+            BombomCommand.run(
+                workingDir,
+                // Force overwriting the empty file created by "createOrtTempFile()".
+                "--force",
+                "--format", "json",
+                "--output", bomFile.absolutePath
+            ).requireSuccess()
 
             resolveDependencies(
                 analysisRoot,
