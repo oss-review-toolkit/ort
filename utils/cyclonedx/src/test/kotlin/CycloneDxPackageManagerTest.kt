@@ -62,7 +62,7 @@ private class TestCycloneDxPackageManager : CycloneDxPackageManager("TestCyclone
         resolveDependencies(
             analysisRoot,
             definitionFile,
-            definitionFile.readText().toByteArray(),
+            definitionFile,
             excludes,
             includes,
             analyzerConfig,

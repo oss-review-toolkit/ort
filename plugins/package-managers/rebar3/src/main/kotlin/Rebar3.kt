@@ -75,7 +75,7 @@ class Rebar3(
             resolveDependencies(
                 analysisRoot,
                 definitionFile,
-                bomFile.readBytes(),
+                bomFile,
                 excludes,
                 includes,
                 analyzerConfig,
