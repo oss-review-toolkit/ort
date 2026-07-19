@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.cyclonedx.CycloneDxPackageManager
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 private const val PROJECT_TYPE = "otp"
 
@@ -76,26 +77,33 @@ class Mix(
             (workingDir / "mix.lock").isFile
         }
 
+        val bomFile = createOrtTempFile("cyclonedx", ".json")
         val args = buildList {
             add("cyclonedx")
+            // Force overwriting the empty file created by "createOrtTempFile()".
+            add("--force")
             add("--format")
             add("json")
             add("--output")
-            add("-")
+            add(bomFile.absolutePath)
             if (!config.includeSystemDependencies) add("--exclude-system-dependencies")
         }
 
-        val result = MixSbomCommand.run(workingDir, *args.toTypedArray()).requireSuccess()
+        return try {
+            MixSbomCommand.run(workingDir, *args.toTypedArray()).requireSuccess()
 
-        return resolveDependencies(
-            analysisRoot,
-            definitionFile,
-            result.stdout.toByteArray(),
-            excludes,
-            includes,
-            analyzerConfig,
-            labels
-        )
+            resolveDependencies(
+                analysisRoot,
+                definitionFile,
+                bomFile,
+                excludes,
+                includes,
+                analyzerConfig,
+                labels
+            )
+        } finally {
+            bomFile.delete()
+        }
     }
 
     override fun createPackageManagerResult(

@@ -53,7 +53,7 @@ abstract class CycloneDxPackageManager(
     protected fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
-        bom: ByteArray,
+        bomFile: File,
         excludes: Excludes,
         includes: Includes,
         analyzerConfig: AnalyzerConfiguration,
@@ -61,7 +61,7 @@ abstract class CycloneDxPackageManager(
     ): List<ProjectAnalyzerResult> {
         val issues = mutableListOf<Issue>()
 
-        val parsedBom = JsonParser().parse(bom)
+        val parsedBom = JsonParser().parse(bomFile)
 
         val rootComponent = requireNotNull(parsedBom.metadata?.component) {
             "CycloneDX SBOM must contain 'metadata.component'."
