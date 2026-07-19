@@ -61,24 +61,24 @@ class Rebar3(
         }
 
         // bombom doesn't support stdout output, so use a temp file.
-        val tempFile = createOrtTempFile("bombom", ".json")
+        val bomFile = createOrtTempFile("cyclonedx", ".json")
 
         return try {
             // Use --force because createTempFile creates an empty file and bombom prompts for overwrite confirmation.
-            BombomCommand.run(workingDir, "--output", tempFile.absolutePath, "--format", "json", "--force")
+            BombomCommand.run(workingDir, "--output", bomFile.absolutePath, "--format", "json", "--force")
                 .requireSuccess()
 
             resolveDependencies(
                 analysisRoot,
                 definitionFile,
-                tempFile.readBytes(),
+                bomFile.readBytes(),
                 excludes,
                 includes,
                 analyzerConfig,
                 labels
             )
         } finally {
-            tempFile.delete()
+            bomFile.delete()
         }
     }
 
