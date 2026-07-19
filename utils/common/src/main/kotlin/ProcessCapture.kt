@@ -70,16 +70,30 @@ class ProcessCapture(
     private val stderrFile = tempDir / "$commandName.stderr"
 
     /**
-     * Get the standard output stream of the terminated process as a string.
+     * Get the standard output of the terminated process as a string.
      */
     val stdout
         get() = stdoutFile.readText()
 
     /**
-     * Get the standard error stream of the terminated process as a string.
+     * Get the standard output of the terminated process as a stream. The caller is responsible for closing the
+     * stream.
+     */
+    val stdoutStream
+        get() = stdoutFile.inputStream()
+
+    /**
+     * Get the standard error output of the terminated process as a string.
      */
     val stderr
         get() = stderrFile.readText()
+
+    /**
+     * Get the standard error output of the terminated process as a stream. The caller is responsible for closing the
+     * stream.
+     */
+    val stderrStream
+        get() = stderrFile.inputStream()
 
     private val builder = ProcessBuilder(*unmaskedStrings(*command))
         .directory(workingDir)
