@@ -51,6 +51,11 @@ coreutils = {
     bin = "bombom"
 }
 
+"github:erlef/mix_sbom" = {
+    version = "{{ env.MIX_SBOM_VERSION }}",
+    bin = "mix_sbom"
+}
+
 # Scanners
 "github:jpeddicord/askalono" = "{{ env.ASKALONO_VERSION }}"
 "gem:licensee" = "{{ env.LICENSEE_VERSION }}"
