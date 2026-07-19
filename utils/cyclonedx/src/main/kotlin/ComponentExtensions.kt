@@ -166,9 +166,9 @@ internal fun Component.findExternalReferenceUrl(
     type: ExternalReference.Type,
     preferVcsHostParseable: Boolean = false
 ): String {
-    val urls = externalReferences.orEmpty()
-        .filter { it.type == type }
-        .mapNotNull { it.url?.takeIf(String::isNotBlank) }
+    val urls = externalReferences.orEmpty().mapNotNull { ref ->
+        ref.url?.takeIf { ref.type == type && it.isNotBlank() }
+    }
 
     if (urls.isEmpty()) return ""
 
