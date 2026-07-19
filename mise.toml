@@ -28,6 +28,7 @@ ruby = "{{ env.RUBY_VERSION }}"
 coreutils = {
     version = "latest",
     postinstall = """
+        # Using MISE_TOOL_INSTALL_PATH does not work here as the binary is in a subdirectory whose name contains the version.
         cd $(dirname $(which coreutils))
 
         # Create links for all tools built into coreutils.
