@@ -45,6 +45,12 @@ coreutils = {
     """
 }
 
+# Package Managers
+"github:erlef/bombom" = {
+    version = "{{ env.BOMBOM_VERSION }}",
+    bin = "bombom"
+}
+
 # Scanners
 "github:jpeddicord/askalono" = "{{ env.ASKALONO_VERSION }}"
 "gem:licensee" = "{{ env.LICENSEE_VERSION }}"
