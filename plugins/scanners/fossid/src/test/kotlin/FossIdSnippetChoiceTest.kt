@@ -489,7 +489,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             summary.issues.forAtLeastOne {
                 it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
+                    "Please review and resolve them at: https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1"
             }
         }
 
@@ -785,7 +785,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             summary.issues.forAtLeastOne {
                 it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
+                    "Please review and resolve them at: https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1"
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
@@ -850,7 +850,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             summary.issues.forAtLeastOne {
                 it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
+                    "Please review and resolve them at: https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1"
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
@@ -917,7 +917,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             summary.issues.forAtLeastOne {
                 it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/index.html?action=scanview&sid=1"
+                    "Please review and resolve them at: https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1"
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
