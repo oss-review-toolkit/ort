@@ -136,7 +136,13 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
             } ?: RemoteArtifact.EMPTY
 
         val id = Identifier(type = PACKAGE_TYPE, namespace = "", name = pkg.name, version = pkg.version)
-        val declaredLicenses = pkg.declaredLicense?.getDeclaredLicenses().orEmpty()
+
+        // PEP 639 defines License-Expression as the machine-readable replacement for the legacy License field and
+        // license classifiers. Python Inspector exposes that value separately, so use it only as a fallback to keep
+        // the established handling of legacy package metadata unchanged.
+        val declaredLicenses = pkg.declaredLicense?.getDeclaredLicenses()?.takeUnless { it.isEmpty() }
+            ?: setOfNotNull(pkg.licenseExpression?.takeUnless { it.isBlank() })
+
         val declaredLicensesProcessed = processDeclaredLicenses(id, declaredLicenses)
 
         Package(
