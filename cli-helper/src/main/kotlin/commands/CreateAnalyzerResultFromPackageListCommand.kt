@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -56,6 +57,7 @@ import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -122,7 +124,14 @@ internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
         val repositoryConfiguration = repositoryConfigurationFile?.readValue<RepositoryConfiguration>().orEmpty()
             .addScopeExcludeForExcludedScope()
 
-        val packageCurationProviders = PackageCurationProviderFactory.create(ortConfig.packageCurationProviders)
+        val packageCurationProviders = buildList {
+            addAll(PackageCurationProviderFactory.create(ortConfig.packageCurationProviders))
+
+            if (ortConfig.enableRepositoryPackageCurations) {
+                val provider = SimplePackageCurationProvider(repositoryConfiguration.curations.packages)
+                add(REPOSITORY_CONFIGURATION_PROVIDER_ID to provider)
+            }
+        }
 
         val ortResult = OrtResult(
             analyzer = AnalyzerRun.EMPTY.copy(
