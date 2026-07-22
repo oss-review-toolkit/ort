@@ -17,22 +17,18 @@
  * License-Filename: LICENSE
  */
 
-import de.undercouch.gradle.tasks.download.Download
-
 import groovy.json.JsonSlurper
 
+import java.io.File
 import java.net.Authenticator
 import java.net.PasswordAuthentication
 import java.net.URI
-
-val spdxLicenseListVersion = project.property("spdxLicenseListVersion") as String
 
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
 
     // Apply third-party plugins.
-    alias(libs.plugins.download)
     alias(libs.plugins.kotlinSerialization)
 }
 
@@ -59,53 +55,54 @@ if (Authenticator.getDefault() == null) {
     })
 }
 
+// Official SPDX license list.
+val spdxLicenseListUrl = "https://spdx.org/licenses"
+
+// The SPDX license list version, fetched lazily so it is only queried when a generation task runs.
+val spdxLicenseListVersion: String by lazy {
+    val licensesUrl = "$spdxLicenseListUrl/licenses.json"
+
+    logger.quiet("Determining the SPDX license list version from '$licensesUrl'...")
+
+    val jsonSlurper = JsonSlurper()
+
+    @Suppress("UNCHECKED_CAST")
+    val json = jsonSlurper.parse(URI(licensesUrl).toURL(), "UTF-8") as Map<String, Any>
+
+    val version = json["licenseListVersion"] as String
+    logger.quiet("The SPDX license list version is '$version'.")
+
+    version
+}
+
 data class LicenseInfo(
     val id: String,
     val name: String,
     val isDeprecated: Boolean,
-    val isException: Boolean
+    val isException: Boolean,
+    val detailsUrl: String
 )
 
-fun interface SpdxLicenseTextProvider {
-    fun getLicenseUrl(info: LicenseInfo): URI?
-}
+/**
+ * Download each text in [info] from its [LicenseInfo.detailsUrl] (the [textKey] field, "licenseText" or
+ * "licenseExceptionText") and write it to [resourceDir] named after the SPDX id, replacing any previously generated
+ * files.
+ */
+fun importLicenseTexts(resourceDir: File, info: List<LicenseInfo>, textKey: String) {
+    resourceDir.mkdirs()
+    resourceDir.walk().maxDepth(1).filter { it.isFile }.forEach { it.delete() }
 
-class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
-    private val url = "https://scancode-licensedb.aboutcode.org"
+    val jsonSlurper = JsonSlurper()
 
-    private val spdxIdToScanCodeKeyMap: Map<String, String> by lazy {
-        val jsonSlurper = JsonSlurper()
-        val url = URI("https://scancode-licensedb.aboutcode.org/index.json").toURL()
-
-        logger.quiet("Downloading ScanCode license index...")
-
+    info.forEach {
         @Suppress("UNCHECKED_CAST")
-        val json = jsonSlurper.parse(url, "UTF-8") as List<Map<String, Any?>>
-
-        logger.quiet("Found ${json.size} ScanCode license entries.")
-
-        json.mapNotNull { map ->
-            (map["spdx_license_key"] as? String)?.let { it to (map["license_key"] as String) }
-        }.toMap()
+        val details = jsonSlurper.parse(URI(it.detailsUrl).toURL(), "UTF-8") as Map<String, Any>
+        val text = details[textKey] as String
+        resourceDir.resolve(it.id).writeText(text)
     }
 
-    override fun getLicenseUrl(info: LicenseInfo): URI? {
-        val key = spdxIdToScanCodeKeyMap[info.id] ?: return null
-        return URI("$url/$key.LICENSE")
-    }
+    logger.quiet("Imported ${info.size} SPDX text files into '$resourceDir'.")
 }
-
-class SpdxLicenseListDataProvider : SpdxLicenseTextProvider {
-    private val url = "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion"
-
-    override fun getLicenseUrl(info: LicenseInfo): URI {
-        val prefix = "deprecated_".takeIf { info.isDeprecated && !info.isException }.orEmpty()
-        return URI("$url/text/$prefix${info.id}.txt")
-    }
-}
-
-// Prefer the texts from ScanCode as these have better formatting than those from SPDX.
-val providers = sequenceOf(ScanCodeLicenseTextProvider(), SpdxLicenseListDataProvider())
 
 val licensesResourcePath = "licenses"
 val exceptionsResourcePath = "exceptions"
@@ -149,18 +146,18 @@ fun licenseToEnumEntry(info: LicenseInfo): String {
 }
 
 fun getLicenseInfo(
-    jsonUrl: String,
+    listUrl: String,
     description: String,
     listKeyName: String,
     idKeyName: String,
     isException: Boolean
 ): List<LicenseInfo> {
-    logger.quiet("Downloading SPDX $description list...")
+    logger.quiet("Downloading SPDX $description list from '$listUrl'...")
 
     val jsonSlurper = JsonSlurper()
 
     @Suppress("UNCHECKED_CAST")
-    val json = jsonSlurper.parse(URI(jsonUrl).toURL(), "UTF-8") as Map<String, Any>
+    val json = jsonSlurper.parse(URI(listUrl).toURL(), "UTF-8") as Map<String, Any>
 
     val licenseListVersion = json["licenseListVersion"] as String
     logger.quiet("Found SPDX $description list version $licenseListVersion.")
@@ -168,7 +165,13 @@ fun getLicenseInfo(
     @Suppress("UNCHECKED_CAST")
     return (json[listKeyName] as List<Map<String, Any>>).map {
         val id = it[idKeyName] as String
-        LicenseInfo(id, it["name"] as String, it["isDeprecatedLicenseId"] as Boolean, isException = isException)
+        LicenseInfo(
+            id,
+            it["name"] as String,
+            it["isDeprecatedLicenseId"] as Boolean,
+            isException = isException,
+            detailsUrl = it["detailsUrl"] as String
+        )
     }
 }
 
@@ -340,6 +343,29 @@ fun Task.generateEnumClass(
     return info
 }
 
+/**
+ * Wrap [line] at whitespace boundaries so no resulting line exceeds [maxLineLength] characters. A single word longer than
+ * the limit is kept intact, and text without whitespace (e.g. Chinese or Japanese script) is left untouched.
+ */
+fun wrapLine(line: String, maxLineLength: Int): List<String> {
+    if (line.length <= maxLineLength) return listOf(line)
+
+    val wrapped = mutableListOf<String>()
+    var remainder = line
+
+    while (remainder.length > maxLineLength) {
+        val breakIndex = (maxLineLength downTo 1).firstOrNull { remainder[it].isWhitespace() }
+            ?: (maxLineLength + 1..remainder.lastIndex).firstOrNull { remainder[it].isWhitespace() }
+            ?: break
+
+        wrapped += remainder.substring(0, breakIndex)
+        remainder = remainder.substring(breakIndex + 1)
+    }
+
+    wrapped += remainder
+    return wrapped
+}
+
 val fixupLicenseTextResources = tasks.register("fixupLicenseTextResources") {
     doLast {
         val resourcePaths = listOf(licensesResourcePath, exceptionsResourcePath).map {
@@ -348,37 +374,34 @@ val fixupLicenseTextResources = tasks.register("fixupLicenseTextResources") {
 
         resourcePaths.forEach { path ->
             path.walk().maxDepth(1).filter { it.isFile }.forEach { file ->
-                // Trim trailing whitespace and blank lines.
-                val lines = file.readLines().map { it.trimEnd() }
+                val lines = file.readLines()
+                    // Trim trailing whitespace and blank lines.
+                    .map { it.trimEnd() }
                     .dropWhile { it.isEmpty() }.dropLastWhile { it.isEmpty() }
+                    // Wrap sentences longer than 120 characters.
+                    .flatMap { wrapLine(it, maxLineLength = 120) }
                 file.writeText(lines.joinToString("\n", postfix = "\n"))
             }
         }
     }
 }
 
-val generateSpdxLicenseEnum = tasks.register("generateSpdxLicenseEnum", Download::class) {
+val generateSpdxLicenseEnum = tasks.register("generateSpdxLicenseEnum") {
     description = "Generates the enum class of SPDX license ids and their associated texts as resources."
     group = "SPDX"
 
-    val description = "license"
-    val licenseInfo = getLicenseInfo(
-        "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion/json/licenses.json",
-        description,
-        "licenses",
-        "licenseId",
-        isException = false
-    )
-
-    val licenseUrlMap = licenseInfo.associate { info ->
-        providers.mapNotNull { it.getLicenseUrl(info) }.first() to info.id
-    }
-
-    src(licenseUrlMap.keys.sortedBy { it.toString().lowercase() })
-    dest("src/main/resources/$licensesResourcePath")
-    eachFile { name = licenseUrlMap[sourceURL.toURI()] }
-
     doLast {
+        val description = "license"
+        val licenseInfo = getLicenseInfo(
+            "$spdxLicenseListUrl/licenses.json",
+            description,
+            "licenses",
+            "licenseId",
+            isException = false
+        )
+
+        importLicenseTexts(file("src/main/resources/$licensesResourcePath"), licenseInfo, textKey = "licenseText")
+
         generateEnumClass(
             "SpdxLicense",
             description,
@@ -390,28 +413,26 @@ val generateSpdxLicenseEnum = tasks.register("generateSpdxLicenseEnum", Download
     finalizedBy(fixupLicenseTextResources)
 }
 
-val generateSpdxLicenseExceptionEnum = tasks.register("generateSpdxLicenseExceptionEnum", Download::class) {
+val generateSpdxLicenseExceptionEnum = tasks.register("generateSpdxLicenseExceptionEnum") {
     description = "Generates the enum class of SPDX license exception ids and their associated texts as resources."
     group = "SPDX"
 
-    val description = "license exception"
-    val licenseInfo = getLicenseInfo(
-        "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion/json/exceptions.json",
-        description,
-        "exceptions",
-        "licenseExceptionId",
-        isException = true
-    )
-
-    val licenseExceptionUrlMap = licenseInfo.associate { info ->
-        providers.mapNotNull { it.getLicenseUrl(info) }.first() to info.id
-    }
-
-    src(licenseExceptionUrlMap.keys.sortedBy { it.toString().lowercase() })
-    dest("src/main/resources/$exceptionsResourcePath")
-    eachFile { name = licenseExceptionUrlMap[sourceURL.toURI()] }
-
     doLast {
+        val description = "license exception"
+        val licenseInfo = getLicenseInfo(
+            "$spdxLicenseListUrl/exceptions.json",
+            description,
+            "exceptions",
+            "licenseExceptionId",
+            isException = true
+        )
+
+        importLicenseTexts(
+            file("src/main/resources/$exceptionsResourcePath"),
+            licenseInfo,
+            textKey = "licenseExceptionText"
+        )
+
         generateEnumClass(
             "SpdxLicenseException",
             description,
