@@ -57,23 +57,23 @@ data class LicenseFilePatterns(
     companion object {
         val DEFAULT = LicenseFilePatterns(
             licenseFilenames = setOf(
-                "copying*",
-                "copyright",
-                "licence*",
-                "license*",
-                "*.licence",
-                "*.license",
-                "unlicence",
-                "unlicense"
+                "COPYING*",
+                "COPYRIGHT",
+                "LICENCE*",
+                "LICENSE*",
+                "*.LICENCE",
+                "*.LICENSE",
+                "UNLICENCE",
+                "UNLICENSE"
             ),
             noticeFilenames = setOf(
-                "notice*"
+                "NOTICE*"
             ),
             patentFilenames = setOf(
-                "patents"
+                "PATENTS"
             ),
             otherLicenseFilenames = setOf(
-                "readme*"
+                "README*"
             )
         )
 

@@ -84,10 +84,10 @@ class OrtConfigurationTest : WordSpec({
             )
 
             with(ortConfig.licenseFilePatterns) {
-                licenseFilenames should containExactly("license*")
-                noticeFilenames should containExactly("notice*")
-                patentFilenames should containExactly("patents")
-                otherLicenseFilenames should containExactly("readme*")
+                licenseFilenames should containExactly("LICENSE*")
+                noticeFilenames should containExactly("NOTICE*")
+                patentFilenames should containExactly("PATENTS")
+                otherLicenseFilenames should containExactly("README*")
             }
 
             ortConfig.packageCurationProviders should containExactly(

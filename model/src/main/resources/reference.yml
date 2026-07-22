@@ -55,10 +55,10 @@ ort:
       licenseTextDir: '/path/to/scancode/license/text/dir'
 
   licenseFilePatterns:
-    licenseFilenames: ['license*']
-    noticeFilenames: ['notice*']
-    patentFilenames: ['patents']
-    otherLicenseFilenames: ['readme*']
+    licenseFilenames: ['LICENSE*']
+    noticeFilenames: ['NOTICE*']
+    patentFilenames: ['PATENTS']
+    otherLicenseFilenames: ['README*']
 
   # Package configuration providers are listed from highest to lowest priority. If multiple providers return
   # configurations for the same package ID and provenance, the configuration from the higher-priority provider
