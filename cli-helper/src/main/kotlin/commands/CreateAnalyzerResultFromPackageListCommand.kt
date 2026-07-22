@@ -119,6 +119,9 @@ internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
         )
 
         val ortConfig = OrtConfiguration.load(emptyMap(), configFile)
+        val repositoryConfiguration = repositoryConfigurationFile?.readValue<RepositoryConfiguration>().orEmpty()
+            .addScopeExcludeForExcludedScope()
+
         val packageCurationProviders = PackageCurationProviderFactory.create(ortConfig.packageCurationProviders)
 
         val ortResult = OrtResult(
@@ -131,8 +134,7 @@ internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
             ),
             repository = Repository(
                 vcs = projectVcs.normalize(),
-                config = repositoryConfigurationFile?.readValue<RepositoryConfiguration>().orEmpty()
-                    .addScopeExcludeForExcludedScope()
+                config = repositoryConfiguration
             )
         ).setPackageCurations(packageCurationProviders)
 
