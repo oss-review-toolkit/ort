@@ -1,0 +1,26 @@
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/transitive-actions.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  transitive-actions:
+    name: Exercise transitive action dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Links
+        uses: umbrelladocs/action-linkspector@v1
+
+      - name: Upload code coverage data
+        uses: codecov/codecov-action@v7
+
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
