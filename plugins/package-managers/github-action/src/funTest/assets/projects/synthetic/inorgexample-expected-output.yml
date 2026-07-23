@@ -1,0 +1,80 @@
+---
+project:
+  id: "GitHubAction::In Org:"
+  definition_file_path: ".github/workflows/inorgexample.yml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/github-action/src/funTest/assets/projects/synthetic/sha-pinning/.github/workflows"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/github-action/src/funTest/assets/projects/synthetic/sha-pinning/.github/workflows"
+  description: "In Org"
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes:
+  - name: "demo"
+    dependencies:
+    - id: "GitHubAction:actions:checkout:08eba0b27e820071cde6df949e0beb9ba4906955"
+    - id: "GitHubAction:vainesorg:blog_gh_sha_pinning_action:7d6ad4affc79375ac049e2f4101d09f0fb5f4319"
+packages:
+- id: "GitHubAction:actions:checkout:08eba0b27e820071cde6df949e0beb9ba4906955"
+  purl: "pkg:github/actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/checkout"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/checkout.git"
+    revision: "08eba0b27e820071cde6df949e0beb9ba4906955"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/checkout.git"
+    revision: "08eba0b27e820071cde6df949e0beb9ba4906955"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:vainesorg:blog_gh_sha_pinning_action:7d6ad4affc79375ac049e2f4101d09f0fb5f4319"
+  purl: "pkg:github/vainesorg/blog_gh_sha_pinning_action@7d6ad4affc79375ac049e2f4101d09f0fb5f4319"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/vainesorg/blog_gh_sha_pinning_action"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/vainesorg/blog_gh_sha_pinning_action.git"
+    revision: "7d6ad4affc79375ac049e2f4101d09f0fb5f4319"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/vainesorg/blog_gh_sha_pinning_action.git"
+    revision: "7d6ad4affc79375ac049e2f4101d09f0fb5f4319"
+    path: ""
+  source_code_origins:
+  - "VCS"

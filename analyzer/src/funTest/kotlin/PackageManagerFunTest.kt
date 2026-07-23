@@ -53,6 +53,7 @@ class PackageManagerFunTest : WordSpec({
         "conan-py/conanfile.py",
         "conan-txt/conanfile.txt",
         "dotnet/test.csproj",
+        "github-action/.github/workflows/build.yml",
         "gleam/gleam.toml",
         "gomod/go.mod",
         "gradle-groovy/build.gradle",

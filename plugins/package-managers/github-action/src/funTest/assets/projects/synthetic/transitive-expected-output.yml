@@ -1,0 +1,315 @@
+---
+project:
+  id: "GitHubAction::transitive:"
+  definition_file_path: ".github/workflows/transitive.yml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/github-action/src/funTest/assets/projects/synthetic/ort-like/.github/workflows"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/github-action/src/funTest/assets/projects/synthetic/ort-like/.github/workflows"
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes:
+  - name: "transitive-actions"
+    dependencies:
+    - id: "GitHubAction:actions:attest-build-provenance:v4"
+      dependencies:
+      - id: "GitHubAction:actions:attest:a1948c3f048ba23858d222213b7c278aabede763"
+    - id: "GitHubAction:actions:upload-pages-artifact:v3"
+      dependencies:
+      - id: "GitHubAction:actions:upload-artifact:v4"
+    - id: "GitHubAction:codecov:codecov-action:v7"
+      dependencies:
+      - id: "GitHubAction:actions:github-script:ed597411d8f924073f98dfc5c65a23a2325f34cd"
+    - id: "GitHubAction:umbrelladocs:action-linkspector:v1"
+      dependencies:
+      - id: "GitHubAction:actions:cache:27d5ce7f107fe9357f9df03efb73ab90386fccae"
+      - id: "GitHubAction:actions:setup-node:a0853c24544627f65ddf259abe73b1d18a591444"
+      - id: "GitHubAction:reviewdog:action-setup:d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f"
+packages:
+- id: "GitHubAction:actions:attest:a1948c3f048ba23858d222213b7c278aabede763"
+  purl: "pkg:github/actions/attest@a1948c3f048ba23858d222213b7c278aabede763"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/attest"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/attest.git"
+    revision: "a1948c3f048ba23858d222213b7c278aabede763"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/attest.git"
+    revision: "a1948c3f048ba23858d222213b7c278aabede763"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:attest-build-provenance:v4"
+  purl: "pkg:github/actions/attest-build-provenance@v4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/attest-build-provenance"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/attest-build-provenance.git"
+    revision: "v4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/attest-build-provenance.git"
+    revision: "v4"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:cache:27d5ce7f107fe9357f9df03efb73ab90386fccae"
+  purl: "pkg:github/actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/cache"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/cache.git"
+    revision: "27d5ce7f107fe9357f9df03efb73ab90386fccae"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/cache.git"
+    revision: "27d5ce7f107fe9357f9df03efb73ab90386fccae"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:github-script:ed597411d8f924073f98dfc5c65a23a2325f34cd"
+  purl: "pkg:github/actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/github-script"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/github-script.git"
+    revision: "ed597411d8f924073f98dfc5c65a23a2325f34cd"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/github-script.git"
+    revision: "ed597411d8f924073f98dfc5c65a23a2325f34cd"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:setup-node:a0853c24544627f65ddf259abe73b1d18a591444"
+  purl: "pkg:github/actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/setup-node"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/setup-node.git"
+    revision: "a0853c24544627f65ddf259abe73b1d18a591444"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/setup-node.git"
+    revision: "a0853c24544627f65ddf259abe73b1d18a591444"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:upload-artifact:v4"
+  purl: "pkg:github/actions/upload-artifact@v4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/upload-artifact"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/upload-artifact.git"
+    revision: "v4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/upload-artifact.git"
+    revision: "v4"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:upload-pages-artifact:v3"
+  purl: "pkg:github/actions/upload-pages-artifact@v3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/upload-pages-artifact"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/upload-pages-artifact.git"
+    revision: "v3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/upload-pages-artifact.git"
+    revision: "v3"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:codecov:codecov-action:v7"
+  purl: "pkg:github/codecov/codecov-action@v7"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/codecov/codecov-action"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/codecov/codecov-action.git"
+    revision: "v7"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/codecov/codecov-action.git"
+    revision: "v7"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:reviewdog:action-setup:d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f"
+  purl: "pkg:github/reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/reviewdog/action-setup"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/reviewdog/action-setup.git"
+    revision: "d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/reviewdog/action-setup.git"
+    revision: "d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:umbrelladocs:action-linkspector:v1"
+  purl: "pkg:github/umbrelladocs/action-linkspector@v1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/umbrelladocs/action-linkspector"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/umbrelladocs/action-linkspector.git"
+    revision: "v1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/umbrelladocs/action-linkspector.git"
+    revision: "v1"
+    path: ""
+  source_code_origins:
+  - "VCS"
