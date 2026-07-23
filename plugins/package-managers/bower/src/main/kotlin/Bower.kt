@@ -104,12 +104,12 @@ class Bower(override val descriptor: PluginDescriptor = BowerFactory.descriptor)
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+}
 
-    private fun getProjectPackageInfo(workingDir: File): PackageInfo {
-        BowerCommand.run(workingDir, "--allow-root", "install").requireSuccess()
-        val json = BowerCommand.run(workingDir, "--allow-root", "list", "--json").requireSuccess().stdout
-        return parsePackageInfoJson(json)
-    }
+private fun getProjectPackageInfo(workingDir: File): PackageInfo {
+    BowerCommand.run(workingDir, "--allow-root", "install").requireSuccess()
+    val json = BowerCommand.run(workingDir, "--allow-root", "list", "--json").requireSuccess().stdout
+    return parsePackageInfoJson(json)
 }
 
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
