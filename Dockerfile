@@ -36,7 +36,10 @@ RUN /etc/scripts/set_apt_proxy.sh
 RUN --mount=type=cache,target=/var/cache,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     --mount=type=tmpfs,target=/var/log \
-    apt-get update \
+    apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends extrepo \
+    && extrepo enable mise \
+    && apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     ca-certificates \
     coreutils \
@@ -58,6 +61,7 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
     locales \
     lzma \
     make \
+    mise \
     netbase \
     openssh-client \
     openssl \
@@ -219,15 +223,6 @@ RUN --mount=type=cache,target=/opt/nvm/.cache,uid=$USER_ID,gid=$USER_GID \
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component
 FROM base AS ruby-build
-
-# hadolint ignore=DL3004
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    sudo apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends extrepo \
-    && sudo extrepo enable mise \
-    && sudo apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends mise
 
 ARG COCOAPODS_VERSION
 ARG LICENSEE_VERSION
