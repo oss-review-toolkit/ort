@@ -39,5 +39,7 @@ dependencies {
     implementation(libs.clikt)
     implementation(libs.kotlinx.coroutines)
 
+    testImplementation(projects.plugins.reporters.evaluatedModelReporter)
+
     ksp(projects.plugins.commands.commandApi)
 }

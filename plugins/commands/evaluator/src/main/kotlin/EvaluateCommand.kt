@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
@@ -82,6 +83,7 @@ import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.config.setResolutions
 import org.ossreviewtoolkit.utils.ort.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CHOICES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -134,6 +136,15 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory / ORT_COPYRIGHT_GARBAGE_FILENAME)
+        .configurationGroup()
+
+    private val licenseChoicesFile by option(
+        "--license-choices-file",
+        help = "A file containing license choices."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory / ORT_LICENSE_CHOICES_FILENAME)
         .configurationGroup()
 
     private val licenseClassificationsFile by option(
@@ -276,6 +287,14 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
         repositoryConfigurationFile?.let {
             val config = it.readValueOrDefault(RepositoryConfiguration())
             ortResultInput = ortResultInput.replaceConfig(config)
+        }
+
+        licenseChoicesFile.takeIf { it.isFile }?.let {
+            val globalLicenseChoices = it.readValue<LicenseChoices>()
+            val config = ortResultInput.repository.config
+            ortResultInput = ortResultInput.replaceConfig(
+                config.copy(licenseChoices = config.licenseChoices.merge(globalLicenseChoices))
+            )
         }
 
         if (packageCurationsDir != null || packageCurationsFile != null) {

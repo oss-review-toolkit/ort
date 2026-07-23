@@ -45,6 +45,31 @@ data class LicenseChoices(
     @JsonIgnore
     fun isEmpty() = packageLicenseChoices.isEmpty() && repositoryLicenseChoices.isEmpty()
 
+    /**
+     * Return the result of merging [other] into these [LicenseChoices] as fallbacks. For the same repository choice
+     * (matched by [SpdxLicenseChoice.given]) or package (matched by [PackageLicenseChoice.packageId] and again by
+     * [SpdxLicenseChoice.given]), the choices defined in this instance take precedence over those in [other]. This
+     * allows combining a repository's own license choices with globally configured ones, so that repository-specific
+     * choices override the global defaults.
+     */
+    fun merge(other: LicenseChoices): LicenseChoices {
+        val givens = repositoryLicenseChoices.mapTo(mutableSetOf()) { it.given }
+        val mergedRepositoryLicenseChoices = repositoryLicenseChoices +
+            other.repositoryLicenseChoices.filterNot { it.given in givens }
+
+        val packageIds = (packageLicenseChoices.map { it.packageId } + other.packageLicenseChoices.map { it.packageId })
+            .distinct()
+        val mergedPackageLicenseChoices = packageIds.map { packageId ->
+            val choices = packageLicenseChoices.find { it.packageId == packageId }?.licenseChoices.orEmpty()
+            val otherChoices = other.packageLicenseChoices.find { it.packageId == packageId }?.licenseChoices.orEmpty()
+            val choiceGivens = choices.mapTo(mutableSetOf()) { it.given }
+
+            PackageLicenseChoice(packageId, choices + otherChoices.filterNot { it.given in choiceGivens })
+        }
+
+        return LicenseChoices(mergedRepositoryLicenseChoices, mergedPackageLicenseChoices)
+    }
+
     init {
         val choicesWithoutGiven = repositoryLicenseChoices.filter { it.given == null }
         require(choicesWithoutGiven.isEmpty()) {
