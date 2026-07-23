@@ -49,6 +49,15 @@ class NuGetFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Project license detection is correct".config(enabled = false) {
+        val definitionFile = getAssetFile("dotnet/subProjectTestWithLicenseExpressionInCsProj/test.csproj")
+        val expectedResultFile = getAssetFile("dotnet-project-license-detected-output.yml")
+
+        val result = NuGetFactory.create().resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "A .csproj file with an accompanying .nuspec file is detected correctly".config(enabled = false) {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithNuspec/test.csproj")
         val expectedResultFile = getAssetFile("dotnet-with-nuspec-expected-output.yml")
