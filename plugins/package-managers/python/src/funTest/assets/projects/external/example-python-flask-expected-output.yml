@@ -32,8 +32,10 @@ project:
 packages:
 - id: "PyPI::click:8.4.2"
   purl: "pkg:pypi/click@8.4.2"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
   description: "Composable command line interface toolkit"
   homepage_url: ""
   binary_artifact:
@@ -189,8 +191,10 @@ packages:
     path: ""
 - id: "PyPI::markupsafe:3.0.3"
   purl: "pkg:pypi/markupsafe@3.0.3"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
   description: "Safely add untrusted strings to HTML/XML markup."
   homepage_url: ""
   binary_artifact:
@@ -215,8 +219,10 @@ packages:
     path: ""
 - id: "PyPI::werkzeug:3.1.8"
   purl: "pkg:pypi/werkzeug@3.1.8"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
   description: "The comprehensive WSGI web application library."
   homepage_url: ""
   binary_artifact:
