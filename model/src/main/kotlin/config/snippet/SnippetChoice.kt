@@ -62,7 +62,7 @@ data class Choice(
     val reason: SnippetChoiceReason,
 
     /**
-     * An optional comment describing the snippet choice.
+     * An optional comment to further explain why the [reason] is applicable here.
      */
-    val comment: String? = null
+    val comment: String = ""
 )
