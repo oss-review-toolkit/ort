@@ -613,9 +613,14 @@ COPY --from=python-build --chown=$USER:$USER /opt/scancode-license-data /opt/sca
 # Container with all supported package managers.
 FROM minimal-tools AS all-tools
 
+ARG ABOM_VERSION
 ARG ASKALONO_VERSION
 ARG COMPOSER_VERSION
 ARG PHP_VERSION
+
+ENV ABOM_HOME=/opt/abom
+ENV PATH=$PATH:$ABOM_HOME
+RUN sudo mise install-into github:JulietSecurity/abom@$ABOM_VERSION $ABOM_HOME
 
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
