@@ -1,5 +1,43 @@
 ---
 NPM::find-my-way:3.0.0:
+- id: "GHSA-c96f-x56v-gq3h"
+  summary: "find-my-way: DDoS with HTTP2"
+  description: "### Impact\nRemotely triggerable DoS in find-my-way when it is used\
+    \ with Node's HTTP/2 server.\n\nThe short version is that `lookup()` passes `req.method`\
+    \ into `find()`, and `find()` indexes `this.trees[method]`. Since `this.trees`\
+    \ is a normal object, HTTP/2 method values like constructor, `toString`, or `__proto__`\
+    \ can resolve inherited object properties instead of returning undefined. The\
+    \ code then treats that value like a router node and crashes when it reaches `currentNode.prefix.length`.\n\
+    \n### Patches\n\nUpgrade to v9.7.0.\n\n### Workarounds\n\nDo not use find-my-way\
+    \ with HTTP/2 servers, or validate that the http method is valid beforehand."
+  references:
+  - url: "https://github.com/delvedor/find-my-way/security/advisories/GHSA-c96f-x56v-gq3h"
+    scoring_system: "CVSS_V3"
+    severity: "HIGH"
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://github.com/delvedor/find-my-way/pull/434"
+    scoring_system: "CVSS_V3"
+    severity: "HIGH"
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://github.com/delvedor/find-my-way/commit/cfe3fd6168b5ac1594c0820fb83fce251a533fc1"
+    scoring_system: "CVSS_V3"
+    severity: "HIGH"
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://github.com/delvedor/find-my-way"
+    scoring_system: "CVSS_V3"
+    severity: "HIGH"
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  - url: "https://github.com/delvedor/find-my-way/releases/tag/v9.7.0"
+    scoring_system: "CVSS_V3"
+    severity: "HIGH"
+    score: null
+    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+  first_fixed_versions:
+  - "9.7.0"
 - id: "GHSA-jgrh-5m3h-9c5f"
   summary: "Web Cache Poisoning in find-my-way"
   description: "This affects the package find-my-way before 2.2.5, from 3.0.0 and\
