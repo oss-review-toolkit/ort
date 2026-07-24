@@ -59,7 +59,7 @@ coreutils = {
 # Scanners
 "github:jpeddicord/askalono" = "{{ env.ASKALONO_VERSION }}"
 "gem:licensee" = "{{ env.LICENSEE_VERSION }}"
-"github:mstykow/provenant" = "{{ env.PROVENANT_VERSION }}"
+"github:getprovenant/provenant" = "{{ env.PROVENANT_VERSION }}"
 "pipx:scancode-toolkit" = "{{ env.SCANCODE_VERSION }}"
 
 # Version Control Systems
