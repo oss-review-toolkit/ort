@@ -221,10 +221,13 @@ open class PackageRule(
     fun licenseRule(
         name: String,
         licenseView: LicenseView,
+        filterExcluded: Boolean = true,
         separateEvaluationPerSource: Boolean = true,
         block: LicenseRule.() -> Unit
     ) {
-        val effectiveResolvedLicenseInfo = resolvedLicenseInfo.filter(licenseView, filterSources = true)
+        val effectiveResolvedLicenseInfo = resolvedLicenseInfo
+            .run { if (filterExcluded) filterExcluded() else this }
+            .filter(licenseView, filterSources = true)
             .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.metadata.id), licenseView)
             .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView)
 
