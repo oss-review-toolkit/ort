@@ -560,7 +560,7 @@ RUN mkdir -p /opt/provenant && \
     else \
         PROVENANT_ARCHIVE="provenant-linux-x86_64.tar.gz"; \
     fi \
-    && curl -LSs "https://github.com/mstykow/provenant/releases/download/v$PROVENANT_VERSION/$PROVENANT_ARCHIVE" | tar -xz -C /opt/provenant
+    && curl -LSs "https://github.com/getprovenant/provenant/releases/download/v$PROVENANT_VERSION/$PROVENANT_ARCHIVE" | tar -xz -C /opt/provenant
 
 #------------------------------------------------------------------------
 # Container with minimal selection of supported package managers.
