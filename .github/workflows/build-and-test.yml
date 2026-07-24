@@ -33,7 +33,7 @@ jobs:
       run: ./gradlew classes
   codeql-analysis:
     needs: build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       # Needed for SARIF scanning upload.
       security-events: write
@@ -89,7 +89,7 @@ jobs:
         flags: test-${{ matrix.os }}
   funTest-no-external-tools:
     needs: build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -114,7 +114,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-no-external-tools
   funTest-external-tools:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -160,7 +160,7 @@ jobs:
         flags: funTest-external-tools
   publication-test:
     needs: build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
