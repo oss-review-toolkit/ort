@@ -72,7 +72,7 @@ testcontainers = "1.21.4"
 tika = "3.3.2"
 wagonHttp = "3.5.3"
 wiremock = "3.13.2"
-xmlutil = "0.91.3"
+xmlutil = "1.0.0"
 xz = "1.12"
 
 [plugins]
