@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands.repoconfig
+package org.ossreviewtoolkit.clihelper.commands.repoconfig
 
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
@@ -26,12 +26,12 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
-import org.ossreviewtoolkit.helper.utils.minimize
-import org.ossreviewtoolkit.helper.utils.readOrtResult
-import org.ossreviewtoolkit.helper.utils.replaceScopeExcludes
-import org.ossreviewtoolkit.helper.utils.sortScopeExcludes
-import org.ossreviewtoolkit.helper.utils.write
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.minimize
+import org.ossreviewtoolkit.clihelper.utils.readOrtResult
+import org.ossreviewtoolkit.clihelper.utils.replaceScopeExcludes
+import org.ossreviewtoolkit.clihelper.utils.sortScopeExcludes
+import org.ossreviewtoolkit.clihelper.utils.write
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude

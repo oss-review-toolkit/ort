@@ -91,7 +91,7 @@ style:
     max: 5
   WildcardImport:
     excludeImports:
-      - org.ossreviewtoolkit.helper.commands.*
+      - org.ossreviewtoolkit.clihelper.commands.*
       - org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
       - org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
       - kotlinx.html.*

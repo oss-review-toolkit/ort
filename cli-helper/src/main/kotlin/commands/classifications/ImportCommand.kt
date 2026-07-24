@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands.classifications
+package org.ossreviewtoolkit.clihelper.commands.classifications
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
@@ -32,7 +32,7 @@ import java.net.URI
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
+import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
