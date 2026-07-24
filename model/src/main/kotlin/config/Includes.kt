@@ -21,9 +21,12 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+/**
+ * Defines which parts of a (root) repository should be included.
+ */
 data class Includes(
     /**
-     * Path includes.
+     * Path includes which target file paths relative to the analysis root.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val paths: List<PathInclude> = emptyList(),
