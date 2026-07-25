@@ -136,12 +136,9 @@ class UploadArchiveHandler(
             .filter { it != path }
             .forEach { file ->
                 val relativePath = file.relativeTo(path).invariantSeparatorsPath
-                if (shouldDeleteFile(relativePath, includes, excludes)) {
+                if (!isPathIncluded(relativePath, excludes, includes)) {
                     file.delete()
                 }
             }
     }
-
-    private fun shouldDeleteFile(relativePath: String, includes: Includes, excludes: Excludes): Boolean =
-        !isPathIncluded(relativePath, excludes, includes)
 }
