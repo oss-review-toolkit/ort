@@ -26,7 +26,9 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
+import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 /**
@@ -73,4 +75,15 @@ data class ScanContext(
      * The [SnippetChoices] of the project to scan. Only set if [packageType] is [PackageType.PROJECT].
      */
     val snippetChoices: List<SnippetChoices> = emptyList()
-)
+) {
+    /**
+     * Returns true if the given [relativePath] is excluded. The [relativePath] is relative to root directory of the
+     * provenance corresponding to the scan.
+     */
+    fun isPathExcluded(relativePath: String): Boolean =
+        !isPathIncluded(
+            relativePath,
+            excludes.orEmpty(),
+            includes.orEmpty()
+        )
+}

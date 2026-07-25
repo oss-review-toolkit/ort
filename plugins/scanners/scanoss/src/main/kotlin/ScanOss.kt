@@ -35,11 +35,9 @@ import java.time.Instant
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
-import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
@@ -94,11 +92,7 @@ class ScanOss(
                 // This is provided by the Scanner and represents individual files/directories during traversal.
                 try {
                     val relativePath = currentPath.toFile().toRelativeString(path)
-                    val isExcluded = !isPathIncluded(
-                        relativePath,
-                        context.excludes.orEmpty(),
-                        context.includes.orEmpty()
-                    )
+                    val isExcluded = context.isPathExcluded(relativePath)
 
                     logger.debug { "Path: $currentPath, relative: $relativePath, isExcluded: $isExcluded" }
                     isExcluded
