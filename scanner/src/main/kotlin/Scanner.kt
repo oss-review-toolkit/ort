@@ -131,10 +131,7 @@ class Scanner(
             ScanContext(
                 labels = ortResult.labels + labels,
                 packageType = PackageType.PACKAGE,
-                excludes = ortResult.repository.config.excludes,
-                includes = ortResult.repository.config.includes,
-                detectedLicenseMapping = scannerConfig.detectedLicenseMapping,
-                snippetChoices = ortResult.repository.config.snippetChoices
+                detectedLicenseMapping = scannerConfig.detectedLicenseMapping
             )
         )
 
