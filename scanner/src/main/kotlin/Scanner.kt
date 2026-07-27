@@ -129,7 +129,7 @@ class Scanner(
         val packageResults = scan(
             packages,
             ScanContext(
-                labels = ortResult.labels,
+                labels = ortResult.labels + labels,
                 packageType = PackageType.PACKAGE,
                 excludes = ortResult.repository.config.excludes,
                 includes = ortResult.repository.config.includes,
