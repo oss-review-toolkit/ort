@@ -3,6 +3,9 @@
 # NPM dependencies
 node_modules/
 
+# Build output
+build/
+
 # NPM misc
 .env.local
 .env.development.local

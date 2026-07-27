@@ -1,5 +1,0 @@
-# Use Unix line endings for JavaScript source code to avoid problems with eslint.
-**/*.js	text eol=lf
-
-# Fix GitHub language statistics, see https://github.com/github/linguist#using-gitattributes.
-index.html	linguist-generated=true

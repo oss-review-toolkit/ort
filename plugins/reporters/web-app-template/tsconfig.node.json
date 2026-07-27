@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2023"],
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "moduleDetection": "force",
+        "esModuleInterop": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "noEmit": true,
+        "types": ["node"]
+    },
+    "include": ["vite.config.ts"]
+}

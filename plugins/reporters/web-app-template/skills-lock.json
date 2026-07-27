@@ -1,0 +1,29 @@
+{
+    "version": 1,
+    "skills": {
+        "shadcn": {
+            "source": "shadcn/ui",
+            "sourceType": "github",
+            "skillPath": "skills/shadcn/SKILL.md",
+            "computedHash": "ac9d0d69caac7de1d1e5647f3db3bcd2f13af355d6b3a78780fbf7fc80e8dca0"
+        },
+        "tailwind-v4-shadcn": {
+            "source": "secondsky/claude-skills",
+            "sourceType": "github",
+            "skillPath": "plugins/tailwind-v4-shadcn/skills/tailwind-v4-shadcn/SKILL.md",
+            "computedHash": "c2b354b64cbd922c8d93121091d079026e2c8a3ca81c07c4f31b6e738c2695f1"
+        },
+        "tanstack-router-best-practices": {
+            "source": "deckardger/tanstack-agent-skills",
+            "sourceType": "github",
+            "skillPath": "skills/tanstack-router/SKILL.md",
+            "computedHash": "65764bc7b90e47f6023cb7f89b3af93eaaafc517754f10b9382e184d4646a77d"
+        },
+        "tanstack-table": {
+            "source": "tanstack-skills/tanstack-skills",
+            "sourceType": "github",
+            "skillPath": "plugins/tanstack-table/skills/tanstack-table/SKILL.md",
+            "computedHash": "d5ac71bd795696cd3310165c3ea0e435c310a0ac3c4e9dd45b39ed91b8dbcbb1"
+        }
+    }
+}

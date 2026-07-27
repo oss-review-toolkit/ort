@@ -23,18 +23,12 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsSetupTask
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootEnvSpec
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 
-// The Kotlin/JS plugins are only applied programmatically for Kotlin projects that target JavaScript. As this project
-// does not directly target JavaScript from Kotlin, manually apply the YarnPlugin and configure the tool versions.
-
-// The YarnPlugin depends on the NodeJsRootPlugin and registers both on the root project, see
-// https://github.com/JetBrains/kotlin/blob/2.1.20/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L32
-// https://github.com/JetBrains/kotlin/blob/2.1.20/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L159-L163
-YarnPlugin.apply(project)
+// This module uses npm (not Yarn). The Kotlin/JS NodeJsRootPlugin is bootstrapped just to download a
+// pinned Node.js distribution; npm is bundled with that Node.js, so no extra setup task is required.
+NodeJsRootPlugin.apply(rootProject)
 
 rootProject.plugins.withType<NodeJsPlugin>().configureEach {
     rootProject.the<NodeJsEnvSpec>().version = "22.13.0"
@@ -42,33 +36,27 @@ rootProject.plugins.withType<NodeJsPlugin>().configureEach {
 
 val kotlinNodeJsSetup = rootProject.tasks.withType(NodeJsSetupTask::class).single()
 
-rootProject.plugins.withType<YarnPlugin>().configureEach {
-    rootProject.the<YarnRootEnvSpec>().version = "1.22.22"
-}
-
-val kotlinYarnSetup = rootProject.tasks.withType(YarnSetupTask::class).single()
-
 val nodeDir = kotlinNodeJsSetup.destinationProvider.asFile.get()
 val nodeBinDir = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeDir else nodeDir.resolve("bin")
 val nodeExecutable = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeBinDir.resolve("node.exe") else nodeBinDir.resolve("node")
 
-val yarnDir = kotlinYarnSetup.destinationProvider.asFile.get()
-val yarnJs = yarnDir.resolve("bin/yarn.js")
+// npm is shipped with the Node.js distribution under "lib/node_modules/npm/bin/npm-cli.js".
+val npmCliJs = nodeDir.resolve("lib/node_modules/npm/bin/npm-cli.js")
+    .takeIf { it.exists() }
+    ?: nodeDir.resolve("node_modules/npm/bin/npm-cli.js")
 
-tasks.addRule("Pattern: yarn<Command>") {
+tasks.addRule("Pattern: npm<Command>") {
     val taskName = this
-    if (taskName.startsWith("yarn")) {
-        val command = taskName.removePrefix("yarn").replaceFirstChar { it.lowercase(Locale.ROOT) }
+    if (taskName.startsWith("npm")) {
+        val command = taskName.removePrefix("npm").replaceFirstChar { it.lowercase(Locale.ROOT) }
 
         tasks.register<Exec>(taskName) {
-            // Execute the Yarn version downloaded by Gradle using the NodeJs version downloaded by Gradle.
-            commandLine = listOf(nodeExecutable.path, yarnJs.path, command)
+            // Execute the npm CLI via the Node.js version downloaded by Gradle.
+            commandLine = listOf(nodeExecutable.path, npmCliJs.path, "run", command)
 
             val oldPath = System.getenv("PATH")
             val newPath = listOf(
-                // Prepend the directory of the bootstrapped Node.js to the PATH environment.
                 nodeBinDir.path,
-                // Prepend the directory of additional tools like "rescripts" to the PATH environment.
                 projectDir.resolve("node_modules/.bin").path,
                 oldPath
             ).joinToString(File.pathSeparator)
@@ -78,38 +66,47 @@ tasks.addRule("Pattern: yarn<Command>") {
     }
 }
 
-/*
- * Further configure rule tasks, e.g. with inputs and outputs.
- */
-
-val yarnInstall = tasks.named("yarnInstall") {
-    description = "Use Yarn to install the Node.js dependencies."
+val npmInstall = tasks.register<Exec>("npmInstall") {
+    description = "Use npm to install the Node.js dependencies."
     group = "Node"
 
-    dependsOn(kotlinYarnSetup)
+    dependsOn(kotlinNodeJsSetup)
 
-    inputs.files(".yarnrc", "package.json", "yarn.lock")
+    commandLine = listOf(nodeExecutable.path, npmCliJs.path, "install", "--no-audit", "--no-fund")
+
+    val oldPath = System.getenv("PATH")
+    environment = environment + ("PATH" to listOf(nodeBinDir.path, oldPath).joinToString(File.pathSeparator))
+
+    inputs.files("package.json", "package-lock.json")
 
     // Note that "node_modules" cannot be cached due to symlinks, see https://github.com/gradle/gradle/issues/3525.
     outputs.dir("node_modules")
 }
 
-val yarnBuild = tasks.named("yarnBuild") {
-    description = "Use Yarn to build the Node.js application."
+val npmBuild = tasks.named("npmBuild") {
+    description = "Use npm to build the single-file scan report template."
     group = "Node"
 
-    inputs.files(yarnInstall)
+    dependsOn(npmInstall)
     inputs.dir("src")
+    inputs.files("index.html", "vite.config.ts", "tsconfig.json", "tsconfig.node.json", "components.json")
 
     outputs.cacheIf { true }
     outputs.dir("build")
 }
 
-val yarnLint = tasks.named("yarnLint") {
-    description = "Let Yarn run the linter to check for style issues."
+val npmLint = tasks.named("npmLint") {
+    description = "Run Biome to check for style issues."
     group = "Node"
 
-    dependsOn(yarnInstall)
+    dependsOn(npmInstall)
+}
+
+val npmTypecheck = tasks.named("npmTypecheck") {
+    description = "Run the TypeScript type-checker."
+    group = "Node"
+
+    dependsOn(npmInstall)
 }
 
 /*
@@ -117,17 +114,17 @@ val yarnLint = tasks.named("yarnLint") {
  */
 
 tasks.register("build") {
-    dependsOn(yarnBuild, yarnLint)
+    dependsOn(npmBuild, npmLint, npmTypecheck)
 }
 
 tasks.register("check") {
-    dependsOn(yarnLint)
+    dependsOn(npmLint, npmTypecheck)
 }
 
 tasks.register<Delete>("clean") {
     delete("build")
     delete("node_modules")
-    delete("yarn-error.log")
+    delete("npm-debug.log")
 }
 
 val webAppTemplateConfiguration = configurations.create("webAppTemplateConfiguration") {
@@ -135,5 +132,5 @@ val webAppTemplateConfiguration = configurations.create("webAppTemplateConfigura
 }
 
 artifacts {
-    add(webAppTemplateConfiguration.name, yarnBuild)
+    add(webAppTemplateConfiguration.name, npmBuild)
 }
