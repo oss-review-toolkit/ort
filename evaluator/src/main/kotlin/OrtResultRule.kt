@@ -96,7 +96,7 @@ open class OrtResultRule(
                 val appliedChoices = ruleSet.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
                     .effectiveLicenseAndAppliedChoices(licenseView, choices).second.toSet()
 
-                getOrPut(id) { mutableSetOf() } += (choices.toSet() - appliedChoices)
+                getOrPut(id) { mutableSetOf() } += choices.toSet() - appliedChoices
             }
         }
 
