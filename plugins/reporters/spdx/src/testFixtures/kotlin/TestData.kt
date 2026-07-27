@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -169,6 +170,23 @@ val ORT_RESULT = OrtResult(
         ),
         vcs = ANALYZED_VCS,
         vcsProcessed = ANALYZED_VCS
+    ),
+    // Mirror the production flow where the (resolved) license choices are stored in the resolved configuration, which
+    // is where `getRepositoryLicenseChoices()` and `getPackageLicenseChoices()` read them from.
+    resolvedConfiguration = ResolvedConfiguration(
+        licenseChoices = LicenseChoices(
+            packageLicenseChoices = listOf(
+                PackageLicenseChoice(
+                    packageId = Identifier("Maven:pkg7-grp:pkg7:0.0.1"),
+                    licenseChoices = listOf(
+                        SpdxLicenseChoice(
+                            given = "BSD-3-Clause OR MIT".toSpdx(),
+                            choice = "BSD-3-Clause".toSpdx()
+                        )
+                    )
+                )
+            )
+        )
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
