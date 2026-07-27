@@ -110,11 +110,11 @@ class Scanner(
         val projectResults = scan(
             projectPackages,
             ScanContext(
-                ortResult.labels + labels,
-                PackageType.PROJECT,
-                ortResult.repository.config.excludes,
-                ortResult.repository.config.includes,
-                scannerConfig.detectedLicenseMapping,
+                labels = ortResult.labels + labels,
+                packageType = PackageType.PROJECT,
+                excludes = ortResult.repository.config.excludes,
+                includes = ortResult.repository.config.includes,
+                detectedLicenseMapping = scannerConfig.detectedLicenseMapping,
                 snippetChoices = ortResult.repository.config.snippetChoices
             )
         )
@@ -129,11 +129,11 @@ class Scanner(
         val packageResults = scan(
             packages,
             ScanContext(
-                ortResult.labels,
-                PackageType.PACKAGE,
-                ortResult.repository.config.excludes,
-                ortResult.repository.config.includes,
-                scannerConfig.detectedLicenseMapping,
+                labels = ortResult.labels,
+                packageType = PackageType.PACKAGE,
+                excludes = ortResult.repository.config.excludes,
+                includes = ortResult.repository.config.includes,
+                detectedLicenseMapping = scannerConfig.detectedLicenseMapping,
                 snippetChoices = ortResult.repository.config.snippetChoices
             )
         )
