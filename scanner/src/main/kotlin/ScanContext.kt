@@ -44,12 +44,12 @@ data class ScanContext(
     val packageType: PackageType,
 
     /**
-     * The [Excludes] of the project to scan.
+     * The [Excludes] of the project to scan. Only set if [packageType] is [PackageType.PROJECT]
      */
     val excludes: Excludes? = null,
 
     /**
-     * The [Includes] of the project to scan.
+     * The [Includes] of the project to scan. Only set if [packageType] is [PackageType.PROJECT]
      */
     val includes: Includes? = null,
 
@@ -70,7 +70,7 @@ data class ScanContext(
     val coveredPackages: List<Package> = emptyList(),
 
     /**
-     * The [SnippetChoices] of the project to scan.
+     * The [SnippetChoices] of the project to scan. Only set if [packageType] is [PackageType.PROJECT]
      */
     val snippetChoices: List<SnippetChoices> = emptyList()
 )
