@@ -77,6 +77,7 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCur
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.config.setLicenseChoices
 import org.ossreviewtoolkit.utils.config.setPackageConfigurations
 import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.config.setResolutions
@@ -316,6 +317,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
         val packageConfigurationProvider = CompositePackageConfigurationProvider(enabledPackageConfigurationProviders)
 
         ortResultInput = ortResultInput.setPackageConfigurations(packageConfigurationProvider)
+            .setLicenseChoices(ortResultInput.repository.config.licenseChoices)
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 

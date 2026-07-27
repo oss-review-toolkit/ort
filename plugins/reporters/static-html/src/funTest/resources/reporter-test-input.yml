@@ -858,6 +858,15 @@ evaluator:
     how_to_fix: "See the <a href=\"https://example.com/api?foo=1&bar=2&baz=3\">API\
       \ documentation</a> for details."
 resolved_configuration:
+  license_choices:
+    repository_license_choices:
+    - given: "GPL-2.0-only OR MIT"
+      choice: "MIT"
+    package_license_choices:
+    - package_id: "Maven:com.h2database:h2:1.4.200"
+      license_choices:
+      - given: "MPL-2.0 OR EPL-1.0"
+        choice: "MPL-2.0"
   package_curations:
   - provider:
       id: "DefaultDir"

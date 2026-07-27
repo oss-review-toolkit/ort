@@ -20,9 +20,16 @@
 package org.ossreviewtoolkit.utils.config
 
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
+
+/**
+ * Replace the license choices in [OrtResult.resolvedConfiguration] with the given [licenseChoices].
+ */
+fun OrtResult.setLicenseChoices(licenseChoices: LicenseChoices): OrtResult =
+    copy(resolvedConfiguration = resolvedConfiguration.copy(licenseChoices = licenseChoices))
 
 /**
  * Replace the package configurations in [OrtResult.resolvedConfiguration] with the ones obtained from

@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -175,6 +176,21 @@ val allProjects = setOf(
     projectIncluded
 )
 
+val licenseChoices = LicenseChoices(
+    repositoryLicenseChoices = listOf(
+        SpdxLicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-b".toSpdx()),
+        SpdxLicenseChoice("LicenseRef-c OR LicenseRef-d".toSpdx(), "LicenseRef-d".toSpdx())
+    ),
+    packageLicenseChoices = listOf(
+        PackageLicenseChoice(
+            packageId = Identifier("Maven:org.ossreviewtoolkit:package-with-only-concluded-license:1.0"),
+            licenseChoices = listOf(
+                SpdxLicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-a".toSpdx())
+            )
+        )
+    )
+)
+
 val ortResult = OrtResult(
     repository = Repository(
         vcs = VcsInfo.EMPTY,
@@ -188,24 +204,10 @@ val ortResult = OrtResult(
                     )
                 )
             ),
-            licenseChoices = LicenseChoices(
-                repositoryLicenseChoices = listOf(
-                    // This license choice will not be applied to "only-concluded-license" since the package license
-                    // choice takes precedence.
-                    SpdxLicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-b".toSpdx()),
-                    SpdxLicenseChoice("LicenseRef-c OR LicenseRef-d".toSpdx(), "LicenseRef-d".toSpdx())
-                ),
-                packageLicenseChoices = listOf(
-                    PackageLicenseChoice(
-                        packageId = Identifier("Maven:org.ossreviewtoolkit:package-with-only-concluded-license:1.0"),
-                        licenseChoices = listOf(
-                            SpdxLicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-a".toSpdx())
-                        )
-                    )
-                )
-            )
+            licenseChoices = licenseChoices
         )
     ),
+    resolvedConfiguration = ResolvedConfiguration(licenseChoices = licenseChoices),
     analyzer = AnalyzerRun.EMPTY.copy(
         config = AnalyzerConfiguration(allowDynamicVersions = true),
         result = AnalyzerResult(

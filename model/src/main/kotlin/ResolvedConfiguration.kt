@@ -22,8 +22,10 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.utils.LicenseChoicesFilter
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
@@ -37,6 +39,12 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
  * TODO: Add further data.
  */
 data class ResolvedConfiguration(
+    /**
+     * All license choices that may apply to [OrtResult].
+     */
+    @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = LicenseChoicesFilter::class)
+    val licenseChoices: LicenseChoices = LicenseChoices(),
+
     /**
      * All [PackageConfiguration]s that correspond to the scan results in this [OrtResult].
      */

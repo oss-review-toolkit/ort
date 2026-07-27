@@ -441,7 +441,7 @@ data class OrtResult(
      * Return all [SpdxLicenseChoice]s for the [Package] with [id].
      */
     fun getPackageLicenseChoices(id: Identifier): List<SpdxLicenseChoice> =
-        repository.config.licenseChoices.packageLicenseChoices
+        resolvedConfiguration.licenseChoices.packageLicenseChoices
             .filter { it.packageId == id }
             .flatMap { it.licenseChoices }
 
@@ -504,7 +504,7 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getRepositoryLicenseChoices(): List<SpdxLicenseChoice> =
-        repository.config.licenseChoices.repositoryLicenseChoices
+        resolvedConfiguration.licenseChoices.repositoryLicenseChoices
 
     /**
      * Return the [Resolutions] contained in the repository configuration of this [OrtResult].

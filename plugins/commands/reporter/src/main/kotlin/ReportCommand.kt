@@ -76,6 +76,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.config.setLicenseChoices
 import org.ossreviewtoolkit.utils.config.setPackageConfigurations
 import org.ossreviewtoolkit.utils.config.setResolutions
 import org.ossreviewtoolkit.utils.ort.ORT_COPYRIGHT_GARBAGE_FILENAME
@@ -244,6 +245,7 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
         }
 
         ortResult = ortResult.setPackageConfigurations(packageConfigurationProvider)
+            .setLicenseChoices(ortResult.repository.config.licenseChoices)
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 

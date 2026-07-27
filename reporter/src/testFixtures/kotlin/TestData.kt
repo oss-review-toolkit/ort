@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -98,6 +99,21 @@ val ORT_RESULT = OrtResult(
                             )
                         )
 
+                    )
+                )
+            )
+        )
+    ),
+    resolvedConfiguration = ResolvedConfiguration(
+        licenseChoices = LicenseChoices(
+            packageLicenseChoices = listOf(
+                PackageLicenseChoice(
+                    packageId = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
+                    licenseChoices = listOf(
+                        SpdxLicenseChoice(
+                            given = "Apache-2.0 OR BSD-3-Clause".toSpdx(),
+                            choice = "BSD-3-Clause".toSpdx()
+                        )
                     )
                 )
             )
