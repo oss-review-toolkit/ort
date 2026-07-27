@@ -80,8 +80,8 @@ open class OrtResultRule(
         )
 
     /**
-     * Return the set of non-applicable choices associated with the [Identifier] corresponding to the respective
-     * [org.ossreviewtoolkit.model.config.PackageLicenseChoice].
+     * Return the set of packages license choices which are contained in the repository configuration
+     * but that do not apply as map keyed by [Identifier].
      */
     fun getNonApplicablePackageLicenseChoices(licenseView: LicenseView): Map<Identifier, Set<SpdxLicenseChoice>> =
         buildMap<Identifier, MutableSet<SpdxLicenseChoice>> {
@@ -101,7 +101,8 @@ open class OrtResultRule(
         }
 
     /**
-     * Return the set of non-applicable repository license choices.
+     * Return the set of repository license choices which are contained in the repository configuration
+     * but that do not apply.
      */
     fun getNonApplicableRepositoryLicenseChoices(licenseView: LicenseView): Set<SpdxLicenseChoice> {
         val repositoryLicenseChoices = ortResult.repository.config.licenseChoices.repositoryLicenseChoices
