@@ -167,6 +167,8 @@ object StatisticsCalculator {
                 it.packageLicenseChoices.size + it.repositoryLicenseChoices.size
             },
             licenseFindingCurations = config.curations.licenseFindings.size,
+            packageConfigurations = config.packageConfigurations.size,
+            packageCurations = config.curations.packages.size,
             issueResolutions = config.resolutions.issues.size,
             ruleViolationResolutions = config.resolutions.ruleViolations.size,
             vulnerabilityResolutions = config.resolutions.vulnerabilities.size
