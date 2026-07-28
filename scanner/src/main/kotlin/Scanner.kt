@@ -106,7 +106,8 @@ class Scanner(
     )
 
     suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean, labels: Map<String, String>): OrtResult {
-        val projectPackages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() }
+        val projects = ortResult.getProjects(skipExcluded)
+        val projectPackages = projects.mapTo(mutableSetOf()) { it.toPackage() }
         val projectResults = scan(
             projectPackages,
             ScanContext(
