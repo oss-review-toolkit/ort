@@ -199,24 +199,20 @@ RUN mkdir /tmp/conan2 \
 RUN find /opt/python -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 
 #------------------------------------------------------------------------
-# NODEJS - Build NodeJS as a separate component with nvm
+# NODEJS - Build NodeJS as a separate component with fnm
 FROM base AS nodejs-build
 
 ARG BOWER_VERSION
 ARG COREPACK_VERSION
+ARG FNM_VERSION
 ARG NODEJS_VERSION
-ARG USER_ID=1000
-ARG USER_GID=$USER_ID
 
-ENV NVM_DIR=/opt/nvm
-ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
+ENV FNM_DIR=/opt/fnm
+ENV PATH=$PATH:$FNM_DIR:$FNM_DIR/node-versions/v$NODEJS_VERSION/installation/bin
 
-RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git $NVM_DIR
-RUN --mount=type=cache,target=/opt/nvm/.cache,uid=$USER_ID,gid=$USER_GID \
-    . $NVM_DIR/nvm.sh \
-    && nvm install "$NODEJS_VERSION" \
-    && nvm alias default "$NODEJS_VERSION" \
-    && nvm use default \
+RUN mise install-into aqua:Schniz/fnm@$FNM_VERSION $FNM_DIR
+RUN fnm install "$NODEJS_VERSION" \
+    && fnm default "$NODEJS_VERSION" \
     && npm install --global bower@$BOWER_VERSION corepack@$COREPACK_VERSION \
     && corepack enable
 
@@ -580,9 +576,10 @@ ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
 COPY --from=python-build --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
 
 # NodeJS
-ENV NVM_DIR=/opt/nvm
-ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
-COPY --from=nodejs-build --chown=$USER:$USER $NVM_DIR $NVM_DIR
+ENV FNM_DIR=/opt/fnm
+ENV PATH=$PATH:$FNM_DIR:$FNM_DIR/node-versions/v$NODEJS_VERSION/installation/bin
+COPY --from=nodejs-build --chown=$USER:$USER $FNM_DIR $FNM_DIR
+RUN chmod -R a+w $FNM_DIR/node-versions
 
 # Rust
 ENV RUST_HOME=/opt/rust
