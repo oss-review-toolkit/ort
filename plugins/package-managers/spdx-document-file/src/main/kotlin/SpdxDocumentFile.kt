@@ -214,8 +214,8 @@ class SpdxDocumentFile(
         }
 
     /**
-     * Return the [PackageLinkage] between [dependency] and [dependant] as specified in [relationships]. If no
-     * relationship is found, return [PackageLinkage.DYNAMIC].
+     * Return the [PackageLinkage] between [dependency] and [dependant] as specified in
+     * [SpdxResolvedDocument.relationships]. If no relationship is found, return [PackageLinkage.DYNAMIC].
      */
     private fun getLinkageForDependency(
         dependency: SpdxPackage,
