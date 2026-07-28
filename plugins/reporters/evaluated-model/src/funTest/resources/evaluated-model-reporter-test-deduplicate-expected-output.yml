@@ -1174,6 +1174,12 @@ statistics:
     issue_resolutions: 2
     rule_violation_resolutions: 1
     vulnerability_resolutions: 0
+  resolved_configuration:
+    package_configurations: 1
+    package_curations: 3
+    issue_resolutions: 2
+    rule_violation_resolutions: 1
+    vulnerability_resolutions: 0
   open_issues:
     errors: 7
     warnings: 4

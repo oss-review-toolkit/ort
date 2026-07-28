@@ -51,6 +51,11 @@ data class Statistics(
     val repositoryConfiguration: RepositoryConfigurationStatistics,
 
     /**
+     * Statistics for the resolved configuration.
+     */
+    val resolvedConfiguration: ResolvedConfigurationStatistics,
+
+    /**
      * The number of [Issue]s by severity which are not resolved and not excluded.
      */
     val openIssues: IssueStatistics,
@@ -200,6 +205,36 @@ data class RepositoryConfigurationStatistics(
      */
     val licenseFindingCurations: Int,
 
+    /**
+     * The number of [PackageConfiguration]s.
+     */
+    val packageConfigurations: Int,
+
+    /**
+     * The number of [PackageCuration]s.
+     */
+    val packageCurations: Int,
+
+    /**
+     * The number of [IssueResolution]s.
+     */
+    val issueResolutions: Int,
+
+    /**
+     * The number of [RuleViolationResolution]s.
+     */
+    val ruleViolationResolutions: Int,
+
+    /**
+     * The number of [VulnerabilityResolution]s.
+     */
+    val vulnerabilityResolutions: Int
+)
+
+/**
+ * A class containing statistics about the resolved configuration
+ */
+data class ResolvedConfigurationStatistics(
     /**
      * The number of [PackageConfiguration]s.
      */
