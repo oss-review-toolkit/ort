@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Scope
@@ -32,6 +33,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
@@ -197,6 +199,16 @@ data class RepositoryConfigurationStatistics(
      * The number of [LicenseFindingCuration]s.
      */
     val licenseFindingCurations: Int,
+
+    /**
+     * The number of [PackageConfiguration]s.
+     */
+    val packageConfigurations: Int,
+
+    /**
+     * The number of [PackageCuration]s.
+     */
+    val packageCurations: Int,
 
     /**
      * The number of [IssueResolution]s.

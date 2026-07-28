@@ -1169,6 +1169,8 @@ statistics:
     scope_excludes: 1
     license_choices: 2
     license_finding_curations: 0
+    package_configurations: 0
+    package_curations: 0
     issue_resolutions: 2
     rule_violation_resolutions: 1
     vulnerability_resolutions: 0
