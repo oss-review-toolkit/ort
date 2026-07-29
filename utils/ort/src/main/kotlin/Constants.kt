@@ -85,6 +85,11 @@ const val ORT_PACKAGE_CURATIONS_FILENAME = "curations.yml"
 const val ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME = "reporter.how-to-fix-text-provider.kts"
 
 /**
+ * The name of the ORT license choices configuration file.
+ */
+const val ORT_LICENSE_CHOICES_FILENAME = "license-choices.yml"
+
+/**
  * The name of the ORT license classifications file.
  */
 const val ORT_LICENSE_CLASSIFICATIONS_FILENAME = "license-classifications.yml"

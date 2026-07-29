@@ -40,4 +40,6 @@ class SimpleLicenseInfoProvider(licenseInfo: List<LicenseInfo>) : LicenseInfoPro
 
     override fun get(id: Identifier) =
         licenseInfoById[id] ?: throw IllegalArgumentException("No license info for '${id.toCoordinates()}' available.")
+
+    fun getIdentifiers(): Set<Identifier> = licenseInfoById.keys
 }
