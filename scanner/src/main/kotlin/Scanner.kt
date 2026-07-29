@@ -73,6 +73,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
+@Suppress("LargeClass")
 class Scanner(
     val scannerConfig: ScannerConfiguration,
     val downloaderConfig: DownloaderConfiguration,
@@ -108,16 +109,22 @@ class Scanner(
     suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean, labels: Map<String, String>): OrtResult {
         val projects = ortResult.getProjects(skipExcluded)
         val projectPackages = projects.mapTo(mutableSetOf()) { it.toPackage() }
+
+        val projectDirRelativeToAnalysisRootForId = projects.associate { project ->
+            project.id to ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project).substringBeforeLast("/", "")
+        }
+
         val projectResults = scan(
-            projectPackages,
-            ScanContext(
+            packages = projectPackages,
+            context = ScanContext(
                 labels = ortResult.labels + labels,
                 packageType = PackageType.PROJECT,
                 excludes = ortResult.repository.config.excludes,
                 includes = ortResult.repository.config.includes,
                 detectedLicenseMapping = scannerConfig.detectedLicenseMapping,
                 snippetChoices = ortResult.repository.config.snippetChoices
-            )
+            ),
+            projectDirRelativeToAnalysisRootForId = projectDirRelativeToAnalysisRootForId
         )
 
         val packages = ortResult.getPackages(skipExcluded)
@@ -128,8 +135,8 @@ class Scanner(
             .toSet()
 
         val packageResults = scan(
-            packages,
-            ScanContext(
+            packages = packages,
+            context = ScanContext(
                 labels = ortResult.labels + labels,
                 packageType = PackageType.PACKAGE,
                 detectedLicenseMapping = scannerConfig.detectedLicenseMapping
@@ -144,7 +151,11 @@ class Scanner(
         return ortResult.copy(scanner = paddedScannerRun)
     }
 
-    internal suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun? {
+    internal suspend fun scan(
+        packages: Set<Package>,
+        context: ScanContext,
+        projectDirRelativeToAnalysisRootForId: Map<Identifier, String> = emptyMap()
+    ): ScannerRun? {
         val scannerWrappers = scannerWrappers[context.packageType]
         if (scannerWrappers.isNullOrEmpty()) {
             logger.info { "Skipping ${context.packageType} scan as no according scanner is configured." }
@@ -162,9 +173,15 @@ class Scanner(
 
         readStoredResults(controller)
 
+        val checkoutPathsForProvenance = if (context.packageType == PackageType.PROJECT) {
+            controller.getCheckoutPathsForProvenance(projectDirRelativeToAnalysisRootForId)
+        } else {
+            emptyMap()
+        }
+
         runPackageScanners(controller, context)
-        runProvenanceScanners(controller, context)
-        runPathScanners(controller, context)
+        runProvenanceScanners(controller, context, checkoutPathsForProvenance)
+        runPathScanners(controller, context, checkoutPathsForProvenance)
 
         createFileLists(controller)
         createMissingArchives(controller)
@@ -387,7 +404,11 @@ class Scanner(
     /**
      * Run provenance scanners for provenances with missing scan results.
      */
-    private fun runProvenanceScanners(controller: ScanController, context: ScanContext) {
+    private fun runProvenanceScanners(
+        controller: ScanController,
+        context: ScanContext,
+        checkoutPathsForProvenance: Map<KnownProvenance, Set<String>>
+    ) {
         val provenances = controller.getAllProvenances()
 
         provenances.forEachIndexed { index, provenance ->
@@ -407,7 +428,9 @@ class Scanner(
                         "'${scanner.descriptor.displayName}'."
                 }
 
-                val adjustedContext = context.clearPropertiesIfNeeded(scanner.matcher)
+                val adjustedContext = context
+                    .clearPropertiesIfNeeded(scanner.matcher)
+                    .setCheckoutPaths(provenance, checkoutPathsForProvenance)
 
                 runCatching {
                     scanner.scanProvenance(provenance, adjustedContext)
@@ -441,7 +464,11 @@ class Scanner(
     /**
      * Run path scanners for provenances with missing scan results.
      */
-    private fun runPathScanners(controller: ScanController, context: ScanContext) {
+    private fun runPathScanners(
+        controller: ScanController,
+        context: ScanContext,
+        checkoutPathsForProvenance: Map<KnownProvenance, Set<String>>
+    ) {
         val provenances = controller.getAllProvenances()
 
         provenances.forEachIndexed { index, provenance ->
@@ -459,7 +486,12 @@ class Scanner(
 
             logger.info { "Scanning $provenance (${index + 1} of ${provenances.size})..." }
 
-            val scanResults = scanPath(provenance, scannersWithoutResults, context, controller)
+            val scanResults = scanPath(
+                provenance = provenance,
+                scanners = scannersWithoutResults,
+                context = context.setCheckoutPaths(provenance, checkoutPathsForProvenance),
+                controller = controller
+            )
 
             scanResults.forEach { (scanner, scanResult) ->
                 val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
@@ -889,3 +921,38 @@ private fun ScanContext.clearPropertiesIfNeeded(matcher: ScannerMatcher?) =
     } else {
         copy(excludes = null, includes = null, snippetChoices = emptyList())
     }
+
+private fun ScanController.getCheckoutPathsForProvenance(
+    projectDirRelativeToAnalysisRootForId: Map<Identifier, String>
+): Map<KnownProvenance, Set<String>> {
+    val result = mutableMapOf<KnownProvenance, MutableSet<String>>()
+
+    packages.forEach { pkg ->
+        val projectProvenance = getPackageProvenanceWithoutVcsPath(pkg.id) ?: return@forEach
+        val projectDirRelativeToAnalysisRoot = projectDirRelativeToAnalysisRootForId[pkg.id] ?: run {
+            logger.warn { "Could not determine project checkout path for {${pkg.id}." }
+            return@forEach
+        }
+
+        val provenanceCheckoutPath = projectDirRelativeToAnalysisRoot
+            .removeSuffix(pkg.vcsProcessed.path)
+            .removeSuffix("/")
+
+        result.getOrPut(projectProvenance) { mutableSetOf() } += provenanceCheckoutPath
+
+        val projectNestedProvenance = getNestedProvenance(pkg.id) ?: return@forEach
+        projectNestedProvenance.subRepositories.forEach { (path, submoduleProvenance) ->
+            result.getOrPut(submoduleProvenance) { mutableSetOf() } += "$provenanceCheckoutPath/$path"
+        }
+    }
+
+    return result
+}
+
+private fun ScanContext.setCheckoutPaths(
+    provenance: KnownProvenance,
+    checkoutPathsForProvenance: Map<KnownProvenance, Set<String>>
+): ScanContext =
+    copy(
+        checkoutPaths = checkoutPathsForProvenance[provenance].orEmpty().ifEmpty { setOf("") }
+    )

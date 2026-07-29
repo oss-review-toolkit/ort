@@ -312,6 +312,8 @@ internal class ScanController(
 
     fun getPackageProvenance(id: Identifier): KnownProvenance? = packageProvenances[id]
 
+    fun getPackageProvenanceWithoutVcsPath(id: Identifier): KnownProvenance? = packageProvenancesWithoutVcsPath[id]
+
     /**
      * Return the package provenanceResolutionIssue associated with the given [id].
      */
