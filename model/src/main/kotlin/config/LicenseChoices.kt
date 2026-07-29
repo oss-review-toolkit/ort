@@ -45,6 +45,16 @@ data class LicenseChoices(
     @JsonIgnore
     fun isEmpty() = packageLicenseChoices.isEmpty() && repositoryLicenseChoices.isEmpty()
 
+    /**
+     * Return the result of merging [other] into this [LicenseChoices].
+     * Entries of this [LicenseChoices] take precedence.
+     */
+    fun merge(other: LicenseChoices): LicenseChoices =
+        LicenseChoices(
+            repositoryLicenseChoices = (repositoryLicenseChoices + other.repositoryLicenseChoices).distinct(),
+            packageLicenseChoices = (packageLicenseChoices + other.packageLicenseChoices).distinct()
+        )
+
     init {
         val choicesWithoutGiven = repositoryLicenseChoices.filter { it.given == null }
         require(choicesWithoutGiven.isEmpty()) {
@@ -62,3 +72,7 @@ data class PackageLicenseChoice(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val licenseChoices: List<SpdxLicenseChoice> = emptyList()
 )
+
+fun LicenseChoices?.orEmpty() = this ?: LicenseChoices()
+
+operator fun LicenseChoices.plus(other: LicenseChoices): LicenseChoices = merge(other)

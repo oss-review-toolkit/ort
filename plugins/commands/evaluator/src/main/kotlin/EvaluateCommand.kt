@@ -46,10 +46,12 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.model.config.plus
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -57,6 +59,7 @@ import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.filterApplicable
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -83,6 +86,7 @@ import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.config.setResolutions
 import org.ossreviewtoolkit.utils.ort.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CHOICES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -135,6 +139,15 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory / ORT_COPYRIGHT_GARBAGE_FILENAME)
+        .configurationGroup()
+
+    private val licenseChoicesFile by option(
+        "--license-choices-file",
+        help = "A file containing license choices."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory / ORT_LICENSE_CHOICES_FILENAME)
         .configurationGroup()
 
     private val licenseClassificationsFile by option(
@@ -317,7 +330,16 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
         val packageConfigurationProvider = CompositePackageConfigurationProvider(enabledPackageConfigurationProviders)
 
         ortResultInput = ortResultInput.setPackageConfigurations(packageConfigurationProvider)
-            .setLicenseChoices(ortResultInput.repository.config.licenseChoices)
+
+        val applicableGlobalLicenseChoices = licenseChoicesFile
+            .takeIf { it.isFile }
+            ?.readValue<LicenseChoices>()
+            .orEmpty()
+            .filterApplicable(ortResultInput)
+
+        ortResultInput = ortResultInput.setLicenseChoices(
+            ortResultInput.repository.config.licenseChoices + applicableGlobalLicenseChoices
+        )
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
