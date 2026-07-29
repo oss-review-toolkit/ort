@@ -41,7 +41,8 @@ data class SnippetChoice(
  */
 data class Given(
     /**
-     * The source file for which the snippet choice is made.
+     * The source file for which the snippet choice is made. The path of [sourceLocation] is relative to the provenance
+     * of the corresponding [SnippetProvenance] associated via [SnippetChoices].
      */
     val sourceLocation: TextLocation
 )
