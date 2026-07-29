@@ -24,7 +24,8 @@ package org.ossreviewtoolkit.model.config.snippet
  */
 data class SnippetChoices(
     /**
-     * The provenance this snippet choice applies to.
+     * The provenance in the project source tree the snippet choice applies to. This can either the root provenance or
+     * a submodule provenances.
      */
     val provenance: SnippetProvenance,
 
