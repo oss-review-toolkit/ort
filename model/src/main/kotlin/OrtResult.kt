@@ -441,7 +441,9 @@ data class OrtResult(
      * Return all [SpdxLicenseChoice]s for the [Package] with [id].
      */
     fun getPackageLicenseChoices(id: Identifier): List<SpdxLicenseChoice> =
-        repository.config.licenseChoices.packageLicenseChoices.find { it.packageId == id }?.licenseChoices.orEmpty()
+        repository.config.licenseChoices.packageLicenseChoices
+            .filter { it.packageId == id }
+            .flatMap { it.licenseChoices }
 
     /**
      * Return a [CuratedPackage] which represents either a [Package] if the given [id] corresponds to a [Package],
