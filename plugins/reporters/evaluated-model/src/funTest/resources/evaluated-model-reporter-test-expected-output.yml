@@ -1175,6 +1175,7 @@ statistics:
     rule_violation_resolutions: 1
     vulnerability_resolutions: 0
   resolved_configuration:
+    license_choices: 2
     package_configurations: 1
     package_curations: 3
     issue_resolutions: 2

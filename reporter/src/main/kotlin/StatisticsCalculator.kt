@@ -182,6 +182,9 @@ object StatisticsCalculator {
         val resolutions = resolvedConfiguration.resolutions.orEmpty()
 
         return ResolvedConfigurationStatistics(
+            licenseChoices = resolvedConfiguration.licenseChoices.let {
+                it.packageLicenseChoices.size + it.repositoryLicenseChoices.size
+            },
             packageConfigurations = resolvedConfiguration.packageConfigurations.orEmpty().size,
             packageCurations = resolvedConfiguration.getAllPackageCurations().size,
             issueResolutions = resolutions.issues.size,
