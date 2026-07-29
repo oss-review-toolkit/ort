@@ -38,6 +38,8 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.plugins.packagemanagers.node.FnmCommand
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodeVersionManagerCommand
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -151,5 +153,47 @@ class NpmFunTest : StringSpec({
             .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
 
         result.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
+    }
+
+    "Use an explicitly specified Node.js version" {
+        // The test processes a project that depends on a deprecated native library which is incompatible with newer
+        // versions of Node.js. In Node.js >= 16, the `install` step fails. With version 14, the project can be
+        // installed. It still cannot be analyzed successfully because the dependency tree produced by the `list`
+        // command has an old format which causes the JSON deserialization to fail. However, this is a good proof that
+        // actually an old version of Node.js is used.
+        val definitionFile = getAssetFile("projects/synthetic/npm/fix-version/package.json")
+
+        try {
+            val result = NpmFactory.create(nodeVersion = "14")
+                .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
+
+            val resultYaml = result.toYaml()
+            resultYaml shouldContain "Unexpected JSON token at offset "
+        } finally {
+            // Remove the old version again, so that it cannot interfere with other tests.
+            FnmCommand.run("uninstall", "14")
+        }
+    }
+
+    "Use a Node.js version configured by the project" {
+        // Same as the previous test, but the project directory is created dynamically and contains a `.node-version`
+        // file that specifies the version to use.
+        val projectDir = tempdir()
+        projectDir.resolve(".node-version").writeText("14.21.3")
+        val subDir = projectDir.resolve("project").also { it.mkdir() }
+        val definitionFile = subDir.resolve("package.json")
+        val sourceDefinitionFile = getAssetFile("projects/synthetic/npm/fix-version/package.json")
+        sourceDefinitionFile.copyTo(definitionFile)
+
+        try {
+            val result = NpmFactory.create(nodeVersion = NodeVersionManagerCommand.NODE_VERSION_AUTO_DISCOVER)
+                .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
+
+            val resultYaml = result.toYaml()
+            resultYaml shouldContain "Unexpected JSON token at offset "
+        } finally {
+            // Remove the old version again, so that it cannot interfere with other tests.
+            FnmCommand.run("uninstall", "14")
+        }
     }
 })

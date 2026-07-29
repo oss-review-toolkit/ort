@@ -176,7 +176,8 @@ class NodePackageManagerDetectionTest : WordSpec({
                 "npm/list-issues/package.json",
                 "npm/babel/package.json",
                 "npm/version-urls/package.json",
-                "npm/workspaces/package.json"
+                "npm/workspaces/package.json",
+                "npm/fix-version/package.json"
             )
         }
     }

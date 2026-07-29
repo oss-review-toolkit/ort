@@ -58,7 +58,7 @@ class NpmTest : WordSpec({
                 every { process.isError } returns true
                 every { process.stdout } returns ""
                 every { process.stderr } returns errorText
-                every { NpmCommand.run(workingDir, "install", *anyVararg()) } returns process
+                every { NpmCommand.DEFAULT.run(workingDir, "install", *anyVararg()) } returns process
 
                 val results = npm.resolveDependencies(
                     workingDir,
