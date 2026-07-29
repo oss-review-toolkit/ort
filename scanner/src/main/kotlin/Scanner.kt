@@ -406,10 +406,10 @@ class Scanner(
                         "'${scanner.descriptor.displayName}'."
                 }
 
-                val filteredContext = context.clearPropertiesIfNeeded(scanner.matcher)
+                val adjustedContext = context.clearPropertiesIfNeeded(scanner.matcher)
 
                 runCatching {
-                    scanner.scanProvenance(provenance, filteredContext)
+                    scanner.scanProvenance(provenance, adjustedContext)
                 }.onSuccess { scanResult ->
                     val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
 
