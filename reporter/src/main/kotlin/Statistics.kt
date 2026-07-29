@@ -236,6 +236,11 @@ data class RepositoryConfigurationStatistics(
  */
 data class ResolvedConfigurationStatistics(
     /**
+     * The number of [LicenseChoices].
+     */
+    val licenseChoices: Int,
+
+    /**
      * The number of [PackageConfiguration]s.
      */
     val packageConfigurations: Int,
