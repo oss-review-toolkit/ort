@@ -46,6 +46,14 @@ data class ScanContext(
     val packageType: PackageType,
 
     /**
+     * Relative paths of all directories in the root provenance source tree of the project to scan, to which the root
+     * directory of the provenance corresponding to the scan is checked out to. This should only be set to non-default,
+     * if the [packageType] is [PackageType.PROJECT] and must never be empty, because there always is at least one
+     * checkout path.
+     */
+    val checkoutPaths: Set<String> = setOf(""),
+
+    /**
      * The [Excludes] of the project to scan. Only set if [packageType] is [PackageType.PROJECT].
      */
     val excludes: Excludes? = null,
@@ -76,14 +84,33 @@ data class ScanContext(
      */
     val snippetChoices: List<SnippetChoices> = emptyList()
 ) {
+    init {
+        require(checkoutPaths.isNotEmpty()) {
+            "The checkout paths must not be empty."
+        }
+    }
+
     /**
-     * Returns true if the given [relativePath] is excluded. The [relativePath] is relative to root directory of the
-     * provenance corresponding to the scan.
+     * Returns true if the given [pathRelativeToProvenanceRoot] is excluded.
      */
-    fun isPathExcluded(relativePath: String): Boolean =
-        !isPathIncluded(
-            relativePath,
-            excludes.orEmpty(),
-            includes.orEmpty()
-        )
+    fun isPathExcluded(pathRelativeToProvenanceRoot: String): Boolean {
+        // For package scans, includes and excludes should not be set anyway. But return early to be on the safe side.
+        if (packageType != PackageType.PROJECT) return false
+
+        val pathsInRootProvenanceSourceTree = checkoutPaths.map {
+            if (it.isEmpty()) {
+                pathRelativeToProvenanceRoot
+            } else {
+                "${it.removeSuffix("/")}/$pathRelativeToProvenanceRoot"
+            }
+        }
+
+        return pathsInRootProvenanceSourceTree.all { path ->
+            !isPathIncluded(
+                path,
+                excludes.orEmpty(),
+                includes.orEmpty()
+            )
+        }
+    }
 }
