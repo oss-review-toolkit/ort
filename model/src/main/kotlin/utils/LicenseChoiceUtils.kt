@@ -30,13 +30,16 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
 /** License views to compute effective licenses for, to use for filtering license choices. */
-private val FILTER_LICENSE_VIEWS = setOf(
+private val FILTER_LICENSE_VIEWS_DEFAULT = setOf(
     LicenseView.ONLY_DECLARED,
     LicenseView.ONLY_DETECTED,
     LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
 )
 
-fun LicenseChoices.filterApplicable(ortResult: OrtResult): LicenseChoices {
+fun LicenseChoices.filterApplicable(
+    ortResult: OrtResult,
+    filterLicenseViews: Set<LicenseView> = FILTER_LICENSE_VIEWS_DEFAULT
+): LicenseChoices {
     val packageIds = ortResult.getPackages().mapTo(mutableSetOf()) { it.metadata.id }
 
     val licenseInfoResolver = LicenseInfoResolver(
@@ -50,7 +53,8 @@ fun LicenseChoices.filterApplicable(ortResult: OrtResult): LicenseChoices {
     return copy(
         repositoryLicenseChoices = repositoryLicenseChoices.filterRepositoryLicenseChoices(
             packageIds,
-            licenseInfoResolver
+            licenseInfoResolver,
+            filterLicenseViews
         ),
         packageLicenseChoices = packageLicenseChoices.filter { it.packageId in packageIds }
     )
@@ -58,14 +62,15 @@ fun LicenseChoices.filterApplicable(ortResult: OrtResult): LicenseChoices {
 
 internal fun List<SpdxLicenseChoice>.filterRepositoryLicenseChoices(
     packageIds: Set<Identifier>,
-    licenseInfoResolver: LicenseInfoResolver
+    licenseInfoResolver: LicenseInfoResolver,
+    filterLicenseViews: Set<LicenseView> = FILTER_LICENSE_VIEWS_DEFAULT
 ): List<SpdxLicenseChoice> {
     val licenseInfos = packageIds.map { id -> licenseInfoResolver.resolveLicenseInfo(id).filterExcluded() }
     val remainingChoices = toMutableSet()
 
     return buildSet {
         licenseInfos.forEach { licenseInfo ->
-            FILTER_LICENSE_VIEWS.forEach { view ->
+            filterLicenseViews.forEach { view ->
                 val applicableChoices = licenseInfo.effectiveLicenseAndAppliedChoices(
                     view,
                     remainingChoices.toList()
