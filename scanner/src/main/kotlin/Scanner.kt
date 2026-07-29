@@ -324,10 +324,7 @@ class Scanner(
                 val referencePackage = packagesWithIncompleteScanResult.first()
                 val nestedProvenance = controller.getNestedProvenance(referencePackage.id) ?: return@scanner
 
-                val adjustedContext = context.copy(
-                    // Hide includes and excludes from scanners with a scanner matcher.
-                    excludes = context.excludes.takeUnless { scanner.matcher != null },
-                    includes = context.includes.takeUnless { scanner.matcher != null },
+                val adjustedContext = context.clearPropertiesIfNeeded(scanner.matcher).copy(
                     // Tell scanners also about the non-reference packages.
                     coveredPackages = packagesWithIncompleteScanResult
                 )
@@ -409,12 +406,7 @@ class Scanner(
                         "'${scanner.descriptor.displayName}'."
                 }
 
-                // Filter the scan context to hide the includes and excludes from scanner with scan matcher.
-                val filteredContext = if (scanner.matcher == null) {
-                    context
-                } else {
-                    context.copy(excludes = null, includes = null)
-                }
+                val filteredContext = context.clearPropertiesIfNeeded(scanner.matcher)
 
                 runCatching {
                     scanner.scanProvenance(provenance, filteredContext)
@@ -884,3 +876,11 @@ internal fun ScanResult.padNoneLicenseFindings(paths: Set<String>): ScanResult {
         )
     )
 }
+
+private fun ScanContext.clearPropertiesIfNeeded(matcher: ScannerMatcher?) =
+    if (matcher == null) {
+        this
+    } else {
+        // Filter the scan context to hide the includes and excludes from scanner with scan matcher.
+        copy(excludes = null, includes = null)
+    }
