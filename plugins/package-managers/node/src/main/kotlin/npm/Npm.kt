@@ -38,13 +38,12 @@ import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NPM_RUNTIME_CONFIGURATION_FILENAME
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodeCommand
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodeVersionManagerCommand
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
-import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.FileStash
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -54,24 +53,30 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
-internal object NpmCommand : CommandLineTool {
-    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
+internal class NpmCommand(nodePath: String? = null, nodeVersion: String? = null) :
+    NodeVersionManagerCommand(nodePath, nodeVersion) {
+    companion object {
+        /**
+         * A default instance of [NpmCommand] that uses the system-installed version of Node.js and NPM.
+         */
+        val DEFAULT: NpmCommand = NpmCommand()
+    }
+
+    override fun baseCommand(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
+
+    override fun withNodePath(nodePath: String, nodeVersion: String): NpmCommand = NpmCommand(nodePath, nodeVersion)
 
     override fun getVersionRequirement(): RangeList = RangeListFactory.create("6.* - 11.*")
 
-    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
-        super.run(
-            *args,
-            workingDir = workingDir,
-            environment = environment.toMutableMap().apply {
-                if (NodeCommand.hasUseSystemCaOption) {
-                    compute("NODE_OPTIONS") { _, options ->
-                        // Additional whitespaces do not matter when separating options.
-                        "${options.orEmpty()} --use-system-ca"
-                    }
+    override fun enrichEnvironment(environment: Map<String, String>): Map<String, String> =
+        environment.toMutableMap().apply {
+            if (hasUseSystemCaOption) {
+                compute("NODE_OPTIONS") { _, options ->
+                    // Additional whitespaces do not matter when separating options.
+                    "${options.orEmpty()} --use-system-ca"
                 }
             }
-        )
+        }
 }
 
 data class NpmConfig(
@@ -88,7 +93,18 @@ data class NpmConfig(
      * [NPM Blog](https://blog.npmjs.org/post/626173315965468672/npm-v7-series-beta-release-and-semver-major).
      */
     @OrtPluginOption(defaultValue = "false")
-    val legacyPeerDeps: Boolean
+    val legacyPeerDeps: Boolean,
+
+    /**
+     * Allows configuring the version of Node.js to be used for the analysis. This implicitly also sets the NPM version
+     * because NPM is bundled with Node.js. The property is interpreted as follows: If it is unspecified, ORT uses the
+     * version of Node.js that is currently installed (or ships with the container image if using the ORT Docker
+     * image). If the property has the special value "*", ORT tries to set up the version requested by the project, in
+     * a `.node-version` or `.nvmrc` file, or in the `engines` field of the `package.json` file. Any other value of the
+     * property is interpreted as a specific version of Node.js to be used for the analysis.
+     */
+    @OrtPluginOption(defaultValue = "")
+    val nodeVersion: String
 )
 
 /**
@@ -106,9 +122,14 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     private lateinit var fileStash: FileStash
 
+    /**
+     * The command to invoke NPM. This is constructed dynamically based on the configured version of Node.js.
+     */
+    private lateinit var command: NodeVersionManagerCommand
+
     private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->
         runCatching {
-            val process = NpmCommand.run(workingDir, "info", "--json", moduleId).requireSuccess()
+            val process = command.run(workingDir, "info", "--json", moduleId).requireSuccess()
             parsePackageJson(process.stdout)
         }.onFailure { e ->
             logger.warn { "Error getting module info for $moduleId: ${e.message.orEmpty()}" }
@@ -125,8 +146,6 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         analyzerConfig: AnalyzerConfiguration
     ) {
         super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
-
-        NpmCommand.checkVersion()
 
         val npmrcFiles = definitionFiles.mapNotNullTo(mutableSetOf()) { definitionFile ->
             definitionFile.resolveSibling(NPM_RUNTIME_CONFIGURATION_FILENAME).takeIf { it.isFile }?.also {
@@ -155,6 +174,8 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         moduleInfoResolver.workingDir = workingDir
+        command = NodeVersionManagerCommand.useVersion(NpmCommand.DEFAULT, config.nodeVersion, workingDir)
+        command.checkVersion()
 
         val issues = installDependencies(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions).toMutableList()
 
@@ -188,7 +209,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
     }
 
     private fun listModules(workingDir: File, issues: MutableList<Issue>): ModuleInfo {
-        val listProcess = NpmCommand.run(workingDir, "list", "--depth", "Infinity", "--json", "--long")
+        val listProcess = command.run(workingDir, "list", "--depth", "Infinity", "--json", "--long")
         issues += listProcess.extractNpmIssues()
 
         return parseNpmList(listProcess.stdout)
@@ -205,7 +226,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
         val subcommand = if (managerType.hasLockfile(workingDir)) "ci" else "install"
 
-        val process = NpmCommand.run(workingDir, subcommand, *options.toTypedArray())
+        val process = command.run(workingDir, subcommand, *options.toTypedArray())
 
         return process.extractNpmIssues()
     }

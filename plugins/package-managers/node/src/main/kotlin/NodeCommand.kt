@@ -26,8 +26,16 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.semver4j.Semver
 
 internal object NodeCommand : CommandLineTool {
-    // As of Node 23.8.0, there is support to use trusted CA certificates present in the system store.
-    val hasUseSystemCaOption by lazy { Semver(getVersion()).isGreaterThanOrEqualTo("23.8.0") }
+    /**
+     * Return a flag whether the given [version] of Node.js supports the `--use-system-ca` option. This is the case
+     * for newer versions only. This function is used when constructing the environment for some package manager
+     * command executions.
+     */
+    fun hasUseSystemCaOption(version: String): Boolean =
+        // As of Node 23.8.0, there is support to use trusted CA certificates present in the system store.
+        Semver(version).isGreaterThanOrEqualTo("23.8.0")
+
+    val hasUseSystemCaOption by lazy { hasUseSystemCaOption(getVersion()) }
 
     override fun command(workingDir: File?) = "node"
 

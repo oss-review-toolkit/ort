@@ -27,8 +27,10 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.runs
 import io.mockk.unmockkObject
 
 import java.io.File
@@ -58,7 +60,8 @@ class NpmTest : WordSpec({
                 every { process.isError } returns true
                 every { process.stdout } returns ""
                 every { process.stderr } returns errorText
-                every { NpmCommand.run(workingDir, "install", *anyVararg()) } returns process
+                every { NpmCommand.DEFAULT.run(workingDir, "install", *anyVararg()) } returns process
+                every { NpmCommand.DEFAULT.checkVersion() } just runs
 
                 val results = npm.resolveDependencies(
                     workingDir,
