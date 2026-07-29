@@ -886,5 +886,5 @@ private fun ScanContext.clearPropertiesIfNeeded(matcher: ScannerMatcher?) =
     if (matcher == null) {
         this
     } else {
-        copy(excludes = null, includes = null)
+        copy(excludes = null, includes = null, snippetChoices = emptyList())
     }
