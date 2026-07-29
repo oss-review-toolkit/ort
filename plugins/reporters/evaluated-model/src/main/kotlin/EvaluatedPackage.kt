@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
 /**
  * The evaluated form of a [Package] used by the [EvaluatedModel].
@@ -56,6 +57,8 @@ data class EvaluatedPackage(
     val concludedLicense: SpdxExpression? = null,
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val effectiveLicense: SpdxExpression? = null,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val appliedLicenseChoices: List<SpdxLicenseChoice> = emptyList(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val description: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

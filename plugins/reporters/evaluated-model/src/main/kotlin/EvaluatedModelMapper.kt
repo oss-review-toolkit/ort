@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
+import org.ossreviewtoolkit.model.utils.filterApplicable
 import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -59,6 +60,7 @@ import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
 /**
  * Maps the [reporter input][input] to an [EvaluatedModel].
@@ -70,6 +72,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val dependencyTrees = mutableListOf<DependencyTreeNode>()
     private val scanResults = mutableListOf<EvaluatedScanResult>()
     private val copyrights = mutableListOf<CopyrightStatement>()
+    private val licenseChoices = input.ortResult.resolvedConfiguration.licenseChoices.filterApplicable(
+        input.ortResult,
+        setOf(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
+    )
+
     private val licenses = mutableListOf<LicenseId>()
     private val licenseFindingCurations = mutableListOf<LicenseFindingCuration>()
     private val scopes = mutableMapOf<String, EvaluatedScope>()
@@ -172,6 +179,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             issueResolutions = issueResolutions,
             issues = issues,
             copyrights = copyrights,
+            licenseChoices = licenseChoices,
             licenses = licenses,
             licenseFindingCurations = licenseFindingCurations,
             scopes = scopes.values.toList(),
@@ -275,6 +283,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 .flatMap { it.pathExcludes }
         }
 
+    /**
+     * Return the [SpdxLicenseChoice]s applied to the package or project with [id] when computing its effective license.
+     */
+    private fun getAppliedLicenseChoices(id: Identifier): List<SpdxLicenseChoice> =
+        input.getAppliedLicenseChoicesForId(id)
+
     private fun addProject(project: Project) {
         val scanResults = mutableListOf<EvaluatedScanResult>()
         val detectedLicenses = mutableSetOf<LicenseId>()
@@ -295,6 +309,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             detectedLicenses = detectedLicenses,
             detectedExcludedLicenses = detectedExcludedLicenses,
             effectiveLicense = input.getEffectiveLicenseForId(project.id),
+            appliedLicenseChoices = getAppliedLicenseChoices(project.id),
             description = "",
             homepageUrl = project.homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
@@ -366,6 +381,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             detectedExcludedLicenses = detectedExcludedLicenses,
             concludedLicense = pkg.concludedLicense,
             effectiveLicense = input.getEffectiveLicenseForId(pkg.id),
+            appliedLicenseChoices = getAppliedLicenseChoices(pkg.id),
             description = pkg.description,
             homepageUrl = pkg.homepageUrl,
             binaryArtifact = pkg.binaryArtifact,
@@ -832,3 +848,10 @@ private fun ReporterInput.getEffectiveLicenseForId(id: Identifier): SpdxExpressi
         ortResult.getPackageLicenseChoices(id),
         ortResult.getRepositoryLicenseChoices()
     )?.sorted()
+
+private fun ReporterInput.getAppliedLicenseChoicesForId(id: Identifier): List<SpdxLicenseChoice> =
+    licenseInfoResolver.resolveLicenseInfo(id).filterExcluded().effectiveLicenseAndAppliedChoices(
+        LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+        ortResult.getPackageLicenseChoices(id),
+        ortResult.getRepositoryLicenseChoices()
+    ).second
