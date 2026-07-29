@@ -877,10 +877,14 @@ internal fun ScanResult.padNoneLicenseFindings(paths: Set<String>): ScanResult {
     )
 }
 
+/**
+ * Return a copy of this [ScanContext] with the entries which are not allowed for the given matcher removed. If a
+ * scanner has a non-null matcher, it may store scan results. In this case, entries which impact / modify the scan
+ * result would lead to undesired behavior.
+ */
 private fun ScanContext.clearPropertiesIfNeeded(matcher: ScannerMatcher?) =
     if (matcher == null) {
         this
     } else {
-        // Filter the scan context to hide the includes and excludes from scanner with scan matcher.
         copy(excludes = null, includes = null)
     }
