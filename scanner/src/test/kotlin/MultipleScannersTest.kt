@@ -72,24 +72,24 @@ private fun createAnalyzerResult(): OrtResult {
         revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     ).normalize()
 
-    val pkg = Package.EMPTY.copy(
-        id = PACKAGE_ID,
-        vcs = vcs,
-        vcsProcessed = vcs
-    )
-
-    val project = Project.EMPTY.copy(
-        id = PROJECT_ID,
-        vcs = vcs,
-        vcsProcessed = vcs
-    )
-
-    val analyzerRun = AnalyzerRun.EMPTY.copy(
-        result = AnalyzerResult.EMPTY.copy(
-            projects = setOf(project),
-            packages = setOf(pkg)
+    return OrtResult.EMPTY.copy(
+        analyzer = AnalyzerRun.EMPTY.copy(
+            result = AnalyzerResult.EMPTY.copy(
+                projects = setOf(
+                    Project.EMPTY.copy(
+                        id = PROJECT_ID,
+                        vcs = vcs,
+                        vcsProcessed = vcs
+                    )
+                ),
+                packages = setOf(
+                    Package.EMPTY.copy(
+                        id = PACKAGE_ID,
+                        vcs = vcs,
+                        vcsProcessed = vcs
+                    )
+                )
+            )
         )
     )
-
-    return OrtResult.EMPTY.copy(analyzer = analyzerRun)
 }
