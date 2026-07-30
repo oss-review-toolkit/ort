@@ -70,18 +70,18 @@ private fun createAnalyzerResult(): OrtResult {
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort-test-data-scanner.git",
         revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
-    )
+    ).normalize()
 
     val pkg = Package.EMPTY.copy(
         id = PACKAGE_ID,
         vcs = vcs,
-        vcsProcessed = vcs.normalize()
+        vcsProcessed = vcs
     )
 
     val project = Project.EMPTY.copy(
         id = PROJECT_ID,
         vcs = vcs,
-        vcsProcessed = vcs.normalize()
+        vcsProcessed = vcs
     )
 
     val analyzerRun = AnalyzerRun.EMPTY.copy(
