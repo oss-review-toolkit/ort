@@ -175,9 +175,11 @@ internal class VulnerableCodeApiV3(
         val missingAdvisoryUids = advisoryUidsByPurl.values.flatMapTo(mutableSetOf()) { it.keys } - advisoriesByUid.keys
 
         missingAdvisoryUids.forEach { advisoryUid ->
+            val correspondingPurls = advisoryUidsByPurl.filter { it.value.keys.any { id -> id == advisoryUid } }.keys
             issues += createAndLogIssue(
-                "The v3/packages response referenced advisory '$advisoryUid', but the v3/advisories response did " +
-                    "not contain its details.",
+                "The v3/packages response referenced advisory '$advisoryUid' for the following packages, " +
+                    "but the v3/advisories response did not contain its details: \n\n" +
+                    correspondingPurls.joinToString("\n"),
                 Severity.WARNING
             )
         }
