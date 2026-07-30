@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -73,6 +74,10 @@ private fun createAnalyzerResult(): OrtResult {
     ).normalize()
 
     return OrtResult.EMPTY.copy(
+        repository = Repository(
+            vcs = vcs,
+            vcsProcessed = vcs
+        ),
         analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult.EMPTY.copy(
                 projects = setOf(
