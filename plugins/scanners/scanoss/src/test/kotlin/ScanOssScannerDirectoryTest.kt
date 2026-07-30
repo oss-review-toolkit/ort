@@ -152,7 +152,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
             pathToDir,
             ScanContext(
                 labels = emptyMap(),
-                packageType = PackageType.PACKAGE,
+                packageType = PackageType.PROJECT,
                 excludes = Excludes(paths = pathExcludes)
             )
         )
