@@ -26,6 +26,9 @@ import java.io.File
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonArray
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.gradle.tooling.GradleConnector
@@ -46,6 +49,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeInclude
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.isScopeIncluded
@@ -126,14 +131,18 @@ class GradleInspector(
 
     private val dependencyHandler = GradleDependencyHandler(projectType)
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
-    private val initScriptFile by lazy { extractInitScript() }
 
-    private fun extractInitScript(): File {
+    private fun extractInitScript(excludedScopes: List<ScopeExclude>, includedScopes: List<ScopeInclude>): File {
         val toolsDir = ortToolsDirectory.resolve(descriptor.id).apply { safeMkdirs() }
         val pluginJar = extractResource("/gradle-plugin.jar", toolsDir / "gradle-plugin.jar")
 
+        val excludedScopesJson = buildJsonArray { excludedScopes.forEach { add(JsonPrimitive(it.pattern)) } }.toString()
+        val includedScopesJson = buildJsonArray { includedScopes.forEach { add(JsonPrimitive(it.pattern)) } }.toString()
+
         val initScriptText = javaClass.getResource("/template.init.gradle").readText()
             .replace("<REPLACE_PLUGIN_JAR>", pluginJar.invariantSeparatorsPath)
+            .replace("<REPLACE_EXCLUDED_SCOPES>", excludedScopesJson)
+            .replace("<REPLACE_INCLUDED_SCOPES>", includedScopesJson)
 
         val initScript = toolsDir / "init.gradle"
 
@@ -144,6 +153,9 @@ class GradleInspector(
 
     private fun GradleConnector.getOrtDependencyTreeModel(
         projectDir: File,
+        excludes: Excludes,
+        includes: Includes,
+        analyzerConfig: AnalyzerConfiguration,
         issues: MutableList<Issue>
     ): OrtDependencyTreeModel =
         forProjectDirectory(projectDir).connect().use { connection ->
@@ -161,6 +173,8 @@ class GradleInspector(
 
             logger.info { "The project at '$projectDir' uses Gradle version $buildGradleVersion." }
 
+            val excludedScopes = if (analyzerConfig.skipExcluded) excludes.scopes else emptyList()
+            val includedScopes = if (analyzerConfig.skipExcluded) includes.scopes else emptyList()
             // In order to debug the plugin, pass the "-Dorg.gradle.debug=true" option to the JVM running ORT. This will
             // then block execution of the plugin until a remote debug session is attached to port 5005 (by default),
             // also see https://docs.gradle.org/current/userguide/troubleshooting.html#sec:troubleshooting_build_logic.
@@ -200,7 +214,11 @@ class GradleInspector(
                 .setJvmArguments(jvmArgs)
                 .setStandardOutput(stdout)
                 .setStandardError(stderr)
-                .withArguments("-Duser.home=${Os.userHomeDirectory}", "--init-script", initScriptFile.path)
+                .withArguments(
+                    "-Duser.home=${Os.userHomeDirectory}",
+                    "--init-script",
+                    extractInitScript(excludedScopes, includedScopes).path
+                )
                 .get()
 
             if (stdout.size() > 0) {
@@ -246,7 +264,8 @@ class GradleInspector(
 
         logger.info { "Resolving the dependency tree model via IPC from the Gradle Daemon..." }
 
-        val dependencyTreeModel = gradleConnector.getOrtDependencyTreeModel(projectDir, issues)
+        val dependencyTreeModel =
+            gradleConnector.getOrtDependencyTreeModel(projectDir, excludes, includes, analyzerConfig, issues)
         dependencyHandler.setTreeModel(dependencyTreeModel)
 
         logger.info { "Successfully retrieved the dependency tree model from the Gradle Daemon." }
