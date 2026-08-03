@@ -203,6 +203,7 @@ RUN find /opt/python -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null |
 FROM base AS nodejs-build
 
 ARG BOWER_VERSION
+ARG BUN_VERSION
 ARG COREPACK_VERSION
 ARG FNM_VERSION
 ARG NODEJS_VERSION
@@ -213,7 +214,7 @@ ENV PATH=$PATH:$FNM_DIR:$FNM_DIR/node-versions/v$NODEJS_VERSION/installation/bin
 RUN mise install-into aqua:Schniz/fnm@$FNM_VERSION $FNM_DIR
 RUN fnm install "$NODEJS_VERSION" \
     && fnm default "$NODEJS_VERSION" \
-    && npm install --global bower@$BOWER_VERSION corepack@$COREPACK_VERSION \
+    && npm install --global bower@$BOWER_VERSION bun@$BUN_VERSION corepack@$COREPACK_VERSION \
     && corepack enable
 
 #------------------------------------------------------------------------
