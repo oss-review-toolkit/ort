@@ -23,6 +23,7 @@ import java.io.File
 import java.io.IOException
 import java.lang.invoke.MethodHandles
 import java.net.HttpURLConnection
+import java.net.PasswordAuthentication
 import java.net.URI
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
@@ -101,6 +102,7 @@ private const val CACHE_DIRECTORY = "cache/http"
 private val MAX_CACHE_SIZE_IN_BYTES = 1.gibibytes
 private const val READ_TIMEOUT_IN_SECONDS = 30L
 private const val AUTHORIZATION_HEADER = "Authorization"
+private const val BEARER_AUTH_SCHEME = "Bearer"
 
 /**
  * The default [OkHttpClient] for ORT to use.
@@ -140,13 +142,13 @@ val okHttpClient: OkHttpClient by lazy {
                     val request = chain.request()
 
                     if (request.header(AUTHORIZATION_HEADER) == null) {
-                        val credentials = requestPasswordAuthentication(request.url.toUri())
-                        if (credentials != null) {
+                        val requestUri = request.url.toUri()
+
+                        val authentication = requestPasswordAuthentication(requestUri)
+                        val headerValue = authorizationHeaderValue(authentication)
+                        if (headerValue != null) {
                             val authenticatedRequest = request.newBuilder()
-                                .header(
-                                    AUTHORIZATION_HEADER,
-                                    Credentials.basic(credentials.userName, String(credentials.password))
-                                )
+                                .header(AUTHORIZATION_HEADER, headerValue)
                                 .build()
 
                             return@addInterceptor chain.proceed(authenticatedRequest)
@@ -175,6 +177,20 @@ fun OkHttpClient.Builder.addBasicAuthorization(username: String, password: Strin
             .header("Authorization", Credentials.basic(username, password))
 
         chain.proceed(requestBuilder.build())
+    }
+
+/**
+ * Build the value for the "Authorization" header from the given [authentication]. If [authentication] is null, return
+ * null. If the [user name][PasswordAuthentication.getUserName] is "bitbucket", the password is treated as a Bearer
+ * token; otherwise, the credentials are used for HTTP Basic authentication.
+ */
+internal fun authorizationHeaderValue(authentication: PasswordAuthentication?): String? =
+    authentication?.let {
+        if (it.userName == "bearer") {
+            "$BEARER_AUTH_SCHEME ${String(it.password)}"
+        } else {
+            Credentials.basic(it.userName, String(it.password))
+        }
     }
 
 /**
@@ -339,15 +355,12 @@ internal class JavaNetAuthenticatorWrapper(
         if (response.request.header(AUTHORIZATION_HEADER) != null) return null
 
         val requestUri = response.request.url.toUri()
-        return requestPasswordAuthentication(requestUri)?.let { authentication ->
+        val authentication = requestPasswordAuthentication(requestUri)
+        return authorizationHeaderValue(authentication)?.let { headerValue ->
+
             response.request.newBuilder()
-                .header(
-                    AUTHORIZATION_HEADER,
-                    Credentials.basic(
-                        authentication.userName,
-                        String(authentication.password)
-                    )
-                ).build()
+                .header(AUTHORIZATION_HEADER, headerValue)
+                .build()
         }
     }
 }
