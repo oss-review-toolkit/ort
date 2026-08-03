@@ -79,6 +79,7 @@ image_build python ort/python "$PYTHON_VERSION" \
 image_build nodejs ort/nodejs "$NODEJS_VERSION" \
     --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
     --build-arg BOWER_VERSION="$BOWER_VERSION" \
+    --build-arg BUN_VERSION="$BUN_VERSION" \
     --build-arg NPM_VERSION="$NPM_VERSION" \
     --build-arg PNPM_VERSION="$PNPM_VERSION" \
     --build-arg YARN_VERSION="$YARN_VERSION" \
