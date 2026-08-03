@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
 import java.io.File
-import java.util.LinkedList
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -189,7 +188,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     private fun listModules(workingDir: File, issues: MutableList<Issue>): ModuleInfo {
         val listProcess = NpmCommand.run(workingDir, "list", "--depth", "Infinity", "--json", "--long")
-        issues += listProcess.extractNpmIssues()
+        issues += listProcess.extractNpmIssues(descriptor.displayName)
 
         return parseNpmList(listProcess.stdout)
     }
@@ -207,7 +206,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
         val process = NpmCommand.run(workingDir, subcommand, *options.toTypedArray())
 
-        return process.extractNpmIssues()
+        return process.extractNpmIssues(descriptor.displayName)
     }
 
     private fun requestAllPackageDetails(projectModuleInfo: ModuleInfo, scopes: Set<Scope>) {
@@ -215,64 +214,6 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
             moduleInfoResolver.getModuleInfos(moduleIds)
         }
     }
-}
-
-private fun ModuleInfo.getAllPackageNodeModuleIds(scopes: Set<Scope>): Set<String> =
-    buildSet {
-        val queue = scopes.flatMapTo(LinkedList()) { getScopeDependencies(it) }
-
-        while (queue.isNotEmpty()) {
-            val info = queue.removeFirst()
-
-            @Suppress("ComplexCondition")
-            if (!info.isProject && info.isInstalled && !info.name.isNullOrBlank() && !info.version.isNullOrBlank()) {
-                add("${info.name}@${info.version}")
-            }
-
-            scopes.flatMapTo(queue) { info.getScopeDependencies(it) }
-        }
-    }
-
-private fun ModuleInfo.getScopeDependencies(scope: Scope) =
-    when (scope) {
-        Scope.DEPENDENCIES -> dependencies.values.filter { !it.dev }
-        Scope.DEV_DEPENDENCIES -> dependencies.values.filter { it.dev && !it.optional }
-    }
-
-private fun ModuleInfo.undoDeduplication(): ModuleInfo {
-    val replacements = getNonDeduplicatedModuleInfosForId()
-
-    fun ModuleInfo.undoDeduplicationRec(ancestorsIds: Set<String> = emptySet()): ModuleInfo {
-        val dependencyAncestorIds = ancestorsIds + setOfNotNull(id)
-        val replacement = replacements[id] ?: this
-
-        return replacement.copy(
-            dependencies = replacement.dependencies
-                .filter { it.value.id !in dependencyAncestorIds } // break cycles.
-                .mapValues { it.value.undoDeduplicationRec(dependencyAncestorIds) }
-        )
-    }
-
-    return undoDeduplicationRec()
-}
-
-private fun ModuleInfo.filterInstalled(): ModuleInfo = copy(dependencies = dependencies.filter { it.value.isInstalled })
-
-private fun ModuleInfo.getNonDeduplicatedModuleInfosForId(): Map<String, ModuleInfo> {
-    val queue = LinkedList<ModuleInfo>().apply { add(this@getNonDeduplicatedModuleInfosForId) }
-    val result = mutableMapOf<String, ModuleInfo>()
-
-    while (queue.isNotEmpty()) {
-        val info = queue.removeFirst()
-
-        if (info.id != null && info.dependencyConstraints.keys.subtract(info.dependencies.keys).isEmpty()) {
-            result[info.id] = info
-        }
-
-        queue += info.dependencies.values
-    }
-
-    return result
 }
 
 internal fun List<String>.groupLines(vararg markers: String): List<String> {
@@ -357,19 +298,19 @@ internal fun List<String>.groupLines(vararg markers: String): List<String> {
     }
 }
 
-private fun ProcessCapture.extractNpmIssues(): List<Issue> {
+internal fun ProcessCapture.extractNpmIssues(source: String): List<Issue> {
     val lines = stderr.lines()
     val issues = mutableListOf<Issue>()
 
-    // Generally forward issues from the NPM CLI to the ORT NPM package manager. Lower the severity of warnings to
-    // hints, as warnings usually do not prevent the ORT NPM package manager from getting the dependencies right.
+    // Generally forward issues from the NPM CLI to the ORT package manager. Lower the severity of warnings to hints,
+    // as warnings usually do not prevent the ORT package manager from getting the dependencies right.
     lines.groupLines("npm WARN ", "npm warn ").mapTo(issues) {
-        Issue(source = NpmFactory.descriptor.displayName, message = it, severity = Severity.HINT)
+        Issue(source = source, message = it, severity = Severity.HINT)
     }
 
     // For errors, however, something clearly went wrong, so keep the severity here.
     lines.groupLines("npm ERR! ", "npm error ").mapTo(issues) {
-        Issue(source = NpmFactory.descriptor.displayName, message = it, severity = Severity.ERROR)
+        Issue(source = source, message = it, severity = Severity.ERROR)
     }
 
     return issues
