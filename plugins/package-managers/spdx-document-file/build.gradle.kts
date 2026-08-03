@@ -27,7 +27,6 @@ dependencies {
     api(projects.model)
 
     implementation(projects.downloader)
-    implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxDocumentUtils)
