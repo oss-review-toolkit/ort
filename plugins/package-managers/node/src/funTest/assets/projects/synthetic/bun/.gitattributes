@@ -1,0 +1,3 @@
+bun.lock	text eol=lf
+bun.lockb	binary
+package*.json	text eol=lf
