@@ -61,8 +61,8 @@ class PackageManagerFunTest : WordSpec({
         "maven/pom.xml",
         "mix/mix.exs",
 
-        // Note that the NPM, PNPM and Yarn implementations share code. Internal logic decides dynamically whether to
-        // process "package.json" with NPM, PNPM or Yarn.
+        // Note that the Bun, NPM, PNPM and Yarn implementations share code. Internal logic decides dynamically whether
+        // to process "package.json" with Bun, NPM, PNPM or Yarn.
         "npm-pnpm-and-yarn/package.json",
 
         "nuget/packages.config",
@@ -103,6 +103,7 @@ class PackageManagerFunTest : WordSpec({
             assertSoftly {
                 managedFilesById["Bazel"] should containExactly("bazel/MODULE.bazel")
                 managedFilesById["Bower"] should containExactly("bower/bower.json")
+                managedFilesById["Bun"] should containExactly("npm-pnpm-and-yarn/package.json")
                 managedFilesById["Bundler"] should containExactly("bundler/Gemfile")
                 managedFilesById["Cargo"] should containExactly("cargo/Cargo.toml")
                 managedFilesById["Carthage"] should containExactly("carthage/Cartfile.resolved")

@@ -32,10 +32,12 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.BUN
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.NPM
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.PNPM
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.YARN
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.YARN2
+import org.ossreviewtoolkit.plugins.packagemanagers.node.bun.BunFactory
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.NpmFactory
 import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.PnpmFactory
 import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.YarnFactory
@@ -44,7 +46,7 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class NodePackageManagerDetectionTest : WordSpec({
-    val packageManagers = listOf(NpmFactory(), PnpmFactory(), YarnFactory(), Yarn2Factory())
+    val packageManagers = listOf(BunFactory(), NpmFactory(), PnpmFactory(), YarnFactory(), Yarn2Factory())
         .map { it.create(PluginConfig.EMPTY) }
 
     "All Node package manager detections" should {
@@ -141,6 +143,24 @@ class NodePackageManagerDetectionTest : WordSpec({
             }
 
             NodePackageManagerType.forDirectory(projectDir) should containExactlyInAnyOrder(YARN2)
+        }
+
+        "return only BUN if distinguished by lockfile" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                resolve(BUN.lockfileName).writeText("{}")
+            }
+
+            NodePackageManagerType.forDirectory(projectDir) should containExactlyInAnyOrder(BUN)
+        }
+
+        "return only BUN if distinguished by other file" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                BUN.markerFileName?.also { resolve(it).writeText("binary") }
+            }
+
+            NodePackageManagerType.forDirectory(projectDir) should containExactlyInAnyOrder(BUN)
         }
     }
 
@@ -248,6 +268,46 @@ class NodePackageManagerDetectionTest : WordSpec({
                 "yarn/invalid-package-json/package.json",
                 "yarn/project-with-lockfile/package.json",
                 "yarn/workspaces/package.json"
+            )
+        }
+    }
+
+    "Bun detection" should {
+        "recognize lockfiles" {
+            val lockfile = tempdir().resolve(BUN.lockfileName).apply {
+                writeText("{}")
+            }
+
+            BUN.hasLockfile(lockfile.parentFile) shouldBe true
+        }
+
+        "recognize legacy binary lockfiles" {
+            val projectDir = tempdir().apply {
+                BUN.markerFileName?.also { resolve(it).writeText("binary") }
+            }
+
+            BUN.hasLockfile(projectDir) shouldBe true
+        }
+
+        "parse workspace files" {
+            val projectDir = getAssetFile("projects/synthetic/bun/workspaces")
+
+            BUN.getWorkspaces(projectDir) shouldNotBeNull {
+                mapNotNull { it.withoutPrefix(projectDir.invariantSeparatorsPath) } should
+                    containExactly("/packages/**")
+            }
+        }
+
+        "filter definition files correctly" {
+            val projectDir = getAssetFile("projects/synthetic")
+            val definitionFiles = PackageManager.findManagedFiles(projectDir, packageManagers).values.flatten().toSet()
+
+            val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(BUN)
+
+            filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath } should containExactlyInAnyOrder(
+                "bun/binary-lockfile/package.json",
+                "bun/project-with-lockfile/package.json",
+                "bun/workspaces/package.json"
             )
         }
     }
