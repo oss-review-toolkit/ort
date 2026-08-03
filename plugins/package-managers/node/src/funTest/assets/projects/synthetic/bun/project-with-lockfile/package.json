@@ -1,0 +1,19 @@
+{
+  "name": "bun-project-with-lockfile",
+  "version": "1.0.0",
+  "description": "Bun test project with bun.lock.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oss-review-toolkit/ort.git"
+  },
+  "license": "Apache-2.0",
+  "author": "The Author <the.author@mail.example> (https://www.the.author.example/index.html)",
+  "private": true,
+  "dependencies": {
+    "long": "3.2.0",
+    "nth-check": "1.0.2"
+  },
+  "devDependencies": {
+    "css-what": "2.1.3"
+  }
+}

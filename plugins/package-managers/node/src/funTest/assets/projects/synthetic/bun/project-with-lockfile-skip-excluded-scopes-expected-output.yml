@@ -1,0 +1,120 @@
+---
+project:
+  id: "Bun::bun-project-with-lockfile:1.0.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "The Author"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  description: "Bun test project with bun.lock."
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::long:3.2.0"
+    - id: "NPM::nth-check:1.0.2"
+      dependencies:
+      - id: "NPM::boolbase:1.0.0"
+packages:
+- id: "NPM::boolbase:1.0.0"
+  purl: "pkg:npm/boolbase@1.0.0"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "two functions: One that returns true, one that returns false"
+  homepage_url: "https://github.com/fb55/boolbase"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
+    hash:
+      value: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/fb55/boolbase"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/boolbase.git"
+    revision: ""
+    path: ""
+- id: "NPM::long:3.2.0"
+  purl: "pkg:npm/long@3.2.0"
+  authors:
+  - "Daniel Wirtz"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A Long class for representing a 64-bit two's-complement integer value."
+  homepage_url: "https://github.com/dcodeIO/long.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/long/-/long-3.2.0.tgz"
+    hash:
+      value: "d821b7138ca1cb581c172990ef14db200b5c474b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
+- id: "NPM::nth-check:1.0.2"
+  purl: "pkg:npm/nth-check@1.0.2"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "performant nth-check parser & compiler"
+  homepage_url: "https://github.com/fb55/nth-check"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/nth-check/-/nth-check-1.0.2.tgz"
+    hash:
+      value: "b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/fb55/nth-check"
+    revision: "03a02587bbd126fafc3d2331ffef6ea5cb2f9b66"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/nth-check.git"
+    revision: "03a02587bbd126fafc3d2331ffef6ea5cb2f9b66"
+    path: ""
