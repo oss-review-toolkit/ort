@@ -99,6 +99,14 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
             )
         )
 
+        "Bun" -> listOf(
+            ScopeExclude(
+                pattern = "devDependencies",
+                reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
+                comment = "Packages for development only."
+            )
+        )
+
         "Bundler" -> listOf(
             ScopeExclude(
                 pattern = "test",
