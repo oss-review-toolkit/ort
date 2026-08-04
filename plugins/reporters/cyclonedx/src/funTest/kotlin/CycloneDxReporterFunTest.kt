@@ -180,6 +180,19 @@ class CycloneDxReporterFunTest : WordSpec({
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
         }
+
+        "not include excluded dependencies on the top level" {
+            val expectedBom = readResource("/cyclonedx-reporter-expected-result-top-level-excludes.json")
+
+            val bom = generateSingleBomReport(
+                ortResult = ORT_RESULT,
+                format = Format.JSON,
+                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+            )
+
+            bom should matchJsonSchema(schemaJson)
+            bom.patchCycloneDxResult() shouldEqualJson expectedBom
+        }
     }
 
     "Requesting separate BOMs per project" should {

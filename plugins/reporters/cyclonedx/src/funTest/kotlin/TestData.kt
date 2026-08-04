@@ -158,6 +158,9 @@ val ORT_RESULT = OrtResult(
                             dependencies = setOf(
                                 PackageReference(
                                     id = Identifier("NPM:@ort:declared-license:1.0")
+                                ),
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:test:0.1.0")
                                 )
                             )
                         )
@@ -264,6 +267,15 @@ val ORT_RESULT = OrtResult(
                     ),
                     vcs = VcsInfo.EMPTY,
                     isModified = true
+                ),
+                Package(
+                    id = Identifier("NPM:@ort:test:0.1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
                 )
             )
         )
