@@ -203,6 +203,7 @@ RUN find /opt/python -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null |
 FROM base AS nodejs-build
 
 ARG BOWER_VERSION
+ARG BUN_VERSION
 ARG COREPACK_VERSION
 ARG NODEJS_VERSION
 ARG USER_ID=1000
@@ -217,7 +218,7 @@ RUN --mount=type=cache,target=/opt/nvm/.cache,uid=$USER_ID,gid=$USER_GID \
     && nvm install "$NODEJS_VERSION" \
     && nvm alias default "$NODEJS_VERSION" \
     && nvm use default \
-    && npm install --global bower@$BOWER_VERSION corepack@$COREPACK_VERSION \
+    && npm install --global bower@$BOWER_VERSION bun@$BUN_VERSION corepack@$COREPACK_VERSION \
     && corepack enable
 
 #------------------------------------------------------------------------

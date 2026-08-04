@@ -49,6 +49,7 @@ data class AnalyzerConfiguration(
     val enabledPackageManagers: List<String> = listOf(
         "Bazel",
         "Bower",
+        "Bun",
         "Bundler",
         "Cargo",
         "Carthage",

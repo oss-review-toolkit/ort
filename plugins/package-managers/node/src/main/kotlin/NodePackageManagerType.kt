@@ -100,6 +100,21 @@ enum class NodePackageManagerType(
                 lines.take(4).lastOrNull() == lockfileMarker
             }
         }
+    },
+
+    // Note that this entry must come last, as the first entry is used as the fallback for directories that contain
+    // only a definition file, see NodePackageManager.mapDefinitionFiles().
+    BUN(
+        projectType = "Bun",
+        packageType = "NPM",
+        lockfileName = "bun.lock", // The textual JSONC lockfile which is the default since Bun 1.2.
+        markerFileName = "bun.lockb" // The legacy binary lockfile, see https://bun.sh/docs/install/lockfile.
+    ) {
+        // Similar to NPM's "npm-shrinkwrap.json", treat the marker file as an alternative lockfile. Note that this
+        // makes getFileScore() count a directory with only a "bun.lockb" file twice, which is harmless as it aligns
+        // with how NPM scores a directory with only an "npm-shrinkwrap.json" file.
+        override fun hasLockfile(projectDir: File): Boolean =
+            super.hasLockfile(projectDir) || hasNonEmptyFile(projectDir, markerFileName)
     };
 
     companion object {
