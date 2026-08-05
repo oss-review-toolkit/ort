@@ -66,10 +66,16 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
             }
 
             if (details.status == StatusType.pending) {
-                logger.info { "Adding snippet for '$localFile' as identification is pending." }
+                logger.info {
+                    "Adding '${details.status}' findings for '$localFile' as snippet findings."
+                }
+
                 snippetFindings += getSnippetFindings(details, localFile)
             } else {
-                logger.info { "File '$localFile' was identified, not including in snippet findings." }
+                logger.info {
+                    "Adding '${details.status}' findings for '$localFile' as license and copyright findings."
+                }
+
                 licenseFindings += getLicenseFindings(details, localFile)
                 copyrightFindings += getCopyrightFindings(details, localFile)
             }
