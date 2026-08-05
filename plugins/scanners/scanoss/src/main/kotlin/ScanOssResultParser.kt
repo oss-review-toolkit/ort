@@ -65,19 +65,19 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
                 else -> logger.warn { "Unknown match type '${details.matchType}'." }
             }
 
-            if (details.status == StatusType.pending) {
-                logger.info {
-                    "Adding '${details.status}' findings for '$localFile' as snippet findings."
-                }
-
-                snippetFindings += getSnippetFindings(details, localFile)
-            } else {
+            if (details.status == StatusType.identified) {
                 logger.info {
                     "Adding '${details.status}' findings for '$localFile' as license and copyright findings."
                 }
 
                 licenseFindings += getLicenseFindings(details, localFile)
                 copyrightFindings += getCopyrightFindings(details, localFile)
+            } else {
+                logger.info {
+                    "Adding '${details.status}' findings for '$localFile' as snippet findings."
+                }
+
+                snippetFindings += getSnippetFindings(details, localFile)
             }
         }
     }
