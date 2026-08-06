@@ -70,8 +70,8 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
                 snippetFindings += getSnippetFindings(details, localFile)
             } else {
                 logger.info { "File '$localFile' was identified, not including in snippet findings." }
-                licenseFindings += getLicenseFindings(details, result.filePath)
-                copyrightFindings += getCopyrightFindings(details, result.filePath)
+                licenseFindings += getLicenseFindings(details, localFile)
+                copyrightFindings += getCopyrightFindings(details, localFile)
             }
         }
     }
