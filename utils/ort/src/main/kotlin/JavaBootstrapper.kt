@@ -24,28 +24,40 @@ import java.io.File
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
+import kotlinx.coroutines.runBlocking
+
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.clients.foojay.Architecture
-import org.ossreviewtoolkit.clients.foojay.ArchiveType
-import org.ossreviewtoolkit.clients.foojay.DiscoService
-import org.ossreviewtoolkit.clients.foojay.Distribution
-import org.ossreviewtoolkit.clients.foojay.Latest
-import org.ossreviewtoolkit.clients.foojay.LibCType
-import org.ossreviewtoolkit.clients.foojay.OperatingSystem
-import org.ossreviewtoolkit.clients.foojay.Package
-import org.ossreviewtoolkit.clients.foojay.PackageType
-import org.ossreviewtoolkit.clients.foojay.ReleaseStatus
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.div
-import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 
 import org.semver4j.Semver
 
-object JavaBootstrapper {
-    internal val discoService = DiscoService.create(client = OkHttpClientHelper.buildClient())
+/**
+ * JDK bootstrapper that manages downloading and installing JDKs.
+ *
+ * @param jdkService The [JdkService] used to discover JDK packages.
+ */
+class JavaBootstrapper(
+    private val jdkService: JdkService
+) {
+    companion object {
+        /**
+         * Return whether ORT is running on a JDK (not JRE) of the specified [version].
+         */
+        @JvmStatic
+        fun isRunningOnJdk(version: String): Boolean {
+            val requestedVersion = Semver.coerce(version)
+            val runningVersion = Semver.coerce(Environment.JAVA_VERSION)
+            if (requestedVersion != runningVersion) return false
+
+            val javaHome = System.getProperty("java.home") ?: return false
+            val javac = File(javaHome) / "bin" / "javac"
+            return Os.resolveExecutable(javac) != null
+        }
+    }
 
     /**
      * Return the single top-level directory contained in this directory, if any, or return this directory otherwise.
@@ -56,75 +68,14 @@ object JavaBootstrapper {
     }
 
     /**
-     * Return whether ORT is running on a JDK (not JRE) of the specified [version].
-     */
-    fun isRunningOnJdk(version: String): Boolean {
-        val requestedVersion = Semver.coerce(version)
-        val runningVersion = Semver.coerce(Environment.JAVA_VERSION)
-        if (requestedVersion != runningVersion) return false
-
-        val javaHome = System.getProperty("java.home") ?: return false
-        val javac = File(javaHome) / "bin" / "javac"
-        return Os.resolveExecutable(javac) != null
-    }
-
-    /**
      * Find a JDK package matching [distributionName] and [version]. Return it on success, or an exception on failure.
      */
-    internal fun findJdkPackage(distributionName: String, version: String): Result<Package> {
-        val distro = runCatching {
-            Distribution.valueOf(distributionName.uppercase())
-        }.getOrElse {
-            return Result.failure(
-                IllegalArgumentException("No JDK package for unsupported distribution '$distributionName' found.")
-            )
-        }
-
-        val os = when (Os.Name.current) {
-            Os.Name.LINUX -> OperatingSystem.LINUX
-
-            Os.Name.MAC -> OperatingSystem.MACOS
-
-            Os.Name.WINDOWS -> OperatingSystem.WINDOWS
-
-            else -> return Result.failure(
-                IllegalArgumentException("No JDK package for unsupported operating system '${Os.Name.current}' found.")
-            )
-        }
-
-        val arch = when (Os.Arch.current) {
-            Os.Arch.X86_64 -> Architecture.X86_64
-            Os.Arch.AARCH64 -> Architecture.AARCH64
-            else -> Architecture.X86
-        }
-
+    internal fun findJdkPackage(distributionName: String, version: String): Result<JdkPackage> {
         logger.info { "Setting up JDK '$distributionName' in version $version..." }
 
-        val packages = runCatching {
-            runBlocking {
-                discoService.getPackages(
-                    version,
-                    enumSetOf(distro),
-                    enumSetOf(arch),
-                    enumSetOf(ArchiveType.TAR, ArchiveType.TAR_GZ, ArchiveType.TGZ, ArchiveType.ZIP),
-                    enumSetOf(PackageType.JDK),
-                    enumSetOf(os),
-                    if (os == OperatingSystem.LINUX) enumSetOf(LibCType.GLIBC) else enumSetOf(),
-                    enumSetOf(ReleaseStatus.GENERAL_AVAILABILITY),
-                    directlyDownloadable = true,
-                    Latest.AVAILABLE,
-                    freeToUseInProduction = true
-                )
-            }
-        }.getOrElse {
-            return Result.failure(it)
+        return runBlocking {
+            jdkService.findJdkPackage(distributionName, version)
         }
-
-        val pkg = packages.result.firstOrNull() ?: return Result.failure(
-            IllegalArgumentException("No JDK package for distribution '$distributionName' and version $version found.")
-        )
-
-        return Result.success(pkg)
     }
 
     /**
@@ -137,8 +88,8 @@ object JavaBootstrapper {
         }
 
         return downloadJdk(
-            pkg.links.pkgDownloadRedirect,
-            ortToolsDirectory / "jdks" / pkg.distribution / pkg.distributionVersion
+            pkg.downloadUrl,
+            ortToolsDirectory / "jdks" / pkg.downloadUrl
         )
     }
 

@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 import org.ossreviewtoolkit.utils.common.suppressInput
 import org.ossreviewtoolkit.utils.common.withoutPrefix
+import org.ossreviewtoolkit.utils.ort.FoojayJdkService
 import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 
 import org.semver4j.range.RangeList
@@ -86,7 +87,12 @@ data class SbtConfig(
      * The directory of the Java home to use when analyzing projects. By default, the same Java home as for ORT itself
      * is used.
      */
-    val javaHome: String?
+    val javaHome: String?,
+
+    /**
+     * URL for the JDK download repository. If unset, the default URL is used.
+     */
+    val jdkRepositoryUrl: String?
 )
 
 /**
@@ -116,10 +122,12 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
 
         // TODO: Consider auto-detecting the Java version based on the SBT version. See:
         //       https://docs.scala-lang.org/overviews/jdk-compatibility/overview.html#build-tool-compatibility-table
+        val bootstrapper = JavaBootstrapper(FoojayJdkService.create(config.jdkRepositoryUrl))
+
         val javaHome = config.javaVersion
             ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
             ?.let {
-                JavaBootstrapper.installJdk("TEMURIN", it)
+                bootstrapper.installJdk("TEMURIN", it)
                     .onFailure { e -> logger.error { "Failed to bootstrap JDK version $it: ${e.collectMessages()}" } }
                     .getOrNull()
             } ?: config.javaHome?.let { File(it) }
