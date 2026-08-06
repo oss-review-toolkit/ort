@@ -23,6 +23,7 @@ import com.scanoss.dto.CopyrightDetails
 import com.scanoss.dto.LicenseDetails
 import com.scanoss.dto.QualityDetails
 import com.scanoss.dto.ScanFileDetails
+import com.scanoss.dto.ScanFileResult
 import com.scanoss.dto.ServerDetails
 import com.scanoss.dto.VulnerabilityDetails
 import com.scanoss.dto.enums.MatchType
@@ -43,6 +44,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Snippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
@@ -60,8 +62,7 @@ class ScanOssResultParserTest : WordSpec({
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
-            val time = Instant.now()
-            val summary = generateSummary(time, time, results)
+            val summary = generateSummary(results)
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",
@@ -99,8 +100,7 @@ class ScanOssResultParserTest : WordSpec({
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
-            val time = Instant.now()
-            val summary = generateSummary(time, time, results)
+            val summary = generateSummary(results)
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",
@@ -161,8 +161,7 @@ class ScanOssResultParserTest : WordSpec({
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
-            val time = Instant.now()
-            val summary = generateSummary(time, time, results)
+            val summary = generateSummary(results)
 
             // Verify we have one finding per source location, not per PURL.
             summary.snippetFindings should haveSize(2)
@@ -211,8 +210,7 @@ class ScanOssResultParserTest : WordSpec({
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
-            val time = Instant.now()
-            val summary = generateSummary(time, time, results)
+            val summary = generateSummary(results)
 
             // Verify the snippet finding.
             summary.snippetFindings should haveSize(1)
@@ -235,8 +233,7 @@ class ScanOssResultParserTest : WordSpec({
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
-            val time = Instant.now()
-            val summary = generateSummary(time, time, results)
+            val summary = generateSummary(results)
 
             // Verify the snippet finding.
             summary.snippetFindings should haveSize(1)
@@ -260,8 +257,7 @@ class ScanOssResultParserTest : WordSpec({
                 JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
-            val time = Instant.now()
-            val summary = generateSummary(time, time, results)
+            val summary = generateSummary(results)
 
             // Should have only one finding because the identified snippet is excluded
             summary.snippetFindings should haveSize(1)
@@ -338,6 +334,11 @@ class ScanOssResultParserTest : WordSpec({
         }
     }
 })
+
+private fun generateSummary(results: List<ScanFileResult>): ScanSummary {
+    val time = Instant.now()
+    return generateSummary(time, time, results)
+}
 
 private val dummyDetails = ScanFileDetails(
     MatchType.snippet,
