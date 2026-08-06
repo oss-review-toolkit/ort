@@ -25,6 +25,19 @@
     "reason" : "TEST_DEPENDENCY_OF",
     "comment" : "The scope only contains test dependencies."
   } ],
+  "license_choices" : {
+    "repository_license_choices" : [ {
+      "given" : "GPL-2.0-only OR MIT",
+      "choice" : "MIT"
+    } ],
+    "package_license_choices" : [ {
+      "package_id" : "Maven:com.h2database:h2:1.4.200",
+      "license_choices" : [ {
+        "given" : "MPL-2.0 OR EPL-1.0",
+        "choice" : "MPL-2.0"
+      } ]
+    } ]
+  },
   "license_finding_curations" : [ {
     "_id" : 0,
     "path" : "project/file2.java",
@@ -796,6 +809,10 @@
     },
     "concluded_license" : "GPL-2.0-only OR MIT",
     "effective_license" : "MIT",
+    "applied_license_choices" : [ {
+      "given" : "GPL-2.0-only OR MIT",
+      "choice" : "MIT"
+    } ],
     "binary_artifact" : {
       "url" : "",
       "hash" : {
@@ -845,6 +862,10 @@
     },
     "concluded_license" : "MPL-2.0 OR EPL-1.0",
     "effective_license" : "MPL-2.0",
+    "applied_license_choices" : [ {
+      "given" : "MPL-2.0 OR EPL-1.0",
+      "choice" : "MPL-2.0"
+    } ],
     "description" : "H2 Database Engine",
     "homepage_url" : "https://h2database.com",
     "binary_artifact" : {
