@@ -34,6 +34,13 @@
           "url": "https://spdx.org/licenses/GPL-2.0-only.html"
         }
       ],
+      "copyrights" : [ {
+        "name" : "Copyright (c) 2020 Composer",
+        "source" : "license_file"
+      }, {
+        "name" : "Copyright (c) 2022 Composer",
+        "source" : "license_file"
+      } ],
       "lines": "12-150,540-561",
       "matched": "35%",
       "oss_lines": "10-148,86-107",

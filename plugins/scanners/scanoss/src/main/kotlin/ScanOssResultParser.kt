@@ -156,6 +156,10 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
 
         // Purls can be empty if only one entry is provided which is used as the primary purl.
         if (purls.isNotEmpty()) put("related_purls", purls.joinToString(",") { it.trim() })
+
+        if (!details.copyrightDetails.isNullOrEmpty()) {
+            put("copyright_details", details.copyrightDetails.joinToString("\n") { it.name })
+        }
     }
 
     // Convert both local and OSS line ranges to source locations.

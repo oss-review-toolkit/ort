@@ -188,7 +188,11 @@ class ScanOssResultParserTest : WordSpec({
                         "url_hash" to "a9c1c67f0930dc42dbd40c29e565bcdd",
                         "release_date" to "2019-02-21",
                         "source_hash" to "45dd1e50621a8a32f88fbe0251a470ab",
-                        "related_purls" to "pkg:github/fake/fake_repository"
+                        "related_purls" to "pkg:github/fake/fake_repository",
+                        "copyright_details" to """
+                            Copyright (c) 2020 Composer
+                            Copyright (c) 2022 Composer
+                        """.trimIndent()
                     )
 
                 // Check OSS location.
@@ -364,5 +368,14 @@ private val dummyDetails = ScanFileDetails(
     arrayOf<LicenseDetails>(),
     arrayOf<QualityDetails>(),
     arrayOf<VulnerabilityDetails>(),
-    arrayOf<CopyrightDetails>()
+    arrayOf(
+        CopyrightDetails(
+            "Copyright (c) 2020 Composer",
+            "license_file"
+        ),
+        CopyrightDetails(
+            "Copyright (c) 2022 Composer",
+            "license_file"
+        )
+    )
 )
