@@ -47,6 +47,7 @@ class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {
         "be deserializable from YAML" {
             val refConfig = File("src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME")
+
             val ortConfig = OrtConfiguration.load(file = refConfig)
 
             ortConfig.allowedProcessEnvironmentVariableNames should containExactlyInAnyOrder("PASSPORT", "USER_HOME")
@@ -277,6 +278,7 @@ class OrtConfigurationTest : WordSpec({
                         options should containExactlyEntries(
                             "apiUrl" to "https://api.osskb.org/",
                             "writeToStorage" to "true",
+                            "chosenSnippetModel" to "LICENSE_AND_COPYRIGHT_FINDING",
                             "enablePathObfuscation" to "false",
                             "minSnippetHits" to "5",
                             "minSnippetLines" to "3",
