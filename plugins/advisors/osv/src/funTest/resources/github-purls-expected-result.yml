@@ -180,7 +180,6 @@ Unmanaged::pkg-0:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   first_fixed_versions:
-  - "21767c654d31d2dccdde4330529775c6c5fd5389"
   - "5c44459c3b28a9bd3283aaceab7c615f8020c531"
 - id: "CVE-2022-37434"
   description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer overflow\
@@ -515,69 +514,45 @@ Unmanaged::pkg-0:1.0.0:
     severity: null
     score: null
     vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
-- id: "CVE-2026-3381"
-  summary: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially insecure\
-    \ versions of zlib"
-  description: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
-    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the zlib\
-    \ library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which addresses\
-    \ findings fron the 7ASecurity audit of zlib. The includes fixs for CVE-2026-27171."
+- id: "CVE-2026-27171"
+  description: "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64\
+    \ because x2nmodp can do right shifts within a loop that has no termination condition."
   references:
-  - url: "https://cpan.org/modules"
+  - url: "https://7asecurity.com/reports/pentest-report-zlib-RC1.1.pdf"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.zlib.net/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/3xxx/CVE-2026-3381.json"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   - url: "https://github.com/madler/zlib/releases/tag/v1.3.2"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://metacpan.org/release/PMQS/Compress-Raw-Zlib-2.221/source/Changes"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://ostif.org/zlib-audit-complete/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-3381"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/27xxx/CVE-2026-27171.json"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.cve.org/CVERecord?id=CVE-2026-27171"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-27171"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/pmqs/Compress-Raw-Zlib/issues/41"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://github.com/madler/zlib/issues/904"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/pmqs/Compress-Raw-Zlib"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   first_fixed_versions:
   - "da607da739fa6047df13e66a2af6b8bec7c2a498"
 Unmanaged::pkg-1:1.0.0:
@@ -761,7 +736,6 @@ Unmanaged::pkg-1:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   first_fixed_versions:
-  - "21767c654d31d2dccdde4330529775c6c5fd5389"
   - "5c44459c3b28a9bd3283aaceab7c615f8020c531"
 - id: "CVE-2022-37434"
   description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer overflow\
@@ -1096,69 +1070,45 @@ Unmanaged::pkg-1:1.0.0:
     severity: null
     score: null
     vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
-- id: "CVE-2026-3381"
-  summary: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially insecure\
-    \ versions of zlib"
-  description: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
-    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the zlib\
-    \ library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which addresses\
-    \ findings fron the 7ASecurity audit of zlib. The includes fixs for CVE-2026-27171."
+- id: "CVE-2026-27171"
+  description: "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64\
+    \ because x2nmodp can do right shifts within a loop that has no termination condition."
   references:
-  - url: "https://cpan.org/modules"
+  - url: "https://7asecurity.com/reports/pentest-report-zlib-RC1.1.pdf"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.zlib.net/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/3xxx/CVE-2026-3381.json"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   - url: "https://github.com/madler/zlib/releases/tag/v1.3.2"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://metacpan.org/release/PMQS/Compress-Raw-Zlib-2.221/source/Changes"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://ostif.org/zlib-audit-complete/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-3381"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/27xxx/CVE-2026-27171.json"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.cve.org/CVERecord?id=CVE-2026-27171"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-27171"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/pmqs/Compress-Raw-Zlib/issues/41"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://github.com/madler/zlib/issues/904"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/pmqs/Compress-Raw-Zlib"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   first_fixed_versions:
   - "da607da739fa6047df13e66a2af6b8bec7c2a498"
 Unmanaged::pkg-2:1.0.0:
@@ -1342,7 +1292,6 @@ Unmanaged::pkg-2:1.0.0:
     score: null
     vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
   first_fixed_versions:
-  - "21767c654d31d2dccdde4330529775c6c5fd5389"
   - "5c44459c3b28a9bd3283aaceab7c615f8020c531"
 - id: "CVE-2022-37434"
   description: "zlib through 1.2.12 has a heap-based buffer over-read or buffer overflow\
@@ -1677,68 +1626,44 @@ Unmanaged::pkg-2:1.0.0:
     severity: null
     score: null
     vector: "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:L/SC:N/SI:N/SA:N"
-- id: "CVE-2026-3381"
-  summary: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially insecure\
-    \ versions of zlib"
-  description: "Compress::Raw::Zlib versions through 2.219 for Perl use potentially\
-    \ insecure versions of zlib.\n\nCompress::Raw::Zlib includes a copy of the zlib\
-    \ library. Compress::Raw::Zlib version 2.220 includes zlib 1.3.2, which addresses\
-    \ findings fron the 7ASecurity audit of zlib. The includes fixs for CVE-2026-27171."
+- id: "CVE-2026-27171"
+  description: "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64\
+    \ because x2nmodp can do right shifts within a loop that has no termination condition."
   references:
-  - url: "https://cpan.org/modules"
+  - url: "https://7asecurity.com/reports/pentest-report-zlib-RC1.1.pdf"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.zlib.net/"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/3xxx/CVE-2026-3381.json"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   - url: "https://github.com/madler/zlib/releases/tag/v1.3.2"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://metacpan.org/release/PMQS/Compress-Raw-Zlib-2.221/source/Changes"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://ostif.org/zlib-audit-complete/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-3381"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://github.com/CVEProject/cvelistV5/tree/main/cves/2026/27xxx/CVE-2026-27171.json"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://www.cve.org/CVERecord?id=CVE-2026-27171"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://nvd.nist.gov/vuln/detail/CVE-2026-27171"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/pmqs/Compress-Raw-Zlib/issues/41"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+  - url: "https://github.com/madler/zlib/issues/904"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/madler/zlib"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-  - url: "https://github.com/pmqs/Compress-Raw-Zlib"
-    scoring_system: "CVSS_V3"
-    severity: null
-    score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   - url: "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/"
     scoring_system: "CVSS_V3"
     severity: null
     score: null
-    vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    vector: "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
   first_fixed_versions:
   - "da607da739fa6047df13e66a2af6b8bec7c2a498"
