@@ -96,7 +96,12 @@ data class AnalyzerConfiguration(
     /**
      * A flag to control whether excluded scopes and paths should be skipped during the analysis.
      */
-    val skipExcluded: Boolean = false
+    val skipExcluded: Boolean = false,
+
+    /**
+     * The URL of the Foojay Disco API. If unset, the Disco client's default URL is used.
+     */
+    val discoUrl: String? = null
 ) {
     /**
      * A copy of [packageManagers] with case-insensitive keys.
@@ -150,7 +155,8 @@ data class AnalyzerConfiguration(
             enabledPackageManagers = override.enabledPackageManagers ?: enabledPackageManagers,
             disabledPackageManagers = override.disabledPackageManagers ?: disabledPackageManagers,
             packageManagers = mergedPackageManagers,
-            skipExcluded = override.skipExcluded ?: skipExcluded
+            skipExcluded = override.skipExcluded ?: skipExcluded,
+            discoUrl = discoUrl
         )
     }
 

@@ -45,8 +45,6 @@ import org.ossreviewtoolkit.utils.common.unpack
 import org.semver4j.Semver
 
 object JavaBootstrapper {
-    internal val discoService = DiscoService.create(client = OkHttpClientHelper.buildClient())
-
     /**
      * Return the single top-level directory contained in this directory, if any, or return this directory otherwise.
      */
@@ -69,9 +67,10 @@ object JavaBootstrapper {
     }
 
     /**
-     * Find a JDK package matching [distributionName] and [version]. Return it on success, or an exception on failure.
+     * Find a JDK package matching [distributionName] and [version], using the Disco API at [discoUrl].
+     * Return it on success, or an exception on failure. If [discoUrl] is null, use the default Disco API URL.
      */
-    internal fun findJdkPackage(distributionName: String, version: String): Result<Package> {
+    internal fun findJdkPackage(distributionName: String, version: String, discoUrl: String? = null): Result<Package> {
         val distro = runCatching {
             Distribution.valueOf(distributionName.uppercase())
         }.getOrElse {
@@ -101,6 +100,8 @@ object JavaBootstrapper {
         logger.info { "Setting up JDK '$distributionName' in version $version..." }
 
         val packages = runCatching {
+            val discoService = DiscoService.create(discoUrl, OkHttpClientHelper.buildClient())
+
             runBlocking {
                 discoService.getPackages(
                     version,
@@ -128,11 +129,12 @@ object JavaBootstrapper {
     }
 
     /**
-     * Install a JDK matching [distributionName] and [version] below [ortToolsDirectory] and return its directory on
-     * success, or an exception on failure.
+     * Install a JDK matching [distributionName] and [version] below [ortToolsDirectory], using the Disco API at
+     * [discoUrl], and return its directory on success, or an exception on failure. If [discoUrl] is null, use the
+     * default Disco API URL.
      */
-    fun installJdk(distributionName: String, version: String): Result<File> {
-        val pkg = findJdkPackage(distributionName, version).getOrElse {
+    fun installJdk(distributionName: String, version: String, discoUrl: String? = null): Result<File> {
+        val pkg = findJdkPackage(distributionName, version, discoUrl).getOrElse {
             return Result.failure(it)
         }
 
