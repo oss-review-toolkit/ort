@@ -22,6 +22,9 @@ import type { JSX } from "react";
 import { Fragment, useCallback, useMemo } from "react";
 
 import { CvssVectorChart, type CvssVectorInput } from "@/components/CvssVectorChart";
+import { PackageDetails } from "@/components/PackageDetails";
+import { PackagePaths } from "@/components/PackagePaths";
+import { MarkdownText, Url } from "@/components/Shared";
 import {
     createExpandColumn,
     DataTable,
@@ -30,11 +33,8 @@ import {
     DataTableFacetedFilter,
     getActiveExpandedRowId,
     LARGE_TABLE_PAGE_SIZES,
-} from "@/components/data-table";
-import { PackageDetails } from "@/components/PackageDetails";
-import { PackagePaths } from "@/components/PackagePaths";
-import { MarkdownText, Url } from "@/components/Shared";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@/components/ui/data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import {
     indexToRating,
     VulnerabilityRatingBadge,

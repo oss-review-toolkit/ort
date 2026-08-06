@@ -21,7 +21,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 
 import { ExpandRowIcon } from "@/components/Shared";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 interface ExpandColumnOptions {
     // When true, the column header shows a toggle that expands or collapses every row at once.

@@ -33,16 +33,6 @@ import {
 } from "lucide-react";
 import type { JSX, ReactNode } from "react";
 import { useCallback, useMemo } from "react";
-
-import {
-    createExpandColumn,
-    DataTable,
-    DataTableColumnHeader,
-    DataTableColumnSearch,
-    DataTableFacetedFilter,
-    getActiveExpandedRowId,
-    LARGE_TABLE_PAGE_SIZES,
-} from "@/components/data-table";
 import { IssuesTable } from "@/components/IssuesTable";
 import { PackageConfigurations } from "@/components/PackageConfigurations";
 import { PackageCurations } from "@/components/PackageCurations";
@@ -63,9 +53,18 @@ import {
     PackageCurationIcon,
     Url,
 } from "@/components/Shared";
-import { Badge } from "@/components/ui/badge";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/Badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/Collapsible";
+import {
+    createExpandColumn,
+    DataTable,
+    DataTableColumnHeader,
+    DataTableColumnSearch,
+    DataTableFacetedFilter,
+    getActiveExpandedRowId,
+    LARGE_TABLE_PAGE_SIZES,
+} from "@/components/ui/data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { VulnerabilitiesTable } from "@/components/VulnerabilitiesTable";
 import { cn } from "@/lib/utils";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";

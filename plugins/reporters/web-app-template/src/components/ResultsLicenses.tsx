@@ -22,7 +22,7 @@ import { useMemo } from "react";
 
 import { LicenseChart, type LicenseChartDatum } from "@/components/LicenseChart";
 import { LicenseStatsTable } from "@/components/LicenseStatsTable";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { licenseToHslColor } from "@/utils";
 

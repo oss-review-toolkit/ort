@@ -21,7 +21,7 @@ import type { ColumnDef, Row } from "@tanstack/react-table";
 import { Copyright, FileText, FileX } from "lucide-react";
 import type { JSX } from "react";
 import { useMemo } from "react";
-
+import { ExcludeStatusIcon, IconHeader, LicenseExpression, Url } from "@/components/Shared";
 import {
     createExpandColumn,
     DataTable,
@@ -29,8 +29,7 @@ import {
     DataTableColumnSearch,
     DataTableFacetedFilter,
     LARGE_TABLE_PAGE_SIZES,
-} from "@/components/data-table";
-import { ExcludeStatusIcon, IconHeader, LicenseExpression, Url } from "@/components/Shared";
+} from "@/components/ui/data-table";
 import { parseSpdxLicenseExpression } from "@/lib/spdx-license-expressions";
 import { cn } from "@/lib/utils";
 import type WebAppFinding from "@/models/WebAppFinding";

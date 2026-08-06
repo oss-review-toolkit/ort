@@ -40,8 +40,8 @@ import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import yaml from "react-syntax-highlighter/dist/esm/languages/hljs/yaml";
 import github from "react-syntax-highlighter/dist/esm/styles/hljs/github";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { parseSpdxLicenseExpression } from "@/lib/spdx-license-expressions";
 import { cn } from "@/lib/utils";
 import { licenseToHslColor } from "@/utils";

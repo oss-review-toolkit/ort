@@ -30,7 +30,7 @@ import {
     Url,
 } from "@/components/Shared";
 import { ToolsMetadataCards } from "@/components/ToolsMetadataCards";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 
 export interface RunDetailsProps {

@@ -20,7 +20,7 @@
 import type { JSX, ReactNode } from "react";
 
 import { Url } from "@/components/Shared";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/Separator";
 import type WebAppPackage from "@/models/WebAppPackage";
 
 export interface PackageDetailsProps {

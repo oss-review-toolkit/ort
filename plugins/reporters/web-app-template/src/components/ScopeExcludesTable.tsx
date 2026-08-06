@@ -26,7 +26,7 @@ import {
     DataTableColumnHeader,
     DataTableFacetedFilter,
     LARGE_TABLE_PAGE_SIZES,
-} from "@/components/data-table";
+} from "@/components/ui/data-table";
 import type WebAppScopeExclude from "@/models/WebAppScopeExclude";
 
 export interface ScopeExcludesTableProps {

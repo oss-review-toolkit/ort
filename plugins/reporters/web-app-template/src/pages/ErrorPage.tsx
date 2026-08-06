@@ -20,7 +20,7 @@
 import { AlertTriangle } from "lucide-react";
 import type { JSX } from "react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/Alert";
 
 export interface ErrorPageProps {
     message: string;

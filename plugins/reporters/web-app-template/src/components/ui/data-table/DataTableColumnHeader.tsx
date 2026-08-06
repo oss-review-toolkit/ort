@@ -20,7 +20,7 @@
 import type { Column } from "@tanstack/react-table";
 import { ChevronDown, ChevronsUpDown, ChevronUp, type LucideIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
 interface DataTableColumnHeaderProps<TData, TValue> {

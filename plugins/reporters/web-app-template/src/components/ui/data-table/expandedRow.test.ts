@@ -19,7 +19,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { getActiveExpandedRowId } from "@/components/data-table/expandedRow";
+import { getActiveExpandedRowId } from "@/components/ui/data-table/expandedRow";
 
 describe("getActiveExpandedRowId", () => {
     it("returns undefined when nothing is expanded", () => {

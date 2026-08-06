@@ -20,8 +20,8 @@
 import type { JSX } from "react";
 
 import { OrtLogo } from "@/components/OrtLogo";
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent } from "@/components/ui/Card";
+import { Progress } from "@/components/ui/Progress";
 
 export interface LoadingPageProps {
     percent?: number;

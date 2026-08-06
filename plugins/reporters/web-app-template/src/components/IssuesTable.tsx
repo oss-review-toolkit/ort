@@ -21,7 +21,12 @@ import type { ColumnDef, Row, TableState } from "@tanstack/react-table";
 import { Lightbulb } from "lucide-react";
 import type { JSX } from "react";
 import { useCallback, useMemo } from "react";
-
+import { PackageDetails } from "@/components/PackageDetails";
+import { PackageLicenses } from "@/components/PackageLicenses";
+import { PackagePaths } from "@/components/PackagePaths";
+import { SeverityTag, type SeverityValue } from "@/components/SeverityTag";
+import { MarkdownText, PackageLink } from "@/components/Shared";
+import { Button } from "@/components/ui/Button";
 import {
     createExpandColumn,
     DataTable,
@@ -30,14 +35,8 @@ import {
     DataTableFacetedFilter,
     getActiveExpandedRowId,
     LARGE_TABLE_PAGE_SIZES,
-} from "@/components/data-table";
-import { PackageDetails } from "@/components/PackageDetails";
-import { PackageLicenses } from "@/components/PackageLicenses";
-import { PackagePaths } from "@/components/PackagePaths";
-import { SeverityTag, type SeverityValue } from "@/components/SeverityTag";
-import { MarkdownText, PackageLink } from "@/components/Shared";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@/components/ui/data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import type WebAppOrtIssue from "@/models/WebAppOrtIssue";
 
 export interface IssuesTableProps {

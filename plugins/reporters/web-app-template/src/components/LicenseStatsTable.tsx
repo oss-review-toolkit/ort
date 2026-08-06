@@ -20,15 +20,14 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { JSX } from "react";
 import { useMemo } from "react";
-
+import { LicenseBadge } from "@/components/Shared";
+import { Button } from "@/components/ui/Button";
 import {
     DataTable,
     DataTableColumnHeader,
     DataTableFacetedFilter,
     LARGE_TABLE_PAGE_SIZES,
-} from "@/components/data-table";
-import { LicenseBadge } from "@/components/Shared";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/data-table";
 
 export interface LicenseStatRow {
     color: string;

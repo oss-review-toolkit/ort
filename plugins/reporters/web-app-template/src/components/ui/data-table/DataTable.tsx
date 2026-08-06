@@ -42,12 +42,11 @@ import {
 } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, FilterX } from "lucide-react";
 import { Fragment, type MouseEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
-
-import { DataTablePagination } from "@/components/data-table/DataTablePagination";
-import { DataTableViewOptions } from "@/components/data-table/DataTableViewOptions";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/Button";
+import { DataTablePagination } from "@/components/ui/data-table/DataTablePagination";
+import { DataTableViewOptions } from "@/components/ui/data-table/DataTableViewOptions";
+import { Input } from "@/components/ui/Input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { cn } from "@/lib/utils";
 
 export interface DataTableProps<TData> {

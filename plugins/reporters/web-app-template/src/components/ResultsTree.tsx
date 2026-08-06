@@ -22,9 +22,9 @@ import type { JSX, ReactNode } from "react";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { PackageDetailPanel } from "@/components/ResultsTable";
-import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/Button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/Collapsible";
+import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import type WebAppTreeNode from "@/models/WebAppTreeNode";

@@ -23,5 +23,5 @@ export { DataTableColumnSearch } from "./DataTableColumnSearch";
 export { DataTableFacetedFilter } from "./DataTableFacetedFilter";
 export { DataTablePagination } from "./DataTablePagination";
 export { DataTableViewOptions } from "./DataTableViewOptions";
-export { createExpandColumn } from "./expandColumn";
+export { createExpandColumn } from "./ExpandColumn";
 export { getActiveExpandedRowId } from "./expandedRow";

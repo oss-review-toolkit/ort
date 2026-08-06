@@ -20,13 +20,13 @@
 import type { Table } from "@tanstack/react-table";
 import { Settings2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/DropdownMenu";
 
 interface DataTableViewOptionsProps<TData> {
     table: Table<TData>;

@@ -21,16 +21,6 @@ import type { ColumnDef, Row, TableState } from "@tanstack/react-table";
 import { Lightbulb } from "lucide-react";
 import type { JSX, ReactNode } from "react";
 import { useCallback, useMemo } from "react";
-
-import {
-    createExpandColumn,
-    DataTable,
-    DataTableColumnHeader,
-    DataTableColumnSearch,
-    DataTableFacetedFilter,
-    getActiveExpandedRowId,
-    LARGE_TABLE_PAGE_SIZES,
-} from "@/components/data-table";
 import { PackageConfigurations } from "@/components/PackageConfigurations";
 import { PackageCurations } from "@/components/PackageCurations";
 import { PackageDetails } from "@/components/PackageDetails";
@@ -40,9 +30,18 @@ import { PackageScannerFindingsTable } from "@/components/PackageScannerFindings
 import { PackageScanResultsDetails } from "@/components/PackageScanResultsDetails";
 import { SeverityTag, type SeverityValue } from "@/components/SeverityTag";
 import { LicenseBadge, MarkdownText, PackageLink } from "@/components/Shared";
-import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/Button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/Collapsible";
+import {
+    createExpandColumn,
+    DataTable,
+    DataTableColumnHeader,
+    DataTableColumnSearch,
+    DataTableFacetedFilter,
+    getActiveExpandedRowId,
+    LARGE_TABLE_PAGE_SIZES,
+} from "@/components/ui/data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import type WebAppRuleViolation from "@/models/WebAppRuleViolation";
 
 export interface RuleViolationsTableProps {

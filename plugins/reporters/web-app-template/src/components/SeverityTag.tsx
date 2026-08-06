@@ -19,7 +19,7 @@
 
 import type { JSX } from "react";
 
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 
 export type SeverityValue = "ERROR" | "WARNING" | "HINT";

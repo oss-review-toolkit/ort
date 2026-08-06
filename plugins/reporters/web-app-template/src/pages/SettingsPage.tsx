@@ -24,9 +24,9 @@ import { useEffect, useState } from "react";
 
 import { RESULTS_TABLE_COLUMNS, type ResultsTableColumn } from "@/components/ResultsTable";
 import { useSettings } from "@/components/SettingsProvider";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Switch } from "@/components/ui/switch";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { Switch } from "@/components/ui/Switch";
 import { cn } from "@/lib/utils";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 

@@ -20,7 +20,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Fragment, type JSX, type ReactNode, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export interface PaginatedProps<T> {
     // Classes for the container that lays out the current page's items (e.g. a grid).

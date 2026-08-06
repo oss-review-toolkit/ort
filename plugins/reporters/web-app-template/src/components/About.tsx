@@ -21,7 +21,7 @@ import type { JSX } from "react";
 
 import { OrtLogo } from "@/components/OrtLogo";
 import { Url } from "@/components/Shared";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 
 // The About page: what this report is, plus ORT project links and license/attribution details.
 function About(): JSX.Element {

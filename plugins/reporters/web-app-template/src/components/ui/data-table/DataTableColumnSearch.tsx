@@ -21,9 +21,9 @@ import type { Column } from "@tanstack/react-table";
 import { Search } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover";
 import { cn } from "@/lib/utils";
 
 interface DataTableColumnSearchProps<TData, TValue> {

@@ -35,7 +35,7 @@ import type { JSX, ReactNode } from "react";
 import { useMemo } from "react";
 
 import { LICENSE_TERM_DEFINITIONS, Url } from "@/components/Shared";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/components/ui/Card";
 import { indexToRating, type VulnerabilityRatingValue } from "@/components/VulnerabilityRatingBadge";
 import { cn } from "@/lib/utils";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
