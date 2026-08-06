@@ -224,26 +224,50 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
     }
 }
 
-private fun createRequestForPurl(purl: PackageURL): VulnerabilitiesForPackageRequest =
-    if (purl.type == "github") {
+private fun createRequestForPurl(purl: PackageURL): VulnerabilitiesForPackageRequest {
+    val normalizedPurl = normalizePurlForOsv(purl)
+
+    return if (normalizedPurl.type == "github") {
         // Work around OSV not yet being able to match against GitHub purls.
         val pkg = org.ossreviewtoolkit.clients.osv.Package(
             ecosystem = "GIT", // See https://google.github.io/osv.dev/post-v1-query/#queries-for-git-records.
-            name = "https://github.com/${purl.namespace}/${purl.name}.git"
+            name = "https://github.com/${normalizedPurl.namespace}/${normalizedPurl.name}.git"
         )
 
         when {
             // The version may be missing for packages without a resolved version. In that case, fall back to a
             // package-only query, which lets OSV return all vulnerabilities for the package regardless of the version.
-            purl.version.isNullOrEmpty() -> VulnerabilitiesForPackageRequest(pkg = pkg)
+            normalizedPurl.version.isNullOrEmpty() -> VulnerabilitiesForPackageRequest(pkg = pkg)
 
-            purl.version.isSha1() -> VulnerabilitiesForPackageRequest(pkg = pkg, commit = purl.version)
+            normalizedPurl.version.isSha1() -> VulnerabilitiesForPackageRequest(
+                pkg = pkg,
+                commit = normalizedPurl.version
+            )
 
-            else -> VulnerabilitiesForPackageRequest(pkg = pkg, version = purl.version)
+            else -> VulnerabilitiesForPackageRequest(pkg = pkg, version = normalizedPurl.version)
         }
     } else {
-        VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = purl.toString()))
+        VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = normalizedPurl.toString()))
     }
+}
+
+/**
+ * Normalize [purl] into a form that OSV's querybatch endpoint will accept. Currently this only restructures
+ * Swift purls whose vendor prefix is encoded in the name instead of the namespace, which OSV rejects with
+ * "namespace is required". The convention is that SwiftPM package names always carry a
+ * vendor prefix separated by a dot
+ * (https://docs.swift.org/swiftpm/documentation/packagemanagerdocs/usingswiftpackageregistry), so splitting
+ * on the first '.' into namespace + name is safe.
+ */
+private fun normalizePurlForOsv(purl: PackageURL): PackageURL {
+    if (purl.type != "swift") {
+        return purl
+    }
+
+    val (newNamespace, newName) = purl.name.split('.', limit = 2)
+    val qualifiers = purl.qualifiers?.let { java.util.TreeMap<String, String>().apply { putAll(it) } }
+    return PackageURL(purl.type, newNamespace, newName, purl.version, qualifiers, purl.subpath)
+}
 
 private val SHA1_REGEX = Regex("^[0-9a-fA-F]{40}$")
 
