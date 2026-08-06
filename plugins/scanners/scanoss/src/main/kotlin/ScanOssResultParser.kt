@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Snippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.plugins.scanners.scanoss.ScanOssConfig.SnippetModel
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
@@ -50,7 +51,12 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
  * Generate a summary from the given SCANOSS [results], using [startTime], [endTime] as metadata. This variant can be
  * used if the result is not read from a local file.
  */
-internal fun generateSummary(startTime: Instant, endTime: Instant, results: List<ScanFileResult>): ScanSummary {
+internal fun generateSummary(
+    startTime: Instant,
+    endTime: Instant,
+    results: List<ScanFileResult>,
+    chosenSnippetModel: Set<SnippetModel>
+): ScanSummary {
     val licenseFindings = mutableSetOf<LicenseFinding>()
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
     val snippetFindings = mutableSetOf<SnippetFinding>()
@@ -83,7 +89,13 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
             }
 
             if (details.status == StatusType.identified) {
-                addLicenseAndCopyrightFindings(details, localFile)
+                if (SnippetModel.LICENSE_AND_COPYRIGHT_FINDING in chosenSnippetModel) {
+                    addLicenseAndCopyrightFindings(details, localFile)
+                }
+
+                if (SnippetModel.SNIPPET_FINDING in chosenSnippetModel) {
+                    addSnippetFindings(details, localFile)
+                }
             } else {
                 addSnippetFindings(details, localFile)
             }

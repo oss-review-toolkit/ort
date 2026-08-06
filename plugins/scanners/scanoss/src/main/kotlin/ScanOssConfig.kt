@@ -40,6 +40,12 @@ data class ScanOssConfig(
     val writeToStorage: Boolean,
 
     /**
+     * Whether to output chosen snippets as either license and copyright finding, as snippet finding, or both.
+     */
+    @OrtPluginOption(defaultValue = "LICENSE_AND_COPYRIGHT_FINDING")
+    val chosenSnippetModel: List<SnippetModel>,
+
+    /**
      * Whether to enable path obfuscation when sending file paths to the SCANOSS server.
      * When enabled, the actual file paths will be obfuscated in the requests to protect sensitive information.
      */
@@ -101,4 +107,15 @@ data class ScanOssConfig(
      */
     @OrtPluginOption(defaultValue = "0")
     val skipHeadersLimit: Int
-)
+) {
+    enum class SnippetModel {
+        LICENSE_AND_COPYRIGHT_FINDING,
+        SNIPPET_FINDING
+    }
+
+    init {
+        require(chosenSnippetModel.isNotEmpty()) {
+            "Chosen snippets must at least have one model as representation."
+        }
+    }
+}
