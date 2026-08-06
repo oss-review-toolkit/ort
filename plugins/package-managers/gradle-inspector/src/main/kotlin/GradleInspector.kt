@@ -144,7 +144,8 @@ class GradleInspector(
 
     private fun GradleConnector.getOrtDependencyTreeModel(
         projectDir: File,
-        issues: MutableList<Issue>
+        issues: MutableList<Issue>,
+        discoUrl: String?
     ): OrtDependencyTreeModel =
         forProjectDirectory(projectDir).connect().use { connection ->
             val stdout = ByteArrayOutputStream()
@@ -181,7 +182,7 @@ class GradleInspector(
 
                         config.javaVersion != null -> {
                             if (!JavaBootstrapper.isRunningOnJdk(config.javaVersion)) {
-                                JavaBootstrapper.installJdk("TEMURIN", config.javaVersion).onFailure { e ->
+                                JavaBootstrapper.installJdk("TEMURIN", config.javaVersion, discoUrl).onFailure { e ->
                                     issues += createAndLogIssue(e.collectMessages())
                                 }.getOrNull()
                             } else {
@@ -246,7 +247,7 @@ class GradleInspector(
 
         logger.info { "Resolving the dependency tree model via IPC from the Gradle Daemon..." }
 
-        val dependencyTreeModel = gradleConnector.getOrtDependencyTreeModel(projectDir, issues)
+        val dependencyTreeModel = gradleConnector.getOrtDependencyTreeModel(projectDir, issues, analyzerConfig.discoUrl)
         dependencyHandler.setTreeModel(dependencyTreeModel)
 
         logger.info { "Successfully retrieved the dependency tree model from the Gradle Daemon." }

@@ -117,6 +117,7 @@ class OrtConfigurationTest : WordSpec({
             with(ortConfig.analyzer) {
                 allowDynamicVersions shouldBe true
                 skipExcluded shouldBe true
+                discoUrl shouldBe "https://foojay.example.com/disco/"
 
                 enabledPackageManagers should containExactlyInAnyOrder("Gradle")
                 disabledPackageManagers should containExactlyInAnyOrder("Maven", "NPM")
