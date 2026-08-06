@@ -145,6 +145,7 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
         put("vendor", details.vendor)
         put("version", details.version)
         put("latest", details.latest)
+        put("status", details.status.toString())
 
         put("file_hash", details.fileHash)
         if (details.fileUrl.isNotBlank()) put("file_url", details.fileUrl)
