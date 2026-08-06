@@ -67,6 +67,7 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.common.unquote
+import org.ossreviewtoolkit.utils.ort.FoojayJdkService
 import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
@@ -100,7 +101,12 @@ data class GradleConfig(
      * The directory of the Java home to use when analyzing projects. By default, the same Java home as for ORT itself
      * is used.
      */
-    val javaHome: String?
+    val javaHome: String?,
+
+    /**
+     * URL for the JDK download repository. If unset, the default URL is used.
+     */
+    val jdkRepositoryUrl: String?
 )
 
 /**
@@ -235,10 +241,12 @@ class Gradle(
                             addProgressListener(ProgressListener { logger.debug(it.displayName) })
                         }
 
+                        val bootstrapper = JavaBootstrapper(FoojayJdkService.create(config.jdkRepositoryUrl))
+
                         val javaHome = config.javaVersion
                             ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
                             ?.let {
-                                JavaBootstrapper.installJdk("TEMURIN", it).onFailure { e ->
+                                bootstrapper.installJdk("TEMURIN", it).onFailure { e ->
                                     issues += createAndLogIssue(e.collectMessages())
                                 }.getOrNull()
                             } ?: config.javaHome?.let { File(it) }
