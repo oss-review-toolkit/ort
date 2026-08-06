@@ -20,10 +20,13 @@
 import type { JSX } from "react";
 import { useEffect, useMemo, useState } from "react";
 
+import { payloadToEvaluatedModel } from "@/lib/reportData";
 import WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import AppPage from "@/pages/AppPage";
 import ErrorPage from "@/pages/ErrorPage";
 import LoadingPage from "@/pages/LoadingPage";
+import type { ReportWorkerRequest, ReportWorkerResponse } from "@/reportDataWorker";
+import ReportDataWorker from "@/reportDataWorker?worker&inline";
 import type { EvaluatedModel } from "@/types/evaluatedModelData";
 import "@/App.css";
 
@@ -33,25 +36,19 @@ type LoaderStatus =
     | { state: "ready"; raw: EvaluatedModel }
     | { state: "error"; message: string; submessage?: string };
 
+type ReportPayload = { kind: "placeholder" } | { kind: "data"; payload: string; gzip: boolean };
+
+type ProgressHandler = (text: string, percent: number) => void;
+
 // The placeholder string is exactly 27 characters long. Comparing by length avoids embedding the
 // literal placeholder text in the JS bundle, which would otherwise inflate the post-build
 // occurrence count beyond the single occurrence inside the data script element.
 const PLACEHOLDER_LENGTH = 27;
 
-async function decodeBase64Gzip(b64: string): Promise<string> {
-    const binaryString = atob(b64);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-
-    const stream = new Blob([bytes]).stream();
-    const decompressedStream = stream.pipeThrough(new DecompressionStream("gzip"));
-    const response = new Response(decompressedStream);
-    return await response.text();
-}
-
-async function readReportData(): Promise<EvaluatedModel | "placeholder"> {
+// Read the embedded report payload off the DOM and remove the script element afterwards. For a large
+// report the script's text is tens or hundreds of MB; dropping the node lets that string be garbage
+// collected while the worker parses its own copy, roughly halving peak memory during load.
+function readReportPayload(): ReportPayload {
     const script = document.getElementById("ort-report-data") as HTMLScriptElement | null;
     if (!script) {
         throw new Error("Report data script element #ort-report-data not found in document.");
@@ -59,20 +56,84 @@ async function readReportData(): Promise<EvaluatedModel | "placeholder"> {
 
     const raw = (script.textContent ?? "").trim();
     if (raw === "" || raw.length === PLACEHOLDER_LENGTH) {
-        return "placeholder";
+        return { kind: "placeholder" };
     }
 
     const type = script.type;
-    let json: string;
+    let gzip: boolean;
     if (type === "application/gzip") {
-        json = await decodeBase64Gzip(raw);
+        gzip = true;
     } else if (type === "application/json" || type === "") {
-        json = raw;
+        gzip = false;
     } else {
         throw new Error(`Unsupported report data type "${type}".`);
     }
 
-    return JSON.parse(json) as EvaluatedModel;
+    script.remove();
+    return { kind: "data", payload: raw, gzip };
+}
+
+// Progress from the single in-flight load is forwarded to whichever App mount is currently active.
+// StrictMode mounts App twice in dev, so the sink is swapped per mount rather than bound to one.
+let activeProgress: ProgressHandler | null = null;
+const emitProgress: ProgressHandler = (text, percent) => activeProgress?.(text, percent);
+
+// Decode the payload into an EvaluatedModel. The decode (base64 + gzip inflate + JSON.parse) is the
+// single biggest main-thread stall for large reports, so it runs in an inlined Web Worker to keep the
+// tab responsive and let the progress bar animate. Browsers without Worker/DecompressionStream fall
+// back to decoding on the main thread. The worker terminates itself once it reports done or error.
+function decodeReport(payload: string, gzip: boolean): Promise<EvaluatedModel> {
+    if (typeof Worker === "undefined" || typeof DecompressionStream === "undefined") {
+        emitProgress("Parsing report data...", 45);
+        return payloadToEvaluatedModel(payload, gzip);
+    }
+
+    return new Promise<EvaluatedModel>((resolve, reject) => {
+        const worker = new ReportDataWorker();
+
+        worker.onmessage = (event: MessageEvent<ReportWorkerResponse>) => {
+            const message = event.data;
+            if (message.type === "progress") {
+                emitProgress(message.text, message.percent);
+            } else if (message.type === "done") {
+                worker.terminate();
+                resolve(message.data as EvaluatedModel);
+            } else {
+                worker.terminate();
+                reject(new Error(message.message));
+            }
+        };
+        worker.onerror = (event: ErrorEvent) => {
+            worker.terminate();
+            reject(new Error(event.message || "Report data worker failed."));
+        };
+
+        worker.postMessage({ payload, gzip } satisfies ReportWorkerRequest);
+    });
+}
+
+// readReportPayload removes the script element, so the load must run exactly once - but StrictMode
+// double-invokes effects in dev and HMR re-executes this module. Cache the single load promise on
+// window so remounts and hot reloads reuse it instead of re-reading the now-removed script element.
+type ReportLoad = Promise<EvaluatedModel | "placeholder">;
+const LOAD_KEY = "__ortReportDataLoad__";
+
+function startReportLoad(): ReportLoad {
+    const payload = readReportPayload();
+    if (payload.kind === "placeholder") {
+        return Promise.resolve("placeholder");
+    }
+    return decodeReport(payload.payload, payload.gzip);
+}
+
+function loadReportOnce(): ReportLoad {
+    const store = window as unknown as Record<string, ReportLoad | undefined>;
+    let load = store[LOAD_KEY];
+    if (!load) {
+        load = startReportLoad();
+        store[LOAD_KEY] = load;
+    }
+    return load;
 }
 
 export default function App(): JSX.Element {
@@ -85,17 +146,18 @@ export default function App(): JSX.Element {
     useEffect(() => {
         let cancelled = false;
 
-        const run = async (): Promise<void> => {
-            try {
-                if (!cancelled) {
-                    setStatus({ state: "loading", text: "Reading report data...", percent: 30 });
-                }
-                await Promise.resolve();
-                const data = await readReportData();
+        setStatus({ state: "loading", text: "Reading report data...", percent: 30 });
+        activeProgress = (text, percent) => {
+            if (!cancelled) {
+                setStatus({ state: "loading", text, percent });
+            }
+        };
+
+        loadReportOnce()
+            .then((data) => {
                 if (cancelled) {
                     return;
                 }
-
                 if (data === "placeholder") {
                     setStatus({
                         state: "error",
@@ -106,14 +168,9 @@ export default function App(): JSX.Element {
                     });
                     return;
                 }
-
-                setStatus({ state: "loading", text: "Processing report data...", percent: 70 });
-                await Promise.resolve();
-                if (cancelled) {
-                    return;
-                }
                 setStatus({ state: "ready", raw: data });
-            } catch (err) {
+            })
+            .catch((err: unknown) => {
                 if (cancelled) {
                     return;
                 }
@@ -123,13 +180,11 @@ export default function App(): JSX.Element {
                     message: "Oops, something went wrong...",
                     submessage: message,
                 });
-            }
-        };
-
-        void run();
+            });
 
         return () => {
             cancelled = true;
+            activeProgress = null;
         };
     }, []);
 
