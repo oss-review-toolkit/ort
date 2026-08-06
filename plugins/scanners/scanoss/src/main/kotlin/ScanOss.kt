@@ -116,7 +116,7 @@ class ScanOss(
 
         val results = JsonUtils.toScanFileResults(rawResults)
         val endTime = Instant.now()
-        return generateSummary(startTime, endTime, results)
+        return generateSummary(startTime, endTime, results, config.chosenSnippetModel.toSet())
     }
 
     data class ProcessedRules(
