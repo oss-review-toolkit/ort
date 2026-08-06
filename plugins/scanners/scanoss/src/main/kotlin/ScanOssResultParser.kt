@@ -55,6 +55,23 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
     val snippetFindings = mutableSetOf<SnippetFinding>()
 
+    fun addLicenseAndCopyrightFindings(details: ScanFileDetails, localFile: String) {
+        logger.info {
+            "Adding '${details.status}' findings for '$localFile' as license and copyright findings."
+        }
+
+        licenseFindings += getLicenseFindings(details, localFile)
+        copyrightFindings += getCopyrightFindings(details, localFile)
+    }
+
+    fun addSnippetFindings(details: ScanFileDetails, localFile: String) {
+        logger.info {
+            "Adding '${details.status}' findings for '$localFile' as snippet findings."
+        }
+
+        snippetFindings += getSnippetFindings(details, localFile)
+    }
+
     results.forEach { result ->
         result.fileDetails.filterNot { it.matchType == MatchType.none }.forEach { details ->
             val localFile = requireNotNull(result.filePath)
@@ -66,18 +83,9 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
             }
 
             if (details.status == StatusType.identified) {
-                logger.info {
-                    "Adding '${details.status}' findings for '$localFile' as license and copyright findings."
-                }
-
-                licenseFindings += getLicenseFindings(details, localFile)
-                copyrightFindings += getCopyrightFindings(details, localFile)
+                addLicenseAndCopyrightFindings(details, localFile)
             } else {
-                logger.info {
-                    "Adding '${details.status}' findings for '$localFile' as snippet findings."
-                }
-
-                snippetFindings += getSnippetFindings(details, localFile)
+                addSnippetFindings(details, localFile)
             }
         }
     }
