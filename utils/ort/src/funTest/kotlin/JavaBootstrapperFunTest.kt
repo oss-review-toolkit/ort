@@ -26,6 +26,7 @@ import io.kotest.matchers.shouldBe
 
 import io.mockk.every
 import io.mockk.mockkObject
+import io.mockk.verify
 
 import okhttp3.Cache
 
@@ -45,14 +46,41 @@ class JavaBootstrapperFunTest : StringSpec({
             cache(tempCache)
         }
 
-        mockkObject(JavaBootstrapper) {
-            every { JavaBootstrapper.discoService } returns DiscoService.create(client = tempCacheClient)
+        val service = DiscoService.create(client = tempCacheClient)
+
+        mockkObject(DiscoService.Companion) {
+            every { DiscoService.create(null, any()) } returns service
 
             JavaBootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
                 it.distribution shouldBe "temurin"
                 it.jdkVersion shouldBe 21
                 Os.Name.fromString(it.operatingSystem) shouldBe Os.Name.current
                 Os.Arch.fromString(it.architecture) shouldBe Os.Arch.current
+            }
+        }
+    }
+
+    "A custom Disco URL is used by DiscoService" {
+        val tempCache = Cache(tempdir(), 1.mebibytes)
+
+        val tempCacheClient = OkHttpClientHelper.buildClient {
+            cache(tempCache)
+        }
+
+        val service = DiscoService.create(client = tempCacheClient)
+        val customUrl = "https://custom.foojay.example.com/disco/"
+
+        mockkObject(OkHttpClientHelper) {
+            every { OkHttpClientHelper.buildClient(any()) } returns tempCacheClient
+
+            mockkObject(DiscoService.Companion) {
+                every { DiscoService.create(customUrl, any()) } returns service
+
+                JavaBootstrapper.findJdkPackage("TEMURIN", "21", customUrl) shouldBeSuccess {
+                    it.jdkVersion shouldBe 21
+                }
+
+                verify { DiscoService.create(customUrl, tempCacheClient) }
             }
         }
     }
