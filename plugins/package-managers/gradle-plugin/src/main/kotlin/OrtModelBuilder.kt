@@ -71,7 +71,13 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
         project.repositories.associateNamesWithUrlsTo(repositories)
 
-        val relevantConfigurations = project.configurations.filter { it.isRelevant() }
+        val excludedScopes = project.rootProject.scopePatterns(OrtScopePatternType.EXCLUDED)
+        val includedScopes = project.rootProject.scopePatterns(OrtScopePatternType.INCLUDED)
+
+        val relevantConfigurations = project.configurations.filter { config ->
+            config.isRelevant() && config.name.isOrtScopeIncluded(excludedScopes, includedScopes)
+        }
+
         val componentsForId = mutableMapOf<OrtComponentIdentifier, OrtComponent>()
 
         val ortConfigurations = relevantConfigurations.mapNotNull { config ->

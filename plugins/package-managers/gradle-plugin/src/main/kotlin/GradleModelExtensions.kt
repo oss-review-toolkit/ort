@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
 import OrtRepository
 
+import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.ArtifactRepository
@@ -61,6 +62,24 @@ internal fun Configuration.isRelevant(): Boolean {
     val isDependencySources = name == "dependencySources" || name.endsWith("DependencySources")
 
     return canBeResolved && !isDeprecatedConfiguration && !isDependenciesMetadata && !isDependencySources
+}
+
+internal enum class OrtScopePatternType { EXCLUDED, INCLUDED }
+
+internal fun Project.scopePatterns(type: OrtScopePatternType): List<String> {
+    val name = when (type) {
+        OrtScopePatternType.EXCLUDED -> "ortExcludedScopes"
+        OrtScopePatternType.INCLUDED -> "ortIncludedScopes"
+    }
+
+    val ext = rootProject.extensions.extraProperties
+    return (ext.get(name) as? List<*>)?.filterIsInstance<String>().orEmpty()
+}
+
+internal fun String.isOrtScopeIncluded(excludes: List<String>, includes: List<String>): Boolean {
+    val isIncluded = includes.isEmpty() || includes.any { Regex(it).matches(this) }
+    val isExcluded = excludes.any { Regex(it).matches(this) }
+    return isIncluded && !isExcluded
 }
 
 /**
