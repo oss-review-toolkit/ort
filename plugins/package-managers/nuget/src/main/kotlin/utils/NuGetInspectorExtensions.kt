@@ -77,7 +77,7 @@ internal fun NuGetInspector.Result.toOrtProject(
         vcs = VcsInfo.EMPTY,
         authors = emptySet(),
         vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile),
-        declaredLicenses = emptySet(),
+        declaredLicenses = setOfNotNull(packages.first().licenseExpression),
         homepageUrl = "",
         scopeDependencies = scopes
     )
