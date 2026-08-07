@@ -20,7 +20,7 @@ project:
     dependencies:
     - id: "GitHubAction:actions:attest-build-provenance:v4"
       dependencies:
-      - id: "GitHubAction:actions:attest:a1948c3f048ba23858d222213b7c278aabede763"
+      - id: "GitHubAction:actions:attest:508db95dd578ae2727ebd6217d5ba78e4fbda05d"
     - id: "GitHubAction:actions:upload-pages-artifact:v3"
       dependencies:
       - id: "GitHubAction:actions:upload-artifact:v4"
@@ -33,8 +33,8 @@ project:
       - id: "GitHubAction:actions:setup-node:a0853c24544627f65ddf259abe73b1d18a591444"
       - id: "GitHubAction:reviewdog:action-setup:d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f"
 packages:
-- id: "GitHubAction:actions:attest:a1948c3f048ba23858d222213b7c278aabede763"
-  purl: "pkg:github/actions/attest@a1948c3f048ba23858d222213b7c278aabede763"
+- id: "GitHubAction:actions:attest:508db95dd578ae2727ebd6217d5ba78e4fbda05d"
+  purl: "pkg:github/actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -52,12 +52,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/actions/attest.git"
-    revision: "a1948c3f048ba23858d222213b7c278aabede763"
+    revision: "508db95dd578ae2727ebd6217d5ba78e4fbda05d"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/actions/attest.git"
-    revision: "a1948c3f048ba23858d222213b7c278aabede763"
+    revision: "508db95dd578ae2727ebd6217d5ba78e4fbda05d"
     path: ""
   source_code_origins:
   - "VCS"
