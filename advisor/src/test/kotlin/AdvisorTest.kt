@@ -42,6 +42,9 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectHealth
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
@@ -107,6 +110,39 @@ class AdvisorTest : WordSpec({
             val expectedResults = mapOf(
                 pkg1.id to listOf(advisorResult1, advisorResult2),
                 pkg2.id to listOf(advisorResult3, advisorResult4)
+            )
+
+            val advisor = createAdvisor(listOf(provider1, provider2))
+
+            val result = advisor.advise(ortResult)
+
+            result.advisor shouldNotBeNull {
+                results shouldBe expectedResults
+            }
+        }
+
+        "return the merged results of multiple advice providers including project health data" {
+            val pkg1 = createPackage(1)
+            val packages = setOf(pkg1)
+            val ortResult = createOrtResultWithPackages(packages)
+            val projectPackages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
+
+            val advisorResult1 = mockkAdvisorResult()
+            val healthInfo = listOf(ProjectHealth(name = "CodeQuality", value = 90.0, source = "TestPlugin"))
+            val advisorResult2 = mockkAdvisorResult(projectHealths = healthInfo)
+
+            val provider1 = mockkAdviceProvider()
+            val provider2 = mockkAdviceProvider("HealthProvider")
+
+            coEvery { provider1.retrievePackageFindings(projectPackages + packages) } returns mapOf(
+                pkg1 to advisorResult1
+            )
+            coEvery { provider2.retrievePackageFindings(projectPackages + packages) } returns mapOf(
+                pkg1 to advisorResult2
+            )
+
+            val expectedResults = mapOf(
+                pkg1.id to listOf(advisorResult1, advisorResult2)
             )
 
             val advisor = createAdvisor(listOf(provider1, provider2))
@@ -227,12 +263,12 @@ class AdvisorTest : WordSpec({
 /**
  * Create a test [Advisor] instance that is configured with the given [providers].
  */
-private fun createAdvisor(providers: List<AdviceProvider>): Advisor {
+private fun createAdvisor(providers: List<AdviceProvider> = emptyList()): Advisor {
     val advisorConfig = AdvisorConfiguration()
 
     val factories = providers.map { provider ->
         val factory = mockk<AdviceProviderFactory>()
-        every { factory.create(PluginConfig(emptyMap(), emptyMap())) } returns provider
+        every { factory.create(any()) } returns provider
         factory
     }
 
@@ -256,15 +292,23 @@ private fun createOrtResultWithPackages(packages: Set<Package>): OrtResult =
  * Create a test [Package] based on the given [index].
  */
 private fun createPackage(index: Int): Package =
-    Package.EMPTY.copy(id = Identifier.EMPTY.copy(name = "test-package$index"))
+    Package.EMPTY.copy(
+        id = Identifier.EMPTY.copy(name = "test-package$index"),
+        vcsProcessed = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/oss-review-toolkit/ort.git",
+            revision = "main"
+        )
+    )
 
 private fun mockkAdviceProvider(displayName: String = "Provider"): AdviceProvider =
     mockk<AdviceProvider>().apply {
         every { descriptor } returns PluginDescriptor(displayName, displayName, "", options = emptyList())
     }
 
-private fun mockkAdvisorResult(): AdvisorResult =
+private fun mockkAdvisorResult(projectHealths: List<ProjectHealth> = emptyList()): AdvisorResult =
     mockk<AdvisorResult>().apply {
         every { vulnerabilities } returns emptyList()
+        every { projectHealth } returns projectHealths
         every { copy(vulnerabilities = any()) } returns this
     }

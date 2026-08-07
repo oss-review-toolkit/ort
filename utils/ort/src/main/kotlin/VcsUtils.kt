@@ -98,3 +98,23 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 
     return url
 }
+
+/**
+ * Split a [normalized VCS URL][normalizedVcsUrl] into these parts:
+ * 1. Hostname
+ * 2. Repository owner / organization
+ * 3. Repository name
+ */
+fun getVcsUrlParts(normalizedVcsUrl: String?): List<String>? {
+    val pattern = """^[a-z]+://(?:git@)?([^/.]+(?:\.[^/.]+)+)/([^/]+)/([^/]+?)(?:\.git)?$""".toRegex()
+
+    return normalizedVcsUrl?.let {
+        pattern.find(it)?.groupValues?.drop(1)
+    }
+}
+
+/**
+ * Returns the Repository owner and name, concatenated with a forward slash ("/") from a [normalized VCS URL][normalizedVcsUrl]
+ */
+fun getVcsUrlOwnerAndName(normalizedVcsUrl: String?): String? =
+    getVcsUrlParts(normalizedVcsUrl)?.drop(1)?.joinToString("/")

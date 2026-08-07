@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
 import java.nio.file.Paths
@@ -50,8 +51,8 @@ class VcsUtilsTest : WordSpec({
             val packages = mapOf(
                 "git+ssh://git@github.com/logicalparadox/idris.git"
                     to "ssh://git@github.com/logicalparadox/idris.git",
-                "git@github.com:oss-review-toolkit/ort.git"
-                    to "ssh://git@github.com/oss-review-toolkit/ort.git",
+                "git@github.com:oss-review-toolkit/repo.git"
+                    to "ssh://git@github.com/oss-review-toolkit/repo.git",
                 "git@git.sr.ht:~user/repo"
                     to "ssh://git@git.sr.ht/~user/repo",
                 "ssh://user@gerrit.server.com:29418/parent/project"
@@ -182,6 +183,58 @@ class VcsUtilsTest : WordSpec({
             val url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml"
 
             normalizeVcsUrl(url) shouldBe url
+        }
+    }
+
+    "getVcsUrlParts" should {
+        "match basic GitHub https URLs" {
+            getVcsUrlParts("https://github.com/org/repo") shouldBe
+                listOf("github.com", "org", "repo")
+        }
+
+        "match basic GitHub https URLs with '.git' extension" {
+            getVcsUrlParts("https://github.com/org/repo.git") shouldBe
+                listOf("github.com", "org", "repo")
+        }
+
+        "match basic GitHub ssh URLs" {
+            getVcsUrlParts("ssh://git@github.com/org/repo") shouldBe
+                listOf("github.com", "org", "repo")
+        }
+
+        "match basic GitHub ssh URLs with '.git' extension" {
+            getVcsUrlParts("ssh://git@github.com/org/repo.git") shouldBe
+                listOf("github.com", "org", "repo")
+        }
+
+        "match basic GitHub https URLs with dots in repo name" {
+            getVcsUrlParts("https://github.com/es-shims/Object.entries") shouldBe
+                listOf("github.com", "es-shims", "Object.entries")
+        }
+
+        "match basic GitHub https URLs with dots in repo name and '.git' extension" {
+            getVcsUrlParts("https://github.com/es-shims/Object.entries.git") shouldBe
+                listOf("github.com", "es-shims", "Object.entries")
+        }
+
+        "match more complex domains" {
+            getVcsUrlParts("https://non-existing.git.hub1337.org/a/b") shouldBe
+                listOf("non-existing.git.hub1337.org", "a", "b")
+        }
+
+        "not crash on null values" {
+            getVcsUrlParts(null).shouldBeNull()
+        }
+
+        "return null for non-URLs" {
+            getVcsUrlParts("dwao98ijhdwa8io9wadihdwa").shouldBeNull()
+        }
+    }
+
+    "getVcsUrlOwnerAndName" should {
+        "concatenate repository owner and name" {
+            getVcsUrlOwnerAndName("https://github.com/org/repo.git") shouldBe
+                "org/repo"
         }
     }
 })
