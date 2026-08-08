@@ -291,6 +291,7 @@ ort:
         options:
           apiUrl: 'https://api.osskb.org/'
           writeToStorage: true
+          chosenSnippetModel: 'LICENSE_AND_COPYRIGHT_FINDING'
           enablePathObfuscation: false
           # Snippet tuning parameters (all optional, these are the defaults):
           minSnippetHits: 5

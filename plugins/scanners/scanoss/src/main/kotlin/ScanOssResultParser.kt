@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Snippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.plugins.scanners.scanoss.ScanOssConfig.SnippetModel
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
@@ -50,10 +51,32 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
  * Generate a summary from the given SCANOSS [results], using [startTime], [endTime] as metadata. This variant can be
  * used if the result is not read from a local file.
  */
-internal fun generateSummary(startTime: Instant, endTime: Instant, results: List<ScanFileResult>): ScanSummary {
+internal fun generateSummary(
+    startTime: Instant,
+    endTime: Instant,
+    results: List<ScanFileResult>,
+    chosenSnippetModel: Set<SnippetModel>
+): ScanSummary {
     val licenseFindings = mutableSetOf<LicenseFinding>()
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
     val snippetFindings = mutableSetOf<SnippetFinding>()
+
+    fun addLicenseAndCopyrightFindings(details: ScanFileDetails, localFile: String) {
+        logger.info {
+            "Adding '${details.status}' findings for '$localFile' as license and copyright findings."
+        }
+
+        licenseFindings += getLicenseFindings(details, localFile)
+        copyrightFindings += getCopyrightFindings(details, localFile)
+    }
+
+    fun addSnippetFindings(details: ScanFileDetails, localFile: String) {
+        logger.info {
+            "Adding '${details.status}' findings for '$localFile' as snippet findings."
+        }
+
+        snippetFindings += getSnippetFindings(details, localFile)
+    }
 
     results.forEach { result ->
         result.fileDetails.filterNot { it.matchType == MatchType.none }.forEach { details ->
@@ -65,13 +88,16 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
                 else -> logger.warn { "Unknown match type '${details.matchType}'." }
             }
 
-            if (details.status == StatusType.pending) {
-                logger.info { "Adding snippet for '$localFile' as identification is pending." }
-                snippetFindings += getSnippetFindings(details, localFile)
+            if (details.status == StatusType.identified) {
+                if (SnippetModel.LICENSE_AND_COPYRIGHT_FINDING in chosenSnippetModel) {
+                    addLicenseAndCopyrightFindings(details, localFile)
+                }
+
+                if (SnippetModel.SNIPPET_FINDING in chosenSnippetModel) {
+                    addSnippetFindings(details, localFile)
+                }
             } else {
-                logger.info { "File '$localFile' was identified, not including in snippet findings." }
-                licenseFindings += getLicenseFindings(details, result.filePath)
-                copyrightFindings += getCopyrightFindings(details, result.filePath)
+                addSnippetFindings(details, localFile)
             }
         }
     }

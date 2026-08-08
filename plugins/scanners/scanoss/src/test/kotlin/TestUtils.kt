@@ -57,6 +57,7 @@ internal fun createScanOssConfig(
         apiUrl = apiUrl,
         apiKey = apiKey,
         writeToStorage = writeToStorage,
+        chosenSnippetModel = listOf(ScanOssConfig.SnippetModel.LICENSE_AND_COPYRIGHT_FINDING),
         enablePathObfuscation = enablePathObfuscation,
         minSnippetHits = minSnippetHits,
         minSnippetLines = minSnippetLines,

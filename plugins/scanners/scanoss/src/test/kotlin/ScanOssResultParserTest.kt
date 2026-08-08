@@ -50,6 +50,8 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.scanners.scanoss.ScanOssConfig.SnippetModel
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
@@ -335,9 +337,12 @@ class ScanOssResultParserTest : WordSpec({
     }
 })
 
-private fun generateSummary(results: List<ScanFileResult>): ScanSummary {
+private fun generateSummary(
+    results: List<ScanFileResult>,
+    chosenSnippetModel: Set<SnippetModel> = enumSetOf(SnippetModel.LICENSE_AND_COPYRIGHT_FINDING)
+): ScanSummary {
     val time = Instant.now()
-    return generateSummary(time, time, results)
+    return generateSummary(time, time, results, chosenSnippetModel)
 }
 
 private val dummyDetails = ScanFileDetails(
