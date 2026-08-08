@@ -127,7 +127,15 @@ internal class CycloneDxModelMapper(
             )
 
             val allDirectDependencies = projects.flatMapTo(mutableSetOf()) { project ->
-                input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
+                input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1) {
+                    !input.ortResult.isExcluded(it.id)
+                }
+            }
+
+            projects.forEach { project ->
+                val dependencyType = DependencyType.DIRECT.takeIf { project.id in allDirectDependencies }
+                    ?: DependencyType.TRANSITIVE
+                addComponent(project.toPackage().copy(purl = project.id.toPurl()), dependencyType)
             }
 
             input.ortResult.getPackages(omitExcluded = true)

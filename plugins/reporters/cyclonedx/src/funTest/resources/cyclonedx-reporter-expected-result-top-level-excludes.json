@@ -18,7 +18,7 @@
       "type" : "application",
       "bom-ref" : "https://github.com/oss-review-toolkit/ort.git@main",
       "group" : "@ort",
-      "name" : "root-test-project",
+      "name" : "https://github.com/oss-review-toolkit/ort.git",
       "version" : "1.0",
       "licenses" : [
         {
@@ -111,26 +111,6 @@
           "url": "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "properties": [
-        {
-          "name": "ort:effectiveLicense",
-          "value": "NONE"
-        },
-        {
-          "name": "ort:dependencyType",
-          "value": "transitive"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "bom-ref": "NPM:@ort:root-test-project:1.0",
-      "group": "@ort",
-      "name": "root-test-project",
-      "version": "1.0",
-      "description": "",
-      "scope": "required",
-      "purl": "pkg:npm/%40ort/root-test-project@1.0",
       "properties": [
         {
           "name": "ort:effectiveLicense",
@@ -514,28 +494,6 @@
         "NPM:@ort:license-file-and-additional-licenses:1.0",
         "NPM:@ort:concluded-license:1.0",
         "NPM:@ort:declared-license:1.0"
-      ]
-    }
-  ],
-  "vulnerabilities" : [
-    {
-      "id" : "CVE-2021-1234",
-      "ratings" : [
-        {
-          "source" : {
-            "url" : "https://cves.example.org/cve1"
-          },
-          "score" : 6.0,
-          "severity" : "medium",
-          "method" : "CVSSv2"
-        }
-      ],
-      "description" : "A vulnerability description",
-      "detail" : "A vulnerability summary",
-      "affects" : [
-        {
-          "ref" : "NPM:@ort:declared-license:1.0"
-        }
       ]
     }
   ]

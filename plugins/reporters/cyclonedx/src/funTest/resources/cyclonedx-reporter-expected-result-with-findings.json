@@ -437,7 +437,8 @@
         "NPM:@ort:license-file:1.0",
         "NPM:@ort:license-file-and-additional-licenses:1.0",
         "NPM:@ort:concluded-license:1.0",
-        "NPM:@ort:declared-license:1.0"
+        "NPM:@ort:declared-license:1.0",
+        "NPM:@ort:test:0.1.0"
       ]
     }
   ],
