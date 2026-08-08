@@ -32,11 +32,9 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.SpdxDocumentFile
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.SpdxDocumentFileFactory
-import org.ossreviewtoolkit.utils.authentication.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.addBasicAuthorization
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.downloadFile
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
@@ -346,14 +344,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
 
     val tempDir = createOrtTempDir()
     return try {
-        val client = OkHttpClientHelper.buildClient {
-            // Use the authenticator also to request preemptive authentication.
-            val auth = requestPasswordAuthentication(uri)
-
-            if (auth != null) {
-                addBasicAuthorization(auth.userName, String(auth.password))
-            }
-        }
+        val client = OkHttpClientHelper.buildClient()
 
         val file = client.downloadFile(uri.toString(), tempDir).getOrElse {
             return ResolutionResult(
