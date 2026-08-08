@@ -144,6 +144,7 @@ class ScanOssResultParserTest : WordSpec({
                                 "vendor" to "vdurmont",
                                 "version" to "3.1.0",
                                 "latest" to "3.1.0",
+                                "status" to "pending",
                                 "file_hash" to "6ff2427335b985212c9b79dfa795799f",
                                 "file_url" to "https://osskb.org/api/file_contents/6ff2427335b985212c9b79dfa795799f",
                                 "url_hash" to "b92cd7e4d588747588d1b5fe1f8c664c",
@@ -181,12 +182,17 @@ class ScanOssResultParserTest : WordSpec({
                         "vendor" to "kdrag0n",
                         "version" to "15",
                         "latest" to "17",
+                        "status" to "pending",
                         "file_hash" to "581734935cfbe570d280a1265aaa2a6b",
                         "file_url" to "https://api.scanoss.com/file_contents/581734935cfbe570d280a1265aaa2a6b",
                         "url_hash" to "a9c1c67f0930dc42dbd40c29e565bcdd",
                         "release_date" to "2019-02-21",
                         "source_hash" to "45dd1e50621a8a32f88fbe0251a470ab",
-                        "related_purls" to "pkg:github/fake/fake_repository"
+                        "related_purls" to "pkg:github/fake/fake_repository",
+                        "copyright_details" to """
+                            Copyright (c) 2020 Composer
+                            Copyright (c) 2022 Composer
+                        """.trimIndent()
                     )
 
                 // Check OSS location.
@@ -362,5 +368,14 @@ private val dummyDetails = ScanFileDetails(
     arrayOf<LicenseDetails>(),
     arrayOf<QualityDetails>(),
     arrayOf<VulnerabilityDetails>(),
-    arrayOf<CopyrightDetails>()
+    arrayOf(
+        CopyrightDetails(
+            "Copyright (c) 2020 Composer",
+            "license_file"
+        ),
+        CopyrightDetails(
+            "Copyright (c) 2022 Composer",
+            "license_file"
+        )
+    )
 )

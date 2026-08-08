@@ -119,6 +119,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
                                 "vendor" to "scanoss",
                                 "version" to "e654028",
                                 "latest" to "b12f8ee",
+                                "status" to "pending",
                                 "file_hash" to "871fb0c5188c2f620d9b997e225b0095",
                                 "file_url" to "https://osskb.org/api/file_contents/871fb0c5188c2f620d9b997e225b0095",
                                 "url_hash" to "37faa38a820322fa93bf7a8fa8290bb8",
