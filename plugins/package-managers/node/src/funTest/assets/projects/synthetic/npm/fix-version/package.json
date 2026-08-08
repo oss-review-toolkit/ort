@@ -1,0 +1,12 @@
+{
+  "name": "node-version-test",
+  "version": "1.0.0",
+  "description": "A project that installs on Node 14 but fails on Node 16+",
+  "main": "index.js",
+  "scripts": {
+    "build": "node-sass style.scss style.css"
+  },
+  "dependencies": {
+    "node-sass": "4.14.1"
+  }
+}
