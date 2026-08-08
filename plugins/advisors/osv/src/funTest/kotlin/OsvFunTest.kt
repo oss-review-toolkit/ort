@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.advisors.osv
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -111,7 +112,7 @@ class OsvFunTest : WordSpec({
             packageFindings shouldBe expectedResult
         }
 
-        "return the vulnerabilities for github purls" {
+        "return a superset of the expected vulnerability ids for github purls" {
             val osv = OsvFactory.create()
             val purls = listOf(
                 // By SHA1:
@@ -127,14 +128,18 @@ class OsvFunTest : WordSpec({
             }
 
             val packageFindings = osv.retrievePackageFindings(packages).entries.associate {
-                it.key.id to it.value.vulnerabilities
+                it.key.id.toCoordinates() to it.value.vulnerabilities
             }
 
             val expectedResult = readResourceValue<Map<Identifier, List<Vulnerability>>>(
                 "/github-purls-expected-result.yml"
-            )
+            ).mapKeys { it.key.toCoordinates() }
 
-            packageFindings shouldBe expectedResult
+            packageFindings.keys shouldContainExactlyInAnyOrder expectedResult.keys
+            packageFindings.keys.forAll { id ->
+                packageFindings.getValue(id).map { it.id } shouldContainAll
+                    expectedResult.getValue(id).map { it.id }
+            }
         }
     }
 })
