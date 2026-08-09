@@ -72,7 +72,7 @@ internal val ModuleInfo.isInstalled: Boolean
     get() = path != null && File(path).isDirectory
 
 internal val ModuleInfo.isProject: Boolean
-    get() = resolved == null
+    get() = resolved == null || resolved.startsWith("file:")
 
 private val ModuleInfo.packageJsonFile: File get() {
     check(isInstalled) { "The module directory '$path' is null or does not exist." }
