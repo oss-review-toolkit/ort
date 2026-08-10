@@ -277,7 +277,8 @@ private fun URI.toDefinitionFile(): File? =
 internal fun SpdxExternalDocumentReference.resolve(cache: SpdxDocumentCache, baseUri: URI): ResolutionResult {
     val uri = runCatching {
         val resolvedUri = baseUri.resolve(spdxDocument)
-        resolvedUri.takeUnless { baseUri.query != null } ?: URI("$resolvedUri?${baseUri.query}")
+        resolvedUri.takeUnless { baseUri.query != null && resolvedUri.query == null }
+            ?: URI("$resolvedUri?${baseUri.query}")
     }.getOrElse {
         return ResolutionResult(
             document = null,
