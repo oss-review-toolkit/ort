@@ -4,6 +4,15 @@
     "github>oss-review-toolkit/.github//renovate-config",
     "docker:disable"
   ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/.env.versions$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>\\S+))?\\s*\\n\\w+_VERSION=(?<currentValue>\\S+)"
+      ]
+    }
+  ],
   "ignorePaths": [
     "plugins/reporters/web-app-template",
     "**/src/funTest/assets/**",
