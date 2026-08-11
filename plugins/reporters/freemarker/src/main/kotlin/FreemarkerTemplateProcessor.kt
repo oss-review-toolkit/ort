@@ -32,14 +32,20 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorResultFilter
 import org.ossreviewtoolkit.model.AdvisorRun
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.Snippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.licenses.LicenseView
@@ -47,14 +53,18 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
+import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
 /**
  * A class to process [Apache Freemarker][1] templates, intended to be called by a [Reporter] that uses the generated
@@ -397,6 +407,143 @@ class FreemarkerTemplateProcessor(
          */
         @Suppress("unused") // This function is used in the templates.
         fun identifierFromString(identifier: String) = Identifier(identifier)
+
+        /**
+         * Info about the snippets used from the package corresponding to [purl].
+         * Only for experimental use along with ScanOSS configured to not drop chosen snippets findings.
+         */
+        data class UpstreamPackageSnippetData(
+            /* The purl of the upstream package. */
+            val purl: String,
+            /* Set if the provenance corresponding to the upstream package is a source artifact. */
+            val sourceArtifactUrl: String?,
+            /* Set if the provenance corresponding to the upstream package is a repository. */
+            val vcsInfo: VcsInfo?,
+            /* The file paths of the snippets relative the provenance root. */
+            val filePaths: List<String>,
+            /* The license which applies to the snippets in [filePaths] */
+            val license: SpdxExpression,
+            /*
+             * The copyright statements corresponding to snippets in [filePaths] with
+             * [copyright garbage][ReporterInput.copyrightGarbage] removed, and then beautified with
+             * [CopyrightStatementsProcessor].
+             **/
+            val copyrightStatementsProcessed: List<String>
+        ) {
+            init {
+                require(!((sourceArtifactUrl != null) && (vcsInfo != null))) {
+                    "At most one provenance must be set."
+                }
+            }
+        }
+
+        /**
+         * Group the snippets by their [purl][Snippet.purl] of upstream packages, and combine the data into a compact
+         * representation. Copyright statements can be extracted only from Snippets originating from ScanOSS.
+         * Only for experimental use along with ScanOSS configured to not drop chosen snippets findings.
+         */
+        @Suppress("unused") // This function is used in the templates.
+        fun getSnippetsByUpstreamPackageProcessed(snippets: Collection<Snippet>): List<UpstreamPackageSnippetData> =
+            snippets.groupBy { it.purl }.mapNotNull { (purl, snippetsForPurl) ->
+                val license = snippetsForPurl.map { it.license }.toExpression()
+                    ?.simplify()
+                    ?.sorted()
+                    ?.takeUnless { SpdxConstants.isNotPresent(it.toString()) }
+                    ?: return@mapNotNull null
+
+                val vcsInfo = snippetsForPurl
+                    .map { it.provenance }
+                    .filterIsInstance<RepositoryProvenance>()
+                    .map { it.vcsInfo }
+                    .firstOrNull { it.url.isNotBlank() }
+
+                val sourceArtifactUrl = if (vcsInfo != null) {
+                    null
+                } else {
+                    snippetsForPurl
+                        .map { it.provenance }
+                        .filterIsInstance<ArtifactProvenance>()
+                        .map { it.sourceArtifact.url }
+                        .firstOrNull { it.isNotBlank() }
+                }
+
+                val filePaths = snippetsForPurl.map { it.location.path }.distinct().sorted()
+
+                val copyrightStatements = snippetsForPurl.flatMap {
+                    it.additionalData["copyright_details"]?.split("\n").orEmpty()
+                }.filterNot {
+                    input.copyrightGarbage.contains(it) || it.isBlank()
+                }.let {
+                    CopyrightStatementsProcessor.process(it).allStatements
+                }.distinct().sorted()
+
+                UpstreamPackageSnippetData(purl, sourceArtifactUrl, vcsInfo, filePaths, license, copyrightStatements)
+            }.sortedBy { it.purl }
+
+        /**
+         * Return all snippets which are confirmed by a snippet choice, from any ScanOSS scan.
+         * Only for experimental use along with ScanOSS configured to not drop chosen snippets findings.
+         */
+        @Suppress("unused") // This function is used in the templates.
+        fun getConfirmedScanOssProjectSnippetFindings(
+            omitExcluded: Boolean = true,
+            applyLicenseFindingCurations: Boolean = true
+        ): Set<Snippet> {
+            val projectIds = input.ortResult.getProjects(
+                // Handle excludes only on file granularity, to not miss files in case only definition file is excluded.
+                omitExcluded = false,
+                includeSubProjects = true
+            ).mapTo(mutableSetOf()) { it.id }
+
+            return projectIds.flatMap { id ->
+                input.ortResult.getScanResultsForId(id).flatMap { scanResult ->
+                    if (scanResult.scanner.name.uppercase() != "SCANOSS") return@flatMap emptyList()
+
+                    scanResult.summary.snippetFindings.filterNot { finding ->
+                        !omitExcluded || input.ortResult.isPathExcluded(finding.sourceLocation.path)
+                    }.let {
+                        if (applyLicenseFindingCurations) {
+                            it.applyLicenseFindingCurations(input.ortResult.getLicenseFindingCurations(id))
+                        } else {
+                            it
+                        }
+                    }
+                }
+            }.flatMap {
+                it.snippets
+            }.filterTo(mutableSetOf()) {
+                it.additionalData["status"] == "confirmed"
+            }
+        }
+
+        /**
+         * Return result of applying [licenseFindingCurations] to this snippet findings.
+         */
+        private fun Collection<SnippetFinding>.applyLicenseFindingCurations(
+            licenseFindingCurations: Collection<LicenseFindingCuration>
+        ): List<SnippetFinding> {
+            val matcher = FindingCurationMatcher()
+            return map { snippetFinding ->
+                snippetFinding.copy(
+                    snippets = snippetFinding.snippets.mapNotNullTo(mutableSetOf()) { snippet ->
+                        val licenseFinding = LicenseFinding(
+                            license = snippet.license,
+                            location = snippetFinding.sourceLocation,
+                            score = snippet.score
+                        )
+
+                        val curatedLicense = matcher
+                            .applyAll(listOf(licenseFinding), licenseFindingCurations)
+                            .mapNotNull { it.curatedFinding?.license }
+                            .singleOrNull()
+                            ?.takeUnless { SpdxConstants.isNotPresent(it.toString()) }
+                            ?: return@mapNotNullTo null
+
+                        snippet.copy(license = curatedLicense)
+                    }
+                )
+            }
+        }
     }
 }
 
