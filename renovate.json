@@ -7,7 +7,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/.env.versions$"],
+      "managerFilePatterns": ["/\\.env\\.versions$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>\\S+))?\\s*\\n\\w+_VERSION=(?<currentValue>\\S+)"
       ]
