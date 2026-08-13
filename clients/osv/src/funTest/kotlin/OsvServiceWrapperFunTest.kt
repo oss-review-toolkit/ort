@@ -55,14 +55,14 @@ class OsvServiceWrapperFunTest : WordSpec({
             result shouldBeSuccess {
                 it shouldHaveSize 3
 
-                it[0] should containAll(
+                it[0].getOrThrow() should containAll(
                     "CVE-2023-25193",
                     "OSV-2020-484"
                 )
 
-                it[1] should beEmpty()
+                it[1].getOrThrow() should beEmpty()
 
-                it[2] should containAll(
+                it[2].getOrThrow() should containAll(
                     "OSV-2018-115",
                     "OSV-2018-143",
                     "OSV-2018-97",
@@ -78,9 +78,7 @@ class OsvServiceWrapperFunTest : WordSpec({
 
             val result = OsvServiceWrapper().getVulnerabilitiesForIds(ids)
 
-            result shouldBeSuccess {
-                it.map { vulnerability -> vulnerability.id } shouldContainExactlyInAnyOrder ids
-            }
+            result.map { it.value.getOrThrow().id } shouldContainExactlyInAnyOrder ids
         }
     }
 })

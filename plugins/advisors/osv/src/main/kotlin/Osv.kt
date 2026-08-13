@@ -40,7 +40,9 @@ import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
@@ -77,56 +79,65 @@ class Osv(
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
-        val vulnerabilityIdsForPackageId = getVulnerabilityIdsForPackages(packages)
-        val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.flatten().toSet()
-        val vulnerabilityForId = getVulnerabilitiesForIds(allVulnerabilityIds).associateBy { it.id }
+        val requests = packages.mapNotNull { pkg ->
+            createRequest(pkg)?.let { pkg to it }
+        }
 
-        return packages.mapNotNull { pkg ->
-            vulnerabilityIdsForPackageId[pkg.id]?.let { ids ->
+        val idsByPackage = getVulnerabilityIdsForPackages(requests)
+        val allVulnerabilityIds =
+            idsByPackage.values.mapNotNull { (it as? OsvServiceWrapper.RequestResult.Success)?.ids }
+                .flatten()
+                .toSet()
+        val vulnerabilitiesById = getVulnerabilitiesForIds(allVulnerabilityIds)
+
+        return requests.mapNotNull { (pkg, _) ->
+            val issues = mutableListOf<Issue>()
+
+            val ids: List<String>? = when (val outcome = idsByPackage[pkg.id]) {
+                is OsvServiceWrapper.RequestResult.Success -> outcome.ids
+
+                is OsvServiceWrapper.RequestResult.Failure -> {
+                    issues += createAndLogIssue(
+                        "Requesting vulnerability IDs for package '${pkg.id.toCoordinates()}' " +
+                            "(purl: ${pkg.purl}) failed: ${outcome.message}"
+                    )
+                    null
+                }
+
+                null -> null
+            }
+
+            val vulnerabilities = ids.orEmpty().mapNotNull { id -> vulnerabilitiesById[id] }
+                .map { it.toOrtVulnerability(pkg.purl) }
+
+            // Only include packages that have findings.
+            if (vulnerabilities.isEmpty() && issues.isEmpty()) {
+                null
+            } else {
                 pkg to AdvisorResult(
                     advisor = details,
-                    summary = AdvisorSummary(startTime = startTime, endTime = Instant.now()),
-                    vulnerabilities = ids.map { vulnerabilityForId.getValue(it).toOrtVulnerability(pkg.purl) }
+                    summary = AdvisorSummary(
+                        startTime = startTime,
+                        endTime = Instant.now(),
+                        issues = issues
+                    ),
+                    vulnerabilities = vulnerabilities
                 )
             }
         }.toMap()
     }
 
-    private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
-        val requests = packages.mapNotNull { pkg ->
-            createRequest(pkg)?.let { pkg to it }
-        }
+    private fun getVulnerabilityIdsForPackages(
+        requests: List<Pair<Package, VulnerabilitiesForPackageRequest>>
+    ): Map<Identifier, OsvServiceWrapper.RequestResult> =
+        service.getVulnerabilityIdsForPackages(requests.map { it.second })
+            .mapIndexed { i, result -> requests[i].first.id to result }
+            .toMap()
 
-        val result = service.getVulnerabilityIdsForPackages(requests.map { it.second })
-        val results = mutableListOf<Pair<Identifier, List<String>>>()
-
-        result.map { allVulnerabilities ->
-            // OSV returns vulnerability results in the same order as packages were requested, so use the list index to
-            // identify to which package a result belongs. This means that also empty results are returned as otherwise
-            // list indices would not match, so filter these out.
-            allVulnerabilities.mapIndexedNotNullTo(results) { i, pkgVulnerabilities ->
-                pkgVulnerabilities.takeUnless { it.isEmpty() }?.let { requests[i].first.id to it }
-            }
-        }.onFailure {
-            logger.error {
-                "Requesting vulnerability IDs for packages failed: ${it.collectMessages()}"
-            }
-        }
-
-        return results.toMap()
-    }
-
-    private fun getVulnerabilitiesForIds(ids: Set<String>): List<Vulnerability> {
-        val result = service.getVulnerabilitiesForIds(ids)
-
-        return result.getOrElse {
-            logger.error {
-                "Requesting vulnerabilities for IDs failed: ${it.collectMessages()}"
-            }
-
-            emptyList()
-        }
-    }
+    private fun getVulnerabilitiesForIds(ids: Set<String>): Map<String, Vulnerability> =
+        service.getVulnerabilitiesForIds(ids)
+            .map { vulnerabilities -> ids.toList().zip(vulnerabilities).toMap() }
+            .getOrDefault(emptyMap())
 }
 
 private fun Vulnerability.toOrtVulnerability(purl: String): org.ossreviewtoolkit.model.vulnerabilities.Vulnerability {
