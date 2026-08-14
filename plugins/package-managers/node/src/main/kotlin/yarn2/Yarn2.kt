@@ -83,7 +83,7 @@ data class Yarn2Config(
     summary = "The Yarn 2+ package manager for Node.js.",
     factory = PackageManagerFactory::class
 )
-class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor, private val config: Yarn2Config) :
+class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor, config: Yarn2Config) :
     NodePackageManager(NodePackageManagerType.YARN2) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
     internal val yarn2Command = Yarn2Command(config.corepackEnabled)
