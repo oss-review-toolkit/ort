@@ -60,13 +60,21 @@ class DependencyReferenceSortedSetConverter : StdConverter<Set<DependencyReferen
         value.toSortedSet(compareBy({ it.pkg.toString() }, { it.fragment }))
 }
 
-/** Do not convert to SortedSet in order to not require a comparator consistent with equals */
 class FileListSortedSetConverter : StdConverter<Set<FileList>, Set<FileList>>() {
+    /**
+     * Deliberately do not use [Iterable.toSortedSet] that takes a [Comparator] as such sorted sets use the comparator
+     * also for equality checks, but equality should consider other properties as well to avoid undesired deduplication
+     * on serialization.
+     */
     override fun convert(value: Set<FileList>) = value.sortedBy { it.provenance.getSortKey() }.toSet()
 }
 
-/** Do not convert to SortedSet in order to not require a comparator consistent with equals */
 class FileListEntrySortedSetConverter : StdConverter<Set<FileList.Entry>, Set<FileList.Entry>>() {
+    /**
+     * Deliberately do not use [Iterable.toSortedSet] that takes a [Comparator] as such sorted sets use the comparator
+     * also for equality checks, but equality should consider other properties as well to avoid undesired deduplication
+     * on serialization.
+     */
     override fun convert(value: Set<FileList.Entry>) = value.sortedBy { it.path }.toSet()
 }
 
@@ -95,8 +103,12 @@ class ScannersMapConverter : StdConverter<Map<Identifier, Set<String>>, Map<Iden
     override fun convert(value: Map<Identifier, Set<String>>) = value.mapValues { it.value.toSortedSet() }.toSortedMap()
 }
 
-/** Do not convert to SortedSet in order to not require a comparator consistent with equals */
 class ScanResultSortedSetConverter : StdConverter<Set<ScanResult>, Set<ScanResult>>() {
+    /**
+     * Deliberately do not use [Iterable.toSortedSet] that takes a [Comparator] as such sorted sets use the comparator
+     * also for equality checks, but equality should consider other properties as well to avoid undesired deduplication
+     * on serialization.
+     */
     override fun convert(value: Set<ScanResult>) = value.sortedBy { it.provenance.getSortKey() }.toSet()
 }
 
@@ -105,6 +117,11 @@ class ScopeSortedSetConverter : StdConverter<Set<Scope>, SortedSet<Scope>>() {
 }
 
 class SnippetFindingSortedSetConverter : StdConverter<Set<SnippetFinding>, Set<SnippetFinding>>() {
+    /**
+     * Deliberately do not use [Iterable.toSortedSet] that takes a [Comparator] as such sorted sets use the comparator
+     * also for equality checks, but equality should consider other properties as well to avoid undesired deduplication
+     * on serialization.
+     */
     override fun convert(value: Set<SnippetFinding>) = value.sortedBy { it.sourceLocation }.toSet()
 }
 
