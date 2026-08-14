@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
-import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
 internal class NpmCommand(nodePath: String? = null, nodeVersion: String? = null) :
@@ -59,16 +58,16 @@ internal class NpmCommand(nodePath: String? = null, nodeVersion: String? = null)
         /**
          * A default instance of [NpmCommand] that uses the system-installed version of Node.js and NPM.
          */
-        val DEFAULT: NpmCommand = NpmCommand()
+        val DEFAULT = NpmCommand()
     }
 
     override fun baseCommand(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
-    override fun withNodePath(nodePath: String, nodeVersion: String): NpmCommand = NpmCommand(nodePath, nodeVersion)
+    override fun withNodePath(nodePath: String, nodeVersion: String) = NpmCommand(nodePath, nodeVersion)
 
-    override fun getVersionRequirement(): RangeList = RangeListFactory.create("6.* - 11.*")
+    override fun getVersionRequirement() = RangeListFactory.create("6.* - 11.*")
 
-    override fun enrichEnvironment(environment: Map<String, String>): Map<String, String> =
+    override fun enrichEnvironment(environment: Map<String, String>) =
         environment.toMutableMap().apply {
             if (hasUseSystemCaOption) {
                 compute("NODE_OPTIONS") { _, options ->
