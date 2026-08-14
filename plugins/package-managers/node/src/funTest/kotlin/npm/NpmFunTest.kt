@@ -168,8 +168,7 @@ class NpmFunTest : StringSpec({
             val result = NpmFactory.create(nodeVersion = "14")
                 .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
 
-            val resultYaml = result.toYaml()
-            resultYaml shouldContain "JsonDecodingException:"
+            result.toYaml() shouldContain "JsonDecodingException:"
         } finally {
             // Remove the old version again, so that it cannot interfere with other tests.
             FnmCommand.run("uninstall", "14")
@@ -179,8 +178,7 @@ class NpmFunTest : StringSpec({
     "Use a Node.js version configured by the project" {
         // Same as the previous test, but the project directory is created dynamically and contains a `.node-version`
         // file that specifies the version to use.
-        val projectDir = tempdir()
-        projectDir.resolve(".node-version").writeText("14.21.3")
+        val projectDir = tempdir().apply { resolve(".node-version").writeText("14.21.3") }
         val subDir = projectDir.resolve("project").also { it.mkdir() }
         val definitionFile = subDir.resolve("package.json")
         val sourceDefinitionFile = getAssetFile("projects/synthetic/npm/fix-version/package.json")
@@ -190,8 +188,7 @@ class NpmFunTest : StringSpec({
             val result = NpmFactory.create(nodeVersion = NodeVersionManagerCommand.NODE_VERSION_AUTO_DISCOVER)
                 .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
 
-            val resultYaml = result.toYaml()
-            resultYaml shouldContain "JsonDecodingException:"
+            result.toYaml() shouldContain "JsonDecodingException:"
         } finally {
             // Remove the old version again, so that it cannot interfere with other tests.
             FnmCommand.run("uninstall", "14")
