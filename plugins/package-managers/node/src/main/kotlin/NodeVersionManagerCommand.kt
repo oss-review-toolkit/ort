@@ -238,10 +238,9 @@ abstract class NodeVersionManagerCommand(
     private fun prependNodePath(environment: Map<String, String>): Map<String, String> {
         if (nodePath == null) return environment
 
-        val pathSeparator = if (Os.isWindows) ";" else ":"
         val existingPath = environment["PATH"] ?: System.getenv("PATH").orEmpty()
         return environment.toMutableMap().apply {
-            put("PATH", "$nodePath$pathSeparator$existingPath")
+            put("PATH", "$nodePath${File.pathSeparator}$existingPath")
         }
     }
 }
