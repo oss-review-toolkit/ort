@@ -30,6 +30,7 @@ import com.scanoss.settings.ScanossSettings
 import com.scanoss.utils.JsonUtils
 
 import java.io.File
+import java.net.Proxy
 import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.logger
@@ -59,6 +60,7 @@ class ScanOss(
         // As there is only a single endpoint, the SCANOSS API client expects the path to be part of the API URL.
         .url(config.apiUrl.removeSuffix("/") + "/scan/direct")
         .apiKey(config.apiKey.value)
+        .apply { if (config.noProxy) proxy(Proxy.NO_PROXY) }
         .obfuscate(config.enablePathObfuscation)
 
     override val version: String by lazy {
