@@ -67,6 +67,7 @@ import org.ossreviewtoolkit.scanner.utils.alignRevisions
 import org.ossreviewtoolkit.scanner.utils.filterScanResultsByVcsPaths
 import org.ossreviewtoolkit.scanner.utils.getVcsPathsForProvenances
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.ensureSuffix
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -936,13 +937,13 @@ private fun ScanController.getCheckoutPathsForProvenance(
 
         val provenanceCheckoutPath = projectDirRelativeToAnalysisRoot
             .removeSuffix(pkg.vcsProcessed.path)
-            .removeSuffix("/")
+            .ensureSuffix("/")
 
         result.getOrPut(projectProvenance) { mutableSetOf() } += provenanceCheckoutPath
 
         val projectNestedProvenance = getNestedProvenance(pkg.id) ?: return@forEach
         projectNestedProvenance.subRepositories.forEach { (path, submoduleProvenance) ->
-            result.getOrPut(submoduleProvenance) { mutableSetOf() } += "$provenanceCheckoutPath/$path"
+            result.getOrPut(submoduleProvenance) { mutableSetOf() } += "$provenanceCheckoutPath$path"
         }
     }
 
