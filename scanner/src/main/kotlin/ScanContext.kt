@@ -88,6 +88,11 @@ data class ScanContext(
         require(checkoutPaths.isNotEmpty()) {
             "The checkout paths must not be empty."
         }
+
+        val invalidCheckoutPaths = checkoutPaths.filter { it.startsWith("/") || it.endsWith("/") }
+        require(invalidCheckoutPaths.isEmpty()) {
+            "The following checkout paths start or end with a '/' which is not allowed: $invalidCheckoutPaths"
+        }
     }
 
     /**
