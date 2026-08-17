@@ -144,11 +144,9 @@ val okHttpClient: OkHttpClient by lazy {
                     if (request.header(AUTHORIZATION_HEADER) == null) {
                         val requestUri = request.url.toUri()
 
-                        val authentication = requestPasswordAuthentication(requestUri)
-                        val headerValue = authorizationHeaderValue(authentication)
-                        if (headerValue != null) {
+                        requestPasswordAuthentication(requestUri).getHeaderValue()?.also {
                             val authenticatedRequest = request.newBuilder()
-                                .header(AUTHORIZATION_HEADER, headerValue)
+                                .header(AUTHORIZATION_HEADER, it)
                                 .build()
 
                             return@addInterceptor chain.proceed(authenticatedRequest)
@@ -180,17 +178,15 @@ fun OkHttpClient.Builder.addBasicAuthorization(username: String, password: Strin
     }
 
 /**
- * Build the value for the "Authorization" header from the given [authentication]. If [authentication] is null, return
- * null. If the [user name][PasswordAuthentication.getUserName] is "bearer", the password is treated as a Bearer
- * token; otherwise, the credentials are used for HTTP Basic authentication.
+ * Build the value for the "Authorization" header from this [PasswordAuthentication], if any. If the [user name]
+ * [PasswordAuthentication.getUserName] is "bearer", the password is treated as a Bearer token. Otherwise, the
+ * credentials are used for HTTP Basic authentication.
  */
-internal fun authorizationHeaderValue(authentication: PasswordAuthentication?): String? =
-    authentication?.let {
-        if (it.userName == "bearer") {
-            "$BEARER_AUTH_SCHEME ${String(it.password)}"
-        } else {
-            Credentials.basic(it.userName, String(it.password))
-        }
+private fun PasswordAuthentication?.getHeaderValue(): String? =
+    when {
+        this == null -> null
+        userName == "bearer" -> "$BEARER_AUTH_SCHEME ${String(password)}"
+        else -> Credentials.basic(userName, String(password))
     }
 
 /**
@@ -355,11 +351,9 @@ internal class JavaNetAuthenticatorWrapper(
         if (response.request.header(AUTHORIZATION_HEADER) != null) return null
 
         val requestUri = response.request.url.toUri()
-        val authentication = requestPasswordAuthentication(requestUri)
-        return authorizationHeaderValue(authentication)?.let { headerValue ->
-
+        return requestPasswordAuthentication(requestUri)?.getHeaderValue()?.let {
             response.request.newBuilder()
-                .header(AUTHORIZATION_HEADER, headerValue)
+                .header(AUTHORIZATION_HEADER, it)
                 .build()
         }
     }
