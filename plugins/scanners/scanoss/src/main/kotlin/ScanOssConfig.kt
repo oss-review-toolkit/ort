@@ -33,6 +33,10 @@ data class ScanOssConfig(
     @OrtPluginOption(defaultValue = "")
     val apiKey: Secret,
 
+    /** Whether to use a proxy defined by the dedicated environment variable(s). */
+    @OrtPluginOption(defaultValue = "false")
+    val noProxy: Boolean,
+
     /**
      * Whether to write scan results to the storage.
      */
