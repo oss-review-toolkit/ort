@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
@@ -235,10 +234,8 @@ private fun RepositoryConfiguration.addScopeExcludeForExcludedScope() =
         this
     } else {
         copy(
-            excludes = Excludes(
-                scopes = listOf(
-                    ScopeExclude(EXCLUDED_SCOPE_NAME, ScopeExcludeReason.DEV_DEPENDENCY_OF)
-                )
+            excludes = excludes.copy(
+                scopes = excludes.scopes + ScopeExclude(EXCLUDED_SCOPE_NAME, ScopeExcludeReason.DEV_DEPENDENCY_OF)
             )
         )
     }
