@@ -33,10 +33,3 @@ stack test --flag stack-yesodweb-simple:library-only --flag stack-yesodweb-simpl
 	* `stack haddock --open` to generate Haddock documentation for your dependencies, and open that documentation in a browser
 	* `stack hoogle <function, module or type signature>` to generate a Hoogle database and search for your query
 * The [Yesod cookbook](https://github.com/yesodweb/yesod-cookbook) has sample code for various needs
-
-## Getting Help
-
-* Ask questions on [Stack Overflow, using the Yesod or Haskell tags](https://stackoverflow.com/questions/tagged/yesod+haskell)
-* Ask the [Yesod Google Group](https://groups.google.com/forum/#!forum/yesodweb)
-* There are several chatrooms you can ask for help:
-	* For IRC, try Freenode#yesod and Freenode#haskell
