@@ -512,7 +512,7 @@ class FreemarkerTemplateProcessor(
             }.flatMap {
                 it.snippets
             }.filterTo(mutableSetOf()) {
-                it.additionalData["status"] == "confirmed"
+                it.additionalData["status"] == "identified"
             }
         }
 
