@@ -166,18 +166,6 @@ val okHttpClient: OkHttpClient by lazy {
 }
 
 /**
- * Add a request interceptor that injects basic authorization using the [username] and [password] into the client
- * builder.
- */
-fun OkHttpClient.Builder.addBasicAuthorization(username: String, password: String): OkHttpClient.Builder =
-    addInterceptor { chain ->
-        val requestBuilder = chain.request().newBuilder()
-            .header("Authorization", Credentials.basic(username, password))
-
-        chain.proceed(requestBuilder.build())
-    }
-
-/**
  * Build the value for the "Authorization" header from this [PasswordAuthentication], if any. If the [user name]
  * [PasswordAuthentication.getUserName] is "bearer", the password is treated as a Bearer token. Otherwise, the
  * credentials are used for HTTP Basic authentication.
