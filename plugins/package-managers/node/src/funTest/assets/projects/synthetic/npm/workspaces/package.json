@@ -1,17 +1,17 @@
 {
-    "name": "dos-monorepo",
-    "version": "0.0.0",
-    "license": "MIT",
-    "workspaces": [
-        "packages/*",
-        "apps/*"
-    ],
-    "devDependencies": {
-        "rimraf": "5.0.5"
-    },
-    "engines": {
-        "node": "18.15.0",
-        "npm": "9.5.0"
-    },
-    "packageManager": "npm@11.17.0"
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "Workspace root module.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "license": "Apache-2.0",
+  "dependencies": {
+    "long": "3.2.0"
+  },
+  "devDependencies": {
+    "boolbase": "1.0.0"
+  },
+  "packageManager": "npm@11.17.0"
 }

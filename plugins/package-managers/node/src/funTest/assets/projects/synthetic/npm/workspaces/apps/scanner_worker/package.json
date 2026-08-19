@@ -1,9 +1,0 @@
-{
-    "name": "scanner-worker",
-    "version": "0.0.0",
-    "license": "MIT",
-    "dependencies": {
-        "is-windows": "1.0.2"
-    },
-    "packageManager": "npm@11.17.0"
-}
