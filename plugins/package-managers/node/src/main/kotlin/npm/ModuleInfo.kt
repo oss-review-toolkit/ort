@@ -78,7 +78,12 @@ internal fun ModuleInfo.getAllPackageNodeModuleIds(scopes: Set<Scope>): Set<Stri
                 add("${info.name}@${info.version}")
             }
 
-            scopes.flatMapTo(queue) { info.getScopeDependencies(it) }
+            if (info.isProject) {
+                scopes.flatMapTo(queue) { info.getScopeDependencies(it) }
+            } else {
+                // Ignore dev-dependencies of dependencies, as usual.
+                queue += info.getScopeDependencies(Scope.DEPENDENCIES)
+            }
         }
     }
 
