@@ -33,6 +33,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withInvariantIssues
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -154,6 +156,18 @@ class NpmFunTest : StringSpec({
             .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
 
         result.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
+    }
+
+    "Resolve workspace dependencies correctly" {
+        // This test is for now only for illustrating the current behavior and the effect of upcoming code changes.
+        // As there as never been official support for workspaces implemented, functional tests were absent. In the
+        // results, there are missing project entries of pkg1, and pkg2.
+        val definitionFile = getAssetFile("projects/synthetic/npm/workspaces/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/npm/workspaces-expected-output.yml")
+
+        val result = analyze(definitionFile.parentFile, packageManagers = setOf(NpmFactory())).getAnalyzerResult()
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Use an explicitly specified Node.js version" {
