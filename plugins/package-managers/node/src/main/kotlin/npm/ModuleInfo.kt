@@ -81,7 +81,7 @@ internal fun ModuleInfo.getAllPackageNodeModuleIds(scopes: Set<Scope>): Set<Stri
             if (info.isProject) {
                 scopes.flatMapTo(queue) { info.getScopeDependencies(it) }
             } else {
-                // Ignore dev-dependencies of dependencies, as usual.
+                // Ignore dev-dependencies of dependencies, as this is what NPM does itself.
                 queue += info.getScopeDependencies(Scope.DEPENDENCIES)
             }
         }

@@ -47,6 +47,8 @@ import org.ossreviewtoolkit.utils.common.FileStash
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.div
+import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 import org.semver4j.range.RangeListFactory
@@ -188,22 +190,47 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
             return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
         }
 
-        val project = parseProject(definitionFile, analysisRoot)
-        val projectModuleInfo = listModules(workingDir, issues).undoDeduplication().filterInstalled()
+        val rootModuleInfo = listModules(workingDir, issues).undoDeduplication().filterInstalled()
         val scopes = Scope.entries.filterNotTo(mutableSetOf()) { scope -> scope.isExcluded(excludes, includes) }
+        requestAllPackageDetails(rootModuleInfo, scopes)
 
-        // Warm-up the cache to speed-up processing.
-        requestAllPackageDetails(projectModuleInfo, scopes)
+        val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
 
-        scopes.forEach { scope ->
-            graphBuilder.addDependencies(project.id, scope.descriptor, projectModuleInfo.getScopeDependencies(scope))
+        return workspaceModuleDirs.map { projectDir ->
+            val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
+            val project = parseProject(packageJsonFile, analysisRoot)
+
+            val projectModuleInfo = rootModuleInfo.takeIf { projectDir == workingDir }
+                ?: rootModuleInfo.dependencies.values.single { moduleInfo ->
+                    moduleInfo.isProject && moduleInfo.path?.let { File(it).realFile } == projectDir
+                }
+
+            scopes.forEach { scope ->
+                graphBuilder.addDependencies(
+                    projectId = project.id,
+                    scopeName = scope.descriptor,
+                    dependencies = projectModuleInfo.getScopeDependencies(scope)
+                )
+            }
+
+            ProjectAnalyzerResult(
+                project = project.copy(scopeNames = scopes.getNames()),
+                packages = emptySet(),
+                issues = issues
+            )
         }
+    }
 
-        return ProjectAnalyzerResult(
-            project = project.copy(scopeNames = scopes.getNames()),
-            packages = emptySet(),
-            issues = issues
-        ).let { listOf(it) }
+    private fun getWorkspaceModuleDirs(workingDir: File): Set<File> {
+        val process = command.run(workingDir, "query", ".workspace").requireSuccess()
+
+        return buildSet {
+            add(workingDir)
+
+            parseLocationsFromWorkspaceQueryResult(process.stdout).mapTo(this) {
+                workingDir / it
+            }
+        }
     }
 
     private fun listModules(workingDir: File, issues: MutableList<Issue>): ModuleInfo {
