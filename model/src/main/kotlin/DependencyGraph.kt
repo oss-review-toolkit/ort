@@ -367,7 +367,12 @@ data class DependencyGraphNode(
      * A list of [Issue]s that occurred handling this dependency.
      */
     val issues: List<Issue> = emptyList()
-)
+) {
+    /**
+     * Test whether this node is a special marker node to indicate a cycle in the dependency graph.
+     */
+    fun isCycleIndicator(): Boolean = isCycleIndicatorIndex(fragment)
+}
 
 /**
  * A data class representing an edge in the dependency graph.
@@ -382,6 +387,24 @@ data class DependencyGraphEdge(
     /** The index of the destination node of this edge. */
     val to: Int
 )
+
+/**
+ * Constant of a bit mask used to add information about cycles to a fragment index. A node acting as cycle indicator
+ * has a fragment index greater than this value.
+ */
+private const val CYCLE_INDICATOR_MASK = 0xFFFF
+
+/**
+ * Check whether the given [fragmentIndex] indicates a marker node for a cycle in the dependency graph.
+ */
+fun isCycleIndicatorIndex(fragmentIndex: Int): Boolean = fragmentIndex > CYCLE_INDICATOR_MASK
+
+/**
+ * Return the plain index of the fragment referenced by the given [fragmentIndex] stripping any information about
+ * cycles. If the passed in [fragmentIndex] is not an indicator index for cycles, it is returned as is; otherwise,
+ * the fragment component is extracted.
+ */
+fun extractFragment(fragmentIndex: Int): Int = fragmentIndex and CYCLE_INDICATOR_MASK
 
 /**
  * Convert this [DependencyReference] to a [DependencyGraphNode].
