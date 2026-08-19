@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "license": "Apache-2.0",
   "dependencies": {
-    "@csstools/css-color-parser": "3.0.8",
+    "@csstools/css-color-parser": "^4.2.0",
+    "@csstools/css-parser-algorithms": "^4.0.0",
+    "@csstools/css-tokenizer": "^4.0.0",
     "@here/harp-fetch": "^0.3.6"
   }
 }
