@@ -118,27 +118,35 @@ open class PackageRule(
                     .flatMap { it.references }
                     .filter { it.scoringSystem == scoringSystem }
 
-                val scores = matchingSystems.mapNotNull { it.score }
-                if (scores.any()) return scores.any { it >= scoreThreshold }
+                val scores = matchingSystems.mapNotNull {
+                    it.score ?: scoreFromSeverity(it)
+                }
 
-                // Fall back to a more coarse comparison of qualitative severity ratings if no scores are available.
-                val severityThreshold = VulnerabilityReference.getQualitativeRating(scoringSystem, scoreThreshold)
-                    ?: return false
+                return scores.any { it >= scoreThreshold }
+            }
 
-                val severities = matchingSystems
-                    .mapNotNull { it.severity }
-                    .mapNotNull { severity ->
-                        val system = scoringSystem.uppercase()
+            /**
+             * Map the qualitative severity of the given [reference] to a numeric score according to the ratings
+             * defined for the scoring systems. Return *null* if no severity is defined or the scoring system is not
+             * supported.
+             */
+            private fun scoreFromSeverity(reference: VulnerabilityReference): Float? =
+                reference.scoringSystem?.let { system ->
+                    reference.severity?.let { severity ->
                         when {
-                            Cvss2Rating.PREFIXES.any { system.startsWith(it) } -> enumValueOf<Cvss2Rating>(severity)
-                            Cvss3Rating.PREFIXES.any { system.startsWith(it) } -> enumValueOf<Cvss3Rating>(severity)
-                            Cvss4Rating.PREFIXES.any { system.startsWith(it) } -> enumValueOf<Cvss4Rating>(severity)
+                            Cvss2Rating.PREFIXES.any { system.startsWith(it) } ->
+                                enumValueOf<Cvss2Rating>(severity).upperBound
+
+                            Cvss3Rating.PREFIXES.any { system.startsWith(it) } ->
+                                enumValueOf<Cvss3Rating>(severity).upperBound
+
+                            Cvss4Rating.PREFIXES.any { system.startsWith(it) } ->
+                                enumValueOf<Cvss4Rating>(severity).upperBound
+
                             else -> null
                         }
                     }
-
-                return severities.any { it.ordinal >= severityThreshold.ordinal }
-            }
+                }
         }
 
     /**

@@ -23,7 +23,7 @@ package org.ossreviewtoolkit.model.vulnerabilities
  * The rating attaches human-readable semantics to the score number according to CVSS version 4, see
  * https://www.first.org/cvss/v4.0/specification-document#Qualitative-Severity-Rating-Scale.
  */
-enum class Cvss4Rating(private val upperBound: Float) {
+enum class Cvss4Rating(val upperBound: Float) {
     NONE(0.0f),
     LOW(4.0f),
     MEDIUM(7.0f),
