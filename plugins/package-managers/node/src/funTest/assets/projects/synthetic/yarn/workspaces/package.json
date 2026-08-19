@@ -6,5 +6,11 @@
     "packages/*"
   ],
   "private": true,
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "long": "3.2.0"
+  },
+  "devDependencies": {
+    "boolbase": "1.0.0"
+  }
 }
