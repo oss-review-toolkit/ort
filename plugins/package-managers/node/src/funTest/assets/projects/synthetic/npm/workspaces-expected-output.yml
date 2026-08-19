@@ -25,15 +25,17 @@ projects:
     - id: "NPM::pkg2:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
-      - id: "NPM:@csstools:css-color-parser:3.0.8"
+      - id: "NPM:@csstools:css-color-parser:4.2.0"
         dependencies:
-        - id: "NPM:@csstools:color-helpers:5.1.0"
-        - id: "NPM:@csstools:css-calc:2.1.4"
+        - id: "NPM:@csstools:color-helpers:6.1.1"
+        - id: "NPM:@csstools:css-calc:3.3.0"
           dependencies:
-          - id: "NPM:@csstools:css-parser-algorithms:3.0.5"
-          - id: "NPM:@csstools:css-tokenizer:3.0.4"
-        - id: "NPM:@csstools:css-parser-algorithms:3.0.5"
-        - id: "NPM:@csstools:css-tokenizer:3.0.4"
+          - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+          - id: "NPM:@csstools:css-tokenizer:4.0.0"
+        - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+        - id: "NPM:@csstools:css-tokenizer:4.0.0"
+      - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+      - id: "NPM:@csstools:css-tokenizer:4.0.0"
       - id: "NPM:@here:harp-fetch:0.3.6"
         linkage: "PROJECT_DYNAMIC"
         dependencies:
@@ -49,15 +51,17 @@ projects:
       - id: "NPM::pkg2:1.0.0"
         linkage: "PROJECT_DYNAMIC"
         dependencies:
-        - id: "NPM:@csstools:css-color-parser:3.0.8"
+        - id: "NPM:@csstools:css-color-parser:4.2.0"
           dependencies:
-          - id: "NPM:@csstools:color-helpers:5.1.0"
-          - id: "NPM:@csstools:css-calc:2.1.4"
+          - id: "NPM:@csstools:color-helpers:6.1.1"
+          - id: "NPM:@csstools:css-calc:3.3.0"
             dependencies:
-            - id: "NPM:@csstools:css-parser-algorithms:3.0.5"
-            - id: "NPM:@csstools:css-tokenizer:3.0.4"
-          - id: "NPM:@csstools:css-parser-algorithms:3.0.5"
-          - id: "NPM:@csstools:css-tokenizer:3.0.4"
+            - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+            - id: "NPM:@csstools:css-tokenizer:4.0.0"
+          - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+          - id: "NPM:@csstools:css-tokenizer:4.0.0"
+        - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+        - id: "NPM:@csstools:css-tokenizer:4.0.0"
         - id: "NPM:@here:harp-fetch:0.3.6"
           linkage: "PROJECT_DYNAMIC"
           dependencies:
@@ -578,8 +582,8 @@ packages:
     url: "https://github.com/jsdom/whatwg-url.git"
     revision: "d34854a7af6ed1204f55d7da7761497bad350a7b"
     path: ""
-- id: "NPM:@csstools:color-helpers:5.1.0"
-  purl: "pkg:npm/%40csstools/color-helpers@5.1.0"
+- id: "NPM:@csstools:color-helpers:6.1.1"
+  purl: "pkg:npm/%40csstools/color-helpers@6.1.1"
   declared_licenses:
   - "MIT-0"
   declared_licenses_processed:
@@ -592,22 +596,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/@csstools/color-helpers/-/color-helpers-5.1.0.tgz"
+    url: "https://registry.npmjs.org/@csstools/color-helpers/-/color-helpers-6.1.1.tgz"
     hash:
-      value: "106c54c808cabfd1ab4c602d8505ee584c2996ef"
+      value: "1890f29a4347486b54048d24c6ab8fbef039ee61"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/csstools/postcss-plugins.git"
-    revision: "132530a36b9f711a886602ce4bf1e95de95f2a5b"
+    revision: "b9695c6c05437f624c65409f165d1c992930a662"
     path: "packages/color-helpers"
   vcs_processed:
     type: "Git"
     url: "https://github.com/csstools/postcss-plugins.git"
-    revision: "132530a36b9f711a886602ce4bf1e95de95f2a5b"
+    revision: "b9695c6c05437f624c65409f165d1c992930a662"
     path: "packages/color-helpers"
-- id: "NPM:@csstools:css-calc:2.1.4"
-  purl: "pkg:npm/%40csstools/css-calc@2.1.4"
+- id: "NPM:@csstools:css-calc:3.3.0"
+  purl: "pkg:npm/%40csstools/css-calc@3.3.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -620,22 +624,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/@csstools/css-calc/-/css-calc-2.1.4.tgz"
+    url: "https://registry.npmjs.org/@csstools/css-calc/-/css-calc-3.3.0.tgz"
     hash:
-      value: "8473f63e2fcd6e459838dd412401d5948f224c65"
+      value: "33cc4bdbab8edf1b6e3ab8c1eba849c41a324f1a"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/csstools/postcss-plugins.git"
-    revision: "7a21bdf28305a0915af8e002b98ba82bc25a1573"
+    revision: "14c008aa5ca4b7898a7c9adb033fc6d9eb673bc6"
     path: "packages/css-calc"
   vcs_processed:
     type: "Git"
     url: "https://github.com/csstools/postcss-plugins.git"
-    revision: "7a21bdf28305a0915af8e002b98ba82bc25a1573"
+    revision: "14c008aa5ca4b7898a7c9adb033fc6d9eb673bc6"
     path: "packages/css-calc"
-- id: "NPM:@csstools:css-color-parser:3.0.8"
-  purl: "pkg:npm/%40csstools/css-color-parser@3.0.8"
+- id: "NPM:@csstools:css-color-parser:4.2.0"
+  purl: "pkg:npm/%40csstools/css-color-parser@4.2.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -648,22 +652,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/@csstools/css-color-parser/-/css-color-parser-3.0.8.tgz"
+    url: "https://registry.npmjs.org/@csstools/css-color-parser/-/css-color-parser-4.2.0.tgz"
     hash:
-      value: "5fe9322920851450bf5e065c2b0e731b9e165394"
+      value: "6161696d5c1e37c2e70f67d2f5d3702c8774b7c8"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/csstools/postcss-plugins.git"
-    revision: "1e7b98202406e4041a9dae1629ec9272138fd77f"
+    revision: "949298b2c6f052a10d05cfecd69c18e91a0800a8"
     path: "packages/css-color-parser"
   vcs_processed:
     type: "Git"
     url: "https://github.com/csstools/postcss-plugins.git"
-    revision: "1e7b98202406e4041a9dae1629ec9272138fd77f"
+    revision: "949298b2c6f052a10d05cfecd69c18e91a0800a8"
     path: "packages/css-color-parser"
-- id: "NPM:@csstools:css-parser-algorithms:3.0.5"
-  purl: "pkg:npm/%40csstools/css-parser-algorithms@3.0.5"
+- id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+  purl: "pkg:npm/%40csstools/css-parser-algorithms@4.0.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -676,22 +680,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/@csstools/css-parser-algorithms/-/css-parser-algorithms-3.0.5.tgz"
+    url: "https://registry.npmjs.org/@csstools/css-parser-algorithms/-/css-parser-algorithms-4.0.0.tgz"
     hash:
-      value: "5755370a9a29abaec5515b43c8b3f2cf9c2e3076"
+      value: "e1c65dc09378b42f26a111fca7f7075fc2c26164"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/csstools/postcss-plugins.git"
-    revision: "5ab78eca30b46bc86fd6c571d2014e524b8f89cf"
+    revision: "cb790c643f758d707260d2cd554a1a85f1167fa1"
     path: "packages/css-parser-algorithms"
   vcs_processed:
     type: "Git"
     url: "https://github.com/csstools/postcss-plugins.git"
-    revision: "5ab78eca30b46bc86fd6c571d2014e524b8f89cf"
+    revision: "cb790c643f758d707260d2cd554a1a85f1167fa1"
     path: "packages/css-parser-algorithms"
-- id: "NPM:@csstools:css-tokenizer:3.0.4"
-  purl: "pkg:npm/%40csstools/css-tokenizer@3.0.4"
+- id: "NPM:@csstools:css-tokenizer:4.0.0"
+  purl: "pkg:npm/%40csstools/css-tokenizer@4.0.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -704,19 +708,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/@csstools/css-tokenizer/-/css-tokenizer-3.0.4.tgz"
+    url: "https://registry.npmjs.org/@csstools/css-tokenizer/-/css-tokenizer-4.0.0.tgz"
     hash:
-      value: "333fedabc3fd1a8e5d0100013731cf19e6a8c5d3"
+      value: "798a33950d11226a0ebb6acafa60f5594424967f"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/csstools/postcss-plugins.git"
-    revision: "a3e4776ae125d52acc5cfb9b250a7625c968c7fd"
+    revision: "9256e22798ff1360e178912af9b57d59d0601c99"
     path: "packages/css-tokenizer"
   vcs_processed:
     type: "Git"
     url: "https://github.com/csstools/postcss-plugins.git"
-    revision: "a3e4776ae125d52acc5cfb9b250a7625c968c7fd"
+    revision: "9256e22798ff1360e178912af9b57d59d0601c99"
     path: "packages/css-tokenizer"
 - id: "NPM:@here:harp-fetch:0.11.0"
   purl: "pkg:npm/%40here/harp-fetch@0.11.0"
