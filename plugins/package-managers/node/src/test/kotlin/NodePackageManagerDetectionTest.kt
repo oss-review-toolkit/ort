@@ -178,7 +178,7 @@ class NodePackageManagerDetectionTest : WordSpec({
 
             NPM.getWorkspaces(projectDir) shouldNotBeNull {
                 mapNotNull { it.withoutPrefix(projectDir.invariantSeparatorsPath) } should
-                    containExactly("/packages/**", "/apps/**")
+                    containExactly("/packages/**")
             }
         }
 
@@ -196,6 +196,7 @@ class NodePackageManagerDetectionTest : WordSpec({
                 "npm/list-issues/package.json",
                 "npm/babel/package.json",
                 "npm/version-urls/package.json",
+                "npm/workspaces/non-workspace/pkg3/package.json",
                 "npm/workspaces/package.json",
                 "npm/fix-version/package.json"
             )
