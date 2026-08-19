@@ -191,6 +191,32 @@ val licenseChoices = LicenseChoices(
     )
 )
 
+val criticalVulnerability = Vulnerability(
+    id = "CVE-2021-critical",
+    references = listOf(
+        VulnerabilityReference(
+            url = URI("https://oss-review-toolkit.org"),
+            scoringSystem = "CVSS3",
+            severity = "CRITICAL",
+            score = 9.0f,
+            vector = null
+        )
+    )
+)
+
+val lowVulnerability = Vulnerability(
+    id = "CVE-2021-low",
+    references = listOf(
+        VulnerabilityReference(
+            url = URI("https://oss-review-toolkit.org"),
+            scoringSystem = "CVSS3",
+            severity = "LOW",
+            score = 2.0f,
+            vector = null
+        )
+    )
+)
+
 val ortResult = OrtResult(
     repository = Repository(
         vcs = VcsInfo.EMPTY,
@@ -226,30 +252,8 @@ val ortResult = OrtResult(
                     advisor = AdvisorDetails("Advisor"),
                     summary = AdvisorSummary(startTime = Instant.EPOCH, endTime = Instant.EPOCH),
                     vulnerabilities = listOf(
-                        Vulnerability(
-                            id = "CVE-2021-critical",
-                            references = listOf(
-                                VulnerabilityReference(
-                                    url = URI("https://oss-review-toolkit.org"),
-                                    scoringSystem = "CVSS3",
-                                    severity = "CRITICAL",
-                                    score = 9.0f,
-                                    vector = null
-                                )
-                            )
-                        ),
-                        Vulnerability(
-                            id = "CVE-2021-trivial",
-                            references = listOf(
-                                VulnerabilityReference(
-                                    url = URI("https://oss-review-toolkit.org"),
-                                    scoringSystem = "CVSS3",
-                                    severity = "LOW",
-                                    score = 2.0f,
-                                    vector = null
-                                )
-                            )
-                        )
+                        criticalVulnerability,
+                        lowVulnerability
                     )
                 )
             )

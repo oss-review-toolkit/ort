@@ -23,7 +23,7 @@ package org.ossreviewtoolkit.model.vulnerabilities
  * The rating attaches human-readable semantics to the score number according to CVSS version 2, see
  * https://www.balbix.com/insights/cvss-v2-vs-cvss-v3/#CVSSv3-Scoring-Scale-vs-CVSSv2-6.
  */
-enum class Cvss2Rating(private val upperBound: Float) {
+enum class Cvss2Rating(val upperBound: Float) {
     LOW(4.0f),
     MEDIUM(7.0f),
     HIGH(10.0f);
