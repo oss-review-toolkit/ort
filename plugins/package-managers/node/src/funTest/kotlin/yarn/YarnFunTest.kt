@@ -74,8 +74,6 @@ class YarnFunTest : StringSpec({
     }
 
     "Resolve workspace dependencies correctly" {
-        // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
-        // dependencies get assigned to a scope.
         val definitionFile = getAssetFile("projects/synthetic/yarn/workspaces/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn/workspaces-expected-output.yml")
 
