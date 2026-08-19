@@ -268,6 +268,7 @@ class NodePackageManagerDetectionTest : WordSpec({
                 "yarn/dangling-linked-references/package.json",
                 "yarn/invalid-package-json/package.json",
                 "yarn/project-with-lockfile/package.json",
+                "yarn/workspaces/non-workspace/pkg3/package.json",
                 "yarn/workspaces/package.json"
             )
         }

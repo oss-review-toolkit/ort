@@ -45,7 +45,13 @@ projects:
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn2/workspaces"
   description: "Yarn test project using Yarn workspaces."
   homepage_url: ""
-  scopes: []
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::long:3.2.0"
+  - name: "devDependencies"
+    dependencies:
+    - id: "NPM::boolbase:1.0.0"
 - id: "Yarn2:@scope1:pkg1:1.0.0"
   definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn2/workspaces/packages/pkg1/package.json"
   declared_licenses:
@@ -80,6 +86,66 @@ projects:
         dependencies:
         - id: "NPM::node-fetch:2.6.0"
 packages:
+- id: "NPM::boolbase:1.0.0"
+  purl: "pkg:npm/boolbase@1.0.0"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "two functions: One that returns true, one that returns false"
+  homepage_url: "https://github.com/fb55/boolbase"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
+    hash:
+      value: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/fb55/boolbase"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/boolbase.git"
+    revision: ""
+    path: ""
+- id: "NPM::long:3.2.0"
+  purl: "pkg:npm/long@3.2.0"
+  authors:
+  - "Daniel Wirtz"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A Long class for representing a 64-bit two's-complement integer value."
+  homepage_url: "https://github.com/dcodeIO/long.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/long/-/long-3.2.0.tgz"
+    hash:
+      value: "d821b7138ca1cb581c172990ef14db200b5c474b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
 - id: "NPM::node-fetch:2.6.0"
   purl: "pkg:npm/node-fetch@2.6.0"
   authors:
