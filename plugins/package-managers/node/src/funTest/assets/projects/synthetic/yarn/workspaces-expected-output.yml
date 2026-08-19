@@ -48,7 +48,7 @@ projects:
     url: "<REPLACE_VCS_PROCESSED_URL>"
     revision: "<REPLACE_VCS_REVISION>"
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn/workspaces"
-  description: "Yarn test project using Yarn workspaces."
+  description: "Workspace root module."
   homepage_url: ""
   scopes:
   - name: "dependencies"
