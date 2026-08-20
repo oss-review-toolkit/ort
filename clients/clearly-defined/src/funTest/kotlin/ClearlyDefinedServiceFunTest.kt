@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.clients.clearlydefined
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.TestAbortedException
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.comparables.shouldBeGreaterThan
@@ -30,6 +31,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.include
 import io.kotest.matchers.string.shouldStartWith
+
+import java.net.SocketTimeoutException
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
@@ -61,7 +64,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         "return single curation data" {
             val service = ClearlyDefinedService.create()
 
-            val curation = service.getCuration(coordinates)
+            val curation = withIgnoreTimeout { service.getCuration(coordinates) }
 
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
@@ -143,3 +146,21 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         }
     }
 })
+
+/**
+ * Skip the test in case `SocketTimeoutException` occurred by throwing a `TestAbortedException`. Otherwise, execute the
+ * [block] as usual.
+ *
+ * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
+ * when network is not available.
+ */
+private suspend fun <T> withIgnoreTimeout(block: suspend () -> T): T =
+    runCatching {
+        block()
+    }.getOrElse {
+        throw if (it is SocketTimeoutException) {
+            TestAbortedException()
+        } else {
+            it
+        }
+    }
