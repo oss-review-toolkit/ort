@@ -19,14 +19,13 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import io.kotest.assertions.retry
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.TestAbortedException
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.result.shouldBeSuccess
 
+import java.net.SocketTimeoutException
 import java.time.Instant
-
-import kotlin.time.Duration.Companion.seconds
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Hash
@@ -59,7 +58,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        withRetry {
+        withIgnoreTimeout {
             val results = storage.read(pkg)
 
             results shouldBeSuccess {
@@ -122,7 +121,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        withRetry {
+        withIgnoreTimeout {
             val results = storage.read(pkg)
 
             results shouldBeSuccess {
@@ -165,7 +164,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        withRetry {
+        withIgnoreTimeout {
             val results = storage.read(pkg)
 
             results shouldBeSuccess { result ->
@@ -182,11 +181,21 @@ class ClearlyDefinedStorageFunTest : StringSpec({
     }
 })
 
-private suspend fun <T> withRetry(f: suspend () -> T): T =
-    retry(
-        maxRetry = 5,
-        timeout = (10 + 20 + 40 + 80 + 160).seconds,
-        delay = 10.seconds,
-        multiplier = 2,
-        f = f
-    )
+/**
+ * Skips the test in case `SocketTimeoutException` occurred, by throwing a `TestAbortedException`.
+ * Otherwise, execute [block] as usual.
+ *
+ * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
+ * when network is not available.
+ */
+private suspend fun withIgnoreTimeout(block: suspend () -> Unit) {
+    runCatching {
+        block()
+    }.onFailure { e ->
+        throw if (e is SocketTimeoutException) {
+            TestAbortedException()
+        } else {
+            e
+        }
+    }
+}
