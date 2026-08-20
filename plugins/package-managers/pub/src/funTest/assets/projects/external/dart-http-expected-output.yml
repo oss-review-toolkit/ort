@@ -176,7 +176,7 @@ project:
           dependencies:
           - id: "Pub::path:1.9.0"
         - id: "Pub::path:1.9.0"
-        - id: "Pub::source_maps:0.10.13"
+        - id: "Pub::source_maps:0.10.14"
           dependencies:
           - id: "Pub::source_span:1.10.2"
             dependencies:
@@ -694,7 +694,7 @@ project:
             dependencies:
             - id: "Pub::path:1.9.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::source_maps:0.10.13"
+          - id: "Pub::source_maps:0.10.14"
             dependencies:
             - id: "Pub::source_span:1.10.2"
               dependencies:
@@ -759,7 +759,7 @@ project:
         - id: "Pub::source_map_stack_trace:2.1.2"
           dependencies:
           - id: "Pub::path:1.9.0"
-          - id: "Pub::source_maps:0.10.13"
+          - id: "Pub::source_maps:0.10.14"
             dependencies:
             - id: "Pub::source_span:1.10.2"
               dependencies:
@@ -769,7 +769,7 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-        - id: "Pub::source_maps:0.10.13"
+        - id: "Pub::source_maps:0.10.14"
           dependencies:
           - id: "Pub::source_span:1.10.2"
             dependencies:
@@ -1719,8 +1719,8 @@ packages:
     url: "https://github.com/dart-lang/tools.git"
     revision: ""
     path: "pkgs/source_map_stack_trace"
-- id: "Pub::source_maps:0.10.13"
-  purl: "pkg:pub/source_maps@0.10.13"
+- id: "Pub::source_maps:0.10.14"
+  purl: "pkg:pub/source_maps@0.10.14"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A library to programmatically manipulate source map files."
@@ -1731,9 +1731,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/source_maps/versions/0.10.13.tar.gz"
+    url: "https://pub.dev/packages/source_maps/versions/0.10.14.tar.gz"
     hash:
-      value: "190222579a448b03896e0ca6eca5998fa810fda630c1d65e2f78b3f638f54812"
+      value: "14c2945847669b44089bb1222f66873d7ff7103c58911917f2a63c5a62327898"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
