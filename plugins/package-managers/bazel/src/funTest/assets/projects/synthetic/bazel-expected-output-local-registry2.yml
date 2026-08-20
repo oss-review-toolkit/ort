@@ -41,12 +41,12 @@ packages:
       value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
       algorithm: "SHA-256"
   vcs:
-    type: "Git"
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -67,12 +67,12 @@ packages:
       value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
       algorithm: "SHA-256"
   vcs:
-    type: "Git"
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: ""
     url: ""
     revision: ""
     path: ""

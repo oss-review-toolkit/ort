@@ -718,11 +718,13 @@ class Bazel(
 private fun String.expandRepositoryUrl(): String = withoutPrefix("github:")?.let { "https://github.com/$it" } ?: this
 
 private fun ModuleMetadata.toVcsInfo() =
-    VcsInfo(
-        type = VcsType.GIT,
-        url = repository?.firstOrNull().orEmpty().expandRepositoryUrl(),
-        revision = ""
-    )
+    repository?.firstOrNull()?.let { url ->
+        VcsInfo(
+            type = VcsType.GIT,
+            url = url.expandRepositoryUrl(),
+            revision = ""
+        )
+    }.orEmpty()
 
 private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? =
     when (this) {
