@@ -19,14 +19,13 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import io.kotest.assertions.retry
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.TestAbortedException
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.result.shouldBeSuccess
 
+import java.net.SocketTimeoutException
 import java.time.Instant
-
-import kotlin.time.Duration.Companion.seconds
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Hash
@@ -59,54 +58,52 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        withRetry {
-            val results = storage.read(pkg)
+        val results = storage.read(pkg).withIgnoreTimeout()
 
-            results shouldBeSuccess {
-                it shouldContain ScanResult(
-                    provenance = RepositoryProvenance(
-                        vcsInfo = VcsInfo(
-                            type = VcsType.GIT,
-                            url = "https://github.com/vdurmont/semver4j.git",
-                            revision = "88912638db3f6112a2b345f1638ced33a0a606e1"
-                        ),
-                        resolvedRevision = "88912638db3f6112a2b345f1638ced33a0a606e1"
+        results shouldBeSuccess {
+            it shouldContain ScanResult(
+                provenance = RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/vdurmont/semver4j.git",
+                        revision = "88912638db3f6112a2b345f1638ced33a0a606e1"
                     ),
-                    scanner = ScannerDetails(
-                        name = "ScanCode",
-                        version = "30.1.0",
-                        configuration = "--classify true --copyright true --email true " +
-                            "--generated true --info true --is-license-text true --json-pp /tmp/cd-d8WH1p " +
-                            "--license true --license-clarity-score true --license-text true " +
-                            "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
-                            "--summary true --summary-key-files true --timeout 1000.0 --url true"
-                    ),
-                    summary = ScanSummary.EMPTY.copy(
-                        startTime = Instant.parse("2023-09-27T08:28:44.000244665Z"),
-                        endTime = Instant.parse("2023-09-27T08:29:22.000369368Z"),
-                        licenseFindings = setOf(
-                            LicenseFinding(
-                                license = "BSD-3-Clause",
-                                location = TextLocation(
-                                    path = "META-INF/maven/com.vdurmont/semver4j/pom.xml",
-                                    startLine = 28,
-                                    endLine = 34
-                                ),
-                                score = 75.0f
+                    resolvedRevision = "88912638db3f6112a2b345f1638ced33a0a606e1"
+                ),
+                scanner = ScannerDetails(
+                    name = "ScanCode",
+                    version = "30.1.0",
+                    configuration = "--classify true --copyright true --email true " +
+                        "--generated true --info true --is-license-text true --json-pp /tmp/cd-d8WH1p " +
+                        "--license true --license-clarity-score true --license-text true " +
+                        "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
+                        "--summary true --summary-key-files true --timeout 1000.0 --url true"
+                ),
+                summary = ScanSummary.EMPTY.copy(
+                    startTime = Instant.parse("2023-09-27T08:28:44.000244665Z"),
+                    endTime = Instant.parse("2023-09-27T08:29:22.000369368Z"),
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation(
+                                path = "META-INF/maven/com.vdurmont/semver4j/pom.xml",
+                                startLine = 28,
+                                endLine = 34
                             ),
-                            LicenseFinding(
-                                license = "MIT",
-                                location = TextLocation(
-                                    path = "META-INF/maven/com.vdurmont/semver4j/pom.xml",
-                                    startLine = 30,
-                                    endLine = 31
-                                ),
-                                score = 83.33f
-                            )
+                            score = 75.0f
+                        ),
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation(
+                                path = "META-INF/maven/com.vdurmont/semver4j/pom.xml",
+                                startLine = 30,
+                                endLine = 31
+                            ),
+                            score = 83.33f
                         )
                     )
                 )
-            }
+            )
         }
     }
 
@@ -122,34 +119,32 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        withRetry {
-            val results = storage.read(pkg)
+        val results = storage.read(pkg).withIgnoreTimeout()
 
-            results shouldBeSuccess {
-                it shouldContain ScanResult(
-                    provenance = RepositoryProvenance(
-                        vcsInfo = VcsInfo(
-                            type = VcsType.GIT,
-                            url = "https://github.com/sksamuel/hoplite.git",
-                            revision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
-                        ),
-                        resolvedRevision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
+        results shouldBeSuccess {
+            it shouldContain ScanResult(
+                provenance = RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/sksamuel/hoplite.git",
+                        revision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
                     ),
-                    scanner = ScannerDetails(
-                        name = "ScanCode",
-                        version = "30.1.0",
-                        configuration = "--classify true --copyright true --email true " +
-                            "--generated true --info true --is-license-text true --json-pp /tmp/cd-ZLZNNN " +
-                            "--license true --license-clarity-score true --license-text true " +
-                            "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
-                            "--summary true --summary-key-files true --timeout 1000.0 --url true"
-                    ),
-                    summary = ScanSummary.EMPTY.copy(
-                        startTime = Instant.parse("2022-05-02T07:34:28.000784295Z"),
-                        endTime = Instant.parse("2022-05-02T07:34:59.000958218Z")
-                    )
+                    resolvedRevision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
+                ),
+                scanner = ScannerDetails(
+                    name = "ScanCode",
+                    version = "30.1.0",
+                    configuration = "--classify true --copyright true --email true " +
+                        "--generated true --info true --is-license-text true --json-pp /tmp/cd-ZLZNNN " +
+                        "--license true --license-clarity-score true --license-text true " +
+                        "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
+                        "--summary true --summary-key-files true --timeout 1000.0 --url true"
+                ),
+                summary = ScanSummary.EMPTY.copy(
+                    startTime = Instant.parse("2022-05-02T07:34:28.000784295Z"),
+                    endTime = Instant.parse("2022-05-02T07:34:59.000958218Z")
                 )
-            }
+            )
         }
     }
 
@@ -165,28 +160,33 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        withRetry {
-            val results = storage.read(pkg)
+        val results = storage.read(pkg).withIgnoreTimeout()
 
-            results shouldBeSuccess { result ->
-                result.map { it.provenance } shouldContain RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "https://github.com/bropat/ioBroker.eusec.git",
-                        revision = "327b125548c9b806490085a2dacfdfc6e7776803"
-                    ),
-                    resolvedRevision = "327b125548c9b806490085a2dacfdfc6e7776803"
-                )
-            }
+        results shouldBeSuccess { result ->
+            result.map { it.provenance } shouldContain RepositoryProvenance(
+                vcsInfo = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/bropat/ioBroker.eusec.git",
+                    revision = "327b125548c9b806490085a2dacfdfc6e7776803"
+                ),
+                resolvedRevision = "327b125548c9b806490085a2dacfdfc6e7776803"
+            )
         }
     }
 })
 
-private suspend fun <T> withRetry(f: suspend () -> T): T =
-    retry(
-        maxRetry = 5,
-        timeout = (10 + 20 + 40 + 80 + 160).seconds,
-        delay = 10.seconds,
-        multiplier = 2,
-        f = f
-    )
+/**
+ * Skip the test in case `SocketTimeoutException` occurred by throwing a `TestAbortedException`. Otherwise, return the
+ * [Result] as-is.
+ *
+ * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
+ * when network is not available.
+ */
+private fun <T> Result<T>.withIgnoreTimeout(): Result<T> =
+    onFailure { e ->
+        throw if (e.cause is SocketTimeoutException) {
+            TestAbortedException()
+        } else {
+            e
+        }
+    }
