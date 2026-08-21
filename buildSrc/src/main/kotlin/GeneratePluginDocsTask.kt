@@ -243,11 +243,22 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
     }
 }
 
-private val KDOC_LINK_REGEX = Regex("""\[([^]]+)](?:\[([^]]+)])?(?!\()""")
+/**
+ * A regex to search for KDoc links by looking for text surrounded by square brackets. To be able to ignore square
+ * brackets within code blocks, it matches three alternatives:
+ * 1. Multiline code blocks surrounded by triple backticks.
+ * 2. Inline code blocks surrounded by single backticks.
+ * 3. KDoc links surrounded by square brackets, optionally followed by a second set of square brackets for the link
+ *    target.
+ */
+private val KDOC_LINK_REGEX = Regex("""```[\s\S]*?```|`[^`]*`|\[([^]]+)](?:\[([^]]+)])?(?!\()""")
 
 /** Convert KDoc symbol links into inline code blocks. */
 fun convertKdocLinks(input: String) =
     input.replace(KDOC_LINK_REGEX) {
+        // Ignore code blocks.
+        if (it.value.startsWith('`')) return@replace it.value
+
         val (text, target) = it.destructured
         if (target.isNotEmpty()) "$text (`$target`)" else "`$text`"
     }
