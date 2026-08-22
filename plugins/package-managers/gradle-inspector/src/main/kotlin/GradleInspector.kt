@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.toJson
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.isScopeIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -134,12 +133,8 @@ class GradleInspector(
 
         val initScriptText = javaClass.getResource("/template.init.gradle").readText()
             .replace("<REPLACE_PLUGIN_JAR>", pluginJar.invariantSeparatorsPath)
-            .replace(
-                "<REPLACE_EXCLUDED_SCOPES>", excludedScopes.toJson(prettyPrint = false)
-            )
-            .replace(
-                "<REPLACE_INCLUDED_SCOPES>", includedScopes.toJson(prettyPrint = false)
-            )
+            .replace("<REPLACE_EXCLUDED_SCOPES>", excludedScopes.joinToString("\u0000"))
+            .replace("<REPLACE_INCLUDED_SCOPES>", includedScopes.joinToString("\u0000"))
 
         val initScript = toolsDir / "init.gradle"
 
@@ -170,8 +165,14 @@ class GradleInspector(
 
             logger.info { "The project at '$projectDir' uses Gradle version $buildGradleVersion." }
 
-            val excludedScopes = if (analyzerConfig.skipExcluded) excludes.scopes.map { it.pattern } else emptyList()
-            val includedScopes = if (analyzerConfig.skipExcluded) includes.scopes.map { it.pattern } else emptyList()
+            val excludedScopes = mutableListOf<String>()
+            val includedScopes = mutableListOf<String>()
+
+            if (analyzerConfig.skipExcluded) {
+                excludes.scopes.mapTo(excludedScopes) { it.pattern }
+                includes.scopes.mapTo(includedScopes) { it.pattern }
+            }
+
             // In order to debug the plugin, pass the "-Dorg.gradle.debug=true" option to the JVM running ORT. This will
             // then block execution of the plugin until a remote debug session is attached to port 5005 (by default),
             // also see https://docs.gradle.org/current/userguide/troubleshooting.html#sec:troubleshooting_build_logic.

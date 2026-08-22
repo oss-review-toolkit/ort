@@ -18,7 +18,6 @@
  */
 
 import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
 
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 
@@ -30,12 +29,9 @@ initscript {
     }
 }
 
-def excludedScopes = new JsonSlurper().parseText('<REPLACE_EXCLUDED_SCOPES>') as List<String>
-def includedScopes = new JsonSlurper().parseText('<REPLACE_INCLUDED_SCOPES>') as List<String>
-
 gradle.projectsLoaded {
-    rootProject.ext.ortExcludedScopes = excludedScopes
-    rootProject.ext.ortIncludedScopes = includedScopes
+    rootProject.ext.ortExcludedScopes = '<REPLACE_EXCLUDED_SCOPES>'
+    rootProject.ext.ortIncludedScopes = '<REPLACE_INCLUDED_SCOPES>'
 }
 
 allprojects {
