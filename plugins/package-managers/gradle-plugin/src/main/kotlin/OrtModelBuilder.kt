@@ -77,8 +77,8 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
             // Note that for empty strings, `split()` creates a list with a single element that is the empty string.
             Pair(
-                separatedExcludedScopes.split('\u0000').filter { it.isNotBlank() },
-                separatedIncludedScopes.split('\u0000').filter { it.isNotBlank() }
+                separatedExcludedScopes.split('\u0000').filter { it.isNotBlank() }.map { it.toRegex() },
+                separatedIncludedScopes.split('\u0000').filter { it.isNotBlank() }.map { it.toRegex() }
             )
         }
 

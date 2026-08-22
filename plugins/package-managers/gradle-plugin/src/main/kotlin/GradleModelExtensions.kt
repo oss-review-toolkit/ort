@@ -63,9 +63,9 @@ internal fun Configuration.isRelevant(): Boolean {
     return canBeResolved && !isDeprecatedConfiguration && !isDependenciesMetadata && !isDependencySources
 }
 
-internal fun String.isOrtScopeIncluded(excludes: Collection<String>, includes: Collection<String>): Boolean {
-    val isIncluded = includes.isEmpty() || includes.any { Regex(it).matches(this) }
-    val isExcluded = excludes.any { Regex(it).matches(this) }
+internal fun String.isOrtScopeIncluded(excludes: Collection<Regex>, includes: Collection<Regex>): Boolean {
+    val isIncluded = includes.isEmpty() || includes.any { it.matches(this) }
+    val isExcluded = excludes.any { it.matches(this) }
     return isIncluded && !isExcluded
 }
 
