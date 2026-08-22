@@ -110,6 +110,9 @@ ort:
     # `enabledPackageManagers`.
     disabledPackageManagers: [Maven, NPM]
 
+    # The URL of the Foojay Disco API. If unset, the Disco client's default URL is used.
+    discoUrl: "https://foojay.example.com/disco/"
+
     # A flag to control whether excluded scopes and paths should be skipped during the analysis.
     skipExcluded: true
 
