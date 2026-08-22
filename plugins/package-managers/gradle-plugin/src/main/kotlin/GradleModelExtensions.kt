@@ -63,6 +63,12 @@ internal fun Configuration.isRelevant(): Boolean {
     return canBeResolved && !isDeprecatedConfiguration && !isDependenciesMetadata && !isDependencySources
 }
 
+internal fun String.isOrtScopeIncluded(excludes: Collection<Regex>, includes: Collection<Regex>): Boolean {
+    val isIncluded = includes.isEmpty() || includes.any { it.matches(this) }
+    val isExcluded = excludes.any { it.matches(this) }
+    return isIncluded && !isExcluded
+}
+
 /**
  * Return a map that associates names of artifact repositories to their model representations.
  */

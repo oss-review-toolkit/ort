@@ -29,6 +29,11 @@ initscript {
     }
 }
 
+gradle.projectsLoaded {
+    rootProject.ext.ortExcludedScopes = '<REPLACE_EXCLUDED_SCOPES>'
+    rootProject.ext.ortIncludedScopes = '<REPLACE_INCLUDED_SCOPES>'
+}
+
 allprojects {
     apply plugin: OrtModelPlugin
 }

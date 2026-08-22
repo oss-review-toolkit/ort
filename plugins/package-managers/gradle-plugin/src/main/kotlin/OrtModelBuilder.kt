@@ -71,7 +71,21 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
         project.repositories.associateNamesWithUrlsTo(repositories)
 
-        val relevantConfigurations = project.configurations.filter { it.isRelevant() }
+        val (excludedScopes, includedScopes) = with(project.rootProject.extensions.extraProperties) {
+            val separatedExcludedScopes = get("ortExcludedScopes") as String
+            val separatedIncludedScopes = get("ortIncludedScopes") as String
+
+            // Note that for empty strings, `split()` creates a list with a single element that is the empty string.
+            Pair(
+                separatedExcludedScopes.split('\u0000').filter { it.isNotBlank() }.map { it.toRegex() },
+                separatedIncludedScopes.split('\u0000').filter { it.isNotBlank() }.map { it.toRegex() }
+            )
+        }
+
+        val relevantConfigurations = project.configurations.filter { config ->
+            config.isRelevant() && config.name.isOrtScopeIncluded(excludedScopes, includedScopes)
+        }
+
         val componentsForId = mutableMapOf<OrtComponentIdentifier, OrtComponent>()
 
         val ortConfigurations = relevantConfigurations.mapNotNull { config ->
