@@ -76,7 +76,7 @@ internal fun Project.scopePatterns(type: OrtScopePatternType): List<String> {
     return (ext.get(name) as? List<*>)?.filterIsInstance<String>().orEmpty()
 }
 
-internal fun String.isOrtScopeIncluded(excludes: List<String>, includes: List<String>): Boolean {
+internal fun String.isOrtScopeIncluded(excludes: Collection<String>, includes: Collection<String>): Boolean {
     val isIncluded = includes.isEmpty() || includes.any { Regex(it).matches(this) }
     val isExcluded = excludes.any { Regex(it).matches(this) }
     return isIncluded && !isExcluded
