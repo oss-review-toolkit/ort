@@ -128,7 +128,7 @@ class GradleInspector(
     private val dependencyHandler = GradleDependencyHandler(projectType)
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
-    private fun extractInitScript(excludedScopes: List<String>, includedScopes: List<String>): File {
+    private fun extractInitScript(excludedScopes: Collection<String>, includedScopes: Collection<String>): File {
         val toolsDir = ortToolsDirectory.resolve(descriptor.id).apply { safeMkdirs() }
         val pluginJar = extractResource("/gradle-plugin.jar", toolsDir / "gradle-plugin.jar")
 
