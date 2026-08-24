@@ -249,7 +249,7 @@ class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descr
                 type = projectType,
                 namespace = namespace,
                 name = name,
-                version = pkgInfo.version.orEmpty()
+                version = pkgInfo.version.orEmpty().removePrefix("v")
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = parseAuthors(pkgInfo),
@@ -322,7 +322,7 @@ private fun parseVirtualPackageNames(
 
 private fun PackageInfo.toPackage(): Package {
     val rawName = checkNotNull(name)
-    val version = version.orEmpty()
+    val version = version.orEmpty().removePrefix("v")
     val homepageUrl = homepage.orEmpty()
     val vcsFromPackage = parseVcsInfo(this)
 
