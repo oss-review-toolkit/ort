@@ -65,6 +65,11 @@ private const val SCOPE_NAME_REQUIRE_DEV = "require-dev"
 private val ALL_SCOPE_NAMES = setOf(SCOPE_NAME_REQUIRE, SCOPE_NAME_REQUIRE_DEV)
 
 internal object ComposerCommand : CommandLineTool {
+    private val DEFAULT_ENVIRONMENT = mapOf(
+        "COMPOSER_NO_AUDIT" to "1",
+        "COMPOSER_NO_INTERACTION" to "1"
+    )
+
     override fun command(workingDir: File?) =
         if (workingDir?.resolve(COMPOSER_PHAR_BINARY)?.isFile == true) {
             "php $COMPOSER_PHAR_BINARY"
@@ -75,6 +80,9 @@ internal object ComposerCommand : CommandLineTool {
                 "composer"
             }
         }
+
+    override fun run(workingDir: File?, vararg args: CharSequence) =
+        run(args = args, workingDir = workingDir, environment = DEFAULT_ENVIRONMENT)
 
     override fun transformVersion(output: String) =
         // The version string can be something like:
