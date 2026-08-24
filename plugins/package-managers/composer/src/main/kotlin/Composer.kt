@@ -67,6 +67,7 @@ private val ALL_SCOPE_NAMES = setOf(SCOPE_NAME_REQUIRE, SCOPE_NAME_REQUIRE_DEV)
 internal object ComposerCommand : CommandLineTool {
     private val DEFAULT_ENVIRONMENT = mapOf(
         "COMPOSER_NO_AUDIT" to "1",
+        "COMPOSER_NO_BLOCKING" to "1",
         "COMPOSER_NO_INTERACTION" to "1"
     )
 
