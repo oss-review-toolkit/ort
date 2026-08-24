@@ -147,7 +147,6 @@ class GradleInspector(
         projectDir: File,
         excludes: Excludes,
         includes: Includes,
-        analyzerConfig: AnalyzerConfiguration,
         issues: MutableList<Issue>
     ): OrtDependencyTreeModel =
         forProjectDirectory(projectDir).connect().use { connection ->
@@ -165,13 +164,10 @@ class GradleInspector(
 
             logger.info { "The project at '$projectDir' uses Gradle version $buildGradleVersion." }
 
-            val excludedScopes = mutableListOf<String>()
-            val includedScopes = mutableListOf<String>()
-
-            if (analyzerConfig.skipExcluded) {
-                excludes.scopes.mapTo(excludedScopes) { it.pattern }
-                includes.scopes.mapTo(includedScopes) { it.pattern }
-            }
+            // Note that excludes / includes are cleared by the caller already if [AnalyzerConfiguration.skipExcluded]
+            // is false.
+            val excludedScopes = excludes.scopes.map { it.pattern }
+            val includedScopes = includes.scopes.map { it.pattern }
 
             // In order to debug the plugin, pass the "-Dorg.gradle.debug=true" option to the JVM running ORT. This will
             // then block execution of the plugin until a remote debug session is attached to port 5005 (by default),
@@ -263,7 +259,7 @@ class GradleInspector(
         logger.info { "Resolving the dependency tree model via IPC from the Gradle Daemon..." }
 
         val dependencyTreeModel =
-            gradleConnector.getOrtDependencyTreeModel(projectDir, excludes, includes, analyzerConfig, issues)
+            gradleConnector.getOrtDependencyTreeModel(projectDir, excludes, includes, issues)
         dependencyHandler.setTreeModel(dependencyTreeModel)
 
         logger.info { "Successfully retrieved the dependency tree model from the Gradle Daemon." }
