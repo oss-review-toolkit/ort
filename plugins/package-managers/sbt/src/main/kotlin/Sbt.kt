@@ -119,7 +119,7 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
         val javaHome = config.javaVersion
             ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
             ?.let {
-                JavaBootstrapper.installJdk("TEMURIN", it)
+                JavaBootstrapper.installJdk("TEMURIN", it, analyzerConfig.discoUrl)
                     .onFailure { e -> logger.error { "Failed to bootstrap JDK version $it: ${e.collectMessages()}" } }
                     .getOrNull()
             } ?: config.javaHome?.let { File(it) }

@@ -26,6 +26,9 @@
         },
         "skipExcluded": {
             "type": "boolean"
+        },
+        "discoUrl": {
+            "type": "string"
         }
     }
 }

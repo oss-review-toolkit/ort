@@ -238,7 +238,7 @@ class Gradle(
                         val javaHome = config.javaVersion
                             ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
                             ?.let {
-                                JavaBootstrapper.installJdk("TEMURIN", it).onFailure { e ->
+                                JavaBootstrapper.installJdk("TEMURIN", it, analyzerConfig.discoUrl).onFailure { e ->
                                     issues += createAndLogIssue(e.collectMessages())
                                 }.getOrNull()
                             } ?: config.javaHome?.let { File(it) }
