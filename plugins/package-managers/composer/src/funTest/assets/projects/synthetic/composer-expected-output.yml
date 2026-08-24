@@ -45,7 +45,7 @@ project:
             - id: "Composer:phpdocumentor:reflection-common:2.2.0"
           - id: "Composer:webmozart:assert:1.9.1"
             dependencies:
-            - id: "Composer:symfony:polyfill-ctype:v1.22.0"
+            - id: "Composer:symfony:polyfill-ctype:1.22.0"
         - id: "Composer:sebastian:comparator:3.0.3"
           dependencies:
           - id: "Composer:sebastian:diff:3.0.3"
@@ -954,8 +954,8 @@ packages:
     url: "https://github.com/sebastianbergmann/version.git"
     revision: "99732be0ddb3361e16ad77b68ba41efc8e979019"
     path: ""
-- id: "Composer:symfony:polyfill-ctype:v1.22.0"
-  purl: "pkg:composer/symfony/polyfill-ctype@v1.22.0"
+- id: "Composer:symfony:polyfill-ctype:1.22.0"
+  purl: "pkg:composer/symfony/polyfill-ctype@1.22.0"
   authors:
   - "Gert de Pagter"
   - "Symfony Community"
