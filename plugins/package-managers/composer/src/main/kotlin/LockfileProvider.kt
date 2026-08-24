@@ -53,15 +53,15 @@ class LockfileProvider(private val definitionFile: File) {
         val lockConfig = ComposerCommand.run(workingDir, "config", "lock")
 
         if (lockConfig.isSuccess && lockConfig.stdout.trim() == "false") {
-            File.createTempFile("composer", "json", workingDir).also {
+            definitionFileBackup = File.createTempFile("composer", "json", workingDir).also {
                 // The above call already creates an empty file, so the copy call needs to overwrite it.
-                definitionFileBackup = definitionFile.copyTo(it, overwrite = true)
+                definitionFile.copyTo(it, overwrite = true)
             }
 
             // Ensure that the build is not configured to disallow the creation of lockfiles.
             val unsetLock = ComposerCommand.run(workingDir, "config", "--unset", "lock")
             if (unsetLock.isError) {
-                definitionFileBackup?.delete()
+                definitionFileBackup.delete()
                 return null
             }
         }
