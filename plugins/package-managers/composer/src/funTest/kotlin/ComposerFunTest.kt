@@ -23,7 +23,8 @@ import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldBeSingle
+import io.kotest.matchers.ints.beInRange
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
@@ -69,8 +70,9 @@ class ComposerFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Error is shown when no lockfile is present" {
+    "Error is shown when no lockfile is present with disallowing dynamic versions" {
         val definitionFile = getAssetFile("projects/synthetic/no-lockfile/composer.json")
+
         val result = ComposerFactory.create().resolveSingleProject(definitionFile)
 
         with(result) {
@@ -78,8 +80,21 @@ class ComposerFunTest : StringSpec({
             project.definitionFilePath shouldBe "plugins/package-managers/composer/src/funTest/assets/projects/" +
                 "synthetic/no-lockfile/composer.json"
             packages should beEmpty()
-            issues shouldHaveSize 1
-            issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+            issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+        }
+    }
+
+    "No error is shown when no lockfile is present with allowing dynamic versions" {
+        val definitionFile = getAssetFile("projects/synthetic/no-lockfile/composer.json")
+
+        val result = ComposerFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
+
+        with(result) {
+            project.id shouldBe Identifier("Composer:ort:composer-test-project:0.1.0")
+            project.definitionFilePath shouldBe "plugins/package-managers/composer/src/funTest/assets/projects/" +
+                "synthetic/no-lockfile/composer.json"
+            packages.size should beInRange(30..40)
+            issues should beEmpty()
         }
     }
 
