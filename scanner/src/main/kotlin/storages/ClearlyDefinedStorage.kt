@@ -165,7 +165,7 @@ class ClearlyDefinedStorage(
                 }
             }
 
-            throw ScanStorageException(message)
+            throw ScanStorageException(message, e)
         }
     }
 
