@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
@@ -73,7 +74,16 @@ internal val ModuleInfo.isInstalled: Boolean
     get() = path != null && File(path).isDirectory
 
 internal val ModuleInfo.isProject: Boolean
-    get() = resolved == null || resolved.startsWith("file:")
+    get(): Boolean {
+        val moduleDir = path?.let { File(it).realFile } ?: return false
+        val baseDir = if (name != null && "/" in name) {
+            moduleDir.parentFile.parentFile
+        } else {
+            moduleDir.parentFile
+        }
+
+        return baseDir.name != NODE_MODULES_DIRNAME
+    }
 
 private val ModuleInfo.packageJsonFile: File get() {
     check(isInstalled) { "The module directory '$path' is null or does not exist." }

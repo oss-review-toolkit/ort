@@ -32,7 +32,6 @@ projects:
     - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
     - id: "NPM:@csstools:css-tokenizer:4.0.0"
     - id: "NPM:@here:harp-fetch:0.3.6"
-      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "NPM::node-fetch:2.7.0"
         dependencies:
@@ -77,7 +76,6 @@ projects:
       - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
       - id: "NPM:@csstools:css-tokenizer:4.0.0"
       - id: "NPM:@here:harp-fetch:0.3.6"
-        linkage: "PROJECT_DYNAMIC"
         dependencies:
         - id: "NPM::node-fetch:2.7.0"
           dependencies:
@@ -103,7 +101,6 @@ projects:
         - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
         - id: "NPM:@csstools:css-tokenizer:4.0.0"
         - id: "NPM:@here:harp-fetch:0.3.6"
-          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "NPM::node-fetch:2.7.0"
             dependencies:
@@ -157,7 +154,6 @@ projects:
       - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
       - id: "NPM:@csstools:css-tokenizer:4.0.0"
       - id: "NPM:@here:harp-fetch:0.3.6"
-        linkage: "PROJECT_DYNAMIC"
         dependencies:
         - id: "NPM::node-fetch:2.7.0"
           dependencies:
@@ -813,6 +809,36 @@ packages:
     url: "https://github.com/csstools/postcss-plugins.git"
     revision: "9256e22798ff1360e178912af9b57d59d0601c99"
     path: "packages/css-tokenizer"
+- id: "NPM:@here:harp-fetch:0.3.6"
+  purl: "pkg:npm/%40here/harp-fetch@0.3.6"
+  authors:
+  - "HERE Europe B.V."
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "This module adds a subset of the fetch API for Node.js"
+  homepage_url: "https://github.com/heremaps/harp.gl#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
+    hash:
+      value: "703fc8b034f6e0d621cc2c3ded96c6f904723742"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+    path: "@here/harp-fetch"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+    path: "@here/harp-fetch"
 - id: "NPM:@here:harp-fetch:0.11.0"
   purl: "pkg:npm/%40here/harp-fetch@0.11.0"
   authors:
