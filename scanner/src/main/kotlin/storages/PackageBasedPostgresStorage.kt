@@ -159,7 +159,7 @@ class PackageBasedPostgresStorage(
 
                 logger.info { message }
 
-                return Result.failure(ScanStorageException(message))
+                return Result.failure(ScanStorageException(message, it))
             }
         }
     }
@@ -183,7 +183,7 @@ class PackageBasedPostgresStorage(
 
             logger.warn { message }
 
-            throw ScanStorageException(message)
+            throw ScanStorageException(message, it)
         }.map { /* Unit */ }
     }
 }

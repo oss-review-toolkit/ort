@@ -67,7 +67,7 @@ class PackageBasedFileStorage(
 
             logger.info { message }
 
-            throw ScanStorageException(message)
+            throw ScanStorageException(message, it)
         }
     }
 
@@ -104,7 +104,7 @@ class PackageBasedFileStorage(
 
                 logger.warn { message }
 
-                return Result.failure(ScanStorageException(message))
+                return Result.failure(ScanStorageException(message, it))
             }
         }
     }
