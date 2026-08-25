@@ -57,6 +57,7 @@ mordant = "3.0.2"
 okhttp = "5.5.0"
 packageurl = "1.5.0"
 postgres = "42.7.13"
+protoGoogleCommon = "2.74.0"
 reflections = "0.10.2"
 retrofit = "3.0.0"
 s3 = "2.54.0"
@@ -71,6 +72,7 @@ svnkit = "1.10.13"
 testcontainers = "1.21.4"
 tika = "4.0.0"
 wagonHttp = "3.5.3"
+wire = "6.4.7"
 wiremock = "3.13.2"
 xmlutil = "1.0.2"
 xz = "1.12"
@@ -82,6 +84,7 @@ gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSe
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 kfx = { id = "io.github.hfhbd.kfx", version.ref = "kfxPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
+wire = { id = "com.squareup.wire", version.ref = "wire" }
 
 [libraries]
 # These are Maven coordinates for Gradle plugins, which are required for use in precompiled plugin scripts.
@@ -173,6 +176,7 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 packageurl = { module = "com.github.package-url:packageurl-java", version.ref = "packageurl" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
+proto-google-common = { module = "com.google.api.grpc:proto-google-common-protos", version.ref = "protoGoogleCommon" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-jackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
@@ -189,6 +193,7 @@ svnkit = { module = "com.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
 tika = { module = "org.apache.tika:tika-core", version.ref = "tika" }
 wagon-http = { module = "org.apache.maven.wagon:wagon-http", version.ref = "wagonHttp" }
+wire-grpc-client = { module = "com.squareup.wire:wire-grpc-client", version.ref = "wire" }
 wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
 xz = { module = "org.tukaani:xz", version.ref = "xz" }
 

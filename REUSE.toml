@@ -131,6 +131,11 @@ SPDX-FileCopyrightText = "2020 The ORT Project Copyright Holders <https://github
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
+path = "clients/open-source-insights/src/main/proto/api.proto"
+SPDX-FileCopyrightText = "Copyright 2024 Google LLC"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
 path = "clients/osv/src/test/resources/vulnerability/examples/**"
 SPDX-FileCopyrightText = "2021-2022 OSV Schema Authors"
 SPDX-License-Identifier = "Apache-2.0"
