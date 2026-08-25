@@ -68,6 +68,7 @@ object CopyrightableFiles {
         "json",
         "md",
         "png",
+        "proto",
         "svg",
         "ttf",
         "woff2"
