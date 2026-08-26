@@ -126,6 +126,7 @@ class Bun(override val descriptor: PluginDescriptor = BunFactory.descriptor) :
             .markDevDependencies(parsePackageJson(definitionFile))
             .undoDeduplication()
             .filterInstalled()
+
         val scopes = Scope.entries.filterNotTo(mutableSetOf()) { scope -> scope.isExcluded(excludes, includes) }
 
         // Warm-up the cache to speed-up processing.
