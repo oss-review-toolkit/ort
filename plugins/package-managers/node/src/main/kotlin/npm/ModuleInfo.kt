@@ -89,8 +89,8 @@ internal fun ModuleInfo.getAllPackageNodeModuleIds(scopes: Set<Scope>): Set<Stri
 
 internal fun ModuleInfo.getScopeDependencies(scope: Scope) =
     when (scope) {
-        Scope.DEPENDENCIES -> dependencies.values.filter { !it.dev }
-        Scope.DEV_DEPENDENCIES -> dependencies.values.filter { it.dev && !it.optional }
+        Scope.DEPENDENCIES -> dependencies.values.filter { !it.dev && it.isInstalled }
+        Scope.DEV_DEPENDENCIES -> dependencies.values.filter { it.dev && !it.optional && it.isInstalled }
     }
 
 internal fun ModuleInfo.undoDeduplication(): ModuleInfo {
