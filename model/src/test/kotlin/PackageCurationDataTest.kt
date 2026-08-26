@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class PackageCurationDataTest : WordSpec({
@@ -41,6 +43,7 @@ class PackageCurationDataTest : WordSpec({
             url = "original",
             hash = Hash.create("original")
         ),
+        publishedAt = Instant.EPOCH,
         vcs = VcsInfoCurationData(
             type = VcsType.GIT,
             url = "original",
@@ -73,6 +76,7 @@ class PackageCurationDataTest : WordSpec({
             url = "other",
             hash = Hash.create("other")
         ),
+        publishedAt = Instant.EPOCH,
         vcs = VcsInfoCurationData(
             type = VcsType.SUBVERSION,
             url = "other",

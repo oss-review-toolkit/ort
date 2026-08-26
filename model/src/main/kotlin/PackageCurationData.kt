@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.utils.common.zip
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxCompoundExpression
@@ -82,6 +84,11 @@ data class PackageCurationData(
      * The remote artifact where the source package can be downloaded.
      */
     val sourceArtifact: RemoteArtifact? = null,
+
+    /**
+     * The timestamp when the package was published, usually to a package registry like Maven Central.
+     */
+    val publishedAt: Instant? = null,
 
     /**
      * VCS-related information.
@@ -173,6 +180,7 @@ data class PackageCurationData(
             homepageUrl = homepageUrl ?: base.homepageUrl,
             binaryArtifact = binaryArtifact ?: base.binaryArtifact,
             sourceArtifact = sourceArtifact ?: base.sourceArtifact,
+            publishedAt = publishedAt ?: base.publishedAt,
             vcs = base.vcs,
             vcsProcessed = vcsProcessed,
             isMetadataOnly = isMetadataOnly ?: base.isMetadataOnly,
@@ -200,6 +208,7 @@ data class PackageCurationData(
             homepageUrl = homepageUrl ?: other.homepageUrl,
             binaryArtifact = binaryArtifact ?: other.binaryArtifact,
             sourceArtifact = sourceArtifact ?: other.sourceArtifact,
+            publishedAt = publishedAt ?: other.publishedAt,
             vcs = vcs?.merge(other.vcs ?: vcs) ?: other.vcs,
             isMetadataOnly = isMetadataOnly ?: other.isMetadataOnly,
             isModified = isModified ?: other.isModified,
