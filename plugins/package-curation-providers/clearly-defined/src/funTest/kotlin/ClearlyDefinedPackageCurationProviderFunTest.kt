@@ -25,7 +25,8 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
+
+import java.time.Instant
 
 import kotlin.time.Duration.Companion.seconds
 
@@ -44,8 +45,10 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
             val curations = withRetry { provider.getCurationsFor(packages) }
 
-            curations.shouldBeSingle().data.concludedLicense shouldBe
-                "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
+            with(curations.shouldBeSingle().data) {
+                concludedLicense shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
+                publishedAt shouldBe Instant.parse("2013-04-25T00:00:00Z")
+            }
         }
 
         "return an existing curation for the slf4j-log4j12 Maven package" {
@@ -54,7 +57,10 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
             val curations = withRetry { provider.getCurationsFor(packages) }
 
-            curations.shouldBeSingle().data.vcs?.revision shouldBe "0b97c416e42a184ff9728877b461c616187c58f7"
+            with(curations.shouldBeSingle().data) {
+                vcs?.revision shouldBe "0b97c416e42a184ff9728877b461c616187c58f7"
+                publishedAt shouldBe Instant.parse("2019-12-16T00:00:00Z")
+            }
         }
 
         "return no curation for a non-existing dummy NPM package" {
@@ -88,7 +94,9 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
             val curations = withRetry { provider.getCurationsFor(packages) }
 
-            curations shouldNot beEmpty()
+            with(curations.shouldBeSingle().data) {
+                publishedAt shouldBe Instant.parse("2014-06-06T00:00:00Z")
+            }
         }
     }
 })

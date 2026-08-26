@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.plugins.packagecurationproviders.clearlydefined
 
 import java.net.HttpURLConnection
+import java.time.LocalDate
+import java.time.ZoneOffset
 
 import okhttp3.OkHttpClient
 
@@ -127,9 +129,12 @@ class ClearlyDefinedPackageCurationProvider(
             return emptySet()
         }
 
-        val filteredCurations = if (config.minTotalLicenseScore > 0) {
-            val definitions = runBlocking { service.getDefinitionsChunked(curations.keys) }
+        val definitions = runBlocking {
+            // Note that curations also contains keys for coordinates for which no curations are available.
+            service.getDefinitionsChunked(curations.keys)
+        }
 
+        val filteredCurations = if (config.minTotalLicenseScore > 0) {
             curations.filterKeys { coordinates ->
                 val score = definitions[coordinates]?.licensed?.score?.total
                 score == null || score >= config.minTotalLicenseScore
@@ -153,6 +158,11 @@ class ClearlyDefinedPackageCurationProvider(
                 concludedLicense = declaredLicenseParsed,
                 homepageUrl = curation.described?.projectWebsite?.toString(),
                 sourceArtifact = sourceLocation as? RemoteArtifact,
+                publishedAt = definitions[coordinates]?.described?.releaseDate?.let {
+                    // The release date is formatted as a YYYY-MM-DD instead of being a full timestamp.
+                    val date = LocalDate.parse(it)
+                    date.atStartOfDay(ZoneOffset.UTC).toInstant()
+                },
                 vcs = sourceLocation as? VcsInfoCurationData
             )
 
