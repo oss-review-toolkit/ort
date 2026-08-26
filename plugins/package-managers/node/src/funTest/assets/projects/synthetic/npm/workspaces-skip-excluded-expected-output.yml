@@ -1,0 +1,703 @@
+---
+projects:
+- id: "NPM::pkg2:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm/workspaces/packages/pkg2/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm/workspaces/packages/pkg2"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM:@csstools:css-color-parser:4.2.0"
+      dependencies:
+      - id: "NPM:@csstools:color-helpers:6.1.1"
+      - id: "NPM:@csstools:css-calc:3.3.0"
+        dependencies:
+        - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+        - id: "NPM:@csstools:css-tokenizer:4.0.0"
+      - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+      - id: "NPM:@csstools:css-tokenizer:4.0.0"
+    - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+    - id: "NPM:@csstools:css-tokenizer:4.0.0"
+    - id: "NPM:@here:harp-fetch:0.3.6"
+      dependencies:
+      - id: "NPM::node-fetch:2.7.0"
+        dependencies:
+        - id: "NPM::whatwg-url:5.0.0"
+          dependencies:
+          - id: "NPM::tr46:0.0.3"
+          - id: "NPM::webidl-conversions:3.0.1"
+- id: "NPM::workspace:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm/workspaces/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm/workspaces"
+  description: "Workspace root module."
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::long:3.2.0"
+- id: "NPM:@scope1:pkg3:1.0.1"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm/workspaces/non-workspace/pkg3/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm/workspaces/non-workspace/pkg3"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::set-value:2.0.1"
+      dependencies:
+      - id: "NPM::extend-shallow:2.0.1"
+        dependencies:
+        - id: "NPM::is-extendable:0.1.1"
+      - id: "NPM::is-extendable:0.1.1"
+      - id: "NPM::is-plain-object:2.0.4"
+        dependencies:
+        - id: "NPM::isobject:3.0.1"
+      - id: "NPM::split-string:3.1.0"
+        dependencies:
+        - id: "NPM::extend-shallow:3.0.2"
+          dependencies:
+          - id: "NPM::assign-symbols:1.0.0"
+          - id: "NPM::is-extendable:1.0.1"
+            dependencies:
+            - id: "NPM::is-plain-object:2.0.4"
+              dependencies:
+              - id: "NPM::isobject:3.0.1"
+packages:
+- id: "NPM::assign-symbols:1.0.0"
+  purl: "pkg:npm/assign-symbols@1.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Assign the enumerable es6 Symbol properties from an object (or objects)\
+    \ to the first object passed on the arguments. Can be used as a supplement to\
+    \ other extend, assign or merge methods as a polyfill for the Symbols part of\
+    \ the es6 Object.assign method."
+  homepage_url: "https://github.com/jonschlinkert/assign-symbols"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/assign-symbols/-/assign-symbols-1.0.0.tgz"
+    hash:
+      value: "59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/assign-symbols.git"
+    revision: "2df01f26fce8359fa75688eb89e2a1c65de6f237"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/assign-symbols.git"
+    revision: "2df01f26fce8359fa75688eb89e2a1c65de6f237"
+    path: ""
+- id: "NPM::extend-shallow:2.0.1"
+  purl: "pkg:npm/extend-shallow@2.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Extend an object with the properties of additional objects. node.js/javascript\
+    \ util."
+  homepage_url: "https://github.com/jonschlinkert/extend-shallow"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/extend-shallow/-/extend-shallow-2.0.1.tgz"
+    hash:
+      value: "51af7d614ad9a9f610ea1bafbb989d6b1c56890f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/extend-shallow.git"
+    revision: "e9b1f1d2ff9d2990ec4a127afa7c14732d1eec8a"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/extend-shallow.git"
+    revision: "e9b1f1d2ff9d2990ec4a127afa7c14732d1eec8a"
+    path: ""
+- id: "NPM::extend-shallow:3.0.2"
+  purl: "pkg:npm/extend-shallow@3.0.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Extend an object with the properties of additional objects. node.js/javascript\
+    \ util."
+  homepage_url: "https://github.com/jonschlinkert/extend-shallow"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/extend-shallow/-/extend-shallow-3.0.2.tgz"
+    hash:
+      value: "26a71aaf073b39fb2127172746131c2704028db8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/extend-shallow.git"
+    revision: "33698c3df7804f0d0e3ea98caa64d53f09c37bd4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/extend-shallow.git"
+    revision: "33698c3df7804f0d0e3ea98caa64d53f09c37bd4"
+    path: ""
+- id: "NPM::is-extendable:0.1.1"
+  purl: "pkg:npm/is-extendable@0.1.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if a value is any of the object types: array, regexp,\
+    \ plain object, function or date. This is useful for determining if a value can\
+    \ be extended, e.g. \"can the value have keys?\""
+  homepage_url: "https://github.com/jonschlinkert/is-extendable"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz"
+    hash:
+      value: "62b110e289a471418e3ec36a617d472e301dfc89"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-extendable.git"
+    revision: "c36a0732e6a76931c6f66c5931d1f3e54fa44380"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-extendable.git"
+    revision: "c36a0732e6a76931c6f66c5931d1f3e54fa44380"
+    path: ""
+- id: "NPM::is-extendable:1.0.1"
+  purl: "pkg:npm/is-extendable@1.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if a value is a plain object, array or function."
+  homepage_url: "https://github.com/jonschlinkert/is-extendable"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-extendable/-/is-extendable-1.0.1.tgz"
+    hash:
+      value: "a7470f9e426733d81bd81e1155264e3a3507cab4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-extendable.git"
+    revision: "230717f6be5be812c16916ec8a745d6252dfa7a5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-extendable.git"
+    revision: "230717f6be5be812c16916ec8a745d6252dfa7a5"
+    path: ""
+- id: "NPM::is-plain-object:2.0.4"
+  purl: "pkg:npm/is-plain-object@2.0.4"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if an object was created by the `Object` constructor."
+  homepage_url: "https://github.com/jonschlinkert/is-plain-object"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-plain-object/-/is-plain-object-2.0.4.tgz"
+    hash:
+      value: "2c163b3fafb1b606d9d17928f05c2a1c38e07677"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-plain-object.git"
+    revision: "81345df0d1700a5c285f379cbdca0e273388910d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-plain-object.git"
+    revision: "81345df0d1700a5c285f379cbdca0e273388910d"
+    path: ""
+- id: "NPM::isobject:3.0.1"
+  purl: "pkg:npm/isobject@3.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if the value is an object and not an array or null."
+  homepage_url: "https://github.com/jonschlinkert/isobject"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz"
+    hash:
+      value: "4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/isobject.git"
+    revision: "7ad1fc405d19f144a21e2bfe947fa82801baa7aa"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/isobject.git"
+    revision: "7ad1fc405d19f144a21e2bfe947fa82801baa7aa"
+    path: ""
+- id: "NPM::long:3.2.0"
+  purl: "pkg:npm/long@3.2.0"
+  authors:
+  - "Daniel Wirtz"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A Long class for representing a 64-bit two's-complement integer value."
+  homepage_url: "https://github.com/dcodeIO/long.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/long/-/long-3.2.0.tgz"
+    hash:
+      value: "d821b7138ca1cb581c172990ef14db200b5c474b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
+- id: "NPM::node-fetch:2.7.0"
+  purl: "pkg:npm/node-fetch@2.7.0"
+  authors:
+  - "David Frank"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A light-weight module that brings window.fetch to node.js"
+  homepage_url: "https://github.com/bitinn/node-fetch"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz"
+    hash:
+      value: "d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/bitinn/node-fetch.git"
+    revision: "9b9d45881e5ca68757077726b3c0ecf8fdca1f29"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bitinn/node-fetch.git"
+    revision: "9b9d45881e5ca68757077726b3c0ecf8fdca1f29"
+    path: ""
+- id: "NPM::set-value:2.0.1"
+  purl: "pkg:npm/set-value@2.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Create nested values and any intermediaries using dot notation (`'a.b.c'`)\
+    \ paths."
+  homepage_url: "https://github.com/jonschlinkert/set-value"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/set-value/-/set-value-2.0.1.tgz"
+    hash:
+      value: "a18d40530e6f07de4228c7defe4227af8cad005b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/set-value.git"
+    revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/set-value.git"
+    revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
+    path: ""
+- id: "NPM::split-string:3.1.0"
+  purl: "pkg:npm/split-string@3.1.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Split a string on a character except when the character is escaped."
+  homepage_url: "https://github.com/jonschlinkert/split-string"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/split-string/-/split-string-3.1.0.tgz"
+    hash:
+      value: "7cb09dda3a86585705c64b39a6466038682e8fe2"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/split-string.git"
+    revision: "2f83feb70267a54ca01e795e6a0558a51b89d6c8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/split-string.git"
+    revision: "2f83feb70267a54ca01e795e6a0558a51b89d6c8"
+    path: ""
+- id: "NPM::tr46:0.0.3"
+  purl: "pkg:npm/tr46@0.0.3"
+  authors:
+  - "Sebastian Mayr"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "An implementation of the Unicode TR46 spec"
+  homepage_url: "https://github.com/Sebmaster/tr46.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
+    hash:
+      value: "8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/Sebmaster/tr46.js.git"
+    revision: "a8009f9ce80ff5dbe71dd71e203afe4e4c878d28"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Sebmaster/tr46.js.git"
+    revision: "a8009f9ce80ff5dbe71dd71e203afe4e4c878d28"
+    path: ""
+- id: "NPM::webidl-conversions:3.0.1"
+  purl: "pkg:npm/webidl-conversions@3.0.1"
+  authors:
+  - "Domenic Denicola"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "Implements the WebIDL algorithms for converting to and from JavaScript\
+    \ values"
+  homepage_url: "https://github.com/jsdom/webidl-conversions#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
+    hash:
+      value: "24534275e2a7bc6be7bc86611cc16ae0a5654871"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jsdom/webidl-conversions.git"
+    revision: "e21056f891736db755cfe0d72e4ce083a9034ace"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jsdom/webidl-conversions.git"
+    revision: "e21056f891736db755cfe0d72e4ce083a9034ace"
+    path: ""
+- id: "NPM::whatwg-url:5.0.0"
+  purl: "pkg:npm/whatwg-url@5.0.0"
+  authors:
+  - "Sebastian Mayr"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "An implementation of the WHATWG URL Standard's URL API and parsing\
+    \ machinery"
+  homepage_url: "https://github.com/jsdom/whatwg-url#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz"
+    hash:
+      value: "966454e8765462e37644d3626f6742ce8b70965d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jsdom/whatwg-url.git"
+    revision: "d34854a7af6ed1204f55d7da7761497bad350a7b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jsdom/whatwg-url.git"
+    revision: "d34854a7af6ed1204f55d7da7761497bad350a7b"
+    path: ""
+- id: "NPM:@csstools:color-helpers:6.1.1"
+  purl: "pkg:npm/%40csstools/color-helpers@6.1.1"
+  declared_licenses:
+  - "MIT-0"
+  declared_licenses_processed:
+    spdx_expression: "MIT-0"
+  description: "Color helpers to ease transformation between formats, gamut, etc"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/color-helpers#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/color-helpers/-/color-helpers-6.1.1.tgz"
+    hash:
+      value: "1890f29a4347486b54048d24c6ab8fbef039ee61"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "b9695c6c05437f624c65409f165d1c992930a662"
+    path: "packages/color-helpers"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "b9695c6c05437f624c65409f165d1c992930a662"
+    path: "packages/color-helpers"
+- id: "NPM:@csstools:css-calc:3.3.0"
+  purl: "pkg:npm/%40csstools/css-calc@3.3.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Solve CSS math expressions"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-calc#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-calc/-/css-calc-3.3.0.tgz"
+    hash:
+      value: "33cc4bdbab8edf1b6e3ab8c1eba849c41a324f1a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "14c008aa5ca4b7898a7c9adb033fc6d9eb673bc6"
+    path: "packages/css-calc"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "14c008aa5ca4b7898a7c9adb033fc6d9eb673bc6"
+    path: "packages/css-calc"
+- id: "NPM:@csstools:css-color-parser:4.2.0"
+  purl: "pkg:npm/%40csstools/css-color-parser@4.2.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Parse CSS color values"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-color-parser#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-color-parser/-/css-color-parser-4.2.0.tgz"
+    hash:
+      value: "6161696d5c1e37c2e70f67d2f5d3702c8774b7c8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "949298b2c6f052a10d05cfecd69c18e91a0800a8"
+    path: "packages/css-color-parser"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "949298b2c6f052a10d05cfecd69c18e91a0800a8"
+    path: "packages/css-color-parser"
+- id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+  purl: "pkg:npm/%40csstools/css-parser-algorithms@4.0.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Algorithms to help you parse CSS from an array of tokens."
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-parser-algorithms#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-parser-algorithms/-/css-parser-algorithms-4.0.0.tgz"
+    hash:
+      value: "e1c65dc09378b42f26a111fca7f7075fc2c26164"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "cb790c643f758d707260d2cd554a1a85f1167fa1"
+    path: "packages/css-parser-algorithms"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "cb790c643f758d707260d2cd554a1a85f1167fa1"
+    path: "packages/css-parser-algorithms"
+- id: "NPM:@csstools:css-tokenizer:4.0.0"
+  purl: "pkg:npm/%40csstools/css-tokenizer@4.0.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Tokenize CSS"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-tokenizer#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-tokenizer/-/css-tokenizer-4.0.0.tgz"
+    hash:
+      value: "798a33950d11226a0ebb6acafa60f5594424967f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "9256e22798ff1360e178912af9b57d59d0601c99"
+    path: "packages/css-tokenizer"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "9256e22798ff1360e178912af9b57d59d0601c99"
+    path: "packages/css-tokenizer"
+- id: "NPM:@here:harp-fetch:0.3.6"
+  purl: "pkg:npm/%40here/harp-fetch@0.3.6"
+  authors:
+  - "HERE Europe B.V."
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "This module adds a subset of the fetch API for Node.js"
+  homepage_url: "https://github.com/heremaps/harp.gl#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
+    hash:
+      value: "703fc8b034f6e0d621cc2c3ded96c6f904723742"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+    path: "@here/harp-fetch"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+    path: "@here/harp-fetch"

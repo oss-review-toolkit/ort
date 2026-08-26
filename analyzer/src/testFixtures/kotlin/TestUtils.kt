@@ -37,6 +37,8 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
@@ -125,6 +127,7 @@ fun ProjectAnalyzerResult.withInvariantIssues() =
 fun analyze(
     projectDir: File,
     allowDynamicVersions: Boolean = false,
+    excludedPaths: Collection<String> = emptySet(),
     excludedScopes: Collection<String> = emptySet(),
     skipExcluded: Boolean = false,
     packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ALL.values,
@@ -139,6 +142,9 @@ fun analyze(
 
     val repositoryConfig = RepositoryConfiguration(
         excludes = Excludes(
+            paths = excludedPaths.map {
+                PathExclude(it, PathExcludeReason.TEST_OF)
+            },
             scopes = excludedScopes.map {
                 ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF)
             }

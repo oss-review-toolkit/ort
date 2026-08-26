@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -197,7 +198,15 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         val rootModuleInfo = listModules(workingDir, issues)
         val scopes = Scope.entries.filterNotTo(mutableSetOf()) { scope -> scope.isExcluded(excludes, includes) }
 
-        val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
+        val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir).filterTo(mutableSetOf()) { moduleDir ->
+            val relativeModulePath = moduleDir.relativeTo(analysisRoot).invariantSeparatorsPath
+
+            isPathIncluded(relativeModulePath, excludes, includes).also { isIncluded ->
+                if (!isIncluded) {
+                    logger.info { "Skipping analysis of the excluded submodule in '$moduleDir'..." }
+                }
+            }
+        }
 
         return workspaceModuleDirs.map { projectDir ->
             val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
