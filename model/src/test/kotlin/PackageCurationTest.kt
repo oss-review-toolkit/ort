@@ -24,6 +24,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
@@ -95,8 +96,7 @@ class PackageCurationTest : WordSpec({
                 labels shouldBe curation.data.labels
             }
 
-            curatedPkg.curations shouldHaveSize 1
-            curatedPkg.curations.first() shouldBe curation.data
+            curatedPkg.curations.shouldBeSingle() shouldBe curation.data
         }
 
         "change only curated fields" {
@@ -148,8 +148,7 @@ class PackageCurationTest : WordSpec({
                 labels shouldBe pkg.labels
             }
 
-            curatedPkg.curations shouldHaveSize 1
-            curatedPkg.curations.first() shouldBe curation.data
+            curatedPkg.curations.shouldBeSingle() shouldBe curation.data
         }
 
         "be able to empty VCS information" {

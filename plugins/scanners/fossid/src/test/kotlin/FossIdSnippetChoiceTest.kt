@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAtLeastOne
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
@@ -143,13 +144,9 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings shouldHaveSize 1
-            summary.snippetFindings.first().apply {
-                sourceLocation.path shouldBe FILE_1
-                snippets shouldHaveSize 1
-                snippets.first().apply {
-                    purl shouldBe PURL_2
-                }
+            summary.snippetFindings.shouldBeSingleton {
+                it.sourceLocation.path shouldBe FILE_1
+                it.snippets.shouldBeSingle().purl shouldBe PURL_2
             }
         }
 
@@ -190,13 +187,9 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings shouldHaveSize 1
-            summary.snippetFindings.first().apply {
-                sourceLocation.path shouldBe FILE_1
-                snippets shouldHaveSize 1
-                snippets.first().apply {
-                    purl shouldBe PURL_3
-                }
+            summary.snippetFindings.shouldBeSingleton {
+                it.sourceLocation.path shouldBe FILE_1
+                it.snippets.shouldBeSingle().purl shouldBe PURL_3
             }
         }
 
@@ -237,13 +230,9 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings shouldHaveSize 1
-            summary.snippetFindings.first().apply {
-                sourceLocation.path shouldBe FILE_1
-                snippets shouldHaveSize 1
-                snippets.first().apply {
-                    purl shouldBe PURL_3
-                }
+            summary.snippetFindings.shouldBeSingleton {
+                it.sourceLocation.path shouldBe FILE_1
+                it.snippets.shouldBeSingle().purl shouldBe PURL_3
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
@@ -472,13 +461,9 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings shouldHaveSize 1
-            summary.snippetFindings.first().apply {
-                sourceLocation.path shouldBe FILE_1
-                snippets shouldHaveSize 1
-                snippets.first().apply {
-                    purl shouldBe PURL_2
-                }
+            summary.snippetFindings.shouldBeSingleton {
+                it.sourceLocation.path shouldBe FILE_1
+                it.snippets.shouldBeSingle().purl shouldBe PURL_2
             }
 
             coVerify(inverse = true) {
@@ -576,10 +561,9 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.licenseFindings shouldHaveSize 1
-            summary.licenseFindings.first().apply {
-                license shouldBe "MIT".toSpdx()
-                location shouldBe choiceLocation
+            summary.licenseFindings.shouldBeSingleton {
+                it.license shouldBe "MIT".toSpdx()
+                it.location shouldBe choiceLocation
             }
         }
 
@@ -658,10 +642,9 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.licenseFindings shouldHaveSize 1
-            summary.licenseFindings.first().apply {
-                license shouldBe "MIT".toSpdx()
-                location shouldBe choiceLocation
+            summary.licenseFindings.shouldBeSingleton {
+                it.license shouldBe "MIT".toSpdx()
+                it.location shouldBe choiceLocation
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
@@ -734,11 +717,9 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = emptyList()).summary
 
-            summary.licenseFindings shouldHaveSize 1
-            summary.licenseFindings.first().apply {
-                license shouldBe "MIT".toSpdx()
-                val defaultLocation = TextLocation(FILE_1, -1, -1)
-                location shouldBe defaultLocation
+            summary.licenseFindings.shouldBeSingleton {
+                it.license shouldBe "MIT".toSpdx()
+                it.location shouldBe TextLocation(FILE_1, -1, -1)
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()

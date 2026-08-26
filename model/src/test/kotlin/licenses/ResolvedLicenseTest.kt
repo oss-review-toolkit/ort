@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -51,10 +51,12 @@ class ResolvedLicenseTest : WordSpec({
 
             val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = false)
 
-            resolvedCopyrights shouldHaveSize 1
-            with(resolvedCopyrights.first()) {
-                statement shouldBe "Copyright (C) 2022 The ORT Project Copyright Holders"
-                findings.map { it.location.path } should containExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
+            resolvedCopyrights.shouldBeSingleton { copyright ->
+                copyright.statement shouldBe "Copyright (C) 2022 The ORT Project Copyright Holders"
+                copyright.findings.map { it.location.path } should containExactlyInAnyOrder(
+                    "/path/to/file/A",
+                    "/path/to/file/B"
+                )
             }
         }
 
@@ -81,10 +83,12 @@ class ResolvedLicenseTest : WordSpec({
 
             val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = true)
 
-            resolvedCopyrights shouldHaveSize 1
-            with(resolvedCopyrights.first()) {
-                statement shouldBe "Copyright (C) 2022 The ORT Project Copyright Holders"
-                findings.map { it.location.path } should containExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
+            resolvedCopyrights.shouldBeSingleton { copyright ->
+                copyright.statement shouldBe "Copyright (C) 2022 The ORT Project Copyright Holders"
+                copyright.findings.map { it.location.path } should containExactlyInAnyOrder(
+                    "/path/to/file/A",
+                    "/path/to/file/B"
+                )
             }
         }
     }

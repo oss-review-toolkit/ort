@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.reporters.ctrlx
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -114,10 +115,7 @@ class CtrlXAutomationReporterFunTest : StringSpec({
         val reporterResult = reporter.generateReport(input, outputDir)
 
         validateReport(reporterResult) {
-            components shouldNotBeNull {
-                this shouldHaveSize 1
-                first().name shouldBe "package2"
-            }
+            components.shouldNotBeNull().shouldBeSingle().name shouldBe "package2"
         }
     }
 })

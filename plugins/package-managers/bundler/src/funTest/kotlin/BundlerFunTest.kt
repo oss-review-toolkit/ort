@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
@@ -55,8 +55,7 @@ class BundlerFunTest : WordSpec({
                 project.definitionFilePath shouldBe
                     "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
                 packages should beEmpty()
-                issues shouldHaveSize 1
-                issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+                issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found in")
             }
         }
 
