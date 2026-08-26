@@ -34,7 +34,7 @@ internal class ModuleInfoResolver(
         fun create(fetchModuleInfo: (workingDir: File, moduleId: String) -> PackageJson?): ModuleInfoResolver =
             ModuleInfoResolver { workingDir, moduleIds ->
                 runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-                    moduleIds.map {
+                    moduleIds.sorted().map {
                         async { fetchModuleInfo(workingDir, it) }
                     }.awaitAll()
                 }.filterNotNullTo(mutableSetOf())
