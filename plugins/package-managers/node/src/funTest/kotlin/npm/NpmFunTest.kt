@@ -167,6 +167,23 @@ class NpmFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Resolve workspace dependencies with excluded paths and scopes correctly skipped" {
+        val definitionFile = getAssetFile("projects/synthetic/npm/workspaces/package.json")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/npm/workspaces-skip-excluded-expected-output.yml"
+        )
+
+        val result = analyze(
+            definitionFile.parentFile,
+            excludedPaths = setOf("packages/pkg1/**"),
+            excludedScopes = setOf("devDependencies"),
+            skipExcluded = true,
+            packageManagers = setOf(NpmFactory())
+        ).getAnalyzerResult()
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Use an explicitly specified Node.js version" {
         // The test processes a project that depends on a deprecated native library which is incompatible with newer
         // versions of Node.js. In Node.js >= 16, the `install` step fails. With version 14, the project can be
