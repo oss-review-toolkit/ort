@@ -112,7 +112,27 @@ data class CycloneDxReporterConfig(
         defaultValue = "JSON",
         aliases = ["output.file.formats"]
     )
-    val outputFileFormats: List<Format>
+    val outputFileFormats: List<Format>,
+
+    /**
+     * Allows specifying a supplier name in the metadata of the generated BOMs.
+     * See https://cyclonedx.org/docs/1.7/json/#metadata_tools_oneOf_i0_components_items_supplier_name
+     */
+    @OrtPluginOption(
+        defaultValue = "",
+        aliases = ["metadata.supplier.name"]
+    )
+    val metadataSupplierName: String,
+
+    /**
+     * Allows specifying a supplier URL in the metadata of the generated BOMs.
+     * See https://cyclonedx.org/docs/1.7/json/#metadata_tools_oneOf_i0_components_items_supplier_url
+     */
+    @OrtPluginOption(
+        defaultValue = "",
+        aliases = ["metadata.supplier.url"]
+    )
+    val metadataSupplierUrl: String
 )
 
 /**
