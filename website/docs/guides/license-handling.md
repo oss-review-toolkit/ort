@@ -15,7 +15,7 @@ There are so-called "envelope cases" where the license visible from the outside 
 For example, a package might have declared itself to be licensed under the MIT license, but in the source code a file might contain a BSD-3-Clause license header.
 
 Declared licenses often come in non-SPDX form or contain typos.
-For universally valid cases, ORT has built-in [mappings](https://github.com/oss-review-toolkit/ort/blob/main/utils/spdx/src/main/resources/declared-license-mapping.yml).
+For universally valid cases, ORT has built-in [mappings](https://github.com/oss-review-toolkit/ort/blob/main/utils/spdx-expression/src/main/resources/declared-license-mapping.yml).
 For cases that might be ambiguous in general but are valid in the specific context of a package, [curations](../configuration/package-curations.md) can be used to define a `declared_license_mapping`.
 
 ### Detected license
