@@ -27,7 +27,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
@@ -73,22 +72,6 @@ internal data class ModuleReference(
     val moduleInfo: ModuleInfo,
     val dependencies: List<ModuleReference>
 )
-
-internal val ModuleInfo.isInstalled: Boolean
-    // For non-installed modules NPM 10 returns a null path, while NPM 11 returns a non-existent non-null path.
-    get() = path != null && File(path).isDirectory
-
-internal val ModuleInfo.isProject: Boolean
-    get(): Boolean {
-        val moduleDir = path?.let { File(it).realFile } ?: return false
-        val baseDir = if (name != null && "/" in name) {
-            moduleDir.parentFile.parentFile
-        } else {
-            moduleDir.parentFile
-        }
-
-        return baseDir.name != NODE_MODULES_DIRNAME
-    }
 
 internal val ModuleInfo.packageJsonFile: File get() {
     check(isInstalled) { "The module directory '$path' is null or does not exist." }

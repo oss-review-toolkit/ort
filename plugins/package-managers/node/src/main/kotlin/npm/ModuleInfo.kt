@@ -19,11 +19,15 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
+import java.io.File
 import java.util.LinkedList
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
+import org.ossreviewtoolkit.utils.common.realFile
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
@@ -62,7 +66,23 @@ internal data class ModuleInfo(
 
     /** The URI from where the package was resolved. Starts with "file:" for local packages. */
     val resolved: String? = null
-)
+) {
+    val isInstalled: Boolean by lazy {
+        // For non-installed modules NPM 10 returns a null path, while NPM 11 returns a non-existent non-null path.
+        path != null && File(path).isDirectory
+    }
+
+    val isProject: Boolean by lazy {
+        val moduleDir = path?.let { File(it).realFile } ?: return@lazy false
+        val baseDir = if (name != null && "/" in name) {
+            moduleDir.parentFile.parentFile
+        } else {
+            moduleDir.parentFile
+        }
+
+        baseDir.name != NODE_MODULES_DIRNAME
+    }
+}
 
 internal fun ModuleInfo.getNonDeduplicatedModuleInfosForId(): Map<String, ModuleInfo> {
     val queue = LinkedList<ModuleInfo>().apply { add(this@getNonDeduplicatedModuleInfosForId) }

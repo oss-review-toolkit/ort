@@ -30,8 +30,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.ModuleInfo
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.isInstalled
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.isProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.packageJsonFile
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
