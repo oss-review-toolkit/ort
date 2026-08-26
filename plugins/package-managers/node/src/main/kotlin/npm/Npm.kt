@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
 import java.io.File
+import java.util.LinkedList
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -190,9 +191,8 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
             return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
         }
 
-        val rootModuleInfo = listModules(workingDir, issues).undoDeduplication().filterInstalled()
+        val rootModuleInfo = listModules(workingDir, issues)
         val scopes = Scope.entries.filterNotTo(mutableSetOf()) { scope -> scope.isExcluded(excludes, includes) }
-        requestAllPackageDetails(rootModuleInfo, scopes)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
 
@@ -200,16 +200,19 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
             val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
             val project = parseProject(packageJsonFile, analysisRoot)
 
-            val projectModuleInfo = rootModuleInfo.takeIf { projectDir == workingDir }
-                ?: rootModuleInfo.dependencies.values.single { moduleInfo ->
-                    moduleInfo.isProject && moduleInfo.path?.let { File(it).realFile } == projectDir
+            scopes.forEach { scope ->
+                logger.info {
+                    "Processing the '${scope.name}' scope of '${packageJsonFile.relativeTo(analysisRoot)}' ..."
                 }
 
-            scopes.forEach { scope ->
+                val dependencies = getScopeDependenciesForModule(rootModuleInfo, projectDir, scope)
+
+                requestAllPackageDetails(dependencies) // Warm-up the cache.
+
                 graphBuilder.addDependencies(
                     projectId = project.id,
                     scopeName = scope.descriptor,
-                    dependencies = projectModuleInfo.getScopeDependencies(scope)
+                    dependencies = dependencies
                 )
             }
 
@@ -256,8 +259,8 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         return process.extractNpmIssues(descriptor.displayName)
     }
 
-    private fun requestAllPackageDetails(projectModuleInfo: ModuleInfo, scopes: Set<Scope>) {
-        projectModuleInfo.getAllPackageNodeModuleIds(scopes).let { moduleIds ->
+    private fun requestAllPackageDetails(dependencies: Collection<ModuleReference>) {
+        dependencies.getAllPackageNodeModuleIds().let { moduleIds ->
             moduleInfoResolver.getModuleInfos(moduleIds)
         }
     }
@@ -362,3 +365,51 @@ internal fun ProcessCapture.extractNpmIssues(source: String): List<Issue> {
 
     return issues
 }
+
+private fun getScopeDependenciesForModule(
+    rootModuleInfo: ModuleInfo,
+    moduleDir: File,
+    scope: Scope
+): List<ModuleReference> {
+    val replacements = rootModuleInfo.getNonDeduplicatedModuleInfosForId()
+    val moduleInfo = if (rootModuleInfo.path?.let { File(it).realFile } == moduleDir) {
+        rootModuleInfo
+    } else {
+        rootModuleInfo.dependencies.values.single { info ->
+            info.isProject && info.path?.let { File(it).realFile } == moduleDir
+        }
+    }
+
+    fun ModuleInfo.getScopeDependenciesForModuleRec(ancestorsIds: Set<String> = emptySet()): ModuleReference {
+        val dependencyAncestorIds = ancestorsIds + setOfNotNull(id)
+        val replacement = replacements[id] ?: this
+
+        return ModuleReference(
+            moduleInfo = replacement,
+            dependencies = replacement.dependencies.values
+                .filter { it.isInstalled && it.id !in dependencyAncestorIds } // break cycles
+                .map { it.getScopeDependenciesForModuleRec(dependencyAncestorIds) }
+        )
+    }
+
+    return moduleInfo.getScopeDependencies(scope)
+        .filter { it.isInstalled }
+        .map { it.getScopeDependenciesForModuleRec() }
+}
+
+private fun Collection<ModuleReference>.getAllPackageNodeModuleIds(): Set<String> =
+    buildSet {
+        val queue = LinkedList(this@getAllPackageNodeModuleIds)
+
+        while (queue.isNotEmpty()) {
+            val moduleReference = queue.removeFirst()
+            val info = moduleReference.moduleInfo
+
+            @Suppress("ComplexCondition")
+            if (!info.isProject && info.isInstalled && !info.name.isNullOrBlank() && !info.version.isNullOrBlank()) {
+                add("${info.name}@${info.version}")
+            }
+
+            queue += moduleReference.dependencies
+        }
+    }
