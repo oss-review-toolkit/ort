@@ -45,8 +45,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.ModuleInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.NpmCommand
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.extractNpmIssues
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.getNonDeduplicatedModuleInfosForId
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.isInstalled
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.isProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.parseNpmList
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
