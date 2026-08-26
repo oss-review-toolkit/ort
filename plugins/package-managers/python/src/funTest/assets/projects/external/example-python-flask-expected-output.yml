@@ -20,7 +20,7 @@ project:
     dependencies:
     - id: "PyPI::flask:0.12"
       dependencies:
-      - id: "PyPI::click:8.4.2"
+      - id: "PyPI::click:8.5.0"
       - id: "PyPI::itsdangerous:2.2.0"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
@@ -30,8 +30,8 @@ project:
         - id: "PyPI::markupsafe:3.0.3"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
-- id: "PyPI::click:8.4.2"
-  purl: "pkg:pypi/click@8.4.2"
+- id: "PyPI::click:8.5.0"
+  purl: "pkg:pypi/click@8.5.0"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -39,14 +39,14 @@ packages:
   description: "Composable command line interface toolkit"
   homepage_url: ""
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/fb/e2/79c688af8b210d232694e31e59da9f6ec747bae31c3f5946e4e9b98860d5/click-8.4.2-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/58/50/6c0d534c5f134586a8e1ba4e330569e32f057e33372ae556463212fb4cd3/click-8.5.0-py3-none-any.whl"
     hash:
-      value: "e6f9f66136c816745b9d65817da91d61d957fb16e02e4dcd0552553c5a197b76"
+      value: "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360"
       algorithm: "SHA-256"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/76/d4/81420972a676e8ffea40450d8c8c92943e7218a78fe9b64359836cc9876b/click-8.4.2.tar.gz"
+    url: "https://files.pythonhosted.org/packages/c7/0e/7fa0ef50764b67090eca4114772a2abf8b6148198475e54c660b97caeee6/click-8.5.0.tar.gz"
     hash:
-      value: "9a6cea6e60b17ebe0a44c5cc636d94f09bd66142c1cd7d8b4cd731c4917a15f6"
+      value: "ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34"
       algorithm: "SHA-256"
   vcs:
     type: ""
