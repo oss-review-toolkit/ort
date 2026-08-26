@@ -24,6 +24,7 @@ import com.icegreen.greenmail.util.GreenMailUtil
 import com.icegreen.greenmail.util.ServerSetup
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -66,15 +67,14 @@ class MailNotifierTest : WordSpec({
             )
 
             greenMail.waitForIncomingEmail(1000, 1) shouldBe true
-            greenMail.receivedMessages shouldHaveSize 1
-            with(greenMail.receivedMessages.first()) {
-                val headerLines = GreenMailUtil.getHeaders(this).lines()
+            greenMail.receivedMessages.shouldBeSingleton {
+                val headerLines = GreenMailUtil.getHeaders(it).lines()
                 headerLines shouldContain "From: no-reply@oss-review-toolkit.org"
                 headerLines shouldContain "To: no-reply@oss-review-toolkit.org"
                 headerLines shouldContain "Subject: ORT notifier subject"
                 headerLines shouldContain "Content-Type: text/plain; charset=UTF-8"
 
-                val bodyLines = GreenMailUtil.getBody(this).lines()
+                val bodyLines = GreenMailUtil.getBody(it).lines()
                 bodyLines shouldContain "<strong>ORT notifier message</strong>"
             }
         }

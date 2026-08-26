@@ -24,7 +24,8 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldBeSingle
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
@@ -249,24 +250,24 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 resolvedResult.dependencyGraphs should beEmptyMap()
 
                 resolvedResult.projects.find { it.id == p1.id } shouldNotBeNull {
-                    scopes shouldHaveSize 1
-                    scopes.first().name shouldBe "scope-1"
-                    scopes.first().dependencies shouldHaveSize 1
-                    scopes.first().dependencies.first().id shouldBe package1.id
+                    scopes.shouldBeSingleton {
+                        it.name shouldBe "scope-1"
+                        it.dependencies.shouldBeSingle().id shouldBe package1.id
+                    }
                 }
 
                 resolvedResult.projects.find { it.id == project3.id } shouldNotBeNull {
-                    scopes shouldHaveSize 1
-                    scopes.first().name shouldBe "scope-2"
-                    scopes.first().dependencies shouldHaveSize 1
-                    scopes.first().dependencies.first().id shouldBe package2.id
+                    scopes.shouldBeSingleton {
+                        it.name shouldBe "scope-2"
+                        it.dependencies.shouldBeSingle().id shouldBe package2.id
+                    }
                 }
 
                 resolvedResult.projects.find { it.id == p2.id } shouldNotBeNull {
-                    scopes shouldHaveSize 1
-                    scopes.first().name shouldBe "scope-3"
-                    scopes.first().dependencies shouldHaveSize 1
-                    scopes.first().dependencies.first().id shouldBe package3.id
+                    scopes.shouldBeSingleton {
+                        it.name shouldBe "scope-3"
+                        it.dependencies.shouldBeSingle().id shouldBe package3.id
+                    }
                 }
             }
         }

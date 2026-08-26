@@ -22,8 +22,7 @@ package org.ossreviewtoolkit.model
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -176,15 +175,12 @@ class DependencyGraphTest : WordSpec({
 
             val graph = DependencyGraph(ids, trees, scopeMap)
             val scopes = graph.createScopes()
-            val scope = scopes.first()
+            val scope = scopes.shouldBeSingle()
 
-            scope.shouldNotBeNull()
-            scope.dependencies shouldHaveSize 1
-            val pkgRefCol = scope.dependencies.first()
+            val pkgRefCol = scope.dependencies.shouldBeSingle()
             pkgRefCol.issues should containExactly(issue)
-            pkgRefCol.dependencies shouldHaveSize 1
 
-            val pkgRefLang = pkgRefCol.dependencies.first()
+            val pkgRefLang = pkgRefCol.dependencies.shouldBeSingle()
             pkgRefLang.linkage shouldBe PackageLinkage.PROJECT_DYNAMIC
         }
     }
