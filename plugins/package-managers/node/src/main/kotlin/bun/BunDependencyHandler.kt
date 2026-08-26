@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
+package org.ossreviewtoolkit.plugins.packagemanagers.node.bun
 
 import java.io.File
 
@@ -27,21 +27,24 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.ModuleInfo
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.isInstalled
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.isProject
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.packageJsonFile
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNamespaceAndName
 import org.ossreviewtoolkit.utils.common.realFile
 
-internal class NpmDependencyHandler(
+internal class BunDependencyHandler(
     private val moduleInfoResolver: ModuleInfoResolver
 ) : DependencyHandler<ModuleInfo> {
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
     override fun identifierFor(dependency: ModuleInfo): Identifier {
-        val type = with(NodePackageManagerType.NPM) { if (dependency.isProject) projectType else packageType }
+        val type = with(NodePackageManagerType.BUN) { if (dependency.isProject) projectType else packageType }
         val (namespace, name) = splitNamespaceAndName(dependency.name.orEmpty())
         val version = if (dependency.isProject) {
             val packageJson = packageJsonCache.getOrPut(dependency.packageJsonFile.realFile) {
@@ -66,25 +69,4 @@ internal class NpmDependencyHandler(
         dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
             parsePackage(it.packageJsonFile, moduleInfoResolver)
         }
-}
-
-internal val ModuleInfo.isInstalled: Boolean
-    // For non-installed modules NPM 10 returns a null path, while NPM 11 returns a non-existent non-null path.
-    get() = path != null && File(path).isDirectory
-
-internal val ModuleInfo.isProject: Boolean
-    get(): Boolean {
-        val moduleDir = path?.let { File(it).realFile } ?: return false
-        val baseDir = if (name != null && "/" in name) {
-            moduleDir.parentFile.parentFile
-        } else {
-            moduleDir.parentFile
-        }
-
-        return baseDir.name != NODE_MODULES_DIRNAME
-    }
-
-internal val ModuleInfo.packageJsonFile: File get() {
-    check(isInstalled) { "The module directory '$path' is null or does not exist." }
-    return File(path, NodePackageManagerType.DEFINITION_FILE)
 }
