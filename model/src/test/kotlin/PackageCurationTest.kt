@@ -30,6 +30,8 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
@@ -60,6 +62,7 @@ class PackageCurationTest : WordSpec({
                         url = "http://source.artifact",
                         hash = Hash.create("source.hash")
                     ),
+                    publishedAt = Instant.EPOCH,
                     vcs = VcsInfoCurationData(
                         type = VcsType.GIT,
                         url = "http://url.git",
@@ -89,6 +92,7 @@ class PackageCurationTest : WordSpec({
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe curation.data.binaryArtifact
                 sourceArtifact shouldBe curation.data.sourceArtifact
+                publishedAt shouldBe curation.data.publishedAt
                 vcs shouldBe pkg.vcs
                 vcsProcessed.toCuration() shouldBe curation.data.vcs
                 isMetadataOnly shouldBe true
