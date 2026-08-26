@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node.bun
 
 import java.io.File
+import java.util.LinkedList
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -43,11 +44,10 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.ModuleInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.NpmCommand
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.extractNpmIssues
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.filterInstalled
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.getAllPackageNodeModuleIds
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.getScopeDependencies
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.getNonDeduplicatedModuleInfosForId
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.isInstalled
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.isProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.parseNpmList
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.undoDeduplication
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.realFile
@@ -212,4 +212,50 @@ private fun ModuleInfo.markDevDependencies(packageJson: PackageJson): ModuleInfo
             if (name in devDependencyNames) info.copy(dev = true) else info
         }
     )
+}
+
+private fun ModuleInfo.filterInstalled(): ModuleInfo = copy(dependencies = dependencies.filter { it.value.isInstalled })
+
+private fun ModuleInfo.getAllPackageNodeModuleIds(scopes: Set<Scope>): Set<String> =
+    buildSet {
+        val queue = scopes.flatMapTo(LinkedList()) { getScopeDependencies(it) }
+
+        while (queue.isNotEmpty()) {
+            val info = queue.removeFirst()
+
+            @Suppress("ComplexCondition")
+            if (!info.isProject && info.isInstalled && !info.name.isNullOrBlank() && !info.version.isNullOrBlank()) {
+                add("${info.name}@${info.version}")
+            }
+
+            if (info.isProject) {
+                scopes.flatMapTo(queue) { info.getScopeDependencies(it) }
+            } else {
+                // Ignore dev-dependencies of dependencies, as this is what NPM does itself.
+                queue += info.getScopeDependencies(Scope.DEPENDENCIES)
+            }
+        }
+    }
+
+private fun ModuleInfo.getScopeDependencies(scope: Scope) =
+    when (scope) {
+        Scope.DEPENDENCIES -> dependencies.values.filter { !it.dev && it.isInstalled }
+        Scope.DEV_DEPENDENCIES -> dependencies.values.filter { it.dev && !it.optional && it.isInstalled }
+    }
+
+private fun ModuleInfo.undoDeduplication(): ModuleInfo {
+    val replacements = getNonDeduplicatedModuleInfosForId()
+
+    fun ModuleInfo.undoDeduplicationRec(ancestorsIds: Set<String> = emptySet()): ModuleInfo {
+        val dependencyAncestorIds = ancestorsIds + setOfNotNull(id)
+        val replacement = replacements[id] ?: this
+
+        return replacement.copy(
+            dependencies = replacement.dependencies
+                .filter { it.value.id !in dependencyAncestorIds } // break cycles.
+                .mapValues { it.value.undoDeduplicationRec(dependencyAncestorIds) }
+        )
+    }
+
+    return undoDeduplicationRec()
 }
