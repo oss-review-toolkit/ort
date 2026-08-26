@@ -113,7 +113,7 @@ internal fun ModuleInfo.undoDeduplication(): ModuleInfo {
 internal fun ModuleInfo.filterInstalled(): ModuleInfo =
     copy(dependencies = dependencies.filter { it.value.isInstalled })
 
-private fun ModuleInfo.getNonDeduplicatedModuleInfosForId(): Map<String, ModuleInfo> {
+internal fun ModuleInfo.getNonDeduplicatedModuleInfosForId(): Map<String, ModuleInfo> {
     val queue = LinkedList<ModuleInfo>().apply { add(this@getNonDeduplicatedModuleInfosForId) }
     val result = mutableMapOf<String, ModuleInfo>()
 

@@ -37,36 +37,42 @@ import org.ossreviewtoolkit.utils.common.realFile
 
 internal class NpmDependencyHandler(
     private val moduleInfoResolver: ModuleInfoResolver
-) : DependencyHandler<ModuleInfo> {
+) : DependencyHandler<ModuleReference> {
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
-    override fun identifierFor(dependency: ModuleInfo): Identifier {
-        val type = with(NodePackageManagerType.NPM) { if (dependency.isProject) projectType else packageType }
-        val (namespace, name) = splitNamespaceAndName(dependency.name.orEmpty())
-        val version = if (dependency.isProject) {
-            val packageJson = packageJsonCache.getOrPut(dependency.packageJsonFile.realFile) {
-                parsePackageJson(dependency.packageJsonFile)
+    override fun identifierFor(dependency: ModuleReference): Identifier {
+        val moduleInfo = dependency.moduleInfo
+        val type = with(NodePackageManagerType.NPM) { if (moduleInfo.isProject) projectType else packageType }
+        val (namespace, name) = splitNamespaceAndName(moduleInfo.name.orEmpty())
+        val version = if (moduleInfo.isProject) {
+            val packageJson = packageJsonCache.getOrPut(moduleInfo.packageJsonFile.realFile) {
+                parsePackageJson(moduleInfo.packageJsonFile)
             }
 
             packageJson.version.orEmpty()
         } else {
-            dependency.version?.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
+            moduleInfo.version?.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
         }
 
         return Identifier(type, namespace, name, version)
     }
 
-    override fun dependenciesFor(dependency: ModuleInfo): List<ModuleInfo> =
-        dependency.dependencies.values.filter { it.isInstalled }
+    override fun dependenciesFor(dependency: ModuleReference): List<ModuleReference> =
+        dependency.dependencies.filter { it.moduleInfo.isInstalled }
 
-    override fun linkageFor(dependency: ModuleInfo): PackageLinkage =
-        PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
+    override fun linkageFor(dependency: ModuleReference): PackageLinkage =
+        PackageLinkage.DYNAMIC.takeUnless { dependency.moduleInfo.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
 
-    override fun createPackage(dependency: ModuleInfo, issues: MutableCollection<Issue>): Package? =
-        dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
-            parsePackage(it.packageJsonFile, moduleInfoResolver)
+    override fun createPackage(dependency: ModuleReference, issues: MutableCollection<Issue>): Package? =
+        dependency.takeUnless { it.moduleInfo.isProject || !it.moduleInfo.isInstalled }?.let {
+            parsePackage(it.moduleInfo.packageJsonFile, moduleInfoResolver)
         }
 }
+
+internal data class ModuleReference(
+    val moduleInfo: ModuleInfo,
+    val dependencies: List<ModuleReference>
+)
 
 internal val ModuleInfo.isInstalled: Boolean
     // For non-installed modules NPM 10 returns a null path, while NPM 11 returns a non-existent non-null path.
