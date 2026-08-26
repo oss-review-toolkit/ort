@@ -237,6 +237,15 @@ internal class CycloneDxModelMapper(
                 )
             }
 
+            if (config.metadataSupplierName.isNotBlank() || config.metadataSupplierName.isNotBlank()) {
+                supplier = OrganizationalEntity().apply {
+                    name = config.metadataSupplierName.takeIf { it.isNotBlank() }
+                    if (config.metadataSupplierUrl.isNotBlank()) {
+                        urls = listOf(config.metadataSupplierUrl)
+                    }
+                }
+            }
+
             licenses = LicenseChoice().apply {
                 val expression = Expression(config.dataLicense)
                 items = listOf(LicenseItem.ofExpression(expression))

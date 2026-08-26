@@ -30,6 +30,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 
 import org.cyclonedx.Format
 import org.cyclonedx.Version
@@ -193,6 +194,20 @@ class CycloneDxReporterFunTest : WordSpec({
             bom should matchJsonSchema(schemaJson)
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
         }
+
+        "support specifying information about the supplier in metadata" {
+            val expectedBom = readResource("/cyclonedx-reporter-expected-result-supplier.json")
+
+            val bom = generateSingleBomReport(
+                ortResult = ORT_RESULT_WITH_VULNERABILITIES,
+                format = Format.JSON,
+                licenseFactProvider = SpdxLicenseFactProviderFactory.create(),
+                supplierName = "Test Supplier",
+                supplierUrl = "https://example.com/supplier"
+            )
+
+            bom.patchCycloneDxResult() shouldEqualJson expectedBom
+        }
     }
 
     "Requesting separate BOMs per project" should {
@@ -227,6 +242,22 @@ class CycloneDxReporterFunTest : WordSpec({
             bomWithoutFindings.patchCycloneDxResult() shouldBe readResource(
                 "/cyclonedx-reporter-expected-result-without-findings.json"
             )
+        }
+
+        "support specifying information about the supplier in metadata" {
+            val boms = generateMultiBomReport(
+                ortResult = ORT_RESULT_WITH_VULNERABILITIES,
+                format = Format.JSON,
+                licenseFactProvider = SpdxLicenseFactProviderFactory.create(),
+                supplierName = "Test Supplier",
+                supplierUrl = "https://example.com/supplier"
+            )
+
+            boms shouldHaveSize 2
+            boms.forAll { bom ->
+                bom shouldContain "\"Test Supplier\""
+                bom shouldContain "\"https://example.com/supplier\""
+            }
         }
     }
 })
@@ -272,12 +303,16 @@ private fun TestConfiguration.generateSingleBomReport(
     format: Format,
     singleBomComponentName: String = "",
     singleBomComponentType: Component.Type = Component.Type.APPLICATION,
+    supplierName: String = "",
+    supplierUrl: String = "",
     licenseFactProvider: LicenseFactProvider = CompositeLicenseFactProvider(emptyList())
 ): String {
     val reporter = CycloneDxReporterFactory.create(
         schemaVersion = SchemaVersion.entries.single { it.version.versionString == DEFAULT_SCHEMA_VERSION_NAME },
         singleBomComponentName = singleBomComponentName,
         singleBomComponentType = singleBomComponentType,
+        metadataSupplierName = supplierName,
+        metadataSupplierUrl = supplierUrl,
         outputFileFormats = listOf(format)
     )
 
@@ -292,11 +327,15 @@ private fun TestConfiguration.generateSingleBomReport(
 private fun TestConfiguration.generateMultiBomReport(
     ortResult: OrtResult,
     format: Format,
+    supplierName: String = "",
+    supplierUrl: String = "",
     licenseFactProvider: LicenseFactProvider = CompositeLicenseFactProvider(emptyList())
 ): List<String> {
     val reporter = CycloneDxReporterFactory.create(
         schemaVersion = SchemaVersion.entries.single { it.version.versionString == DEFAULT_SCHEMA_VERSION_NAME },
         singleBom = false,
+        metadataSupplierName = supplierName,
+        metadataSupplierUrl = supplierUrl,
         outputFileFormats = listOf(format)
     )
 
