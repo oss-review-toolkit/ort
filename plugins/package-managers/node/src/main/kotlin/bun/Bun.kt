@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.ModuleInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.NpmCommand
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.NpmDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.extractNpmIssues
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.filterInstalled
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.getAllPackageNodeModuleIds
@@ -89,7 +88,7 @@ class Bun(override val descriptor: PluginDescriptor = BunFactory.descriptor) :
         }.getOrNull()
     }
 
-    private val handler = NpmDependencyHandler(moduleInfoResolver, NodePackageManagerType.BUN)
+    private val handler = BunDependencyHandler(moduleInfoResolver)
 
     override val graphBuilder = DependencyGraphBuilder(handler)
 
