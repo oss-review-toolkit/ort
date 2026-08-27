@@ -24,7 +24,7 @@ import io.kotest.engine.TestAbortedException
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.comparables.shouldBeGreaterThan
-import io.kotest.matchers.maps.shouldHaveSize
+import io.kotest.matchers.maps.shouldMatchExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -128,7 +128,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
     }
 
     "Definitions" should {
-        "contain facets for file entries" {
+        "contain defined data properties" {
             val service = ClearlyDefinedService.create()
 
             // https://clearlydefined.io/definitions/npm/npmjs/-/eslint-plugin-tsdoc/0.2.2
@@ -141,10 +141,12 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
             val curations = withIgnoreTimeout { service.getDefinitions(listOf(coordinates)) }
 
-            curations shouldHaveSize 1
-            curations[coordinates]?.files?.get(11)?.facets shouldNotBeNull {
-                this shouldContain "tests"
-            }
+            curations.shouldMatchExactly(
+                coordinates to { defined ->
+                    defined.files?.get(11)?.facets.shouldNotBeNull() shouldContain "tests"
+                    defined.described.releaseDate shouldBe "2020-02-22"
+                }
+            )
         }
     }
 })
