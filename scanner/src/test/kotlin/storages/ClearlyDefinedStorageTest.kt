@@ -177,7 +177,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(TEST_PACKAGE) shouldBeFailure {
-                it.message shouldContain "HttpException"
+                it.message shouldContain "JsonDecodingException"
             }
         }
 
