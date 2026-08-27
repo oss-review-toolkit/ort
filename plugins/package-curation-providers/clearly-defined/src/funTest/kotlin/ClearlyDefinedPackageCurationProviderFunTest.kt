@@ -22,8 +22,9 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.clearlydefined
 import io.kotest.assertions.retry
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
 import kotlin.time.Duration.Companion.seconds
@@ -41,34 +42,27 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // https://clearlydefined.io/definitions/sourcearchive/mavencentral/javax.servlet/javax.servlet-api/3.1.0
             val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
 
-            withRetry {
-                val curations = provider.getCurationsFor(packages)
+            val curations = withRetry { provider.getCurationsFor(packages) }
 
-                curations.map { it.data.concludedLicense } shouldHaveSingleElement
-                    "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
-            }
+            curations.shouldBeSingle().data.concludedLicense shouldBe
+                "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
         }
 
         "return an existing curation for the slf4j-log4j12 Maven package" {
             // https://clearlydefined.io/definitions/sourcearchive/mavencentral/org.slf4j/slf4j-log4j12/1.7.30
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
-            withRetry {
-                val curations = provider.getCurationsFor(packages)
+            val curations = withRetry { provider.getCurationsFor(packages) }
 
-                curations.map { it.data.vcs?.revision } shouldHaveSingleElement
-                    "0b97c416e42a184ff9728877b461c616187c58f7"
-            }
+            curations.shouldBeSingle().data.vcs?.revision shouldBe "0b97c416e42a184ff9728877b461c616187c58f7"
         }
 
         "return no curation for a non-existing dummy NPM package" {
             val packages = createPackagesFromIds("NPM:@scope:name:1.2.3")
 
-            withRetry {
-                val curations = provider.getCurationsFor(packages)
+            val curations = withRetry { provider.getCurationsFor(packages) }
 
-                curations should beEmpty()
-            }
+            curations should beEmpty()
         }
     }
 
@@ -83,22 +77,18 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // Use an id which is known to have non-empty results from an earlier test.
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
-            withRetry {
-                val curations = customProvider.getCurationsFor(packages)
+            val curations = withRetry { customProvider.getCurationsFor(packages) }
 
-                curations should beEmpty()
-            }
+            curations should beEmpty()
         }
 
         "be retrieved for packages without a namespace" {
             // https://clearlydefined.io/definitions/npm/npmjs/-/acorn/0.6.0
             val packages = createPackagesFromIds("NPM::acorn:0.6.0")
 
-            withRetry {
-                val curations = provider.getCurationsFor(packages)
+            val curations = withRetry { provider.getCurationsFor(packages) }
 
-                curations shouldNot beEmpty()
-            }
+            curations shouldNot beEmpty()
         }
     }
 })
