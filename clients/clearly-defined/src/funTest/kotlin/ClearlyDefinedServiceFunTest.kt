@@ -135,9 +135,9 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "0.2.2"
             )
 
-            val curations = withIgnoreTimeout { service.getDefinitions(listOf(coordinates)) }
+            val definitions = withIgnoreTimeout { service.getDefinitions(listOf(coordinates)) }
 
-            curations.shouldMatchExactly(
+            definitions.shouldMatchExactly(
                 coordinates to { defined ->
                     defined.files?.get(11)?.facets.shouldNotBeNull() shouldContain "tests"
                     defined.described.releaseDate shouldBe "2020-02-22"
