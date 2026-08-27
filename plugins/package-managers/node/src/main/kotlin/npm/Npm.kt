@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NPM_RUNTIME_CONFIGURATI
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodeVersionManagerCommand
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJsonResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
@@ -137,6 +138,8 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         }.getOrNull()
     }
 
+    private val packageJsonResolver = PackageJsonResolver()
+
     private val handler = NpmDependencyHandler(moduleInfoResolver)
 
     override val graphBuilder = DependencyGraphBuilder(handler)
@@ -205,7 +208,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
                     "Processing the '${scope.name}' scope of '${packageJsonFile.relativeTo(analysisRoot)}' ..."
                 }
 
-                val dependencies = getScopeDependenciesForModule(rootModuleInfo, projectDir, scope)
+                val dependencies = getScopeDependenciesForModule(rootModuleInfo, projectDir, scope, packageJsonResolver)
 
                 requestAllPackageDetails(dependencies) // Warm-up the cache.
 
@@ -369,7 +372,8 @@ internal fun ProcessCapture.extractNpmIssues(source: String): List<Issue> {
 private fun getScopeDependenciesForModule(
     rootModuleInfo: ModuleInfo,
     moduleDir: File,
-    scope: Scope
+    scope: Scope,
+    packageJsonResolver: PackageJsonResolver
 ): List<ModuleReference> {
     val replacements = rootModuleInfo.getNonDeduplicatedModuleInfosForId()
     val moduleInfo = if (rootModuleInfo.path?.let { File(it).realFile } == moduleDir) {
@@ -386,13 +390,13 @@ private fun getScopeDependenciesForModule(
 
         return ModuleReference(
             moduleInfo = replacement,
-            dependencies = replacement.dependencies.values
+            dependencies = replacement.getScopeDependencies(Scope.DEPENDENCIES, packageJsonResolver)
                 .filter { it.isInstalled && it.id !in dependencyAncestorIds } // break cycles
                 .map { it.getScopeDependenciesForModuleRec(dependencyAncestorIds) }
         )
     }
 
-    return moduleInfo.getScopeDependencies(scope)
+    return moduleInfo.getScopeDependencies(scope, packageJsonResolver)
         .filter { it.isInstalled }
         .map { it.getScopeDependenciesForModuleRec() }
 }
@@ -413,3 +417,21 @@ private fun Collection<ModuleReference>.getAllPackageNodeModuleIds(): Set<String
             queue += moduleReference.dependencies
         }
     }
+
+private fun ModuleInfo.getScopeDependencies(scope: Scope, resolver: PackageJsonResolver): List<ModuleInfo> {
+    if (!isInstalled) return emptyList()
+
+    // The resolver should not return null, because above check ensures the module is installed.
+    val packageJson = checkNotNull(resolver.resolvePackageJson(packageJsonFile))
+
+    val names = when (scope) {
+        Scope.DEPENDENCIES ->
+            packageJson.dependencies.keys + packageJson.optionalDependencies.keys + packageJson.peerDependencies.keys
+
+        Scope.DEV_DEPENDENCIES -> packageJson.devDependencies.keys
+    }
+
+    return dependencies.filter { (name, moduleInfo) ->
+        moduleInfo.isInstalled && name in names
+    }.values.toList()
+}
