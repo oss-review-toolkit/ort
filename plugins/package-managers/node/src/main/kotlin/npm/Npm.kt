@@ -214,12 +214,17 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
             scopes.forEach { scope ->
                 logger.info {
-                    "Processing the '${scope.name}' scope of '${packageJsonFile.relativeTo(analysisRoot)}' ..."
+                    "Constructing scope '${scope.name}' of '${packageJsonFile.relativeTo(analysisRoot)}' ..."
                 }
 
                 val dependencies = getScopeDependenciesForModule(rootModuleInfo, projectDir, scope, packageJsonResolver)
 
                 requestAllPackageDetails(dependencies) // Warm-up the cache.
+
+                logger.info {
+                    "Adding scope '${scope.name}' of '${packageJsonFile.relativeTo(analysisRoot)}' to the " +
+                        "dependency graph..."
+                }
 
                 graphBuilder.addDependencies(
                     projectId = project.id,
