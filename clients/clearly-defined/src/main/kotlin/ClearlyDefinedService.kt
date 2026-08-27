@@ -206,6 +206,13 @@ interface ClearlyDefinedService {
     )
 
     /**
+     * Return the definition for the component given as [coordinates], see
+     * https://api.clearlydefined.io/api-docs/#/definitions/get_definitions__type___provider___namespace___name___revision_.
+     */
+    @GET("definitions/{coordinates}")
+    suspend fun getDefinition(@Path("coordinates", encoded = true) coordinates: Coordinates): Defined
+
+    /**
      * Return a batch of definitions for the components given as [coordinates], see
      * https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
      */

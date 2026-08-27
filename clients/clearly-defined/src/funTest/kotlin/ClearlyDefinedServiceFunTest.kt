@@ -126,7 +126,22 @@ class ClearlyDefinedServiceFunTest : WordSpec({
     }
 
     "Definitions" should {
-        "contain defined data properties" {
+        "contain defined data properties for single requests" {
+            // https://clearlydefined.io/definitions/npm/npmjs/-/eslint-plugin-tsdoc/0.2.2
+            val coordinates = Coordinates(
+                type = ComponentType.NPM,
+                provider = Provider.NPM_JS,
+                name = "eslint-plugin-tsdoc",
+                revision = "0.2.2"
+            )
+
+            val defined = withIgnoreTimeout { service.getDefinition(coordinates) }
+
+            defined.files?.get(11)?.facets.shouldNotBeNull() shouldContain "tests"
+            defined.described.releaseDate shouldBe "2020-02-22"
+        }
+
+        "contain defined data properties for batch requests" {
             // https://clearlydefined.io/definitions/npm/npmjs/-/eslint-plugin-tsdoc/0.2.2
             val coordinates = Coordinates(
                 type = ComponentType.NPM,
