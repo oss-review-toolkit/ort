@@ -38,6 +38,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
     "The production server" should {
         "return an existing curation for the javax.servlet-api Maven package" {
+            // https://clearlydefined.io/definitions/sourcearchive/mavencentral/javax.servlet/javax.servlet-api/3.1.0
             val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
 
             withRetry {
@@ -49,6 +50,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         }
 
         "return an existing curation for the slf4j-log4j12 Maven package" {
+            // https://clearlydefined.io/definitions/sourcearchive/mavencentral/org.slf4j/slf4j-log4j12/1.7.30
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
             withRetry {
@@ -89,6 +91,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         }
 
         "be retrieved for packages without a namespace" {
+            // https://clearlydefined.io/definitions/npm/npmjs/-/acorn/0.6.0
             val packages = createPackagesFromIds("NPM::acorn:0.6.0")
 
             withRetry {

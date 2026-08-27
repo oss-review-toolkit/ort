@@ -53,6 +53,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
     }
 
     "Downloading a contribution patch" should {
+        // https://clearlydefined.io/definitions/sourcearchive/mavencentral/javax.servlet/javax.servlet-api/3.1.0
         val coordinates = Coordinates(
             type = ComponentType.MAVEN,
             provider = Provider.MAVEN_CENTRAL,
@@ -93,6 +94,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             "6.2.3" to Curation(licensed = CurationLicensed(declared = "Apache-1.0"))
         )
 
+        // https://clearlydefined.io/definitions/npm/npmjs/@nestjs/platform-express/6.2.3
         val patch = Patch(
             Coordinates(
                 type = ComponentType.NPM,
@@ -130,6 +132,8 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         // TODO: Enable again once HTTP 429 "Too Many Requests" errors are resolved.
         "contain facets for file entries".config(enabled = false) {
             val service = ClearlyDefinedService.create()
+
+            // https://clearlydefined.io/definitions/npm/npmjs/-/eslint-plugin-tsdoc/0.2.2
             val coordinates = Coordinates(
                 type = ComponentType.NPM,
                 provider = Provider.NPM_JS,
