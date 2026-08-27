@@ -70,11 +70,10 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
 
-        // TODO: Enable again once HTTP 429 "Too Many Requests" errors are resolved.
-        "return bulk curation data".config(enabled = false) {
+        "return bulk curation data" {
             val service = ClearlyDefinedService.create()
 
-            val curations = service.getCurations(listOf(coordinates))
+            val curations = withIgnoreTimeout { service.getCurations(listOf(coordinates)) }
             val curation = curations[coordinates]?.curations?.get(coordinates)
 
             curation?.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
@@ -129,8 +128,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
     }
 
     "Definitions" should {
-        // TODO: Enable again once HTTP 429 "Too Many Requests" errors are resolved.
-        "contain facets for file entries".config(enabled = false) {
+        "contain facets for file entries" {
             val service = ClearlyDefinedService.create()
 
             // https://clearlydefined.io/definitions/npm/npmjs/-/eslint-plugin-tsdoc/0.2.2
@@ -141,7 +139,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "0.2.2"
             )
 
-            val curations = service.getDefinitions(listOf(coordinates))
+            val curations = withIgnoreTimeout { service.getDefinitions(listOf(coordinates)) }
 
             curations shouldHaveSize 1
             curations[coordinates]?.files?.get(11)?.facets shouldNotBeNull {
