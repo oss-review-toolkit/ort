@@ -31,6 +31,7 @@ dependencies {
     api(libs.okhttp)
     api(libs.retrofit)
 
+    implementation(projects.utils.commonUtils)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.ks3.jdk)
     implementation(libs.ks3.standard)
