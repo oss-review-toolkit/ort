@@ -39,6 +39,8 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Contrib
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 
 class ClearlyDefinedServiceFunTest : WordSpec({
+    val service by lazy { ClearlyDefinedService.create() }
+
     "A contribution patch" should {
         "be correctly deserialized when using empty facet arrays" {
             // See https://github.com/clearlydefined/curated-data/blob/0b2db78/curations/maven/mavencentral/com.google.code.gson/gson.yaml#L10-L11.
@@ -63,16 +65,12 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         "return single curation data" {
-            val service = ClearlyDefinedService.create()
-
             val curation = withIgnoreTimeout { service.getCuration(coordinates) }
 
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
 
         "return bulk curation data" {
-            val service = ClearlyDefinedService.create()
-
             val curations = withIgnoreTimeout { service.getCurations(listOf(coordinates)) }
             val curation = curations[coordinates]?.curations?.get(coordinates)
 
@@ -116,9 +114,9 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         // Disable this test by default as it talks to the real development instance of ClearlyDefined and creates
         // pull-requests at https://github.com/clearlydefined/curated-data-dev.
         "return a summary of the created pull-request".config(enabled = false) {
-            val service = ClearlyDefinedService.create(Server.DEVELOPMENT)
+            val developmentService = ClearlyDefinedService.create(Server.DEVELOPMENT)
 
-            val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
+            val summary = developmentService.putCuration(ContributionPatch(info, listOf(patch)))
 
             summary shouldNotBeNull {
                 prNumber shouldBeGreaterThan 0
@@ -129,8 +127,6 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
     "Definitions" should {
         "contain defined data properties" {
-            val service = ClearlyDefinedService.create()
-
             // https://clearlydefined.io/definitions/npm/npmjs/-/eslint-plugin-tsdoc/0.2.2
             val coordinates = Coordinates(
                 type = ComponentType.NPM,
