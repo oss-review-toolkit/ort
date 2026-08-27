@@ -28,10 +28,10 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -277,7 +277,7 @@ interface ClearlyDefinedService {
         @Path("coordinates", encoded = true) coordinates: Coordinates,
         @Path("tool") tool: String,
         @Path("toolVersion") toolVersion: String
-    ): ResponseBody
+    ): JsonObject
 }
 
 suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.() -> T): T =
