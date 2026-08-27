@@ -159,9 +159,6 @@ class NpmFunTest : StringSpec({
     }
 
     "Resolve workspace dependencies correctly" {
-        // This test is for now only for illustrating the current behavior and the effect of upcoming code changes.
-        // As there as never been official support for workspaces implemented, functional tests were absent. In the
-        // results, there are missing project entries of pkg1, and pkg2.
         val definitionFile = getAssetFile("projects/synthetic/npm/workspaces/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/npm/workspaces-expected-output.yml")
 
