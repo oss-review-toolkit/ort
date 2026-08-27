@@ -30,6 +30,8 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.include
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldStartWith
 
 import java.net.SocketTimeoutException
@@ -40,6 +42,23 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 
 class ClearlyDefinedServiceFunTest : WordSpec({
     val service by lazy { ClearlyDefinedService.create() }
+
+    "Harvests" should {
+        "not contain curation data" {
+            // https://clearlydefined.io/definitions/sourcearchive/mavencentral/org.slf4j/slf4j-log4j12/1.7.30
+            val coordinates = Coordinates(
+                type = ComponentType.SOURCE_ARCHIVE,
+                provider = Provider.MAVEN_CENTRAL,
+                namespace = "org.slf4j",
+                name = "slf4j-log4j12",
+                revision = "1.7.30"
+            )
+
+            val data = withIgnoreTimeout { service.getLatestHarvestToolData(coordinates, "clearlydefined") }
+
+            data.toString() shouldNotContain "0b97c416e42a184ff9728877b461c616187c58f7"
+        }
+    }
 
     "A contribution patch" should {
         "be correctly deserialized when using empty facet arrays" {
@@ -158,6 +177,21 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                     defined.described.releaseDate shouldBe "2020-02-22"
                 }
             )
+        }
+
+        "contain curation data" {
+            // https://clearlydefined.io/definitions/sourcearchive/mavencentral/org.slf4j/slf4j-log4j12/1.7.30
+            val coordinates = Coordinates(
+                type = ComponentType.SOURCE_ARCHIVE,
+                provider = Provider.MAVEN_CENTRAL,
+                namespace = "org.slf4j",
+                name = "slf4j-log4j12",
+                revision = "1.7.30"
+            )
+
+            val defined = withIgnoreTimeout { service.getDefinition(coordinates) }
+
+            defined.toString() shouldContain "0b97c416e42a184ff9728877b461c616187c58f7"
         }
     }
 })
