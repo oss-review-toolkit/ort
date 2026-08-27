@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
-    val provider = ClearlyDefinedPackageCurationProviderFactory.create()
+    val provider by lazy { ClearlyDefinedPackageCurationProviderFactory.create() }
 
     "The production server" should {
         "return an existing curation for the javax.servlet-api Maven package" {
