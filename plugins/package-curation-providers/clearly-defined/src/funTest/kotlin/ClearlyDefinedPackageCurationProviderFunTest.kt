@@ -34,9 +34,9 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
-    "The production server" should {
-        val provider = ClearlyDefinedPackageCurationProviderFactory.create()
+    val provider = ClearlyDefinedPackageCurationProviderFactory.create()
 
+    "The production server" should {
         "return an existing curation for the javax.servlet-api Maven package" {
             val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
 
@@ -76,20 +76,19 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
                 serverUrl = Server.PRODUCTION.apiUrl,
                 minTotalLicenseScore = 80
             )
-            val provider = ClearlyDefinedPackageCurationProvider(config = config)
+            val customProvider = ClearlyDefinedPackageCurationProvider(config = config)
 
             // Use an id which is known to have non-empty results from an earlier test.
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
             withRetry {
-                val curations = provider.getCurationsFor(packages)
+                val curations = customProvider.getCurationsFor(packages)
 
                 curations should beEmpty()
             }
         }
 
         "be retrieved for packages without a namespace" {
-            val provider = ClearlyDefinedPackageCurationProviderFactory.create()
             val packages = createPackagesFromIds("NPM::acorn:0.6.0")
 
             withRetry {
