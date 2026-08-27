@@ -33,6 +33,8 @@ import kotlinx.serialization.json.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
+import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
+
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -267,6 +269,18 @@ interface ClearlyDefinedService {
     suspend fun harvestTools(@Path("coordinates", encoded = true) coordinates: Coordinates): List<String>
 
     /**
+     * Get the harvested data for the component with the given [coordinates] that was produced by any version of [tool].
+     * If the [revision][Coordinates.revision] is empty, the latest revision will be used (if that makes sense for the
+     * provider), see
+     * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision___tool_
+     */
+    @GET("harvest/{coordinates}/{tool}?form=list")
+    suspend fun harvestToolData(
+        @Path("coordinates", encoded = true) coordinates: Coordinates,
+        @Path("tool") tool: String
+    ): List<String>
+
+    /**
      * Get the harvested data for the component with the given [coordinates] that was produced by [tool] with version
      * [toolVersion]. If the [revision][Coordinates.revision] is empty, the latest revision will be used (if that makes
      * sense for the provider), see
@@ -321,3 +335,14 @@ suspend fun ClearlyDefinedService.getCurationsChunked(
             putAll(it.curations)
         }
     }
+
+suspend fun ClearlyDefinedService.getLatestHarvestTool(coordinates: Coordinates, tool: String): String? {
+    val data = call { harvestToolData(coordinates, tool) }
+    val versions = data.map { it.substringAfter("$tool/") }
+    return versions.sortedWith(AlphaNumericComparator).lastOrNull()
+}
+
+suspend fun ClearlyDefinedService.getLatestHarvestToolData(coordinates: Coordinates, tool: String): JsonObject? {
+    val version = getLatestHarvestTool(coordinates, tool) ?: return null
+    return call { harvestToolData(coordinates, tool, version) }
+}
