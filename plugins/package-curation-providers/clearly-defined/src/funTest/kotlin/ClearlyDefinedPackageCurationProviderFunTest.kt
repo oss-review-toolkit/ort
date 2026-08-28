@@ -19,21 +19,23 @@
 
 package org.ossreviewtoolkit.plugins.packagecurationproviders.clearlydefined
 
-import io.kotest.assertions.retry
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.TestAbortedException
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.time.Instant
-
-import kotlin.time.Duration.Companion.seconds
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
+
+import retrofit2.HttpException
 
 class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
     val provider by lazy { ClearlyDefinedPackageCurationProviderFactory.create() }
@@ -43,7 +45,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // https://clearlydefined.io/definitions/sourcearchive/mavencentral/javax.servlet/javax.servlet-api/3.1.0
             val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
 
-            val curations = withRetry { provider.getCurationsFor(packages) }
+            val curations = withIgnoreUnavailable { provider.getCurationsFor(packages) }
 
             with(curations.shouldBeSingle().data) {
                 concludedLicense shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
@@ -55,7 +57,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // https://clearlydefined.io/definitions/sourcearchive/mavencentral/org.slf4j/slf4j-log4j12/1.7.30
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
-            val curations = withRetry { provider.getCurationsFor(packages) }
+            val curations = withIgnoreUnavailable { provider.getCurationsFor(packages) }
 
             with(curations.shouldBeSingle().data) {
                 vcs?.revision shouldBe "0b97c416e42a184ff9728877b461c616187c58f7"
@@ -66,7 +68,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         "return no curation for a non-existing dummy NPM package" {
             val packages = createPackagesFromIds("NPM:@scope:name:1.2.3")
 
-            val curations = withRetry { provider.getCurationsFor(packages) }
+            val curations = withIgnoreUnavailable { provider.getCurationsFor(packages) }
 
             curations should beEmpty()
         }
@@ -83,7 +85,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // Use an id which is known to have non-empty results from an earlier test.
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
-            val curations = withRetry { customProvider.getCurationsFor(packages) }
+            val curations = withIgnoreUnavailable { customProvider.getCurationsFor(packages) }
 
             curations should beEmpty()
         }
@@ -92,7 +94,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // https://clearlydefined.io/definitions/npm/npmjs/-/acorn/0.6.0
             val packages = createPackagesFromIds("NPM::acorn:0.6.0")
 
-            val curations = withRetry { provider.getCurationsFor(packages) }
+            val curations = withIgnoreUnavailable { provider.getCurationsFor(packages) }
 
             with(curations.shouldBeSingle().data) {
                 publishedAt shouldBe Instant.parse("2014-06-06T00:00:00Z")
@@ -103,11 +105,20 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
 private fun createPackagesFromIds(vararg ids: String) = ids.map { Package.EMPTY.copy(id = Identifier(it)) }
 
-private suspend fun <T> withRetry(f: suspend () -> T): T =
-    retry(
-        maxRetry = 5,
-        timeout = (10 + 20 + 40 + 80 + 160).seconds,
-        delay = 10.seconds,
-        multiplier = 2,
-        f = f
-    )
+/**
+ * Skip the test by throwing a `TestAbortedException` in case the service is unavailable for some reasons. Otherwise,
+ * execute the [block] as usual.
+ *
+ * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
+ * when network is not available.
+ */
+private suspend fun <T> withIgnoreUnavailable(block: suspend () -> T): T =
+    runCatching {
+        block()
+    }.getOrElse { e ->
+        throw when (e) {
+            is SocketTimeoutException -> TestAbortedException()
+            is HttpException -> if (e.code() == HttpURLConnection.HTTP_BAD_GATEWAY) TestAbortedException() else e
+            else -> e
+        }
+    }
