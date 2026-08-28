@@ -131,8 +131,8 @@ class ProcessCapture(
     /**
      * A generic error message, can be used when [exitValue] is not 0.
      */
-    val errorMessage
-        get(): String {
+    val errorMessage: String
+        get() {
             // Fall back to stdout for the error message if stderr does not provide meaningful information.
             val message = stderr.takeUnless {
                 val notContainsErrorButStdoutDoes =
