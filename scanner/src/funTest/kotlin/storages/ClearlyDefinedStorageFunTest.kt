@@ -24,6 +24,7 @@ import io.kotest.engine.TestAbortedException
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.result.shouldBeSuccess
 
+import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.time.Instant
 
@@ -43,6 +44,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 
+import retrofit2.HttpException
+
 class ClearlyDefinedStorageFunTest : StringSpec({
     val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration(Server.PRODUCTION.apiUrl))
 
@@ -58,7 +61,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        val results = storage.read(pkg).withIgnoreTimeout()
+        val results = storage.read(pkg).withIgnoreUnavailable()
 
         results shouldBeSuccess {
             it shouldContain ScanResult(
@@ -119,7 +122,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        val results = storage.read(pkg).withIgnoreTimeout()
+        val results = storage.read(pkg).withIgnoreUnavailable()
 
         results shouldBeSuccess {
             it shouldContain ScanResult(
@@ -160,7 +163,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         )
 
-        val results = storage.read(pkg).withIgnoreTimeout()
+        val results = storage.read(pkg).withIgnoreUnavailable()
 
         results shouldBeSuccess { result ->
             result.map { it.provenance } shouldContain RepositoryProvenance(
@@ -176,17 +179,18 @@ class ClearlyDefinedStorageFunTest : StringSpec({
 })
 
 /**
- * Skip the test in case `SocketTimeoutException` occurred by throwing a `TestAbortedException`. Otherwise, return the
- * [Result] as-is.
+ * Skip the test by throwing a `TestAbortedException` in case the service is unavailable for some reasons. Otherwise,
+ * return the [Result] as-is.
  *
  * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
  * when network is not available.
  */
-private fun <T> Result<T>.withIgnoreTimeout(): Result<T> =
-    onFailure { e ->
-        throw if (e.cause is SocketTimeoutException) {
-            TestAbortedException()
-        } else {
-            e
+private fun <T> Result<T>.withIgnoreUnavailable(): Result<T> =
+    onFailure {
+        val e = it.cause
+        throw when (e) {
+            is SocketTimeoutException -> TestAbortedException()
+            is HttpException -> if (e.code() == HttpURLConnection.HTTP_BAD_GATEWAY) TestAbortedException() else it
+            else -> it
         }
     }
