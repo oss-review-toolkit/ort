@@ -223,30 +223,31 @@ private data class ModuleReference(
     val linkPath: String?
 )
 
-private val YarnListNode.moduleReference: ModuleReference get() {
-    if ("@link:" in name) {
+private val YarnListNode.moduleReference: ModuleReference
+    get() {
+        if ("@link:" in name) {
+            return ModuleReference(
+                alias = null,
+                name = name.substringBefore("@link:"),
+                version = "",
+                linkPath = name.substringAfter("@link:")
+            )
+        }
+
+        val parts = name.split(Regex("@npm:"))
+        val (alias, nameAndVersion) = if (parts.size == 2) {
+            parts[0] to parts[1]
+        } else {
+            null to parts[0]
+        }
+
         return ModuleReference(
-            alias = null,
-            name = name.substringBefore("@link:"),
-            version = "",
-            linkPath = name.substringAfter("@link:")
+            alias = alias,
+            name = nameAndVersion.substringBeforeLast("@"),
+            version = nameAndVersion.substringAfterLast("@"),
+            linkPath = null
         )
     }
-
-    val parts = name.split(Regex("@npm:"))
-    val (alias, nameAndVersion) = if (parts.size == 2) {
-        parts[0] to parts[1]
-    } else {
-        null to parts[0]
-    }
-
-    return ModuleReference(
-        alias = alias,
-        name = nameAndVersion.substringBeforeLast("@"),
-        version = nameAndVersion.substringAfterLast("@"),
-        linkPath = null
-    )
-}
 
 internal val YarnListNode.moduleAlias: String
     get() = moduleReference.alias ?: moduleName
