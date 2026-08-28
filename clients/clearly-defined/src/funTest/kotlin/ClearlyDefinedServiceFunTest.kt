@@ -34,11 +34,14 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldStartWith
 
+import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
+
+import retrofit2.HttpException
 
 class ClearlyDefinedServiceFunTest : WordSpec({
     val service by lazy { ClearlyDefinedService.create() }
@@ -54,7 +57,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "1.7.30"
             )
 
-            val data = withIgnoreTimeout { service.getLatestHarvestToolData(coordinates, "clearlydefined") }
+            val data = withIgnoreUnavailable { service.getLatestHarvestToolData(coordinates, "clearlydefined") }
 
             data.toString() shouldNotContain "0b97c416e42a184ff9728877b461c616187c58f7"
         }
@@ -84,13 +87,13 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         "return single curation data" {
-            val curation = withIgnoreTimeout { service.getCuration(coordinates) }
+            val curation = withIgnoreUnavailable { service.getCuration(coordinates) }
 
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
 
         "return bulk curation data" {
-            val curations = withIgnoreTimeout { service.getCurations(listOf(coordinates)) }
+            val curations = withIgnoreUnavailable { service.getCurations(listOf(coordinates)) }
             val curation = curations[coordinates]?.curations?.get(coordinates)
 
             curation?.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
@@ -154,7 +157,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "0.2.2"
             )
 
-            val defined = withIgnoreTimeout { service.getDefinition(coordinates) }
+            val defined = withIgnoreUnavailable { service.getDefinition(coordinates) }
 
             defined.files?.get(11)?.facets.shouldNotBeNull() shouldContain "tests"
             defined.described.releaseDate shouldBe "2020-02-22"
@@ -169,7 +172,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "0.2.2"
             )
 
-            val definitions = withIgnoreTimeout { service.getDefinitions(listOf(coordinates)) }
+            val definitions = withIgnoreUnavailable { service.getDefinitions(listOf(coordinates)) }
 
             definitions.shouldMatchExactly(
                 coordinates to { defined ->
@@ -189,7 +192,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "1.7.30"
             )
 
-            val defined = withIgnoreTimeout { service.getDefinition(coordinates) }
+            val defined = withIgnoreUnavailable { service.getDefinition(coordinates) }
 
             defined.toString() shouldContain "0b97c416e42a184ff9728877b461c616187c58f7"
         }
@@ -197,19 +200,19 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 })
 
 /**
- * Skip the test in case `SocketTimeoutException` occurred by throwing a `TestAbortedException`. Otherwise, execute the
- * [block] as usual.
+ * Skip the test by throwing a `TestAbortedException` in case the service is unavailable for some reasons. Otherwise,
+ * execute the [block] as usual.
  *
  * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
  * when network is not available.
  */
-private suspend fun <T> withIgnoreTimeout(block: suspend () -> T): T =
+private suspend fun <T> withIgnoreUnavailable(block: suspend () -> T): T =
     runCatching {
         block()
-    }.getOrElse {
-        throw if (it is SocketTimeoutException) {
-            TestAbortedException()
-        } else {
-            it
+    }.getOrElse { e ->
+        throw when (e) {
+            is SocketTimeoutException -> TestAbortedException()
+            is HttpException -> if (e.code() == HttpURLConnection.HTTP_BAD_GATEWAY) TestAbortedException() else e
+            else -> e
         }
     }
