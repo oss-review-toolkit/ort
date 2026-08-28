@@ -74,7 +74,7 @@ tika = "4.0.0"
 wagonHttp = "3.5.3"
 wire = "6.4.7"
 wiremock = "3.13.2"
-xmlutil = "1.0.2"
+xmlutil = "1.0.2.1"
 xz = "1.12"
 
 [plugins]
