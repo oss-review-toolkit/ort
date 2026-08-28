@@ -101,6 +101,9 @@ class ScanCodeLicenseFactProvider(
             // Work around for https://github.com/aboutcode-org/scancode-toolkit/issues/2813 which affects ScanCode
             // versions below 31.0.0.
             "x11-xconsortium_veillard.LICENSE"
+        } else if (licenseOrExceptionId == "LicenseRef-scancode-unlimited-link-exception-lgpl") {
+            // Work around for https://github.com/oss-review-toolkit/ort/issues/12369.
+            "unlimited-linking-exception-lgpl.LICENSE"
         } else {
             "${licenseOrExceptionId.removePrefix("LicenseRef-scancode-").lowercase()}.LICENSE"
         }
