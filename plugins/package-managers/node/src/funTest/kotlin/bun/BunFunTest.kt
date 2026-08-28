@@ -27,6 +27,8 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.toYaml
@@ -61,15 +63,9 @@ class BunFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bun/workspaces/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/bun/workspaces-expected-output.yml")
 
-        val result = BunFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = analyze(definitionFile.parentFile, packageManagers = setOf(BunFactory())).getAnalyzerResult()
 
-        patchActualResult(result.toYaml()) should matchExpectedResult(
-            expectedResultFile,
-            definitionFile,
-            custom = mapOf(
-                "<REPLACE_PROJECT_DIR>" to definitionFile.parentFile.invariantSeparatorsPath
-            )
-        )
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Resolve dependencies for a project with a legacy binary lockfile correctly" {
