@@ -59,7 +59,7 @@ internal object BunCommand : CommandLineTool {
 
     // Require at least Bun 1.2.0 which introduced the textual "bun.lock" lockfile format. Older binary "bun.lockb"
     // lockfiles can still be read by modern Bun versions.
-    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=1.2.0")
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=1.4.0")
 }
 
 /**
