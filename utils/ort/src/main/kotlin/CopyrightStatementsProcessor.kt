@@ -300,10 +300,11 @@ private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
 /**
  * Return a tuple of the copyright prefix and the normalized Copyright owner to group statement parts by.
  */
-private val Parts.key: String get() {
-    val normalizedOwnerKey = owner.filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
-    return "$prefix:$normalizedOwnerKey"
-}
+private val Parts.key: String
+    get() {
+        val normalizedOwnerKey = owner.filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
+        return "$prefix:$normalizedOwnerKey"
+    }
 
 @Suppress("UnsafeCallOnNullableType")
 private fun MatchResult.getGroup(index: Int): MatchGroup = groups[index]!!

@@ -73,7 +73,8 @@ internal data class ModuleReference(
     val dependencies: List<ModuleReference>
 )
 
-internal val ModuleInfo.packageJsonFile: File get() {
-    check(isInstalled) { "The module directory '$path' is null or does not exist." }
-    return File(path, NodePackageManagerType.DEFINITION_FILE)
-}
+internal val ModuleInfo.packageJsonFile: File
+    get() {
+        check(isInstalled) { "The module directory '$path' is null or does not exist." }
+        return File(path, NodePackageManagerType.DEFINITION_FILE)
+    }

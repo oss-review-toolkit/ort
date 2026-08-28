@@ -24,17 +24,20 @@ import java.util.Locale
 /**
  * Return the bytes equal to this [Int] number of kibibytes (KiB).
  */
-inline val Int.kibibytes: Long get() = this * 1024L
+inline val Int.kibibytes: Long
+    get() = this * 1024L
 
 /**
  * Return the bytes equal to this [Int] number of mebibytes (MiB).
  */
-inline val Int.mebibytes: Long get() = kibibytes * 1024L
+inline val Int.mebibytes: Long
+    get() = kibibytes * 1024L
 
 /**
  * Return the bytes equal to this [Int] number of gibibytes (GiB).
  */
-inline val Int.gibibytes: Long get() = mebibytes * 1024L
+inline val Int.gibibytes: Long
+    get() = mebibytes * 1024L
 
 /**
  * Format this [Double] as a string with the provided number of [decimalPlaces].
