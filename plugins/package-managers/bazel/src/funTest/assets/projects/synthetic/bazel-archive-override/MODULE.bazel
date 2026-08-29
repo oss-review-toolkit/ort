@@ -1,0 +1,20 @@
+bazel_dep(name = "rules_cuda", version = "0.1.1")
+
+archive_override(
+    module_name = "rules_cuda",
+    integrity = "sha256-3B9PcEylbj1e3Zc/mKRfBIfQ8oxonQpXuiNhEhSLGDM=",
+    patches = [
+        "//rules_cuda_patches:dummy.patch",
+    ],
+    strip_prefix = "rules_cuda-v0.1.2",
+    urls = ["https://github.com/bazel-contrib/rules_cuda/releases/download/v0.1.2/rules_cuda-v0.1.2.tar.gz"],
+)
+
+bazel_dep(name = "nanopb", version = "0.4.9", dev_dependency=True)
+
+archive_override(
+    module_name = "nanopb",
+    urls = ["https://github.com/nanopb/nanopb/archive/e34dfae6f1aeb87cbe1c05a8fb96f5b9cb1034f6.zip"],
+    integrity = "sha256-a+rlc9aR9sNF8MfourU1VFf3foRRZo+qlmXfxY0se6s=",
+    strip_prefix = "nanopb-e34dfae6f1aeb87cbe1c05a8fb96f5b9cb1034f6",
+)

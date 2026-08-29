@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ORT Help" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="org.ossreviewtoolkit.cli.OrtMainKt" />
+    <module name="oss-review-toolkit.cli.main" />
+    <option name="PROGRAM_PARAMETERS" value="--help" />
+    <shortenClasspath name="ARGS_FILE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

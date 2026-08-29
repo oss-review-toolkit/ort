@@ -1,0 +1,11 @@
+Package: testpkg
+Source: test.src
+Version: 1.2.3.1-4
+Architecture: all
+Maintainer: Test
+Installed-Size: 42
+Section: Test
+Priority: optional
+Homepage: https://test.example.org
+Description: This is just a test package.
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product name="ORT Tycho Test Product" uid="tychoTestProduct" id="org.ossreviewtoolkit.tycho.test.product" version="1.0.0.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="true">
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="org.ossreviewtoolkit.tycho.test.feature" installMode="root"/>
+      <feature id="maven.jars" installMode="root"/>
+   </features>
+
+   <configurations>
+   </configurations>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
+
+</product>

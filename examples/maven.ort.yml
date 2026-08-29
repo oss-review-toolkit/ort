@@ -1,0 +1,9 @@
+# This is an example for a (project specific) repository configuration file.
+excludes:
+  scopes:
+  - pattern: "provided"
+    reason: "PROVIDED_DEPENDENCY_OF"
+    comment: "Packages provided at runtime by the JDK or container only."
+  - pattern: "test"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Packages for testing only."

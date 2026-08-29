@@ -1,0 +1,39 @@
+name: Native Build
+
+on:
+  workflow_dispatch:
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.logging.stacktrace=all
+
+permissions: read-all
+
+jobs:
+  analyzer-only:
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@5298d94fb55a4f185c602eeac5de1b553882abe2 # v1.6.4
+        with:
+          distribution: graalvm
+          java-version: 25
+          native-image-job-reports: true
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      - name: Build Executable
+        run: ./gradlew -P cliAnalyzerOnly=true --no-configuration-cache :cli:nativeCompile
+      - name: Compress Executable
+        uses: crazy-max/ghaction-upx@c83f378efc804f828e988debb88ed6116feb2368 # v4.0.0
+        with:
+          files: cli/build/native/nativeCompile/ort
+      - name: Upload Executable
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ORT Analyzer-only
+          path: cli/build/native/nativeCompile/ort
+          archive: false
+          retention-days: 7

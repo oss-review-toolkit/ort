@@ -1,0 +1,78 @@
+---
+projects:
+- id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-local-registry2/MODULE.bazel:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "main"
+    dependencies:
+    - id: "Bazel::module_a:0.0.1"
+      linkage: "STATIC"
+      dependencies:
+      - id: "Bazel::module_b:0.0.1"
+        linkage: "STATIC"
+packages:
+- id: "Bazel::module_a:0.0.1"
+  purl: "pkg:bazel/module_a@0.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://example.com/module_a-0.0.1.zip"
+    hash:
+      value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Bazel::module_b:0.0.1"
+  purl: "pkg:bazel/module_b@0.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://example.com/module_b-0.0.1.zip"
+    hash:
+      value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""

@@ -1,0 +1,33 @@
+extends: default
+title-page:
+  background-image: image:../logos/ort.png[]
+header:
+  height: $base-line-height-length * 1.5
+  line-height: -2
+  image-vertical-align: 2 # # (1)
+  background-image: image:../logos/ort.png[][fit=contain]
+  recto:
+    center:
+      content: '{section-title}'
+  verso:
+    center:
+      content: '{section-title}'
+footer:
+  height: $base-line-height-length * 2.5
+  line-height: 1
+  recto:
+    right:
+      content: '{page-number}/{page-count}'
+    left:
+      content: '© Some Copyright'
+  verso:
+    right:
+      content: $footer-recto-right-content
+    left:
+      content: $footer-recto-left-content
+code:
+  background-color: transparent
+  border-color: transparent
+role:
+  alert:
+    font-color: #ff0000

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>oss-review-toolkit/.github//renovate-config",
+    "docker:disable"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/\\.env\\.versions$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>\\S+))?\\s*\\n\\w+_VERSION=(?<currentValue>\\S+)"
+      ]
+    }
+  ],
+  "ignorePaths": [
+    "plugins/reporters/web-app-template",
+    "**/src/funTest/assets/**",
+    "**/src/test/assets/**"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["gradle"],
+      "commitMessageTopic": "{{depName}}",
+      "recreateWhen": "never"
+    },
+    {
+      "matchPackageNames": [
+        "com.atlassian.jira:jira-rest-java-client-api",
+        "com.atlassian.jira:jira-rest-java-client-app"
+      ],
+      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+$/"
+    },
+    {
+      "matchPackageNames": [
+        "org.jruby:jruby"
+      ],
+      "allowedVersions": "/^9\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?$/"
+    },
+    {
+      "matchPackageNames": [
+        "software.amazon.awssdk:*"
+      ],
+      "matchUpdateTypes": ["patch"],
+      "schedule": "after 9pm on wednesday"
+    },
+    {
+      "matchManagers": ["npm"],
+      "rangeStrategy": "pin",
+      "schedule": "after 9pm on wednesday"
+    }
+  ],
+  "nuget": {
+    "enabled": false
+  }
+}

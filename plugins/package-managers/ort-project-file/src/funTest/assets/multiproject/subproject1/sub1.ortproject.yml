@@ -1,0 +1,17 @@
+projectName: "subproject-x-1"
+description: "Subproject X-1 description"
+homepageUrl: "https://project_x-1.example.com"
+declaredLicenses:
+  - "Apache-2.0"
+authors:
+  - "Gerard & Son"
+dependencies:
+  - purl: "pkg:maven/com.example/sub-x1@9.98.0"
+    description: "Package of subproject 1"
+    vcs:
+      type: "Mercurial"
+      url: "https://mercurial.example.com/full/"
+      revision: "master"
+      path: "/"
+    declaredLicenses:
+      - "Apache-2.0"

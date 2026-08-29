@@ -1,0 +1,415 @@
+# Copyright (C) 2022 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+# License-Filename: LICENSE
+
+# A reference configuration file containing all possible ORT configuration options. Some of those options are mutually
+# exclusive, so this file is only used to show all options and to validate the configuration.
+
+ort:
+  allowedProcessEnvironmentVariableNames:
+  - PASSPORT
+  - USER_HOME
+  deniedProcessEnvironmentVariablesSubstrings:
+  - PASS
+  - SECRET
+  - TOKEN
+  - USER
+
+  enableRepositoryPackageConfigurations: true
+  enableRepositoryPackageCurations: true
+
+  # Force overwriting of any existing output files.
+  forceOverwrite: true
+
+  # License fact providers, ordered from highest to lowest priority.
+  licenseFactProviders:
+  - type: "DefaultCustomLicenseTexts"
+  - type: "CustomLicenseTexts"
+    id: "local-custom-license-texts"
+    options:
+      dir: '/project-sources/.ort/custom-license-texts'
+  - type: "CustomLicenseTexts"
+    id: "global-custom-license-texts"
+    options:
+      dir: '/ort-config/custom-license-texts'
+  - type: "DefaultLicenseTextCuration"
+  - type: "LicenseTextCuration"
+    options:
+      dir: '/ort-config/license-text-curations'
+  - type: "SPDX"
+  - type: "ScanCode"
+    options:
+      licenseTextDir: '/path/to/scancode/license/text/dir'
+
+  licenseFilePatterns:
+    licenseFilenames: ['LICENSE*']
+    noticeFilenames: ['NOTICE*']
+    patentFilenames: ['PATENTS']
+    otherLicenseFilenames: ['README*']
+
+  # Package configuration providers are listed from highest to lowest priority. If multiple providers return
+  # configurations for the same package ID and provenance, the configuration from the higher-priority provider (listed
+  # first) takes precedence. Ensure that different providers do not provide conflicting configurations for the same
+  # package, see https://github.com/oss-review-toolkit/ort/issues/6972 for details.
+  packageConfigurationProviders:
+  - type: DefaultDir
+  - type: Dir
+    id: SomeConfigDir
+    options:
+      path: '/some-path/'
+      mustExist: true
+  - type: OrtConfig
+
+  # Package curation providers are listed from highest to lowest priority. Technically, they are applied in reverse
+  # order: The provider with the highest priority is applied last, so it can overwrite any previously applied curations.
+  packageCurationProviders:
+  - type: DefaultFile
+  - type: DefaultDir
+  - type: File
+    id: SomeCurationsFile
+    options:
+      path: '/some-path/curations.yml'
+      mustExist: true
+  - type: File
+    id: SomeCurationsDir
+    options:
+      path: '/some-path/curations-dir'
+      mustExist: false
+  - type: OrtConfig
+    enabled: '${USE_ORT_CONFIG_CURATIONS:-true}'
+  - type: ClearlyDefined
+    options:
+      serverUrl: 'https://api.clearlydefined.io'
+      minTotalLicenseScore: 80
+  - type: Spring
+    enabled: false
+
+  severeIssueThreshold: ERROR
+  severeRuleViolationThreshold: ERROR
+
+  analyzer:
+    allowDynamicVersions: true
+
+    # A list of enabled package managers.
+    enabledPackageManagers: [Gradle]
+
+    # A list of disabled package managers. Disabling a package manager here overrides enabling it in
+    # `enabledPackageManagers`.
+    disabledPackageManagers: [Maven, NPM]
+
+    # A flag to control whether excluded scopes and paths should be skipped during the analysis.
+    skipExcluded: true
+
+    packageManagers:
+      Gradle:
+        # A list of package manager names that this package manager must run after. For example, this can be used if
+        # another package manager generates files that this package manager requires to run correctly.
+        mustRunAfter: [NPM]
+
+      GradleInspector:
+        options:
+          # An optional path to the Java home to use for Gradle project analysis. By default the Java version that ORT
+          # itself is run with will be used.
+          javaHome: "/path/to/java/home"
+
+      Yarn2:
+        options:
+          # If set to true, disable verification of HTTPS certificate of remote registries. Useful when using a proxy to
+          # intercept requests to the registry.
+          disableRegistryCertificateVerification: false
+
+      Conan:
+        options:
+          # Holds a name of the lockfile. Required if allowDynamicVersions = false.
+          # The lockfile should be located in the same directory as the conanfile.py or conanfile.txt.
+          lockfileName: "lockfile.lock"
+
+          # If true, the Conan package manager with call a command called "conan2" instead of "conan".
+          useConan2: true
+
+  advisor:
+    # A flag to control whether excluded scopes and paths should be skipped when giving the advice.
+    skipExcluded: true
+
+    config:
+      BlackDuck:
+        options:
+          serverUrl: 'server-url'
+        secrets:
+          apiToken: 'token'
+
+      OssIndex:
+        options:
+          serverUrl: 'https://api.guide.sonatype.com/'
+        secrets:
+          username: username
+          password: password
+
+      OSV:
+        options:
+          serverUrl: 'https://api.osv.dev'
+
+      VulnerableCode:
+        options:
+          serverUrl: 'http://localhost:8000'
+          readTimeout: 40
+        secrets:
+          apiKey: 0123456789012345678901234567890123456789
+
+  downloader:
+    allowMovingRevisions: true
+
+    # Only used if the '--license-classifications-file' option is specified.
+    includedLicenseCategories:
+      - 'category-a'
+      - 'category-b'
+
+    # A flag to control whether excluded scopes and paths should be skipped during the download.
+    skipExcluded: true
+
+    sourceCodeOrigins: [VCS, ARTIFACT]
+
+  scanner:
+    skipConcluded: true
+    skipExcluded: true
+
+    archive:
+      enabled: true
+
+      fileStorage:
+        localFileStorage:
+          directory: ~/.ort/scanner/archive
+          compression: false
+
+      postgresStorage:
+        connection:
+          url: 'jdbc:postgresql://your-postgresql-server:5432/your-database'
+          schema: public
+          username: username
+          password: password
+          sslmode: require
+          sslcert: /defaultdir/postgresql.crt
+          sslkey: /defaultdir/postgresql.pk8
+          sslrootcert: /defaultdir/root.crt
+          connectionTimeout: 30000
+          idleTimeout: 600000
+          keepaliveTime: 0
+          maxLifetime: 1800000
+          maximumPoolSize: 10
+          minimumIdle: 600000
+
+    # Map scanner license findings to valid SPDX licenses. Note that these mappings are only applied in new scans,
+    # stored scan results are not affected.
+    detectedLicenseMapping:
+      BSD (Three Clause License): 'BSD-3-clause'
+      LicenseRef-scancode-generic-cla: 'NOASSERTION'
+
+    fileListStorage:
+      fileStorage:
+        localFileStorage:
+          directory: ~/.ort/scanner/file-lists
+          compression: false
+
+      postgresStorage:
+        connection:
+          url: 'jdbc:postgresql://your-postgresql-server:5432/your-database'
+          schema: public
+          username: username
+          password: password
+          sslmode: require
+          sslcert: /defaultdir/postgresql.crt
+          sslkey: /defaultdir/postgresql.pk8
+          sslrootcert: /defaultdir/root.crt
+          connectionTimeout: 30000
+          idleTimeout: 600000
+          keepaliveTime: 0
+          maxLifetime: 1800000
+          maximumPoolSize: 10
+          minimumIdle: 600000
+
+    config:
+      # A map from scanner plugin types to the plugin configuration.
+      ScanCode:
+        options:
+          # Command line options that affect the ScanCode output. If changed, stored scan results that were created with
+          # different options are not reused.
+          commandLine: '--copyright,--license,--info,--strip-root,--timeout,300'
+
+          # Command line options that do not affect the ScanCode output.
+          commandLineNonConfig: '--processes,4'
+
+          # Use per-file license findings instead of per-line ones.
+          preferFileLicense: false
+
+          # Criteria for matching stored scan results. These can be configured for any scanner that uses semantic
+          # versioning. Note that the 'maxVersion' is exclusive and not part of the range of accepted versions.
+          minVersion: '3.2.1-rc2'
+          maxVersion: '32.0.0'
+
+      FossId:
+        options:
+          serverUrl: 'https://fossid.example.com/instance/'
+
+          projectName: 'My Project'
+          namingScanPattern: '#projectName_#repositoryName_#currentTimestamp_#deltaTag_#branch'
+
+          waitForResult: false
+
+          keepFailedScans: false
+          deltaScans: true
+          deltaScanLimit: 10
+
+          detectLicenseDeclarations: true
+          detectCopyrightStatements: true
+
+          timeout: 60
+
+          urlMappings: "https://my-repo.example.org(?<repoPath>.*) -> ssh://my-mapped-repo.example.org${repoPath}"
+
+          sensitivity: 10
+
+          treatPendingIdentificationsAsError: false
+
+        secrets:
+          user: user
+          apiKey: XYZ
+
+      SCANOSS:
+        options:
+          apiUrl: 'https://api.osskb.org/'
+          writeToStorage: true
+          chosenSnippetModel: 'LICENSE_AND_COPYRIGHT_FINDING'
+          enablePathObfuscation: false
+          # Snippet tuning parameters (all optional, these are the defaults):
+          minSnippetHits: 5
+          minSnippetLines: 3
+          honourFileExts: true
+          rankingEnabled: false
+          rankingThreshold: 0
+          skipHeaders: false
+          skipHeadersLimit: 0
+        secrets:
+          apiKey: 'your API key'
+
+    storages:
+      local:
+        backend:
+          localFileStorage:
+            directory: ~/.ort/scanner/results
+            compression: false
+
+      http:
+        backend:
+          httpFileStorage:
+            url: 'https://your-http-server'
+            query: '?username=user&password=123'
+            headers:
+              key1: value1
+              key2: value2
+
+      aws:
+        backend:
+          s3FileStorage:
+            accessKeyId: "accessKey"
+            awsRegion: "us-east-1"
+            bucketName: "ort-scan-results"
+            compression: false
+            customEndpoint: "http://localhost:4567"
+            pathStyleAccess: false # Required for some non-AWS S3 providers that do not support DNS style access.
+            secretAccessKey: "secret"
+
+      clearlyDefined:
+        serverUrl: 'https://api.clearlydefined.io'
+
+      postgres:
+        connection:
+          url: 'jdbc:postgresql://your-postgresql-server:5432/your-database'
+          schema: public
+          username: username
+          password: password
+          sslmode: require
+          sslcert: /defaultdir/postgresql.crt
+          sslkey: /defaultdir/postgresql.pk8
+          sslrootcert: /defaultdir/root.crt
+          connectionTimeout: 30000
+          idleTimeout: 600000
+          keepaliveTime: 0
+          maxLifetime: 1800000
+          maximumPoolSize: 10
+          minimumIdle: 600000
+        type: PROVENANCE_BASED
+
+    # Storage readers are listed from highest to lower priority, i.e. the first match wins.
+    storageReaders: [local, postgres, http, aws, clearlyDefined]
+
+    # For storage writers no priority is implied by the order; scan results are stored for all writers.
+    storageWriters: [postgres]
+
+    ignorePatterns: ['**/META-INF/DEPENDENCIES']
+
+    provenanceStorage:
+      fileStorage:
+        localFileStorage:
+          directory: ~/.ort/scanner/provenance
+          compression: false
+
+      postgresStorage:
+        connection:
+          url: 'jdbc:postgresql://your-postgresql-server:5432/your-database'
+          schema: public
+          username: username
+          password: password
+          sslmode: require
+          sslcert: /defaultdir/postgresql.crt
+          sslkey: /defaultdir/postgresql.pk8
+          sslrootcert: /defaultdir/root.crt
+          connectionTimeout: 30000
+          idleTimeout: 600000
+          keepaliveTime: 0
+          maxLifetime: 1800000
+          maximumPoolSize: 10
+          minimumIdle: 600000
+
+  reporter:
+    config:
+      CycloneDx:
+        options:
+          schema.version: 1.6
+
+      FossId:
+        options:
+          serverUrl: 'https://fossid.example.com/instance/'
+        secrets:
+          user: user
+          apiKey: XYZ
+
+      CtrlXAutomation:
+        options:
+          licenseCategoriesToInclude: 'include-in-disclosure-document'
+
+  notifier:
+    mail:
+      hostName: 'localhost'
+      username: user
+      password: password
+      port: 465
+      useSsl: true
+      fromAddress: 'no-reply@oss-review-toolkit.org'
+
+    jira:
+        host: 'http://localhost'
+        username: user
+        password: password

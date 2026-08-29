@@ -1,0 +1,7 @@
+target 'example' do
+    pod 'fmt'
+    pod 'glog'
+    pod 'React'
+    pod 'React-Core'
+    pod 'React-RCTActionSheet'
+end

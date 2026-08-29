@@ -1,0 +1,214 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oss-review-toolkit.org/ort-project.yml",
+  "title": "ORT project",
+  "description": "The OSS-Review-Toolkit (ORT) project package manager uses definition files to manually define projects and their dependencies. A full list of all available options can be found at https://oss-review-toolkit.org/ort/docs/guides/ort-project-package-manager.",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "description": "Name of the project.",
+      "type": "string"
+    },
+    "description": {
+      "description": "Brief description of the project.",
+      "type": "string"
+    },
+    "homepageUrl": {
+      "description": "URL of the project homepage.",
+      "type": "string",
+      "format": "uri"
+    },
+    "declaredLicenses": {
+      "description": "List of declared licenses for the project in SPDX format.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "authors": {
+      "description": "List of authors of the project.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependencies": {
+      "description": "List of dependency packages for the project.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/dependency"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "dependency": {
+      "description": "Dependency package.",
+      "type": "object",
+      "anyOf": [
+        {
+          "required": ["purl"]
+        },
+        {
+          "required": ["id"]
+        }
+      ],
+      "properties": {
+        "purl": {
+          "description": "Package URL in PURL format. Must start with 'pkg:'. Qualifier and subpath components are not supported.",
+          "type": "string",
+          "pattern": "^pkg:"
+        },
+        "id": {
+          "description": "Package identifier in ORT format: '<ecosystem>:<package-manager>:<namespace>:<name>:<version>'.",
+          "type": "string",
+          "pattern": "^[^:]+:[^:]*:[^:]*:[^:]*$"
+        },
+        "description": {
+          "description": "Brief description of the package.",
+          "type": "string"
+        },
+        "vcs": {
+          "$ref": "#/definitions/vcs"
+        },
+        "sourceArtifact": {
+          "$ref": "#/definitions/sourceArtifact"
+        },
+        "declaredLicenses": {
+          "description": "List of declared licenses for the dependency in SPDX format.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "homepageUrl": {
+          "description": "URL of the package homepage.",
+          "type": "string",
+          "format": "uri"
+        },
+        "labels": {
+          "description": "User-defined labels associated with this package as key-value pairs.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "authors": {
+          "description": "List of authors of the dependency.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scopes": {
+          "description": "List of scopes the package belongs to.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "linkage": {
+          "description": "The linkage type used be the dependent to link this package.",
+          "type": "string",
+          "enum": [
+            "DYNAMIC",
+            "STATIC"
+          ],
+          "default": "DYNAMIC"
+        },
+        "isModified": {
+          "description": "Flag indicating whether the source code of the package has been modified compared to the original source code. Default is false.",
+          "type": "boolean",
+          "default": false
+        },
+        "isMetadataOnly": {
+          "description": "Flag indicating whether the package is just metadata, like Maven BOM artifacts which only define constraints for dependency versions. Default is false.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "vcs": {
+      "description": "Version control system location of the package.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "VCS type, e.g., 'Git', 'Subversion', 'Mercurial'.",
+          "type": "string"
+        },
+        "url": {
+          "description": "VCS repository URL.",
+          "type": "string",
+          "format": "uri"
+        },
+        "revision": {
+          "description": "VCS revision (branch, tag, or commit).",
+          "type": "string"
+        },
+        "path": {
+          "description": "VCS path within the repository. Default is empty string.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "sourceArtifact": {
+      "description": "Remote artifact where the source package can be downloaded.",
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "URL of the source artifact.",
+          "type": "string",
+          "format": "uri"
+        },
+        "hash": {
+          "$ref": "#/definitions/hash"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false
+    },
+    "hash": {
+      "description": "Hash of an artifact.",
+      "type": "object",
+      "properties": {
+        "value": {
+          "description": "Hash value.",
+          "type": "string"
+        },
+        "algorithm": {
+          "description": "Hash algorithm.",
+          "type": "string",
+          "enum": [
+            "MD5",
+            "SHA-1",
+            "SHA1",
+            "SHA-256",
+            "SHA256",
+            "SHA-384",
+            "SHA384",
+            "SHA-512",
+            "SHA512",
+            "SHA-1-GIT",
+            "SHA1-GIT",
+            "SHA1GIT",
+            "SWHID"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "algorithm"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

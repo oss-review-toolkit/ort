@@ -1,0 +1,151 @@
+/*
+ * Copyright (C) 2021 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.clients.ossindex
+
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+import okhttp3.Credentials
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+
+import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.POST
+
+/**
+ * Interface for the OSS Index REST API, based on the documentation from
+ * https://guide.sonatype.com/api#/OSS%20Index%20Compatibility.
+ */
+interface OssIndexService {
+    companion object {
+        /**
+         * The default base URL for the REST API of the public OSS Index service.
+         */
+        const val DEFAULT_BASE_URL = "https://api.guide.sonatype.com/"
+
+        /**
+         * The JSON (de-)serialization object used by this service.
+         */
+        val JSON = Json.Default
+
+        /**
+         * Create an OSS Index service instance for communicating with a server running at the given [url].
+         * Authentication happens either via a Sonatype Guide personal access [token], or OSS Index [username] and
+         * [password][token]. Optionally, a custom HTTP [client] can be used.
+         */
+        fun create(
+            url: String? = null,
+            username: String? = null,
+            token: String,
+            client: OkHttpClient? = null
+        ): OssIndexService {
+            val ossIndexClient = (client?.newBuilder() ?: OkHttpClient.Builder()).addInterceptor { chain ->
+                val request = chain.request()
+                val requestBuilder = request.newBuilder()
+
+                if (username == null) {
+                    require(token.startsWith("sonatype_pat_")) {
+                        "The token is not a valid Sonatype Guide PAT."
+                    }
+
+                    requestBuilder.header("Authorization", "Bearer $token")
+                } else {
+                    requestBuilder.header("Authorization", Credentials.basic(username, token))
+                }
+
+                chain.proceed(requestBuilder.build())
+            }.build()
+
+            val contentType = "application/json".toMediaType()
+            val retrofit = Retrofit.Builder()
+                .client(ossIndexClient)
+                .baseUrl(url ?: DEFAULT_BASE_URL)
+                .addConverterFactory(JSON.asConverterFactory(contentType))
+                .build()
+
+            return retrofit.create(OssIndexService::class.java)
+        }
+    }
+
+    @Serializable
+    data class ComponentReportRequest(
+        val coordinates: List<String>
+    )
+
+    @Serializable
+    data class ComponentReport(
+        /** The Package URL coordinates. */
+        val coordinates: String,
+
+        /** The description of the component. */
+        val description: String? = null,
+
+        /** The reference URL of the component on OSS Index itself. */
+        val reference: String,
+
+        /** The list of known vulnerabilities. */
+        val vulnerabilities: List<Vulnerability>
+    )
+
+    @Serializable
+    data class Vulnerability(
+        /** A UUID */
+        val id: String,
+
+        /** A human-readable name; in case of a CVE the CVE name. */
+        val displayName: String? = null,
+
+        /** A title for the vulnerability. */
+        val title: String,
+
+        /** A longer description of the vulnerability. */
+        val description: String,
+
+        /** A numeric CVSS score. */
+        val cvssScore: Float,
+
+        /** A CVSS vector string. */
+        val cvssVector: String? = null,
+
+        /** A Common Vulnerabilities and Exposures value, if known. */
+        val cve: String? = null,
+
+        /** A Common Weakness Enumeration value, if known. */
+        val cwe: String? = null,
+
+        /** The reference URL of the vulnerability on OSS Index itself. */
+        val reference: String,
+
+        /** An optional list of additional external references. */
+        val externalReferences: List<String>? = null,
+
+        /** An optional list of affected version ranges. */
+        val versionRanges: List<String>? = null
+    )
+
+    /**
+     * Request vulnerability reports for [components] (requires basic authentication; rate limits are relaxed).
+     * See https://guide.sonatype.com/api#/OSS%20Index%20Compatibility/getComponentReports_1.
+     */
+    @POST("api/v3/authorized/component-report")
+    suspend fun getAuthorizedComponentReport(@Body components: ComponentReportRequest): List<ComponentReport>
+}

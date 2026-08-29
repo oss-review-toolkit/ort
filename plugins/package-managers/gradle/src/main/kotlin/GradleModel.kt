@@ -1,0 +1,76 @@
+/*
+ * Copyright (C) 2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+// As it is not possible to declare a package in "init.gradle" also no package is declared here.
+
+internal interface LegacyOrtDependencyTreeModel {
+    val group: String
+    val name: String
+    val version: String
+    val configurations: List<LegacyOrtConfiguration>
+    val repositories: List<LegacyOrtRepository>
+    val errors: List<String>
+    val warnings: List<String>
+}
+
+internal interface LegacyOrtConfiguration {
+    val name: String
+    val dependencies: List<LegacyOrtComponent>
+}
+
+internal interface LegacyOrtComponentIdentifier {
+    val groupId: String
+    val artifactId: String
+    val version: String
+}
+
+internal interface LegacyOrtComponent {
+    val componentId: LegacyOrtComponentIdentifier
+    val classifier: String
+    val extension: String
+    val variants: Map<String, Map<String, String>>
+    val dependencies: List<LegacyOrtComponent>
+    val error: String?
+    val warning: String?
+    val pomFile: String?
+    val mavenModel: LegacyOrtMavenModel?
+    val localPath: String?
+}
+
+internal interface LegacyOrtMavenModel {
+    val licenses: Set<String>
+    val authors: Set<String>
+    val description: String?
+    val homepageUrl: String?
+    val vcs: LegacyOrtVcsModel?
+}
+
+internal interface LegacyOrtVcsModel {
+    val connection: String
+    val tag: String
+    val browsableUrl: String
+}
+
+internal interface LegacyOrtRepository {
+    val url: String
+    val username: String?
+    val password: String?
+    val headerName: String?
+    val headerValue: String?
+}

@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        applicationId "org.ossreviewtoolkit.example.android"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions 'store', 'type'
+
+    productFlavors {
+        google {
+            dimension 'store'
+        }
+
+        amazon {
+            dimension 'store'
+        }
+
+        demo {
+            dimension 'type'
+        }
+
+        full {
+            dimension 'type'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+}
+
+dependencies {
+    implementation project(':lib')
+
+    amazonImplementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
+    testImplementation 'junit:junit:4.12'
+}
+
+configurations {
+    // Exclude the lint dependency to reduce the size of the dependency tree for testing, because this dependency has
+    // a lot of transitive dependencies and is not required to test the variant-aware dependency resolution.
+    lintClassPath.exclude module: 'lint-gradle'
+}
+
+logger.quiet("The current working directory is set to: " + System.properties['user.dir'])

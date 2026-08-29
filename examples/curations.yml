@@ -1,0 +1,89 @@
+---
+# Example for a complete curation object:
+#- id: "Maven:org.hamcrest:hamcrest-core:1.3"
+#  curations:
+#    comment: "An explanation why the curation is needed or the reasoning for a license conclusion."
+#    concluded_license: "Apache-2.0 OR BSD-3-Clause" # Valid SPDX license expression to override the license findings.
+#    declared_license_mapping:
+#      "Copyright (C) 2013, Martin Journois": "NONE"
+#      "BSD": "BSD-3-Clause"
+#    description: "Curated description."
+#    homepage_url: "http://example.com"
+#    binary_artifact:
+#      url: "http://example.com/binary.zip"
+#      hash:
+#        value: "ddce269a1e3d054cae349621c198dd52"
+#        algorithm: "MD5"
+#    source_artifact:
+#      url: "http://example.com/sources.zip"
+#      hash:
+#        value: "ddce269a1e3d054cae349621c198dd52"
+#        algorithm: "MD5"
+#    vcs:
+#      type: "Git"
+#      url: "http://example.com/repo.git"
+#      revision: "1234abc"
+#      path: "subdirectory"
+#    is_metadata_only: true # Whether the package is metadata only.
+#    is_modified: true # Whether the package is modified compared to the original source.
+
+- id: "Maven:asm:asm" # No version means the curation will be applied to all versions of the package.
+  curations:
+    comment: "Repository moved to https://gitlab.ow2.org."
+    vcs:
+      type: "Git"
+      url: "https://gitlab.ow2.org/asm/asm.git"
+
+- id: "NPM::ast-traverse:0.1.0"
+  curations:
+    comment: "Revision found by comparing the NPM package with the sources from https://github.com/olov/ast-traverse."
+    vcs:
+      revision: "f864d24ba07cde4b79f16999b1c99bfb240a441e"
+
+- id: "NPM::ast-traverse:0.1.1"
+  curations:
+    comment: "Revision found by comparing the NPM package with the sources from https://github.com/olov/ast-traverse."
+    vcs:
+      revision: "73f2b3c319af82fd8e490d40dd89a15951069b0d"
+
+- id: "NPM::ramda:[0.21.0,0.25.0]" # Ivy-style version matchers are supported.
+  curations:
+    comment: >-
+      The package is licensed under MIT per `LICENSE` and `dist/ramda.js`. The project logo is CC-BY-NC-SA-3.0 but it is
+      not part of the distributed .tar.gz package, see the `README.md` which says:
+      "Ramda logo artwork © 2014 J. C. Phillipps. Licensed Creative Commons CC BY-NC-SA 3.0."
+    concluded_license: "MIT"
+
+- id: "Maven:org.jetbrains.kotlin:kotlin-bom"
+  curations:
+    comment: "The package is a Maven BOM file and thus is metadata only."
+    is_metadata_only: true
+
+- id: "PyPI::pyramid-workflow:1.0.0"
+  curations:
+    comment: "The package has an unmappable declared license entry."
+    declared_license_mapping:
+      "BSD-derived (http://www.repoze.org/LICENSE.txt)": "LicenseRef-scancode-repoze"
+
+- id: "PyPI::branca"
+  curations:
+    comment: "A copyright statement was used to declare the license."
+    declared_license_mapping:
+      "Copyright (C) 2013, Martin Journois": "NONE"
+
+- id: "Maven:androidx.collection:collection:"
+  curations:
+    comment: "Scan the source artifact, because the VCS revision and path are hard to figure out."
+    source_code_origins: [ARTIFACT]
+
+- id: "Maven:androidx.collection:collection:"
+  curations:
+    comment: "Specify the platform for use within policy rules."
+    labels:
+      platform: "android"
+
+- id: "NPM:@types:mime-types:2.1.0"
+  curations:
+    comment: "Retrieve the vulnerabilities from Black Duck by the provided origin-id instead of by the purl."
+    labels:
+      black-duck:origin-id: "npmjs:@types/mime-types/2.1.0"

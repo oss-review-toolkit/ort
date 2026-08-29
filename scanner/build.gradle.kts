@@ -1,0 +1,59 @@
+/*
+ * Copyright (C) 2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+plugins {
+    // Apply core plugins.
+    `java-test-fixtures`
+
+    // Apply precompiled plugins.
+    id("ort-library-conventions")
+}
+
+dependencies {
+    api(projects.downloader)
+    api(projects.model)
+    api(projects.plugins.api)
+    api(projects.utils.ortUtils)
+    api(libs.exposed.core)
+    api(libs.exposed.dao)
+
+    implementation(projects.clients.clearlyDefinedClient)
+    implementation(projects.utils.commonUtils)
+    implementation(jacksonLibs.jacksonModuleKotlin)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.json)
+    implementation(libs.kotlinx.coroutines)
+
+    funTestImplementation(platform(projects.plugins.scanners))
+    funTestImplementation(platform(projects.plugins.versionControlSystems))
+    funTestImplementation(testFixtures(projects.scanner))
+    funTestImplementation(projects.utils.testUtils)
+
+    testFixturesImplementation(projects.utils.commonUtils)
+    testFixturesImplementation(projects.utils.testUtils)
+    testFixturesImplementation(libs.kotest.assertions.core)
+    testFixturesImplementation(libs.kotest.runner.junit5)
+
+    testImplementation(platform(projects.plugins.scanners))
+    testImplementation(projects.utils.testUtils)
+    testImplementation(libs.kotlinx.serialization.core)
+    testImplementation(libs.kotlinx.serialization.json)
+    testImplementation(libs.mockk)
+    testImplementation(libs.wiremock)
+}

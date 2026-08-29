@@ -1,0 +1,9 @@
+---
+- id: "Maven:org.hamcrest::"
+  curations:
+    homepage_url: "http://hamcrest.org/JavaHamcrest/"
+    comment: "Use the actual homepage instead of the GitHub page."
+- id: "Maven:org.hamcrest:hamcrest-core:"
+  curations:
+    description: "Curated description."
+    comment: "Fix description."

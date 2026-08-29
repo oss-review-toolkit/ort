@@ -1,0 +1,201 @@
+/*
+ * Copyright (C) 2023 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.scanners.fossid
+
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldBeSingleton
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
+
+class MapIgnoreRulesTest : WordSpec({
+    "convertRules" should {
+        "map rule with directory with **" {
+            val exclude = Excludes(listOf(PathExclude("directory/**", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "directory/**"
+                it.type shouldBe RuleType.DIRECTORY
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with directory containing subdirectories with **" {
+            val exclude = Excludes(listOf(PathExclude("directory/sub1/sub2/**", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "directory/sub1/sub2/**"
+                it.type shouldBe RuleType.DIRECTORY
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with directory containing a dot" {
+            val exclude = Excludes(listOf(PathExclude(".git/", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, _) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe ".git"
+                it.type shouldBe RuleType.DIRECTORY
+            }
+        }
+
+        "map rule with directory containing subdirectories with a dot" {
+            val exclude = Excludes(listOf(PathExclude("src/example.test/templates/", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "src/example.test/templates"
+                it.type shouldBe RuleType.DIRECTORY
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with directory containing a dash" {
+            val exclude = Excludes(listOf(PathExclude("test-prod/", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, _) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "test-prod"
+                it.type shouldBe RuleType.DIRECTORY
+            }
+        }
+
+        "map rule with directory containing subdirectories with a dash" {
+            val exclude = Excludes(listOf(PathExclude("src/test-prod/templates/", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "src/test-prod/templates"
+                it.type shouldBe RuleType.DIRECTORY
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with directory" {
+            val exclude = Excludes(listOf(PathExclude("directory/", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "directory"
+                it.type shouldBe RuleType.DIRECTORY
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with directory containing subdirectories" {
+            val exclude = Excludes(listOf(PathExclude("directory/sub1/sub2/", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "directory/sub1/sub2"
+                it.type shouldBe RuleType.DIRECTORY
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with file extensions" {
+            val exclude = Excludes(listOf(PathExclude("*.pdf", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe ".pdf"
+                it.type shouldBe RuleType.EXTENSION
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with file" {
+            val exclude = Excludes(listOf(PathExclude("file.txt", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "file.txt"
+                it.type shouldBe RuleType.FILE
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with files (with '.' in their names)" {
+            val exclude = Excludes(listOf(PathExclude("file.old.txt", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "file.old.txt"
+                it.type shouldBe RuleType.FILE
+            }
+
+            issues should beEmpty()
+        }
+
+        "map rule with files (with '-' in their names)" {
+            val exclude = Excludes(listOf(PathExclude("package-lock.json", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules.shouldBeSingleton {
+                it.value shouldBe "package-lock.json"
+                it.type shouldBe RuleType.FILE
+            }
+
+            issues should beEmpty()
+        }
+
+        "add an issue when the pattern cannot be mapped" {
+            val exclude = Excludes(listOf(PathExclude("directory/**/test/*", PathExcludeReason.OTHER)))
+
+            val (ignoreRules, issues) = convertRules(exclude)
+
+            ignoreRules should beEmpty()
+
+            issues.shouldBeSingleton {
+                it.message shouldBe "Path exclude 'directory/**/test/*' cannot be converted to an ignore rule."
+                it.severity shouldBe Severity.HINT
+            }
+        }
+    }
+})

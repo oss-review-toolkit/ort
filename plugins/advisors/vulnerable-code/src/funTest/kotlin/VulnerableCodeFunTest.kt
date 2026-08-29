@@ -1,0 +1,270 @@
+/*
+ * Copyright (C) 2023 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
+
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containAll
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.plugins.advisors.api.normalizeVulnerabilityData
+import org.ossreviewtoolkit.plugins.api.Secret
+
+class VulnerableCodeFunTest : WordSpec({
+    "VulnerableCode API v1".config(enabled = false) should {
+        val vc = createVulnerableCode(VulnerableCodeApiVersion.V1)
+
+        "return findings for Go package QUIC" {
+            val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
+
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
+
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys should containAll(
+                    "CVE-2023-49295"
+                )
+
+                val vulnerability = getValue("CVE-2023-49295")
+                vulnerability.summary shouldBe "quic-go is an implementation of the QUIC protocol (RFC 9000, RFC..."
+
+                vulnerability.references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-49295"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 6.5f
+                    vector shouldBe "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+                }
+            }
+        }
+
+        "return findings for Maven package Guava" {
+            val id = Identifier("Maven:com.google.guava:guava:19.0")
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
+
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
+
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys should containAll(
+                    "CVE-2018-10237",
+                    "CVE-2020-8908",
+                    "CVE-2023-2976"
+                )
+
+                val vulnerability = getValue("CVE-2023-2976")
+                vulnerability.summary shouldBe "Use of Java's default temporary directory for file creation in `..."
+
+                vulnerability.references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3"
+                    severity shouldBe "HIGH"
+                    score shouldBe 7.1f
+                    vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N"
+                }
+            }
+        }
+
+        "return findings for Maven package Commons-Compress" {
+            val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
+
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
+
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys should containAll(
+                    "CVE-2023-42503"
+                )
+
+                val vulnerability = getValue("CVE-2023-42503")
+                vulnerability.summary shouldBe "Improper Input Validation, Uncontrolled Resource Consumption vul..."
+
+                vulnerability.references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-42503"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 5.5f
+                    vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+                }
+            }
+        }
+
+        "return findings for NPM package Elliptic" {
+            val id = Identifier("NPM::elliptic:6.5.7")
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
+
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
+
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys should containAll(
+                    "CVE-2024-48948"
+                )
+
+                val vulnerability = getValue("CVE-2024-48948")
+                vulnerability.summary shouldBe "The Elliptic package 6.5.7 for Node.js, in its for ECDSA impleme..."
+
+                vulnerability.references.find {
+                    it.url.toString() == "https://github.com/indutny/elliptic"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3.1"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 4.8f
+                    vector shouldBe "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+                }
+            }
+        }
+    }
+
+    "VulnerableCode API v3" should {
+        val vc = createVulnerableCode(VulnerableCodeApiVersion.V3)
+
+        // TODO: Add test for QUIC, Go packages are not yet supported in V3, see
+        //       https://github.com/aboutcode-org/vulnerablecode/issues/2334
+        "return findings for Go package QUIC".config(enabled = false) {
+            val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
+
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
+
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys should containAll(
+                    "CVE-2023-49295"
+                )
+
+                val vulnerability = getValue("CVE-2023-49295")
+                vulnerability.summary shouldBe "quic-go is an implementation of the QUIC protocol (RFC 9000, RFC..."
+
+                vulnerability.references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-49295"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 6.5f
+                    vector shouldBe "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+                }
+            }
+        }
+
+        "return findings for Maven package Guava" {
+            val id = Identifier("Maven:com.google.guava:guava:19.0")
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
+
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
+
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys should containAll(
+                    "CVE-2018-10237",
+                    "CVE-2020-8908",
+                    "CVE-2023-2976"
+                )
+
+                val vulnerability = getValue("CVE-2023-2976")
+                vulnerability.summary shouldBe "Guava vulnerable to insecure use of temporary directory\nUse of J..."
+
+                vulnerability.references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3.1"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 5.5f
+                    vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N"
+                }
+
+                vulnerability.firstFixedVersions should containExactly("32.0.0-android")
+            }
+        }
+
+        "return findings for Maven package Commons-Compress" {
+            val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
+
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
+
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys should containAll(
+                    "CVE-2023-42503"
+                )
+
+                val vulnerability = getValue("CVE-2023-42503")
+                vulnerability.summary shouldBe "Apache Commons Compress denial of service vulnerability\nImproper..."
+
+                vulnerability.references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-42503"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3.1"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 5.5f
+                    vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+                }
+
+                vulnerability.firstFixedVersions should containExactly("1.24.0")
+            }
+        }
+
+        "return findings for NPM package Elliptic" {
+            val id = Identifier("NPM::elliptic:6.5.7")
+            val pkg = Package.EMPTY.copy(id = id, purl = id.toPurl())
+
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
+
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys should containAll(
+                    "CVE-2024-48948"
+                )
+
+                val vulnerability = getValue("CVE-2024-48948")
+                vulnerability.summary shouldBe "Valid ECDSA signatures erroneously rejected in Elliptic\nThe Elli..."
+
+                vulnerability.references.find {
+                    it.url.toString() == "https://github.com/indutny/elliptic"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3.1"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 4.8f
+                    vector shouldBe "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+                }
+
+                vulnerability.firstFixedVersions should containExactly("6.6.0")
+            }
+        }
+    }
+})
+
+private fun createVulnerableCode(apiVersion: VulnerableCodeApiVersion): VulnerableCode =
+    VulnerableCodeFactory.create(
+        apiKey = System.getenv("VULNERABLECODE_API_KEY")?.let { Secret(it) },
+        apiVersion = apiVersion
+    )

@@ -1,0 +1,5 @@
+{
+  "type": "git_repository",
+  "remote": "https://example.com/module_c.git",
+  "commit": "main"
+}

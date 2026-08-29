@@ -1,0 +1,135 @@
+/*
+ * Copyright (C) 2021 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.model.utils
+
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
+
+import java.util.concurrent.ConcurrentHashMap
+
+import javax.sql.DataSource
+
+import org.apache.logging.log4j.kotlin.logger
+
+import org.jetbrains.exposed.v1.core.Transaction
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.vendors.currentDialectMetadata
+
+import org.ossreviewtoolkit.model.config.PostgresConnection
+import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
+
+object DatabaseUtils {
+    /**
+     * This map holds the [HikariDataSource] based on the [PostgresConnection].
+     */
+    private val dataSources = ConcurrentHashMap<PostgresConnection, Lazy<DataSource>>()
+
+    /**
+     * Return a [HikariDataSource] for the given [PostgresConnection].
+     */
+    fun createHikariDataSource(
+        config: PostgresConnection,
+        applicationNameSuffix: String = "",
+        maxPoolSize: Int = 5
+    ): Lazy<DataSource> {
+        require(config.url.isNotBlank()) {
+            "URL for PostgreSQL storage is missing."
+        }
+
+        require(config.schema.isNotBlank()) {
+            "Schema for PostgreSQL storage is missing."
+        }
+
+        require(config.username.isNotBlank()) {
+            "Username for PostgreSQL storage is missing."
+        }
+
+        require(config.password.isNotBlank()) {
+            "Password for PostgreSQL storage is missing."
+        }
+
+        return dataSources.getOrPut(config) {
+            val dataSourceConfig = HikariConfig().apply {
+                jdbcUrl = config.url
+                username = config.username
+                password = config.password
+                schema = config.schema
+                maximumPoolSize = maxPoolSize
+
+                config.connectionTimeout?.also { connectionTimeout = it }
+                config.idleTimeout?.also { idleTimeout = it }
+                config.keepaliveTime?.also { keepaliveTime = it }
+                config.maxLifetime?.also { maxLifetime = it }
+                config.maximumPoolSize?.also { maximumPoolSize = it }
+                config.minimumIdle?.also { minimumIdle = it }
+
+                val suffix = " - $applicationNameSuffix".takeIf { applicationNameSuffix.isNotEmpty() }.orEmpty()
+                addDataSourceProperty("ApplicationName", "$ORT_FULL_NAME$suffix")
+
+                // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
+                // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
+                // "sslmode", "ssl" is not required.
+                addDataSourceProperty("sslmode", config.sslmode)
+                addDataSourcePropertyIfDefined("sslcert", config.sslcert)
+                addDataSourcePropertyIfDefined("sslkey", config.sslkey)
+                addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
+            }
+
+            lazy { HikariDataSource(dataSourceConfig) }
+        }
+    }
+
+    /**
+     * Logs a warning in case the actual database encoding does not equal the [expectedEncoding].
+     */
+    fun JdbcTransaction.checkDatabaseEncoding(expectedEncoding: String = "UTF8") =
+        execShow("SHOW client_encoding") { resultSet ->
+            if (resultSet.next()) {
+                val clientEncoding = resultSet.getString(1)
+                if (clientEncoding != expectedEncoding) {
+                    logger.warn {
+                        "The database's client_encoding is '$clientEncoding' but should be '$expectedEncoding'."
+                    }
+                }
+            }
+        }
+
+    /**
+     * Return true if a table named [tableName] exists.
+     */
+    fun Transaction.tableExists(tableName: String): Boolean =
+        tableName in currentDialectMetadata.allTablesNames().map { it.substringAfterLast(".") }
+
+    /**
+     * Start a new transaction to execute the given [statement] on this [Database].
+     */
+    fun <T> Database.transaction(statement: JdbcTransaction.() -> T): T = transaction(db = this, statement = statement)
+
+    /**
+     * Add a property with the given [key] and [value] to the [HikariConfig]. If the [value] is *null*, this
+     * function has no effect. (It is not specified how the database driver deals with *null* values in its
+     * properties; so it is safer to avoid them.)
+     */
+    private fun HikariConfig.addDataSourcePropertyIfDefined(key: String, value: String?) {
+        value?.let { addDataSourceProperty(key, it) }
+    }
+}

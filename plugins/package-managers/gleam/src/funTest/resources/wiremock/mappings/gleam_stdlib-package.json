@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/packages/gleam_stdlib"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "gleam_stdlib-package-response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

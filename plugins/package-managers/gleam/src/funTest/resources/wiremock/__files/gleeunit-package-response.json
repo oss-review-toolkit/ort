@@ -1,0 +1,22 @@
+{
+  "name": "gleeunit",
+  "latest_stable_version": "1.2.0",
+  "releases": [
+    { "version": "1.2.0" },
+    { "version": "1.1.0" },
+    { "version": "1.0.0" }
+  ],
+  "meta": {
+    "description": "A simple test runner for Gleam, using EUnit on Erlang",
+    "licenses": ["Apache-2.0"],
+    "links": {
+      "Repository": "https://github.com/lpil/gleeunit",
+      "Sponsor": "https://github.com/sponsors/lpil"
+    }
+  },
+  "owners": [
+    {
+      "username": "lpil"
+    }
+  ]
+}

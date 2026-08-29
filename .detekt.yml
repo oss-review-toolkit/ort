@@ -1,0 +1,112 @@
+# Configuration of detekt rule sets, see https://detekt.dev/docs/intro.
+# This file only lists the differences to the default configuration at
+# https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml.
+
+complexity:
+  CyclomaticComplexMethod:
+    allowedComplexity: 25
+  LongMethod:
+    allowedLines: 158
+  LongParameterList:
+    allowedConstructorParameters: 11
+    allowedFunctionParameters: 8
+  NestedBlockDepth:
+    allowedDepth: 10
+  TooManyFunctions:
+    allowedFunctionsPerClass: 19
+    allowedFunctionsPerObject: 14
+
+coroutines:
+  InjectDispatcher:
+    active: false
+
+# Formatting rules are implemented via the ktlint plugin and are the only rules that support auto-formatting. However,
+# as ktlint does not allow to configure exceptions, some rules need to be disabled completely.
+ktlint:
+  AnnotationOnSeparateLine:
+    active: false
+  ArgumentListWrapping:
+    active: false
+  ChainMethodContinuation:
+    active: false
+  ChainWrapping:
+    active: false
+  ClassSignature:
+    active: false
+  CommentWrapping:
+    active: false
+  FinalNewline:
+    active: false
+  FunctionSignature:
+    active: true
+    functionBodyExpressionWrapping: multiline
+  ImportOrdering:
+    active: false
+  MaximumLineLength:
+    active: false
+  NoBlankLineInList:
+    active: false
+  NoWildcardImports:
+    active: false
+  ParameterListWrapping:
+    active: false
+  SpacingBetweenDeclarationsWithAnnotations:
+    active: false
+  StringTemplateIndent:
+    active: false
+  TrailingCommaOnCallSite:
+    active: true
+    useTrailingCommaOnCallSite: false
+  TrailingCommaOnDeclarationSite:
+    active: true
+    useTrailingCommaOnDeclarationSite: false
+
+naming:
+  InvalidPackageDeclaration:
+    active: false
+
+performance:
+  SpreadOperator:
+    active: false
+
+style:
+  DestructuringDeclarationWithTooManyEntries:
+    maxDestructuringEntries: 4
+  ForbiddenComment:
+    active: false
+  ForbiddenMethodCall:
+    active: true
+    # Use org.ossreviewtoolkit.utils.ort.runBlocking instead in all code that can be used as a library.
+    # One exception to that are the CLI commands.
+    methods: ['kotlinx.coroutines.runBlocking']
+  LoopWithTooManyJumpStatements:
+    active: false
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: false
+  SpacingAfterPackageAndImports:
+    active: true
+  ThrowsCount:
+    max: 5
+  WildcardImport:
+    excludeImports:
+      - org.ossreviewtoolkit.clihelper.commands.*
+      - org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
+      - org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
+      - kotlinx.html.*
+      - kotlinx.html.dom.*
+
+potential-bugs:
+  MissingPackageDeclaration:
+    active: true
+    excludes: ["**/GradleModel.kt", "**/*.gradle.kts", "**/buildSrc/src/main/kotlin/*.kt"]
+
+ORT:
+  OrtEmptyLineAfterBlock:
+    active: true
+  OrtImportOrder:
+    active: true
+    autoCorrect: true
+  OrtPackageNaming:
+    active: true

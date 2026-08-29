@@ -1,0 +1,54 @@
+---
+project:
+  id: "NuGet::src/funTest/assets/dotnet/subProjectTestWithNuGetConfig/test.csproj:"
+  definition_file_path: "plugins/package-managers/nuget/src/funTest/assets/dotnet/subProjectTestWithNuGetConfig/test.csproj"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "net7.0"
+    dependencies:
+    - id: "NuGet:xunit:analyzers:1.2.0-pre.7"
+packages:
+- id: "NuGet:xunit:analyzers:1.2.0-pre.7"
+  purl: "pkg:nuget/xunit.analyzers@1.2.0-pre.7"
+  authors:
+  - "jnewkirk,bradwilson,marcind"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "xUnit.net is a developer testing framework, built to support Test\
+    \ Driven Development, with a design goal of extreme simplicity and alignment with\
+    \ framework features."
+  homepage_url: ""
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/xunit.analyzers/1.2.0-pre.7/xunit.analyzers.1.2.0-pre.7.nupkg"
+    hash:
+      value: "1f47f8e4e068ee24b672410ac46b8e09e6045471e2556484f056dcdc973463ba164ef3e2d5663f234b97da30538660c11bd15a5a6a3af7abefd392b8c6f28fcd"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: "git+https://github.com/xunit/xunit.analyzers"
+    revision: "ff43df6a3ee2e48cbadc259ca9930d600cab4c24"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/xunit/xunit.analyzers.git"
+    revision: "ff43df6a3ee2e48cbadc259ca9930d600cab4c24"
+    path: ""

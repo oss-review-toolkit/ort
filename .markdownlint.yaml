@@ -1,0 +1,32 @@
+# Markdownlint configuration, see: https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.yaml
+# For the list of rules see: https://github.com/DavidAnson/markdownlint/blob/main/README.md#rules--aliases
+
+# ul-style
+MD004:
+  style: asterisk
+
+# line-length
+MD013: false
+
+# no-duplicate-heading
+MD024: false # GitHub has no issues with anchors for headings with the same content.
+
+# no-inline-html
+MD033: false # Inline HTML is used for anchors in README.md where images are used in headings.
+
+# no-bare-urls
+MD034: false # GitHub has no issues with rendering bare URLs.
+
+# fenced-code-language
+MD040: false # It is not possible to always set a language, for example in case of config files using uncommon formats.
+
+# first-line-heading
+MD041: false # Some short README.md files do not require a heading.
+
+# code-block-style
+MD046:
+  style: fenced
+
+# emphasis-style
+MD049:
+  style: asterisk

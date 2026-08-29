@@ -1,0 +1,15 @@
+{
+  "name": "yarn-project-with-dep-with-invalid-package-json",
+  "version": "1.0.0",
+  "description": "Yarn test project with yarn.lock.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oss-review-toolkit/ort.git"
+  },
+  "license": "Apache-2.0",
+  "author": "The Author <the.author@mail.example> (https://www.the.author.example/index.html)",
+  "private": true,
+  "dependencies": {
+    "resolve": "1.22.2"
+  }
+}

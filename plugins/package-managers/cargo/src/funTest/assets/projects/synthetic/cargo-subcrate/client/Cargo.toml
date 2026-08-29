@@ -1,0 +1,9 @@
+[package]
+name = "client"
+version = "0.1.0"
+authors = ["anon <anon@example.org>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+lib = {path = ".."}

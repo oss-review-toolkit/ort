@@ -1,0 +1,24 @@
+[
+  {
+    "name": "outer-project",
+    "version": "1.0.0",
+    "path": "/tmp/work/top",
+    "private": false,
+    "dependencies": {
+      "eslint-scope": {
+        "from": "eslint-scope",
+        "version": "link:node_modules/.pnpm/eslint-scope@5.1.1/node_modules/eslint-scope",
+        "path": "/tmp/work/top/node_modules/.pnpm/eslint-scope@5.1.1/node_modules/eslint-scope"
+      }
+    }
+  }
+]
+
+[
+  {
+    "name": "nested-project",
+    "version": "1.0.0",
+    "path": "/tmp/work/top/nested",
+    "private": false
+  }
+]

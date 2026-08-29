@@ -1,0 +1,26 @@
+{
+  "id" : "4680754e-1daa-4d1e-84ff-cfba5a66715d",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"get_all_scans\",\"group\":\"projects\",\"data\":{\"username\":\"\",\"key\":\"\",\"project_code\":\"semver4j_3\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{  \"operation\": \"get_all_scans\",  \"status\": \"1\",  \"data\": [    {      \"0\": \"3496\",      \"id\": \"3496\",      \"1\": \"2021-06-01 10:15:30\",      \"created\": \"2021-06-01 10:15:30\",      \"2\": null,      \"updated\": null,      \"3\": \"143\",      \"user_id\": \"143\",      \"4\": \"937\",      \"project_id\": \"937\",      \"5\": \"mockito_20210601_101530\",      \"code\": \"mockito_20210601_101530\",      \"6\": \"mockito_20210601_101530\",      \"name\": \"mockito_20210601_101530\",      \"7\": \"\",      \"description\": \"\",      \"8\": \"\",      \"comment\": \"\",      \"9\": null,      \"is_archived\": \"1\",      \"10\": \"\",      \"target_path\": \"\",      \"11\": null,      \"is_blind_audit\": null,      \"12\": null,      \"files_not_scanned\": null,      \"13\": null,      \"pending_items\": null,      \"14\": null,      \"is_from_report\": null,      \"15\": \"https:\\/\\/github.com\\/mockito\\/mockito.git\",      \"git_repo_url\": \"https:\\/\\/github.com\\/mockito\\/mockito.git\",      \"16\": \"HEAD\",      \"git_branch\": \"HEAD\",      \"17\": null,      \"imported_metadata\": null,      \"18\": \"1\",      \"has_file_extension\": \"1\",      \"19\": \"if_no_fullmatch\",      \"jar_extraction\": \"if_no_fullmatch\",      \"20\": null,      \"any_archives_expanded\": null,      \"21\": null,      \"uploaded_files\": null    }  ]}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "4680754e-1daa-4d1e-84ff-cfba5a66715d",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

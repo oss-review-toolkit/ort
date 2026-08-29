@@ -1,0 +1,48 @@
+PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - CocoaSecurity (1.2.4)
+  - MLHudAlert (0.0.4)
+  - Ono (2.1.1)
+
+DEPENDENCIES:
+  - AFNetworking
+  - CocoaSecurity
+  - MLHudAlert (from `https://github.com/MacLabs/MLHudAlert.git`)
+  - Ono
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - CocoaSecurity
+    - Ono
+
+EXTERNAL SOURCES:
+  MLHudAlert:
+    :git: https://github.com/MacLabs/MLHudAlert.git
+
+CHECKOUT OPTIONS:
+  MLHudAlert:
+    :commit: 3f23fa41632f8935fed028b04335576633ec53a2
+    :git: https://github.com/MacLabs/MLHudAlert.git
+
+SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  CocoaSecurity: d288a6f87e0f363823d2cb83e753814a6944f71a
+  MLHudAlert: e1654a23a4c1bffbf0fbcea2ef1c5f1c8c5dc896
+  Ono: 13c25831a4a66b30df93bd1fa57cf70f13c62699
+
+PODFILE CHECKSUM: 13d1396980f8da373e400ea9318d6521b938a692
+
+COCOAPODS: 1.6.0

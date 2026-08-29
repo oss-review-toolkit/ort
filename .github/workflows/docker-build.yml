@@ -1,0 +1,224 @@
+name: Docker Build
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.logging.stacktrace=all
+  REGISTRY: ghcr.io
+
+jobs:
+  metadata:
+    name: Get Metadata
+    runs-on: ubuntu-26.04
+    outputs:
+      version: ${{ steps.get-version.outputs.ORT_VERSION }}
+      ort-tags: ${{ steps.meta-ort.outputs.tags }}
+      ort-labels: ${{ steps.meta-ort.outputs.labels }}
+      ort-minimal-tags: ${{ steps.meta-ort-minimal.outputs.tags }}
+      ort-minimal-labels: ${{ steps.meta-ort-minimal.outputs.labels }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      - name: Get ORT version
+        id: get-version
+        run: |
+          ORT_VERSION=$(./gradlew -q printVersion)
+          echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_OUTPUT
+      - name: Extract Metadata for 'ort' Docker Image
+        id: meta-ort
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort
+          tags: |
+            type=pep440,pattern={{version}}
+            type=raw,value=${{ steps.get-version.outputs.ORT_VERSION }}
+            type=ref,event=branch
+            type=ref,event=tag
+            type=sha
+      - name: Extract Metadata for 'ort-minimal' Docker Image
+        id: meta-ort-minimal
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal
+          tags: |
+            type=pep440,pattern={{version}}
+            type=raw,value=${{ steps.get-version.outputs.ORT_VERSION }}
+            type=ref,event=branch
+            type=ref,event=tag
+            type=sha
+
+  build:
+    name: "Docker Build (${{ matrix.name }})"
+    needs: metadata
+    strategy:
+      matrix:
+        include:
+          - os: "ubuntu-26.04"
+            name: "X86"
+          - os: "ubuntu-26.04-arm"
+            name: "ARM64"
+      fail-fast: false
+    runs-on: "${{ matrix.os }}"
+    env:
+      ORT_VERSION: ${{ needs.metadata.outputs.version }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Free Disk Space
+        uses: ./.github/actions/free-disk-space
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build & Push 'ort' Docker Image
+        id: build-ort
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          labels: ${{ needs.metadata.outputs.ort-labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache,mode=max
+          build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          sbom: true
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort,push-by-digest=true,name-canonical=true,push=true
+      - name: Build 'ort' Docker Image
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          tags: ${{ needs.metadata.outputs.ort-tags }}
+          labels: ${{ needs.metadata.outputs.ort-labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
+          build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          sbom: true
+      - name: Build & Push 'ort-minimal' Docker Image
+        id: build-ort-minimal
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          # Do not "cache-to" here to not overwrite additional layers from the "full" image, which also contains all
+          # layers present in the "minimal" image anyway.
+          labels: ${{ needs.metadata.outputs.ort-minimal-labels }}
+          target: minimal
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
+          build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          sbom: true
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal,push-by-digest=true,name-canonical=true,push=true
+      - name: Build 'ort-minimal' Docker Image
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          labels: ${{ needs.metadata.outputs.ort-minimal-labels }}
+          target: minimal
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
+          build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          sbom: true
+      - name: Export digests
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          mkdir -p /tmp/digests/ort /tmp/digests/ort-minimal
+          echo "${{ steps.build-ort.outputs.digest }}" > "/tmp/digests/ort/${{ matrix.name }}"
+          echo "${{ steps.build-ort-minimal.outputs.digest }}" > "/tmp/digests/ort-minimal/${{ matrix.name }}"
+      - name: Upload ORT digest
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ort-digest-${{ matrix.name }}
+          path: /tmp/digests/ort/*
+      - name: Upload ORT-minimal digest
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ort-minimal-digest-${{ matrix.name }}
+          path: /tmp/digests/ort-minimal/*
+      - name: Print Disk Space
+        run: df -h
+
+  merge:
+    name: Merge Multi-Arch Manifests
+    if: ${{ github.event_name != 'pull_request' }}
+    needs:
+      - metadata
+      - build
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Download ORT digests
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: ort-digest-*
+          path: /tmp/digests/ort
+          merge-multiple: true
+      - name: Download ORT-minimal digests
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: ort-minimal-digest-*
+          path: /tmp/digests/ort-minimal
+          merge-multiple: true
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create 'ort' multi-arch manifest
+        working-directory: /tmp/digests/ort
+        env:
+          REGISTRY_IMAGE: ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort
+        run: |
+          # Build tag arguments safely
+          TAGS=()
+          while IFS= read -r tag; do
+            [ -n "$tag" ] && TAGS+=("-t" "$tag")
+          done <<< "${{ needs.metadata.outputs.ort-tags }}"
+
+          # Build digest arguments safely
+          DIGESTS=()
+          for digest_file in *; do
+            [ -f "$digest_file" ] && DIGESTS+=("${REGISTRY_IMAGE}@$(cat "$digest_file")")
+          done
+
+          docker buildx imagetools create "${TAGS[@]}" "${DIGESTS[@]}"
+      - name: Create 'ort-minimal' multi-arch manifest
+        working-directory: /tmp/digests/ort-minimal
+        env:
+          REGISTRY_IMAGE: ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal
+        run: |
+          # Build tag arguments safely
+          TAGS=()
+          while IFS= read -r tag; do
+            [ -n "$tag" ] && TAGS+=("-t" "$tag")
+          done <<< "${{ needs.metadata.outputs.ort-minimal-tags }}"
+
+          # Build digest arguments safely
+          DIGESTS=()
+          for digest_file in *; do
+            [ -f "$digest_file" ] && DIGESTS+=("${REGISTRY_IMAGE}@$(cat "$digest_file")")
+          done
+
+          docker buildx imagetools create "${TAGS[@]}" "${DIGESTS[@]}"

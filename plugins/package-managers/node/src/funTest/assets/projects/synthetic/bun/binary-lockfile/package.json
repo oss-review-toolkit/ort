@@ -1,0 +1,14 @@
+{
+  "name": "bun-binary-lockfile",
+  "version": "1.0.0",
+  "description": "Bun test project with a legacy binary bun.lockb.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oss-review-toolkit/ort.git"
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "long": "3.2.0"
+  }
+}

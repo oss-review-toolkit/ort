@@ -1,0 +1,100 @@
+/*
+ * Copyright (C) 2023 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
+
+import OrtComponent
+import OrtComponentIdentifier
+import OrtComponentReference
+import OrtConfiguration
+import OrtDependencyTreeModel
+import OrtMavenModel
+import OrtRepository
+import OrtVcsModel
+
+import java.io.Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtDependencyTreeModelImpl(
+    override val group: String,
+    override val name: String,
+    override val version: String,
+    override val components: List<OrtComponent>,
+    override val configurations: List<OrtConfiguration>,
+    override val repositories: List<OrtRepository>,
+    override val errors: List<String>,
+    override val warnings: List<String>
+) : OrtDependencyTreeModel, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtConfigurationImpl(
+    override val name: String,
+    override val dependencies: List<OrtComponentReference>
+) : OrtConfiguration, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal data class OrtComponentIdentifierImpl(
+    override val groupId: String,
+    override val artifactId: String,
+    override val version: String
+) : OrtComponentIdentifier, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal data class OrtComponentReferenceImpl(
+    override val componentId: OrtComponentIdentifier,
+    override val dependencies: List<OrtComponentReference>
+) : OrtComponentReference, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtComponentImpl(
+    override val componentId: OrtComponentIdentifier,
+    override val classifier: String,
+    override val extension: String,
+    override val variants: Map<String, Map<String, String>>,
+    override val error: String?,
+    override val warning: String?,
+    override val pomFile: String?,
+    override val mavenModel: OrtMavenModel?,
+    override val localPath: String?
+) : OrtComponent, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtMavenModelImpl(
+    override val licenses: Set<String>,
+    override val authors: Set<String>,
+    override val description: String?,
+    override val homepageUrl: String?,
+    override val vcs: OrtVcsModel?
+) : OrtMavenModel, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtVcsModelImpl(
+    override val connection: String,
+    override val tag: String,
+    override val browsableUrl: String
+) : OrtVcsModel, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+internal class OrtRepositoryImpl(
+    override val url: String,
+    override val username: String?,
+    override val password: String?,
+    override val headerName: String?,
+    override val headerValue: String?
+) : OrtRepository, Serializable

@@ -1,0 +1,82 @@
+.features {
+  display: block;
+  width: 100%;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  padding: 5rem 20%;
+  background: linear-gradient(
+    to bottom,
+    var(--ifm-background-color),
+    var(--ifm-color-emphasis-100)
+  );
+  width: 100%;
+  justify-content: space-between;
+}
+
+.featureReverse {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.featureContent {
+  flex: 3;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.featureContent h1 {
+  font-size: 2.5em;
+  margin-bottom: 2rem;
+}
+
+.featureContent li,
+.featureContent p {
+  font-size: 1.2em;
+  text-align: start;
+}
+
+.featureContent ul {
+  list-style-type: '✔';
+  width: 90%;
+  margin: 2rem auto;
+}
+
+.featureContent li {
+  position: relative;
+  padding-left: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.featureSvgContainer {
+  flex: 1;
+  text-align: center;
+  align-self: flex-start;
+  margin-top: 2rem;
+}
+
+.featureSvg {
+  height: 200px;
+}
+
+@media (max-width: 768px) {
+  .feature {
+    flex-direction: column;
+    padding: 2rem 5%;
+  }
+
+  .featureReverse {
+    flex-direction: column;
+  }
+
+  .featureSvgContainer {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .featureContent ul {
+    width: 100%;
+  }
+}

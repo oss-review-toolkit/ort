@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.ossreviewtoolkit.tycho.test.feature"
+      label="Tycho test feature"
+      version="1.0.0.qualifier"
+      provider-name="ORT">
+
+   <description>
+      A test feature for the ORT Tycho package manager.
+   </description>
+
+   <copyright>
+   </copyright>
+
+   <license url="">
+   </license>
+
+   <plugin
+         id="org.ossreviewtoolkit.tycho.test.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+</feature>

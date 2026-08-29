@@ -1,0 +1,26 @@
+{
+  "id" : "c5ddf15c-cbde-485b-aeb3-8af89302375c",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{  \"action\": \"set_identification_component\",  \"group\": \"files_and_folders\",  \"data\": {    \"username\": \"\",    \"key\": \"\",    \"scan_code\": \"semver4j_20201203_090342\",    \"path\": \"c3JjL21haW4vamF2YS9jb20vdmR1cm1vbnQvc2VtdmVyNGovUmFuZ2UuamF2YQ==\",    \"is_directory\": \"0\",    \"component_name\": \"semver4j\",    \"component_version\": \"3.0.0\",    \"preserve_existing_identifications\": \"0\"  }}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{  \"operation\": \"files_and_folders_set_identification_component\",  \"status\": \"1\",  \"data\": {    \"operation\": \"files_set_identification_component\",    \"status\": \"1\",    \"data\": null,    \"message\": \"Success\"  },  \"message\": \"Success\"}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 05 Dec 2021 11:54:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "c5ddf15c-cbde-485b-aeb3-8af89302375c",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

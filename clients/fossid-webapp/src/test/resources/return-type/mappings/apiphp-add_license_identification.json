@@ -1,0 +1,26 @@
+{
+  "id" : "7794f1fa-b8b9-4170-9811-9cb276522ee9",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{  \"action\": \"add_license_identification\",  \"group\": \"files_and_folders\",  \"data\": {    \"username\": \"\",    \"key\": \"\",    \"scan_code\": \"semver4j_20201203_090342\",    \"path\": \"c3JjL21haW4vamF2YS9jb20vdmR1cm1vbnQvc2VtdmVyNGovUmFuZ2UuamF2YQ==\",    \"license_identifier\": \"Apache-2.0\",    \"identification_on\": \"snippet\",    \"is_directory\": \"0\"  }}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{  \"operation\": \"files_and_folders_add_license_identification\",  \"status\": \"1\",  \"data\": {    \"identification_id\": \"10397697\"  },  \"message\": \"Success, the identification with ID: 10397697 was created.\"}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 05 Dec 2021 11:54:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "7794f1fa-b8b9-4170-9811-9cb276522ee9",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

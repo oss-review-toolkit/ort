@@ -1,0 +1,120 @@
+/*
+ * Copyright (C) 2025 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.packagemanagers.node
+
+import java.io.File
+
+import org.apache.logging.log4j.kotlin.logger
+
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
+import org.ossreviewtoolkit.analyzer.parseAuthorString
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.utils.common.DirectoryStash
+import org.ossreviewtoolkit.utils.common.realFile
+
+const val NODE_MODULES_DIRNAME = "node_modules"
+const val NPM_RUNTIME_CONFIGURATION_FILENAME = ".npmrc"
+
+abstract class NodePackageManager(val managerType: NodePackageManagerType) : PackageManager(managerType.projectType) {
+    private lateinit var dirStash: DirectoryStash
+
+    // This needs to be "internal" instead of "protected" as overrides expose internal types.
+    internal abstract val graphBuilder: DependencyGraphBuilder<*>
+
+    internal fun parseProject(packageJsonFile: File, analysisRoot: File): Project {
+        logger.debug { "Parsing project info from '$packageJsonFile'." }
+
+        val packageJson = parsePackageJson(packageJsonFile)
+
+        val (namespace, name) = splitNamespaceAndName(packageJson.name.orEmpty())
+
+        val projectName = name.ifBlank {
+            getFallbackProjectName(analysisRoot, packageJsonFile)
+        }
+
+        val vcs = parseVcsInfo(packageJson)
+
+        return Project(
+            id = Identifier(
+                type = projectType,
+                namespace = namespace,
+                name = projectName,
+                version = packageJson.version.orEmpty()
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile).path,
+            authors = packageJson.authors.flatMap {
+                parseAuthorString(it.name)
+            }.mapNotNullTo(mutableSetOf()) {
+                it.name
+            },
+            declaredLicenses = packageJson.licenses.mapLicenses(),
+            vcs = vcs,
+            vcsProcessed = processProjectVcs(packageJsonFile.parentFile.realFile, vcs, packageJson.homepage.orEmpty()),
+            description = packageJson.description.orEmpty(),
+            homepageUrl = packageJson.homepage.orEmpty()
+        )
+    }
+
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
+        super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
+
+        val nodeModulesDirs = definitionFiles.mapNotNullTo(mutableSetOf()) { definitionFile ->
+            definitionFile.resolveSibling(NODE_MODULES_DIRNAME).takeIf { it.isDirectory }?.also {
+                logger.info { "Project-specific '$NODE_MODULES_DIRNAME' directory present at '$it'." }
+            }
+        }
+
+        dirStash = DirectoryStash(nodeModulesDirs)
+    }
+
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
+        dirStash.close()
+
+        super.afterResolution(analysisRoot, definitionFiles)
+    }
+
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> {
+        val enabledIds = analyzerConfig.determineEnabledPackageManagers().map { it.descriptor.id.uppercase() }
+
+        // Only keep those types for which a package manager is enabled and assume the first type to be the best
+        // candidate for the fallback.
+        val fallbackType = NodePackageManagerType.entries.first { it.name in enabledIds }
+
+        return NodePackageManagerDetection(definitionFiles).filterApplicable(managerType, fallbackType)
+    }
+
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+}

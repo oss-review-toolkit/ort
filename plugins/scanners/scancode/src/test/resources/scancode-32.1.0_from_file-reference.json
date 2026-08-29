@@ -1,0 +1,585 @@
+{
+  "headers": [
+    {
+      "tool_name": "scancode-toolkit",
+      "tool_version": "32.1.0",
+      "options": {
+        "input": [
+          "/home/sebastian/Downloads/files"
+        ],
+        "--copyright": true,
+        "--info": true,
+        "--json-pp": "scancode-result.json",
+        "--license": true,
+        "--strip-root": true,
+        "--timeout": "300.0"
+      },
+      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+      "start_timestamp": "2024-03-28T110041.376392",
+      "end_timestamp": "2024-03-28T110044.147354",
+      "output_format_version": "3.1.0",
+      "duration": 2.770972490310669,
+      "message": null,
+      "errors": [],
+      "warnings": [],
+      "extra_data": {
+        "system_environment": {
+          "operating_system": "linux",
+          "cpu_architecture": "64",
+          "platform": "Linux-6.7.10-200.fc39.x86_64-x86_64-with-glibc2.38",
+          "platform_version": "#1 SMP PREEMPT_DYNAMIC Mon Mar 18 18:56:52 UTC 2024",
+          "python_version": "3.12.2 (main, Feb 21 2024, 00:00:00) [GCC 13.2.1 20231205 (Red Hat 13.2.1-6)]"
+        },
+        "spdx_license_list_version": "3.23",
+        "files_count": 2
+      }
+    }
+  ],
+  "license_detections": [
+    {
+      "identifier": "lgpl_2_1-9de8e5f7-3171-8985-b4d6-a1ffddf63f3a",
+      "license_expression": "lgpl-2.1",
+      "license_expression_spdx": "LGPL-2.1-only",
+      "detection_count": 1,
+      "reference_matches": [
+        {
+          "license_expression": "lgpl-2.1",
+          "license_expression_spdx": "LGPL-2.1-only",
+          "from_file": "files/COPYING.LGPLv2.1",
+          "start_line": 1,
+          "end_line": 502,
+          "matcher": "1-hash",
+          "score": 100.0,
+          "matched_length": 4288,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "lgpl-2.1.LICENSE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
+        }
+      ]
+    },
+    {
+      "identifier": "public_domain_and_lgpl_2_1_plus_and_gpl_2_0_plus_and__public_domain_and_gpl_2_0_plus_and_gpl_3_0_plus__and__other_permissive_and_other_copyleft__and_public_domain_disclaimer_and_lgpl_2_1-4b11d70c-b401-ad7e-7036-9e3ec1ab19a9",
+      "license_expression": "public-domain AND lgpl-2.1-plus AND gpl-2.0-plus AND (public-domain AND gpl-2.0-plus AND gpl-3.0-plus) AND (other-permissive AND other-copyleft) AND public-domain-disclaimer AND lgpl-2.1",
+      "license_expression_spdx": "LicenseRef-scancode-public-domain AND LGPL-2.1-or-later AND GPL-2.0-or-later AND (LicenseRef-scancode-public-domain AND GPL-2.0-or-later AND GPL-3.0-or-later) AND (LicenseRef-scancode-other-permissive AND LicenseRef-scancode-other-copyleft) AND LicenseRef-scancode-public-domain-disclaimer AND LGPL-2.1-only",
+      "detection_count": 1,
+      "reference_matches": [
+        {
+          "license_expression": "public-domain",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain",
+          "from_file": "files/COPYING",
+          "start_line": 9,
+          "end_line": 9,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 5,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "public-domain_285.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_285.RULE"
+        },
+        {
+          "license_expression": "public-domain",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain",
+          "from_file": "files/COPYING",
+          "start_line": 11,
+          "end_line": 12,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 8,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "public-domain_431.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_431.RULE"
+        },
+        {
+          "license_expression": "lgpl-2.1-plus",
+          "license_expression_spdx": "LGPL-2.1-or-later",
+          "from_file": "files/COPYING",
+          "start_line": 13,
+          "end_line": 14,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 9,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "lgpl-2.1-plus_393.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1-plus_393.RULE"
+        },
+        {
+          "license_expression": "gpl-2.0-plus",
+          "license_expression_spdx": "GPL-2.0-or-later",
+          "from_file": "files/COPYING",
+          "start_line": 17,
+          "end_line": 18,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 9,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "gpl-2.0-plus_991.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_991.RULE"
+        },
+        {
+          "license_expression": "public-domain",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain",
+          "from_file": "files/COPYING",
+          "start_line": 21,
+          "end_line": 22,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 10,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "public-domain_428.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_428.RULE"
+        },
+        {
+          "license_expression": "public-domain",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain",
+          "from_file": "files/COPYING",
+          "start_line": 24,
+          "end_line": 24,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 7,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "public-domain_429.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_429.RULE"
+        },
+        {
+          "license_expression": "public-domain AND gpl-2.0-plus AND gpl-3.0-plus",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain AND GPL-2.0-or-later AND GPL-3.0-or-later",
+          "from_file": "files/COPYING",
+          "start_line": 26,
+          "end_line": 27,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 17,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE"
+        },
+        {
+          "license_expression": "public-domain",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain",
+          "from_file": "files/COPYING",
+          "start_line": 31,
+          "end_line": 31,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 5,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "public-domain_305.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_305.RULE"
+        },
+        {
+          "license_expression": "public-domain",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain",
+          "from_file": "files/COPYING",
+          "start_line": 33,
+          "end_line": 33,
+          "matcher": "2-aho",
+          "score": 70.0,
+          "matched_length": 2,
+          "match_coverage": 100.0,
+          "rule_relevance": 70,
+          "rule_identifier": "public-domain_bare_words.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_bare_words.RULE"
+        },
+        {
+          "license_expression": "other-permissive AND other-copyleft",
+          "license_expression_spdx": "LicenseRef-scancode-other-permissive AND LicenseRef-scancode-other-copyleft",
+          "from_file": "files/COPYING",
+          "start_line": 33,
+          "end_line": 34,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 8,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "other-permissive_and_other-copyleft_4.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/other-permissive_and_other-copyleft_4.RULE"
+        },
+        {
+          "license_expression": "public-domain-disclaimer",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain-disclaimer",
+          "from_file": "files/COPYING",
+          "start_line": 36,
+          "end_line": 50,
+          "matcher": "3-seq",
+          "score": 96.69,
+          "matched_length": 117,
+          "match_coverage": 96.69,
+          "rule_relevance": 100,
+          "rule_identifier": "public-domain-disclaimer_72.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain-disclaimer_72.RULE"
+        },
+        {
+          "license_expression": "lgpl-2.1 AND gpl-2.0 AND gpl-3.0",
+          "license_expression_spdx": "LGPL-2.1-only AND GPL-2.0-only AND GPL-3.0-only",
+          "from_file": "files/COPYING",
+          "start_line": 52,
+          "end_line": 55,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 37,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE"
+        },
+        {
+          "license_expression": "public-domain",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain",
+          "from_file": "files/COPYING",
+          "start_line": 59,
+          "end_line": 59,
+          "matcher": "2-aho",
+          "score": 100.0,
+          "matched_length": 12,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "public-domain_427.RULE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_427.RULE"
+        },
+        {
+          "license_expression": "lgpl-2.1",
+          "license_expression_spdx": "LGPL-2.1-only",
+          "from_file": "files/COPYING.LGPLv2.1",
+          "start_line": 1,
+          "end_line": 502,
+          "matcher": "1-hash",
+          "score": 100.0,
+          "matched_length": 4288,
+          "match_coverage": 100.0,
+          "rule_relevance": 100,
+          "rule_identifier": "lgpl-2.1.LICENSE",
+          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "COPYING",
+      "type": "file",
+      "name": "COPYING",
+      "base_name": "COPYING",
+      "extension": "",
+      "size": 2775,
+      "date": "2024-01-29",
+      "sha1": "66933e63e70616b43f1dc60340491f8e050eedfd",
+      "md5": "97d554a32881fee0aa283d96e47cb24a",
+      "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c",
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": null,
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": false,
+      "is_script": false,
+      "detected_license_expression": "public-domain AND lgpl-2.1-plus AND gpl-2.0-plus AND (public-domain AND gpl-2.0-plus AND gpl-3.0-plus) AND (other-permissive AND other-copyleft) AND public-domain-disclaimer AND lgpl-2.1",
+      "detected_license_expression_spdx": "LicenseRef-scancode-public-domain AND LGPL-2.1-or-later AND GPL-2.0-or-later AND (LicenseRef-scancode-public-domain AND GPL-2.0-or-later AND GPL-3.0-or-later) AND (LicenseRef-scancode-other-permissive AND LicenseRef-scancode-other-copyleft) AND LicenseRef-scancode-public-domain-disclaimer AND LGPL-2.1-only",
+      "license_detections": [
+        {
+          "license_expression": "public-domain AND lgpl-2.1-plus AND gpl-2.0-plus AND (public-domain AND gpl-2.0-plus AND gpl-3.0-plus) AND (other-permissive AND other-copyleft) AND public-domain-disclaimer AND lgpl-2.1",
+          "license_expression_spdx": "LicenseRef-scancode-public-domain AND LGPL-2.1-or-later AND GPL-2.0-or-later AND (LicenseRef-scancode-public-domain AND GPL-2.0-or-later AND GPL-3.0-or-later) AND (LicenseRef-scancode-other-permissive AND LicenseRef-scancode-other-copyleft) AND LicenseRef-scancode-public-domain-disclaimer AND LGPL-2.1-only",
+          "matches": [
+            {
+              "license_expression": "public-domain",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain",
+              "from_file": "files/COPYING",
+              "start_line": 9,
+              "end_line": 9,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 5,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "public-domain_285.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_285.RULE"
+            },
+            {
+              "license_expression": "public-domain",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain",
+              "from_file": "files/COPYING",
+              "start_line": 11,
+              "end_line": 12,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 8,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "public-domain_431.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_431.RULE"
+            },
+            {
+              "license_expression": "lgpl-2.1-plus",
+              "spdx_license_expression": "LGPL-2.1-or-later",
+              "from_file": "files/COPYING",
+              "start_line": 13,
+              "end_line": 14,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 9,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "lgpl-2.1-plus_393.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1-plus_393.RULE"
+            },
+            {
+              "license_expression": "gpl-2.0-plus",
+              "spdx_license_expression": "GPL-2.0-or-later",
+              "from_file": "files/COPYING",
+              "start_line": 17,
+              "end_line": 18,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 9,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "gpl-2.0-plus_991.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_991.RULE"
+            },
+            {
+              "license_expression": "public-domain",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain",
+              "from_file": "files/COPYING",
+              "start_line": 21,
+              "end_line": 22,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 10,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "public-domain_428.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_428.RULE"
+            },
+            {
+              "license_expression": "public-domain",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain",
+              "from_file": "files/COPYING",
+              "start_line": 24,
+              "end_line": 24,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 7,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "public-domain_429.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_429.RULE"
+            },
+            {
+              "license_expression": "public-domain AND gpl-2.0-plus AND gpl-3.0-plus",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain AND GPL-2.0-or-later AND GPL-3.0-or-later",
+              "from_file": "files/COPYING",
+              "start_line": 26,
+              "end_line": 27,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 17,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE"
+            },
+            {
+              "license_expression": "public-domain",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain",
+              "from_file": "files/COPYING",
+              "start_line": 31,
+              "end_line": 31,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 5,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "public-domain_305.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_305.RULE"
+            },
+            {
+              "license_expression": "public-domain",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain",
+              "from_file": "files/COPYING",
+              "start_line": 33,
+              "end_line": 33,
+              "matcher": "2-aho",
+              "score": 70.0,
+              "matched_length": 2,
+              "match_coverage": 100.0,
+              "rule_relevance": 70,
+              "rule_identifier": "public-domain_bare_words.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_bare_words.RULE"
+            },
+            {
+              "license_expression": "other-permissive AND other-copyleft",
+              "spdx_license_expression": "LicenseRef-scancode-other-permissive AND LicenseRef-scancode-other-copyleft",
+              "from_file": "files/COPYING",
+              "start_line": 33,
+              "end_line": 34,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 8,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "other-permissive_and_other-copyleft_4.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/other-permissive_and_other-copyleft_4.RULE"
+            },
+            {
+              "license_expression": "public-domain-disclaimer",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain-disclaimer",
+              "from_file": "files/COPYING",
+              "start_line": 36,
+              "end_line": 50,
+              "matcher": "3-seq",
+              "score": 96.69,
+              "matched_length": 117,
+              "match_coverage": 96.69,
+              "rule_relevance": 100,
+              "rule_identifier": "public-domain-disclaimer_72.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain-disclaimer_72.RULE"
+            },
+            {
+              "license_expression": "lgpl-2.1 AND gpl-2.0 AND gpl-3.0",
+              "spdx_license_expression": "LGPL-2.1-only AND GPL-2.0-only AND GPL-3.0-only",
+              "from_file": "files/COPYING",
+              "start_line": 52,
+              "end_line": 55,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 37,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE"
+            },
+            {
+              "license_expression": "public-domain",
+              "spdx_license_expression": "LicenseRef-scancode-public-domain",
+              "from_file": "files/COPYING",
+              "start_line": 59,
+              "end_line": 59,
+              "matcher": "2-aho",
+              "score": 100.0,
+              "matched_length": 12,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "public-domain_427.RULE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_427.RULE"
+            },
+            {
+              "license_expression": "lgpl-2.1",
+              "spdx_license_expression": "LGPL-2.1-only",
+              "from_file": "files/COPYING.LGPLv2.1",
+              "start_line": 1,
+              "end_line": 502,
+              "matcher": "1-hash",
+              "score": 100.0,
+              "matched_length": 4288,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "lgpl-2.1.LICENSE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
+            }
+          ],
+          "identifier": "public_domain_and_lgpl_2_1_plus_and_gpl_2_0_plus_and__public_domain_and_gpl_2_0_plus_and_gpl_3_0_plus__and__other_permissive_and_other_copyleft__and_public_domain_disclaimer_and_lgpl_2_1-4b11d70c-b401-ad7e-7036-9e3ec1ab19a9",
+          "detection_log": [
+            "unknown-reference-to-local-file"
+          ]
+        }
+      ],
+      "license_clues": [],
+      "percentage_of_license_text": 58.99,
+      "copyrights": [],
+      "holders": [],
+      "authors": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "COPYING.LGPLv2.1",
+      "type": "file",
+      "name": "COPYING.LGPLv2.1",
+      "base_name": "COPYING.LGPLv2",
+      "extension": ".1",
+      "size": 26530,
+      "date": "2024-01-29",
+      "sha1": "01a6b4bf79aca9b556822601186afab86e8c4fbf",
+      "md5": "4fbd65380cdd255951079008b364516c",
+      "sha256": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551",
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": null,
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": false,
+      "is_script": false,
+      "detected_license_expression": "lgpl-2.1",
+      "detected_license_expression_spdx": "LGPL-2.1-only",
+      "license_detections": [
+        {
+          "license_expression": "lgpl-2.1",
+          "license_expression_spdx": "LGPL-2.1-only",
+          "matches": [
+            {
+              "license_expression": "lgpl-2.1",
+              "spdx_license_expression": "LGPL-2.1-only",
+              "from_file": "files/COPYING.LGPLv2.1",
+              "start_line": 1,
+              "end_line": 502,
+              "matcher": "1-hash",
+              "score": 100.0,
+              "matched_length": 4288,
+              "match_coverage": 100.0,
+              "rule_relevance": 100,
+              "rule_identifier": "lgpl-2.1.LICENSE",
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
+            }
+          ],
+          "identifier": "lgpl_2_1-9de8e5f7-3171-8985-b4d6-a1ffddf63f3a"
+        }
+      ],
+      "license_clues": [],
+      "percentage_of_license_text": 100.0,
+      "copyrights": [
+        {
+          "copyright": "Copyright (c) 1991, 1999 Free Software Foundation, Inc.",
+          "start_line": 4,
+          "end_line": 4
+        },
+        {
+          "copyright": "copyrighted by the Free Software Foundation",
+          "start_line": 429,
+          "end_line": 429
+        }
+      ],
+      "holders": [
+        {
+          "holder": "Free Software Foundation, Inc.",
+          "start_line": 4,
+          "end_line": 4
+        },
+        {
+          "holder": "the Free Software Foundation",
+          "start_line": 429,
+          "end_line": 429
+        }
+      ],
+      "authors": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": []
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "described": {
+    "facets": {
+      "dev": [],
+      "tests": []
+    },
+    "sourceLocation": {
+      "name": "gson",
+      "namespace": "google",
+      "provider": "github",
+      "revision": "29c93895bbcaed02178abc9e3d47b73878aaca73",
+      "type": "git",
+      "url": "https://github.com/google/gson/commit/29c93895bbcaed02178abc9e3d47b73878aaca73"
+    }
+  }
+}

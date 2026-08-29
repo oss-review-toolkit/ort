@@ -1,0 +1,57 @@
+/*
+ * Copyright (C) 2024 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+plugins {
+    // Apply precompiled plugins.
+    id("ort-plugin-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
+}
+
+dependencies {
+    api(projects.analyzer)
+    api(projects.model)
+
+    implementation(projects.clients.bazelModuleRegistryClient)
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.semver4j)
+
+    funTestImplementation(testFixtures(projects.analyzer))
+    funTestImplementation(projects.utils.testUtils)
+
+    funTestRuntimeOnly(projects.plugins.packageManagers.conanPackageManager)
+
+    testImplementation(libs.mockk)
+
+    ksp(projects.analyzer)
+}
+
+tasks.named<Test>("funTest") {
+    val conanPackageManagerProject = project.project(projects.plugins.packageManagers.conanPackageManager.path)
+    val conanPackageManagerFunTestTask = conanPackageManagerProject.tasks.named<Test>("funTest")
+
+    // Prevent conflicts with the Conan configuration database by running after the Conan package manager tests.
+    mustRunAfter(conanPackageManagerFunTestTask)
+}

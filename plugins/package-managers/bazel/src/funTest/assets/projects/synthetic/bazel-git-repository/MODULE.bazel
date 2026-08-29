@@ -1,0 +1,1 @@
+bazel_dep(name = "module_c", version = "0.0.1")

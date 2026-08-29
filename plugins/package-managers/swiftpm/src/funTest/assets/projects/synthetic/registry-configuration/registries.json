@@ -1,0 +1,10 @@
+{
+  "authentication" : {},
+  "registries" : {
+    "some-scope" : {
+      "supportsAvailability" : false,
+      "url" : "https://some.artifactory.url/artifactory/api/swift/swift"
+    }
+  },
+  "version" : 1
+}

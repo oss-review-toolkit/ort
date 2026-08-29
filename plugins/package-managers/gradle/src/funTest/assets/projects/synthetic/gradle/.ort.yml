@@ -1,0 +1,25 @@
+# Test repository configuration file.
+excludes:
+  paths:
+  - pattern: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
+    reason: "OPTIONAL_COMPONENT_OF"
+    comment: "Project not delivered."
+  scopes:
+  - pattern: "testAnnotationProcessor"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Test dependencies."
+  - pattern: "testCompile"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Test dependencies."
+  - pattern: "testCompileClasspath"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Test dependencies."
+  - pattern: "testCompileOnly"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Test dependencies."
+  - pattern: "testRuntime"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Test dependencies."
+  - pattern: "testRuntimeClasspath"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Test dependencies."

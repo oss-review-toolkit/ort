@@ -1,0 +1,17 @@
+{
+    "name": "ort/composer-test-project",
+    "description": "A simple project for parsing composer projects in oss-review-toolkit",
+    "homepage": "https://github.com/oss-review-toolkit/ort",
+    "version": "0.1.0",
+    "license": ["Apache-2.0","MIT"],
+    "authors": [
+        {
+            "name": "The Author"
+        },
+        {
+            "name": "The Other Author"
+        }
+    ],
+    "require": {},
+    "require-dev": {}
+}

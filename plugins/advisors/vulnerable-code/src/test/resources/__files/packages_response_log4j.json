@@ -1,0 +1,18 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.17.0",
+      "affected_by_vulnerabilities": [
+        {
+          "advisory_id": "GHSA-8489-44mv-ggj8",
+          "advisory_uid": "github_osv_importer_v2/GHSA-8489-44mv-ggj8",
+          "resource_url": "https://example.org/advisories/github_osv_importer_v2/GHSA-8489-44mv-ggj8"
+        }
+      ],
+      "fixing_vulnerabilities": []
+    }
+  ]
+}

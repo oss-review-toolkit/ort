@@ -1,0 +1,6 @@
+# Cartfile that declares multiple dependencies of mixed types
+github "user/project" "4.5.0"
+
+git "https://host.tld/path/to/git/project/user-2/project_2.git" "1.0.0"
+
+binary "https://host.tld/path/to/binary/spec.json" "1.0.0"

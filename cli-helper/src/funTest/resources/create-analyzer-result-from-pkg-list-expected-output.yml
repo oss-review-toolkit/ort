@@ -1,0 +1,131 @@
+---
+repository:
+  vcs:
+    type: "Git"
+    url: "https://github.com/example/project.git"
+    revision: "2222222222222222222222222222222222222222"
+    path: "vcs-path/project"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/example/project.git"
+    revision: "2222222222222222222222222222222222222222"
+    path: "vcs-path/project"
+  config:
+    excludes:
+      scopes:
+      - pattern: "excluded"
+        reason: "DEV_DEPENDENCY_OF"
+analyzer:
+  start_time: "1970-01-01T00:00:00Z"
+  end_time: "1970-01-01T00:00:00Z"
+  environment:
+    ort_version: "1.1.0-SNAPSHOT"
+    java_version: "17.0.8.1"
+    os: "Linux"
+    processors: 8
+    max_memory: 536870912
+    variables: {}
+    tool_versions: {}
+  config:
+    allow_dynamic_versions: false
+    skip_excluded: false
+  result:
+    projects:
+    - id: "Unmanaged::Example project name:"
+      definition_file_path: ""
+      declared_licenses: []
+      declared_licenses_processed: {}
+      vcs:
+        type: "Git"
+        url: "https://github.com/example/project.git"
+        revision: "2222222222222222222222222222222222222222"
+        path: "vcs-path/project"
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/example/project.git"
+        revision: "2222222222222222222222222222222222222222"
+        path: "vcs-path/project"
+      homepage_url: ""
+      scopes:
+      - name: "excluded"
+        dependencies:
+        - id: "NPM::example-dependency-one:1.0.0"
+      - name: "main"
+        dependencies:
+        - id: "NPM::example-dependency-two:2.0.0"
+          linkage: "STATIC"
+    packages:
+    - id: "NPM::example-dependency-one:1.0.0"
+      purl: "pkg:npm/example-dependency-one@1.0.0"
+      declared_licenses:
+      - "Apache-2.0 OR LGPL-2.0-only"
+      - "MIT"
+      declared_licenses_processed:
+        spdx_expression: "(Apache-2.0 OR LGPL-2.0-only) AND MIT"
+      description: ""
+      homepage_url: ""
+      binary_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      source_artifact:
+        url: "https://example.org/example-dependency-one.zip"
+        hash:
+          value: ""
+          algorithm: ""
+      vcs:
+        type: "Git"
+        url: "https://github.com/example/depedency-one.git"
+        revision: "0000000000000000000000000000000000000000"
+        path: "vcs-path/dependency-one"
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/example/depedency-one.git"
+        revision: "0000000000000000000000000000000000000000"
+        path: "vcs-path/dependency-one"
+    - id: "NPM::example-dependency-two:2.0.0"
+      purl: "pkg:github/example-org/example-dependency-two@v2.0.0"
+      authors:
+      - "Author One"
+      - "Author Two"
+      declared_licenses: []
+      declared_licenses_processed: {}
+      concluded_license: "MIT-Festival"
+      description: "Package description."
+      homepage_url: "https://example.com/example-dependency-two"
+      binary_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      source_artifact:
+        url: "https://example.org/example-dependency-two.zip"
+        hash:
+          value: ""
+          algorithm: ""
+      vcs:
+        type: "Git"
+        url: "https://github.com/example/depedency-1.git"
+        revision: "1111111111111111111111111111111111111111"
+        path: "vcs-path/dependency-two"
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/example/depedency-1.git"
+        revision: "1111111111111111111111111111111111111111"
+        path: "vcs-path/dependency-two"
+      labels:
+        key: "value"
+scanner: null
+advisor: null
+evaluator: null
+resolved_configuration:
+  package_curations:
+  - provider:
+      id: "File"
+    curations:
+    - id: "NPM::example-dependency-one:1.0.0"
+      curations:
+        comment: "Example curation."
+        vcs:
+          revision: "v1.0.0"

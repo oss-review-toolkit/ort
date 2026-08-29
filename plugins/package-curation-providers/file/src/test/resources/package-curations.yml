@@ -1,0 +1,41 @@
+---
+- id: "Maven:org.hamcrest:hamcrest-core:1.3"
+  curations:
+    description: "description"
+    homepage_url: "http://home.page"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: "http://url.git"
+      revision: ""
+      path: ""
+- id: "Maven:org.hamcrest:hamcrest-library:1.3"
+  curations:
+    homepage_url: "http://home.page"
+- id: "NPM:org.hamcrest:hamcrest-core:1.3"
+  curations:
+    homepage_url: "http://home.page"
+- id: "Maven:org.hamcrest:hamcrest-core:"
+  curations:
+    homepage_url: "http://home.page"
+- id: "Maven:org.hamcrest::1.3"
+  curations:
+    homepage_url: "http://home.page"
+- id: "Maven:org.hamcrest::"
+  curations:
+    homepage_url: "http://home.page"
+- id: "Maven:org.apache::"
+  curations:
+    homepage_url: "http://home.page"
+- id: "NPM::ramda:[0.21.0,0.25.0]"
+  curations:
+    concluded_license: "MIT"

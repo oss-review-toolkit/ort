@@ -1,0 +1,162 @@
+/*
+ * Copyright (C) 2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.versioncontrolsystems.mercurial
+
+import io.kotest.assertions.throwables.shouldNotThrow
+import io.kotest.core.annotation.Tags
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.shouldBe
+
+import java.io.File
+
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+
+import org.semver4j.Semver
+import org.semver4j.SemverException
+
+private const val PKG_VERSION = "v1.0.0"
+
+private const val REPO_URL = "https://hg.sr.ht/~breakfastquay/bqfft"
+private const val REPO_REV = "e1c392f85e973225ece81cf8d74287b3a4992dea"
+private const val REPO_PATH = "test"
+
+private const val REPO_REV_FOR_VERSION = "a766fe47501b185bc46cffc210735304e28f2189"
+private const val REPO_PATH_FOR_VERSION = "build"
+
+@Tags("RequiresExternalTool")
+class MercurialFunTest : WordSpec({
+    val hg = Mercurial()
+    lateinit var outputDir: File
+
+    beforeEach {
+        outputDir = tempdir()
+    }
+
+    "getVersion()" should {
+        "return a version that can be coerced to a Semver" {
+            shouldNotThrow<SemverException> {
+                Semver.coerce(hg.getVersion())
+            }
+        }
+    }
+
+    "download()" should {
+        "get the given revision" {
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV))
+            val expectedFiles = listOf(
+                ".hg",
+                ".hgignore",
+                ".hgtags",
+                ".travis.yml",
+                "COPYING",
+                "Makefile",
+                "README.md",
+                "bqfft",
+                "build",
+                "src",
+                "test"
+            )
+
+            val workingTree = hg.download(pkg, outputDir)
+            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
+            }.sorted()
+
+            workingTree.isValid() shouldBe true
+            workingTree.getRevision() shouldBe REPO_REV
+            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+        }
+
+        "get only the given path".config(enabled = hg.isAtLeastVersion("4.3")) {
+            val pkg = Package.EMPTY.copy(
+                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV, path = REPO_PATH)
+            )
+            val expectedFiles = listOf(
+                ".hgignore",
+                ".hgtags",
+                "COPYING",
+                "README.md",
+                "$REPO_PATH/TestFFT.cpp",
+                "$REPO_PATH/timings.cpp"
+            )
+
+            val workingTree = hg.download(pkg, outputDir)
+            val actualFiles = workingTree.getRootPath().walkBottomUp()
+                .onEnter { it.name != ".hg" }
+                .filter { it.isFile }
+                .map { it.relativeTo(outputDir) }
+                .sortedBy { it.path }
+                .toList()
+
+            workingTree.isValid() shouldBe true
+            workingTree.getRevision() shouldBe REPO_REV
+            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+        }
+
+        "work based on a package version" {
+            val pkg = Package.EMPTY.copy(
+                id = Identifier("Test:::$PKG_VERSION"),
+
+                // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
+                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy")
+            )
+
+            val workingTree = hg.download(pkg, outputDir)
+
+            workingTree.isValid() shouldBe true
+            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+        }
+
+        "get only the given path based on a package version".config(enabled = hg.isAtLeastVersion("4.3")) {
+            val pkg = Package.EMPTY.copy(
+                id = Identifier("Test:::$PKG_VERSION"),
+
+                // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
+                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
+            )
+            val expectedFiles = listOf(
+                ".hgignore",
+                "COPYING",
+                "README.md",
+                "build/Makefile.inc",
+                "build/Makefile.linux.fftw",
+                "build/Makefile.linux.ipp",
+                "build/Makefile.osx",
+                "build/run-platform-tests.sh"
+            )
+
+            val workingTree = hg.download(pkg, outputDir)
+            val actualFiles = workingTree.getRootPath().walkBottomUp()
+                .onEnter { it.name != ".hg" }
+                .filter { it.isFile }
+                .map { it.relativeTo(outputDir) }
+                .sortedBy { it.path }
+                .toList()
+
+            workingTree.isValid() shouldBe true
+            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+        }
+    }
+})

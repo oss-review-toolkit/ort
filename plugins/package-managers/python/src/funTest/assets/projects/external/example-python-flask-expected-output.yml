@@ -1,0 +1,247 @@
+---
+project:
+  id: "PIP::requirements.txt:0773991e36a4c69b121cdb05146d6140347d4065"
+  definition_file_path: "requirements.txt"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/deis/example-python-flask.git"
+    revision: "0773991e36a4c69b121cdb05146d6140347d4065"
+    path: ""
+  homepage_url: ""
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::flask:0.12"
+      dependencies:
+      - id: "PyPI::click:8.5.0"
+      - id: "PyPI::itsdangerous:2.2.0"
+      - id: "PyPI::jinja2:2.8.1"
+        dependencies:
+        - id: "PyPI::markupsafe:3.0.3"
+      - id: "PyPI::werkzeug:3.1.8"
+        dependencies:
+        - id: "PyPI::markupsafe:3.0.3"
+    - id: "PyPI::gunicorn:19.6.0"
+packages:
+- id: "PyPI::click:8.5.0"
+  purl: "pkg:pypi/click@8.5.0"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Composable command line interface toolkit"
+  homepage_url: ""
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/58/50/6c0d534c5f134586a8e1ba4e330569e32f057e33372ae556463212fb4cd3/click-8.5.0-py3-none-any.whl"
+    hash:
+      value: "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/c7/0e/7fa0ef50764b67090eca4114772a2abf8b6148198475e54c660b97caeee6/click-8.5.0.tar.gz"
+    hash:
+      value: "ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/click.git"
+    revision: ""
+    path: ""
+- id: "PyPI::flask:0.12"
+  purl: "pkg:pypi/flask@0.12"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD"
+  - "BSD License"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+      BSD License: "BSD-3-Clause"
+  description: "A microframework based on Werkzeug, Jinja2 and good intentions"
+  homepage_url: "http://github.com/pallets/flask/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/0e/e9/37ee66dde483dceefe45bb5e92b387f990d4f097df40c400cf816dcebaa4/Flask-0.12-py2.py3-none-any.whl"
+    hash:
+      value: "7f03bb2c255452444f7265eddb51601806e5447b6f8a2d50bbc77a654a14c118"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/4b/3a/4c20183df155dd2e39168e35d53a388efb384a512ca6c73001d8292c094a/Flask-0.12.tar.gz"
+    hash:
+      value: "93e803cdbe326a61ebd5c5d353959397c85f829bec610d59cb635c9f97d7ca8b"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/flask.git"
+    revision: ""
+    path: ""
+- id: "PyPI::gunicorn:19.6.0"
+  purl: "pkg:pypi/gunicorn@19.6.0"
+  authors:
+  - "Benoit Chesneau <benoitc@e-engura.com>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Gunicorn"
+  homepage_url: "http://gunicorn.org"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/72/de/ec28a64885e0b390063379cca601b60b1f9e51367e0c76030ac8a5cddd5e/gunicorn-19.6.0-py2.py3-none-any.whl"
+    hash:
+      value: "723234ea1fa8dff370ab69830ba8bc37469a7cba13fd66055faeef24085e6530"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80/gunicorn-19.6.0.tar.gz"
+    hash:
+      value: "813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::itsdangerous:2.2.0"
+  purl: "pkg:pypi/itsdangerous@2.2.0"
+  declared_licenses:
+  - "BSD License"
+  declared_licenses_processed:
+    unmapped:
+    - "BSD License"
+  description: "Safely pass data to untrusted environments and back."
+  homepage_url: ""
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/04/96/92447566d16df59b2a776c0fb82dbc4d9e07cd95062562af01e408583fc4/itsdangerous-2.2.0-py3-none-any.whl"
+    hash:
+      value: "c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/9c/cb/8ac0172223afbccb63986cc25049b154ecfb5e85932587206f42317be31d/itsdangerous-2.2.0.tar.gz"
+    hash:
+      value: "e0050c0b7da1eea53ffaf149c0cfbb5c6e2e2b69c4bef22c81fa6eb73e5f6173"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/itsdangerous.git"
+    revision: ""
+    path: ""
+- id: "PyPI::jinja2:2.8.1"
+  purl: "pkg:pypi/jinja2@2.8.1"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD"
+  - "BSD License"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+      BSD License: "BSD-3-Clause"
+  description: "A small but fast and easy to use stand-alone template engine written\
+    \ in pure python."
+  homepage_url: "http://jinja.pocoo.org/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/67/ea/92b1d9d8f2dc43302df7f5271b9500bbfc237386782343561a5f62beb306/Jinja2-2.8.1-py2.py3-none-any.whl"
+    hash:
+      value: "3997cf273f1424207c60d5895264f74483fce72702f15a7cd51a8551d43663ca"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/Jinja2-2.8.1.tar.gz"
+    hash:
+      value: "35341f3a97b46327b3ef1eb624aadea87a535b8f50863036e085e7c426ac5891"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::markupsafe:3.0.3"
+  purl: "pkg:pypi/markupsafe@3.0.3"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Safely add untrusted strings to HTML/XML markup."
+  homepage_url: ""
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/af/cd/ce6e848bbf2c32314c9b237839119c5a564a59725b53157c856e90937b7a/markupsafe-3.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+    hash:
+      value: "f42d0984e947b8adf7dd6dde396e720934d12c506ce84eea8476409563607591"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/7e/99/7690b6d4034fffd95959cbe0c02de8deb3098cc577c67bb6a24fe5d7caa7/markupsafe-3.0.3.tar.gz"
+    hash:
+      value: "722695808f4b6457b320fdc131280796bdceb04ab50fe1795cd540799ebe1698"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/markupsafe.git"
+    revision: ""
+    path: ""
+- id: "PyPI::werkzeug:3.1.8"
+  purl: "pkg:pypi/werkzeug@3.1.8"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "The comprehensive WSGI web application library."
+  homepage_url: ""
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/93/8c/2e650f2afeb7ee576912636c23ddb621c91ac6a98e66dc8d29c3c69446e1/werkzeug-3.1.8-py3-none-any.whl"
+    hash:
+      value: "63a77fb8892bf28ebc3178683445222aa500e48ebad5ec77b0ad80f8726b1f50"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/dd/b2/381be8cfdee792dd117872481b6e378f85c957dd7c5bca38897b08f765fd/werkzeug-3.1.8.tar.gz"
+    hash:
+      value: "9bad61a4268dac112f1c5cd4630a56ede601b6ed420300677a869083d70a4c44"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/werkzeug.git"
+    revision: ""
+    path: ""

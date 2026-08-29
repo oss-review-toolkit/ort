@@ -1,0 +1,489 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://oss-review-toolkit.org/ort-configuration.yml",
+    "title": "ORT configuration",
+    "description": "The main configuration file for the OSS-Review-Toolkit (ORT). A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/resources/reference.yml.",
+    "type": "object",
+    "properties": {
+        "ort": {
+            "properties": {
+                "licenseFilePatterns": {
+                    "$ref": "#/definitions/LicenseFilePatterns"
+                },
+                "severeIssueThreshold": {
+                    "$ref": "#/definitions/Severity"
+                },
+                "severeRuleViolationThreshold": {
+                    "$ref": "#/definitions/Severity"
+                },
+                "enableRepositoryPackageCurations": {
+                    "type": "boolean"
+                },
+                "enableRepositoryPackageConfigurations": {
+                    "type": "boolean"
+                },
+                "analyzer": {
+                    "$ref": "#/definitions/Analyzer"
+                },
+                "advisor": {
+                    "$ref": "#/definitions/Advisor"
+                },
+                "downloader": {
+                    "$ref": "#/definitions/Downloader"
+                },
+                "scanner": {
+                    "$ref": "#/definitions/Scanner"
+                },
+                "reporter": {
+                    "$ref": "#/definitions/Reporter"
+                },
+                "notifier": {
+                    "$ref": "#/definitions/Notifier"
+                }
+            }
+        }
+    },
+    "required": [
+        "ort"
+    ],
+    "definitions": {
+        "Advisor": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "skipExcluded": {
+                    "type": "boolean"
+                },
+                "config": {
+                    "$ref": "#/definitions/AdvisorConfig"
+                }
+            }
+        },
+        "AdvisorConfig": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "Analyzer": {
+            "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/analyzer-configuration-schema.json"
+        },
+        "Downloader": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "allowMovingRevisions": {
+                    "type": "boolean"
+                },
+                "includedLicenseCategories": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "skipExcluded": {
+                    "type": "boolean"
+                },
+                "sourceCodeOrigins": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SourceCodeOrigins"
+                    }
+                }
+            }
+        },
+        "LicenseFilePatterns": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "licenseFilenames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "noticeFilenames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "patentFilenames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "otherLicenseFilenames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "Notifier": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "mail": {
+                    "$ref": "#/definitions/Mail"
+                },
+                "jira": {
+                    "$ref": "#/definitions/Jira"
+                }
+            }
+        },
+        "Jira": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Mail": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "hostName": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "useSsl": {
+                    "type": "boolean"
+                },
+                "fromAddress": {
+                    "type": "string"
+                }
+            }
+        },
+        "Reporter": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "config": {
+                    "$ref": "#/definitions/ReporterOptions"
+                }
+            },
+            "required": [
+                "config"
+            ]
+        },
+        "ReporterOptions": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "Scanner": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "skipConcluded": {
+                    "type": "boolean"
+                },
+                "skipExcluded": {
+                    "type": "boolean"
+                },
+                "archive": {
+                    "$ref": "#/definitions/Archive"
+                },
+                "detectedLicenseMapping": {
+                    "$ref": "#/definitions/DetectedLicenseMapping"
+                },
+                "fileListStorage": {
+                    "$ref": "#/definitions/FileListStorage"
+                },
+                "config": {
+                    "$ref": "#/definitions/ScannerConfig"
+                },
+                "storages": {
+                    "$ref": "#/definitions/Storages"
+                },
+                "storageReaders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/StorageTypes"
+                    }
+                },
+                "storageWriters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/StorageTypes"
+                    }
+                },
+                "ignorePatterns": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "provenanceStorage": {
+                    "$ref": "#/definitions/ProvenanceStorage"
+                }
+            }
+        },
+        "Archive": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "fileStorage": {
+                    "$ref": "#/definitions/FileStorage"
+                },
+                "postgresStorage": {
+                    "$ref": "#/definitions/PostgresConfig"
+                }
+            }
+        },
+        "FileListStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "fileStorage": {
+                    "$ref": "#/definitions/FileStorage"
+                },
+                "postgresStorage": {
+                    "$ref": "#/definitions/PostgresConfig"
+                }
+            }
+        },
+        "FileStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "localFileStorage": {
+                    "$ref": "#/definitions/LocalFileStorage"
+                },
+                "httpFileStorage": {
+                    "$ref": "#/definitions/HttpFileStorage"
+                },
+                "s3FileStorage": {
+                    "$ref": "#/definitions/S3FileStorage"
+                }
+            },
+            "oneOf": [
+                {
+                    "required": [
+                        "localFileStorage"
+                    ]
+                },
+                {
+                    "required": [
+                        "httpFileStorage"
+                    ]
+                },
+                {
+                    "required": [
+                        "s3FileStorage"
+                    ]
+                }
+            ]
+        },
+        "LocalFileStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "compression": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "directory"
+            ]
+        },
+        "HttpFileStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "query": {
+                    "type": "string"
+                },
+                "headers": {
+                    "$ref": "#/definitions/Headers"
+                }
+            },
+            "required": [
+                "url"
+            ]
+        },
+        "S3FileStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "accessKeyId": {
+                    "type": "string"
+                },
+                "awsRegion": {
+                    "type": "string"
+                },
+                "bucketName": {
+                    "type": "string"
+                },
+                "compression": {
+                    "type": "boolean"
+                },
+                "customEndpoint": {
+                    "type": "string"
+                },
+                "secretAccessKey": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "bucketName"
+            ]
+        },
+        "PostgresConfig": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "connection": {
+                    "$ref": "#/definitions/Connection"
+                }
+            },
+            "required": [
+                "connection"
+            ]
+        },
+        "Connection": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "schema": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "sslmode": {
+                    "type": "string"
+                },
+                "sslcert": {
+                    "type": "string"
+                },
+                "sslkey": {
+                    "type": "string"
+                },
+                "sslrootcert": {
+                    "type": "string"
+                },
+                "connectionTimeout": {
+                    "type": "integer"
+                },
+                "idleTimeout": {
+                    "type": "integer"
+                },
+                "keepaliveTime": {
+                    "type": "integer"
+                },
+                "maxLifetime": {
+                    "type": "integer"
+                },
+                "maximumPoolSize": {
+                    "type": "integer"
+                },
+                "minimumIdle": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "url",
+                "username"
+            ]
+        },
+        "DetectedLicenseMapping": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "ScannerConfig": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "ProvenanceStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "fileStorage": {
+                    "$ref": "#/definitions/FileStorage"
+                },
+                "postgresStorage": {
+                    "$ref": "#/definitions/PostgresConfig"
+                }
+            }
+        },
+        "Storages": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "Severity": {
+            "enum": [
+                "HINT",
+                "WARNING",
+                "ERROR"
+            ]
+        },
+        "SourceCodeOrigins": {
+            "enum": [
+                "ARTIFACT",
+                "VCS"
+            ]
+        },
+        "StorageTypes": {
+            "enum": [
+                "aws",
+                "clearlyDefined",
+                "http",
+                "local",
+                "postgres"
+            ]
+        },
+        "Headers": {
+            "type": "object",
+            "additionalProperties": {
+                "type": [
+                    "boolean",
+                    "number",
+                    "string"
+                ]
+            }
+        }
+    }
+}

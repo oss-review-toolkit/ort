@@ -1,0 +1,190 @@
+---
+excludes:
+  paths:
+  - pattern: "**/src/{:funTest|test}/**"
+    reason: "TEST_OF"
+    comment: >-
+      Licenses contained in this directory are used for testing and do not apply to the OSS Review Toolkit.
+  - pattern: "evaluator/src/main/resources/rules/matrixseqexpl.json"
+    reason: "DATA_FILE_OF"
+    comment: >-
+      This file contains the OSADL license compatibility matrix used by the Evaluator.
+      It does not apply to the OSS Review Toolkit.
+  - pattern: "examples/**"
+    reason: "EXAMPLE_OF"
+    comment: >-
+      This directory contains example files with licenses that do not apply to the OSS Review Toolkit.
+  - pattern: "utils/spdx/src/main/kotlin/{:SpdxDeclaredLicenseMapping|SpdxLicense|SpdxLicenseException|SpdxSimpleLicenseMapping}.kt"
+    reason: "DATA_FILE_OF"
+    comment: >-
+      Licenses contained in this class are used for processing licenses and do not apply to the OSS Review Toolkit.
+  - pattern: "utils/spdx/src/main/resources/**"
+    reason: "DATA_FILE_OF"
+    comment: >-
+      Licenses contained in this directory are used for generating license notes and mapping licenses and exceptions.
+      They do not apply to the OSS Review Toolkit.
+  - pattern: "utils/test/**"
+    reason: "TEST_OF"
+    comment: >-
+      Licenses contained in this directory are used for testing and do not apply to the OSS Review Toolkit.
+  scopes:
+  - pattern: "(test.*|funTest.*)"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: >-
+      Packages for testing only. Not part of released artifacts.
+  - pattern: "devDependencies"
+    reason: "DEV_DEPENDENCY_OF"
+    comment: >-
+      Packages for development only. Not part of released artifacts.
+  - pattern: "dokka.*"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: >-
+      Packages for the Dokka documentation engine.
+  - pattern: "graphql.*"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: >-
+      Packages for the generation of GraphQL clients by the GraphQL Kotlin build plugin.
+resolutions:
+  issues:
+  - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
+    reason: "SCANNER_ISSUE"
+    comment: >-
+      The error can be ignored because the file does contain relevant license information.
+  - message: "ERROR: Timeout after 300 seconds while scanning file 'scanner/src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json'."
+    reason: "SCANNER_ISSUE"
+    comment: >-
+      This file contains test data. Contained licenses do not apply to the OSS Review Toolkit.
+  vulnerabilities:
+  - id: "CVE-2022-22965"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is triggered by the org.springframework:spring-beans package which comes as a transitive
+      dependency of the Jira REST client used by the notifier. The vulnerability applies only to Spring MVC or Spring
+      WebFlux applications; so it is ineffective for the current usage scenario.
+  - id: "CVE-2016-7954"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. The CVE is
+      actually assigned to Bundler which is shipped with JRuby. It is about a possibility to inject malicious code for
+      gems hosted on GitHub by deploying packages with same names on RubyGems.org. For the usage in the Reporter, this
+      is completely irrelevant. For the Analyzer, the issue does not affect ORT itself, but applications analyzed by
+      ORT that use Bundler as package manager.
+  - id: "CVE-2021-41819"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
+      related to the CGI gem. The version of the gem bundled with JRuby is greater than 0.3.1 and is therefore not
+      affected. Since ORT does not use Ruby gems to implement server functionality, this vulnerability is ineffective
+      anyway.
+  - id: "CVE-2022-40149"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
+      by the notifier. The component is vulnerable to Denial of Service attacks causing stack overflow for specially
+      crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not an issue.
+  - id: "CVE-2022-40150"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
+      by the notifier. The component is vulnerable to Denial of Service attacks causing out of memory errors for
+      specially crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not
+      an issue.
+  - id: "CVE-2022-45685"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
+      by the notifier. The component is vulnerable to Denial of Service attacks due to Uncontrolled Recursion for
+      specially crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not
+      an issue.
+  - id: "CVE-2022-45693"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
+      by the notifier. The component is vulnerable to Denial of Service attacks causing stack overflow for specially
+      crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not an issue.
+  - id: "CVE-2021-28965"
+    reason: "INVALID_MATCH_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
+      related to the RXML gem in versions prior to 3.2.5. According to
+      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles version
+      3.2.5 of this gem.
+  - id: "CVE-2021-31799"
+    reason: "INVALID_MATCH_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
+      related to the RDoc gem in versions prior to 6.3.0. According to
+      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles a higher
+      version of this gem.
+  - id: "CVE-2021-43809"
+    reason: "INVALID_MATCH_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
+      related to the Bundler component in versions prior to 2.2.23. According to
+      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles a higher
+      version of this component.
+curations:
+  license_findings:
+  - path: "README.md"
+    line_count: 1
+    detected_license: "GPL-1.0-or-later"
+    concluded_license: "NONE"
+    reason: "DOCUMENTATION_OF"
+    comment: >-
+      Findings reference a file with 'gpl' in its name.
+  - path: "plugins/package-managers/python/src/funTest/assets/projects/external/spdx-tools-python/spdx/licenses.json"
+    concluded_license: "CC0-1.0"
+    reason: "DATA_OF"
+    comment: >-
+      This file contains official SPDX.org license ids. SPDX is licensed under CC0-1.0, see
+      https://github.com/spdx/license-list-XML/blob/master/package.json#L33.
+  - path: "plugins/package-managers/composer/src/funTest/assets/projects/synthetic/{empty-deps,lockfile,no-lockfile,no-deps,with-provide,with-replace}/composer.phar"
+    concluded_license: "MIT"
+    reason: "DATA_OF"
+    comment: >-
+      These files are part of PHP Composer and include a mapping from human readable strings to SPDX license ids.
+  - path: "docs/**/*.md"
+    concluded_license: "Apache-2.0"
+    reason: "DOCUMENTATION_OF"
+    comment: >-
+      Documentation contains examples mentioning various licenses.
+  - path: "plugins/reporters/web-app-template/index.html"
+    concluded_license: "Apache-2.0"
+    reason: "DATA_OF"
+    comment: >-
+      This file contains license identifiers in test data.
+  - path: "utils/spdx/src/main/kotlin/SpdxLicense.kt"
+    concluded_license: "Apache-2.0"
+    reason: "DATA_OF"
+    comment: >-
+      This file defines official SPDX.org licenses so they can be used in OSS Review Toolkit.
+  - path: "utils/spdx/src/main/kotlin/SpdxLicenseException.kt"
+    concluded_license: "Apache-2.0"
+    reason: "DATA_OF"
+    comment: >-
+      This file defines official SPDX.org exceptions so they can be used in OSS Review Toolkit.
+  - path: "utils/spdx/src/main/resources/{declared-license-mapping.yml,deprecated-license-mapping.yml,exception-association.yml,simple-license-mapping.yml}"
+    concluded_license: "Apache-2.0"
+    reason: "DATA_OF"
+    comment: >-
+      These files contain mappings for licenses and exceptions.
+  - path: "utils/spdx/src/main/resources/licenserefs/**"
+    concluded_license: "CC0-1.0"
+    reason: "DATA_OF"
+    comment: >-
+      This directory contains all non-official SPDX license ids which are used to generate open source notices. SPDX and
+      ScanCode license files are licensed under CC0-1.0, see
+      https://github.com/spdx/license-list-XML/blob/master/package.json#L33 and
+      https://github.com/nexB/scancode-toolkit/blame/develop/README.rst#L168.
+  - path: "utils/spdx/src/main/resources/licenses/**"
+    concluded_license: "CC0-1.0"
+    reason: "DATA_OF"
+    comment: >-
+      This directory contains all official SPDX.org license ids which are used to generate open source notices. SPDX and
+      ScanCode license files are licensed under CC0-1.0, see
+      https://github.com/spdx/license-list-XML/blob/master/package.json#L33.
+  - path: "utils/spdx/src/test/kotlin/SpdxExpressionTest.kt"
+    concluded_license: "Apache-2.0"
+    reason: "CODE"
+    comment: >-
+      This file uses several variables named after licenses.

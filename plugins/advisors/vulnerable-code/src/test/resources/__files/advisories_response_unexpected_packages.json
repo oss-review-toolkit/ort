@@ -1,0 +1,41 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "advisory_id": "GHSA-2cxf-6567-7pp6",
+      "advisory_uid": "github_osv_importer_v2/GHSA-2cxf-6567-7pp6",
+      "url": "https://github.com/advisories/GHSA-2cxf-6567-7pp6",
+      "aliases": [
+        "CVE-2014-8242"
+      ],
+      "severities": [],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": []
+    },
+    {
+      "advisory_id": "CVE-2021-9876",
+      "advisory_uid": "test/CVE-2021-9876",
+      "url": "https://example.org/advisories/CVE-2021-9876",
+      "aliases": [],
+      "severities": [],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": []
+    },
+    {
+      "advisory_id": "GHSA-v7xh-cg3m-mx2g",
+      "advisory_uid": "github_osv_importer_v2/GHSA-v7xh-cg3m-mx2g",
+      "url": "https://example.org/advisories/GHSA-v7xh-cg3m-mx2g",
+      "aliases": [
+        "CVE-2009-1382"
+      ],
+      "severities": [],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": []
+    }
+  ]
+}

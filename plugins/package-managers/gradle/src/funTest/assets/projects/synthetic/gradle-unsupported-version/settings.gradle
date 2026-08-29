@@ -1,0 +1,1 @@
+// Required to prevent Gradle from reading the settings.gradle from the root directory of the ORT project.

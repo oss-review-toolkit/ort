@@ -1,0 +1,25 @@
+---
+project:
+  id: "Composer:ort:composer-test-project:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "The Author"
+  - "The Other Author"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes: []
+packages: []

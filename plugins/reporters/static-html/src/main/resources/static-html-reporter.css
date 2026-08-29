@@ -1,0 +1,293 @@
+body {
+    background-color: #f7f7f7;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial,
+    "Lucida Grande", sans-serif;
+    font-size: 14px;
+}
+
+a, a:visited {
+    color: black;
+}
+
+dd {
+    margin-left: 1em;
+}
+
+dd div {
+    padding-left: 1em;
+    text-indent:-1em;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * The root tag which contains everything.
+ */
+
+#report-container {
+    background-color: #fff;
+    border: 1px solid rgba(34, 36, 38, .15);
+    border-radius: .28rem;
+    padding: 0em 1em 0.5em 1em;
+    margin: 1em 2em 1em 2em;
+}
+
+/*
+ * The label at the very top of the report.
+ */
+ 
+#report-top-label {
+    background-color: #f9fafb;
+    border-left: 1px solid rgba(34, 36, 38, .15);
+    border-right: 1px solid rgba(34, 36, 38, .15);
+    border-bottom: 1px solid rgba(34, 36, 38, .15);
+    border-top: none;
+    border-bottom-left-radius: .28rem;
+    border-bottom-right-radius: .28rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: rgba(34, 36, 38, .7);
+    font-size: 18px;
+    font-weight: 700;
+    padding: 0.4em 0.4em 0.4em 0.4em;
+    margin-bottom: 1em;
+    top: -10px;
+    width: 110px;
+}
+
+/*
+ * Table for key value pairs with a simple styling. Used for the VCS infos of projects and for the ORT result labels.
+ */
+
+.report-key-value-table {
+    font-size: 12px;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+.report-key-value-table td {
+    border-bottom: 1px solid rgba(34, 36, 38, .15);
+    overflow: hidden;
+    padding: 5px 20px 5px 0px;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.report-key-value-table tr:first-child td {
+    border-top: 1px solid rgba(34, 36, 38, .15);
+}
+
+/*
+ * The base class for the main top level tables for violations, issues and projects.
+ */
+
+.report-table {
+    border-spacing: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.report-table th {
+    background-color: #f9fafb;
+    border-left: 1px solid rgba(34, 36, 38, .15);
+    border-top: 1px solid rgba(34, 36, 38, .15);
+    overflow: hidden;
+    padding: 5px 5px 5px .8em !important;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.report-table th:first-child {
+    width: 30px;
+    white-space: nowrap;
+    border-top-left-radius: .28rem;
+    border-left: 1px solid rgba(34, 36, 38, .15);
+    border-top: 1px solid rgba(34, 36, 38, .15);
+}
+
+.report-table th:last-child {
+    border-top-right-radius: .28rem;
+    border-right: 1px solid rgba(34, 36, 38, .15);
+    border-top: 1px solid rgba(34, 36, 38, .15);
+}
+
+.report-table tr:last-child td {
+    border-bottom: 1px solid rgba(34, 36, 38, .15);
+}
+
+.report-table tr:last-child td:first-child {
+    border-bottom-left-radius: .28rem;
+}
+
+.report-table tr:last-child td:last-child {
+    border-bottom-right-radius: .28rem;
+}
+
+.report-table td {
+    border-left: 1px solid rgba(34, 36, 38, .15);
+    border-top: 1px solid rgba(34, 36, 38, .15);
+    padding: 8px;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.report-table td:last-child {
+    border-right: 1px solid rgba(34, 36, 38, .15);
+}
+
+.report-table details {
+    overflow: scroll;
+}
+
+.report-table tr.error td {
+    background: #fff6f6;
+    color: #9f3a38;
+}
+
+.report-table tr.warning td {
+    background: #fffaf3;
+    color: #573a08;
+}
+
+.report-table tr.hint td {
+    background: #f7f5ff;
+    color: #1c0859;
+}
+
+/**
+ * Project section.
+ */
+
+.project.excluded {
+   h3, .report-key-value-table, .report-project-table > thead th {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table .pkg.excluded {
+   > td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table .pkg:not(.excluded) {
+   .scope.excluded, .detected-license.excluded {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table td:has(.package-issue-table) {
+   padding: 0px;
+}
+
+.package-issue-table {
+   border-spacing: 10px;
+   padding: 0px;
+   margin: 0px;
+}
+
+.package-issue-table td {
+    border-radius: .60rem !important;
+    border-bottom: 1px solid rgba(34, 36, 38, .15);
+}
+
+.package-issue-table tr.resolved td {
+    background: #fcfff5;
+    color: #2c662d;
+}
+
+.package-issue-table tr.excluded td {
+    background: #f9fafb;
+    color: rgba(34, 36, 38, .7);
+}
+
+.reason {
+    border-radius: 3px;
+    background: #EEE;
+    padding: 2px;
+    font-size: 12px;
+    display: inline;
+}
+
+/**
+ * Report table media specific styling.
+ */
+
+@media all and (max-width: 1000px) {
+    .report-table th:nth-child(2), .report-table td:nth-child(2) {
+        display: none;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        visibility: collapse;
+    }
+}
+
+@media all and (max-width: 900px) {
+    .report-table th:nth-child(3), .report-table td:nth-child(3) {
+        display: none;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        visibility: collapse;
+    }
+}
+
+@media all and (max-width: 800px) {
+    .report-table th:nth-child(5),
+    .report-table td:nth-child(5),
+    .report-table th:nth-child(6),
+    .report-table td:nth-child(6) {
+        display: none;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        visibility: collapse;
+    }
+
+    .report-table th:nth-child(4) {
+        border-top-right-radius: .28rem;
+        border-right: 1px solid rgba(34, 36, 38, .15);
+    }
+
+    .report-table td:nth-child(4) {
+        border-right: 1px solid rgba(34, 36, 38, .15);
+    }
+
+    .report-table tr:last-child td:nth-child(4) {
+        border-bottom-right-radius: .28rem;
+    }
+}
+
+@media all and (max-width: 500px) {
+    .report-table th:nth-child(4),
+    .report-table td:nth-child(4) {
+        display: none;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        visibility: collapse;
+    }
+
+    .report-table th:first-child {
+        border-top-right-radius: .28rem;
+        border-right: 1px solid rgba(34, 36, 38, .15);
+    }
+
+    .report-table td:first-child {
+        border-right: 1px solid rgba(34, 36, 38, .15);
+    }
+
+    .report-table tr:last-child td:first-child {
+        border-bottom-right-radius: .28rem;
+    }
+}

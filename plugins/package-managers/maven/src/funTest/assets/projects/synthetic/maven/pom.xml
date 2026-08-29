@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.ossreviewtoolkit.maven</groupId>
+    <artifactId>maven-project</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>maven-project</name>
+    <url>http://maven.apache.org</url>
+    <scm>
+        <connection>scm:git:https://example.com/git/repository.git</connection>
+        <developerConnection>scm:git:https://example.com/git/repository.git</developerConnection>
+        <url>https://example.com/git/repository</url>
+    </scm>
+    <organization>
+        <name>ACME</name>
+    </organization>
+    <developers>
+        <developer>
+            <organization>ACME</organization>
+            <name>Dev A</name>
+        </developer>
+        <developer>
+            <organization>Sirius Cybernetics Corporation</organization>
+            <name>Dev B</name>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <properties>
+        <jenkins-ci.url>https://repo.jenkins-ci.org/releases</jenkins-ci.url>
+        <commons-text.version>1.1</commons-text.version>
+        <junit.version>3.8.1</junit.version>
+        <version-number.version>1.4</version-number.version>
+    </properties>
+</project>

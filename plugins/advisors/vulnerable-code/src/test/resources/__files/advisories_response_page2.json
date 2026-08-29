@@ -1,0 +1,20 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": "/api/v3/advisories/?page=1",
+  "results": [
+    {
+      "advisory_id": "GHSA-8489-44mv-ggj8",
+      "advisory_uid": "github_osv_importer_v2/GHSA-8489-44mv-ggj8",
+      "url": "https://github.com/advisories/GHSA-8489-44mv-ggj8.json",
+      "aliases": [
+        "CVE-2021-44832"
+      ],
+      "summary": "Improper Input Validation and Injection in Apache Log4j2",
+      "severities": [],
+      "weaknesses": [],
+      "references": [],
+      "related_ssvc_trees": []
+    }
+  ]
+}

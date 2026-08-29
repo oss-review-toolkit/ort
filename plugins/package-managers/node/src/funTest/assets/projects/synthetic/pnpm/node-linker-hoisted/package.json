@@ -1,0 +1,13 @@
+{
+  "name": "pnpm-package-with-hoisted-node-linker",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.29.3",
+  "dependencies": {
+    "expo": "~55.0.3",
+    "expo-router": "~55.0.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-native": "0.83.2"
+  }
+}

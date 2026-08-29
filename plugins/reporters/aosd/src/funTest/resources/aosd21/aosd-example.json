@@ -1,0 +1,344 @@
+{
+    "schemaVersion": "2.1.0",
+    "externalId": "myownId",
+    "scanned": true,
+    "directDependencies": [1,2,3,4,5,6,7,8,9],
+    "components": [
+        {
+            "id": 1,
+            "componentName": "multi_dual_1.0.0",
+            "componentVersion": "1.0.0",
+            "scmUrl": "https://testurl.com/mutli_dual_1.0.0.tgz",
+            "modified": true,
+            "linking": "dynamic_linking",
+            "transitiveDependencies": [],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "LGPL-2.0-or-later AND (Apache-2.0 OR MIT) AND BSD-2-Clause",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example for a license key combination where you have to choose between the combination of LGPL-2.0-or-later AND Apache-2.0 AND BSD-2-Clause or LGPL-2.0-or-later AND MIT AND BSD-2-Clause\n\nSo in the field selectedLicense you must add your decision because the combination of license keys contains an OR in the logic. This means you have to choose.\n\n In this field for the license texts you nust add the license texts for all 4 licenses.\n\nTo follow good praxis:\n\nLicense text for LGPL-2.0-or-later\n\nAND\n\nLicense text for Apache-2.0\n\nOR\n\nLicense text for MIT\n\nAND\n\nLicense text for BSD-2-Clause.\n\nMeans you must add the texts for all 4 licenses in this special case.\n\nThe license texts can be devided by AND and OR like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field are LGPL-2.0-or-later AND Apache-2.0 AND BSD-2-Clause. So MIT is deselected.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "LGPL-2.0-or-later AND Apache-2.0 AND BSD-2-Clause",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_1",
+                    "spdxId": "MIT OR Apache-2.0 OR GPL-2.0-only OR ISC",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose from 4 different licenses but you have to select only one. The license you wnat to use has to be added in the field slectedLicense.\n\nIn this field for the license texts you nust add the license texts for all 4 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nOR\n\nLicense text for Apache-2.0\n\nOR\n\nLicense text for GPL-2.0-only\n\nOR\n\nLicense text for ISC.\n\nMeans you must add the texts for all 4 licenses in this special case.\n\nThe license texts can be devided by OR like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field is MIT.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "MIT",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_2",
+                    "spdxId": "MIT OR (Apache-2.0 OR GPL-2.0-only) OR ISC",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose from 4 different licenses but you have to select only one. The license you wnat to use has to be added in the field slectedLicense.\n\nIn this field for the license texts you nust add the license texts for all 4 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nOR\n\nLicense text for Apache-2.0\n\nOR\n\nLicense text for GPL-2.0-only\n\nOR\n\nLicense text for ISC.\n\nMeans you must add the texts for all 4 licenses in this special case.\n\nThe license texts can be devided by OR like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field is ISC.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "ISC",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_3",
+                    "spdxId": "MIT OR Apache-2.0 WITH Classpath-exception-2.0",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose between MIT or Apache-2.0 WITH Classpath-exception-2.0 license.\n\nIn this field for the license texts you nust add the license texts for all 2 licenses and also the text from the exception.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nOR\n\nLicense text for Apache-2.0\n\nWITH\n\nClasspath-exception-2.0.\n\nMeans you must add 3 text blocks here.\n\nThe license texts can be devided by OR and WITH like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field are Apache-2.0 WITH Classpath-exception-2.0.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "Apache-2.0 WITH Classpath-exception-2.0",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_4",
+                    "spdxId": "MIT OR Apache-2.0 AND GPL-2.0-only",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose between MIT or Apache-2.0 AND GPL-2.0-only.\n\nIn this field for the license texts you nust add the license texts for all 3 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nOR\n\nLicense text for Apache-2.0\n\nAND\n\nGPL-2.0-only.\n\nMeans you must add 3 text blocks here.\n\nThe license texts can be devided by OR and AND like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field are Apache-2.0 AND GPL-2.0-only.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "Apache-2.0 AND GPL-2.0-only",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_5",
+                    "spdxId": "MIT OR Apache-2.0 AND GPL-2.0-only AND ISC OR LGPL-2.0-only",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose between MIT or Apache-2.0 AND GPL-2.0-only AND ISC or LGPL-2.0-only.\n\nIn this field for the license texts you nust add the license texts for all 5 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nOR\n\nLicense text for Apache-2.0\n\nAND\n\nGPL-2.0-only.\n\nAND\n\nISC.\n\nOR\n\nLGPL-2.0-only\n\nMeans you must add 5 text blocks here.\n\nThe license texts can be devided by OR and AND like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field are Apache-2.0 AND GPL-2.0-only AND ISC.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "Apache-2.0 AND GPL-2.0-only AND ISC",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_6",
+                    "spdxId": "MIT AND (Apache-2.0 OR GPL-2.0-only)",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose between MIT AND Apache-2.0 or MIT AND GPL-2.0-only.\n\nIn this field for the license texts you nust add the license texts for all 3 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nAND\n\nLicense text for Apache-2.0\n\nOR\n\nLicense text for GPL-2.0-only.\n\nMeans you must add 3 text blocks here.\n\nThe license texts can be devided by OR and AND like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field are MIT AND Apache-2.0.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "MIT AND Apache-2.0",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_7",
+                    "spdxId": "MIT AND (Apache-2.0 OR GPL-2.0-only)",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose between MIT AND Apache-2.0 or MIT AND GPL-2.0-only.\n\nIn this field for the license texts you nust add the license texts for all 3 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nAND\n\nLicense text for Apache-2.0\n\nOR\n\nLicense text for GPL-2.0-only.\n\nMeans you must add 3 text blocks here.\n\nThe license texts can be devided by OR and AND like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field are MIT AND GPL-2.0-only.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "MIT AND GPL-2.0-only",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_8",
+                    "spdxId": "MIT OR (Apache-2.0 AND GPL-2.0-only) OR ISC",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose between MIT or Apache-2.0 AND GPL-2.0-only or ISC.\n\nIn this field for the license texts you nust add the license texts for all 4 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nOR\n\nLicense text for Apache-2.0\n\nAND\n\nLicense text for GPL-2.0-only\n\nOR\n\nLicense text for ISC\n\nMeans you must add 4 text blocks here.\n\nThe license texts can be devided by OR and AND like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field is MIT.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "MIT",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_9",
+                    "spdxId": "MIT OR (Apache-2.0 AND GPL-2.0-only) OR ISC",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose between MIT or Apache-2.0 AND GPL-2.0-only or ISC.\n\nIn this field for the license texts you nust add the license texts for all 4 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nOR\n\nLicense text for Apache-2.0\n\nAND\n\nLicense text for GPL-2.0-only\n\nOR\n\nLicense text for ISC\n\nMeans you must add 4 text blocks here.\n\nThe license texts can be devided by OR and AND like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field are Apache-2.0 AND GPL-2.0-only.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "Apache-2.0 AND GPL-2.0-only",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "ex_block_10",
+                    "spdxId": "MIT OR (Apache-2.0 AND GPL-2.0-only) OR ISC",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field. But we use this field in the Example file also for explanations!\n\nThis is an example where you can choose between MIT or Apache-2.0 AND GPL-2.0-only or ISC.\n\nIn this field for the license texts you nust add the license texts for all 4 licenses.\n\nTo follow good praxis:\n\nLicense text for MIT\n\nOR\n\nLicense text for Apache-2.0\n\nAND\n\nLicense text for GPL-2.0-only\n\nOR\n\nLicense text for ISC\n\nMeans you must add 4 text blocks here.\n\nThe license texts can be devided by OR and AND like in the license expression. So we can better split the text blocks.\n\nFor this component the selected licenses in the selectedLicense field is ISC.\n\nSee also README.md -> 2.0.0 Multi licensing / Dual licensing\n\nIn general this component is modified and is linked dynamic.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "ISC",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "componentName": "ex_additionalLicenseInfos",
+            "componentVersion": "1.0.0",
+            "scmUrl": "https://testurl.com/ex_additionalLicenseInfos",
+            "modified": false,
+            "linking": "static_linking",
+            "transitiveDependencies":[],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "Apache-2.0",
+                    "copyrights": [],
+                    "authors":[],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nThis is an example where also the information from the NOTICE file was found.\n\nSo it is a good practise to add the content from a found NOTICE file in the field additionalLicenseInfos.\n\nIn general this component is not modified and is linked static.\n\nIn general this component is not modified and is linked static.",
+                    "licenseTextUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": "=========================================================================\n==  Example NOTICE file for use with the Apache License, Version 2.0,  ==\n==  in this case for the Apache httpd-2.5.0 distribution.              ==\n=========================================================================\n\nApache HTTP Server\nCopyright 2016 The Apache Software Foundation.\n\nThis product includes software developed at\nThe Apache Software Foundation (http://www.apache.org/).\n\nPortions of this software were developed at the National Center\nfor Supercomputing Applications (NCSA) at the University of\nIllinois at Urbana-Champaign.\n\nThis software contains code derived from the RSA Data Security\nInc. MD5 Message-Digest Algorithm, including various\nmodifications by Spyglass Inc., Carnegie Mellon University, and\nBell Communications Research, Inc (Bellcore)."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "componentName": "ex_dynamic_linking",
+            "componentVersion": "1.0.0",
+            "modified": false,
+            "linking": "dynamic_linking",
+            "scmUrl": "https://testurl.com/ex_dynamic_linking",
+            "transitiveDependencies":[],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "Apache-2.0",
+                    "authors":[],
+                    "copyrights":[],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nIn general this component is not modified and is linked dynamic.\n\nIn general this component is not modified and is linked dynamic.",
+                    "licenseTextUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "componentName": "ex_static_linking",
+            "componentVersion": "1.16",
+            "scmUrl": "https://testurl.com/ex_static_linking",
+            "modified": false,
+            "linking": "static_linking",
+            "transitiveDependencies":[],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "MIT",
+                    "copyrights":[],
+                    "authors":[],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nIn general this component is not modified and is linked static.\n\nIn general this component is not modified and is linked static.",
+                    "licenseTextUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "componentName": "ex_sys_call",
+            "componentVersion": "1.0.0",
+            "scmUrl": "https://testurl.com/ex_sys_call",
+            "modified": true,
+            "linking": "sys_call",
+            "transitiveDependencies": [],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "BSD-4-Clause",
+                    "copyrights": ["Copyright 2014 John Doe", "Copyright 2014 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nIn general this component is modified and is linked via system call.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "componentName": "ex_process_call",
+            "componentVersion": "1.0.0-beta",
+            "scmUrl": "https://testurl.com/ex_process_call",
+            "modified": true,
+            "linking": "process_call",
+            "transitiveDependencies": [],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "BSD-4-Clause",
+                    "copyrights": ["Copyright 2017 John Doe", "Copyright 2017 Johann Doe"],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nIn general this component is modified and is linked via process call.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "componentName": "ex_no_modification_no_linking",
+            "componentVersion": "1.0",
+            "scmUrl": "https://testurl.com/ex_no_modification_no_linking",
+            "modified": null,
+            "linking": null,
+            "transitiveDependencies":[],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "MIT",
+                    "copyrights":[],
+                    "authors":[],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nIn general this component has no information for modification and linking.\n\nIn this case the initial values null for both fields are allowed.\n\nIf you have copyleft licenses in your component the two fields modified and linking become mandatory and null is not allowed anymore.\n\nYou can find a list with copyleft licenses in the file modifiaction_linking.json.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "componentName": "ex_more_licenses_in_component",
+            "componentVersion": "7.0.3",
+            "scmUrl": "https://testurl.com/ex_no_modification_no_linking/ex_more_licenses_in_component",
+            "modified": false,
+            "linking": "static_linking",
+            "transitiveDependencies": [],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "MIT",
+                    "copyrights": [
+                        "Copyright (c) 2023 Maria Generic"
+                    ],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nThis is an example for a component with 3 license findings.\n\nEvery single license is stored in it's own subcomponent.\n\nIn general this component is not modified and is linked static.",
+                    "licenseTextUrl": "https://testpackages/texturl/generated",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "subcomponent_2_2",
+                    "spdxId": "LicenseRef-scancode-unknown",
+                    "copyrights": [
+                        "Copyright (c) 2023 TORSTEN MIT"
+                    ],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nThis is an example for a component with 3 license findings.\n\nEvery single license is stored in it's own subcomponent.\n\nIn general this component is not modified and is linked static.",
+                    "licenseTextUrl": "https://testpackages/texturl/generated",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                },
+                {
+                    "subcomponentName": "subcomponent_2_3",
+                    "spdxId": "Apache-2.0",
+                    "copyrights": [
+                        "Copyright (c) 2019 Maria Generic"
+                    ],
+                    "authors": [],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nThis is an example for a component with 3 license findings.\n\nEvery single license is stored in it's own subcomponent.\n\nIn general this component is not modified and is linked static.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "componentName": "ex_component_with_transitive_dependency",
+            "componentVersion": "1.0",
+            "scmUrl": "https://testurl.com/ex_component_with_transitive_dependency",
+            "modified": null,
+            "linking": null,
+            "transitiveDependencies":[10],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "MIT",
+                    "copyrights":[],
+                    "authors":[],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nThis component has a transitive dependency, component ex_component_is_a_transitive_dependency with id 10.\n\nThat's why the id 10 was added in the field transitiveDependencies.\n\nThat is the way to document the dependency tree for a software project.\n\nIn general this component has the initial value null for modification and linking because for this spsdx key MIT the information is not mandatory.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "componentName": "ex_component_is_a_transitive_dependency",
+            "componentVersion": "1.0",
+            "scmUrl": "https://testurl.com/ex_no_modification_no_linking",
+            "modified": null,
+            "linking": null,
+            "transitiveDependencies":[],
+            "subcomponents": [
+                {
+                    "subcomponentName": "main",
+                    "spdxId": "MIT",
+                    "copyrights":[],
+                    "authors":[],
+                    "licenseText": "CAUTION! In a real live JSON import file the license texts only should be added in this field.\n\nThis component is a transitive dependency of the component ex_component_with_transitive_dependency with oid 9.\n\nThat's why the id 10 was added in the field transitiveDependencies of component with id 9.\n\nThe id of this component was not added in the directDependencies.\n\nIn general this component has the initial value null for modification and linking because for this spsdx key MIT the information is not mandatory.",
+                    "licenseTextUrl": "",
+                    "selectedLicense": "",
+                    "additionalLicenseInfos": ""
+                }
+            ]
+        }
+    ]
+}

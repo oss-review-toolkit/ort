@@ -1,0 +1,29 @@
+{
+  "count": 3,
+  "next": "/api/v3/packages/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "purl": "pkg:maven/junit/junit@4.12",
+      "affected_by_vulnerabilities": [
+        {
+          "advisory_id": "GHSA-269g-pwp5-87pp",
+          "advisory_uid": "github_osv/GHSA-269g-pwp5-87pp",
+          "resource_url": "https://example.org/advisories/github_osv/GHSA-269g-pwp5-87pp"
+        }
+      ],
+      "fixing_vulnerabilities": []
+    },
+    {
+      "purl": "pkg:maven/org.apache.commons/commons-lang3@3.5",
+      "affected_by_vulnerabilities": [
+        {
+          "advisory_id": "GHSA-2cxf-6567-7pp6",
+          "advisory_uid": "github_osv_importer_v2/GHSA-2cxf-6567-7pp6",
+          "resource_url": "https://example.org/advisories/github_osv_importer_v2/GHSA-2cxf-6567-7pp6"
+        }
+      ],
+      "fixing_vulnerabilities": []
+    }
+  ]
+}

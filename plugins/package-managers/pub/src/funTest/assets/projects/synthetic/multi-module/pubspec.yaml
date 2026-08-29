@@ -1,0 +1,14 @@
+name: multimodule
+description: A sample multi-module project.
+version: 1.0.0
+authors:
+  - "The ORT Project Authors"
+homepage: https://ossreviewtoolkit.org/
+repository: https://github.com/oss-review-toolkit/ort.git
+
+dependencies:
+  subproject:
+    path: ./subproject
+
+environment:
+  sdk: ">=2.12.0 <4.0.0"

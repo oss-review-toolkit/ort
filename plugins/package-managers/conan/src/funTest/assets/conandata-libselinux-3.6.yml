@@ -1,0 +1,13 @@
+# Example conandata.yml with multiple source archives listed under the version key as a YAML list.
+# libselinux depends on libsepol at the same version, so the recipe bundles both tarballs.
+sources:
+  "3.6":
+    - url: "https://github.com/SELinuxProject/selinux/releases/download/3.6/libselinux-3.6.tar.gz"
+      sha256: "ba4e0ef34b270e7672a5e5f1b523fe2beab3a40bb33d9389f4ad3a8728f21b52"
+    - url: "https://github.com/SELinuxProject/selinux/releases/download/3.6/libsepol-3.6.tar.gz"
+      sha256: "c9dc585ea94903d784d597c861cd5dce6459168f95e22b31a0eab1cdd800975a"
+patches:
+  "3.6":
+    - patch_file: "patches/3.6/0001-remove-rpath.patch"
+      patch_description: "Remove RPATH from the build"
+      patch_type: "conan"

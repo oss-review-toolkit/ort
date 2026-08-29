@@ -1,0 +1,90 @@
+---
+project:
+  id: "Cargo::client:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "anon"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Crate::lib:0.1.0"
+      linkage: "STATIC"
+      dependencies:
+      - id: "Crate::cfg-if:0.1.9"
+        linkage: "STATIC"
+packages:
+- id: "Crate::cfg-if:0.1.9"
+  purl: "pkg:cargo/cfg-if@0.1.9"
+  authors:
+  - "Alex Crichton"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 OR MIT"
+  description: "A macro to ergonomically define an item depending on a large number\
+    \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
+    \ branch is the\nitem that gets emitted.\n"
+  homepage_url: "https://github.com/alexcrichton/cfg-if"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://crates.io/api/v1/crates/cfg-if/0.1.9/download"
+    hash:
+      value: "b486ce3ccf7ffd79fdeb678eac06a9e6c09fc88d33836340becb8fffe87c5e33"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/alexcrichton/cfg-if.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/alexcrichton/cfg-if.git"
+    revision: ""
+    path: ""
+- id: "Crate::lib:0.1.0"
+  purl: "pkg:cargo/lib@0.1.0"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 OR MIT"
+  description: ""
+  homepage_url: "https://example.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/cargo/src/funTest/assets/projects/synthetic/cargo-subcrate"

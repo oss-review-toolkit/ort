@@ -1,0 +1,2 @@
+# Cartfile that declares binary dependencies
+github "user/project" "1.0.0" "comment"

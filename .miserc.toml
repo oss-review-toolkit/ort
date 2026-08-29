@@ -1,0 +1,3 @@
+# Stop search upward for further `mise.toml` files, see
+# https://mise.jdx.dev/configuration.html#configuration-resolution-process
+ceiling_paths = ["{{ config_root | dirname }}"]

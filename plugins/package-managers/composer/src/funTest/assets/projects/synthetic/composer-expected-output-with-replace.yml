@@ -1,0 +1,53 @@
+---
+project:
+  id: "Composer:ort:composer-test-project:0.1.0"
+  definition_file_path: "plugins/package-managers/composer/src/funTest/assets/projects/synthetic/with-replace/composer.json"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes:
+  - name: "require"
+    dependencies:
+    - id: "Composer:ort:child2:1.0.0"
+  - name: "require-dev"
+    dependencies: []
+packages:
+- id: "Composer:ort:child2:1.0.0"
+  purl: "pkg:composer/ort/child2@1.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "composer.phar"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""

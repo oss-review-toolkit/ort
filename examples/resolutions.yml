@@ -1,0 +1,43 @@
+---
+# This file contains global resolutions for issues and rule violations occurring in the OSS scan.
+# These resolutions are applied to all scanned projects, so make sure to only
+# add resolutions that are not specific to a project. Project specific
+# resolutions can be configured in the .ort.yml file of the project.
+#
+# For detailed documentation, see:
+# https://oss-review-toolkit.org/ort/docs/configuration/resolutions
+
+# Structure of issue resolution:
+#
+# issues:
+# - message: "A regular expression matching the error message."
+#   reason: "One of: BUILD_TOOL_ISSUE|CANT_FIX_ISSUE|SCANNER_ISSUE"
+#   comment: "A comment further explaining why the reason above is applicable."
+issues:
+- message: "^$"
+  reason: "CANT_FIX_ISSUE"
+  comment: "An issue resolution which resolves only issues with an empty message."
+
+# Structure of policy rule violation resolution:
+#
+# rule_violations:
+# - message: "A regular expression matching the violation message."
+#   reason: "One of: CANT_FIX_EXCEPTION|DYNAMIC_LINKAGE_EXCEPTION|EXAMPLE_OF_EXCEPTION|LICENSE_ACQUIRED_EXCEPTION|PATENT_GRANT_EXCEPTION"
+#   comment: "A comment further explaining why the reason above is applicable."
+
+rule_violations:
+- message: "^$"
+  reason: "CANT_FIX_EXCEPTION"
+  comment: "A rule violation resolution which resolves only rule violations with an empty message."
+
+# Structure of vulnerability resolution:
+#
+# vulnerabilities:
+# - id: "A regular expression matching the vulnerability id."
+#   reason: "One of: CANT_FIX_VULNERABILITY|INEFFECTIVE_VULNERABILITY|INVALID_MATCH_VULNERABILITY|MITIGATED_VULNERABILITY
+#                    |WILL_NOT_FIX_VULNERABILITY|WORKAROUND_FOR_VULNERABILITY"
+#   comment: "A comment further explaining why the reason above is applicable."
+vulnerabilities:
+- id: "^$"
+  reason: "INVALID_MATCH_VULNERABILITY"
+  comment: "A vulnerability resolution which resolves only vulnerabilities with an empty id."

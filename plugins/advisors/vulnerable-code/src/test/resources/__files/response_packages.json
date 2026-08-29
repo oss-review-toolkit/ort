@@ -1,0 +1,92 @@
+[
+  {
+    "name": "commons-lang3",
+    "namespace": "org.apache.commons",
+    "purl": "pkg:maven/org.apache.commons/commons-lang3@3.5",
+    "qualifiers": {},
+    "resolved_vulnerabilities": [],
+    "subpath": "",
+    "type": "maven",
+    "version": "3.5",
+    "url": "http://testserver/api/packages/3467",
+    "unresolved_vulnerabilities": [
+      {
+        "references": [
+          {
+            "reference_id": "",
+            "scores": [],
+            "source": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-8242"
+          },
+          {
+            "reference_id": "GHSA-2cxf-6567-7pp6",
+            "scores": [{"scoring_system": "cvssv3.1_qr", "value": "LOW"}],
+            "source": "",
+            "url": "https://github.com/apache/commons-lang/security/advisories/GHSA-2cxf-6567-7pp6"
+          },
+          {
+            "reference_id": "GHSA-2cxf-6567-7pp6",
+            "scores": [],
+            "source": "",
+            "url": "https://github.com/advisories/GHSA-2cxf-6567-7pp6"
+          }
+        ],
+        "url": "http://testserver/api/vulnerabilities/60",
+        "vulnerability_id": "CVE-2014-8242"
+      }
+    ]
+  },
+  {
+    "name": "struts2-assembly",
+    "namespace": "org.apache.struts",
+    "purl": "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1",
+    "qualifiers": {},
+    "resolved_vulnerabilities": [
+      {
+        "references": [
+          {
+            "reference_id": "",
+            "scores": [{"scoring_system": "cvssv3.1", "value": "6"}],
+            "source": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-8242"
+          }
+        ],
+        "url": "http://testserver/api/vulnerabilities/61",
+        "vulnerability_id": "CVE-2009-2459"
+      }
+    ],
+    "subpath": "",
+    "type": "maven",
+    "version": "2.5.14.1",
+    "url": "http://testserver/api/packages/3468",
+    "unresolved_vulnerabilities": [
+      {
+        "references": [
+          {
+            "reference_id": "",
+            "scores": [{"scoring_system": "cvssv2", "value": "7"}],
+            "source": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2009-1382"
+          }
+        ],
+        "url": "http://testserver/api/vulnerabilities/62",
+        "vulnerability_id": "CVE-2009-1382"
+      },
+      {
+        "references": [
+          {
+            "reference_id": "",
+            "scores": [
+              {"scoring_system": "cvssv3", "value": "10"},
+              {"scoring_system":  "cvssv3.1_qr", "value": "HIGH" }
+            ],
+            "source": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19"
+          }
+        ],
+        "url": "http://testserver/api/vulnerabilities/63",
+        "vulnerability_id": "CVE-2019-CoV19"
+      }
+    ]
+  }
+]

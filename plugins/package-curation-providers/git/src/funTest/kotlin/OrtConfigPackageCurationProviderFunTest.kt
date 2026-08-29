@@ -1,0 +1,69 @@
+/*
+ * Copyright (C) 2022 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.packagecurationproviders.git
+
+import io.kotest.core.annotation.Tags
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldNot
+
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
+
+@Tags("RequiresExternalTool")
+class OrtConfigPackageCurationProviderFunTest : StringSpec({
+    Os.env[ORT_DATA_DIR_ENV_NAME] = tempdir().absolutePath
+
+    fun createProvider() = OrtConfigPackageCurationProviderFactory.create()
+
+    "The provider succeeds to return known curations for packages" {
+        val azureCore = Identifier("NuGet:Azure:Core:1.22.0")
+        val azureCoreAmqp = Identifier("NuGet:Azure.Core:Amqp:1.2.0")
+        val packages = createPackagesFromIds(azureCore, azureCoreAmqp)
+
+        val curations = createProvider().getCurationsFor(packages)
+
+        curations.filter { it.isApplicable(azureCore) } shouldNot beEmpty()
+        curations.filter { it.isApplicable(azureCoreAmqp) } shouldNot beEmpty()
+    }
+
+    "The provider returns curations that match the namespace of a package" {
+        val xrd4j = Identifier("Maven:org.niis.xrd4j:foo:0.0.0")
+        val packages = createPackagesFromIds(xrd4j)
+
+        val curations = createProvider().getCurationsFor(packages)
+
+        curations.filter { it.isApplicable(xrd4j) } shouldNot beEmpty()
+    }
+
+    "The provider does not fail for packages which have no curations" {
+        val packages = createPackagesFromIds(Identifier("Some:Bogus:Package:Id"))
+
+        val curations = createProvider().getCurationsFor(packages)
+
+        curations should beEmpty()
+    }
+})
+
+internal fun createPackagesFromIds(vararg ids: Identifier) = ids.map { Package.EMPTY.copy(id = it) }

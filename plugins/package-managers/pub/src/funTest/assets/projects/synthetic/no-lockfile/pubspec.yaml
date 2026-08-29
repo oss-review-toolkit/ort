@@ -1,0 +1,16 @@
+name: no_lockfile
+description: A synthetic dart project without a lockfile
+version: 0.1.0
+author: Marlon Hille <marlon.hille@here.com>
+homepage: http://oss-review-toolkit.org/
+repository: https://github.com/oss-review-toolkit/ort.git
+
+dependencies:
+  http: "0.12.0"
+  async: ">=1.10.0 <3.0.0"
+
+dev_dependencies:
+  test: any
+
+environment:
+  sdk: ">=2.12.0 <4.0.0"

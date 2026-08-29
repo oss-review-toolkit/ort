@@ -1,0 +1,26 @@
+{
+  "id" : "584e3cce-204a-41f0-b5cb-2ace14f99101",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"check_status\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scan_check_status\",\"status\":\"1\",\"data\":{\"scan_id\":\"4920\",\"scan_name\":\"semver4j_20201203_090342\",\"scan_code\":\"semver4j_20201203_090342\",\"pid\":\"{\\\"primary\\\":11837}\",\"type\":\"SCAN\",\"status\":\"FINISHED\",\"is_finished\":\"1\",\"percentage_done\":\"100%\",\"comment\":\"Scan finished ... 40 files scanned. 32 files ignored. 0 files failed.\",\"comment_2\":\"\",\"comment_3\":\"\",\"started\":\"2020-12-03 09:03:44\",\"finished\":\"2020-12-03 09:03:58\"}}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:04:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "584e3cce-204a-41f0-b5cb-2ace14f99101",
+  "persistent" : true,
+  "insertionIndex" : 13
+}

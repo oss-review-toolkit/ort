@@ -1,0 +1,35 @@
+{
+  "id" : "b3b4952b-68cf-4e1e-bfbf-50222fe6defb",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "headers": {
+      "Content-Type": {
+        "equalTo": "application/octet-stream"
+      },
+      "FOSSID-SCAN-CODE": {
+        "equalTo": "c2VtdmVyNGpfMjAyMDEyMDNfMDkwMzQy"
+      },
+      "Authorization": {
+        "equalTo": "Basic Og=="
+      }
+    },
+    "bodyPatterns" : [ {
+      "equalTo" : "Hello World!"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"Upload_apiUpload\",\"status\":1,\"data\":null}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 05 Dec 2021 11:54:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "b3b4952b-68cf-4e1e-bfbf-50222fe6defb",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

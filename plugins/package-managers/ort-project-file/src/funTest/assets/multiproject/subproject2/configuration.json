@@ -1,0 +1,6 @@
+{
+  "description": "Sample, syntactically valid definition file, to check if will be avoided due to unmatched name.",
+  "dependencies": [
+    "purl:pkg:maven/org.apache.commons/commons-lang3@3.12.0"
+  ]
+}

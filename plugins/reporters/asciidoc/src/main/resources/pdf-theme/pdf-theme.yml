@@ -1,0 +1,40 @@
+extends: default
+font:
+  catalog:
+    merge: true
+    FiraSans:
+      bold: FiraSans-Bold.ttf
+      normal: FiraSans-Regular.ttf
+      italic: FiraSans-Italic.ttf
+      bold_italic: FiraSans-BoldItalic.ttf
+base:
+  font-family: FiraSans
+title-page:
+  logo:
+    align: center
+    image: image:ort.png[pdfwidth=80%]
+list:
+  text_align: left
+ulist:
+  marker:
+    circle:
+      content: "\u2022"
+    square:
+      content: "\u2022"
+literal:
+  font_color: $base_font_color
+role:
+  alert:
+    font-color: #cc0000
+  severity-unknown:
+    background-color: #bfbfbf
+  severity-none:
+    background-color: #ffffff
+  severity-low:
+    background-color: #006bbf
+  severity-medium:
+    background-color: #f5c648
+  severity-high:
+    background-color: #f4861d
+  severity-critical:
+    background-color: #bc012f

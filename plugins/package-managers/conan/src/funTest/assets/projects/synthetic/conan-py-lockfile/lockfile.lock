@@ -1,0 +1,97 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "0": {
+    "ref": "poco/None",
+    "options": "enable_active_record=deprecated\nenable_activerecord=True\nenable_activerecord_compiler=False\nenable_apacheconnector=False\nenable_cppparser=False\nenable_crypto=True\nenable_data=True\nenable_data_mysql=True\nenable_data_odbc=False\nenable_data_postgresql=True\nenable_data_sqlite=True\nenable_encodings=True\nenable_fork=True\nenable_json=True\nenable_jwt=True\nenable_mongodb=True\nenable_net=True\nenable_netssl=True\nenable_pagecompiler=False\nenable_pagecompiler_file2page=False\nenable_pdf=False\nenable_pocodoc=False\nenable_prometheus=False\nenable_redis=True\nenable_sevenzip=False\nenable_util=True\nenable_xml=True\nenable_zip=True\nfPIC=True\nlog_debug=False\nshared=False\nwith_sql_parser=True\nbzip2:build_executable=True\nbzip2:fPIC=True\nbzip2:shared=False\nexpat:char_type=char\nexpat:fPIC=True\nexpat:large_size=False\nexpat:shared=False\nlibmysqlclient:fPIC=True\nlibmysqlclient:shared=False\nlibpq:disable_rpath=False\nlibpq:fPIC=True\nlibpq:shared=False\nlibpq:with_openssl=False\nlz4:fPIC=True\nlz4:shared=False\nopenssl:386=False\nopenssl:enable_trace=False\nopenssl:enable_weak_ssl_ciphers=False\nopenssl:fPIC=True\nopenssl:no_apps=False\nopenssl:no_aria=False\nopenssl:no_asm=False\nopenssl:no_async=False\nopenssl:no_autoload_config=False\nopenssl:no_bf=False\nopenssl:no_blake2=False\nopenssl:no_camellia=False\nopenssl:no_cast=False\nopenssl:no_chacha=False\nopenssl:no_cms=False\nopenssl:no_comp=False\nopenssl:no_ct=False\nopenssl:no_deprecated=False\nopenssl:no_des=False\nopenssl:no_dgram=False\nopenssl:no_dh=False\nopenssl:no_dsa=False\nopenssl:no_dso=False\nopenssl:no_ec=False\nopenssl:no_ecdh=False\nopenssl:no_ecdsa=False\nopenssl:no_engine=False\nopenssl:no_filenames=False\nopenssl:no_fips=False\nopenssl:no_gost=False\nopenssl:no_idea=False\nopenssl:no_legacy=False\nopenssl:no_md2=True\nopenssl:no_md4=False\nopenssl:no_mdc2=False\nopenssl:no_module=False\nopenssl:no_ocsp=False\nopenssl:no_pinshared=False\nopenssl:no_rc2=False\nopenssl:no_rc4=False\nopenssl:no_rc5=False\nopenssl:no_rfc3779=False\nopenssl:no_rmd160=False\nopenssl:no_seed=False\nopenssl:no_sm2=False\nopenssl:no_sm3=False\nopenssl:no_sm4=False\nopenssl:no_sock=False\nopenssl:no_srp=False\nopenssl:no_srtp=False\nopenssl:no_sse2=False\nopenssl:no_ssl=False\nopenssl:no_ssl3=False\nopenssl:no_stdio=False\nopenssl:no_threads=False\nopenssl:no_tls1=False\nopenssl:no_ts=False\nopenssl:no_whirlpool=False\nopenssl:no_zlib=False\nopenssl:openssldir=None\nopenssl:shared=False\nopenssl:tls_security_level=None\npcre2:build_pcre2_16=True\npcre2:build_pcre2_32=True\npcre2:build_pcre2_8=True\npcre2:build_pcre2grep=True\npcre2:fPIC=True\npcre2:grep_support_callout_fork=True\npcre2:link_size=2\npcre2:shared=False\npcre2:support_jit=False\npcre2:with_bzip2=True\npcre2:with_zlib=True\nsqlite3:build_executable=True\nsqlite3:disable_gethostuuid=False\nsqlite3:enable_column_metadata=True\nsqlite3:enable_dbpage_vtab=False\nsqlite3:enable_dbstat_vtab=False\nsqlite3:enable_default_secure_delete=False\nsqlite3:enable_default_vfs=True\nsqlite3:enable_explain_comments=False\nsqlite3:enable_fts3=False\nsqlite3:enable_fts3_parenthesis=False\nsqlite3:enable_fts4=False\nsqlite3:enable_fts5=False\nsqlite3:enable_json1=False\nsqlite3:enable_math_functions=True\nsqlite3:enable_preupdate_hook=False\nsqlite3:enable_rtree=True\nsqlite3:enable_soundex=False\nsqlite3:enable_unlock_notify=True\nsqlite3:fPIC=True\nsqlite3:max_blob_size=None\nsqlite3:max_column=None\nsqlite3:max_variable_number=None\nsqlite3:omit_deprecated=False\nsqlite3:omit_load_extension=False\nsqlite3:shared=False\nsqlite3:threadsafe=1\nsqlite3:use_alloca=False\nsqlite3:use_uri=False\nzlib:fPIC=True\nzlib:shared=False\nzstd:build_programs=True\nzstd:fPIC=True\nzstd:shared=False\nzstd:threading=True",
+    "requires": [
+     "1",
+     "2",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8"
+    ],
+    "path": "conanfile.py",
+    "context": "host"
+   },
+   "1": {
+    "ref": "pcre2/10.42",
+    "options": "build_pcre2_16=True\nbuild_pcre2_32=True\nbuild_pcre2_8=True\nbuild_pcre2grep=True\nfPIC=True\ngrep_support_callout_fork=True\nlink_size=2\nshared=False\nsupport_jit=False\nwith_bzip2=True\nwith_zlib=True\nbzip2:build_executable=True\nbzip2:fPIC=True\nbzip2:shared=False\nzlib:fPIC=True\nzlib:shared=False",
+    "package_id": "89b1a341654fffa9a2b737e1b6e52b42acec7462",
+    "requires": [
+     "2",
+     "3"
+    ],
+    "context": "host"
+   },
+   "2": {
+    "ref": "zlib/1.3.1",
+    "options": "fPIC=True\nshared=False",
+    "package_id": "2a19826344ff00be1c04403f2f8e7008ed3a7cc6",
+    "context": "host"
+   },
+   "3": {
+    "ref": "bzip2/1.0.8",
+    "options": "build_executable=True\nfPIC=True\nshared=False",
+    "package_id": "3cfc45772763dad1237052f26c1fe8b2bae3f7d2",
+    "context": "host"
+   },
+   "4": {
+    "ref": "expat/2.6.3",
+    "options": "char_type=char\nfPIC=True\nlarge_size=False\nshared=False",
+    "package_id": "a1ba772dbe13186199f7ecf8dde362ba9613ecf7",
+    "context": "host"
+   },
+   "5": {
+    "ref": "sqlite3/3.45.0",
+    "options": "build_executable=True\ndisable_gethostuuid=False\nenable_column_metadata=True\nenable_dbpage_vtab=False\nenable_dbstat_vtab=False\nenable_default_secure_delete=False\nenable_default_vfs=True\nenable_explain_comments=False\nenable_fts3=False\nenable_fts3_parenthesis=False\nenable_fts4=False\nenable_fts5=False\nenable_json1=False\nenable_math_functions=True\nenable_preupdate_hook=False\nenable_rtree=True\nenable_soundex=False\nenable_unlock_notify=True\nfPIC=True\nmax_blob_size=None\nmax_column=None\nmax_variable_number=None\nomit_deprecated=False\nomit_load_extension=False\nshared=False\nthreadsafe=1\nuse_alloca=False\nuse_uri=False",
+    "package_id": "668a23a956a1ae835b578205ecc8274cfd29ae40",
+    "context": "host"
+   },
+   "6": {
+    "ref": "openssl/3.3.1",
+    "options": "386=False\nenable_trace=False\nenable_weak_ssl_ciphers=False\nfPIC=True\nno_apps=False\nno_aria=False\nno_asm=False\nno_async=False\nno_autoload_config=False\nno_bf=False\nno_blake2=False\nno_camellia=False\nno_cast=False\nno_chacha=False\nno_cms=False\nno_comp=False\nno_ct=False\nno_deprecated=False\nno_des=False\nno_dgram=False\nno_dh=False\nno_dsa=False\nno_dso=False\nno_ec=False\nno_ecdh=False\nno_ecdsa=False\nno_engine=False\nno_filenames=False\nno_fips=False\nno_gost=False\nno_idea=False\nno_legacy=False\nno_md2=True\nno_md4=False\nno_mdc2=False\nno_module=False\nno_ocsp=False\nno_pinshared=False\nno_rc2=False\nno_rc4=False\nno_rc5=False\nno_rfc3779=False\nno_rmd160=False\nno_seed=False\nno_sm2=False\nno_sm3=False\nno_sm4=False\nno_sock=False\nno_srp=False\nno_srtp=False\nno_sse2=False\nno_ssl=False\nno_ssl3=False\nno_stdio=False\nno_threads=False\nno_tls1=False\nno_ts=False\nno_whirlpool=False\nno_zlib=False\nopenssldir=None\nshared=False\ntls_security_level=None\nzlib:fPIC=True\nzlib:shared=False",
+    "package_id": "772675ace4978e609416253f5f352cadffbfbb53",
+    "requires": [
+     "2"
+    ],
+    "context": "host"
+   },
+   "7": {
+    "ref": "libpq/15.4",
+    "options": "disable_rpath=False\nfPIC=True\nshared=False\nwith_openssl=False",
+    "package_id": "2a19826344ff00be1c04403f2f8e7008ed3a7cc6",
+    "context": "host"
+   },
+   "8": {
+    "ref": "libmysqlclient/8.1.0",
+    "options": "fPIC=True\nshared=False\nlz4:fPIC=True\nlz4:shared=False\nopenssl:386=False\nopenssl:enable_trace=False\nopenssl:enable_weak_ssl_ciphers=False\nopenssl:fPIC=True\nopenssl:no_apps=False\nopenssl:no_aria=False\nopenssl:no_asm=False\nopenssl:no_async=False\nopenssl:no_autoload_config=False\nopenssl:no_bf=False\nopenssl:no_blake2=False\nopenssl:no_camellia=False\nopenssl:no_cast=False\nopenssl:no_chacha=False\nopenssl:no_cms=False\nopenssl:no_comp=False\nopenssl:no_ct=False\nopenssl:no_deprecated=False\nopenssl:no_des=False\nopenssl:no_dgram=False\nopenssl:no_dh=False\nopenssl:no_dsa=False\nopenssl:no_dso=False\nopenssl:no_ec=False\nopenssl:no_ecdh=False\nopenssl:no_ecdsa=False\nopenssl:no_engine=False\nopenssl:no_filenames=False\nopenssl:no_fips=False\nopenssl:no_gost=False\nopenssl:no_idea=False\nopenssl:no_legacy=False\nopenssl:no_md2=True\nopenssl:no_md4=False\nopenssl:no_mdc2=False\nopenssl:no_module=False\nopenssl:no_ocsp=False\nopenssl:no_pinshared=False\nopenssl:no_rc2=False\nopenssl:no_rc4=False\nopenssl:no_rc5=False\nopenssl:no_rfc3779=False\nopenssl:no_rmd160=False\nopenssl:no_seed=False\nopenssl:no_sm2=False\nopenssl:no_sm3=False\nopenssl:no_sm4=False\nopenssl:no_sock=False\nopenssl:no_srp=False\nopenssl:no_srtp=False\nopenssl:no_sse2=False\nopenssl:no_ssl=False\nopenssl:no_ssl3=False\nopenssl:no_stdio=False\nopenssl:no_threads=False\nopenssl:no_tls1=False\nopenssl:no_ts=False\nopenssl:no_whirlpool=False\nopenssl:no_zlib=False\nopenssl:openssldir=None\nopenssl:shared=False\nopenssl:tls_security_level=None\nzlib:fPIC=True\nzlib:shared=False\nzstd:build_programs=True\nzstd:fPIC=True\nzstd:shared=False\nzstd:threading=True",
+    "package_id": "fa72dd8aafc989c2eefcb1d5933a7a6f312c1c1a",
+    "requires": [
+     "6",
+     "2",
+     "9",
+     "10"
+    ],
+    "context": "host"
+   },
+   "9": {
+    "ref": "zstd/1.5.5",
+    "options": "build_programs=True\nfPIC=True\nshared=False\nthreading=True",
+    "package_id": "1b177e416597e90db2922415c5ce0fe8e7df6e75",
+    "context": "host"
+   },
+   "10": {
+    "ref": "lz4/1.9.4",
+    "options": "fPIC=True\nshared=False",
+    "package_id": "2a19826344ff00be1c04403f2f8e7008ed3a7cc6",
+    "context": "host"
+   }
+  },
+  "revisions_enabled": false
+ },
+ "version": "0.4",
+ "profile_host": "[settings]\narch=x86_64\narch_build=x86_64\nbuild_type=Release\ncompiler=gcc\ncompiler.libcxx=libstdc++\ncompiler.version=12\nos=Linux\nos_build=Linux\n[options]\n[build_requires]\n[env]\n"
+}

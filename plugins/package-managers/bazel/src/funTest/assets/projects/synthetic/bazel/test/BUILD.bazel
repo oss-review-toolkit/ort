@@ -1,0 +1,11 @@
+cc_test(
+    name = "test",
+    srcs = glob([
+        "*.cc",
+    ]),
+    deps = [
+        "//lib:cookie-jar",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+

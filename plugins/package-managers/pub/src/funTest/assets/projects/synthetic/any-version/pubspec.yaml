@@ -1,0 +1,22 @@
+name: version_any
+description: A Sample project that is using dependencies without fixed versions
+version: 0.1.0
+authors:
+- "Marlon Hille <marlon.hille@here.com>"
+- "Another Author"
+- "<mail.only@test.example>"
+homepage: http://oss-review-toolkit.org/
+repository: https://github.com/oss-review-toolkit/ort.git
+
+dependencies:
+  # common dart lib using "any" version
+  protobuf: any
+  # common dart lib using range based version
+  async: ">=1.10.0 <3.0.0"
+
+dev_dependencies:
+  # dart unit tests
+  test: any
+
+environment:
+  sdk: ">=2.12.0 <4.0.0"

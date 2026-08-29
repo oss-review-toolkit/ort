@@ -1,0 +1,79 @@
+---
+project:
+  id: "GoMod::my-module:<REPLACE_VCS_REVISION>"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "main"
+    dependencies:
+    - id: "Go::github.com/klauspost/shutdown2:1.1.0"
+      linkage: "PROJECT_STATIC"
+  - name: "vendor"
+    dependencies:
+    - id: "Go::github.com/klauspost/shutdown2:1.1.0"
+      linkage: "PROJECT_STATIC"
+packages:
+- id: "Go::github.com/klauspost/shutdown2:1.1.0"
+  purl: "pkg:golang/github.com/klauspost/shutdown2@1.1.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/klauspost/shutdown2"
+    revision: "8cffc584385a89235a56e64a8f610ced202c1da0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/klauspost/shutdown2.git"
+    revision: "8cffc584385a89235a56e64a8f610ced202c1da0"
+    path: ""
+- id: "Go::golang.org/x/net:0.37.0"
+  purl: "pkg:golang/golang.org/x/net@0.37.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://go.googlesource.com/net"
+    revision: "99b3ae0643f9a2f9d820fcbba5f9e4c83b23bd48"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://go.googlesource.com/net"
+    revision: "99b3ae0643f9a2f9d820fcbba5f9e4c83b23bd48"
+    path: ""

@@ -1,0 +1,26 @@
+{
+  "id" : "b5481b47-6b8c-4ae5-9d4c-31c16f32beca",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"remove_uploaded_content\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_2_20201203_090342\",\"filename\":\"missing.zip\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scans_remove_uploaded_content\",\"status\":\"0\",\"data\":[{\"code\":\"RequestData.Traits.PathTrait.filename_is_not_valid\",\"message\":\"The filename is not valid\",\"message_parameters\":[]}],\"error\":\"RequestData.Base.issues_while_parsing_request\",\"message\":\"These issues were found while parsing the request:\",\"message_parameters\":[]}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 05 Dec 2021 11:54:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "b5481b47-6b8c-4ae5-9d4c-31c16f32beca",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

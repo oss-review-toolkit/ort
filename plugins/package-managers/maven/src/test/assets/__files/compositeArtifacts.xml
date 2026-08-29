@@ -1,0 +1,10 @@
+<?compositeArtifactRepository version='1.0.0'?>
+<repository name="Test ORT Composite Site R20250310" type="org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository" version="1.0.0">
+    <properties size="1">
+        <property name="p2.timestamp" value="20211213173813"/>
+    </properties>
+    <children size="2">
+        <child location="../../child/repository"/>
+        <child location="https://p2.example.org/test/repository"/>
+    </children>
+</repository>

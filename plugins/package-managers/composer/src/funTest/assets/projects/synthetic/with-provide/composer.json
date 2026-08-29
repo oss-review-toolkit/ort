@@ -1,0 +1,44 @@
+{
+    "name": "ort/composer-test-project",
+    "description": "A simple project for parsing composer projects in oss-review-toolkit",
+    "homepage": "https://github.com/oss-review-toolkit/ort",
+    "version": "0.1.0",
+    "license": ["Apache-2.0","MIT"],
+    "require": {
+        "ort/child": "*",
+        "ort/virtual1": "*",
+        "ort/virtual2": "1.0.0"
+    },
+    "require-dev": {},
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "ort/child",
+                "version": "1.0.0",
+                "dist": {
+                    "url": "composer.phar",
+                    "type": "file"
+                },
+                "provide": {
+                    "ort/virtual2": "2.0.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "ort/virtual2",
+                "version": "1.0.0",
+                "dist": {
+                    "url": "composer.phar",
+                    "type": "file"
+                }
+            }
+        }
+
+    ],
+    "provide": {
+        "ort/virtual1": "*"
+    }
+}

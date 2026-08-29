@@ -1,0 +1,50 @@
+# Ignore Docker-related files to avoid the cache being invalidated if the files are changed during development.
+.dockerignore
+Dockerfile*
+scripts/docker_*.sh
+
+# Ignore GitHub configuration to avoid the cache being invalidated if the files are changed during development.
+.github/
+
+# Ignore the Jenkinsfile to avoid the cache being invalidated if the file is changed during development.
+integrations/jenkins/Jenkinsfile
+
+# Ignore miscellaneous top-level configuration files that do not have an impact on ORT's build.
+.codecov.yml
+.commitlintrc.yml
+.editorconfig
+.mailmap
+.markdownlint-cli2.yaml
+.markdownlint.yaml
+.ort.yml
+mlc_config.json
+qodana.yml
+renovate.json
+
+# Ignore Git entries.
+.git/
+.gitignore
+
+# Ignore IntelliJ IDEA files.
+.idea/
+*.iml
+
+# Ignore intermediate build artifacts.
+**/.gradle/
+**/.kotest/
+**/build/
+!docker/build
+**/out/
+plugins/reporters/web-app-template/node_modules/
+
+# Ignore the logos as we do not need them to run ORT.
+logos/
+
+# Ignore test directories as we do not need them to run ORT.
+**/src/*[Tt]est/
+
+# Ignore macOS-specific files.
+.DS_Store
+
+# Ignore CI linters.
+.hadolint.yaml

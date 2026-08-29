@@ -1,0 +1,18 @@
+{
+  "name": "pnpm-workspaces",
+  "version": "1.0.1",
+  "private": true,
+  "description": "PNPM workspaces test",
+  "author": "Marcel Bochtler",
+  "license": "MIT",
+  "main": "index.js",
+  "engines": {
+    "node": ">16.0.0"
+  },
+  "packageManager": "pnpm@10.29.2",
+  "scripts": {},
+  "dependencies": {
+    "json-stable-stringify": "1.0.1",
+    "pnpm-workspaces": "link:"
+  }
+}

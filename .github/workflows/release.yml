@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to release from"
+        required: true
+        type: string
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.logging.stacktrace=all
+
+jobs:
+  publish:
+    env:
+      ORT_VERSION: ${{ inputs.tag || github.ref_name }}
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.ORT_VERSION }}
+          fetch-depth: 0
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          dependency-graph: generate-and-submit
+      - name: Build ORT Distributions
+        env:
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+        run: ./gradlew :cli:signDistTar :cli:signDistZip :cli-helper:signDistTar :cli-helper:signDistZip
+      - name: Generate Release Notes
+        run: ./gradlew -q printChangeLog > RELEASE_NOTES.md
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create $ORT_VERSION --notes-file RELEASE_NOTES.md \
+              ./cli/build/distributions/ort-$ORT_VERSION.{tgz,zip}* \
+              ./cli-helper/build/distributions/orth-$ORT_VERSION.{tgz,zip}*
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            ./cli/build/distributions/ort-${{ env.ORT_VERSION }}.tgz
+            ./cli/build/distributions/ort-${{ env.ORT_VERSION }}.zip
+            ./cli-helper/build/distributions/orth-${{ env.ORT_VERSION }}.tgz
+            ./cli-helper/build/distributions/orth-${{ env.ORT_VERSION }}.zip
+      - name: Publish to Maven Central
+        env:
+          GITHUB_DEPENDENCY_GRAPH_REF: refs/heads/main
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signAllPublications: true
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_SONATYPE_CONNECT_TIMEOUT_SECONDS: 300
+          ORG_GRADLE_PROJECT_SONATYPE_CLOSE_TIMEOUT_SECONDS: 3600
+        run: ./gradlew publishAndReleaseToMavenCentral

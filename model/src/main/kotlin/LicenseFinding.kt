@@ -1,0 +1,70 @@
+/*
+ * Copyright (C) 2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.model
+
+import com.fasterxml.jackson.annotation.JsonInclude
+
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
+
+/**
+ * A class representing a license finding. License findings can point to single licenses or to complex
+ * [SpdxExpression]s, depending on the capabilities of the used license scanner. [LicenseFindingCuration]s can also be
+ * used to create findings with complex expressions.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class LicenseFinding(
+    /**
+     * The found license as an SPDX expression.
+     */
+    val license: SpdxExpression,
+
+    /**
+     * The text location where the license was found.
+     */
+    val location: TextLocation,
+
+    /**
+     * The score of a license finding. Its exact meaning is scanner-specific, but it should give some hint at how much
+     * the finding can be relied on / how confident the scanner is to be right. In most cases this is a percentage where
+     * 100.0 means that the scanner is 100% confident that the finding is correct.
+     */
+    val score: Float? = null
+) {
+    companion object {
+        val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
+            .thenByDescending { it.score }
+    }
+
+    constructor(license: String, location: TextLocation, score: Float? = null) : this(license.toSpdx(), location, score)
+}
+
+/**
+ * Apply [mapping] from the [org.ossreviewtoolkit.model.config.ScannerConfiguration] to any license String.
+ */
+fun String.mapLicense(mapping: Map<String, String>): String =
+    mapping.entries.fold(this) { result, (from, to) ->
+        val regex = """(^| |\()(${Regex.escape(from)})($| |\))""".toRegex()
+
+        regex.replace(result) {
+            "${it.groupValues[1]}$to${it.groupValues[3]}"
+        }
+    }

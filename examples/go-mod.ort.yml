@@ -1,0 +1,6 @@
+# This is an example for a (project specific) repository configuration file.
+excludes:
+  scopes:
+    - pattern: "vendor"
+      reason: "DEV_DEPENDENCY_OF"
+      comment: "Packages to build and test the main module."

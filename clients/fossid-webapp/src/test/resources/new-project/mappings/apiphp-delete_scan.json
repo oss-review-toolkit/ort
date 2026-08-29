@@ -1,0 +1,26 @@
+{
+  "id" : "d791fc9e-c440-4123-9267-72baab5019e9",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"delete\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342\",\"delete_identifications\":\"1\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scan_delete\",\"status\":\"1\",\"data\":\"2976\",\"message\":\"Scan name:  has been deleted.\"}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 15 Mar 2021 15:05:02 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "d791fc9e-c440-4123-9267-72baab5019e9",
+  "persistent" : true,
+  "insertionIndex" : 10
+}

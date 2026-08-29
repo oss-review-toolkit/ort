@@ -1,0 +1,67 @@
+# Commitlint configuration.
+# See: https://github.com/conventional-changelog/commitlint/blob/master/docs/reference/rules.md
+---
+parserPreset:
+  parserOpts:
+    headerPattern: '^(\w*)(?:\((.*)\))?!?: (.*)$'
+    breakingHeaderPattern: '^(\w*)(?:\((.*)\))?!: (.*)$'
+    headerCorrespondence: ['type', 'scope', 'subject']
+    noteKeywords: ['BREAKING CHANGE', 'BREAKING-CHANGE', '\[\d+\]:', 'Signed-off-by:']
+    revertPattern: '/^(?:Revert|revert:)\s"?([\s\S]+?)"?\s*This reverts commit (\w*)\./i'
+    revertCorrespondence: ['header', 'hash']
+rules:
+  body-leading-blank:
+    - 2
+    - always
+  body-max-line-length:
+    - 2
+    - always
+    - 75
+  footer-leading-blank:
+    - 2
+    - always
+  header-max-length:
+    - 2
+    - always
+    - 75
+  scope-case:
+    - 0
+  subject-case:
+    - 1
+    - always
+    - - pascal-case
+      - sentence-case
+      - start-case
+      - upper-case
+  subject-empty:
+    - 2
+    - never
+  subject-full-stop:
+    - 2
+    - never
+    - .
+  type-case:
+    - 2
+    - always
+    - lower-case
+  type-empty:
+    - 2
+    - never
+  type-enum:
+    - 2
+    - always
+    - - build
+      - chore
+      - ci
+      - deps
+      - docs
+      - feat
+      - fix
+      - perf
+      - refactor
+      - revert
+      - style
+      - test
+  signed-off-by:
+    - 2
+    - always

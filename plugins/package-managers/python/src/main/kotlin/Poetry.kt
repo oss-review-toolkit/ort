@@ -1,0 +1,195 @@
+/*
+ * Copyright (C) 2022 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.packagemanagers.python
+
+import java.io.File
+
+import net.peanuuutz.tomlkt.Toml
+import net.peanuuutz.tomlkt.getStringOrNull
+import net.peanuuutz.tomlkt.getTableOrNull
+import net.peanuuutz.tomlkt.parseToTomlTable
+
+import org.apache.logging.log4j.kotlin.logger
+
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.div
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.withoutPrefix
+import org.ossreviewtoolkit.utils.common.withoutSuffix
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+
+import org.semver4j.Semver
+import org.semver4j.range.RangeListFactory
+
+private const val PROJECT_TYPE = "Poetry"
+
+internal object PoetryCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "poetry"
+
+    override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
+}
+
+/**
+ * The [Poetry](https://python-poetry.org/) package manager for Python.
+ */
+@OrtPlugin(
+    displayName = "Poetry",
+    summary = "The Poetry package manager for Python.",
+    factory = PackageManagerFactory::class
+)
+class Poetry(
+    override val descriptor: PluginDescriptor = PoetryFactory.descriptor, private val config: PipConfig
+) : PackageManager(PROJECT_TYPE) {
+    companion object {
+        /**
+         * The name of the build system requirements and information file used by modern Python packages.
+         */
+        internal const val PYPROJECT_FILENAME = "pyproject.toml"
+    }
+
+    // Usually, definition files should not contain (only) lockfiles, to also support the case when no lockfile is
+    // present. However, there currently is no way to distinguish a Poetry project from a vanilla Pip project without
+    // looking at the lockfile.
+    override val globsForDefinitionFiles = listOf("poetry.lock")
+
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        includes: Includes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
+        val scopeName = parseScopeNamesFromPyproject(definitionFile.resolveSibling(PYPROJECT_FILENAME))
+        val resultsForScopeName = scopeName.associateWith { inspectLockfile(definitionFile, it) }
+
+        val packages = resultsForScopeName
+            .flatMap { (_, results) -> results.packages }
+            .toOrtPackages()
+
+        val project = Project.EMPTY.copy(
+            id = Identifier(
+                type = projectType,
+                namespace = "",
+                name = definitionFile.relativeTo(analysisRoot).path,
+                version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            scopeDependencies = resultsForScopeName.mapTo(mutableSetOf()) { (scopeName, results) ->
+                Scope(scopeName, results.resolvedDependenciesGraph.toPackageReferences())
+            },
+            vcsProcessed = processProjectVcs(definitionFile.parentFile)
+        )
+
+        return listOf(ProjectAnalyzerResult(project, packages))
+    }
+
+    /**
+     * Return the result of running Python inspector against a requirements file generated by exporting the dependencies
+     * in [lockfile] with the scope named [dependencyGroupName] via the `poetry export` command.
+     */
+    private fun inspectLockfile(lockfile: File, dependencyGroupName: String): PythonInspector.Result {
+        val workingDir = lockfile.parentFile
+        val requirementsFile = createOrtTempFile("requirements", ".txt")
+
+        logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
+
+        val options = listOf(
+            "export",
+            "--without-hashes",
+            "--format=requirements.txt",
+            "--only=$dependencyGroupName"
+        )
+
+        val requirements = PoetryCommand.run(workingDir, *options.toTypedArray()).requireSuccess().stdout
+        requirementsFile.writeText(requirements)
+
+        return Pip(config = config, projectType = projectType).runPythonInspector(requirementsFile) {
+            detectPythonVersion(workingDir)
+        }.also {
+            requirementsFile.parentFile.safeDeleteRecursively()
+        }
+    }
+
+    private fun detectPythonVersion(workingDir: File): String? {
+        val pyprojectFile = workingDir / PYPROJECT_FILENAME
+        val constraint = getPythonVersionConstraint(pyprojectFile) ?: return null
+        return getPythonVersion(constraint)?.also {
+            logger.info { "Detected Python version '$it' from '$constraint'." }
+        }
+    }
+}
+
+internal fun parseScopeNamesFromPyproject(pyprojectFile: File): Set<String> {
+    // The implicit "main" scope is always present.
+    val scopes = mutableSetOf("main")
+
+    if (!pyprojectFile.isFile) return scopes
+
+    pyprojectFile.readLines().mapNotNullTo(scopes) { line ->
+        // Handle both "[tool.poetry.<scope>-dependencies]" and "[tool.poetry.group.<scope>.dependencies]" syntax.
+        val poetryEntry = line.withoutPrefix("[tool.poetry.")
+        poetryEntry.withoutPrefix("group.") { poetryEntry }
+            .withoutSuffix("dependencies]")
+            ?.trimEnd('-', '.')
+            ?.takeUnless { it.isEmpty() }
+    }
+
+    return scopes
+}
+
+internal fun getPythonVersion(constraint: String): String? {
+    val rangeLists = constraint.split(',')
+        .map { RangeListFactory.create(it) }
+        .takeIf { it.isNotEmpty() } ?: return null
+
+    return PythonInspector.getSupportedPythonVersions().lastOrNull { version ->
+        rangeLists.all { rangeList ->
+            val semver = Semver.coerce(version)
+            semver != null && rangeList.isSatisfiedBy(semver)
+        }
+    }
+}
+
+internal fun getPythonVersionConstraint(pyprojectTomlFile: File): String? {
+    if (!pyprojectTomlFile.isFile) return null
+
+    val config = runCatching { Toml.parseToTomlTable(pyprojectTomlFile.reader()) }.getOrElse { return null }
+    val requiresPython = config.getTableOrNull("project")?.getStringOrNull("requires-python")
+    val toolPython = config.getTableOrNull("tool")?.getTableOrNull("poetry")?.getTableOrNull("dependencies")
+        ?.getStringOrNull("python")
+
+    return requiresPython ?: toolPython
+}

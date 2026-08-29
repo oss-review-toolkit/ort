@@ -1,0 +1,18 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "purl": "pkg:maven/junit/junit@4.12",
+      "affected_by_vulnerabilities": [
+        {
+          "advisory_id": "GHSA-269g-pwp5-87pp",
+          "advisory_uid": "github_osv/GHSA-269g-pwp5-87pp",
+          "resource_url": "http://public.vulnerablecode.io/advisories/github_osv/GHSA-269g-pwp5-87pp"
+        }
+      ],
+      "fixing_vulnerabilities": []
+    }
+  ]
+}

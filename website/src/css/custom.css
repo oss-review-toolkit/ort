@@ -1,0 +1,50 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('/fonts/FiraSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('/fonts/FiraCode-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-font-family-base: 'Fira Sans', sans-serif;
+  --ifm-font-family-monospace: 'Fira Code', monospace;
+  --ifm-color-primary: #26a5a1;
+  --ifm-color-primary-dark: #229794;
+  --ifm-color-primary-darker: #208c89;
+  --ifm-color-primary-darkest: #1d7e7b;
+  --ifm-color-primary-light: #27aaa6;
+  --ifm-color-primary-lighter: #2ab8b4;
+  --ifm-color-primary-lightest: #31d6d1;
+  --ifm-code-font-size: 95%;
+  --ifm-hero-text-color: #ffffff;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #27aaa6;
+  --ifm-color-primary-dark: #26a5a1;
+  --ifm-color-primary-darker: #229794;
+  --ifm-color-primary-darkest: #208c89;
+  --ifm-color-primary-light: #2ab8b4;
+  --ifm-color-primary-lighter: #31d6d1;
+  --ifm-color-primary-lightest: #36ece7;
+  --ifm-hero-text-color: #000000;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}

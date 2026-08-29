@@ -1,0 +1,14 @@
+{
+  "name": "pnpm-nested-sub-project",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oss-review-toolkit/ort.git"
+  },
+  "license": "Apache-2.0",
+  "author": "The Author <the.author@mail.example> (https://www.the.author.example/index.html)",
+  "description": "A sub project nested in another one",
+  "dependencies": {
+    "proxy-from-env": "~1.1.0"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "npm-node-modules",
+  "version": "1.0.0",
+  "description": "NPM test project with existing node_modules directory.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oss-review-toolkit/ort.git"
+  },
+  "license": "Apache-2.0",
+  "author": "The Author",
+  "private": true,
+  "dependencies": {
+    "long": "^3.2.0",
+    "cheerio": "1.0.0-rc.1",
+    "web-animations-js": "github:web-animations/web-animations-js#2.3.2"
+  },
+  "devDependencies": {
+    "cson": "~4.1.0"
+  },
+  "optionalDependencies": {
+    "promise": "~7.3.1"
+  },
+  "packageManager": "npm@11.17.0"
+}

@@ -1,0 +1,3 @@
+name = "local_pkg"
+version = "2.0.0"
+licences = ["Apache-2.0"]

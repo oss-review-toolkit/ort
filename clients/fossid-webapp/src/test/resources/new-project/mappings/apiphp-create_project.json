@@ -1,0 +1,26 @@
+{
+  "id" : "f8285bc1-a6b1-4210-b21f-eba35ede3b3e",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"create\",\"group\":\"projects\",\"data\":{\"username\":\"\",\"key\":\"\",\"project_code\":\"semver4j\",\"project_name\":\"semver4j\",\"comment\":\"Created by ORT\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"insert\",\"status\":\"1\",\"data\":{\"project_id\":405},\"message\":\"Project semver4j has been created.\"}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "f8285bc1-a6b1-4210-b21f-eba35ede3b3e",
+  "persistent" : true,
+  "insertionIndex" : 3
+}

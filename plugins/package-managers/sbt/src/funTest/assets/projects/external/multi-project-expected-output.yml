@@ -1,0 +1,1265 @@
+---
+projects:
+- id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
+  definition_file_path: "common/target-scala-2.12-common_2.12-0.1.0-SNAPSHOT.pom"
+  authors:
+  - "com.pbassiner"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+    path: "common"
+  homepage_url: ""
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
+      dependencies:
+      - id: "Maven:ch.qos.logback:logback-core:1.2.3"
+      - id: "Maven:org.slf4j:slf4j-api:1.7.25"
+    - id: "Maven:com.typesafe:config:1.3.1"
+    - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
+      dependencies:
+      - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
+      - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
+        dependencies:
+        - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
+      - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
+    - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
+      dependencies:
+      - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
+    - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
+      dependencies:
+      - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
+        dependencies:
+        - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
+        - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
+    - id: "Maven:org.scala-lang:scala-library:2.12.15"
+    - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+  - name: "test"
+    dependencies:
+    - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
+      dependencies:
+      - id: "Maven:org.scala-sbt:test-interface:1.0"
+    - id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
+      dependencies:
+      - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
+      - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
+      - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
+- id: "SBT:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT"
+  definition_file_path: "multi1/target-scala-2.12-multi1_2.12-0.1.0-SNAPSHOT.pom"
+  authors:
+  - "com.pbassiner"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+    path: "multi1"
+  homepage_url: ""
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
+      dependencies:
+      - id: "Maven:ch.qos.logback:logback-core:1.2.3"
+      - id: "Maven:org.slf4j:slf4j-api:1.7.25"
+    - id: "Maven:com.github.julien-truffaut:monocle-core_2.12:1.4.0"
+      dependencies:
+      - id: "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
+    - id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
+      dependencies:
+      - id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
+    - id: "Maven:com.typesafe:config:1.3.1"
+    - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
+      dependencies:
+      - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
+      - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
+        dependencies:
+        - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
+      - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
+    - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
+      dependencies:
+      - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
+    - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
+      dependencies:
+      - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
+        dependencies:
+        - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
+        - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
+    - id: "Maven:org.scala-lang:scala-library:2.12.15"
+    - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+    - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
+      linkage: "PROJECT_DYNAMIC"
+  - name: "test"
+    dependencies:
+    - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
+      dependencies:
+      - id: "Maven:org.scala-sbt:test-interface:1.0"
+    - id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
+      dependencies:
+      - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
+      - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
+      - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
+- id: "SBT:com.pbassiner:multi2_2.12:0.1.0-SNAPSHOT"
+  definition_file_path: "multi2/target-scala-2.12-multi2_2.12-0.1.0-SNAPSHOT.pom"
+  authors:
+  - "com.pbassiner"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+    path: "multi2"
+  homepage_url: ""
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
+      dependencies:
+      - id: "Maven:ch.qos.logback:logback-core:1.2.3"
+      - id: "Maven:org.slf4j:slf4j-api:1.7.25"
+    - id: "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
+      dependencies:
+      - id: "Maven:com.chuusai:shapeless_2.12:2.3.2"
+      - id: "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"
+        dependencies:
+        - id: "Maven:org.scala-lang:scala-compiler:2.12.3"
+        - id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
+    - id: "Maven:com.typesafe:config:1.3.1"
+    - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
+      dependencies:
+      - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
+      - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
+        dependencies:
+        - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
+      - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
+    - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
+      dependencies:
+      - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
+    - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
+      dependencies:
+      - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
+        dependencies:
+        - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
+        - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
+    - id: "Maven:org.scala-lang:scala-library:2.12.15"
+    - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+    - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
+      linkage: "PROJECT_DYNAMIC"
+  - name: "test"
+    dependencies:
+    - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
+      dependencies:
+      - id: "Maven:org.scala-sbt:test-interface:1.0"
+    - id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
+      dependencies:
+      - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
+      - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
+      - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
+- id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1.0-SNAPSHOT"
+  definition_file_path: "target-scala-2.12-sbt-multi-project-example_2.12-0.1.0-SNAPSHOT.pom"
+  authors:
+  - "com.pbassiner"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+    path: ""
+  homepage_url: ""
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Maven:org.scala-lang:scala-library:2.12.15"
+packages:
+- id: "Maven:ch.qos.logback:logback-classic:1.2.3"
+  purl: "pkg:maven/ch.qos.logback/logback-classic@1.2.3"
+  authors:
+  - "Ceki Gulcu"
+  - "Joern Huxhorn"
+  - "QOS.ch"
+  declared_licenses:
+  - "Eclipse Public License - v 1.0"
+  - "GNU Lesser General Public License"
+  declared_licenses_processed:
+    spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
+    mapped:
+      Eclipse Public License - v 1.0: "EPL-1.0"
+      GNU Lesser General Public License: "LGPL-2.1-or-later"
+  description: "logback-classic module"
+  homepage_url: "http://logback.qos.ch/logback-classic"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar"
+    hash:
+      value: "7c4f3c474fb2c041d8028740440937705ebb473a"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3-sources.jar"
+    hash:
+      value: "cfd5385e0c5ed1c8a5dce57d86e79cf357153a64"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:ceki/logback.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/ceki/logback.git"
+    revision: ""
+    path: ""
+- id: "Maven:ch.qos.logback:logback-core:1.2.3"
+  purl: "pkg:maven/ch.qos.logback/logback-core@1.2.3"
+  authors:
+  - "Ceki Gulcu"
+  - "Joern Huxhorn"
+  - "QOS.ch"
+  declared_licenses:
+  - "Eclipse Public License - v 1.0"
+  - "GNU Lesser General Public License"
+  declared_licenses_processed:
+    spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
+    mapped:
+      Eclipse Public License - v 1.0: "EPL-1.0"
+      GNU Lesser General Public License: "LGPL-2.1-or-later"
+  description: "logback-core module"
+  homepage_url: "http://logback.qos.ch/logback-core"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar"
+    hash:
+      value: "864344400c3d4d92dfeb0a305dc87d953677c03c"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3-sources.jar"
+    hash:
+      value: "3ebabe69eba0196af9ad3a814f723fb720b9101e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:ceki/logback.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/ceki/logback.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.chuusai:shapeless_2.12:2.3.2"
+  purl: "pkg:maven/com.chuusai/shapeless_2.12@2.3.2"
+  authors:
+  - "Miles Sabin"
+  - "com.chuusai"
+  declared_licenses:
+  - "Apache 2"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2: "Apache-2.0"
+  description: "core"
+  homepage_url: "https://github.com/milessabin/shapeless"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/chuusai/shapeless_2.12/2.3.2/shapeless_2.12-2.3.2.jar"
+    hash:
+      value: "27e115ffed7917b456e54891de67173f4a68d5f1"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/chuusai/shapeless_2.12/2.3.2/shapeless_2.12-2.3.2-sources.jar"
+    hash:
+      value: "6d83fa4fa6d25b1e8d8cd9d9d551c05c745633b1"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:milessabin/shapeless.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/milessabin/shapeless.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
+  purl: "pkg:maven/com.fasterxml.jackson.core/jackson-annotations@2.8.0"
+  authors:
+  - "Christopher Currie"
+  - "FasterXML"
+  - "Paul Brown"
+  - "Tatu Saloranta"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Core annotations used for value types, used by Jackson data binding\
+    \ package."
+  homepage_url: "http://github.com/FasterXML/jackson"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-annotations/2.8.0/jackson-annotations-2.8.0.jar"
+    hash:
+      value: "45b426f7796b741035581a176744d91090e2e6fb"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-annotations/2.8.0/jackson-annotations-2.8.0-sources.jar"
+    hash:
+      value: "29a1a95363d497e856c0a7d682e4f7973e334068"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:FasterXML/jackson-annotations.git"
+    revision: "jackson-annotations-2.8.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/FasterXML/jackson-annotations.git"
+    revision: "jackson-annotations-2.8.0"
+    path: ""
+- id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
+  purl: "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.8.9"
+  authors:
+  - "Christopher Currie"
+  - "FasterXML"
+  - "Paul Brown"
+  - "Tatu Saloranta"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Core Jackson abstractions, basic JSON streaming API implementation"
+  homepage_url: "https://github.com/FasterXML/jackson-core"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-core/2.8.9/jackson-core-2.8.9.jar"
+    hash:
+      value: "569b1752705da98f49aabe2911cc956ff7d8ed9d"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-core/2.8.9/jackson-core-2.8.9-sources.jar"
+    hash:
+      value: "8cf3613202ddcd495137f8cb944e2da69964a641"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:FasterXML/jackson-core.git"
+    revision: "jackson-core-2.8.9"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/FasterXML/jackson-core.git"
+    revision: "jackson-core-2.8.9"
+    path: ""
+- id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
+  purl: "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.8.9"
+  authors:
+  - "Christopher Currie"
+  - "FasterXML"
+  - "Paul Brown"
+  - "Tatu Saloranta"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "General data-binding functionality for Jackson: works on core streaming\
+    \ API"
+  homepage_url: "http://github.com/FasterXML/jackson"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-databind/2.8.9/jackson-databind-2.8.9.jar"
+    hash:
+      value: "4dfca3975be3c1a98eacb829e70f02e9a71bc159"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-databind/2.8.9/jackson-databind-2.8.9-sources.jar"
+    hash:
+      value: "98e1b4171628d8f230f6a60b248de84ed04fab0d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:FasterXML/jackson-databind.git"
+    revision: "jackson-databind-2.8.9"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/FasterXML/jackson-databind.git"
+    revision: "jackson-databind-2.8.9"
+    path: ""
+- id: "Maven:com.github.julien-truffaut:monocle-core_2.12:1.4.0"
+  purl: "pkg:maven/com.github.julien-truffaut/monocle-core_2.12@1.4.0"
+  authors:
+  - "Ilan Godik"
+  - "Julien Truffaut"
+  - "Kenji Yoshida"
+  - "Naoki Aoyama"
+  - "com.github.julien-truffaut"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "core"
+  homepage_url: "https://github.com/julien-truffaut/Monocle"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/github/julien-truffaut/monocle-core_2.12/1.4.0/monocle-core_2.12-1.4.0.jar"
+    hash:
+      value: "219da9cc75878a75c888e38ad883fe4d30a7651d"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/github/julien-truffaut/monocle-core_2.12/1.4.0/monocle-core_2.12-1.4.0-sources.jar"
+    hash:
+      value: "37d333798ca15a03f5dfbb02f133d5b6b8e57b8c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:julien-truffaut/Monocle.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/julien-truffaut/Monocle.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
+  purl: "pkg:maven/com.github.julien-truffaut/monocle-macro_2.12@1.4.0"
+  authors:
+  - "Ilan Godik"
+  - "Julien Truffaut"
+  - "Kenji Yoshida"
+  - "Naoki Aoyama"
+  - "com.github.julien-truffaut"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "macros"
+  homepage_url: "https://github.com/julien-truffaut/Monocle"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/github/julien-truffaut/monocle-macro_2.12/1.4.0/monocle-macro_2.12-1.4.0.jar"
+    hash:
+      value: "319242d130983fec319a2e2d4f8e7741b809b5a0"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/github/julien-truffaut/monocle-macro_2.12/1.4.0/monocle-macro_2.12-1.4.0-sources.jar"
+    hash:
+      value: "e7ce64d7973ad64f3fa872b931a31c8c25de59b3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:julien-truffaut/Monocle.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/julien-truffaut/Monocle.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"
+  purl: "pkg:maven/com.github.pureconfig/pureconfig-macros_2.12@0.8.0"
+  authors:
+  - "Rui Gonçalves"
+  - "com.github.pureconfig"
+  declared_licenses:
+  - "Mozilla Public License, version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "MPL-2.0"
+    mapped:
+      Mozilla Public License, version 2.0: "MPL-2.0"
+  description: "pureconfig-macros"
+  homepage_url: "https://github.com/pureconfig/pureconfig"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/github/pureconfig/pureconfig-macros_2.12/0.8.0/pureconfig-macros_2.12-0.8.0.jar"
+    hash:
+      value: "eea0e86f18c08e7fd00c90626f4f17a9ee6ef088"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/github/pureconfig/pureconfig-macros_2.12/0.8.0/pureconfig-macros_2.12-0.8.0-sources.jar"
+    hash:
+      value: "7411f96540756236648b48347827b6ba2622e5e0"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:pureconfig/pureconfig.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/pureconfig/pureconfig.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
+  purl: "pkg:maven/com.github.pureconfig/pureconfig_2.12@0.8.0"
+  authors:
+  - "Derek Morr"
+  - "Joao Azevedo"
+  - "Leif Wickland"
+  - "Mario Pastorelli"
+  - "Rui Gonçalves"
+  - "com.github.pureconfig"
+  declared_licenses:
+  - "Mozilla Public License, version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "MPL-2.0"
+    mapped:
+      Mozilla Public License, version 2.0: "MPL-2.0"
+  description: "pureconfig"
+  homepage_url: "https://github.com/pureconfig/pureconfig"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/github/pureconfig/pureconfig_2.12/0.8.0/pureconfig_2.12-0.8.0.jar"
+    hash:
+      value: "891fde63cda086f593bffddb0b47933abc75523f"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/github/pureconfig/pureconfig_2.12/0.8.0/pureconfig_2.12-0.8.0-sources.jar"
+    hash:
+      value: "fa6de3ab2dd82543fb37288626687a9a6c1a67a2"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:pureconfig/pureconfig.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/pureconfig/pureconfig.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.typesafe:config:1.3.1"
+  purl: "pkg:maven/com.typesafe/config@1.3.1"
+  authors:
+  - "Havoc Pennington"
+  - "com.typesafe"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "config"
+  homepage_url: "https://github.com/typesafehub/config"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/config/1.3.1/config-1.3.1.jar"
+    hash:
+      value: "2cf7a6cc79732e3bdf1647d7404279900ca63eb0"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/config/1.3.1/config-1.3.1-sources.jar"
+    hash:
+      value: "a27878630ff503b63ed25ff2a25fa8ef888740b3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/typesafehub/config.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/typesafehub/config.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
+  purl: "pkg:maven/com.typesafe/ssl-config-core_2.12@0.2.2"
+  authors:
+  - "Konrad Malawski"
+  - "Will Sargent"
+  - "com.typesafe"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "ssl-config-core"
+  homepage_url: "https://github.com/typesafehub/ssl-config"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/ssl-config-core_2.12/0.2.2/ssl-config-core_2.12-0.2.2.jar"
+    hash:
+      value: "8a357d491f7f94c5b4b1e0b27644e1306cc8742d"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/ssl-config-core_2.12/0.2.2/ssl-config-core_2.12-0.2.2-sources.jar"
+    hash:
+      value: "1baaec9149929d0970330aa80aca73e3f1f15624"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/typesafehub/ssl-config.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/typesafehub/ssl-config.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
+  purl: "pkg:maven/com.typesafe.akka/akka-actor_2.12@2.5.6"
+  authors:
+  - "Akka Contributors"
+  - "Lightbend Inc."
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "akka-actor"
+  homepage_url: "http://akka.io/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/akka/akka-actor_2.12/2.5.6/akka-actor_2.12-2.5.6.jar"
+    hash:
+      value: "1e9f4c1829d3ce5640c17164b1756d1e98eb7af3"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/akka/akka-actor_2.12/2.5.6/akka-actor_2.12-2.5.6-sources.jar"
+    hash:
+      value: "9642cf6f2a774d781e2f2a2e5de152971bfd714e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:akka/akka.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/akka/akka.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
+  purl: "pkg:maven/com.typesafe.akka/akka-stream_2.12@2.5.6"
+  authors:
+  - "Akka Contributors"
+  - "Lightbend Inc."
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "akka-stream"
+  homepage_url: "http://akka.io/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/akka/akka-stream_2.12/2.5.6/akka-stream_2.12-2.5.6.jar"
+    hash:
+      value: "876aa1471ac773a3dd02f70c1e511a9a014b3491"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/akka/akka-stream_2.12/2.5.6/akka-stream_2.12-2.5.6-sources.jar"
+    hash:
+      value: "14459df7523aea2cfd04080fe88eccd20897bcc5"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:akka/akka.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/akka/akka.git"
+    revision: ""
+    path: ""
+- id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
+  purl: "pkg:maven/com.typesafe.scala-logging/scala-logging_2.12@3.7.2"
+  authors:
+  - "Heiko Seeberger"
+  - "Mathias Bogaert"
+  - "com.typesafe.scala-logging"
+  declared_licenses:
+  - "Apache 2.0 License"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2.0 License: "Apache-2.0"
+  description: "scala-logging"
+  homepage_url: "https://github.com/typesafehub/scala-logging"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/scala-logging/scala-logging_2.12/3.7.2/scala-logging_2.12-3.7.2.jar"
+    hash:
+      value: "a1dc97509765287faa4747f7cb411f0b85dc9a34"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/com/typesafe/scala-logging/scala-logging_2.12/3.7.2/scala-logging_2.12-3.7.2-sources.jar"
+    hash:
+      value: "a5f760917b60283e37c84bf3db2aeaf976980ad3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/typesafehub/scala-logging.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/typesafehub/scala-logging.git"
+    revision: ""
+    path: ""
+- id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
+  purl: "pkg:maven/net.logstash.logback/logstash-logback-encoder@4.11"
+  authors:
+  - "John E. Vincent"
+  - "Nokia"
+  - "Phil Clay"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 OR MIT"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+      MIT License: "MIT"
+  description: "Logback encoder which will output events as Logstash-compatible JSON"
+  homepage_url: "https://github.com/logstash/logstash-logback-encoder"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/net/logstash/logback/logstash-logback-encoder/4.11/logstash-logback-encoder-4.11.jar"
+    hash:
+      value: "163b6b046de5414ac17c83cbd6cb619e541fc69a"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/net/logstash/logback/logstash-logback-encoder/4.11/logstash-logback-encoder-4.11-sources.jar"
+    hash:
+      value: "8b889d5eb55aabfa5d9aa9cad95529668f3edb2b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:logstash/logstash-logback-encoder.git"
+    revision: "logstash-logback-encoder-4.11"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/logstash/logstash-logback-encoder.git"
+    revision: "logstash-logback-encoder-4.11"
+    path: ""
+- id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
+  purl: "pkg:maven/org.reactivestreams/reactive-streams@1.0.1"
+  authors:
+  - "Reactive Streams SIG"
+  declared_licenses:
+  - "CC0"
+  declared_licenses_processed:
+    spdx_expression: "CC0-1.0"
+    mapped:
+      CC0: "CC0-1.0"
+  description: "A Protocol for Asynchronous Non-Blocking Data Sequence"
+  homepage_url: "http://www.reactive-streams.org/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/reactivestreams/reactive-streams/1.0.1/reactive-streams-1.0.1.jar"
+    hash:
+      value: "1b1c911686eb40179219466e6a59b634b9d7a748"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/reactivestreams/reactive-streams/1.0.1/reactive-streams-1.0.1-sources.jar"
+    hash:
+      value: "af471e34e448bd4f1c183e9b26c85679be11035c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:reactive-streams/reactive-streams.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/reactive-streams/reactive-streams.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scala-lang:scala-compiler:2.12.3"
+  purl: "pkg:maven/org.scala-lang/scala-compiler@2.12.3"
+  authors:
+  - "LAMP/EPFL"
+  - "Lightbend, Inc."
+  declared_licenses:
+  - "BSD 3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD 3-Clause: "BSD-3-Clause"
+  description: "Compiler for the Scala Programming Language"
+  homepage_url: "http://www.scala-lang.org/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar"
+    hash:
+      value: "b6b9ca202fc8405260d30e703b9790e91c75cd85"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3-sources.jar"
+    hash:
+      value: "b8fe133c260f72b7fe9889195e19efeeab1b8087"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/scala/scala.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/scala/scala.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scala-lang:scala-library:2.12.15"
+  purl: "pkg:maven/org.scala-lang/scala-library@2.12.15"
+  authors:
+  - "LAMP/EPFL"
+  - "Lightbend, Inc."
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Standard library for the Scala Programming Language"
+  homepage_url: "https://www.scala-lang.org/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/scala-library/2.12.15/scala-library-2.12.15.jar"
+    hash:
+      value: "0f2e89c89340282c9625ac57efb451056f31af57"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/scala-library/2.12.15/scala-library-2.12.15-sources.jar"
+    hash:
+      value: "5e789d895ee2b8b02577db7b6bbb5409798b7daf"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/scala/scala.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/scala/scala.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scala-lang:scala-reflect:2.12.2"
+  purl: "pkg:maven/org.scala-lang/scala-reflect@2.12.2"
+  authors:
+  - "LAMP/EPFL"
+  - "Lightbend, Inc."
+  declared_licenses:
+  - "BSD 3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD 3-Clause: "BSD-3-Clause"
+  description: "Compiler for the Scala Programming Language"
+  homepage_url: "http://www.scala-lang.org/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/scala-reflect/2.12.2/scala-reflect-2.12.2.jar"
+    hash:
+      value: "fa13c13351566738ff156ef8a56b869868f4b77e"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/scala-reflect/2.12.2/scala-reflect-2.12.2-sources.jar"
+    hash:
+      value: "a8808be417014e233b25ee44439f725e1f5e92a4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/scala/scala.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/scala/scala.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
+  purl: "pkg:maven/org.scala-lang.modules/scala-java8-compat_2.12@0.8.0"
+  authors:
+  - "EPFL"
+  - "Typesafe, Inc."
+  - "org.scala-lang.modules"
+  declared_licenses:
+  - "BSD 3-clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD 3-clause: "BSD-3-Clause"
+  description: "scala-java8-compat"
+  homepage_url: "http://www.scala-lang.org/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/modules/scala-java8-compat_2.12/0.8.0/scala-java8-compat_2.12-0.8.0.jar"
+    hash:
+      value: "1e6f1e745bf6d3c34d1e2ab150653306069aaf34"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/modules/scala-java8-compat_2.12/0.8.0/scala-java8-compat_2.12-0.8.0-sources.jar"
+    hash:
+      value: "0a33ce48278b9e3bbea8aed726e3c0abad3afadd"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/scala/scala-java8-compat.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/scala/scala-java8-compat.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
+  purl: "pkg:maven/org.scala-lang.modules/scala-parser-combinators_2.12@1.0.4"
+  authors:
+  - "EPFL"
+  - "Typesafe, Inc."
+  - "org.scala-lang.modules"
+  declared_licenses:
+  - "BSD 3-clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD 3-clause: "BSD-3-Clause"
+  description: "scala-parser-combinators"
+  homepage_url: "http://www.scala-lang.org/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/modules/scala-parser-combinators_2.12/1.0.4/scala-parser-combinators_2.12-1.0.4.jar"
+    hash:
+      value: "7c5f25a2d40ea7651452f0f0d1d4c12dabffcb8b"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/modules/scala-parser-combinators_2.12/1.0.4/scala-parser-combinators_2.12-1.0.4-sources.jar"
+    hash:
+      value: "9ec2f46c07d355853654af38e8b06e15ccca8cd0"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/scala/scala-parser-combinators.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/scala/scala-parser-combinators.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
+  purl: "pkg:maven/org.scala-lang.modules/scala-xml_2.12@1.0.5"
+  authors:
+  - "EPFL"
+  - "Typesafe, Inc."
+  - "org.scala-lang.modules"
+  declared_licenses:
+  - "BSD 3-clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD 3-clause: "BSD-3-Clause"
+  description: "scala-xml"
+  homepage_url: "http://www.scala-lang.org/"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/modules/scala-xml_2.12/1.0.5/scala-xml_2.12-1.0.5.jar"
+    hash:
+      value: "a2b2afbeea86818a911b05851bb11d7d4840bb75"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-lang/modules/scala-xml_2.12/1.0.5/scala-xml_2.12-1.0.5-sources.jar"
+    hash:
+      value: "d12864d1a73aa540f7b624c8a92a5f48783c342c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/scala/scala-xml.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/scala/scala-xml.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scala-sbt:test-interface:1.0"
+  purl: "pkg:maven/org.scala-sbt/test-interface@1.0"
+  authors:
+  - "Bill Venners"
+  - "Chua Chee Seng"
+  - "Josh Cough"
+  - "Mark Harrah"
+  - "org.scala-sbt"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "Uniform test interface to Scala/Java test frameworks (specs, ScalaCheck,\
+    \ ScalaTest, JUnit and other)"
+  homepage_url: "http://www.scala-sbt.org"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar"
+    hash:
+      value: "0a3f14d010c4cb32071f863d97291df31603b521"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar"
+    hash:
+      value: "d44b23e9e3419ad0e00b91bba764a48d43075000"
+      algorithm: "SHA-1"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sbt/test-interface.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
+  purl: "pkg:maven/org.scalacheck/scalacheck_2.12@1.13.5"
+  authors:
+  - "Rickard Nilsson"
+  - "org.scalacheck"
+  declared_licenses:
+  - "BSD-style"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD-style: "BSD-3-Clause"
+  description: "scalacheck"
+  homepage_url: "http://www.scalacheck.org"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scalacheck/scalacheck_2.12/1.13.5/scalacheck_2.12-1.13.5.jar"
+    hash:
+      value: "fff972ccaa0d83ca53bfdbbd0763c1059281fb76"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scalacheck/scalacheck_2.12/1.13.5/scalacheck_2.12-1.13.5-sources.jar"
+    hash:
+      value: "d0e1376902de65c7fa327f455b61d5d71957d78e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:rickynils/scalacheck.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/rickynils/scalacheck.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
+  purl: "pkg:maven/org.scalactic/scalactic_2.12@3.0.4"
+  authors:
+  - "Bill Venners"
+  - "Chua Chee Seng"
+  - "George Berger"
+  - "org.scalactic"
+  declared_licenses:
+  - "the Apache License, ASL Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      the Apache License, ASL Version 2.0: "Apache-2.0"
+  description: "scalactic"
+  homepage_url: "http://www.scalatest.org"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scalactic/scalactic_2.12/3.0.4/scalactic_2.12-3.0.4.jar"
+    hash:
+      value: "e75f0f9c77aa391e01797cfc42fb82fd7c7d59a5"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scalactic/scalactic_2.12/3.0.4/scalactic_2.12-3.0.4-sources.jar"
+    hash:
+      value: "9f7f02217c7d2f14c6b1982493c39243a20b749d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:scalatest/scalatest.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/scalatest/scalatest.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
+  purl: "pkg:maven/org.scalatest/scalatest_2.12@3.0.4"
+  authors:
+  - "Bill Venners"
+  - "Chua Chee Seng"
+  - "George Berger"
+  - "org.scalatest"
+  declared_licenses:
+  - "the Apache License, ASL Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      the Apache License, ASL Version 2.0: "Apache-2.0"
+  description: "scalatest"
+  homepage_url: "http://www.scalatest.org"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scalatest/scalatest_2.12/3.0.4/scalatest_2.12-3.0.4.jar"
+    hash:
+      value: "87d68f3d06dbf698fd0084c0a8b8996864d15465"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scalatest/scalatest_2.12/3.0.4/scalatest_2.12-3.0.4-sources.jar"
+    hash:
+      value: "ba669c2c9b7092151e2a19e975b1bf2a2e7a5fda"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:scalatest/scalatest.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/scalatest/scalatest.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
+  purl: "pkg:maven/org.scalaz/scalaz-core_2.12@7.2.8"
+  authors:
+  - "Alexey Romanov"
+  - "Daniel Peebles"
+  - "Edward Kmett"
+  - "Jason Zaugg"
+  - "Kris Nuttycombe"
+  - "Lars Hupel"
+  - "Paul Chiusano"
+  - "Richard Wallace"
+  - "Runar Bjarnason"
+  - "Tony Morris"
+  - "org.scalaz"
+  declared_licenses:
+  - "BSD-style"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD-style: "BSD-3-Clause"
+  description: "scalaz-core"
+  homepage_url: "http://scalaz.org"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.12/7.2.8/scalaz-core_2.12-7.2.8.jar"
+    hash:
+      value: "2922d47f6dc7aba452634fe674087b6221b90dbf"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.12/7.2.8/scalaz-core_2.12-7.2.8-sources.jar"
+    hash:
+      value: "c94295a434f26b5650ec0fcbf93c9d2c7aada88e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:scalaz/scalaz.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/scalaz/scalaz.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+  purl: "pkg:maven/org.slf4j/jcl-over-slf4j@1.7.25"
+  authors:
+  - "Ceki Gulcu"
+  - "QOS.ch"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "JCL 1.2 implemented over SLF4J"
+  homepage_url: "http://www.slf4j.org"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25.jar"
+    hash:
+      value: "f8c32b13ff142a513eeb5b6330b1588dcb2c0461"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25-sources.jar"
+    hash:
+      value: "ffd0827a7c67d5915b7dc611afbda56a1f247191"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:qos-ch/slf4j.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/qos-ch/slf4j.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.slf4j:slf4j-api:1.7.25"
+  purl: "pkg:maven/org.slf4j/slf4j-api@1.7.25"
+  authors:
+  - "Ceki Gulcu"
+  - "QOS.ch"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "The slf4j API"
+  homepage_url: "http://www.slf4j.org"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar"
+    hash:
+      value: "da76ca59f6a57ee3102f8f9bd9cee742973efa8a"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25-sources.jar"
+    hash:
+      value: "962153db4a9ea71b79d047dfd1b2a0d80d8f4739"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:qos-ch/slf4j.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/qos-ch/slf4j.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
+  purl: "pkg:maven/org.typelevel/macro-compat_2.12@1.1.1"
+  authors:
+  - "Miles Sabin"
+  - "org.typelevel"
+  declared_licenses:
+  - "Apache 2"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2: "Apache-2.0"
+  description: "core"
+  homepage_url: "https://github.com/milessabin/macro-compat"
+  binary_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/typelevel/macro-compat_2.12/1.1.1/macro-compat_2.12-1.1.1.jar"
+    hash:
+      value: "ed809d26ef4237d7c079ae6cf7ebd0dfa7986adf"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://oss.sonatype.org/content/repositories/releases/org/typelevel/macro-compat_2.12/1.1.1/macro-compat_2.12-1.1.1-sources.jar"
+    hash:
+      value: "ade6d6ec81975cf514b0f9e2061614f2799cfe97"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:milessabin/macro-compat.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/milessabin/macro-compat.git"
+    revision: ""
+    path: ""

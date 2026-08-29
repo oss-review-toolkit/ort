@@ -1,0 +1,26 @@
+{
+  "id" : "892411ab-7982-4496-8394-e351e3e01549",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{  \"action\" : \"get_information\",  \"group\" : \"scans\",  \"data\" : {    \"username\":\"\",    \"key\":\"\",    \"scan_code\": \"semver4j_2_20201203_090342\"  }}  ",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{  \"operation\": \"scans_get_information\",  \"status\": \"1\",  \"data\": {    \"id\": 8996,    \"scanlimit\": 10,    \"last_run\": \"2023-03-08 14:26:23\",    \"code\": \"semver4j_2_20201203_090342\",    \"name\": \"semver4j_2_20201203_090342\",    \"description\": null,    \"comment\": \"master\",    \"is_archived\": null,    \"target_path\": null,    \"is_blind_audit\": null,    \"is_from_report\": false,    \"files_not_scanned\": 0,    \"pending_items\": null,    \"git_repo_url\": \"https:\/\/github.com\/vdurmont\/semver4j.git\",    \"git_branch\": \"7653e418d610ffcd2811bcb55fd72d00d420950b\",    \"imported_metadata\": null,    \"has_file_extension\": true,    \"jar_extraction\": \"if_no_fullmatch\",    \"any_archives_expanded\": null,    \"uploaded_files\": null,    \"sensitivity\": 10,    \"kb_version\": \"a:9:{s:3:\\\"cli\\\";a:3:{i:0;s:3:\\\"cli\\\";i:1;s:12:\\\"475072363bac\\\";i:2;s:66:\\\"FossID Command Line Interface (CLI) 3.4.6 (build 5605120, RELEASE)\\\";}s:7:\\\"wrapper\\\";a:3:{i:0;s:7:\\\"wrapper\\\";i:1;s:22:\\\"si0engfossidscantest01\\\";i:2;s:5:\\\"3.6.6\\\";}s:6:\\\"alfred\\\";a:3:{i:0;s:6:\\\"alfred\\\";i:1;s:22:\\\"si0engfossidscantest01\\\";i:2;s:58:\\\"FossID Alfred 4.1.0 (build 11627ef, RELEASE 61b5 61b5 001)\\\";}s:42:\\\"- \\\/mnt\\\/fossid_nfs\\\/kb2.1\\\/full_kb_2201\\\/VOLSO\\\";a:4:{i:0;s:42:\\\"- \\\/mnt\\\/fossid_nfs\\\/kb2.1\\\/full_kb_2201\\\/VOLSO\\\";i:1;s:2:\\\"uc\\\";i:2;s:10:\\\"2020-12-01\\\";i:3;s:11:\\\"(SO Volume)\\\";}s:46:\\\"- \\\/mnt\\\/fossid_nfs\\\/kb2.1\\\/full_kb\\\/VOLLICENSE2211\\\";a:4:{i:0;s:46:\\\"- \\\/mnt\\\/fossid_nfs\\\/kb2.1\\\/full_kb\\\/VOLLICENSE2211\\\";i:1;s:7:\\\"regular\\\";i:2;s:10:\\\"2022-11-15\\\";i:3;s:19:\\\"(License KB Volume)\\\";}s:43:\\\"- \\\/mnt\\\/fossid_nfs\\\/kb2.1\\\/full_kb\\\/VOLMAIN2211\\\";a:4:{i:0;s:43:\\\"- \\\/mnt\\\/fossid_nfs\\\/kb2.1\\\/full_kb\\\/VOLMAIN2211\\\";i:1;s:7:\\\"regular\\\";i:2;s:10:\\\"2022-11-15\\\";i:3;s:16:\\\"(Main KB Volume)\\\";}s:45:\\\"- \\\/mnt\\\/fossid_nfs\\\/weekly_updates\\\/2309w\\\/VOLCPE\\\";a:4:{i:0;s:45:\\\"- \\\/mnt\\\/fossid_nfs\\\/weekly_updates\\\/2309w\\\/VOLCPE\\\";i:1;s:7:\\\"regular\\\";i:2;s:10:\\\"2023-03-03\\\";i:3;s:30:\\\"(Vulnerable components volume)\\\";}s:52:\\\"- \\\/mnt\\\/fossid_nfs\\\/weekly_updates\\\/2309w\\\/VOLCPELICENSE\\\";a:4:{i:0;s:52:\\\"- \\\/mnt\\\/fossid_nfs\\\/weekly_updates\\\/2309w\\\/VOLCPELICENSE\\\";i:1;s:7:\\\"license\\\";i:2;s:10:\\\"2023-03-03\\\";i:3;s:27:\\\"(License volume for VOLCPE)\\\";}s:46:\\\"- \\\/mnt\\\/fossid_nfs\\\/weekly_updates\\\/2309w\\\/VOLVULN\\\";a:4:{i:0;s:46:\\\"- \\\/mnt\\\/fossid_nfs\\\/weekly_updates\\\/2309w\\\/VOLVULN\\\";i:1;s:7:\\\"regular\\\";i:2;s:10:\\\"2023-03-03\\\";i:3;s:22:\\\"(Vulnerability volume)\\\";}}\",    \"fid_version\": \"2022.2.2.b#21471\",    \"ort_version\": null,    \"created\": \"2023-03-08 14:26:12\",    \"updated\": \"2023-03-08 14:26:24\",    \"username\": \"\",    \"project_code\": \"semver4j_2\",    \"user_id\": 143,    \"project_id\": 2355  }}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "892411ab-7982-4496-8394-e351e3e01549",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

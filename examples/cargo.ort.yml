@@ -1,0 +1,9 @@
+# This is an example for a (project specific) repository configuration file.
+excludes:
+  scopes:
+  - pattern: "build-dependencies"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: "Packages for building the code only."
+  - pattern: "dev-dependencies"
+    reason: "DEV_DEPENDENCY_OF"
+    comment: "Packages for development only."

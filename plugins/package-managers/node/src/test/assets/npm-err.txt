@@ -1,0 +1,17 @@
+npm notice
+npm notice New major version of npm available! 8.15.1 -> 9.4.0
+npm notice Changelog: <https://github.com/npm/cli/releases/tag/v9.4.0>
+npm notice Run `npm install -g npm@9.4.0` to update!
+npm notice
+npm ERR! code ENOTFOUND
+npm ERR! syscall getaddrinfo
+npm ERR! errno ENOTFOUND
+npm ERR! network request to https://example.com/artifactory/api/npm/npm-repo/zone.js/-/zone.js-0.11.6.tgz failed, reason: getaddrinfo ENOTFOUND example.com
+npm ERR! network This is a problem related to network connectivity.
+npm ERR! network In most cases you are behind a proxy or have bad network settings.
+npm ERR! network
+npm ERR! network If you are behind a proxy, please make sure that the
+npm ERR! network 'proxy' config is set properly.  See: 'npm help config'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/ort/.npm/_logs/2023-01-31T07_29_19_725Z-debug-0.log

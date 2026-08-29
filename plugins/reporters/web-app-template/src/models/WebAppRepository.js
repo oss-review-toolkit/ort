@@ -1,0 +1,76 @@
+/*
+ * Copyright (C) 2019 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+import VcsInfo from './VcsInfo';
+import WebAppRepositoryConfiguration from './WebAppRepositoryConfiguration';
+
+class Repository {
+    #vcs = new VcsInfo();
+
+    #vcsProcessed = new VcsInfo();
+
+    #nestedRepositories = new Map();
+
+    #config = {};
+
+    constructor(obj, webAppOrtResult) {
+        if (obj instanceof Object) {
+            if (obj.vcs) {
+                this.#vcs = obj.vcs;
+            }
+
+            if (obj.vcs_processed || obj.vcsProcessed) {
+                const vcsProcessed = obj.vcs_processed || obj.vcsProcessed;
+                this.#vcsProcessed = new VcsInfo(vcsProcessed);
+            }
+
+            if (obj.nested_repositories || obj.nestedRepositories) {
+                const nestedRepositories = obj.nested_repositories || obj.nestedRepositories;
+
+                if (nestedRepositories !== null && nestedRepositories instanceof Object) {
+                    Object.entries(nestedRepositories).forEach(
+                        ([string, vcsInfo]) => this.#nestedRepositories.set(string, new VcsInfo(vcsInfo))
+                    );
+                }
+            }
+
+            if (obj.config) {
+                this.#config = new WebAppRepositoryConfiguration(obj.config, webAppOrtResult);
+            }
+        }
+    }
+
+    get vcs() {
+        return this.#vcs;
+    }
+
+    get vcsProcessed() {
+        return this.#vcsProcessed;
+    }
+
+    get nestedRepositories() {
+        return this.#nestedRepositories;
+    }
+
+    get config() {
+        return this.#config;
+    }
+}
+
+export default Repository;

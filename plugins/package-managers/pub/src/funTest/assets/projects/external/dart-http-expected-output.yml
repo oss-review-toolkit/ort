@@ -1,0 +1,2171 @@
+---
+project:
+  id: "Pub::http:0.13.0"
+  definition_file_path: "pubspec.yaml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: "28f740cbbd14be0a04749e623cf689c5d9627a22"
+    path: ""
+  homepage_url: "https://github.com/dart-lang/http"
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Pub::http_parser:4.0.2"
+      dependencies:
+      - id: "Pub::collection:1.18.0"
+      - id: "Pub::source_span:1.10.2"
+        dependencies:
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::string_scanner:1.4.1"
+        dependencies:
+        - id: "Pub::source_span:1.10.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::typed_data:1.3.2"
+        dependencies:
+        - id: "Pub::collection:1.18.0"
+    - id: "Pub::meta:1.16.0"
+    - id: "Pub::path:1.9.0"
+    - id: "Pub::pedantic:1.11.1"
+  - name: "dev_dependencies"
+    dependencies:
+    - id: "Pub::shelf:1.4.1"
+      dependencies:
+      - id: "Pub::async:2.11.0"
+        dependencies:
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::meta:1.16.0"
+      - id: "Pub::collection:1.18.0"
+      - id: "Pub::http_parser:4.0.2"
+        dependencies:
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::source_span:1.10.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::string_scanner:1.4.1"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::typed_data:1.3.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+      - id: "Pub::path:1.9.0"
+      - id: "Pub::stack_trace:1.11.1"
+        dependencies:
+        - id: "Pub::path:1.9.0"
+      - id: "Pub::stream_channel:2.1.4"
+        dependencies:
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+    - id: "Pub::test:1.25.7"
+      dependencies:
+      - id: "Pub::analyzer:6.4.1"
+        dependencies:
+        - id: "Pub::_fe_analyzer_shared:67.0.0"
+          dependencies:
+          - id: "Pub::meta:1.16.0"
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::convert:3.1.1"
+          dependencies:
+          - id: "Pub::typed_data:1.3.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+        - id: "Pub::crypto:3.0.3"
+          dependencies:
+          - id: "Pub::typed_data:1.3.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+        - id: "Pub::glob:2.1.3"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::file:7.0.1"
+            dependencies:
+            - id: "Pub::meta:1.16.0"
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::meta:1.16.0"
+        - id: "Pub::package_config:2.1.0"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::pub_semver:2.1.4"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+        - id: "Pub::source_span:1.10.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::watcher:1.1.4"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::yaml:3.1.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::async:2.11.0"
+        dependencies:
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::meta:1.16.0"
+      - id: "Pub::boolean_selector:2.1.2"
+        dependencies:
+        - id: "Pub::source_span:1.10.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::string_scanner:1.4.1"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::collection:1.18.0"
+      - id: "Pub::coverage:1.8.0"
+        dependencies:
+        - id: "Pub::args:2.7.0"
+        - id: "Pub::logging:1.2.0"
+        - id: "Pub::package_config:2.1.0"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::source_maps:0.10.14"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::stack_trace:1.11.1"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::vm_service:14.3.1"
+      - id: "Pub::http_multi_server:3.2.2"
+        dependencies:
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+      - id: "Pub::io:1.0.4"
+        dependencies:
+        - id: "Pub::meta:1.16.0"
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::string_scanner:1.4.1"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::js:0.7.1"
+      - id: "Pub::matcher:0.12.16+1"
+        dependencies:
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+        - id: "Pub::meta:1.16.0"
+        - id: "Pub::stack_trace:1.11.1"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::test_api:0.7.2"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::boolean_selector:2.1.2"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
+              dependencies:
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::stack_trace:1.11.1"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::stream_channel:2.1.4"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::node_preamble:2.0.2"
+      - id: "Pub::package_config:2.1.0"
+        dependencies:
+        - id: "Pub::path:1.9.0"
+      - id: "Pub::path:1.9.0"
+      - id: "Pub::pool:1.5.1"
+        dependencies:
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+        - id: "Pub::stack_trace:1.11.1"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+      - id: "Pub::shelf:1.4.1"
+        dependencies:
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::http_parser:4.0.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::typed_data:1.3.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::stack_trace:1.11.1"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::stream_channel:2.1.4"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+      - id: "Pub::shelf_packages_handler:3.0.2"
+        dependencies:
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::shelf:1.4.1"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::http_parser:4.0.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
+              dependencies:
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::typed_data:1.3.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::stack_trace:1.11.1"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::stream_channel:2.1.4"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+        - id: "Pub::shelf_static:1.1.3"
+          dependencies:
+          - id: "Pub::convert:3.1.1"
+            dependencies:
+            - id: "Pub::typed_data:1.3.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+          - id: "Pub::http_parser:4.0.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
+              dependencies:
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::typed_data:1.3.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+          - id: "Pub::mime:2.0.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::shelf:1.4.1"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::http_parser:4.0.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+              - id: "Pub::string_scanner:1.4.1"
+                dependencies:
+                - id: "Pub::source_span:1.10.2"
+                  dependencies:
+                  - id: "Pub::collection:1.18.0"
+                  - id: "Pub::path:1.9.0"
+                  - id: "Pub::term_glyph:1.2.2"
+              - id: "Pub::typed_data:1.3.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::stack_trace:1.11.1"
+              dependencies:
+              - id: "Pub::path:1.9.0"
+            - id: "Pub::stream_channel:2.1.4"
+              dependencies:
+              - id: "Pub::async:2.11.0"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::meta:1.16.0"
+      - id: "Pub::shelf_static:1.1.3"
+        dependencies:
+        - id: "Pub::convert:3.1.1"
+          dependencies:
+          - id: "Pub::typed_data:1.3.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+        - id: "Pub::http_parser:4.0.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::typed_data:1.3.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+        - id: "Pub::mime:2.0.0"
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::shelf:1.4.1"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::http_parser:4.0.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
+              dependencies:
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::typed_data:1.3.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::stack_trace:1.11.1"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::stream_channel:2.1.4"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+      - id: "Pub::shelf_web_socket:2.0.1"
+        dependencies:
+        - id: "Pub::shelf:1.4.1"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::http_parser:4.0.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
+              dependencies:
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::typed_data:1.3.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::stack_trace:1.11.1"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::stream_channel:2.1.4"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+        - id: "Pub::stream_channel:2.1.4"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+        - id: "Pub::web_socket_channel:3.0.3"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::crypto:3.0.3"
+            dependencies:
+            - id: "Pub::typed_data:1.3.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+          - id: "Pub::stream_channel:2.1.4"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+          - id: "Pub::web:0.5.1"
+          - id: "Pub::web_socket:0.1.6"
+            dependencies:
+            - id: "Pub::web:0.5.1"
+      - id: "Pub::source_span:1.10.2"
+        dependencies:
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::stack_trace:1.11.1"
+        dependencies:
+        - id: "Pub::path:1.9.0"
+      - id: "Pub::stream_channel:2.1.4"
+        dependencies:
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+      - id: "Pub::test_api:0.7.2"
+        dependencies:
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+        - id: "Pub::boolean_selector:2.1.2"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::meta:1.16.0"
+        - id: "Pub::source_span:1.10.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::stack_trace:1.11.1"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::stream_channel:2.1.4"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+        - id: "Pub::string_scanner:1.4.1"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::test_core:0.6.4"
+        dependencies:
+        - id: "Pub::analyzer:6.4.1"
+          dependencies:
+          - id: "Pub::_fe_analyzer_shared:67.0.0"
+            dependencies:
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::convert:3.1.1"
+            dependencies:
+            - id: "Pub::typed_data:1.3.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+          - id: "Pub::crypto:3.0.3"
+            dependencies:
+            - id: "Pub::typed_data:1.3.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+          - id: "Pub::glob:2.1.3"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::file:7.0.1"
+              dependencies:
+              - id: "Pub::meta:1.16.0"
+              - id: "Pub::path:1.9.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::string_scanner:1.4.1"
+              dependencies:
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::meta:1.16.0"
+          - id: "Pub::package_config:2.1.0"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::pub_semver:2.1.4"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::watcher:1.1.4"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::yaml:3.1.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
+              dependencies:
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::args:2.7.0"
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+        - id: "Pub::boolean_selector:2.1.2"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::coverage:1.8.0"
+          dependencies:
+          - id: "Pub::args:2.7.0"
+          - id: "Pub::logging:1.2.0"
+          - id: "Pub::package_config:2.1.0"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::source_maps:0.10.14"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::stack_trace:1.11.1"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::vm_service:14.3.1"
+        - id: "Pub::frontend_server_client:4.0.0"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::glob:2.1.3"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::file:7.0.1"
+            dependencies:
+            - id: "Pub::meta:1.16.0"
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::io:1.0.4"
+          dependencies:
+          - id: "Pub::meta:1.16.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::meta:1.16.0"
+        - id: "Pub::package_config:2.1.0"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::path:1.9.0"
+        - id: "Pub::pool:1.5.1"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::stack_trace:1.11.1"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+        - id: "Pub::source_map_stack_trace:2.1.2"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::source_maps:0.10.14"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::stack_trace:1.11.1"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+        - id: "Pub::source_maps:0.10.14"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::source_span:1.10.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::stack_trace:1.11.1"
+          dependencies:
+          - id: "Pub::path:1.9.0"
+        - id: "Pub::stream_channel:2.1.4"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+        - id: "Pub::test_api:0.7.2"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+          - id: "Pub::boolean_selector:2.1.2"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
+              dependencies:
+              - id: "Pub::source_span:1.10.2"
+                dependencies:
+                - id: "Pub::collection:1.18.0"
+                - id: "Pub::path:1.9.0"
+                - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::stack_trace:1.11.1"
+            dependencies:
+            - id: "Pub::path:1.9.0"
+          - id: "Pub::stream_channel:2.1.4"
+            dependencies:
+            - id: "Pub::async:2.11.0"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::meta:1.16.0"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::vm_service:14.3.1"
+        - id: "Pub::yaml:3.1.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
+            dependencies:
+            - id: "Pub::source_span:1.10.2"
+              dependencies:
+              - id: "Pub::collection:1.18.0"
+              - id: "Pub::path:1.9.0"
+              - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::typed_data:1.3.2"
+        dependencies:
+        - id: "Pub::collection:1.18.0"
+      - id: "Pub::web_socket_channel:3.0.3"
+        dependencies:
+        - id: "Pub::async:2.11.0"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::meta:1.16.0"
+        - id: "Pub::crypto:3.0.3"
+          dependencies:
+          - id: "Pub::typed_data:1.3.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+        - id: "Pub::stream_channel:2.1.4"
+          dependencies:
+          - id: "Pub::async:2.11.0"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::meta:1.16.0"
+        - id: "Pub::web:0.5.1"
+        - id: "Pub::web_socket:0.1.6"
+          dependencies:
+          - id: "Pub::web:0.5.1"
+      - id: "Pub::webkit_inspection_protocol:1.2.1"
+        dependencies:
+        - id: "Pub::logging:1.2.0"
+      - id: "Pub::yaml:3.1.2"
+        dependencies:
+        - id: "Pub::collection:1.18.0"
+        - id: "Pub::source_span:1.10.2"
+          dependencies:
+          - id: "Pub::collection:1.18.0"
+          - id: "Pub::path:1.9.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::string_scanner:1.4.1"
+          dependencies:
+          - id: "Pub::source_span:1.10.2"
+            dependencies:
+            - id: "Pub::collection:1.18.0"
+            - id: "Pub::path:1.9.0"
+            - id: "Pub::term_glyph:1.2.2"
+packages:
+- id: "Pub::_fe_analyzer_shared:67.0.0"
+  purl: "pkg:pub/_fe_analyzer_shared@67.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Logic that is shared between the front_end and analyzer packages."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/_fe_analyzer_shared/versions/67.0.0.tar.gz"
+    hash:
+      value: "0b2f2bd91ba804e53a61d757b986f89f1f9eaed5b11e4b2f5a2468d86d6c9fc7"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/_fe_analyzer_shared"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/_fe_analyzer_shared"
+- id: "Pub::analyzer:6.4.1"
+  purl: "pkg:pub/analyzer@6.4.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "This package provides a library that performs static analysis of Dart\
+    \ code."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/analyzer/versions/6.4.1.tar.gz"
+    hash:
+      value: "37577842a27e4338429a1cbc32679d508836510b056f1eedf0c8d20e39c1383d"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/analyzer"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/analyzer"
+- id: "Pub::args:2.7.0"
+  purl: "pkg:pub/args@2.7.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Library for defining parsers for parsing raw command-line arguments\
+    \ into a set of options and values using GNU and POSIX style options."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/args/versions/2.7.0.tar.gz"
+    hash:
+      value: "d0481093c50b1da8910eb0bb301626d4d8eb7284aa739614d2b394ee09e3ea04"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/core.git"
+    revision: ""
+    path: "pkgs/args"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/core.git"
+    revision: ""
+    path: "pkgs/args"
+- id: "Pub::async:2.11.0"
+  purl: "pkg:pub/async@2.11.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Utility functions and classes related to the 'dart:async' library."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/async/versions/2.11.0.tar.gz"
+    hash:
+      value: "947bfcf187f74dbc5e146c9eb9c0f10c9f8b30743e341481c1e2ed3ecc18c20c"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/async.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/async.git"
+    revision: ""
+    path: ""
+- id: "Pub::boolean_selector:2.1.2"
+  purl: "pkg:pub/boolean_selector@2.1.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A flexible syntax for boolean expressions, based on a simplified version\
+    \ of Dart's expression syntax."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/boolean_selector/versions/2.1.2.tar.gz"
+    hash:
+      value: "8aab1771e1243a5063b8b0ff68042d67334e3feab9e95b9490f9a6ebf73b42ea"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/boolean_selector"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/boolean_selector"
+- id: "Pub::collection:1.18.0"
+  purl: "pkg:pub/collection@1.18.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Collections and utilities functions and classes related to collections."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/collection/versions/1.18.0.tar.gz"
+    hash:
+      value: "ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/collection.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/collection.git"
+    revision: ""
+    path: ""
+- id: "Pub::convert:3.1.1"
+  purl: "pkg:pub/convert@3.1.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Utilities for converting between data representations. Provides a\
+    \ number of Sink, Codec, Decoder, and Encoder types."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/convert/versions/3.1.1.tar.gz"
+    hash:
+      value: "0f08b14755d163f6e2134cb58222dd25ea2a2ee8a195e53983d57c075324d592"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/convert.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/convert.git"
+    revision: ""
+    path: ""
+- id: "Pub::coverage:1.8.0"
+  purl: "pkg:pub/coverage@1.8.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Coverage data manipulation and formatting"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/coverage/versions/1.8.0.tar.gz"
+    hash:
+      value: "3945034e86ea203af7a056d98e98e42a5518fff200d6e8e6647e1886b07e936e"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/coverage.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/coverage.git"
+    revision: ""
+    path: ""
+- id: "Pub::crypto:3.0.3"
+  purl: "pkg:pub/crypto@3.0.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Implementations of SHA, MD5, and HMAC cryptographic functions."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/crypto/versions/3.0.3.tar.gz"
+    hash:
+      value: "ff625774173754681d66daaf4a448684fb04b78f902da9cb3d308c19cc5e8bab"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/crypto.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/crypto.git"
+    revision: ""
+    path: ""
+- id: "Pub::file:7.0.1"
+  purl: "pkg:pub/file@7.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A pluggable, mockable file system abstraction for Dart. Supports local\
+    \ file system access, as well as in-memory file systems, record-replay file systems,\
+    \ and chroot file systems."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/file/versions/7.0.1.tar.gz"
+    hash:
+      value: "a3b4f84adafef897088c160faf7dfffb7696046cb13ae90b508c2cbc95d3b8d4"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/file"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/file"
+- id: "Pub::frontend_server_client:4.0.0"
+  purl: "pkg:pub/frontend_server_client@4.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Client code to start and interact with the frontend_server compiler\
+    \ from the Dart SDK."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/frontend_server_client/versions/4.0.0.tar.gz"
+    hash:
+      value: "f64a0333a82f30b0cca061bc3d143813a486dc086b574bfb233b7c1372427694"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/webdev.git"
+    revision: ""
+    path: "frontend_server_client"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/webdev.git"
+    revision: ""
+    path: "frontend_server_client"
+- id: "Pub::glob:2.1.3"
+  purl: "pkg:pub/glob@2.1.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A library to perform Bash-style file and directory globbing."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/glob/versions/2.1.3.tar.gz"
+    hash:
+      value: "c3f1ee72c96f8f78935e18aa8cecced9ab132419e8625dc187e1c2408efc20de"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/glob"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/glob"
+- id: "Pub::http_multi_server:3.2.2"
+  purl: "pkg:pub/http_multi_server@3.2.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A dart:io HttpServer wrapper that handles requests from multiple servers."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/http_multi_server/versions/3.2.2.tar.gz"
+    hash:
+      value: "aa6199f908078bb1c5efb8d8638d4ae191aac11b311132c3ef48ce352fb52ef8"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: ""
+    path: "pkgs/http_multi_server"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: ""
+    path: "pkgs/http_multi_server"
+- id: "Pub::http_parser:4.0.2"
+  purl: "pkg:pub/http_parser@4.0.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A platform-independent package for parsing and serializing HTTP formats."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/http_parser/versions/4.0.2.tar.gz"
+    hash:
+      value: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/http_parser.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/http_parser.git"
+    revision: ""
+    path: ""
+- id: "Pub::io:1.0.4"
+  purl: "pkg:pub/io@1.0.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Utilities for the Dart VM Runtime including support for ANSI colors,\
+    \ file copying, and standard exit code values."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/io/versions/1.0.4.tar.gz"
+    hash:
+      value: "2ec25704aba361659e10e3e5f5d672068d332fc8ac516421d483a11e5cbd061e"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/io.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/io.git"
+    revision: ""
+    path: ""
+- id: "Pub::js:0.7.1"
+  purl: "pkg:pub/js@0.7.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Annotations to create static Dart interfaces for JavaScript APIs."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/js/versions/0.7.1.tar.gz"
+    hash:
+      value: "c1b2e9b5ea78c45e1a0788d29606ba27dc5f71f019f32ca5140f61ef071838cf"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/js"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/js"
+- id: "Pub::logging:1.2.0"
+  purl: "pkg:pub/logging@1.2.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Provides APIs for debugging and error logging, similar to loggers\
+    \ in other languages, such as the Closure JS Logger and java.util.logging.Logger."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/logging/versions/1.2.0.tar.gz"
+    hash:
+      value: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/logging.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/logging.git"
+    revision: ""
+    path: ""
+- id: "Pub::matcher:0.12.16+1"
+  purl: "pkg:pub/matcher@0.12.16%2B1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Support for specifying test expectations via an extensible Matcher\
+    \ class. Also includes a number of built-in Matcher implementations for common\
+    \ cases."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/matcher/versions/0.12.16+1.tar.gz"
+    hash:
+      value: "d2323aa2060500f906aa31a895b4030b6da3ebdcc5619d14ce1aada65cd161cb"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/matcher.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/matcher.git"
+    revision: ""
+    path: ""
+- id: "Pub::meta:1.16.0"
+  purl: "pkg:pub/meta@1.16.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Annotations used to express developer intentions that can't otherwise\
+    \ be deduced by statically analyzing source code."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/meta/versions/1.16.0.tar.gz"
+    hash:
+      value: "e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/meta"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/meta"
+- id: "Pub::mime:2.0.0"
+  purl: "pkg:pub/mime@2.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Utilities for handling media (MIME) types, including determining a\
+    \ type from a file extension and file contents."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/mime/versions/2.0.0.tar.gz"
+    hash:
+      value: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/mime"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/mime"
+- id: "Pub::node_preamble:2.0.2"
+  purl: "pkg:pub/node_preamble@2.0.2"
+  authors:
+  - "Michael Bullington"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Better node.js preamble for dart2js, use it in your build system."
+  homepage_url: "https://github.com/mbullington/node_preamble.dart"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/node_preamble/versions/2.0.2.tar.gz"
+    hash:
+      value: "6e7eac89047ab8a8d26cf16127b5ed26de65209847630400f9aefd7cd5c730db"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mbullington/node_preamble.dart.git"
+    revision: ""
+    path: ""
+- id: "Pub::package_config:2.1.0"
+  purl: "pkg:pub/package_config@2.1.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Support for reading and writing Dart Package Configuration files."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/package_config/versions/2.1.0.tar.gz"
+    hash:
+      value: "1c5b77ccc91e4823a5af61ee74e6b972db1ef98c2ff5a18d3161c982a55448bd"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/package_config.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/package_config.git"
+    revision: ""
+    path: ""
+- id: "Pub::path:1.9.0"
+  purl: "pkg:pub/path@1.9.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A string-based path manipulation library. All of the path operations\
+    \ you know and love, with solid support for Windows, POSIX (Linux and Mac OS X),\
+    \ and the web."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/path/versions/1.9.0.tar.gz"
+    hash:
+      value: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/path.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/path.git"
+    revision: ""
+    path: ""
+- id: "Pub::pedantic:1.11.1"
+  purl: "pkg:pub/pedantic@1.11.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "The Dart analyzer settings and best practices used internally at Google."
+  homepage_url: "https://github.com/google/pedantic"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/pedantic/versions/1.11.1.tar.gz"
+    hash:
+      value: "67fc27ed9639506c856c840ccce7594d0bdcd91bc8d53d6e52359449a1d50602"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/pedantic.git"
+    revision: ""
+    path: ""
+- id: "Pub::pool:1.5.1"
+  purl: "pkg:pub/pool@1.5.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Manage a finite pool of resources. Useful for controlling concurrent\
+    \ file system or network requests."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/pool/versions/1.5.1.tar.gz"
+    hash:
+      value: "20fe868b6314b322ea036ba325e6fc0711a22948856475e2c2b6306e8ab39c2a"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/pool.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/pool.git"
+    revision: ""
+    path: ""
+- id: "Pub::pub_semver:2.1.4"
+  purl: "pkg:pub/pub_semver@2.1.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Versions and version constraints implementing pub's versioning policy.\
+    \ This is very similar to vanilla semver, with a few corner cases."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/pub_semver/versions/2.1.4.tar.gz"
+    hash:
+      value: "40d3ab1bbd474c4c2328c91e3a7df8c6dd629b79ece4c4bd04bee496a224fb0c"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/pub_semver.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/pub_semver.git"
+    revision: ""
+    path: ""
+- id: "Pub::shelf:1.4.1"
+  purl: "pkg:pub/shelf@1.4.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A model for web server middleware that encourages composition and\
+    \ easy reuse."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/shelf/versions/1.4.1.tar.gz"
+    hash:
+      value: "ad29c505aee705f41a4d8963641f91ac4cee3c8fad5947e033390a7bd8180fa4"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/shelf.git"
+    revision: ""
+    path: "pkgs/shelf"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/shelf.git"
+    revision: ""
+    path: "pkgs/shelf"
+- id: "Pub::shelf_packages_handler:3.0.2"
+  purl: "pkg:pub/shelf_packages_handler@3.0.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A shelf handler for serving a `packages/` directory."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/shelf_packages_handler/versions/3.0.2.tar.gz"
+    hash:
+      value: "89f967eca29607c933ba9571d838be31d67f53f6e4ee15147d5dc2934fee1b1e"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/shelf.git"
+    revision: ""
+    path: "pkgs/shelf_packages_handler"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/shelf.git"
+    revision: ""
+    path: "pkgs/shelf_packages_handler"
+- id: "Pub::shelf_static:1.1.3"
+  purl: "pkg:pub/shelf_static@1.1.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Static file server support for the shelf package and ecosystem."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/shelf_static/versions/1.1.3.tar.gz"
+    hash:
+      value: "c87c3875f91262785dade62d135760c2c69cb217ac759485334c5857ad89f6e3"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/shelf.git"
+    revision: ""
+    path: "pkgs/shelf_static"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/shelf.git"
+    revision: ""
+    path: "pkgs/shelf_static"
+- id: "Pub::shelf_web_socket:2.0.1"
+  purl: "pkg:pub/shelf_web_socket@2.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A shelf handler that wires up a listener for every connection."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/shelf_web_socket/versions/2.0.1.tar.gz"
+    hash:
+      value: "cc36c297b52866d203dbf9332263c94becc2fe0ceaa9681d07b6ef9807023b67"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/shelf.git"
+    revision: ""
+    path: "pkgs/shelf_web_socket"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/shelf.git"
+    revision: ""
+    path: "pkgs/shelf_web_socket"
+- id: "Pub::source_map_stack_trace:2.1.2"
+  purl: "pkg:pub/source_map_stack_trace@2.1.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A package for applying source maps to stack traces."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/source_map_stack_trace/versions/2.1.2.tar.gz"
+    hash:
+      value: "c0713a43e323c3302c2abe2a1cc89aa057a387101ebd280371d6a6c9fa68516b"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/source_map_stack_trace"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/source_map_stack_trace"
+- id: "Pub::source_maps:0.10.14"
+  purl: "pkg:pub/source_maps@0.10.14"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A library to programmatically manipulate source map files."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/source_maps/versions/0.10.14.tar.gz"
+    hash:
+      value: "14c2945847669b44089bb1222f66873d7ff7103c58911917f2a63c5a62327898"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/source_maps"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/source_maps"
+- id: "Pub::source_span:1.10.2"
+  purl: "pkg:pub/source_span@1.10.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Provides a standard representation for source code locations and spans."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/source_span/versions/1.10.2.tar.gz"
+    hash:
+      value: "56a02f1f4cd1a2d96303c0144c93bd6d909eea6bee6bf5a0e0b685edbd4c47ab"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/source_span"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/source_span"
+- id: "Pub::stack_trace:1.11.1"
+  purl: "pkg:pub/stack_trace@1.11.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A package for manipulating stack traces and printing them readably."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/stack_trace/versions/1.11.1.tar.gz"
+    hash:
+      value: "73713990125a6d93122541237550ee3352a2d84baad52d375a4cad2eb9b7ce0b"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/stack_trace.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/stack_trace.git"
+    revision: ""
+    path: ""
+- id: "Pub::stream_channel:2.1.4"
+  purl: "pkg:pub/stream_channel@2.1.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "An abstraction for two-way communication channels based on the Dart\
+    \ Stream class."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/stream_channel/versions/2.1.4.tar.gz"
+    hash:
+      value: "969e04c80b8bcdf826f8f16579c7b14d780458bd97f56d107d3950fdbeef059d"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/stream_channel"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/stream_channel"
+- id: "Pub::string_scanner:1.4.1"
+  purl: "pkg:pub/string_scanner@1.4.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A class for parsing strings using a sequence of patterns."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/string_scanner/versions/1.4.1.tar.gz"
+    hash:
+      value: "921cd31725b72fe181906c6a94d987c78e3b98c2e205b397ea399d4054872b43"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/string_scanner"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/string_scanner"
+- id: "Pub::term_glyph:1.2.2"
+  purl: "pkg:pub/term_glyph@1.2.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Useful Unicode glyphs and ASCII substitutes."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/term_glyph/versions/1.2.2.tar.gz"
+    hash:
+      value: "7f554798625ea768a7518313e58f83891c7f5024f88e46e7182a4558850a4b8e"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/term_glyph"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/term_glyph"
+- id: "Pub::test:1.25.7"
+  purl: "pkg:pub/test@1.25.7"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A full featured library for writing and running Dart tests across\
+    \ platforms."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/test/versions/1.25.7.tar.gz"
+    hash:
+      value: "7ee44229615f8f642b68120165ae4c2a75fe77ae2065b1e55ae4711f6cf0899e"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/test.git"
+    revision: ""
+    path: "pkgs/test"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/test.git"
+    revision: ""
+    path: "pkgs/test"
+- id: "Pub::test_api:0.7.2"
+  purl: "pkg:pub/test_api@0.7.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "The user facing API for structuring Dart tests and checking expectations."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/test_api/versions/0.7.2.tar.gz"
+    hash:
+      value: "5b8a98dafc4d5c4c9c72d8b31ab2b23fc13422348d2997120294d3bac86b4ddb"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/test.git"
+    revision: ""
+    path: "pkgs/test_api"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/test.git"
+    revision: ""
+    path: "pkgs/test_api"
+- id: "Pub::test_core:0.6.4"
+  purl: "pkg:pub/test_core@0.6.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A basic library for writing tests and running them on the VM."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/test_core/versions/0.6.4.tar.gz"
+    hash:
+      value: "55ea5a652e38a1dfb32943a7973f3681a60f872f8c3a05a14664ad54ef9c6696"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/test.git"
+    revision: ""
+    path: "pkgs/test_core"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/test.git"
+    revision: ""
+    path: "pkgs/test_core"
+- id: "Pub::typed_data:1.3.2"
+  purl: "pkg:pub/typed_data@1.3.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Utility functions and classes related to the dart:typed_data library."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/typed_data/versions/1.3.2.tar.gz"
+    hash:
+      value: "facc8d6582f16042dd49f2463ff1bd6e2c9ef9f3d5da3d9b087e244a7b564b3c"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/typed_data.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/typed_data.git"
+    revision: ""
+    path: ""
+- id: "Pub::vm_service:14.3.1"
+  purl: "pkg:pub/vm_service@14.3.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A library to communicate with a service implementing the Dart VM service\
+    \ protocol."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/vm_service/versions/14.3.1.tar.gz"
+    hash:
+      value: "0968250880a6c5fe7edc067ed0a13d4bae1577fe2771dcf3010d52c4a9d3ca14"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/vm_service"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/sdk.git"
+    revision: ""
+    path: "pkg/vm_service"
+- id: "Pub::watcher:1.1.4"
+  purl: "pkg:pub/watcher@1.1.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A file system watcher. It monitors changes to contents of directories\
+    \ and sends notifications when files have been added, removed, or modified."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/watcher/versions/1.1.4.tar.gz"
+    hash:
+      value: "592ab6e2892f67760543fb712ff0177f4ec76c031f02f5b4ff8d3fc5eb9fb61a"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/watcher"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/tools.git"
+    revision: ""
+    path: "pkgs/watcher"
+- id: "Pub::web:0.5.1"
+  purl: "pkg:pub/web@0.5.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Lightweight browser API bindings built around JS static interop."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/web/versions/0.5.1.tar.gz"
+    hash:
+      value: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/web.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/web.git"
+    revision: ""
+    path: ""
+- id: "Pub::web_socket:0.1.6"
+  purl: "pkg:pub/web_socket@0.1.6"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Any easy-to-use library for communicating with WebSockets that has\
+    \ multiple implementations."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/web_socket/versions/0.1.6.tar.gz"
+    hash:
+      value: "3c12d96c0c9a4eec095246debcea7b86c0324f22df69893d538fcc6f1b8cce83"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: ""
+    path: "pkgs/web_socket"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: ""
+    path: "pkgs/web_socket"
+- id: "Pub::web_socket_channel:3.0.3"
+  purl: "pkg:pub/web_socket_channel@3.0.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "StreamChannel wrappers for WebSockets. Provides a cross-platform WebSocketChannel\
+    \ API, a cross-platform implementation of that API that communicates over an underlying\
+    \ StreamChannel."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/web_socket_channel/versions/3.0.3.tar.gz"
+    hash:
+      value: "d645757fb0f4773d602444000a8131ff5d48c9e47adfe9772652dd1a4f2d45c8"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: ""
+    path: "pkgs/web_socket_channel"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: ""
+    path: "pkgs/web_socket_channel"
+- id: "Pub::webkit_inspection_protocol:1.2.1"
+  purl: "pkg:pub/webkit_inspection_protocol@1.2.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A client for the Chrome DevTools Protocol (previously called the Webkit\
+    \ Inspection Protocol)."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/webkit_inspection_protocol/versions/1.2.1.tar.gz"
+    hash:
+      value: "87d3f2333bb240704cd3f1c6b5b7acd8a10e7f0bc28c28dcf14e782014f4a572"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/webkit_inspection_protocol.dart.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/webkit_inspection_protocol.dart.git"
+    revision: ""
+    path: ""
+- id: "Pub::yaml:3.1.2"
+  purl: "pkg:pub/yaml@3.1.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A parser for YAML, a human-friendly data serialization standard"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/yaml/versions/3.1.2.tar.gz"
+    hash:
+      value: "75769501ea3489fca56601ff33454fe45507ea3bfb014161abc3b43ae25989d5"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/yaml.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/yaml.git"
+    revision: ""
+    path: ""

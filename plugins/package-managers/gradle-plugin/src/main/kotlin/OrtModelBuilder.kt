@@ -1,0 +1,380 @@
+/*
+ * Copyright (C) 2023 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
+
+import OrtComponent
+import OrtComponentIdentifier
+import OrtComponentReference
+import OrtDependencyTreeModel
+
+import org.apache.maven.model.building.FileModelSource
+import org.apache.maven.model.building.ModelBuildingResult
+
+import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.component.ComponentIdentifier
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
+import org.gradle.api.artifacts.component.ProjectComponentIdentifier
+import org.gradle.api.artifacts.component.ProjectComponentSelector
+import org.gradle.api.artifacts.repositories.UrlArtifactRepository
+import org.gradle.api.artifacts.result.DependencyResult
+import org.gradle.api.artifacts.result.ResolvedArtifactResult
+import org.gradle.api.artifacts.result.ResolvedComponentResult
+import org.gradle.api.artifacts.result.ResolvedDependencyResult
+import org.gradle.api.artifacts.result.UnresolvedDependencyResult
+import org.gradle.api.internal.GradleInternal
+import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
+import org.gradle.api.internal.artifacts.result.ResolvedComponentResultInternal
+import org.gradle.api.logging.Logging
+import org.gradle.internal.component.external.model.DefaultModuleComponentIdentifier
+import org.gradle.internal.resolve.ModuleVersionResolveException
+import org.gradle.maven.MavenModule
+import org.gradle.maven.MavenPomArtifact
+import org.gradle.tooling.provider.model.ToolingModelBuilder
+import org.gradle.util.GradleVersion
+
+internal class OrtModelBuilder : ToolingModelBuilder {
+    private val repositories = mutableMapOf<String, UrlArtifactRepository>()
+
+    private val logger = Logging.getLogger(OrtModelBuilder::class.java)
+    private val errors = mutableListOf<String>()
+    private val warnings = mutableListOf<String>()
+    private val ortComponentReferenceCache = mutableMapOf<OrtComponentReference, OrtComponentReference>()
+
+    override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
+
+    override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
+        if (GradleVersion.current() >= GradleVersion.version("6.8")) {
+            // There currently is no way to access Gradle settings without using internal API, see
+            // https://github.com/gradle/gradle/issues/18616.
+            val settings = (project.gradle as GradleInternal).settings
+
+            settings.dependencyResolutionManagement.repositories.associateNamesWithUrlsTo(repositories)
+        }
+
+        project.repositories.associateNamesWithUrlsTo(repositories)
+
+        val (excludedScopes, includedScopes) = with(project.rootProject.extensions.extraProperties) {
+            val separatedExcludedScopes = get("ortExcludedScopes") as String
+            val separatedIncludedScopes = get("ortIncludedScopes") as String
+
+            // Note that for empty strings, `split()` creates a list with a single element that is the empty string.
+            Pair(
+                separatedExcludedScopes.split('\u0000').filter { it.isNotBlank() }.map { it.toRegex() },
+                separatedIncludedScopes.split('\u0000').filter { it.isNotBlank() }.map { it.toRegex() }
+            )
+        }
+
+        val relevantConfigurations = project.configurations.filter { config ->
+            config.isRelevant() && config.name.isOrtScopeIncluded(excludedScopes, includedScopes)
+        }
+
+        val componentsForId = mutableMapOf<OrtComponentIdentifier, OrtComponent>()
+
+        val ortConfigurations = relevantConfigurations.mapNotNull { config ->
+            // Explicitly resolve all POM files and their parents, as the latter otherwise may get resolved in Gradle's
+            // own binary "descriptor.bin" format only.
+            val poms = project.resolvePoms(config)
+
+            // Get the root of the resolved dependency graph. This is also what Gradle's own "dependencies" task uses to
+            // recursively obtain information about resolved dependencies. Resolving dependencies triggers the download
+            // of metadata (like Maven POMs) only, not of binary artifacts, also see [1].
+            //
+            // [1]: https://docs.gradle.org/current/userguide/dependency_management.html#obtaining_module_metadata
+            val root = config.incoming.resolutionResult.root
+
+            config.incoming.resolutionResult.allComponents.forEach { component ->
+                val ortComponent = component.toOrtComponent(poms) ?: return@forEach
+
+                componentsForId.putIfAbsent(ortComponent.componentId, ortComponent)
+            }
+
+            // Omit configurations without dependencies.
+            root.dependencies.takeUnless { it.isEmpty() }?.let { dependencies ->
+                OrtConfigurationImpl(
+                    name = config.name,
+                    dependencies = dependencies.toOrtComponentReferences(emptySet())
+                )
+            }
+        }
+
+        return OrtDependencyTreeModelImpl(
+            group = project.group.toString(),
+            name = project.name,
+            version = project.version.toString().takeUnless { it == "unspecified" }.orEmpty(),
+            components = componentsForId.values.toList(),
+            configurations = ortConfigurations,
+            repositories = repositories.values.map { it.toOrtRepository() },
+            errors = errors,
+            warnings = warnings
+        )
+    }
+
+    private fun ResolvedComponentResult.toOrtComponent(poms: Map<String, ModelBuildingResult>): OrtComponent? {
+        val componentId = id
+
+        if (componentId is ModuleComponentIdentifier) {
+            val pomFile = getPomFile()
+
+            val modelBuildingResult = poms[id.toString()]
+            if (modelBuildingResult == null) {
+                val message = "No POM found for component '$id'."
+                logger.warn(message)
+                warnings += message
+            }
+
+            return OrtComponentImpl(
+                componentId = OrtComponentIdentifierImpl(componentId.group, componentId.module, componentId.version),
+                classifier = "",
+                extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
+                variants = variants.associate {
+                    it.displayName to it.attributes.keySet().associate { key ->
+                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                    }
+                },
+                error = null,
+                warning = null,
+                pomFile = pomFile,
+                mavenModel = modelBuildingResult?.run {
+                    OrtMavenModelImpl(
+                        licenses = effectiveModel.collectLicenses(),
+                        authors = effectiveModel.collectAuthors(),
+                        description = effectiveModel.description.orEmpty(),
+                        homepageUrl = effectiveModel.url.orEmpty(),
+                        vcs = getVcsModel()
+                    )
+                },
+                localPath = null
+            )
+        }
+
+        if (componentId is ProjectComponentIdentifier) {
+            val moduleId = moduleVersion ?: return null
+
+            return OrtComponentImpl(
+                componentId = OrtComponentIdentifierImpl(
+                    groupId = moduleId.group,
+                    artifactId = moduleId.name,
+                    version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty()
+                ),
+                classifier = "",
+                extension = "",
+                variants = variants.associate {
+                    it.displayName to it.attributes.keySet().associate { key ->
+                        key.name to it.attributes.getAttribute(key)?.toString().orEmpty()
+                    }
+                },
+                error = null,
+                warning = null,
+                pomFile = null,
+                mavenModel = null,
+                localPath = componentId.projectPath
+            )
+        }
+
+        val message = "Unhandled component identifier type $id."
+
+        logger.error(message)
+        errors += message
+
+        return null
+    }
+
+    private fun Collection<DependencyResult>.toOrtComponentReferences(
+        visited: Set<ComponentIdentifier>
+    ): List<OrtComponentReference> =
+        if (GradleVersion.current() < GradleVersion.version("5.1")) {
+            this
+        } else {
+            filterNot { it.isConstraint }
+        }.mapNotNull {
+            it.toOrtComponentReference(visited)
+        }
+
+    private fun DependencyResult.toOrtComponentReference(visited: Set<ComponentIdentifier>): OrtComponentReference? {
+        if (this is UnresolvedDependencyResult) {
+            if (attempted is ProjectComponentSelector) {
+                // Ignore unresolved project dependencies. For example for complex Android projects, Gradle's
+                // own "dependencies" task runs into "AmbiguousConfigurationSelectionException", but the project
+                // still builds fine, probably due to some Android plugin magic. Omitting a project dependency
+                // is uncritical in terms of resolving dependencies, as for the project itself dependencies will
+                // still get resolved.
+                return null
+            }
+
+            val message = buildString {
+                append(failure.message?.removeSuffix("."))
+                append(" from ")
+                append(from)
+                append(".")
+
+                appendCauses(failure)
+            }
+
+            logger.error(message)
+            errors += message
+
+            return null
+        }
+
+        if (this !is ResolvedDependencyResult) {
+            val message = "Unhandled dependency result type '$this' in '$from'."
+
+            logger.error(message)
+            errors += message
+
+            return null
+        }
+
+        val id = selected.id
+
+        // Cut the graph on cyclic dependencies.
+        if (id in visited) return null
+
+        if (id is ModuleComponentIdentifier) {
+            return OrtComponentReferenceImpl(
+                componentId = OrtComponentIdentifierImpl(id.group, id.module, id.version),
+                dependencies = selected.dependencies.toOrtComponentReferences(visited + id)
+            ).run {
+                // Use the same instance for identical subtrees to reduce main memory consumption.
+                ortComponentReferenceCache.getOrPut(this) { this }
+            }
+        }
+
+        if (id is ProjectComponentIdentifier) {
+            val moduleId = selected.moduleVersion ?: return null
+            val dependencies = selected.dependencies.toOrtComponentReferences(visited + id)
+
+            return OrtComponentReferenceImpl(
+                componentId = OrtComponentIdentifierImpl(
+                    groupId = moduleId.group,
+                    artifactId = moduleId.name,
+                    version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty()
+                ),
+                dependencies = dependencies
+            ).run {
+                // Use the same instance for identical subtrees to reduce main memory consumption.
+                ortComponentReferenceCache.getOrPut(this) { this }
+            }
+        }
+
+        val message = "Unhandled component identifier type $id."
+
+        logger.error(message)
+        errors += message
+
+        return null
+    }
+
+    private fun ResolvedComponentResult.getPomFile(): String? {
+        if (this !is ResolvedComponentResultInternal) return null
+        val id = this.id as? ModuleComponentIdentifier ?: return null
+
+        val repositoryId = runCatching {
+            repositoryId
+        }.recoverCatching {
+            @Suppress("DEPRECATION")
+            repositoryName
+        }.map {
+            // Work around https://github.com/gradle/gradle/issues/25674.
+            if (it == "26c913274550a0b2221f47a0fe2d2358") "MavenRepo" else it
+        }.getOrNull()
+
+        return repositories[repositoryId]?.let { repository ->
+            // Note: Only Maven-style layout is supported for now.
+            buildString {
+                append(repository.url.toString().removeSuffix("/"))
+                append('/')
+                append(id.group.replace('.', '/'))
+                append('/')
+                append(id.module)
+                append('/')
+                append(id.version)
+                append('/')
+                append(id.module)
+                append('-')
+                append(id.version)
+                append(".pom")
+            }
+        }
+    }
+}
+
+/**
+ * Resolve the POM files for all dependences in the given [Gradle configuration][config] incl. their parent POMs.
+ */
+private fun Project.resolvePoms(config: Configuration): Map<String, ModelBuildingResult> {
+    val allComponentIds = config.incoming.resolutionResult.allComponents.map { it.id }
+
+    // Get the POM files for all resolved dependencies.
+    val pomFiles = resolvePoms(allComponentIds)
+
+    val fileModelBuilder = FileModelBuilder { groupId, artifactId, version ->
+        val moduleId = DefaultModuleIdentifier.newId(groupId, artifactId)
+        val componentId = DefaultModuleComponentIdentifier.newId(moduleId, version)
+
+        val pomFile = resolvePoms(listOf(componentId)).single().file
+
+        FileModelSource(pomFile)
+    }
+
+    return pomFiles.associate {
+        // Trigger resolution of parent POMs by building the POM model.
+        it.id.componentIdentifier.toString() to fileModelBuilder.buildModel(it.file)
+    }
+}
+
+/**
+ * Resolve the POM files for the given [componentIds] and return them.
+ */
+private fun Project.resolvePoms(componentIds: List<ComponentIdentifier>): List<ResolvedArtifactResult> {
+    val resolutionResult = dependencies.createArtifactResolutionQuery()
+        .forComponents(componentIds.distinct())
+        .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
+        .execute()
+
+    return resolutionResult.resolvedComponents.flatMap {
+        it.getArtifacts(MavenPomArtifact::class.java)
+    }.filterIsInstance<ResolvedArtifactResult>()
+}
+
+/**
+ * Add a string with information about the causes of the given [exception] to this [StringBuilder]. This is used to
+ * log the reason why a dependency could not be resolved. To get meaningful information, all causes need to be obtained
+ * recursively. This is because the top-level [ModuleVersionResolveException] typically has only other
+ * [ModuleVersionResolveException]s as causes with generic messages. The actual information about what went wrong is
+ * hidden somewhere down the cause chain.
+ */
+private fun StringBuilder.appendCauses(exception: Throwable) {
+    val causes = (exception as? ModuleVersionResolveException)?.causes?.takeIf { it.isNotEmpty() }
+    if (causes != null) {
+        appendLine(" Causes are:")
+        val allCauses = mutableSetOf<String>()
+
+        fun getAllCauses(throwable: Throwable) {
+            throwable.message?.also(allCauses::add)
+            throwable.cause?.also { getAllCauses(it) }
+        }
+
+        causes.forEach { getAllCauses(it) }
+
+        append(allCauses.joinToString("\n"))
+    }
+}

@@ -1,0 +1,64 @@
+/*
+ * Copyright (C) 2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+plugins {
+    // Apply precompiled plugins.
+    id("ort-application-conventions")
+}
+
+// See https://docs.gradle.org/current/userguide/declaring_configurations.html#sec:configuration-flags-roles.
+configurations.dependencyScope("pluginClasspath")
+configurations["runtimeOnly"].extendsFrom(configurations["pluginClasspath"])
+
+application {
+    applicationName = "orth"
+    mainClass = "org.ossreviewtoolkit.clihelper.HelperMainKt"
+}
+
+dependencies {
+    implementation(projects.analyzer)
+    implementation(projects.downloader)
+
+    // There are commands with a hard-coded compile-time dependency on these plugins.
+    implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
+    implementation(projects.plugins.packageCurationProviders.filePackageCurationProvider)
+
+    implementation(projects.scanner)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.configUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxExpressionUtils)
+    implementation(projects.utils.spdxUtils)
+    implementation(jacksonLibs.jacksonModuleKotlin)
+    implementation(libs.clikt)
+    implementation(libs.commonsCompress)
+    implementation(libs.jslt)
+    implementation(libs.slf4j)
+
+    implementation(libs.xz) {
+        because("XZOutputStream is a supertype of XZCompressorOutputStream.")
+    }
+
+    funTestImplementation(projects.utils.testUtils)
+
+    testImplementation(projects.utils.testUtils)
+
+    "pluginClasspath"(platform(projects.plugins.packageManagers))
+    "pluginClasspath"(platform(projects.plugins.versionControlSystems))
+}

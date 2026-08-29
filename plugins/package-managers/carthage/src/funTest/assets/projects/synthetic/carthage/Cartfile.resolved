@@ -1,0 +1,12 @@
+# Carthage funTest Cartfile.resolved
+# Dependencies from Github
+github "realm/realm-cocoa" "v5.3.3"
+
+# Github dependency e.g. from a Github enterprise instance
+github "https://github.com/ReactiveCocoa/ReactiveCocoa" "11.0.0"
+
+# Generic git dependencies
+git "https://github.com/Alamofire/Alamofire.git" "5.2.2"
+
+# Binary dependency as relative local file
+binary "binaryspec.json" "1.0.0"

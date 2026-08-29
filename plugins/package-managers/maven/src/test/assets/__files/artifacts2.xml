@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<repository name='Test Repository' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1'>
+    <artifacts size='42'>
+        <artifact classifier='osgi.bundle' id='org.apache.commons.logging.source' version='1.2.0.v20180409-1502'>
+            <properties size='9'>
+                <property name='artifact.size' value='87511'/>
+                <property name='download.size' value='87511'/>
+                <property name='maven-groupId' value='org.apache.commons'/>
+                <property name='maven-artifactId' value='org.apache.commons.logging'/>
+                <property name='maven-version' value='1.2.0-SNAPSHOT'/>
+                <property name='maven-classifier' value='sources'/>
+                <property name='download.md5' value='9d510123465f7ba75f9921abf2980d00'/>
+                <property name='download.checksum.md5' value='9d510123465f7ba75f9921abf2980d00'/>
+                <property name='download.checksum.sha-256' value='8cc7db67131d441aa832dfe2967a9b602c940f907a656987367985e2e004f7b0'/>
+            </properties>
+        </artifact>
+        <artifact classifier='org.eclipse.update.feature' id='org.eclipse.orbit.releng.recipes.feature.aggregation.source' version='1.0.0.v20211212-1642'>
+            <properties size='10'>
+                <property name='artifact.size' value='6762'/>
+                <property name='download.size' value='6762'/>
+                <property name='maven-groupId' value='org.eclipse.orbit.bundles'/>
+                <property name='maven-artifactId' value='org.eclipse.orbit.releng.recipes.feature.aggregation'/>
+                <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+                <property name='maven-classifier' value='sources-feature'/>
+                <property name='download.contentType' value='application/zip'/>
+                <property name='download.md5' value='350a35240f863c491f54822be1d108ba'/>
+                <property name='download.checksum.md5' value='350a35240f863c491f54822be1d108ba'/>
+                <property name='download.checksum.sha-256' value='0dd07e47c32da1c9a289fb56705fbe836d8671662080cd4a24abfc8c16691f2c'/>
+            </properties>
+        </artifact>
+    </artifacts>
+</repository>

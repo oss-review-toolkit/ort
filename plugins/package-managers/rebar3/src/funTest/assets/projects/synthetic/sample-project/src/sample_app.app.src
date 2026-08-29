@@ -1,0 +1,12 @@
+{application, sample_app, [
+    {description, "Sample app for testing Rebar3 plugin"},
+    {vsn, "0.1.0"},
+    {registered, []},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache-2.0"]}
+]}.

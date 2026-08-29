@@ -1,0 +1,249 @@
+{
+  "headers": [
+    {
+      "tool_name": "scancode-toolkit",
+      "tool_version": "30.1.0",
+      "options": {
+        "input": [
+          "C:\\temp\\ort\\projects\\test-project"
+        ],
+        "--copyright": true,
+        "--info": true,
+        "--json-pp": "C:\\temp\\ort\\projects\\test-result\\result.json",
+        "--license": true,
+        "--max-in-memory": "5000",
+        "--processes": "3",
+        "--strip-root": true,
+        "--timeout": "300.0"
+      },
+      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+      "start_timestamp": "2022-02-02T140537.140333",
+      "end_timestamp": "2022-02-02T140606.514357",
+      "output_format_version": "1.0.0",
+      "duration": 29.374024152755737,
+      "message": null,
+      "errors": [
+        "Path: src/main/resources/static/document_with_error.pdf"
+      ],
+      "extra_data": {
+        "spdx_license_list_version": "3.14",
+        "OUTDATED": "WARNING: Outdated ScanCode Toolkit version! You are using an outdated version of ScanCode Toolkit: 30.1.0 released on: 2021-09-24. A new version is available with important improvements including bug and security fixes, updated license, copyright and package detection, and improved scanning accuracy. Please download and install the latest version of ScanCode. Visit https://github.com/nexB/scancode-toolkit/releases for details.",
+        "files_count": 105
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": ".ort.yml",
+      "type": "file",
+      "name": ".ort.yml",
+      "base_name": ".ort",
+      "extension": ".yml",
+      "size": 280,
+      "date": "2022-02-02",
+      "sha1": "22549868235f35e175e8b8272c1de8ade026aa3a",
+      "md5": "4ac4bdf304415633dce8023b10e5049d",
+      "sha256": "a9ed732116fc709c27a306f6c3085643f07867e380a495d712312ceacfa78df7",
+      "mime_type": "text/plain",
+      "file_type": "ASCII text, with CRLF line terminators",
+      "programming_language": null,
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": false,
+      "is_script": false,
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "copyrights": [],
+      "holders": [],
+      "authors": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "mvnw",
+      "type": "file",
+      "name": "mvnw",
+      "base_name": "mvnw",
+      "extension": "",
+      "size": 10389,
+      "date": "2022-02-02",
+      "sha1": "cd632dfbf9507b8c80508aec6c5fbf5fde39979b",
+      "md5": "3a27c6cdaa6f6a7deafb89aface269e7",
+      "sha256": "4ed855c6750498d951689421df2f89b96507eb1d0892d22ffac116bc327d0f76",
+      "mime_type": "text/x-shellscript",
+      "file_type": "POSIX shell script, ASCII text executable, with CRLF line terminators",
+      "programming_language": "Bash",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": true,
+      "licenses": [
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 3,
+          "end_line": 18,
+          "matched_rule": {
+            "identifier": "apache-2.0_663.RULE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [
+              "/usr/share/common-licenses/Apache-2.0"
+            ],
+            "is_license_text": false,
+            "is_license_notice": true,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 119,
+            "matched_length": 119,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "license_expressions": [
+        "apache-2.0"
+      ],
+      "percentage_of_license_text": 9.96,
+      "copyrights": [],
+      "holders": [],
+      "authors": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "mvnw.cmd",
+      "type": "file",
+      "name": "mvnw.cmd",
+      "base_name": "mvnw",
+      "extension": ".cmd",
+      "size": 6792,
+      "date": "2022-02-02",
+      "sha1": "5e98acf44877f0704f1c48a67b340d3124403d70",
+      "md5": "e3120799ea19489a2c6e8a288f57bff8",
+      "sha256": "6c9a99460bb59178c8ec570f242086ed7e53962fee9a09df6a320b87dc1532a3",
+      "mime_type": "text/x-msdos-batch",
+      "file_type": "DOS batch file, ASCII text, with CRLF line terminators",
+      "programming_language": "Batchfile",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "licenses": [
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 2,
+          "end_line": 17,
+          "matched_rule": {
+            "identifier": "apache-2.0_663.RULE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [
+              "/usr/share/common-licenses/Apache-2.0"
+            ],
+            "is_license_text": false,
+            "is_license_notice": true,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 119,
+            "matched_length": 119,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "license_expressions": [
+        "apache-2.0"
+      ],
+      "percentage_of_license_text": 13.84,
+      "copyrights": [],
+      "holders": [],
+      "authors": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "src/main/resources/static/document_with_error.pdf",
+      "type": "file",
+      "name": "document_with_error.pdf",
+      "base_name": "document_with_error",
+      "extension": ".pdf",
+      "size": 1597641,
+      "date": "2022-02-02",
+      "sha1": "3fc6d0b40b17d14bbc58ceade10b49c906247881",
+      "md5": "81d995fcd9cd5c33b30c6bd47870ddce",
+      "sha256": "603aba79289d62e7af4ba60d41d4e6ab522c6fe87b0943021c129f757e8c25a8",
+      "mime_type": "application/pdf",
+      "file_type": "PDF document, version 1.7 (password protected)",
+      "programming_language": null,
+      "is_binary": true,
+      "is_text": false,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": false,
+      "is_script": false,
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "copyrights": [],
+      "holders": [],
+      "authors": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": [
+        "ERROR: for scanner: licenses:\nERROR: Unknown error:\nTraceback (most recent call last):\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\src\\scancode\\interrupt.py\", line 133, in runner\n    _res = func(*(args or ()), **(kwargs or {}))\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\src\\scancode\\api.py\", line 176, in get_licenses\n    location=location, min_score=min_score, deadline=deadline, **kwargs\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\src\\licensedcode\\index.py\", line 824, in match\n    bin_line_threshold=50,\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\src\\licensedcode\\query.py\", line 119, in build_query\n    if not T.contains_text:\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\lib\\site-packages\\typecode\\contenttype.py\", line 618, in contains_text\n    elif self.is_pdf and not self.is_pdf_with_text:\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\lib\\site-packages\\typecode\\contenttype.py\", line 594, in is_pdf_with_text\n    doc = PDFDocument(parser)\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\lib\\site-packages\\pdfminer\\pdfdocument.py\", line 578, in __init__\n    xref.load(parser)\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\lib\\site-packages\\pdfminer\\pdfdocument.py\", line 190, in load\n    (_, obj) = parser.nextobject()\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\lib\\site-packages\\pdfminer\\psparser.py\", line 567, in nextobject\n    (pos, token) = self.nexttoken()\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\lib\\site-packages\\pdfminer\\psparser.py\", line 493, in nexttoken\n    self.fillbuf()\n  File \"c:\\data\\dev\\tools\\scancode-toolkit-30.1.0\\lib\\site-packages\\pdfminer\\psparser.py\", line 221, in fillbuf\n    raise PSEOF('Unexpected EOF')\npdfminer.psparser.PSEOF: Unexpected EOF\n"
+      ]
+    }
+  ]
+}

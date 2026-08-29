@@ -1,0 +1,196 @@
+---
+project:
+  id: "PIP::spdx-tools:0.5.4"
+  definition_file_path: "setup.py"
+  authors:
+  - "Ahmed H. Ismail <ahm3d.hisham@gmail.com>"
+  declared_licenses:
+  - "Apache Software License"
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache Software License: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/spdx/tools-python.git"
+    revision: "a48022e65a8897d0e4f2e93d8e53695d2c13ea23"
+    path: ""
+  homepage_url: "https://github.com/spdx/tools-python"
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::ply:3.11"
+    - id: "PyPI::rdflib:5.0.0"
+      dependencies:
+      - id: "PyPI::isodate:0.7.0"
+      - id: "PyPI::pyparsing:2.4.7"
+      - id: "PyPI::six:1.17.0"
+packages:
+- id: "PyPI::isodate:0.7.0"
+  purl: "pkg:pypi/isodate@0.7.0"
+  authors:
+  - "Gerhard Weis"
+  declared_licenses:
+  - "BSD License"
+  declared_licenses_processed:
+    unmapped:
+    - "BSD License"
+  description: "An ISO 8601 date/time/duration parser and formatter"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/9b/40/32ce777053517be3032bb2ab3bb216959071ee0c16c761879e75c34a323e/isodate-0.7.0.tar.gz"
+    hash:
+      value: "c6332cf456314b85cc3b6ea2c45a6fa417cb1fddb361f6d2ed8f4f69e843c6d1"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::ply:3.11"
+  purl: "pkg:pypi/ply@3.11"
+  authors:
+  - "David Beazley <dave@dabeaz.com>"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "Python Lex & Yacc"
+  homepage_url: "http://www.dabeaz.com/ply/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/a3/58/35da89ee790598a0700ea49b2a66594140f44dec458c07e8e3d4979137fc/ply-3.11-py2.py3-none-any.whl"
+    hash:
+      value: "096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da/ply-3.11.tar.gz"
+    hash:
+      value: "00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::pyparsing:2.4.7"
+  purl: "pkg:pypi/pyparsing@2.4.7"
+  authors:
+  - "Paul McGuire <ptmcg@users.sourceforge.net>"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Python parsing module"
+  homepage_url: "https://github.com/pyparsing/pyparsing/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/8a/bb/488841f56197b13700afd5658fc279a2025a39e22449b7cf29864669b15d/pyparsing-2.4.7-py2.py3-none-any.whl"
+    hash:
+      value: "ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210/pyparsing-2.4.7.tar.gz"
+    hash:
+      value: "c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pyparsing/pyparsing.git"
+    revision: ""
+    path: ""
+- id: "PyPI::rdflib:5.0.0"
+  purl: "pkg:pypi/rdflib@5.0.0"
+  authors:
+  - "Daniel 'eikeon' Krech <eikeon@eikeon.com>"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
+    \ language for representing information."
+  homepage_url: "https://github.com/RDFLib/rdflib"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/2f/ae/a50934a7ed4f9d80bbc0e0cf725c7fd2208f2e433efbf881ed0c0317a7f1/rdflib-5.0.0.tar.gz"
+    hash:
+      value: "78149dd49d385efec3b3adfbd61c87afaf1281c30d3fcaf1b323b34f603fb155"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RDFLib/rdflib.git"
+    revision: ""
+    path: ""
+- id: "PyPI::six:1.17.0"
+  purl: "pkg:pypi/six@1.17.0"
+  authors:
+  - "Benjamin Peterson <benjamin@python.org>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Python 2 and 3 compatibility utilities"
+  homepage_url: "https://github.com/benjaminp/six"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl"
+    hash:
+      value: "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz"
+    hash:
+      value: "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/benjaminp/six.git"
+    revision: ""
+    path: ""

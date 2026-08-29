@@ -1,0 +1,61 @@
+# Components precompiled libs
+cc_import(
+    name = "curl_precompiled",
+    static_library = "lib/libcurl.a",
+)
+
+# Root package precompiled libs
+
+# Components libraries declaration
+cc_library(
+    name = "libcurl-curl",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    defines = [
+        "CURL_STATICLIB=1",
+    ],
+    linkopts = [
+        "-lrt",
+        "-lpthread",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":curl_precompiled",
+        "@openssl//:openssl",
+        "@zlib//:zlib",
+    ],
+)
+
+# Package library declaration
+cc_library(
+    name = "libcurl",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":libcurl-curl",
+        "@openssl//:openssl",
+        "@zlib//:zlib",
+    ],
+)
+
+# Filegroup library declaration
+filegroup(
+    name = "libcurl_binaries",
+    srcs = glob([
+        "bin/**",
+    ],
+    allow_empty = True
+    ),
+    visibility = ["//visibility:public"],
+)

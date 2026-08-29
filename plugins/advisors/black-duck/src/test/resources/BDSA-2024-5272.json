@@ -1,0 +1,106 @@
+{
+  "source": "BDSA",
+  "name": "BDSA-2024-5272",
+  "title": "Libtiff Vulnerable to Denial-of-Service (DoS) via Null Pointer Dereference Caused by '_TIFFCreateAnonField' Return Value",
+  "description": "Libtiff is vulnerable to a null pointer dereference issue due to a problem in its `_TIFFMergeFields` function. This could allow an attacker to trigger memory allocation failures, causing a segmentation fault and leading to a crash.",
+  "technicalDescription": "The vulnerability resides within the `tif_dirinfo.c` file. The issue arises from a null pointer dereference in the `_TIFFMergeFields` function, which directly uses the return value of `_TIFFCreateAnonField` as the second parameter, without checking whether it might be NULL. This could lead to a segmentation fault and a potential denial-of-service situation. The vulnerability was fixed by adding a check for the return value of `_TIFFCreateAnonField`. If the return value is NULL, the `_TIFFMergeFields()` function will not proceed. This change was implemented in both the `TIFFReadDirectory` and `TIFFReadCustomDirectory` functions within the `tif_dirread.c` file.",
+  "publishedDate": "2024-08-09T13:47:27.503Z",
+  "updatedDate": "2024-10-08T12:52:29.767Z",
+  "disclosureDate": "2024-08-05T00:00:00.000Z",
+  "exploitPublishDate": "2023-11-23T00:00:00.000Z",
+  "solution": "Fixed in [**v4.7.0rc1**](https://gitlab.com/libtiff/libtiff/-/tags/v4.7.0rc1) by [this](https://gitlab.com/libtiff/libtiff/-/commit/818fb8ce) commit.",
+  "severity": "MEDIUM",
+  "cvss2": {
+    "baseScore": 0,
+    "impactSubscore": 0,
+    "exploitabilitySubscore": 1.2,
+    "severity": "LOW",
+    "accessVector": "LOCAL",
+    "accessComplexity": "HIGH",
+    "authentication": "MULTIPLE",
+    "confidentialityImpact": "NONE",
+    "integrityImpact": "NONE",
+    "availabilityImpact": "NONE",
+    "vector": "(AV:L/AC:H/Au:M/C:N/I:N/A:N)"
+  },
+  "cvss3": {
+    "baseScore": 5.3,
+    "impactSubscore": 1.4,
+    "exploitabilitySubscore": 3.9,
+    "severity": "MEDIUM",
+    "attackVector": "NETWORK",
+    "attackComplexity": "LOW",
+    "confidentialityImpact": "NONE",
+    "integrityImpact": "NONE",
+    "availabilityImpact": "LOW",
+    "privilegesRequired": "NONE",
+    "scope": "UNCHANGED",
+    "userInteraction": "NONE",
+    "temporalMetrics": {
+      "exploitability": "PROOF_OF_CONCEPT",
+      "remediationLevel": "OFFICIAL_FIX",
+      "reportConfidence": "CONFIRMED",
+      "score": 4.8
+    },
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+  },
+  "useCvss3": true,
+  "classifications": [],
+  "zeroDay": false,
+  "underReview": false,
+  "parentAdvisory": false,
+  "workaround": "",
+  "vendorFixDate": "2023-12-09T00:00:00.000Z",
+  "vendorNotifiedDate": "2023-11-23T00:00:00.000Z",
+  "bdsaTags": [],
+  "overallScore": 4.8,
+  "_meta": {
+    "allow": [],
+    "href": "https://zeiss.app.blackduck.com/api/vulnerabilities/BDSA-2024-5272",
+    "links": [
+      {
+        "rel": "cwes",
+        "href": "https://zeiss.app.blackduck.com/api/cwes/CWE-476"
+      },
+      {
+        "rel": "related-vulnerability",
+        "href": "https://zeiss.app.blackduck.com/api/vulnerabilities/CVE-2024-7006",
+        "label": "NVD"
+      },
+      {
+        "rel": "bdsa-ranges",
+        "href": "https://zeiss.app.blackduck.com/api/vulnerabilities/BDSA-2024-5272/ranges"
+      },
+      {
+        "rel": "reference",
+        "href": "https://access.redhat.com/security/cve/CVE-2024-7006",
+        "label": "ADVISORY"
+      },
+      {
+        "rel": "reference",
+        "href": "https://bugzilla.redhat.com/show_bug.cgi?id=2302996",
+        "label": "ADVISORY"
+      },
+      {
+        "rel": "reference",
+        "href": "https://gitlab.com/libtiff/libtiff/-/commit/818fb8ce",
+        "label": "PATCH"
+      },
+      {
+        "rel": "reference",
+        "href": "https://gitlab.com/libtiff/libtiff/-/issues/624",
+        "label": "ADVISORY"
+      },
+      {
+        "rel": "reference",
+        "href": "https://gitlab.com/libtiff/libtiff/-/issues/624",
+        "label": "POC"
+      },
+      {
+        "rel": "reference",
+        "href": "https://gitlab.com/libtiff/libtiff/-/tags/v4.7.0rc1",
+        "label": "VENDOR_UPGRADE"
+      }
+    ]
+  }
+}

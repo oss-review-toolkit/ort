@@ -1,0 +1,120 @@
+# Components precompiled libs
+cc_import(
+    name = "gtest_precompiled",
+    static_library = "lib/libgtest.a",
+)
+
+cc_import(
+    name = "gtest_main_precompiled",
+    static_library = "lib/libgtest_main.a",
+)
+
+cc_import(
+    name = "gmock_precompiled",
+    static_library = "lib/libgmock.a",
+)
+
+cc_import(
+    name = "gmock_main_precompiled",
+    static_library = "lib/libgmock_main.a",
+)
+
+# Root package precompiled libs
+
+# Components libraries declaration
+cc_library(
+    name = "gtest-libgtest",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    linkopts = [
+        "-lm",
+        "-lpthread",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":gtest_precompiled",
+    ],
+)
+
+cc_library(
+    name = "gtest-gtest_main",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":gtest_main_precompiled",
+        ":gtest-libgtest",
+    ],
+)
+
+cc_library(
+    name = "gtest-gmock",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":gmock_precompiled",
+        ":gtest-libgtest",
+    ],
+)
+
+cc_library(
+    name = "gtest-gmock_main",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":gmock_main_precompiled",
+        ":gtest-gmock",
+    ],
+)
+
+# Package library declaration
+cc_library(
+    name = "gtest",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":gtest-libgtest",
+        ":gtest-gtest_main",
+        ":gtest-gmock",
+        ":gtest-gmock_main",
+    ],
+)
+
+# Filegroup library declaration
+filegroup(
+    name = "gtest_binaries",
+    srcs = glob([
+        "bin/**",
+    ],
+    allow_empty = True
+    ),
+    visibility = ["//visibility:public"],
+)

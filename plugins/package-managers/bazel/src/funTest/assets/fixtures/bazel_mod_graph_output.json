@@ -1,0 +1,78 @@
+{
+  "key": "\u003croot\u003e",
+  "dependencies": [
+    {
+      "key": "glog@0.5.0",
+      "dependencies": [
+        {
+          "key": "gflags@2.2.2",
+          "dependencies": [],
+          "indirectDependencies": [],
+          "cycles": []
+        }
+      ],
+      "indirectDependencies": [],
+      "cycles": []
+    },
+    {
+      "key": "googletest@1.14.0",
+      "dependencies": [
+        {
+          "key": "abseil-cpp@20230125.1",
+          "dependencies": [
+            {
+              "key": "platforms@0.0.7",
+              "unexpanded": true
+            },
+            {
+              "key": "rules_cc@0.0.9",
+              "unexpanded": true
+            },
+            {
+              "key": "bazel_skylib@1.4.1",
+              "dependencies": [
+                {
+                  "key": "platforms@0.0.7",
+                  "unexpanded": true
+                }
+              ],
+              "indirectDependencies": [],
+              "cycles": []
+            }
+          ],
+          "indirectDependencies": [],
+          "cycles": []
+        },
+        {
+          "key": "platforms@0.0.7",
+          "dependencies": [
+            {
+              "key": "rules_license@0.0.7",
+              "dependencies": [],
+              "indirectDependencies": [],
+              "cycles": []
+            }
+          ],
+          "indirectDependencies": [],
+          "cycles": []
+        },
+        {
+          "key": "rules_cc@0.0.9",
+          "dependencies": [
+            {
+              "key": "platforms@0.0.7",
+              "unexpanded": true
+            }
+          ],
+          "indirectDependencies": [],
+          "cycles": []
+        }
+      ],
+      "indirectDependencies": [],
+      "cycles": []
+    }
+  ],
+  "indirectDependencies": [],
+  "cycles": [],
+  "root": true
+}

@@ -1,0 +1,532 @@
+/*
+ * Copyright (C) 2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.reporters.cyclonedx
+
+import java.net.URI
+import java.time.Instant
+
+import org.ossreviewtoolkit.model.AdvisorDetails
+import org.ossreviewtoolkit.model.AdvisorResult
+import org.ossreviewtoolkit.model.AdvisorRun
+import org.ossreviewtoolkit.model.AdvisorSummary
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ResolvedConfiguration
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.UnknownProvenance
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.LicenseChoices
+import org.ossreviewtoolkit.model.config.PackageLicenseChoice
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
+import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
+import org.ossreviewtoolkit.utils.test.scannerRunOf
+
+// TODO: Create a way to reduce the code required to prepare an OrtResult for testing.
+val ORT_RESULT = OrtResult(
+    repository = Repository(
+        vcs = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/oss-review-toolkit/ort.git",
+            revision = "main"
+        ),
+        config = RepositoryConfiguration(
+            excludes = Excludes(
+                paths = listOf(
+                    PathExclude(
+                        pattern = "excluded-project/**",
+                        reason = PathExcludeReason.OTHER
+                    )
+                ),
+                scopes = listOf(
+                    ScopeExclude(
+                        pattern = "devDependencies",
+                        reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF
+                    )
+                )
+            ),
+            licenseChoices = LicenseChoices(
+                packageLicenseChoices = listOf(
+                    PackageLicenseChoice(
+                        packageId = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
+                        licenseChoices = listOf(
+                            SpdxLicenseChoice(
+                                given = "Apache-2.0 OR BSD-3-Clause".toSpdx(),
+                                choice = "BSD-3-Clause".toSpdx()
+                            )
+                        )
+
+                    )
+                )
+            )
+        )
+    ),
+    resolvedConfiguration = ResolvedConfiguration(
+        licenseChoices = LicenseChoices(
+            packageLicenseChoices = listOf(
+                PackageLicenseChoice(
+                    packageId = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
+                    licenseChoices = listOf(
+                        SpdxLicenseChoice(
+                            given = "Apache-2.0 OR BSD-3-Clause".toSpdx(),
+                            choice = "BSD-3-Clause".toSpdx()
+                        )
+                    )
+                )
+            )
+        )
+    ),
+    analyzer = AnalyzerRun.EMPTY.copy(
+        result = AnalyzerResult(
+            projects = setOf(
+                Project(
+                    id = Identifier("NPM:@ort:project-with-findings:1.0"),
+                    definitionFilePath = "project-with-findings/package.json",
+                    declaredLicenses = emptySet(),
+                    vcs = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/oss-review-toolkit/ort.git",
+                        revision = "main"
+                    ),
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    scopeDependencies = setOf(
+                        Scope(
+                            name = "dependencies",
+                            dependencies = setOf(
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:no-license-file:1.0")
+                                ),
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:license-file:1.0")
+                                ),
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0")
+                                ),
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:concluded-license:1.0")
+                                ),
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:declared-license:1.0")
+                                )
+                            )
+                        ),
+                        Scope(
+                            name = "devDependencies",
+                            dependencies = setOf(
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:declared-license:1.0")
+                                ),
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:test:0.1.0")
+                                )
+                            )
+                        )
+                    )
+                ),
+                Project(
+                    id = Identifier("NPM:@ort:project-without-findings:1.0"),
+                    definitionFilePath = "project-without-findings/package.json",
+                    declaredLicenses = emptySet(),
+                    vcs = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/oss-review-toolkit/ort.git",
+                        revision = "main"
+                    ),
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    scopeDependencies = setOf(
+                        Scope(
+                            name = "dependencies",
+                            dependencies = emptySet()
+                        )
+                    )
+                ),
+                Project(
+                    id = Identifier("NPM:@ort:excluded-project:1.0"),
+                    definitionFilePath = "excluded-project/package.json",
+                    declaredLicenses = setOf("BSD-2-Clause"),
+                    vcs = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/oss-review-toolkit/ort.git",
+                        revision = "main"
+                    ),
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    scopeDependencies = emptySet()
+                )
+            ),
+            packages = setOf(
+                Package(
+                    id = Identifier("NPM:@ort:no-license-file:1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
+                ),
+                Package(
+                    id = Identifier("NPM:@ort:license-file:1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/license-file-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
+                    vcs = VcsInfo.EMPTY
+                ),
+                Package(
+                    id = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
+                    vcs = VcsInfo.EMPTY
+                ),
+                Package(
+                    id = Identifier("NPM:@ort:concluded-license:1.0"),
+                    declaredLicenses = setOf("BSD-3-Clause"),
+                    concludedLicense = "MIT AND MIT WITH Libtool-exception".toSpdx(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/concluded-license-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
+                    vcs = VcsInfo.EMPTY
+                ),
+                Package(
+                    id = Identifier("NPM:@ort:declared-license:1.0"),
+                    declaredLicenses = setOf("MIT"),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/declared-license-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
+                    vcs = VcsInfo.EMPTY,
+                    isModified = true
+                ),
+                Package(
+                    id = Identifier("NPM:@ort:test:0.1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
+                )
+            )
+        )
+    ),
+    scanner = scannerRunOf(
+        Identifier("NPM:@ort:project-with-findings:1.0") to listOf(
+            ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("project-with-findings/file", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("project-with-findings/file", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("NPM:@ort:project-without-findings:1.0") to listOf(
+            ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY
+            )
+        ),
+        Identifier("NPM:@ort:no-license-file:1.0") to listOf(
+            ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("file", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("NPM:@ort:license-file:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/license-file-1.0.tgz",
+                        hash = Hash.NONE
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("LICENSE", 1)
+                        ),
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("LICENSE", 1)
+                        ),
+                        CopyrightFinding(
+                            statement = "Copyright 2",
+                            location = TextLocation("file", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("NPM:@ort:license-file-and-additional-licenses:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
+                        hash = Hash.NONE
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("LICENSE", 1)
+                        ),
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file", 1)
+                        ),
+                        LicenseFinding(
+                            license = "Apache-2.0 OR BSD-3-Clause",
+                            location = TextLocation("file2", 1)
+                        ),
+                        LicenseFinding(
+                            license = "LicenseRef-scancode-truecrypt-3.1",
+                            location = TextLocation("file3", 1)
+                        ),
+                        LicenseFinding(
+                            license = "LGPL-3.0-or-later WITH openvpn-openssl-exception",
+                            location = TextLocation("file4", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("LICENSE", 1)
+                        ),
+                        CopyrightFinding(
+                            statement = "Copyright 2",
+                            location = TextLocation("file", 1)
+                        ),
+                        CopyrightFinding(
+                            statement = "Copyright 3",
+                            location = TextLocation("file", 50)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("NPM:@ort:concluded-license:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/concluded-license-1.0.tgz",
+                        hash = Hash.NONE
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file1", 1)
+                        ),
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("file2", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("file1", 1)
+                        ),
+                        CopyrightFinding(
+                            statement = "Copyright 2",
+                            location = TextLocation("file2", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("NPM:@ort:declared-license:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/declared-license-1.0.tgz",
+                        hash = Hash.NONE
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("LICENSE", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("LICENSE", 1)
+                        )
+                    )
+                )
+            )
+        )
+    )
+)
+
+val ORT_RESULT_WITH_VULNERABILITIES = ORT_RESULT.copy(
+    advisor = AdvisorRun(
+        startTime = Instant.now(),
+        endTime = Instant.now(),
+        environment = Environment(),
+        config = AdvisorConfiguration(),
+        results = mapOf(
+            Identifier("NPM:@ort:declared-license:1.0") to listOf(
+                AdvisorResult(
+                    advisor = AdvisorDetails("VulnerableCode"),
+                    summary = AdvisorSummary(Instant.now(), Instant.now()),
+                    vulnerabilities = listOf(
+                        Vulnerability(
+                            id = "CVE-2021-1234",
+                            summary = "A vulnerability summary",
+                            description = "A vulnerability description",
+                            references = listOf(
+                                VulnerabilityReference(
+                                    url = URI("https://cves.example.org/cve1"),
+                                    scoringSystem = "CVSSv2",
+                                    severity = "MEDIUM",
+                                    score = 6.0f,
+                                    vector = null
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
+)
+
+val ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS = ORT_RESULT.copy(
+    scanner = scannerRunOf(
+        Identifier("NPM:@ort:no-license-file:1.0") to listOf(
+            ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Portions created by the Initial Developer are Copyright (c) 2002 the " +
+                                "Initial Developer, holder is Tim Hudson (tjh@cryptsoft.com), Objc, (c) Objv, " +
+                                "\u0002 \u0002 \u0001A\u0002\u0002\u0001o\u0002\u0012 AB, Copyright (c)",
+                            location = TextLocation("file", 1)
+                        )
+                    )
+                )
+            )
+        )
+    )
+)
