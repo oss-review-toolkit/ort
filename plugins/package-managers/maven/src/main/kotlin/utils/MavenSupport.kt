@@ -107,7 +107,10 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 private val File?.safePath: String
     get() = this?.invariantSeparatorsPath ?: "<unknown file>"
 
-class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
+class MavenSupport(
+    private val workspaceReader: WorkspaceReader,
+    private val userSettingsFile: File? = null
+) : Closeable {
     private val container = createContainer()
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
 
@@ -136,11 +139,13 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
         val populator = containerLookup<MavenExecutionRequestPopulator>()
 
         val settingsBuilder = containerLookup<org.apache.maven.settings.MavenSettingsBuilder>()
-        // TODO: Add a way to configure the location of a user settings file and pass it to the method below which will
-        //       merge the user settings with the global settings. The default location of the global settings file is
-        //       "${user.home}/.m2/settings.xml". The settings file locations can already be overwritten using the
-        //       system properties "org.apache.maven.global-settings" and "org.apache.maven.user-settings".
-        val settings = settingsBuilder.buildSettings()
+        val settings = if (userSettingsFile != null) {
+            // This internally merges user settings with global settings. A non-existent settings file is equivalent to
+            // empty settings.
+            settingsBuilder.buildSettings(userSettingsFile)
+        } else {
+            settingsBuilder.buildSettings()
+        }
 
         populator.populateFromSettings(request, settings)
         populator.populateDefaults(request)
