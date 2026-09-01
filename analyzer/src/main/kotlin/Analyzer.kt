@@ -24,6 +24,8 @@ import java.time.Instant
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -160,8 +162,10 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     private fun analyzeInParallel(info: ManagedFileInfo): AnalyzerResult {
         logger.info { "Calling before resolution hooks for ${info.managedFiles.size} manager(s)." }
 
-        info.managedFiles.forEach { (manager, definitionFiles) ->
-            manager.beforeResolution(info.absoluteProjectPath, definitionFiles, config)
+        runBlocking {
+            info.managedFiles.map { (manager, definitionFiles) ->
+                async { manager.beforeResolution(info.absoluteProjectPath, definitionFiles, config) }
+            }.awaitAll()
         }
 
         val state = AnalyzerState()
@@ -192,8 +196,10 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         logger.info { "Calling after resolution hooks for ${info.managedFiles.size} manager(s)." }
 
-        info.managedFiles.forEach { (manager, definitionFiles) ->
-            manager.afterResolution(info.absoluteProjectPath, definitionFiles)
+        runBlocking {
+            info.managedFiles.map { (manager, definitionFiles) ->
+                async { manager.afterResolution(info.absoluteProjectPath, definitionFiles) }
+            }.awaitAll()
         }
 
         logger.info { "Building analyzer result." }
