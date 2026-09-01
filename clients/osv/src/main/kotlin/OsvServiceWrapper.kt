@@ -43,21 +43,23 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
         if (requests.isEmpty()) return Result.success(emptyList())
 
         @Suppress("ForbiddenMethodCall")
-        return runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            runCatching {
-                requests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE).map { requestsChunk ->
-                    async {
-                        val batchRequest = VulnerabilitiesForPackageBatchRequest(requestsChunk)
-                        service.getVulnerabilityIdsForPackages(batchRequest)
-                    }
-                }.awaitAll()
-            }.map { batchResponses ->
-                batchResponses.flatMap { batchResponse ->
-                    batchResponse.results.map { idList ->
-                        idList.vulnerabilities.map { it.id }
-                    }
+        val batchResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+            requests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE).map { requestsChunk ->
+                async {
+                    val batchRequest = VulnerabilitiesForPackageBatchRequest(requestsChunk)
+                    runCatching { service.getVulnerabilityIdsForPackages(batchRequest) }.unwrapHttpException()
                 }
-            }.unwrapHttpException()
+            }.awaitAll()
+        }
+
+        // Combine the individual results of requests into one encapsulating result that is a failure if any of the
+        // requests failed.
+        return runCatching {
+            batchResults.flatMap { batchResult ->
+                batchResult.getOrThrow().results.map { idList ->
+                    idList.vulnerabilities.map { it.id }
+                }
+            }
         }
     }
 
@@ -68,15 +70,22 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
      * It's been considered to add a batch API in the future, see
      * https://github.com/google/osv.dev/issues/466#issuecomment-1163337495.
      */
-    fun getVulnerabilitiesForIds(ids: Set<String>): Result<List<Vulnerability>> =
+    fun getVulnerabilitiesForIds(ids: Set<String>): Result<List<Vulnerability>> {
         @Suppress("ForbiddenMethodCall")
-        runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            runCatching {
-                ids.map { id ->
-                    async { service.getVulnerabilityForId(id) }
-                }.awaitAll()
-            }.unwrapHttpException()
+        val vulnerabilityResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+            ids.map { id ->
+                async {
+                    runCatching { service.getVulnerabilityForId(id) }.unwrapHttpException()
+                }
+            }.awaitAll()
         }
+
+        // Combine the individual results of requests into one encapsulating result that is a failure if any of the
+        // requests failed.
+        return runCatching {
+            vulnerabilityResults.map { it.getOrThrow() }
+        }
+    }
 }
 
 /**

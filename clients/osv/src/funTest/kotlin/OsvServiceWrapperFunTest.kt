@@ -73,8 +73,7 @@ class OsvServiceWrapperFunTest : WordSpec({
             }
         }
 
-        // TODO: This test currently does not pass due to an unhandled HttpException.
-        "return a failure if the request is invalid".config(enabled = false) {
+        "return a failure if the request is invalid" {
             val requests = listOf(
                 VulnerabilitiesForPackageRequest(
                     pkg = Package(
@@ -104,8 +103,7 @@ class OsvServiceWrapperFunTest : WordSpec({
             }
         }
 
-        // TODO: This test currently does not pass due to an unhandled HttpException.
-        "return a failure if the request is invalid".config(enabled = false) {
+        "return a failure if the request is invalid" {
             val ids = setOf("dummy")
 
             val result = OsvServiceWrapper().getVulnerabilitiesForIds(ids)
