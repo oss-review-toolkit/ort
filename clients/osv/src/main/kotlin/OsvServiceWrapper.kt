@@ -57,7 +57,7 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
                         idList.vulnerabilities.mapTo(mutableListOf()) { it.id }
                     }
                 }
-            }.handleHttpException()
+            }.unwrapHttpException()
         }
     }
 
@@ -75,11 +75,15 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
                 ids.map { id ->
                     async { service.getVulnerabilityForId(id) }
                 }.awaitAll()
-            }.handleHttpException()
+            }.unwrapHttpException()
         }
 }
 
-private fun <T> Result<T>.handleHttpException() =
+/**
+ * Get the inner code and message of an [HttpException], if any, as part of the [Result], and rethrow them as a
+ * streamlined message of an [IOException].
+ */
+private fun <T> Result<T>.unwrapHttpException() =
     recoverCatching { e ->
         if (e is HttpException) {
             val response = e.response()
