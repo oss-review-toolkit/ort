@@ -75,7 +75,7 @@ class ScanCodeLicenseFactProvider(
             }
         }
 
-        findLicenseDir()?.also {
+        findScanCodeInstallationLicenseDataDir()?.also {
             logger.debug { "Located ScanCode license text directory: $it" }
             return@lazy it
         } ?: logger.debug { "Could not locate the ScanCode 'licenses' text directory." }
@@ -123,7 +123,7 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 private val File.isNotBlank: Boolean
     get() = useLines { lines -> lines.skipYamlFrontMatter().any { line -> line.any { !it.isWhitespace() } } }
 
-private fun findLicenseDir(): File? {
+private fun findScanCodeInstallationLicenseDataDir(): File? {
     logger.debug { "Trying to locate the ScanCode license text directory..." }
 
     val scanCodeExeDir = Os.getPathFromEnvironment("scancode")?.realFile?.parentFile
