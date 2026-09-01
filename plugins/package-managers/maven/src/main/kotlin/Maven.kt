@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.maven
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.project.ProjectBuildingResult
 
 import org.eclipse.aether.graph.DependencyNode
@@ -44,10 +45,21 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.createIssuesForA
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.isTychoProject
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.toOrtProject
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.searchUpwardFor
 
 internal const val PROJECT_TYPE = "Maven"
 internal const val PACKAGE_TYPE = "Maven"
+
+/** A class to represent the configuration options supported by the [Maven] package manager implementation. */
+data class MavenConfig(
+    /**
+     * An optional path to a custom user settings file. If the path is relative, it is resolved against the analyzer
+     * root. If unspecified, the [default user settings file](https://maven.apache.org/settings.html#quick-overview) at
+     * `${user.home}/.m2/settings.xml` is used.
+     */
+    val userSettingsFile: String?
+)
 
 /**
  * The [Maven](https://maven.apache.org/) package manager for Java.
@@ -57,13 +69,17 @@ internal const val PACKAGE_TYPE = "Maven"
     summary = "The Maven package manager for Java.",
     factory = PackageManagerFactory::class
 )
-class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor, private val sbtMode: Boolean) :
-    PackageManager(if (sbtMode) "SBT" else PROJECT_TYPE) {
-    constructor(descriptor: PluginDescriptor = MavenFactory.descriptor) : this(descriptor, false)
+class Maven(
+    override val descriptor: PluginDescriptor = MavenFactory.descriptor,
+    private val config: MavenConfig? = null,
+    private val sbtMode: Boolean
+) : PackageManager(if (sbtMode) "SBT" else PROJECT_TYPE) {
+    constructor(descriptor: PluginDescriptor = MavenFactory.descriptor, config: MavenConfig) :
+        this(descriptor, config, false)
 
     override val globsForDefinitionFiles = listOf("pom.xml")
 
-    private val mavenSupport = MavenSupport(LocalProjectWorkspaceReader { localProjectBuildingResults[it]?.pomFile })
+    private lateinit var mavenSupport: MavenSupport
 
     private val localProjectBuildingResults = mutableMapOf<String, ProjectBuildingResult>()
 
@@ -75,6 +91,16 @@ class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor,
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
     ) {
+        val mavenUserSettingsFile = config?.userSettingsFile?.let { File(it) }
+        mavenSupport = MavenSupport(
+            LocalProjectWorkspaceReader { localProjectBuildingResults[it]?.pomFile },
+            mavenUserSettingsFile?.let { if (it.isAbsolute) it else analysisRoot / it }?.also {
+                if (!it.isFile) {
+                    logger.warn { "The specified Maven user settings file '$it' does not exist." }
+                }
+            }
+        )
+
         localProjectBuildingResults += mavenSupport.prepareMavenProjects(definitionFiles)
 
         val localProjects = localProjectBuildingResults.mapValues { it.value.project }
