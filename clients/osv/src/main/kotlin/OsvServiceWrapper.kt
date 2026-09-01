@@ -51,8 +51,8 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
                         service.getVulnerabilityIdsForPackages(batchRequest)
                     }
                 }.awaitAll()
-            }.map {
-                it.flatMap { batchResponse ->
+            }.map { batchResponses ->
+                batchResponses.flatMap { batchResponse ->
                     batchResponse.results.map { idList ->
                         idList.vulnerabilities.map { it.id }
                     }
