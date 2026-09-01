@@ -58,34 +58,18 @@ class ScanCodeLicenseFactProvider(
     override val descriptor: PluginDescriptor = ScanCodeLicenseFactProviderFactory.descriptor,
     private val config: ScanCodeLicenseFactProviderConfig
 ) : LicenseFactProvider() {
-    private val licenseTextDir: File? by lazy { findScanCodeLicenseDataDir(config) }
-
-    private fun getLicenseTextFile(licenseOrExceptionId: String): File? {
-        val filename = if (licenseOrExceptionId == "LicenseRef-scancode-unlimited-link-exception-lgpl") {
-            // Work around for https://github.com/oss-review-toolkit/ort/issues/12369.
-            "unlimited-linking-exception-lgpl.LICENSE"
-        } else {
-            "${licenseOrExceptionId.removePrefix("LicenseRef-scancode-").lowercase()}.LICENSE"
-        }
-
-        return licenseTextDir?.resolve(filename)?.takeIf { it.isFile && it.isNotBlank }
+    private val licenseDataDirReader: ScanCodeLicenseDataDirReader? by lazy {
+        findScanCodeLicenseDataDir(config)?.let { ScanCodeLicenseDataDirReader(it) }
     }
 
     override fun getLicenseText(licenseOrExceptionId: String) =
-        getLicenseTextFile(licenseOrExceptionId)?.useLines { lines ->
-            lines.skipYamlFrontMatter().joinToString("\n").trimEnd()
-        }?.let {
-            LicenseText(it)
-        }
+        licenseDataDirReader?.getLicenseText(licenseOrExceptionId)?.let { LicenseText(it) }
 
     override fun hasLicenseText(licenseOrExceptionId: String): Boolean =
-        getLicenseTextFile(licenseOrExceptionId) != null
+        licenseDataDirReader?.hasLicenseText(licenseOrExceptionId) ?: false
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
-
-private val File.isNotBlank: Boolean
-    get() = useLines { lines -> lines.skipYamlFrontMatter().any { line -> line.any { !it.isWhitespace() } } }
 
 /**
  * Return the directory that contains the ScanCode license data. This is located using a heuristic based on the path of
@@ -154,22 +138,4 @@ private fun exportLicenseData(targetDir: File): File? {
     )
 
     return targetDir.takeIf { process.isSuccess && it.isDirectory }
-}
-
-internal fun Sequence<String>.skipYamlFrontMatter(): Sequence<String> {
-    var inFrontMatter = false
-
-    return filterIndexed { index, line ->
-        if (index == 0 && line == "---") {
-            inFrontMatter = true
-            false
-        } else if (inFrontMatter) {
-            if (line == "---") inFrontMatter = false
-            false
-        } else {
-            true
-        }
-    }.dropWhile {
-        it.isBlank()
-    }
 }
