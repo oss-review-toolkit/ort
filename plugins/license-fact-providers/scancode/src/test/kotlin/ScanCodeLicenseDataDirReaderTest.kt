@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-class ScanCodeLicenseFactProviderTest : WordSpec({
+class ScanCodeLicenseDataDirReaderTest : WordSpec({
     "skipYamlFrontMatter()" should {
         "skip a YAML front matter" {
             val text = """
