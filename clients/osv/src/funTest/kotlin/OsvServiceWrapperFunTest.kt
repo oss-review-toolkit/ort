@@ -24,8 +24,10 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
+import io.kotest.matchers.string.shouldContain
 
 private val VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0f"
@@ -70,6 +72,25 @@ class OsvServiceWrapperFunTest : WordSpec({
                 )
             }
         }
+
+        // TODO: This test currently does not pass due to an unhandled HttpException.
+        "return a failure if the request is invalid".config(enabled = false) {
+            val requests = listOf(
+                VulnerabilitiesForPackageRequest(
+                    pkg = Package(
+                        name = "dummy",
+                        ecosystem = "dummy"
+                    ),
+                    version = "dummy"
+                )
+            )
+
+            val result = OsvServiceWrapper().getVulnerabilityIdsForPackages(requests)
+
+            result shouldBeFailure {
+                it.message shouldContain "invalid ecosystem"
+            }
+        }
     }
 
     "getVulnerabilitiesForIds()" should {
@@ -80,6 +101,17 @@ class OsvServiceWrapperFunTest : WordSpec({
 
             result shouldBeSuccess {
                 it.map { vulnerability -> vulnerability.id } shouldContainExactlyInAnyOrder ids
+            }
+        }
+
+        // TODO: This test currently does not pass due to an unhandled HttpException.
+        "return a failure if the request is invalid".config(enabled = false) {
+            val ids = setOf("dummy")
+
+            val result = OsvServiceWrapper().getVulnerabilitiesForIds(ids)
+
+            result shouldBeFailure {
+                it.message shouldContain "Vulnerability not found"
             }
         }
     }
