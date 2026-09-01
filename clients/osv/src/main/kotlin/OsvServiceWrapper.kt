@@ -54,7 +54,7 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
             }.map {
                 it.flatMap { batchResponse ->
                     batchResponse.results.map { idList ->
-                        idList.vulnerabilities.mapTo(mutableListOf()) { it.id }
+                        idList.vulnerabilities.map { it.id }
                     }
                 }
             }.unwrapHttpException()
