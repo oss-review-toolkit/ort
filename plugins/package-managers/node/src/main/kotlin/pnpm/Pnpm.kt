@@ -193,7 +193,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
     private fun installDependencies(workingDir: File, scopes: Collection<Scope>) {
         val args = listOfNotNull(
             "install",
-            "--ignore-pnpmfile",
+            "--config.ignorePnpmfile=true",
             "--ignore-scripts",
             "--frozen-lockfile", // Use the existing lockfile instead of updating an outdated one.
             "--prod".takeUnless { Scope.DEV_DEPENDENCIES in scopes }
