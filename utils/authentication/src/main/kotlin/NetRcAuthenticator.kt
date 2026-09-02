@@ -41,7 +41,7 @@ class NetRcAuthenticator(
      * files (in this order) and extracts the credentials they contain. If there are multiple entries for the same
      * machine in different files, the last file wins.
      */
-    netrcFiles: List<File> = DEFAULT_NETRC_FILENAMES.map<String, File> { Os.userHomeDirectory / it }
+    netrcFiles: List<File> = DEFAULT_NETRC_FILENAMES.map { Os.userHomeDirectory / it }
 ) : Authenticator() {
     companion object {
         // TODO: Add support for ".authinfo" files (which use the same syntax as .netrc files) once Git.kt does not
