@@ -195,6 +195,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
             "install",
             "--config.ignorePnpmfile=true", // Ignore the "pnpmfile.mjs" to ensure no script gets executed.
             "--config.trustLockfile=true", // Trust the lockfile and skip verification.
+            "--config.updateNotifier=false", // Disable checking for PNPM updates.
             "--ignore-scripts", // Do not execute any scripts defined in the project or its dependencies.
             "--frozen-lockfile", // Fail to install if the lockfile does not exist or is outdated.
             "--prod".takeUnless { Scope.DEV_DEPENDENCIES in scopes }
