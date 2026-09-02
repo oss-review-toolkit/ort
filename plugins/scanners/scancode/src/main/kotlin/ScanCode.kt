@@ -61,7 +61,15 @@ internal object ScanCodeCommand : CommandLineTool {
         return listOfNotNull(workingDir, executable).joinToString(File.separator)
     }
 
-    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=30.0.0")
+    /**
+     * ScanCode 32.0.0 reorganized the license data in 'src/licensedcode/data/licenses': each license ID is now
+     * described by a single '.LICENSE' file that embeds the metadata as YAML front matter, instead of a separate
+     * '.LICENSE' / '.yml' file pair, see [1]. Require at least this version so that the ScanCode license fact
+     * provider does not have to support the old layout as well.
+     *
+     * [1]: https://github.com/aboutcode-org/scancode-toolkit/pull/3100/commits/e71edc1055b833a3f448bc448cbfb8ac19847381
+     */
+    override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=32.0.0")
 
     override fun transformVersion(output: String): String =
         output.lineSequence().firstNotNullOfOrNull { line ->
