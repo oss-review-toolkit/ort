@@ -133,7 +133,7 @@ class Bundler(
         //
         // TODO: Find a way to customize the Bundler version to an older version than JRuby's, see [2].
         //
-        // [1]: https://github.com/jruby/jruby/blob/9.3.8.0/lib/pom.rb#L21
+        // [1]: https://github.com/jruby/jruby/blob/9.4.15.0/lib/pom.rb#L30
         // [2]: https://github.com/jruby/jruby/discussions/7403
 
         val lockfiles = definitionFiles.map { it.resolveSibling(BUNDLER_LOCKFILE_NAME) }.filter { it.isFile }
