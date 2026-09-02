@@ -63,6 +63,14 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
         }
     }
 
+    fun getVulnerabilityIdsForPackage(request: VulnerabilitiesForPackageRequest): Result<List<String>> =
+        @Suppress("ForbiddenMethodCall")
+        runBlocking(Dispatchers.IO) {
+            runCatching {
+                service.getVulnerabilityIdsForPackage(request).vulnerabilities.mapTo(mutableListOf()) { it.id }
+            }.unwrapHttpException()
+        }
+
     /**
      * Return the vulnerabilities denoted by the given [ids].
      *
