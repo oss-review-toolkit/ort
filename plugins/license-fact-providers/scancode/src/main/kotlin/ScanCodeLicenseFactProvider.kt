@@ -79,8 +79,9 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
  * Return the directory that contains the ScanCode license data. This is located using a heuristic based on the path of
  * the ScanCode binary.
  */
-private fun findLicenseDataDir(config: ScanCodeLicenseFactProviderConfig): File? {
-    if (config.licenseTextDir != null) {
+
+internal fun findLicenseDataDir(config: ScanCodeLicenseFactProviderConfig? = null): File? {
+    if (config?.licenseTextDir != null) {
         return File(config.licenseTextDir).also {
             require(it.isDirectory) {
                 "Configured ScanCode license text directory '${config.licenseTextDir}' does not exist or is not " +
