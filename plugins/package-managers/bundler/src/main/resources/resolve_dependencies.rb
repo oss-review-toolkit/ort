@@ -29,17 +29,18 @@
 require 'bundler'
 require 'yaml'
 
-# Get dependencies independently of the Ruby interpreter.
-Bundler.settings.set_global(:force_ruby_platform, true)
-
-# Resolve all groups including optional ones.
-all_groups = Bundler.definition.dependencies.flat_map(&:groups)
-Bundler.settings.set_global(:with, all_groups)
-
 Bundler.ui.silence do
-  # This command resolves dependencies that are specified in the Gemfile of the current working directory.
-  Bundler.definition.resolve_remotely!
+  # Get dependencies independently of the Ruby interpreter.
+  all_groups = Bundler.settings.temporary(force_ruby_platform: true) do
+    Bundler.definition.dependencies.flat_map(&:groups)
+  end
 
-  # Resolving is triggered lazily, so the below "to_yaml" might create progress output.
-  Bundler.definition.specs.map(&:to_yaml).join("\0")
+  # Resolve all groups including optional ones.
+  Bundler.settings.temporary(with: all_groups) do
+    # This command resolves dependencies that are specified in the Gemfile of the current working directory.
+    Bundler.definition.resolve_remotely!
+
+    # Resolving is triggered lazily, so the below "to_yaml" might create progress output.
+    Bundler.definition.specs.map(&:to_yaml).join("\0")
+  end
 end
