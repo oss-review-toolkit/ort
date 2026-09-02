@@ -44,7 +44,10 @@ class NetRcAuthenticator(
     netrcFiles: List<File> = DEFAULT_NETRC_FILENAMES.map { Os.userHomeDirectory / it }
 ) : Authenticator() {
     companion object {
-        val DEFAULT_NETRC_FILENAMES = listOf(".netrc", "_netrc")
+        val DEFAULT_NETRC_FILENAMES = listOfNotNull(
+            ".netrc",
+            "_netrc".takeIf { Os.isWindows }
+        )
     }
 
     private val credentials = loadCredentials(netrcFiles)
