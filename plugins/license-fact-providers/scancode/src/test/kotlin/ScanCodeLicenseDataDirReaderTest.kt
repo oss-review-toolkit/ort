@@ -47,6 +47,24 @@ class ScanCodeLicenseDataDirReaderTest : WordSpec({
             reader.getLicenseText("LicenseRef-scancode-license-with-intended-title") shouldBe
                 "    indented title"
         }
+
+        "look-up a particular license for multiple SPDX license IDs defined in the same license data file" {
+            val expectedText = """
+                In addition to the permissions in the GNU Lesser General Public License, the
+                Free Software Foundation gives you unlimited permission to link the compiled
+                version of this file with other programs, and to distribute those programs
+                without any restriction coming from the use of this file. 
+                (The GNU Lesser General Public License restrictions do apply in other respects;
+                for example, they cover modification of the file, and distribution when not
+                linked into another program.)
+            """.trimIndent()
+
+            val textA = reader.getLicenseText("LicenseRef-scancode-unlimited-link-exception-lgpl")
+            val textB = reader.getLicenseText("LicenseRef-scancode-unlimited-linking-exception-lgpl")
+
+            textA shouldBe expectedText
+            textB shouldBe expectedText
+        }
     }
 })
 
