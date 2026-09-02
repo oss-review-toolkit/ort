@@ -22,20 +22,14 @@ package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 class ScanCodeLicenseDataDirReaderTest : WordSpec({
-    "skipYamlFrontMatter()" should {
-        "skip a YAML front matter" {
-            val text = """
-                ---
-                key: alasir
-                short_name: Alasir Licence
-                name: The Alasir Licence
-                category: Proprietary Free
-                owner: Alasir
-                homepage_url: http://alasir.com/licence/TAL.txt
-                spdx_license_key: LicenseRef-scancode-alasir
-                ---
+    val reader = ScanCodeLicenseDataDirReader(getAssetFile("license-data"))
 
+    "getLicenseText()" should {
+        "return the license text for LicenseRef-scancode-alasir" {
+            reader.getLicenseText("LicenseRef-scancode-alasir") shouldBe """
                 The Alasir Licence
 
                     This is a free software. It's provided as-is and carries absolutely no
@@ -47,29 +41,13 @@ class ScanCodeLicenseDataDirReaderTest : WordSpec({
                 improper use of the software, even if advised of the possibility of certain
                 injury as such and so forth.
             """.trimIndent()
-
-            text.removeYamlFrontMatter() shouldBe """
-                The Alasir Licence
-
-                    This is a free software. It's provided as-is and carries absolutely no
-                warranty or responsibility by the author and the contributors, neither in
-                general nor in particular. No matter if this software is able or unable to
-                cause any damage to your or third party's computer hardware, software, or any
-                other asset available, neither the author nor a separate contributor may be
-                found liable for any harm or its consequences resulting from either proper or
-                improper use of the software, even if advised of the possibility of certain
-                injury as such and so forth.
-            """.trimIndent()
-        }
-
-        "remove leading empty lines" {
-            "\nfirst sentence".removeYamlFrontMatter() shouldBe "first sentence"
         }
 
         "keep leading whitespace" {
-            "    indented title".removeYamlFrontMatter() shouldBe "    indented title"
+            reader.getLicenseText("LicenseRef-scancode-license-with-intended-title") shouldBe
+                "    indented title"
         }
     }
 })
 
-private fun String.removeYamlFrontMatter() = lineSequence().skipYamlFrontMatter().joinToString("\n")
+private fun getAssetFile(path: String) = File("src/test/assets", path).absoluteFile

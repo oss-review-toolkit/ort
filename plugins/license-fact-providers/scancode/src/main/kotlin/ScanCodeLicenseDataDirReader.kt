@@ -44,7 +44,7 @@ internal class ScanCodeLicenseDataDirReader(val licenseDataDir: File) {
 private val File.isNotBlank: Boolean
     get() = useLines { lines -> lines.skipYamlFrontMatter().any { line -> line.any { !it.isWhitespace() } } }
 
-internal fun Sequence<String>.skipYamlFrontMatter(): Sequence<String> {
+private fun Sequence<String>.skipYamlFrontMatter(): Sequence<String> {
     var inFrontMatter = false
 
     return filterIndexed { index, line ->
