@@ -44,8 +44,6 @@ class NetRcAuthenticator(
     netrcFiles: List<File> = DEFAULT_NETRC_FILENAMES.map { Os.userHomeDirectory / it }
 ) : Authenticator() {
     companion object {
-        // TODO: Add support for ".authinfo" files (which use the same syntax as .netrc files) once Git.kt does not
-        //       call the Git CLI anymore which only supports ".netrc" (and "_netrc") files.
         val DEFAULT_NETRC_FILENAMES = listOf(".netrc", "_netrc")
     }
 
