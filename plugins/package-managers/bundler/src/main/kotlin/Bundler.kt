@@ -143,7 +143,7 @@ class Bundler(
         val bundlerVersion = config.bundlerVersion ?: lockfilesBundlerVersion
 
         if (bundlerVersion != null) {
-            logger.info { "Installing custom Bundler version $bundlerVersion..." }
+            logger.info { "Installing custom '$BUNDLER_GEM_NAME' version $bundlerVersion..." }
 
             runCatching {
                 val code = """
@@ -153,11 +153,11 @@ class Bundler(
                     cmd.execute
                 """.trimIndent()
                 val result = runScriptCode(code) as Long
-                check(result == 0L) { "Installing the '$BUNDLER_GEM_NAME' Gem failed with error code $result." }
+                check(result == 0L) { "Error code $result." }
             }.onSuccess {
-                logger.info { "Installing Bundler version $bundlerVersion completed successfully." }
+                logger.info { "Installing '$BUNDLER_GEM_NAME' version $bundlerVersion succeeded." }
             }.onFailure {
-                logger.info { "Installing Bundler version $bundlerVersion failed: ${it.collectMessages()}" }
+                logger.info { "Installing '$BUNDLER_GEM_NAME' version $bundlerVersion faied. ${it.collectMessages()}" }
             }
         }
 
@@ -165,9 +165,9 @@ class Bundler(
             val code = "Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version.to_s"
             runScriptCode(code) as String
         }.onSuccess { installedBundlerVersion ->
-            logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $installedBundlerVersion." }
+            logger.info { "Using '$BUNDLER_GEM_NAME' in version $installedBundlerVersion." }
         }.onFailure {
-            logger.warn { "Unable to determine the '$BUNDLER_GEM_NAME' Gem version: ${it.collectMessages()}" }
+            logger.warn { "Unable to determine the '$BUNDLER_GEM_NAME' version: ${it.collectMessages()}" }
         }
     }
 
