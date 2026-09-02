@@ -21,43 +21,59 @@ package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
+
 internal class ScanCodeLicenseDataDirReader(val licenseDataDir: File) {
-    private fun getLicenseTextFile(licenseOrExceptionId: String): File? {
-        val filename = if (licenseOrExceptionId == "LicenseRef-scancode-unlimited-link-exception-lgpl") {
-            // Work around for https://github.com/oss-review-toolkit/ort/issues/12369.
-            "unlimited-linking-exception-lgpl.LICENSE"
-        } else {
-            "${licenseOrExceptionId.removePrefix("LicenseRef-scancode-").lowercase()}.LICENSE"
-        }
+    /** Associates license or exception IDs with license data files which contain non-blank license texts. */
+    private val licenseDataFileForLicenseOrExceptionId: Map<String, File> by lazy {
+        buildMap {
+            licenseDataDir.listFiles().filter { it.extension == "LICENSE" }.forEach { file ->
+                val licenseData = parseScanCodeLicenseDataFile(file)
 
-        return licenseDataDir.resolve(filename).takeIf { it.isFile && it.isNotBlank }
+                if (licenseData == null) {
+                    logger.warn {
+                        "Could not parse ScanCode license data file: '${file.absolutePath}'."
+                    }
+
+                    return@forEach
+                }
+
+                if (licenseData.text == null) {
+                    return@forEach
+                }
+
+                licenseData.getAllLicenseOrExceptionIds().forEach { id ->
+                    if (id in this) {
+                        logger.warn {
+                            "Not associating '$id' with '${file.name}', as it is already associated with " +
+                                "'${getValue(id).name}'."
+                        }
+                    } else {
+                        this[id] = file
+                    }
+                }
+            }
+        }
     }
 
-    fun getLicenseText(licenseOrExceptionId: String): String? =
-        getLicenseTextFile(licenseOrExceptionId)?.useLines { lines ->
-            lines.skipYamlFrontMatter().joinToString("\n").trimEnd()
-        }
-
-    fun hasLicenseText(licenseOrExceptionId: String): Boolean = getLicenseTextFile(licenseOrExceptionId) != null
-}
-
-private val File.isNotBlank: Boolean
-    get() = useLines { lines -> lines.skipYamlFrontMatter().any { line -> line.any { !it.isWhitespace() } } }
-
-private fun Sequence<String>.skipYamlFrontMatter(): Sequence<String> {
-    var inFrontMatter = false
-
-    return filterIndexed { index, line ->
-        if (index == 0 && line == "---") {
-            inFrontMatter = true
-            false
-        } else if (inFrontMatter) {
-            if (line == "---") inFrontMatter = false
-            false
-        } else {
-            true
-        }
-    }.dropWhile {
-        it.isBlank()
+    fun getLicenseText(licenseOrExceptionId: String): String? {
+        val file = licenseDataFileForLicenseOrExceptionId[licenseOrExceptionId] ?: return null
+        return checkNotNull(parseScanCodeLicenseDataFile(file)).text
     }
+
+    fun hasLicenseText(licenseOrExceptionId: String): Boolean =
+        licenseOrExceptionId in licenseDataFileForLicenseOrExceptionId
 }
+
+private fun ScanCodeLicense.getAllLicenseOrExceptionIds(): Set<String> =
+    buildSet {
+        if (key.isNotBlank()) {
+            add("LicenseRef-scancode-$key")
+        }
+
+        if (spdxLicenseKey != null) {
+            add(spdxLicenseKey)
+        }
+
+        addAll(otherSpdxLicenseKeys)
+    }
