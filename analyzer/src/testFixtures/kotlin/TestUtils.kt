@@ -28,6 +28,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyTreeNavigator
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -114,6 +115,11 @@ fun Collection<PackageReference>.withInvariantIssues(): Set<PackageReference> =
         )
     }
 
+fun AnalyzerResult.withInvariantIssues() =
+    copy(
+        issues = issues.mapValues { (_, issues) -> issues.toInvariantIssues() }
+    )
+
 fun ProjectAnalyzerResult.withInvariantIssues() =
     copy(
         project = project.copy(
@@ -121,8 +127,10 @@ fun ProjectAnalyzerResult.withInvariantIssues() =
                 scope.copy(dependencies = scope.dependencies.withInvariantIssues())
             }
         ),
-        issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) }
+        issues = issues.toInvariantIssues()
     )
+
+private fun List<Issue>.toInvariantIssues() = sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) }
 
 fun analyze(
     projectDir: File,
