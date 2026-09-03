@@ -41,11 +41,11 @@ private val FALLBACK_DIR = File("/opt/scancode-license-data")
 /** The configuration for the ScanCode license fact provider. */
 data class ScanCodeLicenseFactProviderConfig(
     /**
-     * The directory that contains the ScanCode license texts. If not set, the provider will try to locate the ScanCode
-     * license text directory using a heuristic based on the path of the ScanCode binary.
+     * The directory that contains the ScanCode license data. If not set, the provider will try to locate the ScanCode
+     * license data directory using a heuristic based on the path of the ScanCode binary.
      */
-    @OrtPluginOption(aliases = ["scanCodeLicenseTextDir"])
-    val licenseTextDir: String?
+    @OrtPluginOption(aliases = ["licenseTextDir", "scanCodeLicenseTextDir"])
+    val licenseDataDir: String?
 )
 
 @OrtPlugin(
@@ -78,24 +78,24 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
  * the ScanCode binary.
  */
 internal fun findScanCodeLicenseDataDir(config: ScanCodeLicenseFactProviderConfig? = null): File? {
-    if (config?.licenseTextDir != null) {
-        return File(config.licenseTextDir).also {
+    if (config?.licenseDataDir != null) {
+        return File(config.licenseDataDir).also {
             require(it.isDirectory) {
-                "Configured ScanCode license text directory '${config.licenseTextDir}' does not exist or is not " +
+                "Configured ScanCode license data directory '${config.licenseDataDir}' does not exist or is not " +
                     "a directory."
             }
 
-            logger.debug { "Using configured ScanCode license text directory: ${it.absolutePath}" }
+            logger.debug { "Using configured ScanCode license data directory: ${it.absolutePath}" }
         }
     }
 
     findScanCodeInstallationLicenseDataDir()?.also {
-        logger.debug { "Located ScanCode license text directory: $it" }
+        logger.debug { "Located ScanCode license data directory: $it" }
         return it
     } ?: logger.debug { "Could not locate the ScanCode 'licenses' text directory." }
 
     FALLBACK_DIR.takeIf { it.isDirectory }?.also {
-        logger.debug { "Located fallback ScanCode license text directory: $it" }
+        logger.debug { "Located fallback ScanCode license data directory: $it" }
         return it
     } ?: logger.debug { "Could not locate fallback directory: $FALLBACK_DIR" }
 
@@ -105,13 +105,13 @@ internal fun findScanCodeLicenseDataDir(config: ScanCodeLicenseFactProviderConfi
     } ?: exportLicenseData(exportDir)?.also {
         logger.debug { "Using exported license data from directory: $it" }
     } ?: run {
-        logger.warn { "Could not locate any ScanCode license text directory." }
+        logger.warn { "Could not locate any ScanCode license data directory." }
         null
     }
 }
 
 private fun findScanCodeInstallationLicenseDataDir(): File? {
-    logger.debug { "Trying to locate the ScanCode license text directory..." }
+    logger.debug { "Trying to locate the ScanCode license data directory..." }
 
     val scanCodeExeDir = Os.getPathFromEnvironment("scancode")?.realFile?.parentFile
 

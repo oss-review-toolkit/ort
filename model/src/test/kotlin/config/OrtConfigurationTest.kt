@@ -80,7 +80,7 @@ class OrtConfigurationTest : WordSpec({
                 ProviderPluginConfiguration(type = "SPDX"),
                 ProviderPluginConfiguration(
                     type = "ScanCode",
-                    options = mapOf("licenseTextDir" to "/path/to/scancode/license/text/dir")
+                    options = mapOf("licenseDataDir" to "/path/to/scancode/license/data/dir")
                 )
             )
 
