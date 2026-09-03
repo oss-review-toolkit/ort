@@ -615,6 +615,7 @@ ARG ABOM_VERSION
 ARG ASKALONO_VERSION
 ARG COMPOSER_VERSION
 ARG PHP_VERSION
+ARG UBUNTU_VERSION
 
 ENV ABOM_HOME=/opt/abom
 ENV PATH=$PATH:$ABOM_HOME
@@ -661,7 +662,7 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     --mount=type=tmpfs,target=/var/log \
     curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x14aa40ec0831756756d7f66c4f4ea0aae5267a6c" | sudo gpg --dearmor -o /usr/share/keyrings/ondrej-php-keyring.gpg \
-    && echo "deb [signed-by=/usr/share/keyrings/ondrej-php-keyring.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/ondrej-php.list \
+    && echo "deb [signed-by=/usr/share/keyrings/ondrej-php-keyring.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu $UBUNTU_VERSION main" | sudo tee /etc/apt/sources.list.d/ondrej-php.list \
     && sudo apt-get update \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends php${PHP_VERSION}-cli
 
