@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -29,7 +30,9 @@ class ScanCodeLicenseDataDirReaderTest : WordSpec({
 
     "getLicenseText()" should {
         "return the license text for LicenseRef-scancode-alasir" {
-            reader.getLicenseText("LicenseRef-scancode-alasir") shouldBe """
+            val license = reader.getLicense("LicenseRef-scancode-alasir")
+
+            license.shouldNotBeNull().text shouldBe """
                 The Alasir Licence
 
                     This is a free software. It's provided as-is and carries absolutely no
@@ -44,7 +47,7 @@ class ScanCodeLicenseDataDirReaderTest : WordSpec({
         }
 
         "keep leading whitespace" {
-            reader.getLicenseText("LicenseRef-scancode-license-with-intended-title") shouldBe
+            reader.getLicense("LicenseRef-scancode-license-with-intended-title")!!.text shouldBe
                 "    indented title"
         }
 
@@ -59,11 +62,11 @@ class ScanCodeLicenseDataDirReaderTest : WordSpec({
                 linked into another program.)
             """.trimIndent()
 
-            val textA = reader.getLicenseText("LicenseRef-scancode-unlimited-link-exception-lgpl")
-            val textB = reader.getLicenseText("LicenseRef-scancode-unlimited-linking-exception-lgpl")
+            val licenseA = reader.getLicense("LicenseRef-scancode-unlimited-link-exception-lgpl")
+            val licenseB = reader.getLicense("LicenseRef-scancode-unlimited-linking-exception-lgpl")
 
-            textA shouldBe expectedText
-            textB shouldBe expectedText
+            licenseA.shouldNotBeNull().text shouldBe expectedText
+            licenseB.shouldNotBeNull().text shouldBe expectedText
         }
     }
 })

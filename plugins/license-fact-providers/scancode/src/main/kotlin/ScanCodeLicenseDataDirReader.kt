@@ -23,7 +23,10 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-internal class ScanCodeLicenseDataDirReader(val licenseDataDir: File) {
+internal class ScanCodeLicenseDataDirReader(
+    val licenseDataDir: File,
+    val filterPredicate: (ScanCodeLicense) -> Boolean = { true }
+) {
     /** Associates license or exception IDs with license data files which contain non-blank license texts. */
     private val licenseDataFileForLicenseOrExceptionId: Map<String, File> by lazy {
         buildMap {
@@ -38,7 +41,7 @@ internal class ScanCodeLicenseDataDirReader(val licenseDataDir: File) {
                     return@forEach
                 }
 
-                if (licenseData.text == null) {
+                if (!filterPredicate(licenseData)) {
                     return@forEach
                 }
 
@@ -56,12 +59,12 @@ internal class ScanCodeLicenseDataDirReader(val licenseDataDir: File) {
         }
     }
 
-    fun getLicenseText(licenseOrExceptionId: String): String? {
+    fun getLicense(licenseOrExceptionId: String): ScanCodeLicense? {
         val file = licenseDataFileForLicenseOrExceptionId[licenseOrExceptionId] ?: return null
-        return checkNotNull(parseScanCodeLicenseDataFile(file)).text
+        return checkNotNull(parseScanCodeLicenseDataFile(file))
     }
 
-    fun hasLicenseText(licenseOrExceptionId: String): Boolean =
+    fun hasLicense(licenseOrExceptionId: String): Boolean =
         licenseOrExceptionId in licenseDataFileForLicenseOrExceptionId
 }
 
