@@ -28,7 +28,7 @@ import java.io.File
 
 class ScanCodeLicenseFactProviderTest : WordSpec({
     val provider = ScanCodeLicenseFactProviderFactory.create(
-        licenseTextDir = getAssetFile("license-data").absolutePath
+        licenseDataDir = getAssetFile("license-data").absolutePath
     )
 
     "getLicenseText()" should {
