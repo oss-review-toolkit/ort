@@ -73,21 +73,19 @@ private const val BUNDLER_GEM_NAME = "bundler"
 /** The name of the file where Bundler stores locked down dependency information. */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
-private fun runScriptCode(sourceCode: String, workingDir: File? = null): Any? {
+/**
+ * Run the given Ruby [script] in the given [workingDir]. If no [pathType] is given, the [script] is assumed to contain
+ * the code directly. Otherwise, the meaning of the [script] parameter is determined by the [pathType].
+ */
+private fun runScript(script: String, pathType: PathType? = null, workingDir: File? = null): Any? {
     val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
         environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
-        runScriptlet(sourceCode)
-    }
-
-    return output
-}
-
-private fun runScriptResource(resourceName: String, workingDir: File? = null): Any? {
-    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        if (workingDir != null) currentDirectory = workingDir.path
-        environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
-        runScriptlet(PathType.CLASSPATH, resourceName)
+        if (pathType != null) {
+            runScriptlet(pathType, script)
+        } else {
+            runScriptlet(script)
+        }
     }
 
     return output
@@ -152,7 +150,7 @@ class Bundler(
                     cmd.handle_options ["--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"]
                     cmd.execute
                 """.trimIndent()
-                val result = runScriptCode(code) as Long
+                val result = runScript(code) as Long
                 check(result == 0L) { "Error code $result." }
             }.onSuccess {
                 logger.info { "Installing '$BUNDLER_GEM_NAME' version $bundlerVersion succeeded." }
@@ -163,7 +161,7 @@ class Bundler(
 
         runCatching {
             val code = "Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version.to_s"
-            runScriptCode(code) as String
+            runScript(code) as String
         }.onSuccess { installedBundlerVersion ->
             logger.info { "Using '$BUNDLER_GEM_NAME' in version $installedBundlerVersion." }
         }.onFailure {
@@ -289,10 +287,10 @@ class Bundler(
 
     @Suppress("UNCHECKED_CAST")
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        runScriptResource(ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME, workingDir) as Map<String, List<String>>
+        runScript(ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME, PathType.CLASSPATH, workingDir) as Map<String, List<String>>
 
     private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
-        val specs = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME, workingDir).toString()
+        val specs = runScript(RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME, PathType.CLASSPATH, workingDir).toString()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
