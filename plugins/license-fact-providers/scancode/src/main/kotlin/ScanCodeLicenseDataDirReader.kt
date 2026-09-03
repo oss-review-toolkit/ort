@@ -27,14 +27,17 @@ import org.apache.logging.log4j.kotlin.logger
  * Reads the licenses texts from the given license data directory. If multiple license data files correspond to the same
  * license identifier, then only the first file is used.
  */
-internal class ScanCodeLicenseDataDirReader(val licenseDataDir: File) {
+internal class ScanCodeLicenseDataDirReader(
+    val licenseDataDir: File,
+    filterPredicate: (ScanCodeLicense) -> Boolean = { true }
+) {
     init {
         require(licenseDataDir.isDirectory) {
             "The license data directory '${licenseDataDir.invariantSeparatorsPath}' must be a directory."
         }
     }
 
-    /** Associates license or exception IDs with license data files which contain non-blank license texts. */
+    /** Associates license or exception IDs with the corresponding license data files. */
     private val licenseDataFileForLicenseOrExceptionId: Map<String, File> by lazy {
         buildMap {
             // Process the files in sorted order to get a deterministic effect also in case multiple files define
@@ -50,7 +53,7 @@ internal class ScanCodeLicenseDataDirReader(val licenseDataDir: File) {
                     return@forEach
                 }
 
-                if (licenseData.text == null) {
+                if (!filterPredicate(licenseData)) {
                     return@forEach
                 }
 
@@ -68,12 +71,12 @@ internal class ScanCodeLicenseDataDirReader(val licenseDataDir: File) {
         }
     }
 
-    fun getLicenseText(licenseOrExceptionId: String): String? {
+    fun getLicense(licenseOrExceptionId: String): ScanCodeLicense? {
         val file = licenseDataFileForLicenseOrExceptionId[licenseOrExceptionId] ?: return null
-        return checkNotNull(parseScanCodeLicenseDataFile(file)).text
+        return checkNotNull(parseScanCodeLicenseDataFile(file))
     }
 
-    fun hasLicenseText(licenseOrExceptionId: String): Boolean =
+    fun hasLicense(licenseOrExceptionId: String): Boolean =
         licenseOrExceptionId in licenseDataFileForLicenseOrExceptionId
 }
 
