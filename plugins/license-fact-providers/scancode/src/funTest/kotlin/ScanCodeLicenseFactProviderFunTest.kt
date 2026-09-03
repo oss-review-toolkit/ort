@@ -28,10 +28,10 @@ import io.kotest.matchers.string.startWith
 
 @Tags("RequiresExternalTool")
 class ScanCodeLicenseFactProviderFunTest : WordSpec({
+    val provider = ScanCodeLicenseFactProviderFactory.create()
+
     "getLicenseText()" should {
         "read license texts from the detected ScanCode license directory" {
-            val provider = ScanCodeLicenseFactProviderFactory.create()
-
             provider.getLicenseText("MIT") shouldNotBeNull {
                 text should startWith("Permission is hereby granted, free of charge, to any person obtaining")
             }
@@ -40,8 +40,6 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
 
     "hasLicenseText()" should {
         "return true for a known license" {
-            val provider = ScanCodeLicenseFactProviderFactory.create()
-
             provider.hasLicenseText("MIT") shouldBe true
         }
     }
