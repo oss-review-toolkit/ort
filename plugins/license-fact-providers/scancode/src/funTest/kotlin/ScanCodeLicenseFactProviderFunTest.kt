@@ -31,7 +31,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
     val provider = ScanCodeLicenseFactProviderFactory.create()
 
     "getLicenseText()" should {
-        "read license texts from the detected ScanCode license directory" {
+        "return a license text for an existing license from the detected ScanCode license directory" {
             provider.getLicenseText("MIT") shouldNotBeNull {
                 text should startWith("Permission is hereby granted, free of charge, to any person obtaining")
             }
@@ -39,7 +39,7 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
     }
 
     "hasLicenseText()" should {
-        "return true for a known license" {
+        "return true for an existing license" {
             provider.hasLicenseText("MIT") shouldBe true
         }
     }
