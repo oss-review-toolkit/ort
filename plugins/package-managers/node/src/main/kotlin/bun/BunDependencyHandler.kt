@@ -51,7 +51,7 @@ internal class BunDependencyHandler(
 
             packageJson.version.orEmpty()
         } else {
-            dependency.version?.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
+            dependency.version.orEmpty()
         }
 
         return Identifier(type, namespace, name, version)
