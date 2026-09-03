@@ -196,11 +196,11 @@ class Bundler(
         val scopes = mutableSetOf<Scope>()
         val issues = mutableListOf<Issue>()
 
-        val gemsInfo = resolveGemsInfo(workingDir)
+        val gemsInfo = resolveGemsInfo(definitionFile)
 
         return with(parseProject(analysisRoot, definitionFile, gemsInfo)) {
             val projectId = Identifier(projectType, "", name, version)
-            val groupedDeps = getDependencyGroups(workingDir)
+            val groupedDeps = getDependencyGroups(definitionFile)
 
             groupedDeps.forEach { (groupName, dependencyList) ->
                 parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemsInfo, issues)
@@ -296,13 +296,18 @@ class Bundler(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        runScript(ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME, PathType.CLASSPATH, workingDir, scriptEnvironment)
-            as Map<String, List<String>>
+    private fun getDependencyGroups(gemfile: File): Map<String, List<String>> =
+        runScript(
+            ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME,
+            PathType.CLASSPATH,
+            environment = scriptEnvironment + mapOf("BUNDLE_GEMFILE" to gemfile.absolutePath)
+        ) as Map<String, List<String>>
 
-    private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
+    private fun resolveGemsInfo(gemfile: File): MutableMap<String, GemInfo> {
         val specs = runScript(
-            RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME, PathType.CLASSPATH, workingDir, scriptEnvironment
+            RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME,
+            PathType.CLASSPATH,
+            environment = scriptEnvironment + mapOf("BUNDLE_GEMFILE" to gemfile.absolutePath)
         ).toString()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
