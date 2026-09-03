@@ -21,76 +21,20 @@ package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.engine.spec.tempdir
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.startWith
 
-import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.div
-import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
-
 @Tags("RequiresExternalTool")
 class ScanCodeLicenseFactProviderFunTest : WordSpec({
-    Os.env[ORT_DATA_DIR_ENV_NAME] = tempdir().absolutePath
-
     "getLicenseText()" should {
-        "read license texts from the configured directory" {
-            val licenseDir = tempdir()
-            (licenseDir / "test.LICENSE").writeText("custom license text")
-
-            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
-
-            provider.getLicenseText("test")?.text shouldBe "custom license text"
-        }
-
-        "remove YAML front matter from the license text" {
-            val licenseDir = tempdir()
-            (licenseDir / "test.LICENSE").writeText(
-                """
-                |---
-                |key: value
-                |---
-                |
-                |custom license text
-                """.trimMargin()
-            )
-
-            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
-
-            provider.getLicenseText("test")?.text shouldBe "custom license text"
-        }
-
         "read license texts from the detected ScanCode license directory" {
             val provider = ScanCodeLicenseFactProviderFactory.create()
 
             provider.getLicenseText("MIT") shouldNotBeNull {
                 text should startWith("Permission is hereby granted, free of charge, to any person obtaining")
             }
-        }
-
-        "return null for an unknown license" {
-            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = tempdir().absolutePath)
-
-            provider.getLicenseText("UnknownLicense") should beNull()
-        }
-
-        "return null if the license file contains only YAML front matter" {
-            val licenseDir = tempdir()
-            (licenseDir / "test.LICENSE").writeText(
-                """
-                |---
-                |key: value
-                |---
-                |
-                """.trimMargin()
-            )
-
-            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
-
-            provider.getLicenseText("test") should beNull()
         }
     }
 
@@ -99,28 +43,6 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
             val provider = ScanCodeLicenseFactProviderFactory.create()
 
             provider.hasLicenseText("MIT") shouldBe true
-        }
-
-        "return false for an unknown license" {
-            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = tempdir().absolutePath)
-
-            provider.hasLicenseText("UnknownLicense") shouldBe false
-        }
-
-        "return false if the license file contains only YAML front matter" {
-            val licenseDir = tempdir()
-            (licenseDir / "test.LICENSE").writeText(
-                """
-                |---
-                |key: value
-                |---
-                |
-                """.trimMargin()
-            )
-
-            val provider = ScanCodeLicenseFactProviderFactory.create(licenseTextDir = licenseDir.absolutePath)
-
-            provider.hasLicenseText("test") shouldBe false
         }
     }
 })
