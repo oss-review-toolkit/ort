@@ -74,13 +74,21 @@ private const val BUNDLER_GEM_NAME = "bundler"
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
 /**
- * Run the given Ruby [script] in the given [workingDir]. If no [pathType] is given, the [script] is assumed to contain
- * the code directly. Otherwise, the meaning of the [script] parameter is determined by the [pathType].
+ * Run the given Ruby [script] in the given [workingDir] and with the given [environment] (which gets merged with the
+ * default environment). If no [pathType] is given, the [script] is assumed to contain the code directly. Otherwise, the
+ * meaning of the [script] parameter is determined by the [pathType].
  */
-private fun runScript(script: String, pathType: PathType? = null, workingDir: File? = null): Any? {
+private fun runScript(
+    script: String,
+    pathType: PathType? = null,
+    workingDir: File? = null,
+    environment: Map<String, String> = emptyMap()
+): Any? {
     val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
-        environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
+
+        this.environment.putAll(environment)
+
         if (pathType != null) {
             runScriptlet(pathType, script)
         } else {
@@ -119,6 +127,8 @@ class Bundler(
     override val descriptor: PluginDescriptor = BundlerFactory.descriptor,
     private val config: BundlerConfig
 ) : PackageManager(PROJECT_TYPE) {
+    private val scriptEnvironment = mapOf("BUNDLE_PATH" to "${Os.userHomeDirectory}/.bundle")
+
     override val globsForDefinitionFiles = listOf("Gemfile")
 
     override fun beforeResolution(
@@ -150,7 +160,7 @@ class Bundler(
                     cmd.handle_options ["--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"]
                     cmd.execute
                 """.trimIndent()
-                val result = runScript(code) as Long
+                val result = runScript(code, environment = scriptEnvironment) as Long
                 check(result == 0L) { "Error code $result." }
             }.onSuccess {
                 logger.info { "Installing '$BUNDLER_GEM_NAME' version $bundlerVersion succeeded." }
@@ -161,7 +171,7 @@ class Bundler(
 
         runCatching {
             val code = "Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version.to_s"
-            runScript(code) as String
+            runScript(code, environment = scriptEnvironment) as String
         }.onSuccess { installedBundlerVersion ->
             logger.info { "Using '$BUNDLER_GEM_NAME' in version $installedBundlerVersion." }
         }.onFailure {
@@ -287,10 +297,13 @@ class Bundler(
 
     @Suppress("UNCHECKED_CAST")
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        runScript(ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME, PathType.CLASSPATH, workingDir) as Map<String, List<String>>
+        runScript(ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME, PathType.CLASSPATH, workingDir, scriptEnvironment)
+            as Map<String, List<String>>
 
     private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
-        val specs = runScript(RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME, PathType.CLASSPATH, workingDir).toString()
+        val specs = runScript(
+            RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME, PathType.CLASSPATH, workingDir, scriptEnvironment
+        ).toString()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
