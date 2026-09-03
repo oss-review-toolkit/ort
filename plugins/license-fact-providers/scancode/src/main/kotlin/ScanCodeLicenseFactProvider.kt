@@ -63,14 +63,16 @@ class ScanCodeLicenseFactProvider(
      * found.
      */
     private val licenseDataDirReader: ScanCodeLicenseDataDirReader? by lazy {
-        findLicenseDataDir(config)?.let { ScanCodeLicenseDataDirReader(it) }
+        findLicenseDataDir(config)?.let {
+            ScanCodeLicenseDataDirReader(it) { scanCodeLicense -> scanCodeLicense.text != null }
+        }
     }
 
     override fun getLicenseText(licenseOrExceptionId: String) =
-        licenseDataDirReader?.getLicenseText(licenseOrExceptionId)?.let { LicenseText(it) }
+        licenseDataDirReader?.getLicense(licenseOrExceptionId)?.text?.let { LicenseText(it) }
 
     override fun hasLicenseText(licenseOrExceptionId: String): Boolean =
-        licenseDataDirReader?.hasLicenseText(licenseOrExceptionId) ?: false
+        licenseDataDirReader?.hasLicense(licenseOrExceptionId) == true
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
