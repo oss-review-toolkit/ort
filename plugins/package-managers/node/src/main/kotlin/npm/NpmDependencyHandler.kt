@@ -50,7 +50,7 @@ internal class NpmDependencyHandler(
 
             packageJson.version.orEmpty()
         } else {
-            moduleInfo.version?.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
+            moduleInfo.version.orEmpty()
         }
 
         return Identifier(type, namespace, name, version)
