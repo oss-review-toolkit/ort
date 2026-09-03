@@ -36,11 +36,19 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
                 text should startWith("Permission is hereby granted, free of charge, to any person obtaining")
             }
         }
+
+        "return null for an existing license which does not have a text" {
+            provider.getLicenseText("LicenseRef-scancode-proprietary") shouldBe null
+        }
     }
 
     "hasLicenseText()" should {
         "return true for an existing license" {
             provider.hasLicenseText("MIT") shouldBe true
+        }
+
+        "return false for an existing license which does not have a text" {
+            provider.hasLicenseText("LicenseRef-scancode-proprietary") shouldBe false
         }
     }
 })
