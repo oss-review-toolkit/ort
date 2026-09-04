@@ -380,6 +380,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             homepageUrl = pkg.homepageUrl,
             binaryArtifact = pkg.binaryArtifact,
             sourceArtifact = pkg.sourceArtifact,
+            publishedAt = pkg.publishedAt,
             vcs = pkg.vcs,
             vcsProcessed = pkg.vcsProcessed,
             labels = pkg.labels,

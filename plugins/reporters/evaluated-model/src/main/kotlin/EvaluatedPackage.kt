@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.time.Instant
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.Identifier
@@ -65,6 +66,8 @@ data class EvaluatedPackage(
     val homepageUrl: String,
     val binaryArtifact: RemoteArtifact,
     val sourceArtifact: RemoteArtifact,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val publishedAt: Instant? = null,
     val vcs: VcsInfo,
     val vcsProcessed: VcsInfo = vcs.normalize(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
