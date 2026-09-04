@@ -116,7 +116,7 @@ internal fun generateSummary(
  */
 internal fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
-    val license = checkNotNull(details.licenseDetails.toSpdxExpressions().toExpression())
+    val license = details.licenseDetails.toSpdxExpression()
 
     return setOf(
         LicenseFinding(
@@ -202,7 +202,7 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
     }
 
     // Directly pair source locations with their corresponding OSS locations and create a SnippetFinding.
-    val license = checkNotNull(details.licenseDetails.toSpdxExpressions().toExpression())
+    val license = details.licenseDetails.toSpdxExpression()
     return sourceLocations.zip(ossLocations).mapTo(mutableSetOf()) { (sourceLocation, ossLocation) ->
         SnippetFinding(
             sourceLocation,
@@ -229,10 +229,10 @@ private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
     }
 
 /**
- * Turn an array of [LicenseDetails] into a set of [SpdxExpression]s.
+ * Turn an array of [LicenseDetails] into an [SpdxExpression].
  */
-private fun Array<LicenseDetails>?.toSpdxExpressions(): Set<SpdxExpression> =
-    orEmpty().mapTo(mutableSetOf()) { license ->
+private fun Array<LicenseDetails>?.toSpdxExpression(): SpdxExpression {
+    val expressions = orEmpty().mapTo(mutableSetOf()) { license ->
         val expression = license.name.toSpdxOrNull()
 
         when {
@@ -241,3 +241,7 @@ private fun Array<LicenseDetails>?.toSpdxExpressions(): Set<SpdxExpression> =
             else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}".toSpdx()
         }
     }.ifEmpty { setOf(SpdxExpression.NOASSERTION) }
+
+    // As expression is guaranteed to be non-empty, toExpression() can never return null.
+    return checkNotNull(expressions.toExpression())
+}
