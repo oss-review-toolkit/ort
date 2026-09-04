@@ -66,7 +66,7 @@ class ScanOssResultParserTest : WordSpec({
 
             val summary = generateSummary(results)
 
-            summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
+            summary.licenses should containExactlyInAnyOrder(
                 "Apache-2.0",
                 "EPL-1.0",
                 "MIT",
@@ -104,7 +104,7 @@ class ScanOssResultParserTest : WordSpec({
 
             val summary = generateSummary(results)
 
-            summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
+            summary.licenses should containExactlyInAnyOrder(
                 "Apache-2.0",
                 "BSD-2-Clause",
                 "EPL-2.0",
@@ -384,3 +384,5 @@ private val dummyDetails = ScanFileDetails(
         )
     )
 )
+
+private val ScanSummary.licenses: Set<String> get() = licenseFindings.mapTo(mutableSetOf()) { it.license.toString() }
