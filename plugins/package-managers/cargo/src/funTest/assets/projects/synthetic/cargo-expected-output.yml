@@ -128,37 +128,6 @@ project:
         - id: "Crate::winapi-x86_64-pc-windows-gnu:0.4.0"
           linkage: "STATIC"
 packages:
-- id: "Crate::autocfg:0.1.6"
-  purl: "pkg:cargo/autocfg@0.1.6"
-  authors:
-  - "Josh Stone"
-  declared_licenses:
-  - "Apache-2.0"
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0 OR MIT"
-  description: "Automatic cfg for Rust compiler features"
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://crates.io/api/v1/crates/autocfg/0.1.6/download"
-    hash:
-      value: "b671c8fb71b457dd4ae18c4ba1e59aa81793daacc361d82fcd410cef0d491875"
-      algorithm: "SHA-256"
-  vcs:
-    type: "Git"
-    url: "https://github.com/cuviper/autocfg.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/cuviper/autocfg.git"
-    revision: ""
-    path: ""
 - id: "Crate::bitflags:1.1.0"
   purl: "pkg:cargo/bitflags@1.1.0"
   authors:
