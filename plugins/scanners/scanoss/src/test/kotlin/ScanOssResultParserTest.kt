@@ -67,17 +67,16 @@ class ScanOssResultParserTest : WordSpec({
             val summary = generateSummary(results)
 
             summary.licenses should containExactlyInAnyOrder(
-                "Apache-2.0",
+                "EPL-1.0 AND LicenseRef-scancode-free-unknown",
                 "EPL-1.0",
-                "MIT",
-                "LicenseRef-scancode-free-unknown",
                 "LicenseRef-scanoss-SSPL",
+                "MIT AND Apache-2.0",
                 "NOASSERTION"
             )
 
-            summary.licenseFindings should haveSize(362)
+            summary.licenseFindings should haveSize(360)
             summary.licenseFindings shouldContain LicenseFinding(
-                license = "Apache-2.0",
+                license = "MIT AND Apache-2.0",
                 location = TextLocation(
                     path = "junit/4.12/src/site/resources/scripts/hopscotch-0.1.2.min.js",
                     startLine = TextLocation.UNKNOWN_LINE,
@@ -105,16 +104,13 @@ class ScanOssResultParserTest : WordSpec({
             val summary = generateSummary(results)
 
             summary.licenses should containExactlyInAnyOrder(
-                "Apache-2.0",
-                "BSD-2-Clause",
-                "EPL-2.0",
-                "LicenseRef-scanoss-SSPL",
+                "Apache-2.0 AND BSD-2-Clause AND EPL-2.0 AND LicenseRef-scanoss-SSPL",
                 "MIT"
             )
 
-            summary.licenseFindings should haveSize(11)
+            summary.licenseFindings should haveSize(8)
             summary.licenseFindings shouldContain LicenseFinding(
-                license = "Apache-2.0",
+                license = "Apache-2.0 AND BSD-2-Clause AND EPL-2.0 AND LicenseRef-scanoss-SSPL",
                 location = TextLocation(
                     path = "src/main/java/com/vdurmont/semver4j/Range.java",
                     startLine = TextLocation.UNKNOWN_LINE,
