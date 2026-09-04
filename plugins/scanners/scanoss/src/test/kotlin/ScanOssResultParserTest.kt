@@ -381,4 +381,4 @@ private val dummyDetails = ScanFileDetails(
     )
 )
 
-private val ScanSummary.licenses: Set<String> get() = licenseFindings.mapTo(mutableSetOf()) { it.license.toString() }
+private val ScanSummary.licenses by lazy { licenseFindings.mapTo(mutableSetOf()) { it.license.toString() } }
