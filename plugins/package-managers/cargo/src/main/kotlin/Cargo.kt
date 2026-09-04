@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -147,7 +148,11 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
 
         // A virtual workspace does not define any packages and thus can be skipped, see
         // https://doc.rust-lang.org/cargo/reference/workspaces.html#virtual-workspace.
-        return definitionFiles.mapNotNull { file -> file.takeUnless { it.isVirtualWorkspace() } }
+        return definitionFiles.mapNotNull { file ->
+            file.takeUnless { it.isVirtualWorkspace() }.alsoIfNull {
+                logger.info { "Skipping virtual workspace '$file'." }
+            }
+        }
     }
 
     override fun resolveDependencies(
