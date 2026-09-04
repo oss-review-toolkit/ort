@@ -201,8 +201,9 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
         }
     }
 
-    // Directly pair source locations with their corresponding OSS locations and create a SnippetFinding.
     val license = details.licenseDetails.toSpdxExpression()
+
+    // Directly pair source locations with their corresponding OSS locations and create a SnippetFinding.
     return sourceLocations.zip(ossLocations).mapTo(mutableSetOf()) { (sourceLocation, ossLocation) ->
         SnippetFinding(
             sourceLocation,
