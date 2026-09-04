@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -35,7 +34,6 @@ import org.ossreviewtoolkit.model.utils.LicenseFindingSortedSetConverter
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.SnippetFindingSortedSetConverter
 import org.ossreviewtoolkit.utils.common.FileMatcher
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 /**
  * A short summary of the scan results.
@@ -94,9 +92,6 @@ data class ScanSummary(
             endTime = Instant.EPOCH
         )
     }
-
-    @get:JsonIgnore
-    val licenses: Set<SpdxExpression> by lazy { licenseFindings.mapTo(mutableSetOf()) { it.license } }
 
     /**
      * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath [path]. Findings which
