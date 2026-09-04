@@ -116,9 +116,9 @@ internal fun generateSummary(
  */
 internal fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
-    val licenses = details.licenseDetails.toSpdxExpressions()
+    val license = checkNotNull(details.licenseDetails.toSpdxExpressions().toExpression())
 
-    return licenses.mapTo(mutableSetOf()) { license ->
+    return setOf(
         LicenseFinding(
             license = license,
             location = TextLocation(
@@ -128,7 +128,7 @@ internal fun getLicenseFindings(details: ScanFileDetails, path: String): Set<Lic
             ),
             score = score
         )
-    }
+    )
 }
 
 /**
