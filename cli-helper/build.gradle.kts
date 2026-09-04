@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.clikt)
     implementation(libs.commonsCompress)
     implementation(libs.jslt)
+    implementation(libs.mordant)
     implementation(libs.slf4j)
 
     implementation(libs.xz) {
