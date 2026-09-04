@@ -701,6 +701,7 @@ packages:
     hash:
       value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
       algorithm: "SHA-1"
+  published_at: "2014-12-04T16:17:28Z"
   vcs:
     type: ""
     url: ""

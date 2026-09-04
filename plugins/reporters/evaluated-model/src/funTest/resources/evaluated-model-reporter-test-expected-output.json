@@ -777,6 +777,7 @@
         "algorithm" : "SHA-1"
       }
     },
+    "published_at" : "2014-12-04T16:17:28Z",
     "vcs" : {
       "type" : "",
       "url" : "",
