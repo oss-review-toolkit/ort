@@ -113,7 +113,7 @@ class FileUtilsTest : WordSpec({
         }
 
         "return 'false' for hard links on Windows".config(enabled = Os.isWindows) {
-            ProcessCapture(tempDir, "cmd", "/c", "mklink", "/h", "hardlink", "file")
+            runCmdBuiltIn("mklink", "/h", "hardlink", "file", workingDir = tempDir)
 
             tempDir.resolve("hardlink").let { hardlink ->
                 hardlink shouldBe aFile()
@@ -122,7 +122,7 @@ class FileUtilsTest : WordSpec({
         }
 
         "return 'true' for junctions on Windows".config(enabled = Os.isWindows) {
-            ProcessCapture(tempDir, "cmd", "/c", "mklink", "/j", "junction", "directory")
+            runCmdBuiltIn("mklink", "/j", "junction", "directory", workingDir = tempDir)
 
             tempDir.resolve("junction").let { junction ->
                 junction.isDirectory shouldBe true
@@ -131,7 +131,7 @@ class FileUtilsTest : WordSpec({
         }
 
         "return 'true' for symbolic links to files on Windows".config(enabled = Os.isWindows) {
-            ProcessCapture(tempDir, "cmd", "/c", "mklink", "symlink-to-file", "file")
+            runCmdBuiltIn("mklink", "symlink-to-file", "file", workingDir = tempDir)
 
             tempDir.resolve("symlink-to-file").let { symlinkToFile ->
                 symlinkToFile shouldBe aFile()
@@ -140,7 +140,7 @@ class FileUtilsTest : WordSpec({
         }
 
         "return 'true' for symbolic links to directories on Windows".config(enabled = Os.isWindows) {
-            ProcessCapture(tempDir, "cmd", "/c", "mklink", "/d", "symlink-to-directory", "directory")
+            runCmdBuiltIn("mklink", "/d", "symlink-to-directory", "directory", workingDir = tempDir)
 
             tempDir.resolve("symlink-to-directory").let { symlinkToDirectory ->
                 symlinkToDirectory.isDirectory shouldBe true
@@ -215,3 +215,6 @@ class FileUtilsTest : WordSpec({
         }
     }
 })
+
+private fun runCmdBuiltIn(vararg args: String, workingDir: File) =
+    check(ProcessBuilder("cmd", "/c", *args).directory(workingDir).start().waitFor() == 0)

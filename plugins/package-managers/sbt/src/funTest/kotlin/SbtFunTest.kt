@@ -23,11 +23,12 @@ import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -40,7 +41,7 @@ class SbtFunTest : StringSpec({
         val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
-        ProcessCapture("git", "clean", "-fd", workingDir = definitionFile.parentFile).requireSuccess()
+        runGit("clean", "-fd", workingDir = definitionFile.parentFile)
 
         val result = analyze(
             definitionFile.parentFile,
@@ -59,7 +60,7 @@ class SbtFunTest : StringSpec({
         val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
-        ProcessCapture("git", "clean", "-fd", workingDir = definitionFile.parentFile).requireSuccess()
+        runGit("clean", "-fd", workingDir = definitionFile.parentFile)
 
         val result = analyze(
             definitionFile.parentFile,
@@ -72,3 +73,6 @@ class SbtFunTest : StringSpec({
         patchActualResult(result.toYaml()) shouldBe expectedResult
     }
 })
+
+private fun runGit(vararg args: String, workingDir: File) =
+    check(ProcessBuilder("git", *args).directory(workingDir).start().waitFor() == 0)
