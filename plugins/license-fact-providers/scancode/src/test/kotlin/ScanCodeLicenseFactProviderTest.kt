@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ * Copyright (C) 2026 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,56 +20,46 @@
 package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 class ScanCodeLicenseFactProviderTest : WordSpec({
-    "skipYamlFrontMatter()" should {
-        "skip a YAML front matter" {
-            val text = """
-                ---
-                key: alasir
-                short_name: Alasir Licence
-                name: The Alasir Licence
-                category: Proprietary Free
-                owner: Alasir
-                homepage_url: http://alasir.com/licence/TAL.txt
-                spdx_license_key: LicenseRef-scancode-alasir
-                ---
+    val provider = ScanCodeLicenseFactProviderFactory.create(
+        licenseDataDir = getAssetFile("license-data").absolutePath
+    )
 
-                The Alasir Licence
+    "getLicenseText()" should {
+        "return the text for a license of the configured directory" {
+            val text = provider.getLicenseText("LicenseRef-scancode-license-with-intended-title")?.text
 
-                    This is a free software. It's provided as-is and carries absolutely no
-                warranty or responsibility by the author and the contributors, neither in
-                general nor in particular. No matter if this software is able or unable to
-                cause any damage to your or third party's computer hardware, software, or any
-                other asset available, neither the author nor a separate contributor may be
-                found liable for any harm or its consequences resulting from either proper or
-                improper use of the software, even if advised of the possibility of certain
-                injury as such and so forth.
-            """.trimIndent()
-
-            text.removeYamlFrontMatter() shouldBe """
-                The Alasir Licence
-
-                    This is a free software. It's provided as-is and carries absolutely no
-                warranty or responsibility by the author and the contributors, neither in
-                general nor in particular. No matter if this software is able or unable to
-                cause any damage to your or third party's computer hardware, software, or any
-                other asset available, neither the author nor a separate contributor may be
-                found liable for any harm or its consequences resulting from either proper or
-                improper use of the software, even if advised of the possibility of certain
-                injury as such and so forth.
-            """.trimIndent()
+            text shouldBe "    indented title"
         }
 
-        "remove leading empty lines" {
-            "\nfirst sentence".removeYamlFrontMatter() shouldBe "first sentence"
+        "return null for a non-existing license" {
+            provider.getLicenseText("LicenseRef-scancode-non-existing-license") should beNull()
         }
 
-        "keep leading whitespace" {
-            "    indented title".removeYamlFrontMatter() shouldBe "    indented title"
+        "return null for an existing license without text" {
+            provider.getLicenseText("LicenseRef-scancode-generic-cla") should beNull()
+        }
+    }
+
+    "hasLicenseText()" should {
+        "return true for a license of the configured directory" {
+            provider.hasLicenseText("LicenseRef-scancode-license-with-intended-title") shouldBe true
+        }
+
+        "return false for a non-existing license" {
+            provider.hasLicenseText("LicenseRef-scancode-non-existing-license") shouldBe false
+        }
+
+        "return false for an existing license without text" {
+            provider.hasLicenseText("LicenseRef-scancode-generic-cla") shouldBe false
         }
     }
 })
 
-private fun String.removeYamlFrontMatter() = lineSequence().skipYamlFrontMatter().joinToString("\n")
+private fun getAssetFile(path: String) = File("src/test/assets", path).absoluteFile
