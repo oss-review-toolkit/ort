@@ -296,6 +296,7 @@ private fun verifyBasicProject(result: ProjectAnalyzerResult) {
             authors should beEmptyCollection()
             isModified shouldBe false
             isMetadataOnly shouldBe false
+            sourceCodeOrigins shouldBe emptyList()
         }
     }
 }
