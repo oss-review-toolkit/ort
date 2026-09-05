@@ -32,6 +32,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.clihelper.utils.PathExcludeGenerator
+import org.ossreviewtoolkit.clihelper.utils.readOrtResult
 import org.ossreviewtoolkit.clihelper.utils.sortPathExcludes
 import org.ossreviewtoolkit.clihelper.utils.write
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -42,6 +43,7 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.scanner.storages.PackageBasedFileStorage
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -66,6 +68,13 @@ internal class CreateCommand : OrtHelperCommand(
         help = "The target package for which the package configuration shall be generated."
     ).convert { Identifier(it) }
         .required()
+
+    private val ortFile by option(
+        "--ort-file",
+        help = "An optional ORT result whose processed VCS path is applied to stored scan results."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val outputDir by option(
         "--output-dir",
@@ -118,6 +127,9 @@ internal class CreateCommand : OrtHelperCommand(
     override fun run() {
         outputDir.safeMkdirs()
 
+        val vcsPath = ortFile?.let { readOrtResult(it, resolveScopes = false) }
+            ?.getPackage(packageId)?.metadata?.vcsProcessed?.path.orEmpty()
+
         val scanResultsStorage = PackageBasedFileStorage(LocalFileStorage(scanResultsStorageDir))
         val scanResults = scanResultsStorage.readForId(id = packageId).getOrThrow().run {
             listOfNotNull(
@@ -127,7 +139,7 @@ internal class CreateCommand : OrtHelperCommand(
         }
 
         scanResults.forEach { scanResult ->
-            createPackageConfiguration(scanResult).writeToFile()
+            createPackageConfiguration(scanResult.filterByVcsPath(vcsPath)).writeToFile()
         }
     }
 
