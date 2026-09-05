@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.clients.osv.Affected
 import org.ossreviewtoolkit.clients.osv.Event
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
 import org.ossreviewtoolkit.clients.osv.Range
+import org.ossreviewtoolkit.clients.osv.Severity as OsvSeverity
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
 import org.ossreviewtoolkit.clients.osv.Vulnerability
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -137,11 +138,13 @@ private fun Vulnerability.toOrtVulnerability(purl: String): org.ossreviewtoolkit
     // combination of an OSV severity and reference.
     val ortReferences = mutableListOf<VulnerabilityReference>()
 
-    severity.map {
-        it.type.name to it.score
-    }.ifEmpty {
-        listOf(null to null)
-    }.forEach { (scoringSystem, vector) ->
+    val severities = severity.mapNotNull { sev ->
+        val scoringSystem = sev.type.name.takeIf { sev.type != OsvSeverity.Type.UBUNTU }
+        val vector = sev.score.takeIf { it.isNotBlank() }
+        if (scoringSystem != null && vector != null) scoringSystem to vector else null
+    }
+
+    severities.forEach { (scoringSystem, vector) ->
         references.mapNotNullTo(ortReferences) { reference ->
             val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
 
