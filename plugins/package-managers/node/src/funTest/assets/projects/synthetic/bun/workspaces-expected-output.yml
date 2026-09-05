@@ -1,14 +1,53 @@
 ---
-project:
-  id: "Bun::bun-workspaces:1.0.0"
-  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+projects:
+- id: "Bun::pkg2:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/bun/workspaces/packages/pkg2/package.json"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
     type: "Git"
-    url: "https://github.com/oss-review-toolkit/ort.git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/bun/workspaces/packages/pkg2"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM:@csstools:css-color-parser:4.2.1"
+      dependencies:
+      - id: "NPM:@csstools:color-helpers:6.1.1"
+      - id: "NPM:@csstools:css-calc:3.3.0"
+        dependencies:
+        - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+        - id: "NPM:@csstools:css-tokenizer:4.0.0"
+      - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+      - id: "NPM:@csstools:css-tokenizer:4.0.0"
+    - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+    - id: "NPM:@csstools:css-tokenizer:4.0.0"
+    - id: "NPM:@here:harp-fetch:0.3.6"
+      dependencies:
+      - id: "NPM::node-fetch:2.7.0"
+        dependencies:
+        - id: "NPM::whatwg-url:5.0.0"
+          dependencies:
+          - id: "NPM::tr46:0.0.3"
+          - id: "NPM::webidl-conversions:3.0.1"
+- id: "Bun::workspace:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/bun/workspaces/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
     revision: ""
     path: ""
   vcs_processed:
@@ -16,24 +55,120 @@ project:
     url: "<REPLACE_VCS_PROCESSED_URL>"
     revision: "<REPLACE_VCS_REVISION>"
     path: "<REPLACE_VCS_PATH>"
-  description: "Bun test project with workspaces."
+  description: "Workspace root module."
   homepage_url: ""
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "Bun::pkg-a:1.0.0"
+    - id: "Bun::pkg2:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
-      - id: "NPM::boolbase:1.0.0"
-    - id: "Bun::pkg-b:1.0.0"
+      - id: "NPM:@csstools:css-color-parser:4.2.1"
+        dependencies:
+        - id: "NPM:@csstools:color-helpers:6.1.1"
+        - id: "NPM:@csstools:css-calc:3.3.0"
+          dependencies:
+          - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+          - id: "NPM:@csstools:css-tokenizer:4.0.0"
+        - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+        - id: "NPM:@csstools:css-tokenizer:4.0.0"
+      - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+      - id: "NPM:@csstools:css-tokenizer:4.0.0"
+      - id: "NPM:@here:harp-fetch:0.3.6"
+        dependencies:
+        - id: "NPM::node-fetch:2.7.0"
+          dependencies:
+          - id: "NPM::whatwg-url:5.0.0"
+            dependencies:
+            - id: "NPM::tr46:0.0.3"
+            - id: "NPM::webidl-conversions:3.0.1"
+    - id: "Bun:@scope1:pkg1:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
-      - id: "Bun::pkg-a:1.0.0"
+      - id: "Bun::pkg2:1.0.0"
         linkage: "PROJECT_DYNAMIC"
         dependencies:
-        - id: "NPM::boolbase:1.0.0"
-      - id: "NPM::css-what:2.1.3"
+        - id: "NPM:@csstools:css-color-parser:4.2.1"
+          dependencies:
+          - id: "NPM:@csstools:color-helpers:6.1.1"
+          - id: "NPM:@csstools:css-calc:3.3.0"
+            dependencies:
+            - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+            - id: "NPM:@csstools:css-tokenizer:4.0.0"
+          - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+          - id: "NPM:@csstools:css-tokenizer:4.0.0"
+        - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+        - id: "NPM:@csstools:css-tokenizer:4.0.0"
+        - id: "NPM:@here:harp-fetch:0.3.6"
+          dependencies:
+          - id: "NPM::node-fetch:2.7.0"
+            dependencies:
+            - id: "NPM::whatwg-url:5.0.0"
+              dependencies:
+              - id: "NPM::tr46:0.0.3"
+              - id: "NPM::webidl-conversions:3.0.1"
+      - id: "NPM:@here:harp-fetch:0.11.0"
+        dependencies:
+        - id: "NPM::node-fetch:2.7.0"
+          dependencies:
+          - id: "NPM::whatwg-url:5.0.0"
+            dependencies:
+            - id: "NPM::tr46:0.0.3"
+            - id: "NPM::webidl-conversions:3.0.1"
     - id: "NPM::long:3.2.0"
+  - name: "devDependencies"
+    dependencies:
+    - id: "NPM::boolbase:1.0.0"
+- id: "Bun:@scope1:pkg1:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/bun/workspaces/packages/pkg1/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/bun/workspaces/packages/pkg1"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Bun::pkg2:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "NPM:@csstools:css-color-parser:4.2.1"
+        dependencies:
+        - id: "NPM:@csstools:color-helpers:6.1.1"
+        - id: "NPM:@csstools:css-calc:3.3.0"
+          dependencies:
+          - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+          - id: "NPM:@csstools:css-tokenizer:4.0.0"
+        - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+        - id: "NPM:@csstools:css-tokenizer:4.0.0"
+      - id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+      - id: "NPM:@csstools:css-tokenizer:4.0.0"
+      - id: "NPM:@here:harp-fetch:0.3.6"
+        dependencies:
+        - id: "NPM::node-fetch:2.7.0"
+          dependencies:
+          - id: "NPM::whatwg-url:5.0.0"
+            dependencies:
+            - id: "NPM::tr46:0.0.3"
+            - id: "NPM::webidl-conversions:3.0.1"
+    - id: "NPM:@here:harp-fetch:0.11.0"
+      dependencies:
+      - id: "NPM::node-fetch:2.7.0"
+        dependencies:
+        - id: "NPM::whatwg-url:5.0.0"
+          dependencies:
+          - id: "NPM::tr46:0.0.3"
+          - id: "NPM::webidl-conversions:3.0.1"
 packages:
 - id: "NPM::boolbase:1.0.0"
   purl: "pkg:npm/boolbase@1.0.0"
@@ -65,36 +200,6 @@ packages:
     url: "https://github.com/fb55/boolbase.git"
     revision: ""
     path: ""
-- id: "NPM::css-what:2.1.3"
-  purl: "pkg:npm/css-what@2.1.3"
-  authors:
-  - "Felix Böhm"
-  declared_licenses:
-  - "BSD-2-Clause"
-  declared_licenses_processed:
-    spdx_expression: "BSD-2-Clause"
-  description: "a CSS selector parser"
-  homepage_url: "https://github.com/fb55/css-what#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/css-what/-/css-what-2.1.3.tgz"
-    hash:
-      value: "a6d7604573365fe74686c3f311c56513d88285f2"
-      algorithm: "SHA-1"
-  vcs:
-    type: ""
-    url: "https://github.com/fb55/css-what"
-    revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/fb55/css-what.git"
-    revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
-    path: ""
 - id: "NPM::long:3.2.0"
   purl: "pkg:npm/long@3.2.0"
   authors:
@@ -125,8 +230,325 @@ packages:
     url: "https://github.com/dcodeIO/long.js.git"
     revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
     path: ""
-issues:
-- timestamp: "1970-01-01T00:00:00Z"
-  source: "Bun"
-  message: "invalid: pkg-a@1.0.0 <REPLACE_PROJECT_DIR>/node_modules/pkg-a"
-  severity: "WARNING"
+- id: "NPM::node-fetch:2.7.0"
+  purl: "pkg:npm/node-fetch@2.7.0"
+  authors:
+  - "David Frank"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A light-weight module that brings window.fetch to node.js"
+  homepage_url: "https://github.com/bitinn/node-fetch"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz"
+    hash:
+      value: "d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/bitinn/node-fetch.git"
+    revision: "9b9d45881e5ca68757077726b3c0ecf8fdca1f29"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bitinn/node-fetch.git"
+    revision: "9b9d45881e5ca68757077726b3c0ecf8fdca1f29"
+    path: ""
+- id: "NPM::tr46:0.0.3"
+  purl: "pkg:npm/tr46@0.0.3"
+  authors:
+  - "Sebastian Mayr"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "An implementation of the Unicode TR46 spec"
+  homepage_url: "https://github.com/Sebmaster/tr46.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
+    hash:
+      value: "8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/Sebmaster/tr46.js.git"
+    revision: "a8009f9ce80ff5dbe71dd71e203afe4e4c878d28"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Sebmaster/tr46.js.git"
+    revision: "a8009f9ce80ff5dbe71dd71e203afe4e4c878d28"
+    path: ""
+- id: "NPM::webidl-conversions:3.0.1"
+  purl: "pkg:npm/webidl-conversions@3.0.1"
+  authors:
+  - "Domenic Denicola"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "Implements the WebIDL algorithms for converting to and from JavaScript\
+    \ values"
+  homepage_url: "https://github.com/jsdom/webidl-conversions#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
+    hash:
+      value: "24534275e2a7bc6be7bc86611cc16ae0a5654871"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jsdom/webidl-conversions.git"
+    revision: "e21056f891736db755cfe0d72e4ce083a9034ace"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jsdom/webidl-conversions.git"
+    revision: "e21056f891736db755cfe0d72e4ce083a9034ace"
+    path: ""
+- id: "NPM::whatwg-url:5.0.0"
+  purl: "pkg:npm/whatwg-url@5.0.0"
+  authors:
+  - "Sebastian Mayr"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "An implementation of the WHATWG URL Standard's URL API and parsing\
+    \ machinery"
+  homepage_url: "https://github.com/jsdom/whatwg-url#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz"
+    hash:
+      value: "966454e8765462e37644d3626f6742ce8b70965d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jsdom/whatwg-url.git"
+    revision: "d34854a7af6ed1204f55d7da7761497bad350a7b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jsdom/whatwg-url.git"
+    revision: "d34854a7af6ed1204f55d7da7761497bad350a7b"
+    path: ""
+- id: "NPM:@csstools:color-helpers:6.1.1"
+  purl: "pkg:npm/%40csstools/color-helpers@6.1.1"
+  declared_licenses:
+  - "MIT-0"
+  declared_licenses_processed:
+    spdx_expression: "MIT-0"
+  description: "Color helpers to ease transformation between formats, gamut, etc"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/color-helpers#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/color-helpers/-/color-helpers-6.1.1.tgz"
+    hash:
+      value: "1890f29a4347486b54048d24c6ab8fbef039ee61"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "b9695c6c05437f624c65409f165d1c992930a662"
+    path: "packages/color-helpers"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "b9695c6c05437f624c65409f165d1c992930a662"
+    path: "packages/color-helpers"
+- id: "NPM:@csstools:css-calc:3.3.0"
+  purl: "pkg:npm/%40csstools/css-calc@3.3.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Solve CSS math expressions"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-calc#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-calc/-/css-calc-3.3.0.tgz"
+    hash:
+      value: "33cc4bdbab8edf1b6e3ab8c1eba849c41a324f1a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "14c008aa5ca4b7898a7c9adb033fc6d9eb673bc6"
+    path: "packages/css-calc"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "14c008aa5ca4b7898a7c9adb033fc6d9eb673bc6"
+    path: "packages/css-calc"
+- id: "NPM:@csstools:css-color-parser:4.2.1"
+  purl: "pkg:npm/%40csstools/css-color-parser@4.2.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Parse CSS color values"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-color-parser#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-color-parser/-/css-color-parser-4.2.1.tgz"
+    hash:
+      value: "d2795d618e3d497f394277eede34f10d7adfad0e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "f404587b4827ce44f8849f9ef525810ddaa1f15b"
+    path: "packages/css-color-parser"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "f404587b4827ce44f8849f9ef525810ddaa1f15b"
+    path: "packages/css-color-parser"
+- id: "NPM:@csstools:css-parser-algorithms:4.0.0"
+  purl: "pkg:npm/%40csstools/css-parser-algorithms@4.0.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Algorithms to help you parse CSS from an array of tokens."
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-parser-algorithms#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-parser-algorithms/-/css-parser-algorithms-4.0.0.tgz"
+    hash:
+      value: "e1c65dc09378b42f26a111fca7f7075fc2c26164"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "cb790c643f758d707260d2cd554a1a85f1167fa1"
+    path: "packages/css-parser-algorithms"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "cb790c643f758d707260d2cd554a1a85f1167fa1"
+    path: "packages/css-parser-algorithms"
+- id: "NPM:@csstools:css-tokenizer:4.0.0"
+  purl: "pkg:npm/%40csstools/css-tokenizer@4.0.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Tokenize CSS"
+  homepage_url: "https://github.com/csstools/postcss-plugins/tree/main/packages/css-tokenizer#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@csstools/css-tokenizer/-/css-tokenizer-4.0.0.tgz"
+    hash:
+      value: "798a33950d11226a0ebb6acafa60f5594424967f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/csstools/postcss-plugins.git"
+    revision: "9256e22798ff1360e178912af9b57d59d0601c99"
+    path: "packages/css-tokenizer"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/csstools/postcss-plugins.git"
+    revision: "9256e22798ff1360e178912af9b57d59d0601c99"
+    path: "packages/css-tokenizer"
+- id: "NPM:@here:harp-fetch:0.3.6"
+  purl: "pkg:npm/%40here/harp-fetch@0.3.6"
+  authors:
+  - "HERE Europe B.V."
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "This module adds a subset of the fetch API for Node.js"
+  homepage_url: "https://github.com/heremaps/harp.gl#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
+    hash:
+      value: "703fc8b034f6e0d621cc2c3ded96c6f904723742"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+    path: "@here/harp-fetch"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+    path: "@here/harp-fetch"
+- id: "NPM:@here:harp-fetch:0.11.0"
+  purl: "pkg:npm/%40here/harp-fetch@0.11.0"
+  authors:
+  - "HERE Europe B.V."
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "This module adds a subset of the fetch API for Node.js"
+  homepage_url: "https://github.com/heremaps/harp.gl#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
+    hash:
+      value: "8d0e0bdb523c7c4f306f676aac65aa6bcb95da1c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
+    path: "@here/harp-fetch"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
+    path: "@here/harp-fetch"
