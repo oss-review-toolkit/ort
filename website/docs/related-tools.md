@@ -33,6 +33,12 @@ A [GitLab Pipeline](https://github.com/oss-review-toolkit/ort-gitlab-ci) to run 
 
 A [bash script](https://github.com/oss-review-toolkit/orthw) that helps to simplify and speed up common tasks performed when processing ORT results.
 
+## OpenChain CRA Compliance Checklist
+
+The [OpenChain CRA Compliance Requirements & Checklist](https://openchainproject.org/cracompliance) is a community resource for organizing EU Cyber Resilience Act (CRA) readiness work around governance, SBOM quality, vulnerability handling, open source stewardship and related evidence.
+ORT users can consult it when mapping ORT-generated SBOM and vulnerability information to CRA evidence planning.
+The checklist is not legal advice or a conformity assessment.
+
 ## OpossumUI
 
 [OpossumUI](https://github.com/opossum-tool/OpossumUI) is a desktop application that provides a compliance audit workflow.
