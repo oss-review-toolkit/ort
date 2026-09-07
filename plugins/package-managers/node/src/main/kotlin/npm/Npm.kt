@@ -209,7 +209,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         }
 
         return workspaceModuleDirs.map { projectDir ->
-            val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
+            val packageJsonFile = projectDir / NodePackageManagerType.DEFINITION_FILE
             val project = parseProject(packageJsonFile, analysisRoot)
 
             scopes.forEach { scope ->

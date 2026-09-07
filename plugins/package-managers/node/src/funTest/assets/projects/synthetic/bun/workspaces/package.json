@@ -1,17 +1,16 @@
 {
-  "name": "bun-workspaces",
+  "name": "workspace",
   "version": "1.0.0",
-  "description": "Bun test project with workspaces.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/oss-review-toolkit/ort.git"
-  },
-  "license": "Apache-2.0",
-  "private": true,
+  "description": "Workspace root module.",
   "workspaces": [
     "packages/*"
   ],
+  "private": true,
+  "license": "Apache-2.0",
   "dependencies": {
     "long": "3.2.0"
+  },
+  "devDependencies": {
+    "boolbase": "1.0.0"
   }
 }
