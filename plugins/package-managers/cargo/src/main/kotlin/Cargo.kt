@@ -258,10 +258,9 @@ private fun CargoMetadata.Package.isProject(analysisRoot: File): Boolean {
 private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Package {
     val declaredLicenses = parseDeclaredLicenses()
 
-    // While the previously used "/" was not explicit about the intended license operator, the community consensus
-    // seems to be that an existing "/" should be interpreted as "OR", see e.g. the discussions at
-    // https://github.com/rust-lang/cargo/issues/2039
-    // https://github.com/rust-lang/cargo/pull/4920
+    // Historically, Cargo's metadata used "/" to separate licenses in a string. As the semantics of "/" are unclear in
+    // terms of the intended license operator, the community deprecated "/" in favor of an explicit "OR", see
+    // https://github.com/rust-lang/cargo/pull/4920 and also the related https://github.com/rust-lang/cargo/issues/2039.
     val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, operator = SpdxOperator.OR)
 
     val vcs = (source.takeIf { it?.startsWith("git+https://") == true } ?: repository)
