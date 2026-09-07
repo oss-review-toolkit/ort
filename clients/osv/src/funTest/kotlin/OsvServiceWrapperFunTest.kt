@@ -20,12 +20,10 @@
 package org.ossreviewtoolkit.clients.osv
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
@@ -42,7 +40,7 @@ private val VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION = VulnerabilitiesForPa
     version = "2.2.0"
 )
 private val VULNERABILITY_FOR_PACKAGE_BY_INVALID_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(
-    commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0c"
+    commit = "invalid"
 )
 
 class OsvServiceWrapperFunTest : WordSpec({
@@ -65,8 +63,8 @@ class OsvServiceWrapperFunTest : WordSpec({
                 )
             }
 
-            results[1] shouldBeSuccess {
-                it should beEmpty()
+            results[1] shouldBeFailure {
+                it.message shouldContain "invalid hash"
             }
 
             results[2] shouldBeSuccess {
@@ -93,8 +91,7 @@ class OsvServiceWrapperFunTest : WordSpec({
             val results = OsvServiceWrapper().getVulnerabilityIdsForPackages(requests)
 
             results.shouldBeSingle() shouldBeFailure {
-                it.message shouldContain "dummy"
-                it.cause.shouldNotBeNull().message shouldContain "invalid ecosystem"
+                it.message shouldContain "invalid ecosystem"
             }
         }
     }
