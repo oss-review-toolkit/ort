@@ -55,7 +55,7 @@ class BundlerFunTest : WordSpec({
                 project.definitionFilePath shouldBe
                     "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
                 packages should beEmpty()
-                issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+                issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found")
             }
         }
 

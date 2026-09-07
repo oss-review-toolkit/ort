@@ -56,7 +56,7 @@ class Rebar3(
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        requireLockfile(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions) {
+        requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
             (workingDir / "rebar.lock").isFile
         }
 

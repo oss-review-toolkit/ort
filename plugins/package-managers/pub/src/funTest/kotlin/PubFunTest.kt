@@ -100,7 +100,7 @@ class PubFunTest : WordSpec({
 
             with(result) {
                 packages should beEmpty()
-                issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+                issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found")
             }
         }
     }

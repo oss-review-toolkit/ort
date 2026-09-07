@@ -112,9 +112,14 @@ class Bun(override val descriptor: PluginDescriptor = BunFactory.descriptor) :
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+
         moduleInfoResolver.workingDir = workingDir
 
-        installDependencies(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions)
+        requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
+            managerType.hasLockfile(workingDir)
+        }
+
+        installDependencies(workingDir)
 
         val issues = mutableListOf<Issue>()
 
@@ -156,9 +161,7 @@ class Bun(override val descriptor: PluginDescriptor = BunFactory.descriptor) :
         return parseNpmList(listProcess.stdout).markPackageModules()
     }
 
-    private fun installDependencies(analysisRoot: File, workingDir: File, allowDynamicVersions: Boolean) {
-        requireLockfile(analysisRoot, workingDir, allowDynamicVersions) { managerType.hasLockfile(workingDir) }
-
+    private fun installDependencies(workingDir: File) {
         val options = listOfNotNull(
             "--ignore-scripts",
             // Always use the "hoisted" linker to get the NPM-compatible layout that "npm list" requires. Since Bun

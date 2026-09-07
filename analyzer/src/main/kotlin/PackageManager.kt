@@ -372,17 +372,16 @@ abstract class PackageManager(val projectType: String) : Plugin {
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult>
 
-    protected fun requireLockfile(
+    protected fun requireLockfileForStableVersions(
         analysisRoot: File,
-        workingDir: File,
+        definitionFile: File,
         allowDynamicVersions: Boolean,
-        condition: () -> Boolean
+        hasLockfile: () -> Boolean
     ) {
-        require(allowDynamicVersions || condition()) {
-            val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
-
-            "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +
-                "dependencies. To support this, enable the 'allowDynamicVersions' option in '$ORT_CONFIG_FILENAME'."
+        require(allowDynamicVersions || hasLockfile()) {
+            "No lockfile found for '${definitionFile.relativeTo(analysisRoot)}'. This potentially results in " +
+                "unstable versions of dependencies. To support this, enable the 'allowDynamicVersions' option in " +
+                "'$ORT_CONFIG_FILENAME'."
         }
     }
 

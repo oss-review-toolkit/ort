@@ -345,7 +345,11 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         val projectAnalyzerResults = mutableListOf<ProjectAnalyzerResult>()
 
         if (hasDependencies) {
-            installDependencies(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions)
+            requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
+                definitionFile.resolveSibling(PUB_LOCK_FILE).isFile
+            }
+
+            installDependencies(workingDir)
 
             logger.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
 
@@ -793,9 +797,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         return parsePubspec(definitionFile)
     }
 
-    private fun installDependencies(analysisRoot: File, workingDir: File, allowDynamicVersions: Boolean) {
-        requireLockfile(analysisRoot, workingDir, allowDynamicVersions) { workingDir.resolve(PUB_LOCK_FILE).isFile }
-
+    private fun installDependencies(workingDir: File) {
         if (containsFlutterSdk(workingDir)) {
             // For Flutter projects it is not enough to run `dart pub get`. Instead, use `flutter pub get` which
             // installs the required dependencies and also creates the `local.properties` file which is required for

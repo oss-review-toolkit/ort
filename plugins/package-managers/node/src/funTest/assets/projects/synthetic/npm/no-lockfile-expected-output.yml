@@ -21,6 +21,7 @@ issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
   message: "NPM failed to resolve dependencies for path 'package.json': IllegalArgumentException:\
-    \ No lockfile found in '.'. This potentially results in unstable versions of dependencies.\
-    \ To support this, enable the 'allowDynamicVersions' option in 'config.yml'."
+    \ No lockfile found for 'package.json'. This potentially results in unstable versions\
+    \ of dependencies. To support this, enable the 'allowDynamicVersions' option in\
+    \ 'config.yml'."
   severity: "ERROR"

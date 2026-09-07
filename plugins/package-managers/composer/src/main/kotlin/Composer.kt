@@ -157,7 +157,7 @@ class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descr
         val lockfile = stashDirectories(workingDir / "vendor").use { _ ->
             val lockfileProvider = LockfileProvider(definitionFile)
 
-            requireLockfile(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions) {
+            requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
                 lockfileProvider.lockfile.isFile
             }
 

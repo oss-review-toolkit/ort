@@ -189,7 +189,7 @@ class Bundler(
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        requireLockfile(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions) {
+        requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
             workingDir.resolve(BUNDLER_LOCKFILE_NAME).isFile
         }
 

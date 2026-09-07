@@ -108,7 +108,7 @@ class Gleam internal constructor(
         val gleamToml = parseGleamToml(definitionFile)
         val hasDependencies = gleamToml.dependencies.isNotEmpty() || gleamToml.devDependencies.isNotEmpty()
 
-        requireLockfile(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions) {
+        requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
             manifestFile.isFile || !hasDependencies
         }
 
