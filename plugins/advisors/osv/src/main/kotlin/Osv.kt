@@ -93,27 +93,28 @@ class Osv(
     }
 
     private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
-        val requests = packages.mapNotNull { pkg ->
-            createRequest(pkg)?.let { pkg to it }
-        }
-
-        val result = service.getVulnerabilityIdsForPackages(requests.map { it.second })
-        val results = mutableListOf<Pair<Identifier, List<String>>>()
-
-        result.map { allVulnerabilities ->
-            // OSV returns vulnerability results in the same order as packages were requested, so use the list index to
-            // identify to which package a result belongs. This means that also empty results are returned as otherwise
-            // list indices would not match, so filter these out.
-            allVulnerabilities.mapIndexedNotNullTo(results) { i, pkgVulnerabilities ->
-                pkgVulnerabilities.takeUnless { it.isEmpty() }?.let { requests[i].first.id to it }
-            }
-        }.onFailure {
-            logger.error {
-                "Requesting vulnerability IDs for packages failed: ${it.collectMessages()}"
+        val requests = buildMap(packages.size) {
+            packages.forEach { pkg ->
+                createRequest(pkg)?.also { put(pkg.id, it) }
             }
         }
 
-        return results.toMap()
+        val results = service.getVulnerabilityIdsForPackages(requests.values)
+
+        return buildMap {
+            // OSV returns vulnerability results for each package in the requested order.
+            requests.keys.zip(results) { pkgId, result ->
+                result.onSuccess {
+                    // Filter out empty results which are returned to match request ordering.
+                    if (it.isNotEmpty()) put(pkgId, it)
+                }.onFailure {
+                    logger.error {
+                        "Requesting vulnerability IDs for package '${pkgId.toCoordinates()}' failed: " +
+                            it.collectMessages()
+                    }
+                }
+            }
+        }
     }
 
     private fun getVulnerabilitiesForIds(ids: Set<String>): List<Vulnerability> {
