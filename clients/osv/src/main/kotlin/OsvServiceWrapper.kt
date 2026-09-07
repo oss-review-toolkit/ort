@@ -71,6 +71,8 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
      * https://github.com/google/osv.dev/issues/466#issuecomment-1163337495.
      */
     fun getVulnerabilitiesForIds(ids: Set<String>): Result<List<Vulnerability>> {
+        if (ids.isEmpty()) return Result.success(emptyList())
+
         @Suppress("ForbiddenMethodCall")
         val vulnerabilityResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
             ids.map { id ->
