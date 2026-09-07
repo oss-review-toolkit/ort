@@ -73,7 +73,7 @@ class Mix(
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        requireLockfile(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions) {
+        requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
             (workingDir / "mix.lock").isFile
         }
 

@@ -87,13 +87,9 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
      * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
      * project is part of a workspace. Cargo.lock is then located next to the Cargo.toml file defining the workspace.
      */
-    private fun resolveLockfile(analysisRoot: File, metadata: CargoMetadata, allowDynamicVersions: Boolean): File {
+    private fun resolveLockfile(metadata: CargoMetadata): File {
         val workspaceRoot = File(metadata.workspaceRoot)
-        val lockfile = workspaceRoot / "Cargo.lock"
-
-        requireLockfile(analysisRoot, workspaceRoot, allowDynamicVersions) { lockfile.isFile }
-
-        return lockfile
+        return workspaceRoot / "Cargo.lock"
     }
 
     /**
@@ -212,7 +208,14 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
             depNodesByKind[BUILD_KIND_NAME]?.let { Scope("build-dependencies", it.toPackageReferences()) }
         )
 
-        val hashes = readHashes(resolveLockfile(analysisRoot, metadata, analyzerConfig.allowDynamicVersions))
+        val lockfile = resolveLockfile(metadata)
+
+        requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
+            lockfile.isFile
+        }
+
+        val hashes = readHashes(lockfile)
+
         val projectPkg = packageById.getValue(projectId).let { cargoPkg ->
             cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = projectType)) }
         }

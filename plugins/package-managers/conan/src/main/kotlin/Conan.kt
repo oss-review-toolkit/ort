@@ -212,7 +212,7 @@ class Conan(
             configureRemoteAuthentication(conanConfig)
 
             // TODO: Support lockfiles which are located in a different directory than the definition file.
-            requireLockfile(analysisRoot, workingDir, allowDynamicVersions) {
+            requireLockfileForStableVersions(analysisRoot, definitionFile, allowDynamicVersions) {
                 config.lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } == true
             }
 

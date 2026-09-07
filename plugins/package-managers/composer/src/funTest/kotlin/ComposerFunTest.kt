@@ -80,7 +80,7 @@ class ComposerFunTest : StringSpec({
             project.definitionFilePath shouldBe "plugins/package-managers/composer/src/funTest/assets/projects/" +
                 "synthetic/no-lockfile/composer.json"
             packages should beEmpty()
-            issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+            issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found")
         }
     }
 

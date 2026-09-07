@@ -178,11 +178,16 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+
         moduleInfoResolver.workingDir = workingDir
         command = NodeVersionManagerCommand.useVersion(NpmCommand.DEFAULT, config.nodeVersion, workingDir)
         command.checkVersion()
 
-        val issues = installDependencies(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions).toMutableList()
+        requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
+            managerType.hasLockfile(workingDir)
+        }
+
+        val issues = installDependencies(workingDir).toMutableList()
 
         if (issues.any { it.severity == Severity.ERROR }) {
             val project = runCatching {
@@ -260,9 +265,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         return parseNpmList(listProcess.stdout)
     }
 
-    private fun installDependencies(analysisRoot: File, workingDir: File, allowDynamicVersions: Boolean): List<Issue> {
-        requireLockfile(analysisRoot, workingDir, allowDynamicVersions) { managerType.hasLockfile(workingDir) }
-
+    private fun installDependencies(workingDir: File): List<Issue> {
         val options = listOfNotNull(
             "--ignore-scripts",
             "--no-audit",

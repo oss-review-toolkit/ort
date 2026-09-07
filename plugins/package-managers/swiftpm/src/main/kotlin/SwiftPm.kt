@@ -96,7 +96,7 @@ class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descrip
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         if (definitionFile.name != PACKAGE_RESOLVED_NAME) {
-            requireLockfile(analysisRoot, definitionFile.parentFile, analyzerConfig.allowDynamicVersions) {
+            requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
                 definitionFile.resolveSibling(PACKAGE_RESOLVED_NAME).isFile
             }
         }
