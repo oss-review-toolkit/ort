@@ -45,32 +45,43 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
     ): List<Result<List<String>>> {
         if (requests.isEmpty()) return emptyList()
 
-        val requestChunks = requests.distinct().chunked(OsvService.BATCH_REQUEST_MAX_SIZE)
+        val distinctRequests = requests.distinct()
+        val requestChunks = distinctRequests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE)
 
         @Suppress("ForbiddenMethodCall")
-        val batchResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+        val results = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
             requestChunks.map { chunk ->
                 async {
                     val batchRequest = VulnerabilitiesForPackageBatchRequest(chunk)
-                    runCatching { service.getVulnerabilityIdsForPackages(batchRequest) }.unwrapHttpException()
+
+                    runCatching {
+                        service.getVulnerabilityIdsForPackages(batchRequest)
+                    }.fold(
+                        onSuccess = { batchResponse ->
+                            // Unwrap a successful batch response to individual successful package responses.
+                            batchResponse.results.map { idList ->
+                                Result.success(idList.vulnerabilities.map { it.id })
+                            }
+                        },
+                        onFailure = {
+                            // Fall back to requesting individual packages of a failed chunk in parallel.
+                            chunk.map { request ->
+                                async {
+                                    runCatching {
+                                        val idList = service.getVulnerabilityIdsForPackage(request)
+                                        idList.vulnerabilities.map { it.id }
+                                    }.unwrapHttpException()
+                                }
+                            }.awaitAll()
+                        }
+                    )
                 }
             }.awaitAll()
-        }
+        }.flatten()
 
-        // Each chunk of packages maps to one batch result that either succeeded or failed. Split up the result for a
-        // batch of packages into individual results per package.
-        return requestChunks.zip(batchResults).flatMap { (chunk, batchResult) ->
-            batchResult.fold(
-                onSuccess = { response ->
-                    response.results.map { idList ->
-                        Result.success(idList.vulnerabilities.map { it.id })
-                    }
-                },
-                onFailure = { e ->
-                    chunk.map { request -> Result.failure(IOException("$request failed", e)) }
-                }
-            )
-        }
+        check(distinctRequests.size == results.size)
+
+        return results
     }
 
     /**
