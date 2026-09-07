@@ -44,9 +44,9 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
 
         @Suppress("ForbiddenMethodCall")
         val batchResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            requests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE).map { requestsChunk ->
+            requests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE).map { chunk ->
                 async {
-                    val batchRequest = VulnerabilitiesForPackageBatchRequest(requestsChunk)
+                    val batchRequest = VulnerabilitiesForPackageBatchRequest(chunk)
                     runCatching { service.getVulnerabilityIdsForPackages(batchRequest) }.unwrapHttpException()
                 }
             }.awaitAll()
