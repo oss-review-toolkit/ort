@@ -96,6 +96,10 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
         return lockfile
     }
 
+    /**
+     * Parse the metadata section of the given [lockfile] to extract the SHA-256 digest of each dependency's Crate
+     * (gzipped tarball source artifact) by name.
+     */
     private fun readHashes(lockfile: File): Map<String, String> {
         if (!lockfile.isFile) {
             logger.debug { "Cannot determine the hashes of remote artifacts because the Cargo lockfile is missing." }
