@@ -85,7 +85,7 @@ interface OsvService {
 
 /** See https://google.github.io/osv.dev/post-v1-query/#parameters. */
 @Serializable
-class VulnerabilitiesForPackageRequest(
+data class VulnerabilitiesForPackageRequest(
     /** The commit hash to query for. If specified, [version] should not be set. */
     val commit: String? = null,
 
