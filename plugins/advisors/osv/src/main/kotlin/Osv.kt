@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.toPackageUrl
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
@@ -78,23 +79,39 @@ class Osv(
         val startTime = Instant.now()
 
         val vulnerabilityIdsForPackageId = getVulnerabilityIdsForPackages(packages)
-        val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.flatten().toSet()
+        val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.mapNotNull { it.getOrNull() }.flatten().toSet()
         val vulnerabilityForId = getVulnerabilitiesForIds(allVulnerabilityIds).associateBy { it.id }
 
         val endTime = Instant.now()
 
         return packages.mapNotNull { pkg ->
-            vulnerabilityIdsForPackageId[pkg.id]?.let { ids ->
-                pkg to AdvisorResult(
-                    advisor = details,
-                    summary = AdvisorSummary(startTime, endTime),
-                    vulnerabilities = ids.map { vulnerabilityForId.getValue(it).toOrtVulnerability(pkg.purl) }
+            vulnerabilityIdsForPackageId[pkg.id]?.let { result ->
+                val advisorResult = result.fold(
+                    onSuccess = { ids ->
+                        AdvisorResult(
+                            advisor = details,
+                            summary = AdvisorSummary(startTime, endTime),
+                            vulnerabilities = ids.map { vulnerabilityForId.getValue(it).toOrtVulnerability(pkg.purl) }
+                        )
+                    },
+                    onFailure = { e ->
+                        val message = "Requesting vulnerability IDs for package '${pkg.id.toCoordinates()}' failed: " +
+                            e.collectMessages()
+                        val issues = listOf(createAndLogIssue(message))
+
+                        AdvisorResult(
+                            advisor = details,
+                            summary = AdvisorSummary(startTime, endTime, issues)
+                        )
+                    }
                 )
+
+                pkg to advisorResult
             }
         }.toMap()
     }
 
-    private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
+    private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, Result<List<String>>> {
         val requests = buildMap(packages.size) {
             packages.forEach { pkg ->
                 createRequest(pkg)?.also { put(pkg.id, it) }
@@ -108,12 +125,9 @@ class Osv(
             requests.keys.zip(results) { pkgId, result ->
                 result.onSuccess {
                     // Filter out empty results which are returned to match request ordering.
-                    if (it.isNotEmpty()) put(pkgId, it)
+                    if (it.isNotEmpty()) put(pkgId, Result.success(it))
                 }.onFailure {
-                    logger.error {
-                        "Requesting vulnerability IDs for package '${pkgId.toCoordinates()}' failed: " +
-                            it.collectMessages()
-                    }
+                    put(pkgId, Result.failure(it))
                 }
             }
         }

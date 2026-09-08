@@ -22,11 +22,14 @@ package org.ossreviewtoolkit.plugins.advisors.osv
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.maps.shouldMatchAll
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -39,9 +42,11 @@ class OsvFunTest : WordSpec({
     "retrievePackageFindings()" should {
         "return the vulnerabilities for the supported ecosystems" {
             val osv = OsvFactory.create()
-            val dummyPackage = "A:dummy:package:1.2.3"
-            val packageCoordinates = setOf(
-                dummyPackage,
+
+            // Do not set a PURL here!
+            val invalidPackage = Package.EMPTY.copy(id = Identifier("An:invalid:package:1.2.3"))
+
+            val packages = setOf(
                 "Crate::sys-info:0.7.0",
                 "Composer:thorsten:phpmyfaq:3.0.7",
                 "Gem::rack:2.0.4",
@@ -53,18 +58,26 @@ class OsvFunTest : WordSpec({
                 "Pub::http:0.13.1",
                 "PyPI::django:3.2",
                 "Swift::github.com/apple/swift-nio:2.41.0"
-            )
-            val packages = packageCoordinates.mapTo(mutableSetOf()) { identifierToPackage(it) }
+            ).mapTo(mutableSetOf(invalidPackage)) { identifierToPackage(it) }
 
-            val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id.toCoordinates() }
+            val packageFindings = osv.retrievePackageFindings(packages)
 
-            packageFindings.keys shouldContainExactlyInAnyOrder packageCoordinates - dummyPackage
-            packageFindings.keys.forAll { coordinates ->
-                with(packageFindings.getValue(coordinates)) {
-                    vulnerabilities shouldNot beEmpty()
-                    summary.issues should beEmpty()
-                }
+            packageFindings.keys shouldContainExactlyInAnyOrder packages
+
+            (packageFindings - invalidPackage).values.forAll { result ->
+                result.vulnerabilities shouldNot beEmpty()
+                result.summary.issues should beEmpty()
             }
+
+            packageFindings.shouldMatchAll(
+                invalidPackage to { result ->
+                    result.vulnerabilities should beEmpty()
+                    result.summary.issues.shouldBeSingleton {
+                        it.message shouldContain "package 'An:invalid:package:1.2.3' failed"
+                        it.message shouldContain "invalid ecosystem"
+                    }
+                }
+            )
         }
 
         "return the expected result for the given package(s)" {
