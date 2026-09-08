@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
 import java.io.File
@@ -31,22 +29,14 @@ import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
-import org.ossreviewtoolkit.analyzer.parseAuthorString
-import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
-import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -54,16 +44,19 @@ import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
 private const val PROJECT_TYPE = "Cargo"
-private const val PACKAGE_TYPE = "Crate"
+internal const val PACKAGE_TYPE = "Crate"
 
-private const val DEFAULT_KIND_NAME = "normal"
-private const val DEV_KIND_NAME = "dev"
-private const val BUILD_KIND_NAME = "build"
+/**
+ * A map from the Cargo dependency kinds, see https://doc.rust-lang.org/cargo/commands/cargo-metadata.html, to the names
+ * of the corresponding ORT scopes.
+ */
+private val SCOPE_NAME_FOR_KIND = mapOf(
+    null to "dependencies",
+    "dev" to "dev-dependencies",
+    "build" to "build-dependencies"
+)
 
 internal object CargoCommand : CommandLineTool {
     override fun command(workingDir: File?) = "cargo"
@@ -83,6 +76,9 @@ internal object CargoCommand : CommandLineTool {
     factory = PackageManagerFactory::class
 )
 class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager(PROJECT_TYPE) {
+    private lateinit var handler: CargoDependencyHandler
+    private val graphBuilder by lazy { DependencyGraphBuilder(handler) }
+
     override val globsForDefinitionFiles = listOf("Cargo.toml")
 
     override fun mapDefinitionFiles(
@@ -130,43 +126,6 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
         val packageById = metadata.packages.associateBy { it.id }
         val nodeById = metadata.resolve.nodes.associateBy { it.id }
 
-        // Virtual workspaces have been filtered out in "mapDefinitionFiles".
-        val projectId = checkNotNull(metadata.resolve.root)
-
-        val depNodesByKind = mutableMapOf<String, MutableList<CargoMetadata.Node>>()
-        nodeById.getValue(projectId).deps.forEach { dep ->
-            val depNode = nodeById.getValue(dep.pkg)
-
-            dep.depKinds.forEach { depKind ->
-                depNodesByKind.getOrPut(depKind.kind ?: DEFAULT_KIND_NAME) { mutableListOf() } += depNode
-            }
-        }
-
-        fun Collection<CargoMetadata.Node>.toPackageReferences(): Set<PackageReference> =
-            mapNotNullTo(mutableSetOf()) { node ->
-                // TODO: Handle renamed dependencies here, see:
-                //       https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#renaming-dependencies-in-cargotoml
-                val dependencyNodes = node.deps.filter { dep ->
-                    // Only normal dependencies are transitive.
-                    dep.depKinds.any { it.kind == null }
-                }.map { dep ->
-                    nodeById.getValue(dep.pkg)
-                }
-
-                val pkg = packageById.getValue(node.id)
-                PackageReference(
-                    id = Identifier(PACKAGE_TYPE, "", pkg.name, pkg.version),
-                    linkage = if (pkg.isProject(analysisRoot)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC,
-                    dependencies = dependencyNodes.toPackageReferences()
-                )
-            }
-
-        val scopes = setOfNotNull(
-            depNodesByKind[DEFAULT_KIND_NAME]?.let { Scope("dependencies", it.toPackageReferences()) },
-            depNodesByKind[DEV_KIND_NAME]?.let { Scope("dev-dependencies", it.toPackageReferences()) },
-            depNodesByKind[BUILD_KIND_NAME]?.let { Scope("build-dependencies", it.toPackageReferences()) }
-        )
-
         val lockfile = resolveLockfile(metadata)
 
         requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
@@ -175,8 +134,26 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
 
         val hashes = readHashes(lockfile)
 
+        handler = CargoDependencyHandler(analysisRoot, packageById, nodeById, hashes)
+
+        // Virtual workspaces have been filtered out in "mapDefinitionFiles".
+        val projectId = checkNotNull(metadata.resolve.root)
+
+        val dependenciesByScopeName = mutableMapOf<String, MutableSet<CargoMetadata.Node>>()
+        nodeById.getValue(projectId).deps.forEach { dep ->
+            dep.depKinds.forEach { depKind ->
+                SCOPE_NAME_FOR_KIND[depKind.kind]?.also { scopeName ->
+                    dependenciesByScopeName.getOrPut(scopeName) { mutableSetOf() } += nodeById.getValue(dep.pkg)
+                }
+            }
+        }
+
         val projectPkg = packageById.getValue(projectId).let { cargoPkg ->
             cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = projectType)) }
+        }
+
+        dependenciesByScopeName.forEach { (scopeName, dependencies) ->
+            graphBuilder.addDependencies(projectPkg.id, scopeName, dependencies)
         }
 
         val project = Project(
@@ -188,15 +165,14 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, projectPkg.homepageUrl),
             homepageUrl = projectPkg.homepageUrl,
-            scopeDependencies = scopes
+            scopeNames = graphBuilder.scopesFor(projectPkg.id)
         )
 
-        val nonProjectPackages = packageById.values.mapNotNullTo(mutableSetOf()) { cargoPkg ->
-            cargoPkg.takeUnless { it.isProject(analysisRoot) }?.toPackage(hashes)
-        }
-
-        return listOf(ProjectAnalyzerResult(project, nonProjectPackages))
+        return listOf(ProjectAnalyzerResult(project, packages = emptySet()))
     }
+
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
@@ -246,99 +222,3 @@ private fun readHashes(lockfile: File): Map<String, String> {
         else -> throw IllegalArgumentException("Unsupported lockfile version ${contents.version}.")
     }
 }
-
-/**
- * Return the local path for this Cargo package if applicable, or null if the Cargo package is not local.
- */
-private fun CargoMetadata.Package.getLocalPath(): File? =
-    id.withoutPrefix("path+file://")?.substringBefore("#")?.let { File(it) }
-
-/**
- * Return whether this Cargo package is supposed to be regarded as an ORT project. The [analysisRoot] is used to check
- * whether this Cargo package lives within the analyzer root.
- */
-private fun CargoMetadata.Package.isProject(analysisRoot: File): Boolean {
-    val isWithinAnalyzerRoot = getLocalPath()?.startsWith(analysisRoot.absoluteFile) == true
-
-    // If a package cannot be retrieved from anywhere but lies within the analyzer root, treat it as a project.
-    return source == null && isWithinAnalyzerRoot
-}
-
-/**
- * Map this Cargo package to an ORT [Identifier].
- */
-private fun CargoMetadata.Package.toIdentifier() =
-    Identifier(
-        type = PACKAGE_TYPE,
-        // Note that Rust / Cargo do not support package namespaces, see:
-        // https://samsieber.tech/posts/2020/09/registry-structure-influence/
-        namespace = "",
-        name = name,
-        version = version
-    )
-
-/**
- * Map this Cargo package to an ORT [Package]. [hashes] are used to look up the Crate's SHA-256 digest.
- */
-private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Package {
-    val declaredLicenses = parseDeclaredLicenses()
-
-    // Historically, Cargo's metadata used "/" to separate licenses in a string. As the semantics of "/" are unclear in
-    // terms of the intended license operator, the community deprecated "/" in favor of an explicit "OR", see
-    // https://github.com/rust-lang/cargo/pull/4920 and also the related https://github.com/rust-lang/cargo/issues/2039.
-    val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, operator = SpdxOperator.OR)
-
-    val vcs = (source.takeIf { it?.startsWith("git+https://") == true } ?: repository)
-        ?.let { VcsHost.parseUrl(it) }.orEmpty()
-    val vcsProcessed = getLocalPath()?.let { PackageManager.processProjectVcs(it) } ?: vcs.normalize()
-
-    return Package(
-        id = toIdentifier(),
-        authors = authors.flatMap { parseAuthorString(it) }.mapNotNullTo(mutableSetOf()) { it.name },
-        declaredLicenses = declaredLicenses,
-        declaredLicensesProcessed = declaredLicensesProcessed,
-        description = description.orEmpty(),
-        binaryArtifact = RemoteArtifact.EMPTY,
-        sourceArtifact = parseSourceArtifact(hashes).orEmpty(),
-        homepageUrl = homepage.orEmpty(),
-        vcs = vcs,
-        vcsProcessed = vcsProcessed
-    )
-}
-
-/**
- * Return the set of licenses declared for this Cargo package.
- */
-private fun CargoMetadata.Package.parseDeclaredLicenses(): Set<String> {
-    val declaredLicenses = license.orEmpty().split('/')
-        .mapNotNullTo(mutableSetOf()) { license ->
-            license.trim().takeUnless { it.isEmpty() }
-        }
-
-    // Cargo allows declaring non-SPDX licenses only by referencing a license file. If a license file is specified, add
-    // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this
-    // point.
-    // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields
-    if (licenseFile.orEmpty().isNotBlank()) {
-        declaredLicenses += SpdxConstants.NOASSERTION
-    }
-
-    return declaredLicenses
-}
-
-/**
- * Return [RemoteArtifact] metadata of the source artifact (Crate) for this Cargo package if available on crates.io, or
- * return null if creates.io does not have any metadata for this package. [hashes] are used to look up the Crate's
- * SHA-256 digest.
- */
-private fun CargoMetadata.Package.parseSourceArtifact(hashes: Map<String, String>): RemoteArtifact? =
-    when (source) {
-        "registry+https://github.com/rust-lang/crates.io-index" -> {
-            val url = "https://crates.io/api/v1/crates/$name/$version/download"
-            val key = "$name $version ($source)"
-            val hash = Hash.create(hashes[key].orEmpty())
-            return RemoteArtifact(url, hash)
-        }
-
-        else -> null
-    }
