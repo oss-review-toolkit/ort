@@ -21,14 +21,12 @@ package org.ossreviewtoolkit.plugins.advisors.osv
 
 import com.github.packageurl.PackageURL
 
-import java.lang.invoke.MethodHandles
 import java.time.Instant
 
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
 import org.apache.logging.log4j.kotlin.logger
-import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.clients.osv.Affected
 import org.ossreviewtoolkit.clients.osv.Event
@@ -112,12 +110,7 @@ class Osv(
     }
 
     private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, Result<List<String>>> {
-        val requests = buildMap(packages.size) {
-            packages.forEach { pkg ->
-                createRequest(pkg)?.also { put(pkg.id, it) }
-            }
-        }
-
+        val requests = packages.associate { pkg -> pkg.id to createRequest(pkg) }
         val results = service.getVulnerabilityIdsForPackages(requests.values)
 
         return buildMap {
@@ -217,9 +210,7 @@ private fun Collection<Affected>.toFirstFixedVersions(purl: PackageURL): Set<Str
 private fun Range.getFixedVersions(): List<String> =
     events.mapNotNull { event -> event.takeIf { it.type == Event.Type.FIXED }?.value }
 
-private val logger = loggerOf(MethodHandles.lookup().lookupClass())
-
-private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
+private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest {
     val purl = pkg.purl.toPackageUrl()
 
     return when {
@@ -231,13 +222,13 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
             commit = pkg.vcsProcessed.revision
         )
 
-        else -> {
-            logger.warn {
-                "${pkg.id.toCoordinates()} does not provide any metadata to identify vulnerabilities."
-            }
-
-            null
-        }
+        else -> VulnerabilitiesForPackageRequest(
+            pkg = org.ossreviewtoolkit.clients.osv.Package(
+                ecosystem = pkg.id.type,
+                name = pkg.id.name
+            ),
+            version = pkg.id.version
+        )
     }
 }
 
