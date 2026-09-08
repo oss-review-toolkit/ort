@@ -266,6 +266,19 @@ private fun CargoMetadata.Package.isProject(analysisRoot: File): Boolean {
 }
 
 /**
+ * Map this Cargo package to an ORT [Identifier].
+ */
+private fun CargoMetadata.Package.toIdentifier() =
+    Identifier(
+        type = PACKAGE_TYPE,
+        // Note that Rust / Cargo do not support package namespaces, see:
+        // https://samsieber.tech/posts/2020/09/registry-structure-influence/
+        namespace = "",
+        name = name,
+        version = version
+    )
+
+/**
  * Map this Cargo package to an ORT [Package]. [hashes] are used to look up the Crate's SHA-256 digest.
  */
 private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Package {
@@ -281,14 +294,7 @@ private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packag
     val vcsProcessed = getLocalPath()?.let { PackageManager.processProjectVcs(it) } ?: vcs.normalize()
 
     return Package(
-        id = Identifier(
-            type = PACKAGE_TYPE,
-            // Note that Rust / Cargo do not support package namespaces, see:
-            // https://samsieber.tech/posts/2020/09/registry-structure-influence/
-            namespace = "",
-            name = name,
-            version = version
-        ),
+        id = toIdentifier(),
         authors = authors.flatMap { parseAuthorString(it) }.mapNotNullTo(mutableSetOf()) { it.name },
         declaredLicenses = declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
