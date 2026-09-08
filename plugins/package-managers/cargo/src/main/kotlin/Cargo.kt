@@ -265,6 +265,9 @@ private fun CargoMetadata.Package.isProject(analysisRoot: File): Boolean {
     return source == null && isWithinAnalyzerRoot
 }
 
+/**
+ * Map this Cargo package to an ORT [Package]. [hashes] are used to look up the Crate's SHA-256 digest.
+ */
 private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Package {
     val declaredLicenses = parseDeclaredLicenses()
 
@@ -298,6 +301,9 @@ private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packag
     )
 }
 
+/**
+ * Return the set of licenses declared for this Cargo package.
+ */
 private fun CargoMetadata.Package.parseDeclaredLicenses(): Set<String> {
     val declaredLicenses = license.orEmpty().split('/')
         .map { it.trim() }
@@ -314,6 +320,11 @@ private fun CargoMetadata.Package.parseDeclaredLicenses(): Set<String> {
     return declaredLicenses
 }
 
+/**
+ * Return [RemoteArtifact] metadata of the source artifact (Crate) for this Cargo package if available on crates.io, or
+ * return null if creates.io does not have any metadata for this package. [hashes] are used to look up the Crate's
+ * SHA-256 digest.
+ */
 private fun CargoMetadata.Package.parseSourceArtifact(hashes: Map<String, String>): RemoteArtifact? =
     when (source) {
         "registry+https://github.com/rust-lang/crates.io-index" -> {
