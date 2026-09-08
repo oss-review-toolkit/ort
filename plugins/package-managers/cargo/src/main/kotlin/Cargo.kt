@@ -22,10 +22,12 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
 import java.io.File
+import java.lang.invoke.MethodHandles
 
 import net.peanuuutz.tomlkt.decodeFromNativeReader
 
 import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
@@ -82,52 +84,6 @@ internal object CargoCommand : CommandLineTool {
 )
 class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager(PROJECT_TYPE) {
     override val globsForDefinitionFiles = listOf("Cargo.toml")
-
-    /**
-     * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
-     * project is part of a workspace. Cargo.lock is then located next to the Cargo.toml file defining the workspace.
-     */
-    private fun resolveLockfile(metadata: CargoMetadata): File {
-        val workspaceRoot = File(metadata.workspaceRoot)
-        return workspaceRoot / "Cargo.lock"
-    }
-
-    /**
-     * Parse the metadata section of the given [lockfile] to extract the SHA-256 digest of each dependency's Crate
-     * (gzipped tarball source artifact) by name.
-     */
-    private fun readHashes(lockfile: File): Map<String, String> {
-        if (!lockfile.isFile) {
-            logger.debug { "Cannot determine the hashes of remote artifacts because the Cargo lockfile is missing." }
-            return emptyMap()
-        }
-
-        val contents = lockfile.reader().use { toml.decodeFromNativeReader<CargoLockfile>(it) }
-
-        if (contents.version == null) {
-            val checksumMetadata = contents.metadata.mapNotNull { (k, v) ->
-                // Lockfile version 1 uses strings like:
-                // "checksum cfg-if 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)"
-                k.unquote().withoutPrefix("checksum ")?.let { it to v }
-            }.toMap()
-
-            if (checksumMetadata.isNotEmpty()) return checksumMetadata
-        }
-
-        return when (contents.version) {
-            null, 2, 3, 4 -> {
-                contents.packages.mapNotNull { pkg ->
-                    pkg.checksum?.let { checksum ->
-                        // Use the same key format as for version 1, see above.
-                        val key = "${pkg.name} ${pkg.version} (${pkg.source})"
-                        key to checksum
-                    }
-                }.toMap()
-            }
-
-            else -> throw IllegalArgumentException("Unsupported lockfile version ${contents.version}.")
-        }
-    }
 
     override fun mapDefinitionFiles(
         analysisRoot: File,
@@ -240,6 +196,54 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
         }
 
         return listOf(ProjectAnalyzerResult(project, nonProjectPackages))
+    }
+}
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
+/**
+ * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
+ * project is part of a workspace. Cargo.lock is then located next to the Cargo.toml file defining the workspace.
+ */
+private fun resolveLockfile(metadata: CargoMetadata): File {
+    val workspaceRoot = File(metadata.workspaceRoot)
+    return workspaceRoot / "Cargo.lock"
+}
+
+/**
+ * Parse the metadata section of the given [lockfile] to extract the SHA-256 digest of each dependency's Crate
+ * (gzipped tarball source artifact) by name.
+ */
+private fun readHashes(lockfile: File): Map<String, String> {
+    if (!lockfile.isFile) {
+        logger.debug { "Cannot determine the hashes of remote artifacts because the Cargo lockfile is missing." }
+        return emptyMap()
+    }
+
+    val contents = lockfile.reader().use { toml.decodeFromNativeReader<CargoLockfile>(it) }
+
+    if (contents.version == null) {
+        val checksumMetadata = contents.metadata.mapNotNull { (k, v) ->
+            // Lockfile version 1 uses strings like:
+            // "checksum cfg-if 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)"
+            k.unquote().withoutPrefix("checksum ")?.let { it to v }
+        }.toMap()
+
+        if (checksumMetadata.isNotEmpty()) return checksumMetadata
+    }
+
+    return when (contents.version) {
+        null, 2, 3, 4 -> {
+            contents.packages.mapNotNull { pkg ->
+                pkg.checksum?.let { checksum ->
+                    // Use the same key format as for version 1, see above.
+                    val key = "${pkg.name} ${pkg.version} (${pkg.source})"
+                    key to checksum
+                }
+            }.toMap()
+        }
+
+        else -> throw IllegalArgumentException("Unsupported lockfile version ${contents.version}.")
     }
 }
 
