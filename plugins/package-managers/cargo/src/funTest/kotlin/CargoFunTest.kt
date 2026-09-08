@@ -34,7 +34,7 @@ class CargoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-expected-output.yml")
 
-        val result = CargoFactory.create().resolveSingleProject(definitionFile)
+        val result = CargoFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -43,7 +43,7 @@ class CargoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo-git-source/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-git-source-expected-output.yml")
 
-        val result = CargoFactory.create().resolveSingleProject(definitionFile)
+        val result = CargoFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
