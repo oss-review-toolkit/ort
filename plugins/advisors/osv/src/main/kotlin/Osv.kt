@@ -81,11 +81,13 @@ class Osv(
         val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.flatten().toSet()
         val vulnerabilityForId = getVulnerabilitiesForIds(allVulnerabilityIds).associateBy { it.id }
 
+        val endTime = Instant.now()
+
         return packages.mapNotNull { pkg ->
             vulnerabilityIdsForPackageId[pkg.id]?.let { ids ->
                 pkg to AdvisorResult(
                     advisor = details,
-                    summary = AdvisorSummary(startTime = startTime, endTime = Instant.now()),
+                    summary = AdvisorSummary(startTime, endTime),
                     vulnerabilities = ids.map { vulnerabilityForId.getValue(it).toOrtVulnerability(pkg.purl) }
                 )
             }
