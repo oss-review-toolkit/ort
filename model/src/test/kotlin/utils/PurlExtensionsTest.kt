@@ -60,10 +60,10 @@ class PurlExtensionsTest : WordSpec({
             purl shouldBe purl.lowercase()
         }
 
-        "use the generic type if it is not a known package manager" {
+        "use the lowercase type if it is not a known package manager" {
             val purl = Identifier("FooBar", "namespace", "name", "version").toPurl()
 
-            purl shouldStartWith "pkg:generic"
+            purl shouldStartWith "pkg:foobar"
         }
 
         "not use '/' for empty namespaces" {
@@ -203,8 +203,8 @@ class PurlExtensionsTest : WordSpec({
             Identifier("crate::foo:1.0").getPurlType() shouldBe "cargo"
         }
 
-        "return generic for unknown types" {
-            Identifier("Unknown::foo:1.0").getPurlType() shouldBe "generic"
+        "return the lowercase type if unknown" {
+            Identifier("Unknown::foo:1.0").getPurlType() shouldBe "unknown"
         }
     }
 
