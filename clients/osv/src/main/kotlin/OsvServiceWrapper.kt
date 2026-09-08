@@ -39,12 +39,14 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
     /**
      * Return the vulnerability IDs for the respective package matched by the given [requests].
      */
-    fun getVulnerabilityIdsForPackages(requests: List<VulnerabilitiesForPackageRequest>): Result<List<List<String>>> {
+    fun getVulnerabilityIdsForPackages(
+        requests: Collection<VulnerabilitiesForPackageRequest>
+    ): Result<List<List<String>>> {
         if (requests.isEmpty()) return Result.success(emptyList())
 
         @Suppress("ForbiddenMethodCall")
         val batchResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            requests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE).map { chunk ->
+            requests.distinct().chunked(OsvService.BATCH_REQUEST_MAX_SIZE).map { chunk ->
                 async {
                     val batchRequest = VulnerabilitiesForPackageBatchRequest(chunk)
                     runCatching { service.getVulnerabilityIdsForPackages(batchRequest) }.unwrapHttpException()
@@ -70,12 +72,12 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
      * It's been considered to add a batch API in the future, see
      * https://github.com/google/osv.dev/issues/466#issuecomment-1163337495.
      */
-    fun getVulnerabilitiesForIds(ids: Set<String>): Result<List<Vulnerability>> {
+    fun getVulnerabilitiesForIds(ids: Collection<String>): Result<List<Vulnerability>> {
         if (ids.isEmpty()) return Result.success(emptyList())
 
         @Suppress("ForbiddenMethodCall")
         val vulnerabilityResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            ids.map { id ->
+            ids.distinct().map { id ->
                 async {
                     runCatching { service.getVulnerabilityForId(id) }.unwrapHttpException()
                 }
