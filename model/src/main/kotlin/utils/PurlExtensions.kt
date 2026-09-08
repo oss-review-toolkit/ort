@@ -35,11 +35,11 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 /**
- * Map an ORT [Identifier] type to the corresponding PURL type string, or fall back to "generic"
- * if there is no direct equivalent.
+ * Map an ORT [Identifier] type to the corresponding PURL type string, or fall back to using the lowercase ORT type if
+ * there is no direct equivalent.
  */
 fun Identifier.getPurlType(): String =
-    when (type.lowercase()) {
+    when (val purlType = type.lowercase()) {
         "bazel" -> "bazel"
         "bower" -> "bower"
         "carthage" -> "carthage"
@@ -57,8 +57,9 @@ fun Identifier.getPurlType(): String =
         "pod" -> "cocoapods"
         "pub" -> "pub"
         "pypi" -> "pypi"
+        "spdx", "spdxdocumentfile" -> "generic"
         "swift" -> "swift"
-        else -> "generic"
+        else -> purlType
     }
 
 /**

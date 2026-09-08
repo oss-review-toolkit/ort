@@ -242,7 +242,7 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
 
     val results = scanCodes.associateByTo(
         destination = sortedMapOf(),
-        keySelector = { Identifier.EMPTY.copy(name = it) },
+        keySelector = { Identifier.EMPTY.copy(type = "generic", name = it) },
         valueTransform = { code ->
             val unmatchedScanResult = ScanResult(
                 provenance = UnknownProvenance,
