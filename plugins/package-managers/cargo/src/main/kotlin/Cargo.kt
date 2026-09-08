@@ -164,24 +164,25 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+
         val metadataProcess = CargoCommand.run("metadata", "--format-version=1", "--manifest-path=$definitionFile")
             .requireSuccess()
         val metadata = json.decodeFromString<CargoMetadata>(metadataProcess.stdout)
 
+        val packageById = metadata.packages.associateBy { it.id }
+        val nodeById = metadata.resolve.nodes.associateBy { it.id }
+
         // Virtual workspaces have been filtered out in "mapDefinitionFiles".
         val projectId = checkNotNull(metadata.resolve.root)
 
-        val projectNode = metadata.resolve.nodes.single { it.id == projectId }
         val depNodesByKind = mutableMapOf<String, MutableList<CargoMetadata.Node>>()
-        projectNode.deps.forEach { dep ->
-            val depNode = metadata.resolve.nodes.single { it.id == dep.pkg }
+        nodeById.getValue(projectId).deps.forEach { dep ->
+            val depNode = nodeById.getValue(dep.pkg)
 
             dep.depKinds.forEach { depKind ->
                 depNodesByKind.getOrPut(depKind.kind ?: DEFAULT_KIND_NAME) { mutableListOf() } += depNode
             }
         }
-
-        val packageById = metadata.packages.associateBy { it.id }
 
         fun Collection<CargoMetadata.Node>.toPackageReferences(): Set<PackageReference> =
             mapNotNullTo(mutableSetOf()) { node ->
@@ -191,7 +192,7 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
                     // Only normal dependencies are transitive.
                     dep.depKinds.any { it.kind == null }
                 }.map { dep ->
-                    metadata.resolve.nodes.single { it.id == dep.pkg }
+                    nodeById.getValue(dep.pkg)
                 }
 
                 val pkg = packageById.getValue(node.id)
