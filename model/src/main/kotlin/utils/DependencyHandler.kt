@@ -61,8 +61,8 @@ interface DependencyHandler<D> {
      * Create a [Package] to represent the given [dependency]. This is used to populate the packages in the analyzer
      * result. The creation of a package may fail, e.g. if the dependency cannot be resolved. In this case, a concrete
      * implementation is expected to return a dummy [Package] with correct coordinates and add a corresponding issue to
-     * the provided [issues] list. If the [dependency] does not map to a package, an implementation should return
-     * *null*.
+     * the provided [issues] list. If the [dependency] does not denote a package, e.g. because it refers to a project,
+     * an implementation must return *null*.
      */
     fun createPackage(dependency: D, issues: MutableCollection<Issue>): Package?
 
