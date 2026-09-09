@@ -390,6 +390,7 @@ RUN mkdir -p $DOTNET_HOME/bin \
 FROM base AS bazel-build
 
 ARG BAZELISK_VERSION
+ARG BUILDOZER_VERSION
 
 ENV BAZEL_HOME=/opt/bazel
 ENV GOBIN=/opt/go/bin
@@ -404,7 +405,7 @@ RUN mkdir -p $BAZEL_HOME/bin \
 
 COPY --from=go-build /opt/go /opt/go
 
-RUN $GOBIN/go install github.com/bazelbuild/buildtools/buildozer@latest && chmod a+x $GOBIN/buildozer
+RUN $GOBIN/go install github.com/bazelbuild/buildtools/buildozer@$BUILDOZER_VERSION && chmod a+x $GOBIN/buildozer
 
 #------------------------------------------------------------------------
 # Cosign for signature verification
