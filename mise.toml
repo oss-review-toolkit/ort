@@ -46,6 +46,8 @@ coreutils = {
 }
 
 # Package Managers
+"github:JulietSecurity/abom" = "{{ env.ABOM_VERSION }}"
+
 "github:erlef/bombom" = {
     version = "{{ env.BOMBOM_VERSION }}",
     bin = "bombom"
@@ -55,8 +57,6 @@ coreutils = {
     version = "{{ env.MIX_SBOM_VERSION }}",
     bin = "mix_sbom"
 }
-
-"github:JulietSecurity/abom" = "{{ env.ABOM_VERSION }}"
 
 # Scanners
 "github:jpeddicord/askalono" = "{{ env.ASKALONO_VERSION }}"
