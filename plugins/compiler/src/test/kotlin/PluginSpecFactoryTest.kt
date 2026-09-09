@@ -49,7 +49,7 @@ class PluginSpecFactoryTest : WordSpec({
         }
 
         "return the plugin ID for scanners" {
-            derivePluginId("Askalono", "LocalPathScannerWrapper") shouldBe "Askalono"
+            derivePluginId("ScanCode", "LocalPathScannerWrapper") shouldBe "ScanCode"
         }
 
         "return the plugin ID for version-control-systems" {

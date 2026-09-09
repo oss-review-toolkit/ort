@@ -515,23 +515,6 @@ RUN mkdir -p $GLEAM_HOME/bin \
     && $GLEAM_HOME/bin/gleam --version
 
 #------------------------------------------------------------------------
-# Askalono
-FROM rust-build AS askalono-build
-
-ARG ASKALONO_VERSION
-
-ENV PATH=$PATH:$CARGO_HOME/bin
-
-RUN mkdir -p /opt/askalono && \
-    if [ "$(arch)" = "aarch64" ]; then \
-        cargo install --git https://github.com/jpeddicord/askalono.git --tag $ASKALONO_VERSION --root /opt/askalono; \
-    else \
-        curl -LOs https://github.com/jpeddicord/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
-        unzip askalono-Linux.zip -d /opt/askalono/bin && \
-        rm askalono-Linux.zip; \
-    fi
-
-#------------------------------------------------------------------------
 # cargo-credential-netrc
 FROM rust-build AS cargo-credential-netrc-build
 
@@ -613,7 +596,6 @@ COPY --from=python-build --chown=$USER:$USER /opt/scancode-license-data /opt/sca
 FROM minimal-tools AS all-tools
 
 ARG ABOM_VERSION
-ARG ASKALONO_VERSION
 ARG COMPOSER_VERSION
 ARG PHP_VERSION
 ARG UBUNTU_VERSION
@@ -684,10 +666,6 @@ ENV PATH=$PATH:$BAZEL_HOME/bin
 
 COPY --from=bazel-build $BAZEL_HOME $BAZEL_HOME
 COPY --from=bazel-build --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
-
-# Askalono
-COPY --from=askalono-build --chown=$USER:$USER /opt/askalono /opt/askalono
-ENV PATH=$PATH:/opt/askalono/bin
 
 # Gleam
 ENV GLEAM_HOME=/opt/gleam
