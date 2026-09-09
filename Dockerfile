@@ -523,22 +523,6 @@ ENV PATH=$PATH:$CARGO_HOME/bin
 RUN cargo install cargo-credential-netrc --locked --root /opt/cargo-credential-netrc
 
 #------------------------------------------------------------------------
-# Provenant
-FROM rust-build AS provenant-build
-
-ARG PROVENANT_VERSION
-
-ENV PATH=$PATH:$CARGO_HOME/bin
-
-RUN mkdir -p /opt/provenant && \
-    if [ "$(arch)" = "aarch64" ]; then \
-        PROVENANT_ARCHIVE="provenant-linux-aarch64.tar.gz"; \
-    else \
-        PROVENANT_ARCHIVE="provenant-linux-x86_64.tar.gz"; \
-    fi \
-    && curl -LSs "https://github.com/getprovenant/provenant/releases/download/v$PROVENANT_VERSION/$PROVENANT_ARCHIVE" | tar -xz -C /opt/provenant
-
-#------------------------------------------------------------------------
 # Container with minimal selection of supported package managers.
 FROM base AS minimal-tools
 
@@ -598,6 +582,7 @@ FROM minimal-tools AS all-tools
 ARG ABOM_VERSION
 ARG COMPOSER_VERSION
 ARG PHP_VERSION
+ARG PROVENANT_VERSION
 ARG UBUNTU_VERSION
 
 ENV ABOM_HOME=/opt/abom
@@ -683,8 +668,9 @@ ENV PATH=$PATH:$BOMBOM_HOME/bin
 COPY --from=rebar3-sbom-build --chown=$USER:$USER $BOMBOM_HOME $BOMBOM_HOME
 
 # Provenant
-COPY --from=provenant-build --chown=$USER:$USER /opt/provenant /opt/provenant
-ENV PATH=$PATH:/opt/provenant
+ENV PROVENANT_HOME=/opt/provenant
+ENV PATH=$PATH:$PROVENANT_HOME
+RUN sudo mise install-into github:getprovenant/provenant@$PROVENANT_VERSION $PROVENANT_HOME
 
 #------------------------------------------------------------------------
 # Runtime container with minimal selection of supported package managers pre-installed.
