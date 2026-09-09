@@ -169,6 +169,8 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
             .requireSuccess()
         val metadata = json.decodeFromString<CargoMetadata>(metadataProcess.stdout)
 
+        logger.debug { "Metadata has ${metadata.packages.size} packages and / or projects." }
+
         val packageById = metadata.packages.associateBy { it.id }
         val nodeById = metadata.resolve.nodes.associateBy { it.id }
 
