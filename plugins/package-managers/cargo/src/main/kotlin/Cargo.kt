@@ -251,8 +251,7 @@ private fun readHashes(lockfile: File): Map<String, String> {
  * Return the local path for this Cargo package if applicable, or null if the Cargo package is not local.
  */
 private fun CargoMetadata.Package.getLocalPath(): File? =
-    id.substringAfter("path+file://", "").ifEmpty { null }
-        ?.removeSuffix(")")?.substringBefore("#")?.let { File(it) }
+    id.withoutPrefix("path+file://")?.substringBefore("#")?.let { File(it) }
 
 /**
  * Return whether this Cargo package is supposed to be regarded as an ORT project. The [analysisRoot] is used to check
