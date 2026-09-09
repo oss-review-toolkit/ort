@@ -66,7 +66,6 @@ linux-x64 = { url = "https://static.rust-lang.org/dist/cargo-{{version}}-x86_64-
 macos-arm64 = { url = "https://static.rust-lang.org/dist/cargo-{{version}}-aarch64-apple-darwin.tar.xz" }
 
 # Scanners
-"github:jpeddicord/askalono" = "{{ env.ASKALONO_VERSION }}"
 "gem:licensee" = "{{ env.LICENSEE_VERSION }}"
 "github:getprovenant/provenant" = "{{ env.PROVENANT_VERSION }}"
 "pipx:scancode-toolkit" = "{{ env.SCANCODE_VERSION }}"
