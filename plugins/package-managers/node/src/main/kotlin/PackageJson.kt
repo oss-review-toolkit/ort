@@ -129,28 +129,28 @@ private fun JsonElement.parseLicenses(): Set<String> =
 
 @Serializable
 data class PackageJson(
-    val name: String? = null,
-    val version: String? = null,
-    val homepage: String? = null,
-    val description: String? = null,
-    val licenses: List<String> = emptyList(),
-    @Serializable(AuthorListSerializer::class)
     @SerialName("author")
+    @Serializable(AuthorListSerializer::class)
     val authors: List<Author> = emptyList(),
+    val dependencies: Map<String, String> = emptyMap(),
+    val description: String? = null,
+    val devDependencies: Map<String, String> = emptyMap(),
+    @SerialName("_from")
+    val from: String? = null,
     val gitHead: String? = null,
+    val homepage: String? = null,
+    @SerialName("_integrity")
+    val integrity: String? = null,
+    val licenses: List<String> = emptyList(),
+    val name: String? = null,
+    val optionalDependencies: Map<String, String> = emptyMap(),
+    val packageManager: String? = null,
+    val peerDependencies: Map<String, String> = emptyMap(),
     @Serializable(RepositorySerializer::class)
     val repository: Repository? = null,
     @SerialName("_resolved")
     val resolved: String? = null,
-    @SerialName("_from")
-    val from: String? = null,
-    @SerialName("_integrity")
-    val integrity: String? = null,
-    val packageManager: String? = null,
-    val dependencies: Map<String, String> = emptyMap(),
-    val devDependencies: Map<String, String> = emptyMap(),
-    val optionalDependencies: Map<String, String> = emptyMap(),
-    val peerDependencies: Map<String, String> = emptyMap(),
+    val version: String? = null,
     /** This property does not belong to package.json but to the JSON returned by 'npm info'. */
     val dist: Distribution? = null
 ) {
