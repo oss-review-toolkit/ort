@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
@@ -73,7 +72,10 @@ internal class CargoDependencyHandler(
  * Return the local path for this Cargo package if applicable, or null if the Cargo package is not local.
  */
 private fun CargoMetadata.Package.getLocalPath(): File? =
-    id.withoutPrefix("path+file://")?.substringBefore("#")?.let { File(it) }
+    // Support both Cargo < 1.77.0 IDs like "lib 0.1.0 (path+file:///home/ort)" and Cargo >= 1.77.0 IDs like
+    // "path+file:///home/ort#lib@0.1.0".
+    id.substringAfter("path+file://", "").ifEmpty { null }
+        ?.removeSuffix(")")?.substringBefore("#")?.let { File(it) }
 
 /**
  * Return whether this Cargo package is supposed to be regarded as an ORT project. The [analysisRoot] is used to check
