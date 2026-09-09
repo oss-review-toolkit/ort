@@ -311,8 +311,9 @@ private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packag
  */
 private fun CargoMetadata.Package.parseDeclaredLicenses(): Set<String> {
     val declaredLicenses = license.orEmpty().split('/')
-        .map { it.trim() }
-        .filterTo(mutableSetOf()) { it.isNotEmpty() }
+        .mapNotNullTo(mutableSetOf()) { license ->
+            license.trim().takeUnless { it.isEmpty() }
+        }
 
     // Cargo allows declaring non-SPDX licenses only by referencing a license file. If a license file is specified, add
     // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this
