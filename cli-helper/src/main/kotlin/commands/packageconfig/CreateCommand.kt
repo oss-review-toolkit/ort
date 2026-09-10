@@ -36,15 +36,20 @@ import org.ossreviewtoolkit.clihelper.utils.sortPathExcludes
 import org.ossreviewtoolkit.clihelper.utils.write
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.scanner.storages.PackageBasedFileStorage
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
 
@@ -53,6 +58,14 @@ internal class CreateCommand : OrtHelperCommand(
         "a corresponding scan result exists in the given ORT result for the respective provenance. The output " +
         "package configuration YAML files are written to the given output directory."
 ) {
+    private val configFile by option(
+        "--config",
+        help = "The path to the ORT configuration file that configures the package curation providers."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_CONFIG_FILENAME))
+
     private val scanResultsStorageDir by option(
         "--scan-results-storage-dir",
         help = "The scan results storage to read the scan results from."
@@ -126,8 +139,29 @@ internal class CreateCommand : OrtHelperCommand(
             )
         }
 
+        val ortConfig = OrtConfiguration.load(emptyMap(), configFile)
+        val packageCurationProviders = PackageCurationProviderFactory.create(ortConfig.packageCurationProviders)
+
+        val pkg = Package.EMPTY.copy(id = packageId)
+        val curations = packageCurationProviders.flatMap { (_, provider) ->
+            provider.getCurationsFor(listOf(pkg))
+        }
+
+        val curatedPackage = curations.filter { it.isApplicable(packageId) }
+            .fold(pkg.toCuratedPackage()) { cur, curation ->
+                curation.apply(cur)
+            }
+
+        val vcsPath = curatedPackage.metadata.vcsProcessed.path
+
         scanResults.forEach { scanResult ->
-            createPackageConfiguration(scanResult).writeToFile()
+            val resultToProcess = if (vcsPath.isNotEmpty() && scanResult.provenance is RepositoryProvenance) {
+                scanResult.filterByPath(vcsPath)
+            } else {
+                scanResult
+            }
+
+            createPackageConfiguration(resultToProcess).writeToFile()
         }
     }
 
