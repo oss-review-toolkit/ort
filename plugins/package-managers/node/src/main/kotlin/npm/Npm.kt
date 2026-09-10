@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
-import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NPM_RUNTIME_CONFIGURATION_FILENAME
@@ -81,34 +80,6 @@ internal class NpmCommand(nodePath: String? = null, nodeVersion: String? = null)
             }
         }
 }
-
-data class NpmConfig(
-    /**
-     * If true, ignore any project-specific `.npmrc` files.
-     */
-    @OrtPluginOption(defaultValue = "false")
-    val ignoreProjectNpmrcFiles: Boolean,
-
-    /**
-     * If true, the "--legacy-peer-deps" flag is passed to NPM to ignore conflicts in peer dependencies which are
-     * reported since NPM 7. This allows to analyze NPM 6 projects with peer dependency conflicts. For more information
-     * see the [documentation](https://docs.npmjs.com/cli/v8/commands/npm-install#strict-peer-deps) and the
-     * [NPM Blog](https://blog.npmjs.org/post/626173315965468672/npm-v7-series-beta-release-and-semver-major).
-     */
-    @OrtPluginOption(defaultValue = "false")
-    val legacyPeerDeps: Boolean,
-
-    /**
-     * Allows configuring the version of Node.js to be used for the analysis. This implicitly also sets the NPM version
-     * because NPM is bundled with Node.js. The property is interpreted as follows: If it is unspecified, ORT uses the
-     * version of Node.js that is currently installed (or ships with the container image if using the ORT Docker
-     * image). If the property has the special value "*", ORT tries to set up the version requested by the project, in
-     * a `.node-version` or `.nvmrc` file, or in the `engines` field of the `package.json` file. Any other value of the
-     * property is interpreted as a specific version of Node.js to be used for the analysis.
-     */
-    @OrtPluginOption(defaultValue = "")
-    val nodeVersion: String
-)
 
 /**
  * The [Node package manager](https://www.npmjs.com/).
