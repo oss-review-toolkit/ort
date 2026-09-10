@@ -244,6 +244,16 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
             if (config.legacyPeerDeps) {
                 add("--legacy-peer-deps")
             }
+
+            if (config.os != null) {
+                add("--os")
+                add(config.os.name.lowercase())
+            }
+
+            if (config.cpu != null) {
+                add("--cpu")
+                add(config.cpu.name.lowercase())
+            }
         }
 
         val subcommand = if (managerType.hasLockfile(workingDir)) "ci" else "install"

@@ -46,5 +46,44 @@ data class NpmConfig(
      * property is interpreted as a specific version of Node.js to be used for the analysis.
      */
     @OrtPluginOption(defaultValue = "")
-    val nodeVersion: String
-)
+    val nodeVersion: String,
+
+    /**
+     * Override OS of native modules to install. See also https://nodejs.org/api/process.html#processplatform.
+     */
+    val os: Platform?,
+
+    /**
+     * Override CPU architecture of native modules to install. See also https://nodejs.org/api/process.html#processarch.
+     */
+    val cpu: ProcessorArchitecture?
+) {
+    /**
+     * See https://nodejs.org/api/process.html#processarch.
+     */
+    enum class ProcessorArchitecture {
+        ARM,
+        ARM64,
+        IA32,
+        LOONG64,
+        MIPSEL,
+        PPC64,
+        RISCV64,
+        S390,
+        S390X,
+        X64
+    }
+
+    /**
+     * See https://nodejs.org/api/process.html#processplatform.
+     */
+    enum class Platform {
+        AIX,
+        DARWIN,
+        FREEBSD,
+        LINUX,
+        OPENBSD,
+        SUNOS,
+        WIN32
+    }
+}

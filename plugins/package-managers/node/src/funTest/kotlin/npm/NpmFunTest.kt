@@ -184,6 +184,32 @@ class NpmFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Resolve platform-specific dependencies for 'openbsd', 'arm64'" {
+        val definitionFile = getAssetFile("projects/synthetic/npm/platform-specific/package.json")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/npm/platform-specific-openbsd-arm64-expected-output.yml"
+        )
+
+        val result = NpmFactory.create(
+            os = NpmConfig.Platform.OPENBSD,
+            cpu = NpmConfig.ProcessorArchitecture.ARM64
+        ).resolveSingleProject(definitionFile, resolveScopes = true)
+
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Resolve platform-specific dependencies for 'darwin', 'x64'" {
+        val definitionFile = getAssetFile("projects/synthetic/npm/platform-specific/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/npm/platform-specific-darwin-x64-expected-output.yml")
+
+        val result = NpmFactory.create(
+            os = NpmConfig.Platform.DARWIN,
+            cpu = NpmConfig.ProcessorArchitecture.X64
+        ).resolveSingleProject(definitionFile, resolveScopes = true)
+
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Use an explicitly specified Node.js version" {
         // The test processes a project that depends on a deprecated native library which is incompatible with newer
         // versions of Node.js. In Node.js >= 16, the `install` step fails. With version 14, the project can be
