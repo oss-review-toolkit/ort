@@ -237,11 +237,14 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
     }
 
     private fun installDependencies(workingDir: File): List<Issue> {
-        val options = listOfNotNull(
-            "--ignore-scripts",
-            "--no-audit",
-            "--legacy-peer-deps".takeIf { config.legacyPeerDeps }
-        )
+        val options = buildList {
+            add("--ignore-scripts")
+            add("--no-audit")
+
+            if (config.legacyPeerDeps) {
+                add("--legacy-peer-deps")
+            }
+        }
 
         val subcommand = if (managerType.hasLockfile(workingDir)) "ci" else "install"
 
