@@ -78,8 +78,10 @@ class ScanCodeLicenseFactProvider(
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
- * Return the directory that contains the ScanCode license data. This is located using a heuristic based on the path of
- * the ScanCode binary.
+ * Return the directory that contains the ScanCode license data. If [config.licenseDataDir] is specified, that
+ * configured directory is used, or an exception is thrown in case it does not exist. Otherwise, a fallback mechanism is
+ * used, which prefers the license data directory of a detected ScanCode installation if any, or otherwise uses
+ * [FALLBACK_DIR] if it exists, or else returns `null`.
  */
 internal fun findLicenseDataDir(config: ScanCodeLicenseFactProviderConfig? = null): File? {
     if (config?.licenseDataDir != null) {
