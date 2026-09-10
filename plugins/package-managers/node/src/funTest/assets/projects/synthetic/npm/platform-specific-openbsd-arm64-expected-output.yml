@@ -1,0 +1,80 @@
+---
+project:
+  id: "NPM::project-with-platform-specific-optional-dependenies:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm/platform-specific/package.json"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "devDependencies"
+    dependencies:
+    - id: "NPM::esbuild:0.28.2"
+      dependencies:
+      - id: "NPM:@esbuild:openbsd-arm64:0.28.2"
+packages:
+- id: "NPM::esbuild:0.28.2"
+  purl: "pkg:npm/esbuild@0.28.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "An extremely fast JavaScript and CSS bundler and minifier."
+  homepage_url: "https://github.com/evanw/esbuild#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz"
+    hash:
+      value: "0f43bd1bad955b72d24e2261e3abe5957ccf0816"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/evanw/esbuild.git"
+    revision: "609683d892977362a0f99026cb74b96263d728a9"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/evanw/esbuild.git"
+    revision: "609683d892977362a0f99026cb74b96263d728a9"
+    path: ""
+- id: "NPM:@esbuild:openbsd-arm64:0.28.2"
+  purl: "pkg:npm/%40esbuild/openbsd-arm64@0.28.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "The OpenBSD ARM 64-bit binary for esbuild, a JavaScript bundler."
+  homepage_url: "https://github.com/evanw/esbuild#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@esbuild/openbsd-arm64/-/openbsd-arm64-0.28.2.tgz"
+    hash:
+      value: "9eb32af104ac3dacf4edca01f596664aab0c73ef"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/evanw/esbuild.git"
+    revision: "609683d892977362a0f99026cb74b96263d728a9"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/evanw/esbuild.git"
+    revision: "609683d892977362a0f99026cb74b96263d728a9"
+    path: ""

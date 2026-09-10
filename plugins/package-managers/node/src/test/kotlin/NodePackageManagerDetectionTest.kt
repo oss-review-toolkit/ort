@@ -194,6 +194,7 @@ class NodePackageManagerDetectionTest : WordSpec({
                 "npm/list-issues/package.json",
                 "npm/no-lockfile/package.json",
                 "npm/node-modules/package.json",
+                "npm/platform-specific/package.json",
                 "npm/project-with-lockfile/package.json",
                 "npm/shrinkwrap/package.json",
                 "npm/version-urls/package.json",
