@@ -235,69 +235,69 @@ projects:
           dependencies:
           - id: "Maven:androidx.window:window:1.0.0-beta04"
             dependencies:
-            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
               dependencies:
               - id: "Maven:org.jetbrains:annotations:13.0"
-              - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
+              - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
             - id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
               dependencies:
               - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
                 dependencies:
-                - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+                - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
                   dependencies:
                   - id: "Maven:org.jetbrains:annotations:13.0"
-                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
-                - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
+                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
+                - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.0"
                   dependencies:
-                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
                     dependencies:
                     - id: "Maven:org.jetbrains:annotations:13.0"
-                    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
+                    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
               - id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
                 dependencies:
                 - id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.2"
                   dependencies:
-                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
+                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
                   - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
                     dependencies:
-                    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+                    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
                       dependencies:
                       - id: "Maven:org.jetbrains:annotations:13.0"
-                      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
-                    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
+                      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
+                    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.0"
                       dependencies:
-                      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+                      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
                         dependencies:
                         - id: "Maven:org.jetbrains:annotations:13.0"
-                        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
-          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+                        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
             dependencies:
             - id: "Maven:org.jetbrains:annotations:13.0"
-            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
           - id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
             dependencies:
             - id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.2"
               dependencies:
-              - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
+              - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
               - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
                 dependencies:
-                - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+                - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
                   dependencies:
                   - id: "Maven:org.jetbrains:annotations:13.0"
-                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
-                - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
+                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
+                - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.0"
                   dependencies:
-                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+                  - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
                     dependencies:
                     - id: "Maven:org.jetbrains:annotations:13.0"
-                    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
+                    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
       - id: "Maven:io.flutter:x86_64_release:1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.0"
         dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
           dependencies:
           - id: "Maven:org.jetbrains:annotations:13.0"
-          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
   - name: "dependencies"
     dependencies:
     - id: "Pub::cupertino_icons:1.0.3"
@@ -1170,8 +1170,8 @@ packages:
     url: "https://github.com/JetBrains/intellij-community.git"
     revision: ""
     path: ""
-- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
-  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.5.31"
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.7.0"
   authors:
   - "JetBrains"
   declared_licenses:
@@ -1183,14 +1183,14 @@ packages:
   description: "Kotlin Standard Library for JVM"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.5.31/kotlin-stdlib-1.5.31.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.7.0/kotlin-stdlib-1.7.0.jar"
     hash:
-      value: "6628d61d0f5603568e72d2d5915d2c034b4f1c55"
+      value: "a5f42c684ad9003160ef0d0f693ecf0ba7b13549"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.5.31/kotlin-stdlib-1.5.31-sources.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.7.0/kotlin-stdlib-1.7.0-sources.jar"
     hash:
-      value: "70f4e47092d0158a39aafc634ad60b6320c3d6ce"
+      value: "a47f6071d3ba1c695174371ffeb95ac2df2089a5"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
@@ -1202,8 +1202,8 @@ packages:
     url: "https://github.com/JetBrains/kotlin.git"
     revision: ""
     path: ""
-- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
-  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.5.31"
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.0"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.7.0"
   authors:
   - "JetBrains"
   declared_licenses:
@@ -1215,14 +1215,14 @@ packages:
   description: "Kotlin Common Standard Library"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.31/kotlin-stdlib-common-1.5.31.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.7.0/kotlin-stdlib-common-1.7.0.jar"
     hash:
-      value: "043331609c7de811fed085e0dfd150874b157c32"
+      value: "51736992f422993a1e741051bdf3c12801bc1ca1"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.31/kotlin-stdlib-common-1.5.31-sources.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.7.0/kotlin-stdlib-common-1.7.0-sources.jar"
     hash:
-      value: "ee22598c6d20e94e0fd08cc696f09f83e41b3935"
+      value: "f9c9b06e827013c64085993d479138766ef16aed"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
@@ -1234,8 +1234,8 @@ packages:
     url: "https://github.com/JetBrains/kotlin.git"
     revision: ""
     path: ""
-- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
-  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.5.30"
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.0"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.7.0"
   authors:
   - "JetBrains"
   declared_licenses:
@@ -1247,14 +1247,14 @@ packages:
   description: "Kotlin Standard Library JDK 7 extension"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.30/kotlin-stdlib-jdk7-1.5.30.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.7.0/kotlin-stdlib-jdk7-1.7.0.jar"
     hash:
-      value: "525f5a7fa6d7790a571c07dd24214ed2dda352fe"
+      value: "0fbeaa8fa63cbab09c547083a449097be6660a9a"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.30/kotlin-stdlib-jdk7-1.5.30-sources.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.7.0/kotlin-stdlib-jdk7-1.7.0-sources.jar"
     hash:
-      value: "ccdfdab71f0f3ba104191d8f673d0620e7ed2e46"
+      value: "78b7fc534a411952d7579a61d02b70fdd34aa56c"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
