@@ -66,6 +66,7 @@ data class AnalyzerConfiguration(
         "OrtProjectFile",
         "PIP",
         "Pipenv",
+        "PlatformIO",
         "PNPM",
         "Poetry",
         "Pub",

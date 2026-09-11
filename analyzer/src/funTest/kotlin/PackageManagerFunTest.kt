@@ -70,6 +70,7 @@ class PackageManagerFunTest : WordSpec({
         "pip-requirements/requirements.txt",
         "pip-setup/setup.py",
         "pipenv/Pipfile.lock",
+        "platformio/platformio.ini",
         "poetry/poetry.lock",
         "rebar3/rebar.config",
         "pub/pubspec.yaml",
@@ -131,6 +132,7 @@ class PackageManagerFunTest : WordSpec({
                     "pip-setup/setup.py"
                 )
                 managedFilesById["Pipenv"] should containExactly("pipenv/Pipfile.lock")
+                managedFilesById["PlatformIO"] should containExactly("platformio/platformio.ini")
                 managedFilesById["PNPM"] should containExactly("npm-pnpm-and-yarn/package.json")
                 managedFilesById["Poetry"] should containExactly("poetry/poetry.lock")
                 managedFilesById["Pub"] should containExactly("pub/pubspec.yaml")
