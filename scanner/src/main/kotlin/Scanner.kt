@@ -739,14 +739,14 @@ class Scanner(
                         runCatching {
                             val fileList = fileListResolver.resolve(provenance)
                             controller.putFileList(provenance, fileList)
-                        }.onFailure {
-                            it.showStackTrace()
+                        }.onFailure { e ->
+                            e.showStackTrace()
 
                             idsByProvenance.getValue(provenance).forEach { id ->
                                 val issue = createAndLogIssue(
                                     source = "Downloader",
                                     message = "Could not create file list for " +
-                                        "'${id.toCoordinates()}': ${it.collectMessages()}"
+                                        "'${id.toCoordinates()}': ${e.collectMessages()}"
                                 )
 
                                 controller.addIssue(id, issue)
