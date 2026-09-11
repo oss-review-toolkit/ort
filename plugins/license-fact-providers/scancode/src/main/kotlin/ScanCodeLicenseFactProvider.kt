@@ -64,7 +64,9 @@ class ScanCodeLicenseFactProvider(
      */
     private val licenseDataDirReader: ScanCodeLicenseDataDirReader? by lazy {
         findLicenseDataDir(config)?.let {
-            ScanCodeLicenseDataDirReader(it) { scanCodeLicense -> scanCodeLicense.text != null }
+            ScanCodeLicenseDataDirReader(it) { scanCodeLicense ->
+                scanCodeLicense.text != null && !scanCodeLicense.isGeneric
+            }
         }
     }
 
