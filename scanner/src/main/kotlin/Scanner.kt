@@ -736,24 +736,27 @@ class Scanner(
                             "Creating file list for provenance ${index + 1} of ${provenances.size}."
                         }
 
-                        runCatching {
-                            val fileList = fileListResolver.resolve(provenance)
-                            controller.putFileList(provenance, fileList)
-                        }.onFailure { e ->
-                            e.showStackTrace()
-
-                            idsByProvenance.getValue(provenance).forEach { id ->
-                                val issue = createAndLogIssue(
-                                    source = "Downloader",
-                                    message = "Could not create file list for " +
-                                        "'${id.toCoordinates()}': ${e.collectMessages()}"
-                                )
-
-                                controller.addIssue(id, issue)
-                            }
+                        provenance to runCatching {
+                            fileListResolver.resolve(provenance)
                         }
                     }
-                }.awaitAll()
+                }.awaitAll().forEach { (provenance, result) ->
+                    result.onSuccess { fileList ->
+                        controller.putFileList(provenance, fileList)
+                    }.onFailure { e ->
+                        e.showStackTrace()
+
+                        idsByProvenance.getValue(provenance).forEach { id ->
+                            val issue = createAndLogIssue(
+                                source = "Downloader",
+                                message = "Could not create file list for " +
+                                    "'${id.toCoordinates()}': ${e.collectMessages()}"
+                            )
+
+                            controller.addIssue(id, issue)
+                        }
+                    }
+                }
             }
         }
 
