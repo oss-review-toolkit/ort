@@ -20,6 +20,7 @@ Currently, the following package managers (grouped by the programming language t
 * C / C++
   * [Bazel](https://bazel.build/) (limitations: see [open tasks](https://github.com/oss-review-toolkit/ort/issues/264))
   * [Conan 1.x and 2.x](https://conan.io/)
+  * [PlatformIO](https://platformio.org/)
   * Also see: [Fallback Package Managers](#fallback-package-managers)
 * Dart / Flutter
   * [Pub](https://pub.dev/)
