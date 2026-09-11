@@ -1,0 +1,366 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "API to interact with a project's published Scorecard result",
+    "title": "OpenSSF Scorecard API",
+    "version": "1.0.0"
+  },
+  "host": "api.securityscorecards.dev",
+  "paths": {
+    "/projects/{platform}/{org}/{repo}": {
+      "get": {
+        "tags": [
+          "results"
+        ],
+        "summary": "Get a repository's ScorecardResult",
+        "operationId": "getResult",
+        "parameters": [
+          {
+            "pattern": "^[0-9a-fA-F]{40}$",
+            "type": "string",
+            "description": "SHA1 commit hash expressed in hexadecimal format",
+            "name": "commit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON object of the repository's ScorecardResult",
+            "schema": {
+              "$ref": "#/definitions/ScorecardResult"
+            },
+            "headers": {
+              "Cache-Control": {
+                "type": "string",
+                "description": "TTL for browser caching. Example: max-age=3600"
+              },
+              "Surrogate-Control": {
+                "type": "string",
+                "description": "TTL for Fastly CDN caching. Example: max-age=3600"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/responses/NotFound"
+          },
+          "default": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "results"
+        ],
+        "summary": "Publish a repository's OIDC verified ScorecardResult",
+        "operationId": "postResult",
+        "parameters": [
+          {
+            "name": "publish",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifiedScorecardResult"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully updated ScorecardResult",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "VCS platform. eg. github.com",
+          "name": "platform",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Name of the owner/organization of the repository",
+          "name": "org",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Name of the repository",
+          "name": "repo",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/projects/{platform}/{org}/{repo}/badge": {
+      "get": {
+        "produces": [
+          "image/svg+xml"
+        ],
+        "tags": [
+          "badge"
+        ],
+        "summary": "Get a repository's Scorecard badge",
+        "operationId": "getBadge",
+        "parameters": [
+          {
+            "enum": [
+              "plastic",
+              "flat",
+              "flat-square",
+              "for-the-badge",
+              "social"
+            ],
+            "type": "string",
+            "default": "flat",
+            "description": "Style to render the badge",
+            "name": "style",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "VCS platform. eg. github.com",
+            "name": "platform",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Name of the owner/organization of the repository",
+            "name": "org",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Name of the repository",
+            "name": "repo",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Scorecard badge for the repository",
+            "headers": {
+              "Cache-Control": {
+                "type": "string",
+                "description": "TTL for browser caching. Example: max-age=3600"
+              },
+              "Surrogate-Control": {
+                "type": "string",
+                "description": "TTL for Fastly CDN caching. Example: max-age=3600"
+              },
+              "Surrogate-Key": {
+                "type": "string",
+                "description": "Surrogate key for Fastly CDN purging."
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Repo": {
+      "type": "object",
+      "properties": {
+        "commit": {
+          "description": "SHA1 value of the analyzed commit expressed as hexadecimal",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{40}$",
+          "x-order": 1
+        },
+        "name": {
+          "description": "respository that was analyzed",
+          "type": "string",
+          "x-order": 0
+        }
+      }
+    },
+    "ScorecardCheck": {
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-order": 4
+        },
+        "documentation": {
+          "type": "object",
+          "properties": {
+            "short": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "x-order": 3
+        },
+        "name": {
+          "type": "string",
+          "x-order": 0
+        },
+        "reason": {
+          "type": "string",
+          "x-order": 2
+        },
+        "score": {
+          "type": "integer",
+          "x-omitempty": false,
+          "x-order": 1
+        }
+      }
+    },
+    "ScorecardResult": {
+      "type": "object",
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ScorecardCheck"
+          },
+          "x-order": 4
+        },
+        "date": {
+          "type": "string",
+          "x-order": 0
+        },
+        "metadata": {
+          "type": "string",
+          "x-order": 5
+        },
+        "repo": {
+          "x-order": 1,
+          "$ref": "#/definitions/Repo"
+        },
+        "score": {
+          "description": "Aggregate score of the repository",
+          "type": "number",
+          "x-omitempty": false,
+          "x-order": 3
+        },
+        "scorecard": {
+          "type": "object",
+          "x-order": 2,
+          "$ref": "#/definitions/ScorecardVersion"
+        }
+      }
+    },
+    "ScorecardVersion": {
+      "type": "object",
+      "properties": {
+        "commit": {
+          "description": "SHA1 value of the Scorecard commit used for analysis",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{40}$",
+          "x-order": 1
+        },
+        "version": {
+          "description": "Scorecard version used for this analysis",
+          "type": "string",
+          "x-order": 0
+        }
+      }
+    },
+    "VerifiedScorecardResult": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "result": {
+          "type": "string"
+        },
+        "tlogIndex": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "responses": {
+    "BadRequest": {
+      "description": "The request provided to the server was invalid",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      },
+      "headers": {
+        "Cache-Control": {
+          "type": "string",
+          "description": "TTL for browser caching. Example: max-age=3600"
+        },
+        "Surrogate-Control": {
+          "type": "string",
+          "description": "TTL for Fastly CDN caching. Example: max-age=3600"
+        }
+      }
+    },
+    "InternalServerError": {
+      "description": "There was an internal error in the server while processing the request",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
+    "NotFound": {
+      "description": "The content requested could not be found",
+      "headers": {
+        "Cache-Control": {
+          "type": "string",
+          "description": "TTL for browser caching. Example: max-age=3600"
+        },
+        "Surrogate-Control": {
+          "type": "string",
+          "description": "TTL for Fastly CDN caching. Example: max-age=3600"
+        }
+      }
+    }
+  },
+  "x-google-allow": "all",
+  "x-google-backend": {
+    "address": "https://scorecard-api-prod-x3pmld2cbq-uc.a.run.app",
+    "protocol": "h2"
+  }
+}
