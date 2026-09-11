@@ -189,16 +189,17 @@ class NodePackageManagerDetectionTest : WordSpec({
             val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(NPM)
 
             filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath } should containExactlyInAnyOrder(
+                "npm/babel/package.json",
+                "npm/fix-version/package.json",
+                "npm/list-issues/package.json",
                 "npm/no-lockfile/package.json",
                 "npm/node-modules/package.json",
+                "npm/platform-specific/package.json",
                 "npm/project-with-lockfile/package.json",
                 "npm/shrinkwrap/package.json",
-                "npm/list-issues/package.json",
-                "npm/babel/package.json",
                 "npm/version-urls/package.json",
                 "npm/workspaces/non-workspace/pkg3/package.json",
-                "npm/workspaces/package.json",
-                "npm/fix-version/package.json"
+                "npm/workspaces/package.json"
             )
         }
     }
