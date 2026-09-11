@@ -40,6 +40,10 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
         "return null for an existing license which does not have a text" {
             provider.getLicenseText("LicenseRef-scancode-proprietary") shouldBe null
         }
+
+        "return null for a generic license which does have a text" {
+            provider.getLicenseText("LicenseRef-scancode-proprietary-license") shouldBe null
+        }
     }
 
     "hasLicenseText()" should {
@@ -49,6 +53,10 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
 
         "return false for an existing license which does not have a text" {
             provider.hasLicenseText("LicenseRef-scancode-proprietary") shouldBe false
+        }
+
+        "return false for a generic license which does have a text" {
+            provider.hasLicenseText("LicenseRef-scancode-proprietary-license") shouldBe false
         }
     }
 })
