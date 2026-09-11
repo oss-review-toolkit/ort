@@ -40,8 +40,8 @@ internal class ScanCodeLicenseDataDirReader(
     }
 
     /** Associates license or exception IDs with the corresponding license data files. */
-    private val licenseDataFileForLicenseOrExceptionId: Map<String, File> by lazy {
-        buildMap {
+    private val licenseDataFileForLicenseOrExceptionId: Map<String, Set<File>> by lazy {
+        buildMap<String, MutableSet<File>> {
             // Process the files in sorted order to get a deterministic effect also in case multiple files define
             // the same license identifier.
             licenseDataDir.listFiles().filter { it.extension == "LICENSE" }.sortedBy { it.name }.forEach { file ->
@@ -60,22 +60,16 @@ internal class ScanCodeLicenseDataDirReader(
                 }
 
                 licenseData.getAllLicenseOrExceptionIds().forEach { id ->
-                    if (id in this) {
-                        logger.warn {
-                            "Not associating '$id' with '${file.name}', as it is already associated with " +
-                                "'${getValue(id).name}'."
-                        }
-                    } else {
-                        put(id, file)
-                    }
+                    getOrPut(id) { mutableSetOf() } += file
                 }
             }
         }
     }
 
     fun getLicense(licenseOrExceptionId: String): ScanCodeLicense? {
-        val file = licenseDataFileForLicenseOrExceptionId[licenseOrExceptionId] ?: return null
-        return checkNotNull(parseScanCodeLicenseDataFile(file))
+        val files = licenseDataFileForLicenseOrExceptionId[licenseOrExceptionId].orEmpty()
+        val licenses = files.map { parseScanCodeLicenseDataFile(it) }
+        return licenses.find { !it.isDeprecated } ?: licenses.firstOrNull()
     }
 
     fun hasLicense(licenseOrExceptionId: String): Boolean =
