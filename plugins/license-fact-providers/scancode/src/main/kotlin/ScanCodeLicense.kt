@@ -77,9 +77,9 @@ internal data class ScanCodeLicense(
     }
 }
 
-internal fun parseScanCodeLicenseDataFile(file: File): ScanCodeLicense? {
+internal fun parseScanCodeLicenseDataFile(file: File): ScanCodeLicense {
     require(file.extension == "LICENSE") {
-        "The function works only with '.LICENSE' files, but got '.${file.extension}'."
+        "The function works only with '.LICENSE' files."
     }
 
     val lines = file.readLines()
@@ -88,7 +88,9 @@ internal fun parseScanCodeLicenseDataFile(file: File): ScanCodeLicense? {
         index.takeIf { string == "---" }
     }
 
-    if (markerLineNumbers.size < 2 || markerLineNumbers.first() != 0) return null
+    require(markerLineNumbers.size >= 2 && markerLineNumbers.first() == 0) {
+        "Expected YAML start and end markers could not be found."
+    }
 
     val yamlEndIndex = markerLineNumbers[1]
     val yaml = lines.subList(1, yamlEndIndex).joinToString("\n")

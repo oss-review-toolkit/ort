@@ -23,6 +23,8 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.utils.common.collectMessages
+
 /**
  * Reads the licenses texts from the given license data directory. If multiple license data files correspond to the same
  * license identifier, then only the first file is used.
@@ -43,11 +45,11 @@ internal class ScanCodeLicenseDataDirReader(
             // Process the files in sorted order to get a deterministic effect also in case multiple files define
             // the same license identifier.
             licenseDataDir.listFiles().filter { it.extension == "LICENSE" }.sortedBy { it.name }.forEach { file ->
-                val licenseData = parseScanCodeLicenseDataFile(file)
-
-                if (licenseData == null) {
+                val licenseData = runCatching {
+                    parseScanCodeLicenseDataFile(file)
+                }.getOrElse { e ->
                     logger.warn {
-                        "Could not parse ScanCode license data file: '${file.absolutePath}'."
+                        "Could not parse ScanCode license data file '${file.name}': ${e.collectMessages()}."
                     }
 
                     return@forEach
