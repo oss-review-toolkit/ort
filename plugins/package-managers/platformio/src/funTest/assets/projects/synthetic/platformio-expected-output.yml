@@ -35,8 +35,6 @@ project:
       dependencies:
       - id: "PlatformIO:platformio:framework-arduino-avr:5.4.0"
         linkage: "STATIC"
-      - id: "PlatformIO:platformio:tool-scons:4.40801.0"
-        linkage: "STATIC"
       - id: "PlatformIO:platformio:toolchain-atmelavr:1.70300.191015"
         linkage: "STATIC"
 packages:
@@ -240,34 +238,6 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/arduino/ArduinoCore-avr.git"
-    revision: ""
-    path: ""
-- id: "PlatformIO:platformio:tool-scons:4.40801.0"
-  purl: "pkg:platformio/platformio/tool-scons@4.40801.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "SCons software construction tool"
-  homepage_url: "http://www.scons.org"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/SCons/scons.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/SCons/scons.git"
     revision: ""
     path: ""
 - id: "PlatformIO:platformio:toolchain-atmelavr:1.70300.191015"
