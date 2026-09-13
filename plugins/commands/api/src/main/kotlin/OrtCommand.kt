@@ -63,9 +63,8 @@ abstract class OrtCommand(override val descriptor: PluginDescriptor) : CliktComm
         val existingOutputFiles = outputFiles.filter { it.exists() }
         if (existingOutputFiles.isNotEmpty()) {
             throw UsageError(
-                message = "None of the output files $existingOutputFiles must exist yet. To overwrite output files " +
-                    "set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'.",
-                statusCode = 2
+                "None of the output files $existingOutputFiles must exist yet. To overwrite output files set the " +
+                    "'forceOverwrite' option in '$ORT_CONFIG_FILENAME'."
             )
         }
 
