@@ -122,7 +122,7 @@ class AdviseCommand(descriptor: PluginDescriptor = AdviseCommandFactory.descript
             outputDir.resolve("advisor-result.${format.fileExtension}")
         }
 
-        validateOutputFiles(outputFiles)
+        checkOutputFiles(outputFiles)
 
         val distinctProviders = providerFactories.distinct()
         echo("The following ${distinctProviders.size} advisor(s) are enabled:")
