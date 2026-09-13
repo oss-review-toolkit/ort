@@ -137,7 +137,7 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
                 it / "analyzer-result.${format.fileExtension}"
             }
 
-            validateOutputFiles(analyzerResultFiles)
+            checkOutputFiles(analyzerResultFiles)
         }.orEmpty()
 
         val configurationFiles = listOf(
