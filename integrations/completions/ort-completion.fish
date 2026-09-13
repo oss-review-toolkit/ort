@@ -35,7 +35,7 @@ complete -c ort -f -n __fish_use_subcommand -a analyze -d 'Determine dependencie
 
 ## Options for analyze
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l input-dir -s i -r -F -d 'The project directory to analyze. May point to a definition file, but only if just a single packagemanager is enabled, and the definition file does not depend on any further definition files.'
-complete -c ort -n "__fish_seen_subcommand_from analyze" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with analyzer results to.'
+complete -c ort -n "__fish_seen_subcommand_from analyze" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with analyzer results to. Required unless \'--dry-run\' is specified.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l output-formats -s f -r -fa "JSON YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l repository-configuration-file -r -F -d 'A file containing the repository configuration. If set, overrides any repository configuration contained in a \'.ort.yml\' file in the repository.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
