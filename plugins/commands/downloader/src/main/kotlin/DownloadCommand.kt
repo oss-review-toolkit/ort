@@ -342,7 +342,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
 
         echo("$verb ${packages.size} project(s) / package(s) in total.")
 
-        val downloadDirs = downloadAllPackages(packages, failureMessages, maxParallelDownloads)
+        val downloadDirs = downloadPackages(packages, failureMessages, maxParallelDownloads)
 
         if (archiveMode == ArchiveMode.BUNDLE && !dryRun) {
             val zipFile = outputDir / "archive.zip"
@@ -361,7 +361,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
     }
 
     @Suppress("ForbiddenMethodCall")
-    private fun downloadAllPackages(
+    private fun downloadPackages(
         packages: List<Package>,
         failureMessages: MutableList<String>,
         maxParallelDownloads: Int
