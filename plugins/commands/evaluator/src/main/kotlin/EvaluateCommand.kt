@@ -261,7 +261,7 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
                 absoluteOutputDir / "evaluation-result.${format.fileExtension}"
             }
 
-            validateOutputFiles(outputFiles)
+            checkOutputFiles(outputFiles)
         }
 
         if (checkSyntax) {

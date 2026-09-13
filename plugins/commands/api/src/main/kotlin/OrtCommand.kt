@@ -55,9 +55,9 @@ abstract class OrtCommand(override val descriptor: PluginDescriptor) : CliktComm
     protected val ortConfig by requireObject<OrtConfiguration>()
 
     /**
-     * Validates that the provided [outputFiles] can be used. Throws a [UsageError] otherwise.
+     * Checks that the provided [outputFiles] can be used. Throws a [UsageError] otherwise.
      */
-    protected fun validateOutputFiles(outputFiles: Collection<File>) {
+    protected fun checkOutputFiles(outputFiles: Collection<File>) {
         if (ortConfig.forceOverwrite) return
 
         val existingOutputFiles = outputFiles.filter { it.exists() }
