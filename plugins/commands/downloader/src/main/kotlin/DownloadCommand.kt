@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.commands.downloader
 
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
@@ -30,7 +31,6 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
@@ -93,6 +93,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.utils.common.ArchiveType
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.encodeOrUnknown
@@ -166,7 +167,6 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
-        .required()
         .outputGroup()
 
     /**
@@ -227,6 +227,10 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
     ).int().default(8)
 
     override fun run() {
+        if (outputDir == null && !dryRun) {
+            throw UsageError("The '--output-dir' option is required unless '--dry-run' is specified.")
+        }
+
         val failureMessages = mutableListOf<String>()
 
         val duration = measureTime {
@@ -345,17 +349,18 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
         val downloadDirs = downloadPackages(packages, failureMessages, maxParallelDownloads)
 
         if (archiveMode == ArchiveMode.BUNDLE && !dryRun) {
-            val zipFile = outputDir / "archive.zip"
+            val archiveDir = checkNotNull(outputDir)
+            val zipFile = archiveDir / "archive.zip"
 
-            logger.info { "Archiving directory '$outputDir' to '$zipFile'." }
-            val result = runCatching { outputDir.packZip(zipFile) }
+            logger.info { "Archiving directory '$archiveDir' to '$zipFile'." }
+            val result = runCatching { archiveDir.packZip(zipFile) }
 
             result.exceptionOrNull()?.let {
-                logger.error { "Could not archive '$outputDir': ${it.collectMessages()}" }
+                logger.error { "Could not archive '$archiveDir': ${it.collectMessages()}" }
             }
 
             downloadDirs.forEach { dir ->
-                dir.safeDeleteRecursively(baseDirectory = outputDir)
+                dir.safeDeleteRecursively(baseDirectory = archiveDir)
             }
         }
     }
@@ -393,14 +398,23 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
 
             launch { progress.execute() }
 
-            val packageDownloadDirs = packages.associateWith { outputDir / it.id.toPath() }
+            val packageDownloadDirs = if (!dryRun) {
+                val dir = checkNotNull(outputDir)
+                packages.associateWith { dir / it.id.toPath() }
+            } else {
+                emptyMap()
+            }
 
             withContext(Dispatchers.IO.limitedParallelism(parallelDownloads)) {
                 packages.mapIndexed { index, pkg ->
                     async {
                         with(tasks[index % parallelDownloads]) {
                             reset { context = pkg to index }
-                            downloadPackage(pkg, packageDownloadDirs.getValue(pkg), failureMessages)
+
+                            // For a dry run the download directory is not used anyway.
+                            val dir = if (dryRun) Os.tempDirectory else packageDownloadDirs.getValue(pkg)
+                            downloadPackage(pkg, dir, failureMessages)
+
                             advance()
                         }
 
@@ -417,7 +431,8 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
             Downloader(ortConfig.downloader).download(pkg, dir, dryRun)
 
             if (archiveMode == ArchiveMode.ENTITY && !dryRun) {
-                val zipFile = outputDir / "${pkg.id.toPath("-")}.zip"
+                val archiveDir = checkNotNull(outputDir)
+                val zipFile = archiveDir / "${pkg.id.toPath("-")}.zip"
 
                 logger.info { "Archiving directory '$dir' to '$zipFile'." }
                 val result = runCatching {
@@ -431,7 +446,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
                     logger.error { "Could not archive '$dir': ${it.collectMessages()}" }
                 }
 
-                dir.safeDeleteRecursively(baseDirectory = outputDir)
+                dir.safeDeleteRecursively(baseDirectory = archiveDir)
             }
         } catch (e: DownloadException) {
             e.showStackTrace()
@@ -508,7 +523,13 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
             // project needs to be downloaded.
             val config = ortConfig.downloader.copy(allowMovingRevisions = true)
 
-            val provenance = Downloader(config).download(dummyPackage, outputDir, dryRun)
+            val provenance = if (dryRun) {
+                // For a dry run the download directory is not used anyway.
+                Downloader(config).download(dummyPackage, Os.tempDirectory, dryRun = true)
+            } else {
+                Downloader(config).download(dummyPackage, checkNotNull(outputDir), dryRun = false)
+            }
+
             echo("Successfully downloaded $provenance.")
         }.onFailure {
             it.showStackTrace()
