@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.commands.analyzer
 
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -85,11 +86,11 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
 
     private val outputDir by option(
         "--output-dir", "-o",
-        help = "The directory to write the ORT result file with analyzer results to."
+        help = "The directory to write the ORT result file with analyzer results to. Required unless '--dry-run' is " +
+            "specified."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
-        .required()
         .outputGroup()
 
     private val outputFormats by option(
@@ -128,11 +129,15 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
     ).flag()
 
     override fun run() {
-        val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
-            outputDir / "analyzer-result.${format.fileExtension}"
+        if (outputDir == null && !dryRun) {
+            throw UsageError("The '--output-dir' option is required unless '--dry-run' is specified.")
         }
 
-        validateOutputFiles(outputFiles)
+        val outputFiles = outputDir?.let {
+            outputFormats.mapTo(mutableSetOf()) { format ->
+                it / "analyzer-result.${format.fileExtension}"
+            }
+        }?.also { validateOutputFiles(it) }.orEmpty()
 
         val configurationFiles = listOf(
             repositoryConfigurationFile,
@@ -212,7 +217,7 @@ class AnalyzeCommand(descriptor: PluginDescriptor = AnalyzeCommandFactory.descri
 
         val ortResult = analyzer.analyze(info, enabledCurationProviders).mergeLabels(labels)
 
-        outputDir.safeMkdirs()
+        checkNotNull(outputDir).safeMkdirs()
         writeOrtResult(ortResult, outputFiles, terminal)
 
         val analyzerRun = ortResult.analyzer
