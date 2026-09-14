@@ -208,7 +208,7 @@ class RepositoryConfigurationTest : WordSpec({
                 }
 
                 with(licenseChoices[1]) {
-                    given shouldBe null
+                    given should beNull()
                     choice shouldBe "MPL-2.0 AND MIT".toSpdx()
                 }
             }

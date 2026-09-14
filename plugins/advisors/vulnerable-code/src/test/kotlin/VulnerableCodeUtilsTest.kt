@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.net.URI
@@ -27,9 +29,9 @@ import java.net.URI
 class VulnerableCodeUtilsTest : WordSpec({
     "deriveSummary()" should {
         "return null for a null or blank string" {
-            null.deriveSummary() shouldBe null
-            "".deriveSummary() shouldBe null
-            " ".deriveSummary() shouldBe null
+            null.deriveSummary() should beNull()
+            "".deriveSummary() should beNull()
+            " ".deriveSummary() should beNull()
         }
 
         "return the original string if it fits into the maximum summary length" {

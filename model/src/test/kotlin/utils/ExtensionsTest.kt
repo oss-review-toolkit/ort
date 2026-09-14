@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 class ExtensionsTest : WordSpec({
@@ -31,14 +33,14 @@ class ExtensionsTest : WordSpec({
         }
 
         "return null if no manifest is found" {
-            "https://example.com/repo.git".parseRepoManifestPath() shouldBe null
-            "https://example.com/repo.git?other=param".parseRepoManifestPath() shouldBe null
-            "https://example.com/repo.git?manifest=".parseRepoManifestPath() shouldBe null
+            "https://example.com/repo.git".parseRepoManifestPath() should beNull()
+            "https://example.com/repo.git?other=param".parseRepoManifestPath() should beNull()
+            "https://example.com/repo.git?manifest=".parseRepoManifestPath() should beNull()
         }
 
         "return null if the string is no valid URI" {
-            "^invalid-uri".parseRepoManifestPath() shouldBe null
-            "^invalid-uri?manifest=default.xml".parseRepoManifestPath() shouldBe null
+            "^invalid-uri".parseRepoManifestPath() should beNull()
+            "^invalid-uri?manifest=default.xml".parseRepoManifestPath() should beNull()
         }
     }
 })

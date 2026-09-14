@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.file.aFile
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
@@ -106,7 +108,7 @@ class PoetryTest : WordSpec({
                 """.trimIndent()
             )
 
-            getPythonVersionConstraint(pyprojectFile) shouldBe null
+            getPythonVersionConstraint(pyprojectFile) should beNull()
         }
     }
 })

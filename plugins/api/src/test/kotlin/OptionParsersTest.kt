@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.api
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -87,7 +88,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "return null if the option is not set" {
-            factory.parseNullableBooleanOption("nullableBooleanOption", PluginConfig.EMPTY) shouldBe null
+            factory.parseNullableBooleanOption("nullableBooleanOption", PluginConfig.EMPTY) should beNull()
         }
 
         "throw an exception for an invalid boolean value" {
@@ -116,7 +117,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "ignore the name if an alternative name is set" {
-            findEnumEntry<TestEnum>(entries, "FIRST") shouldBe null
+            findEnumEntry<TestEnum>(entries, "FIRST") should beNull()
         }
 
         "find an entry by alias" {
@@ -186,7 +187,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "return null if the option is not set" {
-            factory.parseNullableEnumOption<TestEnum>("nullableEnumOption", PluginConfig.EMPTY) shouldBe null
+            factory.parseNullableEnumOption<TestEnum>("nullableEnumOption", PluginConfig.EMPTY) should beNull()
         }
 
         "throw an exception for an invalid enum value" {
@@ -273,7 +274,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "return null if the option is not set" {
-            factory.parseNullableEnumListOption<TestEnum>("nullableEnumListOption", PluginConfig.EMPTY) shouldBe null
+            factory.parseNullableEnumListOption<TestEnum>("nullableEnumListOption", PluginConfig.EMPTY) should beNull()
         }
 
         "throw an exception for an invalid enum value" {
@@ -345,7 +346,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "return null if the option is not set" {
-            factory.parseNullableIntegerOption("nullableIntegerOption", PluginConfig.EMPTY) shouldBe null
+            factory.parseNullableIntegerOption("nullableIntegerOption", PluginConfig.EMPTY) should beNull()
         }
 
         "throw an exception for an invalid integer value" {
@@ -417,7 +418,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "return null if the option is not set" {
-            factory.parseNullableLongOption("nullableLongOption", PluginConfig.EMPTY) shouldBe null
+            factory.parseNullableLongOption("nullableLongOption", PluginConfig.EMPTY) should beNull()
         }
 
         "throw an exception for an invalid long value" {
@@ -480,7 +481,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "return null if the option is not set" {
-            factory.parseNullableSecretOption("nullableSecretOption", PluginConfig.EMPTY) shouldBe null
+            factory.parseNullableSecretOption("nullableSecretOption", PluginConfig.EMPTY) should beNull()
         }
     }
 
@@ -534,7 +535,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "return null if the option is not set" {
-            factory.parseNullableStringOption("nullableStringOption", PluginConfig.EMPTY) shouldBe null
+            factory.parseNullableStringOption("nullableStringOption", PluginConfig.EMPTY) should beNull()
         }
     }
 
@@ -611,7 +612,7 @@ class OptionParsersTest : WordSpec({
         }
 
         "return null if the option is not set" {
-            factory.parseNullableStringListOption("nullableStringListOption", PluginConfig.EMPTY) shouldBe null
+            factory.parseNullableStringListOption("nullableStringListOption", PluginConfig.EMPTY) should beNull()
         }
 
         "trim values and filter out empty strings" {

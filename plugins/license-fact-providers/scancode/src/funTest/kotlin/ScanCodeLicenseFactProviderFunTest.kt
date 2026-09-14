@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.licensefactproviders.scancode
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -38,11 +39,11 @@ class ScanCodeLicenseFactProviderFunTest : WordSpec({
         }
 
         "return null for an existing license which does not have a text" {
-            provider.getLicenseText("LicenseRef-scancode-proprietary") shouldBe null
+            provider.getLicenseText("LicenseRef-scancode-proprietary") should beNull()
         }
 
         "return null for a generic license which does have a text" {
-            provider.getLicenseText("LicenseRef-scancode-proprietary-license") shouldBe null
+            provider.getLicenseText("LicenseRef-scancode-proprietary-license") should beNull()
         }
     }
 

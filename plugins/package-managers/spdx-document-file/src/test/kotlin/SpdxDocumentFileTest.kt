@@ -135,7 +135,7 @@ class SpdxDocumentFileTest : WordSpec({
             doc.mockPackage(pkg)
             doc.mockDefinitionFile(null)
 
-            getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) shouldBe null
+            getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) should beNull()
         }
 
         "return null for an undefined package file name" {
@@ -143,7 +143,7 @@ class SpdxDocumentFileTest : WordSpec({
             doc.mockPackage(pkgForVcs)
             doc.mockDefinitionFile(File("definition.spdx"))
 
-            getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) shouldBe null
+            getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) should beNull()
         }
 
         "return null if no external reference with a scope is defined" {
@@ -160,7 +160,7 @@ class SpdxDocumentFileTest : WordSpec({
             doc.mockPackage(pkg)
             doc.mockDefinitionFile(File("wrongReferences.spdx"))
 
-            getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) shouldBe null
+            getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) should beNull()
         }
     }
 

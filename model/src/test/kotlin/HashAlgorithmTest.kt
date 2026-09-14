@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
 
@@ -65,7 +67,7 @@ class HashAlgorithmTest : WordSpec({
         }
 
         "return null for a non-existent file" {
-            HashAlgorithm.SHA1GIT.calculate("/license/DOESNOTEXIST") shouldBe null
+            HashAlgorithm.SHA1GIT.calculate("/license/DOESNOTEXIST") should beNull()
         }
     }
 })

@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -41,7 +42,7 @@ class PoetryFunTest : WordSpec({
         }
 
         "return null if constraint cannot be satisfied" {
-            getPythonVersion("^3.10,<3.10") shouldBe null
+            getPythonVersion("^3.10,<3.10") should beNull()
         }
     }
 

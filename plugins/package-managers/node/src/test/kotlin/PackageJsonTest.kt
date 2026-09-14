@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Author
 
@@ -112,7 +112,7 @@ class PackageJsonTest : WordSpec({
 
             val packageJson = parsePackageJson(json)
 
-            packageJson.repository shouldBe null
+            packageJson.repository should beNull()
         }
     }
 })
