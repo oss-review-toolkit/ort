@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingleton
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -168,8 +169,8 @@ class ScanOssTest : WordSpec({
 
             rules.removeRules.shouldBeSingleton { rule ->
                 rule.path shouldBe FILE_2
-                rule.startLine shouldBe null
-                rule.endLine shouldBe null
+                rule.startLine should beNull()
+                rule.endLine should beNull()
             }
 
             rules.includeRules should beEmpty()

@@ -31,6 +31,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
@@ -118,7 +119,7 @@ class DosScannerTest : WordSpec({
                     )
             )
 
-            scanner.client.getScanResults(emptyList()) shouldBe null
+            scanner.client.getScanResults(emptyList()) should beNull()
         }
 
         "return 'no-results' when no results in db" {
@@ -191,7 +192,7 @@ class DosScannerTest : WordSpec({
             }
 
             response?.state?.status shouldBe "ready"
-            response?.state?.jobId shouldBe null
+            response?.state?.jobId should beNull()
             actualJson shouldBe expectedJson
         }
 

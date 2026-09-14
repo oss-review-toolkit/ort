@@ -60,7 +60,7 @@ class LocalRepositoryHelperTest : WordSpec({
             val root = tempdir()
             val helper = LocalRepositoryHelper(root)
 
-            helper.folderForOsgiArtifact(testArtifact) shouldBe null
+            helper.folderForOsgiArtifact(testArtifact) should beNull()
         }
     }
 
@@ -87,7 +87,7 @@ class LocalRepositoryHelperTest : WordSpec({
             val root = tempdir()
             val helper = LocalRepositoryHelper(root)
 
-            helper.fileForOsgiArtifact(testArtifact) shouldBe null
+            helper.fileForOsgiArtifact(testArtifact) should beNull()
         }
 
         "return null if the artifact file does not exist" {
@@ -95,7 +95,7 @@ class LocalRepositoryHelperTest : WordSpec({
             root.createRepositoryFolder()
 
             val helper = LocalRepositoryHelper(root)
-            helper.fileForOsgiArtifact(testArtifact) shouldBe null
+            helper.fileForOsgiArtifact(testArtifact) should beNull()
         }
     }
 
