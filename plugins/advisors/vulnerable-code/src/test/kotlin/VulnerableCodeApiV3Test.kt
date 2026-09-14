@@ -333,7 +333,7 @@ class VulnerableCodeApiV3Test : WordSpec({
                     with(getValue(pkg)) {
                         advisor shouldBe details
                         vulnerabilities should beEmpty()
-                        summary.issues.shouldBeSingleton { issue ->
+                        summary.issues shouldBeSingleton { issue ->
                             issue.severity shouldBe Severity.ERROR
                             issue.message shouldStartWith "ServerResponseException"
                             issue.message shouldContain "500 Server Error"

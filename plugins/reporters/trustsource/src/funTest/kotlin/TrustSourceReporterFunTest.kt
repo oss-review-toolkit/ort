@@ -37,7 +37,7 @@ class TrustSourceReporterFunTest : StringSpec({
 
         val reportFiles = TrustSourceReporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
 
-        reportFiles.shouldBeSingleton {
+        reportFiles shouldBeSingleton {
             it shouldBeSuccess { reportFile ->
                 reportFile shouldBe aFile()
                 reportFile.readText() shouldEqualJson expectedReport

@@ -305,7 +305,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 )
             )
 
-            issues.shouldBeSingleton { issue ->
+            issues shouldBeSingleton { issue ->
                 issue.severity shouldBe Severity.ERROR
                 issue.source shouldBe "Tycho"
                 issue.message shouldContain server.repositoryUrl()
@@ -334,7 +334,7 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 )
             )
 
-            issues.shouldBeSingleton { issue ->
+            issues shouldBeSingleton { issue ->
                 issue.severity shouldBe Severity.WARNING
                 issue.source shouldBe "Tycho"
                 issue.message shouldContain server.repositoryUrl(basePath2)

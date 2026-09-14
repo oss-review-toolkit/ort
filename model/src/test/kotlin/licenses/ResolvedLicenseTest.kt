@@ -51,7 +51,7 @@ class ResolvedLicenseTest : WordSpec({
 
             val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = false)
 
-            resolvedCopyrights.shouldBeSingleton { copyright ->
+            resolvedCopyrights shouldBeSingleton { copyright ->
                 copyright.statement shouldBe "Copyright (C) 2022 The ORT Project Copyright Holders"
                 copyright.findings.map { it.location.path } should containExactlyInAnyOrder(
                     "/path/to/file/A",
@@ -83,7 +83,7 @@ class ResolvedLicenseTest : WordSpec({
 
             val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = true)
 
-            resolvedCopyrights.shouldBeSingleton { copyright ->
+            resolvedCopyrights shouldBeSingleton { copyright ->
                 copyright.statement shouldBe "Copyright (C) 2022 The ORT Project Copyright Holders"
                 copyright.findings.map { it.location.path } should containExactlyInAnyOrder(
                     "/path/to/file/A",

@@ -250,21 +250,21 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 resolvedResult.dependencyGraphs should beEmptyMap()
 
                 resolvedResult.projects.find { it.id == p1.id } shouldNotBeNull {
-                    scopes.shouldBeSingleton {
+                    scopes shouldBeSingleton {
                         it.name shouldBe "scope-1"
                         it.dependencies.shouldBeSingle().id shouldBe package1.id
                     }
                 }
 
                 resolvedResult.projects.find { it.id == project3.id } shouldNotBeNull {
-                    scopes.shouldBeSingleton {
+                    scopes shouldBeSingleton {
                         it.name shouldBe "scope-2"
                         it.dependencies.shouldBeSingle().id shouldBe package2.id
                     }
                 }
 
                 resolvedResult.projects.find { it.id == p2.id } shouldNotBeNull {
-                    scopes.shouldBeSingleton {
+                    scopes shouldBeSingleton {
                         it.name shouldBe "scope-3"
                         it.dependencies.shouldBeSingle().id shouldBe package3.id
                     }

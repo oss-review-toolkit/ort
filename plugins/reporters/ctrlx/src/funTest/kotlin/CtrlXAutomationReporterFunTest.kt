@@ -73,7 +73,7 @@ class CtrlXAutomationReporterFunTest : StringSpec({
         val outputDir = tempdir()
         val reportFiles = CtrlXAutomationReporterFactory.create().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
-        reportFiles.shouldBeSingleton {
+        reportFiles shouldBeSingleton {
             it shouldBeSuccess outputDir / REPORT_FILENAME
         }
     }
@@ -121,7 +121,7 @@ class CtrlXAutomationReporterFunTest : StringSpec({
 })
 
 private fun validateReport(reporterResult: List<Result<File>>, validate: FossInfo.() -> Unit) {
-    reporterResult.shouldBeSingleton { result ->
+    reporterResult shouldBeSingleton { result ->
         result shouldBeSuccess { file ->
             file.name shouldBe "fossinfo.json"
             val fossInfo = file.inputStream().use {

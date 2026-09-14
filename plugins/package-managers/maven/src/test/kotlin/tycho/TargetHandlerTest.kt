@@ -65,7 +65,7 @@ class TargetHandlerTest : WordSpec({
             val tychoArtifact = DefaultArtifact("p2.eclipse.plugin", "ch.qos.logback.logback-classic", "jar", "1.5.6")
             val targetHandler = createTargetHandlerWithTargetFiles()
 
-            targetHandler.mapToMavenDependency(tychoArtifact).shouldBeSingleton {
+            targetHandler.mapToMavenDependency(tychoArtifact) shouldBeSingleton {
                 it.groupId shouldBe "ch.qos.logback"
                 it.artifactId shouldBe "logback-classic"
                 it.version shouldBe "1.5.6"

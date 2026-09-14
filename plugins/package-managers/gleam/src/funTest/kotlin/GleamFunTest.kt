@@ -121,7 +121,7 @@ class GleamFunTest : StringSpec({
             allowDynamicVersions = true
         )
 
-        result.issues.shouldBeSingleton {
+        result.issues shouldBeSingleton {
             it.severity shouldBe Severity.ERROR
             it.message shouldContain "failed with exit code"
             it.message shouldContain "Dependency resolution failed"

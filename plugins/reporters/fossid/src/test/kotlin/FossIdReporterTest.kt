@@ -199,7 +199,7 @@ class FossIdReporterTest : WordSpec({
 
             val reportFileResults = reporterMock.generateReport(input)
 
-            reportFileResults.shouldBeSingleton {
+            reportFileResults shouldBeSingleton {
                 it shouldBeSuccess FILE_SAMPLE
             }
         }

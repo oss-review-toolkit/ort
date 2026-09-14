@@ -38,7 +38,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "directory/**"
                 it.type shouldBe RuleType.DIRECTORY
             }
@@ -51,7 +51,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "directory/sub1/sub2/**"
                 it.type shouldBe RuleType.DIRECTORY
             }
@@ -64,7 +64,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, _) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe ".git"
                 it.type shouldBe RuleType.DIRECTORY
             }
@@ -75,7 +75,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "src/example.test/templates"
                 it.type shouldBe RuleType.DIRECTORY
             }
@@ -88,7 +88,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, _) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "test-prod"
                 it.type shouldBe RuleType.DIRECTORY
             }
@@ -99,7 +99,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "src/test-prod/templates"
                 it.type shouldBe RuleType.DIRECTORY
             }
@@ -112,7 +112,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "directory"
                 it.type shouldBe RuleType.DIRECTORY
             }
@@ -125,7 +125,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "directory/sub1/sub2"
                 it.type shouldBe RuleType.DIRECTORY
             }
@@ -138,7 +138,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe ".pdf"
                 it.type shouldBe RuleType.EXTENSION
             }
@@ -151,7 +151,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "file.txt"
                 it.type shouldBe RuleType.FILE
             }
@@ -164,7 +164,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "file.old.txt"
                 it.type shouldBe RuleType.FILE
             }
@@ -177,7 +177,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             val (ignoreRules, issues) = convertRules(exclude)
 
-            ignoreRules.shouldBeSingleton {
+            ignoreRules shouldBeSingleton {
                 it.value shouldBe "package-lock.json"
                 it.type shouldBe RuleType.FILE
             }
@@ -192,7 +192,7 @@ class MapIgnoreRulesTest : WordSpec({
 
             ignoreRules should beEmpty()
 
-            issues.shouldBeSingleton {
+            issues shouldBeSingleton {
                 it.message shouldBe "Path exclude 'directory/**/test/*' cannot be converted to an ignore rule."
                 it.severity shouldBe Severity.HINT
             }

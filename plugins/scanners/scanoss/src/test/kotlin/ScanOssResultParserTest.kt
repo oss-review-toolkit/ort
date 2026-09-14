@@ -270,7 +270,7 @@ class ScanOssResultParserTest : WordSpec({
 
     "getLicenseFindings()" should {
         "use NOASSERTION for empty license findings" {
-            getLicenseFindings(dummyDetails, "dummy").shouldBeSingleton { finding ->
+            getLicenseFindings(dummyDetails, "dummy") shouldBeSingleton { finding ->
                 finding.license shouldBe SpdxExpression.NOASSERTION
             }
         }
@@ -282,7 +282,7 @@ class ScanOssResultParserTest : WordSpec({
                 )
                 .build()
 
-            getLicenseFindings(detailsWithUnparsableLicense, "dummy").shouldBeSingleton { finding ->
+            getLicenseFindings(detailsWithUnparsableLicense, "dummy") shouldBeSingleton { finding ->
                 finding.license shouldBe SpdxExpression.NOASSERTION
             }
         }
@@ -294,7 +294,7 @@ class ScanOssResultParserTest : WordSpec({
                 )
                 .build()
 
-            getLicenseFindings(detailsWithUnparsableLicense, "dummy").shouldBeSingleton { finding ->
+            getLicenseFindings(detailsWithUnparsableLicense, "dummy") shouldBeSingleton { finding ->
                 finding.license.toString() shouldBe "LicenseRef-scanoss-OnlyScanOssKnows"
             }
         }
@@ -302,8 +302,8 @@ class ScanOssResultParserTest : WordSpec({
 
     "getSnippetFindings()" should {
         "use NOASSERTION for empty license findings" {
-            getSnippetFindings(dummyDetails, "dummy").shouldBeSingleton { finding ->
-                finding.snippets.shouldBeSingleton { snippet ->
+            getSnippetFindings(dummyDetails, "dummy") shouldBeSingleton { finding ->
+                finding.snippets shouldBeSingleton { snippet ->
                     snippet.license shouldBe SpdxExpression.NOASSERTION
                 }
             }
@@ -316,8 +316,8 @@ class ScanOssResultParserTest : WordSpec({
                 )
                 .build()
 
-            getSnippetFindings(detailsWithUnparsableLicense, "dummy").shouldBeSingleton { finding ->
-                finding.snippets.shouldBeSingleton { snippet ->
+            getSnippetFindings(detailsWithUnparsableLicense, "dummy") shouldBeSingleton { finding ->
+                finding.snippets shouldBeSingleton { snippet ->
                     snippet.license shouldBe SpdxExpression.NOASSERTION
                 }
             }
@@ -330,8 +330,8 @@ class ScanOssResultParserTest : WordSpec({
                 )
                 .build()
 
-            getSnippetFindings(detailsWithUnparsableLicense, "dummy").shouldBeSingleton { finding ->
-                finding.snippets.shouldBeSingleton { snippet ->
+            getSnippetFindings(detailsWithUnparsableLicense, "dummy") shouldBeSingleton { finding ->
+                finding.snippets shouldBeSingleton { snippet ->
                     snippet.license.toString() shouldBe "LicenseRef-scanoss-OnlyScanOssKnows"
                 }
             }
