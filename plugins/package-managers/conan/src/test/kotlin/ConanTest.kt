@@ -42,7 +42,7 @@ class ConanTest : WordSpec({
 
             val conanData = parseConanDataYaml(yaml, "3.6.1")
 
-            conanData.sources.shouldBeSingleton {
+            conanData.sources shouldBeSingleton {
                 it.url shouldBe
                     "https://github.com/openssl/openssl/releases/download/openssl-3.6.1/openssl-3.6.1.tar.gz"
                 it.sha256 shouldBe "b1bfedcd5b289ff22aee87c9d600f515767ebf45f77168cb6d64f231f518a82e"

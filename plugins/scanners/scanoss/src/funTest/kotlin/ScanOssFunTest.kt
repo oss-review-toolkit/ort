@@ -57,7 +57,7 @@ class ScanOssFunTest : StringSpec({
 
         val summary = scanner.scanPath(unoconv, scanContext)
 
-        summary.licenseFindings.shouldBeSingleton {
+        summary.licenseFindings shouldBeSingleton {
             it.license shouldBe "GPL-2.0-only".toSpdx()
             it.score shouldBe 100.0f
         }
@@ -66,7 +66,7 @@ class ScanOssFunTest : StringSpec({
 
         // Copyrights (and vulnerabilities) are commercial features.
         if (CloudCheck.getScanOssApiKey() != null) {
-            summary.copyrightFindings.shouldBeSingleton {
+            summary.copyrightFindings shouldBeSingleton {
                 it.statement shouldBe "Copyright 2007-2010 Dag Wieers <dag@wieers.com>"
             }
         }
@@ -81,8 +81,8 @@ class ScanOssFunTest : StringSpec({
         summary.licenseFindings should beEmpty()
         summary.copyrightFindings should beEmpty()
 
-        summary.snippetFindings.shouldBeSingleton {
-            it.snippets.shouldBeSingleton { snippet ->
+        summary.snippetFindings shouldBeSingleton {
+            it.snippets shouldBeSingleton { snippet ->
                 snippet.score shouldBe 95.0f
                 snippet.location shouldBe TextLocation("unoconv-0.6/unoconv", 19, 186)
                 snippet.provenance shouldBe RepositoryProvenance(

@@ -72,7 +72,7 @@ class OsvFunTest : WordSpec({
             packageFindings.shouldMatchAll(
                 invalidPackage to { result ->
                     result.vulnerabilities should beEmpty()
-                    result.summary.issues.shouldBeSingleton {
+                    result.summary.issues shouldBeSingleton {
                         it.message shouldContain "package 'An:invalid:package:1.2.3' failed"
                         it.message shouldContain "invalid ecosystem"
                     }

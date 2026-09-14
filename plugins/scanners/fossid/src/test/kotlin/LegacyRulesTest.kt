@@ -43,7 +43,7 @@ class LegacyRulesTest : WordSpec({
 
             val (legacyRules, issues) = rulesToTest.filterLegacyRules(referenceRules)
 
-            issues.shouldBeSingleton {
+            issues shouldBeSingleton {
                 it.message shouldBe "Rule '.pdf' with type '${RuleType.EXTENSION}' is not present in the .ort.yml " +
                     "path excludes. Add it to the .ort.yml file or remove it from the FossID scan."
                 it.severity shouldBe Severity.HINT

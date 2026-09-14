@@ -197,7 +197,7 @@ class DependencyTreeParserTest : WordSpec({
                 dummyFeatureFun
             ).toList()
 
-            projectDependencies.shouldBeSingleton {
+            projectDependencies shouldBeSingleton {
                 compareNodes(projectNode, it)
             }
         }
@@ -341,7 +341,7 @@ class DependencyTreeParserTest : WordSpec({
                 dummyFeatureFun
             ).toList()
 
-            projectDependencies.shouldBeSingleton {
+            projectDependencies shouldBeSingleton {
                 compareNodes(projectNode1, it)
             }
         }
@@ -388,7 +388,7 @@ class DependencyTreeParserTest : WordSpec({
                 dummyFeatureFun
             ).toList()
 
-            projectDependencies.shouldBeSingleton { node ->
+            projectDependencies shouldBeSingleton { node ->
                 node.children.map { it.artifact.artifactId } should containExactlyInAnyOrder(
                     "commons-configuration2",
                     "org.objectweb.asm"
@@ -430,7 +430,7 @@ class DependencyTreeParserTest : WordSpec({
                 dummyFeatureFun
             ).toList()
 
-            projectDependencies.shouldBeSingleton { node ->
+            projectDependencies shouldBeSingleton { node ->
                 node.children.map { it.artifact.artifactId } should containExactlyInAnyOrder(
                     "commons-configuration2",
                     "org.objectweb.asm.source"
@@ -481,7 +481,7 @@ class DependencyTreeParserTest : WordSpec({
                 it.groupId == "p2.eclipse.feature"
             }.toList()
 
-            projectDependencies.shouldBeSingleton { node ->
+            projectDependencies shouldBeSingleton { node ->
                 node.children.map { it.artifact.artifactId } should containExactlyInAnyOrder(
                     "commons-configuration2",
                     "org.objectweb.asm"

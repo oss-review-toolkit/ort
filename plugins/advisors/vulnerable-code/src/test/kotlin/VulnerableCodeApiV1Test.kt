@@ -227,7 +227,7 @@ class VulnerableCodeApiV1Test : WordSpec({
 
             val result = vc.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
-            result.getValue(idJUnit).vulnerabilities.normalizeVulnerabilityData().shouldBeSingleton {
+            result.getValue(idJUnit).vulnerabilities.normalizeVulnerabilityData() shouldBeSingleton {
                 it.id shouldBe "CVE-2020-15250"
                 it.firstFixedVersions should containExactlyInAnyOrder("4.13.1", "5.0.2", "6.1.3")
             }
@@ -251,7 +251,7 @@ class VulnerableCodeApiV1Test : WordSpec({
                     with(getValue(pkg)) {
                         advisor shouldBe details
                         vulnerabilities should beEmpty()
-                        summary.issues.shouldBeSingleton { issue ->
+                        summary.issues shouldBeSingleton { issue ->
                             issue.severity shouldBe Severity.ERROR
                             issue.message shouldBe "HttpException: HTTP 500 Server Error"
                         }

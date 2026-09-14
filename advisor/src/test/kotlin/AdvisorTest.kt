@@ -146,7 +146,7 @@ class AdvisorTest : WordSpec({
 
             result.advisor shouldNotBeNull {
                 results should containExactly(pkg.id to listOf(successfulResult))
-                providerIssues.shouldBeSingleton {
+                providerIssues shouldBeSingleton {
                     it.message shouldBe "Failed to create provider 'FailingProvider': IllegalStateException: Could " +
                         "not initialize provider"
                 }
@@ -180,7 +180,7 @@ class AdvisorTest : WordSpec({
 
             result.advisor shouldNotBeNull {
                 results should containExactly(pkg.id to listOf(successfulResult))
-                providerIssues.shouldBeSingleton {
+                providerIssues shouldBeSingleton {
                     it.message shouldBe "Failed to retrieve findings via 'FailingProvider': IllegalStateException: " +
                         "Could not query provider service"
                 }

@@ -166,7 +166,7 @@ class FossIdSnippetMappingTest : WordSpec({
             )
 
             issues should beEmpty()
-            mappedSnippets.shouldBeSingleton { finding ->
+            mappedSnippets shouldBeSingleton { finding ->
                 with(finding.snippets) {
                     this shouldHaveSize 2
                     first().purl shouldBe "pkg:maven/com/vdurmont/semver4j@3.1.0"
@@ -215,8 +215,8 @@ class FossIdSnippetMappingTest : WordSpec({
             )
 
             issues should beEmpty()
-            mappedSnippets.shouldBeSingleton { finding ->
-                finding.snippets.shouldBeSingleton { snippet ->
+            mappedSnippets shouldBeSingleton { finding ->
+                finding.snippets shouldBeSingleton { snippet ->
                     snippet.purl shouldBe "pkg:github/martinpulec/ultragrid@3.1.0"
                 }
             }

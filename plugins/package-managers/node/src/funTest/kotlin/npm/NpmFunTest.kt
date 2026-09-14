@@ -255,7 +255,7 @@ class NpmFunTest : StringSpec({
 
         val result = NpmFactory.create(nodeVersion = invalidVersion).resolveSingleProject(definitionFile)
 
-        result.issues.shouldBeSingleton {
+        result.issues shouldBeSingleton {
             it.source shouldBe "NPM"
             it.severity shouldBe Severity.ERROR
             it.message shouldContain "Invalid Node.js version string:"

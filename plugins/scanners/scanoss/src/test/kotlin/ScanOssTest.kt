@@ -73,7 +73,7 @@ class ScanOssTest : WordSpec({
 
             val rules = scanoss.processSnippetChoices(snippetChoices)
 
-            rules.includeRules.shouldBeSingleton { rule ->
+            rules.includeRules shouldBeSingleton { rule ->
                 rule.purl shouldBe PURL_1
                 rule.path shouldBe FILE_1
             }
@@ -100,7 +100,7 @@ class ScanOssTest : WordSpec({
 
             val rules = scanoss.processSnippetChoices(snippetChoices)
 
-            rules.removeRules.shouldBeSingleton { rule ->
+            rules.removeRules shouldBeSingleton { rule ->
                 rule.path shouldBe FILE_2
                 rule.startLine shouldBe 15
                 rule.endLine shouldBe 30
@@ -134,12 +134,12 @@ class ScanOssTest : WordSpec({
 
             val rules = scanoss.processSnippetChoices(snippetChoices)
 
-            rules.includeRules.shouldBeSingleton { rule ->
+            rules.includeRules shouldBeSingleton { rule ->
                 rule.purl shouldBe PURL_1
                 rule.path shouldBe FILE_1
             }
 
-            rules.removeRules.shouldBeSingleton { rule ->
+            rules.removeRules shouldBeSingleton { rule ->
                 rule.path shouldBe FILE_2
                 rule.startLine shouldBe 15
                 rule.endLine shouldBe 30
@@ -166,7 +166,7 @@ class ScanOssTest : WordSpec({
 
             val rules = scanoss.processSnippetChoices(snippetChoices)
 
-            rules.removeRules.shouldBeSingleton { rule ->
+            rules.removeRules shouldBeSingleton { rule ->
                 rule.path shouldBe FILE_2
                 rule.startLine shouldBe null
                 rule.endLine shouldBe null

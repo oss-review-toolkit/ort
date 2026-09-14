@@ -120,7 +120,7 @@ class CycloneDxPackageManagerTest : StringSpec({
                 labels = emptyMap()
             )
 
-            results.shouldBeSingleton { result ->
+            results shouldBeSingleton { result ->
                 result.project.scopeNames shouldBe setOf("required")
             }
         }
@@ -172,7 +172,7 @@ class CycloneDxPackageManagerTest : StringSpec({
                 labels = emptyMap()
             )
 
-            results.shouldBeSingleton { result ->
+            results shouldBeSingleton { result ->
                 result.project.scopeNames shouldBe setOf("optional")
             }
         }
@@ -224,7 +224,7 @@ class CycloneDxPackageManagerTest : StringSpec({
                 labels = emptyMap()
             )
 
-            results.shouldBeSingleton { result ->
+            results shouldBeSingleton { result ->
                 result.project.scopeNames shouldBe setOf("excluded")
             }
         }
@@ -291,7 +291,7 @@ class CycloneDxPackageManagerTest : StringSpec({
                 labels = emptyMap()
             )
 
-            results.shouldBeSingleton { result ->
+            results shouldBeSingleton { result ->
                 result.project.scopeNames shouldBe setOf("excluded", "optional", "required")
             }
         }
@@ -414,7 +414,7 @@ class CycloneDxPackageManagerTest : StringSpec({
                 labels = emptyMap()
             )
 
-            results.shouldBeSingleton { result ->
+            results shouldBeSingleton { result ->
                 result.project.scopeNames shouldBe setOf("required")
             }
         }
@@ -482,7 +482,7 @@ class CycloneDxPackageManagerTest : StringSpec({
                 labels = emptyMap()
             )
 
-            results.shouldBeSingleton { result ->
+            results shouldBeSingleton { result ->
                 result.project.scopeNames shouldBe setOf("required")
             }
         }
@@ -554,7 +554,7 @@ class CycloneDxPackageManagerTest : StringSpec({
                 labels = emptyMap()
             )
 
-            results.shouldBeSingleton { result ->
+            results shouldBeSingleton { result ->
                 result.project.scopeNames shouldBe setOf("optional")
             }
         }

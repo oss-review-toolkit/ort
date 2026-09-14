@@ -67,7 +67,7 @@ class MailNotifierTest : WordSpec({
             )
 
             greenMail.waitForIncomingEmail(1000, 1) shouldBe true
-            greenMail.receivedMessages.shouldBeSingleton {
+            greenMail.receivedMessages shouldBeSingleton {
                 val headerLines = GreenMailUtil.getHeaders(it).lines()
                 headerLines shouldContain "From: no-reply@oss-review-toolkit.org"
                 headerLines shouldContain "To: no-reply@oss-review-toolkit.org"

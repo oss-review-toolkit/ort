@@ -144,7 +144,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings.shouldBeSingleton {
+            summary.snippetFindings shouldBeSingleton {
                 it.sourceLocation.path shouldBe FILE_1
                 it.snippets.shouldBeSingle().purl shouldBe PURL_2
             }
@@ -187,7 +187,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings.shouldBeSingleton {
+            summary.snippetFindings shouldBeSingleton {
                 it.sourceLocation.path shouldBe FILE_1
                 it.snippets.shouldBeSingle().purl shouldBe PURL_3
             }
@@ -230,7 +230,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings.shouldBeSingleton {
+            summary.snippetFindings shouldBeSingleton {
                 it.sourceLocation.path shouldBe FILE_1
                 it.snippets.shouldBeSingle().purl shouldBe PURL_3
             }
@@ -461,7 +461,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings.shouldBeSingleton {
+            summary.snippetFindings shouldBeSingleton {
                 it.sourceLocation.path shouldBe FILE_1
                 it.snippets.shouldBeSingle().purl shouldBe PURL_2
             }
@@ -561,7 +561,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.licenseFindings.shouldBeSingleton {
+            summary.licenseFindings shouldBeSingleton {
                 it.license shouldBe "MIT".toSpdx()
                 it.location shouldBe choiceLocation
             }
@@ -642,7 +642,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.licenseFindings.shouldBeSingleton {
+            summary.licenseFindings shouldBeSingleton {
                 it.license shouldBe "MIT".toSpdx()
                 it.location shouldBe choiceLocation
             }
@@ -684,7 +684,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.licenseFindings.shouldBeSingleton {
+            summary.licenseFindings shouldBeSingleton {
                 it.license shouldBe "MIT".toSpdx()
                 it.location shouldBe choiceLocation
             }
@@ -717,7 +717,7 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = emptyList()).summary
 
-            summary.licenseFindings.shouldBeSingleton {
+            summary.licenseFindings shouldBeSingleton {
                 it.license shouldBe "MIT".toSpdx()
                 it.location shouldBe TextLocation(FILE_1, -1, -1)
             }

@@ -45,7 +45,7 @@ class PdfTemplateReporterFunTest : StringSpec({
             tempdir()
         )
 
-        reportFileResults.shouldBeSingleton {
+        reportFileResults shouldBeSingleton {
             it shouldBeSuccess { reportFile ->
                 reportFile.reader().use { stream ->
                     val header = CharArray(4)

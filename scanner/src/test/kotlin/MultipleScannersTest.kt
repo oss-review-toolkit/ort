@@ -50,13 +50,13 @@ class MultipleScannersTest : WordSpec({
 
         "return scan results with non-overlapping scanners" {
             ortResult.scanner shouldNotBeNull {
-                getScanResults(PROJECT_ID).shouldBeSingleton {
+                getScanResults(PROJECT_ID) shouldBeSingleton {
                     withClue(it.summary.issues) {
                         it.scanner.name shouldBe "Dummy2"
                     }
                 }
 
-                getScanResults(PACKAGE_ID).shouldBeSingleton {
+                getScanResults(PACKAGE_ID) shouldBeSingleton {
                     withClue(it.summary.issues) {
                         it.scanner.name shouldBe "Dummy1"
                     }

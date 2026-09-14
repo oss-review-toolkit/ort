@@ -92,7 +92,7 @@ class GitPackageConfigurationProviderFunTest : WordSpec({
                 )
             )
 
-            result.shouldBeSingleton {
+            result shouldBeSingleton {
                 it.id shouldBe Identifier("Maven:org.apache.commons:commons-compress:1.26.2")
                 it.pathExcludes should containExactly(
                     PathExclude(
@@ -114,7 +114,7 @@ class GitPackageConfigurationProviderFunTest : WordSpec({
                 )
             )
 
-            result.shouldBeSingleton {
+            result shouldBeSingleton {
                 it.id shouldBe Identifier("PyPI::flask:1.1.2")
                 it.pathExcludes should containExactly(
                     PathExclude(

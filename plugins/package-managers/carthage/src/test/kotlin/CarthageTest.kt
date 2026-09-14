@@ -44,7 +44,7 @@ class CarthageTest : WordSpec({
 
             val result = carthage.resolveSingleProject(cartfile)
 
-            result.packages.shouldBeSingleton {
+            result.packages shouldBeSingleton {
                 it.id.type shouldBe PACKAGE_TYPE
                 it.vcs.url shouldBe "https://github.com/Alamofire/AlamofireImage.git"
                 it.vcs.revision shouldBe "3.2.0"
@@ -56,7 +56,7 @@ class CarthageTest : WordSpec({
 
             val result = carthage.resolveSingleProject(cartfile)
 
-            result.packages.shouldBeSingleton {
+            result.packages shouldBeSingleton {
                 it.id.type shouldBe PACKAGE_TYPE
                 it.vcs.type shouldBe VcsType.GIT
                 it.vcs.url shouldBe "https://host.tld/path/to/project.git"
@@ -73,7 +73,7 @@ class CarthageTest : WordSpec({
 
                 val result = carthage.resolveSingleProject(cartfile)
 
-                result.packages.shouldBeSingleton {
+                result.packages shouldBeSingleton {
                     it.id.type shouldBe PACKAGE_TYPE
                     it.id.name shouldBe "spec"
                     it.binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
@@ -109,7 +109,7 @@ class CarthageTest : WordSpec({
             val result = carthage.resolveSingleProject(cartfile)
 
             result.packages should beEmpty()
-            result.issues.shouldBeSingleton {
+            result.issues shouldBeSingleton {
                 it.message shouldContain "IllegalArgumentException"
             }
         }

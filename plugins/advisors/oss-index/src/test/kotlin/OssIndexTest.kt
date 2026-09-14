@@ -85,7 +85,7 @@ class OssIndexTest : WordSpec({
             result.keys should containExactly(PKG_JUNIT.id)
             result[PKG_JUNIT.id] shouldNotBeNull {
                 advisor shouldBe ossIndex.details
-                vulnerabilities.shouldBeSingleton {
+                vulnerabilities shouldBeSingleton {
                     it.id shouldBe "CVE-2020-15250"
                     it.summary shouldBe "Information Exposure"
                     it.description shouldStartWith "In JUnit4 from version 4.7 and before 4.13.1, the test rule "

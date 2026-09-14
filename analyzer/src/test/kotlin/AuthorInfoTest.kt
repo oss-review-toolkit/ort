@@ -27,37 +27,39 @@ import io.kotest.matchers.should
 class AuthorInfoTest : WordSpec({
     "parseAuthorString()" should {
         "return the name, email, and URL" {
-            parseAuthorString("Brandon Alexander <baalexander@gmail.com> (https://github.com/baalexander)")
-                .shouldBeSingleton {
-                    AuthorInfo("Brandon Alexander", "baalexander@gmail.com", "https://github.com/baalexander")
-                }
+            parseAuthorString(
+                "Brandon Alexander <baalexander@gmail.com> (https://github.com/baalexander)"
+            ) shouldBeSingleton {
+                AuthorInfo("Brandon Alexander", "baalexander@gmail.com", "https://github.com/baalexander")
+            }
         }
 
         "work if any property is not present" {
-            parseAuthorString("Brandon Alexander <baalexander@gmail.com>").shouldBeSingleton {
+            parseAuthorString("Brandon Alexander <baalexander@gmail.com>") shouldBeSingleton {
                 AuthorInfo("Brandon Alexander", "baalexander@gmail.com", null)
             }
 
-            parseAuthorString("Brandon Alexander").shouldBeSingleton {
+            parseAuthorString("Brandon Alexander") shouldBeSingleton {
                 AuthorInfo("Brandon Alexander", null, null)
             }
 
-            parseAuthorString("").shouldBeSingleton {
+            parseAuthorString("") shouldBeSingleton {
                 AuthorInfo(null, null, null)
             }
         }
 
         "work for mixed strings" {
-            parseAuthorString("Nuxi (https://nuxi.nl/) and contributors").shouldBeSingleton {
+            parseAuthorString("Nuxi (https://nuxi.nl/) and contributors") shouldBeSingleton {
                 AuthorInfo("Nuxi and contributors", null, "https://nuxi.nl/")
             }
         }
 
         "return the full string as the name if no email or homepage is matched" {
-            parseAuthorString("Brandon Alexander baalexander@gmail.com https://github.com/baalexander")
-                .shouldBeSingleton {
-                    AuthorInfo("Brandon Alexander baalexander@gmail.com https://github.com/baalexander", null, null)
-                }
+            parseAuthorString(
+                "Brandon Alexander baalexander@gmail.com https://github.com/baalexander"
+            ) shouldBeSingleton {
+                AuthorInfo("Brandon Alexander baalexander@gmail.com https://github.com/baalexander", null, null)
+            }
         }
 
         "handle multiple authors per string" {
