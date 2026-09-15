@@ -27,6 +27,7 @@ dependencies {
     api(projects.reporter)
 
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
     implementation(libs.freemarker)
 
@@ -34,7 +35,6 @@ dependencies {
     funTestImplementation(projects.plugins.licenseFactProviders.spdxLicenseFactProvider)
     funTestImplementation(projects.utils.testUtils)
 
-    testImplementation(projects.utils.ortUtils)
     testImplementation(projects.utils.testUtils)
     testImplementation(libs.mockk)
 
