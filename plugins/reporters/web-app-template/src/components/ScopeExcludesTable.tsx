@@ -52,9 +52,9 @@ function ScopeExcludesTable({ scopeExcludes }: ScopeExcludesTableProps): JSX.Ele
                 enableColumnFilter: true,
             },
             {
-                id: "name",
-                accessorFn: (row) => row.name ?? "",
-                header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+                id: "pattern",
+                accessorFn: (row) => row.pattern ?? "",
+                header: ({ column }) => <DataTableColumnHeader column={column} title="Pattern" />,
             },
             {
                 id: "comment",

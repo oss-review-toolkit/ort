@@ -123,7 +123,7 @@ export interface EvaluatedModelPathInclude {
 export interface EvaluatedModelScopeExclude {
     readonly _id?: number;
     readonly comment?: string;
-    readonly name?: string;
+    readonly pattern?: string;
     readonly reason?: string;
 }
 

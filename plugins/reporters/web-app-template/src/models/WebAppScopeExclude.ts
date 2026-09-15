@@ -25,7 +25,7 @@ class WebAppScopeExclude {
 
     #comment: string | undefined;
 
-    #name: string | undefined;
+    #pattern: string | undefined;
 
     #reason: string | undefined;
 
@@ -41,8 +41,8 @@ class WebAppScopeExclude {
                 this.#comment = obj.comment;
             }
 
-            if (obj.name) {
-                this.#name = obj.name;
+            if (obj.pattern) {
+                this.#pattern = obj.pattern;
             }
 
             if (obj.reason) {
@@ -61,8 +61,8 @@ class WebAppScopeExclude {
         return this.#comment;
     }
 
-    get name(): string | undefined {
-        return this.#name;
+    get pattern(): string | undefined {
+        return this.#pattern;
     }
 
     get reason(): string | undefined {
