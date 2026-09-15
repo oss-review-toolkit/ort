@@ -114,6 +114,15 @@ ort:
     skipExcluded: true
 
     packageManagers:
+      Conan:
+        options:
+          # Holds a name of the lockfile. Required if allowDynamicVersions = false.
+          # The lockfile should be located in the same directory as the conanfile.py or conanfile.txt.
+          lockfileName: "lockfile.lock"
+
+          # If true, the Conan package manager with call a command called "conan2" instead of "conan".
+          useConan2: true
+
       Gradle:
         # A list of package manager names that this package manager must run after. For example, this can be used if
         # another package manager generates files that this package manager requires to run correctly.
@@ -130,15 +139,6 @@ ort:
           # If set to true, disable verification of HTTPS certificate of remote registries. Useful when using a proxy to
           # intercept requests to the registry.
           disableRegistryCertificateVerification: false
-
-      Conan:
-        options:
-          # Holds a name of the lockfile. Required if allowDynamicVersions = false.
-          # The lockfile should be located in the same directory as the conanfile.py or conanfile.txt.
-          lockfileName: "lockfile.lock"
-
-          # If true, the Conan package manager with call a command called "conan2" instead of "conan".
-          useConan2: true
 
   advisor:
     # A flag to control whether excluded scopes and paths should be skipped when giving the advice.
