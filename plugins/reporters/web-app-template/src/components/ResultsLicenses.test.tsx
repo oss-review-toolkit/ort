@@ -65,6 +65,23 @@ describe("ResultsLicenses", () => {
         expect(guide.className).not.toContain("text-primary");
     });
 
+    it("surfaces the declared licenses ORT could not map, under the declared tab", async () => {
+        const user = userEvent.setup();
+        render(<ResultsLicenses webAppEvaluatedModel={result} />);
+
+        await user.click(screen.getByRole("tab", { name: /declared/i }));
+
+        // The sample declares "BSD License", which is too ambiguous to map to an SPDX identifier and so
+        // is counted in none of the three tabs.
+        expect(screen.getByText("Not mapped to an SPDX identifier")).toBeInTheDocument();
+        expect(screen.getByRole("columnheader", { name: /unmapped licenses/i })).toBeInTheDocument();
+
+        // The section says what to do about it, not just that it happened.
+        expect(screen.getByText(/declared license mapping curation/i)).toBeInTheDocument();
+        const curations = screen.getAllByRole("link", { name: /learn more/i }).at(-1);
+        expect(curations).toHaveAttribute("href", expect.stringContaining("configuration/package-curations"));
+    });
+
     it("reports the clicked license and its type through onLicenseClick", async () => {
         const onLicenseClick = vi.fn();
         const user = userEvent.setup();

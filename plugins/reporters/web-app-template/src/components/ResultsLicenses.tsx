@@ -23,6 +23,7 @@ import { useMemo } from "react";
 import { LicenseChart, type LicenseChartDatum } from "@/components/LicenseChart";
 import { LicenseStatsTable } from "@/components/LicenseStatsTable";
 import { LICENSE_TERM_DEFINITIONS, Url } from "@/components/Shared";
+import { buildUnmappedLicenseRows, UnmappedLicensesTable } from "@/components/UnmappedLicensesTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { licenseToHslColor } from "@/utils";
@@ -30,6 +31,13 @@ import { licenseToHslColor } from "@/utils";
 // ORT distinguishes five license types; this view covers three of them, so the guide is linked for the
 // concluded and main licenses it does not show.
 const LICENSE_HANDLING_GUIDE = "https://oss-review-toolkit.org/ort/docs/guides/license-handling";
+
+// Where a declared license ORT could not map gets mapped, via a `declared_license_mapping`.
+const PACKAGE_CURATIONS_GUIDE = "https://oss-review-toolkit.org/ort/docs/configuration/package-curations";
+
+// A link inside a muted sentence takes its colour rather than the primary accent, which would pull the
+// eye to the link ahead of the sentence explaining it.
+const MUTED_LINK = "text-muted-foreground underline hover:text-foreground";
 
 // The definition of the license type on show. It sits in the panel rather than behind a hover, because
 // telling these three apart is what this view is for - a definition nobody can find does not do that.
@@ -39,7 +47,7 @@ function LicenseTypeDescription({ definition }: { definition: string }): JSX.Ele
     return (
         <p className="mb-4 max-w-prose text-muted-foreground text-sm">
             {definition}{" "}
-            <Url className="text-muted-foreground underline hover:text-foreground" href={LICENSE_HANDLING_GUIDE}>
+            <Url className={MUTED_LINK} href={LICENSE_HANDLING_GUIDE}>
                 Learn more
             </Url>
         </p>
@@ -48,6 +56,8 @@ function LicenseTypeDescription({ definition }: { definition: string }): JSX.Ele
 
 export interface ResultsLicensesProps {
     className?: string;
+    // Jumps to a package in the results table and opens its row, for the unmapped licenses listing.
+    onSelectPackage?: (packageId: string) => void;
     onLicenseClick?: (license: string, type: "effective" | "declared" | "detected") => void;
     webAppEvaluatedModel: WebAppEvaluatedModel;
 }
@@ -70,7 +80,12 @@ function buildLicenseStats(
 }
 
 // The Licenses view: a license distribution chart alongside the per-license statistics table.
-function ResultsLicenses({ className, onLicenseClick, webAppEvaluatedModel }: ResultsLicensesProps): JSX.Element {
+function ResultsLicenses({
+    className,
+    onLicenseClick,
+    onSelectPackage,
+    webAppEvaluatedModel,
+}: ResultsLicensesProps): JSX.Element {
     const { declaredLicensesProcessed, detectedLicensesProcessed, effectiveLicenses, statistics } =
         webAppEvaluatedModel;
 
@@ -85,6 +100,12 @@ function ResultsLicenses({ className, onLicenseClick, webAppEvaluatedModel }: Re
     const effectiveLicenseStats = useMemo(
         () => buildLicenseStats(statistics.licenses.effective, webAppEvaluatedModel),
         [statistics, webAppEvaluatedModel],
+    );
+
+    const unmappedRows = useMemo(() => buildUnmappedLicenseRows(webAppEvaluatedModel.packages), [webAppEvaluatedModel]);
+    const unmappedLicenseCount = useMemo(
+        () => new Set(unmappedRows.flatMap((row) => row.licenses)).size,
+        [unmappedRows],
     );
 
     const hasEffective = webAppEvaluatedModel.hasEffectiveLicenses();
@@ -134,6 +155,26 @@ function ResultsLicenses({ className, onLicenseClick, webAppEvaluatedModel }: Re
                         />
                         <LicenseChart height={400} licenses={declaredLicenseStats} />
                     </div>
+                    {unmappedRows.length > 0 ? (
+                        <section className="mt-6">
+                            <h3 className="font-semibold text-sm">Not mapped to an SPDX identifier</h3>
+                            <p className="mt-1 mb-3 max-w-prose text-muted-foreground text-sm">
+                                {unmappedLicenseCount === 1 ? "One license" : `${unmappedLicenseCount} licenses`}{" "}
+                                declared by{" "}
+                                {unmappedRows.length === 1 ? "one package" : `${unmappedRows.length} packages`} could
+                                not be mapped, so {unmappedLicenseCount === 1 ? "it is" : "they are"} counted nowhere
+                                above. Use a declared license mapping curation to map{" "}
+                                {unmappedLicenseCount === 1 ? "it" : "them"}.{" "}
+                                <Url className={MUTED_LINK} href={PACKAGE_CURATIONS_GUIDE}>
+                                    Learn more
+                                </Url>
+                            </p>
+                            <UnmappedLicensesTable
+                                packages={webAppEvaluatedModel.packages}
+                                {...(onSelectPackage ? { onSelectPackage } : {})}
+                            />
+                        </section>
+                    ) : null}
                 </TabsContent>
             ) : null}
             {hasDetected ? (
