@@ -120,6 +120,15 @@ describe("ResultsSummary", () => {
             }
         });
 
+        it("counts dependencies as the packages less the projects", () => {
+            render(<ResultsSummary webAppEvaluatedModel={model} />);
+
+            const dependencies = model.packages.filter((pkg) => !pkg.isProject).length;
+            const row = screen.getByRole("button", { name: /^Dependen/ });
+            expect(row.textContent).toContain(String(dependencies));
+            expect(dependencies).toBe(model.packages.length - model.projects.length);
+        });
+
         it("renders the repository and composition sidebar sections", () => {
             render(<ResultsSummary webAppEvaluatedModel={model} />);
             expect(screen.getByRole("heading", { name: "Repository" })).toBeInTheDocument();
@@ -162,8 +171,9 @@ describe("ResultsSummary", () => {
             // The button's accessible name glues the label to its value (e.g. "Projects4"), so match on the
             // label prefix only.
             ["Projects", /^Projects?/, ["project"]],
-            ["Packages", /^Packages?/, null],
+            ["Dependencies", /^Dependenc/, ["direct", "transitive"]],
             ["Direct / transitive dependencies", /^Direct/, ["direct", "transitive"]],
+            ["Scopes", /^Scopes?/, null],
         ])("filters the table on %s when its composition stat is clicked", async (_label, name, expected) => {
             const onFilterByLevel = vi.fn();
             const user = userEvent.setup();
