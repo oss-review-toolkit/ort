@@ -20,7 +20,9 @@
 import type { JSX, ReactNode } from "react";
 
 import { Paginated } from "@/components/Paginated";
-import { convertIso8601Date2Sentence, Url } from "@/components/Shared";
+import { useDateFormat } from "@/components/SettingsProvider";
+import { Url } from "@/components/Shared";
+import { convertIso8601Date2Sentence, type DateFormat } from "@/lib/dates";
 import type WebAppPackage from "@/models/WebAppPackage";
 import type WebAppScanResult from "@/models/WebAppScanResult";
 
@@ -33,7 +35,7 @@ interface DetailRow {
     label: string;
 }
 
-function buildRows(scanResult: WebAppScanResult): DetailRow[] {
+function buildRows(scanResult: WebAppScanResult, dateFormat: DateFormat): DetailRow[] {
     const rows: DetailRow[] = [];
     const provenance = scanResult.provenance;
     const sourceArtifact = provenance?.sourceArtifact;
@@ -77,10 +79,13 @@ function buildRows(scanResult: WebAppScanResult): DetailRow[] {
         });
     }
     if (scanResult.startTime) {
-        rows.push({ label: "Scanner Start Time", content: convertIso8601Date2Sentence(scanResult.startTime) });
+        rows.push({
+            label: "Scanner Start Time",
+            content: convertIso8601Date2Sentence(scanResult.startTime, dateFormat),
+        });
     }
     if (scanResult.endTime) {
-        rows.push({ label: "Scanner End Time", content: convertIso8601Date2Sentence(scanResult.endTime) });
+        rows.push({ label: "Scanner End Time", content: convertIso8601Date2Sentence(scanResult.endTime, dateFormat) });
     }
 
     return rows;
@@ -88,6 +93,7 @@ function buildRows(scanResult: WebAppScanResult): DetailRow[] {
 
 // Details of a package's raw scan results (scanner name/version and scanned provenance).
 function PackageScanResultsDetails({ pkg }: PackageScanResultsDetailsProps): JSX.Element {
+    const dateFormat = useDateFormat();
     const scanResults = (pkg.scanResults ?? []).filter(
         (scanResult): scanResult is WebAppScanResult => scanResult !== null,
     );
@@ -104,7 +110,7 @@ function PackageScanResultsDetails({ pkg }: PackageScanResultsDetailsProps): JSX
             items={scanResults}
             pageSize={2}
             renderItem={(scanResult) => {
-                const rows = buildRows(scanResult);
+                const rows = buildRows(scanResult, dateFormat);
                 return (
                     <dl className="space-y-2.5 rounded-md border p-4 text-sm">
                         {rows.map((row) => (

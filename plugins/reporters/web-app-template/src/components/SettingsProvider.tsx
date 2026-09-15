@@ -19,6 +19,7 @@
 
 import { createContext, type JSX, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
+import { BROWSER_DATE_FORMAT, type DateFormat, REPORT_DATE_FORMAT } from "@/lib/dates";
 import { loadSettings, type Settings, saveSettings } from "@/lib/settings";
 
 interface SettingsContextValue {
@@ -48,6 +49,16 @@ function SettingsProvider({ children }: { children: ReactNode }): JSX.Element {
     return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 }
 
+/**
+ * The locale and timezone timestamps should render in. Pass the result to the date helpers in lib/dates
+ * rather than formatting directly, so every date in the report honours the reader's preference.
+ */
+function useDateFormat(): DateFormat {
+    const { settings } = useSettings();
+
+    return settings.useBrowserDateFormat ? BROWSER_DATE_FORMAT : REPORT_DATE_FORMAT;
+}
+
 function useSettings(): SettingsContextValue {
     const context = useContext(SettingsContext);
     if (!context) {
@@ -56,4 +67,4 @@ function useSettings(): SettingsContextValue {
     return context;
 }
 
-export { SettingsProvider, useSettings };
+export { SettingsProvider, useDateFormat, useSettings };

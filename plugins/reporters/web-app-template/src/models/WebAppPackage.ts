@@ -155,6 +155,8 @@ class WebAppPackage {
 
     #projectIndexes: Set<number> | undefined;
 
+    #publishedAt: string | undefined;
+
     #purl: string | undefined;
 
     #scanResultsIndexes: ReadonlyArray<number> | undefined;
@@ -317,6 +319,10 @@ class WebAppPackage {
 
             if (obj.paths) {
                 this.#pathIndexes = obj.paths;
+            }
+
+            if (obj.published_at || obj.publishedAt) {
+                this.#publishedAt = obj.published_at || obj.publishedAt;
             }
 
             if (obj.purl) {
@@ -715,6 +721,10 @@ class WebAppPackage {
         }
 
         return this.#projectIndexes;
+    }
+
+    get publishedAt(): string | undefined {
+        return this.#publishedAt;
     }
 
     get purl(): string | undefined {

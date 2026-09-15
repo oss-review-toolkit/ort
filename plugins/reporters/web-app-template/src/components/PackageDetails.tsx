@@ -19,8 +19,10 @@
 
 import type { JSX, ReactNode } from "react";
 
+import { useDateFormat } from "@/components/SettingsProvider";
 import { Url } from "@/components/Shared";
 import { Separator } from "@/components/ui/Separator";
+import { convertIso8601Date2Sentence, type DateFormat } from "@/lib/dates";
 import type WebAppPackage from "@/models/WebAppPackage";
 
 export interface PackageDetailsProps {
@@ -32,7 +34,7 @@ interface Section {
     title?: string;
 }
 
-function buildSections(pkg: WebAppPackage): Section[] {
+function buildSections(pkg: WebAppPackage, dateFormat: DateFormat): Section[] {
     const sections: Section[] = [];
 
     const identity: Section["rows"] = [];
@@ -56,6 +58,9 @@ function buildSections(pkg: WebAppPackage): Section[] {
     }
     if (pkg.homepageUrl) {
         identity.push({ label: "Homepage", content: <Url href={pkg.homepageUrl} truncate /> });
+    }
+    if (pkg.publishedAt) {
+        identity.push({ label: "Published", content: convertIso8601Date2Sentence(pkg.publishedAt, dateFormat) });
     }
     if (identity.length > 0) sections.push({ rows: identity });
 
@@ -113,7 +118,8 @@ function buildSections(pkg: WebAppPackage): Section[] {
 
 // A definition list of a package's core metadata (id, type, VCS, source, homepage, description).
 function PackageDetails({ pkg }: PackageDetailsProps): JSX.Element {
-    const sections = buildSections(pkg);
+    const dateFormat = useDateFormat();
+    const sections = buildSections(pkg, dateFormat);
 
     if (sections.length === 0) {
         return <p className="text-muted-foreground text-sm">No package details.</p>;

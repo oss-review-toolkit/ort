@@ -42,6 +42,8 @@ class PackageCurationData {
 
     #labels = new Map<string, string>();
 
+    #publishedAt: string | undefined;
+
     #purl: string | undefined;
 
     #sourceArtifact: RemoteArtifact | undefined;
@@ -93,6 +95,10 @@ class PackageCurationData {
 
             if (obj.is_modified || obj.isModified) {
                 this.#isModified = obj.is_modified || obj.isModified;
+            }
+
+            if (obj.published_at || obj.publishedAt) {
+                this.#publishedAt = obj.published_at || obj.publishedAt;
             }
 
             if (obj.purl) {
@@ -152,6 +158,10 @@ class PackageCurationData {
 
     get labels(): ReadonlyMap<string, string> {
         return this.#labels;
+    }
+
+    get publishedAt(): string | undefined {
+        return this.#publishedAt;
     }
 
     get purl(): string | undefined {

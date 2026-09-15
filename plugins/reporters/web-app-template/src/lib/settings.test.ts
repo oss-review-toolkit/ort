@@ -28,8 +28,12 @@ describe("settings", () => {
         window.localStorage.clear();
     });
 
-    it("defaults to no column override and deep linking on", () => {
-        expect(DEFAULT_SETTINGS).toEqual({ defaultVisibleColumns: null, deepLinking: true });
+    it("defaults to no column override, deep linking on and the report's own date format", () => {
+        expect(DEFAULT_SETTINGS).toEqual({
+            defaultVisibleColumns: null,
+            deepLinking: true,
+            useBrowserDateFormat: false,
+        });
     });
 
     it("returns the defaults when nothing is stored", () => {
@@ -37,15 +41,19 @@ describe("settings", () => {
     });
 
     it("round-trips saved settings", () => {
-        const settings: Settings = { defaultVisibleColumns: ["package", "scopes"], deepLinking: false };
+        const settings: Settings = {
+            defaultVisibleColumns: ["package", "scopes"],
+            deepLinking: false,
+            useBrowserDateFormat: true,
+        };
         saveSettings(settings);
         expect(loadSettings()).toEqual(settings);
     });
 
     it("persists as JSON under the expected storage key", () => {
-        saveSettings({ defaultVisibleColumns: null, deepLinking: false });
+        saveSettings({ defaultVisibleColumns: null, deepLinking: false, useBrowserDateFormat: false });
         expect(window.localStorage.getItem(STORAGE_KEY)).toBe(
-            JSON.stringify({ defaultVisibleColumns: null, deepLinking: false }),
+            JSON.stringify({ defaultVisibleColumns: null, deepLinking: false, useBrowserDateFormat: false }),
         );
     });
 
@@ -56,7 +64,11 @@ describe("settings", () => {
 
     it("fills in missing fields from the defaults", () => {
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ deepLinking: false }));
-        expect(loadSettings()).toEqual({ defaultVisibleColumns: null, deepLinking: false });
+        expect(loadSettings()).toEqual({
+            defaultVisibleColumns: null,
+            deepLinking: false,
+            useBrowserDateFormat: false,
+        });
     });
 
     it("ignores a defaultVisibleColumns value that is not a string array", () => {
@@ -68,8 +80,18 @@ describe("settings", () => {
     });
 
     it("preserves an explicit empty column list", () => {
-        saveSettings({ defaultVisibleColumns: [], deepLinking: true });
+        saveSettings({ defaultVisibleColumns: [], deepLinking: true, useBrowserDateFormat: false });
         expect(loadSettings().defaultVisibleColumns).toEqual([]);
+    });
+
+    it("ignores a non-boolean useBrowserDateFormat value", () => {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ useBrowserDateFormat: "yes" }));
+        expect(loadSettings().useBrowserDateFormat).toBe(DEFAULT_SETTINGS.useBrowserDateFormat);
+    });
+
+    it("keeps useBrowserDateFormat:true", () => {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ useBrowserDateFormat: true }));
+        expect(loadSettings().useBrowserDateFormat).toBe(true);
     });
 
     it("ignores a non-boolean deepLinking value", () => {

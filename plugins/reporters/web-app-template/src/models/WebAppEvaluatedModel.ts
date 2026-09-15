@@ -1026,6 +1026,10 @@ class WebAppEvaluatedModel {
         return this.#pathExcludes.length > 0;
     }
 
+    hasPublishedDates(): boolean {
+        return this.#packages.some((webAppPackage) => webAppPackage.publishedAt !== undefined);
+    }
+
     hasRepositoryConfiguration(): boolean {
         if (this.#repositoryConfiguration && this.#repositoryConfiguration.replace(/(\r\n|\n|\r)/gm, "") !== "--- {}") {
             return true;

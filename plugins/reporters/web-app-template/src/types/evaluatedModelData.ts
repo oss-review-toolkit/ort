@@ -225,6 +225,8 @@ export interface EvaluatedModelPackageCurationData {
     readonly isMetadataOnly?: boolean;
     readonly isModified?: boolean;
     readonly labels?: Record<string, string>;
+    readonly published_at?: string;
+    readonly publishedAt?: string;
     readonly purl?: string;
     readonly source_artifact?: EvaluatedModelRemoteArtifact;
     readonly source_code_origins?: ReadonlyArray<"ARTIFACT" | "VCS">;
@@ -433,6 +435,8 @@ export interface EvaluatedModelPackage {
     readonly path_excludes?: number[];
     readonly pathExcludes?: number[];
     readonly paths?: number[];
+    readonly published_at?: string;
+    readonly publishedAt?: string;
     readonly purl?: string;
     readonly scan_results?: number[];
     readonly scanResults?: number[];

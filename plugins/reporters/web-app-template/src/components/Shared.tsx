@@ -51,29 +51,6 @@ SyntaxHighlighter.registerLanguage("yaml", yaml);
 // The definitions below are ordered alphabetically by their exported name. Each component keeps its
 // props interface and any private helpers (regexes, sub-components, constants it consumes) next to it.
 
-const ISO_TRIM_REGEX = /(\.\d{3})\d*Z$/;
-
-function convertIso8601Date2Sentence(iso8601Date: string | undefined | null): string {
-    if (!iso8601Date) return "—";
-    const date = new Date(iso8601Date.replace(ISO_TRIM_REGEX, "$1Z"));
-    if (Number.isNaN(date.getTime())) return "—";
-
-    const timeFormatter = new Intl.DateTimeFormat(undefined, {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-        timeZoneName: "short",
-    });
-
-    const dateFormatter = new Intl.DateTimeFormat(undefined, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-
-    return `${timeFormatter.format(date)} on ${dateFormatter.format(date)}`;
-}
-
 export interface CopyToClipboardProps {
     className?: string;
     label?: string;
@@ -533,7 +510,6 @@ function Url({ children, className, href, showIcon = true, truncate = false }: U
 
 export {
     CopyToClipboard,
-    convertIso8601Date2Sentence,
     DefinedTerm,
     ExcludeStatusIcon,
     ExpandRowIcon,
