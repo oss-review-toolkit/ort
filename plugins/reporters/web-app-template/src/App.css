@@ -87,12 +87,11 @@
 
 .ort-app {
     background-color: #fff;
-    border: 1px solid rgba(34,36,38,.15);
-    border-radius: .28rem;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    border-radius: 0.28rem;
     padding: 0em 0.5em 0.5em 0.5em;
     margin: 0.5em;
 }
-
 
 /* === OSS Review Toolkit logo === */
 
