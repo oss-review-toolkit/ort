@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-
 import { ToolsMetadataCards } from "@/components/ToolsMetadataCards";
 import ToolsMetadata from "@/models/ToolsMetadata";
+import { render } from "@/test/render";
 
 describe("ToolsMetadataCards", () => {
     it("renders a card for each tool that has a run", () => {

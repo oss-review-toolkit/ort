@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
-
 import { PackageScanResultsDetails } from "@/components/PackageScanResultsDetails";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import WebAppPackage from "@/models/WebAppPackage";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
+import { render } from "@/test/render";
 
 describe("PackageScanResultsDetails", () => {
     let result: WebAppEvaluatedModel;

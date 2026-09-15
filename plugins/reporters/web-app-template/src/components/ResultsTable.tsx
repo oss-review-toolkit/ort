@@ -42,7 +42,7 @@ import { PackagePaths } from "@/components/PackagePaths";
 import { PackageScannerFindingsTable } from "@/components/PackageScannerFindingsTable";
 import { PackageScanResultsDetails } from "@/components/PackageScanResultsDetails";
 import { RuleViolationsTable } from "@/components/RuleViolationsTable";
-import { useSettings } from "@/components/SettingsProvider";
+import { useDateFormat, useSettings } from "@/components/SettingsProvider";
 import {
     ExcludeStatusIcon,
     IconHeader,
@@ -66,6 +66,7 @@ import {
 } from "@/components/ui/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { VulnerabilitiesTable } from "@/components/VulnerabilitiesTable";
+import { convertIso8601Date2LongDate, convertIso8601Date2Sentence, type DateFormat } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import type WebAppPackage from "@/models/WebAppPackage";
@@ -79,7 +80,7 @@ export interface ResultsTableColumn {
     id: string;
     label: string;
     // Columns that only exist when the report carries the corresponding data.
-    presence?: "excludes" | "curations" | "configurations";
+    presence?: "excludes" | "curations" | "configurations" | "published";
 }
 
 /** All toggleable result-table columns, in display order. Shared with the Settings page. */
@@ -96,6 +97,7 @@ export const RESULTS_TABLE_COLUMNS: readonly ResultsTableColumn[] = [
     { id: "violations", label: "Policy Violations", defaultVisible: false },
     { id: "vulnerabilities", label: "Vulnerabilities", defaultVisible: false },
     { id: "unmappedDeclaredLicenses", label: "Unmapped Declared Licenses", defaultVisible: false },
+    { id: "published", label: "Published", defaultVisible: false, presence: "published" },
     { id: "homepage", label: "Homepage", defaultVisible: false },
     { id: "sources", label: "Sources", defaultVisible: false },
     { id: "labels", label: "Labels", defaultVisible: false },
@@ -163,6 +165,7 @@ interface ResultRow {
     key: string;
     labels: string[];
     pkg: WebAppPackage;
+    publishedAt: string;
     scopes: string[];
     source: string;
     unmappedDeclaredLicenses: string[];
@@ -181,6 +184,23 @@ function kindFilter(row: Row<ResultRow>, columnId: string, value: unknown): bool
     const filter = value as string[] | undefined;
     if (!filter || filter.length === 0) return true;
     return filter.includes(row.getValue<string>(columnId));
+}
+
+// Match the Published column against both the stored timestamp and the date as rendered, so "2022-06",
+// "June" and "June 29, 2022" all find the same rows. The rendered form depends on the reader's date
+// preference, hence the format argument.
+function makePublishedFilter(dateFormat: DateFormat) {
+    return (row: Row<ResultRow>, columnId: string, value: unknown): boolean => {
+        const query = typeof value === "string" ? value.trim().toLowerCase() : "";
+        if (!query) return true;
+        const publishedAt = row.getValue<string>(columnId) ?? "";
+        if (!publishedAt) return false;
+
+        return (
+            publishedAt.toLowerCase().includes(query) ||
+            convertIso8601Date2LongDate(publishedAt, dateFormat).toLowerCase().includes(query)
+        );
+    };
 }
 
 // Classify a package by its shallowest role: a project itself, a direct dependency of a project
@@ -225,6 +245,7 @@ function buildRow(pkg: WebAppPackage, ortResult: WebAppEvaluatedModel, index: nu
         key: pkg.key ?? `pkg-${index}`,
         labels,
         pkg,
+        publishedAt: pkg.publishedAt ?? "",
         scopes: Array.from(pkg.scopeNames ?? []).sort(),
         source: pkg.vcsProcessed.url || pkg.vcs.url || pkg.sourceArtifact?.url || "",
         unmappedDeclaredLicenses: Array.from(pkg.declaredLicensesUnmapped).sort(),
@@ -265,6 +286,23 @@ function LinkCell({ url }: { url: string }): JSX.Element | null {
     // Reuse the shared Url truncate variant so the value shows the external-link icon and ellipsis, with
     // the full URL on hover - matching the package detail panel.
     return <Url className="max-w-[24rem] text-xs" href={url} truncate />;
+}
+
+function PublishedCell({
+    dateFormat,
+    publishedAt,
+}: {
+    dateFormat: DateFormat;
+    publishedAt: string;
+}): JSX.Element | null {
+    if (!publishedAt) return null;
+    // The time of day would only add noise to a release date, so the cell shows the date alone; the exact
+    // timestamp, with the time and zone, stays available on hover.
+    return (
+        <span className="whitespace-nowrap text-xs" title={convertIso8601Date2Sentence(publishedAt, dateFormat)}>
+            {convertIso8601Date2LongDate(publishedAt, dateFormat)}
+        </span>
+    );
 }
 
 function BooleanIcon({
@@ -425,6 +463,7 @@ function ResultsTable({
     webAppEvaluatedModel,
 }: ResultsTableProps): JSX.Element {
     const { settings } = useSettings();
+    const dateFormat = useDateFormat();
     const data = useMemo<ResultRow[]>(
         () => webAppEvaluatedModel.packages.map((pkg, index) => buildRow(pkg, webAppEvaluatedModel, index)),
         [webAppEvaluatedModel],
@@ -773,6 +812,26 @@ function ResultsTable({
             });
         }
 
+        if (webAppEvaluatedModel.hasPublishedDates()) {
+            // Keep it beside the other package metadata columns instead of at the far right.
+            const homepageIndex = cols.findIndex((column) => column.id === "homepage");
+            cols.splice(homepageIndex < 0 ? cols.length : homepageIndex, 0, {
+                id: "published",
+                // Sort on the raw timestamp: it orders chronologically as plain text, which the rendered
+                // month names would not, and it keeps same-day releases in publication order.
+                accessorFn: (row) => row.publishedAt,
+                header: ({ column }) => (
+                    <div className="flex items-center gap-0.5">
+                        <DataTableColumnHeader column={column} title="Published" />
+                        <DataTableColumnSearch column={column} title="Published" />
+                    </div>
+                ),
+                cell: ({ row }) => <PublishedCell dateFormat={dateFormat} publishedAt={row.original.publishedAt} />,
+                filterFn: makePublishedFilter(dateFormat),
+                enableColumnFilter: true,
+            });
+        }
+
         if (webAppEvaluatedModel.hasPackageCurations()) {
             cols.push({
                 id: "curations",
@@ -843,7 +902,7 @@ function ResultsTable({
         }
 
         return cols;
-    }, [facetOptions, webAppEvaluatedModel]);
+    }, [dateFormat, facetOptions, webAppEvaluatedModel]);
 
     const initialState = useMemo<Partial<TableState>>(() => {
         // Default column visibility comes from Settings when the user has customised it, otherwise from the

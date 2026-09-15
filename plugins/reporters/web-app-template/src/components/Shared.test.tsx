@@ -21,14 +21,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import {
-    convertIso8601Date2Sentence,
-    ExcludeStatusIcon,
-    LicenseBadge,
-    LicenseExpression,
-    PackageLink,
-    Url,
-} from "@/components/Shared";
+import { ExcludeStatusIcon, LicenseBadge, LicenseExpression, PackageLink, Url } from "@/components/Shared";
 
 describe("LicenseBadge", () => {
     it("renders the license name", () => {
@@ -94,23 +87,6 @@ describe("Url", () => {
         expect(link).toHaveAttribute("href", "https://example.com/repo");
         expect(link).toHaveAttribute("target", "_blank");
         expect(link).toHaveTextContent("example");
-    });
-});
-
-describe("convertIso8601Date2Sentence", () => {
-    it("returns a dash for missing or invalid input", () => {
-        expect(convertIso8601Date2Sentence(null)).toBe("—");
-        expect(convertIso8601Date2Sentence(undefined)).toBe("—");
-        expect(convertIso8601Date2Sentence("")).toBe("—");
-        expect(convertIso8601Date2Sentence("not-a-date")).toBe("—");
-    });
-
-    it("formats a valid ISO timestamp into a sentence carrying the date", () => {
-        // Noon UTC so the calendar day/year cannot shift under whatever local timezone the test runs in.
-        const result = convertIso8601Date2Sentence("2026-06-15T12:00:00.000Z");
-        expect(result).not.toBe("—");
-        expect(result).toContain(" on ");
-        expect(result).toContain("2026");
     });
 });
 

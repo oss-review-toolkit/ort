@@ -23,6 +23,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { ResultsTable } from "@/components/ResultsTable";
 import { SettingsProvider } from "@/components/SettingsProvider";
+import { convertIso8601Date2LongDate } from "@/lib/dates";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
@@ -46,6 +47,39 @@ describe("ResultsTable", () => {
     it("renders the always-visible Package column header", () => {
         renderTable(result);
         expect(screen.getByRole("columnheader", { name: /package/i })).toBeInTheDocument();
+    });
+
+    it("hides the Published column until it is turned on", () => {
+        renderTable(result);
+        expect(screen.queryByRole("columnheader", { name: /published/i })).not.toBeInTheDocument();
+    });
+
+    it("shows a publish date per row once the Published column is turned on", () => {
+        expect(result.hasPublishedDates()).toBe(true);
+        window.localStorage.setItem(
+            "ort-settings",
+            JSON.stringify({ deepLinking: true, defaultVisibleColumns: ["package", "published"] }),
+        );
+
+        const { container } = render(
+            <SettingsProvider>
+                <ResultsTable webAppEvaluatedModel={result} />
+            </SettingsProvider>,
+        );
+
+        expect(screen.getByRole("columnheader", { name: /published/i })).toBeInTheDocument();
+
+        // Whichever packages land on the first page, one of the sample's publish dates is on screen.
+        // Comparing against the formatter's own output keeps this independent of the test locale.
+        const publishDates = result.packages
+            .map((webAppPackage) => webAppPackage.publishedAt)
+            .filter((publishedAt): publishedAt is string => Boolean(publishedAt))
+            .map((publishedAt) => convertIso8601Date2LongDate(publishedAt));
+        expect(publishDates.length).toBeGreaterThan(0);
+        expect(publishDates.some((date) => container.textContent?.includes(date))).toBe(true);
+
+        // A bare numeric date is what the spelled-out month is there to avoid.
+        expect(container.textContent).not.toMatch(/\d{4}-\d{2}-\d{2}/);
     });
 
     it("expands and collapses every row from the header toggle", async () => {

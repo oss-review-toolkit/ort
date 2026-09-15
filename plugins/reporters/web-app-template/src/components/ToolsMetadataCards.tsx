@@ -19,7 +19,8 @@
 
 import type { JSX } from "react";
 
-import { convertIso8601Date2Sentence } from "@/components/Shared";
+import { useDateFormat } from "@/components/SettingsProvider";
+import { convertIso8601Date2Sentence, type DateFormat } from "@/lib/dates";
 import type Run from "@/models/Run";
 import type ToolsMetadata from "@/models/ToolsMetadata";
 
@@ -33,11 +34,11 @@ interface ToolEntry {
     title: string;
 }
 
-function buildRows(run: Run): Array<{ label: string; value: string }> {
+function buildRows(run: Run, dateFormat: DateFormat): Array<{ label: string; value: string }> {
     const env = run.environment;
     const dur = durationMinutesSeconds(run.startTime, run.endTime);
     return [
-        { label: "Started", value: convertIso8601Date2Sentence(run.startTime) },
+        { label: "Started", value: convertIso8601Date2Sentence(run.startTime, dateFormat) },
         {
             label: "Duration",
             value: dur ? `${dur.mins} minutes ${String(dur.secs).padStart(2, "0")} seconds` : "—",
@@ -72,6 +73,7 @@ function formatBytesAsMiB(maxMemory: number | undefined): string {
 
 // Cards summarising each ORT tool run: name, version, start/end time and environment.
 function ToolsMetadataCards({ metadata }: ToolsMetadataCardsProps): JSX.Element {
+    const dateFormat = useDateFormat();
     const tools = (
         [
             { key: "analyzer", title: "Analyzer", run: metadata.analyzer },
@@ -91,7 +93,7 @@ function ToolsMetadataCards({ metadata }: ToolsMetadataCardsProps): JSX.Element 
                 <div className="rounded-md border bg-muted/30 p-4" key={key}>
                     <h3 className="mb-2 font-semibold text-sm">{title}</h3>
                     <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
-                        {buildRows(run).map((row) => (
+                        {buildRows(run, dateFormat).map((row) => (
                             <div className="contents" key={row.label}>
                                 <dt className="font-medium text-muted-foreground">{row.label}</dt>
                                 <dd className="break-all">{row.value}</dd>

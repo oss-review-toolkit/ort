@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-import { act, render, screen } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi as vitest } from "vitest";
-
 import { ResultsTree } from "@/components/ResultsTree";
 import WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { buildResult } from "@/test/fixture";
+import { render } from "@/test/render";
 import type { EvaluatedModel } from "@/types/evaluatedModelData";
 
 const APP = "Maven:com.example:app:1.0.0";

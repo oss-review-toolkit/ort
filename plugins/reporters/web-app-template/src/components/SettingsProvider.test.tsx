@@ -22,7 +22,8 @@ import userEvent from "@testing-library/user-event";
 import type { JSX } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { SettingsProvider, useSettings } from "@/components/SettingsProvider";
+import { SettingsProvider, useDateFormat, useSettings } from "@/components/SettingsProvider";
+import { BROWSER_DATE_FORMAT, REPORT_DATE_FORMAT } from "@/lib/dates";
 
 // A minimal consumer that surfaces one setting and lets a click flip it through the provider's setter.
 function Probe(): JSX.Element {
@@ -36,6 +37,41 @@ function Probe(): JSX.Element {
         </div>
     );
 }
+
+// Surfaces the resolved date format so a test can assert it without depending on the runner's timezone.
+function DateFormatProbe(): JSX.Element {
+    const { locale, timeZone } = useDateFormat();
+    return <span>{`locale=${String(locale)} timeZone=${String(timeZone)}`}</span>;
+}
+
+describe("useDateFormat", () => {
+    beforeEach(() => {
+        window.localStorage.clear();
+    });
+
+    it("resolves to the report's fixed format by default", () => {
+        render(
+            <SettingsProvider>
+                <DateFormatProbe />
+            </SettingsProvider>,
+        );
+        expect(
+            screen.getByText(`locale=${REPORT_DATE_FORMAT.locale} timeZone=${REPORT_DATE_FORMAT.timeZone}`),
+        ).toBeInTheDocument();
+    });
+
+    it("defers to the browser once the reader turns the setting on", () => {
+        window.localStorage.setItem("ort-settings", JSON.stringify({ useBrowserDateFormat: true }));
+        render(
+            <SettingsProvider>
+                <DateFormatProbe />
+            </SettingsProvider>,
+        );
+        // Undefined locale and timezone are what tell Intl to use the browser's own.
+        expect(BROWSER_DATE_FORMAT.locale).toBeUndefined();
+        expect(screen.getByText("locale=undefined timeZone=undefined")).toBeInTheDocument();
+    });
+});
 
 describe("SettingsProvider", () => {
     beforeEach(() => {

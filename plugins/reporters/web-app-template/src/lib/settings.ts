@@ -23,11 +23,14 @@ export interface Settings {
     deepLinking: boolean;
     /** Result-table column ids to show by default; null means use the table's built-in defaults. */
     defaultVisibleColumns: string[] | null;
+    /** Render timestamps in the reader's own locale and timezone instead of the report's fixed en-US/UTC. */
+    useBrowserDateFormat: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
     deepLinking: true,
     defaultVisibleColumns: null,
+    useBrowserDateFormat: false,
 };
 
 const STORAGE_KEY = "ort-settings";
@@ -50,6 +53,10 @@ export function loadSettings(): Settings {
                     ? parsed.defaultVisibleColumns
                     : DEFAULT_SETTINGS.defaultVisibleColumns,
             deepLinking: typeof parsed.deepLinking === "boolean" ? parsed.deepLinking : DEFAULT_SETTINGS.deepLinking,
+            useBrowserDateFormat:
+                typeof parsed.useBrowserDateFormat === "boolean"
+                    ? parsed.useBrowserDateFormat
+                    : DEFAULT_SETTINGS.useBrowserDateFormat,
         };
     } catch {
         return DEFAULT_SETTINGS;
