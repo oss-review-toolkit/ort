@@ -30,6 +30,11 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
+/**
+ * The name of the build system requirements and information file used by modern Python packages.
+ */
+internal const val PYPROJECT_FILENAME = "pyproject.toml"
+
 private const val GENERIC_BSD_LICENSE = "BSD License"
 private const val SHORT_STRING_MAX_CHARS = 200
 

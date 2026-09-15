@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PYPROJECT_FILENAME
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
@@ -72,13 +73,6 @@ internal object PoetryCommand : CommandLineTool {
 class Poetry(
     override val descriptor: PluginDescriptor = PoetryFactory.descriptor, private val config: PipConfig
 ) : PackageManager(PROJECT_TYPE) {
-    companion object {
-        /**
-         * The name of the build system requirements and information file used by modern Python packages.
-         */
-        internal const val PYPROJECT_FILENAME = "pyproject.toml"
-    }
-
     // Usually, definition files should not contain (only) lockfiles, to also support the case when no lockfile is
     // present. However, there currently is no way to distinguish a Poetry project from a vanilla Pip project without
     // looking at the lockfile.
