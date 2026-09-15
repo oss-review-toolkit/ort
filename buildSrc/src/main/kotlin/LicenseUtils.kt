@@ -35,7 +35,7 @@ object CopyrightableFiles {
         "plugins/reporters/fossid/src/main/resources/templates/freemarker_implicit.ftl",
         "plugins/reporters/freemarker/src/main/resources/templates/freemarker_implicit.ftl",
         "plugins/reporters/static-html/src/main/resources/prismjs/",
-        "plugins/reporters/web-app-template/yarn.lock",
+        "plugins/reporters/web-app-template/src/components/ui/",
         "resources/META-INF/",
         "resources/exceptions/",
         "resources/licenses/",
