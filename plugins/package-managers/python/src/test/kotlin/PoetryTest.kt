@@ -27,7 +27,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-import org.ossreviewtoolkit.plugins.packagemanagers.python.Poetry.Companion.PYPROJECT_FILENAME
 import org.ossreviewtoolkit.utils.common.div
 
 class PoetryTest : WordSpec({
