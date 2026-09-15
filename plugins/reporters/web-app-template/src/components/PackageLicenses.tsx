@@ -24,6 +24,7 @@ import {
     CopyToClipboard,
     DefinedTerm,
     LICENSE_TERM_DEFINITIONS,
+    LicenseBadge,
     LicenseBadgeList,
     LicenseExpression,
     LicenseExpressionList,
@@ -61,6 +62,31 @@ function PackageLicenses({ pkg }: PackageLicensesProps): JSX.Element {
                 copyValue: pkg.effectiveLicense ?? "",
                 definition: LICENSE_TERM_DEFINITIONS.effective,
                 label: "Effective (SPDX)",
+            });
+        }
+
+        if (pkg.hasAppliedLicenseChoices()) {
+            result.push({
+                content: (
+                    <ul className="space-y-1">
+                        {pkg.appliedLicenseChoices.map((licenseChoice) => (
+                            <li
+                                className="flex flex-wrap items-center gap-1.5"
+                                key={`${licenseChoice.given}-${licenseChoice.choice}`}
+                            >
+                                <LicenseExpression expression={licenseChoice.given ?? ""} />
+                                <span aria-hidden="true" className="text-muted-foreground">
+                                    →
+                                </span>
+                                <LicenseBadge name={licenseChoice.choice ?? ""} />
+                            </li>
+                        ))}
+                    </ul>
+                ),
+                definition:
+                    "A license choice resolves a disjunctive (OR) license expression to the single license " +
+                    "counted as effective. These are the choices that applied to this package.",
+                label: "Applied Choices",
             });
         }
 
