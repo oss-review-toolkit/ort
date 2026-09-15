@@ -111,6 +111,11 @@ SPDX-FileCopyrightText = "2017 The ORT Project Copyright Holders <https://github
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
+path = "plugins/reporters/web-app-template/src/components/ui/*.tsx"
+SPDX-FileCopyrightText = "Copyright (c) 2023 shadcn"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
 path = "website/**"
 SPDX-FileCopyrightText = "2017 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>"
 SPDX-License-Identifier = "Apache-2.0"
