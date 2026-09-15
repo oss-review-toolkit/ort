@@ -34,7 +34,7 @@ import {
 import type { JSX, ReactNode } from "react";
 import { useMemo } from "react";
 
-import { LICENSE_TERM_DEFINITIONS, Url } from "@/components/Shared";
+import { DefinedTerm, EXPLAINED_TERM, LICENSE_TERM_DEFINITIONS, Url } from "@/components/Shared";
 import { Card } from "@/components/ui/Card";
 import { indexToRating, type VulnerabilityRatingValue } from "@/components/VulnerabilityRatingBadge";
 import { cn } from "@/lib/utils";
@@ -55,6 +55,16 @@ const s = (count: number): string => (count === 1 ? "" : "s");
 
 // Pluralise a count label so a value of 1 reads naturally, e.g. "1 Project" instead of "1 Projects".
 // Pass an explicit plural form for irregular words (e.g. Dependency -> Dependencies).
+export const FINDING_TALLY_DEFINITIONS = {
+    resolved:
+        "Findings marked resolved by a resolution in the configuration, each with a reason why it is " +
+        "acceptable. Counts vulnerabilities as well as issues and policy violations.",
+    unresolved:
+        "Open technical issues and policy violations at or above the run's severe thresholds - the ones " +
+        "that decide whether the run passes. Vulnerabilities and findings below the thresholds are not " +
+        "counted.",
+} as const;
+
 function plural(count: number, singular: string, pluralForm = `${singular}s`): string {
     return count === 1 ? singular : pluralForm;
 }
@@ -234,14 +244,21 @@ function SidebarStat({
 }): JSX.Element {
     return (
         <button
-            className="-mx-1 flex w-[calc(100%+0.5rem)] items-center justify-between gap-2 rounded border-t px-1 py-2 text-left text-sm first:border-t-0 first:pt-0 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="group -mx-1 flex w-[calc(100%+0.5rem)] items-center justify-between gap-2 rounded border-t px-1 py-2 text-left text-sm first:border-t-0 first:pt-0 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             onClick={onClick}
             title={hint}
             type="button"
         >
             <span className="flex items-center gap-2 text-muted-foreground">
                 <Icon aria-hidden="true" className="size-4 shrink-0" />
-                {label}
+                <span
+                    className={cn(
+                        EXPLAINED_TERM,
+                        "group-hover:decoration-current group-focus-visible:decoration-current",
+                    )}
+                >
+                    {label}
+                </span>
             </span>
             <span className="font-semibold tabular-nums">{value}</span>
         </button>
@@ -263,13 +280,17 @@ function ConfigTag({
 }): JSX.Element {
     return (
         <button
-            className="inline-flex items-center gap-1.5 rounded-md border bg-muted/40 px-2 py-1 text-muted-foreground text-xs transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="group inline-flex items-center gap-1.5 rounded-md border bg-muted/40 px-2 py-1 text-muted-foreground text-xs transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             onClick={onClick}
             title={title}
             type="button"
         >
             <span className="font-semibold text-foreground tabular-nums">{count}</span>
-            {label}
+            <span
+                className={cn(EXPLAINED_TERM, "group-hover:decoration-current group-focus-visible:decoration-current")}
+            >
+                {label}
+            </span>
         </button>
     );
 }
@@ -420,7 +441,7 @@ function ResultsSummary({
                 <dl className="flex shrink-0 gap-5 text-sm sm:pl-4">
                     <div className="flex flex-col items-end">
                         <dt className="order-2 text-[11px] text-muted-foreground uppercase tracking-wide">
-                            Unresolved
+                            <DefinedTerm definition={FINDING_TALLY_DEFINITIONS.unresolved} term="Unresolved" />
                         </dt>
                         <dd
                             className={cn(
@@ -432,7 +453,9 @@ function ResultsSummary({
                         </dd>
                     </div>
                     <div className="flex flex-col items-end">
-                        <dt className="order-2 text-[11px] text-muted-foreground uppercase tracking-wide">Resolved</dt>
+                        <dt className="order-2 text-[11px] text-muted-foreground uppercase tracking-wide">
+                            <DefinedTerm definition={FINDING_TALLY_DEFINITIONS.resolved} term="Resolved" />
+                        </dt>
                         <dd className="order-1 font-semibold text-lg tabular-nums">{resolvedFindings}</dd>
                     </div>
                 </dl>
@@ -476,20 +499,22 @@ function ResultsSummary({
                     <DetectorRow
                         description={
                             <>
-                                <span title={LICENSE_TERM_DEFINITIONS.declaredSpdx}>
-                                    {declaredLicensesProcessed.length} declared
-                                </span>
+                                <DefinedTerm
+                                    definition={LICENSE_TERM_DEFINITIONS.declaredSpdx}
+                                    term={`${declaredLicensesProcessed.length} declared`}
+                                />
                                 {" · "}
-                                <span title={LICENSE_TERM_DEFINITIONS.detected}>
-                                    {detectedLicensesProcessed.length} detected
-                                </span>
+                                <DefinedTerm
+                                    definition={LICENSE_TERM_DEFINITIONS.detected}
+                                    term={`${detectedLicensesProcessed.length} detected`}
+                                />
                             </>
                         }
                         icon={FileText}
                         main={effectiveLicenses.length}
                         name="Licenses"
                         onClick={() => onSelectTab?.("licenses")}
-                        subLabel={<span title={LICENSE_TERM_DEFINITIONS.effective}>effective</span>}
+                        subLabel={<DefinedTerm definition={LICENSE_TERM_DEFINITIONS.effective} term="effective" />}
                     />
                 </Card>
 

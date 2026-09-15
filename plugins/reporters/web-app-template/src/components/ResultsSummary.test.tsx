@@ -21,7 +21,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
-import { ResultsSummary } from "@/components/ResultsSummary";
+import { FINDING_TALLY_DEFINITIONS, ResultsSummary } from "@/components/ResultsSummary";
+import { LICENSE_TERM_DEFINITIONS } from "@/components/Shared";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
@@ -97,6 +98,26 @@ describe("ResultsSummary", () => {
             expect(screen.getByRole("button", { name: /^Policy violations/ })).toBeInTheDocument();
             expect(screen.getByRole("button", { name: /^Vulnerabilities/ })).toBeInTheDocument();
             expect(screen.getByRole("button", { name: /^Licenses/ })).toBeInTheDocument();
+        });
+
+        it("explains the license terms it shows rather than leaving them bare", () => {
+            render(<ResultsSummary webAppEvaluatedModel={model} />);
+
+            for (const definition of [
+                LICENSE_TERM_DEFINITIONS.declaredSpdx,
+                LICENSE_TERM_DEFINITIONS.detected,
+                LICENSE_TERM_DEFINITIONS.effective,
+            ]) {
+                expect(screen.getByTitle(definition)).toBeInTheDocument();
+            }
+        });
+
+        it("explains both verdict tallies rather than leaving them to be guessed at", () => {
+            render(<ResultsSummary webAppEvaluatedModel={model} />);
+
+            for (const definition of Object.values(FINDING_TALLY_DEFINITIONS)) {
+                expect(screen.getByTitle(definition)).toBeInTheDocument();
+            }
         });
 
         it("renders the repository and composition sidebar sections", () => {
@@ -211,7 +232,9 @@ describe("ResultsSummary", () => {
         it("shows no severity badges for a clean detector", () => {
             render(<ResultsSummary webAppEvaluatedModel={fakeModel()} />);
             expect(screen.queryByTitle(/with severity/)).not.toBeInTheDocument();
-            expect(screen.queryByTitle(/vulnerabilit/)).not.toBeInTheDocument();
+            // Anchored on the badge wording ("N open <rating> vulnerability"), so it does not also match
+            // the verdict tallies, whose definitions mention vulnerabilities too.
+            expect(screen.queryByTitle(/^\d+ open .* vulnerabilit/)).not.toBeInTheDocument();
         });
     });
 
