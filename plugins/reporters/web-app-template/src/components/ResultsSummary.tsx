@@ -358,6 +358,10 @@ function ResultsSummary({
     const failureScope = webAppEvaluatedModel.hasExcludes() ? " in non-excluded source code or dependencies" : "";
 
     const resolvedConfig = statistics.resolvedConfiguration;
+    // Counted from the choices themselves rather than statistics.resolvedConfiguration.licenseChoices, so
+    // the pill matches the rows the License Choices tab lists: the statistic counts the configured choices
+    // before ORT narrows them to the applicable ones, and counts a package with several choices only once.
+    const licenseChoicesCount = webAppEvaluatedModel.licenseChoicesCount;
 
     return (
         <div className={cn("space-y-4", className)}>
@@ -560,7 +564,7 @@ function ResultsSummary({
                     {webAppEvaluatedModel.hasRepositoryConfiguration() ||
                     resolvedConfig.packageCurations > 0 ||
                     resolvedConfig.packageConfigurations > 0 ||
-                    resolvedConfig.licenseChoices > 0 ||
+                    licenseChoicesCount > 0 ||
                     resolvedConfig.resolutions > 0 ? (
                         <section className="mt-4 border-t pt-4">
                             <SidebarHeading>Applied configuration</SidebarHeading>
@@ -589,12 +593,12 @@ function ResultsSummary({
                                         title="Package configurations mark file paths in dependencies as excluded and correct scanner license findings."
                                     />
                                 ) : null}
-                                {resolvedConfig.licenseChoices > 0 ? (
+                                {licenseChoicesCount > 0 ? (
                                     <ConfigTag
-                                        count={resolvedConfig.licenseChoices}
-                                        label={plural(resolvedConfig.licenseChoices, "license choice")}
-                                        onClick={() => onSelectRunDetailsTab?.("ort-yml")}
-                                        title="License choices resolve a dependency's disjunctive (OR) license expression to a single selected license."
+                                        count={licenseChoicesCount}
+                                        label={plural(licenseChoicesCount, "license choice")}
+                                        onClick={() => onSelectRunDetailsTab?.("license-choices")}
+                                        title="License choices resolve a dependency's disjunctive (OR) license expression to a single selected license. Counts every choice that applies to this run, from the .ort.yml and the global configuration."
                                     />
                                 ) : null}
                                 {resolvedConfig.resolutions > 0 ? (
