@@ -18,6 +18,7 @@
  */
 
 import {
+    Boxes,
     Bug,
     CheckCircle2,
     ChevronRight,
@@ -27,7 +28,6 @@ import {
     type LucideIcon,
     Network,
     OctagonAlert,
-    Package,
     Scale,
     ShieldAlert,
 } from "lucide-react";
@@ -347,7 +347,7 @@ function ResultsSummary({
     }, [vulnerabilities]);
 
     // A dependency is "direct" when it appears at dependency-tree level 0, otherwise "transitive".
-    const { directDependencies, transitiveDependencies } = useMemo(() => {
+    const { dependencies, directDependencies, transitiveDependencies } = useMemo(() => {
         let direct = 0;
         let transitive = 0;
         for (const pkg of packages) {
@@ -355,7 +355,7 @@ function ResultsSummary({
             if (pkg.hasLevel(0)) direct += 1;
             else transitive += 1;
         }
-        return { directDependencies: direct, transitiveDependencies: transitive };
+        return { dependencies: direct + transitive, directDependencies: direct, transitiveDependencies: transitive };
     }, [packages]);
 
     const issueSeverities = severityBuckets(openIssues, "technical issue");
@@ -564,18 +564,11 @@ function ResultsSummary({
                             value={projects.length}
                         />
                         <SidebarStat
-                            hint="Every distinct package (dependency) resolved across all projects in this run."
-                            icon={Package}
-                            label={plural(packages.length, "Package")}
-                            onClick={() => onFilterByLevel?.(null)}
-                            value={packages.length}
-                        />
-                        <SidebarStat
-                            hint="Dependency scopes declared by the projects (e.g. compile or test) that group how each dependency is used."
-                            icon={Layers}
-                            label={plural(scopes.length, "Scope")}
-                            onClick={() => onFilterByLevel?.(null)}
-                            value={scopes.length}
+                            hint="The packages that are dependencies rather than projects, so this is the package count less the projects."
+                            icon={Boxes}
+                            label={plural(dependencies, "Dependency", "Dependencies")}
+                            onClick={() => onFilterByLevel?.(["direct", "transitive"])}
+                            value={dependencies}
                         />
                         <SidebarStat
                             hint="Direct dependencies are declared straight by a project; transitive ones are pulled in indirectly through other dependencies."
@@ -583,6 +576,13 @@ function ResultsSummary({
                             label="Direct / transitive dependencies"
                             onClick={() => onFilterByLevel?.(["direct", "transitive"])}
                             value={`${directDependencies} / ${transitiveDependencies}`}
+                        />
+                        <SidebarStat
+                            hint="Dependency scopes declared by the projects (e.g. compile or test) that group how each dependency is used."
+                            icon={Layers}
+                            label={plural(scopes.length, "Scope")}
+                            onClick={() => onFilterByLevel?.(null)}
+                            value={scopes.length}
                         />
                     </section>
 
