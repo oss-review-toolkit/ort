@@ -1,0 +1,80 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "includes": [
+            "src/**/*.ts",
+            "src/**/*.tsx",
+            "src/**/*.css",
+            "vite.config.ts",
+            "*.json",
+            "!**/build",
+            "!**/node_modules",
+            "!**/.gradle"
+        ]
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 120,
+        "lineEnding": "lf"
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "double",
+            "jsxQuoteStyle": "double",
+            "semicolons": "always",
+            "trailingCommas": "all",
+            "arrowParentheses": "always"
+        }
+    },
+    "css": {
+        "parser": {
+            "cssModules": false,
+            "allowWrongLineComments": false,
+            "tailwindDirectives": true
+        }
+    },
+    "assist": {
+        "enabled": true,
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "preset": "recommended",
+            "style": {
+                "noNonNullAssertion": "warn",
+                "useImportType": "error",
+                "useNodejsImportProtocol": "error"
+            },
+            "suspicious": {
+                "noExplicitAny": "error"
+            },
+            "correctness": {
+                "noUnusedImports": "error",
+                "noUnusedVariables": "error"
+            },
+            "complexity": {
+                "noBannedTypes": "error"
+            },
+            "nursery": {
+                "useSortedClasses": {
+                    "level": "error",
+                    "options": {
+                        "functions": ["cn"]
+                    }
+                }
+            }
+        }
+    }
+}
