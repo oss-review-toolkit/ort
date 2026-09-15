@@ -90,11 +90,18 @@ export interface DefinedTermProps {
     term: string;
 }
 
-// A term shown with a dotted underline and a hover tooltip explaining it; the underline hints that a
-// definition is available on hover.
+/**
+ * The dotted underline marking text whose explanation sits behind a title. It is transparent at rest, so
+ * the term reads as plain text and revealing it shifts no layout; the caller supplies the trigger, either
+ * `hover:` on the term itself or `group-hover:` where a surrounding element carries the title.
+ */
+const EXPLAINED_TERM = "underline decoration-dotted decoration-transparent underline-offset-2 transition-colors";
+
+// A term whose explanation appears on hover, along with a dotted underline. The underline only shows
+// under the cursor so the term is not decorated at rest, where it would read as a link or as emphasis.
 function DefinedTerm({ definition, term }: DefinedTermProps): JSX.Element {
     return (
-        <span className="cursor-help underline decoration-dotted underline-offset-2" title={definition}>
+        <span className={cn(EXPLAINED_TERM, "cursor-help hover:decoration-current")} title={definition}>
             {term}
         </span>
     );
@@ -511,6 +518,7 @@ function Url({ children, className, href, showIcon = true, truncate = false }: U
 export {
     CopyToClipboard,
     DefinedTerm,
+    EXPLAINED_TERM,
     ExcludeStatusIcon,
     ExpandRowIcon,
     IconHeader,

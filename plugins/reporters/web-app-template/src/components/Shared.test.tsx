@@ -21,7 +21,20 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { ExcludeStatusIcon, LicenseBadge, LicenseExpression, PackageLink, Url } from "@/components/Shared";
+import { DefinedTerm, ExcludeStatusIcon, LicenseBadge, LicenseExpression, PackageLink, Url } from "@/components/Shared";
+
+describe("DefinedTerm", () => {
+    it("leaves the term undecorated until it is hovered", () => {
+        render(<DefinedTerm definition="What effective means." term="Effective" />);
+
+        const term = screen.getByTitle("What effective means.");
+        expect(term).toHaveTextContent("Effective");
+        // The underline exists but is transparent, so revealing it on hover shifts no layout.
+        expect(term.className).toContain("decoration-transparent");
+        expect(term.className).toContain("hover:decoration-current");
+        expect(term.className).toContain("cursor-help");
+    });
+});
 
 describe("LicenseBadge", () => {
     it("renders the license name", () => {
