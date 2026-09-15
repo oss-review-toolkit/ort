@@ -44,7 +44,7 @@ const RAW: EvaluatedModel = {
         { _id: 0, name: "dependencies" },
         { _id: 1, name: "devDependencies" },
     ],
-    scope_excludes: [{ _id: 0, name: "devDependencies", reason: "DEV_DEPENDENCY_OF" }],
+    scope_excludes: [{ _id: 0, pattern: "devDependencies", reason: "DEV_DEPENDENCY_OF" }],
     dependency_trees: [
         {
             key: 0,

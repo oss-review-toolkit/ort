@@ -35,7 +35,7 @@ describe("ScopeExcludesTable", () => {
     it("renders its column headers", () => {
         render(<ScopeExcludesTable scopeExcludes={scopeExcludes} />);
         expect(screen.getByRole("columnheader", { name: /reason/i })).toBeInTheDocument();
-        expect(screen.getByRole("columnheader", { name: /name/i })).toBeInTheDocument();
+        expect(screen.getByRole("columnheader", { name: /pattern/i })).toBeInTheDocument();
         expect(screen.getByRole("columnheader", { name: /comment/i })).toBeInTheDocument();
     });
 
