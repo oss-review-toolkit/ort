@@ -664,11 +664,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         type: EvaluatedIssueType,
         pkg: EvaluatedPackage?,
         scanResult: EvaluatedScanResult?
-    ): List<EvaluatedIssue> {
-        val evaluatedIssues = issues.map { issue ->
+    ): List<EvaluatedIssue> =
+        issues.map { issue ->
             val resolutions = addResolutions(issue)
 
-            EvaluatedIssue(
+            val evaluatedIssue = EvaluatedIssue(
                 timestamp = issue.timestamp,
                 type = type,
                 source = issue.source,
@@ -680,10 +680,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 scanResult = scanResult,
                 howToFix = input.howToFixTextProvider.getHowToFixText(issue).orEmpty()
             )
-        }
 
-        return evaluatedIssues.map { this.issues.addIfRequired(it) }
-    }
+            this.issues.addIfRequired(evaluatedIssue)
+        }
 
     private fun addResolutions(issue: Issue): List<IssueResolution> {
         val matchingResolutions = input.ortResult.getResolutionsFor(issue)
