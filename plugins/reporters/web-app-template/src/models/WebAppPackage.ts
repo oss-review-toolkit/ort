@@ -19,6 +19,7 @@
 
 import { parseSpdxLicenseExpression, type SpdxSimpleLicenseExpression } from "@/lib/spdx-license-expressions";
 import RemoteArtifact from "@/models/RemoteArtifact";
+import SpdxLicenseChoice from "@/models/SpdxLicenseChoice";
 import VcsInfo from "@/models/VcsInfo";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import WebAppFinding from "@/models/WebAppFinding";
@@ -66,6 +67,8 @@ function countSevereOpenFindings(
 
 class WebAppPackage {
     #_id: number | undefined;
+
+    #appliedLicenseChoices: SpdxLicenseChoice[] = [];
 
     #authors: Set<string> = new Set();
 
@@ -189,6 +192,16 @@ class WebAppPackage {
         if (obj) {
             if (Number.isInteger(obj._id)) {
                 this.#_id = obj._id;
+            }
+
+            if (obj.applied_license_choices || obj.appliedLicenseChoices) {
+                const appliedLicenseChoices = obj.applied_license_choices || obj.appliedLicenseChoices || [];
+                for (let i = 0, len = appliedLicenseChoices.length; i < len; i++) {
+                    const raw = appliedLicenseChoices[i];
+                    if (raw) {
+                        this.#appliedLicenseChoices.push(new SpdxLicenseChoice(raw));
+                    }
+                }
             }
 
             if (obj.authors) {
@@ -405,6 +418,11 @@ class WebAppPackage {
 
     get _id(): number | undefined {
         return this.#_id;
+    }
+
+    /** The license choices that were applied when computing this package's effective license. */
+    get appliedLicenseChoices(): readonly SpdxLicenseChoice[] {
+        return this.#appliedLicenseChoices;
     }
 
     get authors(): ReadonlySet<string> {
@@ -840,6 +858,10 @@ class WebAppPackage {
 
     get vcsProcessed(): VcsInfo {
         return this.#vcsProcessed;
+    }
+
+    hasAppliedLicenseChoices(): boolean {
+        return this.#appliedLicenseChoices.length > 0;
     }
 
     hasAuthors(): boolean {

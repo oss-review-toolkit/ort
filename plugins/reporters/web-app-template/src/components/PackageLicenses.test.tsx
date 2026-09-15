@@ -35,6 +35,43 @@ describe("PackageLicenses", () => {
         result = await buildResult(loadSampleEvaluatedModel());
     });
 
+    describe("applied license choices", () => {
+        it("shows each choice as the expression it resolved and the license it picked", () => {
+            const pkg = new WebAppPackage({
+                _id: 0,
+                id: "PyPI::six:1.17.0",
+                effective_license: "MIT",
+                applied_license_choices: [{ given: "LicenseRef-example OR MIT", choice: "MIT" }],
+            });
+            expect(pkg.hasAppliedLicenseChoices()).toBe(true);
+
+            const { container } = render(<PackageLicenses pkg={pkg} />);
+            expect(screen.getByText("Applied Choices")).toBeInTheDocument();
+            expect(container.textContent).toContain("LicenseRef-example");
+            expect(container.textContent).toContain("MIT");
+        });
+
+        it("omits the row for a package that had no choice applied", () => {
+            const pkg = new WebAppPackage({ _id: 0, id: "PyPI::six:1.17.0", effective_license: "MIT" });
+            expect(pkg.hasAppliedLicenseChoices()).toBe(false);
+
+            render(<PackageLicenses pkg={pkg} />);
+            expect(screen.queryByText("Applied Choices")).not.toBeInTheDocument();
+        });
+
+        it("shows the choices the sample model actually applied", () => {
+            const pkg = result.packages.find((candidate) => candidate.hasAppliedLicenseChoices());
+            expect(pkg).toBeDefined();
+            if (!pkg) return;
+
+            const { container } = render(<PackageLicenses pkg={pkg} />);
+            for (const licenseChoice of pkg.appliedLicenseChoices) {
+                expect(licenseChoice.choice).toBeTruthy();
+                expect(container.textContent).toContain(licenseChoice.choice);
+            }
+        });
+    });
+
     function packageWithLicenses(): WebAppPackage {
         const pkg = result.packages.find((candidate) => candidate.hasLicenses());
         if (!pkg) throw new Error("The sample has no package with licenses.");
