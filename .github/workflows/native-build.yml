@@ -20,7 +20,7 @@ jobs:
         uses: graalvm/setup-graalvm@0426e2e191540e8514dff98dc52a5f5146a2a276 # v1.6.6
         with:
           distribution: graalvm
-          java-version: 25
+          java-version: 25.0.4+101.0.LTS
           native-image-job-reports: true
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
