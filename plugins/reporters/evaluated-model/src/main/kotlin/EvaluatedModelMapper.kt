@@ -160,8 +160,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             issues = input.ortResult.getAdvisorProviderIssues(),
             type = EvaluatedIssueType.ADVISOR,
             pkg = null,
-            scanResult = null,
-            path = null
+            scanResult = null
         )
 
         resultProjects.forEach { project ->
@@ -419,7 +418,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val result = mutableListOf<EvaluatedIssue>()
 
         input.ortResult.analyzer?.result?.issues?.get(id)?.let { analyzerIssues ->
-            result += addIssues(analyzerIssues, EvaluatedIssueType.ANALYZER, pkg, null, null)
+            result += addIssues(analyzerIssues, EvaluatedIssueType.ANALYZER, pkg, null)
         }
 
         return result
@@ -431,7 +430,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun addScannerIssues(id: Identifier, pkg: EvaluatedPackage): List<EvaluatedIssue> {
         val result = mutableListOf<EvaluatedIssue>()
         input.ortResult.scanner?.issues?.get(id)?.let { scannerIssues ->
-            result += addIssues(scannerIssues, type = EvaluatedIssueType.SCANNER, pkg, null, null)
+            result += addIssues(scannerIssues, type = EvaluatedIssueType.SCANNER, pkg, null)
         }
 
         return result
@@ -464,7 +463,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             addVulnerability(pkg, vulnerability)
         }
 
-        addIssues(result.summary.issues, EvaluatedIssueType.ADVISOR, pkg, null, null)
+        addIssues(result.summary.issues, EvaluatedIssueType.ADVISOR, pkg, null)
     }
 
     private fun addVulnerability(pkg: EvaluatedPackage, vulnerability: Vulnerability) {
@@ -516,8 +515,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             result.summary.issues,
             EvaluatedIssueType.SCANNER,
             pkg,
-            evaluatedScanResult,
-            null
+            evaluatedScanResult
         )
 
         addLicensesAndCopyrights(pkg.id, result, evaluatedScanResult, findings)
@@ -561,7 +559,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
             if (this.issues.isNotEmpty()) {
                 paths += packagePath
-                issues += addIssues(this.issues, EvaluatedIssueType.ANALYZER, dependency, null, packagePath)
+                issues += addIssues(this.issues, EvaluatedIssueType.ANALYZER, dependency, null)
             }
 
             visitedNodes += getInternalId() to createDependencyNode(dependency, linkage, issues)
@@ -665,8 +663,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         issues: Collection<Issue>,
         type: EvaluatedIssueType,
         pkg: EvaluatedPackage?,
-        scanResult: EvaluatedScanResult?,
-        path: EvaluatedPackagePath?
+        scanResult: EvaluatedScanResult?
     ): List<EvaluatedIssue> {
         val evaluatedIssues = issues.map { issue ->
             val resolutions = addResolutions(issue)
@@ -681,14 +678,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 isExcluded = pkg?.id?.let { input.ortResult.isExcluded(issue, it) } ?: false,
                 pkg = pkg,
                 scanResult = scanResult,
-                path = path,
                 howToFix = input.howToFixTextProvider.getHowToFixText(issue).orEmpty()
             )
         }
 
-        this.issues += evaluatedIssues
-
-        return evaluatedIssues
+        return evaluatedIssues.map { this.issues.addIfRequired(it) }
     }
 
     private fun addResolutions(issue: Issue): List<IssueResolution> {
