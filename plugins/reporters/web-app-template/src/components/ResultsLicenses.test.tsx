@@ -22,6 +22,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import { ResultsLicenses } from "@/components/ResultsLicenses";
+import { LICENSE_TERM_DEFINITIONS } from "@/components/Shared";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
@@ -36,6 +37,32 @@ describe("ResultsLicenses", () => {
         render(<ResultsLicenses webAppEvaluatedModel={result} />);
         expect(screen.getByRole("tab", { name: /effective/i })).toBeInTheDocument();
         expect(screen.getByRole("columnheader", { name: /license/i })).toBeInTheDocument();
+    });
+
+    it("defines the license type on show without making the reader hover for it", () => {
+        render(<ResultsLicenses webAppEvaluatedModel={result} />);
+
+        // The effective tab opens first, so its definition is the visible one.
+        expect(screen.getByText(LICENSE_TERM_DEFINITIONS.effective, { exact: false })).toBeInTheDocument();
+    });
+
+    it("swaps the definition when another license type is selected", async () => {
+        const user = userEvent.setup();
+        render(<ResultsLicenses webAppEvaluatedModel={result} />);
+
+        await user.click(screen.getByRole("tab", { name: /detected/i }));
+
+        expect(screen.getByText(LICENSE_TERM_DEFINITIONS.detected, { exact: false })).toBeInTheDocument();
+    });
+
+    it("links to the guide without letting the link outshine the definition", () => {
+        render(<ResultsLicenses webAppEvaluatedModel={result} />);
+
+        const guide = screen.getAllByRole("link", { name: /learn more/i })[0] as HTMLAnchorElement;
+        expect(guide).toHaveAttribute("href", expect.stringContaining("guides/license-handling"));
+        // It carries the muted colour of the sentence, not the primary accent Url uses by default.
+        expect(guide.className).toContain("text-muted-foreground");
+        expect(guide.className).not.toContain("text-primary");
     });
 
     it("reports the clicked license and its type through onLicenseClick", async () => {

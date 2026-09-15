@@ -22,9 +22,29 @@ import { useMemo } from "react";
 
 import { LicenseChart, type LicenseChartDatum } from "@/components/LicenseChart";
 import { LicenseStatsTable } from "@/components/LicenseStatsTable";
+import { LICENSE_TERM_DEFINITIONS, Url } from "@/components/Shared";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { licenseToHslColor } from "@/utils";
+
+// ORT distinguishes five license types; this view covers three of them, so the guide is linked for the
+// concluded and main licenses it does not show.
+const LICENSE_HANDLING_GUIDE = "https://oss-review-toolkit.org/ort/docs/guides/license-handling";
+
+// The definition of the license type on show. It sits in the panel rather than behind a hover, because
+// telling these three apart is what this view is for - a definition nobody can find does not do that.
+// The link carries the muted colour of the sentence it sits in rather than the primary accent, which
+// would pull the eye to a footnote ahead of the definition itself; the underline marks it as a link.
+function LicenseTypeDescription({ definition }: { definition: string }): JSX.Element {
+    return (
+        <p className="mb-4 max-w-prose text-muted-foreground text-sm">
+            {definition}{" "}
+            <Url className="text-muted-foreground underline hover:text-foreground" href={LICENSE_HANDLING_GUIDE}>
+                Learn more
+            </Url>
+        </p>
+    );
+}
 
 export interface ResultsLicensesProps {
     className?: string;
@@ -92,6 +112,7 @@ function ResultsLicenses({ className, onLicenseClick, webAppEvaluatedModel }: Re
             </TabsList>
             {hasEffective ? (
                 <TabsContent className="mt-4" value="effective">
+                    <LicenseTypeDescription definition={LICENSE_TERM_DEFINITIONS.effective} />
                     <div className="grid gap-4 lg:grid-cols-2">
                         <LicenseStatsTable
                             emptyText="No effective licenses"
@@ -104,6 +125,7 @@ function ResultsLicenses({ className, onLicenseClick, webAppEvaluatedModel }: Re
             ) : null}
             {hasDeclared ? (
                 <TabsContent className="mt-4" value="declared">
+                    <LicenseTypeDescription definition={LICENSE_TERM_DEFINITIONS.declared} />
                     <div className="grid gap-4 lg:grid-cols-2">
                         <LicenseStatsTable
                             emptyText="No declared licenses"
@@ -116,6 +138,7 @@ function ResultsLicenses({ className, onLicenseClick, webAppEvaluatedModel }: Re
             ) : null}
             {hasDetected ? (
                 <TabsContent className="mt-4" value="detected">
+                    <LicenseTypeDescription definition={LICENSE_TERM_DEFINITIONS.detected} />
                     <div className="grid gap-4 lg:grid-cols-2">
                         <LicenseStatsTable
                             emptyText="No detected licenses"
