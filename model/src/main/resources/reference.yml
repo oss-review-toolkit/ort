@@ -134,6 +134,13 @@ ort:
           # itself is run with will be used.
           javaHome: "/path/to/java/home"
 
+      NPM:
+        options:
+          # Set the target platform for the analysis.
+          os: "darwin"
+          cpu: "arm64"
+
+
       Yarn2:
         options:
           # If set to true, disable verification of HTTPS certificate of remote registries. Useful when using a proxy to
