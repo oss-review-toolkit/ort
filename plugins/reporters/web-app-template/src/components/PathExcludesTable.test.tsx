@@ -21,7 +21,7 @@ import { render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { PathExcludesTable } from "@/components/PathExcludesTable";
-import type WebAppPathExclude from "@/models/WebAppPathExclude";
+import WebAppPathExclude from "@/models/WebAppPathExclude";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
 describe("PathExcludesTable", () => {
@@ -42,6 +42,27 @@ describe("PathExcludesTable", () => {
     it("renders a row for a path exclude from the sample model", () => {
         render(<PathExcludesTable pathExcludes={pathExcludes} />);
         expect(screen.getByText("**/*doc*/**")).toBeInTheDocument();
+    });
+
+    it("hides the pagination controls while every path exclude fits on one page", () => {
+        // The sample carries 33 excludes against a first page size of 50, so they all fit.
+        expect(pathExcludes.length).toBeLessThan(50);
+
+        render(<PathExcludesTable pathExcludes={pathExcludes} />);
+        expect(screen.queryByText("Rows per page")).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /go to next page/i })).not.toBeInTheDocument();
+    });
+
+    it("still paginates once the path excludes outgrow a single page", () => {
+        // The first LARGE_TABLE_PAGE_SIZES option is 50, so 51 excludes force a second page.
+        const many = Array.from(
+            { length: 51 },
+            (_, index) => new WebAppPathExclude({ _id: index, pattern: `**/vendor-${index}/**`, reason: "OTHER" }),
+        );
+
+        render(<PathExcludesTable pathExcludes={many} />);
+        expect(screen.getByText("Rows per page")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /go to next page/i })).toBeInTheDocument();
     });
 
     it("shows the empty state when there are no path excludes", () => {

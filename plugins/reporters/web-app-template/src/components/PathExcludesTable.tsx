@@ -73,6 +73,7 @@ function PathExcludesTable({ pathExcludes }: PathExcludesTableProps): JSX.Elemen
             data={data}
             emptyText="No path excludes"
             getRowId={(row, index) => row.key ?? String(index)}
+            hidePaginationWhenSinglePage
             pageSizeOptions={LARGE_TABLE_PAGE_SIZES}
         />
     );

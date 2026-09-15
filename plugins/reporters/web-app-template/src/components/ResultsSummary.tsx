@@ -555,7 +555,7 @@ function ResultsSummary({
                         <SidebarStat
                             hint="Direct dependencies are declared straight by a project; transitive ones are pulled in indirectly through other dependencies."
                             icon={Network}
-                            label="Direct / transitive"
+                            label="Direct / transitive dependencies"
                             onClick={() => onFilterByLevel?.(["direct", "transitive"])}
                             value={`${directDependencies} / ${transitiveDependencies}`}
                         />

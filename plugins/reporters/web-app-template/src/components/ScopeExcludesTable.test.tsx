@@ -21,7 +21,7 @@ import { render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { ScopeExcludesTable } from "@/components/ScopeExcludesTable";
-import type WebAppScopeExclude from "@/models/WebAppScopeExclude";
+import WebAppScopeExclude from "@/models/WebAppScopeExclude";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
 describe("ScopeExcludesTable", () => {
@@ -39,10 +39,37 @@ describe("ScopeExcludesTable", () => {
         expect(screen.getByRole("columnheader", { name: /comment/i })).toBeInTheDocument();
     });
 
-    it("renders a row for every scope exclude in the sample model", () => {
+    it("renders a row for a scope exclude from the sample model", () => {
+        // Read the expected value off the fixture rather than hard-coding it, so re-importing a
+        // different ORT result into index.html does not break the test.
+        const scopeExclude = scopeExcludes[0];
+        expect(scopeExclude).toBeDefined();
+        if (!scopeExclude) return;
+
         const { container } = render(<ScopeExcludesTable scopeExcludes={scopeExcludes} />);
-        expect(scopeExcludes.length).toBeGreaterThan(0);
-        expect(container.querySelectorAll("tbody tr")).toHaveLength(scopeExcludes.length);
+        expect(scopeExclude.pattern).toBeTruthy();
+        expect(container.textContent).toContain(scopeExclude.pattern);
+    });
+
+    it("hides the pagination controls while every scope exclude fits on one page", () => {
+        // The first LARGE_TABLE_PAGE_SIZES option is 50, and the sample carries far fewer.
+        expect(scopeExcludes.length).toBeLessThan(50);
+
+        render(<ScopeExcludesTable scopeExcludes={scopeExcludes} />);
+        expect(screen.queryByText("Rows per page")).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /go to next page/i })).not.toBeInTheDocument();
+    });
+
+    it("still paginates once the scope excludes outgrow a single page", () => {
+        const many = Array.from(
+            { length: 51 },
+            (_, index) =>
+                new WebAppScopeExclude({ _id: index, pattern: `generated-${index}`, reason: "DEV_DEPENDENCY_OF" }),
+        );
+
+        render(<ScopeExcludesTable scopeExcludes={many} />);
+        expect(screen.getByText("Rows per page")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /go to next page/i })).toBeInTheDocument();
     });
 
     it("shows the empty state when there are no scope excludes", () => {

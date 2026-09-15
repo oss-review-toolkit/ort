@@ -19,7 +19,7 @@
 
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, describe, expect, it } from "vitest";
 
 import { ResultsTable } from "@/components/ResultsTable";
 import { SettingsProvider } from "@/components/SettingsProvider";
@@ -42,6 +42,11 @@ describe("ResultsTable", () => {
 
     beforeAll(async () => {
         result = await buildResult(loadSampleEvaluatedModel());
+    });
+
+    // Settings persist in local storage, so a test that seeds them must not leak into the next one.
+    afterEach(() => {
+        window.localStorage.clear();
     });
 
     it("renders the always-visible Package column header", () => {

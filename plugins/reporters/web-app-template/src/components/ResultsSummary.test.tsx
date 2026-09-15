@@ -142,7 +142,7 @@ describe("ResultsSummary", () => {
             // label prefix only.
             ["Projects", /^Projects?/, ["project"]],
             ["Packages", /^Packages?/, null],
-            ["Direct / transitive", /^Direct/, ["direct", "transitive"]],
+            ["Direct / transitive dependencies", /^Direct/, ["direct", "transitive"]],
         ])("filters the table on %s when its composition stat is clicked", async (_label, name, expected) => {
             const onFilterByLevel = vi.fn();
             const user = userEvent.setup();

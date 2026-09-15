@@ -73,6 +73,7 @@ function ResolutionTable({ resolutions }: ResolutionTableProps): JSX.Element {
             data={data}
             emptyText="No resolutions"
             getRowId={(row, index) => row.key ?? String(index)}
+            hidePaginationWhenSinglePage
             pageSizeOptions={LARGE_TABLE_PAGE_SIZES}
         />
     );
