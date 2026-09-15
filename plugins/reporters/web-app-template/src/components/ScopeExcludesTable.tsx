@@ -72,6 +72,7 @@ function ScopeExcludesTable({ scopeExcludes }: ScopeExcludesTableProps): JSX.Ele
             data={data}
             emptyText="No scope excludes"
             getRowId={(row, index) => row.key ?? String(index)}
+            hidePaginationWhenSinglePage
             pageSizeOptions={LARGE_TABLE_PAGE_SIZES}
         />
     );

@@ -55,6 +55,27 @@ describe("ResolutionTable", () => {
         expect(container.querySelector("table")).toBeInTheDocument();
     });
 
+    it("hides the pagination controls while every resolution fits on one page", () => {
+        // The first LARGE_TABLE_PAGE_SIZES option is 50, and the sample carries far fewer.
+        expect(resolutions.length).toBeLessThan(50);
+
+        render(<ResolutionTable resolutions={resolutions} />);
+        expect(screen.queryByText("Rows per page")).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /go to next page/i })).not.toBeInTheDocument();
+    });
+
+    it("still paginates once the resolutions outgrow a single page", () => {
+        const many = Array.from(
+            { length: 51 },
+            (_, index) =>
+                new WebAppResolution({ _id: index, message: `Finding ${index}`, reason: "CANT_FIX_EXCEPTION" }),
+        );
+
+        render(<ResolutionTable resolutions={many} />);
+        expect(screen.getByText("Rows per page")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /go to next page/i })).toBeInTheDocument();
+    });
+
     it("shows the empty state when there are no resolutions", () => {
         render(<ResolutionTable resolutions={[]} />);
         expect(screen.getByText("No resolutions")).toBeInTheDocument();

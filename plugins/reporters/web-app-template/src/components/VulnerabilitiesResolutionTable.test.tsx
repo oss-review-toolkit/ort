@@ -21,7 +21,7 @@ import { render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { VulnerabilitiesResolutionTable } from "@/components/VulnerabilitiesResolutionTable";
-import type WebAppVulnerabilityResolution from "@/models/WebAppVulnerabilityResolution";
+import WebAppVulnerabilityResolution from "@/models/WebAppVulnerabilityResolution";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
 describe("VulnerabilitiesResolutionTable", () => {
@@ -42,6 +42,31 @@ describe("VulnerabilitiesResolutionTable", () => {
     it("renders a row for a vulnerability resolution from the sample model", () => {
         render(<VulnerabilitiesResolutionTable resolutions={resolutions} />);
         expect(screen.getByText("GHSA-g4m4-9q4c-mfw6")).toBeInTheDocument();
+    });
+
+    it("hides the pagination controls while every resolution fits on one page", () => {
+        // The first LARGE_TABLE_PAGE_SIZES option is 50, and the sample carries far fewer.
+        expect(resolutions.length).toBeLessThan(50);
+
+        render(<VulnerabilitiesResolutionTable resolutions={resolutions} />);
+        expect(screen.queryByText("Rows per page")).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /go to next page/i })).not.toBeInTheDocument();
+    });
+
+    it("still paginates once the resolutions outgrow a single page", () => {
+        const many = Array.from(
+            { length: 51 },
+            (_, index) =>
+                new WebAppVulnerabilityResolution({
+                    _id: index,
+                    id: `CVE-2026-${index}`,
+                    reason: "INEFFECTIVE_VULNERABILITY",
+                }),
+        );
+
+        render(<VulnerabilitiesResolutionTable resolutions={many} />);
+        expect(screen.getByText("Rows per page")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /go to next page/i })).toBeInTheDocument();
     });
 
     it("shows the empty state when there are no resolutions", () => {

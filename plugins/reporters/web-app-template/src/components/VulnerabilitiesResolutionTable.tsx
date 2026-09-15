@@ -73,6 +73,7 @@ function VulnerabilitiesResolutionTable({ resolutions }: VulnerabilitiesResoluti
             data={data}
             emptyText="No resolutions"
             getRowId={(row, index) => row.key ?? String(index)}
+            hidePaginationWhenSinglePage
             pageSizeOptions={LARGE_TABLE_PAGE_SIZES}
         />
     );
