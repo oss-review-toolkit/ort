@@ -38,6 +38,19 @@ describe("RunDetails", () => {
         expect(screen.getByRole("tab", { name: /tools/i })).toBeInTheDocument();
     });
 
+    it("offers a License Choices tab for a run that applied some", () => {
+        expect(result.hasLicenseChoices()).toBe(true);
+
+        render(<RunDetails webAppEvaluatedModel={result} />);
+        expect(screen.getByRole("tab", { name: /license choices/i })).toBeInTheDocument();
+    });
+
+    it("opens the License Choices tab when the Summary deep-links to it", () => {
+        render(<RunDetails focusTab="license-choices" webAppEvaluatedModel={result} />);
+
+        expect(screen.getByRole("tab", { name: /license choices/i })).toHaveAttribute("aria-selected", "true");
+    });
+
     it("opens the focused tab first when focusTab is set", () => {
         render(<RunDetails focusTab="tools" webAppEvaluatedModel={result} />);
 

@@ -17,9 +17,10 @@
  * License-Filename: LICENSE
  */
 
-import { ListChecks, type LucideIcon, Tags } from "lucide-react";
+import { ListChecks, type LucideIcon, Scale, Tags } from "lucide-react";
 import type { JSX, ReactNode } from "react";
 import { useMemo, useState } from "react";
+import { LicenseChoicesTable } from "@/components/LicenseChoicesTable";
 import {
     CopyToClipboard,
     OrtYmlFileIcon,
@@ -37,6 +38,8 @@ export interface RunDetailsProps {
     // When set to one of the inner tab keys (e.g. "package-curations"), that tab opens first instead of
     // the default; used by the Summary stat cards to deep-link into a specific section.
     focusTab?: string | null;
+    // Jumps to a package in the results table, for the package ids listed under License Choices.
+    onSelectPackage?: (packageId: string) => void;
     webAppEvaluatedModel: WebAppEvaluatedModel;
 }
 
@@ -49,7 +52,7 @@ interface ConfigTab {
 
 // The Run Details view: tabbed run configuration (.ort.yml, labels, package configurations/curations,
 // resolutions, tools).
-function RunDetails({ focusTab, webAppEvaluatedModel }: RunDetailsProps): JSX.Element {
+function RunDetails({ focusTab, onSelectPackage, webAppEvaluatedModel }: RunDetailsProps): JSX.Element {
     const tabs = useMemo<ConfigTab[]>(() => {
         const items: ConfigTab[] = [];
 
@@ -88,6 +91,28 @@ function RunDetails({ focusTab, webAppEvaluatedModel }: RunDetailsProps): JSX.El
                             </div>
                         ))}
                     </dl>
+                ),
+            });
+        }
+
+        if (webAppEvaluatedModel.hasLicenseChoices()) {
+            items.push({
+                key: "license-choices",
+                label: "License Choices",
+                icon: Scale,
+                content: (
+                    <div className="space-y-3">
+                        <p className="text-muted-foreground text-sm">
+                            The license choices applied to this run, merged from the repository's <code>.ort.yml</code>{" "}
+                            and the global configuration, and filtered to those that actually apply to a package in this
+                            run. A choice resolves a disjunctive (OR) license expression to the single license ORT
+                            counts as effective.
+                        </p>
+                        <LicenseChoicesTable
+                            licenseChoices={webAppEvaluatedModel.licenseChoices}
+                            {...(onSelectPackage ? { onSelectPackage } : {})}
+                        />
+                    </div>
                 ),
             });
         }
@@ -163,7 +188,7 @@ function RunDetails({ focusTab, webAppEvaluatedModel }: RunDetailsProps): JSX.El
         });
 
         return items;
-    }, [webAppEvaluatedModel]);
+    }, [onSelectPackage, webAppEvaluatedModel]);
 
     const defaultValue = tabs[0]?.key ?? "";
     // Open `focusTab` first when the Summary deep-links to a section that exists, otherwise the first

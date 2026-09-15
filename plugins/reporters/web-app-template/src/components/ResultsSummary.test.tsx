@@ -120,6 +120,23 @@ describe("ResultsSummary", () => {
             expect(onSelectTab).toHaveBeenCalledWith(tab);
         });
 
+        it("sends the license choices pill to the License Choices tab, not the .ort.yml", async () => {
+            const onSelectRunDetailsTab = vi.fn();
+            const user = userEvent.setup();
+            render(<ResultsSummary onSelectRunDetailsTab={onSelectRunDetailsTab} webAppEvaluatedModel={model} />);
+
+            await user.click(screen.getByRole("button", { name: /license choice/i }));
+
+            expect(onSelectRunDetailsTab).toHaveBeenCalledWith("license-choices");
+        });
+
+        it("counts every applicable choice on the pill, matching the tab's rows", () => {
+            render(<ResultsSummary webAppEvaluatedModel={model} />);
+
+            const pill = screen.getByRole("button", { name: /license choice/i });
+            expect(pill.textContent).toContain(String(model.licenseChoicesCount));
+        });
+
         it.each([
             // The button's accessible name glues the label to its value (e.g. "Projects4"), so match on the
             // label prefix only.

@@ -401,6 +401,8 @@ export interface EvaluatedModelDeclaredLicensesProcessed {
 
 export interface EvaluatedModelPackage {
     readonly _id?: number;
+    readonly applied_license_choices?: EvaluatedModelSpdxLicenseChoice[];
+    readonly appliedLicenseChoices?: EvaluatedModelSpdxLicenseChoice[];
     readonly authors?: string[];
     readonly binary_artifact?: EvaluatedModelRemoteArtifact;
     readonly binaryArtifact?: EvaluatedModelRemoteArtifact;
@@ -633,7 +635,9 @@ export interface EvaluatedModel {
     readonly issueResolutions?: EvaluatedModelResolution[];
     readonly issues?: EvaluatedModelIssue[];
     readonly labels?: Record<string, string>;
+    readonly license_choices?: EvaluatedModelWebAppLicenseChoices;
     readonly license_finding_curations?: EvaluatedModelLicenseFindingCuration[];
+    readonly licenseChoices?: EvaluatedModelWebAppLicenseChoices;
     readonly licenseFindingCurations?: EvaluatedModelLicenseFindingCuration[];
     readonly licenses?: EvaluatedModelLicense[];
     readonly package_configurations?: EvaluatedModelWebAppPackageConfiguration[];

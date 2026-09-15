@@ -24,6 +24,7 @@ import Statistics from "@/models/Statistics";
 import ToolsMetadata from "@/models/ToolsMetadata";
 import WebAppCopyright from "@/models/WebAppCopyright";
 import WebAppLicense from "@/models/WebAppLicense";
+import WebAppLicenseChoices from "@/models/WebAppLicenseChoices";
 import WebAppLicenseFindingCuration from "@/models/WebAppLicenseFindingCuration";
 import WebAppOrtIssue from "@/models/WebAppOrtIssue";
 import WebAppPackage from "@/models/WebAppPackage";
@@ -106,6 +107,8 @@ class WebAppEvaluatedModel {
     #labels: Record<string, string> = {};
 
     #levels: number[] = [];
+
+    #licenseChoices: WebAppLicenseChoices = new WebAppLicenseChoices();
 
     #licenseFindingCurations: WebAppLicenseFindingCuration[] = [];
 
@@ -266,6 +269,10 @@ class WebAppEvaluatedModel {
                         plain.license_finding_curations = collected;
                     }
                 }
+            }
+
+            if (obj.license_choices || obj.licenseChoices) {
+                this.#licenseChoices = new WebAppLicenseChoices(obj.license_choices || obj.licenseChoices);
             }
 
             if (obj.package_curations || obj.packageCurations) {
@@ -621,6 +628,27 @@ class WebAppEvaluatedModel {
 
     get levels(): readonly number[] {
         return this.#levels;
+    }
+
+    get licenseChoices(): WebAppLicenseChoices {
+        return this.#licenseChoices;
+    }
+
+    /**
+     * Every applicable license choice, counted individually: a package contributing three choices counts
+     * three times. This is what the License Choices tab lists, so the Summary's count matches its rows.
+     *
+     * It can differ from statistics.resolvedConfiguration.licenseChoices, which counts the configured
+     * choices before ORT filters them down to the ones that actually apply to this run, and counts a
+     * package with several choices only once.
+     */
+    get licenseChoicesCount(): number {
+        const packageChoices = this.#licenseChoices.packageLicenseChoices.reduce(
+            (total, packageLicenseChoice) => total + packageLicenseChoice.licenseChoices.length,
+            0,
+        );
+
+        return this.#licenseChoices.repositoryLicenseChoices.length + packageChoices;
     }
 
     get licenseFindingCurations(): readonly WebAppLicenseFindingCuration[] {
@@ -1008,6 +1036,10 @@ class WebAppEvaluatedModel {
 
     hasLabels(): boolean {
         return Object.keys(this.#labels).length > 0;
+    }
+
+    hasLicenseChoices(): boolean {
+        return this.licenseChoicesCount > 0;
     }
 
     hasLevels(): boolean {
