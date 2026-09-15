@@ -49,9 +49,6 @@ data class EvaluatedIssue(
     @JsonIdentityReference(alwaysAsId = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val scanResult: EvaluatedScanResult?,
-    @JsonIdentityReference(alwaysAsId = true)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val path: EvaluatedPackagePath?,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val howToFix: String
 )

@@ -379,7 +379,6 @@
     "message" : "Example analyzer warning in included package.",
     "severity" : "WARNING",
     "pkg" : 2,
-    "path" : 0,
     "how_to_fix" : "Some how to fix text."
   }, {
     "_id" : 23,
@@ -390,7 +389,6 @@
     "severity" : "WARNING",
     "is_excluded" : true,
     "pkg" : 3,
-    "path" : 1,
     "how_to_fix" : "Some how to fix text."
   } ],
   "scan_results" : [ {
@@ -743,7 +741,7 @@
       "revision" : "",
       "path" : ""
     },
-    "paths" : [ 7, 8 ],
+    "paths" : [ 5, 6 ],
     "levels" : [ 0, 1 ],
     "scopes" : [ 0, 1 ],
     "scan_results" : [ 5 ],
@@ -790,7 +788,7 @@
       "revision" : "",
       "path" : ""
     },
-    "paths" : [ 2 ],
+    "paths" : [ 0 ],
     "levels" : [ 0 ],
     "scopes" : [ 1 ],
     "scan_results" : [ 2 ],
@@ -844,7 +842,7 @@
       "foo" : "bar"
     },
     "curations" : [ 0, 1 ],
-    "paths" : [ 3 ],
+    "paths" : [ 1 ],
     "levels" : [ 1 ],
     "scopes" : [ 1 ],
     "is_excluded" : true,
@@ -896,7 +894,7 @@
       "path" : ""
     },
     "curations" : [ 2 ],
-    "paths" : [ 4 ],
+    "paths" : [ 2 ],
     "levels" : [ 1 ],
     "scopes" : [ 1 ],
     "scan_results" : [ 3 ],
@@ -942,7 +940,7 @@
       "revision" : "",
       "path" : ""
     },
-    "paths" : [ 5, 6 ],
+    "paths" : [ 3, 4 ],
     "levels" : [ 1, 2 ],
     "scopes" : [ 0, 1 ],
     "scan_results" : [ 4 ],
@@ -1030,7 +1028,7 @@
       "path" : ""
     },
     "package_configurations" : [ 0 ],
-    "paths" : [ 9 ],
+    "paths" : [ 7 ],
     "levels" : [ 1 ],
     "scopes" : [ 1 ],
     "scan_results" : [ 6 ],
@@ -1068,80 +1066,80 @@
       "revision" : "",
       "path" : ""
     },
-    "paths" : [ 10, 11 ],
+    "paths" : [ 8, 9 ],
     "levels" : [ 0 ],
     "scopes" : [ 0, 1 ],
     "is_excluded" : false
   } ],
   "paths" : [ {
     "_id" : 0,
-    "pkg" : 2,
+    "pkg" : 3,
     "project" : 1,
-    "scope" : 0,
+    "scope" : 1,
     "path" : [ ]
   }, {
     "_id" : 1,
-    "pkg" : 3,
-    "project" : 1,
-    "scope" : 1,
-    "path" : [ ]
-  }, {
-    "_id" : 2,
-    "pkg" : 3,
-    "project" : 1,
-    "scope" : 1,
-    "path" : [ ]
-  }, {
-    "_id" : 3,
     "pkg" : 4,
     "project" : 1,
     "scope" : 1,
     "path" : [ 3 ]
   }, {
-    "_id" : 4,
+    "_id" : 2,
     "pkg" : 5,
     "project" : 1,
     "scope" : 1,
     "path" : [ 3 ]
   }, {
-    "_id" : 5,
+    "_id" : 3,
     "pkg" : 6,
     "project" : 1,
     "scope" : 0,
     "path" : [ 2 ]
   }, {
-    "_id" : 6,
+    "_id" : 4,
     "pkg" : 6,
     "project" : 1,
     "scope" : 1,
     "path" : [ 9, 2 ]
   }, {
-    "_id" : 7,
+    "_id" : 5,
     "pkg" : 2,
     "project" : 1,
     "scope" : 0,
     "path" : [ ]
   }, {
-    "_id" : 8,
+    "_id" : 6,
     "pkg" : 2,
     "project" : 1,
     "scope" : 1,
     "path" : [ 9 ]
   }, {
-    "_id" : 9,
+    "_id" : 7,
     "pkg" : 8,
     "project" : 1,
     "scope" : 1,
     "path" : [ 3 ]
   }, {
-    "_id" : 10,
+    "_id" : 8,
     "pkg" : 9,
     "project" : 1,
     "scope" : 0,
     "path" : [ ]
   }, {
-    "_id" : 11,
+    "_id" : 9,
     "pkg" : 9,
+    "project" : 1,
+    "scope" : 1,
+    "path" : [ ]
+  }, {
+    "_id" : 10,
+    "pkg" : 2,
+    "project" : 1,
+    "scope" : 0,
+    "path" : [ ]
+  }, {
+    "_id" : 11,
+    "pkg" : 3,
     "project" : 1,
     "scope" : 1,
     "path" : [ ]
