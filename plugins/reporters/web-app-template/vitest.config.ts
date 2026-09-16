@@ -35,8 +35,12 @@ export default defineConfig({
     test: {
         environment: "jsdom",
         globals: false,
-        setupFiles: ["./src/test/setup.ts"],
+        // CI runs this suite while Gradle compiles the Kotlin sources on the same runner, which takes it
+        // from seconds to minutes. The defaults of five and ten seconds are not enough under that load.
+        hookTimeout: 30_000,
         include: ["src/**/*.{test,spec}.{ts,tsx}"],
         restoreMocks: true,
+        setupFiles: ["./src/test/setup.ts"],
+        testTimeout: 30_000,
     },
 });

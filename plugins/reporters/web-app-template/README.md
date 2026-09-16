@@ -52,13 +52,14 @@ runs the matching npm script for you):
 
 | Command                                                 | What it does                                                                                                                                                            |
 | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `./gradlew :plugins:reporters:web-app-template:check`   | Frontend Biome lint, TypeScript type-check and Vitest suite (`npmLint` + `npmTypecheck` + `npmTest`).                                                                   |
+| `./gradlew :plugins:reporters:web-app-template:npmTest` | Runs the frontend Vitest suite (`npm run test`).                                                                                                                        |
+| `./gradlew :plugins:reporters:web-app-template:test`    | Runs the frontend Vitest suite. Named to match the task CI invokes.                                                                                                     |
 | `./gradlew :plugins:reporters:web-app:build`            | Runs the Vite build (`:web-app-template:npmBuild`), copies `scan-report-template.html` into the reporter's resources, and compiles the reporter (incl. its unit tests). |
 | `./gradlew :plugins:reporters:web-app:funTest`          | Renders a full report from the freshly built template (the reporter's functional test).                                                                                 |
-| `./gradlew :plugins:reporters:web-app-template:npmTest` | Runs the frontend Vitest suite (`npm run test`).                                                                                                                        |
-| `./gradlew :plugins:reporters:web-app-template:check`   | Frontend Biome lint + TypeScript type-check (`npmLint` + `npmTypecheck`).                                                                                               |
 
-Note: the frontend Vitest tests are **not** part of `:web-app-template:build`/`check` — run `npmTest`
-explicitly (or `npm run test`) for them.
+**Note:** `:web-app-template:build` and `check` both run the frontend Vitest suite, so a failing test
+fails the Gradle build.
 
 ## Before opening a pull request
 
