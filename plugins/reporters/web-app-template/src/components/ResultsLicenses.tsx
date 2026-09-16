@@ -120,7 +120,7 @@ function ResultsLicenses({
 
     return (
         <Tabs className={className} defaultValue={firstLicenseTab}>
-            <TabsList className="flex h-auto flex-wrap">
+            <TabsList>
                 {hasEffective ? (
                     <TabsTrigger value="effective">Effective ({effectiveLicenses.length})</TabsTrigger>
                 ) : null}
