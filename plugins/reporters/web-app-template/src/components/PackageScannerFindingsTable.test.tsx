@@ -42,6 +42,14 @@ describe("PackageScannerFindingsTable", () => {
         expect(scannerFindings.length).toBeGreaterThan(0);
     });
 
+    it("keeps the column menu reachable, having no global search to bring the toolbar out", () => {
+        render(<PackageScannerFindingsTable scannerFindings={scannerFindings} />);
+
+        // The toolbar used to appear only for a global search, an active filter or a table wide enough
+        // to scroll, which left this table's column menu unreachable until one of those happened.
+        expect(screen.getByRole("button", { name: /customize columns/i })).toBeInTheDocument();
+    });
+
     it("offers a reset button once a filter is applied and clears it on click", async () => {
         const user = userEvent.setup();
         render(<PackageScannerFindingsTable scannerFindings={scannerFindings} />);
