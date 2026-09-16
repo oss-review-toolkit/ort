@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.commands.downloader
 
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
@@ -30,7 +31,6 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
@@ -93,6 +93,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.utils.common.ArchiveType
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.encodeOrUnknown
@@ -166,7 +167,6 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
-        .required()
         .outputGroup()
 
     /**
@@ -227,6 +227,10 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
     ).int().default(8)
 
     override fun run() {
+        if (outputDir == null && !dryRun) {
+            throw UsageError("The '--output-dir' option is required unless '--dry-run' is specified.")
+        }
+
         val failureMessages = mutableListOf<String>()
 
         val duration = measureTime {
@@ -342,74 +346,93 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
 
         echo("$verb ${packages.size} project(s) / package(s) in total.")
 
-        val packageDownloadDirs = packages.associateWith { outputDir / it.id.toPath() }
-
-        downloadAllPackages(packageDownloadDirs, failureMessages, maxParallelDownloads)
+        val downloadDirs = downloadPackages(packages, failureMessages, maxParallelDownloads)
 
         if (archiveMode == ArchiveMode.BUNDLE && !dryRun) {
-            val zipFile = outputDir / "archive.zip"
+            val archiveDir = checkNotNull(outputDir)
+            val zipFile = archiveDir / "archive.zip"
 
-            logger.info { "Archiving directory '$outputDir' to '$zipFile'." }
-            val result = runCatching { outputDir.packZip(zipFile) }
+            logger.info { "Archiving directory '$archiveDir' to '$zipFile'." }
+            val result = runCatching { archiveDir.packZip(zipFile) }
 
             result.exceptionOrNull()?.let {
-                logger.error { "Could not archive '$outputDir': ${it.collectMessages()}" }
+                logger.error { "Could not archive '$archiveDir': ${it.collectMessages()}" }
             }
 
-            packageDownloadDirs.forEach { (_, dir) ->
-                dir.safeDeleteRecursively(baseDirectory = outputDir)
+            downloadDirs.forEach { dir ->
+                dir.safeDeleteRecursively(baseDirectory = archiveDir)
             }
         }
     }
 
     @Suppress("ForbiddenMethodCall")
-    private fun downloadAllPackages(
-        packageDownloadDirs: Map<Package, File>,
+    private fun downloadPackages(
+        packages: List<Package>,
         failureMessages: MutableList<String>,
         maxParallelDownloads: Int
-    ) = runBlocking {
-        val parallelDownloads = packageDownloadDirs.size.coerceAtMost(maxParallelDownloads)
+    ): Collection<File> =
+        runBlocking {
+            val parallelDownloads = packages.size.coerceAtMost(maxParallelDownloads)
 
-        val overallLayout = progressBarLayout(alignColumns = false) {
-            text(if (dryRun) "Verifying" else "Downloading", align = TextAlign.LEFT)
-            progressBar()
-            percentage()
-            timeRemaining()
-        }
+            val overallLayout = progressBarLayout(alignColumns = false) {
+                text(if (dryRun) "Verifying" else "Downloading", align = TextAlign.LEFT)
+                progressBar()
+                percentage()
+                timeRemaining()
+            }
 
-        val taskLayout = progressBarContextLayout<Pair<Package, Int>> {
-            text(fps = animationFps, align = TextAlign.LEFT) { "> Package '${context.first.id.toCoordinates()}'..." }
-            cell(width = ColumnWidth.Expand()) { EmptyWidget }
-            text(fps = animationFps, align = TextAlign.RIGHT) { "${context.second.inc()}/${packageDownloadDirs.size}" }
-        }
-
-        val progress = MultiProgressBarAnimation(terminal).animateInCoroutine()
-        val overall = progress.addTask(overallLayout, total = packageDownloadDirs.size.toLong())
-        val tasks = List(parallelDownloads) { progress.addTask(taskLayout, context = Package.EMPTY to 0, total = 1) }
-
-        launch { progress.execute() }
-
-        withContext(Dispatchers.IO.limitedParallelism(parallelDownloads)) {
-            packageDownloadDirs.entries.mapIndexed { index, (pkg, dir) ->
-                async {
-                    with(tasks[index % parallelDownloads]) {
-                        reset { context = pkg to index }
-                        downloadPackage(pkg, dir, failureMessages)
-                        advance()
-                    }
-
-                    overall.advance()
+            val taskLayout = progressBarContextLayout<Pair<Package, Int>> {
+                text(fps = animationFps, align = TextAlign.LEFT) {
+                    "> Package '${context.first.id.toCoordinates()}'..."
                 }
-            }.awaitAll()
+
+                cell(width = ColumnWidth.Expand()) { EmptyWidget }
+                text(fps = animationFps, align = TextAlign.RIGHT) { "${context.second.inc()}/${packages.size}" }
+            }
+
+            val progress = MultiProgressBarAnimation(terminal).animateInCoroutine()
+            val overall = progress.addTask(overallLayout, total = packages.size.toLong())
+            val tasks = List(parallelDownloads) {
+                progress.addTask(taskLayout, context = Package.EMPTY to 0, total = 1)
+            }
+
+            launch { progress.execute() }
+
+            val packageDownloadDirs = if (!dryRun) {
+                val dir = checkNotNull(outputDir)
+                packages.associateWith { dir / it.id.toPath() }
+            } else {
+                emptyMap()
+            }
+
+            withContext(Dispatchers.IO.limitedParallelism(parallelDownloads)) {
+                packages.mapIndexed { index, pkg ->
+                    async {
+                        with(tasks[index % parallelDownloads]) {
+                            reset { context = pkg to index }
+
+                            // For a dry run the download directory is not used anyway.
+                            val dir = if (dryRun) Os.tempDirectory else packageDownloadDirs.getValue(pkg)
+                            downloadPackage(pkg, dir, failureMessages)
+
+                            advance()
+                        }
+
+                        overall.advance()
+                    }
+                }.awaitAll()
+            }
+
+            packageDownloadDirs.values
         }
-    }
 
     private fun downloadPackage(pkg: Package, dir: File, failureMessages: MutableList<String>) {
         try {
             Downloader(ortConfig.downloader).download(pkg, dir, dryRun)
 
             if (archiveMode == ArchiveMode.ENTITY && !dryRun) {
-                val zipFile = outputDir / "${pkg.id.toPath("-")}.zip"
+                val archiveDir = checkNotNull(outputDir)
+                val zipFile = archiveDir / "${pkg.id.toPath("-")}.zip"
 
                 logger.info { "Archiving directory '$dir' to '$zipFile'." }
                 val result = runCatching {
@@ -423,7 +446,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
                     logger.error { "Could not archive '$dir': ${it.collectMessages()}" }
                 }
 
-                dir.safeDeleteRecursively(baseDirectory = outputDir)
+                dir.safeDeleteRecursively(baseDirectory = archiveDir)
             }
         } catch (e: DownloadException) {
             e.showStackTrace()
@@ -500,7 +523,13 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
             // project needs to be downloaded.
             val config = ortConfig.downloader.copy(allowMovingRevisions = true)
 
-            val provenance = Downloader(config).download(dummyPackage, outputDir, dryRun)
+            val provenance = if (dryRun) {
+                // For a dry run the download directory is not used anyway.
+                Downloader(config).download(dummyPackage, Os.tempDirectory, dryRun = true)
+            } else {
+                Downloader(config).download(dummyPackage, checkNotNull(outputDir), dryRun = false)
+            }
+
             echo("Successfully downloaded $provenance.")
         }.onFailure {
             it.showStackTrace()
