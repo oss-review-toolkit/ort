@@ -93,7 +93,15 @@ val npmBuild = tasks.named("npmBuild") {
 
     dependsOn(npmInstall)
     inputs.dir("src")
-    inputs.files("index.html", "vite.config.ts", "tsconfig.json", "tsconfig.node.json", "components.json")
+    inputs.files(
+        "components.json",
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "tsconfig.json",
+        "tsconfig.node.json",
+        "vite.config.ts"
+    )
 
     outputs.cacheIf { true }
     outputs.dir("build")
