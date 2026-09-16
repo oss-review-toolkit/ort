@@ -129,7 +129,16 @@ type ReportLoad = Promise<EvaluatedModel | "placeholder">;
 const LOAD_KEY = "__ortReportDataLoad__";
 
 function startReportLoad(): ReportLoad {
-    const payload = readReportPayload();
+    // The function `readReportPayload` throws for a missing or unreadable script element. Turn that
+    // into a rejected promise, as a throw here escapes the effect calling this and unmounts the app,
+    // leaving a blank page with the message only in the console.
+    let payload: ReportPayload;
+    try {
+        payload = readReportPayload();
+    } catch (err: unknown) {
+        return Promise.reject(err);
+    }
+
     if (payload.kind === "placeholder") {
         return Promise.resolve("placeholder");
     }
