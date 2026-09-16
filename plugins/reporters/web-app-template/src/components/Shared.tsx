@@ -395,10 +395,6 @@ function PackageLink({ id, onClick }: { id: string; onClick?: (id: string) => vo
     );
 }
 
-function renderAnchor(text: string, href?: string): JSX.Element {
-    return <Url href={href ?? text}>{text}</Url>;
-}
-
 // The lucide "summary" icon (https://lucide.dev/icons/summary) used for the Summary section. It is
 // not part of the pinned lucide-react 0.475 release, so its paths are vendored here as a drop-in
 // LucideIcon rather than bumping the whole icon set.
@@ -531,7 +527,6 @@ export {
     PackageConfigurationIcon,
     PackageCurationIcon,
     PackageLink,
-    renderAnchor,
     SummaryIcon,
     SyntaxHighlight,
     ToolsIcon,
