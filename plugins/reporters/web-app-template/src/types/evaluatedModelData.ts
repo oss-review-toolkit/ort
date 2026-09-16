@@ -324,7 +324,6 @@ export interface EvaluatedModelIssue {
     readonly is_excluded?: boolean;
     readonly isExcluded?: boolean;
     readonly message?: string;
-    readonly path?: string;
     readonly pkg?: number;
     readonly resolutions?: number[];
     readonly scan_result?: number;

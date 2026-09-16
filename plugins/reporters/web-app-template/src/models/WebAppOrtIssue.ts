@@ -37,8 +37,6 @@ class WebAppOrtIssue {
 
     #packageIndex: number | undefined;
 
-    #path: string | undefined;
-
     #scanResultIndex: number | undefined;
 
     #severity: string | undefined;
@@ -73,10 +71,6 @@ class WebAppOrtIssue {
 
             if (obj.message) {
                 this.#message = obj.message;
-            }
-
-            if (obj.path) {
-                this.#path = obj.path;
             }
 
             if (Number.isInteger(obj.pkg)) {
@@ -152,10 +146,6 @@ class WebAppOrtIssue {
 
     get packageName(): string {
         return this.#package ? (this.#package.id ?? "") : "";
-    }
-
-    get path(): string | undefined {
-        return this.#path;
     }
 
     // Resolve lazily from the model (matching WebAppFinding.scanResult) using the scan-result index, not
