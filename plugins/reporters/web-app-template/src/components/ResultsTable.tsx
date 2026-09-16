@@ -435,7 +435,7 @@ function PackageDetailPanel({
     return (
         <div className="p-4">
             <Tabs defaultValue={initialTab} {...(onTabChange ? { onValueChange: onTabChange } : {})}>
-                <TabsList className="flex h-auto flex-wrap">
+                <TabsList>
                     {tabs.map((tab) => (
                         <TabsTrigger key={tab.value} value={tab.value}>
                             {tab.label}

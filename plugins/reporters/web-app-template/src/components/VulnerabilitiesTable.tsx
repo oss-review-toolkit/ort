@@ -134,7 +134,7 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
     return (
         <div className="p-4 text-sm">
             <Tabs defaultValue="advisory">
-                <TabsList className="flex h-auto flex-wrap">
+                <TabsList>
                     <TabsTrigger value="advisory">Advisory</TabsTrigger>
                     {pkg ? <TabsTrigger value="package">Package Details</TabsTrigger> : null}
                     {pkg && paths.length > 0 ? <TabsTrigger value="paths">Dependency Paths</TabsTrigger> : null}

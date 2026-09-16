@@ -203,7 +203,7 @@ function RunDetails({ focusTab, onSelectPackage, webAppEvaluatedModel }: RunDeta
 
     return (
         <Tabs onValueChange={setActiveTab} value={activeTab}>
-            <TabsList className="flex h-auto flex-wrap">
+            <TabsList>
                 {tabs.map(({ icon: Icon, key, label }) => (
                     <TabsTrigger key={key} value={key}>
                         <Icon aria-hidden="true" className="mr-2 size-4" />

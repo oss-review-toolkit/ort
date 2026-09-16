@@ -208,7 +208,7 @@ function renderSubRow(row: Row<RuleViolationRow>): JSX.Element {
     return (
         <div className="p-4 text-sm">
             <Tabs defaultValue="details">
-                <TabsList className="flex h-auto flex-wrap">
+                <TabsList>
                     {tabs.map((tab) => (
                         <TabsTrigger key={tab.value} value={tab.value}>
                             {tab.label}

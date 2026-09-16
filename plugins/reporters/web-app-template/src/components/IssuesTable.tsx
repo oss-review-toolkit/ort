@@ -96,7 +96,7 @@ function renderSubRow(row: Row<IssueRow>): JSX.Element {
     return (
         <div className="p-4 text-sm">
             <Tabs defaultValue="details">
-                <TabsList className="flex h-auto flex-wrap">
+                <TabsList>
                     <TabsTrigger value="details">Technical Issue Details</TabsTrigger>
                     {issue.hasPackage() ? <TabsTrigger value="package">Package Details</TabsTrigger> : null}
                     {issue.hasPackage() && paths.length > 0 ? (
