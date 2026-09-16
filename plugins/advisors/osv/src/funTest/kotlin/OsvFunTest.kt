@@ -156,7 +156,7 @@ class OsvFunTest : WordSpec({
             }
         }
 
-        "associate vulnerabilities correctly for packages with duplicate requests".config(enabled = false) {
+        "associate vulnerabilities correctly for packages with duplicate requests" {
             val osv = OsvFactory.create()
             val purl = "pkg:npm/find-my-way@3.0.0"
             val packages = setOf(

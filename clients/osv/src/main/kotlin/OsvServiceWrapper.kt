@@ -45,12 +45,9 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
     ): List<Result<List<String>>> {
         if (requests.isEmpty()) return emptyList()
 
-        val distinctRequests = requests.distinct()
-        val requestChunks = distinctRequests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE)
-
         @Suppress("ForbiddenMethodCall")
         val results = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            requestChunks.map { chunk ->
+            requests.chunked(OsvService.BATCH_REQUEST_MAX_SIZE).map { chunk ->
                 async {
                     val batchRequest = VulnerabilitiesForPackageBatchRequest(chunk)
 
@@ -79,7 +76,7 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
             }.awaitAll()
         }.flatten()
 
-        check(distinctRequests.size == results.size)
+        check(requests.size == results.size)
 
         return results
     }
@@ -96,12 +93,14 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
 
         @Suppress("ForbiddenMethodCall")
         val vulnerabilityResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            ids.distinct().map { id ->
+            ids.map { id ->
                 async {
                     runCatching { service.getVulnerabilityForId(id) }.unwrapHttpException()
                 }
             }.awaitAll()
         }
+
+        check(ids.size == vulnerabilityResults.size)
 
         // Combine the individual results of requests into one encapsulating result that is a failure if any of the
         // requests failed.
