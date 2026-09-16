@@ -428,9 +428,14 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
 
     private fun downloadPackage(pkg: Package, dir: File, failureMessages: MutableList<String>) {
         try {
-            Downloader(ortConfig.downloader).download(pkg, dir, dryRun)
+            if (dryRun) {
+                Downloader(ortConfig.downloader).download(pkg, dir, dryRun = true)
+                return
+            }
 
-            if (archiveMode == ArchiveMode.ENTITY && !dryRun) {
+            Downloader(ortConfig.downloader).download(pkg, checkOutputDirectory(dir), dryRun = false)
+
+            if (archiveMode == ArchiveMode.ENTITY) {
                 val archiveDir = checkNotNull(outputDir)
                 val zipFile = archiveDir / "${pkg.id.toPath("-")}.zip"
 
@@ -527,7 +532,8 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
                 // For a dry run the download directory is not used anyway.
                 Downloader(config).download(dummyPackage, Os.tempDirectory, dryRun = true)
             } else {
-                Downloader(config).download(dummyPackage, checkNotNull(outputDir), dryRun = false)
+                val downloadDir = checkOutputDirectory(checkNotNull(outputDir))
+                Downloader(config).download(dummyPackage, downloadDir, dryRun = false)
             }
 
             echo("Successfully downloaded $provenance.")
