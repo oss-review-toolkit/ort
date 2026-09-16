@@ -25,6 +25,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.maps.shouldMatchAll
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -153,6 +154,20 @@ class OsvFunTest : WordSpec({
                 packageFindings.getValue(id).map { it.id } shouldContainAll
                     expectedResult.getValue(id).map { it.id }
             }
+        }
+
+        "associate vulnerabilities correctly for packages with duplicate requests".config(enabled = false) {
+            val osv = OsvFactory.create()
+            val purl = "pkg:npm/find-my-way@3.0.0"
+            val packages = setOf(
+                Package.EMPTY.copy(id = Identifier("NPM::find-my-way:3.0.0"), purl = purl),
+                Package.EMPTY.copy(id = Identifier("NPM::find-my-way-vendored:3.0.0"), purl = purl),
+                identifierToPackage("PyPI::donfig:0.2.0")
+            )
+
+            val packageFindings = osv.retrievePackageFindings(packages)
+
+            packageFindings shouldHaveSize 3
         }
     }
 })
