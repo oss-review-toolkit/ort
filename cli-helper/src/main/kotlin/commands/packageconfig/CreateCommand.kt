@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.scanner.storages.PackageBasedFileStorage
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -141,28 +142,26 @@ internal class CreateCommand : OrtHelperCommand(
 
         val ortConfig = OrtConfiguration.load(emptyMap(), configFile)
         val packageCurationProviders = PackageCurationProviderFactory.create(ortConfig.packageCurationProviders)
+            .map { it.second }
+
+        scanResults.forEach { scanResult ->
+            val resultToProcess = scanResult.filterByVcsPath(packageCurationProviders)
+            createPackageConfiguration(resultToProcess).writeToFile()
+        }
+    }
+
+    private fun ScanResult.filterByVcsPath(packageCurationProviders: Collection<PackageCurationProvider>): ScanResult {
+        if (provenance !is RepositoryProvenance) return this
 
         val pkg = Package.EMPTY.copy(id = packageId)
-        val curations = packageCurationProviders.flatMap { (_, provider) ->
-            provider.getCurationsFor(listOf(pkg))
-        }
-
+        val curations = packageCurationProviders.flatMap { it.getCurationsFor(listOf(pkg)) }
         val curatedPackage = curations.filter { it.isApplicable(packageId) }
             .fold(pkg.toCuratedPackage()) { cur, curation ->
                 curation.apply(cur)
             }
 
         val vcsPath = curatedPackage.metadata.vcsProcessed.path
-
-        scanResults.forEach { scanResult ->
-            val resultToProcess = if (vcsPath.isNotEmpty() && scanResult.provenance is RepositoryProvenance) {
-                scanResult.filterByPath(vcsPath)
-            } else {
-                scanResult
-            }
-
-            createPackageConfiguration(resultToProcess).writeToFile()
-        }
+        return if (vcsPath.isNotEmpty()) filterByPath(vcsPath) else this
     }
 
     private fun PackageConfiguration.writeToFile() {
