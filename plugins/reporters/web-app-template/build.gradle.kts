@@ -106,6 +106,13 @@ val npmLint = tasks.named("npmLint") {
     dependsOn(npmInstall)
 }
 
+val npmTest = tasks.named("npmTest") {
+    description = "Run the Vitest suite."
+    group = "Node"
+
+    dependsOn(npmInstall)
+}
+
 val npmTypecheck = tasks.named("npmTypecheck") {
     description = "Run the TypeScript type-checker."
     group = "Node"
@@ -118,11 +125,15 @@ val npmTypecheck = tasks.named("npmTypecheck") {
  */
 
 tasks.register("build") {
-    dependsOn(npmBuild, npmLint, npmTypecheck)
+    dependsOn(npmBuild, npmLint, npmTest, npmTypecheck)
 }
 
 tasks.register("check") {
-    dependsOn(npmLint, npmTypecheck)
+    dependsOn(npmLint, npmTest, npmTypecheck)
+}
+
+tasks.register("test") {
+    dependsOn(npmTest)
 }
 
 tasks.register<Delete>("clean") {
