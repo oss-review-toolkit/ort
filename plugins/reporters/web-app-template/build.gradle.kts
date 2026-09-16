@@ -79,8 +79,7 @@ val npmInstall = tasks.register<Exec>("npmInstall") {
 
     commandLine = listOf(nodeExecutable.path, npmCliJs.path, "install", "--no-audit", "--no-fund")
 
-    val oldPath = System.getenv("PATH")
-    environment = environment + ("PATH" to listOf(nodeBinDir.path, oldPath).joinToString(File.pathSeparator))
+    environment = environment + ("PATH" to "${nodeBinDir.path}${File.pathSeparator}${System.getenv("PATH")}")
 
     inputs.files("package.json", "package-lock.json")
 
