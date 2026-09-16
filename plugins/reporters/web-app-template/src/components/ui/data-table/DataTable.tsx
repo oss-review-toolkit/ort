@@ -219,7 +219,9 @@ function DataTable<TData>({
     const rows = table.getRowModel().rows;
 
     const isFiltered = table.getState().columnFilters.length > 0 || globalFilter.length > 0;
-    const showToolbar = enableGlobalFilter || scroll.overflow || isFiltered;
+    // Every control the toolbar holds has to be able to bring it out, or it becomes unreachable:
+    // a table with the global search off and nothing filtered still has its column menu in here.
+    const showToolbar = enableColumnVisibility || enableGlobalFilter || scroll.overflow || isFiltered;
 
     const handleRowClick = (row: Row<TData>) => (event: MouseEvent<HTMLTableRowElement>) => {
         if (!row.getCanExpand()) return;
