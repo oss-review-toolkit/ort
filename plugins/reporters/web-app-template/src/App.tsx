@@ -73,6 +73,9 @@ function readReportPayload(): ReportPayload {
     return { kind: "data", payload: raw, gzip };
 }
 
+/** Matches the note in index.html; the floor comes from Tailwind CSS v4. */
+const SUPPORTED_BROWSERS = "Chrome 111, Edge 111, Safari 16.4 or Firefox 128, or newer";
+
 // Progress from the single in-flight load is forwarded to whichever App mount is currently active.
 // StrictMode mounts App twice in dev, so the sink is swapped per mount rather than bound to one.
 let activeProgress: ProgressHandler | null = null;
@@ -80,10 +83,17 @@ const emitProgress: ProgressHandler = (text, percent) => activeProgress?.(text, 
 
 // Decode the payload into an EvaluatedModel. The decode (base64 + gzip inflate + JSON.parse) is the
 // single biggest main-thread stall for large reports, so it runs in an inlined Web Worker to keep the
-// tab responsive and let the progress bar animate. Browsers without Worker/DecompressionStream fall
-// back to decoding on the main thread. The worker terminates itself once it reports done or error.
+// tab responsive and let the progress bar animate. Browsers without Worker fall back to decoding on
+// the main thread. The worker terminates itself once it reports done or error.
 function decodeReport(payload: string, gzip: boolean): Promise<EvaluatedModel> {
-    if (typeof Worker === "undefined" || typeof DecompressionStream === "undefined") {
+    // A browser without DecompressionStream cannot read a gzip payload, and is too old for the stylesheet
+    // anyway, so report it rather than failing on a missing global. A missing Worker is different: the
+    // main thread can still decode.
+    if (gzip && typeof DecompressionStream === "undefined") {
+        return Promise.reject(new Error(`This report needs ${SUPPORTED_BROWSERS}.`));
+    }
+
+    if (typeof Worker === "undefined") {
         emitProgress("Parsing report data...", 45);
         return payloadToEvaluatedModel(payload, gzip);
     }
