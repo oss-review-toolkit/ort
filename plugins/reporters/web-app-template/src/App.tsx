@@ -25,6 +25,7 @@ import WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import AppPage from "@/pages/AppPage";
 import ErrorPage from "@/pages/ErrorPage";
 import LoadingPage from "@/pages/LoadingPage";
+import TemplatePage from "@/pages/TemplatePage";
 import type { ReportWorkerRequest, ReportWorkerResponse } from "@/reportDataWorker";
 import ReportDataWorker from "@/reportDataWorker?worker&inline";
 import type { EvaluatedModel } from "@/types/evaluatedModelData";
@@ -34,6 +35,7 @@ type LoaderStatus =
     | { state: "idle" }
     | { state: "loading"; text: string; percent: number }
     | { state: "ready"; raw: EvaluatedModel }
+    | { state: "template" }
     | { state: "error"; message: string; submessage?: string };
 
 type ReportPayload = { kind: "placeholder" } | { kind: "data"; payload: string; gzip: boolean };
@@ -178,13 +180,7 @@ export default function App(): JSX.Element {
                     return;
                 }
                 if (data === "placeholder") {
-                    setStatus({
-                        state: "error",
-                        message: "Waiting for report data...",
-                        submessage:
-                            "Either something went wrong or you are looking at an ORT report template file " +
-                            "with no embedded scan results.",
-                    });
+                    setStatus({ state: "template" });
                     return;
                 }
                 setStatus({ state: "ready", raw: data });
@@ -217,6 +213,10 @@ export default function App(): JSX.Element {
             (window as unknown as { ORT?: WebAppEvaluatedModel }).ORT = webAppEvaluatedModel;
         }
     }, [webAppEvaluatedModel]);
+
+    if (status.state === "template") {
+        return <TemplatePage />;
+    }
 
     if (status.state === "error") {
         return <ErrorPage message={status.message} submessage={status.submessage ?? ""} />;

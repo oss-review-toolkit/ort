@@ -73,6 +73,17 @@ describe("App", () => {
         addReportDataScript("ORT_REPORT_DATA_PLACEHOLDER", "application/json");
         render(<App />);
 
-        expect(await screen.findByText("Waiting for report data...")).toBeInTheDocument();
+        expect(await screen.findByRole("heading", { name: "An empty report" })).toBeInTheDocument();
+    });
+
+    it("does not dress the empty template as a failure", async () => {
+        addReportDataScript("ORT_REPORT_DATA_PLACEHOLDER", "application/json");
+        render(<App />);
+
+        await screen.findByRole("heading", { name: "An empty report" });
+        // Reusing the error page made a template indistinguishable from a report that failed to load.
+        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+        expect(screen.queryByText(/something went wrong/i)).not.toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: /issue on github/i })).not.toBeInTheDocument();
     });
 });
