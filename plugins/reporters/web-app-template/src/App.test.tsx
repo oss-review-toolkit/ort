@@ -18,7 +18,7 @@
  */
 
 import { screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import App from "@/App";
 import { render } from "@/test/render";
@@ -43,6 +43,7 @@ describe("App", () => {
 
     afterEach(() => {
         document.getElementById("ort-report-data")?.remove();
+        vi.unstubAllGlobals();
     });
 
     it("reports a missing data script element instead of rendering nothing", async () => {
@@ -64,8 +65,29 @@ describe("App", () => {
     it("keeps the message the reader needs on screen, not just in the console", async () => {
         render(<App />);
 
-        expect(await screen.findByText("Oops, something went wrong...")).toBeInTheDocument();
-        expect(screen.getByRole("link", { name: /issue on github/i })).toBeInTheDocument();
+        expect(await screen.findByRole("heading", { name: "No report data found" })).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: /ask on slack/i })).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: /report an issue/i })).toBeInTheDocument();
+    });
+
+    it("names the cause rather than apologizing", async () => {
+        addReportDataScript('{"foo":1}', "text/plain");
+        render(<App />);
+
+        await screen.findByRole("heading", { name: "No report data found" });
+        // The page used to lead with a fixed "Oops, something went wrong..." above the one line that
+        // actually said anything.
+        expect(screen.queryByText(/oops/i)).not.toBeInTheDocument();
+    });
+
+    it("names the browser when it cannot inflate the report data", async () => {
+        // The only branch that reaches decodeReport, so nothing else covers it.
+        vi.stubGlobal("DecompressionStream", undefined);
+        addReportDataScript("H4sIAAAAAAAAA6tWKkpNLFKyUkpKLFKqBQBQe7YvDwAAAA==", "application/gzip");
+        render(<App />);
+
+        expect(await screen.findByRole("heading", { name: "Unsupported browser" })).toBeInTheDocument();
+        expect(screen.getByText(/Chrome 111/)).toBeInTheDocument();
     });
 
     it("tells the reader a template carries no results yet", async () => {
@@ -74,6 +96,16 @@ describe("App", () => {
         render(<App />);
 
         expect(await screen.findByRole("heading", { name: "An empty report" })).toBeInTheDocument();
+    });
+
+    it("does not mistake a report written without its data for the template", async () => {
+        // Only the placeholder means "template". An empty element means the data never made it into the
+        // file, and showing the template page there would insist nothing had gone wrong.
+        addReportDataScript("", "application/gzip");
+        render(<App />);
+
+        expect(await screen.findByRole("heading", { name: "No report data found" })).toBeInTheDocument();
+        expect(screen.queryByText(/Nothing has gone wrong/)).not.toBeInTheDocument();
     });
 
     it("does not dress the empty template as a failure", async () => {

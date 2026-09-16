@@ -21,6 +21,7 @@ import type { JSX } from "react";
 import { useEffect, useMemo, useState } from "react";
 
 import { payloadToEvaluatedModel } from "@/lib/reportData";
+import { type ReportErrorKind, ReportLoadError, toReportErrorDetail, toReportErrorKind } from "@/lib/reportErrors";
 import WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import AppPage from "@/pages/AppPage";
 import ErrorPage from "@/pages/ErrorPage";
@@ -36,16 +37,16 @@ type LoaderStatus =
     | { state: "loading"; text: string; percent: number }
     | { state: "ready"; raw: EvaluatedModel }
     | { state: "template" }
-    | { state: "error"; message: string; submessage?: string };
+    | { state: "error"; detail: string; kind: ReportErrorKind };
 
 type ReportPayload = { kind: "placeholder" } | { kind: "data"; payload: string; gzip: boolean };
 
 type ProgressHandler = (text: string, percent: number) => void;
 
-// The placeholder string is exactly 27 characters long. Comparing by length avoids embedding the
-// literal placeholder text in the JS bundle, which would otherwise inflate the post-build
-// occurrence count beyond the single occurrence inside the data script element.
-const PLACEHOLDER_LENGTH = 27;
+// The reporter splits the built template on the first occurrence of this token, so it must not appear
+// in the bundle as a literal or the split would land in the JavaScript instead of the data element.
+// Joining the fragments at run time keeps it out: esbuild folds string concatenation, but not this.
+const PLACEHOLDER = ["ORT_REPORT_DATA", "PLACEHOLDER"].join("_");
 
 // Read the embedded report payload off the DOM and remove the script element afterwards. For a large
 // report the script's text is tens or hundreds of MB; dropping the node lets that string be garbage
@@ -53,12 +54,19 @@ const PLACEHOLDER_LENGTH = 27;
 function readReportPayload(): ReportPayload {
     const script = document.getElementById("ort-report-data") as HTMLScriptElement | null;
     if (!script) {
-        throw new Error("Report data script element #ort-report-data not found in document.");
+        throw new ReportLoadError("missing-data", "Report data script element #ort-report-data not found in document.");
     }
 
     const raw = (script.textContent ?? "").trim();
-    if (raw === "" || raw.length === PLACEHOLDER_LENGTH) {
+    if (raw === PLACEHOLDER) {
         return { kind: "placeholder" };
+    }
+
+    // An empty element is not the template: the one ORT ships always carries the placeholder. Reaching
+    // here means the report was written without its data, so say so rather than showing the template
+    // page, which would tell the reader nothing had gone wrong.
+    if (raw === "") {
+        throw new ReportLoadError("missing-data", "Report data script element #ort-report-data is empty.");
     }
 
     const type = script.type;
@@ -68,7 +76,7 @@ function readReportPayload(): ReportPayload {
     } else if (type === "application/json" || type === "") {
         gzip = false;
     } else {
-        throw new Error(`Unsupported report data type "${type}".`);
+        throw new ReportLoadError("missing-data", `Unsupported report data type "${type}".`);
     }
 
     script.remove();
@@ -92,7 +100,7 @@ function decodeReport(payload: string, gzip: boolean): Promise<EvaluatedModel> {
     // anyway, so report it rather than failing on a missing global. A missing Worker is different: the
     // main thread can still decode.
     if (gzip && typeof DecompressionStream === "undefined") {
-        return Promise.reject(new Error(`This report needs ${SUPPORTED_BROWSERS}.`));
+        return Promise.reject(new ReportLoadError("unsupported-browser", `This report needs ${SUPPORTED_BROWSERS}.`));
     }
 
     if (typeof Worker === "undefined") {
@@ -112,12 +120,12 @@ function decodeReport(payload: string, gzip: boolean): Promise<EvaluatedModel> {
                 resolve(message.data as EvaluatedModel);
             } else {
                 worker.terminate();
-                reject(new Error(message.message));
+                reject(new ReportLoadError("unknown", message.message));
             }
         };
         worker.onerror = (event: ErrorEvent) => {
             worker.terminate();
-            reject(new Error(event.message || "Report data worker failed."));
+            reject(new ReportLoadError("unknown", event.message || "Report data worker failed."));
         };
 
         worker.postMessage({ payload, gzip } satisfies ReportWorkerRequest);
@@ -189,11 +197,10 @@ export default function App(): JSX.Element {
                 if (cancelled) {
                     return;
                 }
-                const message = err instanceof Error ? err.message : "Unknown error";
                 setStatus({
                     state: "error",
-                    message: "Oops, something went wrong...",
-                    submessage: message,
+                    detail: toReportErrorDetail(err),
+                    kind: toReportErrorKind(err),
                 });
             });
 
@@ -219,7 +226,7 @@ export default function App(): JSX.Element {
     }
 
     if (status.state === "error") {
-        return <ErrorPage message={status.message} submessage={status.submessage ?? ""} />;
+        return <ErrorPage detail={status.detail} kind={status.kind} />;
     }
 
     if (status.state === "ready" && webAppEvaluatedModel) {
