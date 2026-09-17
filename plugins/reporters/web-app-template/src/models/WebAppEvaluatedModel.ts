@@ -168,7 +168,12 @@ class WebAppEvaluatedModel {
 
     #vulnerabilityResolutions: WebAppVulnerabilityResolution[] = [];
 
-    constructor(obj?: EvaluatedModel) {
+    /**
+     * @param eagerFindingsForPackageId The package whose findings are built up front rather than on a
+     *   later task. A deep link expands its package in the same tick this model is constructed, so that
+     *   panel would otherwise read findings that are still empty and never hear about them arriving.
+     */
+    constructor(obj?: EvaluatedModel, eagerFindingsForPackageId?: string | null) {
         if (obj) {
             if (obj.copyrights) {
                 for (let i = 0, len = obj.copyrights.length; i < len; i++) {
@@ -303,7 +308,11 @@ class WebAppEvaluatedModel {
                     if (!raw) {
                         continue;
                     }
-                    const webAppPackage = new WebAppPackage(raw, this);
+                    const webAppPackage = new WebAppPackage(
+                        raw,
+                        this,
+                        raw.id !== undefined && raw.id === eagerFindingsForPackageId,
+                    );
                     this.#packages.push(webAppPackage);
                     this.#packagesByKeyMap.set(webAppPackage.key, webAppPackage);
                     this.#packagesIdtoKeyMap.set(webAppPackage.id, webAppPackage.key);
@@ -355,15 +364,23 @@ class WebAppEvaluatedModel {
 
             if (obj.scan_results || obj.scanResults) {
                 const scanResults = obj.scan_results || obj.scanResults || [];
-
-                setTimeout(() => {
+                const buildScanResults = (): void => {
                     for (let i = 0, len = scanResults.length; i < len; i++) {
                         const raw = scanResults[i];
                         if (raw) {
                             this.#scanResults.push(new WebAppScanResult(raw));
                         }
                     }
-                }, 0);
+                };
+
+                // A finding resolves the scanner that reported it from here, so a package opened by a
+                // deep link needs these as much as it needs its findings; without them its panel lists
+                // the findings with an empty scanner column.
+                if (eagerFindingsForPackageId) {
+                    buildScanResults();
+                } else {
+                    setTimeout(buildScanResults, 0);
+                }
             }
 
             if (obj.repository) {
