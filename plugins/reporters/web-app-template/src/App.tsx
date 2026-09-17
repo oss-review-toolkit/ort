@@ -20,6 +20,7 @@
 import type { JSX } from "react";
 import { useEffect, useMemo, useState } from "react";
 
+import { getDeepLinkFocus } from "@/lib/deepLinks";
 import { payloadToEvaluatedModel } from "@/lib/reportData";
 import { type ReportErrorKind, ReportLoadError, toReportErrorDetail, toReportErrorKind } from "@/lib/reportErrors";
 import WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
@@ -211,7 +212,9 @@ export default function App(): JSX.Element {
     }, []);
 
     const webAppEvaluatedModel = useMemo(
-        () => (status.state === "ready" ? new WebAppEvaluatedModel(status.raw) : null),
+        // The deep-linked package opens in the same tick this model is built, so it needs its
+        // findings up front rather than on a later task.
+        () => (status.state === "ready" ? new WebAppEvaluatedModel(status.raw, getDeepLinkFocus().packageId) : null),
         [status],
     );
 

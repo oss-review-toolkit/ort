@@ -47,6 +47,7 @@ import { RunDetails } from "@/components/RunDetails";
 import { useSettings } from "@/components/SettingsProvider";
 import { SummaryIcon } from "@/components/Shared";
 import { VulnerabilitiesTable } from "@/components/VulnerabilitiesTable";
+import { getDeepLinkFocus } from "@/lib/deepLinks";
 import { cn } from "@/lib/utils";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { SettingsPage } from "@/pages/SettingsPage";
@@ -110,31 +111,13 @@ function readHashTab(): TabId {
 }
 
 // The deep-linked targets from the query string: a package (+ its inner detail tab) for the
-// Packages/Dependency Graph/Technical Issues/Policy Violations views, e.g. ?pkg-id=...&pkg-tab=..., and a vulnerability (its advisory
-// id, scoped by the affected package) for the Vulnerabilities tab, e.g. ?vul-id=...&pkg-id=...
-function getActiveFocusFromUrl(): {
-    packageId: string | null;
-    packageTab: string | null;
-    vulnerabilityId: string | null;
-} {
-    if (typeof window === "undefined") {
-        return { packageId: null, packageTab: null, vulnerabilityId: null };
-    }
-    const params = new URLSearchParams(window.location.search);
-    return {
-        packageId: params.get("pkg-id"),
-        packageTab: params.get("pkg-tab"),
-        vulnerabilityId: params.get("vul-id"),
-    };
-}
-
 function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
     const { settings } = useSettings();
     const [activeTab, setActiveTab] = useState<TabId>(() => readHashTab());
-    const [focusPackageId, setFocusPackageId] = useState<string | null>(() => getActiveFocusFromUrl().packageId);
-    const [focusPackageTab, setFocusPackageTab] = useState<string | null>(() => getActiveFocusFromUrl().packageTab);
+    const [focusPackageId, setFocusPackageId] = useState<string | null>(() => getDeepLinkFocus().packageId);
+    const [focusPackageTab, setFocusPackageTab] = useState<string | null>(() => getDeepLinkFocus().packageTab);
     const [focusVulnerabilityId, setFocusVulnerabilityId] = useState<string | null>(
-        () => getActiveFocusFromUrl().vulnerabilityId,
+        () => getDeepLinkFocus().vulnerabilityId,
     );
     const [focusLicense, setFocusLicense] = useState<{ columnId: string; license: string } | null>(null);
     const [focusLevel, setFocusLevel] = useState<string[] | null>(null);

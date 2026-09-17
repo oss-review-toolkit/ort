@@ -188,7 +188,11 @@ class WebAppPackage {
 
     key: string | undefined;
 
-    constructor(obj?: EvaluatedModelPackage, webAppEvaluatedModel?: WebAppEvaluatedModel) {
+    constructor(
+        obj?: EvaluatedModelPackage,
+        webAppEvaluatedModel?: WebAppEvaluatedModel,
+        buildFindingsEagerly: boolean = false,
+    ) {
         if (obj) {
             if (Number.isInteger(obj._id)) {
                 this.#_id = obj._id;
@@ -292,7 +296,7 @@ class WebAppPackage {
 
             if (obj.findings && webAppEvaluatedModel) {
                 const findings = obj.findings;
-                setTimeout(() => {
+                const buildFindings = (): void => {
                     for (let i = 0, len = findings.length; i < len; i++) {
                         const finding = findings[i];
                         if (!finding) {
@@ -304,7 +308,17 @@ class WebAppPackage {
 
                         this.#findings.push(new WebAppFinding(finding, webAppEvaluatedModel));
                     }
-                }, 0);
+                };
+
+                // Deferred by default so a report with a great many findings does not lock up the
+                // browser while the model is built. The caller asks for them up front only when
+                // something is about to read them immediately, which nothing would tell it about
+                // afterwards.
+                if (buildFindingsEagerly) {
+                    buildFindings();
+                } else {
+                    setTimeout(buildFindings, 0);
+                }
             }
 
             if (obj.is_project || obj.isProject) {
@@ -564,8 +578,8 @@ class WebAppPackage {
     }
 
     get excludedFindings(): WebAppFinding[] {
-        // Resolve fresh on each read: #findings and #excludedFindingsIndexes are filled asynchronously
-        // (setTimeout in the constructor), so a memoised empty first read would persist.
+        // Resolve fresh on each read: #findings and #excludedFindingsIndexes are filled on a later
+        // task, so a memoised empty first read would persist.
         const excludedFindings: WebAppFinding[] = [];
         this.#excludedFindingsIndexes.forEach((index) => {
             const finding = this.#findings[index];
