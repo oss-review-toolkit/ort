@@ -57,8 +57,9 @@ const s = (count: number): string => (count === 1 ? "" : "s");
 // Pass an explicit plural form for irregular words (e.g. Dependency -> Dependencies).
 export const FINDING_TALLY_DEFINITIONS = {
     resolved:
-        "Findings marked resolved by a resolution in the configuration, each with a reason why it is " +
-        "acceptable. Counts vulnerabilities as well as issues and policy violations.",
+        "Technical issues and policy violations marked resolved by a resolution in the .ort.yml or the " +
+        "global configuration. Vulnerabilities are not counted as whether they must be resolved is a " +
+        "policy decision.",
     unresolved:
         "Open technical issues and policy violations at or above the run's severe thresholds - the ones " +
         "that decide whether the run passes. Vulnerabilities and findings below the thresholds are not " +
@@ -371,8 +372,11 @@ function ResultsSummary({
     });
 
     const resolvedVulnerabilities = vulnerabilityCounts.resolved;
+    // Both tallies count the same population: technical issues and policy violations. Whether a
+    // vulnerability has to be resolved is a policy decision, so counting vulnerabilities here would
+    // count that decision twice. The Vulnerabilities card keeps its own resolved tally.
     const severeFindings = unresolvedIssues + unresolvedRuleViolations;
-    const resolvedFindings = resolvedIssues + resolvedRuleViolations + resolvedVulnerabilities;
+    const resolvedFindings = resolvedIssues + resolvedRuleViolations;
 
     // Run verdict — the run needs attention when open findings remain at or above the severe thresholds.
     const passed = severeFindings === 0;
