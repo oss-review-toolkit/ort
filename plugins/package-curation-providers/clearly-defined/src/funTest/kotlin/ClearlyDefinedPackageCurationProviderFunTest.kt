@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.TestAbortedException
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingle
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -45,9 +46,9 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // https://clearlydefined.io/definitions/sourcearchive/mavencentral/javax.servlet/javax.servlet-api/3.1.0
             val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
 
-            val curations = withIgnoreUnavailable { provider.getCurationsFor(packages) }
+            val result = provider.getCurationsResultFor(packages).withIgnoreUnavailable()
 
-            with(curations.shouldBeSingle().data) {
+            with(result.shouldBeSuccess().shouldBeSingle().data) {
                 concludedLicense shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
                 publishedAt shouldBe Instant.parse("2013-04-25T00:00:00Z")
             }
@@ -57,9 +58,9 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // https://clearlydefined.io/definitions/sourcearchive/mavencentral/org.slf4j/slf4j-log4j12/1.7.30
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
-            val curations = withIgnoreUnavailable { provider.getCurationsFor(packages) }
+            val result = provider.getCurationsResultFor(packages).withIgnoreUnavailable()
 
-            with(curations.shouldBeSingle().data) {
+            with(result.shouldBeSuccess().shouldBeSingle().data) {
                 vcs?.revision shouldBe "0b97c416e42a184ff9728877b461c616187c58f7"
                 publishedAt shouldBe Instant.parse("2019-12-16T00:00:00Z")
             }
@@ -68,9 +69,9 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         "return no curation for a non-existing dummy NPM package" {
             val packages = createPackagesFromIds("NPM:@scope:name:1.2.3")
 
-            val curations = withIgnoreUnavailable { provider.getCurationsFor(packages) }
+            val result = provider.getCurationsResultFor(packages).withIgnoreUnavailable()
 
-            curations should beEmpty()
+            result.shouldBeSuccess() should beEmpty()
         }
     }
 
@@ -86,18 +87,18 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             // Use an id which is known to have non-empty results from an earlier test.
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
-            val curations = withIgnoreUnavailable { customProvider.getCurationsFor(packages) }
+            val result = customProvider.getCurationsResultFor(packages).withIgnoreUnavailable()
 
-            curations should beEmpty()
+            result.shouldBeSuccess() should beEmpty()
         }
 
         "be retrieved for packages without a namespace" {
             // https://clearlydefined.io/definitions/npm/npmjs/-/acorn/0.6.0
             val packages = createPackagesFromIds("NPM::acorn:0.6.0")
 
-            val curations = withIgnoreUnavailable { provider.getCurationsFor(packages) }
+            val curations = provider.getCurationsResultFor(packages).withIgnoreUnavailable()
 
-            with(curations.shouldBeSingle().data) {
+            with(curations.shouldBeSuccess().shouldBeSingle().data) {
                 publishedAt shouldBe Instant.parse("2014-06-06T00:00:00Z")
             }
         }
@@ -108,15 +109,13 @@ private fun createPackagesFromIds(vararg ids: String) = ids.map { Package.EMPTY.
 
 /**
  * Skip the test by throwing a `TestAbortedException` in case the service is unavailable for some reason. Otherwise,
- * execute the [block] as usual.
+ * return the [Result] as-is.
  *
  * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
  * when network is not available.
  */
-private suspend fun <T> withIgnoreUnavailable(block: suspend () -> T): T =
-    runCatching {
-        block()
-    }.getOrElse { e ->
+private fun <T> Result<T>.withIgnoreUnavailable(): Result<T> =
+    onFailure { e ->
         throw when (e) {
             is SocketTimeoutException -> TestAbortedException()
             is HttpException -> if (e.code() == HttpURLConnection.HTTP_BAD_GATEWAY) TestAbortedException() else e

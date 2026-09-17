@@ -91,7 +91,10 @@ class ClearlyDefinedPackageCurationProvider(
         ClearlyDefinedService.create(config.serverUrl, client ?: okHttpClient)
     }
 
-    override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> {
+    override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> =
+        getCurationsResultFor(packages).getOrDefault(emptySet())
+
+    internal fun getCurationsResultFor(packages: Collection<Package>): Result<Set<PackageCuration>> {
         val coordinatesToIds = mutableMapOf<Coordinates, Identifier>()
 
         packages.forEach { pkg ->
@@ -106,27 +109,24 @@ class ClearlyDefinedPackageCurationProvider(
         val curations = runCatching {
             runBlocking { service.getCurationsChunked(coordinatesToIds.keys) }
         }.onFailure { e ->
-            when (e) {
-                is HttpException -> {
-                    // An "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a
-                    // failure.
-                    if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
-                        e.showStackTrace()
-
-                        logger.warn {
-                            val message = e.response()?.errorBody()?.string() ?: e.collectMessages()
-                            "Getting curations failed with code ${e.code()}: $message"
-                        }
-                    }
+            if (e is HttpException) {
+                // An "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a
+                // failure.
+                if (e.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+                    return Result.success(emptySet())
                 }
 
-                else -> {
-                    e.showStackTrace()
-                    logger.warn { "Querying curations failed: ${e.collectMessages()}" }
+                e.showStackTrace()
+                logger.warn {
+                    val message = e.response()?.errorBody()?.string() ?: e.collectMessages()
+                    "Getting curations failed with code ${e.code()}: $message"
                 }
+            } else {
+                e.showStackTrace()
+                logger.warn { "Querying curations failed: ${e.collectMessages()}" }
             }
-        }.getOrElse {
-            return emptySet()
+        }.getOrElse { e ->
+            return Result.failure(e)
         }
 
         val definitions = runBlocking {
@@ -170,7 +170,7 @@ class ClearlyDefinedPackageCurationProvider(
             if (data != PackageCurationData()) pkgCurations += PackageCuration(pkgId, data)
         }
 
-        return pkgCurations
+        return Result.success(pkgCurations)
     }
 }
 
