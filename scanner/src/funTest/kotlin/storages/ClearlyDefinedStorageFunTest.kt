@@ -179,7 +179,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
 })
 
 /**
- * Skip the test by throwing a `TestAbortedException` in case the service is unavailable for some reasons. Otherwise,
+ * Skip the test by throwing a `TestAbortedException` in case the service is unavailable for some reason. Otherwise,
  * return the [Result] as-is.
  *
  * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
