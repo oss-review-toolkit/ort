@@ -140,7 +140,6 @@ ort:
           os: "darwin"
           cpu: "arm64"
 
-
       Yarn2:
         options:
           # If set to true, disable verification of HTTPS certificate of remote registries. Useful when using a proxy to
