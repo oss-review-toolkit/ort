@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
 /**
@@ -154,19 +155,13 @@ data class PackageCurationData(
 
         val declaredLicenseMapping = basePackage.getDeclaredLicenseMapping() + declaredLicenseMapping
 
-        // Preserve an existing top-level operator from the base SPDX expression.
-        val declaredLicensesProcessed = when (val expression = base.declaredLicensesProcessed.spdxExpression) {
-            is SpdxCompoundExpression -> DeclaredLicenseProcessor.process(
-                base.declaredLicenses,
-                declaredLicenseMapping,
-                expression.operator
-            )
-
-            else -> DeclaredLicenseProcessor.process(
-                base.declaredLicenses,
-                declaredLicenseMapping
-            )
-        }
+        val declaredLicensesProcessed = DeclaredLicenseProcessor.process(
+            declaredLicenses = base.declaredLicenses,
+            customLicenseMapping = declaredLicenseMapping,
+            // Preserve an existing top-level operator from the base SPDX expression.
+            operator = (base.declaredLicensesProcessed.spdxExpression as? SpdxCompoundExpression)?.operator
+                ?: SpdxOperator.AND
+        )
 
         val pkg = Package(
             id = base.id,
