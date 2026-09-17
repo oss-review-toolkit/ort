@@ -129,9 +129,13 @@ class ClearlyDefinedPackageCurationProvider(
             return Result.failure(e)
         }
 
-        val definitions = runBlocking {
-            // Note that curations also contains keys for coordinates for which no curations are available.
-            service.getDefinitionsChunked(curations.keys)
+        val definitions = runCatching {
+            runBlocking {
+                // Note that curations also contains keys for coordinates for which no curations are available.
+                service.getDefinitionsChunked(curations.keys)
+            }
+        }.getOrElse { e ->
+            return Result.failure(e)
         }
 
         val filteredCurations = if (config.minTotalLicenseScore > 0) {
