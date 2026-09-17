@@ -66,9 +66,9 @@ class OpenSourceInsightsCurationProvider(
 
                     runCatching {
                         service.getVersion(system, name, version)
-                    }.onFailure {
-                        if (!(it is GrpcException && it.grpcStatus.name == "NOT_FOUND")) {
-                            logger.error { "Failed to get version information for '${pkg.id.toCoordinates()}': $it" }
+                    }.onFailure { e ->
+                        if (!(e is GrpcException && e.grpcStatus.name == "NOT_FOUND")) {
+                            logger.error { "Failed to get version information for '${pkg.id.toCoordinates()}': $e" }
                         }
                     }.getOrNull()?.let {
                         pkg.id to it
