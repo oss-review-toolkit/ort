@@ -84,7 +84,54 @@ function fakeModel(options: FakeOptions = {}): WebAppEvaluatedModel {
     return model as unknown as WebAppEvaluatedModel;
 }
 
+/** The number shown under a tally heading, e.g. "Resolved". */
+function tally(container: HTMLElement, term: string): string | undefined {
+    const heading = Array.from(container.querySelectorAll("dt")).find((dt) => dt.textContent?.trim() === term);
+    return heading?.parentElement?.querySelector("dd")?.textContent?.trim();
+}
+
 describe("ResultsSummary", () => {
+    describe("the unresolved and resolved tallies", () => {
+        it("counts neither open nor resolved vulnerabilities", () => {
+            // Whether a vulnerability has to be resolved is decided by policy, and a violation is raised
+            // for it, so counting it here too would count that decision twice.
+            const { container } = render(
+                <ResultsSummary
+                    webAppEvaluatedModel={fakeModel({
+                        issuesTotal: 4,
+                        openIssues: { errors: 1, hints: 0, total: 1, warnings: 0 },
+                        severeOpenIssuesCount: 1,
+                        vulnerabilities: [
+                            { isResolved: true, severityIndex: 0 },
+                            { isResolved: true, severityIndex: 1 },
+                            { isResolved: false, severityIndex: 0 },
+                        ],
+                    })}
+                />,
+            );
+
+            expect(tally(container, "Unresolved")).toBe("1");
+            // Four issues, one still open, so three resolved - and not the two resolved vulnerabilities.
+            expect(tally(container, "Resolved")).toBe("3");
+        });
+
+        it("still counts resolved vulnerabilities on the Vulnerabilities card", () => {
+            const { container } = render(
+                <ResultsSummary
+                    webAppEvaluatedModel={fakeModel({
+                        vulnerabilities: [
+                            { isResolved: true, severityIndex: 0 },
+                            { isResolved: true, severityIndex: 1 },
+                        ],
+                    })}
+                />,
+            );
+
+            expect(tally(container, "Resolved")).toBe("0");
+            expect(container.textContent).toContain("2 resolved");
+        });
+    });
+
     describe("with the sample report", () => {
         let model: WebAppEvaluatedModel;
 
