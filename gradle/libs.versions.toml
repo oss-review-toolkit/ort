@@ -1,5 +1,5 @@
 [versions]
-buildConfigPlugin = "6.1.0"
+buildConfigPlugin = "6.1.1"
 detektPlugin = "2.0.0-alpha.6"
 dokkaPlugin = "2.2.0"
 downloadPlugin = "5.7.0"
