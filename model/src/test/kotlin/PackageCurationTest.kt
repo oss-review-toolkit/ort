@@ -376,6 +376,7 @@ class PackageCurationTest : WordSpec({
                 val expression = SpdxCompoundExpression(operator, licenses.map { it.toSpdx() })
                 val pkg = Package.EMPTY.copy(
                     declaredLicenses = licenses,
+                    declaredLicensesOperator = operator,
                     declaredLicensesProcessed = ProcessedDeclaredLicense(expression)
                 )
                 val curation = PackageCuration(

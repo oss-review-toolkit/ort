@@ -40,6 +40,7 @@ packages:
   - "JUnit"
   declared_licenses:
   - "Common Public License Version 1.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "CPL-1.0"
     mapped:
@@ -74,6 +75,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -126,6 +128,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -164,6 +167,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -195,6 +199,7 @@ packages:
   purl: "pkg:maven/org.jenkins-ci/version-number@1.4"
   declared_licenses:
   - "MIT License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
