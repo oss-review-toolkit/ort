@@ -476,3 +476,5 @@ private fun declaredLicenseMappingCuration(id: Identifier, vararg entries: Pair<
 
 private fun labelsCuration(id: Identifier, vararg entries: Pair<String, String>): PackageCuration =
     PackageCuration(id, PackageCurationData(labels = entries.toMap()))
+
+private val ProcessedDeclaredLicense.allLicenses get(): List<String> = decompose().map { it.toString() } + unmapped
