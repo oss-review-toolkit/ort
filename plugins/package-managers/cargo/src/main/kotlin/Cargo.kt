@@ -76,8 +76,8 @@ internal object CargoCommand : CommandLineTool {
     factory = PackageManagerFactory::class
 )
 class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager(PROJECT_TYPE) {
-    private lateinit var handler: CargoDependencyHandler
-    private val graphBuilder by lazy { DependencyGraphBuilder(handler) }
+    private val handler = CargoDependencyHandler()
+    private val graphBuilder = DependencyGraphBuilder(handler)
 
     override val globsForDefinitionFiles = listOf("Cargo.toml")
 
@@ -134,7 +134,7 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
 
         val hashes = readHashes(lockfile)
 
-        handler = CargoDependencyHandler(analysisRoot, packageById, nodeById, hashes)
+        handler.setContext(analysisRoot, packageById, nodeById, hashes)
 
         // Virtual workspaces have been filtered out in "mapDefinitionFiles".
         val projectId = checkNotNull(metadata.resolve.root)
