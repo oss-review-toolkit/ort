@@ -255,6 +255,7 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
 
 private fun Package.mergeLicenses(other: Package): Package {
     val mergedDeclaredLicenses = declaredLicenses + other.declaredLicenses
+    // Differing operators cannot be merged, so use AND in this case.
     val mergedDeclaredLicensesOperator = setOf(declaredLicensesOperator, other.declaredLicensesOperator).singleOrNull()
         ?: SpdxOperator.AND
     val mergedConcludedLicense = setOfNotNull(concludedLicense, other.concludedLicense).toExpression()
