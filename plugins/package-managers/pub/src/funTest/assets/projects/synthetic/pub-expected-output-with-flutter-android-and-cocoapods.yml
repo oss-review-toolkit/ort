@@ -313,6 +313,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -346,6 +347,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -380,6 +382,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -414,6 +417,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -446,6 +450,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -478,6 +483,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -510,6 +516,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -545,6 +552,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -580,6 +588,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -615,6 +624,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -647,6 +657,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -679,6 +690,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -711,6 +723,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -743,6 +756,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -775,6 +789,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -807,6 +822,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -842,6 +858,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -875,6 +892,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -907,6 +925,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -940,6 +959,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -975,6 +995,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1008,6 +1029,7 @@ packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1037,6 +1059,7 @@ packages:
 - id: "Maven:io.flutter:arm64_v8a_release:1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
   purl: "pkg:maven/io.flutter/arm64_v8a_release@1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
   declared_licenses: []
+  declared_licenses_operator: "OR"
   declared_licenses_processed: {}
   description: ""
   homepage_url: ""
@@ -1063,6 +1086,7 @@ packages:
 - id: "Maven:io.flutter:armeabi_v7a_release:1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
   purl: "pkg:maven/io.flutter/armeabi_v7a_release@1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
   declared_licenses: []
+  declared_licenses_operator: "OR"
   declared_licenses_processed: {}
   description: ""
   homepage_url: ""
@@ -1089,6 +1113,7 @@ packages:
 - id: "Maven:io.flutter:flutter_embedding_release:1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
   purl: "pkg:maven/io.flutter/flutter_embedding_release@1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
   declared_licenses: []
+  declared_licenses_operator: "OR"
   declared_licenses_processed: {}
   description: ""
   homepage_url: ""
@@ -1115,6 +1140,7 @@ packages:
 - id: "Maven:io.flutter:x86_64_release:1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
   purl: "pkg:maven/io.flutter/x86_64_release@1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"
   declared_licenses: []
+  declared_licenses_operator: "OR"
   declared_licenses_processed: {}
   description: ""
   homepage_url: ""
@@ -1144,6 +1170,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1176,6 +1203,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1208,6 +1236,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1240,6 +1269,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1272,6 +1302,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1304,6 +1335,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1336,6 +1368,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1368,6 +1401,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:

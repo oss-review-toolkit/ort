@@ -33,8 +33,6 @@ import org.ossreviewtoolkit.model.orNone
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
 // See http://maven.apache.org/pom.html#SCM.
@@ -43,7 +41,7 @@ private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<pa
 
 // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project which says: "If multiple licenses
 // are listed, it is assumed that the user can select any of them, not that they must accept all."
-private val MAVEN_DECLARED_LICENSES_OPERATOR = SpdxOperator.OR
+internal val MAVEN_DECLARED_LICENSES_OPERATOR = SpdxOperator.OR
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
@@ -206,6 +204,3 @@ internal fun parseScm(scm: Scm?, artifactId: String, vcsPath: String = ""): VcsI
         }
     }
 }
-
-internal fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
-    DeclaredLicenseProcessor.process(licenses, operator = MAVEN_DECLARED_LICENSES_OPERATOR)

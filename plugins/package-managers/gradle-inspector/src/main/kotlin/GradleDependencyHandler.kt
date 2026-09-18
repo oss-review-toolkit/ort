@@ -48,7 +48,6 @@ import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
@@ -138,13 +137,9 @@ internal class GradleDependencyHandler(
             id = id,
             authors = model.authors,
             declaredLicenses = model.licenses,
-            declaredLicensesProcessed = DeclaredLicenseProcessor.process(
-                model.licenses,
-                // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project saying: "If multiple
-                // licenses are listed, it is assumed that the user can select any of them, not that they must
-                // accept all."
-                operator = SpdxOperator.OR
-            ),
+            // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project saying: "If multiple licenses are
+            // listed, it is assumed that the user can select any of them, not that they must accept all."
+            declaredLicensesOperator = SpdxOperator.OR,
             description = model.description.orEmpty(),
             homepageUrl = model.homepageUrl.orEmpty(),
             binaryArtifact = binaryArtifact,

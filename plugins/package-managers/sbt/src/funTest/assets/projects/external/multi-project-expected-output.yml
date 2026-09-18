@@ -207,6 +207,7 @@ packages:
   declared_licenses:
   - "Eclipse Public License - v 1.0"
   - "GNU Lesser General Public License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
     mapped:
@@ -243,6 +244,7 @@ packages:
   declared_licenses:
   - "Eclipse Public License - v 1.0"
   - "GNU Lesser General Public License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
     mapped:
@@ -277,6 +279,7 @@ packages:
   - "com.chuusai"
   declared_licenses:
   - "Apache 2"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -312,6 +315,7 @@ packages:
   - "Tatu Saloranta"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -348,6 +352,7 @@ packages:
   - "Tatu Saloranta"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -383,6 +388,7 @@ packages:
   - "Tatu Saloranta"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -420,6 +426,7 @@ packages:
   - "com.github.julien-truffaut"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "core"
@@ -454,6 +461,7 @@ packages:
   - "com.github.julien-truffaut"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "macros"
@@ -485,6 +493,7 @@ packages:
   - "com.github.pureconfig"
   declared_licenses:
   - "Mozilla Public License, version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MPL-2.0"
     mapped:
@@ -522,6 +531,7 @@ packages:
   - "com.github.pureconfig"
   declared_licenses:
   - "Mozilla Public License, version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MPL-2.0"
     mapped:
@@ -555,6 +565,7 @@ packages:
   - "com.typesafe"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -589,6 +600,7 @@ packages:
   - "com.typesafe"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -622,6 +634,7 @@ packages:
   - "Lightbend Inc."
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -655,6 +668,7 @@ packages:
   - "Lightbend Inc."
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -689,6 +703,7 @@ packages:
   - "com.typesafe.scala-logging"
   declared_licenses:
   - "Apache 2.0 License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -724,6 +739,7 @@ packages:
   declared_licenses:
   - "Apache License, Version 2.0"
   - "MIT License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
     mapped:
@@ -757,6 +773,7 @@ packages:
   - "Reactive Streams SIG"
   declared_licenses:
   - "CC0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "CC0-1.0"
     mapped:
@@ -790,6 +807,7 @@ packages:
   - "Lightbend, Inc."
   declared_licenses:
   - "BSD 3-Clause"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -823,6 +841,7 @@ packages:
   - "Lightbend, Inc."
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Standard library for the Scala Programming Language"
@@ -854,6 +873,7 @@ packages:
   - "Lightbend, Inc."
   declared_licenses:
   - "BSD 3-Clause"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -888,6 +908,7 @@ packages:
   - "org.scala-lang.modules"
   declared_licenses:
   - "BSD 3-clause"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -922,6 +943,7 @@ packages:
   - "org.scala-lang.modules"
   declared_licenses:
   - "BSD 3-clause"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -956,6 +978,7 @@ packages:
   - "org.scala-lang.modules"
   declared_licenses:
   - "BSD 3-clause"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -992,6 +1015,7 @@ packages:
   - "org.scala-sbt"
   declared_licenses:
   - "BSD"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -1026,6 +1050,7 @@ packages:
   - "org.scalacheck"
   declared_licenses:
   - "BSD-style"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -1061,6 +1086,7 @@ packages:
   - "org.scalactic"
   declared_licenses:
   - "the Apache License, ASL Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1096,6 +1122,7 @@ packages:
   - "org.scalatest"
   declared_licenses:
   - "the Apache License, ASL Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1138,6 +1165,7 @@ packages:
   - "org.scalaz"
   declared_licenses:
   - "BSD-style"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -1171,6 +1199,7 @@ packages:
   - "QOS.ch"
   declared_licenses:
   - "MIT License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
@@ -1204,6 +1233,7 @@ packages:
   - "QOS.ch"
   declared_licenses:
   - "MIT License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
@@ -1237,6 +1267,7 @@ packages:
   - "org.typelevel"
   declared_licenses:
   - "Apache 2"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:

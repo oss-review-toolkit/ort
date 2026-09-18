@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdxOrNull
 
@@ -254,11 +255,17 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
 
 private fun Package.mergeLicenses(other: Package): Package {
     val mergedDeclaredLicenses = declaredLicenses + other.declaredLicenses
+    val mergedDeclaredLicensesOperator = setOf(declaredLicensesOperator, other.declaredLicensesOperator).singleOrNull()
+        ?: SpdxOperator.AND
     val mergedConcludedLicense = setOfNotNull(concludedLicense, other.concludedLicense).toExpression()
 
     return copy(
         declaredLicenses = mergedDeclaredLicenses,
-        declaredLicensesProcessed = DeclaredLicenseProcessor.process(mergedDeclaredLicenses),
+        declaredLicensesOperator = mergedDeclaredLicensesOperator,
+        declaredLicensesProcessed = DeclaredLicenseProcessor.process(
+            mergedDeclaredLicenses,
+            operator = mergedDeclaredLicensesOperator
+        ),
         concludedLicense = mergedConcludedLicense
     )
 }
