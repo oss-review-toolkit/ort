@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.utils.ort
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
@@ -164,12 +163,6 @@ data class ProcessedDeclaredLicense(
             unmapped = emptySet()
         )
     }
-
-    /**
-     * The list of all mapped and unmapped licenses.
-     */
-    @JsonIgnore
-    val allLicenses = decompose().map { it.toString() } + unmapped
 
     /**
      * [Decompose][SpdxExpression.decompose] the [spdxExpression] or return an empty string if it is null.
