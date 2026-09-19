@@ -182,12 +182,19 @@
         "repository_license_choices": {
           "type": "array",
           "items": {
-            "given": {
-              "type": "string"
+            "type": "object",
+            "properties": {
+              "given": {
+                "type": "string"
+              },
+              "choice": {
+                "type": "string"
+              }
             },
-            "choice": {
-              "type": "string"
-            }
+            "required": [
+              "given",
+              "choice"
+            ]
           }
         }
       }
