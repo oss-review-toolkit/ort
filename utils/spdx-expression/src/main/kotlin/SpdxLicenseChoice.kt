@@ -53,7 +53,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 data class SpdxLicenseChoice(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val given: SpdxExpression? = null,
-    val choice: SpdxExpression
+    val choice: SpdxExpression,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val comment: String = ""
 ) {
     init {
         if (given?.isValidChoice(choice) == false) {
