@@ -31,7 +31,9 @@ const PACKAGE_ID = "PyPI::six:1.17.0";
 
 // One choice of each kind: repository-wide, and one targeting a single package.
 const CHOICES = new WebAppLicenseChoices({
-    repository_license_choices: [{ given: "GPL-2.0-only OR MIT", choice: "MIT" }],
+    repository_license_choices: [
+        { given: "GPL-2.0-only OR MIT", choice: "MIT", comment: "GPL is incompatible with our product." },
+    ],
     package_license_choices: [
         {
             package_id: PACKAGE_ID,
@@ -49,6 +51,23 @@ describe("LicenseChoicesTable", () => {
         expect(screen.getByRole("columnheader", { name: /applies to/i })).toBeInTheDocument();
         expect(screen.getByRole("columnheader", { name: /given/i })).toBeInTheDocument();
         expect(screen.getByRole("columnheader", { name: /choice/i })).toBeInTheDocument();
+        expect(screen.getByRole("columnheader", { name: /comment/i })).toBeInTheDocument();
+    });
+
+    it("shows the comment explaining a choice, where one was configured", () => {
+        render(<LicenseChoicesTable licenseChoices={CHOICES} />);
+
+        expect(screen.getByText("GPL is incompatible with our product.")).toBeInTheDocument();
+    });
+
+    it("leaves the comment cell empty rather than inventing one", () => {
+        const { container } = render(<LicenseChoicesTable licenseChoices={CHOICES} />);
+
+        // A comment is optional, so the two package choices above have none.
+        const comments = Array.from(container.querySelectorAll("tbody tr")).map(
+            (row) => row.querySelectorAll("td")[3]?.textContent,
+        );
+        expect(comments.filter((text) => text === "")).toHaveLength(2);
     });
 
     it("renders one row per choice, not one per package", () => {

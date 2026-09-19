@@ -43,6 +43,7 @@ export interface LicenseChoicesTableProps {
 interface LicenseChoiceRow {
     appliesTo: string;
     choice: string;
+    comment: string;
     given: string;
     key: string;
     // Unset for repository-wide choices, which apply to every package rather than a named one.
@@ -63,6 +64,7 @@ function buildRows(licenseChoices: WebAppLicenseChoices): LicenseChoiceRow[] {
         rows.push({
             appliesTo: ALL_PACKAGES,
             choice: licenseChoice.choice ?? "",
+            comment: licenseChoice.comment ?? "",
             given: licenseChoice.given ?? "",
             key: `repository-${index}`,
             packageId: undefined,
@@ -75,6 +77,7 @@ function buildRows(licenseChoices: WebAppLicenseChoices): LicenseChoiceRow[] {
             rows.push({
                 appliesTo: packageId,
                 choice: licenseChoice.choice ?? "",
+                comment: licenseChoice.comment ?? "",
                 given: licenseChoice.given ?? "",
                 key: `package-${packageIndex}-${index}`,
                 packageId,
@@ -86,7 +89,8 @@ function buildRows(licenseChoices: WebAppLicenseChoices): LicenseChoiceRow[] {
 }
 
 // A table of the license choices applied to this run: which disjunctive (OR) expression each one resolves,
-// the license it selects, and whether it applies repository-wide or to a single package.
+// the license it selects, whether it applies repository-wide or to a single package, and the comment
+// explaining it, if one was configured.
 function LicenseChoicesTable({ licenseChoices, onSelectPackage }: LicenseChoicesTableProps): JSX.Element {
     const data = useMemo(() => buildRows(licenseChoices), [licenseChoices]);
 
@@ -138,6 +142,12 @@ function LicenseChoicesTable({ licenseChoices, onSelectPackage }: LicenseChoices
                 cell: ({ row }) => <LicenseBadge name={row.original.choice} />,
                 filterFn: "arrIncludesSome",
                 enableColumnFilter: true,
+            },
+            {
+                id: "comment",
+                accessorFn: (row) => row.comment,
+                header: ({ column }) => <DataTableColumnHeader column={column} title="Comment" />,
+                meta: { cellClassName: "whitespace-pre-wrap" },
             },
         ],
         [onSelectPackage],

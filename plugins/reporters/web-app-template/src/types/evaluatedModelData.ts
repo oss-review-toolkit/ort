@@ -142,6 +142,7 @@ export interface EvaluatedModelIncludes {
 
 export interface EvaluatedModelSpdxLicenseChoice {
     readonly choice?: string;
+    readonly comment?: string;
     readonly given?: string;
 }
 

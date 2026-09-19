@@ -51,6 +51,37 @@ describe("PackageLicenses", () => {
             expect(container.textContent).toContain("MIT");
         });
 
+        it("explains a choice when whoever configured it said why", () => {
+            const pkg = new WebAppPackage({
+                _id: 0,
+                id: "PyPI::six:1.17.0",
+                effective_license: "MIT",
+                applied_license_choices: [
+                    {
+                        given: "LicenseRef-example OR MIT",
+                        choice: "MIT",
+                        comment: "MIT is the only one our legal team accepts here.",
+                    },
+                ],
+            });
+
+            render(<PackageLicenses pkg={pkg} />);
+            expect(screen.getByText("MIT is the only one our legal team accepts here.")).toBeInTheDocument();
+        });
+
+        it("shows the choice on its own when no comment was configured", () => {
+            const pkg = new WebAppPackage({
+                _id: 0,
+                id: "PyPI::six:1.17.0",
+                effective_license: "MIT",
+                applied_license_choices: [{ given: "LicenseRef-example OR MIT", choice: "MIT" }],
+            });
+
+            // A comment is optional, so nothing should stand in for a missing one.
+            const { container } = render(<PackageLicenses pkg={pkg} />);
+            expect(container.querySelectorAll("li p")).toHaveLength(0);
+        });
+
         it("omits the row for a package that had no choice applied", () => {
             const pkg = new WebAppPackage({ _id: 0, id: "PyPI::six:1.17.0", effective_license: "MIT" });
             expect(pkg.hasAppliedLicenseChoices()).toBe(false);

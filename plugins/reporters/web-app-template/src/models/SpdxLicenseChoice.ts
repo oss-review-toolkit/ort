@@ -22,12 +22,18 @@ import type { EvaluatedModelSpdxLicenseChoice } from "@/types/evaluatedModelData
 class SpdxLicenseChoice {
     #choice: string | undefined;
 
+    #comment: string | undefined;
+
     #given: string | undefined;
 
     constructor(obj?: EvaluatedModelSpdxLicenseChoice) {
         if (obj) {
             if (obj.choice) {
                 this.#choice = obj.choice;
+            }
+
+            if (obj.comment) {
+                this.#comment = obj.comment;
             }
 
             if (obj.given) {
@@ -38,6 +44,10 @@ class SpdxLicenseChoice {
 
     get choice(): string | undefined {
         return this.#choice;
+    }
+
+    get comment(): string | undefined {
+        return this.#comment;
     }
 
     get given(): string | undefined {
