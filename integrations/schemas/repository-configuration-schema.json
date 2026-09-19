@@ -165,6 +165,9 @@
                     },
                     "choice": {
                       "type": "string"
+                    },
+                    "comment": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -188,6 +191,9 @@
                 "type": "string"
               },
               "choice": {
+                "type": "string"
+              },
+              "comment": {
                 "type": "string"
               }
             },

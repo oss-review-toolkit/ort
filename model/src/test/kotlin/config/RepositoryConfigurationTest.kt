@@ -66,7 +66,8 @@ class RepositoryConfigurationTest : WordSpec({
                 configuration.fromYaml<RepositoryConfiguration>()
             }
 
-            exception.message shouldContain "problem: LicenseChoices SpdxLicenseChoice(given=null, choice=MIT)"
+            exception.message shouldContain
+                "problem: LicenseChoices SpdxLicenseChoice(given=null, choice=MIT, comment=)"
             exception.message shouldNotContain "GPL-2.0-only"
         }
 
@@ -118,6 +119,7 @@ class RepositoryConfigurationTest : WordSpec({
                   repository_license_choices:
                   - given: Apache-2.0 or GPL-2.0-only
                     choice: GPL-2.0-only
+                    comment: "GPL-2.0-only is the one we can comply with."
                   package_license_choices:
                   - package_id: "Maven:com.example:lib:0.0.1"
                     license_choices:
@@ -196,6 +198,7 @@ class RepositoryConfigurationTest : WordSpec({
             with(repositoryLicenseChoices.first()) {
                 given shouldBe "Apache-2.0 or GPL-2.0-only".toSpdx()
                 choice shouldBe "GPL-2.0-only".toSpdx()
+                comment shouldBe "GPL-2.0-only is the one we can comply with."
             }
 
             val packageLicenseChoices = repositoryConfiguration.licenseChoices.packageLicenseChoices
@@ -205,6 +208,7 @@ class RepositoryConfigurationTest : WordSpec({
                 with(licenseChoices.first()) {
                     given shouldBe "MPL-2.0 or EPL-1.0".toSpdx()
                     choice shouldBe "MPL-2.0".toSpdx()
+                    comment shouldBe ""
                 }
 
                 with(licenseChoices[1]) {
