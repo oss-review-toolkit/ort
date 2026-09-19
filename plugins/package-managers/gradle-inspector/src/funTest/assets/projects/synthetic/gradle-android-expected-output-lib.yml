@@ -152,6 +152,7 @@ packages:
   - "Torsten Curdt"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -204,6 +205,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -243,6 +245,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -281,6 +284,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
