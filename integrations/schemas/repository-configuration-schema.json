@@ -165,6 +165,9 @@
                     },
                     "choice": {
                       "type": "string"
+                    },
+                    "comment": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -182,12 +185,22 @@
         "repository_license_choices": {
           "type": "array",
           "items": {
-            "given": {
-              "type": "string"
+            "type": "object",
+            "properties": {
+              "given": {
+                "type": "string"
+              },
+              "choice": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              }
             },
-            "choice": {
-              "type": "string"
-            }
+            "required": [
+              "given",
+              "choice"
+            ]
           }
         }
       }

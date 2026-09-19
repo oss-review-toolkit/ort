@@ -70,15 +70,19 @@ function PackageLicenses({ pkg }: PackageLicensesProps): JSX.Element {
                 content: (
                     <ul className="space-y-1">
                         {pkg.appliedLicenseChoices.map((licenseChoice) => (
-                            <li
-                                className="flex flex-wrap items-center gap-1.5"
-                                key={`${licenseChoice.given}-${licenseChoice.choice}`}
-                            >
-                                <LicenseExpression expression={licenseChoice.given ?? ""} />
-                                <span aria-hidden="true" className="text-muted-foreground">
-                                    →
-                                </span>
-                                <LicenseBadge name={licenseChoice.choice ?? ""} />
+                            <li key={`${licenseChoice.given}-${licenseChoice.choice}`}>
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                    <LicenseExpression expression={licenseChoice.given ?? ""} />
+                                    <span aria-hidden="true" className="text-muted-foreground">
+                                        →
+                                    </span>
+                                    <LicenseBadge name={licenseChoice.choice ?? ""} />
+                                </div>
+                                {licenseChoice.comment ? (
+                                    <p className="mt-0.5 whitespace-pre-wrap text-muted-foreground text-xs">
+                                        {licenseChoice.comment}
+                                    </p>
+                                ) : null}
                             </li>
                         ))}
                     </ul>
