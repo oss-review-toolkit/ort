@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.maps.shouldMatchExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -56,7 +57,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "1.7.30"
             )
 
-            val data = withIgnoreUnavailable { service.getLatestHarvestToolData(coordinates, "clearlydefined") }
+            val data = service.getLatestHarvestToolData(coordinates, "clearlydefined").withIgnoreUnavailable()
 
             data.toString() shouldNotContain "0b97c416e42a184ff9728877b461c616187c58f7"
         }
@@ -86,16 +87,20 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         "return single curation data" {
-            val curation = withIgnoreUnavailable { service.getCuration(coordinates) }
+            val curation = runCatching { service.getCuration(coordinates) }.withIgnoreUnavailable()
 
-            curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+            with(curation.shouldBeSuccess()) {
+                licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+            }
         }
 
         "return bulk curation data" {
-            val curations = withIgnoreUnavailable { service.getCurations(listOf(coordinates)) }
-            val curation = curations[coordinates]?.curations?.get(coordinates)
+            val curations = runCatching { service.getCurations(listOf(coordinates)) }.withIgnoreUnavailable()
 
-            curation?.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+            with(curations.shouldBeSuccess()) {
+                val curation = get(coordinates)?.curations?.get(coordinates)
+                curation?.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+            }
         }
     }
 
@@ -156,10 +161,12 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "0.2.2"
             )
 
-            val defined = withIgnoreUnavailable { service.getDefinition(coordinates) }
+            val defined = runCatching { service.getDefinition(coordinates) }.withIgnoreUnavailable()
 
-            defined.files?.get(11)?.facets.shouldNotBeNull() shouldContain "tests"
-            defined.described.releaseDate shouldBe "2020-02-22"
+            with(defined.shouldBeSuccess()) {
+                files?.get(11)?.facets.shouldNotBeNull() shouldContain "tests"
+                described.releaseDate shouldBe "2020-02-22"
+            }
         }
 
         "contain defined data properties for batch requests" {
@@ -171,9 +178,9 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "0.2.2"
             )
 
-            val definitions = withIgnoreUnavailable { service.getDefinitions(listOf(coordinates)) }
+            val definitions = runCatching { service.getDefinitions(listOf(coordinates)) }.withIgnoreUnavailable()
 
-            definitions.shouldMatchExactly(
+            definitions.shouldBeSuccess().shouldMatchExactly(
                 coordinates to { defined ->
                     defined.files?.get(11)?.facets.shouldNotBeNull() shouldContain "tests"
                     defined.described.releaseDate shouldBe "2020-02-22"
@@ -191,7 +198,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 revision = "1.7.30"
             )
 
-            val defined = withIgnoreUnavailable { service.getDefinition(coordinates) }
+            val defined = runCatching { service.getDefinition(coordinates) }.withIgnoreUnavailable()
 
             defined.toString() shouldContain "0b97c416e42a184ff9728877b461c616187c58f7"
         }
@@ -200,15 +207,13 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
 /**
  * Skip the test by throwing a `TestAbortedException` in case the service is unavailable for some reason. Otherwise,
- * execute the [block] as usual.
+ * return the [Result] as-is.
  *
  * This way the tests can still act as a reminder to re-align the data model in case it deviated, without making noise
  * when network is not available.
  */
-private suspend fun <T> withIgnoreUnavailable(block: suspend () -> T): T =
-    runCatching {
-        block()
-    }.getOrElse { e ->
+private fun <T> Result<T>.withIgnoreUnavailable(): Result<T> =
+    onFailure { e ->
         fun Int.isServerSideError(): Boolean = this / 100 == 5
 
         throw when (e) {

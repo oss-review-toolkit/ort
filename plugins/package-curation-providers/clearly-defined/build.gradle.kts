@@ -26,7 +26,6 @@ dependencies {
     api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
     implementation(projects.clients.clearlyDefinedClient)
-    implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxExpressionUtils)
 

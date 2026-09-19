@@ -30,6 +30,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
+import org.ossreviewtoolkit.clients.clearlydefined.Curation
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.clients.clearlydefined.getCurationsChunked
 import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
@@ -47,10 +48,8 @@ import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
-import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.runBlocking
-import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdxOrNull
 
@@ -92,9 +91,10 @@ class ClearlyDefinedPackageCurationProvider(
     }
 
     override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> =
-        getCurationsResultFor(packages).getOrDefault(emptySet())
+        getCurationResultsFor(packages).mapNotNullTo(mutableSetOf()) { it.getOrNull() }
 
-    internal fun getCurationsResultFor(packages: Collection<Package>): Result<Set<PackageCuration>> {
+    internal fun getCurationResultsFor(packages: Collection<Package>): List<Result<PackageCuration>> {
+        val results = mutableListOf<Result<PackageCuration>>()
         val coordinatesToIds = mutableMapOf<Coordinates, Identifier>()
 
         packages.forEach { pkg ->
@@ -106,37 +106,37 @@ class ClearlyDefinedPackageCurationProvider(
             }
         }
 
-        val curations = runCatching {
-            runBlocking { service.getCurationsChunked(coordinatesToIds.keys) }
-        }.onFailure { e ->
-            if (e is HttpException) {
-                // An "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a
-                // failure.
-                if (e.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                    return Result.success(emptySet())
+        val curations = runBlocking {
+            service.getCurationsChunked(coordinatesToIds.keys)
+        }.mapNotNull { (coordinates, result) ->
+            result.recoverCatching { e ->
+                // An "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a failure.
+                if (e is HttpException && e.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+                    Curation()
+                } else {
+                    throw e
                 }
-
-                e.showStackTrace()
-                logger.warn {
-                    val message = e.response()?.errorBody()?.string() ?: e.collectMessages()
-                    "Getting curations failed with code ${e.code()}: $message"
+            }.fold(
+                onSuccess = { curation -> coordinates to curation },
+                onFailure = { e ->
+                    results += Result.failure(e)
+                    null
                 }
-            } else {
-                e.showStackTrace()
-                logger.warn { "Querying curations failed: ${e.collectMessages()}" }
-            }
-        }.getOrElse { e ->
-            return Result.failure(e)
-        }
+            )
+        }.toMap()
 
-        val definitions = runCatching {
-            runBlocking {
-                // Note that curations also contains keys for coordinates for which no curations are available.
-                service.getDefinitionsChunked(curations.keys)
-            }
-        }.getOrElse { e ->
-            return Result.failure(e)
-        }
+        val definitions = runBlocking {
+            // Note that curations also contains keys for coordinates for which no curations are available.
+            service.getDefinitionsChunked(curations.keys)
+        }.mapNotNull { (coordinates, result) ->
+            result.fold(
+                onSuccess = { defined -> coordinates to defined },
+                onFailure = { e ->
+                    results += Result.failure(e)
+                    null
+                }
+            )
+        }.toMap()
 
         val filteredCurations = if (config.minTotalLicenseScore > 0) {
             curations.filterKeys { coordinates ->
@@ -147,10 +147,8 @@ class ClearlyDefinedPackageCurationProvider(
             curations
         }
 
-        val pkgCurations = mutableSetOf<PackageCuration>()
-
-        filteredCurations.forEach inner@{ (coordinates, curation) ->
-            val pkgId = coordinatesToIds[coordinates] ?: return@inner
+        filteredCurations.forEach { (coordinates, curation) ->
+            val pkgId = coordinatesToIds[coordinates] ?: return@forEach
 
             // Only take curations of good quality (i.e. those not using deprecated identifiers) and in particular none
             // that contain "OTHER" as a license, also see https://github.com/clearlydefined/curated-data/issues/7836.
@@ -171,10 +169,10 @@ class ClearlyDefinedPackageCurationProvider(
             )
 
             // Add the curation if it is non-empty.
-            if (data != PackageCurationData()) pkgCurations += PackageCuration(pkgId, data)
+            if (data != PackageCurationData()) results += Result.success(PackageCuration(pkgId, data))
         }
 
-        return Result.success(pkgCurations)
+        return results
     }
 }
 
