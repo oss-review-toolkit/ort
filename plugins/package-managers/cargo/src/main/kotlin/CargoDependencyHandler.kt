@@ -36,12 +36,35 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
-internal class CargoDependencyHandler(
-    private val analysisRoot: File,
-    private val packageById: Map<String, CargoMetadata.Package>,
-    private val nodeById: Map<String, CargoMetadata.Node>,
-    private val hashes: Map<String, String>
-) : DependencyHandler<CargoMetadata.Node> {
+internal class CargoDependencyHandler : DependencyHandler<CargoMetadata.Node> {
+    private lateinit var analysisRoot: File
+    private val packageById = mutableMapOf<String, CargoMetadata.Package>()
+    private val nodeById = mutableMapOf<String, CargoMetadata.Node>()
+    private val hashes = mutableMapOf<String, String>()
+
+    fun setContext(
+        analysisRoot: File,
+        packageById: Map<String, CargoMetadata.Package>,
+        nodeById: Map<String, CargoMetadata.Node>,
+        hashes: Map<String, String>
+    ) {
+        this.analysisRoot = analysisRoot
+        this.packageById.apply {
+            clear()
+            putAll(packageById)
+        }
+
+        this.nodeById.apply {
+            clear()
+            putAll(nodeById)
+        }
+
+        this.hashes.apply {
+            clear()
+            putAll(hashes)
+        }
+    }
+
     override fun identifierFor(dependency: CargoMetadata.Node): Identifier =
         packageById.getValue(dependency.id).toIdentifier()
 
