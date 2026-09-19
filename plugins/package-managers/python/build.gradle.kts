@@ -40,5 +40,7 @@ dependencies {
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)
 
+    testImplementation(libs.wiremock)
+
     ksp(projects.analyzer)
 }
