@@ -88,6 +88,13 @@ object Os {
     }
 
     /**
+     * The operating system's temporary directory.
+     */
+    val tempDirectory by lazy {
+        File(System.getProperty("java.io.tmpdir"))
+    }
+
+    /**
      * The current user's home directory.
      */
     val userHomeDirectory by lazy {
