@@ -437,6 +437,10 @@ The license choice can be applied to a package or globally to an SPDX expression
 A choice is only valid for licenses combined with the SPDX operator `OR`.
 The choices are applied in the evaluator, and the reporter to the effective license of a package, which is calculated by the chosen [LicenseView](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/licenses/LicenseView.kt).
 
+To be able to show why a license was selected, a choice can include an explanation:
+
+* `comment` -- free text, providing an explanation and optionally a link to further information.
+
 ### License Choice by Package
 
 To select a license from a multi-licensed dependency, specified by its `packageId`, an SPDX expression for a `choice` must be provided.
@@ -460,6 +464,7 @@ license_choices:
     # Without a 'given', the 'choice' is applied to the effective license expression if it is a valid choice.
     # The input from the calculated effective license would be: (C OR D) AND E
     - choice: C AND E
+      comment: "C and E are the only licenses approved for redistribution."
     # The result would be: C AND E
 ```
 
@@ -476,6 +481,7 @@ license_choices:
   repository_license_choices:
   - given: "A OR B"
     choice: "B"
+    comment: "A is incompatible with how we distribute our product."
 ```
 
 ### Invalid License Choice
