@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.clearlydefined
 
 import java.io.IOException
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -294,55 +295,101 @@ interface ClearlyDefinedService {
     ): JsonObject
 }
 
-suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.() -> T): T =
-    try {
-        block()
-    } catch (e: HttpException) {
-        val errorMessage = e.response()?.errorBody()?.let {
-            val errorResponse = ClearlyDefinedService.JSON_FOR_ERRORS.decodeFromString<ErrorResponse>(it.string())
-            val innerError = errorResponse.error.innererror
-
-            "The ClearlyDefined service call failed. ${innerError.name}: ${innerError.message}"
-        } ?: "The ClearlyDefined service call failed with code ${e.code()}: ${e.message()}"
-
-        throw IOException(errorMessage, e)
-    }
-
 suspend fun ClearlyDefinedService.getDefinitionsChunked(
     coordinates: Collection<Coordinates>,
     chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
-): Map<Coordinates, ClearlyDefinedService.Defined> =
+): Map<Coordinates, Result<ClearlyDefinedService.Defined>> =
     buildMap {
-        withContext(Dispatchers.IO.limitedParallelism(20)) {
+        val chunkedDefinitions = withContext(Dispatchers.IO.limitedParallelism(20)) {
             coordinates.chunked(chunkSize).map { chunk ->
-                async { call { getDefinitions(chunk) } }
+                async {
+                    runCatching {
+                        getDefinitions(chunk)
+                    }.foldChunk(chunk) {
+                        getDefinition(it)
+                    }
+                }
             }.awaitAll()
-        }.forEach {
-            putAll(it)
         }
+
+        chunkedDefinitions.forEach(::putAll)
     }
 
 suspend fun ClearlyDefinedService.getCurationsChunked(
     coordinates: Collection<Coordinates>,
     chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
-): Map<Coordinates, Curation> =
+): Map<Coordinates, Result<Curation>> =
     buildMap {
-        withContext(Dispatchers.IO.limitedParallelism(20)) {
+        val chunkedCurations = withContext(Dispatchers.IO.limitedParallelism(20)) {
             coordinates.chunked(chunkSize).map { chunk ->
-                async { call { getCurations(chunk).values } }
+                async {
+                    runCatching {
+                        buildMap {
+                            val curations = getCurations(chunk).values.map { it.curations }
+                            curations.forEach(::putAll)
+                        }
+                    }.foldChunk(chunk) {
+                        getCuration(it)
+                    }
+                }
             }.awaitAll()
-        }.flatten().forEach {
-            putAll(it.curations)
         }
+
+        chunkedCurations.forEach(::putAll)
     }
 
-suspend fun ClearlyDefinedService.getLatestHarvestTool(coordinates: Coordinates, tool: String): String? {
-    val data = call { harvestToolData(coordinates, tool) }
-    val versions = data.map { it.substringAfter("$tool/") }
-    return versions.sortedWith(AlphaNumericComparator).lastOrNull()
-}
+suspend fun ClearlyDefinedService.getLatestHarvestTool(coordinates: Coordinates, tool: String): Result<String> =
+    runCatching { harvestToolData(coordinates, tool) }.mapCatching { data ->
+        val versions = data.map { it.substringAfter("$tool/") }
+        versions.sortedWith(AlphaNumericComparator).last()
+    }.unwrapHttpException()
 
-suspend fun ClearlyDefinedService.getLatestHarvestToolData(coordinates: Coordinates, tool: String): JsonObject? {
-    val version = getLatestHarvestTool(coordinates, tool) ?: return null
-    return call { harvestToolData(coordinates, tool, version) }
-}
+suspend fun ClearlyDefinedService.getLatestHarvestToolData(coordinates: Coordinates, tool: String): Result<JsonObject> =
+    getLatestHarvestTool(coordinates, tool).mapCatching { version ->
+        harvestToolData(coordinates, tool, version)
+    }.unwrapHttpException()
+
+/**
+ * Turn the [Result] of a batch request for a [chunk] of keys into a [Map] of individual [Result]s per key. On success,
+ * the batch response is unwrapped as is, on failure [block] is called for each key of the chunk in parallel.
+ */
+context(scope: CoroutineScope)
+private suspend fun <K, V> Result<Map<K, V>>.foldChunk(chunk: List<K>, block: suspend (K) -> V): Map<K, Result<V>> =
+    fold(
+        onSuccess = { batchResponse ->
+            // Unwrap a successful batch response to individual successful coordinate responses.
+            batchResponse.mapValues { (_, defined) ->
+                Result.success(defined)
+            }
+        },
+        onFailure = {
+            // Fall back to requesting individual coordinates of a failed chunk in parallel.
+            chunk.map { coordinates ->
+                scope.async {
+                    coordinates to runCatching {
+                        block(coordinates)
+                    }.unwrapHttpException()
+                }
+            }.awaitAll().toMap()
+        }
+    )
+
+/**
+ * Get the inner name and message of an [HttpException], if any, as part of the [Result], and rethrow them as a
+ * streamlined message of an [IOException].
+ */
+private fun <T> Result<T>.unwrapHttpException() =
+    recoverCatching { e ->
+        if (e is HttpException) {
+            val errorMessage = e.response()?.errorBody()?.let {
+                val errorResponse = ClearlyDefinedService.JSON_FOR_ERRORS.decodeFromString<ErrorResponse>(it.string())
+                val innerError = errorResponse.error.innererror
+
+                "The ClearlyDefined service call failed. ${innerError.name}: ${innerError.message}"
+            } ?: "The ClearlyDefined service call failed with code ${e.code()}: ${e.message()}"
+
+            throw IOException(errorMessage, e)
+        }
+
+        throw e
+    }

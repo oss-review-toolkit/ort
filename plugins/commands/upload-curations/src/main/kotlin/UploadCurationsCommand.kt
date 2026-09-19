@@ -102,7 +102,9 @@ class UploadCurationsCommand(
         val definitions = runBlocking { service.getDefinitionsChunked(curationsToCoordinates.values) }
 
         val curationsByHarvestStatus = curations.groupBy { curation ->
-            definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: logger.warn {
+            definitions[curationsToCoordinates[curation]]?.map { defined ->
+                defined.getHarvestStatus()
+            } ?: logger.warn {
                 "No definition data available for package '${curation.id.toCoordinates()}', cannot request a harvest " +
                     "or upload curations for it."
             }
