@@ -65,7 +65,8 @@ class GitHubAction(
 
     private val aBomCache = mutableMapOf<File, ABom.Workflow>()
     private lateinit var projectVcs: VcsInfo
-    private val graphBuilder by lazy { DependencyGraphBuilder(GitHubActionDependencyHandler(projectVcs)) }
+    private val graphBuilderDelegate = lazy { DependencyGraphBuilder(GitHubActionDependencyHandler(projectVcs)) }
+    private val graphBuilder by graphBuilderDelegate
 
     override fun resolveDependencies(
         analysisRoot: File,
@@ -125,5 +126,9 @@ class GitHubAction(
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+        if (graphBuilderDelegate.isInitialized()) {
+            PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+        } else {
+            PackageManagerResult(projectResults)
+        }
 }
