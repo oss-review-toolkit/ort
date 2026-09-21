@@ -87,6 +87,11 @@ data class Project(
     val vcsProcessed: VcsInfo = vcs.normalize(),
 
     /**
+     * The remote artifact where the source package can be downloaded.
+     */
+    val sourceArtifact: RemoteArtifact,
+
+    /**
      * The description of project.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -129,6 +134,7 @@ data class Project(
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
             homepageUrl = "",
             scopeDependencies = emptySet()
         )
@@ -170,8 +176,9 @@ data class Project(
             description = description,
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = sourceArtifact,
             vcs = vcs,
-            vcsProcessed = vcsProcessed
+            vcsProcessed = vcsProcessed,
+            sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
         )
 }
