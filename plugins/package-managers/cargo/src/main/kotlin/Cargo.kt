@@ -77,7 +77,8 @@ internal object CargoCommand : CommandLineTool {
 )
 class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager(PROJECT_TYPE) {
     private lateinit var handler: CargoDependencyHandler
-    private val graphBuilder by lazy { DependencyGraphBuilder(handler) }
+    private val graphBuilderDelegate = lazy { DependencyGraphBuilder(handler) }
+    private val graphBuilder by graphBuilderDelegate
 
     override val globsForDefinitionFiles = listOf("Cargo.toml")
 
@@ -172,7 +173,11 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+        if (graphBuilderDelegate.isInitialized()) {
+            PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+        } else {
+            PackageManagerResult(projectResults)
+        }
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
