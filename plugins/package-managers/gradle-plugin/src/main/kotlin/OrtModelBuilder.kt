@@ -58,9 +58,17 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     private val warnings = mutableListOf<String>()
     private val ortComponentReferenceCache = mutableMapOf<OrtComponentReference, OrtComponentReference>()
 
+    /**
+     * The project that the dependency tree model is currently built for. This is used to detect and filter out
+     * dependencies that (transitively) resolve back to this very project, see [isSelfDependency].
+     */
+    private lateinit var analyzedProject: Project
+
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
     override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
+        analyzedProject = project
+
         if (GradleVersion.current() >= GradleVersion.version("6.8")) {
             // There currently is no way to access Gradle settings without using internal API, see
             // https://github.com/gradle/gradle/issues/18616.
@@ -166,6 +174,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         }
 
         if (componentId is ProjectComponentIdentifier) {
+            // Filter out self-references that Gradle itself resolves fine, but that must not be reported as a
+            // dependency of the project on itself.
+            if (componentId.isSelfDependency()) return null
+
             val moduleId = moduleVersion ?: return null
 
             return OrtComponentImpl(
@@ -259,6 +271,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         }
 
         if (id is ProjectComponentIdentifier) {
+            // Filter out self-references that Gradle itself resolves fine, but that must not be reported as a
+            // dependency of the project on itself.
+            if (id.isSelfDependency()) return null
+
             val moduleId = selected.moduleVersion ?: return null
             val dependencies = selected.dependencies.toOrtComponentReferences(visited + id)
 
@@ -315,6 +331,13 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             }
         }
     }
+
+    /**
+     * Return whether this [ProjectComponentIdentifier] refers to the current project itself, i.e. whether resolving
+     * this identifier would result in the current project depending on itself.
+     */
+    private fun ProjectComponentIdentifier.isSelfDependency(): Boolean =
+        projectPath == analyzedProject.path && projectName == analyzedProject.name
 }
 
 /**
