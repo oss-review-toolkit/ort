@@ -27,7 +27,6 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.time.Instant
 
@@ -116,9 +115,11 @@ private fun createPackagesFromIds(vararg ids: String) = ids.map { Package.EMPTY.
  */
 private fun <T> Result<T>.withIgnoreUnavailable(): Result<T> =
     onFailure { e ->
+        fun Int.isServerSideError(): Boolean = this / 100 == 5
+
         throw when (e) {
             is SocketTimeoutException -> TestAbortedException()
-            is HttpException -> if (e.code() == HttpURLConnection.HTTP_BAD_GATEWAY) TestAbortedException() else e
+            is HttpException -> if (e.code().isServerSideError()) TestAbortedException() else e
             else -> e
         }
     }

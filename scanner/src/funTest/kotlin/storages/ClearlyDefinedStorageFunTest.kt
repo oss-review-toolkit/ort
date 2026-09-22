@@ -24,7 +24,6 @@ import io.kotest.engine.TestAbortedException
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.result.shouldBeSuccess
 
-import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.time.Instant
 
@@ -187,10 +186,12 @@ class ClearlyDefinedStorageFunTest : StringSpec({
  */
 private fun <T> Result<T>.withIgnoreUnavailable(): Result<T> =
     onFailure {
+        fun Int.isServerSideError(): Boolean = this / 100 == 5
+
         val e = it.cause
         throw when (e) {
             is SocketTimeoutException -> TestAbortedException()
-            is HttpException -> if (e.code() == HttpURLConnection.HTTP_BAD_GATEWAY) TestAbortedException() else it
+            is HttpException -> if (e.code().isServerSideError()) TestAbortedException() else it
             else -> it
         }
     }
