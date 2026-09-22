@@ -171,8 +171,7 @@ class ClearlyDefinedStorage(
      * Return the [Provenance] from where the package with the given [coordinates] was harvested.
      */
     private suspend fun getProvenance(coordinates: Coordinates): Provenance {
-        val definitions = service.getDefinitions(listOf(coordinates))
-        val described = definitions.getValue(coordinates).described
+        val described = service.getDefinition(coordinates).described
         val sourceLocation = described.sourceLocation
 
         return when {

@@ -23,13 +23,10 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
-import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
-import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
@@ -47,7 +44,6 @@ import java.time.Duration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.Provider
@@ -61,7 +57,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.test.readResource
 
 class ClearlyDefinedStorageTest : WordSpec({
     val server = WireMockServer(
@@ -302,9 +297,6 @@ private val TEST_PACKAGE =
         vcs = VcsInfo.EMPTY
     )
 
-/** The template variable with the coordinates of the package that is requested. */
-private const val PACKAGE_VARIABLE = "<<package>>"
-
 /**
  * Return a storage configuration that points to the mock [server].
  */
@@ -355,19 +347,14 @@ private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordin
 /**
  * Stub a request for the definition's endpoint for the given [coordinates] on the [server] server.
  */
-private fun TestConfiguration.stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) {
-    val coordinatesList = listOf(coordinates)
-    val expectedBody = ClearlyDefinedService.JSON.encodeToString(coordinatesList)
-    val actualBody = readResource("/cd_definitions.json").replace(PACKAGE_VARIABLE, coordinates.toString())
+private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) =
     server.stubFor(
-        post(urlPathEqualTo("/definitions"))
-            .withRequestBody(equalToJson(expectedBody))
+        get(urlPathEqualTo("/definitions/$coordinates"))
             .willReturn(
                 aResponse().withStatus(200)
-                    .withBody(actualBody)
+                    .withBodyFile("clearly-defined/definition.json")
             )
     )
-}
 
 /**
  * Check that this [Result] contains the expected data and return the first scan result from the list on success.

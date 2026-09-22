@@ -51,9 +51,6 @@ dependencies {
     testFixturesImplementation(libs.kotest.runner.junit5)
 
     testImplementation(platform(projects.plugins.scanners))
-    testImplementation(projects.utils.testUtils)
-    testImplementation(libs.kotlinx.serialization.core)
-    testImplementation(libs.kotlinx.serialization.json)
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
 }
