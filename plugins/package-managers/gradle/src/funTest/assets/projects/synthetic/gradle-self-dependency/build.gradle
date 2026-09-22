@@ -1,0 +1,13 @@
+allprojects {
+    apply plugin: 'java'
+
+    group 'org.ossreviewtoolkit.gradle.example'
+    version '1.0.0'
+}
+
+// A project that declares a dependency on itself. Gradle allows such a self-referencing project dependency to be
+// resolved without error, but ORT should filter it out from the dependency graph.
+dependencies {
+    implementation project(path: project.path)
+}
+

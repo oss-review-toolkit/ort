@@ -26,8 +26,6 @@ import org.gradle.api.internal.artifacts.DefaultProjectComponentIdentifier
 import org.gradle.api.internal.artifacts.repositories.DefaultFlatDirArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultIvyArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactRepository
-import org.gradle.authentication.http.HttpHeaderAuthentication
-import org.gradle.api.credentials.HttpHeaderCredentials
 import org.gradle.internal.build.BuildState
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
@@ -304,6 +302,14 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             // See: https://docs.gradle.org/current/userguide/platforms.html#sub:bom_import
             if (isBom(dependencyResult)) return null
 
+            // Ignore a dependency that resolves back to the project currently being analyzed. Such self-dependencies
+            // can occur, for example, if a plugin is applied to all projects (including the root project) via
+            // "allprojects {}" and that plugin creates a resolvable configuration which pulls in every project of
+            // the build, including the one it is defined on. Gradle allows such a self-referencing project
+            // dependency to be resolved without error, but including it in the result would incorrectly make a
+            // project appear to depend on itself.
+            if (hasSelfDependency(dependencyResult, project)) return null
+
             def dependencyId = identifierFor(dependencyResult, project)
             dependencies.putIfAbsent(dependencyId, [])
             def dependency = dependencies[dependencyId].find {
@@ -317,6 +323,25 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             dependency = parseDependency(dependencyResult, project, resolvedArtifacts, visited)
             dependencies[dependencyId].add(dependency)
             return dependency
+        }
+
+        /**
+         * Return true if the provided DependencyResult represents a dependency that resolves back to the given
+         * project itself, i.e. a project depending on itself.
+         */
+        private static boolean hasSelfDependency(DependencyResult dependencyResult, Project project) {
+            if (!(dependencyResult instanceof ResolvedDependencyResult)) return false
+
+            ComponentIdentifier id = dependencyResult.selected.id
+            if (!(id instanceof ProjectComponentIdentifier)) return false
+
+            if (!isCurrentBuild(id.build, project) && project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
+                // The dependency belongs to an included build, so it cannot be a self-dependency of "project".
+                return false
+            }
+
+            def dependencyProject = project.rootProject.findProject(id.projectPath)
+            return dependencyProject == project
         }
 
         /**

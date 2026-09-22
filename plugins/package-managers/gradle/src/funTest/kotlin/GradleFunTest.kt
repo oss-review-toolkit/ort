@@ -80,4 +80,16 @@ class GradleFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "A project does not depend on itself" {
+        // This is a test project which declares a dependency on itself. Gradle allows this, but such a
+        // self-dependency should not show up in the result, since it makes no sense from a logical point of view.
+        val definitionFile = getAssetFile("projects/synthetic/gradle-self-dependency/build.gradle")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-self-dependency-expected-output-root.yml")
+
+        val result = GradleFactory.create(javaVersion = "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
