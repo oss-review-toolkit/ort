@@ -34,7 +34,6 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldStartWith
 
-import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
@@ -210,9 +209,11 @@ private suspend fun <T> withIgnoreUnavailable(block: suspend () -> T): T =
     runCatching {
         block()
     }.getOrElse { e ->
+        fun Int.isServerSideError(): Boolean = this / 100 == 5
+
         throw when (e) {
             is SocketTimeoutException -> TestAbortedException()
-            is HttpException -> if (e.code() == HttpURLConnection.HTTP_BAD_GATEWAY) TestAbortedException() else e
+            is HttpException -> if (e.code().isServerSideError()) TestAbortedException() else e
             else -> e
         }
     }
