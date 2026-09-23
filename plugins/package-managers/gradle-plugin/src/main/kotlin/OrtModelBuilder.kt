@@ -169,7 +169,8 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                         vcs = getVcsModel()
                     )
                 },
-                localPath = null
+                localPath = null,
+                projectDir = null
             )
         }
 
@@ -197,7 +198,8 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                 warning = null,
                 pomFile = null,
                 mavenModel = null,
-                localPath = componentId.projectPath
+                localPath = componentId.projectPath,
+                projectDir = analyzedProject.rootProject.findProject(componentId.projectPath)?.projectDir
             )
         }
 
