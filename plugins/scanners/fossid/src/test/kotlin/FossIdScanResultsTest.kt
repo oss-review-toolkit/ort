@@ -43,8 +43,8 @@ private const val FILE_PATH_SNIPPET = "filePathSnippet"
 
 class FossIdScanResultsTest : WordSpec({
     "mapSummary()" should {
-        "apply the license mapping" {
-            val mapping = mapOf(
+        "apply the detected license mapping" {
+            val detectedLicenseMapping = mapOf(
                 "BSD (3-Clause)" to "BSD-3-Clause"
             )
             val sampleFile = createMarkAsIdentifiedFile(
@@ -52,7 +52,7 @@ class FossIdScanResultsTest : WordSpec({
             )
             val issues = mutableListOf<Issue>()
 
-            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, mapping)
+            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, detectedLicenseMapping)
 
             issues should beEmpty()
             findings.licenseFindings.map { it.license.toString() } should containExactly("BSD-3-Clause")
@@ -72,8 +72,8 @@ class FossIdScanResultsTest : WordSpec({
             findings.licenseFindings should beEmpty()
         }
 
-        "handle license mappings included in others" {
-            val mapping = mapOf(
+        "handle detected license mappings included in others" {
+            val detectedLicenseMapping = mapOf(
                 "Apache 2.0" to "Apache-2.0",
                 "Apache License 2.0" to "Apache-2.0",
                 "Apache License, Version 2.0" to "Apache-2.0",
@@ -85,7 +85,7 @@ class FossIdScanResultsTest : WordSpec({
             )
             val issues = mutableListOf<Issue>()
 
-            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, mapping)
+            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, detectedLicenseMapping)
 
             issues should beEmpty()
             findings.licenseFindings.map { it.license.toString() } should containExactly("Apache-2.0")
@@ -112,11 +112,11 @@ class FossIdScanResultsTest : WordSpec({
     }
 
     "mapSnippetFindings()" should {
-        "map non-SPDX compliant FossID licenses in a snippet to snippet findings" {
+        "Apply the detected license mapping to non-SPDX compliant license strings" {
             val rawResults = createSnippet("The Apache License, Version 2.0")
             val issues = mutableListOf<Issue>()
 
-            val mapping = mapOf(
+            val detectedLicenseMapping = mapOf(
                 "Apache License, Version 2.0" to "Apache-2.0",
                 "The Apache License, Version 2.0" to "Apache-2.0"
             )
@@ -124,7 +124,7 @@ class FossIdScanResultsTest : WordSpec({
                 rawResults,
                 500,
                 issues,
-                mapping,
+                detectedLicenseMapping,
                 emptyList(),
                 mutableSetOf()
             )
