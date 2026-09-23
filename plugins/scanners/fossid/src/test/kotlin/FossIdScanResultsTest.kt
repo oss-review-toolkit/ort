@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldBeSingleton
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
@@ -37,7 +35,6 @@ import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 private const val FILE_PATH = "filePath"
 private const val FILE_PATH_SNIPPET = "filePathSnippet"
@@ -127,10 +124,9 @@ class FossIdScanResultsTest : WordSpec({
             )
 
             issues should beEmpty()
-            findings should haveSize(1)
-            findings.first() shouldNotBeNull {
-                snippets.first() shouldNotBeNull {
-                    license.toString() shouldBe "LicenseRef-ort-some-license-id"
+            findings.shouldBeSingleton { findings ->
+                findings.snippets.shouldBeSingleton { snippet ->
+                    snippet.license.toString() shouldBe "LicenseRef-ort-some-license-id"
                 }
             }
         }
@@ -149,11 +145,8 @@ class FossIdScanResultsTest : WordSpec({
             )
 
             issues should beEmpty()
-            findings should haveSize(1)
-            findings.first() shouldNotBeNull {
-                snippets.first() shouldNotBeNull {
-                    license.toString() shouldBe "Apache-2.0"
-                }
+            findings.shouldBeSingleton { findings ->
+                findings.snippets.map { it.license.toString() } should containExactly("Apache-2.0")
             }
         }
 
@@ -176,11 +169,8 @@ class FossIdScanResultsTest : WordSpec({
                 issue.severity shouldBe Severity.ERROR
             }
 
-            findings should haveSize(1)
-            findings.first() shouldNotBeNull {
-                snippets.first() shouldNotBeNull {
-                    license shouldBe SpdxConstants.NOASSERTION.toSpdx()
-                }
+            findings.shouldBeSingleton { findings ->
+                findings.snippets.map { it.license.toString() } should containExactly(SpdxConstants.NOASSERTION)
             }
         }
     }
