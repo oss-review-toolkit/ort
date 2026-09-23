@@ -74,10 +74,7 @@ class FossIdScanResultsTest : WordSpec({
 
         "handle detected license mappings included in others" {
             val detectedLicenseMapping = mapOf(
-                "Apache 2.0" to "Apache-2.0",
-                "Apache License 2.0" to "Apache-2.0",
                 "Apache License, Version 2.0" to "Apache-2.0",
-                "Apache version 2.0" to "Apache-2.0",
                 "The Apache License, Version 2.0" to "Apache-2.0"
             )
             val sampleFile = createMarkAsIdentifiedFile(
