@@ -56,6 +56,20 @@ class FossIdScanResultsTest : WordSpec({
             findings.licenseFindings.map { it.license.toString() } should containExactly("LicenseRef-some-id")
         }
 
+        "apply the built-in license mapping from 'license-mapping.yml'" {
+            val sampleFile = createMarkAsIdentifiedFile(
+                "GWT Terms", FILE_PATH, includeLicensesWithComment = true
+            )
+            val issues = mutableListOf<Issue>()
+
+            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, emptyMap())
+
+            issues should beEmpty()
+            findings.licenseFindings.map { it.license.toString() } should containExactly(
+                "Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-1.0 AND LGPL-2.1-only AND MPL-1.1"
+            )
+        }
+
         "create an issue when a license in an identified file cannot be mapped" {
             val sampleFile = createMarkAsIdentifiedFile("invalid license", FILE_PATH)
             val issues = mutableListOf<Issue>()

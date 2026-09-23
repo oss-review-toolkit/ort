@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.prettyPrintRanges
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
@@ -213,7 +214,9 @@ private fun mapLicense(
     issues: MutableList<Issue>,
     orderedDetectedLicenseMapping: Map<String, String>
 ): LicenseFinding? {
-    val mappedLicense = license.mapLicense(orderedDetectedLicenseMapping)
+    var mappedLicense = license.mapLicense(orderedDetectedLicenseMapping)
+    mappedLicense = SpdxLicenseMapper.map(mappedLicense)?.toString() ?: mappedLicense
+    if (mappedLicense == SpdxConstants.NONE) return null
 
     return runCatching {
         // TODO: The detected license mapping must be applied here, because FossID can return license strings
