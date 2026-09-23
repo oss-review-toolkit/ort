@@ -21,7 +21,7 @@ import type { JSX } from "react";
 import { useMemo, useState } from "react";
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Tooltip } from "recharts";
 
-import { computeCvssScores, cvssVersionLabel, cvssVersionRank, parseCvssVector } from "@/lib/cvss";
+import { type CvssScores, computeCvssScores, cvssVersionLabel, cvssVersionOf, cvssVersionRank } from "@/lib/cvss";
 import { cn } from "@/lib/utils";
 
 export interface CvssVectorInput {
@@ -40,11 +40,12 @@ interface CvssEntry {
     label: string;
     rank: number;
     score: number | undefined;
-    vector: string;
+    scores: CvssScores;
+    style: SeriesStyle;
 }
 
 // The six axes of the severity radar, mirroring the metaeffekt universal CVSS calculator. Each is a
-// CVSS sub-score on a 0-10 scale. Axes that a vector does not define fall back to a related score
+// CVSS sub-score on a 0-10 scale. Axes that a version does not define fall back to a related score
 // (as the reference does), so the shape still closes into a hexagon.
 const AXES = [
     { key: "base", label: "Base", full: "Base Score" },
@@ -54,6 +55,25 @@ const AXES = [
     { key: "exploitability", label: "Exploit.", full: "Exploitability" },
     { key: "environmental", label: "Env.", full: "Environmental" },
 ] as const;
+
+interface SeriesStyle {
+    color: string;
+    /** An SVG dash pattern, so the versions stay apart for a reader who cannot tell the colours apart. */
+    dash: string | undefined;
+}
+
+// One style per CVSS version, so a version keeps the same colour and line across every report. The
+// colours were picked to clear the WCAG 2.2 contrast requirement for graphical objects (1.4.11,
+// at least 3:1) against both the light and the dark card background, and the dash patterns keep the
+// series distinguishable without relying on colour at all (1.4.1). `CvssVectorChart.test.tsx`
+// asserts both.
+const SERIES_STYLES: Record<string, SeriesStyle> = {
+    "v2.0": { color: "hsl(295, 55%, 53%)", dash: "1 3" },
+    "v3.0": { color: "hsl(175, 75%, 31%)", dash: "6 3" },
+    "v3.1": { color: "hsl(225, 62%, 59%)", dash: "2 2" },
+    "v4.0": { color: "hsl(0, 70%, 56%)", dash: undefined },
+};
+const FALLBACK_STYLE: SeriesStyle = { color: "hsl(35, 85%, 33%)", dash: "8 2 1 2" };
 
 // Derive a version label from a raw scoring system (e.g. "CVSS_V3" -> "v3") when the vector itself
 // carries no explicit version.
@@ -74,79 +94,92 @@ function buildEntries(vectors: CvssVectorInput[]): CvssEntry[] {
         if (!input.vector) {
             continue;
         }
-        const { version } = parseCvssVector(input.vector);
+        const version = cvssVersionOf(input.vector);
         const label = cvssVersionLabel(version) || systemLabel(input.system) || "CVSS";
-        const entry: CvssEntry = { label, vector: input.vector, score: input.score, rank: cvssVersionRank(version) };
         const existing = byLabel.get(label);
-        if (!existing || (input.score ?? -1) > (existing.score ?? -1)) {
-            byLabel.set(label, entry);
+        if (existing && (input.score ?? -1) <= (existing.score ?? -1)) {
+            continue;
         }
+        byLabel.set(label, {
+            label,
+            rank: cvssVersionRank(version),
+            score: input.score,
+            scores: computeCvssScores(input.vector, input.score),
+            style: SERIES_STYLES[label] ?? FALLBACK_STYLE,
+        });
     }
 
     return [...byLabel.values()].sort((a, b) => a.rank - b.rank);
 }
 
-function radarData(vector: string, score: number | undefined) {
-    const scores = computeCvssScores(vector, score);
+// The value each axis takes for one version, with the fallbacks the reference calculator applies to
+// the axes a version does not define.
+function axisValues(scores: CvssScores): Record<string, number> {
     const overall = scores.overall ?? scores.base ?? 0;
     const base = scores.base ?? overall;
 
-    // Only base, impact and exploitability are derived from a base-metrics vector; the temporal,
-    // environmental and adjusted-impact axes fall back to the closest available score. CVSS v4.0
-    // vectors are not scored per sub-metric, so they plot as a hexagon at the overall score.
-    const resolved: Record<string, number> = {
-        adjustedImpact: scores.impact ?? overall,
+    return {
+        adjustedImpact: scores.modifiedImpact ?? scores.impact ?? overall,
         base,
-        environmental: overall,
+        environmental: scores.environmental ?? overall,
         exploitability: scores.exploitability ?? overall,
         impact: scores.impact ?? overall,
-        temporal: base,
+        temporal: scores.temporal ?? scores.threat ?? base,
     };
-
-    return AXES.map((axis) => ({
-        axis: axis.label,
-        full: axis.full,
-        value: Math.round((resolved[axis.key] ?? 0) * 10) / 10,
-    }));
 }
 
-// A radar chart of a CVSS vector's metric values, with a selector to switch between CVSS versions.
+// What the chart is called wherever it appears: the heading, the accessible title and the description.
+const TITLE = "Severity Radar";
+
+// A radar chart of the CVSS sub-scores, with one series per CVSS version the vulnerability was
+// scored under so the versions can be compared at a glance, and switched on and off individually.
 function CvssVectorChart({ className, vectors }: CvssVectorChartProps): JSX.Element | null {
     const entries = useMemo(() => buildEntries(vectors), [vectors]);
 
-    // Default to the most severe (highest-scored) version.
-    const defaultLabel = useMemo(() => {
-        let best: CvssEntry | undefined;
-        for (const entry of entries) {
-            if (!best || (entry.score ?? -1) > (best.score ?? -1)) {
-                best = entry;
-            }
-        }
-        return best?.label ?? "";
-    }, [entries]);
+    const data = useMemo(
+        () =>
+            AXES.map((axis) => {
+                const point: Record<string, number | string> = { axis: axis.label, full: axis.full };
+                for (const entry of entries) {
+                    point[entry.label] = Math.round((axisValues(entry.scores)[axis.key] ?? 0) * 10) / 10;
+                }
 
-    const [selectedLabel, setSelectedLabel] = useState(defaultLabel);
-    const selected = entries.find((entry) => entry.label === selectedLabel) ?? entries[0];
+                return point;
+            }),
+        [entries],
+    );
 
-    const data = useMemo(() => (selected ? radarData(selected.vector, selected.score) : []), [selected]);
+    const [hidden, setHidden] = useState<ReadonlySet<string>>(new Set());
 
-    if (!selected || data.every((point) => point.value === 0)) {
+    const hasValues = entries.some((entry) => data.some((point) => Number(point[entry.label]) > 0));
+    if (entries.length === 0 || !hasValues) {
         return null;
     }
+
+    const shown = entries.filter((entry) => !hidden.has(entry.label));
+    const toggle = (label: string) =>
+        setHidden((previous) => {
+            const next = new Set(previous);
+            if (!next.delete(label)) {
+                next.add(label);
+            }
+
+            return next;
+        });
+
+    const described = shown.map((entry) => entry.label).join(", ");
 
     return (
         // Fixed width/height instead of ResponsiveContainer: a radar has no natural aspect ratio to
         // fill, and a fixed size renders identically regardless of how the surrounding column is sized.
         <div className={cn("flex flex-col items-center", className)}>
-            <h4 className="mb-1 text-center font-semibold text-muted-foreground text-xs uppercase">
-                {selected.score !== undefined ? `CVSS Score ${selected.score}` : "CVSS Score"}
-            </h4>
+            <h4 className="mb-1 text-center font-semibold text-muted-foreground text-xs uppercase">{TITLE}</h4>
             <RadarChart
                 data={data}
-                desc={`CVSS sub-scores for ${selected.label}`}
+                desc={`CVSS sub-scores for ${described}`}
                 height={281}
                 outerRadius="68%"
-                title={selected.score !== undefined ? `CVSS Score ${selected.score}` : "CVSS Score"}
+                title={TITLE}
                 width={300}
             >
                 <PolarGrid stroke="var(--border)" />
@@ -161,51 +194,70 @@ function CvssVectorChart({ className, vectors }: CvssVectorChartProps): JSX.Elem
                         fontSize: 12,
                     }}
                     cursor={false}
-                    formatter={(value, _name, item) => [
-                        typeof value === "number" ? value.toFixed(1) : String(value),
-                        (item?.payload as { full?: string })?.full ?? "Score",
-                    ]}
+                    formatter={(value, name) => [typeof value === "number" ? value.toFixed(1) : String(value), name]}
+                    labelFormatter={(_label, payload) => (payload?.[0]?.payload as { full?: string })?.full ?? "Score"}
                 />
-                <Radar
-                    dataKey="value"
-                    dot={{ r: 2.5, fill: "var(--destructive)", stroke: "var(--background)", strokeWidth: 1 }}
-                    fill="var(--destructive)"
-                    fillOpacity={0.25}
-                    isAnimationActive={false}
-                    name="CVSS"
-                    stroke="var(--destructive)"
-                    strokeWidth={2}
-                />
+                {entries.map((entry) => (
+                    <Radar
+                        dataKey={entry.label}
+                        dot={{ r: 2.5, fill: entry.style.color, stroke: "var(--background)", strokeWidth: 1 }}
+                        fill={entry.style.color}
+                        // Several series overlap, so keep the fills faint enough to read through.
+                        fillOpacity={shown.length > 1 ? 0.12 : 0.25}
+                        hide={hidden.has(entry.label)}
+                        isAnimationActive={false}
+                        key={entry.label}
+                        name={entry.label}
+                        stroke={entry.style.color}
+                        {...(entry.style.dash !== undefined ? { strokeDasharray: entry.style.dash } : {})}
+                        strokeWidth={2}
+                    />
+                ))}
             </RadarChart>
 
-            {entries.length > 1 ? (
-                <fieldset aria-label="CVSS version" className="mt-1 flex justify-center gap-1 border-0 p-0">
-                    {entries.map((entry) => {
-                        const isActive = entry.label === selected.label;
-                        // Prefix "CVSS" for clarity, unless the label already carries it.
-                        const buttonLabel = /^cvss/i.test(entry.label) ? entry.label : `CVSS ${entry.label}`;
-                        return (
-                            <button
-                                aria-pressed={isActive}
-                                className={cn(
-                                    "rounded-md border px-2 py-0.5 text-xs transition-colors",
-                                    isActive
-                                        ? "border-border bg-muted font-medium text-foreground"
-                                        : "border-transparent text-muted-foreground hover:text-foreground",
-                                )}
-                                key={entry.label}
-                                onClick={() => setSelectedLabel(entry.label)}
-                                type="button"
-                            >
-                                {buttonLabel}
-                            </button>
-                        );
-                    })}
-                </fieldset>
-            ) : null}
+            {/* The legend is written here rather than taken from recharts so that each entry is a real
+                button: one that takes keyboard focus, says whether its version is shown, and draws the
+                colour and the dash pattern of the series it stands for. */}
+            <fieldset aria-label="CVSS versions charted" className="flex flex-wrap justify-center gap-1 border-0 p-0">
+                {entries.map((entry) => {
+                    const isShown = !hidden.has(entry.label);
+                    // Hiding the last remaining version would leave an empty radar behind.
+                    const isLastShown = isShown && shown.length === 1;
+                    const label = `CVSS ${entry.label}${entry.score !== undefined ? ` (${entry.score})` : ""}`;
+
+                    return (
+                        <button
+                            aria-pressed={isShown}
+                            className={cn(
+                                "flex items-center gap-1.5 rounded-md border border-transparent px-2 py-0.5 text-xs",
+                                "transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50",
+                                isShown ? "text-foreground" : "text-muted-foreground line-through",
+                                isLastShown ? "cursor-default" : "cursor-pointer",
+                            )}
+                            disabled={isLastShown}
+                            key={entry.label}
+                            onClick={() => toggle(entry.label)}
+                            type="button"
+                        >
+                            <svg aria-hidden="true" height="8" viewBox="0 0 16 8" width="16">
+                                <line
+                                    stroke={isShown ? entry.style.color : "var(--muted-foreground)"}
+                                    strokeDasharray={entry.style.dash}
+                                    strokeWidth="2"
+                                    x1="0"
+                                    x2="16"
+                                    y1="4"
+                                    y2="4"
+                                />
+                            </svg>
+                            {label}
+                        </button>
+                    );
+                })}
+            </fieldset>
         </div>
     );
 }
 
-export { CvssVectorChart };
+export { AXES, axisValues, buildEntries, CvssVectorChart, FALLBACK_STYLE, SERIES_STYLES };
 export default CvssVectorChart;

@@ -40,7 +40,7 @@ class WebAppReporterFunTest : WordSpec({
 
             reportFileResults shouldBeSingleton {
                 it shouldBeSuccess { reportFile ->
-                    reportFile.length() should beInRange(1300000L..1400000L)
+                    reportFile.length() should beInRange(1500000L..1600000L)
                 }
             }
         }
