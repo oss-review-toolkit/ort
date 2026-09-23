@@ -214,11 +214,9 @@ class ClearlyDefinedServiceFunTest : WordSpec({
  */
 private fun <T> Result<T>.withIgnoreUnavailable(): Result<T> =
     onFailure { e ->
-        fun Int.isServerSideError(): Boolean = this / 100 == 5
-
         throw when (e) {
             is SocketTimeoutException -> TestAbortedException()
-            is HttpException -> if (e.code().isServerSideError()) TestAbortedException() else e
+            is HttpException -> if (e.code().isServerSideError) TestAbortedException() else e
             else -> e
         }
     }
