@@ -340,6 +340,34 @@ class ScannerTest : WordSpec({
             }
         }
 
+        "Invoke scanProvenance() with expected checkoutPaths, for a repo containing just one project in a sub-repo" {
+            val subRepositoryProvenance = RepositoryProvenance(
+                vcsInfo = VcsInfo.valid().copy(url = "https://example.com/sub-repo.git"),
+                resolvedRevision = "resolvedRevision"
+            )
+
+            val project = Package.new(name = "project").copy(vcsProcessed = subRepositoryProvenance.vcsInfo)
+
+            val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
+            val scanner = createScanner(
+                nestedProvenanceResolver = FakeNestedProvenanceResolver(),
+                projectScannerWrappers = listOf(scannerWrapper)
+            )
+
+            scanner.scan(
+                packages = setOf(project),
+                context = createContext(type = PackageType.PROJECT),
+                projectDirRelativeToAnalysisRootForId = mapOf(project.id to "submodule/checkout/dir")
+            )
+
+            verify(exactly = 1) {
+                scannerWrapper.scanProvenance(
+                    provenance = subRepositoryProvenance,
+                    context = match { it.checkoutPaths == setOf("submodule/checkout/dir") }
+                )
+            }
+        }
+
         "not try to download the source code" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val pkgWithVcs = Package.new(name = "repository").withValidVcs()
