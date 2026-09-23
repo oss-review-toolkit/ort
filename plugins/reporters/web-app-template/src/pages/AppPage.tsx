@@ -455,7 +455,12 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
                 </header>
 
                 <main className="flex-1 overflow-auto">
-                    <div className="flex min-h-full w-full flex-col p-4 sm:p-6">
+                    <div
+                        className={cn(
+                            "flex w-full flex-col p-4 sm:p-6",
+                            activeTab === "tree" ? "h-full min-h-0" : "min-h-full",
+                        )}
+                    >
                         {activeTab === "summary" ? (
                             <ResultsSummary
                                 onFilterByLevel={focusTableWithLevel}
