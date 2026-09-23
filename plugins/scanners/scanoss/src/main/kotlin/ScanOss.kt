@@ -120,11 +120,6 @@ class ScanOss(
         return generateSummary(startTime, endTime, results, config.chosenSnippetModel.toSet())
     }
 
-    data class ProcessedRules(
-        val includeRules: List<Rule>,
-        val removeRules: List<RemoveRule>
-    )
-
     internal fun buildSettingsFromORTContext(context: ScanContext): ScanossSettings {
         val rules = processSnippetChoices(context.snippetChoices)
         val bom = Bom.builder()
@@ -144,7 +139,12 @@ class ScanOss(
         return ScanossSettings.builder().bom(bom).settings(settings).build()
     }
 
-    fun processSnippetChoices(snippetChoices: List<SnippetChoices>): ProcessedRules {
+    internal data class ProcessedRules(
+        val includeRules: List<Rule>,
+        val removeRules: List<RemoveRule>
+    )
+
+    internal fun processSnippetChoices(snippetChoices: List<SnippetChoices>): ProcessedRules {
         val includeRules = mutableListOf<Rule>()
         val removeRules = mutableListOf<RemoveRule>()
 
