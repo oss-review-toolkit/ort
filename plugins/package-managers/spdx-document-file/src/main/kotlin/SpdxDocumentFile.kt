@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
@@ -53,6 +54,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.SpdxDocumentCache
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.extractScopeFromExternalReferences
+import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.getRemoteArtifact
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.locateCpe
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.locateExternalReference
 import org.ossreviewtoolkit.plugins.packagemanagers.spdxdocumentfile.utils.mapNotPresentToEmpty
@@ -341,6 +343,7 @@ class SpdxDocumentFile(
             authors = projectPackage.originator.wrapPresentInSet(),
             declaredLicenses = setOf(projectPackage.licenseDeclared),
             vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY),
+            sourceArtifact = projectPackage.getRemoteArtifact()?.url ?: RemoteArtifact.EMPTY.url,
             homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
             scopeDependencies = scopes
         )
