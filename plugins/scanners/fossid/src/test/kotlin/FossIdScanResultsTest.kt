@@ -45,17 +45,17 @@ class FossIdScanResultsTest : WordSpec({
     "mapSummary()" should {
         "apply the detected license mapping" {
             val detectedLicenseMapping = mapOf(
-                "BSD (3-Clause)" to "BSD-3-Clause"
+                "license from FossId" to "LicenseRef-some-id"
             )
             val sampleFile = createMarkAsIdentifiedFile(
-                "BSD (3-Clause)", FILE_PATH, includeLicensesWithComment = true
+                "license from FossId", FILE_PATH, includeLicensesWithComment = true
             )
             val issues = mutableListOf<Issue>()
 
             val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, detectedLicenseMapping)
 
             issues should beEmpty()
-            findings.licenseFindings.map { it.license.toString() } should containExactly("BSD-3-Clause")
+            findings.licenseFindings.map { it.license.toString() } should containExactly("LicenseRef-some-id")
         }
 
         "create an issue when a license in an identified file cannot be mapped" {
@@ -74,18 +74,18 @@ class FossIdScanResultsTest : WordSpec({
 
         "handle detected license mappings included in others" {
             val detectedLicenseMapping = mapOf(
-                "Apache License, Version 2.0" to "Apache-2.0",
-                "The Apache License, Version 2.0" to "Apache-2.0"
+                "license from FossId" to "LicenseRef-some-id",
+                "some license from FossId" to "LicenseRef-some-id"
             )
             val sampleFile = createMarkAsIdentifiedFile(
-                "The Apache License, Version 2.0", FILE_PATH, includeLicensesWithComment = true
+                "some license from FossId", FILE_PATH, includeLicensesWithComment = true
             )
             val issues = mutableListOf<Issue>()
 
             val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, detectedLicenseMapping)
 
             issues should beEmpty()
-            findings.licenseFindings.map { it.license.toString() } should containExactly("Apache-2.0")
+            findings.licenseFindings.map { it.license.toString() } should containExactly("LicenseRef-some-id")
         }
 
         "ignore plain text comments containing 'ort' substring" {
@@ -110,12 +110,12 @@ class FossIdScanResultsTest : WordSpec({
 
     "mapSnippetFindings()" should {
         "Apply the detected license mapping to non-SPDX compliant license strings" {
-            val rawResults = createSnippet("The Apache License, Version 2.0")
+            val rawResults = createSnippet("license from FossId")
             val issues = mutableListOf<Issue>()
 
             val detectedLicenseMapping = mapOf(
-                "Apache License, Version 2.0" to "Apache-2.0",
-                "The Apache License, Version 2.0" to "Apache-2.0"
+                "license from FossId" to "LicenseRef-ort-some-license-id",
+                "some license from FossId" to "LicenseRef-ort-some-license-id"
             )
             val findings = mapSnippetFindings(
                 rawResults,
@@ -130,7 +130,7 @@ class FossIdScanResultsTest : WordSpec({
             findings should haveSize(1)
             findings.first() shouldNotBeNull {
                 snippets.first() shouldNotBeNull {
-                    license.toString() shouldBe "Apache-2.0"
+                    license.toString() shouldBe "LicenseRef-ort-some-license-id"
                 }
             }
         }
