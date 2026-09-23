@@ -106,7 +106,7 @@ class ScanOss(
 
         // Build the scanner at function level in case any path-specific settings or filters are needed later.
         val scanoss = scanossBuilder
-            .settings(buildSettingsFromORTContext(context))
+            .settings(buildSettings(context))
             .filterConfig(filterConfig)
             .build()
 
@@ -120,7 +120,7 @@ class ScanOss(
         return generateSummary(startTime, endTime, results, config.chosenSnippetModel.toSet())
     }
 
-    internal fun buildSettingsFromORTContext(context: ScanContext): ScanossSettings {
+    internal fun buildSettings(context: ScanContext): ScanossSettings {
         // See https://docs.scanoss.com/en/latest/poc/evaluation/improving-scan-accuracy#providing-context-for-a-component.
         val includedPurls = context.coveredPackages.map { Rule.builder().purl(it.purl).build() }
         val rules = processSnippetChoices(context.snippetChoices)
