@@ -17,68 +17,80 @@
  * License-Filename: LICENSE
  */
 
-// Computes the CVSS sub-scores that make up a "severity radar", following the same idea as the
-// metaeffekt universal CVSS calculator (https://github.com/org-metaeffekt/metaeffekt-universal-cvss-calculator):
-// the radar plots the base / impact / exploitability sub-scores (each 0-10), not the raw metric
-// letters, so its shape reflects how the score is actually composed. The base, impact and
-// exploitability formulas for CVSS v2 and v3.0/v3.1 are implemented here from the official
-// specifications. CVSS v4.0's macro-vector scoring is not reproduced; for it (and any unrecognised
-// vector) the caller-supplied authoritative score is used as the overall value.
+import { fromVector } from "ae-cvss-calculator";
+
+// Scoring a CVSS vector is left to the ae-cvss-calculator library, the implementation behind the
+// metaeffekt universal CVSS calculator (https://github.com/org-metaeffekt/metaeffekt-universal-cvss-calculator),
+// so that the report agrees with that calculator down to the last decimal and the specifications
+// stay out of this code base. This module only adapts what the library returns to what the report
+// needs: a version, a label to show it under, and the sub-scores the severity radar plots.
 
 export type CvssVersion = "2.0" | "3.0" | "3.1" | "4.0" | "unknown";
 
+/**
+ * The sub-scores of a vector, each on a 0-10 scale. Which of them a vector has depends on its
+ * version: CVSS v2 and v3 split into impact and exploitability, while CVSS v4.0 has neither but
+ * scores the threat and environmental metric groups instead. The severity radar falls back to a
+ * related score for an axis a version does not define.
+ */
 export interface CvssScores {
-    base?: number;
-    exploitability?: number;
-    impact?: number;
-    /** Overall/base score used as the fallback for axes that cannot be computed. */
-    overall?: number;
+    base?: number | undefined;
+    environmental?: number | undefined;
+    exploitability?: number | undefined;
+    impact?: number | undefined;
+    /** CVSS v2 and v3 only: the impact with the environmental metrics applied. */
+    modifiedImpact?: number | undefined;
+    /** The score of the vector as a whole, and the fallback for axes that do not apply. */
+    overall?: number | undefined;
+    /** CVSS v2 and v3 only. */
+    temporal?: number | undefined;
+    /** CVSS v4.0 only: the base score with the threat metrics applied (CVSS-BT). */
+    threat?: number | undefined;
 }
 
-export interface ParsedCvssVector {
-    metrics: Map<string, string>;
-    version: CvssVersion;
+// What the library returns; it types `fromVector` as `any`, so narrow it to what is actually used.
+interface ScoredVector {
+    calculateScores(normalize?: boolean): Partial<Record<keyof CvssScores | "baseMetricsOnly", number>>;
+    getVectorName(): string;
 }
 
-// Parse "CVSS:3.1/AV:N/AC:L/..." into its version and METRIC:VALUE pairs. CVSS v2 vectors have no
-// "CVSS:" version prefix and are recognised by their mandatory Authentication (Au) metric.
-export function parseCvssVector(vector: string): ParsedCvssVector {
-    const metrics = new Map<string, string>();
-    let version: CvssVersion = "unknown";
-
-    for (const part of vector.split("/")) {
-        const [key, value] = part.split(":");
-        if (!key || !value) {
-            continue;
-        }
-        if (key === "CVSS") {
-            if (value.startsWith("4.0")) {
-                version = "4.0";
-            } else if (value.startsWith("3.1")) {
-                version = "3.1";
-            } else if (value.startsWith("3.0")) {
-                version = "3.0";
-            } else if (value.startsWith("2")) {
-                version = "2.0";
-            }
-            continue;
-        }
-        metrics.set(key, value);
+// Parse a vector string, returning null for anything the library does not recognise as CVSS. ORT
+// reports an EPSS percentile in the same field as a CVSS vector, so this is a normal outcome.
+function parse(vector: string): ScoredVector | null {
+    if (!vector) {
+        return null;
     }
 
-    if (version === "unknown" && metrics.has("Au")) {
-        version = "2.0";
+    try {
+        return (fromVector(vector) as ScoredVector | null) ?? null;
+    } catch {
+        return null;
     }
-
-    return { metrics, version };
 }
 
-// A short, human-readable label for a CVSS version, e.g. "3.1" -> "v3.1".
+/** The CVSS version a vector string is written in, or "unknown" if it is not a CVSS vector. */
+export function cvssVersionOf(vector: string): CvssVersion {
+    const name = parse(vector)?.getVectorName();
+    switch (name) {
+        case "CVSS:2.0":
+            return "2.0";
+        case "CVSS:3.0":
+            return "3.0";
+        case "CVSS:3.1":
+            return "3.1";
+        case "CVSS:4.0":
+            return "4.0";
+        default:
+            return "unknown";
+    }
+}
+
+/** A short, human-readable label for a CVSS version, e.g. "3.1" -> "v3.1". */
 export function cvssVersionLabel(version: CvssVersion): string {
     return version === "unknown" ? "" : `v${version}`;
 }
 
-// Orders versions oldest-to-newest so a version switch reads left-to-right (v2 -> v3 -> v4).
+// Orders versions oldest-to-newest so a version reads left-to-right (v2 -> v3 -> v4).
 const VERSION_RANK: Record<CvssVersion, number> = {
     "2.0": 0,
     "3.0": 1,
@@ -91,126 +103,32 @@ export function cvssVersionRank(version: CvssVersion): number {
     return VERSION_RANK[version];
 }
 
-function round1(value: number): number {
-    return Math.round(value * 10) / 10;
-}
-
-function weight(table: Record<string, number>, key: string | undefined): number | undefined {
-    return key !== undefined ? table[key] : undefined;
-}
-
-// CVSS v3.1 "Roundup": round up to one decimal place, avoiding binary floating-point drift.
-function roundUp1(value: number): number {
-    const scaled = Math.round(value * 100000);
-    if (scaled % 10000 === 0) {
-        return scaled / 100000;
-    }
-    return (Math.floor(scaled / 10000) + 1) / 10;
-}
-
-const V3_AV: Record<string, number> = { A: 0.62, L: 0.55, N: 0.85, P: 0.2 };
-const V3_AC: Record<string, number> = { H: 0.44, L: 0.77 };
-const V3_UI: Record<string, number> = { N: 0.85, R: 0.62 };
-const V3_PR_UNCHANGED: Record<string, number> = { H: 0.27, L: 0.62, N: 0.85 };
-const V3_PR_CHANGED: Record<string, number> = { H: 0.5, L: 0.68, N: 0.85 };
-const V3_CIA: Record<string, number> = { H: 0.56, L: 0.22, N: 0 };
-
-function computeV3(metrics: Map<string, string>, version: "3.0" | "3.1"): CvssScores {
-    const changed = (metrics.get("S") ?? "U") === "C";
-    const av = weight(V3_AV, metrics.get("AV"));
-    const ac = weight(V3_AC, metrics.get("AC"));
-    const ui = weight(V3_UI, metrics.get("UI"));
-    const pr = weight(changed ? V3_PR_CHANGED : V3_PR_UNCHANGED, metrics.get("PR"));
-    const c = weight(V3_CIA, metrics.get("C"));
-    const i = weight(V3_CIA, metrics.get("I"));
-    const a = weight(V3_CIA, metrics.get("A"));
-
-    if (
-        av === undefined ||
-        ac === undefined ||
-        ui === undefined ||
-        pr === undefined ||
-        c === undefined ||
-        i === undefined ||
-        a === undefined
-    ) {
-        return {};
-    }
-
-    const iss = 1 - (1 - c) * (1 - i) * (1 - a);
-    const impact = changed ? 7.52 * (iss - 0.029) - 3.25 * (iss - 0.02) ** 15 : 6.42 * iss;
-    const exploitability = 8.22 * av * ac * pr * ui;
-
-    let base: number;
-    if (impact <= 0) {
-        base = 0;
-    } else {
-        const raw = Math.min(changed ? 1.08 * (impact + exploitability) : impact + exploitability, 10);
-        base = version === "3.1" ? roundUp1(raw) : Math.ceil(raw * 10) / 10;
-    }
-
-    return {
-        base,
-        overall: base,
-        impact: round1(Math.max(impact, 0)),
-        exploitability: round1(exploitability),
-    };
-}
-
-const V2_AV: Record<string, number> = { A: 0.646, L: 0.395, N: 1.0 };
-const V2_AC: Record<string, number> = { H: 0.35, L: 0.71, M: 0.61 };
-const V2_AU: Record<string, number> = { M: 0.45, N: 0.704, S: 0.56 };
-const V2_CIA: Record<string, number> = { C: 0.66, N: 0, P: 0.275 };
-
-function computeV2(metrics: Map<string, string>): CvssScores {
-    const av = weight(V2_AV, metrics.get("AV"));
-    const ac = weight(V2_AC, metrics.get("AC"));
-    const au = weight(V2_AU, metrics.get("Au"));
-    const c = weight(V2_CIA, metrics.get("C"));
-    const i = weight(V2_CIA, metrics.get("I"));
-    const a = weight(V2_CIA, metrics.get("A"));
-
-    if (
-        av === undefined ||
-        ac === undefined ||
-        au === undefined ||
-        c === undefined ||
-        i === undefined ||
-        a === undefined
-    ) {
-        return {};
-    }
-
-    const impact = 10.41 * (1 - (1 - c) * (1 - i) * (1 - a));
-    const exploitability = 20 * av * ac * au;
-    const fImpact = impact === 0 ? 0 : 1.176;
-    const base = round1((0.6 * impact + 0.4 * exploitability - 1.5) * fImpact);
-
-    return {
-        base,
-        overall: base,
-        impact: round1(impact),
-        exploitability: round1(exploitability),
-    };
-}
-
-// Compute the CVSS sub-scores for a vector. `fallbackScore` (the authoritative score carried by the
-// vulnerability reference) is used as the overall value for CVSS v4.0 and any vector whose sub-scores
-// cannot be derived, so a radar can still be drawn.
+/**
+ * Compute the sub-scores of a vector. Scores are normalized to a 0-10 scale so that every axis of
+ * the severity radar is read the same way. `fallbackScore` (the authoritative score carried by the
+ * vulnerability reference) stands in as the overall score for a vector the library cannot score, so
+ * that a radar can still be drawn.
+ */
 export function computeCvssScores(vector: string, fallbackScore?: number): CvssScores {
-    const { metrics, version } = parseCvssVector(vector);
+    const raw = parse(vector)?.calculateScores(true);
 
-    let scores: CvssScores = {};
-    if (version === "3.0" || version === "3.1") {
-        scores = computeV3(metrics, version);
-    } else if (version === "2.0") {
-        scores = computeV2(metrics);
-    }
+    const scores: CvssScores = {
+        base: raw?.base,
+        environmental: raw?.environmental,
+        exploitability: raw?.exploitability,
+        impact: raw?.impact,
+        modifiedImpact: raw?.modifiedImpact,
+        overall: raw?.overall,
+        temporal: raw?.temporal,
+        threat: raw?.threat,
+    };
 
     if (scores.base === undefined && fallbackScore !== undefined) {
-        scores = { ...scores, base: fallbackScore, overall: fallbackScore };
-    } else if (scores.overall === undefined && fallbackScore !== undefined) {
-        scores = { ...scores, overall: fallbackScore };
+        return { ...scores, base: fallbackScore, overall: scores.overall ?? fallbackScore };
+    }
+
+    if (scores.overall === undefined && fallbackScore !== undefined) {
+        return { ...scores, overall: fallbackScore };
     }
 
     return scores;
