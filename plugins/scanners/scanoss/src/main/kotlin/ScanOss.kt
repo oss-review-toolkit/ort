@@ -158,18 +158,12 @@ class ScanOss(
         snippetChoices.forEach { snippetChoice ->
             snippetChoice.choices.forEach { choice ->
                 when (choice.choice.reason) {
-                    SnippetChoiceReason.ORIGINAL_FINDING -> {
-                        includeRules.includeFinding(choice)
-                    }
+                    SnippetChoiceReason.ORIGINAL_FINDING -> includeRules.includeFinding(choice)
 
-                    SnippetChoiceReason.NO_RELEVANT_FINDING -> {
-                        removeRules.removeFinding(choice)
-                    }
+                    SnippetChoiceReason.NO_RELEVANT_FINDING -> removeRules.removeFinding(choice)
 
-                    SnippetChoiceReason.OTHER -> {
-                        logger.info {
-                            "Encountered OTHER reason for snippet choice in file ${choice.given.sourceLocation.path}"
-                        }
+                    SnippetChoiceReason.OTHER -> logger.info {
+                        "Encountered OTHER reason for snippet choice in file ${choice.given.sourceLocation.path}"
                     }
                 }
             }
