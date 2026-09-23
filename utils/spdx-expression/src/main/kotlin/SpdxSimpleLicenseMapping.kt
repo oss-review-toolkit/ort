@@ -24,7 +24,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 /**
  * A mapping from simple license names to valid SPDX license IDs. This mapping only contains license strings which *can*
  * be parsed by [SpdxExpression.parse] but have a corresponding valid SPDX license ID that should be used instead. See
- * [SpdxDeclaredLicenseMapping] for a mapping of unparsable license strings.
+ * [SpdxLicenseMapper] for a mapping of unparsable license strings.
  */
 object SpdxSimpleLicenseMapping {
     /**
