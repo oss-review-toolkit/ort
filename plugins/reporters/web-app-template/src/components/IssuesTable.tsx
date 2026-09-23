@@ -25,7 +25,7 @@ import { PackageDetails } from "@/components/PackageDetails";
 import { PackageLicenses } from "@/components/PackageLicenses";
 import { PackagePaths } from "@/components/PackagePaths";
 import { SeverityTag, type SeverityValue } from "@/components/SeverityTag";
-import { MarkdownText, PackageLink } from "@/components/Shared";
+import { MarkdownText, PackageLink, ResolutionDetails } from "@/components/Shared";
 import { Button } from "@/components/ui/Button";
 import {
     createExpandColumn,
@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import type WebAppOrtIssue from "@/models/WebAppOrtIssue";
+import type WebAppResolution from "@/models/WebAppResolution";
 
 export interface IssuesTableProps {
     // When set, expand the first technical issue row for this package id on mount.
@@ -59,6 +60,7 @@ interface IssueRow {
     message: string;
     packageName: string;
     resolutionReasons: string;
+    resolutions: readonly WebAppResolution[];
     severity: SeverityValue | "";
     severityIndex: number;
     source: string;
@@ -83,6 +85,7 @@ function buildRow(issue: WebAppOrtIssue, index: number): IssueRow {
         message: issue.message ?? "",
         packageName: issue.packageName,
         resolutionReasons: reasons.length > 0 ? `Resolved with ${reasons.join(", ")}` : "",
+        resolutions: issue.resolutions ?? [],
         severity,
         severityIndex: issue.severityIndex,
         source: issue.source ?? "",
@@ -90,7 +93,7 @@ function buildRow(issue: WebAppOrtIssue, index: number): IssueRow {
 }
 
 function renderSubRow(row: Row<IssueRow>): JSX.Element {
-    const { hasHowToFix, howToFix, isResolved, issue, message, resolutionReasons } = row.original;
+    const { hasHowToFix, howToFix, isResolved, issue, message, resolutions } = row.original;
     const pkg = issue.package;
     const paths = pkg?.paths ?? [];
     return (
@@ -105,10 +108,10 @@ function renderSubRow(row: Row<IssueRow>): JSX.Element {
                 </TabsList>
                 <TabsContent className="mt-4 space-y-3" value="details">
                     <div className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
-                        {isResolved && resolutionReasons ? (
+                        {isResolved && resolutions.length > 0 ? (
                             <>
                                 <span className="font-medium text-muted-foreground">Resolution</span>
-                                <span>{resolutionReasons}</span>
+                                <ResolutionDetails resolutions={resolutions} />
                             </>
                         ) : null}
                     </div>
