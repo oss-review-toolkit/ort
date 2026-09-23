@@ -384,11 +384,12 @@ function ResultsTreeView({
     return (
         <div
             className={cn(
-                "grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:[grid-template-rows:minmax(0,1fr)]",
+                "grid min-h-0 gap-4 [grid-template-rows:minmax(0,1fr)_minmax(0,1fr)]",
+                "lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:[grid-template-rows:minmax(0,1fr)]",
                 className,
             )}
         >
-            <div className="flex min-h-0 flex-col gap-2 lg:h-full">
+            <div className="flex h-full min-h-0 flex-col gap-2">
                 <div className="flex items-center gap-2">
                     <div className="relative flex-1">
                         <Search
@@ -435,7 +436,7 @@ function ResultsTreeView({
                         </div>
                     ) : null}
                 </div>
-                <div className="max-h-[75vh] min-h-0 flex-1 overflow-auto rounded-md border bg-card p-2 text-sm lg:max-h-none">
+                <div className="min-h-0 flex-1 overflow-auto rounded-md border bg-card p-2 text-sm">
                     {roots.length === 0 ? (
                         <p className="px-2 py-4 text-muted-foreground">No dependency tree available.</p>
                     ) : visibleRoots.length === 0 ? (
@@ -458,7 +459,7 @@ function ResultsTreeView({
                     )}
                 </div>
             </div>
-            <div className="max-h-[75vh] min-h-0 overflow-auto rounded-md border bg-card lg:h-full lg:max-h-none">
+            <div className="h-full min-h-0 overflow-auto rounded-md border bg-card">
                 {selectedPackage ? (
                     <PackageDetailPanel
                         key={selectedPackage.id ?? ""}
