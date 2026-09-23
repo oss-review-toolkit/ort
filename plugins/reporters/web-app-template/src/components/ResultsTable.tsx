@@ -49,6 +49,7 @@ import {
     LicenseExpression,
     LicenseExpressionList,
     NO_ASSERTION,
+    NO_LICENSE,
     PackageConfigurationIcon,
     PackageCurationIcon,
     Url,
@@ -226,13 +227,13 @@ function buildRow(pkg: WebAppPackage, ortResult: WebAppEvaluatedModel, index: nu
     return {
         concludedLicenses: pkg.concludedLicense ? [pkg.concludedLicense] : [NO_ASSERTION],
         concludedSimpleExpressions: concludedSimpleExpressions.length > 0 ? concludedSimpleExpressions : [NO_ASSERTION],
-        declaredLicenses: declaredLicenses.length > 0 ? declaredLicenses : [NO_ASSERTION],
-        declaredSimpleExpressions: declaredSimpleExpressions.length > 0 ? declaredSimpleExpressions : [NO_ASSERTION],
+        declaredLicenses: declaredLicenses.length > 0 ? declaredLicenses : [NO_LICENSE],
+        declaredSimpleExpressions: declaredSimpleExpressions.length > 0 ? declaredSimpleExpressions : [NO_LICENSE],
         dependencyKind: classifyDependency(pkg),
-        detectedLicenses: detectedLicenses.length > 0 ? detectedLicenses : [NO_ASSERTION],
-        detectedSimpleExpressions: detectedSimpleExpressions.length > 0 ? detectedSimpleExpressions : [NO_ASSERTION],
-        effectiveLicense: pkg.effectiveLicense || NO_ASSERTION,
-        effectiveSimpleExpressions: effectiveSimpleExpressions.length > 0 ? effectiveSimpleExpressions : [NO_ASSERTION],
+        detectedLicenses: detectedLicenses.length > 0 ? detectedLicenses : [NO_LICENSE],
+        detectedSimpleExpressions: detectedSimpleExpressions.length > 0 ? detectedSimpleExpressions : [NO_LICENSE],
+        effectiveLicense: pkg.effectiveLicense || NO_LICENSE,
+        effectiveSimpleExpressions: effectiveSimpleExpressions.length > 0 ? effectiveSimpleExpressions : [NO_LICENSE],
         excludeReasons: Array.from(pkg.excludeReasons).sort(),
         hasConfigurations: pkg.hasPackageConfigurations(),
         hasCurations: pkg.hasCurations(),
@@ -491,15 +492,15 @@ function ResultsTable({
         for (const pkg of webAppEvaluatedModel.packages) {
             // License options are the decomposed SPDX simple expressions, so a composite expression is
             // filterable by each identifier. A package missing a license for a field is shown (and
-            // therefore filterable) as NOASSERTION.
-            const addLicenses = (target: Set<string>, ids: ReadonlySet<string>) => {
-                if (ids.size === 0) target.add(NO_ASSERTION);
+            // therefore filterable) as the sentinel that column displays.
+            const addLicenses = (target: Set<string>, ids: ReadonlySet<string>, missing: string) => {
+                if (ids.size === 0) target.add(missing);
                 for (const id of ids) target.add(id);
             };
-            addLicenses(declared, pkg.declaredSpdxSimpleExpressions);
-            addLicenses(detected, pkg.detectedSpdxSimpleExpressions);
-            addLicenses(concluded, pkg.concludedSpdxSimpleExpressions);
-            addLicenses(effective, pkg.effectiveSpdxSimpleExpressions);
+            addLicenses(declared, pkg.declaredSpdxSimpleExpressions, NO_LICENSE);
+            addLicenses(detected, pkg.detectedSpdxSimpleExpressions, NO_LICENSE);
+            addLicenses(concluded, pkg.concludedSpdxSimpleExpressions, NO_ASSERTION);
+            addLicenses(effective, pkg.effectiveSpdxSimpleExpressions, NO_LICENSE);
             for (const license of pkg.declaredLicensesUnmapped) unmapped.add(license);
         }
         const scopes = Array.from(webAppEvaluatedModel.scopes).map((scope) => scope.name ?? "");

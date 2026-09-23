@@ -52,9 +52,21 @@ describe("LicenseBadge", () => {
         expect(badge).toHaveClass("truncate");
     });
 
-    it("renders the NOASSERTION sentinel", () => {
-        render(<LicenseBadge name="NOASSERTION" />);
-        expect(screen.getByText("NOASSERTION")).toBeInTheDocument();
+    it.each(["NONE", "NOASSERTION"])("renders the %s sentinel without a colour", (name) => {
+        const { container } = render(<LicenseBadge name={name} />);
+        expect(screen.getByText(name)).toBeInTheDocument();
+        expect(container.querySelector("[style*='background-color']")).not.toBeInTheDocument();
+    });
+
+    it("explains each sentinel as what it means, not as the other one", () => {
+        const { container: none } = render(<LicenseBadge name="NONE" />);
+        expect(none.querySelector("span[title]")).toHaveAttribute("title", expect.stringContaining("no license"));
+
+        const { container: noAssertion } = render(<LicenseBadge name="NOASSERTION" />);
+        expect(noAssertion.querySelector("span[title]")).toHaveAttribute(
+            "title",
+            expect.stringContaining("no determination"),
+        );
     });
 });
 
