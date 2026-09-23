@@ -121,9 +121,11 @@ class ScanOss(
     }
 
     internal fun buildSettingsFromORTContext(context: ScanContext): ScanossSettings {
+        // See https://docs.scanoss.com/en/latest/poc/evaluation/improving-scan-accuracy#providing-context-for-a-component.
+        val includedPurls = context.coveredPackages.map { Rule.builder().purl(it.purl).build() }
         val rules = processSnippetChoices(context.snippetChoices)
         val bom = Bom.builder()
-            .include(rules.includeRules)
+            .include(includedPurls + rules.includeRules)
             .remove(rules.removeRules)
             .build()
         val fileSnippet = FileSnippet.builder()
