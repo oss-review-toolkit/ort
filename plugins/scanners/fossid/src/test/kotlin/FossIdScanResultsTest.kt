@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -64,9 +65,8 @@ class FossIdScanResultsTest : WordSpec({
 
             val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, emptyMap())
 
-            issues should haveSize(1)
-            issues.first() shouldNotBeNull {
-                message shouldStartWith "Failed to parse license 'invalid license' as an SPDX expression:"
+            issues.shouldBeSingleton { issue ->
+                issue.message shouldStartWith "Failed to parse license 'invalid license' as an SPDX expression:"
             }
 
             findings.licenseFindings should beEmpty()
@@ -170,11 +170,10 @@ class FossIdScanResultsTest : WordSpec({
                 mutableSetOf()
             )
 
-            issues should haveSize(1)
-            issues.first() shouldNotBeNull {
-                message shouldStartWith
+            issues.shouldBeSingleton { issue ->
+                issue.message shouldStartWith
                     "Failed to parse license 'invalid license' as an SPDX expression"
-                severity shouldBe Severity.ERROR
+                issue.severity shouldBe Severity.ERROR
             }
 
             findings should haveSize(1)
