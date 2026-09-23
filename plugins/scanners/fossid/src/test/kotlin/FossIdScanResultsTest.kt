@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 private const val FILE_PATH = "filePath"
 private const val FILE_PATH_SNIPPET = "filePathSnippet"
 
-class FossIdLicenseMappingTest : WordSpec({
+class FossIdScanResultsTest : WordSpec({
     "FossIdScanResults" should {
         "create an issue when a license in an identified file cannot be mapped" {
             val sampleFile = createMarkAsIdentifiedFile("invalid license", FILE_PATH)
