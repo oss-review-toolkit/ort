@@ -381,15 +381,31 @@ private suspend fun <K, V> Result<Map<K, V>>.foldChunk(chunk: List<K>, block: su
 private fun <T> Result<T>.unwrapHttpException() =
     recoverCatching { e ->
         if (e is HttpException) {
-            val errorMessage = e.response()?.errorBody()?.let {
-                val errorResponse = ClearlyDefinedService.JSON_FOR_ERRORS.decodeFromString<ErrorResponse>(it.string())
-                val innerError = errorResponse.error.innererror
+            val errorMessage = buildString {
+                append("The ClearlyDefined service call failed")
 
-                "The ClearlyDefined service call failed. ${innerError.name}: ${innerError.message}"
-            } ?: "The ClearlyDefined service call failed with code ${e.code()}: ${e.message()}"
+                val errorString = e.response()?.errorBody()?.string()
+
+                when {
+                    errorString == null -> append(" with code ${e.code()}: ${e.message()}")
+
+                    e.code().isServerSideError -> append(" with code ${e.code()}: $errorString")
+
+                    else -> {
+                        val errorResponse = ClearlyDefinedService.JSON_FOR_ERRORS
+                            .decodeFromString<ErrorResponse>(errorString)
+                        val innerError = errorResponse.error.innererror
+
+                        append(". ${innerError.name}: ${innerError.message}")
+                    }
+                }
+            }
 
             throw IOException(errorMessage, e)
         }
 
         throw e
     }
+
+internal val Int.isServerSideError: Boolean
+    get() = this / 100 == 5
