@@ -124,22 +124,22 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             processedLicenses.unmapped should beEmpty()
         }
 
-        "The declared license mapping is applied" {
+        "The custom license mapping is applied" {
             val declaredLicenses = setOf("Apache-2.0", "https://domain/path/license.html")
-            val declaredLicenseMapping = mapOf("https://domain/path/license.html" to "MIT".toSpdx())
+            val customLicenseMapping = mapOf("https://domain/path/license.html" to "MIT".toSpdx())
 
-            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, customLicenseMapping)
 
             processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
             processedLicenses.mapped should containExactlyEntries("https://domain/path/license.html" to "MIT".toSpdx())
             processedLicenses.unmapped should beEmpty()
         }
 
-        "The declared license mapping discards licenses which are mapped to 'NONE' when applied " {
+        "The custom license mapping discards licenses which are mapped to 'NONE' when applied " {
             val declaredLicenses = setOf("Copyright (c) the authors.", "Apache-2.0", "MIT")
-            val declaredLicenseMapping = mapOf("Copyright (c) the authors." to SpdxConstants.NONE.toSpdx())
+            val customLicenseMapping = mapOf("Copyright (c) the authors." to SpdxConstants.NONE.toSpdx())
 
-            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, customLicenseMapping)
 
             processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
             processedLicenses.mapped should containExactlyEntries(
