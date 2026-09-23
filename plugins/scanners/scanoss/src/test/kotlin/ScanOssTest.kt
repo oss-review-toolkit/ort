@@ -52,10 +52,8 @@ class ScanOssTest : WordSpec({
 
             val rules = scanoss.processSnippetChoices(emptySnippetChoices)
 
-            rules.ignoreRules should beEmpty()
-            rules.removeRules should beEmpty()
             rules.includeRules should beEmpty()
-            rules.replaceRules should beEmpty()
+            rules.removeRules should beEmpty()
         }
 
         "create an include rule for snippet choices with ORIGINAL finding" {
@@ -80,8 +78,6 @@ class ScanOssTest : WordSpec({
             }
 
             rules.removeRules should beEmpty()
-            rules.ignoreRules should beEmpty()
-            rules.replaceRules should beEmpty()
         }
 
         "create a remove rule for snippet choices with NOT_FINDING reason" {
@@ -108,8 +104,6 @@ class ScanOssTest : WordSpec({
             }
 
             rules.includeRules should beEmpty()
-            rules.ignoreRules should beEmpty()
-            rules.replaceRules should beEmpty()
         }
 
         "handle multiple snippet choices with different reasons correctly" {
@@ -145,9 +139,6 @@ class ScanOssTest : WordSpec({
                 rule.startLine shouldBe 15
                 rule.endLine shouldBe 30
             }
-
-            rules.ignoreRules should beEmpty()
-            rules.replaceRules should beEmpty()
         }
 
         "create a remove rule without line ranges when snippet choice has UNKNOWN_LINE (-1) values" {
@@ -174,8 +165,6 @@ class ScanOssTest : WordSpec({
             }
 
             rules.includeRules should beEmpty()
-            rules.ignoreRules should beEmpty()
-            rules.replaceRules should beEmpty()
         }
     }
 

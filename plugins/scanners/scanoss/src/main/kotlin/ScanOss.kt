@@ -24,7 +24,6 @@ import com.scanoss.filters.FilterConfig
 import com.scanoss.settings.Bom
 import com.scanoss.settings.FileSnippet
 import com.scanoss.settings.RemoveRule
-import com.scanoss.settings.ReplaceRule
 import com.scanoss.settings.Rule
 import com.scanoss.settings.ScanossSettings
 import com.scanoss.utils.JsonUtils
@@ -123,17 +122,13 @@ class ScanOss(
 
     data class ProcessedRules(
         val includeRules: List<Rule>,
-        val ignoreRules: List<Rule>,
-        val replaceRules: List<ReplaceRule>,
         val removeRules: List<RemoveRule>
     )
 
     internal fun buildSettingsFromORTContext(context: ScanContext): ScanossSettings {
         val rules = processSnippetChoices(context.snippetChoices)
         val bom = Bom.builder()
-            .ignore(rules.ignoreRules)
             .include(rules.includeRules)
-            .replace(rules.replaceRules)
             .remove(rules.removeRules)
             .build()
         val fileSnippet = FileSnippet.builder()
@@ -151,8 +146,6 @@ class ScanOss(
 
     fun processSnippetChoices(snippetChoices: List<SnippetChoices>): ProcessedRules {
         val includeRules = mutableListOf<Rule>()
-        val ignoreRules = mutableListOf<Rule>()
-        val replaceRules = mutableListOf<ReplaceRule>()
         val removeRules = mutableListOf<RemoveRule>()
 
         snippetChoices.forEach { snippetChoice ->
@@ -169,7 +162,7 @@ class ScanOss(
             }
         }
 
-        return ProcessedRules(includeRules, ignoreRules, replaceRules, removeRules)
+        return ProcessedRules(includeRules, removeRules)
     }
 
     private fun MutableList<Rule>.includeFinding(choice: SnippetChoice) {
