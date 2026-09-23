@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import java.io.File
+
 // As it is not possible to declare a package in "init.gradle" also no package is declared here.
 
 interface OrtDependencyTreeModel {
@@ -56,6 +58,13 @@ interface OrtComponent {
     val pomFile: String?
     val mavenModel: OrtMavenModel?
     val localPath: String?
+
+    /**
+     * The absolute path of the project directory if [localPath] refers to a Gradle project that is part of the
+     * currently analyzed build, or null otherwise (e.g. for projects belonging to a different, included build, or
+     * for regular, non-project dependencies). This is used to handle autolinked dependencies correctly.
+     */
+    val projectDir: File?
 }
 
 interface OrtMavenModel {

@@ -28,6 +28,7 @@ import OrtMavenModel
 import OrtRepository
 import OrtVcsModel
 
+import java.io.File
 import java.io.Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
@@ -71,7 +72,8 @@ internal class OrtComponentImpl(
     override val warning: String?,
     override val pomFile: String?,
     override val mavenModel: OrtMavenModel?,
-    override val localPath: String?
+    override val localPath: String?,
+    override val projectDir: File?
 ) : OrtComponent, Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")

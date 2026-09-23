@@ -300,8 +300,19 @@ class GradleInspector(
         return listOf(result)
     }
 
-    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+    override fun createPackageManagerResult(
+        projectResults: Map<File, List<ProjectAnalyzerResult>>
+    ): PackageManagerResult {
+        val externalProjectResults = dependencyHandler.externalProjects().associate { project ->
+            File(project.definitionFilePath) to listOf(ProjectAnalyzerResult(project, emptySet()))
+        }
+
+        return PackageManagerResult(
+            projectResults + externalProjectResults,
+            graphBuilder.build(),
+            graphBuilder.packages()
+        )
+    }
 }
 
 /**
