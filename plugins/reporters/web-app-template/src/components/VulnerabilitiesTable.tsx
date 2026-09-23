@@ -24,7 +24,7 @@ import { Fragment, useCallback, useMemo } from "react";
 import { CvssVectorChart, type CvssVectorInput } from "@/components/CvssVectorChart";
 import { PackageDetails } from "@/components/PackageDetails";
 import { PackagePaths } from "@/components/PackagePaths";
-import { MarkdownText, Url } from "@/components/Shared";
+import { MarkdownText, ResolutionDetails, Url } from "@/components/Shared";
 import {
     createExpandColumn,
     DataTable,
@@ -44,6 +44,7 @@ import { normalizeDescription } from "@/lib/markdown";
 import type VulnerabilityReference from "@/models/VulnerabilityReference";
 import type WebAppVulnerability from "@/models/WebAppVulnerability";
 import type { CvssScoreGroup } from "@/models/WebAppVulnerability";
+import type WebAppVulnerabilityResolution from "@/models/WebAppVulnerabilityResolution";
 
 export interface VulnerabilitiesTableProps {
     focusPackageId?: string;
@@ -63,6 +64,7 @@ interface VulnerabilityRow {
     packageName: string;
     rating: VulnerabilityRatingValue;
     resolutionReasons: string;
+    resolutions: readonly WebAppVulnerabilityResolution[];
     severityIndex: number;
     summary: string;
     vulnerability: WebAppVulnerability;
@@ -113,6 +115,7 @@ function buildRow(vulnerability: WebAppVulnerability, index: number): Vulnerabil
         packageName: vulnerability.packageName,
         rating: indexToRating(vulnerability.severityIndex),
         resolutionReasons: reasons.length > 0 ? `Resolved with ${reasons.join(", ")}` : "",
+        resolutions: vulnerability.resolutions ?? [],
         severityIndex: vulnerability.severityIndex,
         summary: vulnerability.summary ?? "",
         vulnerability,
@@ -120,7 +123,7 @@ function buildRow(vulnerability: WebAppVulnerability, index: number): Vulnerabil
 }
 
 function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
-    const { description, id, isResolved, packageName, resolutionReasons, summary, vulnerability } = row.original;
+    const { description, id, isResolved, packageName, resolutions, summary, vulnerability } = row.original;
     const cvssVectors = collectCvssVectors(vulnerability.references);
     const normalizedDescription = description ? normalizeDescription(description) : undefined;
     const pkg = vulnerability.package;
@@ -222,12 +225,12 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
                                     )}
                                 </div>
                             ) : null}
-                            {isResolved && resolutionReasons ? (
+                            {isResolved && resolutions.length > 0 ? (
                                 <div>
                                     <h4 className="mb-1 font-semibold text-muted-foreground text-xs uppercase">
                                         Resolution
                                     </h4>
-                                    <p className="leading-relaxed">{resolutionReasons}</p>
+                                    <ResolutionDetails resolutions={resolutions} />
                                 </div>
                             ) : null}
                         </div>

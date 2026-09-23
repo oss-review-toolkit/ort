@@ -29,7 +29,7 @@ import { PackagePaths } from "@/components/PackagePaths";
 import { PackageScannerFindingsTable } from "@/components/PackageScannerFindingsTable";
 import { PackageScanResultsDetails } from "@/components/PackageScanResultsDetails";
 import { SeverityTag, type SeverityValue } from "@/components/SeverityTag";
-import { LicenseBadge, MarkdownText, PackageLink } from "@/components/Shared";
+import { LicenseBadge, MarkdownText, PackageLink, ResolutionDetails } from "@/components/Shared";
 import { Button } from "@/components/ui/Button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/Collapsible";
 import {
@@ -42,6 +42,7 @@ import {
     LARGE_TABLE_PAGE_SIZES,
 } from "@/components/ui/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import type WebAppResolution from "@/models/WebAppResolution";
 import type WebAppRuleViolation from "@/models/WebAppRuleViolation";
 
 export interface RuleViolationsTableProps {
@@ -65,6 +66,7 @@ interface RuleViolationRow {
     message: string;
     packageName: string;
     resolutionReasons: string;
+    resolutions: readonly WebAppResolution[];
     ruleName: string;
     severity: SeverityValue | "";
     severityIndex: number;
@@ -91,6 +93,7 @@ function buildRow(violation: WebAppRuleViolation, index: number): RuleViolationR
         message: violation.message ?? "",
         packageName: violation.packageName,
         resolutionReasons: reasons.length > 0 ? `Resolved with ${reasons.join(", ")}` : "",
+        resolutions: violation.resolutions ?? [],
         ruleName: violation.rule ?? "",
         severity,
         severityIndex: violation.severityIndex,
@@ -99,7 +102,7 @@ function buildRow(violation: WebAppRuleViolation, index: number): RuleViolationR
 }
 
 function renderSubRow(row: Row<RuleViolationRow>): JSX.Element {
-    const { hasHowToFix, howToFix, isResolved, licenseSource, message, resolutionReasons, violation } = row.original;
+    const { hasHowToFix, howToFix, isResolved, licenseSource, message, resolutions, violation } = row.original;
     const pkg = violation.package;
 
     // The policy-violation details always show first; the remaining tabs mirror the Packages view's expanded
@@ -117,10 +120,10 @@ function renderSubRow(row: Row<RuleViolationRow>): JSX.Element {
                                 <span className="font-mono">{licenseSource}</span>
                             </>
                         ) : null}
-                        {isResolved && resolutionReasons ? (
+                        {isResolved && resolutions.length > 0 ? (
                             <>
                                 <span className="font-medium text-muted-foreground">Resolution</span>
-                                <span>{resolutionReasons}</span>
+                                <ResolutionDetails resolutions={resolutions} />
                             </>
                         ) : null}
                     </div>

@@ -402,6 +402,35 @@ function PackageLink({ id, onClick }: { id: string; onClick?: (id: string) => vo
     );
 }
 
+// The part of a resolution this renders, shared by issue, rule violation and vulnerability ones.
+export interface AppliedResolution {
+    comment?: string | undefined;
+    key: string;
+    reason?: string | undefined;
+}
+
+export interface ResolutionDetailsProps {
+    resolutions: readonly AppliedResolution[];
+}
+
+// How a finding was resolved: the reason of every applied resolution, each followed by the comment
+// that explains why the resolution is acceptable. The comment carries the reasoning, so it is shown
+// here and not only in the resolutions listed under the run details.
+function ResolutionDetails({ resolutions }: ResolutionDetailsProps): JSX.Element | null {
+    if (resolutions.length === 0) return null;
+
+    return (
+        <div className="space-y-2">
+            {resolutions.map(({ comment, key, reason }) => (
+                <div key={key}>
+                    <div>{reason ? `Resolved with ${reason} resolution` : "Resolved"}</div>
+                    {comment ? <div className="whitespace-pre-wrap text-muted-foreground">{comment}</div> : null}
+                </div>
+            ))}
+        </div>
+    );
+}
+
 // The lucide "summary" icon (https://lucide.dev/icons/summary) used for the Summary section. It is
 // not part of the pinned lucide-react 0.475 release, so its paths are vendored here as a drop-in
 // LucideIcon rather than bumping the whole icon set.
@@ -534,6 +563,7 @@ export {
     PackageConfigurationIcon,
     PackageCurationIcon,
     PackageLink,
+    ResolutionDetails,
     SummaryIcon,
     SyntaxHighlight,
     ToolsIcon,

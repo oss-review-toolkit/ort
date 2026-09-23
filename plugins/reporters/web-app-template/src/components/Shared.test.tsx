@@ -21,7 +21,15 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { DefinedTerm, ExcludeStatusIcon, LicenseBadge, LicenseExpression, PackageLink, Url } from "@/components/Shared";
+import {
+    DefinedTerm,
+    ExcludeStatusIcon,
+    LicenseBadge,
+    LicenseExpression,
+    PackageLink,
+    ResolutionDetails,
+    Url,
+} from "@/components/Shared";
 
 describe("DefinedTerm", () => {
     it("leaves the term undecorated until it is hovered", () => {
@@ -130,6 +138,47 @@ describe("LicenseExpression", () => {
 
     it("renders nothing for an empty expression", () => {
         const { container } = render(<LicenseExpression expression="" />);
+        expect(container).toBeEmptyDOMElement();
+    });
+});
+
+describe("ResolutionDetails", () => {
+    it("shows the comment that explains why the resolution is acceptable", () => {
+        render(
+            <ResolutionDetails
+                resolutions={[{ comment: "Only used at build time.", key: "a", reason: "CANT_FIX_ISSUE" }]}
+            />,
+        );
+        expect(screen.getByText(/CANT_FIX_ISSUE/)).toBeInTheDocument();
+        expect(screen.getByText("Only used at build time.")).toBeInTheDocument();
+    });
+
+    it("shows the reason on its own when the resolution has no comment", () => {
+        const { container } = render(<ResolutionDetails resolutions={[{ key: "a", reason: "SCANNER_ISSUE" }]} />);
+        expect(screen.getByText(/SCANNER_ISSUE/)).toBeInTheDocument();
+        expect(container.textContent).toBe("Resolved with SCANNER_ISSUE resolution");
+    });
+
+    it("keeps each comment with its own reason when several resolutions apply", () => {
+        render(
+            <ResolutionDetails
+                resolutions={[
+                    { comment: "First reason why.", key: "a", reason: "CANT_FIX_ISSUE" },
+                    { comment: "Second reason why.", key: "b", reason: "SCANNER_ISSUE" },
+                ]}
+            />,
+        );
+        expect(screen.getByText("First reason why.")).toBeInTheDocument();
+        expect(screen.getByText("Second reason why.")).toBeInTheDocument();
+    });
+
+    it("says only that the finding is resolved when the resolution names no reason", () => {
+        const { container } = render(<ResolutionDetails resolutions={[{ comment: "Why.", key: "a" }]} />);
+        expect(container.textContent).toBe("ResolvedWhy.");
+    });
+
+    it("renders nothing when a finding has no resolutions", () => {
+        const { container } = render(<ResolutionDetails resolutions={[]} />);
         expect(container).toBeEmptyDOMElement();
     });
 });
