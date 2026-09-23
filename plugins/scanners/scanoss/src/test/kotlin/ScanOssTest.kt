@@ -168,7 +168,7 @@ class ScanOssTest : WordSpec({
         }
     }
 
-    "buildSettingsFromORTContext()" should {
+    "buildSettings()" should {
         "forward snippet tuning config values to FileSnippet" {
             val config = createScanOssConfig(
                 minSnippetHits = 8,
@@ -182,7 +182,7 @@ class ScanOssTest : WordSpec({
             val scanoss = createScanOss(config)
             val context = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
 
-            val fileSnippet = scanoss.buildSettingsFromORTContext(context).settings.fileSnippet
+            val fileSnippet = scanoss.buildSettings(context).settings.fileSnippet
 
             fileSnippet.minSnippetHits shouldBe 8
             fileSnippet.minSnippetLines shouldBe 4
