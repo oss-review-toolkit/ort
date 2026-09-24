@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils.spdxexpression
 
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 /**
