@@ -29,6 +29,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 
 /**
@@ -55,18 +56,35 @@ abstract class OrtCommand(override val descriptor: PluginDescriptor) : CliktComm
     protected val ortConfig by requireObject<OrtConfiguration>()
 
     /**
-     * Validates that the provided [outputFiles] can be used. Throws a [UsageError] otherwise.
+     * Checks that the provided [outputFiles] can be used and if so, returns them. Throws a [UsageError] otherwise.
      */
-    protected fun validateOutputFiles(outputFiles: Collection<File>) {
-        if (ortConfig.forceOverwrite) return
+    protected fun checkOutputFiles(outputFiles: Set<File>): Set<File> {
+        if (ortConfig.forceOverwrite) return outputFiles
 
         val existingOutputFiles = outputFiles.filter { it.exists() }
         if (existingOutputFiles.isNotEmpty()) {
             throw UsageError(
-                message = "None of the output files $existingOutputFiles must exist yet. To overwrite output files " +
-                    "set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'.",
-                statusCode = 2
+                "None of the output files $existingOutputFiles must exist yet. To overwrite output files set the " +
+                    "'forceOverwrite' option in '$ORT_CONFIG_FILENAME'."
             )
         }
+
+        return outputFiles
+    }
+
+    /**
+     * Checks that the provided [outputDirectory] can be used and if so, returns it. Throws a [UsageError] otherwise.
+     */
+    protected fun checkOutputDirectory(outputDirectory: File): File {
+        if (!ortConfig.forceOverwrite) {
+            if (outputDirectory.exists() && outputDirectory.walk().singleOrNull() != outputDirectory) {
+                throw UsageError(
+                    "The output directory '$outputDirectory' must not contain any files yet. To overwrite output " +
+                        "files set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'."
+                )
+            }
+        }
+
+        return outputDirectory.safeMkdirs()
     }
 }
