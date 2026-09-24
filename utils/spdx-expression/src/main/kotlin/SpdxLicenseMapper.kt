@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 /**
  * A class which unstructured license strings from Open Source packages to SPDX expressions. It only targets license
  * strings which can *not* be parsed by [SpdxExpression.parse], for example because the license strings contain white
- * spaces. See [SpdxSimpleLicenseMapping] for a mapping of varied license names.
+ * spaces. See [SpdxDeprecatedLicenseMapper] for a mapping of varied license names.
  */
 object SpdxLicenseMapper {
     /**

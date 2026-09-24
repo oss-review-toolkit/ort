@@ -126,7 +126,7 @@ sealed class SpdxExpression {
 
     /**
      * Normalize all license IDs by mapping deprecated IDs to their current counterparts via
-     * [SpdxDeprecatedLicenseMapping] and looking up an entry in [SpdxLicense]. The result of this function is not
+     * [SpdxDeprecatedLicenseMapper] and looking up an entry in [SpdxLicense]. The result of this function is not
      * guaranteed to contain only valid IDs. Use [validate] or [isValid] to check the returned [SpdxExpression] for
      * validity afterwards.
      */
@@ -588,7 +588,7 @@ class SpdxLicenseIdExpression(
 
     override fun exception(): String? = null
 
-    override fun normalize() = SpdxSimpleLicenseMapping.map(toString()) ?: this
+    override fun normalize() = SpdxDeprecatedLicenseMapper.map(toString()) ?: this
 
     override fun validate(strictness: Strictness) {
         val isValid = SpdxConstants.isNotPresent(id) || when (strictness) {

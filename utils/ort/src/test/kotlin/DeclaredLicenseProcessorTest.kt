@@ -34,11 +34,11 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseMapper
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeprecatedLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxException
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleLicenseMapping
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
@@ -47,8 +47,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
      * A collection of declared license strings found in open source packages.
      */
     private val declaredLicenses = SpdxLicenseMapper.mapping.keys +
-        SpdxSimpleLicenseMapping.simpleExpressionMapping.keys +
-        SpdxSimpleLicenseMapping.deprecatedExpressionMapping.keys
+        SpdxDeprecatedLicenseMapper.mapping.keys
 
     init {
         "Declared licenses can be processed" {
@@ -99,7 +98,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
                 val strippedLicense = DeclaredLicenseProcessor.stripUrlSurroundings(license)
 
                 withClue("Stripping '$license' to '$strippedLicense' makes the mapping to '$expression' redundant") {
-                    SpdxSimpleLicenseMapping.map(strippedLicense) should beNull()
+                    SpdxDeprecatedLicenseMapper.map(strippedLicense) should beNull()
                 }
             }
         }

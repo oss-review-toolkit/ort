@@ -22,15 +22,12 @@ package org.ossreviewtoolkit.utils.spdxexpression
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
-import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionLexer
 
 class SpdxLicenseMapperTest : WordSpec({
     "The list" should {
@@ -69,28 +66,6 @@ class SpdxLicenseMapperTest : WordSpec({
     }
 
     "The mapping" should {
-        "not contain single ID strings" {
-            val licenseIdMapping = SpdxLicenseMapper.mapping.filter { (_, expression) ->
-                expression is SpdxLicenseIdExpression
-            }
-
-            licenseIdMapping.keys.forAll { declaredLicense ->
-                @Suppress("SwallowedException")
-                try {
-                    val tokens = SpdxExpressionLexer(declaredLicense).tokens().toList()
-
-                    tokens.size shouldBeGreaterThanOrEqual 2
-
-                    if (tokens.size == 2) {
-                        // Rule out that the 2 tokens are caused by IDSTRING and PLUS.
-                        declaredLicense shouldContain " "
-                    }
-                } catch (e: SpdxException) {
-                    // For untokenizable strings no further checks are needed.
-                }
-            }
-        }
-
         "not contain plain SPDX license ids" {
             SpdxLicenseMapper.mapping.keys.forAll { declaredLicense ->
                 SpdxLicense.forId(declaredLicense) should beNull()

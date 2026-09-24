@@ -24,19 +24,26 @@
 ---
 
 # Ambiguous mappings (mapping reason not obvious without additional information)
+"ALv2": Apache-2.0
+"ASL": Apache-2.0
 "Academic Free License (AFL)": AFL-2.1
 "Apache License": Apache-2.0
 "Apache Software Licenses": Apache-2.0
 "Apache Software": Apache-2.0
+"Apache": Apache-2.0
+"Apache-style": Apache-2.0
 "Apple Public Source License": APSL-1.0
 "Artistic License": Artistic-2.0
 "BSD licence": BSD-3-Clause
 "BSD or Apache License, Version 2.0": BSD-3-Clause OR Apache-2.0
 "BSD style license": BSD-3-Clause
 "BSD style": BSD-3-Clause
+"BSD": BSD-3-Clause
 "BSD*": BSD-3-Clause
 "BSD-like license": BSD-3-Clause
+"BSD-like": BSD-3-Clause
 "BSD-style license": BSD-3-Clause
+"BSD-style": BSD-3-Clause
 "CDDL + GPLv2 with classpath exception": CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0
 "CDDL License": CDDL-1.0
 "CDDL or GPL 2 with Classpath Exception": CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0
@@ -62,6 +69,7 @@
 "GNU Library or Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "GNU Public": GPL-2.0-or-later
 "GPL (with dual licensing option)": GPL-2.0-or-later
+"GPL": GPL-2.0-or-later
 "General Public License (GPL)": GPL-2.0-or-later
 "Individual BSD License": BSD-3-Clause
 "LGPL with exceptions or ZPL": LGPL-3.0-or-later OR ZPL-2.1
@@ -69,16 +77,32 @@
 "LGPL/MIT": LGPL-3.0-or-later OR MIT
 "LPGL, see LICENSE file.": LGPL-3.0-or-later
 "Lesser General Public License (LGPL)": LGPL-2.1-or-later
+"MPL": MPL-2.0
 "Mozilla Public License": MPL-2.0
 "NetBeans CDDL/GPL": CDDL-1.0 OR GPL-2.0-or-later
 "The Apache License": Apache-2.0
 "The BSD Software License": BSD-2-Clause
+"afl": AFL-3.0
+"agpl": AGPL-3.0-or-later
+"apache-license": Apache-2.0
 "bsd 4-clause": BSD-3-Clause
+"bsd-license": BSD-3-Clause
+"bsd-licensed": BSD-3-Clause
+"cddl": CDDL-1.0
 "eclipse license": EPL-1.0
+"efl": EFL-2.0
 "eiffel license (EFL)": EFL-2.0
+"epl": EPL-1.0
+"eupl": EUPL-1.0
+"fdl": GFDL-1.3-or-later
+"gfdl": GFDL-1.3-or-later
 "gnu gpl": GPL-2.0-or-later
+"gpl-license": GPL-2.0-or-later
 "lgplv2 or later": LGPL-2.1-or-later
 "netscape License": NPL-1.1
+"psf": PSF-2.0
+"psfl": PSF-2.0
+"python": Python-2.0
 
 # Non-ambiguous mappings
 "(MIT-style) netCDF C library license": NetCDF
@@ -88,8 +112,12 @@
 "3-Clause BSD License": BSD-3-Clause
 "3-Clause BSD": BSD-3-Clause
 "3-clause bdsl": BSD-3-Clause
+"AFLv2.1": AFL-2.1
 "AGPL v3+": AGPL-3.0-or-later
 "AL 2.0": Apache-2.0
+"APACHEv2": Apache-2.0
+"APL2": Apache-2.0
+"APLv2.0": Apache-2.0
 "ASF 2.0": Apache-2.0
 "ASL 2": Apache-2.0
 "ASL 2.0": Apache-2.0
@@ -134,8 +162,11 @@
 "Apache v2.0": Apache-2.0
 "Apache version 2.0": Apache-2.0
 "Apache, Version 2.0": Apache-2.0
+"Apache-2": Apache-2.0
 "Apache-2.0 */ &#39; &quot; &#x3D;end --\n": Apache-2.0
 "Apache-2.0 license": Apache-2.0
+"Apache2": Apache-2.0
+"Apache2.0": Apache-2.0
 "Artistic 2.0": Artistic-2.0
 "BSD (3-clause)": BSD-3-Clause
 "BSD - See ndg/httpsclient/LICENCE file for details": BSD-3-Clause
@@ -163,18 +194,24 @@
 "BSD Three Clause License": BSD-3-Clause
 "BSD Two Clause License": BSD-2-Clause
 "BSD-3 Clause": BSD-3-Clause
+"BSD-3": BSD-3-Clause
 "BSD-Style + Attribution": BSD-3-Clause-Attribution
 "BSD-derived (http://www.repoze.org/LICENSE.txt)": LicenseRef-scancode-repoze
+"BSD2": BSD-2-Clause
+"BSD3": BSD-3-Clause
 "Berkeley Software Distribution (BSD) License": BSD-2-Clause
 "Boost License v1.0": BSL-1.0
 "Boost License": BSL-1.0
 "Boost Software License 1.0 (BSL-1.0)": BSL-1.0
 "Boost Software License": BSL-1.0
+"Boost": BSL-1.0
 "Bouncy Castle Licence": MIT
 "Bouncy Castle License": MIT
+"Bouncy": MIT
 "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication": CC0-1.0
 "CC0 1.0 Universal License": CC0-1.0
 "CC0 1.0 Universal": CC0-1.0
+"CC0": CC0-1.0
 "CDDL 1.0": CDDL-1.0
 "CDDL 1.1": CDDL-1.1
 "CDDL v1.0 / GPL v2 dual license": CDDL-1.0 OR GPL-2.0-only
@@ -185,11 +222,13 @@
 "CECILL v2": CECILL-2.0
 "CERN Open Hardware License v1.2": CERN-OHL-1.2
 "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0": CDDL-1.0
+"CPL": CPL-1.0
 "CUP Parser Generator Copyright Notice, License, and Disclaimer": HPND
 "CeCILL 2.0": CECILL-2.0
 "CeCILL 2.1": CECILL-2.1
 "CeCILL Licence française de logiciel libre": CECILL-2.0
 "CeCILL v2.1": CECILL-2.1
+"CeCILL": CECILL-1.1
 "CeCILL-B Free Software License Agreement (CECILL-B)": CECILL-B
 "CeCILL-B licence": CECILL-B
 "CeCILL-C Free Software License Agreement (CECILL-C)": CECILL-C
@@ -226,6 +265,7 @@
 "Dual License: CDDL 1.0 and GPL V2 with Classpath Exception": CDDL-1.0 OR GPL-2.0-only
 "Dual license consisting of the CDDL v1.1 and GPL v2": CDDL-1.1 OR GPL-2.0-only
 "EDL 1.0": BSD-3-Clause
+"EDL-1.0": BSD-3-Clause
 "EPL (Eclipse Public License), V1.0 or later": EPL-1.0
 "Eclipse Distribution License (EDL), Version 1.0": BSD-3-Clause
 "Eclipse Distribution License (New BSD License)": BSD-3-Clause
@@ -265,6 +305,7 @@
 "Free For Home Use": LicenseRef-scancode-proprietary-license
 "Free To Use But Restricted": LicenseRef-scancode-proprietary-license
 "Free for non-commercial use": LicenseRef-scancode-proprietary-license
+"FreeBSD": BSD-2-Clause-Views
 "Freely Distributable": LicenseRef-scancode-free-unknown
 "Freeware": LicenseRef-scancode-proprietary-license
 "GNU Affero General Public License v3 (AGPL-3.0)": AGPL-3.0-only
@@ -332,9 +373,15 @@
 "GPL v2+": GPL-2.0-or-later
 "GPL v3+": GPL-3.0-or-later
 "GPL version 2": GPL-2.0-only
+"GPL-2": GPL-2.0-only
 "GPL2 w/ CPE": GPL-2.0-only WITH Classpath-exception-2.0
+"GPL2": GPL-2.0-only
 "GPLv2 license, includes the CLASSPATH exception": GPL-2.0-only WITH Classpath-exception-2.0
+"GPLv2": GPL-2.0-only
+"GPLv2+": GPL-2.0-or-later
 "GPLv2+CE": GPL-2.0-only WITH Classpath-exception-2.0
+"GPLv3": GPL-3.0-only
+"GPLv3+": GPL-3.0-or-later
 "GWT Terms": Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-1.0 AND LGPL-2.1-only AND MPL-1.1
 "General Public License 2.0 (GPL)": GPL-2.0-only
 "Go license": BSD-3-Clause
@@ -346,6 +393,7 @@
 "IBM Public License": IPL-1.0
 "ISC License (ISCL)": ISC
 "ISC/BSD License": ISC OR BSD-2-Clause
+"ISCL": ISC
 "Indiana University Extreme! Lab Software License 1.1.1": LicenseRef-scancode-indiana-extreme
 "Indiana University Extreme! Lab Software License, version 1.1.1": LicenseRef-scancode-indiana-extreme
 "Indiana University Extreme! Lab Software License, vesion 1.1.1": LicenseRef-scancode-indiana-extreme
@@ -359,10 +407,17 @@
 "LGPL v3": LGPL-3.0-only
 "LGPL v3+": LGPL-3.0-or-later
 "LGPL v3.0": LGPL-3.0-only
+"LGPL": LGPL-2.0-or-later
 "LGPL, v2.1 or later": LGPL-2.1-or-later
 "LGPL, version 2.1": LGPL-2.1-only
 "LGPL, version 3.0": LGPL-3.0-only
+"LGPL-3": LGPL-3.0-only
+"LGPL2": LGPL-2.1-only
+"LGPL3": LGPL-3.0-only
+"LGPLv2": LGPL-2.1-only
 "LGPLv3 or later": LGPL-3.0-or-later
+"LGPLv3": LGPL-3.0-only
+"LGPLv3+": LGPL-3.0-or-later
 "Lesser General Public License, version 3 or greater": LGPL-3.0-or-later
 "License Agreement For Open Source Computer Vision Library (3-clause BSD License)": BSD-3-Clause
 "MIT (http://mootools.net/license.txt)": MIT
@@ -374,6 +429,8 @@
 "MIT Licensed. http://www.opensource.org/licenses/mit-license.php": MIT
 "MIT, 2-clause BSD": MIT AND BSD-2-Clause
 "MIT, 3-clause BSD": MIT AND BSD-3-Clause
+"MIT-like": MIT
+"MIT-style": MIT
 "MIT/Expat": MIT
 "MIT/X11": MIT OR X11
 "MPL 1.1": MPL-1.1
@@ -381,6 +438,8 @@
 "MPL 2.0": MPL-2.0
 "MPL 2.0, and EPL 1.0": MPL-2.0 AND EPL-1.0
 "MPL v2": MPL-2.0
+"MPLv2": MPL-2.0
+"MPLv2.0": MPL-2.0
 "MPLv2.0, MIT Licences": MPL-2.0 AND MIT
 "MirOS License (MirOS)": MirOS
 "Mockrunner License, based on Apache Software License, version 1.1": Apache-1.1
@@ -403,6 +462,7 @@
 "New BSD": BSD-3-Clause
 "No Copyright": NONE
 "Nokia Open Source License (NOKOS)": Nokia
+"ODBL": ODbL-1.0
 "ODbL 1.0": ODbL-1.0
 "ODbL v1.0": ODbL-1.0
 "OSI Approved": NONE
@@ -411,6 +471,7 @@
 "Oracle Free Use Terms and Conditions (FUTC)": LicenseRef-ort-oracle-futc
 "Other/Proprietary License": LicenseRef-scancode-proprietary-license
 "PSF License": PSF-2.0
+"PSF2": PSF-2.0
 "Perl Artistic v2": Artistic-1.0-Perl
 "Public Domain <http://unlicense.org>": LicenseRef-scancode-public-domain-disclaimer
 "Public Domain": LicenseRef-scancode-public-domain-disclaimer
@@ -471,12 +532,15 @@
 "Three-clause BSD-style": BSD-3-Clause
 "Trilead Library License (BSD-Like)": BSD-3-Clause AND MIT
 "Two-clause BSD-style license": BSD-2-Clause
+"UNLICENSED": Unlicense
 "Unicode/ICU License": ICU
 "Universal Permissive License (UPL)": UPL-1.0
 "Universal Permissive License, Version 1.0": UPL-1.0
+"Unlicence": Unlicense
 "Vovida License 1.0": VSL-1.0
 "Vovida Software License 1.0": VSL-1.0
 "Vovida Software License": VSL-1.0
+"Vovida": VSL-1.0
 "W3C License": W3C
 "ZPL 2.1": ZPL-2.1
 "Zlib / Libpng License": zlib-acknowledgement
@@ -484,7 +548,14 @@
 "Zope Public License": ZPL-2.1
 "Zope Public": ZPL-2.1
 "['MIT']": MIT
+"afl-2": AFL-2.0
+"afl2": AFL-2.0
+"afl2.0": AFL-2.0
+"afl2.1": AFL-2.1
 "artistic license v2.0": Artistic-2.0
+"bouncy-license": MIT
+"bsl": BSL-1.0
+"bsl1.0": BSL-1.0
 "bzip2 license": bzip2-1.0.6
 "cc by-nc-sa 2.0": CC-BY-NC-SA-2.0
 "cc by-nc-sa 2.5": CC-BY-NC-SA-2.5
@@ -496,16 +567,21 @@
 "cc by-sa 4.0": CC-BY-SA-4.0
 "cddl v1.0": CDDL-1.0
 "cddl v1.1": CDDL-1.1
+"cddl1.0": CDDL-1.0
+"cddl1.1": CDDL-1.1
 "common development and distribution license 1.0 (cddl-1.0)": CDDL-1.0
 "common development and distribution license 1.1 (cddl-1.1)": CDDL-1.1
 "cpal 1.0": CPAL-1.0
 "cpal v1.0": CPAL-1.0
+"cpal": CPAL-1.0
 "eclipse 1.0": EPL-1.0
 "eclipse 2.0": EPL-2.0
 "epl 1.0": EPL-1.0
 "epl 2.0": EPL-2.0
 "epl v1.0": EPL-1.0
 "epl v2.0": EPL-2.0
+"epl1.0": EPL-1.0
+"epl2.0": EPL-2.0
 "eu public licence 1.0 (eupl 1.0)": EUPL-1.0
 "eu public licence 1.1 (eupl 1.1)": EUPL-1.1
 "eu public licence 1.2 (eupl 1.2)": EUPL-1.2
@@ -515,11 +591,15 @@
 "eupl v1.0": EUPL-1.0
 "eupl v1.1": EUPL-1.1
 "eupl v1.2": EUPL-1.2
+"eupl1.0": EUPL-1.0
+"eupl1.1": EUPL-1.1
+"eupl1.2": EUPL-1.2
 "european union public licence 1.0 (eupl 1.0)": EUPL-1.0
 "european union public licence 1.1 (eupl 1.1)": EUPL-1.1
 "european union public licence 1.2 (eupl 1.2)": EUPL-1.2
 "gnu gpl v3": GPL-3.0-only
 "gpl (≥ 3)": GPL-3.0-or-later
+"gpl3": GPL-3.0-only
 "http://ant-contrib.sourceforge.net/tasks/LICENSE.txt": Apache-1.1
 "http://asm.ow2.org/license.html": BSD-3-Clause
 "http://creativecommons.org/licenses/publicdomain": CC-PDDC
@@ -579,12 +659,21 @@
 "https://www.scala-lang.org/license.html": Apache-2.0 AND BSD-3-Clause AND MIT
 "https://www.scala-lang.org/license/": Apache-2.0 AND BSD-3-Clause AND MIT
 "icu-unicode license": ICU
+"isc-license": ISC
 "jQuery license": MIT
+"mit-license": MIT
+"mit-licensed": MIT
+"mpl-2": MPL-2.0
+"mpl2": MPL-2.0
+"mpl2.0": MPL-2.0
 "public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)": LicenseRef-scancode-public-domain-disclaimer AND Python-2.0 AND BSD-2-Clause AND GPL-3.0-only
 "the Apache License, ASL Version 2.0": Apache-2.0
 "the gpl v3": GPL-3.0-only
+"w3cl": W3C
+"wtf": WTFPL
 "zope 1.1": ZPL-1.1
 "zope 2.0": ZPL-2.0
 "zope 2.1": ZPL-2.1
 "zope license": ZPL-2.1
 "zope v2.1": ZPL-2.1
+"zope": ZPL-2.1
