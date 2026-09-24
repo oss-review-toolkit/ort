@@ -61,13 +61,12 @@ object SpdxSimpleLicenseMapping {
 
     /**
      * Return the [SpdxSingleLicenseExpression] the [license] maps to, or null if there is no corresponding expression.
-     * If [mapDeprecated] is true, licenses marked as deprecated in the SPDX standard are mapped to their corresponding
-     * current expression. If [mapSimple] is true, licenses that are commonly known abbreviations or aliases are mapped
-     * to their corresponding official expression.
+     * Licenses marked as deprecated in the SPDX standard are mapped to their corresponding current expression. Licenses
+     * that are commonly known abbreviations or aliases are mapped to their corresponding official expression.
      */
-    fun map(license: String, mapDeprecated: Boolean = true, mapSimple: Boolean = true): SpdxSingleLicenseExpression? {
-        if (mapDeprecated) deprecatedExpressionMapping[license]?.also { return it }
-        if (mapSimple) simpleExpressionMapping[license]?.also { return it }
+    fun map(license: String): SpdxSingleLicenseExpression? {
+        deprecatedExpressionMapping[license]?.also { return it }
+        simpleExpressionMapping[license]?.also { return it }
         return SpdxLicense.forId(license)?.toExpression()
     }
 }
