@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionLexer
 
 class SpdxDeclaredLicenseMapperTest : WordSpec({
-    "The list" should {
+    "The raw mapping" should {
         "not contain any duplicate keys with respect to capitalization" {
             val keys = SpdxDeclaredLicenseMapper.rawMapping.keys.toMutableList()
             val uniqueKeys = SpdxDeclaredLicenseMapper.mapping.keys
@@ -96,7 +96,9 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
                 SpdxLicense.forId(declaredLicense) should beNull()
             }
         }
+    }
 
+    "map()" should {
         "be case-insensitive" {
             SpdxDeclaredLicenseMapper.mapping.forAll { (key, license) ->
                 SpdxDeclaredLicenseMapper.map(key.lowercase()) shouldBe license
