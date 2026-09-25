@@ -22,6 +22,9 @@
                 "enableRepositoryPackageConfigurations": {
                     "type": "boolean"
                 },
+                "enableRiskyLicenseMappings": {
+                    "type": "boolean"
+                },
                 "analyzer": {
                     "$ref": "#/definitions/Analyzer"
                 },

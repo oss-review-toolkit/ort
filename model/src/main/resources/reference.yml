@@ -30,6 +30,7 @@ ort:
 
   enableRepositoryPackageConfigurations: true
   enableRepositoryPackageCurations: true
+  enableRiskyLicenseMappings: true
 
   # Force overwriting of any existing output files.
   forceOverwrite: true
