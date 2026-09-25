@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.utils.spdxexpression
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
-import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -35,14 +35,16 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionLexer
 
 class SpdxDeclaredLicenseMapperTest : WordSpec({
     "The mapping" should {
-        "not contain any duplicate keys with respect to capitalization" {
-            val duplicates = SpdxDeclaredLicenseMapper.MAPPING.keys.getDuplicates { it.lowercase() }
+        val mapping = SpdxDeclaredLicenseMapper.AMBIGUOUS_MAPPING + SpdxDeclaredLicenseMapper.MAPPING
 
-            duplicates should beEmpty()
+        "not contain any duplicate keys with respect to capitalization" {
+            val duplicates = mapping.keys.getDuplicates { it.lowercase() }
+
+            duplicates.keys should beEmpty()
         }
 
         "not contain any deprecated values" {
-            SpdxDeclaredLicenseMapper.MAPPING.values.forAll {
+            mapping.values.forAll {
                 it.isValid(SpdxExpression.Strictness.ALLOW_CURRENT) shouldBe true
             }
         }
@@ -57,7 +59,7 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
                 "http://www.gnu.org/copyleft/lesser.html"
             )
 
-            SpdxDeclaredLicenseMapper.MAPPING.forAll { (key, license) ->
+            mapping.forAll { (key, license) ->
                 if (key !in keysWithImpliedVersion && license.licenses().any { it.endsWith("-only") }) {
                     key should containADigit()
                 }
@@ -65,7 +67,7 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
         }
 
         "not contain single ID strings" {
-            val licenseIdMapping = SpdxDeclaredLicenseMapper.MAPPING.filter { (_, expression) ->
+            val licenseIdMapping = mapping.filter { (_, expression) ->
                 expression is SpdxLicenseIdExpression
             }
 
@@ -87,9 +89,17 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
         }
 
         "not contain plain SPDX license ids" {
-            SpdxDeclaredLicenseMapper.MAPPING.keys.forAll { declaredLicense ->
+            mapping.keys.forAll { declaredLicense ->
                 SpdxLicense.forId(declaredLicense) should beNull()
             }
+        }
+    }
+
+    "the mappings" should {
+        "be disjoint" {
+            SpdxDeclaredLicenseMapper.MAPPING.keys.intersect(
+                SpdxDeclaredLicenseMapper.AMBIGUOUS_MAPPING.keys
+            ) should beEmpty()
         }
     }
 

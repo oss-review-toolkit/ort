@@ -30,8 +30,9 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 class SpdxDeclaredLicenseMapper internal constructor(mapping: Map<String, SpdxExpression>) {
     companion object {
         val MAPPING by lazy { readLicenseMappingResource("/declared-license-mapping.yml") }
+        val AMBIGUOUS_MAPPING by lazy { readLicenseMappingResource("/ambiguous-declared-license-mapping.yml") }
 
-        private var instance = SpdxDeclaredLicenseMapper(MAPPING)
+        private var instance = SpdxDeclaredLicenseMapper(AMBIGUOUS_MAPPING + MAPPING)
 
         @Synchronized
         fun getInstance(): SpdxDeclaredLicenseMapper = instance
