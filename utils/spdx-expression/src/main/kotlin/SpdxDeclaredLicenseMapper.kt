@@ -23,11 +23,11 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 /**
- * A mapping from license strings collected from the declared licenses of Open Source packages to SPDX expressions. This
- * mapping only contains license strings which can *not* be parsed by [SpdxExpression.parse], for example because the
- * license names contain white spaces. See [SpdxSimpleLicenseMapping] for a mapping of varied license names.
+ * A class which maps license strings collected from the declared licenses of Open Source packages to SPDX expressions.
+ * The mapping only contains license strings which can *not* be parsed by [SpdxExpression.parse], for example because
+ * the license names contain white spaces. See [SpdxSimpleLicenseMapper] for a mapping of varied license names.
  */
-object SpdxDeclaredLicenseMapping {
+object SpdxDeclaredLicenseMapper {
     /**
      * The raw map which associates collected license strings with their corresponding SPDX expression.
      */

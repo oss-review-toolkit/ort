@@ -34,11 +34,11 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxException
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleLicenseMapping
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
@@ -46,9 +46,9 @@ class DeclaredLicenseProcessorTest : StringSpec() {
     /**
      * A collection of declared license strings found in open source packages.
      */
-    private val declaredLicenses = SpdxDeclaredLicenseMapping.mapping.keys +
-        SpdxSimpleLicenseMapping.simpleExpressionMapping.keys +
-        SpdxSimpleLicenseMapping.deprecatedExpressionMapping.keys
+    private val declaredLicenses = SpdxDeclaredLicenseMapper.mapping.keys +
+        SpdxSimpleLicenseMapper.simpleExpressionMapping.keys +
+        SpdxSimpleLicenseMapper.deprecatedExpressionMapping.keys
 
     init {
         "Declared licenses can be processed" {
@@ -95,11 +95,11 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "Stripping URL surroundings should not make any mapping redundant" {
-            SpdxDeclaredLicenseMapping.mapping.forAll { (license, expression) ->
+            SpdxDeclaredLicenseMapper.mapping.forAll { (license, expression) ->
                 val strippedLicense = DeclaredLicenseProcessor.stripUrlSurroundings(license)
 
                 withClue("Stripping '$license' to '$strippedLicense' makes the mapping to '$expression' redundant") {
-                    SpdxSimpleLicenseMapping.map(strippedLicense) should beNull()
+                    SpdxSimpleLicenseMapper.map(strippedLicense) should beNull()
                 }
             }
         }

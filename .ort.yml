@@ -14,7 +14,7 @@ excludes:
     reason: "EXAMPLE_OF"
     comment: >-
       This directory contains example files with licenses that do not apply to the OSS Review Toolkit.
-  - pattern: "utils/spdx/src/main/kotlin/{:SpdxDeclaredLicenseMapping|SpdxLicense|SpdxLicenseException|SpdxSimpleLicenseMapping}.kt"
+  - pattern: "utils/spdx/src/main/kotlin/{:SpdxDeclaredLicenseMapper|SpdxLicense|SpdxLicenseException|SpdxSimpleLicenseMapper}.kt"
     reason: "DATA_FILE_OF"
     comment: >-
       Licenses contained in this class are used for processing licenses and do not apply to the OSS Review Toolkit.
