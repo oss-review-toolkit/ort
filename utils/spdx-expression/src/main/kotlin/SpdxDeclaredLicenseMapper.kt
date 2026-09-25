@@ -32,10 +32,7 @@ object SpdxDeclaredLicenseMapper {
      * The raw map which associates collected license strings with their corresponding SPDX expression.
      */
     internal val rawMapping: Map<String, SpdxExpression> by lazy {
-        val resource = checkNotNull(javaClass.getResource("/declared-license-mapping.yml"))
-        resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
-            SpdxExpression.parse(value)
-        }
+        readLicenseMappingResource("/declared-license-mapping.yml")
     }
 
     /**
@@ -48,4 +45,11 @@ object SpdxDeclaredLicenseMapper {
      * discarded, or null if there is no corresponding expression.
      */
     fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)?.toExpression()
+}
+
+private fun readLicenseMappingResource(name: String): Map<String, SpdxExpression> {
+    val resource = checkNotNull(SpdxDeclaredLicenseMapper::class.java.getResource(name))
+    return resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
+        SpdxExpression.parse(value)
+    }
 }
