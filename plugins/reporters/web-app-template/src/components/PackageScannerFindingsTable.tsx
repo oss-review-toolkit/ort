@@ -131,6 +131,7 @@ function buildRow(scannerFinding: WebAppFinding, index: number): ScannerFindingR
 
 function renderSubRow(row: Row<ScannerFindingRow>): JSX.Element {
     const { endLine, isExcluded, path, pathExcludeReasons, scannerFinding, startLine, type } = row.original;
+    const isLineRange = endLine !== undefined && endLine !== startLine;
     return (
         <div className="space-y-2 p-4 text-sm">
             <div className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
@@ -140,10 +141,10 @@ function renderSubRow(row: Row<ScannerFindingRow>): JSX.Element {
                 <span className="break-all font-mono">{path}</span>
                 {startLine !== undefined && (
                     <>
-                        <span className="font-medium text-muted-foreground">Lines</span>
+                        <span className="font-medium text-muted-foreground">{isLineRange ? "Lines" : "Line"}</span>
                         <span className="font-mono">
                             {startLine}
-                            {endLine !== undefined && endLine !== startLine ? ` – ${endLine}` : ""}
+                            {isLineRange ? ` – ${endLine}` : ""}
                         </span>
                     </>
                 )}
