@@ -77,3 +77,38 @@ ort:
 ```
 
 To enable this provider, pass `-a VulnerableCode` on the command line.
+
+## SCORECARD
+
+This provider obtains metrics about project health from a [Scorecard](https://github.com/ossf/scorecard) instance.
+The configuration is limited to the server URL, as authentication is not required:
+
+```yaml
+ort:
+  advisor:
+    advisors:
+      Scorecard:
+        options:
+          serverUrl: "https://api.securityscorecards.dev"
+```
+
+To enable this provider, pass `-a Scorecard` on the command line.
+
+## CrOSSD
+
+This provider obtains metrics about project health from a [CrOSSD](https://health.crossd.tech/doc) instance.
+The configuration is limited to the server URL and the criticality thresholds, as authentication is not required:
+
+```yaml
+ort:
+  advisor:
+    advisors:
+      Crossd:
+        options:
+          serverUrl: "https://health.crossd.tech"
+          thresholdCriticalityLow: 15
+          thresholdCriticalityMedium: 25
+          thresholdCriticalityHigh: 40
+```
+
+To enable this provider, pass `-a Crossd` on the command line.
