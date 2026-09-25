@@ -26,6 +26,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 
 internal val JSON = Json {
+    coerceInputValues = true
     decodeEnumsCaseInsensitive = true
     ignoreUnknownKeys = true
     namingStrategy = JsonNamingStrategy.SnakeCase
@@ -55,7 +56,7 @@ internal data class ABom(
     data class Workflow(
         val name: String,
         val path: String,
-        val jobs: List<Job>
+        val jobs: List<Job> = emptyList()
     )
 
     @Serializable
