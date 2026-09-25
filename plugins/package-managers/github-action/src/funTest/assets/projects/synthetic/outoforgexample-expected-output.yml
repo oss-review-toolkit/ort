@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GitHubAction::Out of Org:"
+  id: "GitHubAction:outoforgexample:Out of Org:"
   definition_file_path: ".github/workflows/outoforgexample.yml"
   declared_licenses: []
   declared_licenses_processed: {}

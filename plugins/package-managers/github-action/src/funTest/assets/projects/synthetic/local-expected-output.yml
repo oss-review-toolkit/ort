@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GitHubAction::local:"
+  id: "GitHubAction:local:local:"
   definition_file_path: ".github/workflows/local.yml"
   declared_licenses: []
   declared_licenses_processed: {}
