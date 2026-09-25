@@ -27,18 +27,20 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  * The mapping only contains license strings which can *not* be parsed by [SpdxExpression.parse], for example because
  * the license names contain white spaces. See [SpdxSimpleLicenseMapper] for a mapping of varied license names.
  */
-object SpdxDeclaredLicenseMapper {
-    /**
-     * The raw map which associates collected license strings with their corresponding SPDX expression.
-     */
-    internal val rawMapping: Map<String, SpdxExpression> by lazy {
-        readLicenseMappingResource("/declared-license-mapping.yml")
+class SpdxDeclaredLicenseMapper internal constructor(mapping: Map<String, SpdxExpression>) {
+    companion object {
+        val MAPPING by lazy { readLicenseMappingResource("/declared-license-mapping.yml") }
+
+        private var instance = SpdxDeclaredLicenseMapper(MAPPING)
+
+        @Synchronized
+        fun getInstance(): SpdxDeclaredLicenseMapper = instance
     }
 
     /**
      * The map of collected license strings associated with their corresponding SPDX expression.
      */
-    val mapping = rawMapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+    private val mapping = mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**
      * Return the [SpdxExpression] the [license] string maps to, [SpdxConstants.NONE] if the [license] should be

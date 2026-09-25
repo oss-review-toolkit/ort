@@ -34,15 +34,15 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionLexer
 
 class SpdxDeclaredLicenseMapperTest : WordSpec({
-    "The raw mapping" should {
+    "The mapping" should {
         "not contain any duplicate keys with respect to capitalization" {
-            val duplicates = SpdxDeclaredLicenseMapper.rawMapping.keys.getDuplicates { it.lowercase() }
+            val duplicates = SpdxDeclaredLicenseMapper.MAPPING.keys.getDuplicates { it.lowercase() }
 
             duplicates should beEmpty()
         }
 
         "not contain any deprecated values" {
-            SpdxDeclaredLicenseMapper.rawMapping.values.forAll {
+            SpdxDeclaredLicenseMapper.MAPPING.values.forAll {
                 it.isValid(SpdxExpression.Strictness.ALLOW_CURRENT) shouldBe true
             }
         }
@@ -57,7 +57,7 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
                 "http://www.gnu.org/copyleft/lesser.html"
             )
 
-            SpdxDeclaredLicenseMapper.rawMapping.forAll { (key, license) ->
+            SpdxDeclaredLicenseMapper.MAPPING.forAll { (key, license) ->
                 if (key !in keysWithImpliedVersion && license.licenses().any { it.endsWith("-only") }) {
                     key should containADigit()
                 }
@@ -65,7 +65,7 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
         }
 
         "not contain single ID strings" {
-            val licenseIdMapping = SpdxDeclaredLicenseMapper.rawMapping.filter { (_, expression) ->
+            val licenseIdMapping = SpdxDeclaredLicenseMapper.MAPPING.filter { (_, expression) ->
                 expression is SpdxLicenseIdExpression
             }
 
@@ -87,7 +87,7 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
         }
 
         "not contain plain SPDX license ids" {
-            SpdxDeclaredLicenseMapper.rawMapping.keys.forAll { declaredLicense ->
+            SpdxDeclaredLicenseMapper.MAPPING.keys.forAll { declaredLicense ->
                 SpdxLicense.forId(declaredLicense) should beNull()
             }
         }
@@ -95,10 +95,11 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
 
     "map()" should {
         "be case-insensitive" {
-            SpdxDeclaredLicenseMapper.rawMapping.forAll { (key, license) ->
-                SpdxDeclaredLicenseMapper.map(key.lowercase()) shouldBe license
-                SpdxDeclaredLicenseMapper.map(key.uppercase()) shouldBe license
-            }
+            val expression = "Apache-2.0".toSpdx()
+            val mapper = SpdxDeclaredLicenseMapper(mapOf("a" to expression))
+
+            mapper.map("a") shouldBe expression
+            mapper.map("A") shouldBe expression
         }
     }
 })

@@ -46,7 +46,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
     /**
      * A collection of declared license strings found in open source packages.
      */
-    private val declaredLicenses = SpdxDeclaredLicenseMapper.mapping.keys +
+    private val declaredLicenses = SpdxDeclaredLicenseMapper.MAPPING.keys +
         SpdxSimpleLicenseMapper.simpleExpressionMapping.keys +
         SpdxSimpleLicenseMapper.deprecatedExpressionMapping.keys
 
@@ -95,7 +95,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "Stripping URL surroundings should not make any mapping redundant" {
-            SpdxDeclaredLicenseMapper.mapping.forAll { (license, expression) ->
+            SpdxDeclaredLicenseMapper.MAPPING.forAll { (license, expression) ->
                 val strippedLicense = DeclaredLicenseProcessor.stripUrlSurroundings(license)
 
                 withClue("Stripping '$license' to '$strippedLicense' makes the mapping to '$expression' redundant") {
