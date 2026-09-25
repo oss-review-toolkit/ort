@@ -19,31 +19,32 @@
 
 package org.ossreviewtoolkit.utils.spdxexpression
 
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 /**
- * A mapping from license strings collected from the declared licenses of Open Source packages to SPDX expressions. This
- * mapping only contains license strings which can *not* be parsed by [SpdxExpression.parse], for example because the
- * license names contain white spaces. See [SpdxSimpleLicenseMapping] for a mapping of varied license names.
+ * A class which unstructured license strings from Open Source packages to SPDX expressions. It only targets license
+ * strings which can *not* be parsed by [SpdxExpression.parse], for example because the license strings contain white
+ * spaces. See [SpdxDeprecatedLicenseMapper] for a mapping of varied license names.
  */
-object SpdxDeclaredLicenseMapping {
+object SpdxLicenseMapper {
     /**
-     * The raw map which associates collected license strings with their corresponding SPDX expression.
+     * The raw map which associates unstructured license strings with their corresponding SPDX expression.
      */
     internal val rawMapping: Map<String, SpdxExpression> by lazy {
-        val resource = checkNotNull(javaClass.getResource("/declared-license-mapping.yml"))
+        val resource = checkNotNull(javaClass.getResource("/license-mapping.yml"))
         resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
             SpdxExpression.parse(value)
         }
     }
 
     /**
-     * The map of collected license strings associated with their corresponding SPDX expression.
+     * The map which associates unstructured license strings with their corresponding SPDX expression.
      */
     val mapping = rawMapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**
-     * Return the [SpdxExpression] the [license] string maps to, [SpdxConstants.NONE] if the [license] should be
+     * Return the [SpdxExpression] the given [license] string maps to, [SpdxConstants.NONE] if the [license] should be
      * discarded, or null if there is no corresponding expression.
      */
     fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)?.toExpression()

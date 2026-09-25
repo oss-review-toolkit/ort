@@ -34,11 +34,11 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeprecatedLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxException
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleLicenseMapping
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
@@ -46,9 +46,8 @@ class DeclaredLicenseProcessorTest : StringSpec() {
     /**
      * A collection of declared license strings found in open source packages.
      */
-    private val declaredLicenses = SpdxDeclaredLicenseMapping.mapping.keys +
-        SpdxSimpleLicenseMapping.simpleExpressionMapping.keys +
-        SpdxSimpleLicenseMapping.deprecatedExpressionMapping.keys
+    private val declaredLicenses = SpdxLicenseMapper.mapping.keys +
+        SpdxDeprecatedLicenseMapper.mapping.keys
 
     init {
         "Declared licenses can be processed" {
@@ -95,11 +94,11 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "Stripping URL surroundings should not make any mapping redundant" {
-            SpdxDeclaredLicenseMapping.mapping.forAll { (license, expression) ->
+            SpdxLicenseMapper.mapping.forAll { (license, expression) ->
                 val strippedLicense = DeclaredLicenseProcessor.stripUrlSurroundings(license)
 
                 withClue("Stripping '$license' to '$strippedLicense' makes the mapping to '$expression' redundant") {
-                    SpdxSimpleLicenseMapping.map(strippedLicense) should beNull()
+                    SpdxDeprecatedLicenseMapper.map(strippedLicense) should beNull()
                 }
             }
         }
@@ -124,22 +123,22 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             processedLicenses.unmapped should beEmpty()
         }
 
-        "The declared license mapping is applied" {
+        "The custom license mapping is applied" {
             val declaredLicenses = setOf("Apache-2.0", "https://domain/path/license.html")
-            val declaredLicenseMapping = mapOf("https://domain/path/license.html" to "MIT".toSpdx())
+            val customLicenseMapping = mapOf("https://domain/path/license.html" to "MIT".toSpdx())
 
-            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, customLicenseMapping)
 
             processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
             processedLicenses.mapped should containExactlyEntries("https://domain/path/license.html" to "MIT".toSpdx())
             processedLicenses.unmapped should beEmpty()
         }
 
-        "The declared license mapping discards licenses which are mapped to 'NONE' when applied " {
+        "The custom license mapping discards licenses which are mapped to 'NONE' when applied " {
             val declaredLicenses = setOf("Copyright (c) the authors.", "Apache-2.0", "MIT")
-            val declaredLicenseMapping = mapOf("Copyright (c) the authors." to SpdxConstants.NONE.toSpdx())
+            val customLicenseMapping = mapOf("Copyright (c) the authors." to SpdxConstants.NONE.toSpdx())
 
-            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, customLicenseMapping)
 
             processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
             processedLicenses.mapped should containExactlyEntries(

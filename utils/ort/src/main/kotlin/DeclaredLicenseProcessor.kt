@@ -26,8 +26,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxCompoundExpression
-import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdxOrNull
 
@@ -84,9 +84,9 @@ object DeclaredLicenseProcessor {
 
         val mappedLicense = customLicenseMapping[strippedLicense]
             // When looking up built-in mappings, try some variations of the license name.
-            ?: SpdxDeclaredLicenseMapping.map(strippedLicense)
-            ?: SpdxDeclaredLicenseMapping.map(strippedLicense.unquote())
-            ?: SpdxDeclaredLicenseMapping.map(strippedLicense.removePrefix(SpdxConstants.TAG).trim())
+            ?: SpdxLicenseMapper.map(strippedLicense)
+            ?: SpdxLicenseMapper.map(strippedLicense.unquote())
+            ?: SpdxLicenseMapper.map(strippedLicense.removePrefix(SpdxConstants.TAG).trim())
 
         val processedLicense = mappedLicense ?: strippedLicense.toSpdxOrNull()
         return processedLicense?.normalize()?.takeIf {

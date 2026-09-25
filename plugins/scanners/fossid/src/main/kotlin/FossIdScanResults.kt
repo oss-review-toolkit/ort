@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.prettyPrintRanges
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
@@ -212,21 +213,26 @@ private fun mapLicense(
     location: TextLocation,
     issues: MutableList<Issue>,
     orderedDetectedLicenseMapping: Map<String, String>
-): LicenseFinding? =
-    runCatching {
+): LicenseFinding? {
+    var mappedLicense = license.mapLicense(orderedDetectedLicenseMapping)
+    mappedLicense = SpdxLicenseMapper.map(mappedLicense)?.toString() ?: mappedLicense
+    if (mappedLicense == SpdxConstants.NONE) return null
+
+    return runCatching {
         // TODO: The detected license mapping must be applied here, because FossID can return license strings
         //       which cannot be parsed to an SpdxExpression. A better solution could be to automatically
         //       convert the strings into a form that can be parsed, then the mapping could be applied globally.
-        LicenseFinding(license.mapLicense(orderedDetectedLicenseMapping), location)
-    }.map { licenseFinding ->
-        licenseFinding.copy(license = licenseFinding.license.normalize())
+        mappedLicense.toSpdx().normalize()
     }.onFailure { spdxException ->
         issues += FossId.createAndLogIssue(
             source = FossIdFactory.descriptor.displayName,
             message = "Failed to parse license '$license' as an SPDX expression: ${spdxException.collectMessages()}",
             affectedPath = location.path
         )
+    }.map {
+        LicenseFinding(it, location)
     }.getOrNull()
+}
 
 /**
  * Map the raw snippets to ORT [SnippetFinding]s. If a snippet license cannot be parsed, an issues is added to [issues].
