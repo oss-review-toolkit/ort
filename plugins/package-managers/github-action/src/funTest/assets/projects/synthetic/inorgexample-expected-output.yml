@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GitHubAction::In Org:"
+  id: "GitHubAction:inorgexample:In Org:"
   definition_file_path: ".github/workflows/inorgexample.yml"
   declared_licenses: []
   declared_licenses_processed: {}
