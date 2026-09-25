@@ -16,6 +16,9 @@
                 "severeRuleViolationThreshold": {
                     "$ref": "#/definitions/Severity"
                 },
+                "enableAmbiguousLicenseMappings": {
+                  "type": "boolean"
+                },
                 "enableRepositoryPackageCurations": {
                     "type": "boolean"
                 },

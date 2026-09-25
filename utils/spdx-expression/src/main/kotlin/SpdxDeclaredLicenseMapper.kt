@@ -35,6 +35,11 @@ class SpdxDeclaredLicenseMapper internal constructor(mapping: Map<String, SpdxEx
         private var instance = SpdxDeclaredLicenseMapper(AMBIGUOUS_MAPPING + MAPPING)
 
         @Synchronized
+        fun configure(mapping: Map<String, SpdxExpression>) {
+            instance = SpdxDeclaredLicenseMapper(mapping)
+        }
+
+        @Synchronized
         fun getInstance(): SpdxDeclaredLicenseMapper = instance
     }
 

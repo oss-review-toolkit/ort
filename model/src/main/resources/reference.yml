@@ -28,6 +28,7 @@ ort:
   - TOKEN
   - USER
 
+  enableAmbiguousLicenseMappings: true
   enableRepositoryPackageConfigurations: true
   enableRepositoryPackageCurations: true
 

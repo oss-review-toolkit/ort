@@ -63,6 +63,13 @@ data class OrtConfiguration(
     val deniedProcessEnvironmentVariablesSubstrings: Set<String> = EnvironmentVariableFilter.DEFAULT_DENY_SUBSTRINGS,
 
     /**
+     * Enable the usage of ambiguous license mappings. If set to false, ambiguous declared license mappings won't be
+     * applied. Note that this does not yet, but will be enhanced to disable all ambiguous mappings including the
+     * simple license mappings.
+     */
+    val enableAmbiguousLicenseMappings: Boolean = true,
+
+    /**
      * Enable the usage of project-local package configurations from the [RepositoryConfiguration]. If set to true,
      * apply package configurations from a local .ort.yml file before applying those specified via the command line i.e.
      * configurations from the .ort.yml take precedence.
