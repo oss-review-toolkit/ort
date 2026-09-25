@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GitHubAction::transitive:"
+  id: "GitHubAction:transitive:transitive:"
   definition_file_path: ".github/workflows/transitive.yml"
   declared_licenses: []
   declared_licenses_processed: {}
