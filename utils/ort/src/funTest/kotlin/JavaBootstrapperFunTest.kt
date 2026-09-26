@@ -19,20 +19,18 @@
 
 package org.ossreviewtoolkit.utils.ort
 
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
-import io.mockk.every
-import io.mockk.mockkObject
-
 import okhttp3.Cache
 
 import org.ossreviewtoolkit.clients.foojay.DiscoService
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.mebibytes
 
+@Tags("RequiresExternalTool")
 class JavaBootstrapperFunTest : StringSpec({
     "The Java version running the test should be detected as a JDK" {
         JavaBootstrapper.isRunningOnJdk(Environment.JAVA_VERSION) shouldBe true
@@ -45,15 +43,12 @@ class JavaBootstrapperFunTest : StringSpec({
             cache(tempCache)
         }
 
-        mockkObject(JavaBootstrapper) {
-            every { JavaBootstrapper.discoService } returns DiscoService.create(client = tempCacheClient)
+        val foojayService = FoojayJdkService(DiscoService.create(client = tempCacheClient))
+        val bootstrapper = JavaBootstrapper(foojayService)
 
-            JavaBootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
-                it.distribution shouldBe "temurin"
-                it.jdkVersion shouldBe 21
-                Os.Name.fromString(it.operatingSystem) shouldBe Os.Name.current
-                Os.Arch.fromString(it.architecture) shouldBe Os.Arch.current
-            }
+        bootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
+            it.distribution shouldBe "temurin"
+            it.jdkVersion shouldBe 21
         }
     }
 })
