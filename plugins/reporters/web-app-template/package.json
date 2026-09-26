@@ -29,6 +29,7 @@
     "dependencies": {
         "@tanstack/match-sorter-utils": "^8.19.4",
         "@tanstack/react-table": "^8.21.3",
+        "ae-cvss-calculator": "^1.0.13",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",

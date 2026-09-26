@@ -157,10 +157,16 @@ export const LICENSE_TERM_DEFINITIONS = {
     effective: "Declared plus detected, after removing non-applicable licenses and applying license choices.",
 } as const;
 
-// The SPDX value used when no license has been asserted for a field (rather than leaving it blank).
+// The SPDX values shown when a field holds no license, rather than leaving it blank. Which one
+// applies depends on the field: NONE states that there is no license, while NOASSERTION states that
+// no determination was made, which is what an absent conclusion means.
 export const NO_ASSERTION = "NOASSERTION";
+export const NO_LICENSE = "NONE";
 
-const NO_ASSERTION_EXPLANATION = "NOASSERTION is the SPDX value meaning no license was asserted for this field.";
+const SENTINEL_EXPLANATIONS: Record<string, string> = {
+    [NO_ASSERTION]: "NOASSERTION is the SPDX value meaning no determination was made for this field.",
+    [NO_LICENSE]: "NONE is the SPDX value meaning no license is present for this field.",
+};
 
 export interface LicenseBadgeProps {
     className?: string;
@@ -174,30 +180,31 @@ export interface LicenseBadgeProps {
 // grows to fit longer identifiers (e.g. "LicenseRef-scancode-public-domain-disclaimer") and only when
 // one exceeds the max width is it cut off with a CSS ellipsis; the full id stays available on hover.
 function LicenseBadge({ className, color, name }: LicenseBadgeProps): JSX.Element {
-    const isNoAssertion = name === NO_ASSERTION;
+    const explanation = SENTINEL_EXPLANATIONS[name];
+    const isSentinel = explanation !== undefined;
     // The colour is derived from the license id (single source of truth) so the same license gets the
-    // same WCAG-AA colour in every column; callers may override it, and NOASSERTION stays neutral.
-    const backgroundColor = color ?? (isNoAssertion ? undefined : licenseToHslColor(name));
+    // same WCAG-AA colour in every column; callers may override it, and a sentinel stays neutral.
+    const backgroundColor = color ?? (isSentinel ? undefined : licenseToHslColor(name));
     const shared = "max-w-sm truncate px-1.5 py-0 text-[11px] font-mono";
     const badge =
         backgroundColor !== undefined ? (
             <Badge
                 className={cn(shared, "text-white", className)}
                 style={{ backgroundColor }}
-                title={isNoAssertion ? undefined : name}
+                title={isSentinel ? undefined : name}
             >
                 {name}
             </Badge>
         ) : (
-            <Badge className={cn(shared, className)} title={isNoAssertion ? undefined : name} variant="secondary">
+            <Badge className={cn(shared, className)} title={isSentinel ? undefined : name} variant="secondary">
                 {name}
             </Badge>
         );
-    // NOASSERTION gets a styled tooltip explaining what it means; truncated ids rely on the native title.
-    if (!isNoAssertion) {
+    // A sentinel gets a styled tooltip explaining what it means; truncated ids rely on the native title.
+    if (!isSentinel) {
         return badge;
     }
-    return <span title={NO_ASSERTION_EXPLANATION}>{badge}</span>;
+    return <span title={explanation}>{badge}</span>;
 }
 
 export interface LicenseBadgeListProps {
@@ -395,6 +402,35 @@ function PackageLink({ id, onClick }: { id: string; onClick?: (id: string) => vo
     );
 }
 
+// The part of a resolution this renders, shared by issue, rule violation and vulnerability ones.
+export interface AppliedResolution {
+    comment?: string | undefined;
+    key: string;
+    reason?: string | undefined;
+}
+
+export interface ResolutionDetailsProps {
+    resolutions: readonly AppliedResolution[];
+}
+
+// How a finding was resolved: the reason of every applied resolution, each followed by the comment
+// that explains why the resolution is acceptable. The comment carries the reasoning, so it is shown
+// here and not only in the resolutions listed under the run details.
+function ResolutionDetails({ resolutions }: ResolutionDetailsProps): JSX.Element | null {
+    if (resolutions.length === 0) return null;
+
+    return (
+        <div className="space-y-2">
+            {resolutions.map(({ comment, key, reason }) => (
+                <div key={key}>
+                    <div>{reason ? `Resolved with ${reason} resolution` : "Resolved"}</div>
+                    {comment ? <div className="whitespace-pre-wrap text-muted-foreground">{comment}</div> : null}
+                </div>
+            ))}
+        </div>
+    );
+}
+
 // The lucide "summary" icon (https://lucide.dev/icons/summary) used for the Summary section. It is
 // not part of the pinned lucide-react 0.475 release, so its paths are vendored here as a drop-in
 // LucideIcon rather than bumping the whole icon set.
@@ -527,6 +563,7 @@ export {
     PackageConfigurationIcon,
     PackageCurationIcon,
     PackageLink,
+    ResolutionDetails,
     SummaryIcon,
     SyntaxHighlight,
     ToolsIcon,

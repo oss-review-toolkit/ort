@@ -43,4 +43,18 @@ describe("VulnerabilitiesTable", () => {
         render(<VulnerabilitiesTable vulnerabilities={[]} />);
         expect(screen.getByText("No vulnerabilities")).toBeInTheDocument();
     });
+
+    it("shows the resolution comment, not only the reason, for a resolved vulnerability", () => {
+        const resolved = vulnerabilities.find((vulnerability) => vulnerability.isResolved);
+        expect(resolved).toBeDefined();
+        if (!resolved) return;
+        const [resolution] = resolved.resolutions ?? [];
+        expect(resolution?.comment).toBeTruthy();
+        if (!resolution?.comment || !resolved.id) return;
+
+        render(<VulnerabilitiesTable focusVulnerabilityId={resolved.id} vulnerabilities={vulnerabilities} />);
+
+        expect(screen.getByText(new RegExp(resolution.reason ?? ""))).toBeInTheDocument();
+        expect(screen.getByText(resolution.comment.trim())).toBeInTheDocument();
+    });
 });
