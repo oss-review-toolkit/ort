@@ -405,7 +405,7 @@ RUN mkdir -p $BAZEL_HOME/bin \
 
 COPY --from=go-build /opt/go /opt/go
 
-RUN $GOBIN/go install github.com/bazelbuild/buildtools/buildozer@$BUILDOZER_VERSION && chmod a+x $GOBIN/buildozer
+RUN $GOBIN/go install github.com/bazel-contrib/buildtools/v10/buildozer@$BUILDOZER_VERSION && chmod a+x $GOBIN/buildozer
 
 #------------------------------------------------------------------------
 # Cosign for signature verification
