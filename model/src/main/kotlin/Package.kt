@@ -75,11 +75,17 @@ data class Package(
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val declaredLicenses: Set<String>,
 
+    @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = SpdxOperatorFilter::class)
+    val declaredLicensesOperator: SpdxOperator = SpdxOperator.AND,
+
     /**
      * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
      * concatenated with [SpdxOperator.AND].
      */
-    val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
+    val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(
+        declaredLicenses = declaredLicenses,
+        operator = declaredLicensesOperator
+    ),
 
     /**
      * The concluded license as an [SpdxExpression]. It can be used to override the [declared][declaredLicenses] /
@@ -212,4 +218,9 @@ data class Package(
 
         return ref
     }
+}
+
+@Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+private class SpdxOperatorFilter {
+    override fun equals(other: Any?): Boolean = other is SpdxOperator && other == SpdxOperator.AND
 }

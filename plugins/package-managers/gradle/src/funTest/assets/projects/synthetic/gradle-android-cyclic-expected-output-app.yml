@@ -1050,6 +1050,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1083,6 +1084,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1117,6 +1119,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1151,6 +1154,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1186,6 +1190,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1220,6 +1225,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1252,6 +1258,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1284,6 +1291,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1316,6 +1324,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1348,6 +1357,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1380,6 +1390,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1412,6 +1423,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1444,6 +1456,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1479,6 +1492,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1514,6 +1528,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1546,6 +1561,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1581,6 +1597,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1616,6 +1633,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1651,6 +1669,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1686,6 +1705,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1720,6 +1740,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1753,6 +1774,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1785,6 +1807,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1820,6 +1843,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1855,6 +1879,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1890,6 +1915,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1922,6 +1948,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1954,6 +1981,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1986,6 +2014,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2018,6 +2047,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2050,6 +2080,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2082,6 +2113,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2114,6 +2146,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2149,6 +2182,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2184,6 +2218,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2219,6 +2254,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2251,6 +2287,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2283,6 +2320,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2315,6 +2353,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2347,6 +2386,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2379,6 +2419,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2411,6 +2452,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2443,6 +2485,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2475,6 +2518,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2508,6 +2552,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2543,6 +2588,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2575,6 +2621,7 @@ shared_packages:
   - "The Android Open Source Project"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2610,6 +2657,7 @@ shared_packages:
   - "Google"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2658,6 +2706,7 @@ shared_packages:
   - "Stefan Birkner"
   declared_licenses:
   - "Eclipse Public License 1.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "EPL-1.0"
     mapped:
@@ -2695,6 +2744,7 @@ shared_packages:
   - "Tom Denley"
   declared_licenses:
   - "New BSD License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -2729,6 +2779,7 @@ shared_packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2761,6 +2812,7 @@ shared_packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2793,6 +2845,7 @@ shared_packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2825,6 +2878,7 @@ shared_packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2857,6 +2911,7 @@ shared_packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2889,6 +2944,7 @@ shared_packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2921,6 +2977,7 @@ shared_packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -2953,6 +3010,7 @@ shared_packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
