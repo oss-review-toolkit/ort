@@ -27,25 +27,37 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  * The mapping only contains license strings which can *not* be parsed by [SpdxExpression.parse], for example because
  * the license names contain white spaces. See [SpdxSimpleLicenseMapper] for a mapping of varied license names.
  */
-object SpdxDeclaredLicenseMapper {
-    /**
-     * The raw map which associates collected license strings with their corresponding SPDX expression.
-     */
-    internal val rawMapping: Map<String, SpdxExpression> by lazy {
-        val resource = checkNotNull(javaClass.getResource("/declared-license-mapping.yml"))
-        resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
-            SpdxExpression.parse(value)
+class SpdxDeclaredLicenseMapper internal constructor(mapping: Map<String, SpdxExpression>) {
+    companion object {
+        val MAPPING by lazy { readLicenseMappingResource("/declared-license-mapping.yml") }
+        val AMBIGUOUS_MAPPING by lazy { readLicenseMappingResource("/ambiguous-declared-license-mapping.yml") }
+
+        private var instance = SpdxDeclaredLicenseMapper(AMBIGUOUS_MAPPING + MAPPING)
+
+        @Synchronized
+        fun configure(mapping: Map<String, SpdxExpression>) {
+            instance = SpdxDeclaredLicenseMapper(mapping)
         }
+
+        @Synchronized
+        fun getInstance(): SpdxDeclaredLicenseMapper = instance
     }
 
     /**
      * The map of collected license strings associated with their corresponding SPDX expression.
      */
-    val mapping = rawMapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+    private val mapping = mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**
      * Return the [SpdxExpression] the [license] string maps to, [SpdxConstants.NONE] if the [license] should be
      * discarded, or null if there is no corresponding expression.
      */
     fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)?.toExpression()
+}
+
+private fun readLicenseMappingResource(name: String): Map<String, SpdxExpression> {
+    val resource = checkNotNull(SpdxDeclaredLicenseMapper::class.java.getResource(name))
+    return resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
+        SpdxExpression.parse(value)
+    }
 }

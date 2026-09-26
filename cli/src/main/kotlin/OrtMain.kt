@@ -65,6 +65,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapper
 
 import org.slf4j.LoggerFactory
 
@@ -155,6 +156,17 @@ class OrtMain : CliktCommand(ORT_NAME) {
         // Make options available to subcommands and apply static configuration.
         val ortConfig = OrtConfiguration.load(args = configArguments, file = configFile)
         currentContext.findOrSetObject { ortConfig }
+
+        SpdxDeclaredLicenseMapper.configure(
+            buildMap {
+                if (ortConfig.enableAmbiguousLicenseMappings) {
+                    putAll(SpdxDeclaredLicenseMapper.AMBIGUOUS_MAPPING)
+                }
+
+                putAll(SpdxDeclaredLicenseMapper.MAPPING)
+            }
+        )
+
         LicenseFilePatterns.configure(ortConfig.licenseFilePatterns)
 
         EnvironmentVariableFilter.reset(

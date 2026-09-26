@@ -81,12 +81,12 @@ object DeclaredLicenseProcessor {
         customLicenseMapping: Map<String, SpdxExpression> = emptyMap()
     ): SpdxExpression? {
         val strippedLicense = stripUrlSurroundings(declaredLicense)
-
+        val declaredLicenseMapper = SpdxDeclaredLicenseMapper.getInstance()
         val mappedLicense = customLicenseMapping[strippedLicense]
             // When looking up built-in mappings, try some variations of the license name.
-            ?: SpdxDeclaredLicenseMapper.map(strippedLicense)
-            ?: SpdxDeclaredLicenseMapper.map(strippedLicense.unquote())
-            ?: SpdxDeclaredLicenseMapper.map(strippedLicense.removePrefix(SpdxConstants.TAG).trim())
+            ?: declaredLicenseMapper.map(strippedLicense)
+            ?: declaredLicenseMapper.map(strippedLicense.unquote())
+            ?: declaredLicenseMapper.map(strippedLicense.removePrefix(SpdxConstants.TAG).trim())
 
         val processedLicense = mappedLicense ?: strippedLicense.toSpdxOrNull()
         return processedLicense?.normalize()?.takeIf {
