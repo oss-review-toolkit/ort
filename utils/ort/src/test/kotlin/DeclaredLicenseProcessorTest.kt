@@ -47,8 +47,8 @@ class DeclaredLicenseProcessorTest : StringSpec() {
      * A collection of declared license strings found in open source packages.
      */
     private val declaredLicenses = SpdxDeclaredLicenseMapper.MAPPING.keys +
-        SpdxSimpleLicenseMapper.simpleExpressionMapping.keys +
-        SpdxSimpleLicenseMapper.deprecatedExpressionMapping.keys
+        SpdxSimpleLicenseMapper.caseInsensitiveSimpleMapping.keys +
+        SpdxSimpleLicenseMapper.caseInsensitiveDeprecatedMapping.keys
 
     init {
         "Declared licenses can be processed" {
