@@ -45,13 +45,13 @@ class SpdxDeclaredLicenseMapper internal constructor(mapping: Map<String, SpdxEx
     /**
      * The map of collected license strings associated with their corresponding SPDX expression.
      */
-    private val mapping = mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+    private val caseInsensitiveMapping = mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**
      * Return the [SpdxExpression] the [license] string maps to, [SpdxConstants.NONE] if the [license] should be
      * discarded, or null if there is no corresponding expression.
      */
-    fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)?.toExpression()
+    fun map(license: String) = caseInsensitiveMapping[license] ?: SpdxLicense.forId(license)?.toExpression()
 }
 
 private fun readLicenseMappingResource(name: String): Map<String, SpdxExpression> {
