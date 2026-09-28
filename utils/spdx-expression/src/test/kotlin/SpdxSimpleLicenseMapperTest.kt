@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.utils.spdxexpression
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveAtMostSize
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -31,6 +31,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.types.beOfType
 
+import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionLexer
 import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionParser
@@ -39,13 +40,9 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.Token
 class SpdxSimpleLicenseMapperTest : WordSpec({
     "The simple license mapping" should {
         "not contain any duplicate keys with respect to capitalization" {
-            val keys = SpdxSimpleLicenseMapper.simpleExpressionMapping.keys.toMutableList()
-            val uniqueKeys = SpdxSimpleLicenseMapper.simpleExpressionMapping.keys
+            val duplicates = SpdxSimpleLicenseMapper.simpleExpressionMapping.keys.getDuplicates { it.lowercase() }
 
-            // Remove keys one by one as calling "-" would remove all occurrences of a key.
-            uniqueKeys.forEach { uniqueKey -> keys.remove(uniqueKey) }
-
-            keys should beEmpty()
+            duplicates should beEmpty()
         }
 
         "not contain any deprecated values" {
