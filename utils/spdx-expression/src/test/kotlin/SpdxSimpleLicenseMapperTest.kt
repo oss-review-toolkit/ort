@@ -25,6 +25,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveAtMostSize
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
@@ -38,7 +39,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.Token
 class SpdxSimpleLicenseMapperTest : WordSpec({
     "The simple license mapping" should {
         "not contain any duplicate keys with respect to capitalization" {
-            val keys = SpdxSimpleLicenseMapper.simpleLicenseMapping.keys.toMutableList()
+            val keys = SpdxSimpleLicenseMapper.simpleExpressionMapping.keys.toMutableList()
             val uniqueKeys = SpdxSimpleLicenseMapper.simpleExpressionMapping.keys
 
             // Remove keys one by one as calling "-" would remove all occurrences of a key.
@@ -48,14 +49,14 @@ class SpdxSimpleLicenseMapperTest : WordSpec({
         }
 
         "not contain any deprecated values" {
-            SpdxSimpleLicenseMapper.simpleLicenseMapping.values.forAll {
-                it.deprecated shouldBe false
+            SpdxSimpleLicenseMapper.simpleExpressionMapping.values.forAll {
+                SpdxLicense.forId(it.toString()).shouldNotBeNull().deprecated shouldBe false
             }
         }
 
         "not associate licenses without a version to *-only" {
-            SpdxSimpleLicenseMapper.simpleLicenseMapping.forAll { (key, license) ->
-                if (license.id.endsWith("-only")) key should containADigit()
+            SpdxSimpleLicenseMapper.simpleExpressionMapping.forAll { (key, license) ->
+                if (license.toString().endsWith("-only")) key should containADigit()
             }
         }
     }
