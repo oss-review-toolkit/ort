@@ -84,10 +84,8 @@ class SpdxSimpleLicenseMapperTest : WordSpec({
 
         "be case-insensitive" {
             SpdxSimpleLicenseMapper.simpleExpressionMapping.forAll { (key, license) ->
-                SpdxSimpleLicenseMapper.map(key.lowercase(), mapDeprecated = false) shouldBe license
-                SpdxSimpleLicenseMapper.map(key.uppercase(), mapDeprecated = false) shouldBe license
-                SpdxSimpleLicenseMapper.map(key.lowercase(), mapDeprecated = true) shouldBe license
-                SpdxSimpleLicenseMapper.map(key.uppercase(), mapDeprecated = true) shouldBe license
+                SpdxSimpleLicenseMapper.map(key.lowercase()) shouldBe license
+                SpdxSimpleLicenseMapper.map(key.uppercase()) shouldBe license
             }
         }
     }
