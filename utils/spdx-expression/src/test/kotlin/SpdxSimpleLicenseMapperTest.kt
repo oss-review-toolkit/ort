@@ -38,32 +38,19 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionParser
 import org.ossreviewtoolkit.utils.spdxexpression.parser.Token
 
 class SpdxSimpleLicenseMapperTest : WordSpec({
-    "The simple license mapping" should {
-        "not contain any duplicate keys with respect to capitalization" {
-            val duplicates = SpdxSimpleLicenseMapper.simpleExpressionMapping.keys.getDuplicates { it.lowercase() }
+    "The mapping" should {
+        val mapping = SpdxSimpleLicenseMapper.simpleExpressionMapping +
+            SpdxSimpleLicenseMapper.deprecatedExpressionMapping
 
-            duplicates should beEmpty()
-        }
-
-        "not contain any deprecated values" {
-            SpdxSimpleLicenseMapper.simpleExpressionMapping.values.forAll {
-                SpdxLicense.forId(it.toString()).shouldNotBeNull().deprecated shouldBe false
+        "be case-insensitive" {
+            mapping.forAll { (key, license) ->
+                SpdxSimpleLicenseMapper.map(key.lowercase()) shouldBe license
+                SpdxSimpleLicenseMapper.map(key.uppercase()) shouldBe license
             }
         }
 
-        "not associate licenses without a version to *-only" {
-            SpdxSimpleLicenseMapper.simpleExpressionMapping.forAll { (key, license) ->
-                if (license.toString().endsWith("-only")) key should containADigit()
-            }
-        }
-    }
-
-    "The simple expression mapping" should {
         "contain only single ID strings" {
-            val ids = SpdxSimpleLicenseMapper.simpleExpressionMapping.keys +
-                SpdxSimpleLicenseMapper.deprecatedExpressionMapping.keys
-
-            ids.forAll { id ->
+            mapping.keys.forAll { id ->
                 val tokens = SpdxExpressionLexer(id).tokens().toList()
 
                 tokens shouldHaveAtLeastSize 1
@@ -76,16 +63,31 @@ class SpdxSimpleLicenseMapperTest : WordSpec({
             }
         }
 
-        "not contain plain SPDX license ids" {
-            SpdxSimpleLicenseMapper.simpleExpressionMapping.keys.forAll { declaredLicense ->
-                SpdxLicense.forId(declaredLicense) should beNull()
+        "not associate licenses without a version to *-only" {
+            SpdxSimpleLicenseMapper.simpleExpressionMapping.forAll { (key, license) ->
+                if (license.toString().endsWith("-only")) key should containADigit()
             }
         }
 
-        "be case-insensitive" {
-            SpdxSimpleLicenseMapper.simpleExpressionMapping.forAll { (key, license) ->
-                SpdxSimpleLicenseMapper.map(key.lowercase()) shouldBe license
-                SpdxSimpleLicenseMapper.map(key.uppercase()) shouldBe license
+        "not contain any duplicate keys with respect to capitalization" {
+            val duplicates = mapping.keys.getDuplicates { it.lowercase() }
+
+            duplicates should beEmpty()
+        }
+    }
+
+    "The simple license mapping" should {
+        "not contain any deprecated values" {
+            SpdxSimpleLicenseMapper.simpleExpressionMapping.values.forAll {
+                SpdxLicense.forId(it.toString()).shouldNotBeNull().deprecated shouldBe false
+            }
+        }
+    }
+
+    "The simple expression mapping" should {
+        "not contain plain SPDX license ids" {
+            SpdxSimpleLicenseMapper.simpleExpressionMapping.keys.forAll { declaredLicense ->
+                SpdxLicense.forId(declaredLicense) should beNull()
             }
         }
     }
