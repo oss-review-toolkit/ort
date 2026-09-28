@@ -29,8 +29,13 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  */
 class SpdxDeclaredLicenseMapper internal constructor(mapping: Map<String, SpdxExpression>) {
     companion object {
-        val MAPPING by lazy { readLicenseMappingResource("/declared-license-mapping.yml") }
-        val AMBIGUOUS_MAPPING by lazy { readLicenseMappingResource("/ambiguous-declared-license-mapping.yml") }
+        val MAPPING: Map<String, SpdxExpression> by lazy {
+            readLicenseMappingResource("/declared-license-mapping.yml")
+        }
+
+        val AMBIGUOUS_MAPPING: Map<String, SpdxExpression> by lazy {
+            readLicenseMappingResource("/ambiguous-declared-license-mapping.yml")
+        }
 
         private var instance = SpdxDeclaredLicenseMapper(AMBIGUOUS_MAPPING + MAPPING)
 
@@ -53,11 +58,4 @@ class SpdxDeclaredLicenseMapper internal constructor(mapping: Map<String, SpdxEx
      * discarded, or null if there is no corresponding expression.
      */
     fun map(license: String) = caseInsensitiveMapping[license] ?: SpdxLicense.forId(license)?.toExpression()
-}
-
-private fun readLicenseMappingResource(name: String): Map<String, SpdxExpression> {
-    val resource = checkNotNull(SpdxDeclaredLicenseMapper::class.java.getResource(name))
-    return resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
-        SpdxExpression.parse(value)
-    }
 }
