@@ -39,8 +39,8 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.Token
 
 class SpdxSimpleLicenseMapperTest : WordSpec({
     "The mapping" should {
-        val mapping = SpdxSimpleLicenseMapper.simpleExpressionMapping +
-            SpdxSimpleLicenseMapper.deprecatedExpressionMapping
+        val mapping = SpdxSimpleLicenseMapper.caseInsensitiveSimpleMapping +
+            SpdxSimpleLicenseMapper.caseInsensitiveDeprecatedMapping
 
         "be case-insensitive" {
             mapping.forAll { (key, license) ->
@@ -78,13 +78,13 @@ class SpdxSimpleLicenseMapperTest : WordSpec({
 
     "The simple mapping" should {
         "not contain any deprecated values" {
-            SpdxSimpleLicenseMapper.simpleExpressionMapping.values.forAll {
+            SpdxSimpleLicenseMapper.caseInsensitiveSimpleMapping.values.forAll {
                 SpdxLicense.forId(it.toString()).shouldNotBeNull().deprecated shouldBe false
             }
         }
 
         "not contain plain SPDX license ids" {
-            SpdxSimpleLicenseMapper.simpleExpressionMapping.keys.forAll { declaredLicense ->
+            SpdxSimpleLicenseMapper.caseInsensitiveSimpleMapping.keys.forAll { declaredLicense ->
                 SpdxLicense.forId(declaredLicense) should beNull()
             }
         }
