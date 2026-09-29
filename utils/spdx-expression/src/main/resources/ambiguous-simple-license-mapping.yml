@@ -1,0 +1,47 @@
+# Copyright (C) 2022 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+# License-Filename: LICENSE
+
+# A mapping from simple license names to valid SPDX license IDs. This mapping only contains license strings which *can*
+# be parsed by [SpdxExpression.parse] but have a corresponding valid SPDX license ID that should be used instead. See
+# [SpdxDeclaredLicenseMapper] for mapping unparsable license strings.
+
+# Sort the entries below via IntelliJ's "Edit" -> "Sort Lines".
+---
+ALv2: Apache-2.0
+ASL: Apache-2.0
+Apache-style: Apache-2.0
+Apache: Apache-2.0
+BSD-like: BSD-3-Clause
+BSD-style: BSD-3-Clause
+BSD: BSD-3-Clause
+GPL: GPL-2.0-or-later
+MPL: MPL-2.0
+afl: AFL-3.0
+agpl: AGPL-3.0-or-later
+apache-license: Apache-2.0
+bsd-license: BSD-3-Clause
+bsd-licensed: BSD-3-Clause
+cddl: CDDL-1.0
+efl: EFL-2.0
+epl: EPL-1.0
+eupl: EUPL-1.0
+fdl: GFDL-1.3-or-later
+gfdl: GFDL-1.3-or-later
+gpl-license: GPL-2.0-or-later
+psf: PSF-2.0
+psfl: PSF-2.0
+python: Python-2.0

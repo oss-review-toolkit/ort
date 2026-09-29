@@ -21,34 +21,6 @@
 
 # Sort the entries below via IntelliJ's "Edit" -> "Sort Lines".
 ---
-
-# Ambiguous mappings (mapping reason not obvious without additional information)
-ALv2: Apache-2.0
-ASL: Apache-2.0
-Apache-style: Apache-2.0
-Apache: Apache-2.0
-BSD-like: BSD-3-Clause
-BSD-style: BSD-3-Clause
-BSD: BSD-3-Clause
-GPL: GPL-2.0-or-later
-MPL: MPL-2.0
-afl: AFL-3.0
-agpl: AGPL-3.0-or-later
-apache-license: Apache-2.0
-bsd-license: BSD-3-Clause
-bsd-licensed: BSD-3-Clause
-cddl: CDDL-1.0
-efl: EFL-2.0
-epl: EPL-1.0
-eupl: EUPL-1.0
-fdl: GFDL-1.3-or-later
-gfdl: GFDL-1.3-or-later
-gpl-license: GPL-2.0-or-later
-psf: PSF-2.0
-psfl: PSF-2.0
-python: Python-2.0
-
-# Non-ambiguous mappings
 AFLv2.1: AFL-2.1
 APACHEv2: Apache-2.0
 APL2: Apache-2.0
