@@ -52,8 +52,8 @@ import org.ossreviewtoolkit.utils.ort.runBlocking
 private const val PROJECT_TYPE = "Pylock"
 
 /** The lockfile name as specified by PEP 751, and the pattern for named lockfiles like `pylock.linux.toml`. */
-private const val LOCKFILE_NAME = "pylock.toml"
-private const val NAMED_LOCKFILE_GLOB = "pylock.*.toml"
+internal const val LOCKFILE_NAME = "pylock.toml"
+internal const val NAMED_LOCKFILE_GLOB = "pylock.*.toml"
 
 private const val PIP_INDEX_URL_ENV = "PIP_INDEX_URL"
 
@@ -76,10 +76,9 @@ data class PylockConfig(
  *
  * Environment markers are not evaluated, so the result contains the packages for all environments of the lockfile.
  *
- * The packages created from a lockfile differ in metadata from those the PIP package manager creates for the same
- * dependencies via Python Inspector, while ORT requires packages with the same identifier to be equal. So the same
- * directory must not be analyzed by both package managers, e.g. by disabling PIP if a `requirements.txt` is kept
- * next to the lockfile.
+ * The other Python package managers skip directories with a lockfile if this package manager is enabled, see
+ * [filterNotManagedByPylock], as ORT requires packages with the same identifier to be equal. This does not cover
+ * different directories of a repository, which is why this package manager is not enabled by default.
  */
 @OrtPlugin(
     displayName = "Pylock",

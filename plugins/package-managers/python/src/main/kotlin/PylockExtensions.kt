@@ -21,16 +21,20 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 
 import dev.eav.tomlkt.TomlTable
 
+import java.io.File
 import java.lang.invoke.MethodHandles
+import java.nio.file.FileSystems
 
 import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PACKAGE_TYPE
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonCoreMetadata
@@ -40,6 +44,32 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /** The name of the scope for packages that are required without a dependency group or extra, as used by PIP. */
 internal const val DEFAULT_SCOPE_NAME = "install"
+
+private val LOCKFILE_MATCHER = FileSystems.getDefault().getPathMatcher("glob:{$LOCKFILE_NAME,$NAMED_LOCKFILE_GLOB}")
+
+/**
+ * Return the definition files whose directory does not contain a PEP 751 lockfile, if Pylock is enabled in
+ * [analyzerConfig]. The other Python package managers use this to yield to Pylock.
+ */
+internal fun List<File>.filterNotManagedByPylock(analyzerConfig: AnalyzerConfiguration): List<File> {
+    val isPylockEnabled = analyzerConfig.determineEnabledPackageManagers().any {
+        it.descriptor.id == PylockFactory.descriptor.id
+    }
+
+    if (!isPylockEnabled) return this
+
+    return filter { definitionFile ->
+        val lockfile = definitionFile.parentFile.listFiles()?.find {
+            it.isFile && LOCKFILE_MATCHER.matches(it.toPath().fileName)
+        }
+
+        if (lockfile != null) {
+            logger.info { "Skipping '$definitionFile' as the lockfile '$lockfile' next to it is analyzed instead." }
+        }
+
+        lockfile == null
+    }
+}
 
 /** Convert this lockfile entry to an ORT package, taking licenses, authors and URLs from the [metadata], if any. */
 internal fun PylockFile.Package.toOrtPackage(metadata: PythonCoreMetadata?): Package {
