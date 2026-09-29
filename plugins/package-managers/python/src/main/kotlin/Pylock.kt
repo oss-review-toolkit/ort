@@ -54,8 +54,8 @@ private const val PROJECT_TYPE = "Pylock"
  * The name of the lockfile as specified by PEP 751, and the pattern for lockfiles that are specific to a purpose or
  * environment, like `pylock.linux.toml`.
  */
-private const val LOCKFILE_NAME = "pylock.toml"
-private const val NAMED_LOCKFILE_GLOB = "pylock.*.toml"
+internal const val LOCKFILE_NAME = "pylock.toml"
+internal const val NAMED_LOCKFILE_GLOB = "pylock.*.toml"
 
 /** The environment variable pip uses to configure the package index. */
 private const val PIP_INDEX_URL_ENV = "PIP_INDEX_URL"
@@ -73,19 +73,18 @@ data class PylockConfig(
 )
 
 /**
- * A package manager for Python that reads a committed lockfile in the format specified by
+ * A package manager for Python that reads a committed lockfile as specified by
  * [PEP 751](https://peps.python.org/pep-0751/), which pip, uv, PDM and Poetry can write. The lockfile provides the
- * names, versions, distribution files and thus purls of the packages, while the metadata that a lockfile does not
- * contain, like licenses, is retrieved from the package index. Nothing is resolved, downloaded or installed, and no
- * dependency relationships are inferred: Only relationships that the lockfile itself declares are published.
+ * names, versions and distribution files of the packages, while metadata like licenses is retrieved from the package
+ * index. No packages are resolved, downloaded or installed, and only the dependency relationships declared in the
+ * lockfile are published.
  *
- * As environment markers are not evaluated, the result contains the union of the packages for all environments the
- * lockfile supports. Use a lockfile that was created for a single environment to get the packages for that one.
+ * Environment markers are not evaluated, so the result contains the packages for all environments the lockfile
+ * supports. Use a lockfile created for a single environment to get only the packages for that one.
  *
- * The packages created from a lockfile differ in metadata from those the PIP package manager creates for the same
- * dependencies via Python Inspector, while ORT requires packages with the same identifier to be equal. So the same
- * directory must not be analyzed by both package managers, e.g. by disabling PIP if a `requirements.txt` is kept
- * next to the lockfile.
+ * The packages created from a lockfile differ in metadata from those the other Python package managers create via
+ * Python Inspector, while ORT requires packages with the same identifier to be equal. So the other Python package
+ * managers skip directories with a lockfile if this package manager is enabled, see [filterNotManagedByPylock].
  */
 @OrtPlugin(
     displayName = "Pylock",

@@ -82,6 +82,12 @@ class Poetry(
     // looking at the lockfile.
     override val globsForDefinitionFiles = listOf("poetry.lock")
 
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) = definitionFiles.filterNotManagedByPylock(analyzerConfig)
+
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,

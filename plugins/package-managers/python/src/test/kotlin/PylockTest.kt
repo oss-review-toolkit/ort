@@ -229,4 +229,50 @@ class PylockTest : WordSpec({
             }
         }
     }
+
+    "filterNotManagedByPylock()" should {
+        "drop definition files next to a PEP 751 lockfile if Pylock is enabled" {
+            val dir = tempdir()
+            val requirements = (dir / "requirements.txt").apply { writeText("attrs\n") }
+            val nestedRequirements = (dir / "nested" / "requirements.txt").apply {
+                parentFile.mkdirs()
+                writeText("attrs\n")
+            }
+
+            writeLockfile(dir, "pylock.linux.toml")
+
+            val config = AnalyzerConfiguration(enabledPackageManagers = listOf("PIP", "Pylock"))
+
+            listOf(requirements, nestedRequirements).filterNotManagedByPylock(config) should
+                containExactly(nestedRequirements)
+        }
+
+        "keep all definition files if Pylock is disabled" {
+            val dir = tempdir()
+            val requirements = (dir / "requirements.txt").apply { writeText("attrs\n") }
+
+            writeLockfile(dir)
+
+            val config = AnalyzerConfiguration(enabledPackageManagers = listOf("PIP"))
+
+            listOf(requirements).filterNotManagedByPylock(config) should containExactly(requirements)
+        }
+    }
+
+    "The other Python package managers" should {
+        "yield to Pylock for a directory with a PEP 751 lockfile" {
+            val dir = tempdir()
+            val definitionFiles = listOf("requirements.txt", "Pipfile.lock", "poetry.lock").map { name ->
+                (dir / name).apply { writeText("") }
+            }
+
+            writeLockfile(dir)
+
+            val config = AnalyzerConfiguration(enabledPackageManagers = listOf("PIP", "Pipenv", "Poetry", "Pylock"))
+
+            listOf(PipFactory.create(), PipenvFactory.create(), PoetryFactory.create()).forEach { packageManager ->
+                packageManager.mapDefinitionFiles(dir, definitionFiles, config) should beEmpty()
+            }
+        }
+    }
 })

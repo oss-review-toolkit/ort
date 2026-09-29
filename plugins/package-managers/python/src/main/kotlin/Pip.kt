@@ -95,6 +95,12 @@ class Pip internal constructor(
 
     override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
 
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) = definitionFiles.filterNotManagedByPylock(analyzerConfig)
+
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
