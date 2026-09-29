@@ -587,7 +587,7 @@ class SpdxLicenseIdExpression(
 
     override fun exception(): String? = null
 
-    override fun normalize() = SpdxSimpleLicenseMapper.map(toString()) ?: this
+    override fun normalize() = SpdxSimpleLicenseMapper.getInstance().map(toString()) ?: this
 
     override fun validate(strictness: Strictness) {
         val isValid = SpdxConstants.isNotPresent(id) || when (strictness) {

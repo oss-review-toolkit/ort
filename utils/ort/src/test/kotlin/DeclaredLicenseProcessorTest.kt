@@ -47,8 +47,8 @@ class DeclaredLicenseProcessorTest : StringSpec() {
      * A collection of declared license strings found in open source packages.
      */
     private val declaredLicenses = SpdxDeclaredLicenseMapper.MAPPING.keys +
-        SpdxSimpleLicenseMapper.caseInsensitiveSimpleMapping.keys +
-        SpdxSimpleLicenseMapper.caseInsensitiveDeprecatedMapping.keys
+        SpdxSimpleLicenseMapper.SIMPLE_MAPPING.keys +
+        SpdxSimpleLicenseMapper.DEPRECATED_MAPPING.keys
 
     init {
         "Declared licenses can be processed" {
@@ -99,7 +99,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
                 val strippedLicense = DeclaredLicenseProcessor.stripUrlSurroundings(license)
 
                 withClue("Stripping '$license' to '$strippedLicense' makes the mapping to '$expression' redundant") {
-                    SpdxSimpleLicenseMapper.map(strippedLicense) should beNull()
+                    SpdxSimpleLicenseMapper.getInstance().map(strippedLicense) should beNull()
                 }
             }
         }
