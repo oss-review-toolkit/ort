@@ -77,9 +77,8 @@ data class OrtConfiguration(
     val enableRepositoryPackageCurations: Boolean = false,
 
     /**
-     * Enable the usage of risky license mappings. If set to false, risky declared license mappings won't be applied.
-     * Note that this does not yet, but will be enhanced to disable all ambiguous mappings including the simple license
-     * mappings.
+     * Enable the usage of risky license mappings. If set to false, risky declared and simple license mappings won't be
+     * applied.
      */
     val enableRiskyLicenseMappings: Boolean = true,
 
