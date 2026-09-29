@@ -76,15 +76,13 @@ class SpdxSimpleLicenseMapperTest : WordSpec({
         }
     }
 
-    "The simple license mapping" should {
+    "The simple mapping" should {
         "not contain any deprecated values" {
             SpdxSimpleLicenseMapper.simpleExpressionMapping.values.forAll {
                 SpdxLicense.forId(it.toString()).shouldNotBeNull().deprecated shouldBe false
             }
         }
-    }
 
-    "The simple expression mapping" should {
         "not contain plain SPDX license ids" {
             SpdxSimpleLicenseMapper.simpleExpressionMapping.keys.forAll { declaredLicense ->
                 SpdxLicense.forId(declaredLicense) should beNull()
