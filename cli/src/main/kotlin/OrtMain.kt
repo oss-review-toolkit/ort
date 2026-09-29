@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapper
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleLicenseMapper
 
 import org.slf4j.LoggerFactory
 
@@ -164,6 +165,17 @@ class OrtMain : CliktCommand(ORT_NAME) {
                 }
 
                 putAll(SpdxDeclaredLicenseMapper.MAPPING)
+            }
+        )
+
+        SpdxSimpleLicenseMapper.configure(
+            buildMap {
+                if (ortConfig.enableRiskyLicenseMappings) {
+                    putAll(SpdxSimpleLicenseMapper.AMBIGUOUS_SIMPLE_MAPPING)
+                }
+
+                putAll(SpdxSimpleLicenseMapper.SIMPLE_MAPPING)
+                putAll(SpdxSimpleLicenseMapper.DEPRECATED_MAPPING)
             }
         )
 
