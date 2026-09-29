@@ -32,11 +32,15 @@ class SpdxSimpleLicenseMapper(mapping: Map<String, SpdxSingleLicenseExpression>)
             readLicenseMappingResource("/simple-license-mapping.yml")
         }
 
+        val AMBIGUOUS_SIMPLE_MAPPING: Map<String, SpdxSingleLicenseExpression> by lazy {
+            readLicenseMappingResource("/ambiguous-simple-license-mapping.yml")
+        }
+
         val DEPRECATED_MAPPING: Map<String, SpdxSingleLicenseExpression> by lazy {
             readLicenseMappingResource("/deprecated-license-mapping.yml")
         }
 
-        private var instance = SpdxSimpleLicenseMapper(SIMPLE_MAPPING + DEPRECATED_MAPPING)
+        private var instance = SpdxSimpleLicenseMapper(AMBIGUOUS_SIMPLE_MAPPING + SIMPLE_MAPPING + DEPRECATED_MAPPING)
 
         @Synchronized
         fun configure(mapping: Map<String, SpdxSingleLicenseExpression>) {
