@@ -64,7 +64,7 @@ class SpdxSimpleLicenseMapperTest : WordSpec({
         }
 
         "not associate licenses without a version to *-only" {
-            SpdxSimpleLicenseMapper.simpleExpressionMapping.forAll { (key, license) ->
+            mapping.forAll { (key, license) ->
                 if (license.toString().endsWith("-only")) key should containADigit()
             }
         }
