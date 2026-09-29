@@ -26,22 +26,33 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  * *can* be parsed by [SpdxExpression.parse] but have a corresponding valid SPDX license ID that should be used instead.
  * See [SpdxDeclaredLicenseMapper] for mapping unparsable license strings.
  */
-object SpdxSimpleLicenseMapper {
-    /**
-     * The map of simple license names associated with their corresponding [SPDX expression][SpdxLicenseIdExpression].
-     */
-    val caseInsensitiveSimpleMapping: Map<String, SpdxSimpleExpression> by lazy {
-        readLicenseMappingResource<SpdxSimpleExpression>("/simple-license-mapping.yml")
-            .toSortedMap(String.CASE_INSENSITIVE_ORDER)
+class SpdxSimpleLicenseMapper(mapping: Map<String, SpdxSingleLicenseExpression>) {
+    companion object {
+        val SIMPLE_MAPPING: Map<String, SpdxSingleLicenseExpression> by lazy {
+            readLicenseMappingResource("/simple-license-mapping.yml")
+        }
+
+        val DEPRECATED_MAPPING: Map<String, SpdxSingleLicenseExpression> by lazy {
+            readLicenseMappingResource("/deprecated-license-mapping.yml")
+        }
+
+        private var instance = SpdxSimpleLicenseMapper(SIMPLE_MAPPING + DEPRECATED_MAPPING)
+
+        @Synchronized
+        fun configure(mapping: Map<String, SpdxSingleLicenseExpression>) {
+            instance = SpdxSimpleLicenseMapper(mapping)
+        }
+
+        @Synchronized
+        fun getInstance() = instance
     }
 
     /**
-     * The map of deprecated SPDX license IDs associated with their current [SPDX expression]
-     * [SpdxSingleLicenseExpression].
+     * The map of simple license names or deprecated SPDX license IDs associated with their corresponding
+     * [SPDX expression][SpdxLicenseIdExpression].
      */
-    val caseInsensitiveDeprecatedMapping: Map<String, SpdxSingleLicenseExpression> by lazy {
-        readLicenseMappingResource<SpdxSingleLicenseExpression>("/deprecated-license-mapping.yml")
-            .toSortedMap(String.CASE_INSENSITIVE_ORDER)
+    private val caseInsensitiveMapping: Map<String, SpdxSingleLicenseExpression> by lazy {
+        mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
     }
 
     /**
@@ -50,8 +61,7 @@ object SpdxSimpleLicenseMapper {
      * Licenses that are commonly known abbreviations or aliases are mapped to their corresponding official expression.
      */
     fun map(license: String): SpdxSingleLicenseExpression? {
-        caseInsensitiveDeprecatedMapping[license]?.also { return it }
-        caseInsensitiveSimpleMapping[license]?.also { return it }
+        caseInsensitiveMapping[license]?.also { return it }
         return SpdxLicense.forId(license)?.toExpression()
     }
 }
