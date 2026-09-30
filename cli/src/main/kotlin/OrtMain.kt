@@ -158,26 +158,8 @@ class OrtMain : CliktCommand(ORT_NAME) {
         val ortConfig = OrtConfiguration.load(args = configArguments, file = configFile)
         currentContext.findOrSetObject { ortConfig }
 
-        SpdxDeclaredLicenseMapper.configure(
-            buildMap {
-                if (ortConfig.enableRiskyLicenseMappings) {
-                    putAll(SpdxDeclaredLicenseMapper.AMBIGUOUS_MAPPING)
-                }
-
-                putAll(SpdxDeclaredLicenseMapper.MAPPING)
-            }
-        )
-
-        SpdxSimpleLicenseMapper.configure(
-            buildMap {
-                if (ortConfig.enableRiskyLicenseMappings) {
-                    putAll(SpdxSimpleLicenseMapper.AMBIGUOUS_SIMPLE_MAPPING)
-                }
-
-                putAll(SpdxSimpleLicenseMapper.SIMPLE_MAPPING)
-                putAll(SpdxSimpleLicenseMapper.DEPRECATED_MAPPING)
-            }
-        )
+        configureDeclaredLicenseMapper(ortConfig)
+        configureSimpleLicenseMapper(ortConfig)
 
         LicenseFilePatterns.configure(ortConfig.licenseFilePatterns)
 
@@ -242,4 +224,29 @@ class OrtMain : CliktCommand(ORT_NAME) {
                 cell(content.joinToString("\n")) { columnSpan = 2 }
             }
         }
+}
+
+private fun configureDeclaredLicenseMapper(ortConfig: OrtConfiguration) {
+    SpdxDeclaredLicenseMapper.configure(
+        buildMap {
+            if (ortConfig.enableRiskyLicenseMappings) {
+                putAll(SpdxDeclaredLicenseMapper.AMBIGUOUS_MAPPING)
+            }
+
+            putAll(SpdxDeclaredLicenseMapper.MAPPING)
+        }
+    )
+}
+
+private fun configureSimpleLicenseMapper(ortConfig: OrtConfiguration) {
+    SpdxSimpleLicenseMapper.configure(
+        buildMap {
+            if (ortConfig.enableRiskyLicenseMappings) {
+                putAll(SpdxSimpleLicenseMapper.AMBIGUOUS_SIMPLE_MAPPING)
+            }
+
+            putAll(SpdxSimpleLicenseMapper.SIMPLE_MAPPING)
+            putAll(SpdxSimpleLicenseMapper.DEPRECATED_MAPPING)
+        }
+    )
 }
