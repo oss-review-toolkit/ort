@@ -70,6 +70,11 @@ const val ORT_REFERENCE_CONFIG_FILENAME = "reference.yml"
 const val ORT_COPYRIGHT_GARBAGE_FILENAME = "copyright-garbage.yml"
 
 /**
+ * The name of the ORT declared license mapping file.
+ */
+const val ORT_DECLARED_LICENSE_MAPPING_FILENAME = "declared-license-mapping.yml"
+
+/**
  * The name of the ORT package curations directory.
  */
 const val ORT_PACKAGE_CURATIONS_DIRNAME = "curations"

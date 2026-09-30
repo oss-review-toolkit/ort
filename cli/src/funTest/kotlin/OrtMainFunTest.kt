@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapper
 
 /**
  * A test for the main entry point of the application.
@@ -219,6 +220,24 @@ class OrtMainFunTest : StringSpec() {
 
             EnvironmentVariableFilter.isAllowed("PASSPORT") shouldBe true
             EnvironmentVariableFilter.isAllowed("DB_PASS") shouldBe false
+        }
+
+        "The SpdxDeclaredLicenseMapper is correctly initialized with the custom mapping" {
+            val mappingFile = tempfile(suffix = "declared-license-mapping.yml").apply {
+                writeText(
+                    """
+                        "some license": LicenseRef-some-license
+                    """.trimIndent()
+                )
+            }
+
+            OrtMain().test(
+                "-c", configFile.path,
+                "-P", "ort.declaredLicenseMappingFile=${mappingFile.absolutePath}"
+            )
+
+            SpdxDeclaredLicenseMapper.getInstance().map("some license").toString() shouldBe
+                "LicenseRef-some-license"
         }
     }
 }

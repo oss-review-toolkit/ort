@@ -95,6 +95,9 @@
                 }
             }
         },
+        "declaredLicenseMappingFile": {
+            "type": "string"
+        },
         "LicenseFilePatterns": {
             "type": "object",
             "additionalProperties": false,

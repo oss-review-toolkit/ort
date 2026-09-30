@@ -55,6 +55,8 @@ ort:
     options:
       licenseDataDir: '/path/to/scancode/license/data/dir'
 
+  declaredLicenseMappingFile: '/path/to/declared-license-mapping.yml'
+
   licenseFilePatterns:
     licenseFilenames: ['LICENSE*']
     noticeFilenames: ['NOTICE*']
