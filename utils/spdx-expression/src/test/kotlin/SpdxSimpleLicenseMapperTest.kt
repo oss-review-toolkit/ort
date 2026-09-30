@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.spdxexpression
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveAtMostSize
 import io.kotest.matchers.maps.beEmpty
@@ -31,6 +32,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.types.beOfType
 
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionLexer
@@ -91,6 +93,21 @@ class SpdxSimpleLicenseMapperTest : WordSpec({
             simpleMapping.keys.forAll { declaredLicense ->
                 SpdxLicense.forId(declaredLicense) should beNull()
             }
+        }
+    }
+
+    "The deprecated mapping" should {
+        "contain exactly the set of deprecated SPDX licenses on the currently used SPDX license list" {
+            val licensesInMapping = SpdxSimpleLicenseMapper.DEPRECATED_MAPPING.keys
+                .mapNotNullTo(enumSetOf()) { SpdxLicense.forId(it) }
+
+            val deprecatedLicenses = SpdxLicense.entries.filterTo(enumSetOf()) { it.deprecated }.apply {
+                // FIXME: This shows that Net-SNMP is missing in deprecated license mapping, see also
+                //        https://github.com/oss-review-toolkit/ort/issues/12542.
+                remove(SpdxLicense.forId("Net-SNMP"))
+            }
+
+            licensesInMapping shouldContainExactlyInAnyOrder deprecatedLicenses
         }
     }
 })
