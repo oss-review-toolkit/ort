@@ -116,11 +116,18 @@ private fun String.parseYamlKeyValueLines(): Map<String, String> =
         }
 
 /**
+ * Parse a YAML string which contains a top-level sequence of key-value pairs into a map with SPDX expressions of the
+ * given type.
+ */
+internal inline fun <reified T : SpdxExpression> String.parseLicenseMapping(): Map<String, T> =
+    parseYamlKeyValueLines().mapValues { (_, value) ->
+        SpdxExpression.parse(value) as T
+    }
+
+/**
  * Read a license mapping from the resource with the given [name].
  */
 internal inline fun <reified T : SpdxExpression> readLicenseMappingResource(name: String): Map<String, T> {
     val resource = checkNotNull(object {}.javaClass.getResource(name))
-    return resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
-        SpdxExpression.parse(value) as T
-    }
+    return resource.readText().parseLicenseMapping()
 }
