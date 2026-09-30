@@ -105,7 +105,7 @@ fun String.toSpdxOrNull(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpr
 /**
  * Parse a YAML string which contains a top-level sequence of key-value pairs.
  */
-internal fun String.parseYamlKeyValueLines(): Map<String, String> =
+private fun String.parseYamlKeyValueLines(): Map<String, String> =
     lineSequence()
         .map { it.trim() }
         .filterNot { it.isEmpty() || it.startsWith('#') || it == "---" || ':' !in it }
