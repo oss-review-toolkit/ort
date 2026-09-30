@@ -25,6 +25,7 @@ import ch.qos.logback.classic.Logger
 import com.github.ajalt.clikt.completion.completionOption
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.Context
+import com.github.ajalt.clikt.core.PrintMessage
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.core.subcommands
@@ -46,6 +47,8 @@ import com.github.ajalt.mordant.table.ColumnWidth
 import com.github.ajalt.mordant.table.grid
 import com.github.ajalt.mordant.terminal.Terminal
 
+import java.io.File
+
 import kotlin.system.exitProcess
 
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
@@ -61,6 +64,7 @@ import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_DECLARED_LICENSE_MAPPING_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -227,6 +231,11 @@ class OrtMain : CliktCommand(ORT_NAME) {
 }
 
 private fun configureDeclaredLicenseMapper(ortConfig: OrtConfiguration) {
+    val customMappingFile = ortConfig.declaredLicenseMappingFile?.let { File(it) }
+        ?: ortConfigDirectory.resolve(ORT_DECLARED_LICENSE_MAPPING_FILENAME).takeIf { it.isFile }
+
+    val customMapping = customMappingFile?.readDeclaredLicenseMapping()
+
     SpdxDeclaredLicenseMapper.configure(
         buildMap {
             if (ortConfig.enableRiskyLicenseMappings) {
@@ -234,9 +243,24 @@ private fun configureDeclaredLicenseMapper(ortConfig: OrtConfiguration) {
             }
 
             putAll(SpdxDeclaredLicenseMapper.MAPPING)
+
+            // Put the custom mapping last to allow the user to override built-in entries.
+            if (customMapping != null) {
+                putAll(customMapping)
+            }
         }
     )
 }
+
+private fun File.readDeclaredLicenseMapping() =
+    runCatching {
+        SpdxDeclaredLicenseMapper.readMapping(this)
+    }.getOrElse { e ->
+        throw PrintMessage(
+            message = "Could not read the declared license mapping from '$absolutePath': ${e.stackTraceToString()}.",
+            statusCode = 1
+        )
+    }
 
 private fun configureSimpleLicenseMapper(ortConfig: OrtConfiguration) {
     SpdxSimpleLicenseMapper.configure(
