@@ -119,7 +119,7 @@ internal fun String.parseYamlKeyValueLines(): Map<String, String> =
  * Read a license mapping from the resource with the given [name].
  */
 internal inline fun <reified T : SpdxExpression> readLicenseMappingResource(name: String): Map<String, T> {
-    val resource = checkNotNull(SpdxDeclaredLicenseMapper::class.java.getResource(name))
+    val resource = checkNotNull(object {}.javaClass.getResource(name))
     return resource.readText().parseYamlKeyValueLines().mapValues { (_, value) ->
         SpdxExpression.parse(value) as T
     }
