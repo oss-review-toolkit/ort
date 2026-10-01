@@ -75,6 +75,11 @@ const val ORT_COPYRIGHT_GARBAGE_FILENAME = "copyright-garbage.yml"
 const val ORT_DECLARED_LICENSE_MAPPING_FILENAME = "declared-license-mapping.yml"
 
 /**
+ * The name of the ORT simple license mapping file.
+ */
+const val ORT_SIMPLE_LICENSE_MAPPING_FILENAME = "simple-license-mapping.yml"
+
+/**
  * The name of the ORT package curations directory.
  */
 const val ORT_PACKAGE_CURATIONS_DIRNAME = "curations"

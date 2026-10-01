@@ -98,6 +98,9 @@
         "declaredLicenseMappingFile": {
             "type": "string"
         },
+        "simpleLicenseMappingFile": {
+            "type": "string"
+        },
         "LicenseFilePatterns": {
             "type": "object",
             "additionalProperties": false,

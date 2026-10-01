@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapper
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleLicenseMapper
 
 /**
  * A test for the main entry point of the application.
@@ -237,6 +238,24 @@ class OrtMainFunTest : StringSpec() {
             )
 
             SpdxDeclaredLicenseMapper.getInstance().map("some license").toString() shouldBe
+                "LicenseRef-some-license"
+        }
+
+        "The SpdxSimpleLicenseMapper is correctly initialized with the custom mapping" {
+            val mappingFile = tempfile(suffix = "simple-license-mapping.yml").apply {
+                writeText(
+                    """
+                        "some license": LicenseRef-some-license
+                    """.trimIndent()
+                )
+            }
+
+            OrtMain().test(
+                "-c", configFile.path,
+                "-P", "ort.simpleLicenseMappingFile=${mappingFile.absolutePath}"
+            )
+
+            SpdxSimpleLicenseMapper.getInstance().map("some license").toString() shouldBe
                 "LicenseRef-some-license"
         }
     }
