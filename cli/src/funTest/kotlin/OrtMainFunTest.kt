@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
-import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 
 /**
  * A test for the main entry point of the application.
@@ -212,11 +211,10 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "EnvironmentVariableFilter is correctly initialized" {
-            val referenceConfigFile = File("../model/src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME").absolutePath
-
             OrtMain().test(
-                "-c", referenceConfigFile,
-                "config"
+                "-c", configFile.path,
+                "-P", "ort.allowedProcessEnvironmentVariableNames=PASSPORT",
+                "-P", "ort.deniedProcessEnvironmentVariablesSubstrings=DB_PASS"
             )
 
             EnvironmentVariableFilter.isAllowed("PASSPORT") shouldBe true
