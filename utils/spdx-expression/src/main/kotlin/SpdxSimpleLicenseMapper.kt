@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.spdxexpression
 
+import java.io.File
+
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 /**
@@ -49,6 +51,8 @@ class SpdxSimpleLicenseMapper(mapping: Map<String, SpdxSingleLicenseExpression>)
 
         @Synchronized
         fun getInstance() = instance
+
+        fun readMapping(file: File) = file.readText().parseLicenseMapping<SpdxSingleLicenseExpression>()
     }
 
     /**

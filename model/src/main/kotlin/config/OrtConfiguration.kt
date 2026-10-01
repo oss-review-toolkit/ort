@@ -105,6 +105,12 @@ data class OrtConfiguration(
     val declaredLicenseMappingFile: String? = null,
 
     /**
+     * A file containing an additional simple license mapping, which is applied in addition to the built-in one. This
+     * mapping can override entries of the built-in mapping.
+     */
+    val simpleLicenseMappingFile: String? = null,
+
+    /**
      * The license file patterns.
      */
     val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT,

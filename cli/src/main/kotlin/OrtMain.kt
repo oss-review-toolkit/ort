@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_DECLARED_LICENSE_MAPPING_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
+import org.ossreviewtoolkit.utils.ort.ORT_SIMPLE_LICENSE_MAPPING_FILENAME
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
@@ -263,6 +264,11 @@ private fun File.readDeclaredLicenseMapping() =
     }
 
 private fun configureSimpleLicenseMapper(ortConfig: OrtConfiguration) {
+    val customMappingFile = ortConfig.simpleLicenseMappingFile?.let { File(it) }
+        ?: ortConfigDirectory.resolve(ORT_SIMPLE_LICENSE_MAPPING_FILENAME).takeIf { it.isFile }
+
+    val customMapping = customMappingFile?.readSimpleLicenseMapping()
+
     SpdxSimpleLicenseMapper.configure(
         buildMap {
             if (ortConfig.enableRiskyLicenseMappings) {
@@ -271,6 +277,20 @@ private fun configureSimpleLicenseMapper(ortConfig: OrtConfiguration) {
 
             putAll(SpdxSimpleLicenseMapper.SIMPLE_MAPPING)
             putAll(SpdxSimpleLicenseMapper.DEPRECATED_MAPPING)
+
+            if (customMapping != null) {
+                putAll(customMapping)
+            }
         }
     )
 }
+
+private fun File.readSimpleLicenseMapping() =
+    runCatching {
+        SpdxSimpleLicenseMapper.readMapping(this)
+    }.getOrElse { e ->
+        throw PrintMessage(
+            message = "Could not read the simple license mapping from '$absolutePath': ${e.stackTraceToString()}.",
+            statusCode = 1
+        )
+    }
