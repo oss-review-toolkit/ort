@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.clients.clearlydefined
 
 import java.io.IOException
+import java.net.HttpURLConnection
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -380,7 +381,7 @@ private suspend fun <K, V> Result<Map<K, V>>.foldChunk(chunk: List<K>, block: su
  */
 private fun <T> Result<T>.unwrapHttpException() =
     recoverCatching { e ->
-        if (e is HttpException) {
+        if (e is HttpException && e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
             val errorMessage = buildString {
                 append("The ClearlyDefined service call failed")
 
