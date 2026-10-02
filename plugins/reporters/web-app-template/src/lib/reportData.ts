@@ -24,6 +24,10 @@ import type { EvaluatedModel } from "@/types/evaluatedModelData";
  * runs incrementally rather than allocating the whole decompressed buffer up front. Both `atob` and
  * `DecompressionStream` exist on the main thread and inside a Web Worker, so this helper is shared by
  * the worker and the main-thread fallback.
+ *
+ * The compressed bytes are fed in from a `ReadableStream` of this function's own making. Do not feed
+ * them in from a `Blob` instead: reading one inside a Web Worker fails in Safari with "The I/O read
+ * operation failed", whatever the size of the payload, which left every report unreadable there.
  */
 export async function decodeBase64Gzip(b64: string): Promise<string> {
     const binaryString = atob(b64);
@@ -32,8 +36,24 @@ export async function decodeBase64Gzip(b64: string): Promise<string> {
         bytes[i] = binaryString.charCodeAt(i);
     }
 
-    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
-    return await new Response(stream).text();
+    const compressed = new ReadableStream<BufferSource>({
+        start(controller) {
+            controller.enqueue(bytes);
+            controller.close();
+        },
+    });
+
+    const reader = compressed.pipeThrough(new DecompressionStream("gzip")).getReader();
+    const decoder = new TextDecoder();
+    let json = "";
+
+    for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        json += decoder.decode(value, { stream: true });
+    }
+
+    return json + decoder.decode();
 }
 
 /**
