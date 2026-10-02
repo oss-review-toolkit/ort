@@ -32,8 +32,24 @@ export async function decodeBase64Gzip(b64: string): Promise<string> {
         bytes[i] = binaryString.charCodeAt(i);
     }
 
-    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
-    return await new Response(stream).text();
+    const compressed = new ReadableStream<BufferSource>({
+        start(controller) {
+            controller.enqueue(bytes);
+            controller.close();
+        },
+    });
+
+    const reader = compressed.pipeThrough(new DecompressionStream("gzip")).getReader();
+    const decoder = new TextDecoder();
+    let json = "";
+
+    for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        json += decoder.decode(value, { stream: true });
+    }
+
+    return json + decoder.decode();
 }
 
 /**
