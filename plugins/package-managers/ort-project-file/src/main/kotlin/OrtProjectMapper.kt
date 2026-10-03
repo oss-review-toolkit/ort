@@ -81,7 +81,8 @@ private fun Dependency.toPackage(): Package =
         authors = authors,
         labels = labels,
         isModified = isModified ?: false,
-        isMetadataOnly = isMetadataOnly ?: false
+        isMetadataOnly = isMetadataOnly ?: false,
+        sourceCodeOrigins = if (sourceArtifact == null && vcs == null) emptyList() else null
     )
 
 private fun Vcs.toVcsInfo(): VcsInfo =
