@@ -339,6 +339,38 @@ class ScannerTest : WordSpec({
             }
         }
 
+        "pass checkout paths without a trailing '/' for a project below the analysis root" {
+            val project = Package.new(name = "project").withValidVcs()
+            val subRepositoryProvenance = RepositoryProvenance(
+                VcsInfo.valid().copy(url = "https://github.com/oss-review-toolkit/sub.git"),
+                "resolvedRevision"
+            )
+
+            val nestedProvenanceResolver = spyk(FakeNestedProvenanceResolver()) {
+                coEvery { resolveNestedProvenance(project.repositoryProvenance()) } returns
+                    NestedProvenance(project.repositoryProvenance(), mapOf("sub" to subRepositoryProvenance))
+            }
+
+            val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
+            val scanner = createScanner(
+                nestedProvenanceResolver = nestedProvenanceResolver,
+                projectScannerWrappers = listOf(scannerWrapper)
+            )
+
+            scanner.scan(setOf(project), createContext(type = PackageType.PROJECT), mapOf(project.id to "nested"))
+
+            verify(exactly = 1) {
+                scannerWrapper.scanProvenance(
+                    project.repositoryProvenance(),
+                    match { it.checkoutPaths == setOf("nested") }
+                )
+                scannerWrapper.scanProvenance(
+                    subRepositoryProvenance,
+                    match { it.checkoutPaths == setOf("nested/sub") }
+                )
+            }
+        }
+
         "not try to download the source code" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val pkgWithVcs = Package.new(name = "repository").withValidVcs()

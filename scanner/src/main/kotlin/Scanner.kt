@@ -941,13 +941,14 @@ private fun ScanController.getCheckoutPathsForProvenance(
 
         val provenanceCheckoutPath = projectDirRelativeToAnalysisRoot
             .removeSuffix(pkg.vcsProcessed.path)
-            .ensureSuffix("/")
+            .removeSuffix("/")
 
         result.getOrPut(projectProvenance) { mutableSetOf() } += provenanceCheckoutPath
 
         val projectNestedProvenance = getNestedProvenance(pkg.id) ?: return@forEach
         projectNestedProvenance.subRepositories.forEach { (path, submoduleProvenance) ->
-            result.getOrPut(submoduleProvenance) { mutableSetOf() } += "$provenanceCheckoutPath$path"
+            result.getOrPut(submoduleProvenance) { mutableSetOf() } +=
+                "${provenanceCheckoutPath.ensureSuffix("/")}$path"
         }
     }
 
