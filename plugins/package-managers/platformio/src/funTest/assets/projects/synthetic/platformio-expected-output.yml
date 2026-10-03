@@ -1,0 +1,300 @@
+---
+project:
+  id: "PlatformIO::platformio.ini:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "uno"
+    dependencies:
+    - id: "PlatformIO::fmt:10.2.1"
+      linkage: "STATIC"
+    - id: "PlatformIO:adafruit:Adafruit SSD1306:2.5.17"
+      linkage: "STATIC"
+      dependencies:
+      - id: "PlatformIO:adafruit:Adafruit GFX Library:1.12.6"
+        linkage: "STATIC"
+        dependencies:
+        - id: "PlatformIO:adafruit:Adafruit BusIO:1.17.4"
+          linkage: "STATIC"
+    - id: "PlatformIO:bblanchon:ArduinoJson:6.21.6"
+      linkage: "STATIC"
+    - id: "PlatformIO:platformio:atmelavr:5.3.0"
+      linkage: "STATIC"
+      dependencies:
+      - id: "PlatformIO:platformio:framework-arduino-avr:5.4.0"
+        linkage: "STATIC"
+      - id: "PlatformIO:platformio:tool-scons:4.40801.0"
+        linkage: "STATIC"
+      - id: "PlatformIO:platformio:toolchain-atmelavr:1.70300.191015"
+        linkage: "STATIC"
+packages:
+- id: "PlatformIO::fmt:10.2.1"
+  purl: "pkg:platformio/fmt@10.2.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A modern formatting library"
+  homepage_url: "https://fmt.dev"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/fmtlib/fmt.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fmtlib/fmt.git"
+    revision: ""
+    path: ""
+- id: "PlatformIO:adafruit:Adafruit BusIO:1.17.4"
+  purl: "pkg:platformio/adafruit/Adafruit%20BusIO@1.17.4"
+  authors:
+  - "Adafruit"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "This is a library for abstracting away UART, I2C and SPI interfacing"
+  homepage_url: "https://github.com/adafruit/Adafruit_BusIO"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/adafruit/Adafruit_BusIO"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/adafruit/Adafruit_BusIO.git"
+    revision: ""
+    path: ""
+- id: "PlatformIO:adafruit:Adafruit GFX Library:1.12.6"
+  purl: "pkg:platformio/adafruit/Adafruit%20GFX%20Library@1.12.6"
+  authors:
+  - "Adafruit"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Install this library in addition to the display library for your hardware."
+  homepage_url: "https://github.com/adafruit/Adafruit-GFX-Library"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/adafruit/Adafruit-GFX-Library"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/adafruit/Adafruit-GFX-Library.git"
+    revision: ""
+    path: ""
+- id: "PlatformIO:adafruit:Adafruit SSD1306:2.5.17"
+  purl: "pkg:platformio/adafruit/Adafruit%20SSD1306@2.5.17"
+  authors:
+  - "Adafruit"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "SSD1306 oled driver library for monochrome 128x64 and 128x32 displays"
+  homepage_url: "https://github.com/adafruit/Adafruit_SSD1306"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/adafruit/Adafruit_SSD1306"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/adafruit/Adafruit_SSD1306.git"
+    revision: ""
+    path: ""
+- id: "PlatformIO:bblanchon:ArduinoJson:6.21.6"
+  purl: "pkg:platformio/bblanchon/ArduinoJson@6.21.6"
+  authors:
+  - "Benoit Blanchon"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "A simple and efficient JSON library for embedded C++. ArduinoJson\
+    \ supports ✔ serialization, ✔ deserialization, ✔ MessagePack, ✔ fixed allocation,\
+    \ ✔ zero-copy, ✔ streams, ✔ filtering, and more. It is the most popular Arduino\
+    \ library on GitHub ❤❤❤❤❤. Check out arduinojson.org for a comprehensive documentation."
+  homepage_url: "https://arduinojson.org/?utm_source=meta&utm_medium=library.json"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/bblanchon/ArduinoJson.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bblanchon/ArduinoJson.git"
+    revision: ""
+    path: ""
+- id: "PlatformIO:platformio:atmelavr:5.3.0"
+  purl: "pkg:platformio/platformio/atmelavr@5.3.0"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Atmel AVR 8-bit MCUs deliver a unique combination of performance,\
+    \ power efficiency and design flexibility. Optimized to speed time to market-and\
+    \ easily adapt to new ones-they are based on the industry's most code-efficient\
+    \ architecture for C and assembly programming"
+  homepage_url: "http://www.atmel.com/products/microcontrollers/avr/default.aspx"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/platformio/platform-atmelavr.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/platformio/platform-atmelavr.git"
+    revision: ""
+    path: ""
+- id: "PlatformIO:platformio:framework-arduino-avr:5.4.0"
+  purl: "pkg:platformio/platformio/framework-arduino-avr@5.4.0"
+  declared_licenses:
+  - "LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-or-later"
+  description: "The official Arduino Wiring-based Framework for Microchip AVR microcontrollers"
+  homepage_url: "https://www.arduino.cc/reference/en"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/arduino/ArduinoCore-avr"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/arduino/ArduinoCore-avr.git"
+    revision: ""
+    path: ""
+- id: "PlatformIO:platformio:tool-scons:4.40801.0"
+  purl: "pkg:platformio/platformio/tool-scons@4.40801.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "SCons software construction tool"
+  homepage_url: "http://www.scons.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/SCons/scons.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/SCons/scons.git"
+    revision: ""
+    path: ""
+- id: "PlatformIO:platformio:toolchain-atmelavr:1.70300.191015"
+  purl: "pkg:platformio/platformio/toolchain-atmelavr@1.70300.191015"
+  declared_licenses:
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later"
+  description: "GCC Toolchain for Microchip AVR microcontrollers"
+  homepage_url: "https://gcc.gnu.org/wiki/avr-gcc"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""

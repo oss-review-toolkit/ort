@@ -582,6 +582,7 @@ FROM minimal-tools AS all-tools
 ARG ABOM_VERSION
 ARG COMPOSER_VERSION
 ARG PHP_VERSION
+ARG PLATFORMIO_VERSION
 ARG PROVENANT_VERSION
 ARG UBUNTU_VERSION
 
@@ -617,6 +618,9 @@ COPY --from=scala-build --chown=$USER:$USER $SBT_HOME $SBT_HOME
 ENV DART_SDK=/opt/dart-sdk
 ENV PATH=$PATH:$DART_SDK/bin
 COPY --from=dart-build --chown=$USER:$USER $DART_SDK $DART_SDK
+
+# PlatformIO
+RUN pip install --no-cache-dir -U platformio=="$PLATFORMIO_VERSION"
 
 # Dotnet
 ENV DOTNET_HOME=/opt/dotnet
