@@ -34,6 +34,7 @@ packages:
   - "The Rust Project Developers"
   declared_licenses:
   - "MIT OR Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "A lightweight logging facade for Rust\n"
