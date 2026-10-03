@@ -40,7 +40,7 @@ data class PathInclude(
     val reason: PathIncludeReason,
 
     /**
-     * A comment to further explain why the [reason] is applicable here.
+     * An optional comment to further explain why the [reason] is applicable here.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = ""
