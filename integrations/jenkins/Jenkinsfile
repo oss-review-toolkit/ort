@@ -851,7 +851,7 @@ pipeline {
                         RULES_OPTIONS=""
 
                         if [ "$USE_OSADL_RULES" = "true" ]; then
-                            RULES_OPTIONS="$RULES_OPTIONS --rules-resource /rules/osadl.rules.kts"
+                            RULES_OPTIONS="$RULES_OPTIONS --rules-resource /rules/project-license.rules.kts"
                         fi
 
                         if [ "$USE_CONFIG_RULES" = "true" -a -f "$ORT_CONFIG_DIR/evaluator.rules.kts" ]; then
