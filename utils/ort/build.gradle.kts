@@ -32,12 +32,12 @@ buildConfig {
 }
 
 dependencies {
+    api(projects.clients.foojayClient)
     api(projects.utils.spdxExpressionUtils)
     api(libs.commonsCompress)
     api(libs.kotlinx.coroutines)
     api(libs.okhttp)
 
-    implementation(projects.clients.foojayClient)
     implementation(projects.utils.authenticationUtils)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)

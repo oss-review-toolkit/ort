@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
+import org.ossreviewtoolkit.utils.ort.FoojayJdkService
 import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 
@@ -103,7 +104,12 @@ data class GradleInspectorConfig(
      * The directory of the Java home to use when analyzing projects. By default, the same Java home as for ORT itself
      * is used.
      */
-    val javaHome: String?
+    val javaHome: String?,
+
+    /**
+     * URL for the JDK download repository. If unset, the default URL is used.
+     */
+    val jdkRepositoryUrl: String?
 )
 
 /**
@@ -147,7 +153,8 @@ class GradleInspector(
         projectDir: File,
         excludes: Excludes,
         includes: Includes,
-        issues: MutableList<Issue>
+        issues: MutableList<Issue>,
+        bootstrapper: JavaBootstrapper
     ): OrtDependencyTreeModel =
         forProjectDirectory(projectDir).connect().use { connection ->
             val stdout = ByteArrayOutputStream()
@@ -182,14 +189,14 @@ class GradleInspector(
                     val javaHome = when {
                         config.customJdkUrl != null -> {
                             val installDir = ortToolsDirectory / "jdks" / config.customJdkUrl.fileSystemEncode()
-                            JavaBootstrapper.downloadJdk(config.customJdkUrl, installDir).onFailure { e ->
+                            bootstrapper.downloadJdk(config.customJdkUrl, installDir).onFailure { e ->
                                 issues += createAndLogIssue(e.collectMessages())
                             }.getOrNull()
                         }
 
                         config.javaVersion != null -> {
                             if (!JavaBootstrapper.isRunningOnJdk(config.javaVersion)) {
-                                JavaBootstrapper.installJdk("TEMURIN", config.javaVersion).onFailure { e ->
+                                bootstrapper.installJdk("TEMURIN", config.javaVersion).onFailure { e ->
                                     issues += createAndLogIssue(e.collectMessages())
                                 }.getOrNull()
                             } else {
@@ -258,8 +265,9 @@ class GradleInspector(
 
         logger.info { "Resolving the dependency tree model via IPC from the Gradle Daemon..." }
 
+        val bootstrapper = JavaBootstrapper(FoojayJdkService.create(config.jdkRepositoryUrl))
         val dependencyTreeModel =
-            gradleConnector.getOrtDependencyTreeModel(projectDir, excludes, includes, issues)
+            gradleConnector.getOrtDependencyTreeModel(projectDir, excludes, includes, issues, bootstrapper)
         dependencyHandler.setTreeModel(dependencyTreeModel)
 
         logger.info { "Successfully retrieved the dependency tree model from the Gradle Daemon." }
