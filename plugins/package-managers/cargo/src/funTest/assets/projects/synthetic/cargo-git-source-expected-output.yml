@@ -10,7 +10,7 @@ project:
   - "MIT"
   - "NOASSERTION"
   declared_licenses_processed:
-    spdx_expression: "Apache-2.0 OR MIT OR NOASSERTION"
+    spdx_expression: "Apache-2.0 OR MIT"
   vcs:
     type: ""
     url: ""
