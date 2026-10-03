@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.common.unpackTryAllTypes
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -56,22 +55,12 @@ import org.ossreviewtoolkit.utils.ort.ping
  * The class to download source code. The signatures of public functions in this class define the library API.
  */
 class Downloader(private val config: DownloaderConfiguration) {
-    private fun verifyOutputDirectory(outputDirectory: File) {
-        require(!outputDirectory.exists() || outputDirectory.walk().singleOrNull() == outputDirectory) {
-            "The output directory '$outputDirectory' must not contain any files yet."
-        }
-
-        outputDirectory.safeMkdirs()
-    }
-
     /**
      * Download the source code of the [package][pkg] to the [outputDirectory]. If [dryRun] is `true`, no actual
      * download happens but the source code is only checked to be available. A [Provenance] is returned on success or a
      * [DownloadException] is thrown in case of failure.
      */
     fun download(pkg: Package, outputDirectory: File, dryRun: Boolean = false): Provenance {
-        verifyOutputDirectory(outputDirectory)
-
         if (pkg.isMetadataOnly) return UnknownProvenance
 
         val exception = DownloadException("Download failed for '${pkg.id.toCoordinates()}'.")
@@ -225,8 +214,6 @@ class Downloader(private val config: DownloaderConfiguration) {
             throw DownloadException("No VCS URL provided for '${pkg.id.toCoordinates()}'.$hint")
         }
 
-        verifyOutputDirectory(outputDirectory)
-
         logger.info {
             "Trying to download '${pkg.id.toCoordinates()}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
@@ -322,8 +309,6 @@ class Downloader(private val config: DownloaderConfiguration) {
         if (sourceArtifact.url.isBlank()) {
             throw DownloadException("No source artifact URL provided.")
         }
-
-        verifyOutputDirectory(outputDirectory)
 
         logger.info { "Trying to download source artifact from ${sourceArtifact.url}..." }
 
