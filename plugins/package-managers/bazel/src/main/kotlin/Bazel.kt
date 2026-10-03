@@ -113,7 +113,14 @@ data class BazelConfig(
      * Only scan Bazel dependencies and skip reporting Conan packages in the dependency tree.
      */
     @OrtPluginOption(defaultValue = "false")
-    val bazelDependenciesOnly: Boolean
+    val bazelDependenciesOnly: Boolean,
+
+    /**
+     * The name of a file, relative to the project directory, containing the allowed dependencies. Dependencies that are
+     * not listed in this file will be removed from the dependency tree. The file must contain one dependency per line,
+     * the dependency being identified by its `apparentName`, as returned by `bazel mod graph`.
+     */
+    val allowedDependenciesPath: String?
 )
 
 internal object BazelCommand : CommandLineTool {
@@ -528,7 +535,22 @@ class Bazel(
 
         val depDirectivesWithOverrides = depDirectives.toMutableMap()
 
-        val mainModule = process.stdout.parseBazelModule()
+        var mainModule = process.stdout.parseBazelModule()
+
+        config.allowedDependenciesPath?.let {
+            val allowedDependenciesPath = projectDir / it
+            if (!allowedDependenciesPath.isFile) {
+                logger.warn { "The configured allowed dependencies file '$it' does not exist. Ignoring." }
+            } else {
+                val allowedDependencies = allowedDependenciesPath.readLines()
+                    .filterNotTo(mutableSetOf()) { line ->
+                        line.trim().startsWith("#") // remove comments
+                    }
+
+                mainModule = filterDependencyTree(allowedDependencies, mainModule)
+            }
+        }
+
         val (mainDeps, devDeps) = mainModule.dependencies.map { module ->
             val name = module.name ?: module.key.substringBefore("@", "")
             val version = module.version ?: module.key.substringAfter("@", "")
@@ -568,6 +590,35 @@ class Bazel(
                 dependencies = devDeps.mapTo(mutableSetOf()) { it.toPackageReference(archiveOverrides) }
             )
         )
+    }
+
+    /**
+     * Recursively filter the dependencies of [module], keeping only those whose `apparentName` is contained in
+     * [allowedDependencies], either as-is or prefixed with "@". The filtering is applied recursively to the
+     * dependencies of the kept dependencies as well, so that any transitive dependency not present in
+     * [allowedDependencies] is also removed. Return a copy of [module] with the filtered dependency tree.
+     */
+    private fun filterDependencyTree(allowedDependencies: Set<String>, module: BazelModule): BazelModule {
+        logger.info { "There are ${allowedDependencies.size} allowed dependencies" }
+
+        val filteredDependencies = module.dependencies.mapNotNull { dep ->
+            val depName = dep.apparentName
+
+            if (depName == null || "@$depName" in allowedDependencies) {
+                logger.info { "Keep dependency '$depName' from the dependency tree as it is in the allowed list." }
+
+                // Current dependency is allowed, but its dependencies must also be checked.
+                filterDependencyTree(allowedDependencies, dep)
+            } else {
+                logger.info {
+                    "Removing dependency '$depName' from the dependency tree as it is not in the allowed list."
+                }
+
+                null
+            }
+        }
+
+        return module.copy(dependencies = filteredDependencies)
     }
 
     /**
