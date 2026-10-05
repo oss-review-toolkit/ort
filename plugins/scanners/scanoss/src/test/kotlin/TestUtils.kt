@@ -19,55 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
-import com.scanoss.rest.ScanApi
-
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.plugins.api.Secret
 
 // A test project name.
 internal const val PROJECT = "scanoss-test-project"
 
 // A (resolved) test revision.
 private const val REVISION = "0123456789012345678901234567890123456789"
-
-/**
- * Create a new [ScanOss] instance with the specified [config].
- */
-internal fun createScanOss(config: ScanOssConfig): ScanOss = ScanOss(config = config)
-
-/**
- * Create a standard [ScanOssConfig] whose properties can be partly specified.
- */
-@Suppress("LongParameterList")
-internal fun createScanOssConfig(
-    apiUrl: String = ScanApi.DEFAULT_BASE_URL,
-    apiKey: Secret = Secret(""),
-    writeToStorage: Boolean = true,
-    enablePathObfuscation: Boolean = false,
-    minSnippetHits: Int = 5,
-    minSnippetLines: Int = 3,
-    honourFileExts: Boolean = true,
-    rankingEnabled: Boolean = false,
-    rankingThreshold: Int = 0,
-    skipHeaders: Boolean = false,
-    skipHeadersLimit: Int = 0
-): ScanOssConfig =
-    ScanOssConfig(
-        apiUrl = apiUrl,
-        apiKey = apiKey,
-        noProxy = false,
-        writeToStorage = writeToStorage,
-        chosenSnippetModel = listOf(ScanOssConfig.SnippetModel.LICENSE_AND_COPYRIGHT_FINDING),
-        enablePathObfuscation = enablePathObfuscation,
-        minSnippetHits = minSnippetHits,
-        minSnippetLines = minSnippetLines,
-        honourFileExts = honourFileExts,
-        rankingEnabled = rankingEnabled,
-        rankingThreshold = rankingThreshold,
-        skipHeaders = skipHeaders,
-        skipHeadersLimit = skipHeadersLimit
-    )
 
 /**
  * Create a [VcsInfo] object for a project with the given [name][projectName] and the optional parameters for [type],
