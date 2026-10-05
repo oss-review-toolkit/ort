@@ -83,7 +83,7 @@ class SpdxDeclaredLicenseMapperTest : WordSpec({
                         // Rule out that the 2 tokens are caused by IDSTRING and PLUS.
                         declaredLicense shouldContain " "
                     }
-                } catch (e: SpdxException) {
+                } catch (_: SpdxException) {
                     // For untokenizable strings no further checks are needed.
                 }
             }
