@@ -110,7 +110,13 @@ data class ScanOssConfig(
      * Set to 0 to skip the entire header file if skipHeaders is enabled.
      */
     @OrtPluginOption(defaultValue = "0")
-    val skipHeadersLimit: Int
+    val skipHeadersLimit: Int,
+
+    /**
+     * A list of PURLs to ignore when matching snippets.
+     */
+    @OrtPluginOption(defaultValue = "")
+    val ignorePurls: List<String>
 ) {
     enum class SnippetModel {
         LICENSE_AND_COPYRIGHT_FINDING,
