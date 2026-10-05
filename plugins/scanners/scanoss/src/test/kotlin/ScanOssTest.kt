@@ -46,11 +46,9 @@ private const val PURL_1 = "pkg:github/fakeuser/fakepackage1@1.0.0"
 class ScanOssTest : WordSpec({
     "processSnippetChoices()" should {
         "create empty rules when no snippet choices exist" {
-            val scanoss = createScanOss(createScanOssConfig())
+            val scanoss = ScanOssFactory.create()
 
-            val emptySnippetChoices: List<SnippetChoices> = listOf()
-
-            val rules = scanoss.processSnippetChoices(emptySnippetChoices)
+            val rules = scanoss.processSnippetChoices(emptyList())
 
             rules.includeRules should beEmpty()
             rules.removeRules should beEmpty()
@@ -58,8 +56,7 @@ class ScanOssTest : WordSpec({
 
         "create an include rule for snippet choices with ORIGINAL finding" {
             val vcsInfo = createVcsInfo()
-            val scanoss = createScanOss(createScanOssConfig())
-
+            val scanoss = ScanOssFactory.create()
             val location = TextLocation(FILE_1, 10, 20)
             val snippetChoices = createSnippetChoices(
                 vcsInfo.url,
@@ -82,9 +79,7 @@ class ScanOssTest : WordSpec({
 
         "create a remove rule for snippet choices with NOT_FINDING reason" {
             val vcsInfo = createVcsInfo()
-
-            val scanoss = createScanOss(createScanOssConfig())
-
+            val scanoss = ScanOssFactory.create()
             val location = TextLocation(FILE_2, 15, 30)
             val snippetChoices = createSnippetChoices(
                 vcsInfo.url,
@@ -108,11 +103,9 @@ class ScanOssTest : WordSpec({
 
         "handle multiple snippet choices with different reasons correctly" {
             val vcsInfo = createVcsInfo()
-            val scanoss = createScanOss(createScanOssConfig())
-
+            val scanoss = ScanOssFactory.create()
             val location1 = TextLocation(FILE_1, 10, 20)
             val location2 = TextLocation(FILE_2, 15, 30)
-
             val snippetChoices = createSnippetChoices(
                 vcsInfo.url,
                 createSnippetChoice(
@@ -143,9 +136,7 @@ class ScanOssTest : WordSpec({
 
         "create a remove rule without line ranges when snippet choice has UNKNOWN_LINE (-1) values" {
             val vcsInfo = createVcsInfo()
-            val scanoss = createScanOss(createScanOssConfig())
-
-            // Create a TextLocation with -1 for start and end lines.
+            val scanoss = ScanOssFactory.create()
             val location = TextLocation(FILE_2, TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
             val snippetChoices = createSnippetChoices(
                 vcsInfo.url,
@@ -170,7 +161,7 @@ class ScanOssTest : WordSpec({
 
     "buildSettings()" should {
         "forward snippet tuning config values to FileSnippet" {
-            val config = createScanOssConfig(
+            val scanoss = ScanOssFactory.create(
                 minSnippetHits = 8,
                 minSnippetLines = 4,
                 honourFileExts = false,
@@ -179,7 +170,6 @@ class ScanOssTest : WordSpec({
                 skipHeaders = true,
                 skipHeadersLimit = 100
             )
-            val scanoss = createScanOss(config)
             val context = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
 
             val fileSnippet = scanoss.buildSettings(context).settings.fileSnippet
