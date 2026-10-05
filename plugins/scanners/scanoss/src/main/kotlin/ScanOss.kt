@@ -127,6 +127,7 @@ class ScanOss(
         val bom = Bom.builder()
             .include(includedPurls + rules.includeRules)
             .remove(rules.removeRules)
+            .ignore(config.ignorePurls.map { Rule.builder().purl(it).build() })
             .build()
         val fileSnippet = FileSnippet.builder()
             .minSnippetHits(config.minSnippetHits)
