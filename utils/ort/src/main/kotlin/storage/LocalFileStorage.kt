@@ -46,11 +46,7 @@ open class LocalFileStorage(
 
     @Synchronized
     override fun read(path: String): InputStream {
-        val file = directory / transformPath(path)
-
-        require(file.canonicalFile.startsWith(directory.canonicalFile)) {
-            "Path '$path' is not in directory '${directory.invariantSeparatorsPath}'."
-        }
+        val file = resolveSafely(path)
 
         return file.inputStream()
     }
@@ -60,11 +56,7 @@ open class LocalFileStorage(
      * output stream for writing to the file.
      */
     protected open fun safeOutputStream(path: String): OutputStream {
-        val file = directory / transformPath(path)
-
-        require(file.canonicalFile.startsWith(directory.canonicalFile)) {
-            "Path '$path' is not in directory '${directory.invariantSeparatorsPath}'."
-        }
+        val file = resolveSafely(path)
 
         file.parentFile.safeMkdirs()
 
@@ -80,4 +72,15 @@ open class LocalFileStorage(
 
     @Synchronized
     override fun delete(path: String): Boolean = directory.resolve(transformPath(path)).delete()
+
+    /**
+     * Resolve [path] against [directory] and throw an [IllegalArgumentException] if the resolved file is not in
+     * [directory].
+     */
+    private fun resolveSafely(path: String): File =
+        (directory / transformPath(path)).also {
+            require(it.canonicalFile.startsWith(directory.canonicalFile)) {
+                "Path '$path' is not in directory '${directory.invariantSeparatorsPath}'."
+            }
+        }
 }
