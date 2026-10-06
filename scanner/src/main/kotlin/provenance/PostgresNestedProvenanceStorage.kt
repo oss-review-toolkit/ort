@@ -34,6 +34,7 @@ import org.jetbrains.exposed.v1.jdbc.selectAll
 
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.suspendTransaction
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
@@ -66,8 +67,8 @@ class PostgresNestedProvenanceStorage(
         }
     }
 
-    override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? =
-        database.transaction {
+    override suspend fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? =
+        database.suspendTransaction {
             table.selectAll().where {
                 table.vcsType eq root.vcsInfo.type.toString() and
                     (table.vcsUrl eq root.vcsInfo.url) and
@@ -75,8 +76,8 @@ class PostgresNestedProvenanceStorage(
             }.map { it[table.result] }.find { it.nestedProvenance.root == root }
         }
 
-    override fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
-        database.transaction {
+    override suspend fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
+        database.suspendTransaction {
             val idsToRemove = table.selectAll().where {
                 table.vcsType eq root.vcsInfo.type.toString() and
                     (table.vcsUrl eq root.vcsInfo.url) and
