@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
@@ -108,7 +109,7 @@ internal class GetPackageLicensesCommand : OrtHelperCommand(
     private fun getStoredScanResults(pkg: Package): List<ScanResult> {
         val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
         val scanStorages = ScanStorages.createFromConfig(ortConfiguration.scanner)
-        return runCatching { scanStorages.read(pkg) }.getOrDefault(emptyList())
+        return runCatching { runBlocking { scanStorages.read(pkg) } }.getOrDefault(emptyList())
     }
 }
 

@@ -82,7 +82,7 @@ class ScanStorages(
      * Read all [ScanResult]s for the provided [package][pkg]. Returns an empty list if no stored scan results or no
      * stored provenance can be found.
      */
-    fun read(pkg: Package): List<ScanResult> {
+    suspend fun read(pkg: Package): List<ScanResult> {
         val packageProvenances = packageProvenanceStorage.readProvenances(pkg.id)
 
         val nestedProvenances = packageProvenances.mapNotNull { result ->

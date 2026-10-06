@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.suspendTransaction
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
@@ -67,8 +68,11 @@ class PostgresPackageProvenanceStorage(
         }
     }
 
-    override fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult? =
-        database.transaction {
+    override suspend fun readProvenance(
+        id: Identifier,
+        sourceArtifact: RemoteArtifact
+    ): PackageProvenanceResolutionResult? =
+        database.suspendTransaction {
             table.selectAll().where {
                 table.identifier eq id.toCoordinates() and
                     (table.artifactUrl eq sourceArtifact.url) and
@@ -76,8 +80,8 @@ class PostgresPackageProvenanceStorage(
             }.map { it[table.result] }.firstOrNull()
         }
 
-    override fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult? =
-        database.transaction {
+    override suspend fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult? =
+        database.suspendTransaction {
             table.selectAll().where {
                 table.identifier eq id.toCoordinates() and
                     (table.vcsType eq vcs.type.toString()) and
@@ -87,19 +91,19 @@ class PostgresPackageProvenanceStorage(
             }.map { it[table.result] }.firstOrNull()
         }
 
-    override fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> =
-        database.transaction {
+    override suspend fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> =
+        database.suspendTransaction {
             table.selectAll().where {
                 table.identifier eq id.toCoordinates()
             }.map { it[table.result] }
         }
 
-    override fun writeProvenance(
+    override suspend fun writeProvenance(
         id: Identifier,
         sourceArtifact: RemoteArtifact,
         result: PackageProvenanceResolutionResult
     ) {
-        database.transaction {
+        database.suspendTransaction {
             table.deleteWhere {
                 table.identifier eq id.toCoordinates() and
                     (table.artifactUrl eq sourceArtifact.url) and
@@ -115,8 +119,8 @@ class PostgresPackageProvenanceStorage(
         }
     }
 
-    override fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) {
-        database.transaction {
+    override suspend fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) {
+        database.suspendTransaction {
             table.deleteWhere {
                 table.identifier eq id.toCoordinates() and
                     (table.vcsType eq vcs.type.toString()) and
@@ -136,8 +140,8 @@ class PostgresPackageProvenanceStorage(
         }
     }
 
-    override fun deleteProvenances(id: Identifier) {
-        database.transaction {
+    override suspend fun deleteProvenances(id: Identifier) {
+        database.suspendTransaction {
             table.deleteWhere {
                 table.identifier eq id.toCoordinates()
             }

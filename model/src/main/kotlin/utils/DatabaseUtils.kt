@@ -26,11 +26,15 @@ import java.util.concurrent.ConcurrentHashMap
 
 import javax.sql.DataSource
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.jetbrains.exposed.v1.core.Transaction
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.vendors.currentDialectMetadata
 
@@ -123,6 +127,14 @@ object DatabaseUtils {
      * Start a new transaction to execute the given [statement] on this [Database].
      */
     fun <T> Database.transaction(statement: JdbcTransaction.() -> T): T = transaction(db = this, statement = statement)
+
+    /**
+     * Start a new suspending transaction to execute the given [statement] on this [Database].
+     */
+    suspend fun <T> Database.suspendTransaction(statement: JdbcTransaction.() -> T): T =
+        withContext(Dispatchers.IO) {
+            suspendTransaction(db = this@suspendTransaction, statement = statement)
+        }
 
     /**
      * Add a property with the given [key] and [value] to the [HikariConfig]. If the [value] is *null*, this

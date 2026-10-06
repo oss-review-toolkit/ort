@@ -45,7 +45,7 @@ interface WorkingTreeCache {
      *
      * Throws an [IllegalStateException] if the cache was already [shut down][shutdown].
      */
-    suspend fun <T> use(vcsInfo: VcsInfo, block: (VersionControlSystem, WorkingTree) -> T): T
+    suspend fun <T> use(vcsInfo: VcsInfo, block: suspend (VersionControlSystem, WorkingTree) -> T): T
 
     /**
      * Shut down the cache and clear all cached working trees from the file system. The function waits for all currently
@@ -73,7 +73,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
         return this
     }
 
-    override suspend fun <T> use(vcsInfo: VcsInfo, block: (VersionControlSystem, WorkingTree) -> T): T {
+    override suspend fun <T> use(vcsInfo: VcsInfo, block: suspend (VersionControlSystem, WorkingTree) -> T): T {
         val vcs = getVcs(vcsInfo)
         return getWorkingTreeMutex(vcsInfo).withLock { block(vcs, getWorkingTree(vcsInfo, vcs)) }
     }
