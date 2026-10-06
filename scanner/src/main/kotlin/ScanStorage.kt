@@ -46,7 +46,7 @@ interface PackageBasedScanStorageReader : ScanStorageReader {
      *
      * Throws a [ScanStorageException] if an error occurs while reading from the storage.
      */
-    fun read(
+    suspend fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
         scannerMatcher: ScannerMatcher? = null
@@ -67,7 +67,7 @@ interface ProvenanceBasedScanStorageReader : ScanStorageReader {
      * * An error occurs while reading from the storage.
      * * The [provenance] is a [RepositoryProvenance] with a non-empty VCS path.
      */
-    fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher? = null): List<ScanResult>
+    suspend fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher? = null): List<ScanResult>
 }
 
 /**
@@ -87,7 +87,7 @@ interface PackageBasedScanStorageWriter : ScanStorageWriter {
      * * The storage already contains a result for the same provenance and scanner.
      * * The provenance of the package is [unknown][UnknownProvenance].
      */
-    fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult)
+    suspend fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult)
 }
 
 /**
@@ -105,7 +105,7 @@ interface ProvenanceBasedScanStorageWriter : ScanStorageWriter {
      * * The provenance of the [scanResult] is [unknown][UnknownProvenance].
      * * The provenance of the [scanResult] is a [RepositoryProvenance] with a non-empty VCS path.
      */
-    fun write(scanResult: ScanResult): Boolean
+    suspend fun write(scanResult: ScanResult): Boolean
 }
 
 /**

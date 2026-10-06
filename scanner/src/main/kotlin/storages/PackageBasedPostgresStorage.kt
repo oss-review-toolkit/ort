@@ -25,6 +25,8 @@ import java.sql.SQLException
 
 import javax.sql.DataSource
 
+import kotlin.coroutines.cancellation.CancellationException
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.jetbrains.exposed.v1.core.DatabaseConfig
@@ -41,6 +43,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.suspendTransaction
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.model.utils.arrayParam
@@ -123,12 +126,12 @@ class PackageBasedPostgresStorage(
             """.trimIndent()
         )
 
-    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> {
+    override suspend fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> {
         val minVersionArray = scannerMatcher?.minVersion?.run { intArrayOf(major, minor, patch) }
         val maxVersionArray = scannerMatcher?.maxVersion?.run { intArrayOf(major, minor, patch) }
 
         return runCatching {
-            database.transaction {
+            database.suspendTransaction {
                 ScanResultDao.find {
                     var expression = ScanResults.identifier eq pkg.id
 
@@ -151,6 +154,8 @@ class PackageBasedPostgresStorage(
                     .filter { it.provenance.matches(pkg) }
             }
         }.onFailure {
+            if (it is CancellationException) throw it
+
             if (it is JsonProcessingException || it is SQLException) {
                 it.showStackTrace()
 
@@ -164,18 +169,20 @@ class PackageBasedPostgresStorage(
         }
     }
 
-    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
+    override suspend fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         logger.info { "Storing scan result for '${id.toCoordinates()}' in storage." }
 
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
 
         return runCatching {
-            database.transaction {
+            database.suspendTransaction {
                 ScanResultDao.new {
                     identifier = id
                     this.scanResult = scanResult
                 }
             }
+        }.onFailure {
+            if (it is CancellationException) throw it
         }.recoverCatching {
             it.showStackTrace()
 

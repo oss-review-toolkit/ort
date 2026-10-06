@@ -25,6 +25,8 @@ import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
+import kotlin.coroutines.cancellation.CancellationException
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -38,18 +40,17 @@ import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.utils.requireEmptyVcsPath
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
-import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceBasedScanStorage {
-    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
+    override suspend fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
         requireEmptyVcsPath(provenance)
 
         val path = storagePath(provenance)
 
         return runCatching {
-            runBlocking { backend.read(path) }.use { input ->
+            backend.read(path).use { input ->
                 yamlMapper.readValue<List<ScanResult>>(input).map {
                     // Use the provided provenance for the result instead of building it from the stored values, because
                     // in the case of a RepositoryRevision only the resolved revision matters.
@@ -58,6 +59,8 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
             }
         }.getOrElse {
             when (it) {
+                is CancellationException -> throw it
+
                 is FileNotFoundException -> {
                     // If the file cannot be found it means no scan results have been stored, yet.
                     emptyList()
@@ -76,7 +79,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         }
     }
 
-    override fun write(scanResult: ScanResult): Boolean {
+    override suspend fun write(scanResult: ScanResult): Boolean {
         val provenance = scanResult.provenance
 
         requireEmptyVcsPath(provenance)
@@ -103,11 +106,13 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         val input = ByteArrayInputStream(yamlBytes)
 
         runCatching {
-            runBlocking { backend.write(path, input) }
+            backend.write(path, input)
             logger.debug { "Stored scan result for '$provenance' at path '$path'." }
             return true
         }.onFailure {
             when (it) {
+                is CancellationException -> throw it
+
                 is IllegalArgumentException, is IOException -> {
                     it.showStackTrace()
 

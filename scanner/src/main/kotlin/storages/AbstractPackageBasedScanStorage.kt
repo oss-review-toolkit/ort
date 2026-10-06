@@ -48,7 +48,7 @@ abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
      * [provenance][KnownProvenance.matches] of the package and can optionally be filtered by the provided
      * [scannerMatcher].
      */
-    fun read(pkg: Package, scannerMatcher: ScannerMatcher? = null): Result<List<ScanResult>> {
+    suspend fun read(pkg: Package, scannerMatcher: ScannerMatcher? = null): Result<List<ScanResult>> {
         val (result, duration) = measureTimedValue {
             readInternal(pkg, scannerMatcher).map { results ->
                 results.filter { scannerMatcher?.matches(it.scanner) != false }
@@ -71,7 +71,7 @@ abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
      * [ScanResult]s to the storage again, implicitly deleting the original storage entry by overwriting it.
      * Return a [Result] describing whether the operation was successful.
      */
-    fun add(id: Identifier, scanResult: ScanResult): Result<Unit> {
+    suspend fun add(id: Identifier, scanResult: ScanResult): Result<Unit> {
         // Do not store scan results without provenance information, because they cannot be assigned to the revision of
         // the package source code later.
         if (scanResult.provenance is UnknownProvenance) {
@@ -94,14 +94,14 @@ abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
      * this is done by the public [read] function. They can use the [scannerMatcher] if they can implement the filtering
      * more efficiently, for example, as part of a database query.
      */
-    abstract fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher? = null): Result<List<ScanResult>>
+    abstract suspend fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher? = null): Result<List<ScanResult>>
 
     /**
      * Internal version of [add] that skips common sanity checks.
      */
-    protected abstract fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit>
+    protected abstract suspend fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit>
 
-    override fun read(
+    override suspend fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
         scannerMatcher: ScannerMatcher?
@@ -113,7 +113,7 @@ abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
                 .map { it.toNestedProvenanceScanResult(nestedProvenance) }
         }.getOrThrow()
 
-    override fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
+    override suspend fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
         nestedProvenanceScanResult.merge().forEach { scanResult ->
             add(pkg.id, scanResult).getOrThrow()
         }

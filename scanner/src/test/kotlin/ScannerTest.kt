@@ -37,6 +37,7 @@ import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -200,7 +201,7 @@ class ScannerTest : WordSpec({
 
             val storedScanResults = mutableListOf<ScanResult>()
             val writer = object : ProvenanceBasedScanStorageWriter {
-                override fun write(scanResult: ScanResult): Boolean {
+                override suspend fun write(scanResult: ScanResult): Boolean {
                     storedScanResults.add(scanResult)
                     return true
                 }
@@ -287,7 +288,7 @@ class ScannerTest : WordSpec({
 
             val storedScanResults = mutableListOf<Pair<Provenance, ScannerDetails>>()
             val writer = object : ProvenanceBasedScanStorageWriter {
-                override fun write(scanResult: ScanResult): Boolean {
+                override suspend fun write(scanResult: ScanResult): Boolean {
                     storedScanResults.add(scanResult.provenance to scanResult.scanner)
                     return true
                 }
@@ -549,7 +550,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkg), createContext())
 
-            verify(exactly = 0) {
+            coVerify(exactly = 0) {
                 storageWriter.write(any())
             }
         }
@@ -561,7 +562,7 @@ class ScannerTest : WordSpec({
             val scannerWrapper = spyk(FakePackageScannerWrapper())
 
             val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details)) {
-                every { read(pkgWithArtifact, any()) } returns listOf(
+                coEvery { read(pkgWithArtifact, any()) } returns listOf(
                     createStoredNestedScanResult(pkgWithArtifact.artifactProvenance(), scannerWrapper.details)
                 )
             }
@@ -591,7 +592,7 @@ class ScannerTest : WordSpec({
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakePackageScannerWrapper())
             val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details)) {
-                every { read(any(), any(), any()) } returns emptyList()
+                coEvery { read(any(), any(), any()) } returns emptyList()
             }
 
             val scanner = createScanner(
@@ -610,7 +611,7 @@ class ScannerTest : WordSpec({
                 )
             )
 
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 reader.read(pkgWithArtifact, any(), any())
                 scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithArtifact)))
             }
@@ -668,7 +669,7 @@ class ScannerTest : WordSpec({
             }
 
             val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details)) {
-                every { read(pkgCompletelyScanned, any(), any()) } returns listOf(nestedScanResultCompletelyScanned)
+                coEvery { read(pkgCompletelyScanned, any(), any()) } returns listOf(nestedScanResultCompletelyScanned)
             }
 
             val scanner = createScanner(
@@ -701,7 +702,7 @@ class ScannerTest : WordSpec({
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
 
-            every { reader.read(pkgWithArtifact.artifactProvenance()) } returns listOf(
+            coEvery { reader.read(pkgWithArtifact.artifactProvenance()) } returns listOf(
                 createStoredScanResult(pkgWithArtifact.artifactProvenance(), scannerWrapper.details)
             )
 
@@ -731,7 +732,7 @@ class ScannerTest : WordSpec({
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
 
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
-                every { read(any(), any()) } returns emptyList()
+                coEvery { read(any(), any()) } returns emptyList()
             }
 
             val scanner = createScanner(
@@ -750,7 +751,7 @@ class ScannerTest : WordSpec({
                 )
             )
 
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 reader.read(pkgWithArtifact.artifactProvenance(), any())
                 scannerWrapper.scanProvenance(pkgWithArtifact.artifactProvenance(), any())
             }
@@ -809,7 +810,7 @@ class ScannerTest : WordSpec({
             }
 
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
-                every { read(unscannedSubRepository, any()) } returns emptyList()
+                coEvery { read(unscannedSubRepository, any()) } returns emptyList()
             }
 
             val scanner = createScanner(
@@ -857,7 +858,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithVcsPath), createContext())
 
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 writer.write(fullScanResult)
             }
         }
@@ -889,7 +890,7 @@ class ScannerTest : WordSpec({
             )
 
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
-                every { read(any(), any()) } returns listOf(scanResult)
+                coEvery { read(any(), any()) } returns listOf(scanResult)
             }
 
             val scanner = createScanner(
@@ -934,7 +935,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 writer.write(
                     pkgWithArtifact,
                     createNestedScanResult(pkgWithArtifact.artifactProvenance(), scannerWrapper.details)
@@ -956,7 +957,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 0) {
+            coVerify(exactly = 0) {
                 writer.write(any(), any())
             }
         }
@@ -975,7 +976,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 writer.write(createScanResult(pkgWithArtifact.artifactProvenance(), scannerWrapper.details))
             }
         }
@@ -994,7 +995,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 0) {
+            coVerify(exactly = 0) {
                 writer.write(any())
             }
         }
@@ -1015,7 +1016,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 writer.write(any())
             }
         }
@@ -1036,7 +1037,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 0) {
+            coVerify(exactly = 0) {
                 writer.write(any())
             }
         }
@@ -1057,7 +1058,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 reader.read(any(), any())
             }
         }
@@ -1078,7 +1079,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 0) {
+            coVerify(exactly = 0) {
                 reader.read(any())
                 reader.read(any(), any())
             }
@@ -1100,7 +1101,7 @@ class ScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
-            verify(exactly = 0) {
+            coVerify(exactly = 0) {
                 reader.read(any())
                 reader.read(any(), any())
             }

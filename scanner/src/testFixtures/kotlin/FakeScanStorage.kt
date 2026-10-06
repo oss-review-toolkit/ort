@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
  * with a single license finding for the provided [scannerDetails].
  */
 class FakePackageBasedStorageReader(val scannerDetails: ScannerDetails) : PackageBasedScanStorageReader {
-    override fun read(
+    override suspend fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
         scannerMatcher: ScannerMatcher?
@@ -39,14 +39,14 @@ class FakePackageBasedStorageReader(val scannerDetails: ScannerDetails) : Packag
 }
 
 class FakeProvenanceBasedStorageReader(val scannerDetails: ScannerDetails) : ProvenanceBasedScanStorageReader {
-    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> =
+    override suspend fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> =
         listOf(createStoredScanResult(provenance, scannerDetails))
 }
 
 class FakePackageBasedStorageWriter : PackageBasedScanStorageWriter {
-    override fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) = Unit
+    override suspend fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) = Unit
 }
 
 class FakeProvenanceBasedStorageWriter : ProvenanceBasedScanStorageWriter {
-    override fun write(scanResult: ScanResult) = true
+    override suspend fun write(scanResult: ScanResult) = true
 }

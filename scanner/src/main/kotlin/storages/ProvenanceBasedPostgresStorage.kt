@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.suspendTransaction
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.ProvenanceBasedScanStorage
@@ -81,11 +82,11 @@ class ProvenanceBasedPostgresStorage(
         }
     }
 
-    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
+    override suspend fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
         requireEmptyVcsPath(provenance)
 
         try {
-            return database.transaction {
+            return database.suspendTransaction {
                 val query = table.selectAll()
 
                 when (provenance) {
@@ -134,7 +135,7 @@ class ProvenanceBasedPostgresStorage(
     // TODO: Override read(provenance, scannerMatcher) to make it more efficient by matching the scanner details in the
     //       query.
 
-    override fun write(scanResult: ScanResult): Boolean {
+    override suspend fun write(scanResult: ScanResult): Boolean {
         val provenance = scanResult.provenance
 
         requireEmptyVcsPath(provenance)
@@ -146,7 +147,7 @@ class ProvenanceBasedPostgresStorage(
         var rowId: EntityID<Int>? = null
 
         try {
-            database.transaction {
+            database.suspendTransaction {
                 rowId = table.insertIgnoreAndGetId {
                     when (provenance) {
                         is ArtifactProvenance -> {
