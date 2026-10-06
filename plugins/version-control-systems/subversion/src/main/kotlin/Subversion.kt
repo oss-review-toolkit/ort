@@ -73,7 +73,7 @@ class Subversion(override val descriptor: PluginDescriptor = SubversionFactory.d
 
     override fun getVersion(): String = Version.getVersionString()
 
-    override fun getDefaultBranchName(url: String) = "trunk"
+    override fun getDefaultBranchName(url: String) = Result.success("trunk")
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree =
         SubversionWorkingTree(vcsDirectory, type, clientManager)
@@ -93,8 +93,8 @@ class Subversion(override val descriptor: PluginDescriptor = SubversionFactory.d
             false
         }
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
-        try {
+    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): Result<WorkingTree> =
+        runCatching {
             clientManager.updateClient.doCheckout(
                 SVNURL.parseURIEncoded(vcs.url),
                 targetDir,
@@ -103,14 +103,13 @@ class Subversion(override val descriptor: PluginDescriptor = SubversionFactory.d
                 SVNDepth.EMPTY,
                 /* allowUnversionedObstructions = */ false
             )
-        } catch (e: SVNException) {
+        }.recoverCatching { e ->
             e.showStackTrace()
 
             throw IOException("Unable to initialize a $type working tree in '$targetDir' from ${vcs.url}.", e)
+        }.map {
+            getWorkingTree(targetDir)
         }
-
-        return getWorkingTree(targetDir)
-    }
 
     private fun deepenWorkingTreePath(workingTree: WorkingTree, path: String, revision: SVNRevision): Long {
         val finalPath = workingTree.workingDir / path

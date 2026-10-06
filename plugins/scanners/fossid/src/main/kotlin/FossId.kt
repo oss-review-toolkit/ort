@@ -530,7 +530,7 @@ class FossId internal constructor(
 
         val vcs = requireNotNull(VersionControlSystem.forUrl(url))
 
-        val defaultBranch = vcs.getDefaultBranchName(url)
+        val defaultBranch = vcs.getDefaultBranchName(url).getOrThrow()
         logger.info { "Default branch is '$defaultBranch'." }
 
         if (projectRevision == null) {

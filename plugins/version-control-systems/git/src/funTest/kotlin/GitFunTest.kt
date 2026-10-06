@@ -20,18 +20,18 @@
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
 import io.kotest.assertions.throwables.shouldNotThrow
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.concurrent.shouldCompleteWithin
+import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
@@ -72,11 +72,9 @@ class GitFunTest : WordSpec({
             val url = "https://github.com/oss-review-toolkit/foobar.git"
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, url, "master"))
 
-            val exception = shouldThrow<DownloadException> {
-                git.download(pkg, outputDir, allowMovingRevisions = true)
-            }
+            val workingTree = git.download(pkg, outputDir, allowMovingRevisions = true)
 
-            exception.message shouldBe "Git failed to get revisions from URL $url."
+            workingTree.shouldBeFailure().message shouldBe "Git failed to get revisions from URL $url."
         }
 
         "get the given revision" {
@@ -84,18 +82,20 @@ class GitFunTest : WordSpec({
 
             val workingTree = git.download(pkg, outputDir)
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) { file ->
-                file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
-            }.shouldContainExactlyInAnyOrder(
-                "CHANGELOG.md",
-                "LICENSE",
-                "README.md",
-                "lib",
-                "package.json",
-                "specs"
-            )
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV
+                getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) { file ->
+                    file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
+                }.shouldContainExactlyInAnyOrder(
+                    "CHANGELOG.md",
+                    "LICENSE",
+                    "README.md",
+                    "lib",
+                    "package.json",
+                    "specs"
+                )
+            }
         }
 
         "get only the given path" {
@@ -103,17 +103,19 @@ class GitFunTest : WordSpec({
 
             val workingTree = git.download(pkg, outputDir)
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            workingTree.getRootPath().walk().mapNotNullTo(mutableListOf()) { file ->
-                file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
-            }.shouldContainExactlyInAnyOrder(
-                "LICENSE",
-                "README.md",
-                "lib",
-                "lib/dep_graph.js",
-                "lib/index.d.ts"
-            )
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV
+                getRootPath().walk().mapNotNullTo(mutableListOf()) { file ->
+                    file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
+                }.shouldContainExactlyInAnyOrder(
+                    "LICENSE",
+                    "README.md",
+                    "lib",
+                    "lib/dep_graph.js",
+                    "lib/index.d.ts"
+                )
+            }
         }
 
         "work based on a package version" {
@@ -126,8 +128,10 @@ class GitFunTest : WordSpec({
 
             val workingTree = git.download(pkg, outputDir)
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV_FOR_VERSION
+            }
         }
 
         "get only the given path based on a package version" {
@@ -140,16 +144,18 @@ class GitFunTest : WordSpec({
 
             val workingTree = git.download(pkg, outputDir)
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-            workingTree.getRootPath().walk().mapNotNullTo(mutableListOf()) { file ->
-                file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
-            }.shouldContainExactlyInAnyOrder(
-                "LICENSE",
-                "README.md",
-                "specs",
-                "specs/dep_graph_spec.js"
-            )
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV_FOR_VERSION
+                getRootPath().walk().mapNotNullTo(mutableListOf()) { file ->
+                    file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
+                }.shouldContainExactlyInAnyOrder(
+                    "LICENSE",
+                    "README.md",
+                    "specs",
+                    "specs/dep_graph_spec.js"
+                )
+            }
         }
 
         "apply URL replacements" {
@@ -168,9 +174,7 @@ class GitFunTest : WordSpec({
                 vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL.replace("https://", "ssh://git@"), REPO_REV)
             )
 
-            shouldNotThrow<DownloadException> {
-                git.download(pkg, outputDir)
-            }
+            git.download(pkg, outputDir).shouldBeSuccess()
         }
 
         "apply URL replacements recursively" {
@@ -182,63 +186,65 @@ class GitFunTest : WordSpec({
                 git.download(pkg, outputDir, allowMovingRevisions = true)
             }
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRootPath().walk().onEnter {
-                it == outputDir || it.parentFile.resolve(".gitmodules").isFile
-            }.mapNotNullTo(mutableListOf()) { file ->
-                file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
-            }.shouldContainExactlyInAnyOrder(
-                "commons-text",
-                "test-data-npm",
-                "LICENSE",
-                "README.md",
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRootPath().walk().onEnter {
+                    it == outputDir || it.parentFile.resolve(".gitmodules").isFile
+                }.mapNotNullTo(mutableListOf()) { file ->
+                    file.toRelativeString(outputDir).takeIf { it.isNotEmpty() && !it.startsWith('.') }
+                }.shouldContainExactlyInAnyOrder(
+                    "commons-text",
+                    "test-data-npm",
+                    "LICENSE",
+                    "README.md",
 
-                "commons-text/.git",
-                "commons-text/.gitignore",
-                "commons-text/.travis.yml",
-                "commons-text/CONTRIBUTING.md",
-                "commons-text/LICENSE.txt",
-                "commons-text/NOTICE.txt",
-                "commons-text/README.md",
-                "commons-text/RELEASE-NOTES.txt",
-                "commons-text/checkstyle-suppressions.xml",
-                "commons-text/checkstyle.xml",
-                "commons-text/license-header.txt",
-                "commons-text/pom.xml",
-                "commons-text/sb-excludes.xml",
+                    "commons-text/.git",
+                    "commons-text/.gitignore",
+                    "commons-text/.travis.yml",
+                    "commons-text/CONTRIBUTING.md",
+                    "commons-text/LICENSE.txt",
+                    "commons-text/NOTICE.txt",
+                    "commons-text/README.md",
+                    "commons-text/RELEASE-NOTES.txt",
+                    "commons-text/checkstyle-suppressions.xml",
+                    "commons-text/checkstyle.xml",
+                    "commons-text/license-header.txt",
+                    "commons-text/pom.xml",
+                    "commons-text/sb-excludes.xml",
 
-                "test-data-npm/isarray",
-                "test-data-npm/long.js",
-                "test-data-npm/.git",
-                "test-data-npm/.gitignore",
-                "test-data-npm/.gitmodules",
-                "test-data-npm/LICENSE",
-                "test-data-npm/README.md",
-                "test-data-npm/package-lock.json",
-                "test-data-npm/package.json",
+                    "test-data-npm/isarray",
+                    "test-data-npm/long.js",
+                    "test-data-npm/.git",
+                    "test-data-npm/.gitignore",
+                    "test-data-npm/.gitmodules",
+                    "test-data-npm/LICENSE",
+                    "test-data-npm/README.md",
+                    "test-data-npm/package-lock.json",
+                    "test-data-npm/package.json",
 
-                "test-data-npm/isarray/.git",
-                "test-data-npm/isarray/.gitignore",
-                "test-data-npm/isarray/.travis.yml",
-                "test-data-npm/isarray/LICENSE",
-                "test-data-npm/isarray/Makefile",
-                "test-data-npm/isarray/README.md",
-                "test-data-npm/isarray/component.json",
-                "test-data-npm/isarray/index.js",
-                "test-data-npm/isarray/package-lock.json",
-                "test-data-npm/isarray/package.json",
-                "test-data-npm/isarray/test.js",
+                    "test-data-npm/isarray/.git",
+                    "test-data-npm/isarray/.gitignore",
+                    "test-data-npm/isarray/.travis.yml",
+                    "test-data-npm/isarray/LICENSE",
+                    "test-data-npm/isarray/Makefile",
+                    "test-data-npm/isarray/README.md",
+                    "test-data-npm/isarray/component.json",
+                    "test-data-npm/isarray/index.js",
+                    "test-data-npm/isarray/package-lock.json",
+                    "test-data-npm/isarray/package.json",
+                    "test-data-npm/isarray/test.js",
 
-                "test-data-npm/long.js/.git",
-                "test-data-npm/long.js/.gitignore",
-                "test-data-npm/long.js/.travis.yml",
-                "test-data-npm/long.js/LICENSE",
-                "test-data-npm/long.js/README.md",
-                "test-data-npm/long.js/bower.json",
-                "test-data-npm/long.js/index.js",
-                "test-data-npm/long.js/package.json",
-                "test-data-npm/long.js/webpack.config.js"
-            )
+                    "test-data-npm/long.js/.git",
+                    "test-data-npm/long.js/.gitignore",
+                    "test-data-npm/long.js/.travis.yml",
+                    "test-data-npm/long.js/LICENSE",
+                    "test-data-npm/long.js/README.md",
+                    "test-data-npm/long.js/bower.json",
+                    "test-data-npm/long.js/index.js",
+                    "test-data-npm/long.js/package.json",
+                    "test-data-npm/long.js/webpack.config.js"
+                )
+            }
         }
     }
 })

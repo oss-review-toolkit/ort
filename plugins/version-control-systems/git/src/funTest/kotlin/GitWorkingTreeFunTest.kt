@@ -55,7 +55,7 @@ class GitWorkingTreeFunTest : WordSpec({
 
     beforeEach {
         repoDir = tempdir()
-        workingTree = git.initWorkingTree(repoDir, vcsInfo)
+        workingTree = git.initWorkingTree(repoDir, vcsInfo).getOrThrow()
     }
 
     afterEach {

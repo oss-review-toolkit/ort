@@ -476,7 +476,7 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
             } else {
                 val vcs = VersionControlSystem.forUrl(projectUrl)
                 val vcsType = vcsTypeOption?.let { VcsType.forName(it) } ?: vcs?.type ?: VcsType.UNKNOWN
-                val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl).orEmpty()
+                val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl)?.getOrThrow().orEmpty()
 
                 val vcsInfo = VcsInfo(
                     type = vcsType,

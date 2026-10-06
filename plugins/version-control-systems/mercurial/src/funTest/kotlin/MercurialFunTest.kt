@@ -23,6 +23,7 @@ import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -79,13 +80,14 @@ class MercurialFunTest : WordSpec({
             )
 
             val workingTree = hg.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
-            }.sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV
+                getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                    it.toRelativeString(getRootPath()).ifEmpty { null }
+                }.sorted().joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
         }
 
         "get only the given path".config(enabled = hg.isAtLeastVersion("4.3")) {
@@ -102,16 +104,18 @@ class MercurialFunTest : WordSpec({
             )
 
             val workingTree = hg.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walkBottomUp()
-                .onEnter { it.name != ".hg" }
-                .filter { it.isFile }
-                .map { it.relativeTo(outputDir) }
-                .sortedBy { it.path }
-                .toList()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV
+                getRootPath().walkBottomUp()
+                    .onEnter { it.name != ".hg" }
+                    .filter { it.isFile }
+                    .map { it.relativeTo(outputDir) }
+                    .sortedBy { it.path }
+                    .toList()
+                    .joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
         }
 
         "work based on a package version" {
@@ -124,8 +128,10 @@ class MercurialFunTest : WordSpec({
 
             val workingTree = hg.download(pkg, outputDir)
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV_FOR_VERSION
+            }
         }
 
         "get only the given path based on a package version".config(enabled = hg.isAtLeastVersion("4.3")) {
@@ -147,16 +153,17 @@ class MercurialFunTest : WordSpec({
             )
 
             val workingTree = hg.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walkBottomUp()
-                .onEnter { it.name != ".hg" }
-                .filter { it.isFile }
-                .map { it.relativeTo(outputDir) }
-                .sortedBy { it.path }
-                .toList()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV_FOR_VERSION
+                getRootPath().walkBottomUp()
+                    .onEnter { it.name != ".hg" }
+                    .filter { it.isFile }
+                    .map { it.relativeTo(outputDir) }
+                    .sortedBy { it.path }
+                    .toList().joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
         }
     }
 })
