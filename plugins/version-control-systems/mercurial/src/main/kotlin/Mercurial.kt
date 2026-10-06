@@ -62,7 +62,7 @@ class Mercurial(override val descriptor: PluginDescriptor = MercurialFactory.des
 
     override fun getVersion() = MercurialCommand.getVersion()
 
-    override fun getDefaultBranchName(url: String) = "default"
+    override fun getDefaultBranchName(url: String) = Result.success("default")
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree = MercurialWorkingTree(vcsDirectory, type)
 
@@ -70,39 +70,43 @@ class Mercurial(override val descriptor: PluginDescriptor = MercurialFactory.des
 
     override fun isApplicableUrlInternal(vcsUrl: String) = MercurialCommand.run("identify", vcsUrl).isSuccess
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
-        // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
-        val extensionsList = mutableListOf(MERCURIAL_LARGE_FILES_EXTENSION)
+    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): Result<WorkingTree> =
+        runCatching {
+            // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
+            val extensionsList = mutableListOf(MERCURIAL_LARGE_FILES_EXTENSION)
 
-        if (vcs.path.isNotBlank() && isAtLeastVersion("4.3")) {
-            // Starting with version 4.3 Mercurial has experimental built-in support for sparse checkouts, see
-            // https://www.mercurial-scm.org/wiki/WhatsNew#Mercurial_4.3_.2F_4.3.1_.282017-08-10.29
-            extensionsList += MERCURIAL_SPARSE_EXTENSION
+            if (vcs.path.isNotBlank() && isAtLeastVersion("4.3")) {
+                // Starting with version 4.3 Mercurial has experimental built-in support for sparse checkouts, see
+                // https://www.mercurial-scm.org/wiki/WhatsNew#Mercurial_4.3_.2F_4.3.1_.282017-08-10.29
+                extensionsList += MERCURIAL_SPARSE_EXTENSION
+            }
+
+            MercurialCommand.run(targetDir, "init").requireSuccess()
+
+            targetDir.resolve(".hg/hgrc").writeText(
+                """
+                    [paths]
+                    default = ${vcs.url}
+                    [extensions]
+
+                """.trimIndent() + extensionsList.joinToString("\n")
+            )
+
+            if (MERCURIAL_SPARSE_EXTENSION in extensionsList) {
+                logger.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
+
+                // Mercurial does not accept absolute paths.
+                val globPatterns = getSparseCheckoutGlobPatterns() + "${vcs.path}/**"
+
+                MercurialCommand.run(
+                    targetDir,
+                    "debugsparse",
+                    *globPatterns.flatMap { listOf("-I", it) }.toTypedArray()
+                ).requireSuccess()
+            }
+
+            getWorkingTree(targetDir)
         }
-
-        MercurialCommand.run(targetDir, "init").requireSuccess()
-
-        targetDir.resolve(".hg/hgrc").writeText(
-            """
-                [paths]
-                default = ${vcs.url}
-                [extensions]
-
-            """.trimIndent() + extensionsList.joinToString("\n")
-        )
-
-        if (MERCURIAL_SPARSE_EXTENSION in extensionsList) {
-            logger.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
-
-            // Mercurial does not accept absolute paths.
-            val globPatterns = getSparseCheckoutGlobPatterns() + "${vcs.path}/**"
-
-            MercurialCommand.run(targetDir, "debugsparse", *globPatterns.flatMap { listOf("-I", it) }.toTypedArray())
-                .requireSuccess()
-        }
-
-        return getWorkingTree(targetDir)
-    }
 
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
         runCatching {
@@ -111,12 +115,12 @@ class Mercurial(override val descriptor: PluginDescriptor = MercurialFactory.des
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
             // not be the case if the requested revision is already available locally.
-            workingTree.runHg("pull", "-r", revision)
+            workingTree.runHg("pull", "-r", revision).requireSuccess()
 
             // TODO: Implement updating of subrepositories.
 
             // Explicitly update the working tree to the desired revision.
-            workingTree.runHg("update", revision).isSuccess
+            workingTree.runHg("update", revision).requireSuccess()
         }.map {
             revision
         }

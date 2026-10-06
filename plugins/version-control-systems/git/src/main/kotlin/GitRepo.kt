@@ -101,10 +101,11 @@ class GitRepo(
 
     override fun getVersion() = GitRepoCommand.getVersion()
 
-    override fun getDefaultBranchName(url: String): String {
-        val refs = JGit.lsRemoteRepository().setRemote(url).callAsMap()
-        return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
-    }
+    override fun getDefaultBranchName(url: String): Result<String> =
+        runCatching {
+            val refs = JGit.lsRemoteRepository().setRemote(url).callAsMap()
+            (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
+        }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
         val repoRoot = vcsDirectory.searchUpwardFor(dirPath = ".repo")
@@ -165,37 +166,38 @@ class GitRepo(
 
     override fun isApplicableUrlInternal(vcsUrl: String) = false
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
-        val repoUrl = vcs.url.substringBefore('?')
-        val manifestRevision = vcs.revision.takeUnless { it.isBlank() }
-        val manifestPath = vcs.url.parseRepoManifestPath()
+    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): Result<WorkingTree> =
+        runCatching {
+            val repoUrl = vcs.url.substringBefore('?')
+            val manifestRevision = vcs.revision.takeUnless { it.isBlank() }
+            val manifestPath = vcs.url.parseRepoManifestPath()
 
-        val manifestOptions = listOfNotNull(
-            manifestRevision?.let { listOf("-b", it) },
-            manifestPath?.let { listOf("-m", it) }
-        ).flatten()
+            val manifestOptions = listOfNotNull(
+                manifestRevision?.let { listOf("-b", it) },
+                manifestPath?.let { listOf("-m", it) }
+            ).flatten()
 
-        logger.info {
-            val revisionDetails = manifestRevision?.let { " with revision '$it'" }.orEmpty()
-            val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
-            "Initializing $type working tree from $repoUrl$revisionDetails$pathDetails."
+            logger.info {
+                val revisionDetails = manifestRevision?.let { " with revision '$it'" }.orEmpty()
+                val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
+                "Initializing $type working tree from $repoUrl$revisionDetails$pathDetails."
+            }
+
+            runRepo(
+                targetDir,
+                "init",
+                // Configure cloning of all projects instead of only those in the "default" group (until specifying
+                // groups is supported in ORT).
+                "--groups=all",
+                "--no-repo-verify",
+                "--no-clone-bundle",
+                "--repo-rev=$GIT_REPO_REV",
+                "-u", repoUrl,
+                *manifestOptions.toTypedArray()
+            )
+
+            getWorkingTree(targetDir)
         }
-
-        runRepo(
-            targetDir,
-            "init",
-            // Configure cloning of all projects instead of only those in the "default" group (until specifying groups
-            // is supported in ORT).
-            "--groups=all",
-            "--no-repo-verify",
-            "--no-clone-bundle",
-            "--repo-rev=$GIT_REPO_REV",
-            "-u", repoUrl,
-            *manifestOptions.toTypedArray()
-        )
-
-        return getWorkingTree(targetDir)
-    }
 
     override fun updateWorkingTree(
         workingTree: WorkingTree,

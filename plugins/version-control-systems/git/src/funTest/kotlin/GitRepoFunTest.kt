@@ -24,6 +24,7 @@ import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.maps.shouldContainExactly
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.sequences.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
@@ -82,11 +83,13 @@ class GitRepoFunTest : WordSpec({
 
             val workingTree = gitRepo.download(pkg, outputDir)
 
-            workingTree.isValid() shouldBe true
-            workingTree.getInfo() shouldBe vcs
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getInfo() shouldBe vcs
 
-            workingTree.getPathToRoot(outputDir / "grpc" / "README.md") shouldBe "grpc/README.md"
-            workingTree.getPathToRoot(outputDir / "spdx-tools" / "TODO") shouldBe "spdx-tools/TODO"
+                getPathToRoot(outputDir / "grpc" / "README.md") shouldBe "grpc/README.md"
+                getPathToRoot(outputDir / "spdx-tools" / "TODO") shouldBe "spdx-tools/TODO"
+            }
 
             actualSpdxFiles.shouldContainExactly(
                 ".git",
@@ -108,7 +111,7 @@ class GitRepoFunTest : WordSpec({
         "get nested submodules" {
             val workingTree = gitRepo.download(pkg, outputDir)
 
-            workingTree.getNested() shouldContainExactly listOf(
+            workingTree.shouldBeSuccess().getNested() shouldContainExactly listOf(
                 "spdx-tools",
                 "submodules",
                 "submodules/commons-text",

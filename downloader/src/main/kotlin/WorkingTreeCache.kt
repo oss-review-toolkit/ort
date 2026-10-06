@@ -95,7 +95,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
     private fun getWorkingTree(vcsInfo: VcsInfo, vcs: VersionControlSystem) =
         workingTrees.getOrPut(getKey(vcsInfo)) {
             val dir = createOrtTempDir()
-            vcs.initWorkingTree(dir, vcsInfo.copy(path = "", revision = ""))
+            vcs.initWorkingTree(dir, vcsInfo.copy(path = "", revision = "")).getOrThrow()
         }
 
     override suspend fun shutdown() {

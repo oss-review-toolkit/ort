@@ -28,7 +28,6 @@ import java.security.PublicKey
 import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.jgit.api.Git as JGit
-import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.ObjectIdRef
@@ -144,10 +143,11 @@ class Git(
 
     override fun getVersion() = GitCommand.getVersion()
 
-    override fun getDefaultBranchName(url: String): String {
-        val refs = JGit.lsRemoteRepository().setRemote(url).callAsMap()
-        return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
-    }
+    override fun getDefaultBranchName(url: String): Result<String> =
+        runCatching {
+            val refs = JGit.lsRemoteRepository().setRemote(url).callAsMap()
+            (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
+        }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory, type)
 
@@ -160,8 +160,8 @@ class Git(
             logger.debug { "Failed to check whether $type is applicable for $vcsUrl: ${it.collectMessages()}" }
         }.isSuccess
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
-        try {
+    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): Result<WorkingTree> =
+        runCatching {
             JGit.init().setDirectory(targetDir).call().use { git ->
                 git.remoteAdd().setName("origin").setUri(URIish(vcs.url)).call()
 
@@ -189,12 +189,11 @@ class Git(
 
                 git.repository.config.save()
             }
-        } catch (e: GitAPIException) {
+        }.recoverCatching { e ->
             throw IOException("Unable to initialize $type working tree at directory '$targetDir'.", e)
+        }.map {
+            getWorkingTree(targetDir)
         }
-
-        return getWorkingTree(targetDir)
-    }
 
     override fun updateWorkingTree(
         workingTree: WorkingTree,

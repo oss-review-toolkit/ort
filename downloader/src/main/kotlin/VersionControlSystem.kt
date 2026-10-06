@@ -180,10 +180,11 @@ abstract class VersionControlSystem : Plugin {
     abstract fun getVersion(): String
 
     /**
-     * Return the name of the default branch for the repository at [url]. It is expected that there always is a default
-     * branch name that implementations can fall back to, and that the returned name is non-empty.
+     * Return a [Result] wrapping the name of the default branch for the repository at [url] on success, or wrapping a
+     * [Throwable] on failure. It is expected that there always is a default branch name that implementations can fall
+     * back to, and that the returned name is non-empty.
      */
-    abstract fun getDefaultBranchName(url: String): String
+    abstract fun getDefaultBranchName(url: String): Result<String>
 
     /**
      * Return a working tree instance for this VCS.
@@ -218,25 +219,22 @@ abstract class VersionControlSystem : Plugin {
      * Download the source code as specified by the [pkg] information to [targetDir]. [allowMovingRevisions] toggles
      * whether to allow downloads using symbolic names that point to moving revisions, like Git branches. If [recursive]
      * is `true`, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too.
-     *
-     * @return An object describing the downloaded working tree.
-     *
-     * @throws DownloadException in case the download failed.
+     * Returns a [Result] wrapping the downloaded [WorkingTree] on success, or a wrapping a [Throwable] on failure.
      */
     fun download(
         pkg: Package,
         targetDir: File,
         allowMovingRevisions: Boolean = false,
         recursive: Boolean = true
-    ): WorkingTree {
-        val workingTree = try {
-            initWorkingTree(targetDir, pkg.vcsProcessed)
-        } catch (e: IOException) {
-            throw DownloadException("Failed to initialize $type working tree at '$targetDir'.", e)
+    ): Result<WorkingTree> {
+        val downloadUrl = pkg.vcsProcessed.url
+
+        val workingTree = initWorkingTree(targetDir, pkg.vcsProcessed).getOrElse {
+            return Result.failure(DownloadException("Failed to initialize $type working tree at '$targetDir'.", it))
         }
 
         val revisionCandidates = getRevisionCandidates(workingTree, pkg, allowMovingRevisions).getOrElse {
-            throw DownloadException("$type failed to get revisions from URL ${pkg.vcsProcessed.url}.", it)
+            return Result.failure(DownloadException("$type failed to get revisions from URL $downloadUrl.", it))
         }
 
         val results = mutableListOf<Result<String>>()
@@ -248,16 +246,18 @@ abstract class VersionControlSystem : Plugin {
         }
 
         val workingTreeRevision = results.last().getOrElse {
-            throw DownloadException(
-                "$type failed to download from ${pkg.vcsProcessed.url} to '${workingTree.getRootPath()}'.", it
+            return Result.failure(
+                DownloadException("$type failed to download from $downloadUrl to '${workingTree.getRootPath()}'.", it)
             )
         }
 
         pkg.vcsProcessed.path.let {
             if (it.isNotBlank() && !workingTree.getRootPath().resolve(it).exists()) {
-                throw DownloadException(
-                    "The $type working directory at '${workingTree.getRootPath()}' does not contain the requested " +
-                        "path '$it'."
+                return Result.failure(
+                    DownloadException(
+                        "The $type working directory at '${workingTree.getRootPath()}' does not contain the " +
+                            "requested path '$it'."
+                    )
                 )
             }
         }
@@ -266,13 +266,13 @@ abstract class VersionControlSystem : Plugin {
             "Successfully downloaded revision '$workingTreeRevision' for package '${pkg.id.toCoordinates()}'."
         }
 
-        return workingTree
+        return Result.success(workingTree)
     }
 
     /**
-     * Get a list of distinct revision candidates for the [package][pkg]. The iteration order of the elements in the
-     * list represents the priority of the revision candidates. If no revision candidates can be found a
-     * [DownloadException] is thrown.
+     * Return a [Result] wrapping a list of distinct revision candidates for the [package][pkg] on success, or wrapping
+     * a [Throwable] on failure. The iteration order of the elements in the list represents the priority of the revision
+     * candidates.
      *
      * The provided [workingTree] must have been created from the [processed VCS information][Package.vcsProcessed] of
      * the [package][pkg] for the function to return correct results.
@@ -367,11 +367,10 @@ abstract class VersionControlSystem : Plugin {
     }
 
     /**
-     * Initialize the working tree without checking out any files yet.
-     *
-     * @throws IOException in case the initialization failed.
+     * Initialize the working tree without checking out any files yet. Returns a [Result] wrapping the [WorkingTree] on
+     * success, or wrapping a [Throwable] on failure.
      */
-    abstract fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree
+    abstract fun initWorkingTree(targetDir: File, vcs: VcsInfo): Result<WorkingTree>
 
     /**
      * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given

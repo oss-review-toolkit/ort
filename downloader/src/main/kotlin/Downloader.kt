@@ -278,9 +278,12 @@ class Downloader(private val config: DownloaderConfiguration) {
             return RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
         }
 
-        val workingTree = try {
-            applicableVcs.download(pkg, outputDirectory, config.allowMovingRevisions, recursive)
-        } catch (e: DownloadException) {
+        val workingTree = applicableVcs.download(
+            pkg,
+            outputDirectory,
+            config.allowMovingRevisions,
+            recursive
+        ).recoverCatching { e ->
             // TODO: Introduce something like a "strict" mode and only do these kind of fallbacks in non-strict mode.
             val vcsUrlNoCredentials = pkg.vcsProcessed.url.replaceCredentialsInUri()
             if (vcsUrlNoCredentials != pkg.vcsProcessed.url) {
@@ -292,14 +295,18 @@ class Downloader(private val config: DownloaderConfiguration) {
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
                 outputDirectory.safeDeleteRecursively(baseDirectory = outputDirectory)
 
-                val fallbackPkg = pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials))
-                applicableVcs.download(fallbackPkg, outputDirectory, config.allowMovingRevisions, recursive)
+                applicableVcs.download(
+                    pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials)),
+                    outputDirectory,
+                    config.allowMovingRevisions,
+                    recursive
+                ).getOrThrow()
             } else {
                 throw e
             }
         }
 
-        val resolvedRevision = workingTree.getRevision()
+        val resolvedRevision = workingTree.getOrThrow().getRevision()
 
         logger.info {
             "Finished downloading source code revision '$resolvedRevision' to '${outputDirectory.absolutePath}'."

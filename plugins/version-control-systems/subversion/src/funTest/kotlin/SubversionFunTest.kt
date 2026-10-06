@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.versioncontrolsystems.subversion
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -61,13 +62,14 @@ class SubversionFunTest : WordSpec({
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
-            }.sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV
+                getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                    it.toRelativeString(getRootPath()).ifEmpty { null }
+                }.sorted().joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
         }
 
         "get only the given path" {
@@ -80,15 +82,16 @@ class SubversionFunTest : WordSpec({
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walk()
-                .onEnter { it.name !in VCS_DIRECTORIES }
-                .filter { it.isFile }
-                .mapTo(mutableListOf()) { it.toRelativeString(workingTree.getRootPath()) }
-                .sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV
+                getRootPath().walk()
+                    .onEnter { it.name !in VCS_DIRECTORIES }
+                    .filter { it.isFile }
+                    .mapTo(mutableListOf()) { it.toRelativeString(getRootPath()) }
+                    .sorted().joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
         }
 
         "get only the given tag" {
@@ -103,13 +106,14 @@ class SubversionFunTest : WordSpec({
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
-            }.sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_TAG
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV_FOR_TAG
+                getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                    it.toRelativeString(getRootPath()).ifEmpty { null }
+                }.sorted().joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
         }
 
         "work based on a package version" {
@@ -120,8 +124,10 @@ class SubversionFunTest : WordSpec({
 
             val workingTree = svn.download(pkg, outputDir)
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV_FOR_VERSION
+            }
         }
 
         "get only the given path based on a package version" {
@@ -137,14 +143,17 @@ class SubversionFunTest : WordSpec({
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val pathForVersion = workingTree.getRootPath() / REPO_PATH_FOR_VERSION
-            val actualFiles = pathForVersion.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(pathForVersion).ifEmpty { null }
-            }.sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            with(workingTree.shouldBeSuccess()) {
+                isValid() shouldBe true
+                getRevision() shouldBe REPO_REV_FOR_VERSION
+
+                with(getRootPath() / REPO_PATH_FOR_VERSION) {
+                    walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                        it.toRelativeString(this).ifEmpty { null }
+                    }.sorted().joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+                }
+            }
         }
     }
 })

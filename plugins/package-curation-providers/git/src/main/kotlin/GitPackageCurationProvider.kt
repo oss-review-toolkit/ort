@@ -116,8 +116,8 @@ open class GitPackageCurationProvider(
         dir.safeMkdirs()
 
         GitFactory.create().apply {
-            val workingTree = initWorkingTree(dir, vcsInfo)
-            val revision = config.revision ?: getDefaultBranchName(config.repositoryUrl)
+            val workingTree = initWorkingTree(dir, vcsInfo).getOrThrow()
+            val revision = config.revision ?: getDefaultBranchName(config.repositoryUrl).getOrThrow()
             val clonedRevision = updateWorkingTree(workingTree, revision).getOrThrow()
 
             logger.info {
