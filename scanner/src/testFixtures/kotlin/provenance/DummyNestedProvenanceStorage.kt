@@ -22,9 +22,9 @@ package org.ossreviewtoolkit.scanner.provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 
 class DummyNestedProvenanceStorage : NestedProvenanceStorage {
-    override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? = null
+    override suspend fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? = null
 
-    override fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
+    override suspend fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
         // no-op
     }
 }

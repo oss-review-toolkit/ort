@@ -55,13 +55,13 @@ interface NestedProvenanceStorage {
     /**
      * Return the [NestedProvenanceResolutionResult] for the [root] provenance, or null if no result was stored.
      */
-    fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult?
+    suspend fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult?
 
     /**
      * Write the resolution [result] for the [root] provenance into the storage. If the storage already contains an
      * entry for [root] it is overwritten.
      */
-    fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult)
+    suspend fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult)
 }
 
 /**

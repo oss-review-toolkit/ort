@@ -25,29 +25,32 @@ import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
+import kotlin.coroutines.cancellation.CancellationException
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
-import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : NestedProvenanceStorage {
-    override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? =
+    override suspend fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? =
         readResults(root).find { it.nestedProvenance.root == root }
 
-    private fun readResults(root: RepositoryProvenance): List<NestedProvenanceResolutionResult> {
+    private suspend fun readResults(root: RepositoryProvenance): List<NestedProvenanceResolutionResult> {
         val path = storagePath(root)
 
         return runCatching {
-            runBlocking { backend.read(path) }.use { input ->
+            backend.read(path).use { input ->
                 yamlMapper.readValue<List<NestedProvenanceResolutionResult>>(input)
             }
         }.getOrElse {
             when (it) {
+                is CancellationException -> throw it
+
                 is FileNotFoundException -> {
                     // If the file cannot be found it means no scan results have been stored, yet.
                     emptyList()
@@ -65,7 +68,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
         }
     }
 
-    override fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
+    override suspend fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
         val results = readResults(root).toMutableList()
         results.removeAll { it.nestedProvenance.root == root }
         results += result
@@ -75,10 +78,12 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
         val input = ByteArrayInputStream(yamlBytes)
 
         runCatching {
-            runBlocking { backend.write(path, input) }
+            backend.write(path, input)
             logger.debug { "Stored resolved nested provenance for '$root' at path '$path'." }
         }.onFailure {
             when (it) {
+                is CancellationException -> throw it
+
                 is IllegalArgumentException, is IOException -> {
                     it.showStackTrace()
 
