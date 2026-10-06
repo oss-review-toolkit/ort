@@ -29,17 +29,17 @@ interface ProvenanceFileStorage {
     /**
      * Return whether any data is associated by [provenance].
      */
-    fun hasData(provenance: KnownProvenance): Boolean
+    suspend fun hasData(provenance: KnownProvenance): Boolean
 
     /**
      * Associate [provenance] with the given [data] of the provided [size]. Replaces any existing association by
      * [provenance]. The function implementation is responsible for closing the stream.
      */
-    fun putData(provenance: KnownProvenance, data: InputStream, size: Long)
+    suspend fun putData(provenance: KnownProvenance, data: InputStream, size: Long)
 
     /**
      * Return the data associated by [provenance], or null if there is no such data. Note that it is the responsibility
      * of the caller to close the stream.
      */
-    fun getData(provenance: KnownProvenance): InputStream?
+    suspend fun getData(provenance: KnownProvenance): InputStream?
 }

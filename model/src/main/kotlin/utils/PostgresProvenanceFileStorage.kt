@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.suspendTransaction
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 
@@ -77,28 +78,30 @@ class PostgresProvenanceFileStorage(
         }
     }
 
-    override fun hasData(provenance: KnownProvenance): Boolean =
-        database.transaction {
+    override suspend fun hasData(provenance: KnownProvenance): Boolean =
+        database.suspendTransaction {
             table.select(table.provenance.count()).where {
                 table.provenance eq provenance.storageKey()
             }.first()[table.provenance.count()].toInt()
         } == 1
 
-    override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) {
-        database.transaction {
-            table.deleteWhere {
-                table.provenance eq provenance.storageKey()
-            }
+    override suspend fun putData(provenance: KnownProvenance, data: InputStream, size: Long) {
+        data.use {
+            database.suspendTransaction {
+                table.deleteWhere {
+                    table.provenance eq provenance.storageKey()
+                }
 
-            table.insert { statement ->
-                statement[this.provenance] = provenance.storageKey()
-                statement[zipData] = data.use { it.readBytes() }
+                table.insert { statement ->
+                    statement[this.provenance] = provenance.storageKey()
+                    statement[zipData] = it.readBytes()
+                }
             }
         }
     }
 
-    override fun getData(provenance: KnownProvenance): InputStream? {
-        val bytes = database.transaction {
+    override suspend fun getData(provenance: KnownProvenance): InputStream? {
+        val bytes = database.suspendTransaction {
             table.selectAll().where {
                 table.provenance eq provenance.storageKey()
             }.map {

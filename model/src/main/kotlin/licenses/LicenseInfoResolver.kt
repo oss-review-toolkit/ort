@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
 
 class LicenseInfoResolver(
@@ -280,7 +281,7 @@ class LicenseInfoResolver(
 
         val licenseInfo = resolveLicenseInfo(id)
 
-        if (!archiver.unarchive(archiveDir, provenance)) {
+        if (!runBlocking { archiver.unarchive(archiveDir, provenance) }) {
             archiveDir.safeDeleteRecursively()
             return emptyList()
         }

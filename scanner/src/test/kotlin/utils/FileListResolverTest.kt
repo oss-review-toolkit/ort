@@ -81,11 +81,11 @@ class FileListResolverTest : WordSpec({
             val dir = createTempDirWithFiles(".git/index", "LICENSE", "src/cli/main.cpp")
             val resolver = FileListResolver(
                 storage = object : ProvenanceFileStorage {
-                    override fun hasData(provenance: KnownProvenance) = true
+                    override suspend fun hasData(provenance: KnownProvenance) = true
 
-                    override fun getData(provenance: KnownProvenance) = null
+                    override suspend fun getData(provenance: KnownProvenance) = null
 
-                    override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) =
+                    override suspend fun putData(provenance: KnownProvenance, data: InputStream, size: Long) =
                         throw IOException()
                 },
                 provenanceDownloader = { dir }
@@ -140,11 +140,11 @@ class FileListResolverTest : WordSpec({
         "return null if no file list is available" {
             val resolver = FileListResolver(
                 storage = object : ProvenanceFileStorage {
-                    override fun hasData(provenance: KnownProvenance) = false
+                    override suspend fun hasData(provenance: KnownProvenance) = false
 
-                    override fun getData(provenance: KnownProvenance) = null
+                    override suspend fun getData(provenance: KnownProvenance) = null
 
-                    override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) =
+                    override suspend fun putData(provenance: KnownProvenance, data: InputStream, size: Long) =
                         throw IOException()
                 },
                 provenanceDownloader = { tempfile() }
