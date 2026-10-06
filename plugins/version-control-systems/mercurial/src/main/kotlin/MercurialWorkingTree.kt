@@ -52,7 +52,7 @@ internal class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : Workin
         // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.
         runHg("pull", "-r", "default")
         val tags = runHg("cat", "-r", "default", ".hgtags").stdout.trimEnd()
-        return tags.lines().map {
+        return tags.lines().mapTo(mutableSetOf()) {
             it.substringAfterLast(' ')
         }.sorted()
     }
