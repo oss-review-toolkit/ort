@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -50,7 +51,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
         val path = storagePath(id)
 
         return runCatching {
-            backend.read(path).use { input ->
+            runBlocking { backend.read(path) }.use { input ->
                 yamlMapper.readValue<List<StorageEntry>>(input)
             }
         }.getOrElse {
@@ -97,7 +98,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
         val input = ByteArrayInputStream(yamlBytes)
 
         runCatching {
-            backend.write(path, input)
+            runBlocking { backend.write(path, input) }
             logger.debug { "Stored resolved provenances for '${id.toCoordinates()}' at path '$path'." }
         }.onFailure {
             when (it) {
@@ -117,7 +118,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
 
     override fun deleteProvenances(id: Identifier) {
         val path = storagePath(id)
-        if (!backend.delete(path)) {
+        if (!runBlocking { backend.delete(path) }) {
             logger.warn { "Could not delete resolved provenances for '${id.toCoordinates()}' at path '$path'." }
         }
     }

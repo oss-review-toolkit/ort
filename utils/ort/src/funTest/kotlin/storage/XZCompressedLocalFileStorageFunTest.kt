@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 class XZCompressedLocalFileStorageFunTest : WordSpec({
-    fun storage(block: (XZCompressedLocalFileStorage, File) -> Unit) {
+    suspend fun storage(block: suspend (XZCompressedLocalFileStorage, File) -> Unit) {
         val directory = tempdir()
         val storage = XZCompressedLocalFileStorage(directory)
         block(storage, directory)

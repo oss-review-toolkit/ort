@@ -24,6 +24,11 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
@@ -37,6 +42,8 @@ open class LocalFileStorage(
      */
     val directory: File
 ) : FileStorage {
+    val mutex = Mutex()
+
     /**
      * Return the internally used path, which might differ from the provided [path] e.g. in case a suffix is added to
      * denote a compression scheme.
@@ -49,37 +56,44 @@ open class LocalFileStorage(
     /** Wrap the [outputStream] of a stored file, e.g. to compress it. */
     protected open fun wrapOutputStream(outputStream: OutputStream): OutputStream = outputStream
 
-    override fun exists(path: String) = directory.resolve(transformPath(path)).exists()
+    override suspend fun exists(path: String) =
+        withContext(Dispatchers.IO) { directory.resolve(transformPath(path)).exists() }
 
-    @Synchronized
-    override fun read(path: String): InputStream {
-        val file = resolveSafely(path)
-        val inputStream = file.inputStream()
-
-        return try {
-            wrapInputStream(inputStream)
-        } catch (e: IOException) {
-            inputStream.close()
-            throw e
-        }
-    }
-
-    @Synchronized
-    override fun write(path: String, inputStream: InputStream) {
-        inputStream.use {
+    override suspend fun read(path: String): InputStream =
+        withContext(Dispatchers.IO) {
             val file = resolveSafely(path)
-            file.parentFile.safeMkdirs()
+            val inputStream = mutex.withLock { file.inputStream() }
 
-            file.outputStream().use { fileOutput ->
-                wrapOutputStream(fileOutput).use { wrappedOutput ->
-                    it.copyTo(wrappedOutput)
+            try {
+                wrapInputStream(inputStream)
+            } catch (e: IOException) {
+                inputStream.close()
+                throw e
+            }
+        }
+
+    override suspend fun write(path: String, inputStream: InputStream) {
+        inputStream.use {
+            withContext(Dispatchers.IO) {
+                val file = resolveSafely(path)
+                file.parentFile.safeMkdirs()
+
+                mutex.withLock {
+                    file.outputStream().use { fileOutput ->
+                        wrapOutputStream(fileOutput).use { wrappedOutput ->
+                            it.copyTo(wrappedOutput)
+                        }
+                    }
                 }
             }
         }
     }
 
-    @Synchronized
-    override fun delete(path: String): Boolean = directory.resolve(transformPath(path)).delete()
+    override suspend fun delete(path: String): Boolean =
+        withContext(Dispatchers.IO) {
+            val file = directory / transformPath(path)
+            mutex.withLock { file.delete() }
+        }
 
     /**
      * Resolve [path] against [directory] and throw an [IllegalArgumentException] if the resolved file is not in

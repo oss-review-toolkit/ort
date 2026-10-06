@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.scanner.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -55,7 +56,7 @@ class PackageBasedFileStorage(
         val path = storagePath(id)
 
         return runCatching {
-            backend.read(path).use { input ->
+            runBlocking { backend.read(path) }.use { input ->
                 yamlMapper.readValue<ScanResultContainer>(input).results
             }
         }.recoverCatching {
@@ -93,7 +94,7 @@ class PackageBasedFileStorage(
         val input = ByteArrayInputStream(yamlBytes)
 
         return runCatching {
-            backend.write(path, input)
+            runBlocking { backend.write(path, input) }
             logger.debug { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
         }.onFailure {
             if (it is IllegalArgumentException || it is IOException) {

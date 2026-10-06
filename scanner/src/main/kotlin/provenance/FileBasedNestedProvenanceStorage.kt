@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -42,7 +43,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
         val path = storagePath(root)
 
         return runCatching {
-            backend.read(path).use { input ->
+            runBlocking { backend.read(path) }.use { input ->
                 yamlMapper.readValue<List<NestedProvenanceResolutionResult>>(input)
             }
         }.getOrElse {
@@ -74,7 +75,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
         val input = ByteArrayInputStream(yamlBytes)
 
         runCatching {
-            backend.write(path, input)
+            runBlocking { backend.write(path, input) }
             logger.debug { "Stored resolved nested provenance for '$root' at path '$path'." }
         }.onFailure {
             when (it) {

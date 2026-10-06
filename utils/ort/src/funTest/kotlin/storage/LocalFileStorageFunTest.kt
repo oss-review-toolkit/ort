@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 class LocalFileStorageFunTest : WordSpec({
-    fun storage(block: (LocalFileStorage, File) -> Unit) {
+    suspend fun storage(block: suspend (LocalFileStorage, File) -> Unit) {
         val directory = tempdir()
         val storage = LocalFileStorage(directory)
         block(storage, directory)

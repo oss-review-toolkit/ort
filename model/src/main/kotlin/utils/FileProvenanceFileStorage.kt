@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
@@ -54,18 +55,18 @@ class FileProvenanceFileStorage(
     override fun hasData(provenance: KnownProvenance): Boolean {
         val filePath = getFilePath(provenance)
 
-        return storage.exists(filePath)
+        return runBlocking { storage.exists(filePath) }
     }
 
     override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) {
-        storage.write(getFilePath(provenance), data)
+        runBlocking { storage.write(getFilePath(provenance), data) }
     }
 
     override fun getData(provenance: KnownProvenance): InputStream? {
         val filePath = getFilePath(provenance)
 
         return runCatching {
-            storage.read(filePath)
+            runBlocking { storage.read(filePath) }
         }.onFailure {
             logger.error { "Could not read from $filePath: ${it.collectMessages()}" }
         }.getOrNull()
