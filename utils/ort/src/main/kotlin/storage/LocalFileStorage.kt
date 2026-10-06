@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.ort.storage
 
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -42,32 +43,37 @@ open class LocalFileStorage(
      */
     open fun transformPath(path: String): String = path
 
+    /** Wrap the [inputStream] of a stored file, e.g. to decompress it. */
+    protected open fun wrapInputStream(inputStream: InputStream): InputStream = inputStream
+
+    /** Wrap the [outputStream] of a stored file, e.g. to compress it. */
+    protected open fun wrapOutputStream(outputStream: OutputStream): OutputStream = outputStream
+
     override fun exists(path: String) = directory.resolve(transformPath(path)).exists()
 
     @Synchronized
     override fun read(path: String): InputStream {
         val file = resolveSafely(path)
+        val inputStream = file.inputStream()
 
-        return file.inputStream()
-    }
-
-    /**
-     * Ensure that [path] resolves to a file in [directory], create any parent directories if needed, and return an
-     * output stream for writing to the file.
-     */
-    protected open fun safeOutputStream(path: String): OutputStream {
-        val file = resolveSafely(path)
-
-        file.parentFile.safeMkdirs()
-
-        return file.outputStream()
+        return try {
+            wrapInputStream(inputStream)
+        } catch (e: IOException) {
+            inputStream.close()
+            throw e
+        }
     }
 
     @Synchronized
     override fun write(path: String, inputStream: InputStream) {
         inputStream.use {
-            safeOutputStream(path).use { outputStream ->
-                it.copyTo(outputStream)
+            val file = resolveSafely(path)
+            file.parentFile.safeMkdirs()
+
+            file.outputStream().use { fileOutput ->
+                wrapOutputStream(fileOutput).use { wrappedOutput ->
+                    it.copyTo(wrappedOutput)
+                }
             }
         }
     }

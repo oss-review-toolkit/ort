@@ -33,7 +33,6 @@ buildConfig {
 
 dependencies {
     api(projects.utils.spdxExpressionUtils)
-    api(libs.commonsCompress)
     api(libs.kotlinx.coroutines)
     api(libs.okhttp)
 
@@ -42,6 +41,7 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)
     implementation(libs.awsS3)
+    implementation(libs.commonsCompress)
 
     implementation(libs.xz) {
         because("XZOutputStream is a supertype of XZCompressorOutputStream.")
