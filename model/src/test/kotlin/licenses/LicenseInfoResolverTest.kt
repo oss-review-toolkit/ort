@@ -783,7 +783,7 @@ class LicenseInfoResolverTest : WordSpec({
     }
 })
 
-private fun TestConfiguration.createArchiver(
+private suspend fun TestConfiguration.createArchiver(
     provenance: KnownProvenance,
     vararg relativeFilePaths: String
 ): FileArchiver {

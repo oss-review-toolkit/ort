@@ -763,7 +763,7 @@ class Scanner(
         logger.info { "Created file lists for ${provenances.size} provenances in $duration." }
     }
 
-    private fun createMissingArchives(controller: ScanController) {
+    private suspend fun createMissingArchives(controller: ScanController) {
         // TODO: The archives are currently created in a way compatible with the existing implementation in the
         //       PathScanner. This allows to keep using existing file archives without changing the logic used to
         //       access those archives in the reporter. To achieve this nested provenances are downloaded recursively,

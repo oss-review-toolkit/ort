@@ -55,7 +55,7 @@ class FileListResolver(
      * Get the [FileList] associated with the provided [provenance]. If it is not available in the [storage], download
      * the provenance and create the [FileList] from it.
      */
-    fun resolve(provenance: KnownProvenance): FileList {
+    suspend fun resolve(provenance: KnownProvenance): FileList {
         storage.getFileList(provenance)?.let { return it }
 
         val dir = provenanceDownloader.download(provenance)
@@ -72,20 +72,20 @@ class FileListResolver(
     /**
      * Get the [FileList] associated with the provided [provenance], or null if it is not available in the [storage].
      */
-    fun get(provenance: KnownProvenance): FileList? = storage.getFileList(provenance)
+    suspend fun get(provenance: KnownProvenance): FileList? = storage.getFileList(provenance)
 
     /**
      * Return true if the [storage] has a [FileList] associated with the provided [provenance].
      */
-    fun has(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
+    suspend fun has(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
 }
 
-private fun ProvenanceFileStorage.putFileList(provenance: KnownProvenance, fileList: FileList) {
+private suspend fun ProvenanceFileStorage.putFileList(provenance: KnownProvenance, fileList: FileList) {
     val byteArray = fileList.toYaml().toByteArray()
     putData(provenance, ByteArrayInputStream(byteArray), byteArray.size.toLong())
 }
 
-private fun ProvenanceFileStorage.getFileList(provenance: KnownProvenance): FileList? {
+private suspend fun ProvenanceFileStorage.getFileList(provenance: KnownProvenance): FileList? {
     if (!hasData(provenance)) return null
     val data = getData(provenance) ?: return null
     return data.use { yamlMapper.readValue<FileList>(it) }

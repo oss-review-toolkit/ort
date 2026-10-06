@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model.utils
 
 import java.io.InputStream
 
+import kotlin.coroutines.cancellation.CancellationException
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -28,7 +30,6 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
@@ -52,22 +53,24 @@ class FileProvenanceFileStorage(
         }
     }
 
-    override fun hasData(provenance: KnownProvenance): Boolean {
+    override suspend fun hasData(provenance: KnownProvenance): Boolean {
         val filePath = getFilePath(provenance)
 
-        return runBlocking { storage.exists(filePath) }
+        return storage.exists(filePath)
     }
 
-    override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) {
-        runBlocking { storage.write(getFilePath(provenance), data) }
+    override suspend fun putData(provenance: KnownProvenance, data: InputStream, size: Long) {
+        storage.write(getFilePath(provenance), data)
     }
 
-    override fun getData(provenance: KnownProvenance): InputStream? {
+    override suspend fun getData(provenance: KnownProvenance): InputStream? {
         val filePath = getFilePath(provenance)
 
         return runCatching {
-            runBlocking { storage.read(filePath) }
+            storage.read(filePath)
         }.onFailure {
+            if (it is CancellationException) throw it
+
             logger.error { "Could not read from $filePath: ${it.collectMessages()}" }
         }.getOrNull()
     }
