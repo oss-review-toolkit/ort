@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.scanner.storages.PackageBasedFileStorage
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
 
@@ -119,7 +120,7 @@ internal class CreateCommand : OrtHelperCommand(
         outputDir.safeMkdirs()
 
         val scanResultsStorage = PackageBasedFileStorage(LocalFileStorage(scanResultsStorageDir))
-        val scanResults = scanResultsStorage.readForId(id = packageId).getOrThrow().run {
+        val scanResults = runBlocking { scanResultsStorage.readForId(id = packageId) }.getOrThrow().run {
             listOfNotNull(
                 find { it.provenance is RepositoryProvenance },
                 find { it.provenance is ArtifactProvenance }

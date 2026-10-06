@@ -25,6 +25,8 @@ import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
+import kotlin.coroutines.cancellation.CancellationException
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
@@ -35,7 +37,6 @@ import org.ossreviewtoolkit.scanner.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -52,13 +53,15 @@ class PackageBasedFileStorage(
 ) : AbstractPackageBasedScanStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
-    fun readForId(id: Identifier): Result<List<ScanResult>> {
+    suspend fun readForId(id: Identifier): Result<List<ScanResult>> {
         val path = storagePath(id)
 
         return runCatching {
-            runBlocking { backend.read(path) }.use { input ->
+            backend.read(path).use { input ->
                 yamlMapper.readValue<ScanResultContainer>(input).results
             }
+        }.onFailure {
+            if (it is CancellationException) throw it
         }.recoverCatching {
             // If the file cannot be found it means no scan results have been stored, yet.
             if (it is FileNotFoundException) return Result.success(emptyList())
@@ -72,10 +75,10 @@ class PackageBasedFileStorage(
         }
     }
 
-    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> =
+    override suspend fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> =
         readForId(pkg.id).map { results -> results.filter { it.provenance.matches(pkg) } }
 
-    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
+    override suspend fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         val existingScanResults = readForId(id).getOrDefault(emptyList())
 
         if (existingScanResults.any { it.scanner == scanResult.scanner && it.provenance == scanResult.provenance }) {
@@ -94,9 +97,11 @@ class PackageBasedFileStorage(
         val input = ByteArrayInputStream(yamlBytes)
 
         return runCatching {
-            runBlocking { backend.write(path, input) }
+            backend.write(path, input)
             logger.debug { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
         }.onFailure {
+            if (it is CancellationException) throw it
+
             if (it is IllegalArgumentException || it is IOException) {
                 it.showStackTrace()
 

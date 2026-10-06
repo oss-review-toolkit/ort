@@ -23,7 +23,6 @@ import java.time.Instant
 
 import kotlin.coroutines.cancellation.CancellationException
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.json.jsonObject
@@ -58,7 +57,6 @@ import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.okHttpClient
-import org.ossreviewtoolkit.utils.ort.runBlocking
 
 import retrofit2.HttpException
 
@@ -82,10 +80,12 @@ class ClearlyDefinedStorage(
         ClearlyDefinedService.create(config.serverUrl, client ?: okHttpClient)
     }
 
-    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> =
-        runBlocking(Dispatchers.IO) { readFromClearlyDefined(pkg) }
+    override suspend fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> =
+        readFromClearlyDefined(pkg).onFailure {
+            if (it is CancellationException) throw it
+        }
 
-    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> =
+    override suspend fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> =
         Result.failure(ScanStorageException("Adding scan results directly to ClearlyDefined is not supported."))
 
     /**

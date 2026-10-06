@@ -303,7 +303,7 @@ class Scanner(
     /**
      * Run package scanners for packages with incomplete scan results.
      */
-    private fun runPackageScanners(controller: ScanController, context: ScanContext) {
+    private suspend fun runPackageScanners(controller: ScanController, context: ScanContext) {
         val packagesByProvenance = controller.getPackagesConsolidatedByProvenance()
 
         packagesByProvenance.onEachIndexed { index, (provenance, packages) ->
@@ -405,7 +405,7 @@ class Scanner(
     /**
      * Run provenance scanners for provenances with missing scan results.
      */
-    private fun runProvenanceScanners(
+    private suspend fun runProvenanceScanners(
         controller: ScanController,
         context: ScanContext,
         checkoutPathsForProvenance: Map<KnownProvenance, Set<String>>
@@ -465,7 +465,7 @@ class Scanner(
     /**
      * Run path scanners for provenances with missing scan results.
      */
-    private fun runPathScanners(
+    private suspend fun runPathScanners(
         controller: ScanController,
         context: ScanContext,
         checkoutPathsForProvenance: Map<KnownProvenance, Set<String>>
@@ -542,7 +542,7 @@ class Scanner(
             keep
         }
 
-    private fun readStoredResults(controller: ScanController) {
+    private suspend fun readStoredResults(controller: ScanController) {
         logger.info {
             "Reading stored scan results for ${controller.getPackageProvenancesWithoutVcsPath().size} package(s) " +
                 "with ${controller.getAllProvenances().size} provenance(s)."
@@ -565,7 +565,7 @@ class Scanner(
         }
     }
 
-    private fun readStoredPackageResults(controller: ScanController) {
+    private suspend fun readStoredPackageResults(controller: ScanController) {
         controller.scanners.forEach { scanner ->
             val scannerMatcher = scanner.matcher ?: return@forEach
             if (!scanner.readFromStorage) return@forEach
@@ -583,6 +583,8 @@ class Scanner(
                             controller.addAndDeduplicateNestedScanResult(scanner, result)
                         }
                     }.onFailure { e ->
+                        if (e is CancellationException) throw e
+
                         e.showStackTrace()
 
                         logger.warn {
@@ -595,7 +597,7 @@ class Scanner(
         }
     }
 
-    private fun readStoredProvenanceResults(controller: ScanController) {
+    private suspend fun readStoredProvenanceResults(controller: ScanController) {
         controller.scanners.forEach { scanner ->
             val scannerMatcher = scanner.matcher ?: return@forEach
             if (!scanner.readFromStorage) return@forEach
@@ -609,6 +611,8 @@ class Scanner(
                     }.onSuccess { results ->
                         controller.addAndDeduplicateScanResults(scanner, provenance, results)
                     }.onFailure { e ->
+                        if (e is CancellationException) throw e
+
                         e.showStackTrace()
 
                         logger.warn {
@@ -692,11 +696,13 @@ class Scanner(
         return results
     }
 
-    private fun storeProvenanceScanResult(provenance: KnownProvenance, scanResult: ScanResult) {
+    private suspend fun storeProvenanceScanResult(provenance: KnownProvenance, scanResult: ScanResult) {
         storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
             runCatching {
                 writer.write(scanResult)
             }.onFailure { e ->
+                if (e is CancellationException) throw e
+
                 e.showStackTrace()
 
                 logger.warn {
@@ -707,11 +713,13 @@ class Scanner(
         }
     }
 
-    private fun storePackageScanResult(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
+    private suspend fun storePackageScanResult(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
         storageWriters.filterIsInstance<PackageBasedScanStorageWriter>().forEach { writer ->
             runCatching {
                 writer.write(pkg, nestedProvenanceScanResult)
             }.onFailure { e ->
+                if (e is CancellationException) throw e
+
                 e.showStackTrace()
 
                 logger.warn {

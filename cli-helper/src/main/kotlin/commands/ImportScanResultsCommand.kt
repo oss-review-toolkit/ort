@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.clihelper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.clihelper.utils.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.PackageBasedFileStorage
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 internal class ImportScanResultsCommand : OrtHelperCommand(
@@ -55,7 +56,7 @@ internal class ImportScanResultsCommand : OrtHelperCommand(
 
         ortResult.getIdentifiers().forEach { id ->
             ortResult.getScanResultsForId(id).forEach { scanResult ->
-                scanResultsStorage.add(id, scanResult)
+                runBlocking { scanResultsStorage.add(id, scanResult) }
             }
         }
     }
