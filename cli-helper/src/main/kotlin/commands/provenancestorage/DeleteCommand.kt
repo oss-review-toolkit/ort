@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 internal class DeleteCommand : OrtHelperCommand(
     help = "Deletes stored provenance results matching the options."
@@ -70,7 +71,7 @@ internal class DeleteCommand : OrtHelperCommand(
         val config = OrtConfiguration.load(configArguments, configFile)
         val scanStorages = ScanStorages.createFromConfig(config.scanner)
 
-        val provenances = scanStorages.packageProvenanceStorage.readProvenances(packageId)
+        val provenances = runBlocking { scanStorages.packageProvenanceStorage.readProvenances(packageId) }
         if (provenances.isEmpty()) {
             val pkgCoords = Theme.Default.success(packageId.toCoordinates())
             echo(Theme.Default.info("No stored provenance found for '$pkgCoords'."))
@@ -83,7 +84,7 @@ internal class DeleteCommand : OrtHelperCommand(
         provenances.forEach(::echo)
 
         if (forceYes || YesNoPrompt("Continue?", terminal).ask() == true) {
-            scanStorages.packageProvenanceStorage.deleteProvenances(packageId)
+            runBlocking { scanStorages.packageProvenanceStorage.deleteProvenances(packageId) }
         }
     }
 }

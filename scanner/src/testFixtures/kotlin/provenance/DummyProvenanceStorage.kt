@@ -24,22 +24,24 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 
 class DummyProvenanceStorage : PackageProvenanceStorage {
-    override fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult? =
-        null
+    override suspend fun readProvenance(
+        id: Identifier,
+        sourceArtifact: RemoteArtifact
+    ): PackageProvenanceResolutionResult? = null
 
-    override fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult? = null
+    override suspend fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult? = null
 
-    override fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> = emptyList()
+    override suspend fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> = emptyList()
 
-    override fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) {
+    override suspend fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) {
         // no-op
     }
 
-    override fun writeProvenance(
+    override suspend fun writeProvenance(
         id: Identifier,
         sourceArtifact: RemoteArtifact,
         result: PackageProvenanceResolutionResult
     ) { /* no-op */ }
 
-    override fun deleteProvenances(id: Identifier) { /* no-op */ }
+    override suspend fun deleteProvenances(id: Identifier) { /* no-op */ }
 }

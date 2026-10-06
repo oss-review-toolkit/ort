@@ -64,34 +64,38 @@ interface PackageProvenanceStorage {
      * Return the [PackageProvenanceResolutionResult] for the [id] and [sourceArtifact], or null if no result was
      * stored.
      */
-    fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult?
+    suspend fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult?
 
     /**
      * Return the [PackageProvenanceResolutionResult] for the [id] and [vcs], or null if no result was stored.
      */
-    fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult?
+    suspend fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult?
 
     /**
      * Return all [PackageProvenanceResolutionResult]s for the [id].
      */
-    fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult>
+    suspend fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult>
 
     /**
      * Write the resolution [result] for the [id] and [sourceArtifact] into the storage. If the storage already contains
      * an entry for [id] and [sourceArtifact] it is overwritten.
      */
-    fun writeProvenance(id: Identifier, sourceArtifact: RemoteArtifact, result: PackageProvenanceResolutionResult)
+    suspend fun writeProvenance(
+        id: Identifier,
+        sourceArtifact: RemoteArtifact,
+        result: PackageProvenanceResolutionResult
+    )
 
     /**
      * Write the resolution [result] for the [id] and [vcs] into the storage. If the storage already contains an entry
      * for [id] and [vcs] it is overwritten.
      */
-    fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult)
+    suspend fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult)
 
     /**
      * Delete all [PackageProvenanceResolutionResult]s for the [id].
      */
-    fun deleteProvenances(id: Identifier)
+    suspend fun deleteProvenances(id: Identifier)
 }
 
 /**

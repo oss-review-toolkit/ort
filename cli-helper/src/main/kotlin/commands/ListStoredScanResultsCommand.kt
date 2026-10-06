@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 internal class ListStoredScanResultsCommand : OrtHelperCommand(
     help = "Lists the provenance of all stored scan results for a given package identifier."
@@ -70,10 +71,11 @@ internal class ListStoredScanResultsCommand : OrtHelperCommand(
             "Searching for scan results of '${packageId.toCoordinates()}' in ${scanStorages.readers.size} storage(s)."
         )
 
-        val scanResults = runCatching { scanStorages.read(Package.EMPTY.copy(id = packageId)) }.getOrElse {
-            logger.error { "Could not read scan results: ${it.message}" }
-            throw ProgramResult(1)
-        }
+        val scanResults = runCatching { runBlocking { scanStorages.read(Package.EMPTY.copy(id = packageId)) } }
+            .getOrElse {
+                logger.error { "Could not read scan results: ${it.message}" }
+                throw ProgramResult(1)
+            }
 
         println("Found ${scanResults.size} scan results:")
 
