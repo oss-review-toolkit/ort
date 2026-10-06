@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.utils.requireEmptyVcsPath
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -48,7 +49,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         val path = storagePath(provenance)
 
         return runCatching {
-            backend.read(path).use { input ->
+            runBlocking { backend.read(path) }.use { input ->
                 yamlMapper.readValue<List<ScanResult>>(input).map {
                     // Use the provided provenance for the result instead of building it from the stored values, because
                     // in the case of a RepositoryRevision only the resolved revision matters.
@@ -102,7 +103,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         val input = ByteArrayInputStream(yamlBytes)
 
         runCatching {
-            backend.write(path, input)
+            runBlocking { backend.write(path, input) }
             logger.debug { "Stored scan result for '$provenance' at path '$path'." }
             return true
         }.onFailure {

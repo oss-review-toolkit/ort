@@ -24,6 +24,9 @@ import java.io.InputStream
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 import okhttp3.CacheControl
 import okhttp3.ConnectionPool
 import okhttp3.Headers.Companion.toHeaders
@@ -33,7 +36,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.execute
+import org.ossreviewtoolkit.utils.ort.await
 
 private const val HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS = 30L
 private const val HTTP_CLIENT_KEEP_ALIVE_DURATION_IN_SECONDS = 1 * 60L
@@ -85,16 +88,16 @@ class HttpFileStorage(
             .headers(headers.toHeaders())
             .cacheControl(CacheControl.Builder().maxAge(cacheMaxAgeInSeconds, TimeUnit.SECONDS).build())
 
-    override fun exists(path: String): Boolean {
+    override suspend fun exists(path: String): Boolean {
         val request = requestBuilder()
             .head()
             .url(urlForPath(path))
             .build()
 
-        return httpClient.execute(request).isSuccessful
+        return httpClient.await(request).isSuccessful
     }
 
-    override fun read(path: String): InputStream {
+    override suspend fun read(path: String): InputStream {
         val request = requestBuilder()
             .get()
             .url(urlForPath(path))
@@ -102,7 +105,7 @@ class HttpFileStorage(
 
         logger.debug { "Reading file from storage: ${request.url}" }
 
-        val response = httpClient.execute(request)
+        val response = httpClient.await(request)
         if (response.isSuccessful) {
             return response.body.byteStream()
         }
@@ -111,16 +114,18 @@ class HttpFileStorage(
         throw IOException("Could not read from ${request.url}: ${response.code} - ${response.message}")
     }
 
-    override fun write(path: String, inputStream: InputStream) {
+    override suspend fun write(path: String, inputStream: InputStream) {
         inputStream.use {
-            val request = requestBuilder()
-                .put(it.readBytes().toRequestBody())
-                .url(urlForPath(path))
-                .build()
+            val request = withContext(Dispatchers.IO) {
+                requestBuilder()
+                    .put(it.readBytes().toRequestBody())
+                    .url(urlForPath(path))
+                    .build()
+            }
 
             logger.debug { "Writing file to storage: ${request.url}" }
 
-            return httpClient.execute(request).use { response ->
+            return httpClient.await(request).use { response ->
                 if (!response.isSuccessful) {
                     throw IOException(
                         "Could not store file at ${request.url}: ${response.code} - ${response.message}"
@@ -132,7 +137,7 @@ class HttpFileStorage(
 
     private fun urlForPath(path: String) = "$url/$path$query"
 
-    override fun delete(path: String): Boolean {
+    override suspend fun delete(path: String): Boolean {
         val request = requestBuilder()
             .delete()
             .url(urlForPath(path))
@@ -140,7 +145,7 @@ class HttpFileStorage(
 
         logger.debug { "Deleting file from storage: ${request.url}" }
 
-        val response = httpClient.execute(request)
+        val response = httpClient.await(request)
         return response.isSuccessful
     }
 }

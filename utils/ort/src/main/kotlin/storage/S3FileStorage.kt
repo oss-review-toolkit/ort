@@ -25,6 +25,9 @@ import java.io.File
 import java.io.InputStream
 import java.net.URI
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 import org.apache.logging.log4j.kotlin.logger
@@ -96,66 +99,75 @@ class S3FileStorage(
         }.build()
     }
 
-    override fun exists(path: String): Boolean {
-        val request = HeadObjectRequest.builder()
-            .key(path)
-            .bucket(bucketName)
-            .build()
+    override suspend fun exists(path: String): Boolean =
+        withContext(Dispatchers.IO) {
+            val request = HeadObjectRequest.builder()
+                .key(path)
+                .bucket(bucketName)
+                .build()
 
-        return runCatching { s3Client.headObject(request) }.onFailure { exception ->
-            if (exception !is NoSuchKeyException) {
-                logger.warn { "Unable to read '$path' from S3 bucket '$bucketName': ${exception.collectMessages()}" }
-            }
-        }.isSuccess
-    }
-
-    override fun read(path: String): InputStream {
-        val request = GetObjectRequest.builder()
-            .key(path)
-            .bucket(bucketName)
-            .build()
-
-        return runCatching {
-            val response = s3Client.getObjectAsBytes(request)
-            val stream = ByteArrayInputStream(response.asByteArray())
-            if (compression) XZCompressorInputStream(stream) else stream
-        }.onFailure { exception ->
-            if (exception is NoSuchKeyException) throw NoSuchFileException(File(path))
-        }.getOrThrow()
-    }
-
-    override fun write(path: String, inputStream: InputStream) {
-        val request = PutObjectRequest.builder()
-            .key(path)
-            .bucket(bucketName)
-            .build()
-
-        val body = inputStream.use {
-            if (compression) {
-                val stream = ByteArrayOutputStream()
-                XZCompressorOutputStream(stream).write(it.readBytes())
-                RequestBody.fromBytes(stream.toByteArray())
-            } else {
-                RequestBody.fromBytes(it.readBytes())
-            }
+            runCatching { s3Client.headObject(request) }.onFailure { exception ->
+                if (exception !is NoSuchKeyException) {
+                    logger.warn {
+                        "Unable to read '$path' from S3 bucket '$bucketName': ${exception.collectMessages()}"
+                    }
+                }
+            }.isSuccess
         }
 
-        runCatching {
-            s3Client.putObject(request, body)
-        }.onFailure { exception ->
-            if (exception is S3Exception) {
-                logger.warn { "Can not write '$path' to S3 bucket '$bucketName': ${exception.collectMessages()}" }
+    override suspend fun read(path: String): InputStream =
+        withContext(Dispatchers.IO) {
+            val request = GetObjectRequest.builder()
+                .key(path)
+                .bucket(bucketName)
+                .build()
+
+            runCatching {
+                val response = s3Client.getObjectAsBytes(request)
+                val stream = ByteArrayInputStream(response.asByteArray())
+                if (compression) XZCompressorInputStream(stream) else stream
+            }.onFailure { exception ->
+                if (exception is NoSuchKeyException) throw NoSuchFileException(File(path))
+            }.getOrThrow()
+        }
+
+    override suspend fun write(path: String, inputStream: InputStream) {
+        inputStream.use {
+            withContext(Dispatchers.IO) {
+                val request = PutObjectRequest.builder()
+                    .key(path)
+                    .bucket(bucketName)
+                    .build()
+
+                val body = if (compression) {
+                    val stream = ByteArrayOutputStream()
+                    XZCompressorOutputStream(stream).write(it.readBytes())
+                    RequestBody.fromBytes(stream.toByteArray())
+                } else {
+                    RequestBody.fromBytes(it.readBytes())
+                }
+
+                runCatching {
+                    s3Client.putObject(request, body)
+                }.onFailure { exception ->
+                    if (exception is S3Exception) {
+                        logger.warn {
+                            "Can not write '$path' to S3 bucket '$bucketName': ${exception.collectMessages()}"
+                        }
+                    }
+                }
             }
         }
     }
 
-    override fun delete(path: String): Boolean {
-        val request = DeleteObjectRequest.builder()
-            .key(path)
-            .bucket(bucketName)
-            .build()
+    override suspend fun delete(path: String): Boolean =
+        withContext(Dispatchers.IO) {
+            val request = DeleteObjectRequest.builder()
+                .key(path)
+                .bucket(bucketName)
+                .build()
 
-        val response = s3Client.deleteObject(request)
-        return response.sdkHttpResponse().isSuccessful
-    }
+            val response = s3Client.deleteObject(request)
+            response.sdkHttpResponse().isSuccessful
+        }
 }
