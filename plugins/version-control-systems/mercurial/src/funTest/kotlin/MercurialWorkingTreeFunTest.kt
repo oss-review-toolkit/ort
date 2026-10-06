@@ -23,6 +23,7 @@ import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -33,16 +34,15 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.extractResource
-import org.ossreviewtoolkit.utils.common.unpack
+import org.ossreviewtoolkit.utils.common.unpackZip
 
 @Tags("RequiresExternalTool")
 class MercurialWorkingTreeFunTest : StringSpec({
     val hg = Mercurial()
-    val zipContentDir = tempdir()
-
-    beforeSpec {
-        val zipFile = extractResource("/lz4revlog-2018-01-03-hg.zip", tempfile(suffix = ".zip"))
-        zipFile.unpack(zipContentDir)
+    val zipContentDir by lazy {
+        tempdir().also {
+            extractResource("/hgflow-2026-10-06.zip", tempfile(suffix = ".zip")).unpackZip(it)
+        } / "hgflow"
     }
 
     "Detected Mercurial version is not empty" {
@@ -66,8 +66,8 @@ class MercurialWorkingTreeFunTest : StringSpec({
         workingTree.isValid() shouldBe true
         workingTree.getInfo() shouldBe VcsInfo(
             type = VcsType.MERCURIAL,
-            url = "https://bitbucket.org/facebook/lz4revlog",
-            revision = "422ca71c35132f1f55d20a13355708aec7669b50",
+            url = "https://hg.sr.ht/~wu/hgflow",
+            revision = "4f95ea47701fea6ff8d54a5c42ef87f3bb21fc71",
             path = ""
         )
         workingTree.getNested() should beEmptyMap()
@@ -75,25 +75,47 @@ class MercurialWorkingTreeFunTest : StringSpec({
         workingTree.getPathToRoot(zipContentDir / "tests") shouldBe "tests"
     }
 
-    // TODO: Find an alternative to Bitbucket that hosts public Mercurial repositories.
-    "Mercurial correctly lists remote branches".config(enabled = false) {
-        val expectedBranches = listOf(
-            "default"
-        )
-
+    "Mercurial correctly lists remote branches" {
         val workingTree = hg.getWorkingTree(zipContentDir)
-        workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
+
+        workingTree.listRemoteBranches() should containExactlyInAnyOrder(
+            "default",
+            "develop",
+            "hotfix/0.9.8.7"
+        )
     }
 
-    // TODO: Find an alternative to Bitbucket that hosts public Mercurial repositories.
-    "Mercurial correctly lists remote tags".config(enabled = false) {
-        val expectedTags = listOf(
-            "1.0",
-            "1.0.1",
-            "1.0.2"
-        )
-
+    "Mercurial correctly lists remote tags" {
         val workingTree = hg.getWorkingTree(zipContentDir)
-        workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
+
+        workingTree.listRemoteTags() should containExactlyInAnyOrder(
+            "tag_support",
+            "v0.1",
+            "v0.2",
+            "v0.3",
+            "v0.7",
+            "v0.7.1",
+            "v0.7.2",
+            "v0.8.0",
+            "v0.8.1",
+            "v0.8.2",
+            "v0.8.3",
+            "v0.9.0",
+            "v0.9.1",
+            "v0.9.2",
+            "v0.9.3",
+            "v0.9.4",
+            "v0.9.5",
+            "v0.9.6",
+            "v0.9.7",
+            "v0.9.8",
+            "v0.9.8.1",
+            "v0.9.8.2",
+            "v0.9.8.3",
+            "v0.9.8.4",
+            "v0.9.8.5",
+            "v0.9.8.6",
+            "vmaster_push_pull"
+        )
     }
 })
