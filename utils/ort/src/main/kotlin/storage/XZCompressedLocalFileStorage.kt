@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.utils.ort.storage
 
 import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
@@ -35,7 +37,7 @@ class XZCompressedLocalFileStorage(
 ) : LocalFileStorage(directory) {
     override fun transformPath(path: String) = "$path.xz"
 
-    override fun read(path: String) = XZCompressorInputStream(super.read(path))
+    override fun wrapInputStream(inputStream: InputStream) = XZCompressorInputStream(inputStream)
 
-    override fun safeOutputStream(path: String) = XZCompressorOutputStream(super.safeOutputStream(path))
+    override fun wrapOutputStream(outputStream: OutputStream) = XZCompressorOutputStream(outputStream)
 }
