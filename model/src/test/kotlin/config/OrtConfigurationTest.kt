@@ -443,8 +443,8 @@ class OrtConfigurationTest : WordSpec({
             )
 
             val env = mapOf(
-                "ort.scanner.storages.postgres.connection.password" to "envPassword",
-                "ort.scanner.provenanceStorage.postgresStorage.connection.password" to "envPassword"
+                "ort_scanner_storages_postgres_connection_password" to "envPassword",
+                "ort_scanner_provenanceStorage_postgresStorage_connection_password" to "envPassword"
             )
 
             withEnvironment(env) {
@@ -550,10 +550,10 @@ class OrtConfigurationTest : WordSpec({
             val url = "url"
             val schema = "public"
             val env = mapOf(
-                "ort.scanner.storages.postgresStorage.connection.username" to user,
-                "ort.scanner.storages.postgresStorage.connection.url" to url,
-                "ort__scanner__storages__postgresStorage__connection__schema" to schema,
-                "ort__scanner__storages__postgresStorage__connection__password" to password
+                "ort_scanner_storages_postgresStorage_connection_username" to user,
+                "ort_scanner_storages_postgresStorage_connection_password" to password,
+                "ort_scanner_storages_postgresStorage_connection_url" to url,
+                "ort_scanner_storages_postgresStorage_connection_schema" to schema
             )
 
             withEnvironment(env) {
