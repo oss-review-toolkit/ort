@@ -38,7 +38,7 @@ class JavaBootstrapperFunTest : StringSpec({
         JavaBootstrapper.isRunningOnJdk(Environment.JAVA_VERSION) shouldBe true
     }
 
-    "A JDK for Temurin 21 can be found" {
+    "A JDK for Temurin 27 can be found" {
         val tempCache = Cache(tempdir(), 1.mebibytes)
 
         val tempCacheClient = OkHttpClientHelper.buildClient {
@@ -48,9 +48,9 @@ class JavaBootstrapperFunTest : StringSpec({
         mockkObject(JavaBootstrapper) {
             every { JavaBootstrapper.discoService } returns DiscoService.create(client = tempCacheClient)
 
-            JavaBootstrapper.findJdkPackage("TEMURIN", "21") shouldBeSuccess {
+            JavaBootstrapper.findJdkPackage("TEMURIN", "27") shouldBeSuccess {
                 it.distribution shouldBe "temurin"
-                it.jdkVersion shouldBe 21
+                it.jdkVersion shouldBe 27
                 Os.Name.fromString(it.operatingSystem) shouldBe Os.Name.current
                 Os.Arch.fromString(it.architecture) shouldBe Os.Arch.current
             }
