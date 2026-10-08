@@ -204,7 +204,7 @@ data class OrtConfiguration(
                 }
             )
 
-            val loader = ConfigLoaderBuilder.default()
+            val loader = ConfigLoaderBuilder.defaultWithoutPropertySources()
                 .addEnvironmentSource()
                 .addPropertySources(sources)
                 .withContextResolverMode(ContextResolverMode.SkipUnresolved)
