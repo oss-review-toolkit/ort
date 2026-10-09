@@ -146,7 +146,7 @@ class ScanCommand(descriptor: PluginDescriptor = ScanCommandFactory.descriptor) 
             outputDir / "scan-result.${format.fileExtension}"
         }
 
-        validateOutputFiles(outputFiles)
+        checkOutputFiles(outputFiles)
 
         val ortResult = runCatching {
             runScanners(scanners, projectScanners ?: scanners, ortConfig).mergeLabels(labels)
