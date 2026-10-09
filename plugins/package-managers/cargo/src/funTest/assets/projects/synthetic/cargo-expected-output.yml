@@ -10,7 +10,7 @@ project:
   - "MIT"
   - "NOASSERTION"
   declared_licenses_processed:
-    spdx_expression: "Apache-2.0 OR MIT OR NOASSERTION"
+    spdx_expression: "Apache-2.0 OR MIT"
   vcs:
     type: ""
     url: ""
@@ -229,8 +229,7 @@ packages:
   - "Erick Tryzelaar"
   declared_licenses:
   - "NOASSERTION"
-  declared_licenses_processed:
-    spdx_expression: "NOASSERTION"
+  declared_licenses_processed: {}
   description: "Rust crate for the Fuchsia cryptographically secure pseudorandom number\
     \ generator"
   homepage_url: ""

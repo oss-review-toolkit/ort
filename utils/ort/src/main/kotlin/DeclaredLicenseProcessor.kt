@@ -118,8 +118,8 @@ object DeclaredLicenseProcessor {
             }
         }
 
-        val spdxExpression = processedLicenses.values.toSet().filter {
-            it.toString() != SpdxConstants.NONE
+        val spdxExpression = processedLicenses.values.filterTo(mutableSetOf()) {
+            SpdxConstants.isPresent(it.toString())
         }.reduceOrNull { left, right ->
             SpdxCompoundExpression(left, operator, right)
         }
