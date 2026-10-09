@@ -30,6 +30,9 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -44,13 +47,15 @@ class AnalyzerResultBuilder {
     private val dependencyGraphs = mutableMapOf<String, DependencyGraph>()
 
     fun build(excludes: Excludes = Excludes.EMPTY, includes: Includes = Includes.EMPTY): AnalyzerResult {
-        val duplicates = (projects.map { it.toPackage() } + packages).getDuplicates { it.id }
+        val mergedPackages = mergePackagesByIdentifier(packages)
+
+        val duplicates = (projects.map { it.toPackage() } + mergedPackages).getDuplicates { it.id }
         require(duplicates.isEmpty()) {
             "Unable to create the AnalyzerResult as it contains projects and / or packages with the same ids: " +
                 duplicates.values
         }
 
-        return AnalyzerResult(projects, packages, issues, dependencyGraphs)
+        return AnalyzerResult(projects, mergedPackages, issues, dependencyGraphs)
             .convertToDependencyGraph(excludes, includes)
             .resolvePackageManagerDependencies()
     }
@@ -113,6 +118,70 @@ class AnalyzerResultBuilder {
     fun addDependencyGraph(packageManagerName: String, graph: DependencyGraph) =
         apply { dependencyGraphs[packageManagerName] = graph }
 }
+
+private fun mergePackagesByIdentifier(packages: Set<Package>): Set<Package> =
+    packages.groupBy { it.id }.values.mapTo(mutableSetOf()) { group ->
+        group.singleOrNull() ?: group.merge()
+    }
+
+private fun Collection<Package>.merge(): Package {
+    val id = first().id
+
+    return Package(
+        id = id,
+        purl = map { it.purl }.singleNonEmpty(id, "purl", ""),
+        cpe = map { it.cpe }.singleNonEmpty(id, "cpe", null),
+        authors = flatMapTo(mutableSetOf()) { it.authors },
+        declaredLicenses = map { it.declaredLicenses }.singleValue(id, "declaredLicenses"),
+        declaredLicensesProcessed = map { it.declaredLicensesProcessed }.singleValue(id, "declaredLicensesProcessed"),
+        concludedLicense = map { it.concludedLicense }.singleNonEmpty(id, "concludedLicense", null),
+        description = map { it.description }.singleNonEmpty(id, "description", ""),
+        homepageUrl = map { it.homepageUrl }.singleNonEmpty(id, "homepageUrl", ""),
+        binaryArtifact = map { it.binaryArtifact }.singleNonEmpty(id, "binaryArtifact", RemoteArtifact.EMPTY),
+        sourceArtifact = map { it.sourceArtifact }.singleNonEmpty(id, "sourceArtifact", RemoteArtifact.EMPTY),
+        publishedAt = map { it.publishedAt }.singleNonEmpty(id, "publishedAt", null),
+        vcs = mergeVcs(id, "vcs") { it.vcs },
+        vcsProcessed = mergeVcs(id, "vcsProcessed") { it.vcsProcessed },
+        isMetadataOnly = all { it.isMetadataOnly },
+        isModified = any { it.isModified },
+        sourceCodeOrigins = map { it.sourceCodeOrigins }.singleNonEmpty(id, "sourceCodeOrigins", null),
+        labels = mergeLabels(id)
+    )
+}
+
+private fun <T> Collection<T>.singleNonEmpty(id: Identifier, field: String, empty: T): T {
+    val values = filterNot { it == empty }.toSet()
+
+    require(values.size <= 1) {
+        "Cannot merge packages with id '${id.toCoordinates()}': conflicting $field values."
+    }
+
+    return values.singleOrNull() ?: empty
+}
+
+private fun <T> Collection<T>.singleValue(id: Identifier, field: String): T {
+    val values = toSet()
+
+    require(values.size == 1) {
+        "Cannot merge packages with id '${id.toCoordinates()}': conflicting $field values."
+    }
+
+    return values.single()
+}
+
+private fun Collection<Package>.mergeVcs(id: Identifier, field: String, selector: (Package) -> VcsInfo): VcsInfo =
+    VcsInfo(
+        type = map { selector(it).type }.singleNonEmpty(id, "$field.type", VcsType.UNKNOWN),
+        url = map { selector(it).url }.singleNonEmpty(id, "$field.url", ""),
+        revision = map { selector(it).revision }.singleNonEmpty(id, "$field.revision", ""),
+        path = map { selector(it).path }.singleNonEmpty(id, "$field.path", "")
+    )
+
+private fun Collection<Package>.mergeLabels(id: Identifier): Map<String, String> =
+    flatMap { it.labels.entries }
+        .groupBy({ it.key }, { it.value })
+        .toSortedMap()
+        .mapValues { (key, values) -> values.singleValue(id, "labels['$key']") }
 
 private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
     if (dependencyGraphs.size < 2) return this

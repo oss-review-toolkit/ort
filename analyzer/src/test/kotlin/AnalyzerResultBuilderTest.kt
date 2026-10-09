@@ -39,6 +39,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyReference
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -46,8 +47,11 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.config.ScopeExclude
@@ -57,6 +61,8 @@ import org.ossreviewtoolkit.model.config.ScopeIncludeReason
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
 class AnalyzerResultBuilderTest : WordSpec() {
     private val issue1 = Issue(timestamp = Instant.EPOCH, source = "source-1", message = "message-1")
@@ -346,6 +352,94 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     project.scopeNames.orEmpty() shouldNotContain "scope-1"
                     project.scopeNames.orEmpty() shouldNotContain "scope-2"
                 }
+            }
+
+            "merge same-id packages independently of arrival order" {
+                val unknownVcs = VcsInfo(VcsType.UNKNOWN, "https://example.com/repo.git", "abc123")
+                val gitVcs = unknownVcs.copy(type = VcsType.GIT)
+                val wheel = RemoteArtifact("https://example.com/package-1.0.whl", Hash.NONE)
+                val source = RemoteArtifact("https://example.com/package-1.0.tar.gz", Hash.NONE)
+                val packageWithWheel = package1.copy(
+                    vcs = unknownVcs,
+                    vcsProcessed = unknownVcs,
+                    binaryArtifact = wheel
+                )
+                val packageWithSource = package1.copy(
+                    vcs = gitVcs,
+                    vcsProcessed = gitVcs,
+                    sourceArtifact = source
+                )
+                val expected = package1.copy(
+                    vcs = gitVcs,
+                    vcsProcessed = gitVcs,
+                    binaryArtifact = wheel,
+                    sourceArtifact = source
+                )
+
+                val forward = AnalyzerResultBuilder()
+                    .addPackages(setOf(packageWithWheel))
+                    .addPackages(setOf(packageWithSource))
+                    .build()
+                    .packages
+                    .shouldBeSingle()
+                val reverse = AnalyzerResultBuilder()
+                    .addPackages(setOf(packageWithSource))
+                    .addPackages(setOf(packageWithWheel))
+                    .build()
+                    .packages
+                    .shouldBeSingle()
+
+                forward shouldBe expected
+                reverse shouldBe expected
+            }
+
+            "preserve declared license processing for a unique package" {
+                val declaredLicenses = setOf("Apache-2.0", "MIT")
+                val packageWithOrLicenses = package1.copy(
+                    declaredLicenses = declaredLicenses,
+                    declaredLicensesProcessed = DeclaredLicenseProcessor.process(
+                        declaredLicenses,
+                        operator = SpdxOperator.OR
+                    )
+                )
+
+                AnalyzerResultBuilder()
+                    .addPackages(setOf(packageWithOrLicenses))
+                    .build()
+                    .packages
+                    .shouldBeSingle() shouldBe packageWithOrLicenses
+            }
+
+            "fail for conflicting same-id package metadata" {
+                val exception = shouldThrow<IllegalArgumentException> {
+                    AnalyzerResultBuilder()
+                        .addPackages(setOf(package1.copy(description = "description-a")))
+                        .addPackages(setOf(package1.copy(description = "description-b")))
+                        .build()
+                }
+
+                exception.message shouldBe
+                    "Cannot merge packages with id '${package1.id.toCoordinates()}': conflicting description values."
+            }
+
+            "fail for conflicting same-id binary artifacts" {
+                val exception = shouldThrow<IllegalArgumentException> {
+                    AnalyzerResultBuilder()
+                        .addPackages(
+                            setOf(
+                                package1.copy(binaryArtifact = RemoteArtifact("https://example.com/a.whl", Hash.NONE))
+                            )
+                        )
+                        .addPackages(
+                            setOf(
+                                package1.copy(binaryArtifact = RemoteArtifact("https://example.com/b.whl", Hash.NONE))
+                            )
+                        )
+                        .build()
+                }
+
+                exception.message shouldBe
+                    "Cannot merge packages with id '${package1.id.toCoordinates()}': conflicting binaryArtifact values."
             }
 
             "throw if a result contains a project and a package with the same ID" {
