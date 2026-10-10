@@ -69,6 +69,12 @@ class Pipenv(
     // looking at the lockfile.
     override val globsForDefinitionFiles = listOf("Pipfile.lock")
 
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) = definitionFiles.filterNotManagedByPylock(analyzerConfig)
+
     override fun beforeResolution(
         analysisRoot: File,
         definitionFiles: List<File>,
