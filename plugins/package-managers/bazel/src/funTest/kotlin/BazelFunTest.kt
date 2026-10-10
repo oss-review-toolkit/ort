@@ -105,6 +105,18 @@ class BazelFunTest : StringSpec({
             "version in your MODULE.bazel or set --check_direct_dependencies=off"
     }
 
+    "When the project provides a dependency tree filter file, only the allowed dependencies are returned" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-8.0_with_dependency_tree_filtering/MODULE.bazel")
+        val expectedResultFile =
+            getAssetFile("projects/synthetic/bazel-8.0_with_dependency_tree_filtering-expected-output.yml")
+
+        val result = BazelFactory.create(
+            allowedDependenciesPath = "dependency_tree_filter.txt"
+        ).resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Dependencies are detected correctly for a project with a local path override" {
         val definitionFile = getAssetFile("projects/synthetic/bazel-local-path-override/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-local-path-override.yml")
