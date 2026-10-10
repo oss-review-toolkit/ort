@@ -17,7 +17,7 @@ complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -s h -l he
 
 
 ### Setup for advise
-complete -c ort -f -n __fish_use_subcommand -a advise -d 'Check dependencies for security vulnerabilities.'
+complete -c ort -f -n __fish_use_subcommand -a advise -d 'Check dependencies for security vulnerabilities and project health metrics.'
 
 ## Options for advise
 complete -c ort -n "__fish_seen_subcommand_from advise" -l ort-file -s i -r -F -d 'An ORT result file with an analyzer result to use.'
@@ -25,7 +25,7 @@ complete -c ort -n "__fish_seen_subcommand_from advise" -l output-dir -s o -r -F
 complete -c ort -n "__fish_seen_subcommand_from advise" -l output-formats -s f -r -fa "JSON YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l label -s l -r -d 'Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
-complete -c ort -n "__fish_seen_subcommand_from advise" -l advisors -s a -r -d 'The comma-separated advisors to use, any of [BlackDuck, OSSIndex, OSV, ScanOss, VulnerableCode].'
+complete -c ort -n "__fish_seen_subcommand_from advise" -l advisors -s a -r -d 'The comma-separated advisors to use, any of [BlackDuck, Crossd, OSSIndex, OSV, ScanOss, Scorecard, VulnerableCode].'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l skip-excluded -d 'Do not check excluded projects or packages.'
 complete -c ort -n "__fish_seen_subcommand_from advise" -s h -l help -d 'Show this message and exit'
 
