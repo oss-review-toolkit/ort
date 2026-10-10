@@ -30,11 +30,13 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.convertToDependencyGraph
+import org.ossreviewtoolkit.utils.common.getConflictingKeys
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 class AnalyzerResultBuilder {
@@ -44,13 +46,15 @@ class AnalyzerResultBuilder {
     private val dependencyGraphs = mutableMapOf<String, DependencyGraph>()
 
     fun build(excludes: Excludes = Excludes.EMPTY, includes: Includes = Includes.EMPTY): AnalyzerResult {
-        val duplicates = (projects.map { it.toPackage() } + packages).getDuplicates { it.id }
+        val mergedPackages = packages.mergeSameWithDistinctValues()
+
+        val duplicates = (projects.map { it.toPackage() } + mergedPackages).getDuplicates { it.id }
         require(duplicates.isEmpty()) {
             "Unable to create the AnalyzerResult as it contains projects and / or packages with the same ids: " +
                 duplicates.values
         }
 
-        return AnalyzerResult(projects, packages, issues, dependencyGraphs)
+        return AnalyzerResult(projects, mergedPackages, issues, dependencyGraphs)
             .convertToDependencyGraph(excludes, includes)
             .resolvePackageManagerDependencies()
     }
@@ -162,4 +166,61 @@ private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
     }
 
     return copy(dependencyGraphs = graphs)
+}
+
+internal fun Collection<Package>.mergeSameWithDistinctValues(): Set<Package> =
+    groupBy { it.id to it.purl to it.cpe }.values.flatMapTo(mutableSetOf()) { samePackages ->
+        val referencePkg = samePackages.first()
+        if (samePackages.size == 1) return@flatMapTo listOf(referencePkg)
+
+        val normalizedVcsInfo = samePackages.map { it.vcs.normalize() }
+
+        runCatching {
+            Package(
+                id = referencePkg.id,
+                purl = referencePkg.purl,
+                cpe = referencePkg.cpe,
+                authors = distinctValueOf(samePackages) { it.authors },
+                declaredLicenses = distinctValueOf(samePackages) { it.declaredLicenses },
+                declaredLicensesProcessed = distinctValueOf(samePackages) { it.declaredLicensesProcessed },
+                concludedLicense = distinctValueOf(samePackages) { it.concludedLicense },
+                description = distinctValueOf(samePackages) { it.description },
+                homepageUrl = distinctValueOf(samePackages) { it.homepageUrl },
+                binaryArtifact = distinctValueOf(samePackages) { it.binaryArtifact },
+                sourceArtifact = distinctValueOf(samePackages) { it.sourceArtifact },
+                publishedAt = distinctValueOf(samePackages) { it.publishedAt },
+                vcs = VcsInfo(
+                    type = distinctValueOf(normalizedVcsInfo) { it.type },
+                    url = distinctValueOf(normalizedVcsInfo) { it.url },
+                    revision = distinctValueOf(normalizedVcsInfo) { it.revision },
+                    path = distinctValueOf(normalizedVcsInfo) { it.path }
+                ),
+                isMetadataOnly = distinctValueOf(samePackages) { it.isMetadataOnly },
+                isModified = distinctValueOf(samePackages) { it.isModified },
+                sourceCodeOrigins = distinctValueOf(samePackages) { it.sourceCodeOrigins },
+                labels = samePackages.fold(emptyMap()) { acc, pkg ->
+                    acc.getConflictingKeys(pkg.labels).let { conflictingKeys ->
+                        require(conflictingKeys.isEmpty()) {
+                            "Cannot merge labels with conflicting variable keys: $conflictingKeys"
+                        }
+
+                        acc + pkg.labels
+                    }
+                }
+            ).let { listOf(it) }
+        }.getOrDefault(samePackages)
+    }
+
+private inline fun <reified T, R> distinctValueOf(packages: Collection<T>, selector: (T) -> R): R {
+    val emptyValue = selector(T::class.java.getField("EMPTY").get(null) as T)
+    val distinctNonEmptyValues = packages
+        .map(selector)
+        .distinct()
+        .filterNot { it == emptyValue }
+
+    return when (distinctNonEmptyValues.size) {
+        0 -> emptyValue
+        1 -> distinctNonEmptyValues.first()
+        else -> error("More than one distinct value found: $distinctNonEmptyValues")
+    }
 }
