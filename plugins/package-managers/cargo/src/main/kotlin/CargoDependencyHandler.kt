@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
@@ -107,11 +106,6 @@ private fun CargoMetadata.Package.toIdentifier() =
 internal fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Package {
     val declaredLicenses = parseDeclaredLicenses()
 
-    // Historically, Cargo's metadata used "/" to separate licenses in a string. As the semantics of "/" are unclear in
-    // terms of the intended license operator, the community deprecated "/" in favor of an explicit "OR", see
-    // https://github.com/rust-lang/cargo/pull/4920 and also the related https://github.com/rust-lang/cargo/issues/2039.
-    val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, operator = SpdxOperator.OR)
-
     val vcs = (source.takeIf { it?.startsWith("git+https://") == true } ?: repository)
         ?.let { VcsHost.parseUrl(it) }.orEmpty()
     val vcsProcessed = getLocalPath()?.let { PackageManager.processProjectVcs(it) } ?: vcs.normalize()
@@ -120,7 +114,10 @@ internal fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packa
         id = toIdentifier(),
         authors = authors.flatMap { parseAuthorString(it) }.mapNotNullTo(mutableSetOf()) { it.name },
         declaredLicenses = declaredLicenses,
-        declaredLicensesProcessed = declaredLicensesProcessed,
+        // Historically, Cargo's metadata used "/" to separate licenses in a string. As the semantics of "/" are unclear
+        // in terms of the intended license operator, the community deprecated "/" in favor of an explicit "OR", see
+        // https://github.com/rust-lang/cargo/pull/4920 and also the related https://github.com/rust-lang/cargo/issues/2039.
+        declaredLicensesOperator = SpdxOperator.OR,
         description = description.orEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = parseSourceArtifact(hashes).orEmpty(),

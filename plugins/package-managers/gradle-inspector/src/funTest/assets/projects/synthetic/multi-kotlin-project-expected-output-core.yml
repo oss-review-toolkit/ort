@@ -157,6 +157,7 @@ packages:
   declared_licenses:
   - "Apache License v2.0"
   - "LGPL, version 2.1"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR LGPL-2.1-only"
     mapped:
@@ -190,6 +191,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -222,6 +224,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "GNU LESSER GENERAL PUBLIC LICENSE 2.1"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "LGPL-2.1-only"
     mapped:
@@ -254,6 +257,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -286,6 +290,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -318,6 +323,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -350,6 +356,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -382,6 +389,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -414,6 +422,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -446,6 +455,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -478,6 +488,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -510,6 +521,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -542,6 +554,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -574,6 +587,7 @@ packages:
   - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
