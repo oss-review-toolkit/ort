@@ -206,7 +206,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
             }
         }
 
-        "collectIssues" should {
+        "getAllIssues()" should {
             "find all issues" {
                 val analyzerResult = AnalyzerResultBuilder()
                     .addResult(analyzerResult1)
@@ -223,7 +223,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
             }
         }
 
-        "withResolvedScopes" should {
+        "withResolvedScopes()" should {
             "return the same instance if no shared dependency graphs are present" {
                 val analyzerResult = AnalyzerResultBuilder()
                     .addResult(analyzerResult1)
