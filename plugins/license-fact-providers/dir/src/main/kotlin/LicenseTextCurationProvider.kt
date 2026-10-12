@@ -21,18 +21,16 @@ package org.ossreviewtoolkit.plugins.licensefactproviders.dir
 
 import java.io.File
 import java.io.IOException
+import java.lang.invoke.MethodHandles
 
-import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseTextCuration
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.LicenseTextCurations
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
-import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 /**
@@ -78,47 +76,29 @@ class DefaultLicenseTextCurationProvider(
 open class LicenseTextCurationProvider(
     override val descriptor: PluginDescriptor = LicenseTextCurationProviderFactory.descriptor,
     config: LicenseTextCurationProviderConfig
-) : LicenseFactProvider() {
-    private val licenseTextCurationsDir = File(config.dir).also {
-        if (!it.isDirectory) {
-            logger.warn {
-                "The license text curations directory '${it.absolutePath}' does not exist or is not a directory."
-            }
+) : SimpleLicenseTextCurationProvider(
+    descriptor,
+    licenseTextCurations = readLicenseTextCurations(File(config.dir))
+)
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
+private fun readLicenseTextCurations(dir: File): List<LicenseTextCurations> {
+    if (!dir.isDirectory) {
+        logger.warn {
+            "The license text curations directory '${dir.absolutePath}' does not exist or is not a directory."
         }
+
+        return emptyList()
     }
 
-    /** A cache with entries for license text curation files to read each file at most once. */
-    private val licenseTextCurationsForIdWithoutVersion = mutableMapOf<Identifier, List<LicenseTextCurations>>()
+    val files = FileFormat.findFilesWithKnownExtensions(dir).filterNot { it.length() == 0L }
 
-    private fun getCurationsForId(id: Identifier): List<LicenseTextCuration> =
-        licenseTextCurationsForIdWithoutVersion.getOrPut(id.copy(version = "")) {
-            val relativeCurationFilePath = "${id.toPath(emptyValue = "_").substringBeforeLast("/")}.yml"
-            val curationFile = licenseTextCurationsDir.resolve(relativeCurationFilePath).takeIf { it.isFile }
-
-            curationFile?.let { file ->
-                runCatching {
-                    file.readValue<List<LicenseTextCurations>>()
-                }.getOrElse {
-                    throw IOException("Failed reading license text curations from '${file.absolutePath}'.", it)
-                }.also {
-                    logger.info {
-                        "Read ${it.size} license text curations for ${id.toCoordinates()} from ${file.absolutePath}."
-                    }
-                }
-            }.orEmpty()
-        }.filter { it.isApplicable(id) }.flatMap { it.curations }
-
-    override fun hasLicenseText(licenseOrExceptionId: String) = false
-
-    override fun getLicenseText(licenseOrExceptionId: String) = null
-
-    override fun hasLicenseTextsForId(singleLicenseExpression: String, id: Identifier): Boolean =
-        getCurationsForId(id).any { curation -> curation.licenseId.toString() == singleLicenseExpression }
-
-    override fun getLicenseTextsForId(singleLicenseExpression: String, id: Identifier): Set<LicenseText> =
-        getCurationsForId(id).mapNotNullTo(mutableSetOf()) { curation ->
-            curation.licenseText.takeIf {
-                curation.licenseId.toString() == singleLicenseExpression
-            }?.let { LicenseText(it) }
+    return files.flatMap { file ->
+        runCatching {
+            file.readValue<List<LicenseTextCurations>>()
+        }.getOrElse {
+            throw IOException("Failed parsing license text curations from '${file.absolutePath}'.", it)
         }
+    }
 }
