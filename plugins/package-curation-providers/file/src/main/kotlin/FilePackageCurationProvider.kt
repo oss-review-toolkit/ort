@@ -92,51 +92,49 @@ open class FilePackageCurationProvider(descriptor: PluginDescriptor, vararg path
     )
 
     constructor(vararg paths: File?) : this(FilePackageCurationProviderFactory.descriptor, *paths)
-
-    companion object {
-        /**
-         * Read a list of [PackageCuration]s from existing [paths], which can either point to files or directories. In
-         * the latter case, the directory is searched recursively for deserializable files (according to their
-         * extension), which then are assumed to be curation files.
-         */
-        fun readCurationFiles(paths: Collection<File>): List<PackageCuration> {
-            val allCurations = mutableListOf<Pair<PackageCuration, File>>()
-
-            val curationFiles = paths.flatMap {
-                require(it.exists()) {
-                    "The path '$it' does not exist."
-                }
-
-                if (it.isDirectory) FileFormat.findFilesWithKnownExtensions(it) else listOf(it)
-            }.filterNot { it.length() == 0L }
-
-            curationFiles.map { curationFile ->
-                val curations = runCatching {
-                    curationFile.readValue<List<PackageCuration>>()
-                }.getOrElse {
-                    throw IOException("Failed parsing package curation(s) from '${curationFile.absolutePath}'.", it)
-                }
-
-                curations.mapTo(allCurations) { it to curationFile }
-            }
-
-            val duplicates = allCurations.getDuplicates { it.first }
-
-            if (duplicates.isNotEmpty()) {
-                val duplicatesInfo = buildString {
-                    duplicates.forEach { (curation, origins) ->
-                        appendLine("Curation for '${curation.id.toCoordinates()}' found in all of:")
-                        val files = origins.joinToString(separator = "\n") { (_, file) -> file.absolutePath }
-                        appendLine(files.prependIndent())
-                    }
-                }
-
-                throw DuplicatedCurationException("Duplicate curations found:\n${duplicatesInfo.prependIndent()}")
-            }
-
-            return allCurations.unzip().first
-        }
-    }
 }
 
 private class DuplicatedCurationException(message: String?) : Exception(message)
+
+/**
+ * Read a list of [PackageCuration]s from existing [paths], which can either point to files or directories. In
+ * the latter case, the directory is searched recursively for deserializable files (according to their
+ * extension), which then are assumed to be curation files.
+ */
+private fun readCurationFiles(paths: Collection<File>): List<PackageCuration> {
+    val allCurations = mutableListOf<Pair<PackageCuration, File>>()
+
+    val curationFiles = paths.flatMap {
+        require(it.exists()) {
+            "The path '$it' does not exist."
+        }
+
+        if (it.isDirectory) FileFormat.findFilesWithKnownExtensions(it) else listOf(it)
+    }.filterNot { it.length() == 0L }
+
+    curationFiles.map { curationFile ->
+        val curations = runCatching {
+            curationFile.readValue<List<PackageCuration>>()
+        }.getOrElse {
+            throw IOException("Failed parsing package curation(s) from '${curationFile.absolutePath}'.", it)
+        }
+
+        curations.mapTo(allCurations) { it to curationFile }
+    }
+
+    val duplicates = allCurations.getDuplicates { it.first }
+
+    if (duplicates.isNotEmpty()) {
+        val duplicatesInfo = buildString {
+            duplicates.forEach { (curation, origins) ->
+                appendLine("Curation for '${curation.id.toCoordinates()}' found in all of:")
+                val files = origins.joinToString(separator = "\n") { (_, file) -> file.absolutePath }
+                appendLine(files.prependIndent())
+            }
+        }
+
+        throw DuplicatedCurationException("Duplicate curations found:\n${duplicatesInfo.prependIndent()}")
+    }
+
+    return allCurations.unzip().first
+}
