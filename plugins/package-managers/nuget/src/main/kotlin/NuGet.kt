@@ -60,6 +60,7 @@ class NuGet(override val descriptor: PluginDescriptor = NuGetFactory.descriptor,
     override val globsForDefinitionFiles = listOf(
         "*.csproj", // C# projects.
         "*.fsproj", // F# projects.
+        "*.vbproj", // Visual Basic projects.
         "*.vcxproj", // Visual C++ projects (targeting .NET via "/clr").
         "packages.config" // NuGet packages configuration.
     )
