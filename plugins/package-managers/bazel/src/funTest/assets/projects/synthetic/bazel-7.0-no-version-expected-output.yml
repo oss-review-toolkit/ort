@@ -414,7 +414,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/bazelbuild/rules_jvm_external"
+  homepage_url: "https://github.com/bazel-contrib/rules_jvm_external"
   binary_artifact:
     url: ""
     hash:
