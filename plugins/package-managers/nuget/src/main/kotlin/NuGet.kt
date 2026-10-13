@@ -57,7 +57,12 @@ data class NuGetConfig(
 )
 class NuGet(override val descriptor: PluginDescriptor = NuGetFactory.descriptor, config: NuGetConfig) :
     PackageManager(PROJECT_TYPE) {
-    override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj", "packages.config")
+    override val globsForDefinitionFiles = listOf(
+        "*.csproj", // C# projects.
+        "*.fsproj", // F# projects.
+        "*.vcxproj", // Visual C++ projects (targeting .NET via "/clr").
+        "packages.config" // NuGet packages configuration.
+    )
 
     private val nugetConfig = config.nugetConfigFile?.let { File(it) }
 
