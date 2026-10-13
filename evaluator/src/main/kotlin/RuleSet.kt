@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
@@ -150,6 +151,26 @@ class RuleSet(
             }
         }
     }
+
+    /**
+     * A DSL function to configure a [SnippetRule]. The rule is applied to each [SnippetFinding] in the scan results for
+     * every [Project] in [ortResult].
+     */
+    fun snippetRule(name: String, configure: SnippetRule.() -> Unit) {
+        ortResult.getSnippetFindingsByScannerName().forEach { (scannerName, snippetFindings) ->
+            snippetFindings.forEach { snippetFinding ->
+                SnippetRule(
+                    this,
+                    name,
+                    scannerName,
+                    snippetFinding
+                ).apply {
+                    configure()
+                    evaluate()
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -164,3 +185,18 @@ fun ruleSet(
     ),
     configure: RuleSet.() -> Unit = {}
 ) = RuleSet(ortResult, licenseInfoResolver, resolutionProvider, projectSourceResolver).apply(configure)
+
+private fun OrtResult.getSnippetFindingsByScannerName(): Map<String, Set<SnippetFinding>> {
+    val projectIds = getProjects(
+        omitExcluded = false,
+        includeSubProjects = true
+    ).mapTo(mutableSetOf()) { it.id }
+
+    val scanResults = projectIds.flatMap { getScanResultsForId(it) }
+
+    return buildMap<String, MutableSet<SnippetFinding>> {
+        scanResults.forEach { scanResult ->
+            getOrPut(scanResult.scanner.name) { mutableSetOf() } += scanResult.summary.snippetFindings
+        }
+    }
+}
