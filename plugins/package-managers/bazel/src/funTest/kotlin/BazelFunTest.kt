@@ -27,6 +27,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.create
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
@@ -214,8 +215,8 @@ class BazelFunTest : StringSpec({
                     )
                 )
             )
-        )
+        ).getAnalyzerResult()
 
-        result.analyzer?.result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })
