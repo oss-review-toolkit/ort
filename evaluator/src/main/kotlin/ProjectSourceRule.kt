@@ -34,7 +34,7 @@ open class ProjectSourceRule(
     ruleSet: RuleSet,
     name: String
 ) : OrtResultRule(ruleSet, name) {
-    override val description = "Evaluating ORT result rule '$name'."
+    override val description = "Evaluating project source rule '$name'."
 
     /**
      * The directory containing the source code of the project. Accessing the property for the first time triggers a
