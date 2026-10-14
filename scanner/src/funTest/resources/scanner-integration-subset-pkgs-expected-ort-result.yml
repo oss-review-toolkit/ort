@@ -141,8 +141,8 @@ scanner:
     - "**/*.spdx.json"
     - "**/META-INF/DEPENDENCIES"
     - "**/META-INF/DEPENDENCIES.txt"
-    - "**/META-INF/NOTICE"
-    - "**/META-INF/NOTICE.txt"
+    - "**/META-INF/*NOTICE*"
+    - "**/META-INF/*NOTICE*.txt"
   provenances:
   - id: "Dummy::pkg1:1.0.0"
     package_provenance:
