@@ -45,8 +45,8 @@ import org.ossreviewtoolkit.utils.test.extractResource
 
 @EnabledIf(CloudCheck::class)
 class ScanOssFunTest : StringSpec({
-    val scanner = CloudCheck.getOsskbApiKey()?.let { ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL, Secret(it)) } ?:
-        CloudCheck.getScanOssApiKey()?.let { ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL2, Secret(it)) } ?:
+    val scanner = CloudCheck.getScanOssApiKey()?.let { ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL2, Secret(it)) } ?:
+        CloudCheck.getOsskbApiKey()?.let { ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL, Secret(it)) } ?:
         ScanOssFactory.create()
 
     val scanContext = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
