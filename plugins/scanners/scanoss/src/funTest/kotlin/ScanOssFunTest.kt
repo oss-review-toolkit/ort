@@ -30,6 +30,7 @@ import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 import kotlin.reflect.KClass
 
@@ -51,24 +52,46 @@ class ScanOssFunTest : StringSpec({
 
     val scanContext = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
 
-    // Disabled as SCANOSS by now returns ORT itself as the original source of the file.
-    "File matches contain the expected findings".config(enabled = false) {
+    "File matches contain the expected findings" {
         val unoconv = extractResource("/unoconv")
 
         val summary = scanner.scanPath(unoconv, scanContext)
 
-        summary.licenseFindings shouldBeSingleton {
-            it.license shouldBe "GPL-2.0-only".toSpdx()
-            it.score shouldBe 100.0f
-        }
+        summary.licenseFindings should beEmpty()
+        summary.snippetFindings shouldBeSingleton { finding ->
+            finding.snippets shouldBeSingleton { snippet ->
+                snippet.score shouldBe 100.0f
+                snippet.location.path shouldBe "unoconv"
+                snippet.provenance.shouldBeInstanceOf<RepositoryProvenance>().vcsInfo.url shouldBe
+                    "https://github.com/unoconv/unoconv.git"
+                snippet.purl shouldBe "pkg:github/unoconv/unoconv"
+                snippet.license shouldBe "GPL-2.0-only".toSpdx()
+                snippet.additionalData shouldContainExactly buildMap {
+                    put("component", "unoconv")
+                    put("vendor", "unoconv")
+                    put("version", "0.8.2")
+                    put("latest", "0.8.2")
+                    put("status", "pending")
+                    put("file_hash", "0f55e083dcc72a11334eb1a77137e2c4")
 
-        summary.snippetFindings should beEmpty()
+                    if (CloudCheck.getScanOssApiKey() != null) {
+                        put("file_url", "https://api.scanoss.com/file_contents/0f55e083dcc72a11334eb1a77137e2c4")
+                    }
+
+                    put("url_hash", "b53576ddfc63b441ef55998f2f97db8e")
+                    put("release_date", "2017-12-07")
+                    put("source_hash", "0f55e083dcc72a11334eb1a77137e2c4")
+                }
+            }
+        }
 
         // Copyrights (and vulnerabilities) are commercial features.
         if (CloudCheck.getScanOssApiKey() != null) {
             summary.copyrightFindings shouldBeSingleton {
                 it.statement shouldBe "Copyright 2007-2010 Dag Wieers <dag@wieers.com>"
             }
+        } else {
+            summary.copyrightFindings should beEmpty()
         }
     }
 
