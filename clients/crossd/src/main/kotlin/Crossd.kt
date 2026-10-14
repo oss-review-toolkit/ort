@@ -84,10 +84,8 @@ suspend fun HttpClient.getMetrics(packageId: String, snapshot: Double): JsonObje
         return JsonObject(emptyMap())
     }
 
-    val metrics = (response.body() as JsonObject)["metrics"]?.jsonObject
-        ?: return JsonObject(emptyMap())
-
-    return metrics
+    val metrics = (response.body() as JsonObject)["metrics"]
+    return metrics as? JsonObject ?: JsonObject(emptyMap())
 }
 
 suspend fun HttpClient.getMetrics(packageId: String): JsonObject =
