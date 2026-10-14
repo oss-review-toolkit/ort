@@ -100,6 +100,7 @@ jobs:
     - name: Run functional tests that do not require external tools
       env:
         OSSKB_API_KEY: ${{ secrets.OSSKB_API_KEY }}
+        SCANOSS_API_KEY: ${{ secrets.SCANOSS_API_KEY }}
         SONATYPE_PAT: ${{ secrets.SONATYPE_PAT }}
         VULNERABLECODE_API_KEY: ${{ secrets.VULNERABLECODE_API_KEY }}
       run: mise gradle --scan -Dkotest.tags=!RequiresExternalTool funTest jacocoFunTestReport
