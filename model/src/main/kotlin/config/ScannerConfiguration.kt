@@ -129,8 +129,8 @@ data class ScannerConfiguration(
         "**/*.spdx.json",
         "**/META-INF/DEPENDENCIES",
         "**/META-INF/DEPENDENCIES.txt",
-        "**/META-INF/NOTICE",
-        "**/META-INF/NOTICE.txt"
+        "**/META-INF/*NOTICE*",
+        "**/META-INF/*NOTICE*.txt"
     ),
 
     /**
