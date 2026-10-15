@@ -89,6 +89,7 @@ usage = "arg '<commands>' var=#true help='The command to run.'"
 
 # Deny inheriting most environment variables.
 deny_env = true
+allow_env = ["*_API_KEY", "*_PAT"]
 
 # Strip everything but mise install directories from the path environment.
 env.PATH_MINIMAL = """
