@@ -184,7 +184,7 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
         if (purls.isNotEmpty()) put("related_purls", purls.joinToString(",") { it.trim() })
 
         if (!details.copyrightDetails.isNullOrEmpty()) {
-            put("copyright_details", details.copyrightDetails.joinToString("\n") { it.name })
+            put("copyright_details", details.copyrightDetails.mapTo(mutableSetOf()) { it.name }.joinToString("\n"))
         }
     }
 
