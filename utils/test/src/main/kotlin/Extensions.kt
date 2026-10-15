@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 
 fun TestConfiguration.extractResource(name: String) =
-    tempfile(name.substringAfterLast('/')).apply { writeText(readResource(name)) }
+    tempfile(name.substringAfterLast('/'), name.substringAfterLast('.', "")).apply { writeText(readResource(name)) }
 
 fun TestConfiguration.getResource(name: String) = checkNotNull(javaClass.getResource(name))
 
