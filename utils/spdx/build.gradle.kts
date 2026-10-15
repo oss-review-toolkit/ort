@@ -172,6 +172,7 @@ fun getLicenseInfo(
     }
 }
 
+@Suppress("LongMethod")
 fun Task.generateEnumClass(
     className: String,
     description: String,
@@ -300,8 +301,7 @@ fun Task.generateEnumClass(
         |         * Return the enum value for the given [id], or null if it is no SPDX $description id.
         |         */
         |        @JvmStatic
-        |        fun forId(id: String) =
-        |            entries.find { id.equals(it.id, ignoreCase = true) || id.equals(it.fullName, ignoreCase = true) }
+        |        fun forId(id: String) = ENUM_ENTRY_FOR_LOWERCASE_ID_OR_FULL_NAME[id.lowercase()]
         |    }
         |
         |
@@ -314,6 +314,15 @@ fun Task.generateEnumClass(
         |     * The full $description text as a string.
         |     */
         |    val text by lazy { checkNotNull(javaClass.getResource("/$resourcePath/${'$'}id")).readText() }
+        |}
+        |
+        |private val ENUM_ENTRY_FOR_LOWERCASE_ID_OR_FULL_NAME: Map<String, $className> by lazy {
+        |    buildMap($className.entries.size * 2) {
+        |        $className.entries.forEach {
+        |            put(it.id.lowercase(), it)
+        |            put(it.fullName.lowercase(), it)
+        |        }
+        |    }
         |}
         |
         |internal object ${className}Serializer : KSerializer<$className> by $className.generatedSerializer() {
