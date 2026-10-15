@@ -33,6 +33,13 @@ data class ScanOssConfig(
     @OrtPluginOption(defaultValue = "")
     val apiKey: Secret,
 
+    /**
+     * A combination of flags to configure the behavior of the SCANOSS scanner. Note that some flags, like those to
+     * disable functionality, might not make sense when used with ORT, and might cause unexpected results.
+     */
+    @OrtPluginOption(defaultValue = "")
+    val flags: List<ScanFlag>,
+
     /** Whether to use a proxy defined by the dedicated environment variable(s). */
     @OrtPluginOption(defaultValue = "false")
     val noProxy: Boolean,
@@ -118,6 +125,22 @@ data class ScanOssConfig(
     @OrtPluginOption(defaultValue = "")
     val ignorePurls: List<String>
 ) {
+    enum class ScanFlag(val bitMask: Int) {
+        DISABLE_SNIPPET_MATCHING(1 shl 0),
+        ENABLE_SNIPPET_IDS(1 shl 1),
+        DISABLE_DEPENDENCIES(1 shl 2),
+        DISABLE_LICENSES(1 shl 3),
+        DISABLE_COPYRIGHTS(1 shl 4),
+        DISABLE_VULNERABILITIES(1 shl 5),
+        DISABLE_QUALITY(1 shl 6),
+        DISABLE_CRYPTOGRAPHY(1 shl 7),
+        DISABLE_BEST_MATCH_ONLY(1 shl 8),
+        HIDE_IDENTIFIED_FILES(1 shl 9),
+        ENABLE_DOWNLOAD_URL(1 shl 10),
+        ENABLE_GITHUB_FULL_PATH(1 shl 11),
+        DISABLE_EXTENDED_SERVER_STATS(1 shl 12)
+    }
+
     enum class SnippetModel {
         LICENSE_AND_COPYRIGHT_FINDING,
         SNIPPET_FINDING
