@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model.utils
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
@@ -33,7 +34,7 @@ import io.mockk.every
 import io.mockk.spyk
 
 import org.ossreviewtoolkit.model.DependencyGraph
-import org.ossreviewtoolkit.model.DependencyGraphEdge
+import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -222,27 +223,31 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency("root", 1)
                 .build(checkReferences = false)
 
-            graph.nodes shouldHaveSize 6
-            graph.edges should containExactly(
-                DependencyGraphEdge(from = 2, to = 1),
-                DependencyGraphEdge(from = 3, to = 0),
-                DependencyGraphEdge(from = 3, to = 2),
-                DependencyGraphEdge(from = 5, to = 3),
-                DependencyGraphEdge(from = 5, to = 4)
-            )
+            val expected = buildList {
+                add(handler.identifierFor(1).atLevel(0))
+                add(handler.identifierFor(2).atLevel(1))
+                add(handler.identifierFor(4).atLevel(2))
+                add(handler.identifierFor(5).atLevel(2))
+                add(handler.identifierFor(6).atLevel(3))
+                add(handler.identifierFor(2).atLevel(4, cycle = true))
+                add(handler.identifierFor(3).atLevel(1))
+                add(handler.identifierFor(1).atLevel(2, cycle = true))
+            }
+
+            val actual = graph.dumpScope("root")
+            assertGraph(expected, actual)
         }
 
         "deal with cyclic dependency graphs" {
             val scope = "CyclicGraph"
-            val depLang = createDependency("org.apache.commons", "commons-lang3", "3.20.0")
-            val depCyc = spyk(createDependency("org.cyclic", "cyclic", "77.7"))
-            val depIntermediate = createDependency(
-                "org.intermediate",
-                "intermediate",
-                "1.0.0",
-                dependencies = setOf(depLang, depCyc)
-            )
-            val depRoot = createDependency("org.foo", "foo", "1.2.0", dependencies = setOf(depIntermediate))
+            val idLang = createId("org.apache.commons", "commons-lang3", "3.20.0")
+            val idCyc = createId("org.cyclic", "cyclic", "77.7")
+            val idIntermediate = createId("org.intermediate", "intermediate", "1.0.0")
+            val idRoot = createId("org.foo", "foo", "1.2.0")
+            val depLang = createDependency(idLang)
+            val depCyc = spyk(createDependency(idCyc))
+            val depIntermediate = createDependency(idIntermediate, dependencies = setOf(depLang, depCyc))
+            val depRoot = createDependency(idRoot, dependencies = setOf(depIntermediate))
 
             // This causes a cycle in the dependency graph:
             every { depCyc.dependencies } returns setOf(depRoot)
@@ -250,11 +255,17 @@ class DependencyGraphBuilderTest : WordSpec({
             val graph = createGraphBuilder()
                 .addDependency(scope, depRoot)
                 .build()
-            val scopes = graph.createScopes()
 
-            scopeDependencies(scopes, scope) should containExactly(depRoot)
+            val expected = buildList {
+                add(idRoot.atLevel(0))
+                add(idIntermediate.atLevel(1))
+                add(idLang.atLevel(2))
+                add(idCyc.atLevel(2))
+                add(idRoot.atLevel(3, cycle = true))
+            }
 
-            graph.nodes shouldHaveSize 4
+            val actual = graph.dumpScope(scope)
+            assertGraph(expected, actual)
         }
 
         "check for illegal references when building the graph" {
@@ -402,6 +413,12 @@ private fun createGraphBuilder(): DependencyGraphBuilder<PackageReference> =
     DependencyGraphBuilder(PackageRefDependencyHandler)
 
 /**
+ * Create a test [Identifier] with the given [group], [artifact], and [version].
+ */
+private fun createId(group: String, artifact: String, version: String): Identifier =
+    Identifier("test", group, artifact, version)
+
+/**
  * Create a test dependency with the properties provided.
  */
 private fun createDependency(
@@ -409,13 +426,54 @@ private fun createDependency(
     artifact: String,
     version: String,
     dependencies: Set<PackageReference> = emptySet()
-) = PackageReference(
-    id = Identifier("test", group, artifact, version),
-    dependencies = dependencies
-)
+) = createDependency(createId(group, artifact, version), dependencies)
+
+/**
+ * Create a test dependency with the given [id] and [dependencies].
+ */
+private fun createDependency(id: Identifier, dependencies: Set<PackageReference> = emptySet()) =
+    PackageReference(
+        id = id,
+        dependencies = dependencies
+    )
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
  */
 private fun scopeDependencies(scopes: Set<Scope>, scopeName: String): Set<PackageReference> =
     scopes.find { it.name == scopeName }?.dependencies.orEmpty()
+
+/**
+ * Assert that the [actual] representations of a dependency graph matches the [expected] one.
+ */
+private fun assertGraph(expected: List<String>, actual: List<String>) {
+    withClue("Expected:\n${expected.joinToString("\n")}\nActual:\n${actual.joinToString("\n")}") {
+        actual should containExactly(expected)
+    }
+}
+
+/**
+ * Generate a string to represent a graph node for the package with this [Identifier] at the given hierarchy
+ * [level] which may by an indicator for a [cycle].
+ */
+private fun Identifier.atLevel(level: Int, cycle: Boolean = false): String =
+    buildString {
+        append(" ".repeat(level))
+        append(toCoordinates())
+        if (cycle) append("->")
+    }
+
+/**
+ * Generate a list representation for the hierarchy of nodes in the scope with the given [scopeName].
+ */
+private fun DependencyGraph.dumpScope(scopeName: String): List<String> =
+    buildList {
+        fun dumpNode(node: DependencyGraphNode, level: Int) {
+            add(packages[node.pkg].atLevel(level, cycle = node.isCycleIndicator()))
+            dependencies[node].orEmpty().forEach { dumpNode(it, level + 1) }
+        }
+
+        scopes[scopeName].orEmpty().mapNotNull { root ->
+            nodes.find { it.pkg == root.root && it.fragment == root.fragment }
+        }.forEach { root -> dumpNode(root, 0) }
+    }
