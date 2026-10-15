@@ -154,14 +154,22 @@ enum class SpdxLicenseException(
          * Return the enum value for the given [id], or null if it is no SPDX license exception id.
          */
         @JvmStatic
-        fun forId(id: String) =
-            entries.find { id.equals(it.id, ignoreCase = true) || id.equals(it.fullName, ignoreCase = true) }
+        fun forId(id: String) = ENUM_ENTRY_FOR_LOWERCASE_ID_OR_FULL_NAME[id.lowercase()]
     }
 
     /**
      * The full license exception text as a string.
      */
     val text by lazy { checkNotNull(javaClass.getResource("/exceptions/$id")).readText() }
+}
+
+private val ENUM_ENTRY_FOR_LOWERCASE_ID_OR_FULL_NAME: Map<String, SpdxLicenseException> by lazy {
+    buildMap(SpdxLicenseException.entries.size * 2) {
+        SpdxLicenseException.entries.forEach {
+            put(it.id.lowercase(), it)
+            put(it.fullName.lowercase(), it)
+        }
+    }
 }
 
 internal object SpdxLicenseExceptionSerializer : KSerializer<SpdxLicenseException> by SpdxLicenseException.generatedSerializer() {
