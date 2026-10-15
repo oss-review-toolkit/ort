@@ -34,21 +34,36 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 
 import kotlin.reflect.KClass
 
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.Secret
+import org.ossreviewtoolkit.plugins.scanners.scanoss.ScanOssConfig.ScanFlag
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 import org.ossreviewtoolkit.utils.test.extractResource
 
+private val ORT_PURLS_TO_IGNORE = listOf(
+    "pkg:github/oss-review-toolkit/ort",
+    "pkg:maven/org.ossreviewtoolkit/reporter",
+    "pkg:golang/github.com/oss-review-toolkit/ort",
+    "pkg:golang/github.com/heremaps/oss-review-toolkit",
+    "pkg:github/heremaps/oss-review-toolkit",
+    "pkg:codeberg/oss-review-toolkit/ort"
+)
+
 @EnabledIf(CloudCheck::class)
 class ScanOssFunTest : StringSpec({
-    val scanner = CloudCheck.getScanOssApiKey()?.let { ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL2, Secret(it)) } ?:
-        CloudCheck.getOsskbApiKey()?.let { ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL, Secret(it)) } ?:
-        ScanOssFactory.create()
+    val flags = listOf(ScanFlag.ENABLE_DOWNLOAD_URL, ScanFlag.ENABLE_GITHUB_FULL_PATH)
+
+    val scanner = CloudCheck.getScanOssApiKey()?.let {
+        ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL2, Secret(it), flags = flags, ignorePurls = ORT_PURLS_TO_IGNORE)
+    } ?: CloudCheck.getOsskbApiKey()?.let {
+        ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL, Secret(it), flags = flags, ignorePurls = ORT_PURLS_TO_IGNORE)
+    } ?: ScanOssFactory.create(flags = flags, ignorePurls = ORT_PURLS_TO_IGNORE)
 
     val scanContext = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
 
@@ -90,9 +105,12 @@ class ScanOssFunTest : StringSpec({
         }
     }
 
-    // Disabled as SCANOSS by now returns ORT itself as the original source of the snippet.
-    "Snippet matches contain the expected findings".config(enabled = false) {
-        val unoconv = extractResource("/unoconv-snippet")
+    "Snippet matches contain the expected findings" {
+        val unoconv = extractResource("/unoconv-snippet").apply {
+            appendText("\n# A comment to make the contents differ from the committed file.\n")
+        }
+
+        val md5 = HashAlgorithm.MD5.calculate(unoconv)
 
         val summary = scanner.scanPath(unoconv, scanContext)
 
@@ -101,7 +119,7 @@ class ScanOssFunTest : StringSpec({
 
         summary.snippetFindings shouldBeSingleton {
             it.snippets shouldBeSingleton { snippet ->
-                snippet.score shouldBe 95.0f
+                snippet.score shouldBe 93.0f
                 snippet.location shouldBe TextLocation("unoconv-0.6/unoconv", 19, 186)
                 snippet.provenance shouldBe RepositoryProvenance(
                     vcsInfo = VcsInfo(VcsType.GIT, "https://github.com/unoconv/unoconv.git", ""),
@@ -114,6 +132,7 @@ class ScanOssFunTest : StringSpec({
                     put("vendor", "unoconv")
                     put("version", "0.6")
                     put("latest", "0.6")
+                    put("status", "pending")
                     put("file_hash", "38e743a8566d3df4a2dc4432f8d6b091")
 
                     // Copyrights (and vulnerabilities) are commercial features.
@@ -124,7 +143,7 @@ class ScanOssFunTest : StringSpec({
 
                     put("url_hash", "2b5b8e4c1c62f2b3cba48ceabc1f3671")
                     put("release_date", "2012-09-10")
-                    put("source_hash", "21f8df5092922255fd8b42be5e6b59a7")
+                    put("source_hash", md5)
                 }
             }
         }
