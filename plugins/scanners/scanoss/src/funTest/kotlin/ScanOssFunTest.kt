@@ -58,6 +58,8 @@ class ScanOssFunTest : StringSpec({
         val summary = scanner.scanPath(unoconv, scanContext)
 
         summary.licenseFindings should beEmpty()
+        summary.copyrightFindings should beEmpty()
+
         summary.snippetFindings shouldBeSingleton { finding ->
             finding.snippets shouldBeSingleton { snippet ->
                 snippet.score shouldBe 100.0f
@@ -74,8 +76,10 @@ class ScanOssFunTest : StringSpec({
                     put("status", "pending")
                     put("file_hash", "0f55e083dcc72a11334eb1a77137e2c4")
 
+                    // Copyrights (and vulnerabilities) are commercial features.
                     if (CloudCheck.getScanOssApiKey() != null) {
                         put("file_url", "https://api.scanoss.com/file_contents/0f55e083dcc72a11334eb1a77137e2c4")
+                        put("copyright_details", "Copyright 2007-2010 Dag Wieers <dag@wieers.com>")
                     }
 
                     put("url_hash", "b53576ddfc63b441ef55998f2f97db8e")
@@ -83,15 +87,6 @@ class ScanOssFunTest : StringSpec({
                     put("source_hash", "0f55e083dcc72a11334eb1a77137e2c4")
                 }
             }
-        }
-
-        // Copyrights (and vulnerabilities) are commercial features.
-        if (CloudCheck.getScanOssApiKey() != null) {
-            summary.copyrightFindings shouldBeSingleton {
-                it.statement shouldBe "Copyright 2007-2010 Dag Wieers <dag@wieers.com>"
-            }
-        } else {
-            summary.copyrightFindings should beEmpty()
         }
     }
 
@@ -121,8 +116,10 @@ class ScanOssFunTest : StringSpec({
                     put("latest", "0.6")
                     put("file_hash", "38e743a8566d3df4a2dc4432f8d6b091")
 
+                    // Copyrights (and vulnerabilities) are commercial features.
                     if (CloudCheck.getScanOssApiKey() != null) {
                         put("file_url", "https://api.scanoss.com/file_contents/38e743a8566d3df4a2dc4432f8d6b091")
+                        put("copyright_details", "Copyright 2007-2010 Dag Wieers <dag@wieers.com>")
                     }
 
                     put("url_hash", "2b5b8e4c1c62f2b3cba48ceabc1f3671")
