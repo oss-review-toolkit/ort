@@ -367,40 +367,50 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
         packageDownloadDirs: Map<Package, File>,
         failureMessages: MutableList<String>,
         maxParallelDownloads: Int
-    ) = runBlocking {
-        val parallelDownloads = packageDownloadDirs.size.coerceAtMost(maxParallelDownloads)
+    ) {
+        runBlocking {
+            val parallelDownloads = packageDownloadDirs.size.coerceAtMost(maxParallelDownloads)
 
-        val overallLayout = progressBarLayout(alignColumns = false) {
-            text(if (dryRun) "Verifying" else "Downloading", align = TextAlign.LEFT)
-            progressBar()
-            percentage()
-            timeRemaining()
-        }
+            val overallLayout = progressBarLayout(alignColumns = false) {
+                text(if (dryRun) "Verifying" else "Downloading", align = TextAlign.LEFT)
+                progressBar()
+                percentage()
+                timeRemaining()
+            }
 
-        val taskLayout = progressBarContextLayout<Pair<Package, Int>> {
-            text(fps = animationFps, align = TextAlign.LEFT) { "> Package '${context.first.id.toCoordinates()}'..." }
-            cell(width = ColumnWidth.Expand()) { EmptyWidget }
-            text(fps = animationFps, align = TextAlign.RIGHT) { "${context.second.inc()}/${packageDownloadDirs.size}" }
-        }
-
-        val progress = MultiProgressBarAnimation(terminal).animateInCoroutine()
-        val overall = progress.addTask(overallLayout, total = packageDownloadDirs.size.toLong())
-        val tasks = List(parallelDownloads) { progress.addTask(taskLayout, context = Package.EMPTY to 0, total = 1) }
-
-        launch { progress.execute() }
-
-        withContext(Dispatchers.IO.limitedParallelism(parallelDownloads)) {
-            packageDownloadDirs.entries.mapIndexed { index, (pkg, dir) ->
-                async {
-                    with(tasks[index % parallelDownloads]) {
-                        reset { context = pkg to index }
-                        downloadPackage(pkg, dir, failureMessages)
-                        advance()
-                    }
-
-                    overall.advance()
+            val taskLayout = progressBarContextLayout<Pair<Package, Int>> {
+                text(fps = animationFps, align = TextAlign.LEFT) {
+                    "> Package '${context.first.id.toCoordinates()}'..."
                 }
-            }.awaitAll()
+
+                cell(width = ColumnWidth.Expand()) { EmptyWidget }
+
+                text(fps = animationFps, align = TextAlign.RIGHT) {
+                    "${context.second.inc()}/${packageDownloadDirs.size}"
+                }
+            }
+
+            val progress = MultiProgressBarAnimation(terminal).animateInCoroutine()
+            val overall = progress.addTask(overallLayout, total = packageDownloadDirs.size.toLong())
+            val tasks = List(parallelDownloads) {
+                progress.addTask(taskLayout, context = Package.EMPTY to 0, total = 1)
+            }
+
+            launch { progress.execute() }
+
+            withContext(Dispatchers.IO.limitedParallelism(parallelDownloads)) {
+                packageDownloadDirs.entries.mapIndexed { index, (pkg, dir) ->
+                    async {
+                        with(tasks[index % parallelDownloads]) {
+                            reset { context = pkg to index }
+                            downloadPackage(pkg, dir, failureMessages)
+                            advance()
+                        }
+
+                        overall.advance()
+                    }
+                }.awaitAll()
+            }
         }
     }
 
