@@ -55,10 +55,12 @@ class ScanOss(
     override val descriptor: PluginDescriptor = ScanOssFactory.descriptor,
     private val config: ScanOssConfig
 ) : PathScannerWrapper {
+    private val flags = config.flags.fold(0) { acc, flag -> acc or flag.bitMask }
     private val scanossBuilder = Scanner.builder()
         // As there is only a single endpoint, the SCANOSS API client expects the path to be part of the API URL.
         .url(config.apiUrl.removeSuffix("/") + "/scan/direct")
         .apiKey(config.apiKey.value)
+        .scanFlags(flags.toString())
         .apply { if (config.noProxy) proxy(Proxy.NO_PROXY) }
         .obfuscate(config.enablePathObfuscation)
 
