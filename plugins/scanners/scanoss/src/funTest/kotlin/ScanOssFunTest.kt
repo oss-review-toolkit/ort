@@ -151,8 +151,8 @@ class ScanOssFunTest : StringSpec({
 })
 
 internal object CloudCheck : Condition {
-    fun getOsskbApiKey(): String? = System.getenv("OSSKB_API_KEY")
-    fun getScanOssApiKey(): String? = System.getenv("SCANOSS_API_KEY")
+    fun getOsskbApiKey(): String? = System.getenv("OSSKB_API_KEY")?.takeUnless { it.isBlank() }
+    fun getScanOssApiKey(): String? = System.getenv("SCANOSS_API_KEY")?.takeUnless { it.isBlank() }
 
     override fun evaluate(kclass: KClass<out Spec>): Boolean =
         System.getenv("CI") != "true" || getOsskbApiKey() != null || getScanOssApiKey() != null

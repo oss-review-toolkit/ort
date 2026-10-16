@@ -135,7 +135,7 @@ class ScanOssFunTest : WordSpec({
 })
 
 internal object ScanOssCheck : Condition {
-    fun getScanOssApiKey(): String? = System.getenv("SCANOSS_API_KEY")
+    fun getScanOssApiKey(): String? = System.getenv("SCANOSS_API_KEY")?.takeUnless { it.isBlank() }
 
     // Vulnerabilities (and copyrights) are commercial features.
     override fun evaluate(kclass: KClass<out Spec>): Boolean = getScanOssApiKey() != null
