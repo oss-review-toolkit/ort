@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MAVEN_DECLARED_LICENSES_OPERATOR
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
@@ -69,7 +70,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.internalId
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.isTychoProject
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseScm
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.processDeclaredLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.toOrtProject
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
@@ -484,7 +484,6 @@ private fun Package.withOriginalId(dependency: Artifact): Package =
 internal fun createPackageFromManifest(artifact: Artifact, manifest: Manifest, resolver: P2ArtifactResolver): Package =
     with(manifest.mainAttributes) {
         val declaredLicenses = setOfNotNull(getValue("Bundle-License"))
-        val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
         val authors = setOfNotNull(getValue("Bundle-Vendor"))
         val homepageUrl = getValue("Bundle-DocURL").orEmpty()
 
@@ -501,7 +500,7 @@ internal fun createPackageFromManifest(artifact: Artifact, manifest: Manifest, r
             ),
             authors = authors,
             declaredLicenses = declaredLicenses,
-            declaredLicensesProcessed = declaredLicensesProcessed,
+            declaredLicensesOperator = MAVEN_DECLARED_LICENSES_OPERATOR,
             description = getValue("Bundle-Description").orEmpty(),
             homepageUrl = homepageUrl,
             binaryArtifact = resolver.getBinaryArtifactFor(artifact),

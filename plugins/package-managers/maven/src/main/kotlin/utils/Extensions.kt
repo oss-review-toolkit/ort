@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
@@ -91,7 +92,10 @@ internal fun MavenProject.toOrtProject(
     scopeNames: Set<String>
 ): Project {
     val declaredLicenses = parseLicenses(this)
-    val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
+    val declaredLicensesProcessed = DeclaredLicenseProcessor.process(
+        declaredLicenses,
+        operator = MAVEN_DECLARED_LICENSES_OPERATOR
+    )
 
     val vcsFromPackage = parseVcsInfo(this)
     val browsableScmUrl = getOriginalScm(this)?.url
