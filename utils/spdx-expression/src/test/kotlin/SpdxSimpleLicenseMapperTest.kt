@@ -94,6 +94,23 @@ class SpdxSimpleLicenseMapperTest : WordSpec({
                 SpdxLicense.forId(declaredLicense) should beNull()
             }
         }
+
+        "contain matching digits disregarding trailing zeros to disambiguate" {
+            val exceptions = mapOf(
+                // See https://www.eclipse.org/org/documents/edl-v10.php.
+                "EDL-1.0" to SpdxLicense.BSD_3_CLAUSE.id.toSpdx(),
+                // See https://spdx.org/licenses/BSD-2-Clause-Views.html.
+                "FreeBSD" to SpdxLicense.BSD_2_CLAUSE_VIEWS.id.toSpdx()
+            )
+
+            SpdxSimpleLicenseMapper.SIMPLE_MAPPING.entries.filterNot {
+                it in exceptions.entries
+            }.forAll { (key, license) ->
+                val digitsInKey = key.filter { it.isDigit() }.dropLastWhile { it == '0' }
+                val digitsInLicense = license.toString().filter { it.isDigit() }.dropLastWhile { it == '0' }
+                digitsInKey shouldBe digitsInLicense
+            }
+        }
     }
 
     "The deprecated mapping" should {
