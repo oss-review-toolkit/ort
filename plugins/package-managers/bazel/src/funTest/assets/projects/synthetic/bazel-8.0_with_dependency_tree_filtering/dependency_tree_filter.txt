@@ -1,0 +1,5 @@
+@com_github_google_glog
+@com_google_googletest
+# these two dependencies of googletest are kept but two dependencies are removed: platforms and rules_cc
+@com_google_absl
+@com_googlesource_code_re2
