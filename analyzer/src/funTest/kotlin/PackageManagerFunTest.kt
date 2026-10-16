@@ -71,6 +71,7 @@ class PackageManagerFunTest : WordSpec({
         "pip-setup/setup.py",
         "pipenv/Pipfile.lock",
         "poetry/poetry.lock",
+        "pylock/pylock.toml",
         "rebar3/rebar.config",
         "pub/pubspec.yaml",
         "sbt/build.sbt",
@@ -133,6 +134,7 @@ class PackageManagerFunTest : WordSpec({
                 managedFilesById["Pipenv"] should containExactly("pipenv/Pipfile.lock")
                 managedFilesById["PNPM"] should containExactly("npm-pnpm-and-yarn/package.json")
                 managedFilesById["Poetry"] should containExactly("poetry/poetry.lock")
+                managedFilesById["Pylock"] should containExactly("pylock/pylock.toml")
                 managedFilesById["Pub"] should containExactly("pub/pubspec.yaml")
                 managedFilesById["Rebar3"] should containExactly("rebar3/rebar.config")
                 managedFilesById["SBT"] should containExactly("sbt/build.sbt")
