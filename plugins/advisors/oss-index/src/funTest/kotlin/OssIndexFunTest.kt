@@ -130,8 +130,11 @@ class OssIndexFunTest : WordSpec({
 })
 
 internal object OssIndexCredentials : Condition {
-    fun getUsername(): String? = System.getenv("OSS_INDEX_USERNAME")
-    fun getToken(): String? = System.getenv("OSS_INDEX_PASSWORD") ?: System.getenv("SONATYPE_PAT")
+    fun getUsername(): String? = System.getenv("OSS_INDEX_USERNAME")?.takeUnless { it.isBlank() }
+
+    fun getToken(): String? =
+        System.getenv("OSS_INDEX_PASSWORD")?.takeUnless { it.isBlank() }
+            ?: System.getenv("SONATYPE_PAT")?.takeUnless { it.isBlank() }
 
     override fun evaluate(kclass: KClass<out Spec>): Boolean =
         // Authentication can either happen via OSS Index username and password or Sonatype Guide personal access token.
