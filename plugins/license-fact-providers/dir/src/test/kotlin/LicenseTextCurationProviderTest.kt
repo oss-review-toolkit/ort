@@ -70,6 +70,22 @@ class LicenseTextCurationProviderTest : WordSpec({
                 Identifier("Npm::mime-types:10.0.0")
             ).map { it.text } should beEmpty()
         }
+
+        "return the texts from same file, for identifiers which differ in their case" {
+            provider.getLicenseTextsForId(
+                "MIT",
+                Identifier("Npm::Mime-Types:0.0.1")
+            ).map { it.text } should containExactlyInAnyOrder(
+                "Text for uppercase Mime-Types 0.0.1"
+            )
+
+            provider.getLicenseTextsForId(
+                "MIT",
+                Identifier("Npm::mime-types:0.0.1")
+            ).map { it.text } should containExactlyInAnyOrder(
+                "Text for lowercase mime-types 0.0.1"
+            )
+        }
     }
 })
 
@@ -87,4 +103,12 @@ private val CURATIONS_FILE_CONTENT = """
   curations:
   - license_id: "MIT"
     license_text: "Text for mime-types 1.0.0"      
+- id: "Npm::Mime-Types:0.0.1"
+  curations:
+  - license_id: "MIT"
+    license_text: "Text for uppercase Mime-Types 0.0.1"      
+- id: "Npm::mime-types:0.0.1"
+  curations:
+  - license_id: "MIT"
+    license_text: "Text for lowercase mime-types 0.0.1"    
 """.trimIndent()
