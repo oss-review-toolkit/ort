@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model.utils
 
 import java.util.LinkedList
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphEdge
 import org.ossreviewtoolkit.model.DependencyGraphNode
@@ -413,7 +415,9 @@ class DependencyGraphBuilder<D>(
      * this fails, record a corresponding message in [issues].
      */
     private fun updateResolvedPackages(id: Identifier, dependency: D, issues: MutableList<Issue>) {
-        resolvedPackages.compute(id) { _, pkg -> pkg ?: dependencyHandler.createPackage(dependency, issues) }
+        resolvedPackages.compute(id) { _, pkg ->
+            pkg ?: dependencyHandler.createPackage(dependency, issues)?.let { sanitizePackageId(id, it) }
+        }
     }
 
     /**
@@ -435,6 +439,21 @@ class DependencyGraphBuilder<D>(
         return ref
     }
 }
+
+/**
+ * Make sure that the given [pkg] actually has the provided [id]. If this is not the case, return a copy of the package
+ * with the ID replaced. This function is used by [DependencyGraphBuilder] guarantee that the packages it stores in
+ * its _resolvedPackages_ map are consistent with the keys.
+ */
+internal fun sanitizePackageId(id: Identifier, pkg: Package): Package =
+    pkg.takeUnless { it.id != id } ?: pkg.copy(
+        id = id,
+        purl = pkg.purl.takeUnless { it == pkg.id.toPurl() } ?: id.toPurl()
+    ).also {
+        logger(DependencyGraphBuilder::class::java.name).warn {
+            "Unexpected package ID '${pkg.id.toCoordinates()}'. Replacing with '${id.toCoordinates()}'."
+        }
+    }
 
 /**
  * Convert the direct dependency references of all projects to a list of nodes and a set of edges that represent the
