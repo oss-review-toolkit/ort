@@ -165,13 +165,13 @@ RUN curl -kSs https://pyenv.run | bash \
     && pyenv install -v $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION
 
-RUN if [ "$(arch)" = "aarch64" ]; then \
-        pip install -U scancode-toolkit-mini==$SCANCODE_VERSION licensedcode-data setuptools==$PYTHON_SETUPTOOLS_VERSION; \
+RUN curl -Os https://raw.githubusercontent.com/aboutcode-org/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt \
+    && if [ "$(arch)" = "aarch64" ]; then \
+        pip install -U --constraint requirements.txt scancode-toolkit-mini==$SCANCODE_VERSION licensedcode-data setuptools==$PYTHON_SETUPTOOLS_VERSION; \
     else \
-        curl -Os https://raw.githubusercontent.com/aboutcode-org/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
         pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION setuptools==$PYTHON_SETUPTOOLS_VERSION; \
-        rm requirements.txt; \
-    fi
+    fi \
+    && rm requirements.txt
 
 # Extract ScanCode license texts to a directory.
 RUN scancode-license-data --path /opt/scancode-license-data \
