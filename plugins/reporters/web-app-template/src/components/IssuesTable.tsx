@@ -21,6 +21,7 @@ import type { ColumnDef, Row, TableState } from "@tanstack/react-table";
 import { Lightbulb } from "lucide-react";
 import type { JSX } from "react";
 import { useCallback, useMemo } from "react";
+import { createExcludesColumn, getPackageExcludeReason } from "@/components/ExcludesColumn";
 import { PackageDetails } from "@/components/PackageDetails";
 import { PackageLicenses } from "@/components/PackageLicenses";
 import { PackagePaths } from "@/components/PackagePaths";
@@ -52,8 +53,11 @@ export interface IssuesTableProps {
 }
 
 interface IssueRow {
+    excludeReason: string;
     hasHowToFix: boolean;
     howToFix: string;
+    isExcluded: boolean;
+    isPackageExcluded: boolean;
     isResolved: boolean;
     issue: WebAppOrtIssue;
     key: string;
@@ -77,8 +81,11 @@ function buildRow(issue: WebAppOrtIssue, index: number): IssueRow {
     const severity = (issue.severity ?? "") as SeverityValue | "";
     const reasons = Array.from(issue.resolutionReasons ?? []);
     return {
+        excludeReason: getPackageExcludeReason(issue.package),
         hasHowToFix: issue.hasHowToFix(),
         howToFix: issue.howToFix ?? "",
+        isExcluded: issue.isExcluded,
+        isPackageExcluded: issue.package?.isExcluded === true,
         isResolved: issue.isResolved,
         issue,
         key: issue.key ?? `issue-${index}`,
@@ -93,7 +100,7 @@ function buildRow(issue: WebAppOrtIssue, index: number): IssueRow {
 }
 
 function renderSubRow(row: Row<IssueRow>): JSX.Element {
-    const { hasHowToFix, howToFix, isResolved, issue, message, resolutions } = row.original;
+    const { excludeReason, hasHowToFix, howToFix, isExcluded, isResolved, issue, message, resolutions } = row.original;
     const pkg = issue.package;
     const paths = pkg?.paths ?? [];
     return (
@@ -112,6 +119,12 @@ function renderSubRow(row: Row<IssueRow>): JSX.Element {
                             <>
                                 <span className="font-medium text-muted-foreground">Resolution</span>
                                 <ResolutionDetails resolutions={resolutions} />
+                            </>
+                        ) : null}
+                        {isExcluded ? (
+                            <>
+                                <span className="font-medium text-muted-foreground">Excluded</span>
+                                <span>{excludeReason || "Yes"}</span>
                             </>
                         ) : null}
                     </div>
@@ -165,6 +178,7 @@ function IssuesTable({
     onPackageClick,
 }: IssuesTableProps): JSX.Element {
     const data = useMemo<IssueRow[]>(() => issues.map((issue, index) => buildRow(issue, index)), [issues]);
+    const hasExcludedIssues = useMemo(() => data.some((row) => row.isExcluded), [data]);
 
     // Expand the deep-linked package's first technical issue row and/or pre-filter the severity column on mount.
     const initialState = useMemo<Partial<TableState>>(() => {
@@ -195,8 +209,8 @@ function IssuesTable({
         [data, focusPackageId, onFocusPackageChange],
     );
 
-    const columns = useMemo<ColumnDef<IssueRow, unknown>[]>(
-        () => [
+    const columns = useMemo<ColumnDef<IssueRow, unknown>[]>(() => {
+        const cols: ColumnDef<IssueRow, unknown>[] = [
             createExpandColumn<IssueRow>({ enableExpandAll: true }),
             {
                 id: "severity",
@@ -234,8 +248,12 @@ function IssuesTable({
                     </div>
                 ),
                 cell: ({ row }) => (
+                    // Strike through only an excluded package, not a package whose issue is excluded by its
+                    // affected path.
                     <PackageLink
+                        excludeReason={row.original.excludeReason}
                         id={row.original.packageName}
+                        isExcluded={row.original.isPackageExcluded}
                         {...(onPackageClick ? { onClick: onPackageClick } : {})}
                     />
                 ),
@@ -302,9 +320,14 @@ function IssuesTable({
                 enableColumnFilter: false,
                 meta: { headerClassName: "w-8", cellClassName: "w-8" },
             },
-        ],
-        [onPackageClick],
-    );
+        ];
+
+        if (hasExcludedIssues) {
+            cols.splice(1, 0, createExcludesColumn<IssueRow>());
+        }
+
+        return cols;
+    }, [hasExcludedIssues, onPackageClick]);
 
     return (
         <DataTable<IssueRow>
@@ -312,6 +335,7 @@ function IssuesTable({
             data={data}
             emptyText="No technical issues"
             getRowCanExpand={() => true}
+            getRowClassName={(row) => (row.original.isExcluded ? "text-muted-foreground" : undefined)}
             getRowId={(row) => row.key}
             hidePaginationWhenSinglePage
             initialState={initialState}
