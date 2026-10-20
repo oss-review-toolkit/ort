@@ -25,6 +25,9 @@ import type { EvaluatedModelPath, EvaluatedModelTreeNode } from "@/types/evaluat
 
 export type WebAppTreeNodeCallback = (node: WebAppTreeNode) => void;
 
+// Most nodes have no excludes, so they share one empty set rather than allocating two per node.
+const NO_EXCLUDES: ReadonlySet<number> = new Set();
+
 class WebAppTreeNode {
     #children: WebAppTreeNode[] = [];
 
@@ -36,13 +39,13 @@ class WebAppTreeNode {
 
     #parent: WebAppTreeNode | undefined;
 
-    #pathExcludes: Set<number> = new Set();
+    #pathExcludes: ReadonlySet<number> = NO_EXCLUDES;
 
     #scope: WebAppScope | undefined;
 
     #scopeIndex: number | undefined;
 
-    #scopeExcludes: Set<number> = new Set();
+    #scopeExcludes: ReadonlySet<number> = NO_EXCLUDES;
 
     #title: string | undefined;
 
@@ -52,20 +55,15 @@ class WebAppTreeNode {
 
     key: string | undefined;
 
-    className: string | undefined;
-
     constructor(
         obj?: EvaluatedModelTreeNode,
         webAppEvaluatedModel?: WebAppEvaluatedModel,
         callback?: WebAppTreeNodeCallback,
         parent?: WebAppTreeNode,
     ) {
-        const className = new Set<string>();
-
         if (obj) {
             if (Number.isInteger(obj.key)) {
                 this.key = `${obj.key}`;
-                className.add(`ort-tree-node-${obj.key}`);
             }
 
             if (obj.path_excludes || obj.pathExcludes) {
@@ -86,14 +84,6 @@ class WebAppTreeNode {
                 this.#isExcluded = true;
             } else if (this.#parent) {
                 this.#isExcluded = this.#parent.isExcluded;
-            }
-
-            if (this.#isExcluded) {
-                className.add("ort-excluded");
-            }
-
-            if (className.size > 0) {
-                this.className = Array.from(className).join(" ");
             }
 
             if (webAppEvaluatedModel) {
