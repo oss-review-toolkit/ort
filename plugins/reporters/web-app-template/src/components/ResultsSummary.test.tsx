@@ -26,9 +26,9 @@ import { LICENSE_TERM_DEFINITIONS } from "@/components/Shared";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
-// An array of the given length; ResultsSummary only reads `.length` for issues, violations, projects,
-// scopes and the license lists, so the elements themselves do not matter.
-const list = (length: number): unknown[] => Array.from({ length });
+// Issues in one state; ResultsSummary reads only whether each one is excluded or resolved.
+const fakeIssues = (length: number, state: { isExcluded: boolean; isResolved: boolean }) =>
+    Array.from({ length }, () => state);
 
 interface SeverityCounts {
     errors: number;
@@ -38,7 +38,7 @@ interface SeverityCounts {
 }
 
 interface FakeOptions {
-    issuesTotal?: number;
+    excludedIssues?: number;
     openIssues?: SeverityCounts;
     openVulnerabilities?: number;
     resolvedConfiguration?: {
@@ -47,8 +47,9 @@ interface FakeOptions {
         packageCurations: number;
         resolutions: number;
     };
+    resolvedIssues?: number;
     severeOpenIssuesCount?: number;
-    vulnerabilities?: { isResolved: boolean; severityIndex: number }[];
+    vulnerabilities?: { isResolved: boolean; package?: { isExcluded: boolean }; severityIndex: number }[];
 }
 
 const NO_SEVERITY: SeverityCounts = { errors: 0, hints: 0, total: 0, warnings: 0 };
@@ -65,7 +66,11 @@ function fakeModel(options: FakeOptions = {}): WebAppEvaluatedModel {
         effectiveLicenses: [],
         hasExcludes: () => false,
         hasRepositoryConfiguration: () => false,
-        issues: list(options.issuesTotal ?? openIssues.total),
+        issues: [
+            ...fakeIssues(openIssues.total, { isExcluded: false, isResolved: false }),
+            ...fakeIssues(options.resolvedIssues ?? 0, { isExcluded: false, isResolved: true }),
+            ...fakeIssues(options.excludedIssues ?? 0, { isExcluded: true, isResolved: false }),
+        ],
         packages: [],
         projects: [],
         repository: { vcsProcessed: { revision: "abcdef1", type: "Git", url: "https://example.com/acme/repo.git" } },
@@ -98,8 +103,8 @@ describe("ResultsSummary", () => {
             const { container } = render(
                 <ResultsSummary
                     webAppEvaluatedModel={fakeModel({
-                        issuesTotal: 4,
                         openIssues: { errors: 1, hints: 0, total: 1, warnings: 0 },
+                        resolvedIssues: 3,
                         severeOpenIssuesCount: 1,
                         vulnerabilities: [
                             { isResolved: true, severityIndex: 0 },
@@ -129,6 +134,41 @@ describe("ResultsSummary", () => {
 
             expect(tally(container, "Resolved")).toBe("0");
             expect(container.textContent).toContain("2 resolved");
+        });
+
+        it("does not count excluded issues as resolved", () => {
+            // ORT's statistics leave excluded issues out of the open ones, but they have no resolution.
+            const { container } = render(
+                <ResultsSummary
+                    webAppEvaluatedModel={fakeModel({
+                        excludedIssues: 3,
+                        openIssues: { errors: 1, hints: 0, total: 1, warnings: 0 },
+                        resolvedIssues: 1,
+                        severeOpenIssuesCount: 1,
+                    })}
+                />,
+            );
+
+            expect(tally(container, "Resolved")).toBe("1");
+            expect(container.textContent).toContain("1 resolved, 3 excluded");
+        });
+
+        it("counts vulnerabilities of excluded packages as excluded, not open", () => {
+            render(
+                <ResultsSummary
+                    webAppEvaluatedModel={fakeModel({
+                        openVulnerabilities: 1,
+                        vulnerabilities: [
+                            { isResolved: false, package: { isExcluded: true }, severityIndex: 0 },
+                            { isResolved: false, package: { isExcluded: false }, severityIndex: 1 },
+                        ],
+                    })}
+                />,
+            );
+
+            expect(screen.queryByTitle("1 open critical vulnerability")).not.toBeInTheDocument();
+            expect(screen.getByTitle("1 open high vulnerability")).toBeInTheDocument();
+            expect(screen.getByText("0 resolved, 1 excluded")).toBeInTheDocument();
         });
     });
 
@@ -246,8 +286,8 @@ describe("ResultsSummary", () => {
                 <ResultsSummary
                     onSelectTab={onSelectTab}
                     webAppEvaluatedModel={fakeModel({
-                        issuesTotal: 5,
                         openIssues: { errors: 3, hints: 0, total: 3, warnings: 0 },
+                        resolvedIssues: 2,
                         severeOpenIssuesCount: 3,
                     })}
                 />,
@@ -265,7 +305,6 @@ describe("ResultsSummary", () => {
             render(
                 <ResultsSummary
                     webAppEvaluatedModel={fakeModel({
-                        issuesTotal: 5,
                         openIssues: { errors: 3, hints: 0, total: 5, warnings: 2 },
                         severeOpenIssuesCount: 3,
                         vulnerabilities: [

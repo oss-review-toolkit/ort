@@ -297,6 +297,11 @@ function ConfigTag({
 }
 
 // A small heading for a sidebar section.
+// The sub-label below a detector's open count; excluded items are only mentioned when there are any.
+function resolvedAndExcludedLabel(resolved: number, excluded: number): string {
+    return excluded > 0 ? `${resolved} resolved, ${excluded} excluded` : `${resolved} resolved`;
+}
+
 function SidebarHeading({ children }: { children: ReactNode }): JSX.Element {
     return <h3 className="mb-3 font-semibold text-foreground text-xs uppercase tracking-wide">{children}</h3>;
 }
@@ -329,22 +334,37 @@ function ResultsSummary({
     // that must be resolved for the run to pass — not merely the open errors.
     const unresolvedIssues = webAppEvaluatedModel.severeOpenIssuesCount;
     const unresolvedRuleViolations = webAppEvaluatedModel.severeOpenRuleViolationsCount;
-    const resolvedIssues = Math.max(0, issues.length - openIssues.total);
+    // ORT's statistics leave both resolved and excluded issues out of the open ones, so count each state
+    // directly rather than taking the difference to the total. An excluded issue with a resolution counts
+    // as resolved.
+    const { excludedIssues, resolvedIssues } = useMemo(() => {
+        let excluded = 0;
+        let resolved = 0;
+        for (const issue of issues) {
+            if (issue.isResolved) resolved += 1;
+            else if (issue.isExcluded) excluded += 1;
+        }
+        return { excludedIssues: excluded, resolvedIssues: resolved };
+    }, [issues]);
     const resolvedRuleViolations = Math.max(0, ruleViolations.length - openRuleViolations.total);
     const vcsProcessed = webAppEvaluatedModel.repository?.vcsProcessed;
 
     // Vulnerabilities carry no severe threshold and no per-rating statistics, so tally the list directly.
+    // Like ORT's statistics, vulnerabilities of excluded packages do not count as open.
     const vulnerabilityCounts = useMemo(() => {
         const open: Record<VulnerabilityRatingValue, number> = { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0, NONE: 0 };
+        let excluded = 0;
         let resolved = 0;
         for (const vulnerability of vulnerabilities) {
             if (vulnerability.isResolved) {
                 resolved += 1;
+            } else if (vulnerability.package?.isExcluded) {
+                excluded += 1;
             } else {
                 open[indexToRating(vulnerability.severityIndex)] += 1;
             }
         }
-        return { open, resolved };
+        return { excluded, open, resolved };
     }, [vulnerabilities]);
 
     // A dependency is "direct" when it appears at dependency-tree level 0, otherwise "transitive".
@@ -371,7 +391,7 @@ function ResultsSummary({
         };
     });
 
-    const resolvedVulnerabilities = vulnerabilityCounts.resolved;
+    const { excluded: excludedVulnerabilities, resolved: resolvedVulnerabilities } = vulnerabilityCounts;
     // Both tallies count the same population: technical issues and policy violations. Whether a
     // vulnerability has to be resolved is a policy decision, so counting vulnerabilities here would
     // count that decision twice. The Vulnerabilities card keeps its own resolved tally.
@@ -476,7 +496,7 @@ function ResultsSummary({
                         name="Technical issues"
                         onClick={() => onSelectTab?.("tech-issues")}
                         severities={issueSeverities}
-                        subLabel={`${resolvedIssues} resolved`}
+                        subLabel={resolvedAndExcludedLabel(resolvedIssues, excludedIssues)}
                         total={issues.length}
                     />
                     <DetectorRow
@@ -497,7 +517,7 @@ function ResultsSummary({
                         name="Vulnerabilities"
                         onClick={() => onSelectTab?.("vulnerabilities")}
                         severities={vulnerabilitySeverities}
-                        subLabel={`${resolvedVulnerabilities} resolved`}
+                        subLabel={resolvedAndExcludedLabel(resolvedVulnerabilities, excludedVulnerabilities)}
                         total={vulnerabilities.length}
                     />
                     <DetectorRow
