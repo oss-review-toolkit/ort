@@ -376,14 +376,24 @@ PackageCurationIcon.displayName = "PackageCurationIcon";
 
 // A package identifier. When an onClick handler is provided it renders as a link (used to jump to the
 // package in the main results table); otherwise it is plain monospace text.
-function PackageLink({ id, onClick }: { id: string; onClick?: (id: string) => void }): JSX.Element | null {
+export interface PackageLinkProps {
+    // The reasons the package is excluded for, shown as the tooltip of an excluded package.
+    excludeReason?: string;
+    id: string;
+    // Strikes through the name in the same style as an excluded package in the packages table.
+    isExcluded?: boolean;
+    onClick?: (id: string) => void;
+}
+
+function PackageLink({ excludeReason, id, isExcluded = false, onClick }: PackageLinkProps): JSX.Element | null {
     if (!id) return null;
-    if (!onClick) {
-        return <span className="break-all font-mono text-xs">{id}</span>;
-    }
-    return (
+    const excludedClassName = isExcluded ? "text-muted-foreground line-through decoration-muted-foreground" : undefined;
+    const link = onClick ? (
         <button
-            className="break-all text-left font-mono text-primary text-xs underline-offset-4 hover:underline"
+            className={cn(
+                "break-all text-left font-mono text-primary text-xs underline-offset-4 hover:underline",
+                excludedClassName,
+            )}
             onClick={(event) => {
                 event.stopPropagation();
                 onClick(id);
@@ -392,7 +402,11 @@ function PackageLink({ id, onClick }: { id: string; onClick?: (id: string) => vo
         >
             {id}
         </button>
+    ) : (
+        <span className={cn("break-all font-mono text-xs", excludedClassName)}>{id}</span>
     );
+    if (!isExcluded) return link;
+    return <span title={excludeReason ? `Excluded: ${excludeReason}` : "Excluded"}>{link}</span>;
 }
 
 // The part of a resolution this renders, shared by issue, rule violation and vulnerability ones.
