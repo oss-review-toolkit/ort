@@ -153,6 +153,75 @@ describe("WebAppEvaluatedModel", () => {
         }
     });
 
+    describe("with a wide dependency tree", () => {
+        const WIDTH = 2000;
+
+        // A project with one scope holding many direct dependencies, keyed in their display order.
+        const wide: EvaluatedModel = {
+            packages: [
+                { _id: 0, id: "Maven:com.example:app:1.0.0", is_project: true },
+                { _id: 1, id: "Maven:com.example:lib:1.0.0" },
+            ],
+            scopes: [{ _id: 0, name: "compile" }],
+            dependency_trees: [
+                {
+                    key: 0,
+                    pkg: 0,
+                    children: [
+                        {
+                            key: 1,
+                            scope: 0,
+                            children: Array.from({ length: WIDTH }, (_, i) => ({ key: i + 2, pkg: 1, children: [] })),
+                        },
+                    ],
+                },
+            ],
+        };
+
+        const childKeys = (model: WebAppEvaluatedModel): (string | undefined)[] =>
+            model.dependencyTrees[0]?.children[0]?.children.map((child) => child.key) ?? [];
+
+        const expectedKeys = Array.from({ length: WIDTH }, (_, i) => `${i + 2}`);
+
+        it("schedules a single task for the whole build rather than one per node", () => {
+            vitest.useFakeTimers({ loopLimit: 5_000_000 });
+            const setTimeoutSpy = vitest.spyOn(globalThis, "setTimeout");
+            try {
+                const model = new WebAppEvaluatedModel(wide);
+                vitest.runAllTimers();
+
+                expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
+                expect(model.dependencyTreesReady).toBe(true);
+                expect(childKeys(model)).toEqual(expectedKeys);
+            } finally {
+                setTimeoutSpy.mockRestore();
+                vitest.useRealTimers();
+            }
+        });
+
+        it("yields to the browser between slices once a slice exceeds its time budget", () => {
+            vitest.useFakeTimers({ loopLimit: 5_000_000 });
+            // Every look at the clock is past the deadline, so each slice stops at its first clock check.
+            let time = 0;
+            const now = vitest.spyOn(performance, "now").mockImplementation(() => (time += 100));
+            try {
+                const model = new WebAppEvaluatedModel(wide);
+                let slices = 0;
+                while (vitest.getTimerCount() > 0) {
+                    vitest.runOnlyPendingTimers();
+                    slices++;
+                }
+
+                expect(slices).toBeGreaterThan(1);
+                expect(model.dependencyTreesReady).toBe(true);
+                expect(childKeys(model)).toEqual(expectedKeys);
+            } finally {
+                now.mockRestore();
+                vitest.useRealTimers();
+            }
+        });
+    });
+
     it("invokes a late onDependencyTreesReady listener immediately once the trees are built", () => {
         vitest.useFakeTimers({ loopLimit: 5_000_000 });
         try {

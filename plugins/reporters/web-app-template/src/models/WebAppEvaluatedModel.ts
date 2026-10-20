@@ -45,6 +45,12 @@ import type { EvaluatedModel } from "@/types/evaluatedModelData";
 
 type PlainJsObject = Record<string, unknown>;
 
+// How long one slice of the dependency-tree build may block the main thread.
+const TREE_BUILD_SLICE_MS = 12;
+
+// How many node builds run between two looks at the clock.
+const TREE_BUILD_CLOCK_CHECK_INTERVAL = 256;
+
 interface TreeNodeBucket {
     keys: Set<string>;
     parentKeys: Set<string | number | undefined>;
@@ -76,13 +82,17 @@ class WebAppEvaluatedModel {
 
     #dependencyTrees: WebAppTreeNode[] = [];
 
-    // The dependency trees are built across many deferred (setTimeout) tasks so a large report never blocks the
-    // main thread. #pendingTreeBuilds counts the outstanding tasks (roots and the child tasks they spawn);
-    // #dependencyTreesReady flips to false while any are in flight and back to true once they all drain, at
-    // which point #treesReadyListeners fire so the view can render the finished forest instead of a partial one.
+    // The dependency trees are built from a queue of node builds (roots and the child builds they add), which is
+    // drained on deferred tasks so a large report never blocks the main thread. #dependencyTreesReady is false
+    // while the queue is not empty, and once it drains #treesReadyListeners fire so the view can render the
+    // finished forest instead of a partial one.
     #dependencyTreesReady: boolean = true;
 
-    #pendingTreeBuilds: number = 0;
+    #treeBuildQueue: ((() => void) | undefined)[] = [];
+
+    #treeBuildQueueHead: number = 0;
+
+    #treeBuildScheduled: boolean = false;
 
     #treesReadyListeners: Set<() => void> = new Set();
 
@@ -967,33 +977,58 @@ class WebAppEvaluatedModel {
     }
 
     /**
-     * Run a unit of dependency-tree construction on a later task so a large tree does not block the main
-     * thread, tracking it so onDependencyTreesReady can tell when the whole forest is done. Child tasks are
-     * scheduled (and counted) while a parent task runs, so the count only reaches zero once every node is
-     * built.
+     * Queue a unit of dependency-tree construction to run on a later task, so a large tree does not block the
+     * main thread. The queue is drained in slices of a few milliseconds rather than one task per node, as each
+     * task has a fixed cost and browsers delay nested timers by at least 4 ms. Builds queued while a build runs,
+     * such as the children of a node, run in the same drain, so the trees are ready once the queue is empty.
      */
     scheduleTreeBuild(build: () => void): void {
-        if (this.#pendingTreeBuilds === 0) {
-            this.#dependencyTreesReady = false;
+        this.#dependencyTreesReady = false;
+        this.#treeBuildQueue.push(build);
+
+        if (!this.#treeBuildScheduled) {
+            this.#treeBuildScheduled = true;
+            setTimeout(this.#drainTreeBuildQueue, 0);
+        }
+    }
+
+    #drainTreeBuildQueue = (): void => {
+        const deadline = performance.now() + TREE_BUILD_SLICE_MS;
+        const queue = this.#treeBuildQueue;
+
+        while (this.#treeBuildQueueHead < queue.length) {
+            const build = queue[this.#treeBuildQueueHead];
+            queue[this.#treeBuildQueueHead++] = undefined;
+
+            try {
+                build?.();
+            } catch (error) {
+                // Report the error as an uncaught one, like a failing timer callback, without stopping the build.
+                setTimeout(() => {
+                    throw error;
+                }, 0);
+            }
+
+            if (this.#treeBuildQueueHead % TREE_BUILD_CLOCK_CHECK_INTERVAL === 0 && performance.now() > deadline) {
+                // Drop the builds that ran, so the queue does not keep growing over a long build.
+                queue.splice(0, this.#treeBuildQueueHead);
+                this.#treeBuildQueueHead = 0;
+                setTimeout(this.#drainTreeBuildQueue, 0);
+                return;
+            }
         }
 
-        this.#pendingTreeBuilds += 1;
-        setTimeout(() => {
-            try {
-                build();
-            } finally {
-                this.#pendingTreeBuilds -= 1;
-                if (this.#pendingTreeBuilds === 0) {
-                    this.#dependencyTreesReady = true;
-                    const listeners = Array.from(this.#treesReadyListeners);
-                    this.#treesReadyListeners.clear();
-                    for (const listener of listeners) {
-                        listener();
-                    }
-                }
-            }
-        }, 0);
-    }
+        this.#treeBuildQueue = [];
+        this.#treeBuildQueueHead = 0;
+        this.#treeBuildScheduled = false;
+        this.#dependencyTreesReady = true;
+
+        const listeners = Array.from(this.#treesReadyListeners);
+        this.#treesReadyListeners.clear();
+        for (const listener of listeners) {
+            listener();
+        }
+    };
 
     getRuleViolationsForPackageIndex(val: number): WebAppRuleViolation[] {
         return this.#ruleViolationsByPackageIndexMap.get(val) || [];
