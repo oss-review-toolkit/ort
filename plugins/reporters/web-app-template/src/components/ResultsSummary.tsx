@@ -216,7 +216,7 @@ function DetectorRow({
                 <span className="mt-0.5 block text-muted-foreground text-xs">{description}</span>
             </span>
             {severities ? <SeverityBreakdown severities={severities} /> : null}
-            <span className="w-16 shrink-0 text-right">
+            <span className="min-w-16 shrink-0 whitespace-nowrap text-right">
                 <span className="block font-semibold text-sm tabular-nums">
                     <span className={cn(gate && main > 0 && "text-destructive")}>{main}</span>
                     {total !== undefined ? <span className="font-normal text-muted-foreground"> / {total}</span> : null}
