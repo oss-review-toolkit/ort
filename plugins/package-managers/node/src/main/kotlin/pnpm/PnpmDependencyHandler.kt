@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm
 
 import java.io.File
+import java.util.LinkedList
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -29,6 +30,7 @@ import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
+import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.ModuleInfo.Dependency
@@ -57,7 +59,7 @@ internal class PnpmDependencyHandler(
         val version = if (dependency.isProject) {
             readPackageJson(dependency.packageJsonFile).version.orEmpty()
         } else {
-            dependency.version.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
+            dependency.resolvableVersion.orEmpty()
         }
 
         return Identifier(type, namespace, name, version)
@@ -74,6 +76,39 @@ internal class PnpmDependencyHandler(
             parsePackage(it.packageJsonFile, moduleInfoResolver)
         }
 
+    /**
+     * Warm up the cache of [moduleInfoResolver] with the details of all installed, non-project dependencies
+     * (recursively) found in [moduleInfos], to speed up subsequent calls to [createPackage].
+     */
+    fun requestAllPackageDetails(moduleInfos: Collection<ModuleInfo>) {
+        val moduleIds = getAllPackageModuleIds(moduleInfos)
+
+        moduleInfoResolver.getModuleInfos(moduleIds)
+    }
+
+    /**
+     * Return a [Set] with the module IDs for all installed, non-project dependencies (recursively) found in
+     * [moduleInfos]. The module IDs are derived from the dependency metadata already available in [ModuleInfo],
+     * without the need to read and parse the corresponding "package.json" files.
+     */
+    private fun getAllPackageModuleIds(moduleInfos: Collection<ModuleInfo>): Set<String> =
+        buildSet {
+            val queue = LinkedList<Dependency>()
+            moduleInfos.flatMapTo(queue) {
+                it.getScopeDependencies(Scope.DEPENDENCIES) + it.getScopeDependencies(Scope.DEV_DEPENDENCIES)
+            }
+
+            while (queue.isNotEmpty()) {
+                val dependency = queue.removeFirst()
+
+                if (dependency.isInstalled && !dependency.isProject) {
+                    dependency.moduleId?.let(::add)
+                }
+
+                queue += dependency.dependencies.values + dependency.optionalDependencies.values
+            }
+        }
+
     private fun readPackageJson(packageJsonFile: File): PackageJson =
         packageJsonCache.getOrPut(packageJsonFile.realFile) { parsePackageJson(packageJsonFile) }
 }
@@ -83,6 +118,20 @@ private val Dependency.workingDir: File
 
 private val Dependency.packageJsonFile: File
     get() = workingDir.resolve(NodePackageManagerType.DEFINITION_FILE)
+
+/**
+ * Return the version of this [Dependency] that can be resolved via a registry, or `null` if the dependency does
+ * not refer to such a version, e.g. because it is a local "link:" or "file:" dependency.
+ */
+private val Dependency.resolvableVersion: String?
+    get() = version.takeUnless { it.startsWith("link:") || it.startsWith("file:") }
+
+/**
+ * Return the module ID (in the form "name@version") for this [Dependency], or `null` if the dependency does not
+ * refer to a version resolvable via a registry, e.g. because it is a local "link:" or "file:" dependency.
+ */
+private val Dependency.moduleId: String?
+    get() = resolvableVersion?.let { "$from@$it" }
 
 /**
  * pnpm install skips optional dependencies which are not compatible with the environment. In this case the path
