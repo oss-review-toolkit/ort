@@ -22,9 +22,10 @@ import type { JSX } from "react";
 import { Fragment, useCallback, useMemo } from "react";
 
 import { CvssVectorChart, type CvssVectorInput } from "@/components/CvssVectorChart";
+import { createExcludesColumn, getPackageExcludeReason } from "@/components/ExcludesColumn";
 import { PackageDetails } from "@/components/PackageDetails";
 import { PackagePaths } from "@/components/PackagePaths";
-import { MarkdownText, ResolutionDetails, Url } from "@/components/Shared";
+import { MarkdownText, PackageLink, ResolutionDetails, Url } from "@/components/Shared";
 import {
     createExpandColumn,
     DataTable,
@@ -58,7 +59,9 @@ export interface VulnerabilitiesTableProps {
 
 interface VulnerabilityRow {
     description: string;
+    excludeReason: string;
     id: string;
+    isExcluded: boolean;
     isResolved: boolean;
     key: string;
     packageName: string;
@@ -109,7 +112,9 @@ function buildRow(vulnerability: WebAppVulnerability, index: number): Vulnerabil
     const reasons = Array.from(vulnerability.resolutionReasons ?? []);
     return {
         description: vulnerability.description ?? "",
+        excludeReason: getPackageExcludeReason(vulnerability.package),
         id: vulnerability.id ?? "",
+        isExcluded: vulnerability.package?.isExcluded === true,
         isResolved: vulnerability.isResolved,
         key: vulnerability.key ?? `vuln-${index}`,
         packageName: vulnerability.packageName,
@@ -123,7 +128,8 @@ function buildRow(vulnerability: WebAppVulnerability, index: number): Vulnerabil
 }
 
 function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
-    const { description, id, isResolved, packageName, resolutions, summary, vulnerability } = row.original;
+    const { description, excludeReason, id, isExcluded, isResolved, packageName, resolutions, summary, vulnerability } =
+        row.original;
     const cvssVectors = collectCvssVectors(vulnerability.references);
     const normalizedDescription = description ? normalizeDescription(description) : undefined;
     const pkg = vulnerability.package;
@@ -159,6 +165,12 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
                                     <>
                                         <span className="font-medium text-muted-foreground">Package</span>
                                         <span className="break-all font-mono">{packageName}</span>
+                                    </>
+                                ) : null}
+                                {isExcluded ? (
+                                    <>
+                                        <span className="font-medium text-muted-foreground">Excluded</span>
+                                        <span>{excludeReason || "Yes"}</span>
                                     </>
                                 ) : null}
                                 {vulnerability.ratings.length > 0 ? (
@@ -282,6 +294,7 @@ function VulnerabilitiesTable({
         () => vulnerabilities.map((vulnerability, index) => buildRow(vulnerability, index)),
         [vulnerabilities],
     );
+    const hasExcludedVulnerabilities = useMemo(() => data.some((row) => row.isExcluded), [data]);
 
     // Expand the deep-linked vulnerability row on mount (matched by advisory id, scoped by package when set).
     const initialState = useMemo<Partial<TableState>>(() => {
@@ -312,8 +325,8 @@ function VulnerabilitiesTable({
         [data, focusVulnerabilityId, focusPackageId, onFocusVulnerabilityChange],
     );
 
-    const columns = useMemo<ColumnDef<VulnerabilityRow, unknown>[]>(
-        () => [
+    const columns = useMemo<ColumnDef<VulnerabilityRow, unknown>[]>(() => {
+        const cols: ColumnDef<VulnerabilityRow, unknown>[] = [
             createExpandColumn<VulnerabilityRow>({ enableExpandAll: true }),
             {
                 id: "rating",
@@ -345,7 +358,13 @@ function VulnerabilitiesTable({
                         <DataTableColumnSearch column={column} title="Package" />
                     </div>
                 ),
-                cell: ({ row }) => <span className="break-all font-mono text-xs">{row.original.packageName}</span>,
+                cell: ({ row }) => (
+                    <PackageLink
+                        excludeReason={row.original.excludeReason}
+                        id={row.original.packageName}
+                        isExcluded={row.original.isExcluded}
+                    />
+                ),
                 filterFn: "includesString",
                 enableColumnFilter: true,
                 meta: { label: "Package Id" },
@@ -400,9 +419,14 @@ function VulnerabilitiesTable({
                 filterFn: "includesString",
                 enableColumnFilter: true,
             },
-        ],
-        [],
-    );
+        ];
+
+        if (hasExcludedVulnerabilities) {
+            cols.splice(1, 0, createExcludesColumn<VulnerabilityRow>());
+        }
+
+        return cols;
+    }, [hasExcludedVulnerabilities]);
 
     return (
         <DataTable<VulnerabilityRow>
@@ -410,6 +434,7 @@ function VulnerabilitiesTable({
             data={data}
             emptyText="No vulnerabilities"
             getRowCanExpand={() => true}
+            getRowClassName={(row) => (row.original.isExcluded ? "text-muted-foreground" : undefined)}
             getRowId={(row) => row.key}
             hidePaginationWhenSinglePage
             initialState={initialState}
