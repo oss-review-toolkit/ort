@@ -21,6 +21,7 @@ import type { ColumnDef, Row, TableState } from "@tanstack/react-table";
 import { Lightbulb } from "lucide-react";
 import type { JSX, ReactNode } from "react";
 import { useCallback, useMemo } from "react";
+import { createExcludesColumn, getPackageExcludeReason } from "@/components/ExcludesColumn";
 import { PackageConfigurations } from "@/components/PackageConfigurations";
 import { PackageCurations } from "@/components/PackageCurations";
 import { PackageDetails } from "@/components/PackageDetails";
@@ -57,8 +58,10 @@ export interface RuleViolationsTableProps {
 }
 
 interface RuleViolationRow {
+    excludeReason: string;
     hasHowToFix: boolean;
     howToFix: string;
+    isExcluded: boolean;
     isResolved: boolean;
     key: string;
     license: string;
@@ -84,8 +87,10 @@ function buildRow(violation: WebAppRuleViolation, index: number): RuleViolationR
     const severity = (violation.severity ?? "") as SeverityValue | "";
     const reasons = Array.from(violation.resolutionReasons ?? []);
     return {
+        excludeReason: getPackageExcludeReason(violation.package),
         hasHowToFix: violation.hasHowToFix(),
         howToFix: violation.howToFix ?? "",
+        isExcluded: violation.package?.isExcluded === true,
         isResolved: violation.isResolved,
         key: violation.key ?? `violation-${index}`,
         license: violation.licenseName ?? "",
@@ -102,7 +107,17 @@ function buildRow(violation: WebAppRuleViolation, index: number): RuleViolationR
 }
 
 function renderSubRow(row: Row<RuleViolationRow>): JSX.Element {
-    const { hasHowToFix, howToFix, isResolved, licenseSource, message, resolutions, violation } = row.original;
+    const {
+        excludeReason,
+        hasHowToFix,
+        howToFix,
+        isExcluded,
+        isResolved,
+        licenseSource,
+        message,
+        resolutions,
+        violation,
+    } = row.original;
     const pkg = violation.package;
 
     // The policy-violation details always show first; the remaining tabs mirror the Packages view's expanded
@@ -124,6 +139,12 @@ function renderSubRow(row: Row<RuleViolationRow>): JSX.Element {
                             <>
                                 <span className="font-medium text-muted-foreground">Resolution</span>
                                 <ResolutionDetails resolutions={resolutions} />
+                            </>
+                        ) : null}
+                        {isExcluded ? (
+                            <>
+                                <span className="font-medium text-muted-foreground">Excluded</span>
+                                <span>{excludeReason || "Yes"}</span>
                             </>
                         ) : null}
                     </div>
@@ -240,6 +261,7 @@ function RuleViolationsTable({
         () => ruleViolations.map((violation, index) => buildRow(violation, index)),
         [ruleViolations],
     );
+    const hasExcludedViolations = useMemo(() => data.some((row) => row.isExcluded), [data]);
 
     // Expand the deep-linked package's first policy violation row and/or pre-filter the severity column on mount.
     const initialState = useMemo<Partial<TableState>>(() => {
@@ -273,8 +295,8 @@ function RuleViolationsTable({
         [data, focusPackageId, onFocusPackageChange],
     );
 
-    const columns = useMemo<ColumnDef<RuleViolationRow, unknown>[]>(
-        () => [
+    const columns = useMemo<ColumnDef<RuleViolationRow, unknown>[]>(() => {
+        const cols: ColumnDef<RuleViolationRow, unknown>[] = [
             createExpandColumn<RuleViolationRow>({ enableExpandAll: true }),
             {
                 id: "severity",
@@ -327,7 +349,9 @@ function RuleViolationsTable({
                 ),
                 cell: ({ row }) => (
                     <PackageLink
+                        excludeReason={row.original.excludeReason}
                         id={row.original.packageName}
+                        isExcluded={row.original.isExcluded}
                         {...(onPackageClick ? { onClick: onPackageClick } : {})}
                     />
                 ),
@@ -416,9 +440,14 @@ function RuleViolationsTable({
                 enableColumnFilter: false,
                 meta: { headerClassName: "w-8", cellClassName: "w-8" },
             },
-        ],
-        [onPackageClick],
-    );
+        ];
+
+        if (hasExcludedViolations) {
+            cols.splice(1, 0, createExcludesColumn<RuleViolationRow>());
+        }
+
+        return cols;
+    }, [hasExcludedViolations, onPackageClick]);
 
     return (
         <DataTable<RuleViolationRow>

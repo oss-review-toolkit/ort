@@ -21,7 +21,8 @@ import { render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { RuleViolationsTable } from "@/components/RuleViolationsTable";
-import type WebAppRuleViolation from "@/models/WebAppRuleViolation";
+import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
+import WebAppRuleViolation from "@/models/WebAppRuleViolation";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
 describe("RuleViolationsTable", () => {
@@ -42,5 +43,30 @@ describe("RuleViolationsTable", () => {
     it("shows the empty state when there are no policy violations", () => {
         render(<RuleViolationsTable ruleViolations={[]} />);
         expect(screen.getByText("No policy violations")).toBeInTheDocument();
+    });
+
+    it("shows policy violations of excluded packages as excluded", () => {
+        // A minimal stand-in model resolving the package indexes to an excluded and an included package.
+        const packages = [
+            { excludeReasons: new Set(["TEST_OF"]), id: "Maven:acme:excluded:1.0", isExcluded: true },
+            { excludeReasons: new Set(), id: "Maven:acme:included:1.0", isExcluded: false },
+        ];
+        const model = { getPackageByIndex: (index: number) => packages[index] } as unknown as WebAppEvaluatedModel;
+        const violations = [
+            new WebAppRuleViolation({ pkg: 0, rule: "RULE", severity: "ERROR" }, model),
+            new WebAppRuleViolation({ pkg: 1, rule: "RULE", severity: "ERROR" }, model),
+        ];
+
+        const { unmount } = render(<RuleViolationsTable ruleViolations={violations.slice(1)} />);
+        expect(screen.queryByTitle("Included / excluded")).not.toBeInTheDocument();
+        unmount();
+
+        render(<RuleViolationsTable ruleViolations={violations} />);
+        expect(screen.getByTitle("Included / excluded")).toBeInTheDocument();
+        const excludedName = screen.getByText("Maven:acme:excluded:1.0");
+        expect(excludedName).toHaveClass("line-through", "text-muted-foreground");
+        expect(excludedName.parentElement).toHaveAttribute("title", "Excluded: TEST_OF");
+        expect(screen.getByText("Maven:acme:included:1.0")).not.toHaveClass("line-through");
+        expect(excludedName.closest("tr")).not.toHaveClass("text-muted-foreground");
     });
 });
