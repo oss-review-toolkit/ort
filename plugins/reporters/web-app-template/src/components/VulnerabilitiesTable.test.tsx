@@ -21,7 +21,8 @@ import { render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { VulnerabilitiesTable } from "@/components/VulnerabilitiesTable";
-import type WebAppVulnerability from "@/models/WebAppVulnerability";
+import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
+import WebAppVulnerability from "@/models/WebAppVulnerability";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
 describe("VulnerabilitiesTable", () => {
@@ -56,5 +57,27 @@ describe("VulnerabilitiesTable", () => {
 
         expect(screen.getByText(new RegExp(resolution.reason ?? ""))).toBeInTheDocument();
         expect(screen.getByText(resolution.comment.trim())).toBeInTheDocument();
+    });
+
+    it("shows vulnerabilities of excluded packages as excluded", () => {
+        // A minimal stand-in model resolving the package indexes to an excluded and an included package.
+        const packages = [
+            { excludeReasons: new Set(["TEST_OF"]), id: "Maven:acme:excluded:1.0", isExcluded: true },
+            { excludeReasons: new Set(), id: "Maven:acme:included:1.0", isExcluded: false },
+        ];
+        const model = { getPackageByIndex: (index: number) => packages[index] } as unknown as WebAppEvaluatedModel;
+        const excluded = new WebAppVulnerability({ id: "CVE-2026-0001", pkg: 0, references: [] }, model);
+        const included = new WebAppVulnerability({ id: "CVE-2026-0002", pkg: 1, references: [] }, model);
+
+        const { unmount } = render(<VulnerabilitiesTable vulnerabilities={[included]} />);
+        expect(screen.queryByTitle("Included / excluded")).not.toBeInTheDocument();
+        unmount();
+
+        render(<VulnerabilitiesTable vulnerabilities={[excluded, included]} />);
+        expect(screen.getByTitle("Included / excluded")).toBeInTheDocument();
+        const excludedName = screen.getByText("Maven:acme:excluded:1.0");
+        expect(excludedName).toHaveClass("line-through", "text-muted-foreground");
+        expect(excludedName.parentElement).toHaveAttribute("title", "Excluded: TEST_OF");
+        expect(screen.getByText("Maven:acme:included:1.0")).not.toHaveClass("line-through");
     });
 });
