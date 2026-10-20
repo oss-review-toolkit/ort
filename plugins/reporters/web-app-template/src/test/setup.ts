@@ -61,6 +61,18 @@ if (typeof globalThis.ResizeObserver === "undefined") {
     globalThis.ResizeObserver = ResizeObserverStub;
 }
 
+// The dependency tree only mounts the rows that fit its scroll pane, whose height jsdom reports as 0. Give the
+// pane a viewport so the rows near the top render; tests of the virtualization itself stub row heights too.
+const TREE_VIEWPORT_HEIGHT = 600;
+const clientHeight = Object.getOwnPropertyDescriptor(Element.prototype, "clientHeight");
+Object.defineProperty(HTMLElement.prototype, "clientHeight", {
+    configurable: true,
+    get(this: HTMLElement): number {
+        if (this.hasAttribute("data-tree-scroll")) return TREE_VIEWPORT_HEIGHT;
+        return clientHeight?.get?.call(this) ?? 0;
+    },
+});
+
 // jsdom in this configuration does not expose localStorage; provide a minimal in-memory implementation
 // so settings persistence (and anything else reading/writing localStorage) works under test.
 if (typeof window !== "undefined" && !window.localStorage) {

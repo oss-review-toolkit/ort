@@ -17,14 +17,23 @@
  * License-Filename: LICENSE
  */
 
+import { defaultRangeExtractor, useVirtualizer } from "@tanstack/react-virtual";
 import { ChevronLeft, ChevronRight, FileX2, Network, Package, Search } from "lucide-react";
 import type { JSX, ReactNode } from "react";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { PackageDetailPanel } from "@/components/ResultsTable";
 import { Button } from "@/components/ui/Button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/Collapsible";
 import { Input } from "@/components/ui/Input";
+import {
+    flattenTree,
+    getProjectAndScopeKeys,
+    nodeKey,
+    searchTree,
+    type TreeRoot,
+    type TreeRow,
+    type TreeSearchResult,
+} from "@/lib/dependencyTree";
 import { cn } from "@/lib/utils";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import type WebAppTreeNode from "@/models/WebAppTreeNode";
@@ -43,16 +52,29 @@ export interface ResultsTreeProps {
     webAppEvaluatedModel: WebAppEvaluatedModel;
 }
 
-interface TreeNodeProps {
+// How long typing has to pause before the query is applied to the tree.
+const SEARCH_DEBOUNCE_MS = 300;
+
+const ESTIMATED_ROW_HEIGHT_PX = 28;
+
+const OVERSCAN = 10;
+
+// The vertical padding of the tree pane, applied by the virtualizer so it is part of the scrolled height.
+const PANE_PADDING_PX = 8;
+
+interface TreeRowItemProps {
     depth: number;
-    expandedKeys: ReadonlySet<string>;
-    fallbackKey: string;
+    hasChildren: boolean;
+    index: number;
+    isOpen: boolean;
+    isSelected: boolean;
+    measureRef: (element: HTMLElement | null) => void;
     node: WebAppTreeNode;
     onSelect: (key: string, node: WebAppTreeNode) => void;
     onToggle: (key: string, open: boolean) => void;
+    rowKey: string;
     searchValue: string;
-    selectedKeys: ReadonlySet<string>;
-    visibleKeys: ReadonlySet<string> | null;
+    start: number;
 }
 
 function highlight(title: string, searchValue: string): ReactNode {
@@ -80,43 +102,24 @@ function highlight(title: string, searchValue: string): ReactNode {
     );
 }
 
-const TreeNode = memo(function TreeNode({
+const TreeRowItem = memo(function TreeRowItem({
     depth,
-    expandedKeys,
-    fallbackKey,
+    hasChildren,
+    index,
+    isOpen,
+    isSelected,
+    measureRef,
     node,
     onSelect,
     onToggle,
+    rowKey,
     searchValue,
-    selectedKeys,
-    visibleKeys,
-}: TreeNodeProps): JSX.Element {
-    const key = node.key ?? fallbackKey;
-    const hasChildren = node.children.length > 0;
-    const isOpen = hasChildren && expandedKeys.has(key);
-    const isSelected = selectedKeys.has(key);
+    start,
+}: TreeRowItemProps): JSX.Element {
     const title = node.title ?? "";
     const isExcluded = node.isExcluded === true;
     const isProject = node.isProject;
     const isScope = node.isScope;
-    const rowRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (isSelected) {
-            rowRef.current?.scrollIntoView({ block: "nearest" });
-        }
-    }, [isSelected]);
-
-    const handleSelect = useCallback(() => {
-        onSelect(key, node);
-    }, [key, node, onSelect]);
-
-    const handleOpenChange = useCallback(
-        (open: boolean) => {
-            onToggle(key, open);
-        },
-        [key, onToggle],
-    );
 
     const Icon = isScope ? Network : isExcluded ? FileX2 : Package;
 
@@ -137,7 +140,7 @@ const TreeNode = memo(function TreeNode({
                 isExcludedPackage && "line-through",
                 "rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             )}
-            onClick={handleSelect}
+            onClick={() => onSelect(rowKey, node)}
             type="button"
             {...(isExcludedPackage ? {} : { title })}
         >
@@ -145,28 +148,32 @@ const TreeNode = memo(function TreeNode({
         </button>
     );
 
-    const row = (
+    return (
         <div
             className={cn(
-                "group flex items-center gap-1 rounded-md py-1 pr-2 text-sm transition-colors",
-                "hover:bg-accent/60",
+                "group absolute top-0 left-0 flex w-full items-center gap-1 rounded-md py-1 pr-2 text-sm",
+                "transition-colors hover:bg-accent/60",
                 isSelected && "font-semibold text-foreground",
                 isExcluded && "text-muted-foreground",
             )}
-            ref={rowRef}
-            style={{ paddingLeft: `${depth * 16 + 4}px` }}
+            data-index={index}
+            data-tree-row=""
+            ref={measureRef}
+            style={{ paddingLeft: `${depth * 16 + 4}px`, transform: `translateY(${start}px)` }}
         >
             {hasChildren ? (
-                <CollapsibleTrigger
+                <button
+                    aria-expanded={isOpen}
                     aria-label={isOpen ? "Collapse node" : "Expand node"}
                     className="flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-accent"
+                    onClick={() => onToggle(rowKey, !isOpen)}
                     type="button"
                 >
                     <ChevronRight
                         aria-hidden="true"
                         className={cn("size-4 transition-transform", isOpen && "rotate-90")}
                     />
-                </CollapsibleTrigger>
+                </button>
             ) : (
                 <span aria-hidden="true" className="inline-block size-5" />
             )}
@@ -178,39 +185,118 @@ const TreeNode = memo(function TreeNode({
             )}
         </div>
     );
+});
 
-    if (!hasChildren) {
-        return <div>{row}</div>;
-    }
+interface ScrollRequest {
+    key: string;
+}
 
-    const children = node.children
-        .map((child, index) => ({ child, index, childKey: child.key ?? `${fallbackKey}-${index}` }))
-        .filter(({ childKey }) => !visibleKeys || visibleKeys.has(childKey));
+interface VirtualTreeProps {
+    onSelect: (key: string, node: WebAppTreeNode) => void;
+    onToggle: (key: string, open: boolean) => void;
+    rows: readonly TreeRow[];
+    // A request to bring a row into view, such as the current search match. Each request is applied once, to
+    // the rows it was made for, so later expanding or collapsing nodes does not scroll back to it.
+    scrollRequest: ScrollRequest | null;
+    searchValue: string;
+    selectedKey: string | null;
+}
+
+// Renders only the rows in and near the viewport, so a tree with tens of thousands of displayed rows keeps a
+// small, constant number of mounted elements.
+function VirtualTree({
+    onSelect,
+    onToggle,
+    rows,
+    scrollRequest,
+    searchValue,
+    selectedKey,
+}: VirtualTreeProps): JSX.Element {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const appliedScrollRequestRef = useRef<ScrollRequest | null>(null);
+    const [focusedKey, setFocusedKey] = useState<string | null>(null);
+
+    // Keep the row with the keyboard focus mounted while it is scrolled out of view, so the focus is not lost.
+    const focusedIndex = focusedKey === null ? -1 : rows.findIndex((row) => row.key === focusedKey);
+
+    const virtualizer = useVirtualizer({
+        count: rows.length,
+        estimateSize: () => ESTIMATED_ROW_HEIGHT_PX,
+        getItemKey: (index) => rows[index]?.key ?? index,
+        getScrollElement: () => scrollRef.current,
+        overscan: OVERSCAN,
+        paddingEnd: PANE_PADDING_PX,
+        paddingStart: PANE_PADDING_PX,
+        rangeExtractor: (range) => {
+            const indexes = defaultRangeExtractor(range);
+            if (focusedIndex >= 0 && !indexes.includes(focusedIndex)) {
+                indexes.push(focusedIndex);
+                indexes.sort((a, b) => a - b);
+            }
+            return indexes;
+        },
+    });
+
+    useEffect(() => {
+        const pane = scrollRef.current;
+        if (!pane) return;
+
+        const handleFocusIn = (event: FocusEvent): void => {
+            const rowElement = event.target instanceof Element ? event.target.closest("[data-index]") : null;
+            const index = Number(rowElement?.getAttribute("data-index"));
+            setFocusedKey(Number.isInteger(index) ? (rows[index]?.key ?? null) : null);
+        };
+        const handleFocusOut = (event: FocusEvent): void => {
+            if (!(event.relatedTarget instanceof Node && pane.contains(event.relatedTarget))) setFocusedKey(null);
+        };
+
+        pane.addEventListener("focusin", handleFocusIn);
+        pane.addEventListener("focusout", handleFocusOut);
+        return () => {
+            pane.removeEventListener("focusin", handleFocusIn);
+            pane.removeEventListener("focusout", handleFocusOut);
+        };
+    }, [rows]);
+
+    useEffect(() => {
+        if (!scrollRequest || appliedScrollRequestRef.current === scrollRequest) return;
+        appliedScrollRequestRef.current = scrollRequest;
+        const index = rows.findIndex((row) => row.key === scrollRequest.key);
+        if (index >= 0) virtualizer.scrollToIndex(index, { align: "auto" });
+    }, [rows, scrollRequest, virtualizer]);
 
     return (
-        <Collapsible onOpenChange={handleOpenChange} open={isOpen}>
-            <div>{row}</div>
-            <CollapsibleContent>
-                <div>
-                    {children.map(({ child, childKey, index }) => (
-                        <TreeNode
-                            depth={depth + 1}
-                            expandedKeys={expandedKeys}
-                            fallbackKey={`${fallbackKey}-${index}`}
-                            key={childKey}
-                            node={child}
+        <div
+            className="min-h-0 flex-1 overflow-auto rounded-md border bg-card px-2 text-sm"
+            data-tree-scroll=""
+            ref={scrollRef}
+        >
+            <div className="relative w-full" style={{ height: virtualizer.getTotalSize() }}>
+                {virtualizer.getVirtualItems().map((item) => {
+                    const row = rows[item.index];
+                    if (!row) return null;
+                    return (
+                        <TreeRowItem
+                            depth={row.depth}
+                            hasChildren={row.hasChildren}
+                            index={item.index}
+                            isOpen={row.isOpen}
+                            isSelected={row.key === selectedKey}
+                            key={item.key}
+                            measureRef={virtualizer.measureElement}
+                            node={row.node}
                             onSelect={onSelect}
                             onToggle={onToggle}
+                            rowKey={row.key}
                             searchValue={searchValue}
-                            selectedKeys={selectedKeys}
-                            visibleKeys={visibleKeys}
+                            start={item.start}
                         />
-                    ))}
-                </div>
-            </CollapsibleContent>
-        </Collapsible>
+                    );
+                })}
+            </div>
+        </div>
     );
-});
+}
 
 // The dependency graph view: an expandable tree of scopes and their (transitive) packages.
 function ResultsTreeView({
@@ -221,71 +307,48 @@ function ResultsTreeView({
     onFocusPackageTabChange,
     webAppEvaluatedModel,
 }: ResultsTreeProps): JSX.Element {
-    const roots = useMemo(() => webAppEvaluatedModel.dependencyTrees, [webAppEvaluatedModel]);
-    const fallbackKeys = useMemo(() => roots.map(() => randomStringGenerator(8)), [roots]);
+    const roots = useMemo<TreeRoot[]>(
+        () => webAppEvaluatedModel.dependencyTrees.map((node) => ({ fallbackKey: randomStringGenerator(8), node })),
+        [webAppEvaluatedModel],
+    );
 
     // Expand projects and scopes by default so the direct dependencies are always visible.
-    const defaultExpanded = useMemo(() => {
-        const keys = new Set<string>();
-        const walk = (node: WebAppTreeNode, fk: string): void => {
-            if (node.isProject || node.isScope) {
-                keys.add(node.key ?? fk);
-            }
-            node.children.forEach((child, index) => {
-                walk(child, `${fk}-${index}`);
-            });
-        };
-        roots.forEach((root, index) => {
-            walk(root, fallbackKeys[index] ?? `root-${index}`);
-        });
-        return keys;
-    }, [roots, fallbackKeys]);
+    const defaultExpanded = useMemo(() => getProjectAndScopeKeys(roots), [roots]);
 
-    const [search, setSearch] = useState("");
+    // The input updates on every keystroke, while the query applied to the tree follows after a pause in typing.
+    const [searchInput, setSearchInput] = useState("");
+    const [query, setQuery] = useState("");
+    const [searchResult, setSearchResult] = useState<TreeSearchResult | null>(null);
     const [expanded, setExpanded] = useState<ReadonlySet<string>>(defaultExpanded);
     const [selected, setSelected] = useState<{ key: string; node: WebAppTreeNode } | null>(null);
+    const [scrollRequest, setScrollRequest] = useState<ScrollRequest | null>(null);
     const [matchIndex, setMatchIndex] = useState(0);
 
-    // While searching, only keep nodes on a path to a match, force those paths open, and
-    // collect the matches in display (pre-order) order so they can be stepped through.
-    const { matches, searchExpanded, visibleKeys } = useMemo<{
-        visibleKeys: ReadonlySet<string> | null;
-        searchExpanded: ReadonlySet<string> | null;
-        matches: { key: string; node: WebAppTreeNode }[];
-    }>(() => {
-        const trimmed = search.trim().toLowerCase();
+    useEffect(() => {
+        const trimmed = searchInput.trim();
         if (!trimmed) {
-            return { visibleKeys: null, searchExpanded: null, matches: [] };
+            setQuery("");
+            return;
         }
-        const visible = new Set<string>();
-        const expand = new Set<string>();
-        const found: { key: string; node: WebAppTreeNode }[] = [];
-        const walk = (node: WebAppTreeNode, fk: string): boolean => {
-            const key = node.key ?? fk;
-            const selfMatch = (node.title ?? "").toLowerCase().includes(trimmed);
-            if (selfMatch) {
-                found.push({ key, node });
-            }
-            let childMatch = false;
-            node.children.forEach((child, index) => {
-                if (walk(child, `${fk}-${index}`)) {
-                    childMatch = true;
-                }
-            });
-            if (selfMatch || childMatch) {
-                visible.add(key);
-            }
-            if (childMatch) {
-                expand.add(key);
-            }
-            return selfMatch || childMatch;
-        };
-        roots.forEach((root, index) => {
-            walk(root, fallbackKeys[index] ?? `root-${index}`);
-        });
-        return { matches: found, searchExpanded: expand, visibleKeys: visible };
-    }, [search, roots, fallbackKeys]);
+        const handle = setTimeout(() => setQuery(trimmed), SEARCH_DEBOUNCE_MS);
+        return () => clearTimeout(handle);
+    }, [searchInput]);
 
+    // Search on deferred chunks, and cancel a search that a newer query has made obsolete. Clearing the query
+    // shows the whole tree again, scrolled to the selected package.
+    const selectedKeyRef = useRef<string | null>(null);
+    useEffect(() => {
+        setMatchIndex(0);
+        if (!query) {
+            setSearchResult(null);
+            if (selectedKeyRef.current) setScrollRequest({ key: selectedKeyRef.current });
+            return;
+        }
+        return searchTree(roots, query, setSearchResult);
+    }, [query, roots]);
+
+    const isSearching = searchInput.trim() !== query || (query !== "" && searchResult?.query !== query);
+    const matches = useMemo(() => searchResult?.matches ?? [], [searchResult]);
     const clampedIndex = matches.length > 0 ? Math.min(matchIndex, matches.length - 1) : 0;
 
     // Select the current search match so its package details show on the right as you type or step.
@@ -295,6 +358,7 @@ function ResultsTreeView({
             return;
         }
         setSelected((prev) => (prev?.key === match.key ? prev : { key: match.key, node: match.node }));
+        setScrollRequest({ key: match.key });
     }, [matches, clampedIndex]);
 
     const stepMatch = useCallback(
@@ -310,8 +374,12 @@ function ResultsTreeView({
         [matches.length],
     );
 
-    const effectiveExpanded = searchExpanded ?? expanded;
-    const selectedSet = useMemo(() => new Set(selected ? [selected.key] : []), [selected]);
+    const rows = useMemo(
+        () => flattenTree(roots, searchResult?.expanded ?? expanded, searchResult?.visible ?? null),
+        [roots, searchResult, expanded],
+    );
+
+    selectedKeyRef.current = selected?.key ?? null;
 
     const selectedPackage = useMemo(() => {
         const index = selected?.node.packageIndex;
@@ -341,7 +409,7 @@ function ResultsTreeView({
         }
         let result: { key: string; node: WebAppTreeNode; ancestors: string[] } | null = null;
         const walk = (node: WebAppTreeNode, fk: string, ancestors: string[]): boolean => {
-            const key = node.key ?? fk;
+            const key = nodeKey(node, fk);
             const index = node.packageIndex;
             if (index !== undefined && webAppEvaluatedModel.getPackageByIndex(index)?.id === focusPackageId) {
                 result = { ancestors, key, node };
@@ -349,12 +417,11 @@ function ResultsTreeView({
             }
             return node.children.some((child, i) => walk(child, `${fk}-${i}`, [...ancestors, key]));
         };
-        roots.some((root, index) => walk(root, fallbackKeys[index] ?? `root-${index}`, []));
+        roots.some((root) => walk(root.node, root.fallbackKey, []));
         return result;
-    }, [focusPackageId, roots, fallbackKeys, webAppEvaluatedModel]);
+    }, [focusPackageId, roots, webAppEvaluatedModel]);
 
-    // Apply the deep-linked selection once on mount: select the node and expand its ancestors so the
-    // selected TreeNode renders and scrolls itself into view.
+    // Apply the deep-linked selection once on mount: select the node, expand its ancestors and scroll to it.
     const appliedFocusRef = useRef(false);
     useEffect(() => {
         if (appliedFocusRef.current || !focusTarget) {
@@ -362,6 +429,7 @@ function ResultsTreeView({
         }
         appliedFocusRef.current = true;
         setSelected({ key: focusTarget.key, node: focusTarget.node });
+        setScrollRequest({ key: focusTarget.key });
         if (focusTarget.ancestors.length > 0) {
             setExpanded((prev) => new Set([...prev, ...focusTarget.ancestors]));
         }
@@ -376,10 +444,6 @@ function ResultsTreeView({
         },
         [webAppEvaluatedModel, onFocusPackageChange],
     );
-
-    const visibleRoots = roots
-        .map((root, index) => ({ root, index, rootKey: root.key ?? fallbackKeys[index] ?? `root-${index}` }))
-        .filter(({ rootKey }) => !visibleKeys || visibleKeys.has(rootKey));
 
     return (
         <div
@@ -399,24 +463,22 @@ function ResultsTreeView({
                         <Input
                             aria-label="Search the dependency tree"
                             className="h-8 pl-8"
-                            onChange={(event) => {
-                                // Restart the result cursor at the first match on every query change.
-                                setSearch(event.target.value);
-                                setMatchIndex(0);
-                            }}
+                            onChange={(event) => setSearchInput(event.target.value)}
                             placeholder="Search the tree for package ids..."
-                            value={search}
+                            value={searchInput}
                         />
                     </div>
-                    {search ? (
+                    {searchInput.trim() ? (
                         <div className="flex shrink-0 items-center gap-1 text-muted-foreground text-xs">
-                            <span className="tabular-nums">
-                                {matches.length === 0 ? 0 : clampedIndex + 1}/{matches.length}
+                            <span aria-live="polite" className="tabular-nums">
+                                {isSearching
+                                    ? "Searching…"
+                                    : `${matches.length === 0 ? 0 : clampedIndex + 1}/${matches.length}`}
                             </span>
                             <Button
                                 aria-label="Previous match"
                                 className="size-7"
-                                disabled={matches.length === 0}
+                                disabled={isSearching || matches.length === 0}
                                 onClick={() => stepMatch(-1)}
                                 size="icon"
                                 variant="ghost"
@@ -426,7 +488,7 @@ function ResultsTreeView({
                             <Button
                                 aria-label="Next match"
                                 className="size-7"
-                                disabled={matches.length === 0}
+                                disabled={isSearching || matches.length === 0}
                                 onClick={() => stepMatch(1)}
                                 size="icon"
                                 variant="ghost"
@@ -436,28 +498,22 @@ function ResultsTreeView({
                         </div>
                     ) : null}
                 </div>
-                <div className="min-h-0 flex-1 overflow-auto rounded-md border bg-card p-2 text-sm">
-                    {roots.length === 0 ? (
-                        <p className="px-2 py-4 text-muted-foreground">No dependency tree available.</p>
-                    ) : visibleRoots.length === 0 ? (
-                        <p className="px-2 py-4 text-muted-foreground">No matching packages.</p>
-                    ) : (
-                        visibleRoots.map(({ index, root, rootKey }) => (
-                            <TreeNode
-                                depth={0}
-                                expandedKeys={effectiveExpanded}
-                                fallbackKey={fallbackKeys[index] ?? `root-${index}`}
-                                key={rootKey}
-                                node={root}
-                                onSelect={handleSelect}
-                                onToggle={handleToggle}
-                                searchValue={search}
-                                selectedKeys={selectedSet}
-                                visibleKeys={visibleKeys}
-                            />
-                        ))
-                    )}
-                </div>
+                {roots.length === 0 || rows.length === 0 ? (
+                    <div className="min-h-0 flex-1 rounded-md border bg-card p-2 text-sm">
+                        <p className="px-2 py-4 text-muted-foreground">
+                            {roots.length === 0 ? "No dependency tree available." : "No matching packages."}
+                        </p>
+                    </div>
+                ) : (
+                    <VirtualTree
+                        onSelect={handleSelect}
+                        onToggle={handleToggle}
+                        rows={rows}
+                        scrollRequest={scrollRequest}
+                        searchValue={searchResult?.query ?? ""}
+                        selectedKey={selected?.key ?? null}
+                    />
+                )}
             </div>
             <div className="h-full min-h-0 overflow-auto rounded-md border bg-card">
                 {selectedPackage ? (
