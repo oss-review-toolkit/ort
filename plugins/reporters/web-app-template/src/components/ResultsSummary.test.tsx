@@ -136,6 +136,24 @@ describe("ResultsSummary", () => {
             expect(container.textContent).toContain("2 resolved");
         });
 
+        it("keeps a large open and total count on one line", () => {
+            // jsdom has no layout, so this guards the classes that keep "1234 / 5678" from wrapping after the
+            // slash: the count column must not have a fixed width and must not wrap.
+            render(
+                <ResultsSummary
+                    webAppEvaluatedModel={fakeModel({
+                        openIssues: { errors: 1234, hints: 0, total: 1234, warnings: 0 },
+                        resolvedIssues: 4444,
+                        severeOpenIssuesCount: 1234,
+                    })}
+                />,
+            );
+
+            const column = screen.getByText("/ 5678", { exact: false }).closest("span.text-right");
+            expect(column).toHaveClass("whitespace-nowrap", "min-w-16");
+            expect(column).not.toHaveClass("w-16");
+        });
+
         it("does not count excluded issues as resolved", () => {
             // ORT's statistics leave excluded issues out of the open ones, but they have no resolution.
             const { container } = render(
