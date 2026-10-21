@@ -187,7 +187,7 @@ project:
           dependencies:
           - id: "Pub::path:1.9.0"
         - id: "Pub::vm_service:14.3.1"
-      - id: "Pub::http_multi_server:3.2.2"
+      - id: "Pub::http_multi_server:3.2.3"
         dependencies:
         - id: "Pub::async:2.11.0"
           dependencies:
@@ -1212,8 +1212,8 @@ packages:
     url: "https://github.com/dart-lang/tools.git"
     revision: ""
     path: "pkgs/glob"
-- id: "Pub::http_multi_server:3.2.2"
-  purl: "pkg:pub/http_multi_server@3.2.2"
+- id: "Pub::http_multi_server:3.2.3"
+  purl: "pkg:pub/http_multi_server@3.2.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A dart:io HttpServer wrapper that handles requests from multiple servers."
@@ -1224,9 +1224,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/http_multi_server/versions/3.2.2.tar.gz"
+    url: "https://pub.dev/packages/http_multi_server/versions/3.2.3.tar.gz"
     hash:
-      value: "aa6199f908078bb1c5efb8d8638d4ae191aac11b311132c3ef48ce352fb52ef8"
+      value: "361668bdd71f0ae2dc6d17b75a593520f3c414af6534f9eed1aa72049dd71d18"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
