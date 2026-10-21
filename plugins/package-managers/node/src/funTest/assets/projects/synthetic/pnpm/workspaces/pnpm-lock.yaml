@@ -20,6 +20,9 @@ importers:
       testing-pnpm-package-a:
         specifier: 1.0.2
         version: link:../packages/package-a
+      testing-pnpm-package-e:
+        specifier: workspace:*
+        version: link:../packages/package-e/dist
 
   src/packages/package-a:
     dependencies:
@@ -48,6 +51,9 @@ importers:
         version: link:../package-d/dist
 
   src/packages/package-d:
+    publishDirectory: dist
+
+  src/packages/package-e:
     publishDirectory: dist
 
 packages:
