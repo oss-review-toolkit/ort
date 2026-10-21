@@ -116,6 +116,14 @@ describe("searchTree", () => {
         expect(result.matches.map((match) => match.key)).toEqual(["lib-b-1", "lib-b-2"]);
         expect(result.visible).toEqual(new Set(["app", "dependencies", "lib-a", "lib-b-1", "test", "lib-b-2"]));
         expect(result.expanded).toEqual(new Set(["app", "dependencies", "lib-a", "test"]));
+        expect(result.rows.map((row) => [row.key, row.depth, row.isOpen])).toEqual([
+            ["app", 0, true],
+            ["dependencies", 1, true],
+            ["lib-a", 2, true],
+            ["lib-b-1", 3, false],
+            ["test", 1, true],
+            ["lib-b-2", 2, false],
+        ]);
     });
 
     it("finds nothing for a query no title contains", () => {
@@ -123,6 +131,7 @@ describe("searchTree", () => {
 
         expect(result.matches).toEqual([]);
         expect(result.visible.size).toBe(0);
+        expect(result.rows).toEqual([]);
     });
 
     it("yields to the browser between chunks on a large tree", () => {
@@ -159,6 +168,45 @@ describe("searchTree", () => {
         expect(chunks).toBeGreaterThan(1);
         expect(onComplete).toHaveBeenCalledTimes(1);
         expect(onComplete.mock.calls[0]?.[0].matches.map((match: { key: string }) => match.key)).toEqual(["lib-4999"]);
+    });
+
+    it("also builds the rows in chunks, so a query matching most nodes yields as often as needed", () => {
+        const libs = Array.from({ length: 5000 }, (_, i) => fakeNode(`lib-${i}`));
+        const roots: TreeRoot[] = [{ fallbackKey: "root", node: fakeNode("app", libs) as unknown as WebAppTreeNode }];
+
+        // Both queries walk the same nodes, so any extra chunks of the broad one come from building its rows.
+        const countChunks = (query: string): { chunks: number; rows: number } => {
+            let time = 0;
+            const tasks: (() => void)[] = [];
+            let rows = 0;
+            searchTree(
+                roots,
+                query,
+                (result) => {
+                    rows = result.rows.length;
+                },
+                {
+                    now: () => (time += 100),
+                    schedule: (task) => {
+                        tasks.push(task);
+                        return () => {};
+                    },
+                },
+            );
+            let chunks = 1;
+            for (let task = tasks.shift(); task; task = tasks.shift()) {
+                task();
+                chunks++;
+            }
+            return { chunks, rows };
+        };
+
+        const narrow = countChunks("lib-4999");
+        const broad = countChunks("lib");
+
+        expect(narrow.rows).toBe(2);
+        expect(broad.rows).toBe(5001);
+        expect(broad.chunks).toBeGreaterThan(narrow.chunks);
     });
 
     it("does not report the result of a cancelled search", () => {

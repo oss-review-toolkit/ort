@@ -375,7 +375,7 @@ function ResultsTreeView({
     );
 
     const rows = useMemo(
-        () => flattenTree(roots, searchResult?.expanded ?? expanded, searchResult?.visible ?? null),
+        () => searchResult?.rows ?? flattenTree(roots, expanded, null),
         [roots, searchResult, expanded],
     );
 
