@@ -27,6 +27,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NODE_MODULES_DIRNAME
+import org.ossreviewtoolkit.plugins.packagemanagers.node.isGitOrLocalResolution
 import org.ossreviewtoolkit.utils.common.realFile
 
 private val JSON = Json { ignoreUnknownKeys = true }
@@ -82,6 +83,12 @@ internal data class ModuleInfo(
 
         baseDir.name != NODE_MODULES_DIRNAME
     }
+
+    /**
+     * Whether this dependency was installed from an npm-compatible registry, as opposed to a Git repository or the
+     * local file system, based on [resolved].
+     */
+    val isRegistryDependency: Boolean by lazy { !isGitOrLocalResolution(resolved) }
 }
 
 internal fun ModuleInfo.getNonDeduplicatedModuleInfosForId(): Map<String, ModuleInfo> {

@@ -73,7 +73,7 @@ internal class PnpmDependencyHandler(
 
     override fun createPackage(dependency: Dependency, issues: MutableCollection<Issue>): Package? =
         dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
-            parsePackage(it.packageJsonFile, moduleInfoResolver)
+            parsePackage(it.packageJsonFile, moduleInfoResolver, it.isRegistryDependency, it.resolved)
         }
 
     /**
@@ -101,7 +101,7 @@ internal class PnpmDependencyHandler(
             while (queue.isNotEmpty()) {
                 val dependency = queue.removeFirst()
 
-                if (dependency.isInstalled && !dependency.isProject) {
+                if (dependency.isInstalled && !dependency.isProject && dependency.isRegistryDependency) {
                     dependency.moduleId?.let(::add)
                 }
 

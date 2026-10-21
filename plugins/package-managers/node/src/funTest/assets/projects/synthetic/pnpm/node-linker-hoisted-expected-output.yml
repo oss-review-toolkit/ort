@@ -11,9 +11,9 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_VCS_PROCESSED_URL>"
-    revision: "<REPLACE_VCS_REVISION>"
-    path: "<REPLACE_VCS_PATH>"
+    url: "https://github.com/boschglobal/oss-review-toolkit.git"
+    revision: "6c9f84e083eb9161b8289db93a790fb04bb254fe"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/node-linker-hoisted"
   homepage_url: ""
   scopes:
   - name: "dependencies"
@@ -3602,7 +3602,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Launch latest Edge with the Devtools Protocol port open"
-  homepage_url: ""
+  homepage_url: "https://github.com/cezaraugusto/chromium-edge-launcher#readme"
   binary_artifact:
     url: ""
     hash:
@@ -7098,7 +7098,10 @@ packages:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: ""
+  description: "`jest-haste-map` is a module used by Jest, a popular JavaScript testing\
+    \ framework, to create a fast lookup of files in a project. It helps Jest efficiently\
+    \ locate and track changes in files during testing, making it particularly useful\
+    \ for large projects "
   homepage_url: "https://github.com/jestjs/jest#readme"
   binary_artifact:
     url: ""
@@ -18341,7 +18344,7 @@ packages:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "This is an internal utility, not intended for public usage."
+  description: ""
   homepage_url: "https://radix-ui.com/primitives"
   binary_artifact:
     url: ""

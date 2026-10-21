@@ -90,7 +90,7 @@ internal class Yarn2DependencyHandler(
         val packageJson = packageJsonForModuleId[dependency.moduleId]?.takeUnless { dependency.isProject }
             ?: return null
 
-        return parsePackage(packageJson, moduleInfoResolver)
+        return parsePackage(packageJson, moduleInfoResolver, isRegistryDependency = dependency.isNpm)
     }
 
     /**
@@ -177,6 +177,9 @@ internal val PackageInfo.isVirtual: Boolean
 internal val PackageInfo.isPatch: Boolean
     get() = Locator.parse(value).isPatch
 
+internal val PackageInfo.isNpm: Boolean
+    get() = Locator.parse(value).isNpm
+
 internal val PackageInfo.moduleName: String
     get() = Locator.parse(value).moduleName
 
@@ -210,6 +213,18 @@ internal data class Locator(
     val isVirtual: Boolean = remainder.startsWith("virtual:") && !isProject
 
     val isPatch: Boolean = remainder.startsWith("patch:")
+
+    /**
+     * Whether this locator refers to a package resolved from an npm-compatible registry, as opposed to e.g. a Git
+     * repository, a URL, or the local file system. Patches are also considered registry dependencies, as they are
+     * applied on top of a package resolved from the registry, identified by the "npm:" descriptor embedded in the
+     * patch's [remainder].
+     */
+    val isNpm: Boolean = if (remainder.startsWith("virtual:")) {
+        Locator(moduleName, remainder.substringAfter("#", "")).isNpm
+    } else {
+        remainder.startsWith("npm:") || (isPatch && extractNpmRangeFromPatchRemainder(remainder) != null)
+    }
 }
 
 /**

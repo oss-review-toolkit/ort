@@ -65,6 +65,6 @@ internal class BunDependencyHandler(
 
     override fun createPackage(dependency: ModuleInfo, issues: MutableCollection<Issue>): Package? =
         dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
-            parsePackage(it.packageJsonFile, moduleInfoResolver)
+            parsePackage(it.packageJsonFile, moduleInfoResolver, it.isRegistryDependency, it.resolved)
         }
 }

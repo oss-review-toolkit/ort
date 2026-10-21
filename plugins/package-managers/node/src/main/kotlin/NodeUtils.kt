@@ -130,19 +130,55 @@ internal fun parseVcsInfo(packageJson: PackageJson): VcsInfo {
 }
 
 /**
- * Construct a [Package] by parsing its [packageJsonFile] and - if applicable - querying additional content via
- * [moduleInfoResolver]. The result is a [Pair] with the raw identifier and the new package.
+ * Construct a [Package] by parsing its [packageJsonFile] and enriching it with authoritative content queried via
+ * [moduleInfoResolver], see [parsePackage] for details. [isRegistryDependency] indicates whether the dependency was
+ * actually resolved from an npm-compatible registry, see [parsePackage] for how this affects the result. [resolved]
+ * is the "resolved" URI as reported by the package manager's list command, see [parsePackage] for how it is used.
  */
-internal fun parsePackage(packageJsonFile: File, moduleInfoResolver: ModuleInfoResolver): Package {
+internal fun parsePackage(
+    packageJsonFile: File,
+    moduleInfoResolver: ModuleInfoResolver,
+    isRegistryDependency: Boolean = true,
+    resolved: String? = null
+): Package {
     val packageJson = parsePackageJson(packageJsonFile)
-    return parsePackage(packageJson, moduleInfoResolver)
+    return parsePackage(packageJson, moduleInfoResolver, isRegistryDependency, resolved)
 }
 
 /**
- * Construct a [Package] by parsing its [packageJson] and - if applicable - querying additional content via
+ * Construct a [Package] by parsing its [packageJson] and enriching it with authoritative content queried via
  * [moduleInfoResolver]. The result is a [Pair] with the raw identifier and the new package.
+ *
+ * The properties of the resulting [Package] are populated from both the [packageJson] and the data queried via
+ * [moduleInfoResolver]. The following rules are applied to determine which source of data takes precedence for each
+ * property:
+ *
+ * The information about the source code artifact (download URL and hash) is preferred to be taken from the
+ * [moduleInfoResolver]. In [packageJson] it is only available via fields that are private to NPM and are not reliable.
+ *
+ * All other properties are preferred to be taken from the [packageJson], using data from the [moduleInfoResolver] as
+ * fallback for missing data.
+ *
+ * However, the above rules only apply if [isRegistryDependency] is `true`, i.e. the dependency was actually resolved
+ * from an npm-compatible registry. [moduleInfoResolver] looks up data by "$name@$version", which for dependencies
+ * installed from a Git repository, a URL, or the local file system might coincidentally match an unrelated package
+ * published under the same name and version in the registry (e.g. a fork that did not rename itself). To avoid
+ * silently replacing the already resolved, trustworthy source information with unrelated registry data in that case,
+ * [moduleInfoResolver] is not queried at all if [isRegistryDependency] is `false`, and the source code artifact
+ * information is taken exclusively from [packageJson]'s own (private) fields, falling back to [resolved] if present.
+ *
+ * [resolved] is the "resolved" URI as reported by the package manager's list command (e.g. NPM's or PNPM's
+ * "resolved" field). Unlike [packageJson]'s private "_resolved" field, this value is always available for installed
+ * Git or local file system dependencies, as it is reported by the package manager itself rather than being read back
+ * from a possibly incomplete "package.json" file on disk. It is used as a fallback source for the source code
+ * artifact's download URL and the VCS revision if [packageJson] does not provide this information.
  */
-internal fun parsePackage(packageJson: PackageJson, moduleInfoResolver: ModuleInfoResolver): Package {
+internal fun parsePackage(
+    packageJson: PackageJson,
+    moduleInfoResolver: ModuleInfoResolver,
+    isRegistryDependency: Boolean = true,
+    resolved: String? = null
+): Package {
     // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
     // optional, see
     // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
@@ -155,42 +191,39 @@ internal fun parsePackage(packageJson: PackageJson, moduleInfoResolver: ModuleIn
     val declaredLicenses = packageJson.licenses.mapLicenses()
     val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
 
-    var description = packageJson.description.orEmpty()
-    var homepageUrl = packageJson.homepage.orEmpty()
-
-    // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on.
-    var downloadUrl = expandShortcutUrl(packageJson.resolved.orEmpty()).ifEmpty {
-        // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
-        val fromVersion = packageJson.from.orEmpty().substringAfterLast('@')
-        expandShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
-    }
-
-    var hash = Hash.create(packageJson.integrity.orEmpty())
-
-    var vcsFromPackage = parseVcsInfo(packageJson)
-
     val id = Identifier(NodePackageManagerType.NPM.packageType, namespace, name, version)
 
-    val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
-        || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
+    val details = if (isRegistryDependency) moduleInfoResolver.getModuleInfo("$rawName@$version") else null
 
-    if (hasIncompleteData) {
-        moduleInfoResolver.getModuleInfo("$rawName@$version")?.let { details ->
-            if (description.isEmpty()) description = details.description.orEmpty()
-            if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
+    val description = packageJson.description?.takeUnless { it.isBlank() } ?: details?.description.orEmpty()
+    val homepageUrl = packageJson.homepage?.takeUnless { it.isBlank() } ?: details?.homepage.orEmpty()
 
-            details.dist?.let { dist ->
-                if (downloadUrl.isEmpty() || hash == Hash.NONE) {
-                    downloadUrl = dist.tarball.orEmpty()
-                    hash = Hash.create(dist.shasum.orEmpty())
-                }
-            }
+    var downloadUrl = details?.dist?.tarball.orEmpty()
+    var hash = Hash.create(details?.dist?.shasum.orEmpty())
 
-            // Do not replace but merge, because it happens that `package.json` has VCS info while
-            // `npm view` doesn't, for example for dependencies hosted on GitLab package registry.
-            vcsFromPackage = vcsFromPackage.merge(parseVcsInfo(details))
+    if (downloadUrl.isEmpty() || hash == Hash.NONE) {
+        // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on. As a
+        // more reliable fallback, also consider the "resolved" URI as reported by the package manager's list
+        // command, which is always available for Git or local file system dependencies, unlike the "_resolved"
+        // field of `packageJson`, which might be missing, e.g. if `package.json` was not written by NPM itself.
+        val fallbackDownloadUrl = expandShortcutUrl((packageJson.resolved ?: resolved).orEmpty()).ifEmpty {
+            // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
+            val fromVersion = packageJson.from.orEmpty().substringAfterLast('@')
+            expandShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
+        }
+
+        val fallbackHash = Hash.create(packageJson.integrity.orEmpty())
+
+        if (fallbackDownloadUrl.isNotEmpty() && (downloadUrl.isEmpty() || fallbackHash != Hash.NONE)) {
+            downloadUrl = fallbackDownloadUrl
+            hash = fallbackHash
         }
     }
+
+    // Do not replace but merge, because it happens that `package.json` has VCS info while
+    // `npm view` doesn't, for example for dependencies hosted on GitLab's package registry.
+    var vcsFromPackage = parseVcsInfo(packageJson)
+    details?.let { vcsFromPackage = vcsFromPackage.merge(parseVcsInfo(it)) }
 
     downloadUrl = downloadUrl.fixDownloadUrl()
 
@@ -232,6 +265,19 @@ internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
     val name = rawName.substringAfterLast("/")
     val namespace = rawName.removeSuffix(name).removeSuffix("/")
     return Pair(namespace, name)
+}
+
+/**
+ * Return whether the given [resolved] URI (as reported by package manager list commands, e.g. NPM's "resolved" or
+ * PNPM's "resolved" field) indicates that the dependency was installed from a Git repository or the local file
+ * system, as opposed to an npm-compatible registry. A `null` [resolved] value is assumed to indicate a registry
+ * dependency, as this is the common case for dependencies which do not report this information at all.
+ */
+internal fun isGitOrLocalResolution(resolved: String?): Boolean {
+    if (resolved == null) return false
+
+    val nonRegistryPrefixes = listOf("git", "file:", "link:", "github:", "gitlab:", "bitbucket:")
+    return nonRegistryPrefixes.any { resolved.startsWith(it) }
 }
 
 internal val PackageJson.moduleId: String

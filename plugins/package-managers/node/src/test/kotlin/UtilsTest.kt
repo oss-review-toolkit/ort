@@ -23,8 +23,15 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Distribution
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Repository
 
 class UtilsTest : WordSpec({
@@ -129,6 +136,163 @@ class UtilsTest : WordSpec({
         "return the namespace and name separately" {
             splitNamespaceAndName("@babel/core") shouldBe Pair("@babel", "core")
             splitNamespaceAndName("check-if-windows") shouldBe Pair("", "check-if-windows")
+        }
+    }
+
+    "parsePackage()" should {
+        "prefer the ModuleInfoResolver's download URL and hash over the package.json's private fields while " +
+            "preferring the package.json's description, homepage and VCS info" {
+                // This simulates a `package.json` with unreliable "_resolved" / "_integrity" fields that leaked
+                // from the publisher's local environment into the published package.
+                val packageJson = PackageJson(
+                    name = "jail-monkey",
+                    version = "3.0.0",
+                    description = "A description",
+                    homepage = "https://example.com/jail-monkey",
+                    resolved = "https://registry.npmjs.org/jail-monkey/-/jail-monkey-3.0.0.tgz",
+                    integrity = "sha512-O76UCnkijUPGQooYRD3Rq/07JdPc5/p5hetLMKPNaTz2S+7li3dT7yPXs362NbIS/" +
+                        "BZA22/ffPPE4+hwv0fYLA==",
+                    repository = Repository(type = "Git", url = "https://github.com/wrong/jail-monkey.git")
+                )
+
+                val moduleInfoResolver = mockk<ModuleInfoResolver>()
+                every { moduleInfoResolver.getModuleInfo("jail-monkey@3.0.0") } returns PackageJson(
+                    name = "jail-monkey",
+                    version = "3.0.0",
+                    description = "From the registry",
+                    homepage = "https://example.com/artifactory/jail-monkey",
+                    repository = Repository(type = "Git", url = "https://example.com/artifactory/jail-monkey.git"),
+                    dist = Distribution(
+                        tarball = "https://example.com/artifactory/jail-monkey/-/jail-monkey-3.0.0.tgz",
+                        shasum = "82559b2192176b994c53bab14cb7bb93b2dfbe15"
+                    )
+                )
+
+                val result = parsePackage(packageJson, moduleInfoResolver)
+
+                // Unlike the download URL and hash, the description, homepage and VCS info are regular public
+                // fields that are not prone to leaking stale data, so the data from `package.json` is preferred
+                // here, even though the ModuleInfoResolver was queried and returned different data.
+                result.description shouldBe "A description"
+                result.homepageUrl shouldBe "https://example.com/jail-monkey"
+                result.sourceArtifact shouldBe RemoteArtifact(
+                    url = "https://example.com/artifactory/jail-monkey/-/jail-monkey-3.0.0.tgz",
+                    hash = Hash.create("82559b2192176b994c53bab14cb7bb93b2dfbe15")
+                )
+                result.vcs shouldBe VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/wrong/jail-monkey.git",
+                    revision = ""
+                )
+            }
+
+        "fall back to the package.json's own data if the ModuleInfoResolver returns no data" {
+            val packageJson = PackageJson(
+                name = "jail-monkey",
+                version = "3.0.0",
+                description = "A description",
+                homepage = "https://example.com/jail-monkey",
+                resolved = "https://registry.example.com/jail-monkey/-/jail-monkey-3.0.0.tgz",
+                integrity = "sha512-ETo7x4PYUfwDcyFLGep76fo95UHsuf4CbVLGA+jqGcF0zA6XBfi5DTEiEsDDpthFPd+" +
+                    "z4xQUCc9L7cjvAzWQtA=="
+            )
+
+            val moduleInfoResolver = mockk<ModuleInfoResolver>()
+            every { moduleInfoResolver.getModuleInfo("jail-monkey@3.0.0") } returns null
+
+            val result = parsePackage(packageJson, moduleInfoResolver)
+
+            result.description shouldBe "A description"
+            result.homepageUrl shouldBe "https://example.com/jail-monkey"
+            result.sourceArtifact shouldBe RemoteArtifact(
+                url = "https://registry.example.com/jail-monkey/-/jail-monkey-3.0.0.tgz",
+                hash = Hash.create(
+                    "sha512-ETo7x4PYUfwDcyFLGep76fo95UHsuf4CbVLGA+jqGcF0zA6XBfi5DTEiEsDDpthFPd+z4xQUCc9L7cjvAzWQtA=="
+                )
+            )
+        }
+
+        "merge the VCS info from the package.json with the one from the ModuleInfoResolver if the package.json's " +
+            "VCS info is incomplete" {
+                val packageJson = PackageJson(
+                    name = "jail-monkey",
+                    version = "3.0.0"
+                )
+
+                val moduleInfoResolver = mockk<ModuleInfoResolver>()
+                every { moduleInfoResolver.getModuleInfo("jail-monkey@3.0.0") } returns PackageJson(
+                    name = "jail-monkey",
+                    version = "3.0.0",
+                    repository = Repository(type = "Git", url = "git+https://example.com/jail-monkey.git")
+                )
+
+                val result = parsePackage(packageJson, moduleInfoResolver)
+
+                result.vcs shouldBe VcsInfo(
+                    type = VcsType.GIT,
+                    url = "git+https://example.com/jail-monkey.git",
+                    revision = ""
+                )
+            }
+
+        "not query the ModuleInfoResolver at all and preserve the package.json's own source artifact info if " +
+            "isRegistryDependency is false" {
+                val packageJson = PackageJson(
+                    name = "jail-monkey",
+                    version = "3.0.0",
+                    description = "A description",
+                    homepage = "https://example.com/jail-monkey",
+                    resolved = "file:../fork/jail-monkey"
+                )
+
+                val moduleInfoResolver = mockk<ModuleInfoResolver>()
+
+                // This simulates a fork that kept the same name and version as the original published package,
+                // which could lead to the resolver returning unrelated metadata if it were queried.
+                every { moduleInfoResolver.getModuleInfo("jail-monkey@3.0.0") } returns PackageJson(
+                    name = "jail-monkey",
+                    version = "3.0.0",
+                    dist = Distribution(
+                        tarball = "https://registry.npmjs.org/jail-monkey/-/jail-monkey-3.0.0.tgz",
+                        shasum = "82559b2192176b994c53bab14cb7bb93b2dfbe15"
+                    )
+                )
+
+                val result = parsePackage(packageJson, moduleInfoResolver, isRegistryDependency = false)
+
+                verify(exactly = 0) { moduleInfoResolver.getModuleInfo(any()) }
+
+                result.description shouldBe "A description"
+                result.homepageUrl shouldBe "https://example.com/jail-monkey"
+                result.sourceArtifact shouldBe RemoteArtifact(
+                    url = "file:../fork/jail-monkey",
+                    hash = Hash.NONE
+                )
+            }
+    }
+
+    "isGitOrLocalResolution()" should {
+        "return false for a null resolved URI" {
+            isGitOrLocalResolution(null) shouldBe false
+        }
+
+        "return false for a registry tarball URL" {
+            isGitOrLocalResolution("https://registry.npmjs.org/jail-monkey/-/jail-monkey-3.0.0.tgz") shouldBe false
+        }
+
+        "return true for Git and local resolutions" {
+            val resolutions = listOf(
+                "git+https://github.com/fork-owner/jail-monkey.git#0123456789abcdef0123456789abcdef01234567",
+                "github:fork-owner/jail-monkey#0123456789abcdef0123456789abcdef01234567",
+                "gitlab:fork-owner/jail-monkey#0123456789abcdef0123456789abcdef01234567",
+                "bitbucket:fork-owner/jail-monkey#0123456789abcdef0123456789abcdef01234567",
+                "file:../local-package",
+                "link:../local-package"
+            )
+
+            resolutions.forAll { resolved ->
+                isGitOrLocalResolution(resolved) shouldBe true
+            }
         }
     }
 })
