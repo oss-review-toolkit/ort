@@ -88,24 +88,27 @@ open class LicenseTextCurationProvider(
     }
 
     /** A cache with entries for license text curation files to read each file at most once. */
-    private val licenseTextCurationsForIdWithoutVersion = mutableMapOf<Identifier, List<LicenseTextCurations>>()
+    private val licenseTextCurationsForFile = mutableMapOf<File, List<LicenseTextCurations>>()
 
-    private fun getCurationsForId(id: Identifier): List<LicenseTextCuration> =
-        licenseTextCurationsForIdWithoutVersion.getOrPut(id.copy(version = "")) {
-            val relativeCurationFilePath = "${id.toPath(emptyValue = "_").substringBeforeLast("/")}.yml"
-            val file = licenseTextCurationsDir.resolve(relativeCurationFilePath).takeIf { it.isFile }
-                ?: return emptyList()
+    private fun getCurationsForId(id: Identifier): List<LicenseTextCuration> {
+        val relativeCurationFilePath = "${id.toPath(emptyValue = "_").substringBeforeLast("/")}.yml"
+        val file = licenseTextCurationsDir.resolve(relativeCurationFilePath).takeIf { it.isFile } ?: return emptyList()
 
+        return readCurationsFile(file).filter { it.isApplicable(id) }.flatMap { it.curations }
+    }
+
+    private fun readCurationsFile(file: File): List<LicenseTextCurations> =
+        licenseTextCurationsForFile.getOrPut(file) {
             runCatching {
                 file.readValue<List<LicenseTextCurations>>()
             }.getOrElse {
                 throw IOException("Failed reading license text curations from '${file.absolutePath}'.", it)
             }.also {
                 logger.info {
-                    "Read ${it.size} license text curations for ${id.toCoordinates()} from ${file.absolutePath}."
+                    "Read ${it.size} license text curations from ${file.absolutePath}."
                 }
             }
-        }.filter { it.isApplicable(id) }.flatMap { it.curations }
+        }
 
     override fun hasLicenseText(licenseOrExceptionId: String) = false
 
