@@ -56,6 +56,7 @@ data class AnalyzerConfiguration(
         "CocoaPods",
         "Composer",
         "Conan",
+        "GitHubAction",
         "Gleam",
         "GoMod",
         "GradleInspector",
