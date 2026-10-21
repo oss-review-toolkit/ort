@@ -23,6 +23,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { IssuesTable } from "@/components/IssuesTable";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import WebAppOrtIssue from "@/models/WebAppOrtIssue";
+import { showColumn } from "@/test/dataTable";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
 describe("IssuesTable", () => {
@@ -45,7 +46,7 @@ describe("IssuesTable", () => {
         expect(screen.getByText("No technical issues")).toBeInTheDocument();
     });
 
-    it("shows the excludes column only when an issue is excluded", () => {
+    it("offers the excludes column, hidden by default, only when an issue is excluded", async () => {
         const included = new WebAppOrtIssue({ _id: 0, message: "Included issue", severity: "ERROR" });
         const excluded = new WebAppOrtIssue({
             _id: 1,
@@ -59,6 +60,8 @@ describe("IssuesTable", () => {
         unmount();
 
         render(<IssuesTable issues={[included, excluded]} />);
+        expect(screen.queryByTitle("Included / excluded")).not.toBeInTheDocument();
+        await showColumn("Excludes");
         expect(screen.getByTitle("Included / excluded")).toBeInTheDocument();
         expect(screen.getByTitle("Excluded")).toBeInTheDocument();
         expect(screen.getByTitle("Included")).toBeInTheDocument();

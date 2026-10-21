@@ -298,7 +298,10 @@ function VulnerabilitiesTable({
 
     // Expand the deep-linked vulnerability row on mount (matched by advisory id, scoped by package when set).
     const initialState = useMemo<Partial<TableState>>(() => {
-        const state: Partial<TableState> = { sorting: [{ id: "rating", desc: false }] };
+        const state: Partial<TableState> = {
+            columnVisibility: { excludes: false },
+            sorting: [{ id: "rating", desc: false }],
+        };
         if (focusVulnerabilityId) {
             const target = data.find(
                 (row) => row.id === focusVulnerabilityId && (!focusPackageId || row.packageName === focusPackageId),

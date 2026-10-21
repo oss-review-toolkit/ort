@@ -182,7 +182,10 @@ function IssuesTable({
 
     // Expand the deep-linked package's first technical issue row and/or pre-filter the severity column on mount.
     const initialState = useMemo<Partial<TableState>>(() => {
-        const state: Partial<TableState> = { sorting: [{ id: "severity", desc: false }] };
+        const state: Partial<TableState> = {
+            columnVisibility: { excludes: false },
+            sorting: [{ id: "severity", desc: false }],
+        };
         if (focusPackageId) {
             const target = data.find((row) => row.packageName === focusPackageId);
             if (target) {
