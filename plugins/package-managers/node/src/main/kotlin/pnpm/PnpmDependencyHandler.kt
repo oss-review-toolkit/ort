@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.ModuleInfoResolver
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NON_EXISTING_SEMVER
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
@@ -73,6 +74,30 @@ internal class PnpmDependencyHandler(
         dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
             parsePackage(it.packageJsonFile, moduleInfoResolver)
         }
+
+    /**
+     * Return the module IDs in the form "name@version" of all packages which are (transitive) dependencies of the given
+     * [dependencies]. This allows requesting the package details for all packages upfront.
+     */
+    fun getAllPackageModuleIds(dependencies: Collection<Dependency>): Set<String> {
+        val moduleIds = mutableSetOf<String>()
+        val queue = ArrayDeque(dependencies.filter { it.isInstalled })
+
+        // Note that the same module may occur multiple times with different (deduplicated) dependencies in the output
+        // of "pnpm list", so all occurrences need to be visited.
+        while (queue.isNotEmpty()) {
+            val dependency = queue.removeFirst()
+
+            if (!dependency.isProject) {
+                val packageJson = readPackageJson(dependency.packageJsonFile)
+                moduleIds += "${packageJson.name.orEmpty()}@${packageJson.version ?: NON_EXISTING_SEMVER}"
+            }
+
+            queue += dependenciesFor(dependency)
+        }
+
+        return moduleIds
+    }
 
     private fun readPackageJson(packageJsonFile: File): PackageJson =
         packageJsonCache.getOrPut(packageJsonFile.realFile) { parsePackageJson(packageJsonFile) }

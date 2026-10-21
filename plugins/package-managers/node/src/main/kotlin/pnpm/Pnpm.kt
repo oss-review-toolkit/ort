@@ -145,6 +145,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         handler.setWorkspaceModuleDirs(workspaceModuleDirs)
 
         val moduleInfosForScope = scopes.associateWith { scope -> listModules(workingDir, scope) }
+        requestAllPackageDetails(moduleInfosForScope) // Warm-up the cache.
 
         return workspaceModuleDirs.map { projectDir ->
             val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
@@ -160,6 +161,14 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
                 packages = emptySet()
             )
         }
+    }
+
+    private fun requestAllPackageDetails(moduleInfosForScope: Map<Scope, List<ModuleInfo>>) {
+        val dependencies = moduleInfosForScope.flatMap { (scope, moduleInfos) ->
+            moduleInfos.flatMap { it.getScopeDependencies(scope) }
+        }
+
+        moduleInfoResolver.getModuleInfos(handler.getAllPackageModuleIds(dependencies))
     }
 
     private fun useIsolatedNodeLinker(workingDir: File) {
