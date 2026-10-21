@@ -45,6 +45,8 @@ export interface TreeSearchResult {
     // The matching node occurrences in display (pre-order) order.
     matches: readonly TreeMatch[];
     query: string;
+    // The rows of the tree as displayed while searching, with the paths to the matches open.
+    rows: readonly TreeRow[];
     // The keys of the matches and of all nodes on a path to one.
     visible: ReadonlySet<string>;
 }
@@ -90,39 +92,66 @@ export function getProjectAndScopeKeys(roots: readonly TreeRoot[]): Set<string> 
     return keys;
 }
 
-// Flatten the open part of the tree into rows in display order. Only open nodes are descended into, and while
-// searching only the visible ones are kept, so the cost is bounded by the number of displayed rows.
+interface FlattenEntry {
+    depth: number;
+    fallbackKey: string;
+    key: string;
+    node: WebAppTreeNode;
+}
+
+// Flatten the open part of the tree into rows in display order, one node per step, so that the work can be split
+// into chunks. Only open nodes are descended into, and while searching only the visible ones are kept, so the
+// cost is bounded by the number of displayed rows and the children of open nodes.
+function createFlattener(
+    roots: readonly TreeRoot[],
+    expanded: ReadonlySet<string>,
+    visible: ReadonlySet<string> | null,
+): { rows: TreeRow[]; step: () => boolean } {
+    const rows: TreeRow[] = [];
+    const stack: FlattenEntry[] = [];
+
+    const push = (node: WebAppTreeNode, fallbackKey: string, depth: number): void => {
+        const key = nodeKey(node, fallbackKey);
+        if (!visible || visible.has(key)) stack.push({ depth, fallbackKey, key, node });
+    };
+
+    for (let i = roots.length - 1; i >= 0; i--) {
+        const root = roots[i];
+        if (root) push(root.node, root.fallbackKey, 0);
+    }
+
+    // Add the next row and return whether there was one.
+    const step = (): boolean => {
+        const entry = stack.pop();
+        if (!entry) return false;
+
+        const { depth, fallbackKey, key, node } = entry;
+        const hasChildren = node.children.length > 0;
+        const isOpen = hasChildren && expanded.has(key);
+        rows.push({ depth, hasChildren, isOpen, key, node });
+
+        if (isOpen) {
+            for (let i = node.children.length - 1; i >= 0; i--) {
+                const child = node.children[i];
+                if (child) push(child, `${fallbackKey}-${i}`, depth + 1);
+            }
+        }
+
+        return true;
+    };
+
+    return { rows, step };
+}
+
+// Flatten the open part of the tree into rows in display order, all at once.
 export function flattenTree(
     roots: readonly TreeRoot[],
     expanded: ReadonlySet<string>,
     visible: ReadonlySet<string> | null,
 ): TreeRow[] {
-    const rows: TreeRow[] = [];
-    const stack: { depth: number; fallbackKey: string; node: WebAppTreeNode }[] = [];
-
-    for (let i = roots.length - 1; i >= 0; i--) {
-        const root = roots[i];
-        if (root) stack.push({ depth: 0, fallbackKey: root.fallbackKey, node: root.node });
-    }
-
-    for (let entry = stack.pop(); entry; entry = stack.pop()) {
-        const { depth, fallbackKey, node } = entry;
-        const key = nodeKey(node, fallbackKey);
-        if (visible && !visible.has(key)) continue;
-
-        const hasChildren = node.children.length > 0;
-        const isOpen = hasChildren && expanded.has(key);
-        rows.push({ depth, hasChildren, isOpen, key, node });
-
-        if (!isOpen) continue;
-
-        for (let i = node.children.length - 1; i >= 0; i--) {
-            const child = node.children[i];
-            if (child) stack.push({ depth: depth + 1, fallbackKey: `${fallbackKey}-${i}`, node: child });
-        }
-    }
-
-    return rows;
+    const flattener = createFlattener(roots, expanded, visible);
+    while (flattener.step());
+    return flattener.rows;
 }
 
 interface SearchFrame {
@@ -134,9 +163,10 @@ interface SearchFrame {
     selfMatch: boolean;
 }
 
-// Search all node occurrences for titles containing the query, ignoring case. The tree is walked in chunks that
-// each block the main thread for at most a few milliseconds, so typing and scrolling stay responsive on trees
-// with millions of occurrences. Returns a function that cancels the search; onComplete is not called afterwards.
+// Search all node occurrences for titles containing the query, ignoring case, and flatten the tree as displayed
+// for the result. The tree is walked and flattened in chunks that each block the main thread for at most a few
+// milliseconds, so typing and scrolling stay responsive on trees with millions of occurrences, even for queries
+// that match most of them. Returns a function that cancels the search; onComplete is not called afterwards.
 export function searchTree(
     roots: readonly TreeRoot[],
     query: string,
@@ -165,6 +195,7 @@ export function searchTree(
 
     const stack: SearchFrame[] = [];
     let rootIndex = 0;
+    let flattener: ReturnType<typeof createFlattener> | undefined;
     let cancelled = false;
     let cancelTask: (() => void) | undefined;
 
@@ -179,9 +210,10 @@ export function searchTree(
         cancelTask = undefined;
         const deadline = now() + chunkTimeMs;
         let visited = 0;
+        const isPastDeadline = (): boolean => ++visited % CLOCK_CHECK_INTERVAL === 0 && now() > deadline;
 
         while (stack.length > 0 || rootIndex < roots.length) {
-            if (++visited % CLOCK_CHECK_INTERVAL === 0 && now() > deadline) {
+            if (isPastDeadline()) {
                 cancelTask = schedule(runChunk);
                 return;
             }
@@ -208,7 +240,15 @@ export function searchTree(
             if (parent && (frame.selfMatch || frame.childMatch)) parent.childMatch = true;
         }
 
-        if (!cancelled) onComplete({ expanded, matches, query, visible });
+        flattener ??= createFlattener(roots, expanded, visible);
+        while (flattener.step()) {
+            if (isPastDeadline()) {
+                cancelTask = schedule(runChunk);
+                return;
+            }
+        }
+
+        if (!cancelled) onComplete({ expanded, matches, query, rows: flattener.rows, visible });
     };
 
     runChunk();
