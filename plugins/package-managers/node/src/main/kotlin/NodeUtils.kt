@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
-private const val NON_EXISTING_SEMVER = "0.0.0"
+internal const val NON_EXISTING_SEMVER = "0.0.0"
 
 /**
  * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
