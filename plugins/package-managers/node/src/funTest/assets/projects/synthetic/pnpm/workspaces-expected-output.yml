@@ -36,6 +36,8 @@ projects:
               dependencies:
               - id: "NPM::is-buffer:1.1.6"
       - id: "NPM::sax:1.2.4"
+    - id: "PNPM::testing-pnpm-package-e:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
 - id: "PNPM::pnpm-workspaces:1.0.1"
   definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/package.json"
   authors:
@@ -143,6 +145,8 @@ projects:
       - id: "NPM::supports-color:7.2.0"
         dependencies:
         - id: "NPM::has-flag:4.0.0"
+    - id: "PNPM::testing-pnpm-package-d:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
 - id: "PNPM::testing-pnpm-package-c:1.0.0"
   definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/non-workspace/package-c/package.json"
   authors:
@@ -186,6 +190,28 @@ projects:
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-d"
   description: "A package which is published from a directory that only exists after\
     \ a build"
+  homepage_url: ""
+  scopes: []
+- id: "PNPM::testing-pnpm-package-e:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-e/package.json"
+  authors:
+  - "Martin Nonnenmacher"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-e"
+  description: "A package which is published from a directory that has already been\
+    \ built"
   homepage_url: ""
   scopes: []
 packages:

@@ -153,7 +153,11 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
 
             scopes.forEach { scope ->
                 val moduleInfo = moduleInfosForScope.getValue(scope).single { it.path == projectDir.absolutePath }
-                graphBuilder.addDependencies(project.id, scope.descriptor, moduleInfo.getScopeDependencies(scope))
+                graphBuilder.addDependencies(
+                    projectId = project.id,
+                    scopeName = scope.descriptor,
+                    dependencies = moduleInfo.getRelevantScopeDependencies(scope)
+                )
             }
 
             ProjectAnalyzerResult(
@@ -165,11 +169,14 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
 
     private fun requestAllPackageDetails(moduleInfosForScope: Map<Scope, List<ModuleInfo>>) {
         val dependencies = moduleInfosForScope.flatMap { (scope, moduleInfos) ->
-            moduleInfos.flatMap { it.getScopeDependencies(scope) }
+            moduleInfos.flatMap { it.getRelevantScopeDependencies(scope) }
         }
 
         moduleInfoResolver.getModuleInfos(handler.getAllPackageModuleIds(dependencies))
     }
+
+    private fun ModuleInfo.getRelevantScopeDependencies(scope: Scope) =
+        getScopeDependencies(scope).filter { handler.isRelevant(it) }
 
     private fun useIsolatedNodeLinker(workingDir: File) {
         // Always use the 'isolated' (default) node linker, to not have to deal with multiple ways of
@@ -222,7 +229,7 @@ private fun ModuleInfo.getScopeDependencies(scope: Scope) =
         }
 
         Scope.DEV_DEPENDENCIES -> devDependencies.values.toList()
-    }.filter { it.isInstalled }
+    }
 
 /**
  * Find the [List] of [ModuleInfo] objects for the project in the given [workingDir]. If there are nested projects,

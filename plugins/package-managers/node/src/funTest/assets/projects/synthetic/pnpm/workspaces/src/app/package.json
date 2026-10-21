@@ -13,6 +13,7 @@
   "author": "DavidWells",
   "license": "ISC",
   "dependencies": {
-    "testing-pnpm-package-a": "1.0.2"
+    "testing-pnpm-package-a": "1.0.2",
+    "testing-pnpm-package-e": "workspace:*"
   }
 }
