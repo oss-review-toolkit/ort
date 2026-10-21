@@ -1,0 +1,10 @@
+{
+  "name": "testing-pnpm-package-d",
+  "version": "1.0.0",
+  "description": "A package which is published from a directory that only exists after a build",
+  "author": "Martin Nonnenmacher",
+  "license": "ISC",
+  "publishConfig": {
+    "directory": "dist"
+  }
+}

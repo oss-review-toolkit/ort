@@ -166,6 +166,28 @@ projects:
   - name: "dependencies"
     dependencies:
     - id: "NPM::long:5.2.0"
+- id: "PNPM::testing-pnpm-package-d:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-d/package.json"
+  authors:
+  - "Martin Nonnenmacher"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-d"
+  description: "A package which is published from a directory that only exists after\
+    \ a build"
+  homepage_url: ""
+  scopes: []
 packages:
 - id: "NPM::ansi-styles:4.3.0"
   purl: "pkg:npm/ansi-styles@4.3.0"

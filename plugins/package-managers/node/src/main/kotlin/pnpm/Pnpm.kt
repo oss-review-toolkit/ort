@@ -222,7 +222,7 @@ private fun ModuleInfo.getScopeDependencies(scope: Scope) =
         }
 
         Scope.DEV_DEPENDENCIES -> devDependencies.values.toList()
-    }
+    }.filter { it.isInstalled }
 
 /**
  * Find the [List] of [ModuleInfo] objects for the project in the given [workingDir]. If there are nested projects,

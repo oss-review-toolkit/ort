@@ -43,6 +43,12 @@ importers:
       chalk:
         specifier: 4.0.0
         version: 4.0.0
+      testing-pnpm-package-d:
+        specifier: workspace:*
+        version: link:../package-d/dist
+
+  src/packages/package-d:
+    publishDirectory: dist
 
 packages:
 

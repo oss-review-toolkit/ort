@@ -81,7 +81,7 @@ internal class PnpmDependencyHandler(
      */
     fun getAllPackageModuleIds(dependencies: Collection<Dependency>): Set<String> {
         val moduleIds = mutableSetOf<String>()
-        val queue = ArrayDeque(dependencies.filter { it.isInstalled })
+        val queue = ArrayDeque(dependencies)
 
         // Note that the same module may occur multiple times with different (deduplicated) dependencies in the output
         // of "pnpm list", so all occurrences need to be visited.
@@ -116,5 +116,5 @@ private val Dependency.packageJsonFile: File
  * lockfile. Maybe, this can be mitigated by also using --frozen-lockfile. However, the documentation does not explain
  * how the combination of these two options works.
  */
-private val Dependency.isInstalled: Boolean
+internal val Dependency.isInstalled: Boolean
     get() = workingDir.isDirectory
