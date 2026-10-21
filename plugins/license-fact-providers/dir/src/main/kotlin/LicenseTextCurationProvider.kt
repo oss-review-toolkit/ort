@@ -93,19 +93,18 @@ open class LicenseTextCurationProvider(
     private fun getCurationsForId(id: Identifier): List<LicenseTextCuration> =
         licenseTextCurationsForIdWithoutVersion.getOrPut(id.copy(version = "")) {
             val relativeCurationFilePath = "${id.toPath(emptyValue = "_").substringBeforeLast("/")}.yml"
-            val curationFile = licenseTextCurationsDir.resolve(relativeCurationFilePath).takeIf { it.isFile }
+            val file = licenseTextCurationsDir.resolve(relativeCurationFilePath).takeIf { it.isFile }
+                ?: return emptyList()
 
-            curationFile?.let { file ->
-                runCatching {
-                    file.readValue<List<LicenseTextCurations>>()
-                }.getOrElse {
-                    throw IOException("Failed reading license text curations from '${file.absolutePath}'.", it)
-                }.also {
-                    logger.info {
-                        "Read ${it.size} license text curations for ${id.toCoordinates()} from ${file.absolutePath}."
-                    }
+            runCatching {
+                file.readValue<List<LicenseTextCurations>>()
+            }.getOrElse {
+                throw IOException("Failed reading license text curations from '${file.absolutePath}'.", it)
+            }.also {
+                logger.info {
+                    "Read ${it.size} license text curations for ${id.toCoordinates()} from ${file.absolutePath}."
                 }
-            }.orEmpty()
+            }
         }.filter { it.isApplicable(id) }.flatMap { it.curations }
 
     override fun hasLicenseText(licenseOrExceptionId: String) = false
