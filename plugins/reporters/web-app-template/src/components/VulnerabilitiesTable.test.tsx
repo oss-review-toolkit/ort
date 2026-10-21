@@ -23,6 +23,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { VulnerabilitiesTable } from "@/components/VulnerabilitiesTable";
 import type WebAppEvaluatedModel from "@/models/WebAppEvaluatedModel";
 import WebAppVulnerability from "@/models/WebAppVulnerability";
+import { showColumn } from "@/test/dataTable";
 import { buildResult, loadSampleEvaluatedModel } from "@/test/fixture";
 
 describe("VulnerabilitiesTable", () => {
@@ -59,7 +60,7 @@ describe("VulnerabilitiesTable", () => {
         expect(screen.getByText(resolution.comment.trim())).toBeInTheDocument();
     });
 
-    it("shows vulnerabilities of excluded packages as excluded", () => {
+    it("shows vulnerabilities of excluded packages as excluded", async () => {
         // A minimal stand-in model resolving the package indexes to an excluded and an included package.
         const packages = [
             { excludeReasons: new Set(["TEST_OF"]), id: "Maven:acme:excluded:1.0", isExcluded: true },
@@ -74,6 +75,8 @@ describe("VulnerabilitiesTable", () => {
         unmount();
 
         render(<VulnerabilitiesTable vulnerabilities={[excluded, included]} />);
+        expect(screen.queryByTitle("Included / excluded")).not.toBeInTheDocument();
+        await showColumn("Excludes");
         expect(screen.getByTitle("Included / excluded")).toBeInTheDocument();
         const excludedName = screen.getByText("Maven:acme:excluded:1.0");
         expect(excludedName).toHaveClass("line-through", "text-muted-foreground");

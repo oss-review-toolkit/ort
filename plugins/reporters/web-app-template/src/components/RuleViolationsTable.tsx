@@ -266,7 +266,7 @@ function RuleViolationsTable({
     // Expand the deep-linked package's first policy violation row and/or pre-filter the severity column on mount.
     const initialState = useMemo<Partial<TableState>>(() => {
         const state: Partial<TableState> = {
-            columnVisibility: { licenseSource: false },
+            columnVisibility: { excludes: false, licenseSource: false },
             sorting: [{ id: "severity", desc: false }],
         };
         if (focusPackageId) {
