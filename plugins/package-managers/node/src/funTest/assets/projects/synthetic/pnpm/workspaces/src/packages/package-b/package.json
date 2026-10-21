@@ -12,6 +12,7 @@
   "author": "Marcel Bochtler",
   "license": "ISC",
   "dependencies": {
-    "chalk": "4.0.0"
+    "chalk": "4.0.0",
+    "testing-pnpm-package-d": "workspace:*"
   }
 }
