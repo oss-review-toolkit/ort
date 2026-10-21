@@ -24,6 +24,7 @@ import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseTextCuration
 import org.ossreviewtoolkit.model.LicenseTextCurations
@@ -87,14 +88,23 @@ open class LicenseTextCurationProvider(
         }
     }
 
+    /** All curation files, keyed by their lowercase relative path without extension. No file is read here. */
+    private val curationFilesForLowercasePath: Map<String, List<File>> by lazy {
+        FileFormat.findFilesWithKnownExtensions(licenseTextCurationsDir).groupBy { file ->
+            file.relativeTo(licenseTextCurationsDir).invariantSeparatorsPath.lowercase().substringBeforeLast('.')
+        }
+    }
+
     /** A cache with entries for license text curation files to read each file at most once. */
     private val licenseTextCurationsForFile = mutableMapOf<File, List<LicenseTextCurations>>()
 
     private fun getCurationsForId(id: Identifier): List<LicenseTextCuration> {
-        val relativeCurationFilePath = "${id.toPath(emptyValue = "_").substringBeforeLast("/")}.yml"
-        val file = licenseTextCurationsDir.resolve(relativeCurationFilePath).takeIf { it.isFile } ?: return emptyList()
+        val lowercasePath = id.toPath(emptyValue = "_").substringBeforeLast("/").lowercase()
+        val files = curationFilesForLowercasePath[lowercasePath].orEmpty()
 
-        return readCurationsFile(file).filter { it.isApplicable(id) }.flatMap { it.curations }
+        return files.flatMap { file ->
+            readCurationsFile(file)
+        }.filter { it.isApplicable(id) }.flatMap { it.curations }
     }
 
     private fun readCurationsFile(file: File): List<LicenseTextCurations> =
