@@ -44,10 +44,10 @@ class VersionUtilsTest : WordSpec({
             "[1.2.3.4,5.6.7.8]".getIvyVersionRanges().get() should beEmpty()
         }
 
-        "return an empty list for single versions" {
-            "2".getIvyVersionRanges().get() shouldBe listOf()
-            "2.0".getIvyVersionRanges().get() shouldBe listOf()
-            "2.0.0".getIvyVersionRanges().get() shouldBe listOf()
+        "return an empty range list for single versions" {
+            "2".getIvyVersionRanges().get() should beEmpty()
+            "2.0".getIvyVersionRanges().get() should beEmpty()
+            "2.0.0".getIvyVersionRanges().get() should beEmpty()
         }
 
         "return the correct range list for Ivy version ranges" {
