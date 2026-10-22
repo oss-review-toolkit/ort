@@ -34,7 +34,13 @@ fun getEnabledPackageConfigurationProviders(
     ortResult: OrtResult,
     ortConfigOverride: () -> PackageConfigurationProvider?
 ): List<PackageConfigurationProvider> {
-    @Suppress("FunctionExpressionBody")
+    val overrideProvider = ortConfigOverride()
+
+    val resolvedPackageConfigurations = ortResult.resolvedConfiguration.packageConfigurations
+    if (resolvedPackageConfigurations != null && overrideProvider == null) {
+        return listOf(SimplePackageConfigurationProvider(configurations = resolvedPackageConfigurations))
+    }
+
     return buildList {
         val repositoryPackageConfigurations = ortResult.repository.config.packageConfigurations
 
@@ -46,7 +52,7 @@ fun getEnabledPackageConfigurationProviders(
             }
         }
 
-        ortConfigOverride()?.also {
+        overrideProvider?.also {
             add(it)
         } ?: run {
             // This only adds those package configuration providers that are both enabled in the ORT configuration
