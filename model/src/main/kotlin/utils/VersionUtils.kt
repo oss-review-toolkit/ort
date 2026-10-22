@@ -65,7 +65,9 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
  * Get the version ranges contained in this string. Return an empty list if no (non-pathological) ranges are contained.
  */
 internal fun String.getIvyVersionRanges(): RangeList {
-    if (isBlank()) return RangeList(/* includePreRelease = */ false)
+    // Ivy's "latest" status matchers always point to a single version, see
+    // https://ant.apache.org/ivy/history/2.6.0/settings/version-matchers.html#_latest_status_matcher.
+    if (isBlank() || startsWith("latest")) return RangeList(/* includePreRelease = */ false)
 
     val ranges = RangeListFactory.create(this, IvyProcessor())
 
