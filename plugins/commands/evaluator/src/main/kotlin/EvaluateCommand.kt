@@ -39,8 +39,6 @@ import java.time.Duration
 import kotlin.script.experimental.host.UrlScriptSource
 import kotlin.time.toKotlinDuration
 
-import org.apache.logging.log4j.kotlin.logger
-
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
@@ -72,8 +70,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.CompositePackageConfigurationProvider
-import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
-import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.getEnabledPackageConfigurationProviders
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
@@ -306,28 +303,11 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
             ortResultInput = ortResultInput.setPackageCurations(packageCurationProviders)
         }
 
-        val enabledPackageConfigurationProviders = buildList {
-            val repositoryPackageConfigurations = ortResultInput.repository.config.packageConfigurations
-
-            if (ortConfig.enableRepositoryPackageConfigurations) {
-                add(SimplePackageConfigurationProvider(configurations = repositoryPackageConfigurations))
-            } else {
-                if (repositoryPackageConfigurations.isNotEmpty()) {
-                    logger.info { "Local package configurations were not applied because the feature is not enabled." }
-                }
+        val packageConfigurationProvider = CompositePackageConfigurationProvider(
+            getEnabledPackageConfigurationProviders(ortConfig, ortResultInput) {
+                packageConfigurationsDir?.let { DirPackageConfigurationProvider(it) }
             }
-
-            if (packageConfigurationsDir != null) {
-                add(DirPackageConfigurationProvider(packageConfigurationsDir))
-            } else {
-                // This only adds those package configuration providers that are both enabled in the ORT configuration
-                // (which is the default) and available in the classpath.
-                val providers = PackageConfigurationProviderFactory.create(ortConfig.packageConfigurationProviders)
-                addAll(providers.map { it.second })
-            }
-        }
-
-        val packageConfigurationProvider = CompositePackageConfigurationProvider(enabledPackageConfigurationProviders)
+        )
 
         ortResultInput = ortResultInput.setPackageConfigurations(packageConfigurationProvider)
 
