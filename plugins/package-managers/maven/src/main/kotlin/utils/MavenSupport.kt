@@ -159,10 +159,11 @@ class MavenSupport(
         val aetherRepositorySystem = containerLookup<RepositorySystem>()
         val repositorySystemSessionFactory = containerLookup<DefaultRepositorySystemSessionFactory>()
 
-        val repositorySystemSession = repositorySystemSessionFactory
-            .newRepositorySession(createMavenExecutionRequest())
-
-        repositorySystemSession.mirrorSelector = HttpsMirrorSelector(repositorySystemSession.mirrorSelector)
+        val repositorySystemSession = DefaultRepositorySystemSession(
+            repositorySystemSessionFactory.newRepositorySessionBuilder(createMavenExecutionRequest()).build()
+        ).apply {
+            mirrorSelector = HttpsMirrorSelector(mirrorSelector)
+        }
 
         val executionRequest = createMavenExecutionRequest()
         val localRepository = mavenRepositorySystem.createLocalRepository(
@@ -384,10 +385,14 @@ class MavenSupport(
             )
 
             val localPath = repositorySystemSession.localRepositoryManager
-                .getPathForRemoteArtifact(artifact, info.repository, "project")
-            val downloadFile = File(repositorySystemSession.localRepositoryManager.repository.basedir, localPath)
+                .getAbsolutePathForRemoteArtifact(artifact, info.repository, "project")
+            val downloadPath = repositorySystemSession.localRepositoryManager.repository.basePath.resolve(localPath)
 
-            val artifactDownload = ArtifactDownload(artifact, "project", downloadFile, policy.checksumPolicy)
+            // The deprecation in maven-resolver-spi version 2.0.24 is a bug, see
+            // https://github.com/apache/maven-resolver/issues/2173.
+            @Suppress("DEPRECATION")
+            val artifactDownload = ArtifactDownload(artifact, "project", downloadPath, policy.checksumPolicy)
+
             artifactDownload.isExistenceCheck = true
             artifactDownload.listener = object : AbstractTransferListener() {
                 override fun transferFailed(event: TransferEvent?) {
