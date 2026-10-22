@@ -50,6 +50,13 @@ class VersionUtilsTest : WordSpec({
             "2.0.0".getIvyVersionRanges().get() should beEmpty()
         }
 
+        "return an empty range list for symbolic versions that point to a single version" {
+            "main".getIvyVersionRanges().get() should beEmpty()
+            "master".getIvyVersionRanges().get() should beEmpty()
+            "latest".getIvyVersionRanges().get() should beEmpty()
+            "latest.release".getIvyVersionRanges().get() should beEmpty()
+        }
+
         "return the correct range list for Ivy version ranges" {
             "[1.2.3,4.5.6]".getIvyVersionRanges().get() shouldBe listOf(
                 listOf(Range("1.2.3", Range.RangeOperator.GTE), Range("4.5.6", Range.RangeOperator.LTE))
