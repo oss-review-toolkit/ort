@@ -39,8 +39,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
-import org.apache.logging.log4j.kotlin.logger
-
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
@@ -70,7 +68,7 @@ import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFac
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.licensefactproviders.dir.CustomLicenseTextsProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.CompositePackageConfigurationProvider
-import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.getEnabledPackageConfigurationProviders
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterFactory
@@ -233,29 +231,11 @@ class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descript
             ortResult = ortResult.setResolutions(resolutionProvider)
         }
 
-        val resolvedPackageConfigurations = ortResult.resolvedConfiguration.packageConfigurations
-        val packageConfigurationProvider = when {
-            resolvedPackageConfigurations != null && packageConfigurationsDir == null -> {
-                SimplePackageConfigurationProvider(configurations = resolvedPackageConfigurations)
+        val packageConfigurationProvider = CompositePackageConfigurationProvider(
+            getEnabledPackageConfigurationProviders(ortConfig, ortResult) {
+                packageConfigurationsDir?.let { DirPackageConfigurationProvider(it) }
             }
-
-            ortConfig.enableRepositoryPackageConfigurations -> {
-                CompositePackageConfigurationProvider(
-                    SimplePackageConfigurationProvider(
-                        configurations = ortResult.repository.config.packageConfigurations
-                    ),
-                    DirPackageConfigurationProvider(packageConfigurationsDir)
-                )
-            }
-
-            else -> {
-                if (ortResult.repository.config.packageConfigurations.isNotEmpty()) {
-                    logger.info { "Local package configurations were not applied because the feature is not enabled." }
-                }
-
-                DirPackageConfigurationProvider(packageConfigurationsDir)
-            }
-        }
+        )
 
         ortResult = ortResult.setPackageConfigurations(packageConfigurationProvider)
 
