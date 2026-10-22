@@ -92,7 +92,8 @@ data class PackageConfiguration(
 
         if (id.hasIvyVersionRange()) {
             require(vcs == null && sourceArtifactUrl == null) {
-                "A package configuration cannot have a version range and a 'vcs' or 'sourceArtifactUrl'."
+                "A package configuration for '${id.toCoordinates()}' has both a version range matcher and a 'vcs' or " +
+                    "'sourceArtifactUrl' matcher, which is not allowed."
             }
         }
     }
