@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -60,6 +61,10 @@ private const val PROJECT_TYPE = "Composer"
 private const val PACKAGE_TYPE = "Composer"
 
 private const val COMPOSER_PHAR_BINARY = "composer.phar"
+
+// A special "scope" for listing platform dependencies.
+private const val SCOPE_NAME_PLATFORM = "platform"
+
 private const val SCOPE_NAME_REQUIRE = "require"
 private const val SCOPE_NAME_REQUIRE_DEV = "require-dev"
 private val ALL_SCOPE_NAMES = setOf(SCOPE_NAME_REQUIRE, SCOPE_NAME_REQUIRE_DEV)
@@ -185,8 +190,13 @@ class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descr
             Scope(scopeName, dependencies)
         }
 
+        // Platform dependencies are not installed by Composer but need to be provided by the environment, so list them
+        // in a separate flat scope instead of as part of the dependency trees.
+        val platformPackages = getPlatformDependencies(projectPackageInfo, lockfile).map { it.toPlatformPackage() }
+        scopes += Scope(SCOPE_NAME_PLATFORM, platformPackages.mapTo(mutableSetOf()) { it.toReference() })
+
         val project = parseProject(analysisRoot, definitionFile, scopes)
-        val result = ProjectAnalyzerResult(project, packages.values.toSet())
+        val result = ProjectAnalyzerResult(project, (packages.values + platformPackages).toSet())
 
         return listOf(result)
     }
@@ -201,7 +211,8 @@ class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descr
         val packageReferences = mutableSetOf<PackageReference>()
 
         dependencies.filterNot { packageName ->
-            packageName.isPlatformDependency() || packageName in virtualPackages // Virtual packages have no metadata.
+            // Platform dependencies are listed in their own scope, and virtual packages have no metadata.
+            packageName.isPlatformDependency() || packageName in virtualPackages
         }.forEach { packageName ->
             val packageInfo = packages[packageName]
                 ?: throw IOException("Could not find package info for $packageName")
@@ -272,6 +283,26 @@ private fun String.isPlatformDependency(): Boolean =
 
 private val COMPOSER_PLATFORM_TYPES = setOf("composer", "composer-plugin-api", "composer-runtime-api")
 private val PHP_PLATFORM_TYPES = setOf("php", "php-64bit", "php-ipv6", "php-zts", "php-debug")
+
+/**
+ * Get the names of all platform dependencies that are required by the project, including its development dependencies,
+ * or by any of the installed packages.
+ */
+private fun getPlatformDependencies(projectPackageInfo: PackageInfo, lockfile: Lockfile): Set<String> =
+    buildSet {
+        addAll(projectPackageInfo.require.keys)
+        addAll(projectPackageInfo.requireDev.keys)
+        (lockfile.packages + lockfile.packagesDev).flatMapTo(this) { it.require.keys }
+    }.filterTo(mutableSetOf()) { it.isPlatformDependency() }
+
+/**
+ * Create a [Package] for the platform dependency denoted by this String. As platform dependencies are provided by the
+ * environment, there is no metadata about them, not even a version.
+ */
+private fun String.toPlatformPackage(): Package {
+    val id = Identifier(type = PACKAGE_TYPE, namespace = "", name = this, version = "")
+    return Package.EMPTY.copy(id = id, purl = id.toPurl())
+}
 
 private fun getRuntimeDependencies(packageName: String, lockfile: Lockfile): Set<String> {
     (lockfile.packages + lockfile.packagesDev).forEach { packageInfo ->
