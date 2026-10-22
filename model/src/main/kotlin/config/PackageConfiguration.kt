@@ -47,7 +47,7 @@ data class PackageConfiguration(
      * The [version][Identifier.version] can be either:
      * - blank, to match any version,
      * - a plain version string matched for equality,
-     * - an [Ivy-style version matcher](https://ant.apache.org/ivy/history/2.5.0/settings/version-matchers.html).
+     * - an [Ivy-style version matcher](https://ant.apache.org/ivy/history/2.6.0/settings/version-matchers.html).
      * If the package's version is blank, it matches regardless of the version set here.
      * The other components of the [identifier][id] are matched by equality.
      */
