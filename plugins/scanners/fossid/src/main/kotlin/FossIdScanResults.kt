@@ -413,7 +413,7 @@ private fun Set<Snippet>.mapSnippetFindingsForFile(
             }
 
             if (!isSnippetChoice && !isLocationWithFalsePositives) {
-                findings.getOrPut(sourceLocation) { mutableSetOf(ortSnippet) } += ortSnippet
+                findings.getOrPut(sourceLocation) { mutableSetOf() } += ortSnippet
             }
 
             getLicenseFindingFromSnippetChoice(
