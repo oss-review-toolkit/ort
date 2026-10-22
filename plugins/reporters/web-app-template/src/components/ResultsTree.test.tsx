@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { act, screen } from "@testing-library/react";
+import { act, fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi as vitest } from "vitest";
 import { ResultsTree } from "@/components/ResultsTree";
@@ -104,11 +104,26 @@ function searchBox(): HTMLElement {
     return screen.getByRole("textbox", { name: /search the dependency tree/i });
 }
 
+// The search waits for a pause in typing and then runs in deferred chunks. The search tests use fake timers to drive
+// both, so a slow or busy machine cannot run out the time that a findBy query waits for the result. User events
+// wait on real timers, so the query is entered with a plain change event.
+function enterQuery(query: string): void {
+    fireEvent.change(searchBox(), { target: { value: query } });
+}
+
+async function finishSearch(): Promise<void> {
+    await act(() => vitest.runAllTimersAsync());
+}
+
 describe("ResultsTree", () => {
     let result: WebAppEvaluatedModel;
 
     beforeEach(async () => {
         result = await buildResult(RAW);
+    });
+
+    afterEach(() => {
+        vitest.useRealTimers();
     });
 
     it("expands projects and scopes by default, showing direct but not transitive dependencies", () => {
@@ -123,36 +138,39 @@ describe("ResultsTree", () => {
     });
 
     it("filters the tree to the matching path when searching", async () => {
-        const user = userEvent.setup();
+        vitest.useFakeTimers();
         render(<ResultsTree webAppEvaluatedModel={result} />);
 
-        await user.type(searchBox(), "lib-b");
+        enterQuery("lib-b");
+        await finishSearch();
 
-        expect(await screen.findByRole("button", { name: LIB_B })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: LIB_B })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: EXCLUDED_LIB })).not.toBeInTheDocument();
         expect(screen.getByText("1/1")).toBeInTheDocument();
     });
 
     it("shows a match counter and steps through results", async () => {
-        const user = userEvent.setup();
+        vitest.useFakeTimers();
         render(<ResultsTree webAppEvaluatedModel={result} />);
 
-        await user.type(searchBox(), "lib");
+        enterQuery("lib");
+        await finishSearch();
 
-        expect(await screen.findByText("1/3")).toBeInTheDocument();
-        await user.click(screen.getByRole("button", { name: /next match/i }));
+        expect(screen.getByText("1/3")).toBeInTheDocument();
+        fireEvent.click(screen.getByRole("button", { name: /next match/i }));
         expect(screen.getByText("2/3")).toBeInTheDocument();
-        await user.click(screen.getByRole("button", { name: /previous match/i }));
+        fireEvent.click(screen.getByRole("button", { name: /previous match/i }));
         expect(screen.getByText("1/3")).toBeInTheDocument();
     });
 
     it("reports when nothing matches the query", async () => {
-        const user = userEvent.setup();
+        vitest.useFakeTimers();
         render(<ResultsTree webAppEvaluatedModel={result} />);
 
-        await user.type(searchBox(), "does-not-exist");
+        enterQuery("does-not-exist");
+        await finishSearch();
 
-        expect(await screen.findByText("No matching packages.")).toBeInTheDocument();
+        expect(screen.getByText("No matching packages.")).toBeInTheDocument();
         expect(screen.getByText("0/0")).toBeInTheDocument();
     });
 
@@ -169,14 +187,17 @@ describe("ResultsTree", () => {
     });
 
     it("applies the query only after typing pauses", async () => {
-        const user = userEvent.setup();
+        vitest.useFakeTimers();
         render(<ResultsTree webAppEvaluatedModel={result} />);
 
-        await user.type(searchBox(), "lib-b");
+        enterQuery("lib-b");
 
         expect(screen.getByText("Searching…")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: LIB_B })).not.toBeInTheDocument();
-        expect(await screen.findByRole("button", { name: LIB_B })).toBeInTheDocument();
+
+        await finishSearch();
+
+        expect(screen.getByRole("button", { name: LIB_B })).toBeInTheDocument();
         expect(screen.getByText("1/1")).toBeInTheDocument();
     });
 
@@ -229,13 +250,15 @@ describe("ResultsTree", () => {
         });
 
         it("mounts the matching row when searching for a dependency far down the tree", async () => {
-            const user = userEvent.setup();
-            render(<ResultsTree webAppEvaluatedModel={await buildResult(largeModel())} />);
+            const model = await buildResult(largeModel());
+            vitest.useFakeTimers();
+            render(<ResultsTree webAppEvaluatedModel={model} />);
 
-            await user.type(searchBox(), `lib-${LARGE_TREE_SIZE - 1}:`);
+            enterQuery(`lib-${LARGE_TREE_SIZE - 1}:`);
+            await finishSearch();
 
             expect(
-                await screen.findByRole("button", { name: `NPM:@ns:lib-${LARGE_TREE_SIZE - 1}:1.0.0` }),
+                screen.getByRole("button", { name: `NPM:@ns:lib-${LARGE_TREE_SIZE - 1}:1.0.0` }),
             ).toBeInTheDocument();
             expect(mountedRows()).toHaveLength(3);
         });
