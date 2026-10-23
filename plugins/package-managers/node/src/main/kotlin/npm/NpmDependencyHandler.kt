@@ -64,7 +64,12 @@ internal class NpmDependencyHandler(
 
     override fun createPackage(dependency: ModuleReference, issues: MutableCollection<Issue>): Package? =
         dependency.takeUnless { it.moduleInfo.isProject || !it.moduleInfo.isInstalled }?.let {
-            parsePackage(it.moduleInfo.packageJsonFile, moduleInfoResolver)
+            parsePackage(
+                it.moduleInfo.packageJsonFile,
+                moduleInfoResolver,
+                it.moduleInfo.isRegistryDependency,
+                it.moduleInfo.resolved
+            )
         }
 }
 

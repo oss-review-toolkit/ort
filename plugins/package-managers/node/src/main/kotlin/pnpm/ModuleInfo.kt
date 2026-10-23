@@ -26,6 +26,8 @@ import kotlinx.serialization.json.DecodeSequenceMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeToSequence
 
+import org.ossreviewtoolkit.plugins.packagemanagers.node.isGitOrLocalResolution
+
 private val JSON = Json { ignoreUnknownKeys = true }
 
 /**
@@ -59,5 +61,11 @@ internal data class ModuleInfo(
         val path: String,
         val dependencies: Map<String, Dependency> = emptyMap(),
         val optionalDependencies: Map<String, Dependency> = emptyMap()
-    )
+    ) {
+        /**
+         * Whether this dependency was installed from an npm-compatible registry, as opposed to a Git repository or
+         * the local file system, based on [resolved].
+         */
+        val isRegistryDependency: Boolean by lazy { !isGitOrLocalResolution(resolved) }
+    }
 }

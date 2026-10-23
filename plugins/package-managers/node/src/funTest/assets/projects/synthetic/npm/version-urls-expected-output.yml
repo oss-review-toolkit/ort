@@ -652,19 +652,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://github.com/tinydesk/angular-tileview/archive/ccf991b973e78e06d1c59e77200721e159a2d9e7.tar.gz"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "git+https://github.com/tinydesk/angular-tileview.git"
-    revision: ""
+    revision: "ccf991b973e78e06d1c59e77200721e159a2d9e7"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/tinydesk/angular-tileview.git"
-    revision: ""
+    revision: "ccf991b973e78e06d1c59e77200721e159a2d9e7"
     path: ""
 - id: "NPM::ansi-green:0.1.1"
   purl: "pkg:npm/ansi-green@0.1.1"
@@ -2110,19 +2110,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/gulp-format-md/-/gulp-format-md-1.0.0.tgz"
+    url: "https://github.com/jonschlinkert/gulp-format-md/archive/7008a050fc085c2981cc9ac86b57dbc49496a97e.tar.gz"
     hash:
-      value: "0a866365b5e118caef89cd449525d5477589da62"
-      algorithm: "SHA-1"
+      value: ""
+      algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/jonschlinkert/gulp-format-md.git"
-    revision: "ebcdcba3d9fb6eb16368921200b0621ec8178535"
+    revision: "7008a050fc085c2981cc9ac86b57dbc49496a97e"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/jonschlinkert/gulp-format-md.git"
-    revision: "ebcdcba3d9fb6eb16368921200b0621ec8178535"
+    revision: "7008a050fc085c2981cc9ac86b57dbc49496a97e"
     path: ""
 - id: "NPM::gulp-header:1.8.12"
   purl: "pkg:npm/gulp-header@1.8.12"
@@ -3536,10 +3536,10 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/mocha/-/mocha-5.2.0.tgz"
+    url: "https://github.com/mochajs/mocha/archive/5bd33a0ba201d227159759e8ced86756595b0c54.tar.gz"
     hash:
-      value: "6d8ae508f59167f940f2b5b3c4a612ae50c90ae6"
-      algorithm: "SHA-1"
+      value: ""
+      algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/mochajs/mocha.git"

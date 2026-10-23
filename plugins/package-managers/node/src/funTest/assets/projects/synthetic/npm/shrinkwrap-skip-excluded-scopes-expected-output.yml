@@ -715,10 +715,10 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/web-animations-js/-/web-animations-js-2.3.2.tgz"
+    url: "https://github.com/web-animations/web-animations-js/archive/64d83730282fdbce733460d44be52c132d6c04e9.tar.gz"
     hash:
-      value: "a51963a359c543f97b47c7d4bc2d811f9fc9e153"
-      algorithm: "SHA-1"
+      value: ""
+      algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/web-animations/web-animations-js.git"

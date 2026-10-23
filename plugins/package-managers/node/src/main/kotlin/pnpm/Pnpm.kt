@@ -147,6 +147,9 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         val moduleInfosForScope = scopes.associateWith { scope -> listModules(workingDir, scope) }
         requestAllPackageDetails(moduleInfosForScope) // Warm-up the cache.
 
+        // Warm-up the cache to speed-up processing.
+        handler.requestAllPackageDetails(moduleInfosForScope.values.flatten())
+
         return workspaceModuleDirs.map { projectDir ->
             val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
             val project = parseProject(packageJsonFile, analysisRoot)
@@ -221,7 +224,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
     }
 }
 
-private fun ModuleInfo.getScopeDependencies(scope: Scope) =
+internal fun ModuleInfo.getScopeDependencies(scope: Scope) =
     when (scope) {
         Scope.DEPENDENCIES -> buildList {
             addAll(dependencies.values)

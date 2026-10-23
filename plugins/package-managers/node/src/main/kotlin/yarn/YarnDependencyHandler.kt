@@ -76,6 +76,11 @@ internal class YarnDependencyHandler(
     override fun createPackage(dependency: YarnListNode, issues: MutableCollection<Issue>): Package? {
         val packageJson = packageJsonForModuleId[dependency.name]?.takeUnless { dependency.isProject } ?: return null
 
+        // Note: Unlike for the other Node.js package managers, there is currently no reliable way to determine
+        // whether a dependency was actually resolved from an npm-compatible registry, as `yarn list` does not
+        // report this information. So the registry is always queried, which could return outdated or unrelated
+        // metadata for Git, URL, or local dependencies that happen to share their name and version with an
+        // unrelated published package.
         return parsePackage(packageJson, moduleInfoResolver)
     }
 
