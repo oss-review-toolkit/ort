@@ -181,6 +181,21 @@ sealed class SpdxExpression {
     fun offersChoice(): Boolean = validChoices().size > 1
 
     /**
+     * Return true if this expression satisfies the [other] expression. The "or-later" semantic / plus operator is not
+     * handled.
+     */
+    fun satisfies(other: SpdxExpression): Boolean {
+        val conjunctions = toDnf().ifEmpty { return false }
+        val otherConjunctions = other.toDnf().ifEmpty { return false }
+
+        return conjunctions.any { conjunction ->
+            otherConjunctions.any { otherConjunction ->
+                conjunction.containsAll(otherConjunction)
+            }
+        }
+    }
+
+    /**
      * Apply a license [choice], optionally limited to the given [subExpression], and return an [SpdxExpression] where
      * the choice is resolved.
      */

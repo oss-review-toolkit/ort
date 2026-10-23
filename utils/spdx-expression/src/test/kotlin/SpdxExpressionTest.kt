@@ -570,6 +570,38 @@ class SpdxExpressionTest : WordSpec({
         }
     }
 
+    "satisfies()" should {
+        "return true if expressions are identical" {
+            "A".toSpdx().satisfies("A".toSpdx()) shouldBe true
+            "A WITH E".toSpdx().satisfies("A WITH E".toSpdx()) shouldBe true
+        }
+
+        "return false if expressions are different" {
+            "A".toSpdx().satisfies("B".toSpdx()) shouldBe false
+            "A WITH E".toSpdx().satisfies("A WITH F".toSpdx()) shouldBe false
+            "A".toSpdx().satisfies("A WITH E".toSpdx()) shouldBe false
+        }
+
+        "properly handle single OR expression, and exceptions" {
+            "A".toSpdx().satisfies("A OR B".toSpdx()) shouldBe true
+            "B".toSpdx().satisfies("A OR B".toSpdx()) shouldBe true
+            "C".toSpdx().satisfies("A OR B".toSpdx()) shouldBe false
+            "A WITH E".toSpdx().satisfies("A WITH E OR B".toSpdx()) shouldBe true
+        }
+
+        "properly handle a single AND expression, and exceptions" {
+            "A AND B".toSpdx().satisfies("A".toSpdx()) shouldBe true
+            "A".toSpdx().satisfies("A AND B".toSpdx()) shouldBe false
+            "A WITH E AND B".toSpdx().satisfies("A WITH E".toSpdx()) shouldBe true
+        }
+
+        "properly handle nested compound expressions" {
+            "A AND C".toSpdx().satisfies("(A OR B) AND C".toSpdx()) shouldBe true
+            "B AND C".toSpdx().satisfies("(A OR B) AND C".toSpdx()) shouldBe true
+            "A".toSpdx().satisfies("(A OR B) AND C".toSpdx()) shouldBe false
+        }
+    }
+
     "toDnf()" should {
         "return the DNF for a single license, and exception" {
             "A".toSpdx().toDnf() shouldBe setOf(
