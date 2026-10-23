@@ -97,6 +97,35 @@ class SpdxCompoundExpression(
         return checkNotNull(getSortedChildrenWithSameOperator(this).toExpression(operator))
     }
 
+    override fun toDnf(): Set<Set<String>> =
+        when (operator) {
+            SpdxOperator.OR -> {
+                children.flatMapTo(mutableSetOf()) { it.toDnf() }
+            }
+
+            SpdxOperator.AND -> {
+                children.fold(setOf()) { acc, child ->
+                    val childDnf = child.toDnf()
+                    if (acc.isEmpty()) {
+                        childDnf
+                    } else {
+                        val combined = mutableSetOf<Set<String>>()
+
+                        for (lSet in acc) {
+                            for (rSet in childDnf) {
+                                val newSet = LinkedHashSet<String>(lSet.size + rSet.size)
+                                newSet.addAll(lSet)
+                                newSet.addAll(rSet)
+                                combined.add(newSet)
+                            }
+                        }
+
+                        combined
+                    }
+                }
+            }
+        }
+
     override fun validate(strictness: Strictness) {
         children.forEach { it.validate(strictness) }
     }

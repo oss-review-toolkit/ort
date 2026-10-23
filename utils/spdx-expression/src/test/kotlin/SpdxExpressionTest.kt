@@ -570,6 +570,68 @@ class SpdxExpressionTest : WordSpec({
         }
     }
 
+    "toDnf()" should {
+        "return the DNF for a single license, and exception" {
+            "A".toSpdx().toDnf() shouldBe setOf(
+                setOf("A")
+            )
+
+            "A WITH E".toSpdx().toDnf() shouldBe setOf(
+                setOf("A WITH E")
+            )
+        }
+
+        "return the DNF for an OR with single licenses, and exceptions" {
+            "A OR B".toSpdx().toDnf() shouldBe setOf(
+                setOf("A"),
+                setOf("B")
+            )
+
+            "A WITH E OR B WITH F".toSpdx().toDnf() shouldBe setOf(
+                setOf("A WITH E"),
+                setOf("B WITH F")
+            )
+        }
+
+        "return the DNF for an AND with single licenses, and exceptions" {
+            "A AND B".toSpdx().toDnf() shouldBe setOf(
+                setOf("A", "B")
+            )
+
+            "A WITH E AND B WITH F".toSpdx().toDnf() shouldBe setOf(
+                setOf("A WITH E", "B WITH F")
+            )
+        }
+
+        "return the DNF for a nested AND within an OR" {
+            "A OR B AND C".toSpdx().toDnf() shouldBe setOf(
+                setOf("A"),
+                setOf("B", "C")
+            )
+        }
+
+        "return the DNF for a nested OR within an AND" {
+            "(A OR B) AND C".toSpdx().toDnf() shouldBe setOf(
+                setOf("A", "C"),
+                setOf("B", "C")
+            )
+        }
+
+        "return a DNF which does not contain duplicates" {
+            "(A OR B) AND (C OR A)".toSpdx().toDnf() shouldBe setOf(
+                setOf("A", "C"),
+                setOf("A"),
+                setOf("B", "C"),
+                setOf("A", "B")
+            )
+
+            "(A OR B) AND (A OR B)".toSpdx().toDnf() shouldBe setOf(
+                setOf("A"),
+                setOf("B")
+            )
+        }
+    }
+
     "toString()" should {
         "return the textual SPDX expression" {
             val expression = "A+ AND (B WITH E OR C+) AND D WITH F"

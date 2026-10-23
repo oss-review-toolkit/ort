@@ -52,4 +52,6 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
      * Otherwise, return null.
      */
     abstract fun getLicenseUrl(): String?
+
+    override fun toDnf(): Set<Set<String>> = setOf(setOf(toString()))
 }

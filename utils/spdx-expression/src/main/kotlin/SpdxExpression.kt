@@ -133,6 +133,11 @@ sealed class SpdxExpression {
     open fun sorted(): SpdxExpression = this
 
     /**
+     * Converts this expression into the Disjunctive Normal Form (DNF).
+     */
+    internal abstract fun toDnf(): Set<Set<String>>
+
+    /**
      * Validate this expression. [strictness] defines whether only the syntax is checked
      * ([ALLOW_ANY][Strictness.ALLOW_ANY]), or semantics are also checked but deprecated license identifiers are
      * allowed ([ALLOW_DEPRECATED][Strictness.ALLOW_DEPRECATED]) or only current license identifiers are allowed
