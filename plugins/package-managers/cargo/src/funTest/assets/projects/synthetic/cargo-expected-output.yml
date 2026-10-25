@@ -135,6 +135,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to generate structures which behave like bitflags.\n"
@@ -166,6 +167,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to ergonomically define an item depending on a large number\
@@ -198,6 +200,7 @@ packages:
   - "Nuxi and contributors"
   declared_licenses:
   - "BSD-2-Clause"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-2-Clause"
   description: "Low level interface to CloudABI. Contains all syscalls and related\
@@ -229,6 +232,7 @@ packages:
   - "Erick Tryzelaar"
   declared_licenses:
   - "NOASSERTION"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "NOASSERTION"
   description: "Rust crate for the Fuchsia cryptographically secure pseudorandom number\
@@ -260,6 +264,7 @@ packages:
   - "The Rust Project Developers"
   declared_licenses:
   - "MIT OR Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Raw FFI bindings to platform libraries like libc.\n"
@@ -292,6 +297,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Random number generators and other randomness functionality.\n"
@@ -324,6 +330,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "ChaCha random number generator\n"
@@ -356,6 +363,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Core random number generator traits and tools for implementation.\n"
@@ -388,6 +396,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Core random number generator traits and tools for implementation.\n"
@@ -419,6 +428,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "HC128 random number generator\n"
@@ -451,6 +461,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "ISAAC random number generator\n"
@@ -481,6 +492,7 @@ packages:
   - "The Rand Project Developers"
   declared_licenses:
   - "MIT OR Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Random number generator based on timing jitter"
@@ -512,6 +524,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "OS backed Random Number Generator"
@@ -543,6 +556,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Selected PCG random number generators\n"
@@ -575,6 +589,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Xorshift random number generator\n"
@@ -605,6 +620,7 @@ packages:
   - "Simonas Kazlauskas"
   declared_licenses:
   - "ISC"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "An implementation of random number generator based on rdrand and rdseed\
@@ -637,6 +653,7 @@ packages:
   - "Mathijs van de Nes"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Synchronization primitives based on spinning.\nThey may contain data,\
@@ -669,6 +686,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Raw FFI bindings for all of Windows API."
@@ -700,6 +718,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Import libraries for the i686-pc-windows-gnu target. Please don't\
@@ -732,6 +751,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Import libraries for the x86_64-pc-windows-gnu target. Please don't\
