@@ -1,21 +1,5 @@
 ---
 projects:
-- id: "Gradle:org.ossreviewtoolkit.gradle.nodemodules.example:example-native-module:1.0.0"
-  definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-node-modules/node_modules/example-native-module/android"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "<REPLACE_VCS_PROCESSED_URL>"
-    revision: "<REPLACE_VCS_REVISION>"
-    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-node-modules/node_modules/example-native-module/android"
-  homepage_url: ""
-  scopes: []
 - id: "Gradle:org.ossreviewtoolkit.gradle.nodemodules.example:gradle-node-modules-project:1.0.0"
   definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-node-modules/build.gradle.kts"
   declared_licenses: []
@@ -48,4 +32,31 @@ projects:
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.nodemodules.example:example-native-module:1.0.0"
       linkage: "PROJECT_DYNAMIC"
-packages: []
+packages:
+- id: "Gradle:org.ossreviewtoolkit.gradle.nodemodules.example:example-native-module:1.0.0"
+  purl: ""
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-node-modules/node_modules/example-native-module/android"
+  is_metadata_only: true

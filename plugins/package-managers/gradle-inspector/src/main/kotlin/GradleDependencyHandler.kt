@@ -34,14 +34,12 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processProjectVcs
 import org.ossreviewtoolkit.downloader.VcsHost
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -68,23 +66,11 @@ internal class GradleDependencyHandler(
 ) : DependencyHandler<OrtComponentReference> {
     private val componentForId = mutableMapOf<OrtComponentIdentifier, OrtComponent>()
 
-    /**
-     * A map to keep track of [Project]s that have been injected by other package managers (e.g. via React
-     * Native's autolinking). As these projects do not correspond to a definition file processed by this package
-     * manager, they need to be added to the final result explicitly.
-     */
-    private val externalProjects = mutableMapOf<Identifier, Project>()
-
     private fun OrtComponentReference.component(): OrtComponent = componentForId.getValue(componentId)
 
     fun setTreeModel(treeModel: OrtDependencyTreeModel) {
         treeModel.components.associateByTo(componentForId) { it.componentId }
     }
-
-    /**
-     * Return the [Project]s collected so far from external package managers, see [externalProjects].
-     */
-    fun externalProjects(): Collection<Project> = externalProjects.values
 
     override fun identifierFor(dependency: OrtComponentReference): Identifier =
         with(dependency.componentId) {
@@ -109,11 +95,17 @@ internal class GradleDependencyHandler(
         // substituted from another package manager's directory, register an external project for it instead, so that
         // the dependency graph stays consistent.
         if (dependency.isProjectDependency) {
-            component.projectDir?.takeIf { it.isInsideIgnoredDirectory() }?.let { projectDir ->
-                dependency.registerExternalProject(projectDir)
+            val projectDir = component.projectDir
+            return if (projectDir != null && projectDir.isInsideIgnoredDirectory()) {
+                val id = identifierFor(dependency)
+                Package.EMPTY.copy(
+                    id = id,
+                    vcsProcessed = processProjectVcs(projectDir),
+                    isMetadataOnly = true
+                )
+            } else {
+                null
             }
-
-            return null
         }
 
         val id = identifierFor(dependency)
@@ -234,24 +226,6 @@ internal class GradleDependencyHandler(
      */
     val OrtComponentReference.isProjectDependency: Boolean
         get() = component().localPath != null
-
-    /**
-     * Create and store an external [Project] for this dependency. This function is called for projects which Gradle
-     * resolved as a project dependency pointing to [projectDir], but which are not part of the Gradle build actually
-     * being analyzed (e.g. because it is an artifact substituted from another package manager's directory via
-     * autolinking). If a project with the same [Identifier] was already registered, it is not created again.
-     */
-    private fun OrtComponentReference.registerExternalProject(projectDir: File) {
-        val id = identifierFor(this)
-
-        externalProjects.getOrPut(id) {
-            Project.EMPTY.copy(
-                id = id,
-                definitionFilePath = VersionControlSystem.getPathInfo(projectDir).path,
-                vcsProcessed = processProjectVcs(projectDir)
-            )
-        }
-    }
 }
 
 /**
