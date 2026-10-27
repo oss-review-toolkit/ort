@@ -69,7 +69,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
     - name: Install mise
-      uses: jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e # v5.2.3
+      uses: jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d # v5.2.4
       if: runner.os != 'Windows'
     - name: Run unit tests in a minimal environment
       run: mise gradle --scan test jacocoTestReport
@@ -96,7 +96,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
     - name: Install mise
-      uses: jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e # v5.2.3
+      uses: jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d # v5.2.4
     - name: Run functional tests that do not require external tools
       env:
         OSSKB_API_KEY: ${{ secrets.OSSKB_API_KEY }}
