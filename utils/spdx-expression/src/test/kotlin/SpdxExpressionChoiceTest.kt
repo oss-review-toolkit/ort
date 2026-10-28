@@ -30,96 +30,96 @@ import kotlin.time.Duration.Companion.milliseconds
 class SpdxExpressionChoiceTest : WordSpec({
     "applyChoice()" should {
         "return the choice for a simple expression" {
-            val expression = "a".toSpdx()
-            val choice = "a".toSpdx()
+            val expression = "A".toSpdx()
+            val choice = "A".toSpdx()
 
             val result = expression.applyChoice(choice)
 
-            result shouldBe "a".toSpdx()
+            result shouldBe "A".toSpdx()
         }
 
         "throw an exception if a choice picks a license which is not part of the expression" {
-            val expression = "a".toSpdx()
-            val choice = "b".toSpdx()
+            val expression = "A".toSpdx()
+            val choice = "B".toSpdx()
 
             shouldThrow<InvalidLicenseChoiceException> { expression.applyChoice(choice) }
         }
 
         "return the new expression if only a part of the expression is matched by the subExpression" {
-            val expression = "a OR b OR c".toSpdx()
-            val choice = "b".toSpdx()
-            val subExpression = "a OR b".toSpdx()
+            val expression = "A OR B OR C".toSpdx()
+            val choice = "B".toSpdx()
+            val subExpression = "A OR B".toSpdx()
 
             val result = expression.applyChoice(choice, subExpression)
 
-            result shouldBe "b OR c".toSpdx()
+            result shouldBe "B OR C".toSpdx()
         }
 
         "work with choices that itself are a choice" {
-            val expression = "a OR b OR c OR d".toSpdx()
-            val choice = "a OR b".toSpdx()
-            val subExpression = "a OR b OR c".toSpdx()
+            val expression = "A OR B OR C OR D".toSpdx()
+            val choice = "A OR B".toSpdx()
+            val subExpression = "A OR B OR C".toSpdx()
 
             val result = expression.applyChoice(choice, subExpression)
 
-            result shouldBe "a OR b OR d".toSpdx()
+            result shouldBe "A OR B OR D".toSpdx()
         }
 
         "apply the choice if the expression contains multiple choices" {
-            val expression = "a OR b OR c".toSpdx()
-            val choice = "b".toSpdx()
+            val expression = "A OR B OR C".toSpdx()
+            val choice = "B".toSpdx()
 
             val result = expression.applyChoice(choice)
 
-            result shouldBe "b".toSpdx()
+            result shouldBe "B".toSpdx()
         }
 
         "throw an exception if the chosen license is not a valid option" {
-            val expression = "a OR b".toSpdx()
-            val choice = "c".toSpdx()
+            val expression = "A OR B".toSpdx()
+            val choice = "C".toSpdx()
 
             shouldThrow<InvalidLicenseChoiceException> { expression.applyChoice(choice) }
         }
 
         "apply the choice even if not literally contained in the expression" {
-            val expression = "(a OR b) AND c".toSpdx()
-            val choice = "a AND c".toSpdx()
+            val expression = "(A OR B) AND C".toSpdx()
+            val choice = "A AND C".toSpdx()
 
             val result = expression.applyChoice(choice)
 
-            result shouldBe "a AND c".toSpdx()
+            result shouldBe "A AND C".toSpdx()
         }
 
         "return the reduced subExpression if the choice was valid" {
-            val expression = "(a OR b) AND c AND (d OR e)".toSpdx()
-            val choice = "a AND c AND d".toSpdx()
-            val subExpression = "a AND c AND d OR a AND c AND e".toSpdx()
+            val expression = "(A OR B) AND C AND (D OR E)".toSpdx()
+            val choice = "A AND C AND D".toSpdx()
+            val subExpression = "A AND C AND D OR A AND C AND E".toSpdx()
 
             val result = expression.applyChoice(choice, subExpression)
 
-            result shouldBe "a AND c AND d OR b AND c AND d OR b AND c AND e".toSpdx()
+            result shouldBe "A AND C AND D OR B AND C AND D OR B AND C AND E".toSpdx()
         }
 
         "throw an exception if the subExpression does not match the simple expression" {
-            val expression = "a".toSpdx()
-            val choice = "x".toSpdx()
-            val subExpression = "x OR y".toSpdx()
+            val expression = "A".toSpdx()
+            val choice = "X".toSpdx()
+            val subExpression = "X OR Y".toSpdx()
 
             shouldThrow<InvalidSubExpressionException> { expression.applyChoice(choice, subExpression) }
         }
 
         "throw an exception if the subExpression does not match the expression" {
-            val expression = "a OR b OR c".toSpdx()
-            val choice = "x".toSpdx()
-            val subExpression = "x OR y OR z".toSpdx()
+            val expression = "A OR B OR C".toSpdx()
+            val choice = "X".toSpdx()
+            val subExpression = "X OR Y OR Z".toSpdx()
 
             shouldThrow<InvalidSubExpressionException> { expression.applyChoice(choice, subExpression) }
         }
 
         "throw an exception if the subExpression does not match" {
-            val expression = "(a OR b) AND c AND (d OR e)".toSpdx()
-            val choice = "a AND c AND d".toSpdx()
-            val subExpression = "(a AND c AND d) OR (x AND y AND z)".toSpdx()
+            val expression = "(A OR B) AND C AND (D OR E)".toSpdx()
+            val choice = "A AND C AND D".toSpdx()
+            val subExpression = "(A AND C AND D) OR (X AND Y AND Z)".toSpdx()
 
             shouldThrow<InvalidSubExpressionException> { expression.applyChoice(choice, subExpression) }
         }
@@ -138,77 +138,77 @@ class SpdxExpressionChoiceTest : WordSpec({
 
     "applyChoices()" should {
         "return the correct result if a single choice is applied" {
-            val expression = "a OR b OR c OR d".toSpdx()
+            val expression = "A OR B OR C OR D".toSpdx()
 
-            val choices = listOf(SpdxLicenseChoice(expression, "a".toSpdx()))
+            val choices = listOf(SpdxLicenseChoice(expression, "A".toSpdx()))
 
             val result = expression.applyChoices(choices)
 
-            result shouldBe "a".toSpdx()
+            result shouldBe "A".toSpdx()
         }
 
         "return the correct result if multiple simple choices are applied" {
-            val expression = "(a OR b) AND (c OR d)".toSpdx()
+            val expression = "(A OR B) AND (C OR D)".toSpdx()
 
             val choices = listOf(
-                SpdxLicenseChoice("a OR b".toSpdx(), "a".toSpdx()),
-                SpdxLicenseChoice("c OR d".toSpdx(), "c".toSpdx())
+                SpdxLicenseChoice("A OR B".toSpdx(), "A".toSpdx()),
+                SpdxLicenseChoice("C OR D".toSpdx(), "C".toSpdx())
             )
 
             val result = expression.applyChoices(choices)
 
-            result shouldBe "a AND c".toSpdx()
+            result shouldBe "A AND C".toSpdx()
         }
 
         "ignore invalid sub-expressions and return the correct result for valid choices" {
-            val expression = "a OR b OR c OR d".toSpdx()
+            val expression = "A OR B OR C OR D".toSpdx()
 
             val choices = listOf(
-                SpdxLicenseChoice("a OR b".toSpdx(), "b".toSpdx()), // b OR c OR d
-                SpdxLicenseChoice("a OR c".toSpdx(), "a".toSpdx()) // not applied
+                SpdxLicenseChoice("A OR B".toSpdx(), "B".toSpdx()), // B OR C OR D
+                SpdxLicenseChoice("A OR C".toSpdx(), "A".toSpdx()) // not applied
             )
 
             val result = expression.applyChoices(choices)
 
-            result shouldBe "b OR c OR d".toSpdx()
+            result shouldBe "B OR C OR D".toSpdx()
         }
 
         "apply the second choice to the effective license after the first choice" {
-            val expression = "a OR b OR c OR d".toSpdx()
+            val expression = "A OR B OR C OR D".toSpdx()
 
             val choices = listOf(
-                SpdxLicenseChoice("a OR b".toSpdx(), "b".toSpdx()), // b OR c OR d
-                SpdxLicenseChoice("b OR c".toSpdx(), "b".toSpdx()) // b OR d
+                SpdxLicenseChoice("A OR B".toSpdx(), "B".toSpdx()), // B OR C OR D
+                SpdxLicenseChoice("B OR C".toSpdx(), "B".toSpdx()) // B OR D
             )
 
             val result = expression.applyChoices(choices)
 
-            result shouldBe "b OR d".toSpdx()
+            result shouldBe "B OR D".toSpdx()
         }
 
         "apply a single choice to multiple expressions" {
-            val expression = "(a OR b) AND (c OR d) AND (a OR e)".toSpdx()
+            val expression = "(A OR B) AND (C OR D) AND (A OR E)".toSpdx()
 
             val choices = listOf(
-                SpdxLicenseChoice("a OR b".toSpdx(), "a".toSpdx()),
-                SpdxLicenseChoice("a OR e".toSpdx(), "a".toSpdx())
+                SpdxLicenseChoice("A OR B".toSpdx(), "A".toSpdx()),
+                SpdxLicenseChoice("A OR E".toSpdx(), "A".toSpdx())
             )
 
             val result = expression.applyChoices(choices)
 
-            result shouldBe "a AND (c OR d) AND a".toSpdx()
+            result shouldBe "A AND (C OR D) AND A".toSpdx()
         }
 
         "given expressions should match semantically equivalent license expressions" {
-            val expression = "a OR b".toSpdx()
+            val expression = "A OR B".toSpdx()
 
             val choices = listOf(
-                SpdxLicenseChoice("b OR a".toSpdx(), "a".toSpdx())
+                SpdxLicenseChoice("B OR A".toSpdx(), "A".toSpdx())
             )
 
             val result = expression.applyChoices(choices)
 
-            result shouldBe "a".toSpdx()
+            result shouldBe "A".toSpdx()
         }
 
         "apply choices regardless of license order in an OR-expression" {
@@ -276,103 +276,102 @@ class SpdxExpressionChoiceTest : WordSpec({
 
     "isValidChoice()" should {
         "return true if a choice is valid" {
-            val spdxExpression = "(a OR b) AND c AND (d OR e)".toSpdx()
+            val spdxExpression = "(A OR B) AND C AND (D OR E)".toSpdx()
 
-            spdxExpression.isValidChoice("a AND c AND d".toSpdx()) shouldBe true
-            spdxExpression.isValidChoice("a AND d AND c".toSpdx()) shouldBe true
-            spdxExpression.isValidChoice("c AND a AND d".toSpdx()) shouldBe true
-            spdxExpression.isValidChoice("c AND d AND a".toSpdx()) shouldBe true
-            spdxExpression.isValidChoice("d AND a AND c".toSpdx()) shouldBe true
-            spdxExpression.isValidChoice("d AND c AND a".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("A AND C AND D".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("A AND D AND C".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("C AND A AND D".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("C AND D AND A".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("D AND A AND C".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("D AND C AND A".toSpdx()) shouldBe true
 
-            spdxExpression.isValidChoice("a AND c AND e".toSpdx()) shouldBe true
-            spdxExpression.isValidChoice("b AND c AND d".toSpdx()) shouldBe true
-            spdxExpression.isValidChoice("b AND c AND e".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("A AND C AND E".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("B AND C AND D".toSpdx()) shouldBe true
+            spdxExpression.isValidChoice("B AND C AND E".toSpdx()) shouldBe true
         }
 
         "return false if a choice is invalid" {
-            val spdxExpression = "(a OR b) AND c AND (d OR e)".toSpdx()
+            val spdxExpression = "(A OR B) AND C AND (D OR E)".toSpdx()
 
-            spdxExpression.isValidChoice("a".toSpdx()) shouldBe false
-            spdxExpression.isValidChoice("a AND b".toSpdx()) shouldBe false
-            spdxExpression.isValidChoice("a AND c".toSpdx()) shouldBe false
-            spdxExpression.isValidChoice("a AND d".toSpdx()) shouldBe false
-            spdxExpression.isValidChoice("a AND e".toSpdx()) shouldBe false
-            spdxExpression.isValidChoice("a AND b AND c".toSpdx()) shouldBe false
-            spdxExpression.isValidChoice("a AND b AND d".toSpdx()) shouldBe false
-            spdxExpression.isValidChoice("a AND b AND c AND d".toSpdx()) shouldBe false
+            spdxExpression.isValidChoice("A".toSpdx()) shouldBe false
+            spdxExpression.isValidChoice("A AND B".toSpdx()) shouldBe false
+            spdxExpression.isValidChoice("A AND C".toSpdx()) shouldBe false
+            spdxExpression.isValidChoice("A AND D".toSpdx()) shouldBe false
+            spdxExpression.isValidChoice("A AND E".toSpdx()) shouldBe false
+            spdxExpression.isValidChoice("A AND B AND C".toSpdx()) shouldBe false
+            spdxExpression.isValidChoice("A AND B AND D".toSpdx()) shouldBe false
+            spdxExpression.isValidChoice("A AND B AND C AND D".toSpdx()) shouldBe false
         }
 
         "return true for a simplified choice for a complex expression" {
-            val license = "(MIT OR GPL-2.0-only) AND (MIT OR BSD-3-Clause OR GPL-1.0-or-later) AND " +
-                "(MIT OR BSD-3-Clause OR GPL-2.0-only)"
+            val license = "(A OR B) AND (A OR C OR D) AND (A OR C OR B)"
 
-            license.toSpdx().isValidChoice("MIT".toSpdx()) shouldBe true
+            license.toSpdx().isValidChoice("A".toSpdx()) shouldBe true
         }
     }
 
     "offersChoice()" should {
         "return true if the expression contains the OR operator" {
-            "a OR b".toSpdx().offersChoice() shouldBe true
-            "a AND b OR c".toSpdx().offersChoice() shouldBe true
-            "a OR b AND c".toSpdx().offersChoice() shouldBe true
-            "a AND b AND c OR d".toSpdx().offersChoice() shouldBe true
+            "A OR B".toSpdx().offersChoice() shouldBe true
+            "A AND B OR C".toSpdx().offersChoice() shouldBe true
+            "A OR B AND C".toSpdx().offersChoice() shouldBe true
+            "A AND B AND C OR D".toSpdx().offersChoice() shouldBe true
         }
 
         "return false if the expression does not contain the OR operator" {
-            "a".toSpdx().offersChoice() shouldBe false
-            "a AND b".toSpdx().offersChoice() shouldBe false
-            "a AND b AND c".toSpdx().offersChoice() shouldBe false
+            "A".toSpdx().offersChoice() shouldBe false
+            "A AND B".toSpdx().offersChoice() shouldBe false
+            "A AND B AND C".toSpdx().offersChoice() shouldBe false
         }
 
         "return false if the expression contains the OR operator with equal operands" {
-            "a OR a".toSpdx().offersChoice() shouldBe false
+            "A OR A".toSpdx().offersChoice() shouldBe false
         }
     }
 
     "validChoices()" should {
         "return the original terms of an expression in DNF" {
-            val choices = "(a AND b) OR (c AND d) OR (e AND f)".toSpdx().validChoices()
+            val choices = "(A AND B) OR (C AND D) OR (E AND F)".toSpdx().validChoices()
 
             choices.map { it.toString() } should containExactlyInAnyOrder(
-                "a AND b",
-                "c AND d",
-                "e AND f"
+                "A AND B",
+                "C AND D",
+                "E AND F"
             )
         }
 
         "return the distribution of all terms of an expression in CNF" {
-            val choices = "(a OR b) AND (c OR d)".toSpdx().validChoices()
+            val choices = "(A OR B) AND (C OR D)".toSpdx().validChoices()
 
             choices.map { it.toString() } should containExactlyInAnyOrder(
-                "a AND c",
-                "a AND d",
-                "b AND c",
-                "b AND d"
+                "A AND C",
+                "A AND D",
+                "B AND C",
+                "B AND D"
             )
         }
 
         "return the valid choices for a complex expression" {
-            val choices = "(a OR b) AND c AND (d OR e)".toSpdx().validChoices()
+            val choices = "(A OR B) AND C AND (D OR E)".toSpdx().validChoices()
 
             choices.map { it.toString() } should containExactlyInAnyOrder(
-                "a AND c AND d",
-                "a AND c AND e",
-                "b AND c AND d",
-                "b AND c AND e"
+                "A AND C AND D",
+                "A AND C AND E",
+                "B AND C AND D",
+                "B AND C AND E"
             )
         }
 
         "return the valid choices for a nested expression" {
-            val choices = "(a OR (b AND (c OR d))) AND (e OR f)".toSpdx().validChoices()
+            val choices = "(A OR (B AND (C OR D))) AND (E OR F)".toSpdx().validChoices()
 
             choices.map { it.toString() } should containExactlyInAnyOrder(
-                "a AND e",
-                "a AND f",
-                "b AND c AND e",
-                "b AND c AND f",
-                "b AND d AND e",
-                "b AND d AND f"
+                "A AND E",
+                "A AND F",
+                "B AND C AND E",
+                "B AND C AND F",
+                "B AND D AND E",
+                "B AND D AND F"
             )
         }
 
