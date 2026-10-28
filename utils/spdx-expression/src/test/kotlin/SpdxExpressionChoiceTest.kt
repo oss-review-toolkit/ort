@@ -38,7 +38,7 @@ class SpdxExpressionChoiceTest : WordSpec({
             result shouldBe "a".toSpdx()
         }
 
-        "throw an exception if the user chose a wrong license for a simple expression" {
+        "throw an exception if a choice picks a license which is not part of the expression" {
             val expression = "a".toSpdx()
             val choice = "b".toSpdx()
 
