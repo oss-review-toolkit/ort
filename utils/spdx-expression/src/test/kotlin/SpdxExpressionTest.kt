@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression.Strictness
 
 class SpdxExpressionTest : WordSpec({
     "A dummy SpdxExpression" should {
-        val dummyExpression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
+        val dummyExpression = "A+ AND (B WITH exception1 OR C+) AND D WITH exception2"
 
         "be serializable to a string representation" {
             val spdxExpression = dummyExpression.toSpdx()
@@ -58,17 +58,17 @@ class SpdxExpressionTest : WordSpec({
 
             deserializedExpression shouldBe SpdxCompoundExpression(
                 SpdxOperator.AND,
-                SpdxLicenseIdExpression("a", true),
+                SpdxLicenseIdExpression("A", true),
                 SpdxCompoundExpression(
                     SpdxOperator.OR,
                     SpdxLicenseWithExceptionExpression(
-                        SpdxLicenseIdExpression("b"),
+                        SpdxLicenseIdExpression("B"),
                         "exception1"
                     ),
-                    SpdxLicenseIdExpression("c", true)
+                    SpdxLicenseIdExpression("C", true)
                 ),
                 SpdxLicenseWithExceptionExpression(
-                    SpdxLicenseIdExpression("d"),
+                    SpdxLicenseIdExpression("D"),
                     "exception2"
                 )
             )
@@ -503,24 +503,24 @@ class SpdxExpressionTest : WordSpec({
 
     "sort()" should {
         "not change already sorted expressions" {
-            "a AND b".toSpdx().sorted() should beString("a AND b")
-            "(a OR b) AND (c OR d)".toSpdx().sorted() should beString("(a OR b) AND (c OR d)")
+            "A AND B".toSpdx().sorted() should beString("A AND B")
+            "(A OR B) AND (C OR D)".toSpdx().sorted() should beString("(A OR B) AND (C OR D)")
         }
 
         "correctly sort simple expressions" {
-            "b AND a".toSpdx().sorted() should beString("a AND b")
-            "b OR a".toSpdx().sorted() should beString("a OR b")
-            "c AND b AND a".toSpdx().sorted() should beString("a AND b AND c")
+            "B AND A".toSpdx().sorted() should beString("A AND B")
+            "B OR A".toSpdx().sorted() should beString("A OR B")
+            "C AND B AND A".toSpdx().sorted() should beString("A AND B AND C")
         }
 
         "correctly sort a complex expression" {
-            "(h OR g) AND (f OR e) OR (c OR d) AND (a OR b)".toSpdx().sorted() should
-                beString("((a OR b) AND (c OR d)) OR ((e OR f) AND (g OR h))")
+            "(H OR G) AND (F OR E) OR (C OR D) AND (A OR B)".toSpdx().sorted() should
+                beString("((A OR B) AND (C OR D)) OR ((E OR F) AND (G OR H))")
         }
 
         "correctly sort sub-expressions with the same prefixes" {
-            "(a OR d) AND (a OR b)".toSpdx().sorted() should beString("(a OR b) AND (a OR d)")
-            "(a AND b AND d) OR (a AND b AND c)".toSpdx().sorted() should beString("(a AND b AND c) OR (a AND b AND d)")
+            "(A OR D) AND (A OR B)".toSpdx().sorted() should beString("(A OR B) AND (A OR D)")
+            "(A AND B AND D) OR (A AND B AND C)".toSpdx().sorted() should beString("(A AND B AND C) OR (A AND B AND D)")
         }
 
         "correctly sort nested compound expressions" {
@@ -539,25 +539,25 @@ class SpdxExpressionTest : WordSpec({
 
     "equals()" should {
         "return true for semantically equal expressions" {
-            "a".toSpdx() shouldBe "a".toSpdx()
-            "a".toSpdx() shouldBe "a AND a".toSpdx()
-            "a AND a".toSpdx() shouldBe "a".toSpdx()
-            "a".toSpdx() shouldBe "a OR a".toSpdx()
-            "a OR a".toSpdx() shouldBe "a".toSpdx()
-            "a+".toSpdx() shouldBe "a+".toSpdx()
-            "a WITH b".toSpdx() shouldBe "a WITH b".toSpdx()
-            "a AND b".toSpdx() shouldBe "b AND a".toSpdx()
-            "a AND (b OR c)".toSpdx() shouldBe "(a AND b) OR (a AND c)".toSpdx()
+            "A".toSpdx() shouldBe "A".toSpdx()
+            "A".toSpdx() shouldBe "A AND A".toSpdx()
+            "A AND A".toSpdx() shouldBe "A".toSpdx()
+            "A".toSpdx() shouldBe "A OR A".toSpdx()
+            "A OR A".toSpdx() shouldBe "A".toSpdx()
+            "A+".toSpdx() shouldBe "A+".toSpdx()
+            "A WITH B".toSpdx() shouldBe "A WITH B".toSpdx()
+            "A AND B".toSpdx() shouldBe "B AND A".toSpdx()
+            "A AND (B OR C)".toSpdx() shouldBe "(A AND B) OR (A AND C)".toSpdx()
         }
 
         "return false for semantically different expressions" {
-            "a".toSpdx() shouldNotBe "b".toSpdx()
-            "a AND b".toSpdx() shouldNotBe "a OR b".toSpdx()
-            "a OR b".toSpdx() shouldNotBe "a AND b".toSpdx()
-            "a".toSpdx() shouldNotBe "a WITH b".toSpdx()
-            "a".toSpdx() shouldNotBe "a OR b".toSpdx()
-            "a".toSpdx() shouldNotBe "a AND b".toSpdx()
-            "a".toSpdx() shouldNotBe "a+".toSpdx()
+            "A".toSpdx() shouldNotBe "B".toSpdx()
+            "A AND B".toSpdx() shouldNotBe "A OR B".toSpdx()
+            "A OR B".toSpdx() shouldNotBe "A AND B".toSpdx()
+            "A".toSpdx() shouldNotBe "A WITH B".toSpdx()
+            "A".toSpdx() shouldNotBe "A OR B".toSpdx()
+            "A".toSpdx() shouldNotBe "A AND B".toSpdx()
+            "A".toSpdx() shouldNotBe "A+".toSpdx()
         }
 
         "compare expressions case-insensitively" {
@@ -568,36 +568,36 @@ class SpdxExpressionTest : WordSpec({
 
     "hashCode()" should {
         "return the same hashcode for equal expressions" {
-            "a".toSpdx().hashCode() shouldBe "a".toSpdx().hashCode()
-            "a".toSpdx().hashCode() shouldBe "a AND a".toSpdx().hashCode()
-            "a".toSpdx().hashCode() shouldBe "a AND a AND a".toSpdx().hashCode()
-            "a AND b".toSpdx().hashCode() shouldBe "b AND a".toSpdx().hashCode()
-            "a OR b".toSpdx().hashCode() shouldBe "b OR a".toSpdx().hashCode()
-            "a AND (b OR c)".toSpdx().hashCode() shouldBe "(a AND b) OR (a AND c)".toSpdx().hashCode()
+            "A".toSpdx().hashCode() shouldBe "A".toSpdx().hashCode()
+            "A".toSpdx().hashCode() shouldBe "A AND A".toSpdx().hashCode()
+            "A".toSpdx().hashCode() shouldBe "A AND A AND A".toSpdx().hashCode()
+            "A AND B".toSpdx().hashCode() shouldBe "B AND A".toSpdx().hashCode()
+            "A OR B".toSpdx().hashCode() shouldBe "B OR A".toSpdx().hashCode()
+            "A AND (B OR C)".toSpdx().hashCode() shouldBe "(A AND B) OR (A AND C)".toSpdx().hashCode()
         }
     }
 
     "toString()" should {
         "return the textual SPDX expression" {
-            val expression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
+            val expression = "A+ AND (B WITH exception1 OR C+) AND D WITH exception2"
 
             expression.toSpdx() should beString(expression)
         }
 
         "not include unnecessary parenthesis" {
-            val expression = "(a AND (b AND c) AND (d OR (e WITH exception)))"
+            val expression = "(A AND (B AND C) AND (D OR (E WITH exception)))"
 
-            expression.toSpdx() should beString("a AND b AND c AND (d OR e WITH exception)")
+            expression.toSpdx() should beString("A AND B AND C AND (D OR E WITH exception)")
         }
 
         "always add parentheses around groups with different operators" {
-            val expression1 = "a AND b AND c OR d AND e AND f"
-            val expression2 = "(a OR b OR c) AND (d OR e OR f)"
-            val expression3 = "(a OR b AND c) AND (d AND e OR f)"
+            val expression1 = "A AND B AND C OR D AND E AND F"
+            val expression2 = "(A OR B OR C) AND (D OR E OR F)"
+            val expression3 = "(A OR B AND C) AND (D AND E OR F)"
 
-            expression1.toSpdx() should beString("(a AND b AND c) OR (d AND e AND f)")
-            expression2.toSpdx() should beString("(a OR b OR c) AND (d OR e OR f)")
-            expression3.toSpdx() should beString("(a OR (b AND c)) AND ((d AND e) OR f)")
+            expression1.toSpdx() should beString("(A AND B AND C) OR (D AND E AND F)")
+            expression2.toSpdx() should beString("(A OR B OR C) AND (D OR E OR F)")
+            expression3.toSpdx() should beString("(A OR (B AND C)) AND ((D AND E) OR F)")
         }
     }
 })
