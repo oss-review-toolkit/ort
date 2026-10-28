@@ -45,6 +45,13 @@ class SpdxExpressionChoiceTest : WordSpec({
             shouldThrow<InvalidLicenseChoiceException> { expression.applyChoice(choice) }
         }
 
+        "throw an exception for a choice that over-satisfies the offered options" {
+            val expression = "a OR b".toSpdx()
+            val choice = "a AND c".toSpdx()
+
+            shouldThrow<InvalidLicenseChoiceException> { expression.applyChoice(choice) }
+        }
+
         "return the new expression if only a part of the expression is matched by the subExpression" {
             val expression = "A OR B OR C".toSpdx()
             val choice = "B".toSpdx()
@@ -53,6 +60,15 @@ class SpdxExpressionChoiceTest : WordSpec({
             val result = expression.applyChoice(choice, subExpression)
 
             result shouldBe "B OR C".toSpdx()
+        }
+
+        "apply a choice on an overlapping path and minimize the result" {
+            val expression = "a OR (a AND b)".toSpdx()
+            val choice = "a AND b".toSpdx()
+
+            val result = expression.applyChoice(choice)
+
+            result shouldBe "a AND b".toSpdx()
         }
 
         "work with choices that itself are a choice" {
