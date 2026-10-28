@@ -31,7 +31,7 @@ class SpdxCompoundExpressionTest : WordSpec({
             }
 
             shouldThrow<IllegalArgumentException> {
-                SpdxCompoundExpression(SpdxOperator.AND, listOf(SpdxLicenseIdExpression("license")))
+                SpdxCompoundExpression(SpdxOperator.AND, listOf(SpdxLicenseIdExpression("A")))
             }
         }
     }
@@ -44,69 +44,69 @@ class SpdxCompoundExpressionTest : WordSpec({
                     SpdxCompoundExpression(
                         SpdxOperator.AND,
                         listOf(
-                            SpdxLicenseIdExpression("MIT"),
+                            SpdxLicenseIdExpression("A"),
                             SpdxCompoundExpression(
                                 SpdxOperator.AND,
                                 listOf(
-                                    SpdxLicenseIdExpression("MIT"),
-                                    SpdxLicenseIdExpression("Apache-2.0")
+                                    SpdxLicenseIdExpression("A"),
+                                    SpdxLicenseIdExpression("B")
                                 )
                             )
                         )
                     ),
-                    SpdxLicenseIdExpression("Apache-2.0")
+                    SpdxLicenseIdExpression("B")
                 )
             )
 
             // Compare string representations to not rely on semantic equality.
-            expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
+            expression.simplify().sorted().toString() shouldBe "A AND B"
         }
 
         "create a single expression for equal AND-operands" {
             val expression = SpdxCompoundExpression(
                 SpdxOperator.AND,
                 listOf(
-                    SpdxLicenseIdExpression("MIT"),
-                    SpdxLicenseIdExpression("MIT")
+                    SpdxLicenseIdExpression("A"),
+                    SpdxLicenseIdExpression("A")
                 )
             )
 
             // Compare string representations to not rely on semantic equality.
-            expression.simplify().toString() shouldBe "MIT"
+            expression.simplify().toString() shouldBe "A"
         }
 
         "create a single expression for equal OR-operands" {
             val expression = SpdxCompoundExpression(
                 SpdxOperator.OR,
                 listOf(
-                    SpdxLicenseIdExpression("MIT"),
-                    SpdxLicenseIdExpression("MIT")
+                    SpdxLicenseIdExpression("A"),
+                    SpdxLicenseIdExpression("A")
                 )
             )
 
             // Compare string representations to not rely on semantic equality.
-            expression.simplify().toString() shouldBe "MIT"
+            expression.simplify().toString() shouldBe "A"
         }
 
         "remove redundant choices with a nested expression at the beginning" {
-            val expression = "(Apache-2.0 OR MIT) AND MIT AND Apache-2.0 AND Apache-2.0 AND MIT".toSpdx()
+            val expression = "(B OR A) AND A AND B AND B AND A".toSpdx()
 
             // Compare string representations to not rely on semantic equality.
-            expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
+            expression.simplify().sorted().toString() shouldBe "A AND B"
         }
 
         "remove redundant choices with a nested expression in the middle" {
-            val expression = "Apache-2.0 AND (Apache-2.0 OR MIT) AND MIT AND MIT".toSpdx()
+            val expression = "B AND (B OR A) AND A AND A".toSpdx()
 
             // Compare string representations to not rely on semantic equality.
-            expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
+            expression.simplify().sorted().toString() shouldBe "A AND B"
         }
 
         "remove redundant choices with a nested expression at the end" {
-            val expression = "MIT AND Apache-2.0 AND Apache-2.0 AND MIT AND (Apache-2.0 OR MIT)".toSpdx()
+            val expression = "A AND B AND B AND A AND (B OR A)".toSpdx()
 
             // Compare string representations to not rely on semantic equality.
-            expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
+            expression.simplify().sorted().toString() shouldBe "A AND B"
         }
     }
 })

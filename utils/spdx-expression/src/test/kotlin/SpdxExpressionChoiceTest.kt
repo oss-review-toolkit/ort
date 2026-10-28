@@ -212,63 +212,61 @@ class SpdxExpressionChoiceTest : WordSpec({
         }
 
         "apply choices regardless of license order in an OR-expression" {
-            val expression = "(GPL-2.0-only OR MIT) AND Apache-2.0".toSpdx()
-            val choicesGivenGplOrMit = listOf(SpdxLicenseChoice("GPL-2.0-only OR MIT".toSpdx(), "MIT".toSpdx()))
-            val choicesGivenMitOrGpl = listOf(SpdxLicenseChoice("MIT OR GPL-2.0-only".toSpdx(), "MIT".toSpdx()))
+            val expression = "(A OR B) AND C".toSpdx()
+            val choicesGivenAOrB = listOf(SpdxLicenseChoice("A OR B".toSpdx(), "B".toSpdx()))
+            val choicesGivenBOrA = listOf(SpdxLicenseChoice("B OR A".toSpdx(), "B".toSpdx()))
 
-            val resultGivenGplOrMit = expression.applyChoices(choicesGivenGplOrMit)
-            val resultGivenMitOrGpl = expression.applyChoices(choicesGivenMitOrGpl)
+            val resultGivenAOrB = expression.applyChoices(choicesGivenAOrB)
+            val resultGivenBOrA = expression.applyChoices(choicesGivenBOrA)
 
-            resultGivenGplOrMit shouldBe "MIT AND Apache-2.0".toSpdx()
-            resultGivenMitOrGpl shouldBe "MIT AND Apache-2.0".toSpdx()
+            resultGivenAOrB shouldBe "B AND C".toSpdx()
+            resultGivenBOrA shouldBe "B AND C".toSpdx()
         }
 
         "resolve the choice for a sub-expression in a compound expression" {
             // This test ensures that when applying a choice to a sub-expression that appears multiple times,
             // only the matching occurrence is replaced, not similar-looking expressions with WITH-operands.
             // This prevents the over-simplification bug where string replacement would affect too much.
-            val expression = "(CDDL-1.1 OR GPL-2.0-only) AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)"
-                .toSpdx()
-            val choices = listOf(SpdxLicenseChoice("CDDL-1.1 OR GPL-2.0-only".toSpdx(), "CDDL-1.1".toSpdx()))
+            val expression = "(A OR B) AND (A OR B WITH E)".toSpdx()
+            val choices = listOf(SpdxLicenseChoice("A OR B".toSpdx(), "A".toSpdx()))
 
             val result = expression.applyChoices(choices)
 
             // The second OR-expression should remain unchanged because it has a WITH-operand and thus does not exactly
             // match the sub-expression despite containing a sub-string of it.
-            result shouldBe "CDDL-1.1 AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)".toSpdx()
+            result shouldBe "A AND (A OR B WITH E)".toSpdx()
         }
     }
 
     "isSubExpression()" should {
         "return true for the same simple expression" {
-            val mit = "MIT".toSpdx() as SpdxSimpleExpression
+            val simpleExpr = "A".toSpdx() as SpdxSimpleExpression
 
-            mit.isSubExpression(mit) shouldBe true
+            simpleExpr.isSubExpression(simpleExpr) shouldBe true
         }
 
         "return true for the same single expression" {
-            val mit = "GPL-2.0-only WITH Classpath-exception-2.0".toSpdx() as SpdxSingleLicenseExpression
+            val singleExpr = "A WITH E".toSpdx() as SpdxSingleLicenseExpression
 
-            mit.isSubExpression(mit) shouldBe true
+            singleExpr.isSubExpression(singleExpr) shouldBe true
         }
 
         "return true for the same compound expression" {
-            val mit = "CDDL-1.1 OR GPL-2.0-only".toSpdx() as SpdxCompoundExpression
+            val compoundExpr = "A OR B".toSpdx() as SpdxCompoundExpression
 
-            mit.isSubExpression(mit) shouldBe true
+            compoundExpr.isSubExpression(compoundExpr) shouldBe true
         }
 
         "work correctly for compound expressions with exceptions" {
-            val gplWithException = "CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
-            val gpl = "CDDL-1.1 OR GPL-2.0-only".toSpdx()
+            val exprWithException = "A OR B WITH E".toSpdx()
+            val exprWithoutException = "A OR B".toSpdx()
 
-            gplWithException.isSubExpression(gpl) shouldBe false
+            exprWithException.isSubExpression(exprWithoutException) shouldBe false
         }
 
         "work correctly for nested compound expressions" {
-            val expression = "(CDDL-1.1 OR GPL-2.0-only) AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)"
-                .toSpdx()
-            val subExpression = "CDDL-1.1 OR GPL-2.0-only".toSpdx()
+            val expression = "(A OR B) AND (A OR B WITH E)".toSpdx()
+            val subExpression = "A OR B".toSpdx()
 
             expression.isSubExpression(subExpression) shouldBe true
         }
