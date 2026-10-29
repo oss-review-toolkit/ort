@@ -1,0 +1,19 @@
+[project]
+name = "pylock-example"
+version = "1.0.0"
+description = "An example project locked with a PEP 751 lockfile."
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Example Author", email = "author@example.org" }]
+dependencies = [
+  "cattrs==24.1.2",
+  "colorama==0.4.6; sys_platform == 'win32'",
+]
+
+[project.urls]
+Homepage = "https://example.org/pylock-example"
+Repository = "https://github.com/example/pylock-example"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
