@@ -1,0 +1,354 @@
+---
+AFL-1.1:
+- "AFL-1.1"
+- "AFL-1.2"
+- "AFL-2.0"
+- "AFL-2.1"
+- "AFL-3.0"
+AFL-1.2:
+- "AFL-1.2"
+- "AFL-2.0"
+- "AFL-2.1"
+- "AFL-3.0"
+AFL-2.0:
+- "AFL-2.0"
+- "AFL-2.1"
+- "AFL-3.0"
+AFL-2.1:
+- "AFL-2.1"
+- "AFL-3.0"
+AFL-3.0:
+- "AFL-3.0"
+AGPL-1.0:
+- "AGPL-1.0"
+- "AGPL-3.0"
+AGPL-3.0:
+- "AGPL-3.0"
+APSL-1.0:
+- "APSL-1.0"
+- "APSL-1.1"
+- "APSL-1.2"
+- "APSL-2.0"
+APSL-1.1:
+- "APSL-1.1"
+- "APSL-1.2"
+- "APSL-2.0"
+APSL-1.2:
+- "APSL-1.2"
+- "APSL-2.0"
+APSL-2.0:
+- "APSL-2.0"
+Apache-1.0:
+- "Apache-1.0"
+- "Apache-1.1"
+- "Apache-2.0"
+Apache-1.1:
+- "Apache-1.1"
+- "Apache-2.0"
+Apache-2.0:
+- "Apache-2.0"
+Artistic-1.0:
+- "Artistic-1.0"
+- "Artistic-2.0"
+Artistic-2.0:
+- "Artistic-2.0"
+BSD-4.3RENO:
+- "BSD-4.3RENO"
+BSD-4.3TAHOE:
+- "BSD-4.3RENO"
+- "BSD-4.3TAHOE"
+CDDL-1.0:
+- "CDDL-1.0"
+- "CDDL-1.1"
+CDDL-1.1:
+- "CDDL-1.1"
+CECILL-1.0:
+- "CECILL-1.0"
+- "CECILL-1.1"
+- "CECILL-2.0"
+- "CECILL-2.1"
+CECILL-1.1:
+- "CECILL-1.1"
+- "CECILL-2.0"
+- "CECILL-2.1"
+CECILL-2.0:
+- "CECILL-2.0"
+- "CECILL-2.1"
+CECILL-2.1:
+- "CECILL-2.1"
+EPL-1.0:
+- "EPL-1.0"
+- "EPL-2.0"
+EPL-2.0:
+- "EPL-2.0"
+EUPL-1.0:
+- "EUPL-1.0"
+- "EUPL-1.1"
+- "EUPL-1.2"
+EUPL-1.1:
+- "EUPL-1.1"
+- "EUPL-1.2"
+EUPL-1.2:
+- "EUPL-1.2"
+GFDL-1.1:
+- "GFDL-1.1"
+- "GFDL-1.2"
+- "GFDL-1.3"
+GFDL-1.2:
+- "GFDL-1.2"
+- "GFDL-1.3"
+GFDL-1.3:
+- "GFDL-1.3"
+GPL-1.0:
+- "GPL-1.0"
+- "GPL-2.0"
+- "GPL-3.0"
+GPL-2.0:
+- "GPL-2.0"
+- "GPL-3.0"
+GPL-3.0:
+- "GPL-3.0"
+LAL-1.2:
+- "LAL-1.2"
+- "LAL-1.3"
+LAL-1.3:
+- "LAL-1.3"
+LGPL-2.0:
+- "LGPL-2.0"
+- "LGPL-2.1"
+- "LGPL-3.0"
+LGPL-2.1:
+- "LGPL-2.1"
+- "LGPL-3.0"
+LGPL-3.0:
+- "LGPL-3.0"
+LPPL-1.0:
+- "LPPL-1.0"
+- "LPPL-1.1"
+- "LPPL-1.2"
+- "LPPL-1.3a"
+- "LPPL-1.3c"
+LPPL-1.1:
+- "LPPL-1.1"
+- "LPPL-1.2"
+- "LPPL-1.3a"
+- "LPPL-1.3c"
+LPPL-1.2:
+- "LPPL-1.2"
+- "LPPL-1.3a"
+- "LPPL-1.3c"
+LPPL-1.3a:
+- "LPPL-1.3a"
+- "LPPL-1.3c"
+LPPL-1.3c:
+- "LPPL-1.3c"
+MPL-1.0:
+- "MPL-1.0"
+- "MPL-1.1"
+- "MPL-2.0"
+MPL-1.1:
+- "MPL-1.1"
+- "MPL-2.0"
+MPL-2.0:
+- "MPL-2.0"
+OFL-1.0:
+- "OFL-1.0"
+- "OFL-1.1"
+OFL-1.1:
+- "OFL-1.1"
+OLDAP-1.1:
+- "OLDAP-1.1"
+- "OLDAP-1.2"
+- "OLDAP-1.3"
+- "OLDAP-1.4"
+- "OLDAP-2.0"
+- "OLDAP-2.0.1"
+- "OLDAP-2.1"
+- "OLDAP-2.2"
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-1.2:
+- "OLDAP-1.2"
+- "OLDAP-1.3"
+- "OLDAP-1.4"
+- "OLDAP-2.0"
+- "OLDAP-2.0.1"
+- "OLDAP-2.1"
+- "OLDAP-2.2"
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-1.3:
+- "OLDAP-1.3"
+- "OLDAP-1.4"
+- "OLDAP-2.0"
+- "OLDAP-2.0.1"
+- "OLDAP-2.1"
+- "OLDAP-2.2"
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-1.4:
+- "OLDAP-1.4"
+- "OLDAP-2.0"
+- "OLDAP-2.0.1"
+- "OLDAP-2.1"
+- "OLDAP-2.2"
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.0:
+- "OLDAP-2.0"
+- "OLDAP-2.0.1"
+- "OLDAP-2.1"
+- "OLDAP-2.2"
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.0.1:
+- "OLDAP-2.0.1"
+- "OLDAP-2.1"
+- "OLDAP-2.2"
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.1:
+- "OLDAP-2.1"
+- "OLDAP-2.2"
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.2:
+- "OLDAP-2.2"
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.2.1:
+- "OLDAP-2.2.1"
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.2.2:
+- "OLDAP-2.2.2"
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.3:
+- "OLDAP-2.3"
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.4:
+- "OLDAP-2.4"
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.5:
+- "OLDAP-2.5"
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.6:
+- "OLDAP-2.6"
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.7:
+- "OLDAP-2.7"
+- "OLDAP-2.8"
+OLDAP-2.8:
+- "OLDAP-2.8"
+OSL-1.0:
+- "OSL-1.0"
+- "OSL-1.1"
+- "OSL-2.0"
+- "OSL-2.1"
+- "OSL-3.0"
+OSL-1.1:
+- "OSL-1.1"
+- "OSL-2.0"
+- "OSL-2.1"
+- "OSL-3.0"
+OSL-2.0:
+- "OSL-2.0"
+- "OSL-2.1"
+- "OSL-3.0"
+OSL-2.1:
+- "OSL-2.1"
+- "OSL-3.0"
+OSL-3.0:
+- "OSL-3.0"
+PARITY-6.0.0:
+- "PARITY-6.0.0"
+- "PARITY-7.0.0"
+PARITY-7.0.0:
+- "PARITY-7.0.0"
+Python-2.0:
+- "Python-2.0"
+- "Python-2.0.1"
+Python-2.0.1:
+- "Python-2.0.1"
+SGI-B-1.0:
+- "SGI-B-1.0"
+- "SGI-B-1.1"
+- "SGI-B-2.0"
+SGI-B-1.1:
+- "SGI-B-1.1"
+- "SGI-B-2.0"
+SGI-B-2.0:
+- "SGI-B-2.0"
+TU-Berlin-1.0:
+- "TU-Berlin-1.0"
+- "TU-Berlin-2.0"
+TU-Berlin-2.0:
+- "TU-Berlin-2.0"
