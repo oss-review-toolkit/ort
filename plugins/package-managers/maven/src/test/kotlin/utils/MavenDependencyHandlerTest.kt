@@ -162,7 +162,7 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "return null for a package that is resolved to a project dependency" {
-            val dependency = createDependency(PACKAGE_ID_SUFFIX)
+            val dependency = createDependency(PROJECT_ID_SUFFIX)
             val pkg = createPackage(PROJECT_ID_SUFFIX)
 
             val handler = createHandler { pkg }
@@ -188,10 +188,11 @@ class MavenDependencyHandlerTest : WordSpec({
             )
             val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val issues = mutableListOf<Issue>()
+            val expectedPackage = Package.EMPTY.copy(id = toOrtIdentifier(PACKAGE_ID_SUFFIX))
 
             val handler = createHandler { throw exception }
 
-            handler.createPackage(dependency, issues) should beNull()
+            handler.createPackage(dependency, issues) shouldBe expectedPackage
 
             issues should haveSize(1)
             with(issues[0]) {
@@ -209,7 +210,7 @@ class MavenDependencyHandlerTest : WordSpec({
 
             val handler = createHandler { pkg }
 
-            handler.createPackage(dependency, issues) should beNull()
+            handler.createPackage(dependency, issues)
 
             issues should haveSize(1)
             with(issues[0]) {
