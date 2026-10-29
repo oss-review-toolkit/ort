@@ -118,7 +118,10 @@ class MavenDependencyHandler(
                 message = "Could not get package information for dependency '" +
                     "${dependency.artifact.identifier()}': ${e.collectMessages()}"
             )
-        }.getOrNull()
+        }.getOrElse {
+            // Return a dummy package in case of an error according to the contract of this function.
+            Package.EMPTY.copy(id = identifierFor(dependency))
+        }
     }
 
     /**
