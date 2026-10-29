@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -97,7 +98,7 @@ class MavenDependencyHandler(
         if (isLocalProject(dependency)) return null
 
         return runCatching {
-            val pkg = packageResolverFun(dependency)
+            val pkg = sanitizePackageId(identifierFor(dependency), packageResolverFun(dependency))
 
             // There is the corner case that a dependency references a project, but in a different version than
             // the one used by the local build. Then, this dependency is actually a package, but Maven's
@@ -141,3 +142,36 @@ class MavenDependencyHandler(
  * filtered out by [dependenciesFor()].
  */
 private val TOOL_DEPENDENCIES = listOf("com.sun:tools:", "jdk.tools:jdk.tools:")
+
+/**
+ * Make sure that the given [pkg] actually has the provided [id]. If this is not the case, throw an exception unless
+ * the only difference is that the version of the package identifier starts with the expected version, but has an
+ * additional suffix. In that case, return a copy of the package with the expected version.
+ */
+internal fun sanitizePackageId(id: Identifier, pkg: Package): Package {
+    val sanitizedPkg = pkg.takeIf { id == pkg.id || !id.isCompatible(pkg.id) } ?: pkg.copy(
+        id = id,
+        purl = pkg.purl.takeUnless { it == pkg.id.toPurl() } ?: id.toPurl()
+    )
+
+    require(sanitizedPkg.id == id) {
+        "The package '${pkg.id.toCoordinates()}' does not have the expected identifier '${id.toCoordinates()}'."
+    }
+
+    return sanitizedPkg
+}
+
+/**
+ * Return a flag whether this [Identifier] is compatible with the given [other] [Identifier]. This is the case if both
+ * identifiers are equal, or the only difference is that the version of [other] contains an additional suffix.
+ */
+private fun Identifier.isCompatible(other: Identifier): Boolean =
+    namespace == other.namespace && name == other.name && version.isCompatibleVersion(other.version)
+
+/**
+ * Return a flag whether this version is compatible with the given (different) [other] version. This is the case if
+ * [other] starts with this version, followed by a suffix whose first character is not a digit. So, versions like
+ * "1.0.1-SNAPSHOT" or "1.0.1.1" are compatible with "1.0.1", but not "1.0.10".
+ */
+private fun String.isCompatibleVersion(other: String): Boolean =
+    other.startsWith(this) && other.length > length && !other[length].isDigit()
