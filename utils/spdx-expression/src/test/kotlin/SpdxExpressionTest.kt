@@ -26,10 +26,13 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+
+import kotlin.time.Duration.Companion.milliseconds
 
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
@@ -661,6 +664,62 @@ class SpdxExpressionTest : WordSpec({
                 setOf("A"),
                 setOf("B")
             )
+        }
+
+        "return in reasonable time for a complex AND expression".config(
+            blockingTest = true,
+            timeout = 150.milliseconds
+        ) {
+            val licenses = setOf(
+                "Apache-1.1",
+                "Apache-2.0",
+                "Artistic-1.0-Perl",
+                "Artistic-2.0",
+                "BSD-2-Clause",
+                "BSD-2-Clause-Darwin",
+                "BSD-2-Clause-Views",
+                "BSD-3-Clause",
+                "BSL-1.0",
+                "CC-BY-2.5",
+                "CC-BY-4.0",
+                "CDDL-1.0",
+                "CDDL-1.1",
+                "CPL-1.0",
+                "EPL-1.0",
+                "EPL-2.0",
+                "GPL-1.0-or-later",
+                "GPL-2.0-only WITH Classpath-exception-2.0",
+                "GPL-2.0-only",
+                "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                "GPL-2.0-or-later",
+                "ICU",
+                "ISC",
+                "JSON",
+                "LGPL-2.0-only",
+                "LGPL-2.0-or-later",
+                "LGPL-2.1-only",
+                "LGPL-2.1-or-later",
+                "LGPL-3.0-only",
+                "LPPL-1.3c",
+                "MIT",
+                "MPL-1.0",
+                "MPL-1.1",
+                "MPL-2.0",
+                "NTP",
+                "Noweb",
+                "OFL-1.1",
+                "Python-2.0",
+                "Ruby",
+                "Unicode-DFS-2016",
+                "W3C",
+                "W3C-19980720",
+                "W3C-20150513"
+            )
+            val expression = licenses.joinToString(separator = " AND ").toSpdx()
+
+            val dnf = expression.toDnf()
+
+            dnf shouldContain licenses
         }
     }
 

@@ -52,17 +52,6 @@ class SpdxLicenseIdExpression(
         if (!isValid) throw SpdxException("'$this' is not a valid SPDX license id.")
     }
 
-    override fun equals(other: Any?) =
-        when (other) {
-            is SpdxLicenseIdExpression -> {
-                id.equals(other.id, ignoreCase = true) && orLaterVersion == other.orLaterVersion
-            }
-
-            else -> false
-        }
-
-    override fun hashCode() = id.hashCode() + 31 * orLaterVersion.hashCode()
-
     override fun toString() =
         buildString {
             append(id)

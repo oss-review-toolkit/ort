@@ -54,4 +54,11 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
     abstract fun getLicenseUrl(): String?
 
     override fun toDnf(): Set<Set<String>> = setOf(setOf(toString()))
+
+    override fun replaceSubExpression(subExpression: SpdxExpression, replacement: SpdxExpression): SpdxExpression =
+        if (this.toDnf() == subExpression.toDnf()) {
+            replacement
+        } else {
+            this
+        }
 }

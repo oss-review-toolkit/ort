@@ -136,7 +136,7 @@ data class ResolvedLicenseInfo(
             ?: return resolvedLicenses to emptyList()
 
         val (expression, appliedChoices) = resolvedLicenses.applyAndGetChoices(choices)
-        return expression.validChoices().toExpression(SpdxOperator.OR) to appliedChoices
+        return expression.simplify() to appliedChoices
     }
 
     /**

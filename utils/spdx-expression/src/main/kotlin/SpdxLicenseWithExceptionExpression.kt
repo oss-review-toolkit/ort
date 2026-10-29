@@ -87,17 +87,6 @@ class SpdxLicenseWithExceptionExpression(
         throw SpdxException("'$exception' is not a valid SPDX license exception string.")
     }
 
-    override fun equals(other: Any?) =
-        when (other) {
-            is SpdxLicenseWithExceptionExpression -> {
-                license == other.license && exception.equals(other.exception, ignoreCase = true)
-            }
-
-            else -> false
-        }
-
-    override fun hashCode() = license.hashCode() + 31 * exception.hashCode()
-
     override fun toString(): String = "$license $WITH $exception"
 
     override fun getLicenseUrl() = license.getLicenseUrl()

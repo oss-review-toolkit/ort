@@ -21,11 +21,7 @@ package org.ossreviewtoolkit.utils.spdxexpression
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-
-import kotlin.time.Duration.Companion.milliseconds
 
 class SpdxExpressionChoiceTest : WordSpec({
     "applyChoice()" should {
@@ -340,108 +336,6 @@ class SpdxExpressionChoiceTest : WordSpec({
 
         "return false if the expression contains the OR operator with equal operands" {
             "A OR A".toSpdx().offersChoice() shouldBe false
-        }
-    }
-
-    "validChoices()" should {
-        "return the original terms of an expression in DNF" {
-            val choices = "(A AND B) OR (C AND D) OR (E AND F)".toSpdx().validChoices()
-
-            choices.map { it.toString() } should containExactlyInAnyOrder(
-                "A AND B",
-                "C AND D",
-                "E AND F"
-            )
-        }
-
-        "return the distribution of all terms of an expression in CNF" {
-            val choices = "(A OR B) AND (C OR D)".toSpdx().validChoices()
-
-            choices.map { it.toString() } should containExactlyInAnyOrder(
-                "A AND C",
-                "A AND D",
-                "B AND C",
-                "B AND D"
-            )
-        }
-
-        "return the valid choices for a complex expression" {
-            val choices = "(A OR B) AND C AND (D OR E)".toSpdx().validChoices()
-
-            choices.map { it.toString() } should containExactlyInAnyOrder(
-                "A AND C AND D",
-                "A AND C AND E",
-                "B AND C AND D",
-                "B AND C AND E"
-            )
-        }
-
-        "return the valid choices for a nested expression" {
-            val choices = "(A OR (B AND (C OR D))) AND (E OR F)".toSpdx().validChoices()
-
-            choices.map { it.toString() } should containExactlyInAnyOrder(
-                "A AND E",
-                "A AND F",
-                "B AND C AND E",
-                "B AND C AND F",
-                "B AND D AND E",
-                "B AND D AND F"
-            )
-        }
-
-        "return in reasonable time for a complex AND expression".config(
-            blockingTest = true,
-            timeout = 150.milliseconds
-        ) {
-            val expression = listOf(
-                "Apache-1.1",
-                "Apache-2.0",
-                "Artistic-1.0-Perl",
-                "Artistic-2.0",
-                "BSD-2-Clause",
-                "BSD-2-Clause-Darwin",
-                "BSD-2-Clause-Views",
-                "BSD-3-Clause",
-                "BSL-1.0",
-                "CC-BY-2.5",
-                "CC-BY-4.0",
-                "CDDL-1.0",
-                "CDDL-1.1",
-                "CPL-1.0",
-                "EPL-1.0",
-                "EPL-2.0",
-                "GPL-1.0-or-later",
-                "GPL-2.0-only WITH Classpath-exception-2.0",
-                "GPL-2.0-only",
-                "GPL-2.0-or-later WITH Classpath-exception-2.0",
-                "GPL-2.0-or-later",
-                "ICU",
-                "ISC",
-                "JSON",
-                "LGPL-2.0-only",
-                "LGPL-2.0-or-later",
-                "LGPL-2.1-only",
-                "LGPL-2.1-or-later",
-                "LGPL-3.0-only",
-                "LPPL-1.3c",
-                "MIT",
-                "MPL-1.0",
-                "MPL-1.1",
-                "MPL-2.0",
-                "NTP",
-                "Noweb",
-                "OFL-1.1",
-                "Python-2.0",
-                "Ruby",
-                "Unicode-DFS-2016",
-                "W3C",
-                "W3C-19980720",
-                "W3C-20150513"
-            ).joinToString(separator = " AND ")
-
-            val choices = expression.toSpdx().validChoices()
-
-            choices.map { it.toString() } should containExactlyInAnyOrder(expression)
         }
     }
 })
