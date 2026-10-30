@@ -216,7 +216,7 @@ class Gradle(
         return temporaryProperties("user.dir" to rootProjectDir.path) {
             gradleConnection.use { connection ->
                 val initScriptFile = createOrtTempFile("init", ".gradle")
-                initScriptFile.writeBytes(javaClass.getResource("/init.gradle").readBytes())
+                initScriptFile.writeBytes(checkNotNull(javaClass.getResource("/init.gradle")).readBytes())
 
                 val stdout = ByteArrayOutputStream()
                 val stderr = ByteArrayOutputStream()

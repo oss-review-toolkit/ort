@@ -72,7 +72,7 @@ private const val RULE_VIOLATION_TABLE_ID = "rule-violation-summary"
 )
 class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlReporterFactory.descriptor) : Reporter {
     private val reportFilename = "scan-report.html"
-    private val css = javaClass.getResource("/static-html-reporter.css").readText()
+    private val css = checkNotNull(javaClass.getResource("/static-html-reporter.css")).readText()
     private val licensesSha1 = mutableMapOf<String, String>()
 
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
@@ -108,7 +108,7 @@ class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlR
                 style {
                     unsafe {
                         +"\n"
-                        +"<![CDATA[${javaClass.getResource("/prismjs/prism.css").readText()}]]>"
+                        +"<![CDATA[${checkNotNull(javaClass.getResource("/prismjs/prism.css")).readText()}]]>"
                     }
                 }
             }
@@ -117,7 +117,7 @@ class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlR
                 script(type = ScriptType.textJavaScript) {
                     unsafe {
                         +"\n"
-                        +"<![CDATA[${javaClass.getResource("/prismjs/prism.js").readText()}]]>"
+                        +"<![CDATA[${checkNotNull(javaClass.getResource("/prismjs/prism.js")).readText()}]]>"
                     }
                 }
 

@@ -63,7 +63,7 @@ class WebAppReporter(
     private val reportFilename = "scan-report-web-app.html"
 
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
-        val template = javaClass.getResource("/scan-report-template.html").readText()
+        val template = checkNotNull(javaClass.getResource("/scan-report-template.html")).readText()
         val evaluatedModel = EvaluatedModel.create(input, config.deduplicateDependencyTree)
 
         val index = template.indexOf(PLACEHOLDER)

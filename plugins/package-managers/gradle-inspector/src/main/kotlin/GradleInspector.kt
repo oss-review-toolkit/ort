@@ -131,7 +131,7 @@ class GradleInspector(
         val toolsDir = ortToolsDirectory.resolve(descriptor.id).apply { safeMkdirs() }
         val pluginJar = extractResource("/gradle-plugin.jar", toolsDir / "gradle-plugin.jar")
 
-        val initScriptText = javaClass.getResource("/template.init.gradle").readText()
+        val initScriptText = checkNotNull(javaClass.getResource("/template.init.gradle")).readText()
             .replace("<REPLACE_PLUGIN_JAR>", pluginJar.invariantSeparatorsPath)
             .replace("<REPLACE_EXCLUDED_SCOPES>", excludedScopes.joinToString("\u0000"))
             .replace("<REPLACE_INCLUDED_SCOPES>", includedScopes.joinToString("\u0000"))
