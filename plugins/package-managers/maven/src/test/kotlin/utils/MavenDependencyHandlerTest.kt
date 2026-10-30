@@ -19,7 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
@@ -27,6 +29,7 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain
+import io.kotest.matchers.types.beTheSameInstanceAs
 
 import io.mockk.every
 import io.mockk.mockk
@@ -46,6 +49,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.PACKAGE_TYPE
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.PROJECT_TYPE
 
@@ -158,7 +162,7 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "return null for a package that is resolved to a project dependency" {
-            val dependency = createDependency(PACKAGE_ID_SUFFIX)
+            val dependency = createDependency(PROJECT_ID_SUFFIX)
             val pkg = createPackage(PROJECT_ID_SUFFIX)
 
             val handler = createHandler { pkg }
@@ -167,7 +171,7 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "report the correct linkage for a package that is resolved to a project dependency" {
-            val dependency = createDependency(PACKAGE_ID_SUFFIX)
+            val dependency = createDependency(PROJECT_ID_SUFFIX)
             val pkg = createPackage(PROJECT_ID_SUFFIX)
 
             val handler = createHandler { pkg }
@@ -184,10 +188,11 @@ class MavenDependencyHandlerTest : WordSpec({
             )
             val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val issues = mutableListOf<Issue>()
+            val expectedPackage = Package.EMPTY.copy(id = toOrtIdentifier(PACKAGE_ID_SUFFIX))
 
             val handler = createHandler { throw exception }
 
-            handler.createPackage(dependency, issues) should beNull()
+            handler.createPackage(dependency, issues) shouldBe expectedPackage
 
             issues should haveSize(1)
             with(issues[0]) {
@@ -195,6 +200,79 @@ class MavenDependencyHandlerTest : WordSpec({
                 source shouldBe MANAGER_NAME
                 message should contain(PACKAGE_ID_SUFFIX)
                 message should contain(exception.message!!)
+            }
+        }
+
+        "check the identifiers of resolved packages" {
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
+            val pkg = createPackage("org.apache.commons:commons-lang2:3.13")
+            val issues = mutableListOf<Issue>()
+
+            val handler = createHandler { pkg }
+
+            handler.createPackage(dependency, issues)
+
+            issues should haveSize(1)
+            with(issues[0]) {
+                severity shouldBe Severity.ERROR
+                source shouldBe MANAGER_NAME
+                message should contain(PACKAGE_ID_SUFFIX)
+                message should contain(pkg.id.toCoordinates())
+            }
+        }
+    }
+
+    "sanitizePackageId" should {
+        "return the package if there is an exact match of the identifier" {
+            val id = toOrtIdentifier(PACKAGE_ID_SUFFIX)
+            val pkg = createPackage(PACKAGE_ID_SUFFIX)
+
+            sanitizePackageId(id, pkg) should beTheSameInstanceAs(pkg)
+        }
+
+        "return the package with the expected identifier if there is compatible version suffix" {
+            val id = toOrtIdentifier(PACKAGE_ID_SUFFIX)
+            val pkg = Package.EMPTY.copy(
+                id = toOrtIdentifier("$PACKAGE_ID_SUFFIX-SNAPSHOT"),
+                purl = toOrtIdentifier("$PACKAGE_ID_SUFFIX-SNAPSHOT").toPurl(),
+                description = "A test package with a version suffix.",
+                homepageUrl = "https://example.com/test-package"
+            )
+
+            val expectedPackage = pkg.copy(id = id, purl = id.toPurl())
+
+            sanitizePackageId(id, pkg) shouldBe expectedPackage
+        }
+
+        "not override a non-default purl when returning a package with the expected identifier" {
+            val id = Identifier("type", "namespace", "name", "version")
+            val incorrectId = Identifier("type", "namespace", "name", "version-beta")
+            val pkg = Package.EMPTY.copy(id = incorrectId, purl = "pkg:type/special/purl@111")
+
+            val sanitizedPkg = sanitizePackageId(id, pkg)
+
+            sanitizedPkg.id shouldBe id
+            sanitizedPkg.purl shouldBe pkg.purl
+        }
+
+        "throw an exception if the package has a different identifier" {
+            val id = toOrtIdentifier(PACKAGE_ID_SUFFIX)
+            val otherIds = listOf(
+                toOrtIdentifier("org.apache.commons:commons-lang2:3.11"),
+                toOrtIdentifier("org.apache.commons:commons-lang3:3.12"),
+                toOrtIdentifier("org.other.commons:commons-lang2:3.12"),
+                toOrtIdentifier("org.apache.commons:commons-lang2:3.120")
+            )
+
+            otherIds.forAll { otherId ->
+                val pkg = Package.EMPTY.copy(id = otherId)
+
+                val exception = shouldThrow<IllegalArgumentException> {
+                    sanitizePackageId(id, pkg)
+                }
+
+                exception.message should contain(id.toCoordinates())
+                exception.message should contain(otherId.toCoordinates())
             }
         }
     }
