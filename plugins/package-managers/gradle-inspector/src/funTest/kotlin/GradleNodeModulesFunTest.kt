@@ -64,7 +64,7 @@ class GradleNodeModulesFunTest : StringSpec({
 private fun PackageManagerResult.toAnalyzerResult() =
     AnalyzerResultBuilder().apply {
         projectResults.values.flatten().forEach { addResult(it) }
-        dependencyGraph?.let {
+        dependencyGraph?.also {
             addDependencyGraph(GradleInspectorFactory.descriptor.id, it).addPackages(sharedPackages)
         }
     }.build()

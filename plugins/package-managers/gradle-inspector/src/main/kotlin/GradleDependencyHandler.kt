@@ -109,7 +109,7 @@ internal class GradleDependencyHandler(
         // substituted from another package manager's directory, register an external project for it instead, so that
         // the dependency graph stays consistent.
         if (dependency.isProjectDependency) {
-            component.projectDir?.takeIf { it.isInsideIgnoredDirectory() }?.let { projectDir ->
+            component.projectDir?.takeIf { it.isInsideIgnoredDirectory() }?.also { projectDir ->
                 dependency.registerExternalProject(projectDir)
             }
 
@@ -118,7 +118,7 @@ internal class GradleDependencyHandler(
 
         val id = identifierFor(dependency)
 
-        component.error?.let { error ->
+        component.error?.also { error ->
             issues += createAndLogIssue(
                 source = GradleInspectorFactory.descriptor.displayName,
                 message = "Error resolving '${id.toCoordinates()}': $error"
