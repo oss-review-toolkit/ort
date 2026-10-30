@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.commands.evaluator
 
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -218,7 +219,9 @@ class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.desc
         val scriptUris = mutableSetOf<URI>()
 
         rulesFile.mapTo(scriptUris) { it.toURI() }
-        rulesResource.mapTo(scriptUris) { javaClass.getResource(it).toURI() }
+        rulesResource.mapTo(scriptUris) {
+            javaClass.getResource(it)?.toURI() ?: throw UsageError("Unknown resource '$it'.")
+        }
 
         if (scriptUris.isEmpty()) {
             val defaultRulesFile = ortConfigDirectory / ORT_EVALUATOR_RULES_FILENAME
