@@ -152,4 +152,35 @@ class CrossdFunTest : StringSpec({
             }
         )
     }
+
+    "retrievePackageFindings should only report issues for the affected packages" {
+        val validPkg = Package.EMPTY.copy(
+            id = Identifier("NPM::babel-code-frame:6.26.0"),
+            vcsProcessed = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/babel/babel.git",
+                revision = "master"
+            )
+        )
+        val invalidPkg = Package.EMPTY.copy(
+            id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1"),
+            vcsProcessed = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://invalid-url",
+                revision = "ddde192"
+            )
+        )
+
+        val result = crossd.retrievePackageFindings(setOf(validPkg, invalidPkg))
+
+        result should matchExactly(
+            validPkg to {
+                it.summary.issues should beEmpty()
+            },
+            invalidPkg to {
+                it.summary.issues.shouldBeSingle().message shouldBe
+                    "The VCS URL 'https://invalid-url' could not be mapped to a repository."
+            }
+        )
+    }
 })
