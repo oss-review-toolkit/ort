@@ -28,6 +28,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.types.beTheSameInstanceAs
 
 import io.mockk.every
 import io.mockk.spyk
@@ -96,6 +97,21 @@ class DependencyGraphBuilderTest : WordSpec({
             val dep1 = createDependency("org.apache.commons", "commons-lang3", "3.11")
             val dep2 = createDependency("org.apache.commons", "commons-collections4", "4.4")
             val dep3 = createDependency("my-project", "my-module", "1.0")
+
+            val packageIds = createGraphBuilder()
+                .addDependency("s1", dep1)
+                .addDependency("s2", dep2)
+                .addDependency("s3", dep3)
+                .packages()
+                .map { it.id }
+
+            packageIds should containExactlyInAnyOrder(dep1.id, dep2.id, dep3.id)
+        }
+
+        "sanitize package IDs correctly" {
+            val dep1 = createDependency("org.apache.commons", "commons-lang3", "3.11")
+            val dep2 = createDependency("org.apache.commons", "commons-collections4", "4.4")
+            val dep3 = createDependency(idToSanitize.namespace, idToSanitize.name, idToSanitize.version)
 
             val packageIds = createGraphBuilder()
                 .addDependency("s1", dep1)
@@ -369,12 +385,54 @@ class DependencyGraphBuilderTest : WordSpec({
             ) shouldBe true
         }
     }
+
+    "sanitizePackageIds()" should {
+        "return the same package if the ID is correct" {
+            val id = Identifier("type", "namespace", "name", "version")
+            val pkg = Package.EMPTY.copy(id = id)
+
+            sanitizePackageId(id, pkg) should beTheSameInstanceAs(pkg)
+        }
+
+        "return a package with a sanitized ID if the ID is incorrect" {
+            val id = Identifier("type", "namespace", "name", "version")
+            val incorrectId = Identifier("type", "namespace", "name", "wrongVersion")
+            val pkg = Package.EMPTY.copy(
+                id = incorrectId,
+                purl = incorrectId.toPurl(),
+                homepageUrl = "https://example.com/test.html"
+            )
+
+            val sanitizedPkg = sanitizePackageId(id, pkg)
+
+            sanitizedPkg.id shouldBe id
+            sanitizedPkg.purl shouldBe id.toPurl()
+            sanitizedPkg.homepageUrl shouldBe "https://example.com/test.html"
+        }
+
+        "not override a non-default purl" {
+            val id = Identifier("type", "namespace", "name", "version")
+            val incorrectId = Identifier("type", "namespace", "name", "wrongVersion")
+            val pkg = Package.EMPTY.copy(id = incorrectId, purl = "pkg:type/special/purl@111")
+
+            val sanitizedPkg = sanitizePackageId(id, pkg)
+
+            sanitizedPkg.id shouldBe id
+            sanitizedPkg.purl shouldBe pkg.purl
+        }
+    }
 })
 
 /**
  * A special namespace used by dependencies, for which [PackageRefDependencyHandler] should not create a package.
  */
 private const val NO_PACKAGE_NAMESPACE = "no-package"
+
+/**
+ * A special package ID for which [PackageRefDependencyHandler] returns a package with a different ID. This is used to
+ * test that [DependencyGraphBuilder] correctly sanitizes package IDs when building the graph.
+ */
+private val idToSanitize = Identifier("test", "org.strange", "package", "1.0")
 
 /**
  * A [DependencyHandler] implementation that operates on [PackageReference] objects. This is used to handle the
@@ -389,7 +447,9 @@ private object PackageRefDependencyHandler : DependencyHandler<PackageReference>
     override fun linkageFor(dependency: PackageReference): PackageLinkage = dependency.linkage
 
     override fun createPackage(dependency: PackageReference, issues: MutableCollection<Issue>): Package? =
-        Package.EMPTY.copy(id = dependency.id).takeUnless { dependency.id.namespace == NO_PACKAGE_NAMESPACE }
+        Package.EMPTY.copy(
+            id = dependency.id.takeUnless { it == idToSanitize } ?: idToSanitize.copy(version = "1.0-to-sanitize")
+        ).takeUnless { dependency.id.namespace == NO_PACKAGE_NAMESPACE }
 
     override fun issuesFor(dependency: PackageReference): List<Issue> = dependency.issues
 }
