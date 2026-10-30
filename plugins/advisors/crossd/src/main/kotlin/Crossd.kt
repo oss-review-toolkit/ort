@@ -98,7 +98,6 @@ class Crossd(
         }
 
         val startTime = Instant.now()
-        val issues = mutableListOf<Issue>()
 
         // Find project owner and name from repository URL.
         val packageIds = packages.associateWith { pkg ->
@@ -111,7 +110,7 @@ class Crossd(
         }
 
         // Report failed repository URL parsing.
-        packageIds.filterValues { it == null }.mapTo(issues) { pkg ->
+        val issues = packageIds.filterValues { it == null }.mapValues { pkg ->
             Issue(
                 source = descriptor.displayName,
                 message = "The VCS URL '${pkg.key.vcsProcessed.url}' could not be mapped to a repository."
@@ -132,8 +131,9 @@ class Crossd(
 
         val endTime = Instant.now()
 
-        return metrics.mapValues {
-            AdvisorResult(details, AdvisorSummary(startTime, endTime, issues), emptyList(), it.value)
+        return metrics.mapValues { (pkg, healthMetrics) ->
+            val summary = AdvisorSummary(startTime, endTime, listOfNotNull(issues[pkg]))
+            AdvisorResult(details, summary, emptyList(), healthMetrics)
         }
     }
 
