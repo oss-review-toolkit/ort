@@ -146,7 +146,14 @@ sealed class SpdxExpression {
             conjunction.mapTo(mutableSetOf()) { singleLicense -> singleLicense.lowercase() }
         }
 
-    final override fun equals(other: Any?) = other is SpdxExpression && toLowerCaseDnf() == other.toLowerCaseDnf()
+    final override fun equals(other: Any?): Boolean {
+        // Non-functional early returns for performance:
+        if (this === other) return true
+        if (other !is SpdxExpression) return false
+        if (toString().equals(other.toString(), ignoreCase = true)) return true
+
+        return toLowerCaseDnf() == other.toLowerCaseDnf()
+    }
 
     final override fun hashCode(): Int = toLowerCaseDnf().hashCode()
 
@@ -171,8 +178,7 @@ sealed class SpdxExpression {
         runCatching { validate(strictness) }.isSuccess
 
     /**
-     * Return true if [choice] is a valid license choice for this SPDX expression. This can only be the case, if
-     * [choice] does not offer a license choice itself and if [choice] and this expression satisfy one another.
+     * Return true if [choice] is a valid license choice for this SPDX expression.
      */
     fun isValidChoice(choice: SpdxExpression): Boolean = toDnf().dnfIsValidChoice(choice.toDnf())
 
@@ -188,8 +194,7 @@ sealed class SpdxExpression {
     fun offersChoice(): Boolean = toDnf().size > 1
 
     /**
-     * Return true if this expression satisfies the [other] expression. The "or-later" semantic / plus operator is not
-     * handled.
+     * Return true if this expression satisfies the [other] expression.
      */
     fun satisfies(other: SpdxExpression): Boolean {
         val conjunctions = toDnf().ifEmpty { return false }
@@ -197,7 +202,11 @@ sealed class SpdxExpression {
 
         return conjunctions.any { conjunction ->
             otherConjunctions.any { otherConjunction ->
-                conjunction.containsAll(otherConjunction)
+                otherConjunction.all { requiredLicense ->
+                    conjunction.any { offeredLicense ->
+                        offeredLicense.singleLicenseSatisfies(requiredLicense)
+                    }
+                }
             }
         }
     }
@@ -224,7 +233,7 @@ sealed class SpdxExpression {
             throw InvalidLicenseChoiceException("Cannot select $choice for expression $this.")
         }
 
-        return dnf.dnfFilterSatisfiedBy(otherDnf).dnfToSpdxExpression()
+        return choice
     }
 
     /**
@@ -289,13 +298,34 @@ sealed class SpdxExpression {
 }
 
 /**
- * Return [this] DNF converted to an [SpdxExpression]. The result is simplified, to avoid redundancies such as
- * "A or (A AND B)".
+ * Return [this] DNF converted to an [SpdxExpression]. The result is simplified dynamically
+ * based on semantic 'or-later' relationship sets to avoid structural redundancies like "A or A+" and
+ * also A or (A AND B).
  */
 internal fun Set<Set<String>>.dnfToSpdxExpression(): SpdxExpression {
     if (isEmpty()) return SpdxExpression.NONE
 
-    val conjunctionExpressions = map { conjunction ->
+    // If a conjunction contains '-or-later' and '-only' of the same license, discard the former.
+    val cleanedConjunctions = map { conjunction ->
+        conjunction.filter { specificLicense ->
+            conjunction.none { otherLicense ->
+                specificLicense != otherLicense && otherLicense.singleLicenseSatisfies(specificLicense)
+            }
+        }.toSet()
+    }.toSet()
+
+    // Simplify redundancies of the form "A" OR "A+", to just "A+".
+    val minimizedDnf = cleanedConjunctions.filter { currentConjunction ->
+        cleanedConjunctions.none { otherConjunction ->
+            currentConjunction != otherConjunction && otherConjunction.all { otherLicense ->
+                currentConjunction.any { currentLicense ->
+                    currentLicense.singleLicenseSatisfies(otherLicense)
+                }
+            }
+        }
+    }
+
+    val conjunctionExpressions = minimizedDnf.map { conjunction ->
         when (conjunction.size) {
             0 -> throw IllegalArgumentException("A DNF conjunction must not be empty.")
 
@@ -322,7 +352,11 @@ internal fun Set<Set<String>>.dnfToSpdxExpression(): SpdxExpression {
 private fun Set<Set<String>>.dnfIsValidChoice(choiceDnf: Set<Set<String>>): Boolean =
     choiceDnf.ifEmpty { return false }.all { choiceConjunction ->
         any { conjunction ->
-            conjunction.size == choiceConjunction.size && conjunction.containsAllIgnoreCase(choiceConjunction)
+            conjunction.size == choiceConjunction.size && choiceConjunction.all { choiceLicense ->
+                conjunction.any { license ->
+                    choiceLicense.singleLicenseSatisfies(license)
+                }
+            }
         }
     }
 
@@ -344,9 +378,4 @@ private fun Set<Set<String>>.dnfFilterSatisfiedBy(other: Set<Set<String>>): Set<
  * Return true if [this] single license satisfies [otherSingleLicense] license string.
  */
 private fun String.singleLicenseSatisfies(otherSingleLicense: String): Boolean =
-    equals(otherSingleLicense, ignoreCase = true)
-
-private fun Set<String>.containsAllIgnoreCase(other: Set<String>): Boolean =
-    other.all { otherLicense ->
-        any { thisLicense -> thisLicense.equals(otherLicense, ignoreCase = true) }
-    }
+    SpdxOrLaterLicenseMapper.INSTANCE.satisfies(offered = this, required = otherSingleLicense)
