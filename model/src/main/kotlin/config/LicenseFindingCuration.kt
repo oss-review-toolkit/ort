@@ -74,7 +74,7 @@ data class LicenseFindingCuration(
     val reason: LicenseFindingCurationReason,
 
     /**
-     * A comment explaining this [LicenseFindingCuration].
+     * An optional comment to further explain why the [reason] is applicable here.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = ""
