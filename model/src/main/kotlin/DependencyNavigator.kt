@@ -138,7 +138,7 @@ interface DependencyNavigator {
      * scope cannot be resolved, return -1.
      */
     fun dependencyTreeDepth(project: Project, scopeName: String): Int =
-        getTreeDepthRecursive(directDependencies(project, scopeName))
+        getTreeDepthRecursive(directDependencies(project, scopeName), mutableMapOf())
 
     /**
      * Return a map of all de-duplicated [Issue]s associated by [Identifier] for the given [project].
@@ -156,11 +156,15 @@ interface DependencyNavigator {
     }
 
     /**
-     * Traverse the given sequence of [dependencies] recursively to determine the depth of the dependency tree.
+     * Traverse the given sequence of [dependencies] recursively to determine the depth of the dependency tree. Use
+     * [depthCache] to avoid traversing subtrees for nodes that have already been visited, as the same node can be
+     * reached via different paths through the dependency graph.
      */
-    private fun getTreeDepthRecursive(dependencies: Sequence<DependencyNode>): Int =
+    private fun getTreeDepthRecursive(dependencies: Sequence<DependencyNode>, depthCache: MutableMap<Any, Int>): Int =
         dependencies.map { dependency ->
-            1 + dependency.visitDependencies { getTreeDepthRecursive(it) }
+            depthCache.getOrPut(dependency.getInternalId()) {
+                1 + dependency.visitDependencies { getTreeDepthRecursive(it, depthCache) }
+            }
         }.maxOrNull() ?: 0
 }
 
