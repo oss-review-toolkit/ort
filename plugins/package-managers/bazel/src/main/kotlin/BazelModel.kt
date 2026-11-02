@@ -66,6 +66,7 @@ internal data class BazelModule(
     val key: String,
     val name: String? = null,
     val version: String? = null,
+    val apparentName: String? = null,
     val dependencies: List<BazelModule> = emptyList(),
     val extensionUsages: List<BazelExtension> = emptyList()
 )
