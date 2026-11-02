@@ -166,10 +166,10 @@ internal fun SpdxPackage.toPackage(
 ): Package {
     val packageDescription = description.ifEmpty { summary }
 
-    // If the VCS information cannot be determined from the VCS working tree itself, fall back to try getting it
-    // from the download location.
+    // The VCS information should be taken from defined download location, if not provided,
+    // get the VCS information from the working tree instead
     val packageDir = definitionFile?.resolveSibling(packageFilename)
-    val vcs = packageDir?.let { VersionControlSystem.forDirectory(it)?.getInfo() } ?: getVcsInfo().orEmpty()
+    val vcs = getVcsInfo() ?: packageDir?.let { VersionControlSystem.forDirectory(it)?.getInfo() }.orEmpty()
 
     val generatedFromRelations = doc.relationships.filter {
         it.relationshipType == SpdxRelationship.Type.GENERATED_FROM
