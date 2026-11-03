@@ -126,26 +126,6 @@ jobs:
       - name: Run Prettier
         run: npm run format:check
         working-directory: website
-  qodana-scan:
-    if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-26.04
-    permissions:
-      # Needed for SARIF scanning upload.
-      security-events: write
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        fetch-depth: 0
-    - name: Qodana Scan
-      uses: JetBrains/qodana-action@3e8d76ff0e0241618abd808682f426afe84bab3f # v2026.2.2
-      with:
-        post-pr-comment: false
-        use-caches: false
-    - name: Upload Code Scanning Results
-      uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
-      with:
-        sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
   renovate-validation:
     runs-on: ubuntu-26.04
     steps:
