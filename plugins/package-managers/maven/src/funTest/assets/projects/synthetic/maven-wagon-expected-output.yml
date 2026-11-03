@@ -41,4 +41,30 @@ project:
           \ ftp-repository\n        Caused by: AuthenticationException: Password not\
           \ specified for repository ftp-repository"
         severity: "ERROR"
-packages: []
+packages:
+- id: "Maven:com.example:ftp-artifact:1.0.0"
+  purl: ""
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
