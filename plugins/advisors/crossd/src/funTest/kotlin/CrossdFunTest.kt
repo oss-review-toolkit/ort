@@ -43,7 +43,7 @@ class CrossdFunTest : StringSpec({
         )
     }
 
-    "retrievePackageFindings for a valid package should return findings" {
+    "A valid package should return findings" {
         val pkg = Package(
             id = Identifier("NPM::babel-code-frame:6.26.0"),
             declaredLicenses = setOf("MIT"),
@@ -73,7 +73,7 @@ class CrossdFunTest : StringSpec({
         )
     }
 
-    "retrievePackageFindings for an unknown package should return no findings but not crash" {
+    "An unknown package should return no findings" {
         val pkg = Package(
             id = Identifier("NPM::iojawdoiwajdiowajgdwaoijwadoiwadjwadowadji:1.33.7"),
             declaredLicenses = setOf("MIT"),
@@ -104,7 +104,7 @@ class CrossdFunTest : StringSpec({
         )
     }
 
-    "retrievePackageFindings for a package with no vcs should return empty health data" {
+    "A package with no VCS info should return empty health data" {
         val pkg = Package(
             id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1"),
             declaredLicenses = emptySet(),
@@ -126,7 +126,7 @@ class CrossdFunTest : StringSpec({
         )
     }
 
-    "retrievePackageFindings for a malformed vcs url should return an issue" {
+    "A malformed VCS URL should return an issue" {
         val pkg = Package(
             id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1"),
             declaredLicenses = emptySet(),
@@ -153,7 +153,7 @@ class CrossdFunTest : StringSpec({
         )
     }
 
-    "retrievePackageFindings should only report issues for the affected packages" {
+    "Issues should only be reported for the affected packages" {
         val validPkg = Package.EMPTY.copy(
             id = Identifier("NPM::babel-code-frame:6.26.0"),
             vcsProcessed = VcsInfo(
