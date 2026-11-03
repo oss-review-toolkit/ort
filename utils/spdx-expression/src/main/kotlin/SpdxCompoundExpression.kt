@@ -182,7 +182,7 @@ class SpdxCompoundExpression(
             "No licenses left after applying choice $choice to $subExpression."
         }
 
-        return choices.reduce(SpdxExpression::or)
+        return choices.singleOrNull() ?: SpdxCompoundExpression(SpdxOperator.OR, choices)
     }
 
     override fun isSubExpression(subExpression: SpdxExpression?): Boolean =
