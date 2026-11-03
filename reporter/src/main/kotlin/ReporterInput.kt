@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
-import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 
 /**
  * A bundle of input to be used by [Reporter] implementations.
@@ -81,5 +80,5 @@ data class ReporterInput(
      * Statistics for [ortResult].
      */
     @Suppress("unused") // This can be used from templates.
-    val statistics: Statistics by lazy { getStatistics(ortResult, licenseInfoResolver, ortConfig) }
+    val statistics = Statistics(ortResult, licenseInfoResolver, ortConfig)
 }

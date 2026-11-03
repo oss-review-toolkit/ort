@@ -41,32 +41,8 @@ import org.ossreviewtoolkit.model.utils.isScopeIncluded
  * This class calculates [Statistics] for a given [OrtResult] and the applicable [IssueResolution]s and
  * [RuleViolationResolution]s.
  */
-object StatisticsCalculator {
-    /**
-     * Return the [Statistics] for the given [ortResult].
-     */
-    fun getStatistics(ortResult: OrtResult, licenseInfoResolver: LicenseInfoResolver, ortConfig: OrtConfiguration) =
-        Statistics(
-            repositoryConfiguration = getRepositoryConfigurationStatistics(ortResult),
-            resolvedConfiguration = getResolvedConfigurationStatistics(ortResult),
-            openIssues = getOpenIssues(ortResult, ortConfig),
-            openRuleViolations = getOpenRuleViolations(ortResult, ortConfig),
-            openVulnerabilities = getOpenVulnerabilities(ortResult),
-            dependencyTree = DependencyTreeStatistics(
-                includedProjects = ortResult.getProjects().count { !ortResult.isExcluded(it.id) },
-                excludedProjects = ortResult.getProjects().count { ortResult.isExcluded(it.id) },
-                includedPackages = ortResult.getPackages().count { !ortResult.isExcluded(it.metadata.id) },
-                excludesPackages = ortResult.getPackages().count { ortResult.isExcluded(it.metadata.id) },
-                totalTreeDepth = getTreeDepth(ortResult),
-                includedTreeDepth = getTreeDepth(ortResult = ortResult, ignoreExcluded = true),
-                includedScopes = getIncludedScopes(ortResult),
-                excludedScopes = getExcludedScopes(ortResult)
-            ),
-            licenses = getLicenseStatistics(ortResult, licenseInfoResolver),
-            executionDurationInSeconds = getExecutionDurationInSeconds(ortResult)
-        )
-
-    private fun getOpenRuleViolations(ortResult: OrtResult, ortConfig: OrtConfiguration): IssueStatistics {
+internal object StatisticsCalculator {
+    fun getOpenRuleViolations(ortResult: OrtResult, ortConfig: OrtConfiguration): IssueStatistics {
         val openRuleViolations = ortResult.getRuleViolations(omitResolved = true)
 
         return IssueStatistics(
@@ -77,7 +53,7 @@ object StatisticsCalculator {
         )
     }
 
-    private fun getOpenIssues(ortResult: OrtResult, ortConfig: OrtConfiguration): IssueStatistics {
+    fun getOpenIssues(ortResult: OrtResult, ortConfig: OrtConfiguration): IssueStatistics {
         val openIssues = ortResult.getOpenIssues(Severity.HINT)
 
         return IssueStatistics(
@@ -88,10 +64,21 @@ object StatisticsCalculator {
         )
     }
 
-    private fun getOpenVulnerabilities(ortResult: OrtResult): Int =
+    fun getOpenVulnerabilities(ortResult: OrtResult): Int =
         ortResult.getVulnerabilities(omitExcluded = true, omitResolved = true).values.flatten().size
 
-    private fun getTreeDepth(ortResult: OrtResult, ignoreExcluded: Boolean = false): Int =
+    fun getDependencyTreeStatistics(ortResult: OrtResult): DependencyTreeStatistics =
+        DependencyTreeStatistics(
+            includedProjects = ortResult.getProjects().count { !ortResult.isExcluded(it.id) },
+            excludedProjects = ortResult.getProjects().count { ortResult.isExcluded(it.id) },
+            includedPackages = ortResult.getPackages().count { !ortResult.isExcluded(it.metadata.id) },
+            excludesPackages = ortResult.getPackages().count { ortResult.isExcluded(it.metadata.id) },
+            includedScopes = getIncludedScopes(ortResult),
+            excludedScopes = getExcludedScopes(ortResult),
+            ortResult = ortResult
+        )
+
+    fun getTreeDepth(ortResult: OrtResult, ignoreExcluded: Boolean = false): Int =
         ortResult
             .getProjects()
             .filterNot { project -> ignoreExcluded && ortResult.isExcluded(project.id) }
@@ -123,10 +110,7 @@ object StatisticsCalculator {
                 allScopes - getIncludedScopes(ortResult)
             }
 
-    private fun getLicenseStatistics(
-        ortResult: OrtResult,
-        licenseInfoResolver: LicenseInfoResolver
-    ): LicenseStatistics {
+    fun getLicenseStatistics(ortResult: OrtResult, licenseInfoResolver: LicenseInfoResolver): LicenseStatistics {
         fun Set<Identifier>.countLicenses(
             transform: ResolvedLicenseInfo.() -> ResolvedLicenseInfo = { this }
         ): Map<String, Int> =
@@ -149,7 +133,7 @@ object StatisticsCalculator {
         )
     }
 
-    private fun getExecutionDurationInSeconds(ortResult: OrtResult): Long =
+    fun getExecutionDurationInSeconds(ortResult: OrtResult): Long =
         with(ortResult) {
             listOfNotNull(
                 analyzer?.let { secondsBetween(it.startTime, it.endTime) },
@@ -159,7 +143,7 @@ object StatisticsCalculator {
             ).sum()
         }
 
-    private fun getRepositoryConfigurationStatistics(ortResult: OrtResult): RepositoryConfigurationStatistics {
+    fun getRepositoryConfigurationStatistics(ortResult: OrtResult): RepositoryConfigurationStatistics {
         val config = ortResult.repository.config
 
         return RepositoryConfigurationStatistics(
@@ -177,7 +161,7 @@ object StatisticsCalculator {
         )
     }
 
-    private fun getResolvedConfigurationStatistics(ortResult: OrtResult): ResolvedConfigurationStatistics {
+    fun getResolvedConfigurationStatistics(ortResult: OrtResult): ResolvedConfigurationStatistics {
         val resolvedConfiguration = ortResult.resolvedConfiguration
         val resolutions = resolvedConfiguration.resolutions.orEmpty()
 

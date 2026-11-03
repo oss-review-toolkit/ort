@@ -33,58 +33,71 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
 
 /**
- * A class containing statistics for an [OrtResult].
+ * A class containing statistics for an [OrtResult]. All properties are calculated lazily on first access so that
+ * expensive calculations, like for [dependencyTree], are only performed if a property is actually accessed, e.g. by
+ * a reporter template.
  */
-data class Statistics(
+class Statistics(
+    private val ortResult: OrtResult,
+    private val licenseInfoResolver: LicenseInfoResolver,
+    private val ortConfig: OrtConfiguration
+) {
     /**
      * Statistics for the repository configuration.
      */
-    val repositoryConfiguration: RepositoryConfigurationStatistics,
+    val repositoryConfiguration: RepositoryConfigurationStatistics
+        by lazy { StatisticsCalculator.getRepositoryConfigurationStatistics(ortResult) }
 
     /**
      * Statistics for the resolved configuration.
      */
-    val resolvedConfiguration: ResolvedConfigurationStatistics,
+    val resolvedConfiguration: ResolvedConfigurationStatistics
+        by lazy { StatisticsCalculator.getResolvedConfigurationStatistics(ortResult) }
 
     /**
      * The number of [Issue]s by severity which are not resolved and not excluded.
      */
-    val openIssues: IssueStatistics,
+    val openIssues: IssueStatistics by lazy { StatisticsCalculator.getOpenIssues(ortResult, ortConfig) }
 
     /**
      * The number of [RuleViolation]s by severity which are not resolved.
      */
-    val openRuleViolations: IssueStatistics,
+    val openRuleViolations: IssueStatistics
+        by lazy { StatisticsCalculator.getOpenRuleViolations(ortResult, ortConfig) }
 
     /**
      * The number of [Vulnerabilities][Vulnerability] which are not resolved and not excluded.
      */
-    val openVulnerabilities: Int,
+    val openVulnerabilities: Int by lazy { StatisticsCalculator.getOpenVulnerabilities(ortResult) }
 
     /**
      * Statistics for the dependency tree.
      */
-    val dependencyTree: DependencyTreeStatistics,
+    val dependencyTree: DependencyTreeStatistics
+        by lazy { StatisticsCalculator.getDependencyTreeStatistics(ortResult) }
 
     /**
      * Statistics of used licenses.
      */
-    val licenses: LicenseStatistics,
+    val licenses: LicenseStatistics
+        by lazy { StatisticsCalculator.getLicenseStatistics(ortResult, licenseInfoResolver) }
 
     /**
      * The sum of the execution time of all stages in seconds.
      */
-    val executionDurationInSeconds: Long
-)
+    val executionDurationInSeconds: Long by lazy { StatisticsCalculator.getExecutionDurationInSeconds(ortResult) }
+}
 
 /**
  * A class containing the amount of issues per severity.
@@ -114,7 +127,7 @@ data class IssueStatistics(
 /**
  * A class containing statistics about the dependency trees.
  */
-data class DependencyTreeStatistics(
+class DependencyTreeStatistics(
     /**
      * The number of included [Project]s.
      */
@@ -136,16 +149,6 @@ data class DependencyTreeStatistics(
     val excludesPackages: Int,
 
     /**
-     * The total depth of the deepest tree in the forest.
-     */
-    val totalTreeDepth: Int,
-
-    /**
-     * The depth of the deepest tree in the forest disregarding excluded tree nodes.
-     */
-    val includedTreeDepth: Int,
-
-    /**
      * The set of scope names which have at least one not excluded corresponding [Scope].
      */
     @JsonSerialize(converter = StringSortedSetConverter::class)
@@ -155,8 +158,20 @@ data class DependencyTreeStatistics(
      * The set of scope names which do not have a single not excluded corresponding [Scope].
      */
     @JsonSerialize(converter = StringSortedSetConverter::class)
-    val excludedScopes: Set<String>
-)
+    val excludedScopes: Set<String>,
+
+    private val ortResult: OrtResult
+) {
+    /**
+     * The total depth of the deepest tree in the forest.
+     */
+    val totalTreeDepth: Int by lazy { StatisticsCalculator.getTreeDepth(ortResult) }
+
+    /**
+     * The depth of the deepest tree in the forest disregarding excluded tree nodes.
+     */
+    val includedTreeDepth: Int by lazy { StatisticsCalculator.getTreeDepth(ortResult, ignoreExcluded = true) }
+}
 
 /**
  * A class containing statistics about licenses.
