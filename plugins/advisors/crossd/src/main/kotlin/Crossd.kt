@@ -94,7 +94,7 @@ class Crossd(
         val averages = client.getAverageValues()
         CROSSD_METRICS.forEach { metric ->
             val average = averages[metric.name]
-            average?.let { metric.averageValue = average }
+            average?.also { metric.averageValue = average }
         }
 
         val startTime = Instant.now()
