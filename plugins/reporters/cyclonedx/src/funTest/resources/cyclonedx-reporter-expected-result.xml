@@ -324,7 +324,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </reference>
       </externalReferences>
       <properties>
-        <property name="ort:effectiveLicense">MIT AND BSD-3-Clause</property>
+        <property name="ort:effectiveLicense">BSD-3-Clause AND MIT</property>
         <property name="ort:dependencyType">direct</property>
       </properties>
     </component>
@@ -461,7 +461,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         </reference>
       </externalReferences>
       <properties>
-        <property name="ort:effectiveLicense">MIT AND BSD-3-Clause AND LicenseRef-scancode-truecrypt-3.1 AND LGPL-3.0-or-later WITH openvpn-openssl-exception</property>
+        <property name="ort:effectiveLicense">BSD-3-Clause AND LGPL-3.0-or-later WITH openvpn-openssl-exception AND LicenseRef-scancode-truecrypt-3.1 AND MIT</property>
         <property name="ort:dependencyType">direct</property>
       </properties>
     </component>

@@ -294,7 +294,7 @@
       "properties" : [
         {
           "name" : "ort:effectiveLicense",
-          "value" : "MIT AND BSD-3-Clause"
+          "value" : "BSD-3-Clause AND MIT"
         },
         {
           "name" : "ort:dependencyType",
@@ -431,7 +431,7 @@
       "properties" : [
         {
           "name" : "ort:effectiveLicense",
-          "value" : "MIT AND BSD-3-Clause AND LicenseRef-scancode-truecrypt-3.1 AND LGPL-3.0-or-later WITH openvpn-openssl-exception"
+          "value" : "BSD-3-Clause AND LGPL-3.0-or-later WITH openvpn-openssl-exception AND LicenseRef-scancode-truecrypt-3.1 AND MIT"
         },
         {
           "name" : "ort:dependencyType",
