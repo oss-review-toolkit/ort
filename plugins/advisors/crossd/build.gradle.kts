@@ -30,6 +30,7 @@ dependencies {
 
     implementation(projects.clients.crossdClient)
     implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
     implementation(ktorLibs.client.contentNegotiation)
     implementation(ktorLibs.client.core)
     implementation(ktorLibs.client.okhttp)
@@ -37,6 +38,8 @@ dependencies {
     implementation(ktorLibs.serialization)
     implementation(ktorLibs.serialization.kotlinx.json)
     implementation(libs.okhttp)
+
+    funTestImplementation(libs.mockk)
 
     ksp(projects.plugins.advisors.advisorApi)
 }

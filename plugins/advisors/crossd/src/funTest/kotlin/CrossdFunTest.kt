@@ -22,11 +22,20 @@ package org.ossreviewtoolkit.plugins.advisors.crossd
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingle
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.matchExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
+import io.ktor.client.HttpClient
+
+import io.mockk.coEvery
+import io.mockk.mockkStatic
+
+import java.io.IOException
+
+import org.ossreviewtoolkit.clients.crossd.getMetrics
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -96,15 +105,10 @@ class CrossdFunTest : StringSpec({
 
         val result = crossd.retrievePackageFindings(setOf(pkg))
 
-        result should matchExactly(
-            pkg to {
-                it.advisor shouldBe crossd.details
-                it.healthMetrics should beEmpty()
-            }
-        )
+        result should beEmptyMap()
     }
 
-    "A package with no VCS info should return empty health data" {
+    "A package with no VCS info should return no findings" {
         val pkg = Package(
             id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1"),
             declaredLicenses = emptySet(),
@@ -118,15 +122,10 @@ class CrossdFunTest : StringSpec({
 
         val result = crossd.retrievePackageFindings(setOf(pkg))
 
-        result should matchExactly(
-            pkg to {
-                it.advisor shouldBe crossd.details
-                it.healthMetrics should beEmpty()
-            }
-        )
+        result should beEmptyMap()
     }
 
-    "A malformed VCS URL should return an issue" {
+    "A malformed VCS URL should return no findings" {
         val pkg = Package(
             id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1"),
             declaredLicenses = emptySet(),
@@ -144,13 +143,7 @@ class CrossdFunTest : StringSpec({
 
         val result = crossd.retrievePackageFindings(setOf(pkg))
 
-        result should matchExactly(
-            pkg to {
-                it.advisor shouldBe crossd.details
-                it.summary.issues.shouldBeSingle().message shouldBe
-                    "The VCS URL 'https://invalid-url' could not be mapped to a repository."
-            }
-        )
+        result should beEmptyMap()
     }
 
     "Issues should only be reported for the affected packages" {
@@ -163,24 +156,29 @@ class CrossdFunTest : StringSpec({
             )
         )
         val invalidPkg = Package.EMPTY.copy(
-            id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1"),
+            id = Identifier("NPM::invalid:1.0.0"),
             vcsProcessed = VcsInfo(
                 type = VcsType.GIT,
-                url = "https://invalid-url",
-                revision = "ddde192"
+                url = "https://github.com/invalid/invalid.git",
+                revision = "master"
             )
         )
 
-        val result = crossd.retrievePackageFindings(setOf(validPkg, invalidPkg))
+        mockkStatic("org.ossreviewtoolkit.clients.crossd.CrossdKt") {
+            coEvery { any<HttpClient>().getMetrics("invalid/invalid") } throws IOException("Simulated failure")
 
-        result should matchExactly(
-            validPkg to {
-                it.summary.issues should beEmpty()
-            },
-            invalidPkg to {
-                it.summary.issues.shouldBeSingle().message shouldBe
-                    "The VCS URL 'https://invalid-url' could not be mapped to a repository."
-            }
-        )
+            val result = crossd.retrievePackageFindings(setOf(validPkg, invalidPkg))
+
+            result should matchExactly(
+                validPkg to {
+                    it.summary.issues should beEmpty()
+                    it.healthMetrics shouldNot beEmpty()
+                },
+                invalidPkg to {
+                    it.summary.issues.shouldBeSingle().message shouldBe
+                        "Unable to get metrics for 'NPM::invalid:1.0.0': IOException: Simulated failure"
+                }
+            )
+        }
     }
 })

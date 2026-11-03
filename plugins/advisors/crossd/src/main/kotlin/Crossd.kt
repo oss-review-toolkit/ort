@@ -32,9 +32,12 @@ import java.time.Instant
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.crossd.getAverageValues
 import org.ossreviewtoolkit.clients.crossd.getMetrics
@@ -45,15 +48,18 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.HealthMetric
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProviderFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
 /**
  * An [AdviceProvider] implementation that obtains health metrics from a [CrOSSD](https://health.crossd.tech/doc)
- * instance.
+ * instance. Note that this advisor currently
+ * [only supports GitHub repositories](https://github.com/FH-CrOSSD/crossd#known-issues-and-limitations).
  */
 @OrtPlugin(
     id = "Crossd",
@@ -99,42 +105,57 @@ class Crossd(
 
         val startTime = Instant.now()
 
-        // Find project owner and name from repository URL.
-        val packageIds = packages.associateWith { pkg ->
-            val vcsHost = VcsHost.fromUrl(pkg.vcsProcessed.url)
-            vcsHost?.let { vcsHost ->
-                val projectOrg = vcsHost.getUserOrOrganization(pkg.vcsProcessed.url)
-                val projectName = vcsHost.getProject(pkg.vcsProcessed.url)
-                "$projectOrg/$projectName"
-            }
-        }
+        // Find project owner and name from repository URL. Note that the "project is currently only intended for use
+        // with GitHub repositories", see https://github.com/FH-CrOSSD/crossd#known-issues-and-limitations.
+        val packageIds = packages.mapNotNull { pkg ->
+            val slug = when (val vcsHost = VcsHost.fromUrl(pkg.vcsProcessed.url)) {
+                VcsHost.GITHUB -> {
+                    val projectOrg = vcsHost.getUserOrOrganization(pkg.vcsProcessed.url)
+                    val projectName = vcsHost.getProject(pkg.vcsProcessed.url)
+                    "$projectOrg/$projectName"
+                }
 
-        // Report failed repository URL parsing.
-        val issues = packageIds.filterValues { it == null }.mapValues { pkg ->
-            Issue(
-                source = descriptor.displayName,
-                message = "The VCS URL '${pkg.key.vcsProcessed.url}' could not be mapped to a repository."
-            )
-        }
+                else -> {
+                    logger.debug { "The VCS URL '${pkg.vcsProcessed.url}' could not be mapped to a GitHub repository." }
+                    null
+                }
+            }
+
+            slug?.let { pkg to it }
+        }.toMap()
 
         // Query the actual metrics data.
         val metrics = withContext(Dispatchers.IO.limitedParallelism(20)) {
-            packageIds.mapValues { entry ->
+            packageIds.map { (pkg, slug) ->
                 async {
-                    entry.value?.let { packageId ->
-                        val metrics = client.getMetrics(packageId)
+                    pkg to runCatching {
+                        val metrics = client.getMetrics(slug)
                         CROSSD_METRICS.mapNotNull { it.toHealthMetric(metrics) }
-                    }.orEmpty()
+                    }
                 }
-            }.mapValues { it.value.await() }
+            }.awaitAll().toMap()
         }
 
         val endTime = Instant.now()
 
-        return metrics.mapValues { (pkg, healthMetrics) ->
-            val summary = AdvisorSummary(startTime, endTime, listOfNotNull(issues[pkg]))
-            AdvisorResult(details, summary, emptyList(), healthMetrics)
-        }
+        return metrics.mapNotNull { (pkg, result) ->
+            val issues = mutableListOf<Issue>()
+
+            val healthMetrics = result.getOrElse {
+                issues += createAndLogIssue(
+                    "Unable to get metrics for '${pkg.id.toCoordinates()}': ${it.collectMessages()}"
+                )
+
+                emptyList()
+            }
+
+            // If there is neither metrics nor issues, there is no reason to create an advisor result for this package.
+            if (healthMetrics.isEmpty() && issues.isEmpty()) return@mapNotNull null
+
+            val summary = AdvisorSummary(startTime, endTime, issues)
+
+            pkg to AdvisorResult(details, summary, healthMetrics = healthMetrics)
+        }.toMap()
     }
 
     private fun CrossdMetric.toHealthMetric(metrics: JsonObject): HealthMetric? {
