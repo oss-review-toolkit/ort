@@ -310,7 +310,7 @@ internal class CycloneDxModelMapper(
         addProperty(
             Property(
                 "$ORT_NAME:effectiveLicense",
-                effectiveLicense?.toString().nullOrBlankToSpdxNone()
+                effectiveLicense?.sorted()?.toString().nullOrBlankToSpdxNone()
             )
         )
     }
