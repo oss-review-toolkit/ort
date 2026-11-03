@@ -45,6 +45,8 @@ import org.semver4j.range.RangeListFactory
 private const val PROJECT_TYPE = "GitHubAction"
 internal const val PACKAGE_TYPE = "GitHubAction"
 
+private const val GITHUB_WORKFLOWS_DIR = ".github/workflows"
+
 internal object ABomCommand : CommandLineTool {
     override fun command(workingDir: File?) = "abom"
 
@@ -61,12 +63,32 @@ internal object ABomCommand : CommandLineTool {
 class GitHubAction(
     override val descriptor: PluginDescriptor = GitHubActionFactory.descriptor
 ) : PackageManager(PROJECT_TYPE) {
-    override val globsForDefinitionFiles = listOf(".github/workflows/*.{yml,yaml}")
+    override val globsForDefinitionFiles = listOf("$GITHUB_WORKFLOWS_DIR/*.{yml,yaml}")
 
     private val aBomCache = mutableMapOf<File, ABom.Workflow>()
     private lateinit var projectVcs: VcsInfo
     private val graphBuilderDelegate = lazy { DependencyGraphBuilder(GitHubActionDependencyHandler(projectVcs)) }
     private val graphBuilder by graphBuilderDelegate
+
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> {
+        // Only keep workflows that are actually visible to GitHub.
+        val (visible, invisible) = definitionFiles.partition {
+            it.toRelativeString(analysisRoot).startsWith("$GITHUB_WORKFLOWS_DIR/")
+        }
+
+        if (invisible.isNotEmpty()) {
+            logger.debug {
+                "Ignoring the following workflows that are not in the root's '$GITHUB_WORKFLOWS_DIR' directory: " +
+                    invisible.joinToString()
+            }
+        }
+
+        return visible
+    }
 
     override fun resolveDependencies(
         analysisRoot: File,
