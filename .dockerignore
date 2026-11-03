@@ -18,7 +18,6 @@ integrations/jenkins/Jenkinsfile
 .markdownlint.yaml
 .ort.yml
 mlc_config.json
-qodana.yml
 renovate.json
 
 # Ignore Git entries.
