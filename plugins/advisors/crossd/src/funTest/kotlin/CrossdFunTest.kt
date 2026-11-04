@@ -43,14 +43,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class CrossdFunTest : StringSpec({
-    val crossd by lazy {
-        CrossdFactory.create(
-            serverUrl = "https://health.crossd.tech",
-            thresholdCriticalityLow = 15,
-            thresholdCriticalityMedium = 25,
-            thresholdCriticalityHigh = 40
-        )
-    }
+    val crossd by lazy { CrossdFactory.create() }
 
     "A valid package should return findings" {
         val pkg = Package(
