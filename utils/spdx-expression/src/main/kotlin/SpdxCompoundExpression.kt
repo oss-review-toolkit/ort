@@ -145,19 +145,20 @@ class SpdxCompoundExpression(
     }
 
     private fun replaceSubexpressionWithChoice(subExpression: SpdxExpression, choice: SpdxExpression): SpdxExpression {
+        if (this == subExpression) return choice
+
         // If the operator is AND, then there is no choice at this level, but try with the children if they contain the
         // sub-expression. Also, if the sub-expression is the whole expression, no recursive application of the choice
         // is needed, as it will be handled by the logic below.
-        if (
-            operator == SpdxOperator.AND && subExpression != this && children.any { it.isSubExpression(subExpression) }
-        ) {
+        if (operator == SpdxOperator.AND && children.any { it.containsSubexpression(subExpression) }) {
             // Reconstruct this AND-expression with all children having the subexpression replaced with the choice.
             return SpdxCompoundExpression(
                 SpdxOperator.AND,
-                children.map {
-                    when {
-                        it is SpdxCompoundExpression -> it.replaceSubexpressionWithChoice(subExpression, choice)
-                        else -> it
+                children.map { child ->
+                    if (child is SpdxCompoundExpression && child.containsSubexpression(subExpression)) {
+                        child.replaceSubexpressionWithChoice(subExpression, choice)
+                    } else {
+                        child
                     }
                 }
             )
@@ -218,4 +219,11 @@ class SpdxCompoundExpression(
                 }
             }
         }
+}
+
+private fun SpdxExpression.containsSubexpression(subexpression: SpdxExpression): Boolean {
+    if (this == subexpression) return true
+    if (this is SpdxCompoundExpression) return children.any { it.containsSubexpression(subexpression) }
+    if (this is SpdxLicenseWithExceptionExpression) return license == subexpression
+    return false
 }
