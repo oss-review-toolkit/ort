@@ -473,8 +473,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1"
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
             }
         }
 
@@ -765,8 +764,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = emptyList()).summary
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1"
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
@@ -830,8 +828,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = emptyList()).summary
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1"
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
@@ -897,8 +894,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
             summary.issues.forAtLeastOne {
-                it.message shouldBe "This scan has 1 file(s) pending identification in FossID. " +
-                    "Please review and resolve them at: https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1"
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
             }
 
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()

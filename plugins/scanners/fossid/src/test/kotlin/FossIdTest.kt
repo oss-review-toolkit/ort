@@ -396,9 +396,7 @@ class FossIdTest : WordSpec({
                 Issue(
                     timestamp = Instant.EPOCH,
                     source = "FossId",
-                    message = "This scan has 2 file(s) pending identification in FossID. " +
-                        "Please review and resolve them at: " +
-                        "https://www.example.org/fossid/?form=main_interface&action=scanview&sid=1",
+                    message = "This scan has 2 file(s) pending identification in FossID.",
                     severity = Severity.HINT
                 )
             )
