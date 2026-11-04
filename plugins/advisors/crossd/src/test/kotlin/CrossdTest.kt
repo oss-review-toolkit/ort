@@ -27,13 +27,11 @@ import java.net.URI
 import org.ossreviewtoolkit.model.Criticality
 
 class CrossdTest : StringSpec({
-    val testConfig = CrossdConfig(
-        serverUrl = "https://health.crossd.tech",
-        thresholdCriticalityLow = 15,
-        thresholdCriticalityMedium = 25,
-        thresholdCriticalityHigh = 40
+    val testThresholds = mapOf(
+        Criticality.LOW to 15,
+        Criticality.MEDIUM to 25,
+        Criticality.HIGH to 40
     )
-    val testThresholds = testConfig.getThresholds()
 
     "higherIsBetterMetric should return the correct criticality" {
         val metric = CrossdMetric(
