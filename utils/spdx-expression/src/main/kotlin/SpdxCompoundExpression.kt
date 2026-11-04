@@ -131,7 +131,7 @@ class SpdxCompoundExpression(
         }
 
     override fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression): SpdxExpression {
-        if (!subExpression.isSubExpression(choice)) {
+        if (!subExpression.isValidChoice(choice)) {
             throw InvalidLicenseChoiceException(
                 "$choice is not a valid choice for $subExpression. Valid choices are: ${subExpression.validChoices()}."
             )
@@ -155,10 +155,13 @@ class SpdxCompoundExpression(
             return SpdxCompoundExpression(
                 SpdxOperator.AND,
                 children.map { child ->
-                    if (child is SpdxCompoundExpression && child.containsSubexpression(subExpression)) {
-                        child.replaceSubexpressionWithChoice(subExpression, choice)
-                    } else {
-                        child
+                    when {
+                        child == subExpression -> choice
+
+                        child is SpdxCompoundExpression && child.containsSubexpression(subExpression) ->
+                            child.replaceSubexpressionWithChoice(subExpression, choice)
+
+                        else -> child
                     }
                 }
             )
@@ -170,20 +173,27 @@ class SpdxCompoundExpression(
         // remaining expressions are recomped with the OR-operand.
 
         val choices = validChoices().toMutableSet()
-        val subExpressionChoices = subExpression.validChoices()
-        val dismissedChoices = subExpressionChoices - choice.validChoices()
+        val offeredChoices = choice.validChoices()
 
-        // While the sub-expression is still contained in this expression...
-        while (choices.containsAll(subExpressionChoices)) {
-            // ... remove all unchosen expressions.
-            choices.removeAll(dismissedChoices)
+        // Remove conjunctions (branches of an OR) which match the subexpression but are dismissed by the choice.
+        choices.removeIf { choice ->
+            subExpression.validChoices().any { subexpressionChoice ->
+                choice.isValidChoice(subexpressionChoice) && offeredChoices.none { offeredChoice ->
+                    subexpressionChoice.isValidChoice(offeredChoice)
+                }
+            }
         }
 
         require(choices.isNotEmpty()) {
             "No licenses left after applying choice $choice to $subExpression."
         }
 
-        return choices.singleOrNull() ?: SpdxCompoundExpression(SpdxOperator.OR, choices)
+        // Apply or-later choices, for example replace GPL-2.0-or-later with GPL-2.0-or-later.
+        val remainingChoices = choices.map { choice ->
+            offeredChoices.firstOrNull { choice.isValidChoice(it) } ?: choice
+        }.toSet()
+
+        return remainingChoices.singleOrNull() ?: SpdxCompoundExpression(SpdxOperator.OR, children = remainingChoices)
     }
 
     override fun isSubExpression(subExpression: SpdxExpression?): Boolean =
