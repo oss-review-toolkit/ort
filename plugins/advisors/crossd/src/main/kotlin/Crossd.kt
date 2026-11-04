@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
 /**
- * An [AdviceProvider] implementation that obtains health metrics from a [CrOSSD][https://health.crossd.tech/doc]
+ * An [AdviceProvider] implementation that obtains health metrics from a [CrOSSD](https://health.crossd.tech/doc)
  * instance.
  */
 @OrtPlugin(
