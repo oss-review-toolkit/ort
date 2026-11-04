@@ -31,7 +31,7 @@ class CrossdTest : StringSpec({
         serverUrl = "https://health.crossd.tech",
         thresholdCriticalityLow = 15,
         thresholdCriticalityMedium = 25,
-        thresholdCriticalityHigh = 30
+        thresholdCriticalityHigh = 40
     )
     val testThresholds = testConfig.getThresholds()
 
