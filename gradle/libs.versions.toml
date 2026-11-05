@@ -1,7 +1,7 @@
 [versions]
 buildConfigPlugin = "6.1.2"
 detektPlugin = "2.0.0-alpha.6"
-dokkaPlugin = "2.2.0"
+dokkaPlugin = "2.3.0"
 downloadPlugin = "5.7.0"
 gitSemverPlugin = "0.19.6"
 graalVmNativeImagePlugin = "1.1.18"
