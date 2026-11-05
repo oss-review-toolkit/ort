@@ -72,7 +72,7 @@ internal object StatisticsCalculator {
             includedProjects = ortResult.getProjects().count { !ortResult.isExcluded(it.id) },
             excludedProjects = ortResult.getProjects().count { ortResult.isExcluded(it.id) },
             includedPackages = ortResult.getPackages().count { !ortResult.isExcluded(it.metadata.id) },
-            excludesPackages = ortResult.getPackages().count { ortResult.isExcluded(it.metadata.id) },
+            excludedPackages = ortResult.getPackages().count { ortResult.isExcluded(it.metadata.id) },
             includedScopes = getIncludedScopes(ortResult),
             excludedScopes = getExcludedScopes(ortResult),
             ortResult = ortResult

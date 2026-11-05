@@ -146,7 +146,7 @@ class DependencyTreeStatistics(
     /**
      * The number of excluded [Package]s.
      */
-    val excludesPackages: Int,
+    val excludedPackages: Int,
 
     /**
      * The set of scope names which have at least one not excluded corresponding [Scope].
