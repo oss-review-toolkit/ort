@@ -33,8 +33,9 @@ dependencies {
     implementation(jacksonLibs.jacksonCore)
     implementation(jacksonLibs.jacksonDataformatYaml)
 
-    funTestImplementation(projects.utils.commonUtils)
     funTestImplementation(projects.utils.testUtils)
+    funTestImplementation(libs.kotest.assertions.json)
+    funTestImplementation(libs.kotest.assertions.yaml)
 
     ksp(projects.reporter)
 }

@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
+import io.kotest.assertions.json.shouldEqualJson
+import io.kotest.assertions.yaml.shouldEqualYaml
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
-import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.readOrtResult
 import org.ossreviewtoolkit.utils.test.readResource
 
@@ -37,7 +37,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
                 howToFixTextProvider = { "Some how to fix text." }
             ),
             outputDir = tempdir()
-        ).single().getOrThrow().readText().normalizeLineBreaks()
+        ).single().getOrThrow().readText()
 
     val ortResult by lazy { readOrtResult("/reporter-test-input.yml") }
 
@@ -47,7 +47,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
 
             val result = EvaluatedModelReporterFactory.create().generateReport(ortResult)
 
-            result shouldBe expectedResult
+            result shouldEqualJson expectedResult
         }
 
         "create the expected YAML output" {
@@ -57,7 +57,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
                 .create(outputFileFormats = listOf(ConfigFileFormat.YAML))
                 .generateReport(ortResult)
 
-            result shouldBe expectedResult
+            result shouldEqualYaml expectedResult
         }
 
         "create the expected YAML output with dependency tree de-duplication enabled" {
@@ -67,7 +67,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
                 .create(outputFileFormats = listOf(ConfigFileFormat.YAML), deduplicateDependencyTree = true)
                 .generateReport(ortResult)
 
-            result shouldBe expectedResult
+            result shouldEqualYaml expectedResult
         }
     }
 })
