@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.python
 
-import java.io.File
+import dev.eav.tomlkt.Toml
+import dev.eav.tomlkt.getStringOrNull
+import dev.eav.tomlkt.getTableOrNull
+import dev.eav.tomlkt.parseToTomlTable
 
-import net.peanuuutz.tomlkt.Toml
-import net.peanuuutz.tomlkt.getStringOrNull
-import net.peanuuutz.tomlkt.getTableOrNull
-import net.peanuuutz.tomlkt.parseToTomlTable
+import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 

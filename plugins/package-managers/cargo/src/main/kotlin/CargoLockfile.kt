@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
+import dev.eav.tomlkt.Toml
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
-import net.peanuuutz.tomlkt.Toml
 
 internal val toml = Toml { ignoreUnknownKeys = true }
 

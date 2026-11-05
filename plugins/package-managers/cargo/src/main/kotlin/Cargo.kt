@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
+import dev.eav.tomlkt.decodeFromNativeReader
+
 import java.io.File
 import java.lang.invoke.MethodHandles
-
-import net.peanuuutz.tomlkt.decodeFromNativeReader
 
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf

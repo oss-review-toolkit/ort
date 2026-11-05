@@ -19,6 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gleam
 
+import dev.eav.tomlkt.Toml
+import dev.eav.tomlkt.TomlDecoder
+import dev.eav.tomlkt.TomlLiteral
+import dev.eav.tomlkt.TomlTable
+import dev.eav.tomlkt.asTomlLiteral
+import dev.eav.tomlkt.asTomlTable
+import dev.eav.tomlkt.decodeFromNativeReader
+
 import java.io.File
 
 import kotlinx.serialization.KSerializer
@@ -27,14 +35,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-
-import net.peanuuutz.tomlkt.Toml
-import net.peanuuutz.tomlkt.TomlDecoder
-import net.peanuuutz.tomlkt.TomlLiteral
-import net.peanuuutz.tomlkt.TomlTable
-import net.peanuuutz.tomlkt.asTomlLiteral
-import net.peanuuutz.tomlkt.asTomlTable
-import net.peanuuutz.tomlkt.decodeFromNativeReader
 
 private val toml = Toml { ignoreUnknownKeys = true }
 
