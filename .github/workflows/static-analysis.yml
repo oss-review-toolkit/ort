@@ -80,11 +80,13 @@ jobs:
       run: ./gradlew detekt
     - name: Check for Detekt Issues with type resolution
       run: ./gradlew detektMain detektTestFixtures detektTest detektFunTest
+    - name: Copy SARIF reports to a common directory
+      run: find . -path "*/build/reports/detekt/detekt.sarif" -exec cp --parents {} build/reports \;
     - name: Upload SARIF File
       uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
       if: always() # Upload even if the previous step failed.
       with:
-        sarif_file: build/reports/detekt/merged.sarif
+        sarif_file: build/reports
   markdown-links:
     runs-on: ubuntu-26.04
     permissions:

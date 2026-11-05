@@ -171,15 +171,6 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-val mergeDetektReportsTaskName = "mergeDetektReports"
-val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTaskName) != null) {
-    rootProject.tasks.named<ReportMergeTask>(mergeDetektReportsTaskName)
-} else {
-    rootProject.tasks.register<ReportMergeTask>(mergeDetektReportsTaskName) {
-        output = rootProject.layout.buildDirectory.file("reports/detekt/merged.sarif")
-    }
-}
-
 tasks.withType<Detekt>().configureEach detekt@{
     jvmTarget = maxKotlinJvmTarget.target
 
@@ -196,12 +187,6 @@ tasks.withType<Detekt>().configureEach detekt@{
 
         sarif.required = true
     }
-
-    mergeDetektReports.configure {
-        input.from(this@detekt.reports.sarif.outputLocation)
-    }
-
-    finalizedBy(mergeDetektReports)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
