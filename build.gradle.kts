@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import dev.detekt.gradle.report.ReportMergeTask
+
 import git.semver.plugin.gradle.PrintTask
 
 import org.eclipse.jgit.ignore.FastIgnoreRule
@@ -301,6 +303,14 @@ tasks.register<GeneratePluginDocsTask>("generatePluginDocs") {
     //       https://docs.gradle.org/current/samples/sample_cross_project_output_sharing.html. However, this requires
     //       larger refactorings.
     dependsOn(kspKotlinTasks)
+}
+
+tasks.register<ReportMergeTask>("mergeDetektReports") {
+    input = fileTree(rootDir) {
+        include("**/build/reports/detekt/*.sarif")
+    }
+
+    output = layout.buildDirectory.file("reports/detekt/merged.sarif")
 }
 
 open class OrtPrintTask : PrintTask({ "" }, "Prints the current project version", "") {
