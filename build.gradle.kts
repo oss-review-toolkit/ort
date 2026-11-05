@@ -189,7 +189,7 @@ val checkCopyrightsInNoticeFile = tasks.register("checkCopyrightsInNoticeFile") 
     }
 }
 
-val checkLicenseHeaders = tasks.register("checkLicenseHeaders") {
+tasks.register("checkLicenseHeaders") {
     val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
     val files = CopyrightableFiles.filter(gitFilesProvider)
 
@@ -220,7 +220,7 @@ val checkLicenseHeaders = tasks.register("checkLicenseHeaders") {
     }
 }
 
-val checkGitAttributes = tasks.register("checkGitAttributes") {
+tasks.register("checkGitAttributes") {
     val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
 
     inputs.files(gitFilesProvider)
