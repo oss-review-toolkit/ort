@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.utils.spdxdocument.model
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException
-
 import io.kotest.assertions.json.ArrayOrder
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.assertions.throwables.shouldThrow
