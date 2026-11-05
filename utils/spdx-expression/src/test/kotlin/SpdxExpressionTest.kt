@@ -26,10 +26,13 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+
+import kotlin.time.Duration.Companion.milliseconds
 
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
@@ -567,6 +570,156 @@ class SpdxExpressionTest : WordSpec({
             "A AND B".toSpdx().hashCode() shouldBe "B AND A".toSpdx().hashCode()
             "A OR B".toSpdx().hashCode() shouldBe "B OR A".toSpdx().hashCode()
             "A AND (B OR C)".toSpdx().hashCode() shouldBe "(A AND B) OR (A AND C)".toSpdx().hashCode()
+        }
+    }
+
+    "satisfies()" should {
+        "return true if expressions are identical" {
+            "A".toSpdx().satisfies("A".toSpdx()) shouldBe true
+            "A WITH E".toSpdx().satisfies("A WITH E".toSpdx()) shouldBe true
+        }
+
+        "return false if expressions are different" {
+            "A".toSpdx().satisfies("B".toSpdx()) shouldBe false
+            "A WITH E".toSpdx().satisfies("A WITH F".toSpdx()) shouldBe false
+            "A".toSpdx().satisfies("A WITH E".toSpdx()) shouldBe false
+        }
+
+        "properly handle single OR expression, and exceptions" {
+            "A".toSpdx().satisfies("A OR B".toSpdx()) shouldBe true
+            "B".toSpdx().satisfies("A OR B".toSpdx()) shouldBe true
+            "C".toSpdx().satisfies("A OR B".toSpdx()) shouldBe false
+            "A WITH E".toSpdx().satisfies("A WITH E OR B".toSpdx()) shouldBe true
+        }
+
+        "properly handle a single AND expression, and exceptions" {
+            "A AND B".toSpdx().satisfies("A".toSpdx()) shouldBe true
+            "A".toSpdx().satisfies("A AND B".toSpdx()) shouldBe false
+            "A WITH E AND B".toSpdx().satisfies("A WITH E".toSpdx()) shouldBe true
+        }
+
+        "properly handle nested compound expressions" {
+            "A AND C".toSpdx().satisfies("(A OR B) AND C".toSpdx()) shouldBe true
+            "B AND C".toSpdx().satisfies("(A OR B) AND C".toSpdx()) shouldBe true
+            "A".toSpdx().satisfies("(A OR B) AND C".toSpdx()) shouldBe false
+        }
+    }
+
+    "toDnf()" should {
+        "return the DNF for a single license, and exception" {
+            "A".toSpdx().toDnf() shouldBe setOf(
+                setOf("A")
+            )
+
+            "A WITH E".toSpdx().toDnf() shouldBe setOf(
+                setOf("A WITH E")
+            )
+        }
+
+        "return the DNF for an OR with single licenses, and exceptions" {
+            "A OR B".toSpdx().toDnf() shouldBe setOf(
+                setOf("A"),
+                setOf("B")
+            )
+
+            "A WITH E OR B WITH F".toSpdx().toDnf() shouldBe setOf(
+                setOf("A WITH E"),
+                setOf("B WITH F")
+            )
+        }
+
+        "return the DNF for an AND with single licenses, and exceptions" {
+            "A AND B".toSpdx().toDnf() shouldBe setOf(
+                setOf("A", "B")
+            )
+
+            "A WITH E AND B WITH F".toSpdx().toDnf() shouldBe setOf(
+                setOf("A WITH E", "B WITH F")
+            )
+        }
+
+        "return the DNF for a nested AND within an OR" {
+            "A OR B AND C".toSpdx().toDnf() shouldBe setOf(
+                setOf("A"),
+                setOf("B", "C")
+            )
+        }
+
+        "return the DNF for a nested OR within an AND" {
+            "(A OR B) AND C".toSpdx().toDnf() shouldBe setOf(
+                setOf("A", "C"),
+                setOf("B", "C")
+            )
+        }
+
+        "return a DNF which does not contain duplicates" {
+            "(A OR B) AND (C OR A)".toSpdx().toDnf() shouldBe setOf(
+                setOf("A", "C"),
+                setOf("A"),
+                setOf("B", "C"),
+                setOf("A", "B")
+            )
+
+            "(A OR B) AND (A OR B)".toSpdx().toDnf() shouldBe setOf(
+                setOf("A"),
+                setOf("B")
+            )
+        }
+
+        "return in reasonable time for a complex AND expression".config(
+            blockingTest = true,
+            timeout = 150.milliseconds
+        ) {
+            val licenses = setOf(
+                "Apache-1.1",
+                "Apache-2.0",
+                "Artistic-1.0-Perl",
+                "Artistic-2.0",
+                "BSD-2-Clause",
+                "BSD-2-Clause-Darwin",
+                "BSD-2-Clause-Views",
+                "BSD-3-Clause",
+                "BSL-1.0",
+                "CC-BY-2.5",
+                "CC-BY-4.0",
+                "CDDL-1.0",
+                "CDDL-1.1",
+                "CPL-1.0",
+                "EPL-1.0",
+                "EPL-2.0",
+                "GPL-1.0-or-later",
+                "GPL-2.0-only WITH Classpath-exception-2.0",
+                "GPL-2.0-only",
+                "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                "GPL-2.0-or-later",
+                "ICU",
+                "ISC",
+                "JSON",
+                "LGPL-2.0-only",
+                "LGPL-2.0-or-later",
+                "LGPL-2.1-only",
+                "LGPL-2.1-or-later",
+                "LGPL-3.0-only",
+                "LPPL-1.3c",
+                "MIT",
+                "MPL-1.0",
+                "MPL-1.1",
+                "MPL-2.0",
+                "NTP",
+                "Noweb",
+                "OFL-1.1",
+                "Python-2.0",
+                "Ruby",
+                "Unicode-DFS-2016",
+                "W3C",
+                "W3C-19980720",
+                "W3C-20150513"
+            )
+            val expression = licenses.joinToString(separator = " AND ").toSpdx()
+
+            val dnf = expression.toDnf()
+
+            dnf shouldContain licenses
         }
     }
 
