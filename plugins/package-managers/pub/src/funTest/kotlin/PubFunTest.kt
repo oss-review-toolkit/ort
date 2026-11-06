@@ -26,6 +26,8 @@ import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.should
 import io.kotest.matchers.string.haveSubstring
 
+import kotlin.time.Duration.Companion.minutes
+
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
@@ -39,7 +41,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 @Tags("RequiresExternalTool")
 class PubFunTest : WordSpec({
-    "Pub" should {
+    "Pub".config(timeout = 20.minutes) should {
         "resolve dart http dependencies correctly" {
             val definitionFile = getAssetFile("projects/external/dart-http/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/external/dart-http-expected-output.yml")
