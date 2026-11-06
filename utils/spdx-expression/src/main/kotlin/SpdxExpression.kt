@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionParser
  * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/
  */
 @JsonSerialize(using = ToStringSerializer::class)
+@Suppress("TooManyFunctions")
 sealed class SpdxExpression {
     /**
      * The level of strictness to apply when validating an [SpdxExpression].
@@ -190,6 +191,42 @@ sealed class SpdxExpression {
 
         return this
     }
+
+    /**
+     * Returns true if this [SpdxExpression] contains any single license which allows to choose a later version.
+     */
+    abstract fun offersVersionChoice(): Boolean
+
+    /**
+     * Returns true if the [choice] satisfies [given], and [choice] does not equal [given], and [given] is contained in
+     * this [SpdxExpression].
+     */
+    abstract fun isValidVersionChoice(given: SpdxSingleLicenseExpression, choice: SpdxSingleLicenseExpression): Boolean
+
+    /**
+     * Apply a [license version choice][choice] to the given this expression, and return an [SpdxExpression] where the
+     * choice is resolved. Throws an exception if [given] is not a valid version choice for this expression.
+     */
+    fun applyVersionChoice(given: SpdxSingleLicenseExpression, choice: SpdxSingleLicenseExpression): SpdxExpression {
+        if (!SpdxOrLaterLicenseMapper.INSTANCE.isValidChoice(given, choice)) {
+            throw InvalidLicenseVersionChoiceException(
+                "The version choice from $given to $choice is invalid."
+            )
+        }
+
+        if (!isValidVersionChoice(given, choice)) {
+            throw InvalidLicenseVersionChoiceException(
+                "The version choice from $given to $choice cannot be applied to this expression: $this."
+            )
+        }
+
+        return replaceSingleLicense(given, choice)
+    }
+
+    internal abstract fun replaceSingleLicense(
+        given: SpdxSingleLicenseExpression,
+        replacement: SpdxSingleLicenseExpression
+    ): SpdxExpression
 
     /**
      * Apply [licenseChoices] in the given order to [this][SpdxExpression].

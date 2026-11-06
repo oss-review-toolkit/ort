@@ -428,4 +428,99 @@ class SpdxExpressionChoiceTest : WordSpec({
             choices.map { it.toString() } should containExactlyInAnyOrder(expression)
         }
     }
+
+    "applyVersionChoice()" should {
+        "chose a later version within a single license expression" {
+            val expression = "EPL-1.0+".toSpdx()
+
+            val result = expression.applyVersionChoice(given = "EPL-1.0+", choice = "EPL-2.0")
+
+            result shouldBe "EPL-2.0".toSpdx()
+        }
+
+        "chose a later version with + within a single license expression" {
+            val expression = "EPL-1.0+".toSpdx()
+
+            val result = expression.applyVersionChoice(given = "EPL-1.0+", choice = "EPL-2.0+")
+
+            result shouldBe "EPL-2.0+".toSpdx()
+        }
+
+        "chose a later version within a nested compound expression with multiple occurrences" {
+            val expression = "(EPL-1.0+ OR MIT OR 0BSD) AND (EPL-1.0+ OR BSD-3-Clause)".toSpdx()
+
+            val result = expression.applyVersionChoice(given = "EPL-1.0+", choice = "EPL-2.0")
+
+            result shouldBe "(EPL-2.0 OR MIT OR 0BSD) AND (EPL-2.0 OR BSD-3-Clause)".toSpdx()
+        }
+
+        "throw if the choice does not satisfy given" {
+            val expression = "0BSD OR GPL-2.0-only".toSpdx()
+
+            shouldThrow<InvalidLicenseVersionChoiceException> {
+                expression.applyVersionChoice(given = "GPL-2.0-only+", choice = "GPL-3.0-only")
+            }
+        }
+
+        "throw if given is not contained in the expression, even though choice satisfies given" {
+            val expression = "GPL-2.0-only".toSpdx()
+
+            shouldThrow<InvalidLicenseVersionChoiceException> {
+                expression.applyVersionChoice(given = "GPL-1.0-later", choice = "GPL-3.0-only")
+            }
+        }
+
+        "throw if given and choice are equal, even though both are contained in the expression" {
+            val expression = "MIT AND GPL-3.0-or-later".toSpdx()
+
+            shouldThrow<InvalidLicenseVersionChoiceException> {
+                expression.applyVersionChoice(given = "GPL-3.0-or-later", choice = "GPL-3.0-or-later")
+            }
+        }
+    }
+
+    "isValidVersionChoice()" should {
+        "return true if the choice is valid" {
+            "0BSD OR GPL-2.0-or-later".isValidVersionChoice(given = "GPL-2.0-or-later", choice = "GPL-3.0-only")
+        }
+
+        "return false if the choice does not satisfy given" {
+            "0BSD OR GPL-2.0-only".isValidVersionChoice(given = "GPL-2.0-only+", choice = "GPL-3.0-only")
+        }
+
+        "return if given is not contained in the expression, even though choice satisfies given" {
+            "GPL-2.0-only".isValidVersionChoice(given = "GPL-1.0-later", choice = "GPL-3.0-only")
+        }
+
+        "return false if given and choice are equal, even though both are contained in the expression" {
+            "MIT AND GPL-3.0-or-later".isValidVersionChoice(given = "GPL-3.0-or-later", choice = "GPL-3.0-or-later")
+        }
+    }
+
+    "offersVersionChoice()" should {
+        "return true if a version choice is offered" {
+            "GPL-2.0-or-later".offersVersionChoice() shouldBe true
+            "MIT OR (GPL-2.0-or-later AND 0BSD)".offersVersionChoice() shouldBe true
+            "MIT AND GPL-2.0-or-later".offersVersionChoice() shouldBe true
+            "MIT OR GPL-2.0-or-later".offersVersionChoice() shouldBe true
+            "MIT OR GPL-2.0-or-later WITH Classpath-exception-2.0".offersVersionChoice() shouldBe true
+        }
+
+        "return false if no version choice is offered" {
+            "GPL-2.0-only".offersVersionChoice() shouldBe false
+            "MIT OR GPL-2.0-only".offersVersionChoice() shouldBe false
+            "GPL-2.0-only WITH Classpath-exception-2.0".offersVersionChoice() shouldBe false
+        }
+    }
 })
+
+private fun SpdxExpression.applyVersionChoice(given: String, choice: String): SpdxExpression =
+    applyVersionChoice(SpdxSingleLicenseExpression.parse(given), SpdxSingleLicenseExpression.parse(choice))
+
+private fun String.offersVersionChoice() = SpdxExpression.parse(this).offersVersionChoice()
+
+private fun String.isValidVersionChoice(given: String, choice: String) =
+    SpdxExpression.parse(this).isValidVersionChoice(
+        given = SpdxSingleLicenseExpression.parse(given),
+        choice = SpdxSingleLicenseExpression.parse(choice)
+    )

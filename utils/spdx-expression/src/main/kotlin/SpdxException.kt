@@ -27,4 +27,6 @@ open class SpdxException : RuntimeException {
 
 class InvalidLicenseChoiceException(message: String) : SpdxException(message)
 
+class InvalidLicenseVersionChoiceException(message: String) : SpdxException(message)
+
 class InvalidSubExpressionException(message: String) : SpdxException(message)
