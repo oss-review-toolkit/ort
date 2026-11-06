@@ -27,6 +27,10 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * [given] is the complete license expression, or a sub-expression of the license, where [choice] is going to be applied
  * on. If no [given] is supplied, the [choice] will be applied to the complete expression of the package.
  *
+ * If [given] and choice are both single license expressions, the choice is treated as a license version choice,
+ * where given refers to an SPDX license which allows for choosing any later version, and choice refers to the actual
+ * later version to chose which in turn may allow choosing a later version.
+ *
  * e.g.: with [given] as complete expression
  * ```
  *  -> Complete license expression: (A OR B) AND C
@@ -49,6 +53,14 @@ import com.fasterxml.jackson.annotation.JsonInclude
  *  choice: A AND C
  *  -> result: A AND C
  * ```
+ *
+ * e.g.: a license version choice
+ * ```
+ * -> Complete license expression: (A+ OR B) AND (C OR D)
+ *  given: A+
+ *  choice: A
+ *  -> result: (A OR B) AND (C OR D)
+ * ```
  */
 data class SpdxLicenseChoice(
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -58,10 +70,21 @@ data class SpdxLicenseChoice(
     val comment: String = ""
 ) {
     init {
-        if (given?.isValidChoice(choice) == false) {
+        if (isVersionChoice()) {
+            val isValid = SpdxOrLaterLicenseMapper.INSTANCE.isValidChoice(
+                given as SpdxSingleLicenseExpression,
+                choice as SpdxSingleLicenseExpression
+            )
+
+            if (!isValid) {
+                throw InvalidLicenseVersionChoiceException("$choice is not a valid later version of $given.")
+            }
+        } else if (given?.isValidChoice(choice) == false) {
             throw InvalidLicenseChoiceException(
                 "$choice is not a valid choice for $given. Valid choices are: ${given.validChoices()}."
             )
         }
     }
+
+    fun isVersionChoice(): Boolean = given is SpdxSingleLicenseExpression && choice is SpdxSingleLicenseExpression
 }
