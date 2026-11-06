@@ -19,48 +19,58 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.cfg.MapperBuilder
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import org.yaml.snakeyaml.LoaderOptions
 
 /**
- * A lambda expression that can be [applied][apply] to all [ObjectMapper]s to configure them the same way.
+ * A lambda expression that can be [applied][apply] to all [MapperBuilder]s to build them the same way.
  */
-val mapperConfig: ObjectMapper.() -> Unit = {
-    registerKotlinModule()
+val mapperConfig: MapperBuilder<*, *>.() -> Unit = {
+    addModule(kotlinModule())
 
-    registerModule(JavaTimeModule())
+    addModule(JavaTimeModule())
     disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
-    propertyNamingStrategy = SNAKE_CASE
+    propertyNamingStrategy(SNAKE_CASE)
 }
 
-val jsonMapper = JsonMapper().apply(mapperConfig)
+val jsonMapper: JsonMapper by lazy {
+    JsonMapper.builder()
+        .apply(mapperConfig)
+        .build()
+}
 
-val yamlMapper: YAMLMapper = YAMLMapper(
-    YAMLFactory.builder()
-        .loaderOptions(
-            LoaderOptions().apply {
-                // Set the code point limit to the maximum possible value which is approximately 2GB, required since
-                // SnakeYAML 1.32. Also see:
-                //
-                // https://github.com/FasterXML/jackson-dataformats-text/tree/2.15/yaml#maximum-input-yaml-document-size-3-mb
-                // https://github.com/FasterXML/jackson-dataformats-text/issues/337
-                //
-                // TODO: Consider making this configurable.
-                codePointLimit = Int.MAX_VALUE
-            }
-        ).build()
-).apply(mapperConfig).enable(YAMLGenerator.Feature.ALLOW_LONG_KEYS)
+val yamlMapper: YAMLMapper by lazy {
+    val loaderOptions = LoaderOptions().apply {
+        // Set the code point limit to the maximum possible value which is approximately 2GB, required since
+        // SnakeYAML 1.32. Also see:
+        //
+        // https://github.com/FasterXML/jackson-dataformats-text/tree/2.15/yaml#maximum-input-yaml-document-size-3-mb
+        // https://github.com/FasterXML/jackson-dataformats-text/issues/337
+        //
+        // TODO: Consider making this configurable.
+        codePointLimit = Int.MAX_VALUE
+    }
+
+    val yamlFactory = YAMLFactory.builder()
+        .loaderOptions(loaderOptions)
+        .build()
+
+    YAMLMapper.builder(yamlFactory)
+        .apply(mapperConfig)
+        .enable(YAMLGenerator.Feature.ALLOW_LONG_KEYS)
+        .build()
+}
 
 inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 

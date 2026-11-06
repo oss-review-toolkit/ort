@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.plugins.commands.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.fasterxml.jackson.module.kotlin.kotlinModule
 
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.convert
@@ -69,9 +69,10 @@ class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descript
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    private val configWriter = YAMLMapper()
-        .registerKotlinModule()
-        .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
+    private val configWriter = YAMLMapper.builder()
+        .addModule(kotlinModule())
+        .defaultPropertyInclusion(JsonInclude.Value.ALL_NON_NULL)
+        .build()
         .writerFor(OrtConfiguration::class.java)
         .withRootName("ort")
 
