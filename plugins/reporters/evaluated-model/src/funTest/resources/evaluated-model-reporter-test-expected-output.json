@@ -1270,20 +1270,17 @@
     "resolutions" : [ ]
   } ],
   "statistics" : {
-    "resolved_configuration" : {
-      "license_choices" : 2,
-      "package_configurations" : 1,
-      "package_curations" : 3,
-      "issue_resolutions" : 2,
-      "rule_violation_resolutions" : 1,
-      "vulnerability_resolutions" : 0
+    "dependency_tree" : {
+      "excluded_packages" : 5,
+      "excluded_projects" : 1,
+      "excluded_scopes" : [ "testCompile" ],
+      "included_packages" : 2,
+      "included_projects" : 1,
+      "included_scopes" : [ "compile" ],
+      "included_tree_depth" : 3,
+      "total_tree_depth" : 3
     },
-    "open_issues" : {
-      "errors" : 7,
-      "warnings" : 4,
-      "hints" : 3,
-      "severe" : 11
-    },
+    "execution_duration_in_seconds" : 3125,
     "licenses" : {
       "declared" : {
         "Apache-2.0" : 3,
@@ -1312,35 +1309,38 @@
         "MIT" : 1
       }
     },
+    "open_issues" : {
+      "errors" : 7,
+      "hints" : 3,
+      "severe" : 11,
+      "warnings" : 4
+    },
+    "open_rule_violations" : {
+      "errors" : 1,
+      "hints" : 0,
+      "severe" : 2,
+      "warnings" : 1
+    },
+    "open_vulnerabilities" : 1,
     "repository_configuration" : {
-      "path_excludes" : 3,
-      "scope_excludes" : 1,
+      "issue_resolutions" : 2,
       "license_choices" : 2,
       "license_finding_curations" : 0,
       "package_configurations" : 0,
       "package_curations" : 0,
-      "issue_resolutions" : 2,
+      "path_excludes" : 3,
       "rule_violation_resolutions" : 1,
+      "scope_excludes" : 1,
       "vulnerability_resolutions" : 0
     },
-    "open_rule_violations" : {
-      "errors" : 1,
-      "warnings" : 1,
-      "hints" : 0,
-      "severe" : 2
-    },
-    "open_vulnerabilities" : 1,
-    "dependency_tree" : {
-      "included_projects" : 1,
-      "excluded_projects" : 1,
-      "included_packages" : 2,
-      "excluded_packages" : 5,
-      "included_scopes" : [ "compile" ],
-      "excluded_scopes" : [ "testCompile" ],
-      "total_tree_depth" : 3,
-      "included_tree_depth" : 3
-    },
-    "execution_duration_in_seconds" : 3125
+    "resolved_configuration" : {
+      "issue_resolutions" : 2,
+      "license_choices" : 2,
+      "package_configurations" : 1,
+      "package_curations" : 3,
+      "rule_violation_resolutions" : 1,
+      "vulnerability_resolutions" : 0
+    }
   },
   "repository" : {
     "vcs" : {
