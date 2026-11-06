@@ -11,3 +11,5 @@ ignorePatterns:
   - pattern: '^https://www.epam.com/services/engineering/open-source$'
   # The certificate expired but will probably not be renewed as the company is being wound up.
   - pattern: "^https://hella-aglaia.com/$"
+  # This often has "404 Not Found" false-positives for unknown reasons.
+  - pattern: "^https://oss-review-toolkit.slack.com$"
