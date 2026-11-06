@@ -1210,7 +1210,7 @@ statistics:
     included_projects: 1
     excluded_projects: 1
     included_packages: 2
-    excludes_packages: 5
+    excluded_packages: 5
     total_tree_depth: 3
     included_tree_depth: 3
     included_scopes:
