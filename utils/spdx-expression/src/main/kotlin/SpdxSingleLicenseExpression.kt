@@ -52,4 +52,16 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
      * Otherwise, return null.
      */
     abstract fun getLicenseUrl(): String?
+
+    override fun offersVersionChoice(): Boolean = SpdxOrLaterLicenseMapper.INSTANCE.offersChoice(this)
+
+    override fun isValidVersionChoice(
+        given: SpdxSingleLicenseExpression,
+        choice: SpdxSingleLicenseExpression
+    ): Boolean = equalsNormalized(given) && SpdxOrLaterLicenseMapper.INSTANCE.isValidChoice(given, choice)
+
+    override fun replaceSingleLicense(
+        given: SpdxSingleLicenseExpression,
+        replacement: SpdxSingleLicenseExpression
+    ): SpdxSingleLicenseExpression = takeUnless { given.equalsNormalized(this) } ?: replacement
 }

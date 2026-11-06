@@ -86,6 +86,9 @@ internal class SpdxOrLaterLicenseMapper(successorMap: Map<String, String>) {
         }
 }
 
+internal fun SpdxSingleLicenseExpression.equalsNormalized(other: SpdxSingleLicenseExpression) =
+    toNormalizedLicense() == other.toNormalizedLicense()
+
 private data class NormalizedLicense(val baseId: String, val orLater: Boolean, val exceptionId: String?)
 
 private fun SpdxSingleLicenseExpression.toNormalizedLicense(): NormalizedLicense {

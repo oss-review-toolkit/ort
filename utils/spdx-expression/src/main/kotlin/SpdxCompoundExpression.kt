@@ -192,6 +192,19 @@ class SpdxCompoundExpression(
             else -> validChoices().containsAll(subExpression.validChoices())
         }
 
+    override fun offersVersionChoice(): Boolean = children.any { it.offersVersionChoice() }
+
+    override fun isValidVersionChoice(
+        given: SpdxSingleLicenseExpression,
+        choice: SpdxSingleLicenseExpression
+    ): Boolean = children.any { it.isValidVersionChoice(given, choice) }
+
+    override fun replaceSingleLicense(
+        given: SpdxSingleLicenseExpression,
+        replacement: SpdxSingleLicenseExpression
+    ): SpdxCompoundExpression =
+        SpdxCompoundExpression(operator, children.map { it.replaceSingleLicense(given, replacement) })
+
     override fun equals(other: Any?): Boolean {
         if (other !is SpdxExpression) return false
 
