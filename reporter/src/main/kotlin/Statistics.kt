@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
  * expensive calculations, like for [dependencyTree], are only performed if a property is actually accessed, e.g. by
  * a reporter template.
  */
+@JsonPropertyOrder(alphabetic = true)
 class Statistics(
     private val ortResult: OrtResult,
     private val licenseInfoResolver: LicenseInfoResolver,
@@ -102,6 +103,7 @@ class Statistics(
 /**
  * A class containing the amount of issues per severity.
  */
+@JsonPropertyOrder(alphabetic = true)
 data class IssueStatistics(
     /**
      * The number of issues with [Severity.ERROR] as severity.
@@ -127,6 +129,7 @@ data class IssueStatistics(
 /**
  * A class containing statistics about the dependency trees.
  */
+@JsonPropertyOrder(alphabetic = true)
 class DependencyTreeStatistics(
     /**
      * The number of included [Project]s.
@@ -176,6 +179,7 @@ class DependencyTreeStatistics(
 /**
  * A class containing statistics about licenses.
  */
+@JsonPropertyOrder(alphabetic = true)
 data class LicenseStatistics(
     /**
      * All declared licenses, mapped to the number of [Project]s and [Package]s they are declared in.
@@ -199,6 +203,7 @@ data class LicenseStatistics(
 /**
  * A class containing statistics about the repository configuration
  */
+@JsonPropertyOrder(alphabetic = true)
 data class RepositoryConfigurationStatistics(
     /**
      * The number of [PathExclude]s.
@@ -249,6 +254,7 @@ data class RepositoryConfigurationStatistics(
 /**
  * A class containing statistics about the resolved configuration
  */
+@JsonPropertyOrder(alphabetic = true)
 data class ResolvedConfigurationStatistics(
     /**
      * The number of [LicenseChoices].
