@@ -149,12 +149,18 @@ data class EvaluatedModel(
         )
 
         private val JSON_MAPPER by lazy {
-            JsonMapper().apply(mapperConfig).registerModule(IntIdModule(INT_ID_TYPES))
+            JsonMapper.builder()
+                .apply(mapperConfig)
+                .addModule(IntIdModule(INT_ID_TYPES))
                 .disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)
+                .build()
         }
 
         private val YAML_MAPPER by lazy {
-            YAMLMapper().apply(mapperConfig).registerModule(IntIdModule(INT_ID_TYPES))
+            YAMLMapper.builder()
+                .apply(mapperConfig)
+                .addModule(IntIdModule(INT_ID_TYPES))
+                .build()
         }
 
         fun create(input: ReporterInput, deduplicateDependencyTree: Boolean = false): EvaluatedModel =
