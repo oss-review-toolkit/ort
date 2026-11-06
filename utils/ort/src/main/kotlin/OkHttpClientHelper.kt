@@ -244,14 +244,21 @@ fun OkHttpClient.downloadText(url: String): Result<String> {
 }
 
 /**
- * Download from [url] with optional [acceptEncoding] and return a [Result] with the [Response] and non-nullable
- * [ResponseBody] on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on
- * failure.
+ * Download from [url] with optional [acceptEncoding] and [accept] headers and return a [Result] with the [Response]
+ * and non-nullable [ResponseBody] on success, or a [Result] wrapping an [IOException] (which might be a
+ * [HttpDownloadError]) on failure.
  */
-fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<Pair<Response, ResponseBody>> =
+fun OkHttpClient.download(
+    url: String,
+    acceptEncoding: String? = null,
+    accept: String? = null
+): Result<Pair<Response, ResponseBody>> =
     runCatching {
         val request = Request.Builder()
-            .apply { acceptEncoding?.also { header("Accept-Encoding", it) } }
+            .apply {
+                acceptEncoding?.also { header("Accept-Encoding", it) }
+                accept?.also { header("Accept", it) }
+            }
             .get()
             .url(url)
             .build()

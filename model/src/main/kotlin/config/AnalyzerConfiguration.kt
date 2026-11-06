@@ -70,6 +70,7 @@ data class AnalyzerConfiguration(
         "PNPM",
         "Poetry",
         "Pub",
+        "Pylock",
         "Rebar3",
         "SBT",
         "SpdxDocumentFile",
