@@ -236,6 +236,32 @@ class SpdxExpressionChoiceTest : WordSpec({
             // match the sub-expression despite containing a sub-string of it.
             result shouldBe "A AND (A OR B WITH E)".toSpdx()
         }
+
+        "apply multiple license version choices" {
+            val expression = "EPL-1.0+ AND MIT AND GPL-2.0-or-later".toSpdx()
+
+            val choices = listOf(
+                SpdxLicenseChoice("EPL-1.0+".toSpdx(), "EPL-2.0".toSpdx()),
+                SpdxLicenseChoice("GPL-2.0-or-later".toSpdx(), "GPL-3.0-or-later".toSpdx())
+            )
+
+            val result = expression.applyChoices(choices)
+
+            result shouldBe "EPL-2.0 AND MIT AND GPL-3.0-or-later".toSpdx()
+        }
+
+        "apply the license choice before the license version choice" {
+            val expression = "GPL-2.0-or-later OR MIT".toSpdx()
+
+            val choices = listOf(
+                SpdxLicenseChoice("GPL-2.0-or-later".toSpdx(), "GPL-3.0-or-later".toSpdx()),
+                SpdxLicenseChoice("GPL-2.0-or-later OR MIT".toSpdx(), "GPL-2.0-or-later".toSpdx())
+            )
+
+            val result = expression.applyChoices(choices)
+
+            result shouldBe "GPL-3.0-or-later".toSpdx()
+        }
     }
 
     "isSubExpression()" should {

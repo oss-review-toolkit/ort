@@ -235,21 +235,36 @@ sealed class SpdxExpression {
 
     /**
      * Apply [licenseChoices] in the given order to [this][SpdxExpression] and return the resulting SPDX expression
-     * along with the applied license choices in the order they were applied.
+     * along with the applied license choices in the order they were applied, but any OR-operator based choice is
+     * applied before any or-later based choice.
      */
     fun applyAndGetChoices(licenseChoices: List<SpdxLicenseChoice>): Pair<SpdxExpression, List<SpdxLicenseChoice>> {
-        if (validChoices().size == 1) return this to emptyList()
-
         var currentExpression = this
         val appliedChoices = mutableListOf<SpdxLicenseChoice>()
 
-        licenseChoices.forEach {
+        val (versionChoices, choices) = licenseChoices.partition { it.isVersionChoice() }.let {
+            it.first.takeIf { offersVersionChoice() }.orEmpty() to it.second.takeIf { offersChoice() }.orEmpty()
+        }
+
+        // Apply OR-operator based choices:
+        choices.forEach {
             if (it.given == null && currentExpression.isValidChoice(it.choice)) {
                 currentExpression = currentExpression.applyChoice(it.choice)
                 appliedChoices += it
             } else if (currentExpression.isSubExpression(it.given)) {
                 @Suppress("UnsafeCallOnNullableType")
                 currentExpression = currentExpression.applyChoice(it.choice, it.given!!)
+                appliedChoices += it
+            }
+        }
+
+        // Apply or-later based choices:
+        versionChoices.forEach {
+            val given = it.given as SpdxSingleLicenseExpression
+            val choice = it.choice as SpdxSingleLicenseExpression
+
+            if (currentExpression.isValidVersionChoice(given, choice)) {
+                currentExpression = currentExpression.applyVersionChoice(given, choice)
                 appliedChoices += it
             }
         }
