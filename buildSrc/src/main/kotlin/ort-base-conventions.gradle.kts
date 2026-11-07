@@ -81,7 +81,7 @@ configurations.all {
     resolutionStrategy {
         dependencySubstitution {
             substitute(module("org.lz4:lz4-java"))
-                .using(module("at.yawk.lz4:lz4-java:1.13.0"))
+                .using(module("at.yawk.lz4:lz4-java:1.14.0"))
                 .because("lz4-java is unmaintained and vulnerable to CVE-2025-12183")
         }
     }
