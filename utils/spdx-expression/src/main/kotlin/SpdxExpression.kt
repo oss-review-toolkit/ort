@@ -159,10 +159,23 @@ sealed class SpdxExpression {
 
     /**
      * Return true if [choice] is a valid license choice for this SPDX expression. This can only be the case, if
-     * [choice] does not offer a license choice itself and if the [licenses][SpdxSingleLicenseExpression] contained in
-     * [choice] match any of the [valid license choices][validChoices].
+     * [choice] satisfies any of the [valid license choices][validChoices], whereas satisfies considers the or-later
+     * semantics, too.
      */
-    fun isValidChoice(choice: SpdxExpression): Boolean = !choice.offersChoice() && choice in validChoices()
+    fun isValidChoice(choice: SpdxExpression): Boolean {
+        val validChoices = validChoices()
+        val offeredChoices = choice.validChoices() // The choice may itself offer a choice.
+
+        // Use a non-functional return early only for performance. It returns true if the choice is valid and only
+        // OR-based. For example, it does not involve a choice for any 'or-later' choices.
+        if (choice in validChoices || validChoices.containsAll(offeredChoices)) return true
+
+        // Determine the validity considering both, or-later and OR choices. This works like the above, but uses
+        // satisfies() instead of equals() for the matching.
+        return offeredChoices.all { offeredChoice ->
+            validChoices.any { validChoice -> offeredChoice.satisfies(validChoice) }
+        }
+    }
 
     /**
      * Return true if [subExpression] is semantically contained in [this][SpdxExpression] expression.
@@ -171,7 +184,7 @@ sealed class SpdxExpression {
 
     /**
      * Return true if this expression offers a license choice. This can only be true if this expression contains the
-     * [OR operator][SpdxOperator.OR].
+     * [OR operator][SpdxOperator.OR]. Choices for 'or-later' licenses are disregarded by this function.
      */
     fun offersChoice(): Boolean = validChoices().size > 1
 
@@ -184,11 +197,11 @@ sealed class SpdxExpression {
             throw InvalidSubExpressionException("$subExpression is not a valid subExpression for $this")
         }
 
-        if (this != choice) {
+        if (!isValidChoice(choice)) {
             throw InvalidLicenseChoiceException("Cannot select $choice for expression $this.")
         }
 
-        return this
+        return choice
     }
 
     /**
@@ -201,8 +214,6 @@ sealed class SpdxExpression {
      * along with the applied license choices in the order they were applied.
      */
     fun applyAndGetChoices(licenseChoices: List<SpdxLicenseChoice>): Pair<SpdxExpression, List<SpdxLicenseChoice>> {
-        if (validChoices().size == 1) return this to emptyList()
-
         var currentExpression = this
         val appliedChoices = mutableListOf<SpdxLicenseChoice>()
 
@@ -231,4 +242,20 @@ sealed class SpdxExpression {
      */
     infix fun or(other: SpdxExpression) =
         takeIf { this == other } ?: SpdxCompoundExpression(SpdxOperator.OR, listOf(this, other))
+}
+
+/**
+ * Return true if [this offered choice][this] satisfies the given [validChoice].
+ */
+private fun SpdxExpression.satisfies(validChoice: SpdxExpression): Boolean {
+    val offeredLicenses = decompose()
+    val validLicenses = validChoice.decompose()
+
+    if (validLicenses.size != offeredLicenses.size) return false
+
+    return validLicenses.all { required ->
+        offeredLicenses.any { offered ->
+            SpdxOrLaterLicenseMapper.INSTANCE.satisfies(offered, required)
+        }
+    }
 }

@@ -131,7 +131,7 @@ class SpdxCompoundExpression(
         }
 
     override fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression): SpdxExpression {
-        if (!subExpression.isSubExpression(choice)) {
+        if (!subExpression.isValidChoice(choice)) {
             throw InvalidLicenseChoiceException(
                 "$choice is not a valid choice for $subExpression. Valid choices are: ${subExpression.validChoices()}."
             )
@@ -145,19 +145,23 @@ class SpdxCompoundExpression(
     }
 
     private fun replaceSubexpressionWithChoice(subExpression: SpdxExpression, choice: SpdxExpression): SpdxExpression {
+        if (this == subExpression) return choice
+
         // If the operator is AND, then there is no choice at this level, but try with the children if they contain the
         // sub-expression. Also, if the sub-expression is the whole expression, no recursive application of the choice
         // is needed, as it will be handled by the logic below.
-        if (
-            operator == SpdxOperator.AND && subExpression != this && children.any { it.isSubExpression(subExpression) }
-        ) {
+        if (operator == SpdxOperator.AND && children.any { it.containsSubexpression(subExpression) }) {
             // Reconstruct this AND-expression with all children having the subexpression replaced with the choice.
             return SpdxCompoundExpression(
                 SpdxOperator.AND,
-                children.map {
+                children.map { child ->
                     when {
-                        it is SpdxCompoundExpression -> it.replaceSubexpressionWithChoice(subExpression, choice)
-                        else -> it
+                        child == subExpression -> choice
+
+                        child is SpdxCompoundExpression && child.containsSubexpression(subExpression) ->
+                            child.replaceSubexpressionWithChoice(subExpression, choice)
+
+                        else -> child
                     }
                 }
             )
@@ -169,20 +173,27 @@ class SpdxCompoundExpression(
         // remaining expressions are recomped with the OR-operand.
 
         val choices = validChoices().toMutableSet()
-        val subExpressionChoices = subExpression.validChoices()
-        val dismissedChoices = subExpressionChoices - choice.validChoices()
+        val offeredChoices = choice.validChoices()
 
-        // While the sub-expression is still contained in this expression...
-        while (choices.containsAll(subExpressionChoices)) {
-            // ... remove all unchosen expressions.
-            choices.removeAll(dismissedChoices)
+        // Remove conjunctions (branches of an OR) which match the subexpression but are dismissed by the choice.
+        choices.removeIf { choice ->
+            subExpression.validChoices().any { subexpressionChoice ->
+                choice.isValidChoice(subexpressionChoice) && offeredChoices.none { offeredChoice ->
+                    subexpressionChoice.isValidChoice(offeredChoice)
+                }
+            }
         }
 
         require(choices.isNotEmpty()) {
             "No licenses left after applying choice $choice to $subExpression."
         }
 
-        return choices.singleOrNull() ?: SpdxCompoundExpression(SpdxOperator.OR, choices)
+        // Apply or-later choices, for example replace GPL-2.0-or-later with GPL-2.0-or-later.
+        val remainingChoices = choices.map { choice ->
+            offeredChoices.firstOrNull { choice.isValidChoice(it) } ?: choice
+        }.toSet()
+
+        return remainingChoices.singleOrNull() ?: SpdxCompoundExpression(SpdxOperator.OR, children = remainingChoices)
     }
 
     override fun isSubExpression(subExpression: SpdxExpression?): Boolean =
@@ -218,4 +229,11 @@ class SpdxCompoundExpression(
                 }
             }
         }
+}
+
+private fun SpdxExpression.containsSubexpression(subexpression: SpdxExpression): Boolean {
+    if (this == subexpression) return true
+    if (this is SpdxCompoundExpression) return children.any { it.containsSubexpression(subexpression) }
+    if (this is SpdxLicenseWithExceptionExpression) return license == subexpression
+    return false
 }
