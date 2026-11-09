@@ -36,9 +36,6 @@ val javaLanguageVersion = project.property("javaLanguageVersion") as String
 val libsCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 plugins {
-    // Apply core plugins.
-    jacoco
-
     // Apply precompiled plugins.
     id("ort-base-conventions")
 
@@ -251,31 +248,4 @@ tasks.withType<Test>().configureEach {
 
 tasks.named("check") {
     dependsOn(tasks["funTest"])
-}
-
-tasks.named<JacocoReport>("jacocoTestReport") {
-    reports {
-        // Enable XML in addition to HTML for CI integration.
-        xml.required = true
-    }
-}
-
-tasks.register<JacocoReport>("jacocoFunTestReport") {
-    description = "Generates code coverage report for the funTest task."
-    group = "Reporting"
-
-    executionData(tasks["funTest"])
-    sourceSets(sourceSets.main.get())
-
-    reports {
-        // Enable XML in addition to HTML for CI integration.
-        xml.required = true
-    }
-}
-
-tasks.register("jacocoReport") {
-    description = "Generates code coverage reports for all test tasks."
-    group = "Reporting"
-
-    dependsOn(tasks.withType<JacocoReport>())
 }

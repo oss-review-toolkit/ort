@@ -83,6 +83,7 @@ plugins {
     id("com.autonomousapps.build-health").version("3.20.2")
     id("dev.aga.gradle.version-catalog-generator").version("4.2.3")
     id("org.gradle.toolchains.foojay-resolver-convention").version("1.0.0")
+    id("org.jetbrains.kotlinx.kover.aggregation").version("0.9.11")
 
     // Required for the build-health plugin. Keep the version in sync with the one from the version catalog.
     id("org.jetbrains.kotlin.jvm").version("2.4.21").apply(false)
