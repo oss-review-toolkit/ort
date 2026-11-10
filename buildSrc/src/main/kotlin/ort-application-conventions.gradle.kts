@@ -26,6 +26,7 @@ import java.nio.file.Files
 import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
 
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 val javaLanguageVersion = project.property("javaLanguageVersion") as String
 val libsCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -82,7 +83,7 @@ graalvmNative {
                 mapOf(
                     // JLine is shaded into kotlin-compiler-embeddable, rendering the configuration invalid. See
                     // https://youtrack.jetbrains.com/issue/KT-68829.
-                    @OptIn(ExperimentalBuildToolsApi::class)
+                    @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
                     "org.jetbrains.kotlin:kotlin-compiler-embeddable:${kotlin.compilerVersion.get()}" to
                         listOf("^/META-INF/native-image/org.jline/.*"),
                     // The contained "reflect-config.json" does not match the code of the AWS flavor of the Apache HTTP
