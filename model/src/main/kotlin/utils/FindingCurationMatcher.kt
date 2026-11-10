@@ -76,11 +76,9 @@ class FindingCurationMatcher {
         }
 
     /**
-     * Applies the given [curations] to the given [findings]. In case multiple curations match any given finding all
-     * curations are applied to the original finding, thus in this case there are multiple curated findings for one
-     * finding. If multiple curations lead to the same result, only one of them is contained in the returned map. If the
-     * findings are relative to a subdirectory of the path that the curations are relative to, this needs to be set in
-     * the [relativeFindingsPath].
+     * Applies the given [curations] to the given [findings]. In case a single finding is matched by multiple curations,
+     * only the first matching curation is applied to that finding. If the findings are relative to a subdirectory of
+     * the path that the curations are relative to, this needs to be set in the [relativeFindingsPath].
      */
     fun applyAll(
         findings: Collection<LicenseFinding>,
@@ -90,12 +88,13 @@ class FindingCurationMatcher {
         val result = mutableMapOf<LicenseFinding?, MutableList<Pair<LicenseFinding, LicenseFindingCuration>>>()
 
         findings.forEach { finding ->
-            val matchingCurations = curations.filter { matches(finding, it, relativeFindingsPath) }
-            if (matchingCurations.isNotEmpty()) {
-                matchingCurations.forEach { curation ->
-                    val curatedFinding = apply(finding, curation, relativeFindingsPath)
-                    result.getOrPut(curatedFinding) { mutableListOf() } += Pair(finding, curation)
-                }
+            val curation = curations.firstOrNull {
+                matches(finding, it, relativeFindingsPath)
+            }
+
+            if (curation != null) {
+                val curatedFinding = apply(finding, curation, relativeFindingsPath)
+                result.getOrPut(curatedFinding) { mutableListOf() } += Pair(finding, curation)
             } else {
                 result.getOrPut(finding) { mutableListOf() }
             }
