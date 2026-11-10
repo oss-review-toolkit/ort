@@ -67,98 +67,78 @@ class FindingCurationMatcherTest : WordSpec({
         )
     }
 
-    "Given exactly matching curation, matches" should {
-        "return true" {
+    "matches()" should {
+        "return true for an exactly matching curations" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "a/path", startLines = listOf(8), lineCount = 6)
 
             matcher.matches(finding, curation) shouldBe true
         }
-    }
 
-    "Given matching curation with empty startLines, matches" should {
-        "return true" {
+        "return true for a matching curation with empty startLines" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "a/path", startLines = listOf(), lineCount = 6)
 
             matcher.matches(finding, curation) shouldBe true
         }
-    }
 
-    "Given matching curation with multiple startLines, matches" should {
-        "return true" {
+        "return true for a matching curation with multiple startLines" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "a/path", startLines = listOf(7, 8), lineCount = 6)
 
             matcher.matches(finding, curation) shouldBe true
         }
-    }
 
-    "Given matching curation with 'null' as lineCount, matches" should {
-        "return true" {
+        "return true for a matching curation with 'null' as lineCount" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "a/path", startLines = listOf(8), lineCount = null)
 
             matcher.matches(finding, curation) shouldBe true
         }
-    }
 
-    "Given matching curation with wildcard in path glob, matches" should {
-        "return true" {
+        "return true for a matching curation with wildcard in path glob" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "**/path", startLines = listOf(8), lineCount = 6)
 
             matcher.matches(finding, curation) shouldBe true
         }
-    }
 
-    "Given matching curation with null detected license, matches" should {
-        "return true" {
+        "return true for a matching curation with null detected license" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = null, path = "a/path", startLines = listOf(8), lineCount = 6)
 
             matcher.matches(finding, curation) shouldBe true
         }
-    }
 
-    "Given matching curation with maximal broad matchers, matches" should {
-        "return true" {
+        "return true for a matching curation with maximal broad matchers" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "**", startLines = emptyList(), lineCount = null)
 
             matcher.matches(finding, curation) shouldBe true
         }
-    }
 
-    "Given curation with only license not matching, matches" should {
-        "return false" {
+        "return false for a curation with only license not matching" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "Apache-2.0", path = "**", startLines = emptyList(), lineCount = null)
 
             matcher.matches(finding, curation) shouldBe false
         }
-    }
 
-    "Given curation with only path not matching, matches" should {
-        "return false" {
+        "return false for a curation with only path not matching" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "other/path", startLines = emptyList(), lineCount = null)
 
             matcher.matches(finding, curation) shouldBe false
         }
-    }
 
-    "Given curation with only startLines not matching, matches" should {
-        "return false" {
+        "return false for a curation with only startLines not matching" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "**", startLines = listOf(6, 7, 9), lineCount = null)
 
             matcher.matches(finding, curation) shouldBe false
         }
-    }
 
-    "Given curation with only lineCount not matching, matches" should {
-        "return false" {
+        "return false for a curation with only lineCount not matching" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(license = "MIT", path = "**", startLines = emptyList(), lineCount = 1)
 
@@ -166,8 +146,8 @@ class FindingCurationMatcherTest : WordSpec({
         }
     }
 
-    "Given matching curation, apply" should {
-        "return that finding with the license set to the concluded license" {
+    "apply()" should {
+        "return the finding with the license set to the concluded license of the matching curation" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(
                 license = "MIT",
@@ -184,10 +164,8 @@ class FindingCurationMatcherTest : WordSpec({
                 location shouldBe finding.location
             }
         }
-    }
 
-    "Given matching curation with NONE as concluded license, apply" should {
-        "return null" {
+        "return null if the matching curation has NONE as concluded license" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(
                 license = "MIT",
@@ -199,10 +177,8 @@ class FindingCurationMatcherTest : WordSpec({
 
             matcher.apply(finding, curation) should beNull()
         }
-    }
 
-    "Given non-matching curation, apply" should {
-        "return the original finding" {
+        "return the original finding if the curation does not match" {
             setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
             setupCuration(
                 license = "Non-matching-license",
@@ -216,7 +192,7 @@ class FindingCurationMatcherTest : WordSpec({
         }
     }
 
-    "Given multiple curations and findings, applyAll" should {
+    "applyAll()" should {
         "apply a curation to all matching license findings" {
             val findings = listOf(
                 LicenseFinding(
@@ -287,10 +263,8 @@ class FindingCurationMatcherTest : WordSpec({
                 )
             )
         }
-    }
 
-    "Given two curations matching a single finding, applyAll" should {
-        "return two findings with the respective curation applied" {
+        "return two findings for a given single finding and two matching curations with different concluded licenses" {
             val findings = listOf(
                 LicenseFinding(
                     license = "MIT",
