@@ -264,7 +264,7 @@ class FindingCurationMatcherTest : WordSpec({
             )
         }
 
-        "return two findings for a given single finding and two matching curations with different concluded licenses" {
+        "apply only the first out of multiple matching curations with different concluded licenses to a finding" {
             val findings = listOf(
                 LicenseFinding(
                     license = "MIT",
@@ -296,15 +296,6 @@ class FindingCurationMatcherTest : WordSpec({
                     ),
                     originalFindings = listOf(
                         Pair(findings.first(), curations[0])
-                    )
-                ),
-                LicenseFindingCurationResult(
-                    curatedFinding = LicenseFinding(
-                        license = "Apache-2.0",
-                        location = TextLocation("some/path", 1)
-                    ),
-                    originalFindings = listOf(
-                        Pair(findings.first(), curations[1])
                     )
                 )
             )
