@@ -60,6 +60,14 @@ mavenPublishing {
 graalvmNative {
     toolchainDetection = System.getenv("GRAALVM_HOME") == null
 
+    agent {
+        metadataCopy {
+            inputTaskNames.add("run")
+            outputDirectories.add("src/main/resources/META-INF/native-image/org.ossreviewtoolkit/cli")
+            mergeWithExisting = true
+        }
+    }
+
     // For options see https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html.
     binaries {
         named("main") {
