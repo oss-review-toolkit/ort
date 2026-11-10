@@ -129,11 +129,19 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
         if (typeof window === "undefined") {
             return false;
         }
-        return window.localStorage.getItem("ort-sidebar-collapsed") === "true";
+        try {
+            return window.localStorage.getItem("ort-sidebar-collapsed") === "true";
+        } catch {
+            return false;
+        }
     });
 
     useEffect(() => {
-        window.localStorage.setItem("ort-sidebar-collapsed", String(collapsed));
+        try {
+            window.localStorage.setItem("ort-sidebar-collapsed", String(collapsed));
+        } catch {
+            // Ignore: the sidebar state simply won't persist across reloads.
+        }
     }, [collapsed]);
 
     useEffect(() => {
