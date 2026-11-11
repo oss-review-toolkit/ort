@@ -34,6 +34,7 @@ dependencies {
     testImplementation(projects.utils.commonUtils)
     testImplementation(libs.detekt.api)
     testImplementation(libs.detekt.test)
+    testImplementation(libs.detekt.testUtils)
 
     testRuntimeOnly(libs.detekt.psiUtils)
 }

@@ -24,7 +24,11 @@ import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 
 class OrtRuleSet : RuleSetProvider {
-    override val ruleSetId = RuleSetId("ORT")
+    companion object {
+        val ID = RuleSetId("ORT")
+    }
+
+    override val ruleSetId = ID
 
     override fun instance() =
         RuleSet(
@@ -32,7 +36,8 @@ class OrtRuleSet : RuleSetProvider {
             listOf(
                 ::OrtEmptyLineAfterBlock,
                 ::OrtImportOrder,
-                ::OrtPackageNaming
+                ::OrtPackageNaming,
+                ::OrtSingleLineKDoc
             )
         )
 }
