@@ -80,6 +80,7 @@ jobs:
       run: ./gradlew --continue detekt
     - name: Check for Detekt Issues with type resolution
       run: ./gradlew --continue detektMain detektTestFixtures detektTest detektFunTest
+      if: always() # Run even if the previous step failed.
     - name: Merge SARIF files
       run: ./gradlew mergeDetektReports
       if: always() # Merge even if previous steps failed.
