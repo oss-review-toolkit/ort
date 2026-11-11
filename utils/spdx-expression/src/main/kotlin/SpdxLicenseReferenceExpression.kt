@@ -49,14 +49,6 @@ data class SpdxLicenseReferenceExpression(
         if (!isLicenseRef && !isDocumentRefToLicenseRef) throw SpdxException("'$id' is not an SPDX license reference.")
     }
 
-    override fun equals(other: Any?) =
-        when (other) {
-            is SpdxLicenseReferenceExpression -> id.equals(other.id, ignoreCase = true)
-            else -> false
-        }
-
-    override fun hashCode() = id.hashCode()
-
     override fun toString() = id
 
     override fun getLicenseUrl(): String? = null

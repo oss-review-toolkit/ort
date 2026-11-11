@@ -60,7 +60,7 @@ data class SpdxLicenseChoice(
     init {
         if (given?.isValidChoice(choice) == false) {
             throw InvalidLicenseChoiceException(
-                "$choice is not a valid choice for $given. Valid choices are: ${given.validChoices()}."
+                "$choice is not a valid choice for $given."
             )
         }
     }

@@ -67,11 +67,10 @@ class SpdxCompoundExpression(
         return flattenedChildren.singleOrNull() ?: SpdxCompoundExpression(operator, flattenedChildren)
     }
 
-    override fun simplify(): SpdxExpression =
-        // Eliminate redundant choices by creating the set of unique choices and using the choice if there is only one.
-        validChoices().singleOrNull()?.let {
-            if (it is SpdxCompoundExpression) it.flatten() else it
-        } ?: flatten()
+    override fun simplify(): SpdxExpression {
+        val flattened = flatten()
+        return flattened.toDnf().dnfToSpdxExpression()
+    }
 
     override fun sorted(): SpdxExpression {
         /**
@@ -97,116 +96,72 @@ class SpdxCompoundExpression(
         return checkNotNull(getSortedChildrenWithSameOperator(this).toExpression(operator))
     }
 
+    override fun toDnf(): Set<Set<String>> =
+        when (operator) {
+            SpdxOperator.OR -> {
+                children.flatMapTo(mutableSetOf()) { it.toDnf() }
+            }
+
+            SpdxOperator.AND -> {
+                children.fold(setOf()) { acc, child ->
+                    val childDnf = child.toDnf()
+                    if (acc.isEmpty()) {
+                        childDnf
+                    } else {
+                        val combined = mutableSetOf<Set<String>>()
+
+                        for (lSet in acc) {
+                            for (rSet in childDnf) {
+                                val newSet = LinkedHashSet<String>(lSet.size + rSet.size)
+                                newSet.addAll(lSet)
+                                newSet.addAll(rSet)
+                                combined.add(newSet)
+                            }
+                        }
+
+                        combined
+                    }
+                }
+            }
+        }
+
     override fun validate(strictness: Strictness) {
         children.forEach { it.validate(strictness) }
     }
 
-    override fun validChoices(): Set<SpdxExpression> =
-        when (operator) {
-            SpdxOperator.AND -> {
-                // If there is a top-level `AND` in an expression, create the combinations of all choices on the left
-                // and all choices on the right to get the overall valid choices.
-                children.fold(setOf()) { acc, child ->
-                    if (acc.isEmpty()) {
-                        child.validChoices()
-                    } else {
-                        child.validChoices().flatMapTo(mutableSetOf()) { childChoice ->
-                            acc.map { operand ->
-                                // Do not use the "and" operator here which performs an optimization for equal operands
-                                // that could lead to endless recursion. However, perform a similar optimization that at
-                                // least handles equal string representations.
-                                operand.takeIf { it.toString() == childChoice.toString() }
-                                    ?: SpdxCompoundExpression(SpdxOperator.AND, listOf(operand, childChoice))
-                            }
-                        }
-                    }
-                }
+    override fun replaceSubExpression(subExpression: SpdxExpression, replacement: SpdxExpression): SpdxExpression {
+        val dnf = toDnf()
+        val subExpressionDnf = subExpression.toDnf()
+
+        return if (dnf.containsAll(subExpressionDnf)) {
+            dnf.toMutableSet().apply {
+                removeAll(subExpressionDnf)
+                addAll(replacement.toDnf())
+            }.dnfToSpdxExpression()
+        } else {
+            val childrenWithReplacements = children.map { child ->
+                child.replaceSubExpression(subExpression, replacement)
             }
 
-            SpdxOperator.OR -> {
-                // If there is a top-level `OR` in an expression, the operands already are the choices and just need to
-                // be checked themselves for choices.
-                children.flatMapTo(mutableSetOf()) { it.validChoices() }
+            val childrenChanged = childrenWithReplacements.zip(children).any { (transformed, original) ->
+                transformed !== original
             }
+
+            takeUnless { childrenChanged } ?: SpdxCompoundExpression(operator, childrenWithReplacements)
         }
-
-    override fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression): SpdxExpression {
-        if (!subExpression.isSubExpression(choice)) {
-            throw InvalidLicenseChoiceException(
-                "$choice is not a valid choice for $subExpression. Valid choices are: ${subExpression.validChoices()}."
-            )
-        }
-
-        if (!isSubExpression(subExpression)) {
-            throw InvalidSubExpressionException("$subExpression is not a valid subExpression of $this")
-        }
-
-        return replaceSubexpressionWithChoice(subExpression, choice)
-    }
-
-    private fun replaceSubexpressionWithChoice(subExpression: SpdxExpression, choice: SpdxExpression): SpdxExpression {
-        // If the operator is AND, then there is no choice at this level, but try with the children if they contain the
-        // sub-expression. Also, if the sub-expression is the whole expression, no recursive application of the choice
-        // is needed, as it will be handled by the logic below.
-        if (
-            operator == SpdxOperator.AND && subExpression != this && children.any { it.isSubExpression(subExpression) }
-        ) {
-            // Reconstruct this AND-expression with all children having the subexpression replaced with the choice.
-            return SpdxCompoundExpression(
-                SpdxOperator.AND,
-                children.map {
-                    when {
-                        it is SpdxCompoundExpression -> it.replaceSubexpressionWithChoice(subExpression, choice)
-                        else -> it
-                    }
-                }
-            )
-        }
-
-        // The basic idea of the following algorithm is that any expression can be represented as a disjunction of the
-        // choices it offers, and that any expressions that offer exactly the same choices are equal. So an expression
-        // is first "decomposed" into its choices, then dismissed choices (unchosen expressions) are removed, and the
-        // remaining expressions are recomped with the OR-operand.
-
-        val choices = validChoices().toMutableSet()
-        val subExpressionChoices = subExpression.validChoices()
-        val dismissedChoices = subExpressionChoices - choice.validChoices()
-
-        // While the sub-expression is still contained in this expression...
-        while (choices.containsAll(subExpressionChoices)) {
-            // ... remove all unchosen expressions.
-            choices.removeAll(dismissedChoices)
-        }
-
-        require(choices.isNotEmpty()) {
-            "No licenses left after applying choice $choice to $subExpression."
-        }
-
-        return choices.singleOrNull() ?: SpdxCompoundExpression(SpdxOperator.OR, choices)
     }
 
     override fun isSubExpression(subExpression: SpdxExpression?): Boolean =
         when {
             subExpression == null -> false
             operator == SpdxOperator.AND && children.any { it.isSubExpression(subExpression) } -> true
-            else -> validChoices().containsAll(subExpression.validChoices())
+            else -> toDnf().containsAll(subExpression.toDnf())
         }
 
-    override fun equals(other: Any?): Boolean {
-        if (other !is SpdxExpression) return false
-
-        val validChoices = validChoices().map { it.decompose() }
-        val otherValidChoices = other.validChoices().map { it.decompose() }
-
-        return validChoices.size == otherValidChoices.size && validChoices.all { it in otherValidChoices }
-    }
-
-    override fun hashCode() = decompose().sumOf { it.hashCode() }
-
     override fun toString() =
-        // If the operator of the left or right expression is different from the operator of this expression, put the
-        // respective expression in parentheses. Semantically, this would only be required if the priority of this
-        // operator is higher than the priority of the operator of the left or right expression, but always adding
+    // If the operator of the left or right expression is different from the operator of this expression, put the
+    // respective expression in parentheses. Semantically, this would only be required if the priority of this
+    // operator is higher than the priority of the operator of the left or right expression, but always adding
         // parentheses makes it easier to understand the expression.
         buildString {
             children.forEachIndexed { index, child ->

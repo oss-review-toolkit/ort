@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionParser
  * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/
  */
 @JsonSerialize(using = ToStringSerializer::class)
+@Suppress("TooManyFunctions")
 sealed class SpdxExpression {
     /**
      * The level of strictness to apply when validating an [SpdxExpression].
@@ -133,17 +134,36 @@ sealed class SpdxExpression {
     open fun sorted(): SpdxExpression = this
 
     /**
+     * Converts this expression into the Disjunctive Normal Form (DNF).
+     */
+    internal abstract fun toDnf(): Set<Set<String>>
+
+    /**
+     * Converts this expression into the Disjunctive Normal Form (DNF) in lowercase.
+     */
+    private fun toLowerCaseDnf(): Set<Set<String>> =
+        toDnf().mapTo(mutableSetOf()) { conjunction ->
+            conjunction.mapTo(mutableSetOf()) { singleLicense -> singleLicense.lowercase() }
+        }
+
+    final override fun equals(other: Any?): Boolean {
+        // Non-functional early returns for performance:
+        if (this === other) return true
+        if (other !is SpdxExpression) return false
+        if (toString().equals(other.toString(), ignoreCase = true)) return true
+
+        return toLowerCaseDnf() == other.toLowerCaseDnf()
+    }
+
+    final override fun hashCode(): Int = toLowerCaseDnf().hashCode()
+
+    /**
      * Validate this expression. [strictness] defines whether only the syntax is checked
      * ([ALLOW_ANY][Strictness.ALLOW_ANY]), or semantics are also checked but deprecated license identifiers are
      * allowed ([ALLOW_DEPRECATED][Strictness.ALLOW_DEPRECATED]) or only current license identifiers are allowed
      * ([ALLOW_CURRENT][Strictness.ALLOW_CURRENT]). Throws an [SpdxException] if validation fails.
      */
     abstract fun validate(strictness: Strictness)
-
-    /**
-     * Return all valid license choices for this SPDX expression by collecting all disjunct expressions.
-     */
-    open fun validChoices(): Set<SpdxExpression> = setOf(this)
 
     /**
      * Return whether this expression contains [present][SpdxConstants.isPresent] licenses, i.e. not all licenses in
@@ -158,11 +178,9 @@ sealed class SpdxExpression {
         runCatching { validate(strictness) }.isSuccess
 
     /**
-     * Return true if [choice] is a valid license choice for this SPDX expression. This can only be the case, if
-     * [choice] does not offer a license choice itself and if the [licenses][SpdxSingleLicenseExpression] contained in
-     * [choice] match any of the [valid license choices][validChoices].
+     * Return true if [choice] is a valid license choice for this SPDX expression.
      */
-    fun isValidChoice(choice: SpdxExpression): Boolean = !choice.offersChoice() && choice in validChoices()
+    fun isValidChoice(choice: SpdxExpression): Boolean = toDnf().dnfIsValidChoice(choice.toDnf())
 
     /**
      * Return true if [subExpression] is semantically contained in [this][SpdxExpression] expression.
@@ -173,22 +191,68 @@ sealed class SpdxExpression {
      * Return true if this expression offers a license choice. This can only be true if this expression contains the
      * [OR operator][SpdxOperator.OR].
      */
-    fun offersChoice(): Boolean = validChoices().size > 1
+    fun offersChoice(): Boolean = toDnf().size > 1
 
     /**
-     * Apply a license [choice], optionally limited to the given [subExpression], and return an [SpdxExpression] where
-     * the choice is resolved.
+     * Return true if this expression satisfies the [other] expression.
      */
-    open fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression = this): SpdxExpression {
-        if (this != subExpression) {
-            throw InvalidSubExpressionException("$subExpression is not a valid subExpression for $this")
-        }
+    fun satisfies(other: SpdxExpression): Boolean {
+        val conjunctions = toDnf().ifEmpty { return false }
+        val otherConjunctions = other.toDnf().ifEmpty { return false }
 
-        if (this != choice) {
+        return conjunctions.any { conjunction ->
+            otherConjunctions.any { otherConjunction ->
+                otherConjunction.all { requiredLicense ->
+                    conjunction.any { offeredLicense ->
+                        offeredLicense.singleLicenseSatisfies(requiredLicense)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns this expression with all sub-expressions that match [subExpression] replaced by [replacement] based on
+     * semantic equivalence.
+     */
+    internal abstract fun replaceSubExpression(
+        subExpression: SpdxExpression,
+        replacement: SpdxExpression
+    ): SpdxExpression
+
+    /**
+     * Apply a license [choice], and return an [SpdxExpression] where the choice is resolved.
+     * The returned expression is reconstructed from a filtered DNF, so the returned expression tree is flattened and
+     * the original tree structure and parentheses get discarded.
+     */
+    fun applyChoice(choice: SpdxExpression): SpdxExpression {
+        val dnf = toDnf()
+        val otherDnf = choice.toDnf()
+
+        if (!dnf.dnfIsValidChoice(otherDnf)) {
             throw InvalidLicenseChoiceException("Cannot select $choice for expression $this.")
         }
 
-        return this
+        return choice
+    }
+
+    /**
+     * Apply [choice] individually to any expression tree node which is semantically equivalent to [subExpression],
+     * replacing such nodes new ones where the choice is resolved. The expression tree is processed recursively to
+     * replace only the matched subtrees, while preserving the remaining original tree structure.
+     */
+    fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression): SpdxExpression {
+        if (!choice.satisfies(subExpression)) {
+            throw InvalidLicenseChoiceException("Cannot select $choice for subexpression $subExpression.")
+        }
+
+        return replaceSubExpression(subExpression, choice).also {
+            if (it === this) {
+                throw InvalidSubExpressionException(
+                    "The subExpression $subExpression does not match any subtree in $this."
+                )
+            }
+        }
     }
 
     /**
@@ -201,7 +265,7 @@ sealed class SpdxExpression {
      * along with the applied license choices in the order they were applied.
      */
     fun applyAndGetChoices(licenseChoices: List<SpdxLicenseChoice>): Pair<SpdxExpression, List<SpdxLicenseChoice>> {
-        if (validChoices().size == 1) return this to emptyList()
+        if (!offersChoice()) return this to emptyList()
 
         var currentExpression = this
         val appliedChoices = mutableListOf<SpdxLicenseChoice>()
@@ -232,3 +296,86 @@ sealed class SpdxExpression {
     infix fun or(other: SpdxExpression) =
         takeIf { this == other } ?: SpdxCompoundExpression(SpdxOperator.OR, listOf(this, other))
 }
+
+/**
+ * Return [this] DNF converted to an [SpdxExpression]. The result is simplified dynamically
+ * based on semantic 'or-later' relationship sets to avoid structural redundancies like "A or A+" and
+ * also A or (A AND B).
+ */
+internal fun Set<Set<String>>.dnfToSpdxExpression(): SpdxExpression {
+    if (isEmpty()) return SpdxExpression.NONE
+
+    // If a conjunction contains '-or-later' and '-only' of the same license, discard the former.
+    val cleanedConjunctions = map { conjunction ->
+        conjunction.filter { specificLicense ->
+            conjunction.none { otherLicense ->
+                specificLicense != otherLicense && otherLicense.singleLicenseSatisfies(specificLicense)
+            }
+        }.toSet()
+    }.toSet()
+
+    // Simplify redundancies of the form "A" OR "A+", to just "A+".
+    val minimizedDnf = cleanedConjunctions.filter { currentConjunction ->
+        cleanedConjunctions.none { otherConjunction ->
+            currentConjunction != otherConjunction && otherConjunction.all { otherLicense ->
+                currentConjunction.any { currentLicense ->
+                    currentLicense.singleLicenseSatisfies(otherLicense)
+                }
+            }
+        }
+    }
+
+    val conjunctionExpressions = minimizedDnf.map { conjunction ->
+        when (conjunction.size) {
+            0 -> throw IllegalArgumentException("A DNF conjunction must not be empty.")
+
+            1 -> SpdxExpression.parse(conjunction.single())
+
+            else -> SpdxCompoundExpression(
+                operator = SpdxOperator.AND,
+                children = conjunction.map { singleLicense ->
+                    SpdxExpression.parse(singleLicense)
+                }.sortedBy { it.toString().lowercase() }
+            )
+        }
+    }.sortedBy { it.toString().lowercase() }
+
+    return conjunctionExpressions.singleOrNull()
+        ?: SpdxCompoundExpression(SpdxOperator.OR, conjunctionExpressions)
+}
+
+/**
+ * Return true if the choice corresponding to [choiceDnf] is a valid choice for the expression corresponding to [this]
+ * expression DNF. A valid choice is allowed to contain OR operators, but is not allowed to over-satisfy, for example
+ * given "A" choose "A AND B".
+ */
+private fun Set<Set<String>>.dnfIsValidChoice(choiceDnf: Set<Set<String>>): Boolean =
+    choiceDnf.ifEmpty { return false }.all { choiceConjunction ->
+        any { conjunction ->
+            conjunction.size == choiceConjunction.size && choiceConjunction.all { choiceLicense ->
+                conjunction.any { license ->
+                    choiceLicense.singleLicenseSatisfies(license)
+                }
+            }
+        }
+    }
+
+/**
+ * Filter this DNF and return only the conjunctions (paths) that are semantically satisfied by the [other] DNF.
+ */
+private fun Set<Set<String>>.dnfFilterSatisfiedBy(other: Set<Set<String>>): Set<Set<String>> =
+    filterTo(mutableSetOf()) { conjunction ->
+        other.any { otherConjunction ->
+            otherConjunction.all { otherSingleLicense ->
+                conjunction.any { singleLicense ->
+                    singleLicense.singleLicenseSatisfies(otherSingleLicense)
+                }
+            }
+        }
+    }
+
+/**
+ * Return true if [this] single license satisfies [otherSingleLicense] license string.
+ */
+private fun String.singleLicenseSatisfies(otherSingleLicense: String): Boolean =
+    SpdxOrLaterLicenseMapper.INSTANCE.satisfies(offered = this, required = otherSingleLicense)
