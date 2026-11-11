@@ -153,6 +153,7 @@ private fun TestConfiguration.generateReport(
         creationInfoOrganization = "some creation info organization",
         documentComment = "some document comment",
         documentName = documentName,
+        autoConcludeToEffectiveLicense = false,
         fileInformationEnabled = fileInformationEnabled,
         outputFileFormats = listOf(format)
     )
