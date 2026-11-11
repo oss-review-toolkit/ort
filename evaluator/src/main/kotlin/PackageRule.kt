@@ -212,8 +212,7 @@ open class PackageRule(
         val effectiveResolvedLicenseInfo = resolvedLicenseInfo
             .run { if (filterExcluded) filterExcluded() else this }
             .filter(licenseView, filterSources = true)
-            .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.metadata.id), licenseView)
-            .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView)
+            .applyChoices(ruleSet.ortResult.getLicenseChoicesForId(pkg.metadata.id), licenseView)
 
         effectiveResolvedLicenseInfo.forEach { resolvedLicense ->
             if (separateEvaluationPerSource) {

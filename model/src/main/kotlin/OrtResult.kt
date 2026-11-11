@@ -391,6 +391,13 @@ data class OrtResult(
             addAll(getAdvisorProviderIssues(omitResolved = true, minSeverity = minSeverity))
         }.distinct()
 
+    /**
+     * Return all license choices which may apply to [id], which are comprised of package license choices and all
+     * repository license choices.
+     */
+    fun getLicenseChoicesForId(id: Identifier): List<SpdxLicenseChoice> =
+        getPackageLicenseChoices(id) + getRepositoryLicenseChoices()
+
     /** Return a list of [PackageConfiguration]s for the given [packageId] and [provenance]. */
     fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
         packageConfigurationsByIdWithoutVersion[packageId.copy(version = "")].orEmpty()

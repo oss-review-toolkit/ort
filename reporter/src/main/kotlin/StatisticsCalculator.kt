@@ -127,8 +127,7 @@ internal object StatisticsCalculator {
             effective = ortResult.getProjectsAndPackages(omitExcluded = true).countLicenses {
                 filterExcluded()
                     .filter(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
-                    .applyChoices(ortResult.getPackageLicenseChoices(id))
-                    .applyChoices(ortResult.getRepositoryLicenseChoices())
+                    .applyChoices(ortResult.getLicenseChoicesForId(id))
             }
         )
     }
