@@ -105,5 +105,11 @@ internal fun Identifier.matchesDisregardingVersion(other: Identifier) =
  * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
  */
 internal fun Identifier.isMatchedBy(matcher: Identifier): Boolean =
-    matchesDisregardingVersion(matcher)
-        && (matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this))
+    matchesDisregardingVersion(matcher) && isVersionMatchedBy(matcher)
+
+/**
+ * Return true if this [Identifier] is matched by the [matcher]'s version. The [matcher]s version may be an
+ * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
+ */
+internal fun Identifier.isVersionMatchedBy(matcher: Identifier): Boolean =
+    matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this)
