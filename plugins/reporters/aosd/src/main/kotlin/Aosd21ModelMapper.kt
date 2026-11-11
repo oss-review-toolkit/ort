@@ -40,59 +40,57 @@ internal fun createAosdModel(input: ReporterInput, project: Project): AOSD21 {
         directDependencies = directDependencies.mapNotNullTo(mutableSetOf()) {
             componentIdForPackageId[it]
         },
-        components = packages.toComponents(input, project, componentIdForPackageId)
+        components = packages.mapTo(mutableSetOf()) { pkg ->
+            pkg.toComponent(input, project, componentIdForPackageId)
+        }
     )
 }
 
-private fun Collection<Package>.toComponents(
+private fun Package.toComponent(
     input: ReporterInput,
     project: Project,
     componentIdForPackageId: Map<Identifier, Long>
-): Set<Component> =
-    mapTo(mutableSetOf()) { pkg ->
-        val dependencies = input.ortResult.getDependencies(pkg.id, maxLevel = 1, omitExcluded = true)
-        val node = input.ortResult.dependencyNavigator.findBreadthFirst(project, pkg.id)
+): Component {
+    val dependencies = input.ortResult.getDependencies(id, maxLevel = 1, omitExcluded = true)
+    val node = input.ortResult.dependencyNavigator.findBreadthFirst(project, id)
 
-        val licenseChoices = input.ortResult.getLicenseChoicesForId(pkg.id)
-        val licenseView = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
+    val licenseChoices = input.ortResult.getLicenseChoicesForId(id)
+    val licenseView = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
 
-        val effectiveLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
-            .filterExcluded()
-            .applyChoices(licenseChoices, licenseView)
+    val effectiveLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
+        .applyChoices(licenseChoices, licenseView)
 
-        // Use an unsimplified expression here to better document where a license selection might come from.
-        val effectiveLicense = effectiveLicenseInfo.effectiveLicense(licenseView, licenseChoices)?.sorted()
-        val selectedExpression = effectiveLicense?.simplify()?.sorted()?.takeUnless { it.offersChoice() }
+    // Use an unsimplified expression here to better document where a license selection might come from.
+    val effectiveLicense = effectiveLicenseInfo.effectiveLicense(licenseView, licenseChoices)?.sorted()
+    val selectedExpression = effectiveLicense?.simplify()?.sorted()?.takeUnless { it.offersChoice() }
 
-        val licenseTexts = effectiveLicense?.licenses().orEmpty().mapNotNullTo(mutableSetOf()) { license ->
-            input.licenseFactProvider.getLicenseText(license)?.text
-        }.joinToString("\n--\n") { it.trimEnd() }
+    val licenseTexts = effectiveLicense?.licenses().orEmpty().mapNotNullTo(mutableSetOf()) { license ->
+        input.licenseFactProvider.getLicenseText(license)?.text
+    }.joinToString("\n--\n") { it.trimEnd() }
 
-        with(pkg) {
-            Component(
-                id = componentIdForPackageId.getValue(pkg.id),
-                componentName = id.name,
-                componentVersion = id.version,
-                scmUrl = vcsProcessed.url.takeUnless { it.isEmpty() } ?: homepageUrl,
-                modified = isModified,
-                // For simplicity, only use the first linkage found in the graph for the package.
-                linking = node?.linkage?.toLinking(),
-                transitiveDependencies = dependencies.mapNotNullTo(mutableSetOf()) { componentIdForPackageId[it] },
-                subcomponents = listOf(
-                    AOSD21.Subcomponent(
-                        subcomponentName = FIRST_SUBCOMPONENT_NAME,
-                        spdxId = effectiveLicense.nullOrBlankToSpdxNoassertionOrNone(),
-                        copyrights = effectiveLicenseInfo.getCopyrights().sorted(),
-                        authors = authors.sorted(),
-                        licenseText = licenseTexts,
-                        // Can be empty as the license information is the result of a file level scan.
-                        licenseTextUrl = "",
-                        selectedLicense = selectedExpression?.toString().orEmpty()
-                    ).validate()
-                )
+    return Component(
+        id = componentIdForPackageId.getValue(id),
+        componentName = id.name,
+        componentVersion = id.version,
+        scmUrl = vcsProcessed.url.takeUnless { it.isEmpty() } ?: homepageUrl,
+        modified = isModified,
+        // For simplicity, only use the first linkage found in the graph for the package.
+        linking = node?.linkage?.toLinking(),
+        transitiveDependencies = dependencies.mapNotNullTo(mutableSetOf()) { componentIdForPackageId[it] },
+        subcomponents = listOf(
+            AOSD21.Subcomponent(
+                subcomponentName = FIRST_SUBCOMPONENT_NAME,
+                spdxId = effectiveLicense.nullOrBlankToSpdxNoassertionOrNone(),
+                copyrights = effectiveLicenseInfo.getCopyrights().sorted(),
+                authors = authors.sorted(),
+                licenseText = licenseTexts,
+                // Can be empty as the license information is the result of a file level scan.
+                licenseTextUrl = "",
+                selectedLicense = selectedExpression?.toString().orEmpty()
             ).validate()
-        }
-    }
+        )
+    ).validate()
+}
 
 private fun DependencyNavigator.findBreadthFirst(project: Project, nodeId: Identifier): DependencyNode? {
     fun Sequence<DependencyNode>.findBreadthFirst(id: Identifier): DependencyNode? {
