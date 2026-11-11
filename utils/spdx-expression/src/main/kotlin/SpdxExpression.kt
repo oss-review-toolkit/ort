@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionParser
  * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/
  */
 @JsonSerialize(using = ToStringSerializer::class)
+@Suppress("TooManyFunctions")
 sealed class SpdxExpression {
     /**
      * The level of strictness to apply when validating an [SpdxExpression].
@@ -192,27 +193,78 @@ sealed class SpdxExpression {
     }
 
     /**
+     * Returns true if this [SpdxExpression] contains any single license which allows to choose a later version.
+     */
+    abstract fun offersVersionChoice(): Boolean
+
+    /**
+     * Returns true if the [choice] satisfies [given], and [choice] does not equal [given], and [given] is contained in
+     * this [SpdxExpression].
+     */
+    abstract fun isValidVersionChoice(given: SpdxSingleLicenseExpression, choice: SpdxSingleLicenseExpression): Boolean
+
+    /**
+     * Apply a [license version choice][choice] to the given this expression, and return an [SpdxExpression] where the
+     * choice is resolved. Throws an exception if [given] is not a valid version choice for this expression.
+     */
+    fun applyVersionChoice(given: SpdxSingleLicenseExpression, choice: SpdxSingleLicenseExpression): SpdxExpression {
+        if (!SpdxOrLaterLicenseMapper.INSTANCE.isValidChoice(given, choice)) {
+            throw InvalidLicenseVersionChoiceException(
+                "The version choice from $given to $choice is invalid."
+            )
+        }
+
+        if (!isValidVersionChoice(given, choice)) {
+            throw InvalidLicenseVersionChoiceException(
+                "The version choice from $given to $choice cannot be applied to this expression: $this."
+            )
+        }
+
+        return replaceSingleLicense(given, choice)
+    }
+
+    internal abstract fun replaceSingleLicense(
+        given: SpdxSingleLicenseExpression,
+        replacement: SpdxSingleLicenseExpression
+    ): SpdxExpression
+
+    /**
      * Apply [licenseChoices] in the given order to [this][SpdxExpression].
      */
     fun applyChoices(licenseChoices: List<SpdxLicenseChoice>): SpdxExpression = applyAndGetChoices(licenseChoices).first
 
     /**
      * Apply [licenseChoices] in the given order to [this][SpdxExpression] and return the resulting SPDX expression
-     * along with the applied license choices in the order they were applied.
+     * along with the applied license choices in the order they were applied, but any OR-operator based choice is
+     * applied before any or-later based choice.
      */
     fun applyAndGetChoices(licenseChoices: List<SpdxLicenseChoice>): Pair<SpdxExpression, List<SpdxLicenseChoice>> {
-        if (validChoices().size == 1) return this to emptyList()
-
         var currentExpression = this
         val appliedChoices = mutableListOf<SpdxLicenseChoice>()
 
-        licenseChoices.forEach {
+        val (versionChoices, choices) = licenseChoices.partition { it.isVersionChoice() }.let {
+            it.first.takeIf { offersVersionChoice() }.orEmpty() to it.second.takeIf { offersChoice() }.orEmpty()
+        }
+
+        // Apply OR-operator based choices:
+        choices.forEach {
             if (it.given == null && currentExpression.isValidChoice(it.choice)) {
                 currentExpression = currentExpression.applyChoice(it.choice)
                 appliedChoices += it
             } else if (currentExpression.isSubExpression(it.given)) {
                 @Suppress("UnsafeCallOnNullableType")
                 currentExpression = currentExpression.applyChoice(it.choice, it.given!!)
+                appliedChoices += it
+            }
+        }
+
+        // Apply or-later based choices:
+        versionChoices.forEach {
+            val given = it.given as SpdxSingleLicenseExpression
+            val choice = it.choice as SpdxSingleLicenseExpression
+
+            if (currentExpression.isValidVersionChoice(given, choice)) {
+                currentExpression = currentExpression.applyVersionChoice(given, choice)
                 appliedChoices += it
             }
         }
