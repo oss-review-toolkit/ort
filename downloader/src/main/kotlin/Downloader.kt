@@ -52,9 +52,7 @@ import org.ossreviewtoolkit.utils.ort.downloadFile
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ping
 
-/**
- * The class to download source code. The signatures of public functions in this class define the library API.
- */
+/** The class to download source code. The signatures of public functions in this class define the library API. */
 class Downloader(private val config: DownloaderConfiguration) {
     private fun verifyOutputDirectory(outputDirectory: File) {
         require(!outputDirectory.exists() || outputDirectory.walk().singleOrNull() == outputDirectory) {

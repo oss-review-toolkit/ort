@@ -50,20 +50,14 @@ data class Package(
      */
     val id: Identifier,
 
-    /**
-     * An additional identifier in [package URL syntax](https://github.com/package-url/purl-spec).
-     */
+    /** An additional identifier in [package URL syntax](https://github.com/package-url/purl-spec). */
     val purl: String = id.toPurl(),
 
-    /**
-     * An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
-     */
+    /** An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/). */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val cpe: String? = null,
 
-    /**
-     * The set of authors declared for this package.
-     */
+    /** The set of authors declared for this package. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val authors: Set<String> = emptySet(),
@@ -91,35 +85,23 @@ data class Package(
     @JsonSerialize(converter = SpdxExpressionSortedConverter::class)
     val concludedLicense: SpdxExpression? = null,
 
-    /**
-     * The description of the package, as provided by the package manager.
-     */
+    /** The description of the package, as provided by the package manager. */
     val description: String,
 
-    /**
-     * The homepage of the package.
-     */
+    /** The homepage of the package. */
     val homepageUrl: String,
 
-    /**
-     * The remote artifact where the binary package can be downloaded.
-     */
+    /** The remote artifact where the binary package can be downloaded. */
     val binaryArtifact: RemoteArtifact,
 
-    /**
-     * The remote artifact where the source package can be downloaded.
-     */
+    /** The remote artifact where the source package can be downloaded. */
     val sourceArtifact: RemoteArtifact,
 
-    /**
-     * The timestamp when the package was published, usually to a package registry like Maven Central.
-     */
+    /** The timestamp when the package was published, usually to a package registry like Maven Central. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val publishedAt: Instant? = null,
 
-    /**
-     * Original VCS-related information as defined in the package's metadata.
-     */
+    /** Original VCS-related information as defined in the package's metadata. */
     val vcs: VcsInfo,
 
     /**
@@ -159,9 +141,7 @@ data class Package(
     val labels: Map<String, String> = emptyMap()
 ) {
     companion object {
-        /**
-         * A constant for a [Package] where all properties are empty.
-         */
+        /** A constant for a [Package] where all properties are empty. */
         @JvmField
         val EMPTY = Package(
             id = Identifier.EMPTY,
@@ -183,14 +163,10 @@ data class Package(
         sourceCodeOrigins?.requireNoDuplicates()
     }
 
-    /**
-     * Create a [CuratedPackage] from this package with an empty list of applied curations.
-     */
+    /** Create a [CuratedPackage] from this package with an empty list of applied curations. */
     fun toCuratedPackage() = CuratedPackage(this)
 
-    /**
-     * Return a [PackageReference] to refer to this [Package] with optional [dependencies] and [issues].
-     */
+    /** Return a [PackageReference] to refer to this [Package] with optional [dependencies] and [issues]. */
     fun toReference(
         linkage: PackageLinkage? = null,
         dependencies: Set<PackageReference>? = null,

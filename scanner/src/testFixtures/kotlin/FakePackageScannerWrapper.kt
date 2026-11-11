@@ -24,9 +24,7 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 
-/**
- * An implementation of [PackageScannerWrapper] that creates empty scan results.
- */
+/** An implementation of [PackageScannerWrapper] that creates empty scan results. */
 @Suppress("RedundantNullableReturnType")
 class FakePackageScannerWrapper(id: String = "fake") : PackageScannerWrapper {
     override val descriptor = PluginDescriptor(id = id, displayName = id, summary = "")

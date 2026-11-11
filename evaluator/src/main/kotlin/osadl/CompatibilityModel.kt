@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.evaluator.osadl
 
 import kotlinx.serialization.Serializable
 
-/**
- * The license compatibility matrix.
- */
+/** The license compatibility matrix. */
 @Serializable
 internal data class MatrixLicenses(
     /** The Python-style format string for parsing the [timestamp]. */
@@ -36,9 +34,7 @@ internal data class MatrixLicenses(
     val licenses: List<MatrixRow>
 )
 
-/**
- * A row in the license compatibility matrix.
- */
+/** A row in the license compatibility matrix. */
 @Serializable
 internal data class MatrixRow(
     /** The SPDX ID of the license this row refers to. */
@@ -48,9 +44,7 @@ internal data class MatrixRow(
     val compatibilities: List<MatrixCell>
 )
 
-/**
- * A cell in the license compatibility matrix.
- */
+/** A cell in the license compatibility matrix. */
 @Serializable
 internal data class MatrixCell(
     /** The SPDX ID of the license this cell refers to. */

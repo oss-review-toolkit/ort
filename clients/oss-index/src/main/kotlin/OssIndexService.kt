@@ -37,14 +37,10 @@ import retrofit2.http.POST
  */
 interface OssIndexService {
     companion object {
-        /**
-         * The default base URL for the REST API of the public OSS Index service.
-         */
+        /** The default base URL for the REST API of the public OSS Index service. */
         const val DEFAULT_BASE_URL = "https://api.guide.sonatype.com/"
 
-        /**
-         * The JSON (de-)serialization object used by this service.
-         */
+        /** The JSON (de-)serialization object used by this service. */
         val JSON = Json.Default
 
         /**

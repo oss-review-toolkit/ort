@@ -29,9 +29,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphEdgeSortedSetConverter
 import org.ossreviewtoolkit.model.utils.DependencyReferenceSortedSetConverter
 import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
 
-/**
- * Type alias for a [Map] that associates a [DependencyGraphNode] with the nodes representing its dependencies.
- */
+/** Type alias for a [Map] that associates a [DependencyGraphNode] with the nodes representing its dependencies. */
 typealias NodeDependencies = Map<DependencyGraphNode, List<DependencyGraphNode>>
 
 /**
@@ -133,9 +131,7 @@ data class DependencyGraph(
             scopeName.split(':', limit = 4).getOrElse(3) { scopeName }
     }
 
-    /**
-     * A mapping that allows fast access to the dependencies of a node in this graph.
-     */
+    /** A mapping that allows fast access to the dependencies of a node in this graph. */
     @get:JsonIgnore
     val dependencies: NodeDependencies by lazy { constructNodeDependencies() }
 
@@ -158,9 +154,7 @@ data class DependencyGraph(
      */
     fun createScopes(scopeNames: Set<String>): Set<Scope> = createScopesFor(scopes.filterKeys { it in scopeNames })
 
-    /**
-     * Convert the given [map] with scope information to a set of [Scope]s.
-     */
+    /** Convert the given [map] with scope information to a set of [Scope]s. */
     private fun createScopesFor(map: Map<String, List<RootDependencyIndex>>): Set<Scope> =
         map.mapTo(mutableSetOf()) { entry ->
             val dependencies = entry.value.mapTo(mutableSetOf()) { index ->
@@ -206,18 +200,14 @@ data class DependencyGraph(
         }
     }
 
-    /**
-     * Construct a mapping that allows fast navigation from a graph node to its dependencies.
-     */
+    /** Construct a mapping that allows fast navigation from a graph node to its dependencies. */
     private fun constructNodeDependencies(): NodeDependencies =
         when {
             nodes.isNotEmpty() -> constructNodeDependenciesFromGraph(nodes, edges)
             else -> constructNodeDependenciesFromScopeRoots(scopeRoots)
         }
 
-    /**
-     * Return a map of all de-duplicated [Issue]s associated by [Identifier].
-     */
+    /** Return a map of all de-duplicated [Issue]s associated by [Identifier]. */
     fun collectIssues(): Map<Identifier, Set<Issue>> {
         val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
@@ -273,9 +263,7 @@ data class RootDependencyIndex(
         fun generateKey(root: Int, fragment: Int): String = "$root.$fragment"
     }
 
-    /**
-     * Generate a string key to represent this index.
-     */
+    /** Generate a string key to represent this index. */
     fun toKey(): String = generateKey(root, fragment)
 }
 
@@ -318,9 +306,7 @@ class DependencyReference(
     @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
     val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
-    /**
-     * A list of [Issue]s that occurred handling this dependency.
-     */
+    /** A list of [Issue]s that occurred handling this dependency. */
     val issues: List<Issue> = emptyList()
 ) : Comparable<DependencyReference> {
     /**
@@ -363,9 +349,7 @@ data class DependencyGraphNode(
     @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
     val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
-    /**
-     * A list of [Issue]s that occurred handling this dependency.
-     */
+    /** A list of [Issue]s that occurred handling this dependency. */
     val issues: List<Issue> = emptyList()
 )
 
@@ -383,14 +367,10 @@ data class DependencyGraphEdge(
     val to: Int
 )
 
-/**
- * Convert this [DependencyReference] to a [DependencyGraphNode].
- */
+/** Convert this [DependencyReference] to a [DependencyGraphNode]. */
 private fun DependencyReference.toGraphNode() = DependencyGraphNode(pkg, fragment, linkage, issues)
 
-/**
- * Construct a mapping of dependencies based on the given [roots].
- */
+/** Construct a mapping of dependencies based on the given [roots]. */
 private fun constructNodeDependenciesFromScopeRoots(roots: Set<DependencyReference>): NodeDependencies {
     val mapping = mutableMapOf<DependencyGraphNode, List<DependencyGraphNode>>()
 
@@ -408,9 +388,7 @@ private fun constructNodeDependenciesFromScopeRoots(roots: Set<DependencyReferen
     return mapping
 }
 
-/**
- * Construct a mapping of dependencies based on the lists of graph [nodes] and [edges].
- */
+/** Construct a mapping of dependencies based on the lists of graph [nodes] and [edges]. */
 private fun constructNodeDependenciesFromGraph(
     nodes: List<DependencyGraphNode>,
     edges: Set<DependencyGraphEdge>

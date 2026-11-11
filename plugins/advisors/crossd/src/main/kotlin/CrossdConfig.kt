@@ -23,9 +23,7 @@ import org.ossreviewtoolkit.clients.crossd.CROSSD_BASE_URL
 import org.ossreviewtoolkit.model.Criticality
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 
-/**
- * The configuration for the CrOSSD project health provider.
- */
+/** The configuration for the CrOSSD project health provider. */
 data class CrossdConfig(
     /** The URL of the CrOSSD server. */
     @OrtPluginOption(defaultValue = CROSSD_BASE_URL)

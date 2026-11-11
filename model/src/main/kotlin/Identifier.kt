@@ -25,9 +25,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.encodeOr
 
-/**
- * A unique identifier for a software component.
- */
+/** A unique identifier for a software component. */
 data class Identifier(
     /**
      * The type of component this identifier describes. When used in the context of a [Project], the type equals the one
@@ -36,25 +34,17 @@ data class Identifier(
      */
     val type: String,
 
-    /**
-     * The namespace of the component, for example the group for "Maven" or the scope for "NPM".
-     */
+    /** The namespace of the component, for example the group for "Maven" or the scope for "NPM". */
     val namespace: String,
 
-    /**
-     * The name of the component.
-     */
+    /** The name of the component. */
     val name: String,
 
-    /**
-     * The version of the component.
-     */
+    /** The version of the component. */
     val version: String
 ) : Comparable<Identifier> {
     companion object {
-        /**
-         * A constant for an [Identifier] where all properties are empty strings.
-         */
+        /** A constant for an [Identifier] where all properties are empty strings. */
         @JvmField
         val EMPTY = Identifier(
             type = "",
@@ -112,9 +102,7 @@ data class Identifier(
             vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
         }
 
-    /**
-     * Create Maven-like coordinates based on the properties of the [Identifier].
-     */
+    /** Create Maven-like coordinates based on the properties of the [Identifier]. */
     @JsonValue
     fun toCoordinates() = sanitizedProperties.joinToString(":")
 

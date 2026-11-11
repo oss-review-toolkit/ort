@@ -38,21 +38,15 @@ data class PdfTemplateReporterConfig(
     @OrtPluginOption(aliases = ["template.id"])
     val templateIds: List<String>?,
 
-    /**
-     * A comma-separated list of paths to template files provided by the user.
-     */
+    /** A comma-separated list of paths to template files provided by the user. */
     @OrtPluginOption(aliases = ["template.path"])
     val templatePaths: List<String>?,
 
-    /**
-     * The path to an AsciiDoc PDF theme file.
-     */
+    /** The path to an AsciiDoc PDF theme file. */
     @OrtPluginOption(aliases = ["pdf.theme.file"], defaultValue = "uri:classloader:/pdf-theme/pdf-theme.yml")
     val pdfThemeFile: String,
 
-    /**
-     * The path to a directory containing custom fonts.
-     */
+    /** The path to a directory containing custom fonts. */
     @OrtPluginOption(aliases = ["pdf.fonts.dir"], defaultValue = "uri:classloader:/fonts")
     val pdfFontsDir: String
 )

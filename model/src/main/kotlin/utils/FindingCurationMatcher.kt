@@ -25,9 +25,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
-/**
- * A class for matching and applying [LicenseFindingCuration]s to [LicenseFinding]s.
- */
+/** A class for matching and applying [LicenseFindingCuration]s to [LicenseFinding]s. */
 class FindingCurationMatcher {
     private fun isPathMatching(
         finding: LicenseFinding,

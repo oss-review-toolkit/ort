@@ -25,9 +25,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.codehaus.plexus.logging.AbstractLogger
 import org.codehaus.plexus.logging.Logger
 
-/**
- * Map a Log4j2 Level to a Plexus Logger level.
- */
+/** Map a Log4j2 Level to a Plexus Logger level. */
 private fun toPlexusLoggerLevel(level: Level) =
     when (level) {
         Level.OFF -> Logger.LEVEL_DISABLED

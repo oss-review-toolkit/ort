@@ -228,9 +228,7 @@ class SpdxExpressionLexerTest : FunSpec({
     }
 })
 
-/**
- * Verify that the [SpdxExpressionLexer] produces the expected tokens for the given input.
- */
+/** Verify that the [SpdxExpressionLexer] produces the expected tokens for the given input. */
 private suspend fun FunSpecContainerScope.verifyTokens(vararg input: Pair<String, Sequence<Token>>) {
     withData(
         nameFn = { it.first },
@@ -240,9 +238,7 @@ private suspend fun FunSpecContainerScope.verifyTokens(vararg input: Pair<String
     }
 }
 
-/**
- * Verify that the [SpdxExpressionLexer] produces the expected [SpdxExpressionLexerException] for the given input.
- */
+/** Verify that the [SpdxExpressionLexer] produces the expected [SpdxExpressionLexerException] for the given input. */
 private suspend fun FunSpecContainerScope.verifyExceptions(vararg input: Pair<String, SpdxExpressionLexerException>) {
     withData(
         nameFn = { it.first },

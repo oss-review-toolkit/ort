@@ -24,13 +24,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.ossreviewtoolkit.model.utils.FileListEntrySortedSetConverter
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
-/**
- * The file info for files contained in [provenance].
- */
+/** The file info for files contained in [provenance]. */
 data class FileList(
-    /**
-     * The provenance this file list corresponds to.
-     */
+    /** The provenance this file list corresponds to. */
     val provenance: KnownProvenance,
 
     /**
@@ -41,14 +37,10 @@ data class FileList(
     val files: Set<Entry>
 ) {
     data class Entry(
-        /**
-         * The path of the file relative to the root of the provenance corresponding to the enclosing [FileList].
-         */
+        /** The path of the file relative to the root of the provenance corresponding to the enclosing [FileList]. */
         val path: String,
 
-        /**
-         * The sha1 checksum of the file, consisting of 40 lowercase hexadecimal digits.
-         */
+        /** The sha1 checksum of the file, consisting of 40 lowercase hexadecimal digits. */
         val sha1: String
     ) {
         init {

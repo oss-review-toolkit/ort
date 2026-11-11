@@ -41,57 +41,35 @@ import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 )
 sealed interface ScanStorageConfiguration
 
-/**
- * The configuration model of a storage based on ClearlyDefined.
- */
+/** The configuration model of a storage based on ClearlyDefined. */
 data class ClearlyDefinedStorageConfiguration(
-    /**
-     * The URL of the ClearlyDefined server.
-     */
+    /** The URL of the ClearlyDefined server. */
     val serverUrl: String
 ) : ScanStorageConfiguration
 
-/**
- * The configuration model of a file based storage.
- */
+/** The configuration model of a file based storage. */
 data class FileBasedStorageConfiguration(
-    /**
-     * The configuration of the [FileStorage] used to store the files.
-     */
+    /** The configuration of the [FileStorage] used to store the files. */
     val backend: FileStorageConfiguration,
 
-    /**
-     * The way that scan results are stored, defaults to [StorageType.PROVENANCE_BASED].
-     */
+    /** The way that scan results are stored, defaults to [StorageType.PROVENANCE_BASED]. */
     val type: StorageType = StorageType.PROVENANCE_BASED
 ) : ScanStorageConfiguration
 
-/**
- * A class to hold the configuration for using Postgres as a storage.
- */
+/** A class to hold the configuration for using Postgres as a storage. */
 data class PostgresStorageConfiguration(
-    /**
-     * The configuration of the PostgreSQL database.
-     */
+    /** The configuration of the PostgreSQL database. */
     val connection: PostgresConnection,
 
-    /**
-     * The way that scan results are stored, defaults to [StorageType.PROVENANCE_BASED].
-     */
+    /** The way that scan results are stored, defaults to [StorageType.PROVENANCE_BASED]. */
     val type: StorageType = StorageType.PROVENANCE_BASED
 ) : ScanStorageConfiguration
 
-/**
- * An enum to describe different types of storages.
- */
+/** An enum to describe different types of storages. */
 enum class StorageType {
-    /**
-     * A storage that stores scan results by [Package].
-     */
+    /** A storage that stores scan results by [Package]. */
     PACKAGE_BASED,
 
-    /**
-     * A storage that stores scan results by [Provenance].
-     */
+    /** A storage that stores scan results by [Provenance]. */
     PROVENANCE_BASED
 }

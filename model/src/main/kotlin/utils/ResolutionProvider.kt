@@ -26,37 +26,23 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 
-/**
- * An interface to provide resolutions for [Issue]s, [RuleViolation]s and [Vulnerability]s .
- */
+/** An interface to provide resolutions for [Issue]s, [RuleViolation]s and [Vulnerability]s . */
 interface ResolutionProvider {
-    /**
-     * Get all issue resolutions that match [issue].
-     */
+    /** Get all issue resolutions that match [issue]. */
     fun getResolutionsFor(issue: Issue): List<IssueResolution>
 
-    /**
-     * Get all rule violation resolutions that match [violation].
-     */
+    /** Get all rule violation resolutions that match [violation]. */
     fun getResolutionsFor(violation: RuleViolation): List<RuleViolationResolution>
 
-    /**
-     * Get all vulnerability resolutions that match [vulnerability].
-     */
+    /** Get all vulnerability resolutions that match [vulnerability]. */
     fun getResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution>
 
-    /**
-     * Return true if there is at least one issue resolution that matches [issue].
-     */
+    /** Return true if there is at least one issue resolution that matches [issue]. */
     fun isResolved(issue: Issue): Boolean = getResolutionsFor(issue).isNotEmpty()
 
-    /**
-     * Return true if there is at least one rule violation resolution that matches [violation].
-     */
+    /** Return true if there is at least one rule violation resolution that matches [violation]. */
     fun isResolved(violation: RuleViolation): Boolean = getResolutionsFor(violation).isNotEmpty()
 
-    /**
-     * Return true if there is at least one vulnerability resolution that matches [vulnerability].
-     */
+    /** Return true if there is at least one vulnerability resolution that matches [vulnerability]. */
     fun isResolved(vulnerability: Vulnerability): Boolean = getResolutionsFor(vulnerability).isNotEmpty()
 }

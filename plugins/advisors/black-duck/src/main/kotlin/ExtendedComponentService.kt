@@ -51,9 +51,7 @@ private val KB_COMPONENTS_SEARCH_PATH = BlackDuckPath(
     /* isMultiple = */ true
 )
 
-/**
- * This class adds a couple of functions which are missing in the super class.
- */
+/** This class adds a couple of functions which are missing in the super class. */
 internal class ExtendedComponentService(
     blackDuckApiClient: BlackDuckApiClient,
     apiDiscovery: ApiDiscovery,

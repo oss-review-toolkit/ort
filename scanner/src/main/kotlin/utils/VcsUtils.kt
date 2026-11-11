@@ -30,18 +30,14 @@ import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
 import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.scanner.ScanStorageException
 
-/**
- * Throw a [ScanStorageException] if [provenance] is a [RepositoryProvenance] with a non-empty VCS path.
- */
+/** Throw a [ScanStorageException] if [provenance] is a [RepositoryProvenance] with a non-empty VCS path. */
 internal fun requireEmptyVcsPath(provenance: Provenance) {
     if (provenance is RepositoryProvenance && provenance.vcsInfo.path.isNotEmpty()) {
         throw ScanStorageException("Repository provenances with a non-empty VCS path are not supported.")
     }
 }
 
-/**
- * Return a map of VCS paths for each [KnownProvenance] contained in [provenances].
- */
+/** Return a map of VCS paths for each [KnownProvenance] contained in [provenances]. */
 fun getVcsPathsForProvenances(provenances: Set<ProvenanceResolutionResult>) =
     buildMap {
         provenances.forEach { provenance ->
@@ -55,9 +51,7 @@ fun getVcsPathsForProvenances(provenances: Set<ProvenanceResolutionResult>) =
         }
     }
 
-/**
- * Filter [ScanResult]s by the VCS paths of the [KnownProvenance]s contained in [vcsPathsForProvenances].
- */
+/** Filter [ScanResult]s by the VCS paths of the [KnownProvenance]s contained in [vcsPathsForProvenances]. */
 fun filterScanResultsByVcsPaths(
     allScanResults: List<ScanResult>,
     vcsPathsForProvenances: Map<KnownProvenance, MutableSet<String>>

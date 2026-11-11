@@ -88,9 +88,7 @@ private val ORT_LOGO = """
     \________/ |____|___/ |____|
 """.trimIndent()
 
-/**
- * The entry point for the application with [args] being the list of arguments.
- */
+/** The entry point for the application with [args] being the list of arguments. */
 fun main(args: Array<String>) {
     Os.fixupUserHomeProperty()
     OrtMain().main(args)

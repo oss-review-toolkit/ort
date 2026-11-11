@@ -41,9 +41,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-/**
- * A class to archive files matched by provided patterns in a ZIP file that is stored in a [FileStorage][storage].
- */
+/** A class to archive files matched by provided patterns in a ZIP file that is stored in a [FileStorage][storage]. */
 class FileArchiver(
     /**
      * A collection of globs to match the paths of files that shall be archived. For details about the glob patterns see
@@ -51,9 +49,7 @@ class FileArchiver(
      */
     patterns: Collection<String>,
 
-    /**
-     * The [ProvenanceFileStorage] to use for archiving files.
-     */
+    /** The [ProvenanceFileStorage] to use for archiving files. */
     private val storage: ProvenanceFileStorage
 ) {
     companion object {
@@ -65,14 +61,10 @@ class FileArchiver(
         ignoreCase = true
     )
 
-    /**
-     * Return whether an archive corresponding to [provenance] exists.
-     */
+    /** Return whether an archive corresponding to [provenance] exists. */
     suspend fun hasArchive(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
 
-    /**
-     * Archive all files in [directory] matching any of the configured patterns in the [storage].
-     */
+    /** Archive all files in [directory] matching any of the configured patterns in the [storage]. */
     suspend fun archive(directory: File, provenance: KnownProvenance) {
         logger.info { "Archiving files matching ${matcher.patterns} from '$directory'..." }
 
@@ -108,9 +100,7 @@ class FileArchiver(
         }
     }
 
-    /**
-     * Unarchive the data for [provenance] to [directory]. Return true on success or false on failure.
-     */
+    /** Unarchive the data for [provenance] to [directory]. Return true on success or false on failure. */
     suspend fun unarchive(directory: File, provenance: KnownProvenance): Boolean {
         if (!storage.hasData(provenance)) {
             logger.info { "Could not find an archive for $provenance." }

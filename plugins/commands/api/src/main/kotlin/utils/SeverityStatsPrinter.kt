@@ -28,18 +28,14 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 
-/**
- * A helper class to print severity statistics.
- */
+/** A helper class to print severity statistics. */
 class SeverityStatsPrinter(private val terminal: Terminal, private val resolutionProvider: ResolutionProvider) {
     inner class Entry(
         val name: String,
         val resolvedCounts: Map<Severity, Int>,
         val unresolvedCounts: Map<Severity, Int>
     ) {
-        /**
-         * Print the stats to the [terminal].
-         */
+        /** Print the stats to the [terminal]. */
         fun print() =
             apply {
                 fun p(count: Int, thing: String) = if (count == 1) "$count $thing" else "$count ${thing}s"

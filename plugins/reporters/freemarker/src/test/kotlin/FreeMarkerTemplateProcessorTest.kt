@@ -182,9 +182,7 @@ private fun expectResolvedLicenseInfo(
     every { resolverMock.resolveLicenseInfo(id) } returns info
 }
 
-/**
- * Like [expectResolvedLicenseInfo] with multiple licenses that have same originalExpression.
- */
+/** Like [expectResolvedLicenseInfo] with multiple licenses that have same originalExpression. */
 private fun expectResolvedLicenseInfo(
     resolverMock: LicenseInfoResolver,
     id: Identifier,
@@ -211,9 +209,7 @@ private fun expectResolvedLicenseInfo(
  */
 private fun testProjects() = ORT_RESULT.getProjects().toList()
 
-/**
- * Create an [AdvisorResult] with the given [details], [issues], and [vulnerabilities].
- */
+/** Create an [AdvisorResult] with the given [details], [issues], and [vulnerabilities]. */
 private fun advisorResult(
     details: AdvisorDetails = ADVISOR_DETAILS,
     issues: List<Issue> = emptyList(),

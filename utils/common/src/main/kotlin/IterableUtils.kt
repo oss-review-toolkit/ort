@@ -42,25 +42,17 @@ fun Iterable<Int>.collapseToRanges(): List<Pair<Int, Int>> {
     return ranges
 }
 
-/**
- * Return a map that associates duplicates as identified by [keySelector] with belonging lists of entries.
- */
+/** Return a map that associates duplicates as identified by [keySelector] with belonging lists of entries. */
 fun <T, K> Iterable<T>.getDuplicates(keySelector: (T) -> K): Map<K, List<T>> =
     groupBy(keySelector).filter { it.value.size > 1 }
 
-/**
- * Return a set of duplicate entries in this [Iterable].
- */
+/** Return a set of duplicate entries in this [Iterable]. */
 fun <T> Iterable<T>.getDuplicates(): Set<T> = if (this is Set) emptySet() else getDuplicates { it }.keys
 
-/**
- * Return the next value in the iteration, or null if there is no next value.
- */
+/** Return the next value in the iteration, or null if there is no next value. */
 fun <T> Iterator<T>.nextOrNull() = if (hasNext()) next() else null
 
-/**
- * Return a string of common-separated ranges as denoted by the list of pairs.
- */
+/** Return a string of common-separated ranges as denoted by the list of pairs. */
 fun Iterable<Pair<Int, Int>>.prettyPrintRanges(): String =
     joinToString { (startValue, endValue) ->
         if (startValue == endValue) startValue.toString() else "$startValue-$endValue"

@@ -52,9 +52,7 @@ class SpdxDeclaredLicenseMapper internal constructor(mapping: Map<String, SpdxEx
         fun readMapping(file: File) = file.readText().parseLicenseMapping<SpdxExpression>()
     }
 
-    /**
-     * The map of collected license strings associated with their corresponding SPDX expression.
-     */
+    /** The map of collected license strings associated with their corresponding SPDX expression. */
     private val caseInsensitiveMapping = mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**

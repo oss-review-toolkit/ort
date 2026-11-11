@@ -50,9 +50,7 @@ import org.ossreviewtoolkit.utils.ort.printStackTrace
 
 import org.slf4j.LoggerFactory
 
-/**
- * The entry point for the application with [args] being the list of arguments.
- */
+/** The entry point for the application with [args] being the list of arguments. */
 fun main(args: Array<String>) {
     Os.fixupUserHomeProperty()
     HelperMain().main(args)

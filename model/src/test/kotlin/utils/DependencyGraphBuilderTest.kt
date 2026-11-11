@@ -205,7 +205,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 2 to listOf(4, 5),
                 3 to listOf(1), // Cycle: 1 -> 3 -> 1
                 5 to listOf(6),
-                6 to listOf(2)  // Cycle: 1 -> 2 -> 5 -> 6 -> 2
+                6 to listOf(2) // Cycle: 1 -> 2 -> 5 -> 6 -> 2
             )
 
             val handler = object : DependencyHandler<Int> {
@@ -371,9 +371,7 @@ class DependencyGraphBuilderTest : WordSpec({
     }
 })
 
-/**
- * A special namespace used by dependencies, for which [PackageRefDependencyHandler] should not create a package.
- */
+/** A special namespace used by dependencies, for which [PackageRefDependencyHandler] should not create a package. */
 private const val NO_PACKAGE_NAMESPACE = "no-package"
 
 /**
@@ -401,9 +399,7 @@ private object PackageRefDependencyHandler : DependencyHandler<PackageReference>
 private fun createGraphBuilder(): DependencyGraphBuilder<PackageReference> =
     DependencyGraphBuilder(PackageRefDependencyHandler)
 
-/**
- * Create a test dependency with the properties provided.
- */
+/** Create a test dependency with the properties provided. */
 private fun createDependency(
     group: String,
     artifact: String,
@@ -414,8 +410,6 @@ private fun createDependency(
     dependencies = dependencies
 )
 
-/**
- * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
- */
+/** Return the package references from the given [scopes] associated with the scope with the given [scopeName]. */
 private fun scopeDependencies(scopes: Set<Scope>, scopeName: String): Set<PackageReference> =
     scopes.find { it.name == scopeName }?.dependencies.orEmpty()

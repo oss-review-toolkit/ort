@@ -34,9 +34,7 @@ import org.ossreviewtoolkit.model.utils.PackageReferenceSortedSetConverter
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class PackageReference(
-    /**
-     * The identifier of the package.
-     */
+    /** The identifier of the package. */
     override val id: Identifier,
 
     /**
@@ -54,9 +52,7 @@ data class PackageReference(
     @JsonSerialize(converter = PackageReferenceSortedSetConverter::class)
     val dependencies: Set<PackageReference> = emptySet(),
 
-    /**
-     * A list of [Issue]s that occurred handling this [PackageReference].
-     */
+    /** A list of [Issue]s that occurred handling this [PackageReference]. */
     override val issues: List<Issue> = emptyList()
 ) : Comparable<PackageReference>, DependencyNode {
     /**
@@ -98,14 +94,10 @@ data class PackageReference(
      */
     override fun compareTo(other: PackageReference) = id.compareTo(other.id)
 
-    /**
-     * Return whether the package identified by [id] is a (transitive) dependency of this reference.
-     */
+    /** Return whether the package identified by [id] is a (transitive) dependency of this reference. */
     fun dependsOn(id: Identifier): Boolean = dependencies.any { it.id == id || it.dependsOn(id) }
 
-    /**
-     * Return all references to [id] as a dependency.
-     */
+    /** Return all references to [id] as a dependency. */
     fun findReferences(id: Identifier): List<PackageReference> =
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 

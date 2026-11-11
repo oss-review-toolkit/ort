@@ -27,9 +27,7 @@ import kotlinx.serialization.json.Json
 
 private val json = Json { ignoreUnknownKeys = true }
 
-/**
- * The data model for MODULE.bazel.lock.
- */
+/** The data model for MODULE.bazel.lock. */
 @Serializable
 internal data class Lockfile(
     // The flags containing the registry URLs (Bazel < 7.2.0).
@@ -58,9 +56,7 @@ internal data class Lockfile(
 
 internal fun parseLockfile(lockfile: File) = json.decodeFromString<Lockfile>(lockfile.readText())
 
-/**
- * The data model for the output of "bazel mod graph --output json --extension_info=usages".
- */
+/** The data model for the output of "bazel mod graph --output json --extension_info=usages". */
 @Serializable
 internal data class BazelModule(
     val key: String,

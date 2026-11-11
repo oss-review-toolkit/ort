@@ -21,64 +21,40 @@ package org.ossreviewtoolkit.clients.fossid.model.status
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-/**
- * An enumeration for the state of a FossID scan, as returned by the "check_status" operation.
- */
+/** An enumeration for the state of a FossID scan, as returned by the "check_status" operation. */
 enum class ScanStatus {
-    /**
-     * FossID is automatically applying top matched component.
-     */
+    /** FossID is automatically applying top matched component. */
     @JsonProperty("AUTO-ID")
     AUTO_ID,
 
-    /**
-     * The scan has failed.
-     */
+    /** The scan has failed. */
     FAILED,
 
-    /**
-     * The scan has been completed.
-     */
+    /** The scan has been completed. */
     FINISHED,
 
-    /**
-     * The scan has been stopped in the UI. The issue needs to be resolved manually and the scan restarted.
-     */
+    /** The scan has been stopped in the UI. The issue needs to be resolved manually and the scan restarted. */
     INTERRUPTED,
 
-    /**
-     * The scan has been created, but not started.
-     */
+    /** The scan has been created, but not started. */
     NEW,
 
-    /**
-     * The scan has not started yet.
-     */
+    /** The scan has not started yet. */
     @JsonProperty("NOT STARTED")
     NOT_STARTED,
 
-    /**
-     * The scan has been queued and is waiting for execution.
-     */
+    /** The scan has been queued and is waiting for execution. */
     QUEUED,
 
-    /**
-     * The scan is running.
-     */
+    /** The scan is running. */
     RUNNING,
 
-    /**
-     * The scan is running.
-     */
+    /** The scan is running. */
     SCANNING,
 
-    /**
-     * The scan has started.
-     */
+    /** The scan has started. */
     STARTED,
 
-    /**
-     * The scan is starting.
-     */
+    /** The scan is starting. */
     STARTING
 }

@@ -43,9 +43,7 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxFile
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 
-/**
- * A class for mapping [OrtResult]s to [SpdxDocument]s.
- */
+/** A class for mapping [OrtResult]s to [SpdxDocument]s. */
 internal object SpdxDocumentModelMapper {
     fun map(
         ortResult: OrtResult,

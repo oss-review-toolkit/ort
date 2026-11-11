@@ -49,9 +49,7 @@ data class ModuleMetadata(
     )
 }
 
-/**
- * An abstraction of a module source info.
- */
+/** An abstraction of a module source info. */
 @Serializable
 sealed interface ModuleSourceInfo
 
@@ -69,9 +67,7 @@ class ArchiveSourceInfo(
     val url: UriAsString
 ) : ModuleSourceInfo
 
-/**
- * A module source info with type 'git_repository'.
- */
+/** A module source info with type 'git_repository'. */
 @Serializable
 @SerialName("git_repository")
 class GitRepositorySourceInfo(
@@ -84,9 +80,7 @@ class GitRepositorySourceInfo(
     val stripPrefix: String? = null
 ) : ModuleSourceInfo
 
-/**
- * A module source info with type 'local_path'.
- */
+/** A module source info with type 'local_path'. */
 @Serializable
 @SerialName("local_path")
 class LocalRepositorySourceInfo(
@@ -97,9 +91,7 @@ class LocalRepositorySourceInfo(
     var vcs: VcsInfo? = null
 ) : ModuleSourceInfo
 
-/**
- * See https://bazel.build/rules/lib/globals/module#archive_override.
- */
+/** See https://bazel.build/rules/lib/globals/module#archive_override. */
 data class ArchiveOverride(
     val moduleName: String,
     val integrity: String? = null,

@@ -51,9 +51,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.packZip
 
-/**
- * An event handler where an archive containing the source code to scan is created and uploaded to FossID.
- */
+/** An event handler where an archive containing the source code to scan is created and uploaded to FossID. */
 class UploadArchiveHandler(
     val config: FossIdConfig,
     val service: FossIdServiceWithVersion,

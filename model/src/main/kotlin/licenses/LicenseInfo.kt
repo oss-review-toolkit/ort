@@ -31,78 +31,48 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
-/**
- * This class contains all license information about a package or project.
- */
+/** This class contains all license information about a package or project. */
 data class LicenseInfo(
-    /**
-     * The identifier of the package or project.
-     */
+    /** The identifier of the package or project. */
     val id: Identifier,
 
-    /**
-     * Information about the declared license.
-     */
+    /** Information about the declared license. */
     val declaredLicenseInfo: DeclaredLicenseInfo,
 
-    /**
-     * Information about the detected license.
-     */
+    /** Information about the detected license. */
     val detectedLicenseInfo: DetectedLicenseInfo,
 
-    /**
-     * Information about the concluded license.
-     */
+    /** Information about the concluded license. */
     val concludedLicenseInfo: ConcludedLicenseInfo
 )
 
-/**
- * Information about the concluded license of a package or project.
- */
+/** Information about the concluded license of a package or project. */
 data class ConcludedLicenseInfo(
-    /**
-     * The concluded license, or null if no license was concluded.
-     */
+    /** The concluded license, or null if no license was concluded. */
     val concludedLicense: SpdxExpression?,
 
-    /**
-     * The list of [PackageCurationData] that modified the concluded license.
-     */
+    /** The list of [PackageCurationData] that modified the concluded license. */
     val appliedCurations: List<PackageCurationData>
 )
 
-/**
- * Information about the declared license of a package or project.
- */
+/** Information about the declared license of a package or project. */
 data class DeclaredLicenseInfo(
-    /**
-     * The set of authors.
-     */
+    /** The set of authors. */
     val authors: Set<String>,
 
-    /**
-     * The unmodified set of declared licenses.
-     */
+    /** The unmodified set of declared licenses. */
     val licenses: Set<String>,
 
-    /**
-     * The processed declared license.
-     */
+    /** The processed declared license. */
     val processed: ProcessedDeclaredLicense,
 
-    /**
-     * The list of [PackageCurationData] that modified the declared license.
-     */
+    /** The list of [PackageCurationData] that modified the declared license. */
     val appliedCurations: List<PackageCurationData>
 )
 
-/**
- * Information about the detected licenses of a package or project.
- */
+/** Information about the detected licenses of a package or project. */
 data class DetectedLicenseInfo(
-    /**
-     * The list of all [Findings].
-     */
+    /** The list of all [Findings]. */
     val findings: List<Findings>
 )
 
@@ -111,29 +81,19 @@ data class DetectedLicenseInfo(
  * [provenance].
  */
 data class Findings(
-    /**
-     * The root [Provenance] of the scanned source code.
-     */
+    /** The root [Provenance] of the scanned source code. */
     val provenance: Provenance,
 
-    /**
-     * The set of all license findings.
-     */
+    /** The set of all license findings. */
     val licenses: Set<LicenseFinding>,
 
-    /**
-     * The set of all copyright findings.
-     */
+    /** The set of all copyright findings. */
     val copyrights: Set<CopyrightFinding>,
 
-    /**
-     * The list of all license finding curations that apply to this [provenance].
-     */
+    /** The list of all license finding curations that apply to this [provenance]. */
     val licenseFindingCurations: List<LicenseFindingCuration>,
 
-    /**
-     * The list of all path excludes that apply to this [provenance].
-     */
+    /** The list of all path excludes that apply to this [provenance]. */
     val pathExcludes: List<PathExclude>,
 
     /**

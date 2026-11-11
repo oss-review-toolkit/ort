@@ -24,13 +24,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 
-/**
- * A description of the source code repository that was used as input for ORT.
- */
+/** A description of the source code repository that was used as input for ORT. */
 data class Repository(
-    /**
-     * Original VCS-related information from the working tree containing the analyzer root.
-     */
+    /** Original VCS-related information from the working tree containing the analyzer root. */
     val vcs: VcsInfo,
 
     /**
@@ -46,15 +42,11 @@ data class Repository(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val nestedRepositories: Map<String, VcsInfo> = emptyMap(),
 
-    /**
-     * The configuration of the repository, parsed from [ORT_REPO_CONFIG_FILENAME].
-     */
+    /** The configuration of the repository, parsed from [ORT_REPO_CONFIG_FILENAME]. */
     val config: RepositoryConfiguration = RepositoryConfiguration()
 ) {
     companion object {
-        /**
-         * A constant for a [Repository] where all properties are empty strings.
-         */
+        /** A constant for a [Repository] where all properties are empty strings. */
         @JvmField
         val EMPTY = Repository(
             vcs = VcsInfo.EMPTY,

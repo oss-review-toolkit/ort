@@ -26,9 +26,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.treeToValue
 
-/**
- * Provenance information about the origin of source code.
- */
+/** Provenance information about the origin of source code. */
 @JsonDeserialize(using = ProvenanceDeserializer::class)
 sealed interface Provenance {
     /**
@@ -45,21 +43,15 @@ sealed interface KnownProvenance : Provenance
 
 sealed interface RemoteProvenance : KnownProvenance
 
-/**
- * Provenance information for a source artifact.
- */
+/** Provenance information for a source artifact. */
 data class ArtifactProvenance(
-    /**
-     * The source artifact that was downloaded.
-     */
+    /** The source artifact that was downloaded. */
     val sourceArtifact: RemoteArtifact
 ) : RemoteProvenance {
     override fun matches(pkg: Package): Boolean = sourceArtifact == pkg.sourceArtifact
 }
 
-/**
- * Provenance information for a Version Control System location.
- */
+/** Provenance information for a Version Control System location. */
 data class RepositoryProvenance(
     /**
      * The VCS information that was used for [resolving the revision][resolvedRevision]. It potentially still contains
@@ -77,15 +69,11 @@ data class RepositoryProvenance(
         require(resolvedRevision.isNotBlank()) { "The resolved revision must not be blank." }
     }
 
-    /**
-     * Return true if this provenance matches the processed VCS information of the [package][pkg].
-     */
+    /** Return true if this provenance matches the processed VCS information of the [package][pkg]. */
     override fun matches(pkg: Package): Boolean = vcsInfo == pkg.vcsProcessed
 }
 
-/**
- * A custom deserializer for polymorphic deserialization of [Provenance] without requiring type information.
- */
+/** A custom deserializer for polymorphic deserialization of [Provenance] without requiring type information. */
 private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Provenance {
         val node = p.codec.readTree<JsonNode>(p)

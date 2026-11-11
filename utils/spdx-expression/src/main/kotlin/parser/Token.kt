@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.utils.spdxexpression.parser
 
-/**
- * The tokens created by the [SpdxExpressionLexer] and consumed by the [SpdxExpressionParser].
- */
+/** The tokens created by the [SpdxExpressionLexer] and consumed by the [SpdxExpressionParser]. */
 sealed interface Token {
     data class OPEN(val position: Int) : Token
 

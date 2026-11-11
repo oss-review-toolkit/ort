@@ -32,14 +32,10 @@ import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class LicenseFinding(
-    /**
-     * The found license as an SPDX expression.
-     */
+    /** The found license as an SPDX expression. */
     val license: SpdxExpression,
 
-    /**
-     * The text location where the license was found.
-     */
+    /** The text location where the license was found. */
     val location: TextLocation,
 
     /**
@@ -57,9 +53,7 @@ data class LicenseFinding(
     constructor(license: String, location: TextLocation, score: Float? = null) : this(license.toSpdx(), location, score)
 }
 
-/**
- * Apply [mapping] from the [org.ossreviewtoolkit.model.config.ScannerConfiguration] to any license String.
- */
+/** Apply [mapping] from the [org.ossreviewtoolkit.model.config.ScannerConfiguration] to any license String. */
 fun String.mapLicense(mapping: Map<String, String>): String =
     mapping.entries.fold(this) { result, (from, to) ->
         val regex = """(^| |\()(${Regex.escape(from)})($| |\))""".toRegex()

@@ -28,9 +28,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 
-/**
- * The evaluated form of a [Issue] used by the [EvaluatedModel].
- */
+/** The evaluated form of a [Issue] used by the [EvaluatedModel]. */
 data class EvaluatedIssue(
     val timestamp: Instant,
     val type: EvaluatedIssueType,

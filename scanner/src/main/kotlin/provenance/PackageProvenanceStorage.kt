@@ -34,9 +34,7 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-/**
- * A storage for the resolved [RepositoryProvenance]s of [Package]s.
- */
+/** A storage for the resolved [RepositoryProvenance]s of [Package]s. */
 interface PackageProvenanceStorage {
     companion object {
         /**
@@ -66,14 +64,10 @@ interface PackageProvenanceStorage {
      */
     suspend fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult?
 
-    /**
-     * Return the [PackageProvenanceResolutionResult] for the [id] and [vcs], or null if no result was stored.
-     */
+    /** Return the [PackageProvenanceResolutionResult] for the [id] and [vcs], or null if no result was stored. */
     suspend fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult?
 
-    /**
-     * Return all [PackageProvenanceResolutionResult]s for the [id].
-     */
+    /** Return all [PackageProvenanceResolutionResult]s for the [id]. */
     suspend fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult>
 
     /**
@@ -92,35 +86,23 @@ interface PackageProvenanceStorage {
      */
     suspend fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult)
 
-    /**
-     * Delete all [PackageProvenanceResolutionResult]s for the [id].
-     */
+    /** Delete all [PackageProvenanceResolutionResult]s for the [id]. */
     suspend fun deleteProvenances(id: Identifier)
 }
 
-/**
- * The result of a package provenance resolution.
- */
+/** The result of a package provenance resolution. */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 sealed interface PackageProvenanceResolutionResult
 
-/**
- * A successful package provenance resolution result for an [ArtifactProvenance].
- */
+/** A successful package provenance resolution result for an [ArtifactProvenance]. */
 data class ResolvedArtifactProvenance(
-    /**
-     * The resolved [ArtifactProvenance].
-     */
+    /** The resolved [ArtifactProvenance]. */
     val provenance: ArtifactProvenance
 ) : PackageProvenanceResolutionResult
 
-/**
- * A successful package provenance resolution result for a [RepositoryProvenance].
- */
+/** A successful package provenance resolution result for a [RepositoryProvenance]. */
 data class ResolvedRepositoryProvenance(
-    /**
-     * The resolved [RepositoryProvenance].
-     */
+    /** The resolved [RepositoryProvenance]. */
     val provenance: RepositoryProvenance,
 
     /**
@@ -130,18 +112,12 @@ data class ResolvedRepositoryProvenance(
      */
     val clonedRevision: String,
 
-    /**
-     * True if the [clonedRevision] is a fixed revision.
-     */
+    /** True if the [clonedRevision] is a fixed revision. */
     val isFixedRevision: Boolean
 ) : PackageProvenanceResolutionResult
 
-/**
- * A failed package provenance resolution result.
- */
+/** A failed package provenance resolution result. */
 data class UnresolvedPackageProvenance(
-    /**
-     * A message that describes the error that occurred during resolution.
-     */
+    /** A message that describes the error that occurred during resolution. */
     val message: String
 ) : PackageProvenanceResolutionResult

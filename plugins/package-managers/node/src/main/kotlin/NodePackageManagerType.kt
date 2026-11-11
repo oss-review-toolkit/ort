@@ -27,9 +27,7 @@ import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.div
 
-/**
- * An enum of all supported Node package managers.
- */
+/** An enum of all supported Node package managers. */
 enum class NodePackageManagerType(
     internal val projectType: String,
     internal val packageType: String,
@@ -118,19 +116,13 @@ enum class NodePackageManagerType(
     };
 
     companion object {
-        /**
-         * The name of the definition file used by all Node package managers.
-         */
+        /** The name of the definition file used by all Node package managers. */
         const val DEFINITION_FILE = "package.json"
 
-        /**
-         * A regular expression to find an asterisk that is not surrounded by another asterisk.
-         */
+        /** A regular expression to find an asterisk that is not surrounded by another asterisk. */
         private val WORKSPACES_SINGLE_ASTERISK_REGEX = Regex("(?<!\\*)\\*(?!\\*)")
 
-        /**
-         * Return the set of package managers that are most likely responsible for the given [projectDir].
-         */
+        /** Return the set of package managers that are most likely responsible for the given [projectDir]. */
         fun forDirectory(projectDir: File): Set<NodePackageManagerType> {
             val scores = NodePackageManagerType.entries.associateWith {
                 it.getFileScore(projectDir)
@@ -144,9 +136,7 @@ enum class NodePackageManagerType(
         }
     }
 
-    /**
-     * Return true if the [projectDir] contains a lockfile for this package manager, or return false otherwise.
-     */
+    /** Return true if the [projectDir] contains a lockfile for this package manager, or return false otherwise. */
     internal open fun hasLockfile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockfileName)
 
     /**

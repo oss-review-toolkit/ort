@@ -57,9 +57,7 @@ import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
-/**
- * A specialized [DependencyHandler] implementation for Gradle's dependency model.
- */
+/** A specialized [DependencyHandler] implementation for Gradle's dependency model. */
 internal class GradleDependencyHandler(
     /** The type of projects to handle. */
     private val projectType: String
@@ -221,9 +219,7 @@ internal class GradleDependencyHandler(
             else -> "Unknown"
         }
 
-    /**
-     * A flag to indicate whether this Gradle dependency refers to a project, or to a package.
-     */
+    /** A flag to indicate whether this Gradle dependency refers to a project, or to a package. */
     val OrtComponentReference.isProjectDependency: Boolean
         get() = component().localPath != null
 }

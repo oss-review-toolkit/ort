@@ -54,9 +54,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 typealias ManagedProjectFiles = Map<PackageManager, List<File>>
 typealias ProjectResults = Map<File, List<ProjectAnalyzerResult>>
 
-/**
- * A class to represent a package manager that handles projects of the given [projectType].
- */
+/** A class to represent a package manager that handles projects of the given [projectType]. */
 abstract class PackageManager(val projectType: String) : Plugin {
     companion object {
         private val PACKAGE_MANAGER_DIRECTORIES = setOf(
@@ -257,9 +255,7 @@ abstract class PackageManager(val projectType: String) : Plugin {
         }
     }
 
-    /**
-     * Optional mapping of found [definitionFiles] before dependency resolution.
-     */
+    /** Optional mapping of found [definitionFiles] before dependency resolution. */
     open fun mapDefinitionFiles(
         analysisRoot: File,
         definitionFiles: List<File>,
@@ -391,9 +387,7 @@ abstract class PackageManager(val projectType: String) : Plugin {
         }
     }
 
-    /**
-     * Remove all packages from the contained [ProjectAnalyzerResult]s which are also projects.
-     */
+    /** Remove all packages from the contained [ProjectAnalyzerResult]s which are also projects. */
     protected fun ProjectResults.filterProjectPackages(): ProjectResults {
         val projectIds = flatMapTo(mutableSetOf()) { (_, projectResult) -> projectResult.map { it.project.id } }
 

@@ -26,23 +26,15 @@ import java.io.File
 import kotlin.math.abs
 import kotlin.math.min
 
-/**
- * A [TextLocation] references text located in a file.
- */
+/** A [TextLocation] references text located in a file. */
 data class TextLocation(
-    /**
-     * The path (with invariant separators) of the file that contains the text.
-     */
+    /** The path (with invariant separators) of the file that contains the text. */
     val path: String,
 
-    /**
-     * The line the text is starting at.
-     */
+    /** The line the text is starting at. */
     val startLine: Int,
 
-    /**
-     * The line the text is ending at.
-     */
+    /** The line the text is ending at. */
     val endLine: Int
 ) : Comparable<TextLocation> {
     companion object {
@@ -62,14 +54,10 @@ data class TextLocation(
         }
     }
 
-    /**
-     * A convenience constructor that sets [startLine] and [endLine] to the same [line].
-     */
+    /** A convenience constructor that sets [startLine] and [endLine] to the same [line]. */
     constructor(path: String, line: Int) : this(path, line, line)
 
-    /**
-     * Indicate whether this TextLocation has known start and end lines.
-     */
+    /** Indicate whether this TextLocation has known start and end lines. */
     @JsonIgnore
     val hasLineRange = startLine != UNKNOWN_LINE && endLine != UNKNOWN_LINE
 
@@ -79,14 +67,10 @@ data class TextLocation(
      */
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
 
-    /**
-     * Return whether the given [line] is contained in the location.
-     */
+    /** Return whether the given [line] is contained in the location. */
     operator fun contains(line: Int) = line != UNKNOWN_LINE && line in startLine..endLine
 
-    /**
-     * Return whether the given [other] location is contained in this location.
-     */
+    /** Return whether the given [other] location is contained in this location. */
     operator fun contains(other: TextLocation) = other.path == path && other.startLine in this && other.endLine in this
 
     /**

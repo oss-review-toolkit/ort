@@ -32,9 +32,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
  * detected.
  */
 data class LicenseFindingCuration(
-    /**
-     * A glob to match the file path of a license finding.
-     */
+    /** A glob to match the file path of a license finding. */
     val path: String,
 
     /**
@@ -68,14 +66,10 @@ data class LicenseFindingCuration(
     @JsonSerialize(converter = SpdxExpressionSortedConverter::class)
     val concludedLicense: SpdxExpression,
 
-    /**
-     * The reason why the curation was made, out of a predefined choice.
-     */
+    /** The reason why the curation was made, out of a predefined choice. */
     val reason: LicenseFindingCurationReason,
 
-    /**
-     * A comment explaining this [LicenseFindingCuration].
-     */
+    /** A comment explaining this [LicenseFindingCuration]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = ""
 ) {

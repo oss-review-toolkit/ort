@@ -25,13 +25,9 @@ package org.ossreviewtoolkit.model
  * It is meant to be reviewed by an operator as it could be a false positive.
  */
 data class SnippetFinding(
-    /**
-     * The text location in the scanned source file where the snippet has matched.
-     */
+    /** The text location in the scanned source file where the snippet has matched. */
     val sourceLocation: TextLocation,
 
-    /**
-     * The corresponding snippets.
-     */
+    /** The corresponding snippets. */
     val snippets: Set<Snippet>
 )

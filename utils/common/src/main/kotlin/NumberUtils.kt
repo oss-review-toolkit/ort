@@ -21,30 +21,20 @@ package org.ossreviewtoolkit.utils.common
 
 import java.util.Locale
 
-/**
- * Return the bytes equal to this [Int] number of kibibytes (KiB).
- */
+/** Return the bytes equal to this [Int] number of kibibytes (KiB). */
 inline val Int.kibibytes: Long
     get() = this * 1024L
 
-/**
- * Return the bytes equal to this [Int] number of mebibytes (MiB).
- */
+/** Return the bytes equal to this [Int] number of mebibytes (MiB). */
 inline val Int.mebibytes: Long
     get() = kibibytes * 1024L
 
-/**
- * Return the bytes equal to this [Int] number of gibibytes (GiB).
- */
+/** Return the bytes equal to this [Int] number of gibibytes (GiB). */
 inline val Int.gibibytes: Long
     get() = mebibytes * 1024L
 
-/**
- * Format this [Double] as a string with the provided number of [decimalPlaces].
- */
+/** Format this [Double] as a string with the provided number of [decimalPlaces]. */
 fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(Locale.ROOT, this)
 
-/**
- * Converts this [Number] from bytes to mebibytes (MiB).
- */
+/** Converts this [Number] from bytes to mebibytes (MiB). */
 fun Number.bytesToMib(): Double = toDouble() / 1.mebibytes

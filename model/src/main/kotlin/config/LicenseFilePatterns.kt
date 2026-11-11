@@ -26,19 +26,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore
  * patterns are supposed to be used case-insensitively. The prefix '*​*​/' will be prepended before usage.
  */
 data class LicenseFilePatterns(
-    /**
-     * A set of globs that match typical license filenames. The prefix '*​*​/' will be prepended before usage.
-     */
+    /** A set of globs that match typical license filenames. The prefix '*​*​/' will be prepended before usage. */
     val licenseFilenames: Set<String>,
 
-    /**
-     * A set of globs that match typical notice filenames. The prefix '*​*​/' will be prepended before usage.
-     */
+    /** A set of globs that match typical notice filenames. The prefix '*​*​/' will be prepended before usage. */
     val noticeFilenames: Set<String>,
 
-    /**
-     * A set of globs that match typical patent filenames. The prefix '*​*​/' will be prepended before usage.
-     */
+    /** A set of globs that match typical patent filenames. The prefix '*​*​/' will be prepended before usage. */
     val patentFilenames: Set<String>,
 
     /**

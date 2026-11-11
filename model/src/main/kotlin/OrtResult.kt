@@ -52,9 +52,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
  */
 @Suppress("TooManyFunctions")
 data class OrtResult(
-    /**
-     * Information about the repository that was used as input.
-     */
+    /** Information about the repository that was used as input. */
     val repository: Repository,
 
     /**
@@ -96,9 +94,7 @@ data class OrtResult(
     val labels: Map<String, String> = emptyMap()
 ) : ResolutionProvider {
     companion object {
-        /**
-         * A constant for an [OrtResult] with an empty repository and all other properties `null`.
-         */
+        /** A constant for an [OrtResult] with an empty repository and all other properties `null`. */
         @JvmField
         val EMPTY = OrtResult(
             repository = Repository.EMPTY,
@@ -219,9 +215,7 @@ data class OrtResult(
             !omitExcluded || !isExcluded(id)
         }
 
-    /**
-     * Return the list of [AdvisorResult]s for the given [id].
-     */
+    /** Return the list of [AdvisorResult]s for the given [id]. */
     @Suppress("unused")
     fun getAdvisorResultsForId(id: Identifier): List<AdvisorResult> = advisorResultsById[id].orEmpty()
 
@@ -254,9 +248,7 @@ data class OrtResult(
         return dependencies
     }
 
-    /**
-     * Return the identifiers of all projects and packages contained in this [OrtResult].
-     */
+    /** Return the identifiers of all projects and packages contained in this [OrtResult]. */
     @JsonIgnore
     fun getIdentifiers(): Set<Identifier> = projects.keys + packages.keys
 
@@ -380,9 +372,7 @@ data class OrtResult(
      */
     fun getLabelValues(key: String): Set<String> = labels[key]?.split(',').orEmpty().mapTo(mutableSetOf()) { it.trim() }
 
-    /**
-     * Return the [LicenseFindingCuration]s associated with the given package [id].
-     */
+    /** Return the [LicenseFindingCuration]s associated with the given package [id]. */
     fun getLicenseFindingCurations(id: Identifier): List<LicenseFindingCuration> =
         if (projects.containsKey(id)) {
             repository.config.curations.licenseFindings
@@ -401,9 +391,7 @@ data class OrtResult(
             addAll(getAdvisorProviderIssues(omitResolved = true, minSeverity = minSeverity))
         }.distinct()
 
-    /**
-     * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
-     */
+    /** Return a list of [PackageConfiguration]s for the given [packageId] and [provenance]. */
     fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
         packageConfigurationsByIdWithoutVersion[packageId.copy(version = "")].orEmpty()
             .filter { it.matches(packageId, provenance) }
@@ -432,14 +420,10 @@ data class OrtResult(
         return vendorPackages
     }
 
-    /**
-     * Return the [CuratedPackage] denoted by the given [id].
-     */
+    /** Return the [CuratedPackage] denoted by the given [id]. */
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
-    /**
-     * Return all [SpdxLicenseChoice]s for the [Package] with [id].
-     */
+    /** Return all [SpdxLicenseChoice]s for the [Package] with [id]. */
     fun getPackageLicenseChoices(id: Identifier): List<SpdxLicenseChoice> =
         resolvedConfiguration.licenseChoices.packageLicenseChoices
             .filter { it.packageId == id }
@@ -462,9 +446,7 @@ data class OrtResult(
             entry.curatedPackage.takeUnless { omitExcluded && entry.isExcluded }
         }
 
-    /**
-     * Return the [Project] denoted by the given [id].
-     */
+    /** Return the [Project] denoted by the given [id]. */
     fun getProject(id: Identifier): Project? = projects[id]?.project
 
     /**
@@ -499,52 +481,36 @@ data class OrtResult(
             getPackages(omitExcluded = omitExcluded).mapTo(this) { it.metadata.id }
         }
 
-    /**
-     * Return all [SpdxLicenseChoice]s applicable for the scope of the whole [repository].
-     */
+    /** Return all [SpdxLicenseChoice]s applicable for the scope of the whole [repository]. */
     @JsonIgnore
     fun getRepositoryLicenseChoices(): List<SpdxLicenseChoice> =
         resolvedConfiguration.licenseChoices.repositoryLicenseChoices
 
-    /**
-     * Return the [Resolutions] contained in the repository configuration of this [OrtResult].
-     */
+    /** Return the [Resolutions] contained in the repository configuration of this [OrtResult]. */
     @JsonIgnore
     fun getRepositoryConfigResolutions(): Resolutions = repository.config.resolutions.orEmpty()
 
-    /**
-     * Return the [Resolutions] contained in the resolved configuration of this [OrtResult].
-     */
+    /** Return the [Resolutions] contained in the resolved configuration of this [OrtResult]. */
     @JsonIgnore
     fun getResolutions(): Resolutions = resolvedConfiguration.resolutions.orEmpty()
 
-    /**
-     * Return true if [violation] is resolved in this [OrtResult].
-     */
+    /** Return true if [violation] is resolved in this [OrtResult]. */
     override fun isResolved(violation: RuleViolation): Boolean =
         getResolutions().ruleViolations.any { it.matches(violation) }
 
-    /**
-     * Return true if [vulnerability] is resolved in this [OrtResult].
-     */
+    /** Return true if [vulnerability] is resolved in this [OrtResult]. */
     override fun isResolved(vulnerability: Vulnerability): Boolean =
         getResolutions().vulnerabilities.any { it.matches(vulnerability) }
 
-    /**
-     * Return the resolutions matching [issue].
-     */
+    /** Return the resolutions matching [issue]. */
     override fun getResolutionsFor(issue: Issue): List<IssueResolution> =
         getResolutions().issues.filter { it.matches(issue) }
 
-    /**
-     * Return the resolutions matching [violation].
-     */
+    /** Return the resolutions matching [violation]. */
     override fun getResolutionsFor(violation: RuleViolation): List<RuleViolationResolution> =
         getResolutions().ruleViolations.filter { it.matches(violation) }
 
-    /**
-     * Return the resolutions matching [vulnerability].
-     */
+    /** Return the resolutions matching [vulnerability]. */
     override fun getResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution> =
         getResolutions().vulnerabilities.filter { it.matches(vulnerability) }
 
@@ -561,25 +527,17 @@ data class OrtResult(
             (!omitResolved || !isResolved(it)) && it.severity >= minSeverity
         }
 
-    /**
-     * Return the list of [ScanResult]s for the given [id].
-     */
+    /** Return the list of [ScanResult]s for the given [id]. */
     fun getScanResultsForId(id: Identifier): List<ScanResult> = scanner?.getScanResults(id).orEmpty()
 
-    /**
-     * Return the scan results associated with the respective identifiers.
-     */
+    /** Return the scan results associated with the respective identifiers. */
     @JsonIgnore
     fun getScanResults(): Map<Identifier, List<ScanResult>> = scanner?.getAllScanResults().orEmpty()
 
-    /**
-     * Return the [FileList] for the given [id].
-     */
+    /** Return the [FileList] for the given [id]. */
     fun getFileListForId(id: Identifier): FileList? = scanner?.getFileList(id)
 
-    /**
-     * Return the [FileList] associated with the respective identifier.
-     */
+    /** Return the [FileList] associated with the respective identifier. */
     @JsonIgnore
     fun getFileLists(): Map<Identifier, FileList> = scanner?.getAllFileLists().orEmpty()
 
@@ -677,24 +635,16 @@ data class OrtResult(
      */
     fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded == true
 
-    /**
-     * Return true if the given [id] denotes a [Package] contained in this [OrtResult].
-     */
+    /** Return true if the given [id] denotes a [Package] contained in this [OrtResult]. */
     fun isPackage(id: Identifier): Boolean = getPackage(id) != null
 
-    /**
-     * Return true if the given [path] is excluded in the project's source tree. For details see [isPathIncluded].
-     */
+    /** Return true if the given [path] is excluded in the project's source tree. For details see [isPathIncluded]. */
     fun isPathExcluded(path: String): Boolean = !isPathIncluded(path, getExcludes(), getIncludes())
 
-    /**
-     * Return true if the given [id] denotes a [Project] contained in this [OrtResult].
-     */
+    /** Return true if the given [id] denotes a [Project] contained in this [OrtResult]. */
     fun isProject(id: Identifier): Boolean = getProject(id) != null
 
-    /**
-     * Return true if and only if the given [scopeName] is excluded.
-     */
+    /** Return true if and only if the given [scopeName] is excluded. */
     fun isScopeExcluded(scopeName: String): Boolean = !isScopeIncluded(scopeName, getExcludes(), getIncludes())
 
     /**

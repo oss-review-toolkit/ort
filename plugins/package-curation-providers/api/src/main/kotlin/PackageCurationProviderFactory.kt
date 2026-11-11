@@ -27,9 +27,7 @@ import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.api.PluginFactory
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
-/**
- * The extension point for [PackageCurationProvider]s.
- */
+/** The extension point for [PackageCurationProvider]s. */
 interface PackageCurationProviderFactory : PluginFactory<PackageCurationProvider> {
     companion object {
         /**

@@ -37,9 +37,7 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
  * [Synchronized].
  */
 open class LocalFileStorage(
-    /**
-     * The directory used to store files in.
-     */
+    /** The directory used to store files in. */
     val directory: File
 ) : FileStorage {
     val mutex = Mutex()

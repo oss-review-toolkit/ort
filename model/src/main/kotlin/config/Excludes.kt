@@ -24,19 +24,13 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 
-/**
- * Defines which parts of a (root) repository should be excluded.
- */
+/** Defines which parts of a (root) repository should be excluded. */
 data class Excludes(
-    /**
-     * Path excludes which target file paths relative to the analysis root.
-     */
+    /** Path excludes which target file paths relative to the analysis root. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val paths: List<PathExclude> = emptyList(),
 
-    /**
-     * Scopes that will be excluded from all projects.
-     */
+    /** Scopes that will be excluded from all projects. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val scopes: List<ScopeExclude> = emptyList()
 ) {
@@ -49,27 +43,19 @@ data class Excludes(
         val EMPTY = Excludes()
     }
 
-    /**
-     * Return the [PathExclude]s matching the [definitionFilePath][Project.definitionFilePath].
-     */
+    /** Return the [PathExclude]s matching the [definitionFilePath][Project.definitionFilePath]. */
     fun findPathExcludes(project: Project, ortResult: OrtResult): List<PathExclude> {
         val definitionFilePath = ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)
         return paths.filter { it.matches(definitionFilePath) }
     }
 
-    /**
-     * Return the [ScopeExclude]s for the provided [scopeName].
-     */
+    /** Return the [ScopeExclude]s for the provided [scopeName]. */
     fun findScopeExcludes(scopeName: String): List<ScopeExclude> = scopes.filter { it.matches(scopeName) }
 
-    /**
-     * True if any [path exclude][paths] matches [path].
-     */
+    /** True if any [path exclude][paths] matches [path]. */
     fun isPathExcluded(path: String) = paths.any { it.matches(path) }
 
-    /**
-     * True if the scope with the given [scopeName] is excluded by this [Excludes] configuration.
-     */
+    /** True if the scope with the given [scopeName] is excluded by this [Excludes] configuration. */
     fun isScopeExcluded(scopeName: String): Boolean = scopes.any { it.matches(scopeName) }
 }
 

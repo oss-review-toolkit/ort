@@ -42,9 +42,7 @@ fun OrtResult.createLicenseInfoResolver(
     LicenseFilePatterns.getInstance()
 )
 
-/**
- * Return the path where the repository given by [provenance] is linked into the source tree.
- */
+/** Return the path where the repository given by [provenance] is linked into the source tree. */
 fun OrtResult.getRepositoryPath(provenance: RepositoryProvenance): String {
     repository.nestedRepositories.forEach { (path, vcsInfo) ->
         if (vcsInfo.type == provenance.vcsInfo.type
@@ -58,7 +56,5 @@ fun OrtResult.getRepositoryPath(provenance: RepositoryProvenance): String {
     return "/"
 }
 
-/**
- * Copy this [OrtResult] and add all [labels] to the existing labels, overwriting existing labels on conflict.
- */
+/** Copy this [OrtResult] and add all [labels] to the existing labels, overwriting existing labels on conflict. */
 fun OrtResult.mergeLabels(labels: Map<String, String>) = copy(labels = this.labels + labels)

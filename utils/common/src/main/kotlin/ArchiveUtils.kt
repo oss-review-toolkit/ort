@@ -161,9 +161,7 @@ fun File.unpack7Zip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = {
     }
 }
 
-/**
- * Unpack the [File] assuming it is a Zip archive ignoring all entries not matched by [filter].
- */
+/** Unpack the [File] assuming it is a Zip archive ignoring all entries not matched by [filter]. */
 fun File.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
     ZipFile.Builder().setFile(this).get().unpack(targetDirectory, filter)
 
@@ -206,9 +204,7 @@ private fun ZipFile.unpack(targetDirectory: File, filter: (ArchiveEntry) -> Bool
         }
     }
 
-/**
- * A list with file names that are expected to be contained in a Debian package archive file.
- */
+/** A list with file names that are expected to be contained in a Debian package archive file. */
 internal val DEB_NESTED_ARCHIVES = listOf("data.tar.xz", "control.tar.xz")
 
 /**
@@ -303,9 +299,7 @@ private fun <E : ArchiveEntry> ArchiveInputStream<E>.unpack(
     }
 }
 
-/**
- * Copy the executable bit contained in [mode] to the [target] file's mode bits.
- */
+/** Copy the executable bit contained in [mode] to the [target] file's mode bits. */
 private fun copyExecutableModeBit(target: File, mode: Int) {
     if (Os.isWindows) return
 

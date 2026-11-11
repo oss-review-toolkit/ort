@@ -24,14 +24,10 @@ package org.ossreviewtoolkit.utils.spdxdocument.model
  * See https://spdx.github.io/spdx-spec/v2.3/file-information/#84-file-checksum-field.
  */
 data class SpdxChecksum(
-    /**
-     * The checksum algorithm.
-     */
+    /** The checksum algorithm. */
     val algorithm: Algorithm,
 
-    /**
-     * The lower case hexadecimal checksum value.
-     */
+    /** The lower case hexadecimal checksum value. */
     val checksumValue: String
 ) {
     companion object {

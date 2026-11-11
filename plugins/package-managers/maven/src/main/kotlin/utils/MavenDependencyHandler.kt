@@ -42,9 +42,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  */
 typealias PackageResolverFun = (DependencyNode) -> Package
 
-/**
- * A specialized [DependencyHandler] implementation for the dependency model of Maven.
- */
+/** A specialized [DependencyHandler] implementation for the dependency model of Maven. */
 class MavenDependencyHandler(
     /** The source to use for creating issues. */
     private val issueSource: String,
@@ -124,19 +122,13 @@ class MavenDependencyHandler(
         }
     }
 
-    /**
-     * Return a flag whether the given [dependency] references a project in the same multi-module build.
-     */
+    /** Return a flag whether the given [dependency] references a project in the same multi-module build. */
     private fun isLocalProject(dependency: DependencyNode): Boolean = isLocalProject(dependency.artifact.identifier())
 
-    /**
-     * Return a flag whether the given [id] references a project in the same multi-module build.
-     */
+    /** Return a flag whether the given [id] references a project in the same multi-module build. */
     private fun isLocalProject(id: Identifier): Boolean = isLocalProject("${id.namespace}:${id.name}:${id.version}")
 
-    /**
-     * Return a flag whether the given [id] references a project in the same multi-module build.
-     */
+    /** Return a flag whether the given [id] references a project in the same multi-module build. */
     private fun isLocalProject(id: String): Boolean = id in localProjectIds
 }
 

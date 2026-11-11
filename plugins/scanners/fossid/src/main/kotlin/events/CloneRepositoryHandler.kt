@@ -52,9 +52,7 @@ import org.ossreviewtoolkit.scanner.ScanContext
 
 import org.semver4j.Semver
 
-/**
- * An event handler when FossID clones a repository itself.
- */
+/** An event handler when FossID clones a repository itself. */
 class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServiceWithVersion) : EventHandler {
     private val urlProvider = config.createUrlProvider()
 
@@ -174,9 +172,7 @@ class CloneRepositoryHandler(val config: FossIdConfig, val service: FossIdServic
         return excludeRuleIssues + legacyRuleIssues
     }
 
-    /**
-     * Wait until the repository of a scan with [scanCode] has been downloaded.
-     */
+    /** Wait until the repository of a scan with [scanCode] has been downloaded. */
     private suspend fun waitDownloadComplete(scanCode: String) {
         val result = wait(config.timeout.minutes, WAIT_DELAY) {
             logger.info { "Checking download status for scan '$scanCode'." }

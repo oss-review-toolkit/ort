@@ -39,9 +39,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.gleam.GleamManifest.Package.
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
-/**
- * A [DependencyHandler] for Gleam dependencies.
- */
+/** A [DependencyHandler] for Gleam dependencies. */
 internal class GleamDependencyHandler : DependencyHandler<GleamManifest.Package> {
     private lateinit var context: GleamProjectContext
     private val manifestPackagesByName = mutableMapOf<String, GleamManifest.Package>()
@@ -175,9 +173,7 @@ private fun GleamManifest.Package.isProject(context: GleamProjectContext): Boole
     return resolvedPath in context.projectDirs
 }
 
-/**
- * Generate a CPE identifier from a GitHub repository URL.
- */
+/** Generate a CPE identifier from a GitHub repository URL. */
 private fun generateCpe(repositoryUrl: String, version: String): String? {
     if (repositoryUrl.isBlank()) return null
 
@@ -205,9 +201,7 @@ private fun isValidLocalPath(analysisRoot: File, workingDir: File, path: String)
     return resolvedPath.canonicalFile.startsWith(analysisRoot.canonicalFile)
 }
 
-/**
- * Resolve owners to formatted author strings by fetching user details from Hex API.
- */
+/** Resolve owners to formatted author strings by fetching user details from Hex API. */
 private fun resolveAuthors(owners: List<HexPackageInfo.Owner>, hexClient: HexApiClient): Set<String> =
     owners.mapNotNull { it.username }
         .mapTo(mutableSetOf()) { username ->
@@ -216,9 +210,7 @@ private fun resolveAuthors(owners: List<HexPackageInfo.Owner>, hexClient: HexApi
             userInfo.email?.takeIf { it.isNotEmpty() }?.let { "$name <$it>" } ?: name
         }
 
-/**
- * Convert a VCS URL to a browsable homepage URL.
- */
+/** Convert a VCS URL to a browsable homepage URL. */
 private fun toHomepageUrl(vcsUrl: String): String {
     if (vcsUrl.isBlank()) return vcsUrl
     val normalizedUrl = normalizeVcsUrl(vcsUrl)

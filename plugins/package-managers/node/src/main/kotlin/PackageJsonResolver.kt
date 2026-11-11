@@ -23,9 +23,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.utils.common.realFile
 
-/**
- * This class reads 'package.json' files and caches the reads, so that each file is read at most once.
- */
+/** This class reads 'package.json' files and caches the reads, so that each file is read at most once. */
 internal class PackageJsonResolver {
     private val cache = mutableMapOf<File, PackageJson?>()
 

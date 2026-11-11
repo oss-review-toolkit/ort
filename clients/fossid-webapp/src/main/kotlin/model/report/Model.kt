@@ -56,27 +56,17 @@ enum class ReportType(private val value: String) {
     override fun toString(): String = value
 }
 
-/**
- * License types to be included in report.
- */
+/** License types to be included in report. */
 enum class SelectionType {
-    /**
-     * Include all licenses in the report.
-     */
+    /** Include all licenses in the report. */
     INCLUDE_ALL_LICENSES,
 
-    /**
-     * Include licenses marked as copyleft only.
-     */
+    /** Include licenses marked as copyleft only. */
     INCLUDE_COPYLEFT,
 
-    /**
-     * Include licenses marked as FOSS only.
-     */
+    /** Include licenses marked as FOSS only. */
     INCLUDE_FOSS,
 
-    /**
-     * Include licenses marked for report inclusion only.
-     */
+    /** Include licenses marked for report inclusion only. */
     INCLUDE_MARKED_LICENSES
 }

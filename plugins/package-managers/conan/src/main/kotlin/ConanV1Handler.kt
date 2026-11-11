@@ -135,18 +135,14 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
         conan.command.run("user", "-r", remote, "-p", password, username).requireSuccess()
     }
 
-    /**
-     * Return the map of packages and their identifiers which are contained in [pkgInfos].
-     */
+    /** Return the map of packages and their identifiers which are contained in [pkgInfos]. */
     private fun parsePackages(pkgInfos: List<PackageInfoV1>, workingDir: File): Map<String, Package> =
         pkgInfos.associate { pkgInfo ->
             val pkg = parsePackage(pkgInfo, workingDir)
             "${pkg.id.name}:${pkg.id.version}" to pkg
         }
 
-    /**
-     * Return the [Package] parsed from the given [pkgInfo].
-     */
+    /** Return the [Package] parsed from the given [pkgInfo]. */
     private fun parsePackage(pkgInfo: PackageInfoV1, workingDir: File): Package {
         val homepageUrl = pkgInfo.homepage.orEmpty()
 
@@ -176,9 +172,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
         )
     }
 
-    /**
-     * Return the [Identifier] for the package contained in [pkgInfo].
-     */
+    /** Return the [Identifier] for the package contained in [pkgInfo]. */
     private fun parsePackageId(pkgInfo: PackageInfoV1, workingDir: File) =
         Identifier(
             type = PACKAGE_TYPE,
@@ -217,9 +211,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
         )
     }
 
-    /**
-     * Return the dependency tree for the given [direct scope dependencies][requires].
-     */
+    /** Return the dependency tree for the given [direct scope dependencies][requires]. */
     private fun parseDependencyTree(
         pkgInfos: List<PackageInfoV1>,
         requires: List<String>,
@@ -240,15 +232,11 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
         }
 }
 
-/**
- * Return the full list of packages, excluding the project level information.
- */
+/** Return the full list of packages, excluding the project level information. */
 private fun removeProjectPackage(pkgInfos: List<PackageInfoV1>, definitionFileName: String): List<PackageInfoV1> =
     pkgInfos.minusElement(findProjectPackageInfo(pkgInfos, definitionFileName))
 
-/**
- * Find the [PackageInfo] that represents the project defined in the definition file.
- */
+/** Find the [PackageInfo] that represents the project defined in the definition file. */
 private fun findProjectPackageInfo(pkgInfos: List<PackageInfoV1>, definitionFileName: String): PackageInfoV1 =
     pkgInfos.first {
         // Use "in" because conanfile.py's reference string often includes other data.

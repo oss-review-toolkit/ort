@@ -32,9 +32,7 @@ internal val JSON = Json {
     namingStrategy = JsonNamingStrategy.SnakeCase
 }
 
-/**
- * See: https://github.com/JulietSecurity/abom/blob/6dd6c79f0ec7a63165bd92608fd02ba5f31541d6/pkg/model/abom.go
- */
+/** See: https://github.com/JulietSecurity/abom/blob/6dd6c79f0ec7a63165bd92608fd02ba5f31541d6/pkg/model/abom.go */
 @Serializable
 internal data class ABom(
     val abom: ABomMetadata,
@@ -71,9 +69,7 @@ internal data class ABom(
         val action: Action? = null
     )
 
-    /**
-     * See: https://github.com/JulietSecurity/abom/blob/6dd6c79f0ec7a63165bd92608fd02ba5f31541d6/pkg/model/action.go
-     */
+    /** See: https://github.com/JulietSecurity/abom/blob/6dd6c79f0ec7a63165bd92608fd02ba5f31541d6/pkg/model/action.go */
     @Serializable
     data class Action(
         val uses: String,

@@ -78,9 +78,7 @@ internal object YarnCommand : CommandLineTool {
         )
 }
 
-/**
- * The [Yarn package manager](https://classic.yarnpkg.com/).
- */
+/** The [Yarn package manager](https://classic.yarnpkg.com/). */
 @OrtPlugin(
     displayName = "Yarn",
     summary = "The Yarn package manager for Node.js.",

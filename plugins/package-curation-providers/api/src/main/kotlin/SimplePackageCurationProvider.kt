@@ -33,9 +33,7 @@ private val pluginDescriptor = PluginDescriptor(
     summary = "A simple package curation provider, which provides a fixed set of package curations."
 )
 
-/**
- * A [PackageCurationProvider] that provides the specified [packageCurations].
- */
+/** A [PackageCurationProvider] that provides the specified [packageCurations]. */
 open class SimplePackageCurationProvider(
     override val descriptor: PluginDescriptor,
     val packageCurations: List<PackageCuration>

@@ -30,9 +30,7 @@ import org.semver4j.processor.IvyProcessor
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
-/**
- * Return true if the version of this [Identifier] is an Ivy version range.
- */
+/** Return true if the version of this [Identifier] is an Ivy version range. */
 fun Identifier.hasIvyVersionRange(): Boolean = version.getIvyVersionRanges().get().isNotEmpty()
 
 /**

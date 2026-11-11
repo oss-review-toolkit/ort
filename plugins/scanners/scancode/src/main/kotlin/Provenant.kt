@@ -83,9 +83,7 @@ class Provenant(
         }
     }
 
-    /**
-     * Execute Provenant with the configured arguments to scan the given [path] and produce [resultFile].
-     */
+    /** Execute Provenant with the configured arguments to scan the given [path] and produce [resultFile]. */
     internal fun runProvenant(path: File, resultFile: File) =
         ProcessCapture(
             ProvenantCommand.command(),

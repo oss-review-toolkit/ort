@@ -35,40 +35,28 @@ import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.SnippetFindingSortedSetConverter
 import org.ossreviewtoolkit.utils.common.FileMatcher
 
-/**
- * A short summary of the scan results.
- */
+/** A short summary of the scan results. */
 @JsonIgnoreProperties("file_count", "package_verification_code")
 data class ScanSummary(
-    /**
-     * The time when the scan started.
-     */
+    /** The time when the scan started. */
     val startTime: Instant,
 
-    /**
-     * The time when the scan finished.
-     */
+    /** The time when the scan finished. */
     val endTime: Instant,
 
-    /**
-     * The detected license findings.
-     */
+    /** The detected license findings. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("licenses")
     @JsonSerialize(converter = LicenseFindingSortedSetConverter::class)
     val licenseFindings: Set<LicenseFinding> = emptySet(),
 
-    /**
-     * The detected copyright findings.
-     */
+    /** The detected copyright findings. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("copyrights")
     @JsonSerialize(converter = CopyrightFindingSortedSetConverter::class)
     val copyrightFindings: Set<CopyrightFinding> = emptySet(),
 
-    /**
-     * The detected snippet findings.
-     */
+    /** The detected snippet findings. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("snippets")
     @JsonSerialize(converter = SnippetFindingSortedSetConverter::class)
@@ -83,9 +71,7 @@ data class ScanSummary(
     val issues: List<Issue> = emptyList()
 ) {
     companion object {
-        /**
-         * A constant for a [ScannerRun] where all properties are empty.
-         */
+        /** A constant for a [ScannerRun] where all properties are empty. */
         @JvmField
         val EMPTY = ScanSummary(
             startTime = Instant.EPOCH,

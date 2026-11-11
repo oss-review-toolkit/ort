@@ -32,23 +32,15 @@ import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 
-/**
- * The base interface for all types of wrappers for scanners.
- */
+/** The base interface for all types of wrappers for scanners. */
 sealed interface ScannerWrapper : Plugin {
-    /**
-     * The version of the scanner.
-     */
+    /** The version of the scanner. */
     val version: String
 
-    /**
-     * The configuration of the scanner.
-     */
+    /** The configuration of the scanner. */
     val configuration: String
 
-    /**
-     * A convenience property to access all scanner details at once.
-     */
+    /** A convenience property to access all scanner details at once. */
     val details: ScannerDetails
         get() = ScannerDetails(descriptor.id, version, configuration)
 
@@ -70,29 +62,21 @@ sealed interface ScannerWrapper : Plugin {
      */
     val readFromStorage: Boolean
 
-    /**
-     * If `true`, scan results for this scanner shall be written to the configured scan storages.
-     */
+    /** If `true`, scan results for this scanner shall be written to the configured scan storages. */
     val writeToStorage: Boolean
 }
 
-/**
- * A wrapper interface for scanners that operate on [Package]s and download the package source code themselves.
- */
+/** A wrapper interface for scanners that operate on [Package]s and download the package source code themselves. */
 interface PackageScannerWrapper : ScannerWrapper {
     fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult
 }
 
-/**
- * A wrapper interface for scanners that operate on [Provenance]s and download the source code themselves.
- */
+/** A wrapper interface for scanners that operate on [Provenance]s and download the source code themselves. */
 interface ProvenanceScannerWrapper : ScannerWrapper {
     fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult
 }
 
-/**
- * A wrapper interface for scanners that scan the source code in a path on the local filesystem.
- */
+/** A wrapper interface for scanners that scan the source code in a path on the local filesystem. */
 interface PathScannerWrapper : ScannerWrapper {
     fun scanPath(path: File, context: ScanContext): ScanSummary
 }

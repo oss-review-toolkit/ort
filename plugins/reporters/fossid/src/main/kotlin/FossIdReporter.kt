@@ -44,30 +44,20 @@ import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 data class FossIdReporterConfig(
-    /**
-     * The URL of the FossID server to connect to.
-     */
+    /** The URL of the FossID server to connect to. */
     val serverUrl: String,
 
-    /**
-     * The API key to use for authentication.
-     */
+    /** The API key to use for authentication. */
     val apiKey: Secret,
 
-    /**
-     * The user to authenticate as.
-     */
+    /** The user to authenticate as. */
     val user: Secret,
 
-    /**
-     * The type of report to generate.
-     */
+    /** The type of report to generate. */
     @OrtPluginOption(defaultValue = "XLSX")
     val reportType: ReportType,
 
-    /**
-     * The type of selection to use.
-     */
+    /** The type of selection to use. */
     @OrtPluginOption(defaultValue = "INCLUDE_ALL_LICENSES")
     val selectionType: SelectionType
 )

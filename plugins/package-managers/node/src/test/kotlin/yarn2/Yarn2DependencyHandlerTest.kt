@@ -361,18 +361,14 @@ class Yarn2DependencyHandlerTest : WordSpec({
     }
 })
 
-/**
- * Create a minimal [PackageInfo] for the given [locator] and [version].
- */
+/** Create a minimal [PackageInfo] for the given [locator] and [version]. */
 private fun packageInfo(locator: String, version: String, deps: List<PackageInfo.Dependency> = emptyList()) =
     PackageInfo(
         value = locator,
         children = PackageInfo.Children(version = version, dependencies = deps)
     )
 
-/**
- * Create a [PackageInfo.Dependency] with the given [locator]. The descriptor is set to a dummy value.
- */
+/** Create a [PackageInfo.Dependency] with the given [locator]. The descriptor is set to a dummy value. */
 private fun dep(locator: String) = PackageInfo.Dependency(descriptor = "dummy@npm:^1.2.3", locator = locator)
 
 /**

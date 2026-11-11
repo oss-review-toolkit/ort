@@ -25,15 +25,11 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalDocumentReference
 
-/**
- * Remove an [SpdxExternalDocumentReference] prefix from this SPDX identifier, if present.
- */
+/** Remove an [SpdxExternalDocumentReference] prefix from this SPDX identifier, if present. */
 internal fun String.removeDocumentRefPrefix(): String =
     takeUnless { startsWith(SpdxConstants.DOCUMENT_REF_PREFIX) } ?: substringAfter(":")
 
-/**
- * Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string.
- */
+/** Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string. */
 internal fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
 
 /**
@@ -42,9 +38,7 @@ internal fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.
  */
 internal fun String.sanitize(): String = replace(':', ' ').collapseWhitespace()
 
-/**
- * Wrap any "present" SPDX value in a sorted set, or return an empty sorted set otherwise.
- */
+/** Wrap any "present" SPDX value in a sorted set, or return an empty sorted set otherwise. */
 internal fun String?.wrapPresentInSet(): Set<String> {
     if (SpdxConstants.isPresent(this)) {
         withoutPrefix(SpdxConstants.PERSON)?.let { persons ->

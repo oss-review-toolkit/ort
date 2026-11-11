@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.dos
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.Secret
 
-/**
- * This is the configuration class for DOS Scanner.
- */
+/** This is the configuration class for DOS Scanner. */
 data class DosScannerConfig(
     /** The URL where the DOS backend is running. */
     val url: String,
@@ -43,9 +41,7 @@ data class DosScannerConfig(
     @OrtPluginOption(defaultValue = "http://localhost:3000")
     val frontendUrl: String,
 
-    /**
-     * Whether to write scan results to the storage.
-     */
+    /** Whether to write scan results to the storage. */
     @OrtPluginOption(defaultValue = "true")
     val writeToStorage: Boolean
 )

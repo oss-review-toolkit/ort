@@ -36,9 +36,7 @@ import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-/**
- * The name of the ORT license text curations configuration directory.
- */
+/** The name of the ORT license text curations configuration directory. */
 const val ORT_LICENSE_TEXT_CURATIONS_DIRNAME = "license-text-curations"
 
 /** The configuration for the license text-curations-directory-based license fact provider. */

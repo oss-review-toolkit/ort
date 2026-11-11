@@ -21,30 +21,20 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-/**
- * Defines a scope that should be excluded.
- */
+/** Defines a scope that should be excluded. */
 data class ScopeExclude(
-    /**
-     * A regular expression to match the names of scopes to exclude.
-     */
+    /** A regular expression to match the names of scopes to exclude. */
     val pattern: String,
 
-    /**
-     * The reason why the scope is excluded, out of a predefined choice.
-     */
+    /** The reason why the scope is excluded, out of a predefined choice. */
     val reason: ScopeExcludeReason,
 
-    /**
-     * A comment to further explain why the [reason] is applicable here.
-     */
+    /** A comment to further explain why the [reason] is applicable here. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = ""
 ) {
     private val regex by lazy { Regex(pattern) }
 
-    /**
-     * True if [ScopeExclude.pattern] matches [scopeName].
-     */
+    /** True if [ScopeExclude.pattern] matches [scopeName]. */
     fun matches(scopeName: String) = regex.matches(scopeName)
 }

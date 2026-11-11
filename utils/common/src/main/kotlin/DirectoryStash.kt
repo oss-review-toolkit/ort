@@ -84,12 +84,8 @@ class DirectoryStash(files: Set<File>, copy: Boolean = false) : Closeable {
     }
 }
 
-/**
- * A convenience function that stashes directories / files using a [DirectoryStash] instance.
- */
+/** A convenience function that stashes directories / files using a [DirectoryStash] instance. */
 fun stashDirectories(vararg files: File, copy: Boolean = false): Closeable = DirectoryStash(setOf(*files), copy)
 
-/**
- * A convenience function that stashes directories / files using a [DirectoryStash] instance.
- */
+/** A convenience function that stashes directories / files using a [DirectoryStash] instance. */
 fun stashFiles(vararg files: File, copy: Boolean = false): Closeable = FileStash(setOf(*files), copy)

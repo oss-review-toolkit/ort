@@ -68,9 +68,7 @@ internal object PnpmCommand : CommandLineTool {
         )
 }
 
-/**
- * The [PNPM package manager](https://pnpm.io/).
- */
+/** The [PNPM package manager](https://pnpm.io/). */
 @OrtPlugin(
     id = "PNPM",
     displayName = "PNPM",

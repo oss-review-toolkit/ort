@@ -77,9 +77,7 @@ internal data class GleamToml(
     /** Links to project resources like homepage, documentation, etc. */
     val links: List<Link> = emptyList()
 ) {
-    /**
-     * Represents a link in the gleam.toml links section.
-     */
+    /** Represents a link in the gleam.toml links section. */
     @Serializable
     data class Link(
         val title: String,
@@ -117,9 +115,7 @@ internal data class GleamToml(
             )
         }
 
-        /**
-         * Constructs the full repository URL based on the type and other fields.
-         */
+        /** Constructs the full repository URL based on the type and other fields. */
         fun toUrl(): String? {
             if (type == "custom") return url
 
@@ -162,9 +158,7 @@ internal data class GleamToml(
 internal object DependencySerializer : KSerializer<GleamToml.Dependency> {
     override val descriptor = PolymorphicSerializer(GleamToml.Dependency::class).descriptor
 
-    /**
-     * Parse a TOML element into a Dependency.
-     */
+    /** Parse a TOML element into a Dependency. */
     override fun deserialize(decoder: Decoder): GleamToml.Dependency {
         require(decoder is TomlDecoder)
 

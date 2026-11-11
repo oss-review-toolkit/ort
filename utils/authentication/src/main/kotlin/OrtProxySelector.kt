@@ -36,16 +36,12 @@ typealias ProtocolProxyMap = Map<String, List<AuthenticatedProxy>>
 
 const val DEFAULT_PROXY_PORT = 8080
 
-/**
- * A proxy selector which supports dynamic addition and removal of proxies with optional password authentication.
- */
+/** A proxy selector which supports dynamic addition and removal of proxies with optional password authentication. */
 class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelector() {
     companion object {
         internal val NO_PROXY_LIST = listOf(Proxy.NO_PROXY)
 
-        /**
-         * Install this proxy selector as the global default. The previous default selector is used as a fallback.
-         */
+        /** Install this proxy selector as the global default. The previous default selector is used as a fallback. */
         @Synchronized
         fun install(): OrtProxySelector {
             val current = getDefault()
@@ -59,9 +55,7 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
             }
         }
 
-        /**
-         * Uninstall this proxy selector, restoring the previous default selector as the global default.
-         */
+        /** Uninstall this proxy selector, restoring the previous default selector as the global default. */
         @Synchronized
         fun uninstall(): ProxySelector? {
             val current = getDefault()
@@ -124,9 +118,7 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
             proxiesForProtocol += proxy
         }
 
-    /**
-     * Add multiple [proxies for specific protocols][proxyMap] whose definitions come from [origin].
-     */
+    /** Add multiple [proxies for specific protocols][proxyMap] whose definitions come from [origin]. */
     fun addProxies(origin: String, proxyMap: ProtocolProxyMap) =
         apply {
             proxyMap.forEach { (protocol, proxies) ->
@@ -136,26 +128,20 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
             }
         }
 
-    /**
-     * Remove any previously added proxies.
-     */
+    /** Remove any previously added proxies. */
     fun removeAllProxies() =
         apply {
             proxyAuthentication.clear()
             proxyOrigins.clear()
         }
 
-    /**
-     * Return whether the [proxy] has been defined from some origin.
-     */
+    /** Return whether the [proxy] has been defined from some origin. */
     fun hasOrigin(proxy: Proxy) =
         proxy in proxyOrigins.flatMap { (_, proxiesForProtocol) ->
             proxiesForProtocol.values
         }.flatten()
 
-    /**
-     * Remove all proxies whose definition comes from the [origin].
-     */
+    /** Remove all proxies whose definition comes from the [origin]. */
     fun removeProxyOrigin(origin: String) {
         val removed = proxyOrigins.remove(origin)
 
@@ -199,9 +185,7 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
     }
 }
 
-/**
- * Determine settings for an authenticated proxy for the given [protocol] from commonly set system properties.
- */
+/** Determine settings for an authenticated proxy for the given [protocol] from commonly set system properties. */
 fun determineProxyFromProperties(protocol: String?): AuthenticatedProxy? {
     val type = protocol?.toProxyType() ?: return null
 

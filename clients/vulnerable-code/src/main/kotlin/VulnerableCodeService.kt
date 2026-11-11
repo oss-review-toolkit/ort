@@ -39,9 +39,7 @@ import retrofit2.http.POST
  */
 interface VulnerableCodeService {
     companion object {
-        /**
-         * The JSON (de-)serialization object used by this service.
-         */
+        /** The JSON (de-)serialization object used by this service. */
         val JSON = Json {
             ignoreUnknownKeys = true
             namingStrategy = JsonNamingStrategy.SnakeCase
@@ -102,9 +100,7 @@ interface VulnerableCodeService {
      */
     @Serializable
     data class VulnerabilityReference(
-        /**
-         * The URL of this reference. From this URL, it is also possible to identify the source of information.
-         */
+        /** The URL of this reference. From this URL, it is also possible to identify the source of information. */
         val url: String,
 
         /**
@@ -114,9 +110,7 @@ interface VulnerableCodeService {
         val scores: List<Score>
     )
 
-    /**
-     * Data class describing a package version that fixes a vulnerability.
-     */
+    /** Data class describing a package version that fixes a vulnerability. */
     @Serializable
     data class FixedPackage(
         /** The purl identifying this package. */

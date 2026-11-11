@@ -20,33 +20,21 @@
 package org.ossreviewtoolkit.model.config
 
 data class SendMailConfiguration(
-    /**
-     * The address of the outgoing SMTP server that will be used to send the message.
-     */
+    /** The address of the outgoing SMTP server that will be used to send the message. */
     val hostName: String = "localhost",
 
-    /**
-     * The port used for the SMTP server.
-     */
+    /** The port used for the SMTP server. */
     val port: Int = 465,
 
-    /**
-     * The username to authenticate with the SMTP server.
-     */
+    /** The username to authenticate with the SMTP server. */
     val username: String = "",
 
-    /**
-     * The password to authenticate with the SMTP server.
-     */
+    /** The password to authenticate with the SMTP server. */
     val password: String = "",
 
-    /**
-     * Configuration if SSL/TLS encryption should be enabled with the SMTP server.
-     */
+    /** Configuration if SSL/TLS encryption should be enabled with the SMTP server. */
     val useSsl: Boolean = true,
 
-    /**
-     * The 'from' field of the outgoing email.
-     */
+    /** The 'from' field of the outgoing email. */
     val fromAddress: String = "no-reply@oss-review-toolkit.org"
 )

@@ -50,9 +50,7 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 private const val PROJECT_TYPE = "Carthage"
 internal const val PACKAGE_TYPE = "Carthage"
 
-/**
- * The [Carthage](https://github.com/Carthage/Carthage) package manager for Objective-C / Swift.
- */
+/** The [Carthage](https://github.com/Carthage/Carthage) package manager for Objective-C / Swift. */
 @OrtPlugin(
     displayName = "Carthage",
     summary = "The Carthage package manager for Objective-C / Swift.",
@@ -98,9 +96,7 @@ class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descr
         )
     }
 
-    /**
-     * As the "Carthage.resolved" file does not provide any project information, trying to retrieve some from VCS.
-     */
+    /** As the "Carthage.resolved" file does not provide any project information, trying to retrieve some from VCS. */
     private fun getProjectInfoFromVcs(analysisRoot: File, definitionFile: File): ProjectInfo {
         val workingTree = VersionControlSystem.forDirectory(definitionFile.parentFile)
         val vcsInfo = workingTree?.getInfo().orEmpty()

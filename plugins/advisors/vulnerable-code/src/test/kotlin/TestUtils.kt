@@ -37,9 +37,7 @@ internal val idJUnit = Identifier("Maven:junit:junit:4.12")
 internal val idHamcrest = Identifier("Maven:org.hamcrest:hamcrest-core:1.3")
 internal val idLog4j = Identifier("Maven:org.apache.logging.log4j:log4j-core:2.17.0")
 
-/**
- * The list with the identifiers of packages that are referenced in the test result file.
- */
+/** The list with the identifiers of packages that are referenced in the test result file. */
 internal val packageIdentifiers = setOf(idJUnit, idLang, idText, idStruts, idHamcrest)
 
 /**
@@ -47,9 +45,7 @@ internal val packageIdentifiers = setOf(idJUnit, idLang, idText, idStruts, idHam
  */
 internal val packages = packageIdentifiers.map { it.toPurl() }
 
-/**
- * Return a list with [Package]s from the analyzer result file that serve as input for the [VulnerableCode] advisor.
- */
+/** Return a list with [Package]s from the analyzer result file that serve as input for the [VulnerableCode] advisor. */
 internal fun TestConfiguration.inputPackagesFromAnalyzerResult(): Set<Package> =
     readResourceValue<OrtResult>("/ort-analyzer-result.yml").getPackages().mapTo(mutableSetOf()) { it.metadata }
 
@@ -67,34 +63,22 @@ internal fun inputPackagesFromIdentifiers(vararg identifiers: Identifier): Set<P
 internal fun generatePackagesRequest(purls: Collection<String> = packages): String =
     purls.joinToString(prefix = "{ \"purls\": [", postfix = "] }") { "\"$it\"" }
 
-/**
- * Generate the JSON body of the request to query vulnerability information about the [Package] with the given [id].
- */
+/** Generate the JSON body of the request to query vulnerability information about the [Package] with the given [id]. */
 internal fun generatePackagesRequest(id: Identifier): String = generatePackagesRequest(listOf(id.toPurl()))
 
-/**
- * Generate the JSON body of the API v3 packages request for the given [purls].
- */
+/** Generate the JSON body of the API v3 packages request for the given [purls]. */
 internal fun generateV3PackagesRequest(purls: Collection<String> = packages): String =
     purls.joinToString(prefix = "{ \"purls\": [", postfix = "], \"details\": true }") { "\"$it\"" }
 
-/**
- * Generate the JSON body of the API v3 packages request for the [Package] with the given [id].
- */
+/** Generate the JSON body of the API v3 packages request for the [Package] with the given [id]. */
 internal fun generateV3PackagesRequest(id: Identifier): String = generateV3PackagesRequest(listOf(id.toPurl()))
 
-/**
- * Generate the JSON body of the API v3 advisories request for the given [purls].
- */
+/** Generate the JSON body of the API v3 advisories request for the given [purls]. */
 internal fun generateAdvisoriesRequest(purls: Collection<String> = packages): String =
     purls.joinToString(prefix = "{ \"purls\": [", postfix = "] }") { "\"$it\"" }
 
-/**
- * Generate the JSON body of the API v3 advisories request for the [Package] with the given [id].
- */
+/** Generate the JSON body of the API v3 advisories request for the [Package] with the given [id]. */
 internal fun generateAdvisoriesRequest(id: Identifier): String = generateAdvisoriesRequest(listOf(id.toPurl()))
 
-/**
- * The advisor details expected in results produced by the VulnerableCode test instances.
- */
+/** The advisor details expected in results produced by the VulnerableCode test instances. */
 internal val details = AdvisorDetails(VulnerableCodeFactory.descriptor.id)

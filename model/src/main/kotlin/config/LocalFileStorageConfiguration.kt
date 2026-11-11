@@ -21,17 +21,11 @@ package org.ossreviewtoolkit.model.config
 
 import java.io.File
 
-/**
- * A class to hold the configuration for using local files as a storage.
- */
+/** A class to hold the configuration for using local files as a storage. */
 data class LocalFileStorageConfiguration(
-    /**
-     * The directory to use as a storage root.
-     */
+    /** The directory to use as a storage root. */
     val directory: File,
 
-    /**
-     * Whether to use compression for storing files or not. Defaults to true.
-     */
+    /** Whether to use compression for storing files or not. Defaults to true. */
     val compression: Boolean = true
 )

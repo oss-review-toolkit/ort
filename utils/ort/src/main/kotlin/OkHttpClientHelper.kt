@@ -63,13 +63,9 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
 
-/**
- * A helper class to manage OkHttp instances backed by distinct cache directories.
- */
+/** A helper class to manage OkHttp instances backed by distinct cache directories. */
 object OkHttpClientHelper {
-    /**
-     * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
-     */
+    /** A constant for the "too many requests" HTTP code as HttpURLConnection has none. */
     const val HTTP_TOO_MANY_REQUESTS = 429
 
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
@@ -91,9 +87,7 @@ object OkHttpClientHelper {
         } ?: okHttpClient
 }
 
-/**
- * An HTTP-specific download error that enriches an [IOException] with an additional HTTP error code.
- */
+/** An HTTP-specific download error that enriches an [IOException] with an additional HTTP error code. */
 class HttpDownloadError(val code: Int, message: String) : IOException("$message (HTTP code $code)")
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
@@ -104,9 +98,7 @@ private const val READ_TIMEOUT_IN_SECONDS = 30L
 private const val AUTHORIZATION_HEADER = "Authorization"
 private const val BEARER_AUTH_SCHEME = "Bearer"
 
-/**
- * The default [OkHttpClient] for ORT to use.
- */
+/** The default [OkHttpClient] for ORT to use. */
 val okHttpClient: OkHttpClient by lazy {
     OrtAuthenticator.install()
     OrtProxySelector.install()
@@ -266,17 +258,13 @@ fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<P
         response to response.body
     }
 
-/**
- * Execute a HEAD-request against [url] to ping for its existence.
- */
+/** Execute a HEAD-request against [url] to ping for its existence. */
 fun OkHttpClient.ping(url: String): Response =
     Request.Builder().head().url(url).build().let { request ->
         execute(request)
     }
 
-/**
- * Execute a [request] using the client.
- */
+/** Execute a [request] using the client. */
 fun OkHttpClient.execute(request: Request): Response =
     newCall(request).execute().also { response ->
         logger.debug {
@@ -288,14 +276,10 @@ fun OkHttpClient.execute(request: Request): Response =
         }
     }
 
-/**
- * Asynchronously enqueue a [request] using the client and await its response.
- */
+/** Asynchronously enqueue a [request] using the client and await its response. */
 suspend fun OkHttpClient.await(request: Request): Response = newCall(request).await()
 
-/**
- * Asynchronously enqueue the [Call]'s request and await its [Response].
- */
+/** Asynchronously enqueue the [Call]'s request and await its [Response]. */
 suspend fun Call.await(): Response =
     suspendCancellableCoroutine { continuation ->
         continuation.invokeOnCancellation {

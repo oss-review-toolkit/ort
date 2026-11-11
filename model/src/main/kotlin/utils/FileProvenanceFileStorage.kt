@@ -37,14 +37,10 @@ import org.ossreviewtoolkit.utils.ort.storage.FileStorage
  * in files.
  */
 class FileProvenanceFileStorage(
-    /**
-     * The [FileStorage] to use for storing the files.
-     */
+    /** The [FileStorage] to use for storing the files. */
     private val storage: FileStorage,
 
-    /**
-     * The name of the files to use for storing the contents of the associated files.
-     */
+    /** The name of the files to use for storing the contents of the associated files. */
     private val filename: String
 ) : ProvenanceFileStorage {
     init {
@@ -78,9 +74,7 @@ class FileProvenanceFileStorage(
     private fun getFilePath(provenance: KnownProvenance): String = "${provenance.hash()}/$filename"
 }
 
-/**
- * Calculate the SHA-1 hash of the storage key of this [KnownProvenance] instance.
- */
+/** Calculate the SHA-1 hash of the storage key of this [KnownProvenance] instance. */
 private fun KnownProvenance.hash(): String {
     val key = when (this) {
         is ArtifactProvenance -> "${sourceArtifact.url}${sourceArtifact.hash.value}"

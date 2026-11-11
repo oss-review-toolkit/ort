@@ -47,28 +47,18 @@ enum class SpdxOperator(
     OR(0)
 }
 
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
- */
+/** Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND]. */
 infix fun SpdxLicense.and(other: SpdxLicense) = this and other.toExpression()
 
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
- */
+/** Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND]. */
 infix fun SpdxLicense.and(other: SpdxExpression) = SpdxCompoundExpression(toExpression(), SpdxOperator.AND, other)
 
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR].
- */
+/** Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR]. */
 infix fun SpdxLicense.or(other: SpdxLicense) = this or other.toExpression()
 
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR].
- */
+/** Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR]. */
 infix fun SpdxLicense.or(other: SpdxExpression) = SpdxCompoundExpression(toExpression(), SpdxOperator.OR, other)
 
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [exception] using [SpdxExpression.WITH].
- */
+/** Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [exception] using [SpdxExpression.WITH]. */
 infix fun SpdxLicense.with(exception: SpdxLicenseException) =
     SpdxLicenseWithExceptionExpression(toExpression(), exception.id)

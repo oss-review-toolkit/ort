@@ -260,9 +260,7 @@ class AdvisorTest : WordSpec({
     }
 })
 
-/**
- * Create a test [Advisor] instance that is configured with the given [providers].
- */
+/** Create a test [Advisor] instance that is configured with the given [providers]. */
 private fun createAdvisor(providers: List<AdviceProvider>): Advisor {
     val advisorConfig = AdvisorConfiguration()
 
@@ -275,9 +273,7 @@ private fun createAdvisor(providers: List<AdviceProvider>): Advisor {
     return Advisor(factories, advisorConfig)
 }
 
-/**
- * Create an [OrtResult] containing the given [packages].
- */
+/** Create an [OrtResult] containing the given [packages]. */
 private fun createOrtResultWithPackages(packages: Set<Package>): OrtResult =
     OrtResult.EMPTY.copy(
         analyzer = AnalyzerRun.EMPTY.copy(
@@ -288,9 +284,7 @@ private fun createOrtResultWithPackages(packages: Set<Package>): OrtResult =
         )
     )
 
-/**
- * Create a test [Package] based on the given [index].
- */
+/** Create a test [Package] based on the given [index]. */
 private fun createPackage(index: Int): Package =
     Package.EMPTY.copy(
         id = Identifier.EMPTY.copy(name = "test-package$index"),

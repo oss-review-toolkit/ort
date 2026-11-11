@@ -182,9 +182,7 @@ internal class P2RepositoryContentLoader : AutoCloseable {
                 }
             }.maxByOrNull { it.value.length }.orNone()
 
-        /**
-         * Generate an identifier for an OSGi bundle artifact based on the given [artifactId] and [version].
-         */
+        /** Generate an identifier for an OSGi bundle artifact based on the given [artifactId] and [version]. */
         private fun bundleIdentifier(artifactId: String, version: String) = "$artifactId:$version"
     }
 
@@ -222,9 +220,7 @@ internal class P2RepositoryContentLoader : AutoCloseable {
             repositoryContents to issues
         }
 
-    /**
-     * Starts the download of artifact information for the given [repositoryUrl] asynchronously.
-     */
+    /** Starts the download of artifact information for the given [repositoryUrl] asynchronously. */
     private suspend fun startRepositoryDownload(scope: CoroutineScope, repositoryUrl: String) {
         val repositoryIsUnknown = mutex.withLock { knownRepositories.add(repositoryUrl) }
 
@@ -235,9 +231,7 @@ internal class P2RepositoryContentLoader : AutoCloseable {
         }
     }
 
-    /**
-     * Handles the download of the artifact information for the given [repositoryUrl].
-     */
+    /** Handles the download of the artifact information for the given [repositoryUrl]. */
     private suspend fun downloadRepository(scope: CoroutineScope, repositoryUrl: String) {
         loadRepositoryContent(downloadDir, repositoryUrl).onSuccess { content ->
             logger.info { "Found ${content.artifacts.size} artifacts in repository '$repositoryUrl'." }
@@ -280,9 +274,7 @@ internal data class P2Identifier(
     val classifier: String = "osgi.bundle"
 )
 
-/**
- * A data class storing information about a P2 repository including the artifacts it contains.
- */
+/** A data class storing information about a P2 repository including the artifacts it contains. */
 internal data class P2RepositoryContent(
     /** The base URL of this repository. */
     val baseUrl: String,
@@ -308,9 +300,7 @@ private data class ParseArtifactsState(
     /** A [Map] with the aggregated properties of all encountered artifacts. */
     val properties: MutableMap<P2Identifier, Map<String, String>> = mutableMapOf()
 ) {
-    /**
-     * Return an updated [ParseArtifactsState] instance that has the given [artifactId] set as current artifact.
-     */
+    /** Return an updated [ParseArtifactsState] instance that has the given [artifactId] set as current artifact. */
     fun withCurrentArtifactId(artifactId: P2Identifier?): ParseArtifactsState {
         artifactId?.also { id ->
             properties[id] = HashMap(currentProperties)

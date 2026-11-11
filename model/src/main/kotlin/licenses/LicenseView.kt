@@ -35,14 +35,10 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
  */
 class LicenseView(vararg licenseSources: EnumSet<LicenseSource>) {
     companion object {
-        /**
-         * Return all licenses.
-         */
+        /** Return all licenses. */
         val ALL = LicenseView(enumSetOf(LicenseSource.DECLARED, LicenseSource.DETECTED, LicenseSource.CONCLUDED))
 
-        /**
-         * Return only the concluded licenses if they exist, otherwise return declared and detected licenses.
-         */
+        /** Return only the concluded licenses if they exist, otherwise return declared and detected licenses. */
         val CONCLUDED_OR_DECLARED_AND_DETECTED = LicenseView(
             enumSetOf(LicenseSource.CONCLUDED),
             enumSetOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
@@ -58,27 +54,19 @@ class LicenseView(vararg licenseSources: EnumSet<LicenseSource>) {
             enumSetOf(LicenseSource.DETECTED)
         )
 
-        /**
-         * Return only the concluded licenses if they exist, otherwise return detected licenses.
-         */
+        /** Return only the concluded licenses if they exist, otherwise return detected licenses. */
         val CONCLUDED_OR_DETECTED = LicenseView(
             enumSetOf(LicenseSource.CONCLUDED),
             enumSetOf(LicenseSource.DETECTED)
         )
 
-        /**
-         * Return only the concluded licenses.
-         */
+        /** Return only the concluded licenses. */
         val ONLY_CONCLUDED = LicenseView(enumSetOf(LicenseSource.CONCLUDED))
 
-        /**
-         * Return only the declared licenses.
-         */
+        /** Return only the declared licenses. */
         val ONLY_DECLARED = LicenseView(enumSetOf(LicenseSource.DECLARED))
 
-        /**
-         * Return only the detected licenses.
-         */
+        /** Return only the detected licenses. */
         val ONLY_DETECTED = LicenseView(enumSetOf(LicenseSource.DETECTED))
     }
 

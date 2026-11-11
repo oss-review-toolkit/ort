@@ -28,9 +28,7 @@ internal val json = Json {
     namingStrategy = JsonNamingStrategy.SnakeCase
 }
 
-/**
- * See https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.
- */
+/** See https://doc.rust-lang.org/cargo/commands/cargo-metadata.html. */
 @Serializable
 internal data class CargoMetadata(
     /** Array of all packages in the workspace. */

@@ -31,15 +31,11 @@ import org.ossreviewtoolkit.model.utils.ProjectSortedSetConverter
  * A class that merges all information from individual [ProjectAnalyzerResult]s created for each found definition file.
  */
 data class AnalyzerResult(
-    /**
-     * Sorted set of the projects, as they appear in the individual analyzer results.
-     */
+    /** Sorted set of the projects, as they appear in the individual analyzer results. */
     @JsonSerialize(converter = ProjectSortedSetConverter::class)
     val projects: Set<Project>,
 
-    /**
-     * The set of identified packages for all projects.
-     */
+    /** The set of identified packages for all projects. */
     @JsonSerialize(converter = PackageSortedSetConverter::class)
     val packages: Set<Package>,
 
@@ -62,9 +58,7 @@ data class AnalyzerResult(
     val dependencyGraphs: Map<String, DependencyGraph> = emptyMap()
 ) {
     companion object {
-        /**
-         * A constant for an [AnalyzerResult] where all properties are empty.
-         */
+        /** A constant for an [AnalyzerResult] where all properties are empty. */
         @JvmField
         val EMPTY = AnalyzerResult(
             projects = emptySet(),
@@ -73,9 +67,7 @@ data class AnalyzerResult(
         )
     }
 
-    /**
-     * Return a map of all de-duplicated [Issue]s associated by [Identifier].
-     */
+    /** Return a map of all de-duplicated [Issue]s associated by [Identifier]. */
     @JsonIgnore
     fun getAllIssues(): Map<Identifier, Set<Issue>> =
         buildMap<Identifier, MutableSet<Issue>> {

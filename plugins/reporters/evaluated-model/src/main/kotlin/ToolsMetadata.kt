@@ -23,44 +23,28 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.utils.ort.Environment
 
-/**
- * Metadata about the ORT tool runs.
- */
+/** Metadata about the ORT tool runs. */
 data class ToolsMetadata(
-    /**
-     * The metadata for the analyzer run.
-     */
+    /** The metadata for the analyzer run. */
     val analyzer: Run?,
 
-    /**
-     * The metadata for the scanner run.
-     */
+    /** The metadata for the scanner run. */
     val scanner: Run?,
 
-    /**
-     * The metadata for the advisor run.
-     */
+    /** The metadata for the advisor run. */
     val advisor: Run?,
 
-    /**
-     * The metadata for the evaluator run.
-     */
+    /** The metadata for the evaluator run. */
     val evaluator: Run?
 ) {
     data class Run(
-        /**
-         * The time the run has started.
-         */
+        /** The time the run has started. */
         val startTime: Instant,
 
-        /**
-         * The time the run has finished.
-         */
+        /** The time the run has finished. */
         val endTime: Instant,
 
-        /**
-         * The [Environment] in which the run was executed.
-         */
+        /** The [Environment] in which the run was executed. */
         val environment: Environment
     )
 }

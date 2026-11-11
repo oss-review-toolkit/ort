@@ -52,19 +52,13 @@ data class ScanCodeConfig(
     @OrtPluginOption(defaultValue = "false")
     val preferFileLicense: Boolean,
 
-    /**
-     * A regular expression to match the scanner name when looking up scan results in the storage.
-     */
+    /** A regular expression to match the scanner name when looking up scan results in the storage. */
     override val regScannerName: String?,
 
-    /**
-     * The minimum version of stored scan results to use.
-     */
+    /** The minimum version of stored scan results to use. */
     override val minVersion: String?,
 
-    /**
-     * The maximum version of stored scan results to use.
-     */
+    /** The maximum version of stored scan results to use. */
     override val maxVersion: String?,
 
     /**
@@ -73,15 +67,11 @@ data class ScanCodeConfig(
      */
     override val configuration: String?,
 
-    /**
-     * Whether to read scan results from the storage.
-     */
+    /** Whether to read scan results from the storage. */
     @OrtPluginOption(defaultValue = "true")
     val readFromStorage: Boolean,
 
-    /**
-     * Whether to write scan results to the storage.
-     */
+    /** Whether to write scan results to the storage. */
     @OrtPluginOption(defaultValue = "true")
     val writeToStorage: Boolean
 ) : ScannerMatcherCriteria

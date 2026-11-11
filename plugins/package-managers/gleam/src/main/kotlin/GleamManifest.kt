@@ -44,9 +44,7 @@ internal data class GleamManifest(
     val requirements: Map<String, Requirement>
 ) {
     companion object {
-        /**
-         * A constant for a [GleamManifest] where all properties are empty.
-         */
+        /** A constant for a [GleamManifest] where all properties are empty. */
         @JvmField
         val EMPTY = GleamManifest(
             packages = emptyList(),
@@ -54,9 +52,7 @@ internal data class GleamManifest(
         )
     }
 
-    /**
-     * Represents a resolved package in the manifest.toml lockfile.
-     */
+    /** Represents a resolved package in the manifest.toml lockfile. */
     @Serializable
     data class Package(
         /** The package name. */
@@ -101,9 +97,7 @@ internal data class GleamManifest(
         }
     }
 
-    /**
-     * Represents a direct requirement from gleam.toml as recorded in the manifest.
-     */
+    /** Represents a direct requirement from gleam.toml as recorded in the manifest. */
     @Serializable
     data class Requirement(
         /** The source of the requirement: "hex", "git", or "path". */

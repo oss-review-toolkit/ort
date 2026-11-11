@@ -1145,9 +1145,7 @@ internal fun FossIdServiceWithVersion.mockFiles(
     return this
 }
 
-/**
- * Prepare this service mock to expect a mark as identified call for the given [scanCode] and [path].
- */
+/** Prepare this service mock to expect a mark as identified call for the given [scanCode] and [path]. */
 fun FossIdServiceWithVersion.expectMarkAsIdentified(scanCode: String, path: String): FossIdServiceWithVersion {
     coEvery {
         markAsIdentified(USER, API_KEY, scanCode, path, any())
@@ -1166,9 +1164,7 @@ fun FossIdServiceWithVersion.expectMarkAsIdentified(scanCode: String, path: Stri
     return this
 }
 
-/**
- * Prepare this service mock to expect an unmark as identified call for the given [scanCode] and [path].
- */
+/** Prepare this service mock to expect an unmark as identified call for the given [scanCode] and [path]. */
 fun FossIdServiceWithVersion.expectUnmarkAsIdentified(scanCode: String, path: String): FossIdServiceWithVersion {
     coEvery { unmarkAsIdentified(USER, API_KEY, scanCode, path, any()) } returns
         EntityResponseBody(status = 1)

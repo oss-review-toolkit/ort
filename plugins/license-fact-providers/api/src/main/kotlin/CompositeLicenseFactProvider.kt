@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.plugins.licensefactproviders.api
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
-/**
- * A [LicenseFactProvider] that aggregates multiple [LicenseFactProvider]s.
- */
+/** A [LicenseFactProvider] that aggregates multiple [LicenseFactProvider]s. */
 class CompositeLicenseFactProvider(
     /**
      *  A list of [LicenseFactProvider]s to aggregate. The order of the list determines the precedence of the

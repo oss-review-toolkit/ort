@@ -121,9 +121,7 @@ class Gradle(
     // "build" file.
     override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
-    /**
-     * A workspace reader that is backed by the local Gradle artifact cache.
-     */
+    /** A workspace reader that is backed by the local Gradle artifact cache. */
     private class GradleCacheReader : WorkspaceReader {
         private val workspaceRepository = WorkspaceRepository("gradle/remote-artifacts")
         private val gradleCacheRoot = GRADLE_USER_HOME / "caches" / "modules-2" / "files-2.1"

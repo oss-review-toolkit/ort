@@ -23,9 +23,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import kotlinx.serialization.modules.SerializersModule
 
-/**
- * The JSON (de-)serialization object used by this client.
- */
+/** The JSON (de-)serialization object used by this client. */
 internal val JSON = Json {
     ignoreUnknownKeys = true
     namingStrategy = JsonNamingStrategy.SnakeCase
@@ -36,22 +34,14 @@ internal val JSON = Json {
     }
 }
 
-/**
- * A Bazel registry which is either local or remote.
- */
+/** A Bazel registry which is either local or remote. */
 interface BazelModuleRegistryService {
-    /**
-     * The URLs of this registry service.
-     */
+    /** The URLs of this registry service. */
     val urls: List<String>
 
-    /**
-     * Retrieve the metadata for a module.
-     */
+    /** Retrieve the metadata for a module. */
     suspend fun getModuleMetadata(name: String): ModuleMetadata
 
-    /**
-     * Retrieve information about the source code for a specific version of a module.
-     */
+    /** Retrieve information about the source code for a specific version of a module. */
     suspend fun getModuleSourceInfo(name: String, version: String): ModuleSourceInfo
 }

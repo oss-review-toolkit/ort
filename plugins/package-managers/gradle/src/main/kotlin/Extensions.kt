@@ -32,8 +32,6 @@ internal fun LegacyOrtComponent.getIdentifierType(projectType: String) =
         else -> "Unknown"
     }
 
-/**
- * A flag to indicate whether this Gradle dependency refers to a project, or to a package.
- */
+/** A flag to indicate whether this Gradle dependency refers to a project, or to a package. */
 internal val LegacyOrtComponent.isProjectDependency: Boolean
     get() = localPath != null

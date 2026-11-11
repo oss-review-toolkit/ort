@@ -34,9 +34,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
  * repository. It will be included in the analyzer result and can be further processed by the other tools.
  */
 data class RepositoryConfiguration(
-    /**
-     * The configuration for the analyzer. Values in this configuration take precedence over global configuration.
-     */
+    /** The configuration for the analyzer. Values in this configuration take precedence over global configuration. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val analyzer: RepositoryAnalyzerConfiguration? = null,
 
@@ -47,15 +45,11 @@ data class RepositoryConfiguration(
     @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = ExcludesFilter::class)
     val excludes: Excludes = Excludes(),
 
-    /**
-     * Defines which parts of the repository will be included.
-     */
+    /** Defines which parts of the repository will be included. */
     @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = IncludesFilter::class)
     val includes: Includes = Includes.EMPTY,
 
-    /**
-     * Defines resolutions for issues with this repository.
-     */
+    /** Defines resolutions for issues with this repository. */
     @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = ResolutionsFilter::class)
     val resolutions: Resolutions = Resolutions(),
 
@@ -66,21 +60,15 @@ data class RepositoryConfiguration(
     @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = CurationsFilter::class)
     val curations: Curations = Curations(),
 
-    /**
-     * Defines configurations for packages used as dependencies by projects in this repository.
-     */
+    /** Defines configurations for packages used as dependencies by projects in this repository. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageConfigurations: List<PackageConfiguration> = emptyList(),
 
-    /**
-     * Defines license choices within this repository.
-     */
+    /** Defines license choices within this repository. */
     @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = LicenseChoicesFilter::class)
     val licenseChoices: LicenseChoices = LicenseChoices(),
 
-    /**
-     * Defines snippet choices for projects in this repository.
-     */
+    /** Defines snippet choices for projects in this repository. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val snippetChoices: List<SnippetChoices> = emptyList()
 )

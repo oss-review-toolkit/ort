@@ -19,7 +19,5 @@
 
 package org.ossreviewtoolkit.clients.scorecard
 
-/**
- * Base URL for the Scorecard API.
- */
+/** Base URL for the Scorecard API. */
 const val SCORECARD_BASE_URL = "https://api.securityscorecards.dev"

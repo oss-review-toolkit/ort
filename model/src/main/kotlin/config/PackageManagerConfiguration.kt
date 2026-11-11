@@ -43,9 +43,7 @@ data class PackageManagerConfiguration(
      */
     val options: Options? = null
 ) {
-    /**
-     * Merge this [PackageManagerConfiguration] with [override]. Values of [override] take precedence.
-     */
+    /** Merge this [PackageManagerConfiguration] with [override]. Values of [override] take precedence. */
     fun merge(override: PackageManagerConfiguration): PackageManagerConfiguration {
         val mergedOptions = when {
             options == null -> override.options

@@ -33,9 +33,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.parser.SpdxExpressionParser
  */
 @JsonSerialize(using = ToStringSerializer::class)
 sealed class SpdxExpression {
-    /**
-     * The level of strictness to apply when validating an [SpdxExpression].
-     */
+    /** The level of strictness to apply when validating an [SpdxExpression]. */
     enum class Strictness {
         /**
          * Any license identifier string is leniently allowed. The expression is not limited to SPDX license identifier
@@ -63,19 +61,13 @@ sealed class SpdxExpression {
     }
 
     companion object {
-        /**
-         * A constant for [NONE][SpdxConstants.NONE] as an expression.
-         */
+        /** A constant for [NONE][SpdxConstants.NONE] as an expression. */
         val NONE = SpdxLicenseIdExpression(SpdxConstants.NONE)
 
-        /**
-         * A constant for [NOASSERTION][SpdxConstants.NOASSERTION] as an expression.
-         */
+        /** A constant for [NOASSERTION][SpdxConstants.NOASSERTION] as an expression. */
         val NOASSERTION = SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
 
-        /**
-         * The "WITH" keyword, used to concatenate a license with an exception.
-         */
+        /** The "WITH" keyword, used to concatenate a license with an exception. */
         const val WITH = "WITH"
 
         /**
@@ -122,14 +114,10 @@ sealed class SpdxExpression {
      */
     abstract fun normalize(): SpdxExpression
 
-    /**
-     * Return a simplified expression that has e.g. redundancies removed.
-     */
+    /** Return a simplified expression that has e.g. redundancies removed. */
     open fun simplify(): SpdxExpression = this
 
-    /**
-     * Return this expression sorted lexicographically.
-     */
+    /** Return this expression sorted lexicographically. */
     open fun sorted(): SpdxExpression = this
 
     /**
@@ -140,9 +128,7 @@ sealed class SpdxExpression {
      */
     abstract fun validate(strictness: Strictness)
 
-    /**
-     * Return all valid license choices for this SPDX expression by collecting all disjunct expressions.
-     */
+    /** Return all valid license choices for this SPDX expression by collecting all disjunct expressions. */
     open fun validChoices(): Set<SpdxExpression> = setOf(this)
 
     /**
@@ -151,9 +137,7 @@ sealed class SpdxExpression {
      */
     fun isPresent() = licenses().any { SpdxConstants.isPresent(it) }
 
-    /**
-     * Return if this expression is valid according to the [strictness]. Also see [validate].
-     */
+    /** Return if this expression is valid according to the [strictness]. Also see [validate]. */
     fun isValid(strictness: Strictness = Strictness.ALLOW_CURRENT): Boolean =
         runCatching { validate(strictness) }.isSuccess
 
@@ -164,9 +148,7 @@ sealed class SpdxExpression {
      */
     fun isValidChoice(choice: SpdxExpression): Boolean = !choice.offersChoice() && choice in validChoices()
 
-    /**
-     * Return true if [subExpression] is semantically contained in [this][SpdxExpression] expression.
-     */
+    /** Return true if [subExpression] is semantically contained in [this][SpdxExpression] expression. */
     open fun isSubExpression(subExpression: SpdxExpression?): Boolean = this == subExpression
 
     /**
@@ -191,9 +173,7 @@ sealed class SpdxExpression {
         return this
     }
 
-    /**
-     * Apply [licenseChoices] in the given order to [this][SpdxExpression].
-     */
+    /** Apply [licenseChoices] in the given order to [this][SpdxExpression]. */
     fun applyChoices(licenseChoices: List<SpdxLicenseChoice>): SpdxExpression = applyAndGetChoices(licenseChoices).first
 
     /**
@@ -220,15 +200,11 @@ sealed class SpdxExpression {
         return currentExpression to appliedChoices
     }
 
-    /**
-     * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.AND].
-     */
+    /** Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.AND]. */
     infix fun and(other: SpdxExpression) =
         takeIf { this == other } ?: SpdxCompoundExpression(SpdxOperator.AND, listOf(this, other))
 
-    /**
-     * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.OR].
-     */
+    /** Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.OR]. */
     infix fun or(other: SpdxExpression) =
         takeIf { this == other } ?: SpdxCompoundExpression(SpdxOperator.OR, listOf(this, other))
 }

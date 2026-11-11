@@ -260,9 +260,7 @@ private fun ManagedProjectFiles.groupById(projectDir: File) =
         manager.descriptor.id to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
     }.toMap()
 
-/**
- * Create files with a dummy content in the given [directory] for all the path names in this collection.
- */
+/** Create files with a dummy content in the given [directory] for all the path names in this collection. */
 private fun Collection<String>.writeFiles(directory: File) {
     forEach { file ->
         directory.resolve(file).also { dir ->

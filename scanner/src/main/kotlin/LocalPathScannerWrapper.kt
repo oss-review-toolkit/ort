@@ -25,9 +25,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 
-/**
- * A [PathScannerWrapper] that is executed on the local machine.
- */
+/** A [PathScannerWrapper] that is executed on the local machine. */
 abstract class LocalPathScannerWrapper : PathScannerWrapper {
     final override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
@@ -36,9 +34,7 @@ abstract class LocalPathScannerWrapper : PathScannerWrapper {
         return createSummary(result, startTime, endTime)
     }
 
-    /**
-     * Run the scanner on the given [path] with the given [context].
-     */
+    /** Run the scanner on the given [path] with the given [context]. */
     abstract fun runScanner(path: File, context: ScanContext): String
 
     /**

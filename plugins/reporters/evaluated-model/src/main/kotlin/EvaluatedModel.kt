@@ -177,9 +177,7 @@ data class EvaluatedModel(
             else -> JSON_MAPPER.writer()
         }.writeValue(writer, toSortedTree())
 
-    /**
-     * Serialize this [EvaluatedModel] to YAML and write the output to the [writer].
-     */
+    /** Serialize this [EvaluatedModel] to YAML and write the output to the [writer]. */
     fun toYaml(writer: Writer): Unit = YAML_MAPPER.writeValue(writer, toSortedTree())
 
     /**

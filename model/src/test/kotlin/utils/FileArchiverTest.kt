@@ -77,9 +77,7 @@ class FileArchiverTest : StringSpec() {
         file.write()
     }
 
-    /**
-     * Assert that this directory contains a file at [path] which contains the [path] as text.
-     */
+    /** Assert that this directory contains a file at [path] which contains the [path] as text. */
     private fun File.shouldContainFileWithContent(path: String) {
         val file = resolve(path)
         file shouldBe aFile()

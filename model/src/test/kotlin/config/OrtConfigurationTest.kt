@@ -583,9 +583,7 @@ class OrtConfigurationTest : WordSpec({
     }
 })
 
-/**
- * Create a test configuration with the [data] specified.
- */
+/** Create a test configuration with the [data] specified. */
 private fun TestConfiguration.createTestConfig(data: String): File =
     tempfile(suffix = ".yml").apply {
         writeText(data)

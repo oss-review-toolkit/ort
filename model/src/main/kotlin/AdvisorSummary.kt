@@ -23,18 +23,12 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.time.Instant
 
-/**
- * A short summary of the advisor result.
- */
+/** A short summary of the advisor result. */
 data class AdvisorSummary(
-    /**
-     * The time when the advisor started.
-     */
+    /** The time when the advisor started. */
     val startTime: Instant,
 
-    /**
-     * The time when the advisor finished.
-     */
+    /** The time when the advisor finished. */
     val endTime: Instant,
 
     /**

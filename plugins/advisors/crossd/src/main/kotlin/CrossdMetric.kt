@@ -30,29 +30,19 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.ossreviewtoolkit.model.Criticality
 
 data class CrossdMetric(
-    /**
-     * The name of the metric.
-     */
+    /** The name of the metric. */
     val name: String,
 
-    /**
-     * The formatted name of the metric.
-     */
+    /** The formatted name of the metric. */
     val displayName: String,
 
-    /**
-     * A short description of the metric.
-     */
+    /** A short description of the metric. */
     val descriptionShort: String,
 
-    /**
-     * A link to the documentation of the metric.
-     */
+    /** A link to the documentation of the metric. */
     val documentationUrl: URI,
 
-    /**
-     * Whether a higher value means that the value is better.
-     */
+    /** Whether a higher value means that the value is better. */
     val higherIsBetter: Boolean,
 
     /**

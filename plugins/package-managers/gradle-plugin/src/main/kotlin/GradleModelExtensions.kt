@@ -39,9 +39,7 @@ import org.gradle.util.GradleVersion
 internal fun AttributeContainer.getValueByName(name: String): Any? =
     attributes.keySet().find { it.name == name }?.let { getAttribute(it) }
 
-/**
- * Return whether this Gradle configuration is relevant for ORT's dependency resolution.
- */
+/** Return whether this Gradle configuration is relevant for ORT's dependency resolution. */
 internal fun Configuration.isRelevant(): Boolean {
     // Configurations can be resolved and / or consumed, but not neither, see the table at
     // https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:resolvable-consumable-configs
@@ -69,15 +67,11 @@ internal fun String.isOrtScopeIncluded(excludes: Collection<Regex>, includes: Co
     return isIncluded && !isExcluded
 }
 
-/**
- * Return a map that associates names of artifact repositories to their model representations.
- */
+/** Return a map that associates names of artifact repositories to their model representations. */
 internal fun RepositoryHandler.associateNamesWithUrlsTo(repositories: MutableMap<String, UrlArtifactRepository>) =
     filterIsInstance<UrlArtifactRepository>().associateByTo(repositories) { (it as ArtifactRepository).name }
 
-/**
- * Convert this [UrlArtifactRepository] to an [OrtRepository] by extracting the relevant properties.
- */
+/** Convert this [UrlArtifactRepository] to an [OrtRepository] by extracting the relevant properties. */
 internal fun UrlArtifactRepository.toOrtRepository(): OrtRepository {
     val authSupported = this as? AuthenticationSupported
 

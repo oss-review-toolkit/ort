@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.utils.common
 
 import java.io.File
 
-/**
- * Extract the resource with the specified [name] to the given [target] file and return it.
- */
+/** Extract the resource with the specified [name] to the given [target] file and return it. */
 fun extractResource(name: String, target: File) =
     target.apply {
         val resource = checkNotNull(object {}.javaClass.getResource(name)) {
@@ -60,14 +58,10 @@ fun <R> temporaryProperties(vararg properties: Pair<String, String?>, block: () 
     }
 }
 
-/**
- * Call [block] only if the receiver is null, e.g. for error handling, and return the receiver in any case.
- */
+/** Call [block] only if the receiver is null, e.g. for error handling, and return the receiver in any case. */
 inline fun <T> T.alsoIfNull(block: (T) -> Unit): T = this ?: also(block)
 
-/**
- * Recursively collect the messages of this [Throwable] and all its causes and join them to a single [String].
- */
+/** Recursively collect the messages of this [Throwable] and all its causes and join them to a single [String]. */
 fun Throwable.collectMessages(): String {
     fun Throwable.formatCauseAndSuppressedMessages(): String? =
         buildString {

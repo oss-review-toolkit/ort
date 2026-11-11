@@ -39,9 +39,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-/**
- * An interface for the REST API of the Google Open Source Vulnerabilities (OSV) service, see https://osv.dev/.
- */
+/** An interface for the REST API of the Google Open Source Vulnerabilities (OSV) service, see https://osv.dev/. */
 interface OsvService {
     companion object {
         const val BATCH_REQUEST_MAX_SIZE = 1000

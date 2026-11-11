@@ -33,9 +33,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 
-/**
- * Base URL for the CrOSSD API, see https://fh-crossd.github.io/components/api/api.html.
- */
+/** Base URL for the CrOSSD API, see https://fh-crossd.github.io/components/api/api.html. */
 const val CROSSD_BASE_URL = "https://health.crossd.tech"
 
 suspend fun HttpClient.getAvailableSnapshots(packageId: String): List<Double> {

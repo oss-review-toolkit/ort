@@ -44,9 +44,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.await
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
-/**
- * The [PackageProvenanceResolver] provides a function to resolve the [Provenance] of a [Package].
- */
+/** The [PackageProvenanceResolver] provides a function to resolve the [Provenance] of a [Package]. */
 interface PackageProvenanceResolver {
     /**
      * Resolve the [Provenance] of [pkg] based on [Package.sourceCodeOrigins] if specified, or else on
@@ -57,9 +55,7 @@ interface PackageProvenanceResolver {
     suspend fun resolveProvenance(pkg: Package, defaultSourceCodeOrigins: List<SourceCodeOrigin>): KnownProvenance
 }
 
-/**
- * The default implementation of [PackageProvenanceResolver].
- */
+/** The default implementation of [PackageProvenanceResolver]. */
 class DefaultPackageProvenanceResolver(
     private val storage: PackageProvenanceStorage,
     private val workingTreeCache: WorkingTreeCache

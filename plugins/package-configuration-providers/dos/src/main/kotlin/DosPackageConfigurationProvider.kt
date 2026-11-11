@@ -56,9 +56,7 @@ data class DosPackageConfigurationProviderConfig(
     val timeout: Long?
 )
 
-/**
- * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from a Double Open Server instance.
- */
+/** A [PackageConfigurationProvider] that loads [PackageConfiguration]s from a Double Open Server instance. */
 @OrtPlugin(
     id = "DOS",
     displayName = "Double Open Server",

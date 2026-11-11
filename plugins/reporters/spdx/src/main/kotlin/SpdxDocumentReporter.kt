@@ -50,45 +50,31 @@ enum class SpdxVersion {
 }
 
 data class SpdxDocumentReporterConfig(
-    /**
-     * The SPDX version to use.
-     */
+    /** The SPDX version to use. */
     @OrtPluginOption(defaultValue = SPDX_VERSION_2_2)
     val spdxVersion: SpdxVersion,
 
-    /**
-     * The comment to add to the [SpdxDocument.creationInfo].
-     */
+    /** The comment to add to the [SpdxDocument.creationInfo]. */
     @OrtPluginOption(aliases = ["creationInfo.comment"])
     val creationInfoComment: String?,
 
-    /**
-     * The person to add to the [SpdxDocument.creationInfo].
-     */
+    /** The person to add to the [SpdxDocument.creationInfo]. */
     @OrtPluginOption(aliases = ["creationInfo.person"])
     val creationInfoPerson: String?,
 
-    /**
-     * The organization to add to the [SpdxDocument.creationInfo].
-     */
+    /** The organization to add to the [SpdxDocument.creationInfo]. */
     @OrtPluginOption(aliases = ["creationInfo.organization"])
     val creationInfoOrganization: String?,
 
-    /**
-     * The comment to add to the [SpdxDocument].
-     */
+    /** The comment to add to the [SpdxDocument]. */
     @OrtPluginOption(aliases = ["document.comment"])
     val documentComment: String?,
 
-    /**
-     * The name of the generated [SpdxDocument]. Defaults to the first project name from the ORT result if not set.
-     */
+    /** The name of the generated [SpdxDocument]. Defaults to the first project name from the ORT result if not set. */
     @OrtPluginOption(aliases = ["document.name"])
     val documentName: String?,
 
-    /**
-     * The list of file formats to generate.
-     */
+    /** The list of file formats to generate. */
     @OrtPluginOption(defaultValue = "YAML", aliases = ["output.file.formats"])
     val outputFileFormats: List<FileFormat>,
 

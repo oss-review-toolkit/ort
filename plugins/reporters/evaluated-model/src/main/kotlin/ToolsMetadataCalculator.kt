@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
 import org.ossreviewtoolkit.model.OrtResult
 
-/**
- * This class calculates [ToolsMetadata] for a given [OrtResult].
- */
+/** This class calculates [ToolsMetadata] for a given [OrtResult]. */
 internal class ToolsMetadataCalculator {
     fun getMetadata(ortResult: OrtResult) =
         ToolsMetadata(

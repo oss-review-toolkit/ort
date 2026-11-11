@@ -26,13 +26,9 @@ import java.io.OutputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 
-/**
- * A [FileStorage] that stores compressed files in a [directory] of the local file system.
- */
+/** A [FileStorage] that stores compressed files in a [directory] of the local file system. */
 class XZCompressedLocalFileStorage(
-    /**
-     * The directory used to store files in.
-     */
+    /** The directory used to store files in. */
     directory: File
 ) : LocalFileStorage(directory) {
     override fun transformPath(path: String) = "$path.xz"

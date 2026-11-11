@@ -24,9 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.plugins.api.Plugin
 
-/**
- * A reporter that creates a human-readable report from a given [OrtResult].
- */
+/** A reporter that creates a human-readable report from a given [OrtResult]. */
 interface Reporter : Plugin {
     /**
      * Generate a report for the provided [input] and write the generated file(s) to the [outputDir]. If and how the

@@ -21,14 +21,10 @@ package org.ossreviewtoolkit.reporter
 
 import org.ossreviewtoolkit.plugins.api.PluginFactory
 
-/**
- * A factory interface for creating [Reporter] instances.
- */
+/** A factory interface for creating [Reporter] instances. */
 interface ReporterFactory : PluginFactory<Reporter> {
     companion object {
-        /**
-         * All [reporter factories][ReporterFactory] available in the classpath, associated by their ids.
-         */
+        /** All [reporter factories][ReporterFactory] available in the classpath, associated by their ids. */
         val ALL by lazy { PluginFactory.getAll<ReporterFactory, Reporter>() }
     }
 }

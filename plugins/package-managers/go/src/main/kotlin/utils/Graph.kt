@@ -31,15 +31,11 @@ import org.apache.logging.log4j.kotlin.logger
 internal class Graph<T> private constructor(private val nodeMap: MutableMap<T, MutableSet<T>>) {
     constructor() : this(mutableMapOf())
 
-    /**
-     * Return a set with all nodes (i.e. package identifiers) contained in this graph.
-     */
+    /** Return a set with all nodes (i.e. package identifiers) contained in this graph. */
     val nodes: Set<T>
         get() = nodeMap.keys
 
-    /**
-     * Return the size of this graph. This is the number of nodes it contains.
-     */
+    /** Return the size of this graph. This is the number of nodes it contains. */
     val size: Int
         get() = nodeMap.size
 
@@ -52,9 +48,7 @@ internal class Graph<T> private constructor(private val nodeMap: MutableMap<T, M
         addNode(target)
     }
 
-    /**
-     * Add a node to this dependency graph.
-     */
+    /** Add a node to this dependency graph. */
     fun addNode(node: T) {
         nodeMap.getOrPut(node) { mutableSetOf() }
     }
@@ -115,9 +109,7 @@ internal class Graph<T> private constructor(private val nodeMap: MutableMap<T, M
         return Graph(outgoingEdgesForNodes.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() })
     }
 
-    /**
-     * Return the direct dependencies of the given [node].
-     */
+    /** Return the direct dependencies of the given [node]. */
     fun getDependencies(node: T): Set<T> = nodeMap[node].orEmpty()
 }
 

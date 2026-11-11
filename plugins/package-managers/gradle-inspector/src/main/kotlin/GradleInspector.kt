@@ -66,19 +66,13 @@ import org.semver4j.Semver
 
 private const val PROJECT_TYPE = "Gradle"
 
-/**
- * The names of Gradle (Groovy, Kotlin script) build files for a Gradle project.
- */
+/** The names of Gradle (Groovy, Kotlin script) build files for a Gradle project. */
 private val GRADLE_BUILD_FILES = listOf("build.gradle", "build.gradle.kts")
 
-/**
- * The names of Gradle (Groovy, Kotlin script) settings files for a Gradle build.
- */
+/** The names of Gradle (Groovy, Kotlin script) settings files for a Gradle build. */
 private val GRADLE_SETTINGS_FILES = listOf("settings.gradle", "settings.gradle.kts")
 
-/**
- * The Gradle user home directory.
- */
+/** The Gradle user home directory. */
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 
 data class GradleInspectorConfig(
@@ -88,9 +82,7 @@ data class GradleInspectorConfig(
      */
     val gradleVersion: String?,
 
-    /**
-     * A custom URL for direct JDK download. Overrides `javaVersion` if both are specified.
-     */
+    /** A custom URL for direct JDK download. Overrides `javaVersion` if both are specified. */
     val customJdkUrl: String?,
 
     /**

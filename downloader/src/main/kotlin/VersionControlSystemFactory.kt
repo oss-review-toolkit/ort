@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.downloader
 
 import org.ossreviewtoolkit.plugins.api.PluginFactory
 
-/**
- * A factory interface for creating [VersionControlSystem] instances.
- */
+/** A factory interface for creating [VersionControlSystem] instances. */
 interface VersionControlSystemFactory : PluginFactory<VersionControlSystem> {
     companion object {
         /**

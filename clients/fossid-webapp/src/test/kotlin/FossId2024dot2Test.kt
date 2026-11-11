@@ -34,9 +34,7 @@ import io.mockk.mockkObject
 
 private const val PROJECT_CODE_2024 = "semver4j_2024"
 
-/**
- * This client test tests the calls that have been changed for FossID 2024.2.
- */
+/** This client test tests the calls that have been changed for FossID 2024.2. */
 class FossId2024dot2Test : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()

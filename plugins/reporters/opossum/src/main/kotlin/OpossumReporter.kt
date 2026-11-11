@@ -72,16 +72,12 @@ internal fun resolvePath(left: String, right: String = "", isDirectory: Boolean?
 internal fun resolvePath(pieces: List<String>) = pieces.reduce { right, left -> resolvePath(right, left) }
 
 data class OpossumReporterConfig(
-    /**
-     * The depth to which the full file level scanner information is added.
-     */
+    /** The depth to which the full file level scanner information is added. */
     @OrtPluginOption(defaultValue = "3")
     val maxDepth: Int
 )
 
-/**
- * A [Reporter] that generates an [OpossumInput].
- */
+/** A [Reporter] that generates an [OpossumInput]. */
 @OrtPlugin(
     displayName = "Opossum",
     summary = "Generates a report in the Opossum format.",

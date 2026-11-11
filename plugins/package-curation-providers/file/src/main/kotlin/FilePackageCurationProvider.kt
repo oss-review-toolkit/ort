@@ -37,14 +37,10 @@ import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 data class FilePackageCurationProviderConfig(
-    /**
-     * The path of the package curation file or directory.
-     */
+    /** The path of the package curation file or directory. */
     val path: String,
 
-    /**
-     * A flag to denote whether the path is required to exist.
-     */
+    /** A flag to denote whether the path is required to exist. */
     @OrtPluginOption(defaultValue = "false")
     val mustExist: Boolean
 )

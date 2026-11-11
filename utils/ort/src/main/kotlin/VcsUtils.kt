@@ -24,9 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.utils.common.toSafeUri
 import org.ossreviewtoolkit.utils.common.toUri
 
-/**
- * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.
- */
+/** Normalize a string representing a [VCS URL][vcsUrl] to a common string form. */
 fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trim().trimEnd('/')
 

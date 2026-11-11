@@ -42,14 +42,10 @@ import org.ossreviewtoolkit.model.config.PostgresConnection
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 
 object DatabaseUtils {
-    /**
-     * This map holds the [HikariDataSource] based on the [PostgresConnection].
-     */
+    /** This map holds the [HikariDataSource] based on the [PostgresConnection]. */
     private val dataSources = ConcurrentHashMap<PostgresConnection, Lazy<DataSource>>()
 
-    /**
-     * Return a [HikariDataSource] for the given [PostgresConnection].
-     */
+    /** Return a [HikariDataSource] for the given [PostgresConnection]. */
     fun createHikariDataSource(
         config: PostgresConnection,
         applicationNameSuffix: String = "",
@@ -102,9 +98,7 @@ object DatabaseUtils {
         }
     }
 
-    /**
-     * Logs a warning in case the actual database encoding does not equal the [expectedEncoding].
-     */
+    /** Logs a warning in case the actual database encoding does not equal the [expectedEncoding]. */
     fun JdbcTransaction.checkDatabaseEncoding(expectedEncoding: String = "UTF8") =
         execShow("SHOW client_encoding") { resultSet ->
             if (resultSet.next()) {
@@ -117,20 +111,14 @@ object DatabaseUtils {
             }
         }
 
-    /**
-     * Return true if a table named [tableName] exists.
-     */
+    /** Return true if a table named [tableName] exists. */
     fun Transaction.tableExists(tableName: String): Boolean =
         tableName in currentDialectMetadata.allTablesNames().map { it.substringAfterLast(".") }
 
-    /**
-     * Start a new transaction to execute the given [statement] on this [Database].
-     */
+    /** Start a new transaction to execute the given [statement] on this [Database]. */
     fun <T> Database.transaction(statement: JdbcTransaction.() -> T): T = transaction(db = this, statement = statement)
 
-    /**
-     * Start a new suspending transaction to execute the given [statement] on this [Database].
-     */
+    /** Start a new suspending transaction to execute the given [statement] on this [Database]. */
     suspend fun <T> Database.suspendTransaction(statement: JdbcTransaction.() -> T): T =
         withContext(Dispatchers.IO) {
             suspendTransaction(db = this@suspendTransaction, statement = statement)

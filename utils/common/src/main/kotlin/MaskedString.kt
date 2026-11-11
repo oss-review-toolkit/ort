@@ -50,7 +50,5 @@ fun unmaskedStrings(vararg args: CharSequence): Array<out String> =
         }
     }.toTypedArray()
 
-/**
- * Convert this [CharSequence] to a [MaskedString] which uses the provided [mask].
- */
+/** Convert this [CharSequence] to a [MaskedString] which uses the provided [mask]. */
 fun CharSequence.masked(mask: String = MaskedString.DEFAULT_MASK): MaskedString = MaskedString(this, mask)

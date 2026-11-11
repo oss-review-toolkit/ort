@@ -105,17 +105,13 @@ internal class P2ArtifactResolver private constructor(
             projects: Collection<MavenProject>
         ): Set<String> = collectP2RepositoriesFromProjects(projects) + targetHandler.repositoryUrls
 
-        /**
-         * Collect all P2 repositories referenced from one of the given [projects].
-         */
+        /** Collect all P2 repositories referenced from one of the given [projects]. */
         private fun collectP2RepositoriesFromProjects(projects: Collection<MavenProject>): Set<String> =
             projects.flatMapTo(mutableSetOf()) { project ->
                 project.remoteArtifactRepositories.filter { it.layout.id == P2_REPOSITORY_LAYOUT }.map { it.url }
             }
 
-        /**
-         * Return an [Artifact] to represent the source code bundle of the given [artifact].
-         */
+        /** Return an [Artifact] to represent the source code bundle of the given [artifact]. */
         private fun mapToSourceArtifact(artifact: Artifact): Artifact =
             object : Artifact by artifact {
                 override fun getArtifactId(): String = "${artifact.artifactId}.source"
@@ -170,22 +166,16 @@ internal class P2ArtifactResolver private constructor(
      */
     fun isBinary(artifact: Artifact): Boolean = BINARY_CLASSIFIER in classifiersFor(artifact)
 
-    /**
-     * Check whether the given [artifact] represents a Tycho feature based on the classifiers assigned to it.
-     */
+    /** Check whether the given [artifact] represents a Tycho feature based on the classifiers assigned to it. */
     private fun hasFeatureClassifier(artifact: Artifact): Boolean {
         val classifiers = classifiersFor(artifact)
         return FEATURE_CLASSIFIER in classifiers && (classifiers.size == 1 || isFeatureGroupId(artifact.groupId))
     }
 
-    /**
-     * Return the classifiers assigned to the given [artifact] or an empty set for an unknown artifact.
-     */
+    /** Return the classifiers assigned to the given [artifact] or an empty set for an unknown artifact. */
     private fun classifiersFor(artifact: Artifact): Set<String> = artifactClassifiers[artifactKey(artifact)].orEmpty()
 
-    /**
-     * Generate the URL of the OSGi [artifact] in the repository with the given [repositoryUrl].
-     */
+    /** Generate the URL of the OSGi [artifact] in the repository with the given [repositoryUrl]. */
     private fun artifactUrl(artifact: Artifact, repositoryUrl: String): String =
         if (isBinary(artifact)) {
             "$repositoryUrl/binary/${artifact.artifactId}_${artifact.version}"

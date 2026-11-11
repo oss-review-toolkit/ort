@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.plugins.advisors.scorecard
 import org.ossreviewtoolkit.clients.scorecard.SCORECARD_BASE_URL
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 
-/**
- * The configuration for the Scorecard project health provider.
- */
+/** The configuration for the Scorecard project health provider. */
 data class ScorecardConfig(
     /** The URL of the Scorecard server. */
     @OrtPluginOption(defaultValue = SCORECARD_BASE_URL)

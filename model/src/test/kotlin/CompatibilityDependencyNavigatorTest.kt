@@ -224,9 +224,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
     }
 }
 
-/**
- * Construct an [OrtResult] that contains the given [projects].
- */
+/** Construct an [OrtResult] that contains the given [projects]. */
 private fun createOrtResult(vararg projects: Project): OrtResult =
     OrtResult.EMPTY.copy(
         analyzer = AnalyzerRun.EMPTY.copy(
@@ -247,9 +245,7 @@ private fun createProject(name: String, scopes: Set<Scope>? = null, scopeNames: 
     return Project.EMPTY.copy(id = id, scopeDependencies = scopes, scopeNames = scopeNames)
 }
 
-/**
- * Create a [Scope] with the given [name] and a synthetic dependency.
- */
+/** Create a [Scope] with the given [name] and a synthetic dependency. */
 private fun createScope(name: String) =
     Scope(
         name = name,

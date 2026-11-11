@@ -521,9 +521,7 @@ private fun compareNodes(mojoNode: DependencyTreeMojoNode, dependencyNode: Depen
     }
 }
 
-/**
- * Create a [MavenProject] with the given [name] and optional [packaging].
- */
+/** Create a [MavenProject] with the given [name] and optional [packaging]. */
 private fun createProject(name: String, packaging: String = "pom"): MavenProject =
     MavenProject().apply {
         artifactId = name

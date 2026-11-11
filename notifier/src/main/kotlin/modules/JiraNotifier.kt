@@ -40,9 +40,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
             .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
     )
 
-    /**
-     * Create a [comment] within the issue specified by the [issueKey].
-     */
+    /** Create a [comment] within the issue specified by the [issueKey]. */
     @Suppress("unused") // This is intended to be used via scripting.
     fun createComment(issueKey: String, comment: String) {
         val issue = restClient.issueClient.getIssue(issueKey).claim()
@@ -50,9 +48,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
         restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
     }
 
-    /**
-     * Change the [assignee] of the give issue specified by the [issueKey].
-     */
+    /** Change the [assignee] of the give issue specified by the [issueKey]. */
     fun changeAssignee(issueKey: String, assignee: String): Boolean {
         val input = IssueInputBuilder().setAssigneeName(assignee).build()
 
@@ -65,9 +61,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
         }.isSuccess
     }
 
-    /**
-     * Change the [state] of the given issue specified by the [issueKey].
-     */
+    /** Change the [state] of the given issue specified by the [issueKey]. */
     fun changeState(issueKey: String, state: String): Boolean {
         val issue = restClient.issueClient.getIssue(issueKey).claim()
         val possibleTransitions = restClient.issueClient.getTransitions(issue).claim()
@@ -83,9 +77,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
         }.isSuccess
     }
 
-    /**
-     * Return the issue for the given [issueKey].
-     */
+    /** Return the issue for the given [issueKey]. */
     fun getIssue(issueKey: String): Issue? =
         runCatching {
             restClient.issueClient.getIssue(issueKey).claim()
@@ -95,9 +87,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
             }
         }.getOrNull()
 
-    /**
-     * Returns a [ProjectIssueBuilder] object, which can be used to do operations for the given [projectKey].
-     */
+    /** Returns a [ProjectIssueBuilder] object, which can be used to do operations for the given [projectKey]. */
     fun projectIssueBuilder(projectKey: String): ProjectIssueBuilder = ProjectIssueBuilder(projectKey, restClient)
 
     class ProjectIssueBuilder(private val projectKey: String, private val restClient: JiraRestClient) {

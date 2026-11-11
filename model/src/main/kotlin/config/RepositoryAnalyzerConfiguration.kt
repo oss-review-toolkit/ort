@@ -24,9 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.utils.common.zip
 
-/**
- * [AnalyzerConfiguration] options that can be configured in the [RepositoryConfiguration].
- */
+/** [AnalyzerConfiguration] options that can be configured in the [RepositoryConfiguration]. */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class RepositoryAnalyzerConfiguration(
     /**
@@ -71,9 +69,7 @@ data class RepositoryAnalyzerConfiguration(
      */
     val skipExcluded: Boolean? = null
 ) {
-    /**
-     * A copy of [packageManagers] with case-insensitive keys.
-     */
+    /** A copy of [packageManagers] with case-insensitive keys. */
     private val packageManagersCaseInsensitive = packageManagers?.let {
         sortedMapOf<String, PackageManagerConfiguration>(String.CASE_INSENSITIVE_ORDER).zip(it) { a, b ->
             a.merge(b)

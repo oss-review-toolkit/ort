@@ -31,19 +31,13 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.script.HowToFixTextProviderScriptTemplate
 import org.ossreviewtoolkit.utils.script.ScriptRunner
 
-/**
- * Provides how-to-fix texts in Markdown format for any given [Issue].
- */
+/** Provides how-to-fix texts in Markdown format for any given [Issue]. */
 fun interface HowToFixTextProvider {
     companion object {
-        /**
-         * A [HowToFixTextProvider] which returns null for any given [Issue].
-         */
+        /** A [HowToFixTextProvider] which returns null for any given [Issue]. */
         val NONE = HowToFixTextProvider { null }
 
-        /**
-         * Return the [HowToFixTextProvider] which in-turn has to be returned by the given [script].
-         */
+        /** Return the [HowToFixTextProvider] which in-turn has to be returned by the given [script]. */
         fun fromKotlinScript(script: String, ortResult: OrtResult): HowToFixTextProvider =
             HowToFixScriptRunner(ortResult).runScript(script)
     }

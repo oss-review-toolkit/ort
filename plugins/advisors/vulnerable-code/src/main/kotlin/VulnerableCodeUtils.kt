@@ -36,14 +36,10 @@ import org.ossreviewtoolkit.utils.common.percentEncode
  */
 internal const val BULK_REQUEST_SIZE = 100
 
-/**
- * The maximum length for the summary as derived from the description of a vulnerability.
- */
+/** The maximum length for the summary as derived from the description of a vulnerability. */
 internal const val MAX_SUMMARY_LENGTH = 64
 
-/**
- * Return a short summary derived from this string, or null if this string is null or blank.
- */
+/** Return a short summary derived from this string, or null if this string is null or blank. */
 internal fun String?.deriveSummary(): String? {
     val description = this?.ifBlank { null }
 

@@ -26,18 +26,14 @@ import org.ossreviewtoolkit.model.Severity.WARNING
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
-/**
- * A [Rule] to check a single [SnippetFinding] whose source location file path is relative to the root provenance.
- */
+/** A [Rule] to check a single [SnippetFinding] whose source location file path is relative to the root provenance. */
 class SnippetRule(
     ruleSet: RuleSet,
     name: String,
     val scannerName: String,
     val snippetFinding: SnippetFinding
 ) : Rule(ruleSet, name) {
-    /**
-     * A single line string representation of the source location of [snippetFinding].
-     */
+    /** A single line string representation of the source location of [snippetFinding]. */
     val sourceFileLocation by lazy {
         buildString {
             append("${snippetFinding.sourceLocation.path}:${snippetFinding.sourceLocation.startLine}")
@@ -51,9 +47,7 @@ class SnippetRule(
 
     override fun issueSource(): String = "$name - snippet at $sourceFileLocation"
 
-    /**
-     * A [RuleMatcher] that checks if the snippet finding is excluded.
-     */
+    /** A [RuleMatcher] that checks if the snippet finding is excluded. */
     fun isExcluded() =
         object : RuleMatcher {
             override val description = "isExcluded(${snippetFinding.sourceLocation.path})"
@@ -71,18 +65,12 @@ class SnippetRule(
     fun issue(severity: Severity, message: String, howToFix: String) =
         issue(severity, null, null, enumSetOf(), message, howToFix)
 
-    /**
-     * Add a [hint][Severity.HINT] to the list of [violations].
-     */
+    /** Add a [hint][Severity.HINT] to the list of [violations]. */
     fun hint(message: String, howToFix: String) = issue(HINT, message, howToFix)
 
-    /**
-     * Add a [warning][Severity.WARNING] to the list of [violations].
-     */
+    /** Add a [warning][Severity.WARNING] to the list of [violations]. */
     fun warning(message: String, howToFix: String) = issue(WARNING, message, howToFix)
 
-    /**
-     * Add an [error][Severity.ERROR] to the list of [violations].
-     */
+    /** Add an [error][Severity.ERROR] to the list of [violations]. */
     fun error(message: String, howToFix: String) = issue(ERROR, message, howToFix)
 }

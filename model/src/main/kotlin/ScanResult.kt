@@ -23,23 +23,15 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 
-/**
- * The result of a single scan of a single package.
- */
+/** The result of a single scan of a single package. */
 data class ScanResult(
-    /**
-     * Provenance information about the scanned source code.
-     */
+    /** Provenance information about the scanned source code. */
     val provenance: Provenance,
 
-    /**
-     * Details about the used scanner.
-     */
+    /** Details about the used scanner. */
     val scanner: ScannerDetails,
 
-    /**
-     * A summary of the scan results.
-     */
+    /** A summary of the scan results. */
     val summary: ScanSummary,
 
     /**

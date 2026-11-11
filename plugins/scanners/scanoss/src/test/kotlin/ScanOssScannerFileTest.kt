@@ -36,9 +36,7 @@ import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.common.extractResource
 
-/**
- * A test for scanning a single file with the [ScanOss] scanner.
- */
+/** A test for scanning a single file with the [ScanOss] scanner. */
 class ScanOssScannerFileTest : StringSpec({
     lateinit var scanner: ScanOss
 

@@ -24,9 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.ScopeExclude
 
-/**
- * The evaluated form of a [Scope] used by the [EvaluatedModel].
- */
+/** The evaluated form of a [Scope] used by the [EvaluatedModel]. */
 data class EvaluatedScope(
     val name: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

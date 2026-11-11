@@ -21,17 +21,11 @@ package org.ossreviewtoolkit.plugins.advisors.blackduck
 
 import org.ossreviewtoolkit.plugins.api.Secret
 
-/**
- * The configuration for the BlackDuck vulnerability provider.
- */
+/** The configuration for the BlackDuck vulnerability provider. */
 data class BlackDuckConfiguration(
-    /**
-     * The base URL of the BlackDuck REST API.
-     */
+    /** The base URL of the BlackDuck REST API. */
     val serverUrl: String,
 
-    /**
-     * The API token to use for authentication.
-     */
+    /** The API token to use for authentication. */
     val apiToken: Secret
 )

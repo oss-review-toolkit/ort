@@ -117,9 +117,7 @@ class DependencyGraphBuilder<D>(
      */
     private val validPackageDependencies = mutableSetOf<Identifier>()
 
-    /**
-     * A mapping of the identifiers of the dependencies known to this builder to their numeric indices.
-     */
+    /** A mapping of the identifiers of the dependencies known to this builder to their numeric indices. */
     private val dependencyIndexMapping = mutableMapOf<Identifier, Int>()
 
     /**
@@ -214,14 +212,10 @@ class DependencyGraphBuilder<D>(
         }
     }
 
-    /**
-     * Return a set with all the packages that have been encountered for the current project.
-     */
+    /** Return a set with all the packages that have been encountered for the current project. */
     fun packages(): Set<Package> = resolvedPackages.values.toSet()
 
-    /**
-     * Return a set of all the scope names known to this builder that start with the given [prefix].
-     */
+    /** Return a set of all the scope names known to this builder that start with the given [prefix]. */
     fun scopesFor(prefix: String): Set<String> {
         val qualifiedScopes = scopeMapping.keys.filterTo(mutableSetOf()) { it.startsWith(prefix) }
         return qualifiedScopes.mapTo(mutableSetOf()) { it.substring(prefix.length) }

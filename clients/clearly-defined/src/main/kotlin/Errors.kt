@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.clients.clearlydefined
 
 import kotlinx.serialization.Serializable
 
-/**
- * See https://github.com/clearlydefined/service/blob/c47a989/app.js#L201-L205.
- */
+/** See https://github.com/clearlydefined/service/blob/c47a989/app.js#L201-L205. */
 @Serializable
 data class ErrorResponse(
     val error: Error

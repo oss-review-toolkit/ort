@@ -24,9 +24,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 
-/**
- * A [Reporter] that creates man pages from [Apache Freemarker](https://freemarker.apache.org) templates.
- */
+/** A [Reporter] that creates man pages from [Apache Freemarker](https://freemarker.apache.org) templates. */
 @OrtPlugin(
     displayName = "Man Page Template",
     summary = "Generates manpages from AsciiDoc files from Apache Freemarker templates.",

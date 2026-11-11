@@ -45,7 +45,5 @@ private val json = Json {
     ignoreUnknownKeys = true
 }
 
-/**
- * Parses the JSON result string returned by Nomossa into a [NomossaResult] object.
- */
+/** Parses the JSON result string returned by Nomossa into a [NomossaResult] object. */
 internal fun parseNomossaResult(result: String): NomossaResult = json.decodeFromString(result)

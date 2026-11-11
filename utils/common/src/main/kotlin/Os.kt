@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.utils.common
 
 import java.io.File
 
-/**
- * Operating-System-specific utility functions.
- */
+/** Operating-System-specific utility functions. */
 object Os {
     enum class Name(private val substring: String) {
         LINUX("linux"),
@@ -32,9 +30,7 @@ object Os {
         UNKNOWN("");
 
         companion object {
-            /**
-             * The current operating system's name.
-             */
+            /** The current operating system's name. */
             val current = fromString(this())
 
             operator fun invoke() = System.getProperty("os.name").orEmpty()
@@ -43,19 +39,13 @@ object Os {
         }
     }
 
-    /**
-     * A convenience property to indicate whether the operating system is Linux or not.
-     */
+    /** A convenience property to indicate whether the operating system is Linux or not. */
     val isLinux = Name.current == Name.LINUX
 
-    /**
-     * A convenience property to indicate whether the operating system is macOS or not.
-     */
+    /** A convenience property to indicate whether the operating system is macOS or not. */
     val isMac = Name.current == Name.MAC
 
-    /**
-     * A convenience property to indicate whether the operating system is Windows or not.
-     */
+    /** A convenience property to indicate whether the operating system is Windows or not. */
     val isWindows = Name.current == Name.WINDOWS
 
     enum class Arch(private vararg val aliases: String) {
@@ -64,9 +54,7 @@ object Os {
         UNKNOWN("");
 
         companion object {
-            /**
-             * The current operating system's architecture.
-             */
+            /** The current operating system's architecture. */
             val current = fromString(this())
 
             operator fun invoke() = System.getProperty("os.arch").orEmpty()
@@ -78,18 +66,14 @@ object Os {
         }
     }
 
-    /**
-     * The currently set environment variables. Keys are case-insensitive on Windows.
-     */
+    /** The currently set environment variables. Keys are case-insensitive on Windows. */
     val env by lazy {
         System.getenv().let { env ->
             if (isWindows) env.toSortedMap(String.CASE_INSENSITIVE_ORDER) else env.toSortedMap()
         }
     }
 
-    /**
-     * The current user's home directory.
-     */
+    /** The current user's home directory. */
     val userHomeDirectory by lazy {
         File(fixupUserHomeProperty())
     }
@@ -147,9 +131,7 @@ object Os {
         }
     }
 
-    /**
-     * Resolve the [executable] to its full name including any optional Windows extension.
-     */
+    /** Resolve the [executable] to its full name including any optional Windows extension. */
     fun resolveExecutable(executable: File): File? {
         val extensions = env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
         return extensions.map { File(executable.path + it.lowercase()) }.find { it.isFile }

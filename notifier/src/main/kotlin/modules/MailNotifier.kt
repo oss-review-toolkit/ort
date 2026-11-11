@@ -35,9 +35,7 @@ import java.util.Properties
 
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
 
-/**
- * Notification module that provides a configured email client.
- */
+/** Notification module that provides a configured email client. */
 class MailNotifier(private val config: SendMailConfiguration) {
     private val props = Properties().apply {
         put("mail.smtp.host", config.hostName)

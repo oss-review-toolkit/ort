@@ -19,7 +19,5 @@
 
 package org.ossreviewtoolkit.utils.common
 
-/**
- * A typealias for key-value pairs, used in several configuration classes.
- */
+/** A typealias for key-value pairs, used in several configuration classes. */
 typealias Options = Map<String, String>

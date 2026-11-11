@@ -24,12 +24,8 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.plugins.api.Plugin
 
-/**
- * A provider for [PackageConfiguration]s.
- */
+/** A provider for [PackageConfiguration]s. */
 interface PackageConfigurationProvider : Plugin {
-    /**
-     * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
-     */
+    /** Return a list of [PackageConfiguration]s for the given [packageId] and [provenance]. */
     fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration>
 }

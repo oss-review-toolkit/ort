@@ -23,9 +23,7 @@ import org.ossreviewtoolkit.clients.scanoss.SCANOSS_BASE_URL
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.Secret
 
-/**
- * The configuration for the SCANOSS vulnerability provider.
- */
+/** The configuration for the SCANOSS vulnerability provider. */
 data class ScanOssConfig(
     /** The URL of the SCANOSS server. */
     @OrtPluginOption(defaultValue = SCANOSS_BASE_URL)

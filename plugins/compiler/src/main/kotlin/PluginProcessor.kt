@@ -32,9 +32,7 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 
 class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
-    /**
-     * True, if the processor has been invoked in a previous run.
-     */
+    /** True, if the processor has been invoked in a previous run. */
     private var invoked = false
 
     private val specFactory = PluginSpecFactory()
@@ -42,9 +40,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
     private val jsonGenerator = JsonSpecGenerator(codeGenerator)
     private val serviceLoaderGenerator = ServiceLoaderGenerator(codeGenerator)
 
-    /**
-     * Process all classes annotated with [OrtPlugin] to generate plugin factories for them.
-     */
+    /** Process all classes annotated with [OrtPlugin] to generate plugin factories for them. */
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (invoked) return emptyList()
@@ -82,9 +78,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
         return emptyList()
     }
 
-    /**
-     * Get the declaration of the [plugin factory][OrtPlugin.factory].
-     */
+    /** Get the declaration of the [plugin factory][OrtPlugin.factory]. */
     private fun Resolver.getPluginFactoryClass(annotation: OrtPlugin): KSClassDeclaration {
         val pluginFactoryName = annotation.factory.qualifiedName
 
@@ -101,9 +95,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
         return pluginFactoryClass
     }
 
-    /**
-     * Get the declaration of the plugin class created by [factoryClass].
-     */
+    /** Get the declaration of the plugin class created by [factoryClass]. */
     private fun getPluginBaseClass(factoryClass: KSClassDeclaration): KSClassDeclaration {
         val baseClass = factoryClass
             .getAllFunctions()
@@ -121,9 +113,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
         return baseClass
     }
 
-    /**
-     * Ensure that [factoryClass] extends [org.ossreviewtoolkit.plugins.api.PluginFactory].
-     */
+    /** Ensure that [factoryClass] extends [org.ossreviewtoolkit.plugins.api.PluginFactory]. */
     private fun checkExtendsPluginFactory(factoryClass: KSClassDeclaration) =
         require(
             factoryClass.getAllSuperTypes().any {
@@ -133,9 +123,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
             "Plugin factory $factoryClass does not extend the required super type PluginFactory."
         }
 
-    /**
-     * Ensure that [pluginClass] extends [pluginBaseClass].
-     */
+    /** Ensure that [pluginClass] extends [pluginBaseClass]. */
     private fun checkExtendsPluginClass(pluginClass: KSClassDeclaration, pluginBaseClass: KSClassDeclaration) {
         require(pluginClass.getAllSuperTypes().any { it.declaration == pluginBaseClass }) {
             "Plugin class $pluginClass does not extend the required super type $pluginBaseClass."

@@ -23,9 +23,7 @@ import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.plugins.api.PluginFactory
 
-/**
- * A common abstract class for use with [ServiceLoader] that all [ScannerWrapperFactory] classes need to implement.
- */
+/** A common abstract class for use with [ServiceLoader] that all [ScannerWrapperFactory] classes need to implement. */
 interface ScannerWrapperFactory : PluginFactory<ScannerWrapper> {
     companion object {
         /**

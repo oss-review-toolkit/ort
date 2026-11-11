@@ -133,9 +133,7 @@ object DeclaredLicenseProcessor {
 }
 
 data class ProcessedDeclaredLicense(
-    /**
-     * The resulting SPDX expression, or null if no license could be mapped.
-     */
+    /** The resulting SPDX expression, or null if no license could be mapped. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(converter = SpdxExpressionSortedConverter::class)
     val spdxExpression: SpdxExpression?,
@@ -148,9 +146,7 @@ data class ProcessedDeclaredLicense(
     @JsonPropertyOrder(alphabetic = true)
     val mapped: Map<String, SpdxExpression> = emptyMap(),
 
-    /**
-     * Declared licenses that could not be mapped to an SPDX expression.
-     */
+    /** Declared licenses that could not be mapped to an SPDX expression. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val unmapped: Set<String> = emptySet()
@@ -164,8 +160,6 @@ data class ProcessedDeclaredLicense(
         )
     }
 
-    /**
-     * [Decompose][SpdxExpression.decompose] the [spdxExpression] or return an empty string if it is null.
-     */
+    /** [Decompose][SpdxExpression.decompose] the [spdxExpression] or return an empty string if it is null. */
     fun decompose() = spdxExpression?.decompose().orEmpty()
 }

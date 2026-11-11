@@ -26,16 +26,12 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
-/**
- * A [Rule] to check an [OrtResult].
- */
+/** A [Rule] to check an [OrtResult]. */
 open class OrtResultRule(
     ruleSet: RuleSet,
     name: String
 ) : Rule(ruleSet, name) {
-    /**
-     * The [OrtResult] to check.
-     */
+    /** The [OrtResult] to check. */
     val ortResult = ruleSet.ortResult
 
     override val description = "Evaluating ORT result rule '$name'."

@@ -19,18 +19,12 @@
 
 package org.ossreviewtoolkit.model
 
-/**
- * A class representing a single copyright finding.
- */
+/** A class representing a single copyright finding. */
 data class CopyrightFinding(
-    /**
-     * The copyright statement.
-     */
+    /** The copyright statement. */
     val statement: String,
 
-    /**
-     * The text location where the copyright statement was found.
-     */
+    /** The text location where the copyright statement was found. */
     val location: TextLocation
 ) {
     companion object {

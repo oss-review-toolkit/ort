@@ -35,9 +35,7 @@ import org.apache.logging.log4j.kotlin.loggerOf
 
 private val json = Json { ignoreUnknownKeys = true }
 
-/**
- * The data model for the output of the command `swift package show-dependencies --format json`.
- */
+/** The data model for the output of the command `swift package show-dependencies --format json`. */
 @Serializable
 internal data class SwiftPackage(
     val identity: String,

@@ -34,9 +34,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
  * interface.
  */
 interface DependencyHandler<D> {
-    /**
-     * Construct a unique identifier for the given [dependency].
-     */
+    /** Construct a unique identifier for the given [dependency]. */
     fun identifierFor(dependency: D): Identifier
 
     /**
@@ -45,9 +43,7 @@ interface DependencyHandler<D> {
      */
     fun dependenciesFor(dependency: D): List<D>
 
-    /**
-     * Return the [PackageLinkage] for the given [dependency].
-     */
+    /** Return the [PackageLinkage] for the given [dependency]. */
     fun linkageFor(dependency: D): PackageLinkage
 
     /**

@@ -19,124 +19,76 @@
 
 package org.ossreviewtoolkit.utils.ort
 
-/**
- * The (short) name of the OSS Review Toolkit.
- */
+/** The (short) name of the OSS Review Toolkit. */
 const val ORT_NAME = "ort"
 
-/**
- * The full name of the OSS Review Toolkit.
- */
+/** The full name of the OSS Review Toolkit. */
 const val ORT_FULL_NAME = "OSS Review Toolkit"
 
-/**
- * The version of the OSS Review Toolkit as a string.
- */
+/** The version of the OSS Review Toolkit as a string. */
 const val ORT_VERSION = BuildConfig.ORT_VERSION
 
-/**
- * A string that is supposed to be used as the User Agent when using ORT as an HTTP client.
- */
+/** A string that is supposed to be used as the User Agent when using ORT as an HTTP client. */
 const val ORT_USER_AGENT = "$ORT_NAME/$ORT_VERSION"
 
-/**
- * The name of the environment variable to customize the ORT config directory.
- */
+/** The name of the environment variable to customize the ORT config directory. */
 const val ORT_CONFIG_DIR_ENV_NAME = "ORT_CONFIG_DIR"
 
-/**
- * The name of the environment variable to customize the ORT tools directory.
- */
+/** The name of the environment variable to customize the ORT tools directory. */
 const val ORT_TOOLS_DIR_ENV_NAME = "ORT_TOOLS_DIR"
 
-/**
- * The name of the environment variable to customize the ORT data directory.
- */
+/** The name of the environment variable to customize the ORT data directory. */
 const val ORT_DATA_DIR_ENV_NAME = "ORT_DATA_DIR"
 
-/**
- * The name of the ORT (main) configuration file.
- */
+/** The name of the ORT (main) configuration file. */
 const val ORT_CONFIG_FILENAME = "config.yml"
 
-/**
- * The filename of the reference configuration file.
- */
+/** The filename of the reference configuration file. */
 const val ORT_REFERENCE_CONFIG_FILENAME = "reference.yml"
 
-/**
- * The name of the ORT copyright garbage configuration file.
- */
+/** The name of the ORT copyright garbage configuration file. */
 const val ORT_COPYRIGHT_GARBAGE_FILENAME = "copyright-garbage.yml"
 
-/**
- * The name of the ORT declared license mapping file.
- */
+/** The name of the ORT declared license mapping file. */
 const val ORT_DECLARED_LICENSE_MAPPING_FILENAME = "declared-license-mapping.yml"
 
-/**
- * The name of the ORT simple license mapping file.
- */
+/** The name of the ORT simple license mapping file. */
 const val ORT_SIMPLE_LICENSE_MAPPING_FILENAME = "simple-license-mapping.yml"
 
-/**
- * The name of the ORT package curations directory.
- */
+/** The name of the ORT package curations directory. */
 const val ORT_PACKAGE_CURATIONS_DIRNAME = "curations"
 
-/**
- * The name of the ORT package curations configuration file.
- */
+/** The name of the ORT package curations configuration file. */
 const val ORT_PACKAGE_CURATIONS_FILENAME = "curations.yml"
 
-/**
- * The name of the ORT how to fix text provider script file.
- */
+/** The name of the ORT how to fix text provider script file. */
 const val ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME = "reporter.how-to-fix-text-provider.kts"
 
-/**
- * The name of the ORT license choices configuration file.
- */
+/** The name of the ORT license choices configuration file. */
 const val ORT_LICENSE_CHOICES_FILENAME = "license-choices.yml"
 
-/**
- * The name of the ORT license classifications file.
- */
+/** The name of the ORT license classifications file. */
 const val ORT_LICENSE_CLASSIFICATIONS_FILENAME = "license-classifications.yml"
 
-/**
- * The name of the ORT package configurations directory.
- */
+/** The name of the ORT package configurations directory. */
 const val ORT_PACKAGE_CONFIGURATIONS_DIRNAME = "package-configurations"
 
-/**
- * The name of the ORT package configuration file.
- */
+/** The name of the ORT package configuration file. */
 const val ORT_PACKAGE_CONFIGURATION_FILENAME = "package-configuration.yml"
 
-/**
- * The name of the ORT repository configuration file.
- */
+/** The name of the ORT repository configuration file. */
 const val ORT_REPO_CONFIG_FILENAME = ".ort.yml"
 
-/**
- * The name of the ORT Server environment configuration file.
- */
+/** The name of the ORT Server environment configuration file. */
 const val ORT_SERVER_ENV_FILENAME = ".ort.env.yml"
 
-/**
- * The name of the ORT resolutions configuration file.
- */
+/** The name of the ORT resolutions configuration file. */
 const val ORT_RESOLUTIONS_FILENAME = "resolutions.yml"
 
-/**
- * The name of the ORT evaluator rules script.
- */
+/** The name of the ORT evaluator rules script. */
 const val ORT_EVALUATOR_RULES_FILENAME = "evaluator.rules.kts"
 
-/**
- * The name of the ORT notifier script.
- */
+/** The name of the ORT notifier script. */
 const val ORT_NOTIFIER_SCRIPT_FILENAME = "notifier.notifications.kts"
 
 /**

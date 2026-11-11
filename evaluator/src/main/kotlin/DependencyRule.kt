@@ -27,18 +27,14 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
-/**
- * A [Rule] to check a single [dependency][DependencyNode].
- */
+/** A [Rule] to check a single [dependency][DependencyNode]. */
 class DependencyRule(
     ruleSet: RuleSet,
     name: String,
     pkg: CuratedPackage,
     resolvedLicenseInfo: ResolvedLicenseInfo,
 
-    /**
-     * The [dependency][DependencyNode] to check.
-     */
+    /** The [dependency][DependencyNode] to check. */
     val dependency: DependencyNode,
 
     /**
@@ -48,19 +44,13 @@ class DependencyRule(
      */
     val ancestors: List<DependencyNode>,
 
-    /**
-     * The level of the [dependency] inside the dependency tree. Starts with 0 for a direct dependency of a project.
-     */
+    /** The level of the [dependency] inside the dependency tree. Starts with 0 for a direct dependency of a project. */
     val level: Int,
 
-    /**
-     * The [name][scopeName] of the scope that contains the [dependency].
-     */
+    /** The [name][scopeName] of the scope that contains the [dependency]. */
     val scopeName: String,
 
-    /**
-     * The [Project] that contains the [dependency].
-     */
+    /** The [Project] that contains the [dependency]. */
     val project: Project
 ) : PackageRule(ruleSet, name, pkg, resolvedLicenseInfo) {
     override val description =
@@ -70,9 +60,7 @@ class DependencyRule(
     override fun issueSource() =
         "$name - ${pkg.metadata.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope $scopeName)"
 
-    /**
-     * Return the direct dependencies of the [dependency].
-     */
+    /** Return the direct dependencies of the [dependency]. */
     fun directDependencies() = dependency.visitDependencies { it.toList() }
 
     /**
@@ -97,9 +85,7 @@ class DependencyRule(
             override fun matches() = project.id.isFromOrg(*names)
         }
 
-    /**
-     * A [RuleMatcher] that checks if the [dependency] is [statically linked][PackageLinkage].
-     */
+    /** A [RuleMatcher] that checks if the [dependency] is [statically linked][PackageLinkage]. */
     fun isStaticallyLinked() =
         object : RuleMatcher {
             override val description = "isStaticallyLinked()"

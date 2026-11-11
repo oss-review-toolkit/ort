@@ -36,9 +36,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
-/**
- * The evaluated form of a [Package] used by the [EvaluatedModel].
- */
+/** The evaluated form of a [Package] used by the [EvaluatedModel]. */
 data class EvaluatedPackage(
     val id: Identifier,
     val isProject: Boolean,

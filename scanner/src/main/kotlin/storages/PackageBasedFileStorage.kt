@@ -46,9 +46,7 @@ const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
  * A [PackageBasedScanStorage] using a [FileStorage] as backend. Scan results are serialized using [YAML][yamlMapper].
  */
 class PackageBasedFileStorage(
-    /**
-     * The [FileStorage] to use for storing scan results.
-     */
+    /** The [FileStorage] to use for storing scan results. */
     val backend: FileStorage
 ) : AbstractPackageBasedScanStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
@@ -118,17 +116,11 @@ class PackageBasedFileStorage(
     private fun storagePath(id: Identifier) = "${id.toPath()}/$SCAN_RESULTS_FILE_NAME"
 }
 
-/**
- * A container for [ScanResult]s for the package identified by [id].
- */
+/** A container for [ScanResult]s for the package identified by [id]. */
 private data class ScanResultContainer(
-    /**
-     * The [Identifier] of the package these [results] belong to.
-     */
+    /** The [Identifier] of the package these [results] belong to. */
     val id: Identifier,
 
-    /**
-     * The list of [ScanResult]s from potentially multiple scanners and / or with different package provenance.
-     */
+    /** The list of [ScanResult]s from potentially multiple scanners and / or with different package provenance. */
     val results: List<ScanResult>
 )

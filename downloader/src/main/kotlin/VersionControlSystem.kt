@@ -50,9 +50,7 @@ abstract class VersionControlSystem : Plugin {
                 it.priority
             }
 
-        /**
-         * Return the applicable VCS for the given [vcsType], or null if none is applicable.
-         */
+        /** Return the applicable VCS for the given [vcsType], or null if none is applicable. */
         fun forType(vcsType: VcsType, configs: Map<String, PluginConfig> = emptyMap()) =
             getAllVcsByPriority(configs).find { vcs -> vcs.type == vcsType }
 
@@ -63,9 +61,7 @@ abstract class VersionControlSystem : Plugin {
          */
         private val urlToVcsMap = mutableMapOf<Pair<String, Map<String, PluginConfig>>, VersionControlSystem?>()
 
-        /**
-         * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
-         */
+        /** Return the applicable VCS for the given [vcsUrl], or null if none is applicable. */
         @Synchronized
         fun forUrl(vcsUrl: String, configs: Map<String, PluginConfig> = emptyMap()) =
             // Do not use getOrPut() here as it cannot handle null values, also see
@@ -93,9 +89,7 @@ abstract class VersionControlSystem : Plugin {
          */
         private val dirToVcsMap = mutableMapOf<Pair<File, Map<String, PluginConfig>>, WorkingTree?>()
 
-        /**
-         * Return the applicable VCS working tree for the given [vcsDirectory], or null if none is applicable.
-         */
+        /** Return the applicable VCS working tree for the given [vcsDirectory], or null if none is applicable. */
         @Synchronized
         fun forDirectory(vcsDirectory: File, configs: Map<String, PluginConfig> = emptyMap()): WorkingTree? {
             val absoluteVcsDirectory = vcsDirectory.absoluteFile
@@ -145,9 +139,7 @@ abstract class VersionControlSystem : Plugin {
             }.orEmpty()
         }
 
-        /**
-         * Return glob patterns for files that should be checkout out in addition to explicit sparse checkout paths.
-         */
+        /** Return glob patterns for files that should be checkout out in addition to explicit sparse checkout paths. */
         fun getSparseCheckoutGlobPatterns(): List<String> {
             val globPatterns = mutableListOf("*$ORT_REPO_CONFIG_FILENAME", "*$ORT_SERVER_ENV_FILENAME")
             val licensePatterns = LicenseFilePatterns.getInstance()
@@ -158,9 +150,7 @@ abstract class VersionControlSystem : Plugin {
             flatMap { listOf(it, it.uppercase(), it.titlecase()) }
     }
 
-    /**
-     * The type of VCS supported by this implementation.
-     */
+    /** The type of VCS supported by this implementation. */
     abstract val type: VcsType
 
     /**
@@ -169,14 +159,10 @@ abstract class VersionControlSystem : Plugin {
      */
     abstract val priority: Int
 
-    /**
-     * A list of symbolic names that point to the latest revision.
-     */
+    /** A list of symbolic names that point to the latest revision. */
     protected abstract val latestRevisionNames: List<String>
 
-    /**
-     * Return the VCS command's version string, or an empty string if the version cannot be determined.
-     */
+    /** Return the VCS command's version string, or an empty string if the version cannot be determined. */
     abstract fun getVersion(): String
 
     /**
@@ -186,9 +172,7 @@ abstract class VersionControlSystem : Plugin {
      */
     abstract fun getDefaultBranchName(url: String): Result<String>
 
-    /**
-     * Return a working tree instance for this VCS.
-     */
+    /** Return a working tree instance for this VCS. */
     abstract fun getWorkingTree(vcsDirectory: File): WorkingTree
 
     /**
@@ -202,9 +186,7 @@ abstract class VersionControlSystem : Plugin {
         return type == VcsHost.parseUrl(vcsUrl).type || isApplicableUrlInternal(vcsUrl)
     }
 
-    /**
-     * Return true if this [VersionControlSystem] is available for use.
-     */
+    /** Return true if this [VersionControlSystem] is available for use. */
     open fun isAvailable(): Boolean = true
 
     /**
@@ -395,9 +377,7 @@ abstract class VersionControlSystem : Plugin {
                 && (revision !in workingTree.listRemoteBranches() || revision in workingTree.listRemoteTags())
         }
 
-    /**
-     * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.
-     */
+    /** Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features. */
     fun isAtLeastVersion(expectedVersion: String): Boolean {
         val actualVersion = Semver.coerce(getVersion())
         return Semver.coerce(expectedVersion)?.let { actualVersion?.isGreaterThanOrEqualTo(it) } == true

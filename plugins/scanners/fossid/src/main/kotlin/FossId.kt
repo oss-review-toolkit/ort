@@ -124,9 +124,7 @@ class FossId internal constructor(
         @JvmStatic
         internal val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD(?: Already up to date.)*$")
 
-        /**
-         * A regular expression to extract the artifact and version from a purl returned by FossID.
-         */
+        /** A regular expression to extract the artifact and version from a purl returned by FossID. */
         @JvmStatic
         private val SNIPPET_PURL_REGEX = Regex("^.*/(?<artifact>[^@]+)@(?<version>.+)")
 
@@ -151,9 +149,7 @@ class FossId internal constructor(
         @JvmStatic
         internal val SNIPPET_DATA_MATCHED_LINE_SNIPPET = "matchedLinesSnippet"
 
-        /**
-         * The scan states for which a scan can be triggered.
-         */
+        /** The scan states for which a scan can be triggered. */
         @JvmStatic
         private val SCAN_STATE_FOR_TRIGGER = enumSetOf(ScanStatus.NOT_STARTED, ScanStatus.NEW)
 
@@ -187,18 +183,12 @@ class FossId internal constructor(
             )
     }
 
-    /**
-     * The qualifier of a scan when delta scans are enabled.
-     */
+    /** The qualifier of a scan when delta scans are enabled. */
     enum class DeltaTag {
-        /**
-         * Qualifier used when there is no scan and the first one is created.
-         */
+        /** Qualifier used when there is no scan and the first one is created. */
         ORIGIN,
 
-        /**
-         * Qualifier used for all the scans after the first one.
-         */
+        /** Qualifier used for all the scans after the first one. */
         DELTA
     }
 
@@ -244,9 +234,7 @@ class FossId internal constructor(
             }
         }
 
-    /**
-     * Create a [ScanSummary] containing a single [issue] started at [startTime] and ended now.
-     */
+    /** Create a [ScanSummary] containing a single [issue] started at [startTime] and ended now. */
     private fun createSingleIssueSummary(startTime: Instant, issue: Issue) =
         ScanSummary.EMPTY.copy(startTime = startTime, endTime = Instant.now(), issues = listOf(issue))
 
@@ -480,9 +468,7 @@ class FossId internal constructor(
             createOrtScanComment(urlWithoutCredentials, scan.gitBranch.orEmpty(), scan.comment.orEmpty())
         }
 
-    /**
-     * Call FossID service, initiate a scan and return scan data: Scan Code and Scan Id
-     */
+    /** Call FossID service, initiate a scan and return scan data: Scan Code and Scan Id */
     @Suppress("LongParameterList")
     private suspend fun checkAndCreateScan(
         handler: EventHandler,
@@ -514,9 +500,7 @@ class FossId internal constructor(
         return FossIdResult(scanCode, scanId, issues)
     }
 
-    /**
-     * Call FossID service, initiate a delta scan and return scan data: Scan Code and Scan Id
-     */
+    /** Call FossID service, initiate a delta scan and return scan data: Scan Code and Scan Id */
     private suspend fun checkAndCreateDeltaScan(
         handler: EventHandler,
         scans: List<Scan>,
@@ -629,9 +613,7 @@ class FossId internal constructor(
             }
     }
 
-    /**
-     * Create a new scan in the FossID server and return the scan id.
-     */
+    /** Create a new scan in the FossID server and return the scan id. */
     private suspend fun createScan(
         handler: EventHandler,
         projectCode: String,
@@ -665,9 +647,7 @@ class FossId internal constructor(
         return scanId
     }
 
-    /**
-     * Check the repository has been downloaded and the scan has completed. The latter will be triggered if needed.
-     */
+    /** Check the repository has been downloaded and the scan has completed. The latter will be triggered if needed. */
     private suspend fun checkScan(handler: EventHandler, scanCode: String, vararg runOptions: Pair<String, String>) {
         handler.beforeCheckScan(scanCode)
 
@@ -704,9 +684,7 @@ class FossId internal constructor(
         handler.afterCheckScan(scanCode)
     }
 
-    /**
-     * Wait until a scan with [scanCode] has completed.
-     */
+    /** Wait until a scan with [scanCode] has completed. */
     private suspend fun waitScanComplete(scanCode: String) {
         val result = wait(config.timeout.minutes, WAIT_DELAY) {
             logger.info { "Waiting for scan '$scanCode' to complete." }
@@ -736,9 +714,7 @@ class FossId internal constructor(
         logger.info { "Scan has been completed." }
     }
 
-    /**
-     * Delete a scan with [scanCode].
-     */
+    /** Delete a scan with [scanCode]. */
     private suspend fun deleteScan(scanCode: String) {
         val response = service.deleteScan(config.user.value, config.apiKey.value, scanCode)
         response.error?.let {
@@ -746,9 +722,7 @@ class FossId internal constructor(
         }
     }
 
-    /**
-     * Get the different kind of results from the scan with [scanCode]
-     */
+    /** Get the different kind of results from the scan with [scanCode] */
     @Suppress("UnsafeCallOnNullableType")
     private suspend fun getRawResults(scanCode: String, snippetChoices: List<SnippetChoice>): RawResults {
         val identifiedFiles = service.listIdentifiedFiles(config.user.value, config.apiKey.value, scanCode)
@@ -883,9 +857,7 @@ class FossId internal constructor(
             ?.takeIf { selector(it)?.startsWith("fossid-source-archive") == true }
             ?.let { selector(it)?.substringBefore("/") }
 
-    /**
-     * Construct the [ScanSummary] for this FossID scan.
-     */
+    /** Construct the [ScanSummary] for this FossID scan. */
     @Suppress("LongParameterList")
     private suspend fun createResultSummary(
         startTime: Instant,

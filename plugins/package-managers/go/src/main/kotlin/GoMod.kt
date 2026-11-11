@@ -181,9 +181,7 @@ class GoMod(
         }
     }
 
-    /**
-     * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
-     */
+    /** Return the module graph output from `go mod graph` with non-vendor dependencies removed. */
     private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph<GoModule> {
         fun GoModule.hasModuleInfo() = name in moduleInfoForModuleName
 
@@ -247,9 +245,7 @@ class GoMod(
         return graph.breakCycles()
     }
 
-    /**
-     * Return a sequence of module information for [packages] in [projectDir].
-     */
+    /** Return a sequence of module information for [packages] in [projectDir]. */
     private fun getModuleInfos(projectDir: File, vararg packages: String): Sequence<ModuleInfo> {
         projectDir.resolve("go.mod").also { goModFile ->
             require(goModFile.isFile) {
@@ -262,9 +258,7 @@ class GoMod(
         return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }
     }
 
-    /**
-     * Return the module names of all transitive main module dependencies. This excludes test-only dependencies.
-     */
+    /** Return the module names of all transitive main module dependencies. This excludes test-only dependencies. */
     private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
         // See https://pkg.go.dev/text/template for the format syntax.
         // TODO: Find a way to efficiently also get test dependencies, which is possible via "-test", but then they are

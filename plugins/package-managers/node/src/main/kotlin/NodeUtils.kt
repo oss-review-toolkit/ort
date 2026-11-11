@@ -73,9 +73,7 @@ internal fun expandShortcutUrl(url: String): String {
     }
 }
 
-/**
- * Return the result of doing various replacements in this URL.
- */
+/** Return the result of doing various replacements in this URL. */
 internal fun String.fixDownloadUrl(): String =
     @Suppress("HttpUrlsUsage")
     // Work around the issue described at
@@ -104,9 +102,7 @@ internal fun Collection<String>.mapLicenses(): Set<String> =
         }
     }
 
-/**
- * Parse information about the VCS from the [packageJson] of a module.
- */
+/** Parse information about the VCS from the [packageJson] of a module. */
 internal fun parseVcsInfo(packageJson: PackageJson): VcsInfo {
     // See https://github.com/npm/read-package-json/issues/7 for some background info.
     val head = packageJson.gitHead.orEmpty()
@@ -225,9 +221,7 @@ internal fun parsePackage(packageJson: PackageJson, moduleInfoResolver: ModuleIn
     return module
 }
 
-/**
- * Split the given [rawName] of a module to a pair with namespace and name.
- */
+/** Split the given [rawName] of a module to a pair with namespace and name. */
 internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
     val name = rawName.substringAfterLast("/")
     val namespace = rawName.removeSuffix(name).removeSuffix("/")
@@ -243,9 +237,7 @@ internal val PackageJson.moduleId: String
         }
     }
 
-/**
- * Return the directories of all modules which have been installed in the 'node_modules' dir within [projectDir].
- */
+/** Return the directories of all modules which have been installed in the 'node_modules' dir within [projectDir]. */
 internal fun getInstalledModulesDirs(projectDir: File): Set<File> {
     val modulesDirsToProcess = LinkedList<File>().apply { add(projectDir.realFile) }
     val discoveredModulesDirs = mutableSetOf<File>()

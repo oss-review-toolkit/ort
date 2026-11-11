@@ -91,9 +91,7 @@ class SpdxExpressionParser(
         return result
     }
 
-    /**
-     * Parse an OR expression of the form `or-expression -> and-expression ( "OR" and-expression ) *`.
-     */
+    /** Parse an OR expression of the form `or-expression -> and-expression ( "OR" and-expression ) *`. */
     private fun parseOrExpression(): SpdxExpression {
         val children = mutableListOf(parseAndExpression())
 
@@ -105,9 +103,7 @@ class SpdxExpressionParser(
         return checkNotNull(children.toExpression(SpdxOperator.OR))
     }
 
-    /**
-     * Parse an AND expression of the form `and-expression -> primary ( "AND" primary ) *`.
-     */
+    /** Parse an AND expression of the form `and-expression -> primary ( "AND" primary ) *`. */
     private fun parseAndExpression(): SpdxExpression {
         val children = mutableListOf(parsePrimary())
 
@@ -119,9 +115,7 @@ class SpdxExpressionParser(
         return checkNotNull(children.toExpression(SpdxOperator.AND))
     }
 
-    /**
-     * Parse a primary of the form `primary -> "(" license-expression ")" | simple-expression`.
-     */
+    /** Parse a primary of the form `primary -> "(" license-expression ")" | simple-expression`. */
     private fun parsePrimary(): SpdxExpression {
         if (next is Token.OPEN) {
             next = iterator.nextOrNull()

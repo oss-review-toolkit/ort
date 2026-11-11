@@ -21,24 +21,16 @@ package org.ossreviewtoolkit.model.config.snippet
 
 import org.ossreviewtoolkit.model.TextLocation
 
-/**
- * A snippet choice for a given source file.
- */
+/** A snippet choice for a given source file. */
 data class SnippetChoice(
-    /**
-     * The source file criteria for which the snippet choice is made.
-     */
+    /** The source file criteria for which the snippet choice is made. */
     val given: Given,
 
-    /**
-     * The snippet criteria to make the snippet choice.
-     */
+    /** The snippet criteria to make the snippet choice. */
     val choice: Choice
 )
 
-/**
- * A source file criteria for which the snippet choice is made.
- */
+/** A source file criteria for which the snippet choice is made. */
 data class Given(
     /**
      * The source file for which the snippet choice is made. The path of [sourceLocation] is relative to the provenance
@@ -47,9 +39,7 @@ data class Given(
     val sourceLocation: TextLocation
 )
 
-/**
- * A snippet criteria to make the snippet choice.
- */
+/** A snippet criteria to make the snippet choice. */
 data class Choice(
     /**
      * The purl of the snippet chosen by this snippet choice. If [reason] is [SnippetChoiceReason.NO_RELEVANT_FINDING],
@@ -57,13 +47,9 @@ data class Choice(
      */
     val purl: String? = null,
 
-    /**
-     * The reason why this snippet choice was made.
-     */
+    /** The reason why this snippet choice was made. */
     val reason: SnippetChoiceReason,
 
-    /**
-     * An optional comment describing the snippet choice.
-     */
+    /** An optional comment describing the snippet choice. */
     val comment: String? = null
 )

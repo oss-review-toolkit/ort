@@ -61,9 +61,7 @@ data class PipConfig(
     @OrtPluginOption(defaultValue = "true")
     val analyzeSetupPyInsecurely: Boolean,
 
-    /**
-     * The name of the operating system to resolve dependencies for. One of "linux", "macos", or "windows".
-     */
+    /** The name of the operating system to resolve dependencies for. One of "linux", "macos", or "windows". */
     @OrtPluginOption(defaultValue = "linux")
     val operatingSystem: OperatingSystem,
 

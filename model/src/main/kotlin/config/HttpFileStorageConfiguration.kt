@@ -25,9 +25,7 @@ import com.fasterxml.jackson.databind.util.StdConverter
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class HttpFileStorageConfiguration(
-    /**
-     * The URL of the HTTP server, e.g. "https://example.com/storage".
-     */
+    /** The URL of the HTTP server, e.g. "https://example.com/storage". */
     val url: String,
 
     /**

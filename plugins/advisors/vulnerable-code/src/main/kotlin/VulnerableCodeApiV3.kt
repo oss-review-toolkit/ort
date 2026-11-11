@@ -64,9 +64,7 @@ import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
-/**
- * The default maximum number of advisories returned for a single package by the v3/packages endpoint.
- */
+/** The default maximum number of advisories returned for a single package by the v3/packages endpoint. */
 private const val DEFAULT_MAX_ADVISORIES = 100
 
 /**
@@ -191,9 +189,7 @@ internal class VulnerableCodeApiV3(
         }
     }
 
-    /**
-     * Retrieve detailed package information for the given [purls].
-     */
+    /** Retrieve detailed package information for the given [purls]. */
     private suspend fun HttpClient.getAllPackageDetails(purls: List<String>): List<PackageV3> {
         val request = PackageQuery(purls, details = true)
         var page = v3PackagesCreate(request)
@@ -213,9 +209,7 @@ internal class VulnerableCodeApiV3(
         return packages
     }
 
-    /**
-     * Retrieve detailed advisory information for the given package [purls].
-     */
+    /** Retrieve detailed advisory information for the given package [purls]. */
     private suspend fun HttpClient.getAllAdvisories(purls: List<String>): List<AdvisoryV3> {
         val request = AdvisoryQuery(purls)
         var page = v3AdvisoriesCreate(request)
@@ -325,9 +319,7 @@ internal class VulnerableCodeApiV3(
             ?: advisory_id
     }
 
-    /**
-     * Merge vulnerabilities with the same ID into a single vulnerability, combining their references.
-     */
+    /** Merge vulnerabilities with the same ID into a single vulnerability, combining their references. */
     private fun Collection<Vulnerability>.mergeVulnerabilities(): List<Vulnerability> =
         groupBy { it.id }.values.map { vulnerabilitiesWithSameId ->
             val references = vulnerabilitiesWithSameId.flatMapTo(mutableSetOf()) { it.references }
@@ -338,9 +330,7 @@ internal class VulnerableCodeApiV3(
             entry.copy(references = references.toList(), firstFixedVersions = fixedVersions)
         }
 
-    /**
-     * Convert this string to a [URI] object. Populate [issues] if this fails.
-     */
+    /** Convert this string to a [URI] object. Populate [issues] if this fails. */
     private fun String.toUri(issues: MutableList<Issue>): URI? =
         runCatching { URI(fixupUrlEscaping()) }.onFailure {
             issues += createAndLogIssue("Failed to map $this to ORT model due to $it.", Severity.HINT)

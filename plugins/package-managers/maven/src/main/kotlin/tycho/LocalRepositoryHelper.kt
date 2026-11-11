@@ -31,9 +31,7 @@ import org.eclipse.aether.artifact.Artifact
 
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 
-/**
- * A class providing some helper functionality for accessing artifacts and metadata in the local Maven repository.
- */
+/** A class providing some helper functionality for accessing artifacts and metadata in the local Maven repository. */
 internal class LocalRepositoryHelper(
     /** The root directory of the local Maven repository. */
     private val localRepositoryRoot: File

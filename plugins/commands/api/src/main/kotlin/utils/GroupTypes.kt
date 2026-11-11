@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.plugins.commands.api.utils
 
 import java.io.File
 
-/**
- * Helper class for mutually exclusive command line options of different types.
- */
+/** Helper class for mutually exclusive command line options of different types. */
 sealed interface GroupTypes {
     data class FileType(val file: File) : GroupTypes
 

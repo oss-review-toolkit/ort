@@ -33,9 +33,7 @@ private val JSON = Json { ignoreUnknownKeys = true }
 
 internal fun parseNpmList(json: String): ModuleInfo = JSON.decodeFromString(json)
 
-/**
- * Module information for installed NPM packages.
- */
+/** Module information for installed NPM packages. */
 @Serializable
 internal data class ModuleInfo(
     /** The name of the package. */

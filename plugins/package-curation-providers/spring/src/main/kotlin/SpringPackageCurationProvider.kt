@@ -28,9 +28,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 
-/**
- * A [PackageCurationProvider] that provides [PackageCuration]s for [Spring](https://spring.io/) packages.
- */
+/** A [PackageCurationProvider] that provides [PackageCuration]s for [Spring](https://spring.io/) packages. */
 @OrtPlugin(
     displayName = "Spring",
     summary = "A package curation provider for Spring packages.",

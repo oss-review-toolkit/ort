@@ -30,24 +30,16 @@ import org.ossreviewtoolkit.model.utils.PostgresProvenanceFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
-/**
- * The configuration model for a [FileArchiver].
- */
+/** The configuration model for a [FileArchiver]. */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class FileArchiverConfiguration(
-    /**
-     * Toggle to enable or disable the file archiver functionality altogether.
-     */
+    /** Toggle to enable or disable the file archiver functionality altogether. */
     val enabled: Boolean = true,
 
-    /**
-     * Configuration of the [FileStorage] used for archiving the files.
-     */
+    /** Configuration of the [FileStorage] used for archiving the files. */
     val fileStorage: FileStorageConfiguration? = null,
 
-    /**
-     * Configuration of the [PostgresProvenanceFileStorage] used for archiving the files.
-     */
+    /** Configuration of the [PostgresProvenanceFileStorage] used for archiving the files. */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
     companion object {
@@ -65,9 +57,7 @@ data class FileArchiverConfiguration(
     }
 }
 
-/**
- * Create a [FileArchiver] based on this configuration.
- */
+/** Create a [FileArchiver] based on this configuration. */
 fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
     if (this?.enabled == false) return null
 

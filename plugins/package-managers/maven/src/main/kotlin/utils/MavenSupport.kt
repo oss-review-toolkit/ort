@@ -101,9 +101,7 @@ import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-/**
- * Return the path to this file or a corresponding message if the file is unknown.
- */
+/** Return the path to this file or a corresponding message if the file is unknown. */
 private val File?.safePath: String
     get() = this?.invariantSeparatorsPath ?: "<unknown file>"
 
@@ -200,14 +198,10 @@ class MavenSupport(
         }
     }
 
-    /**
-     * Looks up an instance of the class provided from the Maven Plexus container.
-     */
+    /** Looks up an instance of the class provided from the Maven Plexus container. */
     private inline fun <reified T> containerLookup(hint: String = "default"): T = container.lookup(T::class.java, hint)
 
-    /**
-     * Obtain the path to the local Maven repository as configured in the current Maven environment.
-     */
+    /** Obtain the path to the local Maven repository as configured in the current Maven environment. */
     fun localRepositoryPath(): File = createMavenExecutionRequest().localRepositoryPath
 
     /**

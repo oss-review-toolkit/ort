@@ -20,13 +20,9 @@
 package org.ossreviewtoolkit.model.config
 
 enum class PathIncludeReason {
-    /**
-     * The path contains source code used to build distributed build artifacts.
-     */
+    /** The path contains source code used to build distributed build artifacts. */
     SOURCE_OF,
 
-    /**
-     * A fallback reason for the [PathIncludeReason] when none of the other reasons apply.
-     */
+    /** A fallback reason for the [PathIncludeReason] when none of the other reasons apply. */
     OTHER
 }

@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.clients.bazelmoduleregistry
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-/**
- * A Retrofit client for remote bazel module registries.
- */
+/** A Retrofit client for remote bazel module registries. */
 interface RetrofitRegistryServiceClient {
     /**
      * Retrieve the metadata for a module.

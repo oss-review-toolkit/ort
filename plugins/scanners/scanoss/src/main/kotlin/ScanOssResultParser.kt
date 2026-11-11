@@ -111,9 +111,7 @@ internal fun generateSummary(
     )
 }
 
-/**
- * Get the license findings from the given [details].
- */
+/** Get the license findings from the given [details]. */
 internal fun getLicenseFindings(details: ScanFileDetails, path: String): Set<LicenseFinding> {
     val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
     val license = details.licenseDetails.toSpdxExpression()
@@ -131,9 +129,7 @@ internal fun getLicenseFindings(details: ScanFileDetails, path: String): Set<Lic
     )
 }
 
-/**
- * Get the copyright findings from the given [details].
- */
+/** Get the copyright findings from the given [details]. */
 private fun getCopyrightFindings(details: ScanFileDetails, path: String): Set<CopyrightFinding> =
     details.copyrightDetails.orEmpty().mapTo(mutableSetOf()) { copyright ->
         CopyrightFinding(
@@ -214,9 +210,7 @@ internal fun getSnippetFindings(details: ScanFileDetails, localFilePath: String)
     }
 }
 
-/**
- * Split [lineRanges] returned by SCANOSS such as "32-105,117-199" into [TextLocation]s for the given [file].
- */
+/** Split [lineRanges] returned by SCANOSS such as "32-105,117-199" into [TextLocation]s for the given [file]. */
 private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
     lineRanges.split(',').map {
         when {
@@ -229,9 +223,7 @@ private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
         }
     }
 
-/**
- * Turn an array of [LicenseDetails] into an [SpdxExpression].
- */
+/** Turn an array of [LicenseDetails] into an [SpdxExpression]. */
 private fun Array<LicenseDetails>?.toSpdxExpression(): SpdxExpression {
     val expressions = orEmpty().mapTo(mutableSetOf()) { license ->
         val expression = license.name.toSpdxOrNull()

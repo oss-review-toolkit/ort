@@ -44,19 +44,13 @@ data class PackageCurationData(
      */
     val comment: String? = null,
 
-    /**
-     * An additional identifier in [package URL syntax](https://github.com/package-url/purl-spec).
-     */
+    /** An additional identifier in [package URL syntax](https://github.com/package-url/purl-spec). */
     val purl: String? = null,
 
-    /**
-     * An additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
-     */
+    /** An additional identifier in [CPE syntax](https://cpe.mitre.org/specification/). */
     val cpe: String? = null,
 
-    /**
-     * The set of authors of the package.
-     */
+    /** The set of authors of the package. */
     val authors: Set<String>? = null,
 
     /**
@@ -65,44 +59,28 @@ data class PackageCurationData(
      */
     val concludedLicense: SpdxExpression? = null,
 
-    /**
-     * The description of the package, as provided by the package manager.
-     */
+    /** The description of the package, as provided by the package manager. */
     val description: String? = null,
 
-    /**
-     * The homepage of the package.
-     */
+    /** The homepage of the package. */
     val homepageUrl: String? = null,
 
-    /**
-     * The remote artifact where the binary package can be downloaded.
-     */
+    /** The remote artifact where the binary package can be downloaded. */
     val binaryArtifact: RemoteArtifact? = null,
 
-    /**
-     * The remote artifact where the source package can be downloaded.
-     */
+    /** The remote artifact where the source package can be downloaded. */
     val sourceArtifact: RemoteArtifact? = null,
 
-    /**
-     * The timestamp when the package was published, usually to a package registry like Maven Central.
-     */
+    /** The timestamp when the package was published, usually to a package registry like Maven Central. */
     val publishedAt: Instant? = null,
 
-    /**
-     * VCS-related information.
-     */
+    /** VCS-related information. */
     val vcs: VcsInfoCurationData? = null,
 
-    /**
-     * Whether the package is metadata only.
-     */
+    /** Whether the package is metadata only. */
     val isMetadataOnly: Boolean? = null,
 
-    /**
-     * Whether the package is modified compared to the original source
-     */
+    /** Whether the package is modified compared to the original source */
     val isModified: Boolean? = null,
 
     /**

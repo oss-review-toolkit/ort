@@ -67,9 +67,7 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
  */
 private const val ORT_COMMENT_KEY = "\"$ORT_NAME\":"
 
-/**
- * A data class to hold FossID raw results.
- */
+/** A data class to hold FossID raw results. */
 internal data class RawResults(
     val identifiedFiles: List<IdentifiedFile>,
     val markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
@@ -127,17 +125,13 @@ internal data class RawResults(
     }
 }
 
-/**
- * A data class to hold FossID mapped results.
- */
+/** A data class to hold FossID mapped results. */
 internal data class FindingsContainer(
     val licenseFindings: MutableSet<LicenseFinding>,
     val copyrightFindings: MutableSet<CopyrightFinding>
 )
 
-/**
- * Map a FossID raw result to sections that can be included in a [org.ossreviewtoolkit.model.ScanSummary].
- */
+/** Map a FossID raw result to sections that can be included in a [org.ossreviewtoolkit.model.ScanSummary]. */
 internal fun <T : Summarizable> List<T>.mapSummary(
     ignoredFiles: Map<String, IgnoredFile>,
     issues: MutableList<Issue>,

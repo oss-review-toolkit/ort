@@ -28,9 +28,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 
-/**
- * A [DependencyHandler] for CycloneDX SBOM dependencies.
- */
+/** A [DependencyHandler] for CycloneDX SBOM dependencies. */
 class CycloneDxDependencyHandler : DependencyHandler<Component> {
     private val boms = mutableSetOf<Bom>()
     private val projectIds = mutableSetOf<Identifier>()

@@ -63,9 +63,7 @@ internal class MultiBazelModuleRegistryService(
             return MultiBazelModuleRegistryService(registryServices)
         }
 
-        /**
-         * Return an exception with a message that combines the messages of all [Throwable]s in this list.
-         */
+        /** Return an exception with a message that combines the messages of all [Throwable]s in this list. */
         private fun List<String>.combinedException(caption: String): Throwable =
             IllegalArgumentException(
                 "$caption:\n${joinToString("\n")}"

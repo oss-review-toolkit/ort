@@ -47,9 +47,7 @@ fun <T : GroupableOption> T.outputGroup(): T = group(OrtCommand.OPTION_GROUP_OUT
 
 fun <T : GroupableOption> T.configurationGroup(): T = group(OrtCommand.OPTION_GROUP_CONFIGURATION)
 
-/**
- * Read [ortFile] into an [OrtResult] and return it.
- */
+/** Read [ortFile] into an [OrtResult] and return it. */
 fun readOrtResult(ortFile: File): OrtResult {
     logger.debug { "Input ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(ortFile)}." }
 
@@ -60,9 +58,7 @@ fun readOrtResult(ortFile: File): OrtResult {
     return ortResult
 }
 
-/**
- * Write the [ortResult] to all [outputFiles].
- */
+/** Write the [ortResult] to all [outputFiles]. */
 fun writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>, terminal: Terminal) {
     outputFiles.forEach { file ->
         val resultName = file.name.substringBefore('-')

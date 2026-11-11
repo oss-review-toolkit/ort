@@ -37,9 +37,7 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
-/**
- * The name of Yarn 2+ resource file.
- */
+/** The name of Yarn 2+ resource file. */
 private const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
 
 internal class Yarn2Command(private val corepackEnabled: Boolean?) : CommandLineTool {

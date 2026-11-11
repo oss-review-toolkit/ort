@@ -43,9 +43,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toSpdx
 
 class DeclaredLicenseProcessorTest : StringSpec() {
-    /**
-     * A collection of declared license strings found in open source packages.
-     */
+    /** A collection of declared license strings found in open source packages. */
     private val declaredLicenses = SpdxDeclaredLicenseMapper.MAPPING.keys +
         SpdxSimpleLicenseMapper.AMBIGUOUS_SIMPLE_MAPPING.keys +
         SpdxSimpleLicenseMapper.SIMPLE_MAPPING.keys +

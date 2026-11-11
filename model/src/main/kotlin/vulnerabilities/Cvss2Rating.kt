@@ -29,14 +29,10 @@ enum class Cvss2Rating(val upperBound: Float) {
     HIGH(10.0f);
 
     companion object {
-        /**
-         * A set of prefixes that refer to the CVSS version 2 scoring system.
-         */
+        /** A set of prefixes that refer to the CVSS version 2 scoring system. */
         val PREFIXES = setOf("CVSS2", "CVSSV2", "CVSS_V2", "CVSS:2")
 
-        /**
-         * Get the [Cvss2Rating] from a [score], or null if the [score] does not map to any [Cvss2Rating].
-         */
+        /** Get the [Cvss2Rating] from a [score], or null if the [score] does not map to any [Cvss2Rating]. */
         fun fromScore(score: Float): Cvss2Rating? =
             when {
                 score < 0.0f || score > HIGH.upperBound -> null

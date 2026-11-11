@@ -52,9 +52,7 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
-/**
- * The amount of package details to query at once with `yarn npm info`.
- */
+/** The amount of package details to query at once with `yarn npm info`. */
 private const val YARN_NPM_INFO_CHUNK_SIZE = 1000
 
 data class Yarn2Config(
@@ -75,9 +73,7 @@ data class Yarn2Config(
     val corepackEnabled: Boolean?
 )
 
-/**
- * The [Yarn 2+ package manager](https://v2.yarnpkg.com/).
- */
+/** The [Yarn 2+ package manager](https://v2.yarnpkg.com/). */
 @OrtPlugin(
     displayName = "Yarn 2+",
     summary = "The Yarn 2+ package manager for Node.js.",

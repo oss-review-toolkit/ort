@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.plugins.compiler
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
-/**
- * A [SymbolProcessorProvider] that provides a [PluginProcessor].
- */
+/** A [SymbolProcessorProvider] that provides a [PluginProcessor]. */
 class PluginProcessorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment) = PluginProcessor(environment.codeGenerator)
 }

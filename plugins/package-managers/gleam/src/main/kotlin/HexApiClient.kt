@@ -28,9 +28,7 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
-/**
- * Client for fetching package metadata from the Hex.pm API.
- */
+/** Client for fetching package metadata from the Hex.pm API. */
 internal class HexApiClient(private val baseUrl: String = "https://hex.pm") {
     private val packageCache = mutableMapOf<String, HexPackageInfo?>()
     private val userCache = mutableMapOf<String, HexUserInfo?>()

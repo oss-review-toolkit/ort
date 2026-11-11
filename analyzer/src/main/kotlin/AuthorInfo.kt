@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.analyzer
 
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
-/**
- * Information about an author, including the [name], [email] address, and [homepage] URL.
- */
+/** Information about an author, including the [name], [email] address, and [homepage] URL. */
 data class AuthorInfo(val name: String?, val email: String?, val homepage: String?)
 
 /**
@@ -62,9 +60,7 @@ fun parseAuthorString(
         AuthorInfo(cleanedAuthor.collapseWhitespace().ifEmpty { null }, email, homepage)
     }.orEmpty()
 
-/**
- * Trivially guess an author's name from the given [email] address.
- */
+/** Trivially guess an author's name from the given [email] address. */
 fun guessNameFromEmail(email: String): String =
     email.substringBefore('@')
         .replace('.', ' ')

@@ -25,13 +25,9 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 
-/**
- * This class contains information about a [root] provenance and all nested [subRepositories].
- */
+/** This class contains information about a [root] provenance and all nested [subRepositories]. */
 data class NestedProvenance(
-    /**
-     * The root provenance that contains the [nested provenances][subRepositories].
-     */
+    /** The root provenance that contains the [nested provenances][subRepositories]. */
     val root: KnownProvenance,
 
     /**
@@ -41,9 +37,7 @@ data class NestedProvenance(
      */
     val subRepositories: Map<String, RepositoryProvenance>
 ) {
-    /**
-     * The set of all contained [KnownProvenance]s.
-     */
+    /** The set of all contained [KnownProvenance]s. */
     @JsonIgnore
     val allProvenances: Set<KnownProvenance> =
         buildSet {

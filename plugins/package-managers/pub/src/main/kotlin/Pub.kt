@@ -136,21 +136,15 @@ internal class PubCommand(private val flutterAbsolutePath: File?) : CommandLineT
 }
 
 data class PubConfig(
-    /**
-     * The version to use when bootstrapping Flutter. If Flutter is already on the path, this option is ignored.
-     */
+    /** The version to use when bootstrapping Flutter. If Flutter is already on the path, this option is ignored. */
     @OrtPluginOption(defaultValue = "3.19.3-stable")
     val flutterVersion: String,
 
-    /**
-     * The version of Gradle to use when analyzing Gradle projects.
-     */
+    /** The version of Gradle to use when analyzing Gradle projects. */
     @OrtPluginOption(defaultValue = "7.3")
     val gradleVersion: String,
 
-    /**
-     * Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods).
-     */
+    /** Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods). */
     @OrtPluginOption(defaultValue = "false")
     val pubDependenciesOnly: Boolean
 )
@@ -811,9 +805,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         }
     }
 
-    /**
-     * Check the [PUBSPEC_YAML] within [workingDir] if the project contains the Flutter SDK.
-     */
+    /** Check the [PUBSPEC_YAML] within [workingDir] if the project contains the Flutter SDK. */
     private fun containsFlutterSdk(workingDir: File): Boolean {
         val dependencies = parsePubspec(workingDir / PUBSPEC_YAML).dependencies ?: return false
         return dependencies.values.filterIsInstance<SdkDependency>().any { it.sdk == "flutter" }
@@ -842,9 +834,7 @@ private fun commandFlutter(flutterAbsolutePath: File?): String =
 private val PackageInfo.isProject: Boolean
     get() = source == "path" && description.url == null
 
-/**
- * Extract information about package authors from the given [pubspec].
- */
+/** Extract information about package authors from the given [pubspec]. */
 private fun parseAuthors(pubspec: Pubspec): Set<String> =
     (pubspec.authors + pubspec.author).flatMap { parseAuthorString(it) }.mapNotNullTo(mutableSetOf()) { it.name }
 

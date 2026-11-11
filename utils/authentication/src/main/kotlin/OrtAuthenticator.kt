@@ -35,9 +35,7 @@ open class OrtAuthenticator(
     private val original: Authenticator? = null
 ) : Authenticator() {
     companion object {
-        /**
-         * Install this authenticator as the global default.
-         */
+        /** Install this authenticator as the global default. */
         @Synchronized
         fun install(): OrtAuthenticator {
             val current = getDefault()
@@ -51,9 +49,7 @@ open class OrtAuthenticator(
             }
         }
 
-        /**
-         * Uninstall this authenticator, restoring the previous authenticator as the global default.
-         */
+        /** Uninstall this authenticator, restoring the previous authenticator as the global default. */
         @Synchronized
         fun uninstall(): Authenticator? {
             val current = getDefault()

@@ -40,9 +40,7 @@ fun TextLocation.prependedPath(prefix: String): String = path.prependPath(prefix
 fun TextLocation.prependPath(prefix: String): TextLocation =
     if (prefix.isEmpty()) this else copy(path = path.prependPath(prefix))
 
-/**
- * Return the VCS path if this is a [RepositoryProvenance] or else an empty string.
- */
+/** Return the VCS path if this is a [RepositoryProvenance] or else an empty string. */
 val Provenance?.vcsPath: String
     get() = (this as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
 
@@ -63,9 +61,7 @@ fun ProvenanceResolutionResult.getKnownProvenancesWithoutVcsPath(): Map<String, 
         }
     }
 
-/**
- * Return a copy of this [RepositoryProvenance] with an empty VCS path.
- */
+/** Return a copy of this [RepositoryProvenance] with an empty VCS path. */
 fun RepositoryProvenance.clearVcsPath() = copy(vcsInfo = vcsInfo.copy(path = ""))
 
 /**
@@ -98,9 +94,7 @@ internal fun List<SourceCodeOrigin>.requireNoDuplicates() {
     }
 }
 
-/**
- * Return true if this [Identifier] matches the given [other] identifier, disregarding the version.
- */
+/** Return true if this [Identifier] matches the given [other] identifier, disregarding the version. */
 internal fun Identifier.matchesDisregardingVersion(other: Identifier) =
     type.equals(other.type, ignoreCase = true)
         && namespace == other.namespace

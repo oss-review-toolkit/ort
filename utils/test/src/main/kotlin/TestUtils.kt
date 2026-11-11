@@ -51,9 +51,7 @@ private val ENV_TOOL_REGEX = Regex("(\\s{4}tool_versions:)\\n(?:\\s{6}.+)+")
 private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 
-/**
- * Create an [AdvisorRun] with the given [results].
- */
+/** Create an [AdvisorRun] with the given [results]. */
 fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>): AdvisorRun =
     AdvisorRun(
         startTime = Instant.now(),
@@ -63,9 +61,7 @@ fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>): Advisor
         results = results.toMap()
     )
 
-/**
- * Return the absolute file for the functional test assets at the given [path].
- */
+/** Return the absolute file for the functional test assets at the given [path]. */
 fun getAssetFile(path: String): File = File("src/funTest/assets", path).absoluteFile
 
 /**
@@ -133,9 +129,7 @@ fun patchActualResult(
         .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 }
 
-/**
- * Create a [ScannerRun] with the given [pkgScanResults].
- */
+/** Create a [ScannerRun] with the given [pkgScanResults]. */
 fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): ScannerRun {
     val pkgScanResultsWithKnownProvenance = pkgScanResults.associate { (id, scanResultsForId) ->
         id to scanResultsForId.map { scanResult ->

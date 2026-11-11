@@ -69,9 +69,7 @@ class Advisor(
         return ortResult.copy(advisor = advise(packages))
     }
 
-    /**
-     * Query the [advice providers][providerFactories] for the provided [packages].
-     */
+    /** Query the [advice providers][providerFactories] for the provided [packages]. */
     suspend fun advise(packages: Set<Package>): AdvisorRun =
         withContext(Dispatchers.IO) {
             val startTime = Instant.now()

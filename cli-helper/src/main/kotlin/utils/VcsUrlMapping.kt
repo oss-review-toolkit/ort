@@ -27,14 +27,10 @@ import java.util.SortedMap
  * mirror.
  */
 internal data class VcsUrlMapping(
-    /**
-     * Map the hostname of a VCS mirror to the hostname of the original VCS.
-     */
+    /** Map the hostname of a VCS mirror to the hostname of the original VCS. */
     val hostnames: SortedMap<String, String> = sortedMapOf()
 ) {
-    /**
-     * Applies the mapping defined by this [VcsUrlMapping].
-     */
+    /** Applies the mapping defined by this [VcsUrlMapping]. */
     fun map(vcsUrl: String): String {
         val uri = URI(vcsUrl)
 

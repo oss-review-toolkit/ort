@@ -24,13 +24,9 @@ package org.ossreviewtoolkit.model
  * original metadata of the package was modified by applying [PackageCuration]s.
  */
 data class CuratedPackage(
-    /**
-     * The curated package after applying the [curations].
-     */
+    /** The curated package after applying the [curations]. */
     val metadata: Package,
 
-    /**
-     * The curations in the order they were applied.
-     */
+    /** The curations in the order they were applied. */
     val curations: List<PackageCurationData> = emptyList()
 )

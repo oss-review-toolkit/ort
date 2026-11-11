@@ -23,18 +23,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 import org.ossreviewtoolkit.model.utils.isMatchedBy
 
-/**
- * This class assigns a [PackageCurationData] object to a [Package] identified by the [id].
- */
+/** This class assigns a [PackageCurationData] object to a [Package] identified by the [id]. */
 data class PackageCuration(
-    /**
-     * The identifier of the package.
-     */
+    /** The identifier of the package. */
     val id: Identifier,
 
-    /**
-     * The curation data for the package.
-     */
+    /** The curation data for the package. */
     @JsonProperty("curations")
     val data: PackageCurationData
 ) {

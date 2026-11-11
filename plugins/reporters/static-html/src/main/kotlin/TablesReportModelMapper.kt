@@ -32,9 +32,7 @@ import org.ossreviewtoolkit.plugins.reporters.statichtml.ProjectTable.Row
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 
-/**
- * A mapper which converts an [OrtResult] to a [TablesReport].
- */
+/** A mapper which converts an [OrtResult] to a [TablesReport]. */
 internal object TablesReportModelMapper {
     fun map(input: ReporterInput): TablesReport {
         val labels = input.ortResult.labels.mapKeys { it.key.substringAfter(".") }

@@ -106,9 +106,7 @@ data class Credit(
     }
 }
 
-/**
- * Defined package ecosystem values, see https://ossf.github.io/osv-schema/#affectedpackage-field.
- */
+/** Defined package ecosystem values, see https://ossf.github.io/osv-schema/#affectedpackage-field. */
 object Ecosystem {
     const val ALMA_LINUX = "AlmaLinux"
     const val ALPINE = "Alpine"

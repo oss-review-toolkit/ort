@@ -25,9 +25,7 @@ import java.nio.file.PathMatcher
 
 import org.apache.logging.log4j.kotlin.logger
 
-/**
- * A class to detect the package managers used for the give [definitionFiles].
- */
+/** A class to detect the package managers used for the give [definitionFiles]. */
 internal class NodePackageManagerDetection(private val definitionFiles: Collection<File>) {
     /**
      * A map of project directories to the set of package managers that are most likely responsible for the project. If
@@ -64,9 +62,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
             patterns.any { it.matches(projectDir.toPath()) }
         }.keys
 
-    /**
-     * Return whether the given [manager] is applicable for then given [definitionFile], or return null if unknown.
-     */
+    /** Return whether the given [manager] is applicable for then given [definitionFile], or return null if unknown. */
     fun isApplicable(manager: NodePackageManagerType, definitionFile: File): Boolean? {
         val projectDir = definitionFile.parentFile
 

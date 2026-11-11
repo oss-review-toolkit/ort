@@ -85,9 +85,7 @@ internal fun List<ScopeExclude>.minimize(projectScopes: Set<String>): List<Scope
     return greedySetCover(scopeExcludes).toList()
 }
 
-/**
- * Download the sources corresponding to the given [Identifier][id] and [source code origin][sourceCodeOrigin].
- */
+/** Download the sources corresponding to the given [Identifier][id] and [source code origin][sourceCodeOrigin]. */
 internal fun OrtResult.downloadSources(id: Identifier, sourceCodeOrigin: SourceCodeOrigin): File {
     val config = DownloaderConfiguration(sourceCodeOrigins = listOf(sourceCodeOrigin))
     val tempDir = createTempDirectory(Paths.get("."), ORTH_NAME).toFile()
@@ -218,15 +216,11 @@ internal fun OrtResult.getViolatedRulesByLicense(
         .groupBy { it.license!! }
         .mapValues { (_, ruleViolations) -> ruleViolations.map { it.rule } }
 
-/**
- * Return the [Provenance] of the first scan result matching the given [id] or null if there is no match.
- */
+/** Return the [Provenance] of the first scan result matching the given [id] or null if there is no match. */
 internal fun OrtResult.getScannedProvenance(id: Identifier): KnownProvenance? =
     getScanResultsForId(id).firstNotNullOfOrNull { it.provenance as? KnownProvenance }
 
-/**
- * Return the [SourceCodeOrigin] for this provenance.
- */
+/** Return the [SourceCodeOrigin] for this provenance. */
 internal fun KnownProvenance?.getSourceCodeOrigin(): SourceCodeOrigin? =
     when (this) {
         is ArtifactProvenance -> SourceCodeOrigin.ARTIFACT
@@ -234,9 +228,7 @@ internal fun KnownProvenance?.getSourceCodeOrigin(): SourceCodeOrigin? =
         else -> null
     }
 
-/**
- * Return all path excludes from this [OrtResult] represented as [RepositoryPathExcludes].
- */
+/** Return all path excludes from this [OrtResult] represented as [RepositoryPathExcludes]. */
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     fun isDefinitionsFile(pathExclude: PathExclude) =
         PackageManagerFactory.ALL.values.any {
@@ -250,9 +242,7 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     return getPathExcludesByRepository(pathExcludes, repository.nestedRepositories)
 }
 
-/**
- * Wrap this string on word boundaries with line breaks at the given [column].
- */
+/** Wrap this string on word boundaries with line breaks at the given [column]. */
 internal fun String.wrapAt(column: Int): String =
     buildString {
         var text = this@wrapAt
@@ -283,57 +273,41 @@ internal fun OrtResult.replaceConfig(repositoryConfigurationFile: File?): OrtRes
         replaceConfig(it.readValue())
     } ?: this
 
-/**
- * Return a copy with sorting applied to all entry types which are to be sorted.
- */
+/** Return a copy with sorting applied to all entry types which are to be sorted. */
 internal fun PackageConfiguration.sortEntries(): PackageConfiguration =
     copy(
         pathExcludes = pathExcludes.sortPathExcludes(),
         licenseFindingCurations = licenseFindingCurations.sortLicenseFindingCurations()
     )
 
-/**
- * Return a copy with the [IssueResolution]s replaced by the given [issueResolutions].
- */
+/** Return a copy with the [IssueResolution]s replaced by the given [issueResolutions]. */
 internal fun RepositoryConfiguration.replaceIssueResolutions(
     issueResolutions: List<IssueResolution>
 ): RepositoryConfiguration = copy(resolutions = resolutions.copy(issues = issueResolutions))
 
-/**
- * Return a copy with the [LicenseFindingCuration]s replaced by the given scope excludes.
- */
+/** Return a copy with the [LicenseFindingCuration]s replaced by the given scope excludes. */
 internal fun RepositoryConfiguration.replaceLicenseFindingCurations(
     curations: List<LicenseFindingCuration>
 ): RepositoryConfiguration = copy(curations = this.curations.copy(licenseFindings = curations))
 
-/**
- * Return a copy with the [PathExclude]s replaced by the given scope excludes.
- */
+/** Return a copy with the [PathExclude]s replaced by the given scope excludes. */
 internal fun RepositoryConfiguration.replacePathExcludes(pathExcludes: List<PathExclude>): RepositoryConfiguration =
     copy(excludes = excludes.copy(paths = pathExcludes))
 
-/**
- * Return a copy with the [ScopeExclude]s replaced by the given [scopeExcludes].
- */
+/** Return a copy with the [ScopeExclude]s replaced by the given [scopeExcludes]. */
 internal fun RepositoryConfiguration.replaceScopeExcludes(scopeExcludes: List<ScopeExclude>): RepositoryConfiguration =
     copy(excludes = excludes.copy(scopes = scopeExcludes))
 
-/**
- * Return a copy with the [RuleViolationResolution]s replaced by the given [ruleViolations].
- */
+/** Return a copy with the [RuleViolationResolution]s replaced by the given [ruleViolations]. */
 internal fun RepositoryConfiguration.replaceRuleViolationResolutions(
     ruleViolations: List<RuleViolationResolution>
 ): RepositoryConfiguration = copy(resolutions = resolutions.copy(ruleViolations = ruleViolations))
 
-/**
- * Return a copy with sorting applied to all entry types which are to be sorted.
- */
+/** Return a copy with sorting applied to all entry types which are to be sorted. */
 internal fun RepositoryConfiguration.sortEntries(): RepositoryConfiguration =
     sortLicenseFindingCurations().sortPathExcludes().sortScopeExcludes()
 
-/**
- * Return a copy with the [LicenseFindingCuration]s sorted.
- */
+/** Return a copy with the [LicenseFindingCuration]s sorted. */
 internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryConfiguration =
     copy(
         curations = curations.copy(
@@ -341,9 +315,7 @@ internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryCo
         )
     )
 
-/**
- * Return a copy with the [PathExclude]s sorted.
- */
+/** Return a copy with the [PathExclude]s sorted. */
 internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration =
     copy(
         excludes = excludes.copy(
@@ -351,9 +323,7 @@ internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration
         )
     )
 
-/**
- * Return a copy with the [ScopeExclude]s sorted.
- */
+/** Return a copy with the [ScopeExclude]s sorted. */
 internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguration =
     copy(
         excludes = excludes.copy(
@@ -363,9 +333,7 @@ internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguratio
         )
     )
 
-/**
- * Serialize a [RepositoryConfiguration] to the given [targetFile].
- */
+/** Serialize a [RepositoryConfiguration] to the given [targetFile]. */
 internal fun RepositoryConfiguration.write(targetFile: File) {
     targetFile.writeValue(this)
 }
@@ -410,9 +378,7 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
     }
 }
 
-/**
- * Serialize these [RepositoryLicenseFindingCurations] to the given [targetFile].
- */
+/** Serialize these [RepositoryLicenseFindingCurations] to the given [targetFile]. */
 @JvmName("writeRepositoryLicenseFindingCurations")
 internal fun RepositoryLicenseFindingCurations.write(targetFile: File) {
     targetFile.writeValue(
@@ -458,9 +424,7 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
     }
 }
 
-/**
- * Serialize these [RepositoryPathExcludes] to the given [targetFile].
- */
+/** Serialize these [RepositoryPathExcludes] to the given [targetFile]. */
 @JvmName("writeRepositoryPathExcludes")
 internal fun RepositoryPathExcludes.write(targetFile: File) {
     targetFile.writeValue(
@@ -470,9 +434,7 @@ internal fun RepositoryPathExcludes.write(targetFile: File) {
     )
 }
 
-/**
- * Apply the [vcsUrlMapping] to this [RepositoryPathExcludes].
- */
+/** Apply the [vcsUrlMapping] to this [RepositoryPathExcludes]. */
 internal fun RepositoryPathExcludes.mapPathExcludesVcsUrls(vcsUrlMapping: VcsUrlMapping): RepositoryPathExcludes {
     val result = mutableMapOf<String, MutableList<PathExclude>>()
 
@@ -483,9 +445,7 @@ internal fun RepositoryPathExcludes.mapPathExcludesVcsUrls(vcsUrlMapping: VcsUrl
     return result.mapValues { (_, pathExcludes) -> pathExcludes.distinct() }
 }
 
-/**
- * Apply the [vcsUrlMapping] to this [RepositoryLicenseFindingCurations].
- */
+/** Apply the [vcsUrlMapping] to this [RepositoryLicenseFindingCurations]. */
 internal fun RepositoryLicenseFindingCurations.mapLicenseFindingCurationsVcsUrls(
     vcsUrlMapping: VcsUrlMapping
 ): RepositoryLicenseFindingCurations {
@@ -498,9 +458,7 @@ internal fun RepositoryLicenseFindingCurations.mapLicenseFindingCurationsVcsUrls
     return result.mapValues { (_, pathExcludes) -> pathExcludes.distinct() }
 }
 
-/**
- * Merge the given [IssueResolution]s replacing entries with equal [IssueResolution.message].
- */
+/** Merge the given [IssueResolution]s replacing entries with equal [IssueResolution.message]. */
 internal fun Collection<IssueResolution>.mergeIssueResolutions(
     other: Collection<IssueResolution>
 ): List<IssueResolution> {
@@ -533,9 +491,7 @@ internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
     return result.values.toList()
 }
 
-/**
- * Return a copy with the [LicenseFindingCuration]s sorted.
- */
+/** Return a copy with the [LicenseFindingCuration]s sorted. */
 internal fun Collection<LicenseFindingCuration>.sortLicenseFindingCurations(): List<LicenseFindingCuration> =
     sortedBy { curation ->
         curation.path.removePrefix("*").removePrefix("*")
@@ -592,15 +548,11 @@ internal fun Collection<PathInclude>.mergePathIncludes(
     return result.values.toList()
 }
 
-/**
- * Return a copy with the [PathExclude]s sorted.
- */
+/** Return a copy with the [PathExclude]s sorted. */
 internal fun Collection<PathExclude>.sortPathExcludes(): List<PathExclude> =
     sortedBy { it.pattern.removePrefix("*").removePrefix("*") }
 
-/**
- * Merge the given [ScopeExclude]s replacing entries with equal [ScopeExclude.pattern].
- */
+/** Merge the given [ScopeExclude]s replacing entries with equal [ScopeExclude.pattern]. */
 internal fun Collection<ScopeExclude>.mergeScopeExcludes(other: Collection<ScopeExclude>): List<ScopeExclude> {
     val result = mutableMapOf<String, ScopeExclude>()
 
@@ -610,9 +562,7 @@ internal fun Collection<ScopeExclude>.mergeScopeExcludes(other: Collection<Scope
     return result.values.toList()
 }
 
-/**
- * Merge the given [RuleViolationResolution]s replacing entries with equal [RuleViolationResolution.message].
- */
+/** Merge the given [RuleViolationResolution]s replacing entries with equal [RuleViolationResolution.message]. */
 internal fun Collection<RuleViolationResolution>.mergeRuleViolationResolutions(
     other: Collection<RuleViolationResolution>
 ): List<RuleViolationResolution> {
@@ -624,9 +574,7 @@ internal fun Collection<RuleViolationResolution>.mergeRuleViolationResolutions(
     return result.values.toList()
 }
 
-/**
- * Merge the given [VulnerabilityResolution]s replacing entries with equal [VulnerabilityResolution.id].
- */
+/** Merge the given [VulnerabilityResolution]s replacing entries with equal [VulnerabilityResolution.id]. */
 internal fun Collection<VulnerabilityResolution>.mergeVulnerabilityResolutions(
     other: Collection<VulnerabilityResolution>
 ): List<VulnerabilityResolution> {
@@ -638,9 +586,7 @@ internal fun Collection<VulnerabilityResolution>.mergeVulnerabilityResolutions(
     return result.values.toList()
 }
 
-/**
- * Merge the given [RepositoryConfiguration] replacing entries with equal matchers.
- */
+/** Merge the given [RepositoryConfiguration] replacing entries with equal matchers. */
 internal fun RepositoryConfiguration.merge(other: RepositoryConfiguration): RepositoryConfiguration =
     RepositoryConfiguration(
         includes = Includes(
@@ -662,16 +608,12 @@ internal fun RepositoryConfiguration.merge(other: RepositoryConfiguration): Repo
         )
     )
 
-/**
- * Serialize a [PackageConfiguration] to the given [targetFile].
- */
+/** Serialize a [PackageConfiguration] to the given [targetFile]. */
 internal fun PackageConfiguration.write(targetFile: File) {
     targetFile.writeValue(this)
 }
 
-/**
- * Return a copy of this [PackageCuration] with the comment formamtted.
- */
+/** Return a copy of this [PackageCuration] with the comment formamtted. */
 internal fun PackageCuration.formatComment(): PackageCuration {
     val comment = data.comment ?: return this
     val wrappedComment = comment.wrapAt(COMMENT_WRAP_COLUMN)
@@ -684,9 +626,7 @@ internal fun PackageCuration.formatComment(): PackageCuration {
 // Wrap at column 120 minus 6 spaces of indentation.
 private const val COMMENT_WRAP_COLUMN = 120 - 6
 
-/**
- * Serialize [PackageCuration] to the given [targetFile] as YAML.
- */
+/** Serialize [PackageCuration] to the given [targetFile] as YAML. */
 internal fun Collection<PackageCuration>.writeAsYaml(targetFile: File) {
     fun createBlockYamlMapper(): ObjectMapper =
         yamlMapper.copy()
@@ -703,9 +643,7 @@ internal fun Collection<PackageCuration>.writeAsYaml(targetFile: File) {
     targetFile.writeText(yaml)
 }
 
-/**
- * Return the scan result matching the given package configuration if any or null otherwise.
- */
+/** Return the scan result matching the given package configuration if any or null otherwise. */
 internal fun OrtResult.getScanResultFor(packageConfiguration: PackageConfiguration): ScanResult? =
     getScanResultsForId(packageConfiguration.id).find { scanResult ->
         packageConfiguration.matches(packageConfiguration.id, scanResult.provenance)
@@ -731,9 +669,7 @@ internal fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
     return result
 }
 
-/**
- * Return the path of the repository of this [Project] relative to the analyzer root.
- */
+/** Return the path of the repository of this [Project] relative to the analyzer root. */
 internal fun Project.getRepositoryPath(ortResult: OrtResult): String {
     val projectPath = ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(this).substringBeforeLast("/")
     return projectPath.removeSuffix("/${vcsProcessed.path}")

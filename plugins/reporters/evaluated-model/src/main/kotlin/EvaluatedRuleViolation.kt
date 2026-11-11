@@ -28,9 +28,7 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 
-/**
- * The evaluated form of a [RuleViolation] used by the [EvaluatedModel].
- */
+/** The evaluated form of a [RuleViolation] used by the [EvaluatedModel]. */
 data class EvaluatedRuleViolation(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val rule: String,

@@ -34,14 +34,10 @@ private const val TABLE_NAME = "provenance_file_lists"
 private const val FILENAME = "file_list"
 
 data class FileListStorageConfiguration(
-    /**
-     * Configuration of the [FileStorage] used for storing the file lists.
-     */
+    /** Configuration of the [FileStorage] used for storing the file lists. */
     val fileStorage: FileStorageConfiguration? = null,
 
-    /**
-     * Configuration of the [PostgresProvenanceFileStorage] used for storing the file lists.
-     */
+    /** Configuration of the [PostgresProvenanceFileStorage] used for storing the file lists. */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
     init {

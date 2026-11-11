@@ -19,22 +19,14 @@
 
 package org.ossreviewtoolkit.model.config.snippet
 
-/**
- * The reason for which the snippet choice has been made.
- */
+/** The reason for which the snippet choice has been made. */
 enum class SnippetChoiceReason {
-    /**
-     * No relevant finding has been found for the corresponding source file. All snippets will be ignored.
-     */
+    /** No relevant finding has been found for the corresponding source file. All snippets will be ignored. */
     NO_RELEVANT_FINDING,
 
-    /**
-     * One snippet finding is relevant for the corresponding source file. All other snippets will be ignored.
-     */
+    /** One snippet finding is relevant for the corresponding source file. All other snippets will be ignored. */
     ORIGINAL_FINDING,
 
-    /**
-     * A fallback reason for the [SnippetChoiceReason] when none of the other reasons apply.
-     */
+    /** A fallback reason for the [SnippetChoiceReason] when none of the other reasons apply. */
     OTHER
 }

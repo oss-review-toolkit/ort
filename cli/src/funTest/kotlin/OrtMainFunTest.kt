@@ -48,9 +48,7 @@ import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxDeclaredLicenseMapper
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxSimpleLicenseMapper
 
-/**
- * A test for the main entry point of the application.
- */
+/** A test for the main entry point of the application. */
 class OrtMainFunTest : StringSpec() {
     private lateinit var configFile: File
     private lateinit var outputDir: File

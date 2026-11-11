@@ -61,9 +61,7 @@ internal object PoetryCommand : CommandLineTool {
     override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
 }
 
-/**
- * The [Poetry](https://python-poetry.org/) package manager for Python.
- */
+/** The [Poetry](https://python-poetry.org/) package manager for Python. */
 @OrtPlugin(
     displayName = "Poetry",
     summary = "The Poetry package manager for Python.",
@@ -73,9 +71,7 @@ class Poetry(
     override val descriptor: PluginDescriptor = PoetryFactory.descriptor, private val config: PipConfig
 ) : PackageManager(PROJECT_TYPE) {
     companion object {
-        /**
-         * The name of the build system requirements and information file used by modern Python packages.
-         */
+        /** The name of the build system requirements and information file used by modern Python packages. */
         internal const val PYPROJECT_FILENAME = "pyproject.toml"
     }
 

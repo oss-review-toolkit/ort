@@ -21,13 +21,9 @@ package org.ossreviewtoolkit.model.licenses
 
 import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 
-/**
- * A resolved copyright.
- */
+/** A resolved copyright. */
 data class ResolvedCopyright(
-    /**
-     * The resolved copyright statement.
-     */
+    /** The resolved copyright statement. */
     val statement: String,
 
     /**

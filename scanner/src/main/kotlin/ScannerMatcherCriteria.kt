@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.ScannerDetails
 
-/**
- * A holder class for the [ScannerMatcher] criteria. Only non-null properties are taken into account for matching.
- */
+/** A holder class for the [ScannerMatcher] criteria. Only non-null properties are taken into account for matching. */
 interface ScannerMatcherCriteria {
     /**
      * Criterion to match the scanner name. This string is interpreted as a regular expression. In the most basic
@@ -45,8 +43,6 @@ interface ScannerMatcherCriteria {
      */
     val maxVersion: String?
 
-    /**
-     * Criterion to match the [configuration][ScannerDetails.configuration] of the scanner.
-     */
+    /** Criterion to match the [configuration][ScannerDetails.configuration] of the scanner. */
     val configuration: String?
 }

@@ -73,9 +73,7 @@ internal fun SpdxPackage.extractScopeFromExternalReferences(): String? =
     externalRefs.filter { it.referenceType == SpdxExternalReference.Type.Purl }
         .firstNotNullOfOrNull { it.referenceLocator.toPackageUrl()?.qualifiers?.get("scope") }
 
-/**
- * Return the concluded license to be used in ORT's data model, which uses null instead of NOASSERTION.
- */
+/** Return the concluded license to be used in ORT's data model, which uses null instead of NOASSERTION. */
 internal fun SpdxPackage.getConcludedLicense(): SpdxExpression? =
     licenseConcluded.takeUnless { it == SpdxConstants.NOASSERTION }?.toSpdx()
 
@@ -137,16 +135,12 @@ internal fun SpdxPackage.getVcsInfo(): VcsInfo? {
 internal fun SpdxPackage.locateExternalReference(type: SpdxExternalReference.Type): String? =
     externalRefs.find { it.referenceType == type }?.referenceLocator
 
-/**
- * Return a CPE identifier for this package if present. Search for all CPE versions.
- */
+/** Return a CPE identifier for this package if present. Search for all CPE versions. */
 internal fun SpdxPackage.locateCpe(): String? =
     locateExternalReference(SpdxExternalReference.Type.Cpe23Type)
         ?: locateExternalReference(SpdxExternalReference.Type.Cpe22Type)
 
-/**
- * Create an [Identifier] out of this [SpdxPackage].
- */
+/** Create an [Identifier] out of this [SpdxPackage]. */
 internal fun SpdxPackage.toIdentifier(type: String) =
     Identifier(
         type = type,
@@ -156,9 +150,7 @@ internal fun SpdxPackage.toIdentifier(type: String) =
         version = versionInfo.sanitize()
     )
 
-/**
- * Create a [Package] out of this [SpdxPackage].
- */
+/** Create a [Package] out of this [SpdxPackage]. */
 internal fun SpdxPackage.toPackage(
     definitionFile: File?,
     doc: SpdxResolvedDocument,

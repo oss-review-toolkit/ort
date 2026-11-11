@@ -34,44 +34,28 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 internal data class TablesReport(
-    /**
-     * The [VcsInfo] for the scanned project.
-     */
+    /** The [VcsInfo] for the scanned project. */
     val vcsInfo: VcsInfo,
 
-    /**
-     * The [RepositoryConfiguration] of the scanned project.
-     */
+    /** The [RepositoryConfiguration] of the scanned project. */
     val config: RepositoryConfiguration,
 
-    /**
-     * A list containing all evaluator rule violations. `null` if no evaluator result is available.
-     */
+    /** A list containing all evaluator rule violations. `null` if no evaluator result is available. */
     val ruleViolations: List<TablesReportViolation>?,
 
-    /**
-     * An [IssueTable] containing all analyzer issues.
-     */
+    /** An [IssueTable] containing all analyzer issues. */
     val analyzerIssues: IssueTable,
 
-    /**
-     * An [IssueTable] containing all scanner issues.
-     */
+    /** An [IssueTable] containing all scanner issues. */
     val scannerIssues: IssueTable,
 
-    /**
-     * An [IssueTable] containing all advisor issues.
-     */
+    /** An [IssueTable] containing all advisor issues. */
     val advisorIssues: IssueTable,
 
-    /**
-     * The [ProjectTable]s containing the dependencies for each [Project].
-     */
+    /** The [ProjectTable]s containing the dependencies for each [Project]. */
     val projects: List<ProjectTable>,
 
-    /**
-     * The labels from [OrtResult.labels].
-     */
+    /** The labels from [OrtResult.labels]. */
     val labels: Map<String, String>
 )
 
@@ -90,32 +74,22 @@ internal data class IssueTable(
     }
 
     data class Row(
-        /**
-         * The issue of this row represents of the given [type][type].
-         */
+        /** The issue of this row represents of the given [type][type]. */
         val issue: TablesReportIssue,
 
-        /**
-         * The identifier of the package the issue corresponds to, if any.
-         */
+        /** The identifier of the package the issue corresponds to, if any. */
         val id: Identifier?
     )
 }
 
 internal data class ProjectTable(
-    /**
-     * The identifier of the project.
-     */
+    /** The identifier of the project. */
     val id: Identifier,
 
-    /**
-     * The (processed) VCS info of the project.
-     */
+    /** The (processed) VCS info of the project. */
     val vcs: VcsInfo,
 
-    /**
-     * The dependencies of this project.
-     */
+    /** The dependencies of this project. */
     val rows: List<Row>,
 
     /**
@@ -124,47 +98,31 @@ internal data class ProjectTable(
      */
     val fullDefinitionFilePath: String,
 
-    /**
-     * Information about if and why the project is excluded by [PathExclude]s.
-     */
+    /** Information about if and why the project is excluded by [PathExclude]s. */
     val pathExcludes: List<PathExclude>
 ) {
     fun isExcluded() = pathExcludes.isNotEmpty()
 
     data class Row(
-        /**
-         * The identifier of the package.
-         */
+        /** The identifier of the package. */
         val id: Identifier,
 
-        /**
-         * The remote artifact where the source package can be downloaded.
-         */
+        /** The remote artifact where the source package can be downloaded. */
         val sourceArtifact: RemoteArtifact,
 
-        /**
-         * The VCS information of the package.
-         */
+        /** The VCS information of the package. */
         val vcsInfo: VcsInfo,
 
-        /**
-         * The scopes the package is used in.
-         */
+        /** The scopes the package is used in. */
         val scopes: List<Scope>,
 
-        /**
-         * The concluded license of the package.
-         */
+        /** The concluded license of the package. */
         val concludedLicense: SpdxExpression?,
 
-        /**
-         * The licenses declared by the package.
-         */
+        /** The licenses declared by the package. */
         val declaredLicenses: List<ResolvedLicense>,
 
-        /**
-         * The detected licenses aggregated from all [ScanResult]s for this package.
-         */
+        /** The detected licenses aggregated from all [ScanResult]s for this package. */
         val detectedLicenses: List<ResolvedLicense>,
 
         /**
@@ -173,36 +131,24 @@ internal data class ProjectTable(
          */
         val effectiveLicense: SpdxExpression?,
 
-        /**
-         * All analyzer issues related to this package.
-         */
+        /** All analyzer issues related to this package. */
         val openIssues: List<TablesReportIssue>,
 
-        /**
-         * All issues which are either resolved or excluded or both.
-         */
+        /** All issues which are either resolved or excluded or both. */
         val excludedOrResolvedIssues: List<TablesReportIssue>
     ) {
-        /**
-         * Return true if this [Row] is excluded by any [ScopeExclude]s
-         */
+        /** Return true if this [Row] is excluded by any [ScopeExclude]s */
         fun isExcluded(): Boolean = scopes.isNotEmpty() && scopes.all { it.isExcluded() }
     }
 
     data class Scope(
-        /**
-         * The name of the scope.
-         */
+        /** The name of the scope. */
         val name: String,
 
-        /**
-         * The excludes matching this scope.
-         */
+        /** The excludes matching this scope. */
         val excludes: List<ScopeExclude>
     ) {
-        /**
-         * Return true if this scope is matched by any [ScopeExclude]'s.
-         */
+        /** Return true if this scope is matched by any [ScopeExclude]'s. */
         fun isExcluded(): Boolean = excludes.isNotEmpty()
     }
 }

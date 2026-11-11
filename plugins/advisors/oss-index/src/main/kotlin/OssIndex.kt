@@ -47,9 +47,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
-/**
- * The number of packages to request from Sonatype OSS Index in one request.
- */
+/** The number of packages to request from Sonatype OSS Index in one request. */
 private const val BULK_REQUEST_SIZE = 128
 
 /**

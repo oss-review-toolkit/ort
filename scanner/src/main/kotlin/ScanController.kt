@@ -36,24 +36,16 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.utils.common.PATH_STRING_COMPARATOR
 
-/**
- * A controller for the data related to a run of the [Scanner].
- */
+/** A controller for the data related to a run of the [Scanner]. */
 @Suppress("TooManyFunctions")
 internal class ScanController(
-    /**
-     * The set of [Package]s to be scanned.
-     */
+    /** The set of [Package]s to be scanned. */
     val packages: Set<Package>,
 
-    /**
-     * The list of [ScannerWrapper]s used for scanning.
-     */
+    /** The list of [ScannerWrapper]s used for scanning. */
     val scanners: List<ScannerWrapper>,
 
-    /**
-     * The [ScannerConfiguration].
-     */
+    /** The [ScannerConfiguration]. */
     val config: ScannerConfiguration
 ) {
     /**
@@ -74,9 +66,7 @@ internal class ScanController(
      */
     private val issues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
-    /**
-     * A map of [KnownProvenance]s to their resolved [NestedProvenance]s.
-     */
+    /** A map of [KnownProvenance]s to their resolved [NestedProvenance]s. */
     private val nestedProvenances = mutableMapOf<KnownProvenance, NestedProvenance>()
 
     /**
@@ -91,9 +81,7 @@ internal class ScanController(
      */
     private val packageProvenancesWithoutVcsPath = mutableMapOf<Identifier, KnownProvenance>()
 
-    /**
-     * The [ScanResult]s for each [KnownProvenance] and [ScannerWrapper].
-     */
+    /** The [ScanResult]s for each [KnownProvenance] and [ScannerWrapper]. */
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
 
     /**
@@ -102,44 +90,32 @@ internal class ScanController(
      */
     private val scannedProvenances = mutableSetOf<Pair<Provenance, ScannerDetails>>()
 
-    /**
-     * The [FileList] for each [KnownProvenance].
-     */
+    /** The [FileList] for each [KnownProvenance]. */
     private val fileLists = mutableMapOf<KnownProvenance, FileList>()
 
-    /**
-     * Set the [issue] which failed package provenance resolution for the package denoted by [id].
-     */
+    /** Set the [issue] which failed package provenance resolution for the package denoted by [id]. */
     fun putPackageProvenanceResolutionIssue(id: Identifier, issue: Issue) {
         packageProvenanceResolutionIssues[id] = issue
     }
 
-    /**
-     * Set the [issue] which failed nested provenance resolution for the package denoted by [id].
-     */
+    /** Set the [issue] which failed nested provenance resolution for the package denoted by [id]. */
     fun putNestedProvenanceResolutionIssue(id: Identifier, issue: Issue) {
         nestedProvenanceResolutionIssues[id] = issue
     }
 
-    /**
-     * Set the [fileList] corresponding to [provenance], overwriting any existing value.
-     */
+    /** Set the [fileList] corresponding to [provenance], overwriting any existing value. */
     fun putFileList(provenance: KnownProvenance, fileList: FileList) {
         fileLists[provenance] = fileList
     }
 
-    /**
-     * Return all [FileList] by their corresponding [KnownProvenance].
-     */
+    /** Return all [FileList] by their corresponding [KnownProvenance]. */
     fun getAllFileLists(): Map<KnownProvenance, FileList> = fileLists
 
     fun addIssue(id: Identifier, issue: Issue) {
         issues.getOrPut(id) { mutableSetOf() } += issue
     }
 
-    /**
-     * Set the [provenance] for the package denoted by [id], overwriting any existing values.
-     */
+    /** Set the [provenance] for the package denoted by [id], overwriting any existing values. */
     fun putPackageProvenance(id: Identifier, provenance: KnownProvenance) {
         packageProvenances[id] = provenance
         packageProvenancesWithoutVcsPath[id] = when (provenance) {
@@ -205,15 +181,11 @@ internal class ScanController(
         return newResults
     }
 
-    /**
-     * Return all [KnownProvenance]s contained in [nestedProvenances].
-     */
+    /** Return all [KnownProvenance]s contained in [nestedProvenances]. */
     fun getAllProvenances(): Set<KnownProvenance> =
         nestedProvenances.values.flatMapTo(mutableSetOf()) { it.allProvenances }
 
-    /**
-     * Return all scan results.
-     */
+    /** Return all scan results. */
     fun getAllScanResults(): List<ScanResult> =
         scanResults.values.flatMap { scanResultsByProvenance -> scanResultsByProvenance.values.flatten() }
 
@@ -229,31 +201,21 @@ internal class ScanController(
             }
         }
 
-    /**
-     * Get all provenances for which no scan result for the provided [scanner] is available.
-     */
+    /** Get all provenances for which no scan result for the provided [scanner] is available. */
     private fun getMissingProvenanceScans(scanner: ScannerWrapper, nestedProvenance: NestedProvenance) =
         nestedProvenance.allProvenances.filter { hasScanResult(scanner, it) }
 
-    /**
-     * Return the nested provenance resolution issues associated with the given [id].
-     */
+    /** Return the nested provenance resolution issues associated with the given [id]. */
     fun getNestedProvenanceResolutionIssue(id: Identifier): Issue? = nestedProvenanceResolutionIssues[id]
 
-    /**
-     * Get issues that are not part of the scan summaries.
-     */
+    /** Get issues that are not part of the scan summaries. */
     fun getIssues(): Map<Identifier, Set<Issue>> = issues
 
-    /**
-     * Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available.
-     */
+    /** Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available. */
     fun getNestedProvenance(id: Identifier): NestedProvenance? =
         packageProvenancesWithoutVcsPath[id]?.let { nestedProvenances[it] }
 
-    /**
-     * Get all [NestedProvenance]s by [Package].
-     */
+    /** Get all [NestedProvenance]s by [Package]. */
     fun getNestedProvenancesByPackage(): Map<Package, NestedProvenance> =
         buildMap {
             packageProvenancesWithoutVcsPath.forEach { (id, _) ->
@@ -263,9 +225,7 @@ internal class ScanController(
             }
         }
 
-    /**
-     * Get the [NestedProvenanceScanResult] for the provided [id].
-     */
+    /** Get the [NestedProvenanceScanResult] for the provided [id]. */
     fun getNestedScanResult(id: Identifier): NestedProvenanceScanResult? =
         buildNestedProvenanceScanResult(packageProvenancesWithoutVcsPath.getValue(id), emptyList())
 
@@ -304,9 +264,7 @@ internal class ScanController(
         return packagesByProvenance.mapValues { it.value.toList() }
     }
 
-    /**
-     * Return all package [Identifier]s for the provided [provenance].
-     */
+    /** Return all package [Identifier]s for the provided [provenance]. */
     fun getPackagesForProvenanceWithoutVcsPath(provenance: KnownProvenance): Set<Identifier> =
         packageProvenancesWithoutVcsPath.filter { (_, packageProvenance) -> packageProvenance == provenance }.keys
 
@@ -314,51 +272,33 @@ internal class ScanController(
 
     fun getPackageProvenanceWithoutVcsPath(id: Identifier): KnownProvenance? = packageProvenancesWithoutVcsPath[id]
 
-    /**
-     * Return the package provenanceResolutionIssue associated with the given [id].
-     */
+    /** Return the package provenanceResolutionIssue associated with the given [id]. */
     fun getPackageProvenanceResolutionIssue(id: Identifier): Issue? = packageProvenanceResolutionIssues[id]
 
-    /**
-     * Return all [KnownProvenance]s for the [packages] with the VCS path removed.
-     */
+    /** Return all [KnownProvenance]s for the [packages] with the VCS path removed. */
     fun getPackageProvenancesWithoutVcsPath(): Set<KnownProvenance> = packageProvenancesWithoutVcsPath.values.toSet()
 
-    /**
-     * Return all [PackageScannerWrapper]s.
-     */
+    /** Return all [PackageScannerWrapper]s. */
     fun getPackageScanners(): List<PackageScannerWrapper> = scanners.filterIsInstance<PackageScannerWrapper>()
 
-    /**
-     * Return all [PathScannerWrapper]s.
-     */
+    /** Return all [PathScannerWrapper]s. */
     fun getPathScanners(): List<PathScannerWrapper> = scanners.filterIsInstance<PathScannerWrapper>()
 
-    /**
-     * Return all [ProvenanceScannerWrapper]s.
-     */
+    /** Return all [ProvenanceScannerWrapper]s. */
     fun getProvenanceScanners(): List<ProvenanceScannerWrapper> = scanners.filterIsInstance<ProvenanceScannerWrapper>()
 
-    /**
-     * Get all [ScanResult]s for the provided [provenance].
-     */
+    /** Get all [ScanResult]s for the provided [provenance]. */
     private fun getScanResults(provenance: KnownProvenance): List<ScanResult> =
         scanResults.values.flatMap { scanResultsByProvenance -> scanResultsByProvenance[provenance].orEmpty() }
 
-    /**
-     * Get all [ScanResult]s for the provided [scanner].
-     */
+    /** Get all [ScanResult]s for the provided [scanner]. */
     fun getScanResults(scanner: ScannerWrapper): Map<KnownProvenance, List<ScanResult>> = scanResults[scanner].orEmpty()
 
-    /**
-     * Return true if [ScanResult]s for the complete [NestedProvenance] of the package are available.
-     */
+    /** Return true if [ScanResult]s for the complete [NestedProvenance] of the package are available. */
     fun hasCompleteScanResult(scanner: ScannerWrapper, pkg: Package): Boolean =
         getNestedProvenance(pkg.id)?.allProvenances?.all { provenance -> hasScanResult(scanner, provenance) } == true
 
-    /**
-     * Return true if a [ScanResult] for the provided [scanner] and [provenance] is available.
-     */
+    /** Return true if a [ScanResult] for the provided [scanner] and [provenance] is available. */
     fun hasScanResult(scanner: ScannerWrapper, provenance: Provenance) =
         scanResults[scanner]?.get(provenance)?.isNotEmpty() == true
 

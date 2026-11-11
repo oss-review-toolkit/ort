@@ -177,16 +177,12 @@ class SpdxDocumentFileTest : WordSpec({
     }
 })
 
-/**
- * Prepare this mock [SpdxResolvedDocument] to return [pkg] when queried for the test package.
- */
+/** Prepare this mock [SpdxResolvedDocument] to return [pkg] when queried for the test package. */
 private fun SpdxResolvedDocument.mockPackage(pkg: SpdxPackage?) {
     every { getSpdxPackageForId(pkgForVcs.spdxId, any()) } returns pkg
 }
 
-/**
- * Prepare this mock [SpdxResolvedDocument] to return [file] when queried for the test definition file.
- */
+/** Prepare this mock [SpdxResolvedDocument] to return [file] when queried for the test definition file. */
 private fun SpdxResolvedDocument.mockDefinitionFile(file: File?) {
     every { getDefinitionFile(pkgForVcs.spdxId) } returns file
 }

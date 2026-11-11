@@ -48,9 +48,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
         return ServiceLoaderSpec(pluginSpec, generatedFactory)
     }
 
-    /**
-     * Generate a factory class for the [pluginSpec].
-     */
+    /** Generate a factory class for the [pluginSpec]. */
     private fun generateFactoryClass(pluginSpec: PluginSpec): TypeSpec {
         // Create the initializers for the plugin config object.
         val configFromMapInitializer = pluginSpec.configClass?.let {
@@ -129,9 +127,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
         return classSpec
     }
 
-    /**
-     * Generate the code block to initialize the config object from the [PluginConfig].
-     */
+    /** Generate the code block to initialize the config object from the [PluginConfig]. */
     @Suppress("CyclomaticComplexMethod")
     private fun getConfigFromMapInitializer(configType: TypeName, pluginOptions: List<PluginOption>) =
         CodeBlock.builder().apply {
@@ -246,9 +242,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             builder.build()
         }
 
-    /**
-     * Generate the code block to initialize the config object from function arguments.
-     */
+    /** Generate the code block to initialize the config object from function arguments. */
     private fun getConfigFromArgumentsInitializer(configType: TypeName, pluginOptions: List<PluginOption>) =
         CodeBlock.builder().apply {
             add("val configObject = %T(\n", configType)
@@ -260,9 +254,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             add(")\n\n")
         }.build()
 
-    /**
-     * Generate the code block to initialize the [PluginDescriptor] for the plugin.
-     */
+    /** Generate the code block to initialize the [PluginDescriptor] for the plugin. */
     private fun getDescriptorInitializer(descriptor: PluginDescriptor) =
         CodeBlock.builder().apply {
             add(

@@ -26,9 +26,7 @@ import com.squareup.kotlinpoet.TypeSpec
 
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
-/**
- * A specification for a plugin.
- */
+/** A specification for a plugin. */
 data class PluginSpec(
     val containingFile: KSFile?,
     val descriptor: PluginDescriptor,
@@ -38,9 +36,7 @@ data class PluginSpec(
     val factory: PluginFactorySpec
 )
 
-/**
- * A specification for a plugin configuration class.
- */
+/** A specification for a plugin configuration class. */
 data class PluginConfigClassSpec(
     val typeName: TypeName
 )
@@ -54,9 +50,7 @@ data class PluginFactorySpec(
     val qualifiedName: String
 )
 
-/**
- * A specification for a service loader, used to generate service loader files.
- */
+/** A specification for a service loader, used to generate service loader files. */
 data class ServiceLoaderSpec(
     val pluginSpec: PluginSpec,
     val factory: TypeSpec

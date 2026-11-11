@@ -33,15 +33,11 @@ import org.ossreviewtoolkit.utils.spdxexpression.isSpdxExpressionOrNotPresent
  * See https://spdx.github.io/spdx-spec/v2.3/package-information/.
  */
 data class SpdxPackage(
-    /**
-     * A unique identifier for this [SpdxPackage] within an SPDX document.
-     */
+    /** A unique identifier for this [SpdxPackage] within an SPDX document. */
     @JsonProperty("SPDXID")
     val spdxId: String,
 
-    /**
-     * The [SpdxAnnotation]s for the package.
-     */
+    /** The [SpdxAnnotation]s for the package. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val annotations: List<SpdxAnnotation> = emptyList(),
 
@@ -61,15 +57,11 @@ data class SpdxPackage(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val builtDate: Instant? = null,
 
-    /**
-     * Checksums of the package.
-     */
+    /** Checksums of the package. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val checksums: List<SpdxChecksum> = emptyList(),
 
-    /**
-     * Any general comments about the package.
-     */
+    /** Any general comments about the package. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = "",
 
@@ -79,9 +71,7 @@ data class SpdxPackage(
      */
     val copyrightText: String = SpdxConstants.NOASSERTION,
 
-    /**
-     * A more detailed description of the package as opposed to [summary], which may be an extract from the package.
-     */
+    /** A more detailed description of the package as opposed to [summary], which may be an extract from the package. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val description: String = "",
 
@@ -91,9 +81,7 @@ data class SpdxPackage(
      */
     val downloadLocation: String,
 
-    /**
-     * References to external sources of additional information.
-     */
+    /** References to external sources of additional information. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val externalRefs: List<SpdxExternalReference> = emptyList(),
 
@@ -103,15 +91,11 @@ data class SpdxPackage(
      */
     val filesAnalyzed: Boolean = true,
 
-    /**
-     * The Spdx references to the files belonging to the package in the format "SPDXRef-${id-string}".
-     */
+    /** The Spdx references to the files belonging to the package in the format "SPDXRef-${id-string}". */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val hasFiles: List<String> = emptyList(),
 
-    /**
-     * The homepage URL.
-     */
+    /** The homepage URL. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val homepage: String = "",
 
@@ -141,9 +125,7 @@ data class SpdxPackage(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val licenseInfoFromFiles: List<String> = emptyList(),
 
-    /**
-     * The name of the package.
-     */
+    /** The name of the package. */
     val name: String,
 
     /**
@@ -158,22 +140,16 @@ data class SpdxPackage(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val originator: String? = null,
 
-    /**
-     * The actual file name of the package, or path of the directory being treated as a package.
-     */
+    /** The actual file name of the package, or path of the directory being treated as a package. */
     @JsonProperty("packageFileName")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageFilename: String = "",
 
-    /**
-     * The [SpdxPackageVerificationCode] for the package.
-     */
+    /** The [SpdxPackageVerificationCode] for the package. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val packageVerificationCode: SpdxPackageVerificationCode? = null,
 
-    /**
-     * This field provides information about the primary purpose of the identified package.
-     */
+    /** This field provides information about the primary purpose of the identified package. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val primaryPackagePurpose: Purpose? = null,
 
@@ -184,15 +160,11 @@ data class SpdxPackage(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val releaseDate: Instant? = null,
 
-    /**
-     * Any relevant background information or additional comments about the origin of the package.
-     */
+    /** Any relevant background information or additional comments about the origin of the package. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val sourceInfo: String = "",
 
-    /**
-     * A short description of the package.
-     */
+    /** A short description of the package. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val summary: String = "",
 
@@ -213,9 +185,7 @@ data class SpdxPackage(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val validUntilDate: Instant? = null,
 
-    /**
-     * The version of the package.
-     */
+    /** The version of the package. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val versionInfo: String = ""
 ) {

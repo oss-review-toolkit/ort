@@ -42,9 +42,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
-/**
- * Return an [Identifier] for this [MavenProject] with the given [projectType].
- */
+/** Return an [Identifier] for this [MavenProject] with the given [projectType]. */
 internal fun MavenProject.identifier(projectType: String): Identifier =
     Identifier(
         type = projectType,
@@ -53,9 +51,7 @@ internal fun MavenProject.identifier(projectType: String): Identifier =
         version = version
     )
 
-/**
- * Return an internal ID string to uniquely identify this [MavenProject] during the currently ongoing analysis.
- */
+/** Return an internal ID string to uniquely identify this [MavenProject] during the currently ongoing analysis. */
 internal val MavenProject.internalId: String
     get() = "$groupId:$artifactId:$version"
 

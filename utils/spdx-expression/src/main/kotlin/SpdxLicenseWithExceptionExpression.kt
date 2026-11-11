@@ -23,9 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 
-/**
- * An SPDX expression that contains a [license] with an [exception].
- */
+/** An SPDX expression that contains a [license] with an [exception]. */
 class SpdxLicenseWithExceptionExpression(
     val license: SpdxSimpleExpression,
     val exception: String

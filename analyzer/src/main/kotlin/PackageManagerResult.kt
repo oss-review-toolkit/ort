@@ -34,9 +34,7 @@ import org.ossreviewtoolkit.model.utils.PackageSortedSetConverter
  * is shared between the single project results), they are stored here as well.
  */
 data class PackageManagerResult(
-    /**
-     * A map with the [ProjectAnalyzerResult]s created for the single definition files.
-     */
+    /** A map with the [ProjectAnalyzerResult]s created for the single definition files. */
     val projectResults: Map<File, List<ProjectAnalyzerResult>>,
 
     /**

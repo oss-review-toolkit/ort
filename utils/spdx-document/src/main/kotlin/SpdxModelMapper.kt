@@ -36,20 +36,14 @@ object SpdxModelMapper {
      * aliases (not including the dot).
      */
     enum class FileFormat(val mapper: ObjectMapper, val fileExtension: String, vararg aliases: String) {
-        /**
-         * Specifies the [JSON](http://www.json.org/) format.
-         */
+        /** Specifies the [JSON](http://www.json.org/) format. */
         JSON(jsonMapper, "json"),
 
-        /**
-         * Specifies the [YAML](http://yaml.org/) format.
-         */
+        /** Specifies the [YAML](http://yaml.org/) format. */
         YAML(yamlMapper, "yml", "yaml");
 
         companion object {
-            /**
-             * Return the [FileFormat] for the given [extension], or `null` if there is none.
-             */
+            /** Return the [FileFormat] for the given [extension], or `null` if there is none. */
             fun forExtension(extension: String): FileFormat =
                 extension.lowercase().let { lowerCaseExtension ->
                     FileFormat.entries.find {
@@ -59,15 +53,11 @@ object SpdxModelMapper {
                     )
                 }
 
-            /**
-             * Return the [FileFormat] for the given [file], or `null` if there is none.
-             */
+            /** Return the [FileFormat] for the given [file], or `null` if there is none. */
             fun forFile(file: File): FileFormat = forExtension(file.extension)
         }
 
-        /**
-         * The list of file extensions used by this file format.
-         */
+        /** The list of file extensions used by this file format. */
         val fileExtensions = listOf(fileExtension, *aliases)
     }
 

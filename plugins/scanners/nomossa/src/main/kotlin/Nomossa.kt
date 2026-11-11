@@ -102,9 +102,7 @@ class Nomossa(
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary =
         parseNomossaResult(result).toScanSummary(startTime, endTime)
 
-    /**
-     * Execute Nomossa with the configured arguments to scan the given [path].
-     */
+    /** Execute Nomossa with the configured arguments to scan the given [path]. */
     internal fun runNomossa(path: File): ProcessCapture {
         val options = buildList {
             addAll(commandLineOptions)

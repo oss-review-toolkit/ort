@@ -22,22 +22,14 @@ package org.ossreviewtoolkit.model.licenses
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.PathExclude
 
-/**
- * A resolved copyright finding.
- */
+/** A resolved copyright finding. */
 data class ResolvedCopyrightFinding(
-    /**
-     * The copyright statement.
-     */
+    /** The copyright statement. */
     val statement: String,
 
-    /**
-     * The location where this copyright was found.
-     */
+    /** The location where this copyright was found. */
     val location: TextLocation,
 
-    /**
-     * All [PathExclude]s matching this [location].
-     */
+    /** All [PathExclude]s matching this [location]. */
     val matchingPathExcludes: List<PathExclude>
 )

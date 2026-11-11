@@ -27,9 +27,7 @@ import kotlinx.serialization.json.decodeFromStream
  * https://www.osadl.org/Access-to-raw-data.oss-compliance-raw-data-access.0.html.
  */
 object CompatibilityMatrix {
-    /**
-     * A class to represent the information contained in a cell of the matrix, i.e. the result of a lookup.
-     */
+    /** A class to represent the information contained in a cell of the matrix, i.e. the result of a lookup. */
     data class Info(
         val compatibility: Compatibility,
         val explanation: String

@@ -274,9 +274,7 @@ private fun String.patchCycloneDxResult(): String =
         "$1deadbeef"
     )
 
-/**
- * Create an [OrtResult] based on the standard test data that contains the additional [project].
- */
+/** Create an [OrtResult] based on the standard test data that contains the additional [project]. */
 private fun createResultWithAdditionalProject(project: Project): OrtResult =
     ORT_RESULT_WITH_VULNERABILITIES.copy(
         analyzer = ORT_RESULT_WITH_VULNERABILITIES.analyzer?.copy(

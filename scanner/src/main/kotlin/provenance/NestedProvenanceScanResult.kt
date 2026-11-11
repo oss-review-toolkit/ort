@@ -26,18 +26,12 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.utils.mergeScanResultsByScanner
 
-/**
- * A class that contains all [ScanResult]s for a [NestedProvenance].
- */
+/** A class that contains all [ScanResult]s for a [NestedProvenance]. */
 data class NestedProvenanceScanResult(
-    /**
-     * The [NestedProvenance] which the [scanResults] belong to.
-     */
+    /** The [NestedProvenance] which the [scanResults] belong to. */
     val nestedProvenance: NestedProvenance,
 
-    /**
-     * A map of [KnownProvenance]s from [nestedProvenance] associated with lists of [ScanResult]s.
-     */
+    /** A map of [KnownProvenance]s from [nestedProvenance] associated with lists of [ScanResult]s. */
     val scanResults: Map<KnownProvenance, List<ScanResult>>
 ) {
     /**
@@ -46,9 +40,7 @@ data class NestedProvenanceScanResult(
      */
     fun isComplete(): Boolean = nestedProvenance.allProvenances.all { scanResults[it]?.isNotEmpty() == true }
 
-    /**
-     * Filter the contained [ScanResult]s using the [predicate].
-     */
+    /** Filter the contained [ScanResult]s using the [predicate]. */
     fun filter(predicate: (ScanResult) -> Boolean): NestedProvenanceScanResult =
         NestedProvenanceScanResult(
             nestedProvenance,

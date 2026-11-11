@@ -49,9 +49,7 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
  * of SPDX files.
  */
 internal data class SpdxResolvedDocument(
-    /**
-     * The root document. This is the starting point, from which all external references have been traversed.
-     */
+    /** The root document. This is the starting point, from which all external references have been traversed. */
     val rootDocument: ResolvedSpdxDocument,
 
     /**
@@ -211,9 +209,7 @@ private fun resolveAllReferences(
     }
 }
 
-/**
- * Return a map with all [SpdxPackage]s found in one of the given [references] using qualified identifiers as keys.
- */
+/** Return a map with all [SpdxPackage]s found in one of the given [references] using qualified identifiers as keys. */
 private fun collectPackages(
     references: MutableMap<SpdxExternalDocumentReference, ResolvedSpdxDocument>
 ): Map<String, SpdxPackage> {
@@ -242,9 +238,7 @@ private fun collectAndQualifyRelations(
  * of the document may fail, then the document is *null*, and a corresponding [Issue] is present.
  */
 internal data class ResolutionResult(
-    /**
-     * The document the reference points to, if it could be resolved successfully.
-     */
+    /** The document the reference points to, if it could be resolved successfully. */
     val document: SpdxDocument?,
 
     /** The URI pointing to the document. */
@@ -257,14 +251,10 @@ internal data class ResolutionResult(
     val issue: Issue?
 )
 
-/**
- * Check whether this URI points to a local definition file.
- */
+/** Check whether this URI points to a local definition file. */
 private fun URI.isLocalDefinitionFile(): Boolean = scheme.equals("file", ignoreCase = true) || !isAbsolute
 
-/**
- * Convert this URI to a local definition file if possible. Otherwise, return *null*.
- */
+/** Convert this URI to a local definition file if possible. Otherwise, return *null*. */
 private fun URI.toDefinitionFile(): File? =
     takeIf { isLocalDefinitionFile() }?.let { File(it.path).absoluteFile.normalize() }?.takeIf { it.isFile }
 
@@ -422,8 +412,6 @@ private fun SpdxRelationship.qualify(reference: SpdxExternalDocumentReference): 
         ?: copy(spdxElementId = qualifiedElementId, relatedSpdxElement = qualifiedRelatedId)
 }
 
-/**
- * Transform the given [spdxId] to a qualified identifier based on [reference] unless it is already qualified.
- */
+/** Transform the given [spdxId] to a qualified identifier based on [reference] unless it is already qualified. */
 private fun ensureQualified(spdxId: String, reference: SpdxExternalDocumentReference): String =
     spdxId.takeIf { ':' in it } ?: "${reference.externalDocumentId}:$spdxId"

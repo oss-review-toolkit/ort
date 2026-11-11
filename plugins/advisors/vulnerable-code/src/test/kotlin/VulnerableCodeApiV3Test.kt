@@ -373,14 +373,10 @@ class VulnerableCodeApiV3Test : WordSpec({
     }
 })
 
-/**
- * The JSON request to query the test packages found in the result via the VulnerableCode API v3 packages endpoint.
- */
+/** The JSON request to query the test packages found in the result via the VulnerableCode API v3 packages endpoint. */
 private val packagesRequestJson = generateV3PackagesRequest()
 
-/**
- * Prepare this server to expect an API v3 packages [request] and to answer it with the given [responseFile].
- */
+/** Prepare this server to expect an API v3 packages [request] and to answer it with the given [responseFile]. */
 private fun WireMockServer.stubPackagesRequest(responseFile: String, request: String = packagesRequestJson) {
     stubFor(
         post(urlPathEqualTo("/api/v3/packages/"))
@@ -396,9 +392,7 @@ private fun WireMockServer.stubPackagesRequest(responseFile: String, request: St
     )
 }
 
-/**
- * Prepare this server to expect an API v3 advisories [request] and to answer it with the given [responseFile].
- */
+/** Prepare this server to expect an API v3 advisories [request] and to answer it with the given [responseFile]. */
 private fun WireMockServer.stubAdvisoriesRequest(responseFile: String, request: String) {
     stubFor(
         post(urlPathEqualTo("/api/v3/advisories/"))

@@ -24,30 +24,20 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 
-/**
- * The result of a specific advisor execution for a single package.
- */
+/** The result of a specific advisor execution for a single package. */
 @JsonIgnoreProperties("defects")
 data class AdvisorResult(
-    /**
-     * Details about the used advisor.
-     */
+    /** Details about the used advisor. */
     val advisor: AdvisorDetails,
 
-    /**
-     * A summary of the advisor results.
-     */
+    /** A summary of the advisor results. */
     val summary: AdvisorSummary,
 
-    /**
-     * The vulnerabilities.
-     */
+    /** The vulnerabilities. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val vulnerabilities: List<Vulnerability> = emptyList(),
 
-    /**
-     * The health metrics.
-     */
+    /** The health metrics. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val healthMetrics: List<HealthMetric> = emptyList()
 )
