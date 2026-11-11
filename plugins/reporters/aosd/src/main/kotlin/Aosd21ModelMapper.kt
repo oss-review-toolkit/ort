@@ -31,27 +31,25 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdxexpression.nullOrBlankToSpdxNoassertionOrNone
 
 internal fun createAosdModel(input: ReporterInput, project: Project): AOSD21 {
-    val indexedPackages = input.ortResult.getPackages(omitExcluded = true)
-        .map { it.metadata }
-        .withIndex()
-        .associateBy { it.value.id }
-
+    val packages = input.ortResult.getPackages(omitExcluded = true).map { it.metadata }
+    val componentIdForPackageId = packages.withIndex().associate { it.value.id to it.index.toLong() }
     val directDependencies = input.ortResult.getDependencies(project.id, maxLevel = 1, omitExcluded = true)
 
     return AOSD21(
         externalId = project.id.toCoordinates(),
         directDependencies = directDependencies.mapNotNullTo(mutableSetOf()) {
-            indexedPackages[it]?.index?.toLong()
+            componentIdForPackageId[it]
         },
-        components = indexedPackages.toComponents(input, project)
+        components = packages.toComponents(input, project, componentIdForPackageId)
     )
 }
 
-private fun Map<Identifier, IndexedValue<Package>>.toComponents(
+private fun Collection<Package>.toComponents(
     input: ReporterInput,
-    project: Project
+    project: Project,
+    componentIdForPackageId: Map<Identifier, Long>
 ): Set<Component> =
-    values.mapTo(mutableSetOf()) { (index, pkg) ->
+    mapTo(mutableSetOf()) { pkg ->
         val dependencies = input.ortResult.getDependencies(pkg.id, maxLevel = 1, omitExcluded = true)
         val node = input.ortResult.dependencyNavigator.findBreadthFirst(project, pkg.id)
 
@@ -72,14 +70,14 @@ private fun Map<Identifier, IndexedValue<Package>>.toComponents(
 
         with(pkg) {
             Component(
-                id = index.toLong(),
+                id = componentIdForPackageId.getValue(pkg.id),
                 componentName = id.name,
                 componentVersion = id.version,
                 scmUrl = vcsProcessed.url.takeUnless { it.isEmpty() } ?: homepageUrl,
                 modified = isModified,
                 // For simplicity, only use the first linkage found in the graph for the package.
                 linking = node?.linkage?.toLinking(),
-                transitiveDependencies = dependencies.mapNotNullTo(mutableSetOf()) { get(it)?.index?.toLong() },
+                transitiveDependencies = dependencies.mapNotNullTo(mutableSetOf()) { componentIdForPackageId[it] },
                 subcomponents = listOf(
                     AOSD21.Subcomponent(
                         subcomponentName = FIRST_SUBCOMPONENT_NAME,
