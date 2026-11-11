@@ -70,17 +70,20 @@ class VersionUtilsTest : WordSpec({
 
     "isApplicableIvyVersion()" should {
         "support 'Sub Revision Matcher' syntax" {
-            with(Identifier(":::1.0.+")) {
-                isApplicableIvyVersion(Identifier(":::1.0.1")) shouldBe true
-                isApplicableIvyVersion(Identifier(":::1.0.a")) shouldBe true
-                isApplicableIvyVersion(Identifier(":::1.0.1.0")) shouldBe true
+            with("1.0.+") {
+                isApplicableIvyVersion("1.0.1") shouldBe true
+                isApplicableIvyVersion("1.0.a") shouldBe true
+                isApplicableIvyVersion("1.0.1.0") shouldBe true
             }
 
-            with(Identifier(":::1.1+")) {
-                isApplicableIvyVersion(Identifier(":::1.1")) shouldBe true
-                isApplicableIvyVersion(Identifier(":::1.1.5")) shouldBe true
-                isApplicableIvyVersion(Identifier(":::1.10")) shouldBe true
+            with("1.1+") {
+                isApplicableIvyVersion("1.1") shouldBe true
+                isApplicableIvyVersion("1.1.5") shouldBe true
+                isApplicableIvyVersion("1.10") shouldBe true
             }
         }
     }
 })
+
+private fun String.isApplicableIvyVersion(version: String) =
+    Identifier(":::$this").isApplicableIvyVersion(Identifier(":::$version"))
