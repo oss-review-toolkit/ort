@@ -39,17 +39,7 @@ fun Identifier.hasIvyVersionRange(): Boolean = version.getIvyVersionRanges().get
  */
 internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
     runCatching {
-        // Support "Exact Revision Matcher" syntax.
-        if (version == pkgId.version) return true
-
-        // Support "Sub Revision Matcher" syntax.
-        if (version.withoutSuffix("+")?.let { prefix -> pkgId.version.startsWith(prefix) } == true) return true
-
-        // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
-        // https://github.com/semver4j/semver4j/issues/132.
-        val ranges = version.getIvyVersionRanges()
-
-        return Semver.coerce(pkgId.version)?.satisfies(ranges) == true
+        matchesIvyVersionRange(pkgId.version, version)
     }.onFailure {
         logger.warn {
             "Failed to check if identifier version '$version' is applicable to package version " +
@@ -58,6 +48,24 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
 
         it.showStackTrace()
     }.getOrDefault(false)
+
+/**
+ * Return true if [version] is matched by the given [Ivy version matcher][version range]. Throws if the parameters
+ * cannot be parsed.
+ */
+private fun matchesIvyVersionRange(version: String, versionRange: String): Boolean {
+    // Support "Exact Revision Matcher" syntax.
+    if (versionRange == version) return true
+
+    // Support "Sub Revision Matcher" syntax.
+    if (versionRange.withoutSuffix("+")?.let { prefix -> version.startsWith(prefix) } == true) return true
+
+    // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
+    // https://github.com/semver4j/semver4j/issues/132.
+    val ranges = versionRange.getIvyVersionRanges()
+
+    return Semver.coerce(version)?.satisfies(ranges) == true
+}
 
 /**
  * Get the version ranges contained in this string. Return an empty list if no (non-pathological) ranges are contained.
