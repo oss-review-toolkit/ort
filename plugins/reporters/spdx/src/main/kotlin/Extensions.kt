@@ -144,14 +144,13 @@ internal fun Package.toSpdxPackage(
         SpdxPackageVerificationCode(packageVerificationCodeValue = it)
     }
 
-    val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
-        .applyChoices(ortResult.getPackageLicenseChoices(id))
-        .applyChoices(ortResult.getRepositoryLicenseChoices())
+    val licenseChoices = ortResult.getLicenseChoicesForId(id)
+
+    val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id).filterExcluded().applyChoices(licenseChoices)
 
     val effectiveLicense = resolvedLicenseInfo.effectiveLicense(
         LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
-        ortResult.getPackageLicenseChoices(id),
-        ortResult.getRepositoryLicenseChoices()
+        licenseChoices
     )
 
     return SpdxPackage(

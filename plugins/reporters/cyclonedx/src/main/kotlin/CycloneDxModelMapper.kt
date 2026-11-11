@@ -82,8 +82,7 @@ internal class CycloneDxModelMapper(
     private fun getResolvedLicenseForId(id: Identifier): ResolvedLicenseInfo =
         resolvedLicenseForId.getOrPut(id) {
             input.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
-                .applyChoices(input.ortResult.getPackageLicenseChoices(id))
-                .applyChoices(input.ortResult.getRepositoryLicenseChoices())
+                .applyChoices(input.ortResult.getLicenseChoicesForId(id))
         }
 
     private fun getEffectiveLicenseForId(id: Identifier): SpdxExpression? =

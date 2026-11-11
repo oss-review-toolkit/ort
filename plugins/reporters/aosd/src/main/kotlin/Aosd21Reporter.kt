@@ -86,9 +86,9 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
         // Use an unsimplified expression here to better document where a license selection might come from.
         val licenseExpression = relevantLicenseInfo.toExpression()?.sorted()
 
-        val selectedLicenseInfo = relevantLicenseInfo
-            .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.metadata.id))
-            .applyChoices(input.ortResult.getRepositoryLicenseChoices())
+        val selectedLicenseInfo = relevantLicenseInfo.applyChoices(
+            input.ortResult.getLicenseChoicesForId(pkg.metadata.id)
+        )
 
         val selectedExpression = selectedLicenseInfo.toExpression()?.simplify()?.sorted()
             ?.takeUnless { it.offersChoice() }
