@@ -80,20 +80,18 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
         val dependencies = input.ortResult.getDependencies(pkg.metadata.id, maxLevel = 1, omitExcluded = true)
         val node = input.ortResult.dependencyNavigator.findBreadthFirst(project, pkg.metadata.id)
 
-        val nonExcludedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.metadata.id).filterExcluded()
-        val relevantLicenseInfo = nonExcludedLicenseInfo.filter(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
+        val licenseChoices = input.ortResult.getLicenseChoicesForId(pkg.metadata.id)
+        val licenseView = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
+
+        val effectiveLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.metadata.id)
+            .filterExcluded()
+            .applyChoices(licenseChoices, licenseView)
 
         // Use an unsimplified expression here to better document where a license selection might come from.
-        val licenseExpression = relevantLicenseInfo.toExpression()?.sorted()
+        val effectiveLicense = effectiveLicenseInfo.effectiveLicense(licenseView, licenseChoices)?.sorted()
+        val selectedExpression = effectiveLicense?.simplify()?.sorted()?.takeUnless { it.offersChoice() }
 
-        val selectedLicenseInfo = relevantLicenseInfo.applyChoices(
-            input.ortResult.getLicenseChoicesForId(pkg.metadata.id)
-        )
-
-        val selectedExpression = selectedLicenseInfo.toExpression()?.simplify()?.sorted()
-            ?.takeUnless { it.offersChoice() }
-
-        val licenseTexts = licenseExpression?.licenses().orEmpty().mapNotNullTo(mutableSetOf()) { license ->
+        val licenseTexts = effectiveLicense?.licenses().orEmpty().mapNotNullTo(mutableSetOf()) { license ->
             input.licenseFactProvider.getLicenseText(license)?.text
         }.joinToString("\n--\n") { it.trimEnd() }
 
@@ -110,8 +108,8 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
                 subcomponents = listOf(
                     AOSD21.Subcomponent(
                         subcomponentName = FIRST_SUBCOMPONENT_NAME,
-                        spdxId = licenseExpression.nullOrBlankToSpdxNoassertionOrNone(),
-                        copyrights = relevantLicenseInfo.getCopyrights().sorted(),
+                        spdxId = effectiveLicense.nullOrBlankToSpdxNoassertionOrNone(),
+                        copyrights = effectiveLicenseInfo.getCopyrights().sorted(),
                         authors = pkg.metadata.authors.sorted(),
                         licenseText = licenseTexts,
                         // Can be empty as the license information is the result of a file level scan.
