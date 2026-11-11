@@ -84,7 +84,7 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
                         subcomponentName = FIRST_SUBCOMPONENT_NAME,
                         spdxId = effectiveLicense.nullOrBlankToSpdxNoassertionOrNone(),
                         copyrights = effectiveLicenseInfo.getCopyrights().sorted(),
-                        authors = pkg.metadata.authors.sorted(),
+                        authors = authors.sorted(),
                         licenseText = licenseTexts,
                         // Can be empty as the license information is the result of a file level scan.
                         licenseTextUrl = "",
