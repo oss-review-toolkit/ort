@@ -43,17 +43,13 @@ internal fun parseLockfile(lockfile: File) = parseLockfile(lockfile.readText())
 
 internal fun parseLockfile(lockfile: String) = YAML.decodeFromString<Lockfile>(lockfile)
 
-/**
- * See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/lock_file.dart#L18.
- */
+/** See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/lock_file.dart#L18. */
 @Serializable
 internal data class Lockfile(
     val packages: Map<String, PackageInfo> = emptyMap()
 )
 
-/**
- * See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/package_name.dart#L73.
- */
+/** See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/package_name.dart#L73. */
 @Serializable
 internal data class PackageInfo(
     val dependency: String,

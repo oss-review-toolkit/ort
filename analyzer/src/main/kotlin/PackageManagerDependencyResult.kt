@@ -20,13 +20,9 @@
 package org.ossreviewtoolkit.analyzer
 
 data class PackageManagerDependencyResult(
-    /**
-     * The names of package managers that the package manager that provided this result must run before.
-     */
+    /** The names of package managers that the package manager that provided this result must run before. */
     val mustRunBefore: Set<String>,
 
-    /**
-     * The names of package managers that the package manager that provided this result must run after.
-     */
+    /** The names of package managers that the package manager that provided this result must run after. */
     val mustRunAfter: Set<String>
 )

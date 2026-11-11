@@ -29,25 +29,17 @@ import org.ossreviewtoolkit.utils.common.FileMatcher
  * the glob syntax see the [FileMatcher] implementation.
  */
 data class PathInclude(
-    /**
-     * A glob to match the path of the project definition file, relative to the root of the repository.
-     */
+    /** A glob to match the path of the project definition file, relative to the root of the repository. */
     val pattern: String,
 
-    /**
-     * The reason why the project is included, out of a predefined choice.
-     */
+    /** The reason why the project is included, out of a predefined choice. */
     val reason: PathIncludeReason,
 
-    /**
-     * A comment to further explain why the [reason] is applicable here.
-     */
+    /** A comment to further explain why the [reason] is applicable here. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = ""
 ) {
-    /**
-     * Return true if this [PathInclude] matches the given [path].
-     */
+    /** Return true if this [PathInclude] matches the given [path]. */
     fun matches(path: String) =
         FileMatcher.matches(
             pattern = pattern.removePrefix("./"),

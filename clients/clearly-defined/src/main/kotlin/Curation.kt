@@ -31,9 +31,7 @@ data class ContributedCurations(
     val contributions: List<JsonElement>
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/curation-1.0.json#L7-L17.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/curation-1.0.json#L7-L17. */
 @Serializable
 data class Curation(
     val described: CurationDescribed? = null,
@@ -41,9 +39,7 @@ data class Curation(
     val files: List<CurationFileEntry>? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L70-L119.
- */
+/** See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L70-L119. */
 @Serializable
 data class CurationDescribed(
     val facets: CurationFacets? = null,
@@ -53,9 +49,7 @@ data class CurationDescribed(
     val releaseDate: String? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L74-L90.
- */
+/** See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L74-L90. */
 @Serializable
 data class CurationFacets(
     val data: List<String>? = null,
@@ -65,17 +59,13 @@ data class CurationFacets(
     val tests: List<String>? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L243-L247.
- */
+/** See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L243-L247. */
 @Serializable
 data class CurationLicensed(
     val declared: String? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L201-L229.
- */
+/** See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L201-L229. */
 @Serializable
 data class CurationFileEntry(
     val path: FileAsString,
@@ -83,9 +73,7 @@ data class CurationFileEntry(
     val attributions: List<String>? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curations-1.0.json#L8-L15.
- */
+/** See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curations-1.0.json#L8-L15. */
 @Serializable
 data class Patch(
     val coordinates: Coordinates,

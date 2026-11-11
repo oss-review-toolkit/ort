@@ -124,9 +124,7 @@ object LoggingInterceptor : Interceptor {
     }
 }
 
-/**
- * Sanitize the string for logging purposes by removing sensitive information like credentials.
- */
+/** Sanitize the string for logging purposes by removing sensitive information like credentials. */
 private fun String.sanitizeForLogging(): String {
     val requestJson = FossIdRestService.JSON_MAPPER.readTree(this)
     val dataObject = requestJson.get("data")

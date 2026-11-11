@@ -28,9 +28,7 @@ data class LicenseTextCurations(
      */
     val id: Identifier,
 
-    /**
-     * The curations for [id].
-     */
+    /** The curations for [id]. */
     val curations: List<LicenseTextCuration>
 ) {
     init {
@@ -39,8 +37,6 @@ data class LicenseTextCurations(
         }
     }
 
-    /**
-     * Return true the enclosed [curations] are applicable to the given [id].
-     */
+    /** Return true the enclosed [curations] are applicable to the given [id]. */
     fun isApplicable(id: Identifier): Boolean = id.isMatchedBy(this.id)
 }

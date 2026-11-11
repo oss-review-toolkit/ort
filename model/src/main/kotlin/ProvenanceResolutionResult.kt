@@ -28,14 +28,10 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * problems happened during provenance resolution.
  */
 data class ProvenanceResolutionResult(
-    /**
-     * The identifier of package.
-     */
+    /** The identifier of package. */
     val id: Identifier,
 
-    /**
-     * The resolved provenance of the package. Can only be null if a [packageProvenanceResolutionIssue] occurred.
-     */
+    /** The resolved provenance of the package. Can only be null if a [packageProvenanceResolutionIssue] occurred. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val packageProvenance: KnownProvenance? = null,
 
@@ -46,15 +42,11 @@ data class ProvenanceResolutionResult(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val subRepositories: Map<String, VcsInfo> = emptyMap(),
 
-    /**
-     * The issue which happened during package provenance resolution, if any.
-     */
+    /** The issue which happened during package provenance resolution, if any. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val packageProvenanceResolutionIssue: Issue? = null,
 
-    /**
-     * The issue which happened during nested provenance resolution, if any.
-     */
+    /** The issue which happened during nested provenance resolution, if any. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val nestedProvenanceResolutionIssue: Issue? = null
 ) {

@@ -73,15 +73,11 @@ internal class SetDependencyRepresentationCommand : OrtHelperCommand(
             override fun convert(result: AnalyzerResult): AnalyzerResult = result.withResolvedScopes()
         };
 
-        /**
-         * Convert the given [result] to the target format defined by this literal.
-         */
+        /** Convert the given [result] to the target format defined by this literal. */
         abstract fun convert(result: AnalyzerResult): AnalyzerResult
     }
 
-    /**
-     * A data class to describe the placeholders in result files that needs to be handled by this command.
-     */
+    /** A data class to describe the placeholders in result files that needs to be handled by this command. */
     private data class PlaceholderInfo(
         /** The name of the property whose value is a placeholder. */
         val property: String,
@@ -144,9 +140,7 @@ internal class SetDependencyRepresentationCommand : OrtHelperCommand(
             ?: throw UsageError("$ortFile does not contain a supported result.")
     }
 
-    /**
-     * Convert a full ORT result file.
-     */
+    /** Convert a full ORT result file. */
     private fun convertOrtResult(): Any? =
         convertResult<OrtResult> { result ->
             println("Converting a full ORT result file.")
@@ -158,9 +152,7 @@ internal class SetDependencyRepresentationCommand : OrtHelperCommand(
             }
         }
 
-    /**
-     * Convert an [AnalyzerResult] file.
-     */
+    /** Convert an [AnalyzerResult] file. */
     private fun convertAnalyzerResult(): Any? =
         convertResult<AnalyzerResult> {
             println("Converting an analyzer result file.")
@@ -180,9 +172,7 @@ internal class SetDependencyRepresentationCommand : OrtHelperCommand(
             convertToTarget(analyzerResult)
         }
 
-    /**
-     * Convert a [PackageManagerResult]. The result file then contains an [AnalyzerResult].
-     */
+    /** Convert a [PackageManagerResult]. The result file then contains an [AnalyzerResult]. */
     private fun convertPackageManagerResult(): Any? =
         convertResult<PackageManagerResult> { result ->
             convertToTarget(result.toAnalyzerResult())
@@ -197,9 +187,7 @@ internal class SetDependencyRepresentationCommand : OrtHelperCommand(
             block(readInput())
         }.getOrNull()
 
-    /**
-     * Attempt to deserialize the input file to the result type [T]. Handle placeholders if enabled.
-     */
+    /** Attempt to deserialize the input file to the result type [T]. Handle placeholders if enabled. */
     private inline fun <reified T : Any> readInput(): T =
         if (handlePlaceholders) {
             replacePlaceholders(ortFile.readText(), inputPlaceholderReplacements()).fromYaml()
@@ -207,9 +195,7 @@ internal class SetDependencyRepresentationCommand : OrtHelperCommand(
             ortFile.readValue()
         }
 
-    /**
-     * Convert the given [analyzerResult] to the selected target format if it is present.
-     */
+    /** Convert the given [analyzerResult] to the selected target format if it is present. */
     private fun convertToTarget(analyzerResult: AnalyzerResult?): AnalyzerResult? =
         analyzerResult?.let(targetFormat::convert)
 
@@ -230,9 +216,7 @@ internal class SetDependencyRepresentationCommand : OrtHelperCommand(
         }
     }
 
-    /**
-     * Replace placeholders in the given [text] based on the provided [replacement] information.
-     */
+    /** Replace placeholders in the given [text] based on the provided [replacement] information. */
     private fun replacePlaceholders(text: String, replacement: Collection<Pair<Regex, String>>): String =
         replacement.fold(text) { s, replace ->
             s.replace(replace.first, replace.second)
@@ -253,19 +237,13 @@ internal class SetDependencyRepresentationCommand : OrtHelperCommand(
         typedPlaceholders.map { replacement(it.property, it.replacement, it.placeholder.toPlaceholder()) }
 }
 
-/**
- * Quote this string, so that it can be used safely in a regular expression.
- */
+/** Quote this string, so that it can be used safely in a regular expression. */
 private fun String.quote(): String = Pattern.quote(this)
 
-/**
- * Convert this string to a placeholder for a property value in a YAML file with expected test results.
- */
+/** Convert this string to a placeholder for a property value in a YAML file with expected test results. */
 private fun String.toPlaceholder(): String = "\"<$this>\""
 
-/**
- * Generate a [Regex] that matches a specific property in a YAML file with the given [name] and [expectedValue].
- */
+/** Generate a [Regex] that matches a specific property in a YAML file with the given [name] and [expectedValue]. */
 private fun matchProperty(name: String, expectedValue: String): Regex =
     """(${name.quote()}:\s*)${expectedValue.quote()}""".toRegex()
 
@@ -276,9 +254,7 @@ private fun matchProperty(name: String, expectedValue: String): Regex =
 private fun replacement(property: String, oldValue: String, newValue: String): Pair<Regex, String> =
     matchProperty(property, oldValue) to "$1$newValue"
 
-/**
- * Convert this [PackageManagerResult] to an [AnalyzerResult].
- */
+/** Convert this [PackageManagerResult] to an [AnalyzerResult]. */
 private fun PackageManagerResult.toAnalyzerResult(): AnalyzerResult {
     val builder = AnalyzerResultBuilder()
 

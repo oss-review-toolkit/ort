@@ -23,9 +23,7 @@ import java.io.File
 import java.io.InputStream
 import java.security.MessageDigest
 
-/**
- * Calculate the [digest] on the data from the given [file].
- */
+/** Calculate the [digest] on the data from the given [file]. */
 fun calculateHash(file: File, digest: MessageDigest = MessageDigest.getInstance("SHA-1")): ByteArray =
     file.inputStream().use { calculateHash(it, digest) }
 

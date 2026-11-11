@@ -26,8 +26,6 @@ package org.ossreviewtoolkit.utils.spdxexpression
  * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/#d3-simple-license-expressions
  */
 sealed class SpdxSimpleExpression : SpdxSingleLicenseExpression() {
-    /**
-     * Concatenate [this][SpdxSimpleExpression] and [other] using [SpdxExpression.WITH].
-     */
+    /** Concatenate [this][SpdxSimpleExpression] and [other] using [SpdxExpression.WITH]. */
     infix fun with(other: String) = SpdxLicenseWithExceptionExpression(this, other)
 }

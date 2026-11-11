@@ -21,14 +21,10 @@ package org.ossreviewtoolkit.plugins.commands.api
 
 import org.ossreviewtoolkit.plugins.api.PluginFactory
 
-/**
- * A factory interface for creating [OrtCommand] instances.
- */
+/** A factory interface for creating [OrtCommand] instances. */
 interface OrtCommandFactory : PluginFactory<OrtCommand> {
     companion object {
-        /**
-         * All [ORT command factories][OrtCommandFactory] available in the classpath, associated by their ids.
-         */
+        /** All [ORT command factories][OrtCommandFactory] available in the classpath, associated by their ids. */
         val ALL by lazy { PluginFactory.getAll<OrtCommandFactory, OrtCommand>() }
     }
 }

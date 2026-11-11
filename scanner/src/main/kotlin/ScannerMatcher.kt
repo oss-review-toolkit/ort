@@ -54,9 +54,7 @@ data class ScannerMatcher(
      */
     val maxVersion: Semver,
 
-    /**
-     * Criterion to match the [configuration][ScannerDetails.configuration] of the scanner.
-     */
+    /** Criterion to match the [configuration][ScannerDetails.configuration] of the scanner. */
     val configuration: String
 ) {
     companion object {

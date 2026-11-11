@@ -49,14 +49,10 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
  * (Postgres) database.
  */
 class PostgresProvenanceFileStorage(
-    /**
-     * The JDBC data source to obtain database connections.
-     */
+    /** The JDBC data source to obtain database connections. */
     dataSource: Lazy<DataSource>,
 
-    /**
-     * The name of the table to use for storing the contents of the associated files.
-     */
+    /** The name of the table to use for storing the contents of the associated files. */
     tableName: String
 ) : ProvenanceFileStorage {
     private val table = ProvenanceFileTable(tableName)

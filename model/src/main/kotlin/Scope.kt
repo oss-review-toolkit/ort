@@ -23,9 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.model.utils.PackageReferenceSortedSetConverter
 
-/**
- * The scope class puts package dependencies into context.
- */
+/** The scope class puts package dependencies into context. */
 data class Scope(
     /**
      * The respective package manager's native name for the scope, e.g. "compile", "provided" etc. for Maven, or
@@ -63,14 +61,10 @@ data class Scope(
             }
         }
 
-    /**
-     * Return whether the package identified by [id] is contained as a (transitive) dependency in this scope.
-     */
+    /** Return whether the package identified by [id] is contained as a (transitive) dependency in this scope. */
     operator fun contains(id: Identifier) = dependencies.any { it.id == id || it.dependsOn(id) }
 
-    /**
-     * Return all references to [id] as a dependency in this scope.
-     */
+    /** Return all references to [id] as a dependency in this scope. */
     fun findReferences(id: Identifier) =
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 }

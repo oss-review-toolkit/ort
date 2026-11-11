@@ -26,15 +26,11 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * See https://spdx.github.io/spdx-spec/v2.3/package-information/#79-package-verification-code-field.
  */
 data class SpdxPackageVerificationCode(
-    /**
-     * The list of file excluded from the package verification code calculation.
-     */
+    /** The list of file excluded from the package verification code calculation. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageVerificationCodeExcludedFiles: List<String> = emptyList(),
 
-    /**
-     * The package verification code value in lower case hexadecimal representation.
-     */
+    /** The package verification code value in lower case hexadecimal representation. */
     val packageVerificationCodeValue: String
 ) {
     init {

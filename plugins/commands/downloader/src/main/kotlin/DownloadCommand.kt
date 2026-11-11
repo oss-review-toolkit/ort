@@ -169,23 +169,15 @@ class DownloadCommand(descriptor: PluginDescriptor = DownloadCommandFactory.desc
         .required()
         .outputGroup()
 
-    /**
-     * The mode to use for archiving downloaded source code.
-     */
+    /** The mode to use for archiving downloaded source code. */
     private enum class ArchiveMode {
-        /**
-         * Do not archive source code at all.
-         */
+        /** Do not archive source code at all. */
         NONE,
 
-        /**
-         * Create one archive per project or package entity.
-         */
+        /** Create one archive per project or package entity. */
         ENTITY,
 
-        /**
-         * Create a single archive containing all project or package entities.
-         */
+        /** Create a single archive containing all project or package entities. */
         BUNDLE
     }
 

@@ -32,23 +32,17 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 
-/**
- * A set of evaluator [Rule]s, using an [ortResult] as input.
- */
+/** A set of evaluator [Rule]s, using an [ortResult] as input. */
 class RuleSet(
     val ortResult: OrtResult,
     val licenseInfoResolver: LicenseInfoResolver,
     val resolutionProvider: ResolutionProvider,
     val projectSourceResolver: SourceTreeResolver
 ) {
-    /**
-     * The set of all issues created by the rules of this [RuleSet].
-     */
+    /** The set of all issues created by the rules of this [RuleSet]. */
     val violations = mutableSetOf<RuleViolation>()
 
-    /**
-     * A DSL function to configure an [OrtResultRule]. The rule is applied once to [ortResult].
-     */
+    /** A DSL function to configure an [OrtResultRule]. The rule is applied once to [ortResult]. */
     fun ortResultRule(name: String, configure: OrtResultRule.() -> Unit) {
         OrtResultRule(this, name).apply {
             configure()
@@ -56,9 +50,7 @@ class RuleSet(
         }
     }
 
-    /**
-     * A DSL function to configure an [ProjectSourceRule]. The rule is applied once to [ortResult].
-     */
+    /** A DSL function to configure an [ProjectSourceRule]. The rule is applied once to [ortResult]. */
     fun projectSourceRule(name: String, configure: ProjectSourceRule.() -> Unit) {
         ProjectSourceRule(this, name).apply {
             configure()
@@ -173,9 +165,7 @@ class RuleSet(
     }
 }
 
-/**
- * A DSL function to configure a [RuleSet].
- */
+/** A DSL function to configure a [RuleSet]. */
 fun ruleSet(
     ortResult: OrtResult,
     licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),

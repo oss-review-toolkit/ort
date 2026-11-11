@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.utils.common
 
 import java.util.SortedMap
 
-/**
- * Return the set of keys that have different values in this and the [other] map.
- */
+/** Return the set of keys that have different values in this and the [other] map. */
 fun <K, V> Map<K, V>.getConflictingKeys(other: Map<K, V>): Set<K> {
     if (this == other) return emptySet()
     return keys.intersect(other.keys).filterTo(mutableSetOf()) { this[it] != other[it] }

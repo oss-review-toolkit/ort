@@ -31,19 +31,13 @@ import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
-/**
- * An enum to handle VCS-host-specific information.
- */
+/** An enum to handle VCS-host-specific information. */
 @Suppress("TooManyFunctions")
 enum class VcsHost(
-    /**
-     * The hostname of VCS host.
-     */
+    /** The hostname of VCS host. */
     val hostname: String,
 
-    /**
-     * The VCS types the host supports.
-     */
+    /** The VCS types the host supports. */
     vararg supportedTypes: VcsType
 ) {
     AZURE_DEVOPS("dev.azure.com", VcsType.GIT) {
@@ -96,15 +90,11 @@ enum class VcsHost(
                 "?scopePath=/${vcsInfo.path}"
         }
 
-        /**
-         * Return whether [url] is a VCS URI for Azure DevOps. URIs referencing an artifacts feed are excluded.
-         */
+        /** Return whether [url] is a VCS URI for Azure DevOps. URIs referencing an artifacts feed are excluded. */
         override fun isApplicable(url: URI): Boolean = super.isApplicable(url) && url.host != "pkgs.$hostname"
     },
 
-    /**
-     * The enum constant to handle [Bitbucket][https://bitbucket.org/]-specific information.
-     */
+    /** The enum constant to handle [Bitbucket][https://bitbucket.org/]-specific information. */
     BITBUCKET("bitbucket.org", VcsType.GIT) {
         override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
 
@@ -150,9 +140,7 @@ enum class VcsHost(
             "https://$hostname/$userOrOrg/$project/raw/${vcsInfo.revision}/${vcsInfo.path}"
     },
 
-    /**
-     * The enum constant to handle [GitHub][https://github.com/]-specific information.
-     */
+    /** The enum constant to handle [GitHub][https://github.com/]-specific information. */
     GITHUB("github.com", VcsType.GIT) {
         override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
 
@@ -191,9 +179,7 @@ enum class VcsHost(
             super.isApplicable(url) && url.host?.endsWith(".pkg.$hostname") == false
     },
 
-    /**
-     * The enum constant to handle [GitLab][https://gitlab.com/]-specific information.
-     */
+    /** The enum constant to handle [GitLab][https://gitlab.com/]-specific information. */
     GITLAB("gitlab.com", VcsType.GIT) {
         override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
 
@@ -318,19 +304,13 @@ enum class VcsHost(
         private val GIT_REVISION_FRAGMENT = Regex("git.+#[a-fA-F0-9]{7,}")
         private val GIT_PROJECT_NAME = Regex("/([^/]+)\\.git$")
 
-        /**
-         * Return the applicable [VcsHost] for the given [url], or null if no applicable host is found.
-         */
+        /** Return the applicable [VcsHost] for the given [url], or null if no applicable host is found. */
         fun fromUrl(url: URI): VcsHost? = entries.find { host -> host.isApplicable(url) }
 
-        /**
-         * Return the applicable [VcsHost] for the given [url], or null if no applicable host is found.
-         */
+        /** Return the applicable [VcsHost] for the given [url], or null if no applicable host is found. */
         fun fromUrl(url: String): VcsHost? = url.toUri { fromUrl(it) }.getOrNull()
 
-        /**
-         * Return all [VcsInfo] that can be parsed from the [vcsUrl] without actually making a network request.
-         */
+        /** Return all [VcsInfo] that can be parsed from the [vcsUrl] without actually making a network request. */
         fun parseUrl(vcsUrl: String): VcsInfo {
             val projectUrl = vcsUrl.ifBlank { return VcsInfo.EMPTY }
             val unknownVcsInfo = VcsInfo.EMPTY.copy(url = projectUrl)
@@ -460,40 +440,28 @@ enum class VcsHost(
 
     private val supportedTypes = supportedTypes.asList()
 
-    /**
-     * Return whether this host is applicable for the [url] URI.
-     */
+    /** Return whether this host is applicable for the [url] URI. */
     open fun isApplicable(url: URI) = url.host?.endsWith(hostname) == true
 
-    /**
-     * Return whether this host is applicable for the [url] string.
-     */
+    /** Return whether this host is applicable for the [url] string. */
     fun isApplicable(url: String) = url.toUri { isApplicable(it) }.getOrDefault(false)
 
-    /**
-     * Return whether this host is applicable for [vcsInfo].
-     */
+    /** Return whether this host is applicable for [vcsInfo]. */
     fun isApplicable(vcsInfo: VcsInfo) = vcsInfo.type in supportedTypes && isApplicable(vcsInfo.url)
 
-    /**
-     * Return the user or organization name the project belongs to.
-     */
+    /** Return the user or organization name the project belongs to. */
     fun getUserOrOrganization(projectUrl: String): String? =
         projectUrl.toUri { if (isApplicable(it)) getUserOrOrgInternal(it) else null }.getOrNull()
 
     protected abstract fun getUserOrOrgInternal(projectUrl: URI): String?
 
-    /**
-     * Return the project's name.
-     */
+    /** Return the project's name. */
     fun getProject(projectUrl: String): String? =
         projectUrl.toUri { if (isApplicable(it)) getProjectInternal(it) else null }.getOrNull()
 
     protected abstract fun getProjectInternal(projectUrl: URI): String?
 
-    /**
-     * Return all [VcsInfo] that can be extracted from the host-specific [projectUrl].
-     */
+    /** Return all [VcsInfo] that can be extracted from the host-specific [projectUrl]. */
     fun toVcsInfo(projectUrl: String): VcsInfo? =
         projectUrl.toUri { if (isApplicable(it)) toVcsInfoInternal(it) else null }.getOrNull()
 

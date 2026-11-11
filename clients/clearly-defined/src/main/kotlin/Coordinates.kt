@@ -33,9 +33,7 @@ data class Coordinates(
      */
     val type: ComponentType,
 
-    /**
-     * Where the component can be found. Examples include npmjs, mavencentral, github, nuget, etc.
-     */
+    /** Where the component can be found. Examples include npmjs, mavencentral, github, nuget, etc. */
     val provider: Provider,
 
     /**
@@ -44,9 +42,7 @@ data class Coordinates(
      */
     val namespace: String? = null,
 
-    /**
-     * The name of the component. Given the mentioned [namespace] segment, this is just the simple name.
-     */
+    /** The name of the component. Given the mentioned [namespace] segment, this is just the simple name. */
     val name: String,
 
     /**
@@ -71,9 +67,7 @@ data class Coordinates(
     override fun toString() = strings.joinToString("/")
 }
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L211-L235.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L211-L235. */
 @Serializable
 data class SourceLocation(
     // The following properties match those of Coordinates, except that the revision is mandatory here.
@@ -87,7 +81,5 @@ data class SourceLocation(
     val url: String? = null
 )
 
-/**
- * Convert a [SourceLocation] to a [Coordinates] object.
- */
+/** Convert a [SourceLocation] to a [Coordinates] object. */
 fun SourceLocation.toCoordinates(): Coordinates = Coordinates(type, provider, namespace, name, revision)

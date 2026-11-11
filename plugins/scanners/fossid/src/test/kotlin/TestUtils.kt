@@ -125,14 +125,10 @@ internal const val REVISION_EMPTY = ""
 /** The 'master' VCS revision. */
 internal const val REVISION_MASTER = "master"
 
-/**
- * Create a new [FossId] instance with the specified [config].
- */
+/** Create a new [FossId] instance with the specified [config]. */
 internal fun createFossId(config: FossIdConfig): FossId = FossId(config = config)
 
-/**
- * Create a standard [FossIdConfig] whose properties can be partly specified.
- */
+/** Create a standard [FossIdConfig] whose properties can be partly specified. */
 internal fun createConfig(
     projectName: String? = PROJECT,
     waitForResult: Boolean = true,
@@ -213,24 +209,18 @@ internal fun createVersionControlSystemMock(): VersionControlSystem {
     return vcs
 }
 
-/**
- * Generate a synthetic scan code for the project with the given [name], [tag], and [index].
- */
+/** Generate a synthetic scan code for the project with the given [name], [tag], and [index]. */
 internal fun scanCode(name: String, tag: FossId.DeltaTag? = null, index: Int = 1): String =
     "$name:${tag?.name}:scanCode$index"
 
-/**
- * Create a mock [UnversionedScanDescription] that returns the given [state].
- */
+/** Create a mock [UnversionedScanDescription] that returns the given [state]. */
 private fun createScanDescription(state: ScanStatus): UnversionedScanDescription =
     mockk<UnversionedScanDescription> {
         every { status } returns state
         every { comment } returns "status$state"
     }
 
-/**
- * Create a mock [Scan] as if created by the [CloneRepositoryHandler] with the given properties.
- */
+/** Create a mock [Scan] as if created by the [CloneRepositoryHandler] with the given properties. */
 internal fun createScan(
     url: String,
     revision: String,
@@ -252,9 +242,7 @@ internal fun createScan(
         }
     }
 
-/**
- * Create a mock [Scan] as if created by the [UploadArchiveHandler] with the given properties.
- */
+/** Create a mock [Scan] as if created by the [UploadArchiveHandler] with the given properties. */
 internal fun createScanWithUploadedContent(
     url: String,
     revision: String,
@@ -282,32 +270,22 @@ internal fun createVcsInfo(
     revision: String = REVISION
 ): VcsInfo = VcsInfo(type = type, path = path, revision = revision, url = "https://github.com/test/$projectName.git")
 
-/**
- * Create a test [Identifier] with properties derived from the given [index].
- */
+/** Create a test [Identifier] with properties derived from the given [index]. */
 internal fun createIdentifier(index: Int = 1): Identifier =
     Identifier(type = "test", namespace = "test-ns", name = "test$index", version = "1.0.$index")
 
-/**
- * Create a test [Package] with the given [id] , [vcsInfo], and [authors].
- */
+/** Create a test [Package] with the given [id] , [vcsInfo], and [authors]. */
 internal fun createPackage(id: Identifier, vcsInfo: VcsInfo, authors: Set<String> = emptySet()): Package =
     Package.EMPTY.copy(id = id, vcsProcessed = vcsInfo, authors = authors)
 
-/**
- * Generate the path to a test file based on the given [index].
- */
+/** Generate the path to a test file based on the given [index]. */
 private fun filePath(index: Int): String = "/path/to/file$index.kt"
 
-/**
- * Create a [TextLocation] that references a test file without any line information.
- */
+/** Create a [TextLocation] that references a test file without any line information. */
 internal fun textLocation(fileIndex: Int): TextLocation =
     TextLocation(filePath(fileIndex), TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
 
-/**
- * Create an [IdentifiedFile] based on the given [index].
- */
+/** Create an [IdentifiedFile] based on the given [index]. */
 private fun createIdentifiedFile(index: Int): IdentifiedFile {
     val file = IdentifiedFile(
         comment = null,
@@ -349,9 +327,7 @@ private fun createIdentifiedFile(index: Int): IdentifiedFile {
     return file
 }
 
-/**
- * Create a [MarkedAsIdentifiedFile] based on the given [index].
- */
+/** Create a [MarkedAsIdentifiedFile] based on the given [index]. */
 private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
     val file = MarkedAsIdentifiedFile(
         identificationId = index,
@@ -439,20 +415,14 @@ internal fun createMarkAsIdentifiedFile(
     }
 }
 
-/**
- * Create an [IgnoredFile] based on the given [index].
- */
+/** Create an [IgnoredFile] based on the given [index]. */
 private fun createIgnoredFile(index: Int): IgnoredFile =
     IgnoredFile(id = index, path = filePath(index), reason = "ignoreReason$index", matchType = "match$index")
 
-/**
- * Generate a string representing a pending file based on the given [index].
- */
+/** Generate a string representing a pending file based on the given [index]. */
 internal fun createPendingFile(index: Int): String = "/pending/file/$index"
 
-/**
- * Generate a FossID snippet based on the given [index].
- */
+/** Generate a FossID snippet based on the given [index]. */
 private fun createSnippet(index: Int): Snippet =
     Snippet(
         index,
@@ -483,9 +453,7 @@ private fun createSnippet(index: Int): Snippet =
         "highlighting$index"
     )
 
-/**
- * Generate a ORT snippet finding based on the given [index].
- */
+/** Generate a ORT snippet finding based on the given [index]. */
 internal fun createSnippetFindings(index: Int): SnippetFinding =
     SnippetFinding(
         TextLocation("/pending/file/$index", TextLocation.UNKNOWN_LINE),
@@ -533,9 +501,7 @@ internal fun FossIdServiceWithVersion.expectCheckScanStatus(
     return this
 }
 
-/**
- * Prepare this service mock to return the list of [scans] for the given [projectCode].
- */
+/** Prepare this service mock to return the list of [scans] for the given [projectCode]. */
 internal fun FossIdServiceWithVersion.expectListScans(
     projectCode: String,
     scans: List<Scan>
@@ -545,9 +511,7 @@ internal fun FossIdServiceWithVersion.expectListScans(
     return this
 }
 
-/**
- * Prepare this service mock to return the list of [rules] for the given [scanCode].
- */
+/** Prepare this service mock to return the list of [rules] for the given [scanCode]. */
 internal fun FossIdServiceWithVersion.expectListIgnoreRules(
     scanCode: String,
     rules: List<IgnoreRule>
@@ -557,9 +521,7 @@ internal fun FossIdServiceWithVersion.expectListIgnoreRules(
     return this
 }
 
-/**
- * Prepare this service mock to return the list of [rules] for the given [scanCode].
- */
+/** Prepare this service mock to return the list of [rules] for the given [scanCode]. */
 internal fun FossIdServiceWithVersion.expectCreateIgnoreRule(
     scanCode: String,
     type: RuleType,
@@ -593,9 +555,7 @@ internal fun FossIdServiceWithVersion.expectCreateIgnoreRule(
     return this
 }
 
-/**
- * Prepare this service mock to expect a request to remove uploaded content for the given [scanCode].
- */
+/** Prepare this service mock to expect a request to remove uploaded content for the given [scanCode]. */
 internal fun FossIdServiceWithVersion.expectRemoveUploadedContent(scanCode: String): FossIdServiceWithVersion {
     coEvery {
         removeUploadedContent(USER, API_KEY, scanCode)
@@ -668,9 +628,7 @@ internal fun FossIdServiceWithVersion.expectCreateScan(
     return this
 }
 
-/**
- * Prepare this service mock to expect a request to delete the scan with the given [scanCode].
- */
+/** Prepare this service mock to expect a request to delete the scan with the given [scanCode]. */
 internal fun FossIdServiceWithVersion.expectDeleteScan(scanCode: String): FossIdServiceWithVersion {
     coEvery {
         deleteScan(USER, API_KEY, scanCode)
@@ -720,9 +678,7 @@ internal fun FossIdServiceWithVersion.mockFiles(
     return this
 }
 
-/**
- * Trigger a FossID scan of the given [package][pkg].
- */
+/** Trigger a FossID scan of the given [package][pkg]. */
 internal fun FossId.scan(
     pkg: Package,
     labels: Map<String, String> = emptyMap(),
@@ -781,9 +737,7 @@ internal fun FossIdServiceWithVersion.expectUploadArchiveWorkflow(
         expectExtractArchives(scanCode)
     }
 
-/**
- * Verify that all functions called during an upload archive workflow for a new scan [scanCode] were called
- */
+/** Verify that all functions called during an upload archive workflow for a new scan [scanCode] were called */
 fun FossIdServiceWithVersion.verifyUploadArchiveWorkflow(
     projectCode: String,
     scanCode: String,

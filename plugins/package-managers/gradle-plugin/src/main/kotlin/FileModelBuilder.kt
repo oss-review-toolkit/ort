@@ -37,16 +37,12 @@ import org.apache.maven.model.resolution.ModelResolver
 
 typealias ModelSourceResolver = (groupId: String, artifactId: String, version: String) -> ModelSource2
 
-/**
- * A Maven model builder for POM files.
- */
+/** A Maven model builder for POM files. */
 class FileModelBuilder(resolve: ModelSourceResolver) {
     private val simpleModelCache = SimpleModelCache()
     private val simpleModelResolver = SimpleModelResolver(resolve)
 
-    /**
-     * Build the Maven model for the given [pomFile] and return it. Throws [ModelBuildingException] on error.
-     */
+    /** Build the Maven model for the given [pomFile] and return it. Throws [ModelBuildingException] on error. */
     fun buildModel(pomFile: File): ModelBuildingResult {
         val request = DefaultModelBuildingRequest().apply {
             isProcessPlugins = false
@@ -61,9 +57,7 @@ class FileModelBuilder(resolve: ModelSourceResolver) {
     }
 }
 
-/**
- * A simple in-memory cache for built Maven models.
- */
+/** A simple in-memory cache for built Maven models. */
 private class SimpleModelCache : ModelCache {
     private data class CacheKey(
         val groupId: String,
@@ -85,9 +79,7 @@ private class SimpleModelCache : ModelCache {
     }
 }
 
-/**
- * A simple Maven model resolver that does not support repositories.
- */
+/** A simple Maven model resolver that does not support repositories. */
 private class SimpleModelResolver(private val resolve: ModelSourceResolver) : ModelResolver {
     override fun resolveModel(groupId: String, artifactId: String, version: String): ModelSource2 =
         resolve(groupId, artifactId, version)

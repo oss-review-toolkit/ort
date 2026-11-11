@@ -34,9 +34,7 @@ class FileMatcher(
      */
     val patterns: Collection<String>,
 
-    /**
-     * Toggle the case-sensitivity of the matching.
-     */
+    /** Toggle the case-sensitivity of the matching. */
     ignoreCase: Boolean = false
 ) {
     companion object {

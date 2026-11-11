@@ -40,14 +40,10 @@ data class ProviderPluginConfiguration(
      */
     val type: String,
 
-    /**
-     * A unique identifier for the provider.
-     */
+    /** A unique identifier for the provider. */
     val id: String = type,
 
-    /**
-     * Whether this provider is enabled.
-     */
+    /** Whether this provider is enabled. */
     val enabled: Boolean = true,
 
     /**
@@ -63,8 +59,6 @@ data class ProviderPluginConfiguration(
     @JsonIgnore
     val secrets: Options = emptyMap()
 ) {
-    /**
-     * Return a string representation of the object that does not contain the [secrets].
-     */
+    /** Return a string representation of the object that does not contain the [secrets]. */
     override fun toString() = "${this::class.simpleName}(type=$type, id=$id, enabled=$enabled, options=$options)"
 }

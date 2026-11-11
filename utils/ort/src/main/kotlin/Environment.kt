@@ -29,53 +29,35 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.common.getConflictingKeys
 
-/**
- * A description of the environment that ORT was executed in.
- */
+/** A description of the environment that ORT was executed in. */
 @JsonIgnoreProperties("tool_versions")
 data class Environment(
-    /**
-     * The version of the OSS Review Toolkit as a string.
-     */
+    /** The version of the OSS Review Toolkit as a string. */
     val ortVersion: String = ORT_VERSION,
 
-    /**
-     * The version of Java used to build ORT.
-     */
+    /** The version of Java used to build ORT. */
     val buildJdk: String = BUILD_JDK,
 
-    /**
-     * The version of Java used to run ORT.
-     */
+    /** The version of Java used to run ORT. */
     val javaVersion: String = JAVA_VERSION,
 
-    /**
-     * Name of the operating system, defaults to [Os.Name].
-     */
+    /** Name of the operating system, defaults to [Os.Name]. */
     val os: String = Os.Name(),
 
-    /**
-     * The number of logical processors available.
-     */
+    /** The number of logical processors available. */
     val processors: Int = Runtime.getRuntime().availableProcessors(),
 
-    /**
-     * The maximum amount of memory available.
-     */
+    /** The maximum amount of memory available. */
     val maxMemory: Long = Runtime.getRuntime().maxMemory(),
 
-    /**
-     * Map of selected environment variables that might be relevant for debugging.
-     */
+    /** Map of selected environment variables that might be relevant for debugging. */
     @JsonPropertyOrder(alphabetic = true)
     val variables: Map<String, String> = RELEVANT_VARIABLES.mapNotNull { key ->
         Os.env[key]?.let { value -> key to value }
     }.toMap()
 ) {
     companion object {
-        /**
-         * The version of Java used to build ORT.
-         */
+        /** The version of Java used to build ORT. */
         val BUILD_JDK: String by lazy {
             runCatching {
                 val codeSource = this::class.java.protectionDomain.codeSource
@@ -85,9 +67,7 @@ data class Environment(
             }.getOrDefault(JAVA_VERSION)
         }
 
-        /**
-         * The version of Java used to run ORT.
-         */
+        /** The version of Java used to run ORT. */
         val JAVA_VERSION: String by lazy { System.getProperty("java.version") }
 
         private val RELEVANT_VARIABLES = listOf(
@@ -186,9 +166,7 @@ val ortConfigDirectory by lazy {
     } ?: (ortDataDirectory / "config")
 }
 
-/**
- * The directory to store ORT (read-write) tools in. Defaults to the "tools" directory below the data directory.
- */
+/** The directory to store ORT (read-write) tools in. Defaults to the "tools" directory below the data directory. */
 val ortToolsDirectory by lazy {
     Os.env[ORT_TOOLS_DIR_ENV_NAME]?.takeUnless {
         it.isEmpty()

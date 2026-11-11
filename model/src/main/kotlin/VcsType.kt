@@ -35,9 +35,7 @@ data class VcsType private constructor(private val aliases: List<String>) {
     constructor(name: String, vararg aliases: String) : this(listOf(name, *aliases))
 
     companion object {
-        /**
-         * [Git](https://git-scm.com/) - the stupid content tracker.
-         */
+        /** [Git](https://git-scm.com/) - the stupid content tracker. */
         val GIT = VcsType("Git", "GitHub", "GitLab")
 
         /**
@@ -46,19 +44,13 @@ data class VcsType private constructor(private val aliases: List<String>) {
          */
         val GIT_REPO = VcsType("GitRepo", "git-repo", "repo")
 
-        /**
-         * [Mercurial](https://www.mercurial-scm.org/) is a free, distributed source control management tool.
-         */
+        /** [Mercurial](https://www.mercurial-scm.org/) is a free, distributed source control management tool. */
         val MERCURIAL = VcsType("Mercurial", "hg")
 
-        /**
-         * [Subversion](https://subversion.apache.org/) is an open source Version Control System.
-         */
+        /** [Subversion](https://subversion.apache.org/) is an open source Version Control System. */
         val SUBVERSION = VcsType("Subversion", "svn")
 
-        /**
-         * An unknown VCS type.
-         */
+        /** An unknown VCS type. */
         val UNKNOWN = VcsType("")
 
         private val KNOWN_TYPES = setOf(GIT, GIT_REPO, MERCURIAL, SUBVERSION)

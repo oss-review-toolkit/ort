@@ -33,14 +33,10 @@ data class RuleViolationResolution(
      */
     val message: String,
 
-    /**
-     * The reason why the rule violation is resolved.
-     */
+    /** The reason why the rule violation is resolved. */
     val reason: RuleViolationResolutionReason,
 
-    /**
-     * A comment to further explain why the [reason] is applicable here.
-     */
+    /** A comment to further explain why the [reason] is applicable here. */
     val comment: String
 ) {
     private val regex = Regex(message.collapseWhitespace(), RegexOption.DOT_MATCHES_ALL)

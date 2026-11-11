@@ -31,9 +31,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * constraints.
  */
 data class SpdxExtractedLicenseInfo(
-    /**
-     * A general comment about the license referred to by [licenseId].
-     */
+    /** A general comment about the license referred to by [licenseId]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = "",
 
@@ -43,20 +41,14 @@ data class SpdxExtractedLicenseInfo(
      */
     val extractedText: String,
 
-    /**
-     * A locally unique identifier for a license that is not on the SPDX License List.
-     */
+    /** A locally unique identifier for a license that is not on the SPDX License List. */
     val licenseId: String,
 
-    /**
-     * The common name for the license referred to by [licenseId].
-     */
+    /** The common name for the license referred to by [licenseId]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val name: String = "",
 
-    /**
-     * A list of URLs pointing to the official source of the license referred to by [licenseId].
-     */
+    /** A list of URLs pointing to the official source of the license referred to by [licenseId]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val seeAlsos: List<String> = emptyList()
 ) {

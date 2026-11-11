@@ -19,37 +19,23 @@
 
 package org.ossreviewtoolkit.model.config
 
-/**
- * Possible reasons for a license finding curation.
- */
+/** Possible reasons for a license finding curation. */
 enum class LicenseFindingCurationReason {
-    /**
-     * The findings occur in source code, for example the name of a variable.
-     */
+    /** The findings occur in source code, for example the name of a variable. */
     CODE,
 
-    /**
-     * The findings occur in a data, for example a JSON object defining all SPDX licenses.
-     */
+    /** The findings occur in a data, for example a JSON object defining all SPDX licenses. */
     DATA_OF,
 
-    /**
-     * The findings occur in documentation, for example in code comments or in the README.md.
-     */
+    /** The findings occur in documentation, for example in code comments or in the README.md. */
     DOCUMENTATION_OF,
 
-    /**
-     * The detected licenses are not correct. Use only if none of the other reasons apply.
-     */
+    /** The detected licenses are not correct. Use only if none of the other reasons apply. */
     INCORRECT,
 
-    /**
-     * Add applicable license as the scanner did not detect it.
-     */
+    /** Add applicable license as the scanner did not detect it. */
     NOT_DETECTED,
 
-    /**
-     * The findings reference a file or URL, e.g. SEE LICENSE IN LICENSE or https://jquery.org/license/.
-     */
+    /** The findings reference a file or URL, e.g. SEE LICENSE IN LICENSE or https://jquery.org/license/. */
     REFERENCE
 }

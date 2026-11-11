@@ -45,9 +45,7 @@ interface DependencyNavigator {
          */
         val MATCH_ALL: DependencyMatcher = { true }
 
-        /**
-         * A pre-defined [DependencyMatcher] that matches only dependencies with a linkage indicating subprojects.
-         */
+        /** A pre-defined [DependencyMatcher] that matches only dependencies with a linkage indicating subprojects. */
         val MATCH_SUB_PROJECTS: DependencyMatcher = { node ->
             node.linkage in PackageLinkage.PROJECT_LINKAGE
         }
@@ -75,9 +73,7 @@ interface DependencyNavigator {
         }
     }
 
-    /**
-     * Return a set with the names of all the scopes defined for the given [project].
-     */
+    /** Return a set with the names of all the scopes defined for the given [project]. */
     fun scopeNames(project: Project): Set<String>
 
     /**
@@ -140,9 +136,7 @@ interface DependencyNavigator {
     fun dependencyTreeDepth(project: Project, scopeName: String): Int =
         getTreeDepthRecursive(directDependencies(project, scopeName), mutableMapOf())
 
-    /**
-     * Return a map of all de-duplicated [Issue]s associated by [Identifier] for the given [project].
-     */
+    /** Return a map of all de-duplicated [Issue]s associated by [Identifier] for the given [project]. */
     fun projectIssues(project: Project): Map<Identifier, Set<Issue>> =
         collectIssues(scopeNames(project).asSequence().flatMap { directDependencies(project, it) })
 
@@ -173,9 +167,7 @@ private data class QueueItem(
     val predecessorNode: DependencyNode?
 )
 
-/**
- * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes].
- */
+/** Determine the map of the shortest paths for a specific scope given its direct dependency [nodes]. */
 private fun getShortestPathsForScope(nodes: Sequence<DependencyNode>): Map<Identifier, List<Identifier>> {
     // A node is visited if it is a key in this map.
     val predecessorForVisitedNode = mutableMapOf<DependencyNode, DependencyNode?>()

@@ -624,9 +624,7 @@ private val DUMMY_CHECKSUM = SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "01234567
 /** Holds an SPDX document that is used as basis when creating documents for tests. */
 private val spdxBaseDocument: SpdxDocument = SpdxModelMapper.read(BASE_DOCUMENT_FILE)
 
-/**
- * Create a synthetic test package based in the given [index].
- */
+/** Create a synthetic test package based in the given [index]. */
 private fun createPackage(index: Int): SpdxPackage =
     SpdxPackage(
         spdxId = packageId(index),
@@ -645,14 +643,10 @@ private fun createPackage(index: Int): SpdxPackage =
 private fun packageId(index: Int, referenceIndex: Int? = null): String =
     referenceIndex?.let { "${referenceId(it)}:" }.orEmpty() + "$SPDX_REF-$index"
 
-/**
- * Generate the ID of a test document reference based on the given [index].
- */
+/** Generate the ID of a test document reference based on the given [index]. */
 private fun referenceId(index: Int): String = "DocumentRef-ref$index"
 
-/**
- * Create an [SpdxExternalDocumentReference] that points to this file with an ID derived from [index].
- */
+/** Create an [SpdxExternalDocumentReference] that points to this file with an ID derived from [index]. */
 private fun File.toExternalReference(index: Int): SpdxExternalDocumentReference {
     val hash = calculateHash(this)
     return SpdxExternalDocumentReference(

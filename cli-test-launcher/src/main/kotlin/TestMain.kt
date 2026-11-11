@@ -34,9 +34,7 @@ import org.ossreviewtoolkit.utils.common.Os
 
 import org.slf4j.LoggerFactory
 
-/**
- * The entry point for the application with [args] being the list of arguments.
- */
+/** The entry point for the application with [args] being the list of arguments. */
 fun main(args: Array<String>) {
     Os.fixupUserHomeProperty()
     TestMain(args).main(args)

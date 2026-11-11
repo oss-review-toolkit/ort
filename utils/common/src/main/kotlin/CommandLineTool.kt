@@ -27,14 +27,10 @@ import org.semver4j.Semver
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
-/**
- * An interface to implement by classes that are backed by a command line tool.
- */
+/** An interface to implement by classes that are backed by a command line tool. */
 interface CommandLineTool {
     companion object {
-        /**
-         * A convenience property to require any version.
-         */
+        /** A convenience property to require any version. */
         val ANY_VERSION: RangeList = RangeListFactory.create("*")
     }
 
@@ -44,24 +40,16 @@ interface CommandLineTool {
      */
     fun command(workingDir: File? = null): String
 
-    /**
-     * Get the arguments to pass to the command in order to get its version.
-     */
+    /** Get the arguments to pass to the command in order to get its version. */
     fun getVersionArguments() = "--version"
 
-    /**
-     * Transform the command's version output to a string that only contains the version.
-     */
+    /** Transform the command's version output to a string that only contains the version. */
     fun transformVersion(output: String) = output
 
-    /**
-     * Return the requirement for the version of the command. Defaults to any version.
-     */
+    /** Return the requirement for the version of the command. Defaults to any version. */
     fun getVersionRequirement() = ANY_VERSION
 
-    /**
-     * Return whether the executable for this command is available in the system PATH.
-     */
+    /** Return whether the executable for this command is available in the system PATH. */
     fun isInPath() = Os.getPathFromEnvironment(command()) != null
 
     /**
@@ -75,15 +63,11 @@ interface CommandLineTool {
             environment = environment
         )
 
-    /**
-     * Run the command in the [workingDir] directory with arguments as specified by [args].
-     */
+    /** Run the command in the [workingDir] directory with arguments as specified by [args]. */
     fun run(workingDir: File?, vararg args: CharSequence) =
         run(args = args, workingDir = workingDir, environment = emptyMap())
 
-    /**
-     * Get the version of the command by parsing its output.
-     */
+    /** Get the version of the command by parsing its output. */
     fun getVersion(workingDir: File? = null): String {
         val version = run(
             *getVersionArguments().splitOnWhitespace().toTypedArray(),
@@ -101,9 +85,7 @@ interface CommandLineTool {
         return versionString.orEmpty()
     }
 
-    /**
-     * Run a [command] to check its version against the [required version][getVersionRequirement].
-     */
+    /** Run a [command] to check its version against the [required version][getVersionRequirement]. */
     fun checkVersion(workingDir: File? = null) {
         val actualVersion = Semver.coerce(getVersion(workingDir))
         val requiredVersion = getVersionRequirement()
@@ -116,8 +98,6 @@ interface CommandLineTool {
         }
     }
 
-    /**
-     * The name to use when referring to this command in user facing output.
-     */
+    /** The name to use when referring to this command in user facing output. */
     fun displayName(): String = javaClass.simpleName.removeSuffix("Command")
 }

@@ -19,17 +19,11 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.rules
 
-/**
- * The scope of an [IgnoreRule].
- */
+/** The scope of an [IgnoreRule]. */
 enum class RuleScope {
-    /**
-     * The corresponding rule applies to every scan.
-     */
+    /** The corresponding rule applies to every scan. */
     GLOBAL,
 
-    /**
-     * The corresponding rule applies to a specific scan.
-     */
+    /** The corresponding rule applies to a specific scan. */
     SCAN
 }

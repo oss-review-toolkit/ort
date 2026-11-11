@@ -21,9 +21,7 @@
 
 package org.ossreviewtoolkit.utils.common
 
-/**
- * Trim leading and trailing whitespace, and collapse consecutive inner whitespace to a single space.
- */
+/** Trim leading and trailing whitespace, and collapse consecutive inner whitespace to a single space. */
 fun String.collapseWhitespace() = trim().replace(CONSECUTIVE_WHITESPACE_REGEX, " ")
 
 private val CONSECUTIVE_WHITESPACE_REGEX = Regex("\\s+")
@@ -38,24 +36,16 @@ fun String.encodeOr(emptyValue: String): String {
     return ifEmpty { emptyValue }.fileSystemEncode()
 }
 
-/**
- * Ensure that this non-empty string starts with the specified [prefix].
- */
+/** Ensure that this non-empty string starts with the specified [prefix]. */
 fun String.ensurePrefix(prefix: String) = if (isEmpty() || startsWith(prefix)) this else "$prefix$this"
 
-/**
- * Ensure that this non-empty string ends with the specified [suffix].
- */
+/** Ensure that this non-empty string ends with the specified [suffix]. */
 fun String.ensureSuffix(suffix: String) = if (isEmpty() || endsWith(suffix)) this else "$this$suffix"
 
-/**
- * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
- */
+/** Return the string encoded for safe use as a file name or "unknown", if the string is empty. */
 fun String.encodeOrUnknown(): String = encodeOr("unknown")
 
-/**
- * Return true if this string equals the [other] string, or if either string is blank.
- */
+/** Return true if this string equals the [other] string, or if either string is blank. */
 fun String.equalsOrIsBlank(other: String) = equals(other) || isBlank() || other.isBlank()
 
 /**
@@ -70,23 +60,17 @@ fun String.fileSystemEncode() =
         .replace(Regex("(^\\.|\\.$)"), "%2E")
         .take(255)
 
-/**
- * Replace "\r\n" and "\r" line breaks with "\n".
- */
+/** Replace "\r\n" and "\r" line breaks with "\n". */
 fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS_REGEX, "\n")
 
 private val NON_LINUX_LINE_BREAKS_REGEX = Regex("\\r\\n?")
 
-/**
- * Return all substrings that do not contain any whitespace as a list.
- */
+/** Return all substrings that do not contain any whitespace as a list. */
 fun String.splitOnWhitespace(): List<String> = NON_SPACE_REGEX.findAll(this).mapTo(mutableListOf()) { it.value }
 
 private val NON_SPACE_REGEX = Regex("\\S+")
 
-/**
- * Return this string lower-cased except for the first character which is upper-cased.
- */
+/** Return this string lower-cased except for the first character which is upper-cased. */
 fun String.titlecase() = lowercase().replaceFirstChar { it.titlecase() }
 
 /**
@@ -96,14 +80,10 @@ fun String.titlecase() = lowercase().replaceFirstChar { it.titlecase() }
 fun String.unquote(trimWhitespace: Boolean = true) =
     trim { (trimWhitespace && it.isWhitespace()) || it == '\'' || it == '"' }
 
-/**
- * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
- */
+/** If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue]. */
 fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { null }): String? =
     this?.removePrefix(prefix)?.takeIf { it != this } ?: missingPrefixValue()
 
-/**
- * If this string ends with [suffix], return the string without the suffix, otherwise return [missingSuffixValue].
- */
+/** If this string ends with [suffix], return the string without the suffix, otherwise return [missingSuffixValue]. */
 fun String?.withoutSuffix(suffix: String, missingSuffixValue: () -> String? = { null }): String? =
     this?.removeSuffix(suffix)?.takeIf { it != this } ?: missingSuffixValue()

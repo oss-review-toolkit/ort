@@ -172,9 +172,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
         conan.command.run("remote", "login", "-p", password, remote, username).requireSuccess()
     }
 
-    /**
-     * Return the map of packages and their identifiers which are contained in [pkgInfos].
-     */
+    /** Return the map of packages and their identifiers which are contained in [pkgInfos]. */
     private fun parsePackages(pkgInfos: List<PackageInfoV2>): Map<String, Package> =
         pkgInfos
             .filterNot { it.packageType == PackageType.APPLICATION || it.packageType == PackageType.BUILD_SCRIPTS }
@@ -183,9 +181,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
                 "${pkg.id.name}:${pkg.id.version}" to pkg
             }
 
-    /**
-     * Return the [Package] parsed from the given [pkgInfo].
-     */
+    /** Return the [Package] parsed from the given [pkgInfo]. */
     private fun parsePackage(pkgInfo: PackageInfoV2): Package {
         val homepageUrl = pkgInfo.homepage.orEmpty()
 
@@ -248,24 +244,18 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
     }
 }
 
-/**
- * Return the full list of packages, excluding the project level information.
- */
+/** Return the full list of packages, excluding the project level information. */
 private fun removeProjectPackage(pkgInfos: List<PackageInfoV2>, definitionFileName: String): List<PackageInfoV2> =
     pkgInfos - findProjectPackageInfo(pkgInfos, definitionFileName)
 
-/**
- * Find the [PackageInfo] that represents the project defined in the definition file.
- */
+/** Find the [PackageInfo] that represents the project defined in the definition file. */
 private fun findProjectPackageInfo(pkgInfos: List<PackageInfoV2>, definitionFileName: String): PackageInfoV2 =
     pkgInfos.first {
         // Use "in" because conanfile.py's reference string often includes other data.
         definitionFileName in it.label
     }
 
-/**
- * Return the [Identifier] for the package contained in [pkgInfo].
- */
+/** Return the [Identifier] for the package contained in [pkgInfo]. */
 private fun parsePackageId(pkgInfo: PackageInfoV2) =
     Identifier(
         type = PACKAGE_TYPE,
@@ -274,9 +264,7 @@ private fun parsePackageId(pkgInfo: PackageInfoV2) =
         version = pkgInfo.version
     )
 
-/**
- * Return the dependency tree for the given [direct scope dependencies][requires].
- */
+/** Return the dependency tree for the given [direct scope dependencies][requires]. */
 private fun parseDependencyTree(
     pkgInfos: List<PackageInfoV2>,
     requires: List<String>,

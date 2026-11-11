@@ -57,9 +57,7 @@ import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
-/**
- * The class to run the analysis. The signatures of public functions in this class define the library API.
- */
+/** The class to run the analysis. The signatures of public functions in this class define the library API. */
 class Analyzer(private val config: AnalyzerConfiguration, private val labels: Map<String, String> = emptyMap()) {
     data class ManagedFileInfo(
         val absoluteProjectPath: File,
@@ -282,58 +280,36 @@ private class AnalyzerState {
     fun buildResult(excludes: Excludes, includes: Includes) = builder.build(excludes, includes)
 }
 
-/**
- * A class to manage running a [PackageManager].
- */
+/** A class to manage running a [PackageManager]. */
 private class PackageManagerRunner(
-    /**
-     * The [PackageManager] to run.
-     */
+    /** The [PackageManager] to run. */
     val manager: PackageManager,
 
-    /**
-     * The list of definition files to analyze.
-     */
+    /** The list of definition files to analyze. */
     val definitionFiles: List<File>,
 
-    /**
-     * The root directory of the analysis.
-     */
+    /** The root directory of the analysis. */
     val analysisRoot: File,
 
-    /**
-     * The [Excludes] to apply.
-     */
+    /** The [Excludes] to apply. */
     val excludes: Excludes,
 
-    /**
-     * The [Includes] to apply.
-     */
+    /** The [Includes] to apply. */
     val includes: Includes,
 
-    /**
-     * The [AnalyzerConfiguration] to use.
-     */
+    /** The [AnalyzerConfiguration] to use. */
     val analyzerConfig: AnalyzerConfiguration,
 
-    /**
-     * The labels passed to ORT.
-     */
+    /** The labels passed to ORT. */
     val labels: Map<String, String>,
 
-    /**
-     * A set of the names of package managers that this package manager must run after.
-     */
+    /** A set of the names of package managers that this package manager must run after. */
     val mustRunAfter: Set<String>,
 
-    /**
-     * A [StateFlow] that updates with the set of already finished package managers.
-     */
+    /** A [StateFlow] that updates with the set of already finished package managers. */
     val finishedPackageManagersState: StateFlow<Set<String>>,
 
-    /**
-     * A callback for this package manager to return its result.
-     */
+    /** A callback for this package manager to return its result. */
     val onResult: (PackageManagerResult) -> Unit
 ) {
     /**

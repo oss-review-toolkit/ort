@@ -88,9 +88,7 @@ abstract class CycloneDxPackageManager(
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
-    /**
-     * Create a Project from the CycloneDX metadata component.
-     */
+    /** Create a Project from the CycloneDX metadata component. */
     private fun createProjectFromSbom(definitionFile: File, component: Component, issues: MutableList<Issue>): Project {
         val definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
 

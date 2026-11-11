@@ -38,9 +38,7 @@ import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 private const val PROJECT_CODE = "semver4j"
 private const val SCAN_CODE = "${PROJECT_CODE}_20201203_090342"
 
-/**
- * This client test creates a new project, triggers the download and the scan and gets the scan results.
- */
+/** This client test creates a new project, triggers the download and the scan and gets the scan results. */
 class FossIdClientNewProjectTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()

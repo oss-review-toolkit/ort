@@ -24,9 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
-/**
- * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].
- */
+/** The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel]. */
 data class EvaluatedProcessedDeclaredLicense(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val spdxExpression: SpdxExpression?,

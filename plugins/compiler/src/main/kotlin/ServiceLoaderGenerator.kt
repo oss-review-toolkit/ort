@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.plugins.compiler
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 
-/**
- * A class to generate service loader files for plugin factories.
- */
+/** A class to generate service loader files for plugin factories. */
 class ServiceLoaderGenerator(private val codeGenerator: CodeGenerator) {
     fun generate(serviceLoaderSpecs: List<ServiceLoaderSpec>) {
         serviceLoaderSpecs.groupBy { it.pluginSpec.factory.qualifiedName }.forEach { (factoryName, specs) ->

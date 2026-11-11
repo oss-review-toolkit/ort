@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.clients.fossid.model
 
-/**
- * This class is present to handle the high polymorphism of the 'removeUploadedContent' response.
- */
+/** This class is present to handle the high polymorphism of the 'removeUploadedContent' response. */
 data class RemoveUploadContentResponse @JvmOverloads constructor(
     // Normal response.
     val value: Boolean? = null,

@@ -30,9 +30,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 
-/**
- * The default [LicenseInfoProvider] that collects license information from an [ortResult].
- */
+/** The default [LicenseInfoProvider] that collects license information from an [ortResult]. */
 class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider {
     private val licenseInfo: ConcurrentMap<Identifier, LicenseInfo> = ConcurrentHashMap()
 

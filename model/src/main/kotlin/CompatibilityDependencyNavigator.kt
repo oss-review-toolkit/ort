@@ -84,9 +84,7 @@ class CompatibilityDependencyNavigator internal constructor(
         matcher: DependencyMatcher
     ): Set<Identifier> = project.invokeNavigator { packageDependencies(it, packageId, maxDepth, matcher) }
 
-    /**
-     * Choose the correct [DependencyNavigator] to handle this [Project] and invoke [block] on it.
-     */
+    /** Choose the correct [DependencyNavigator] to handle this [Project] and invoke [block] on it. */
     private fun <T> Project.invokeNavigator(block: DependencyNavigator.(Project) -> T): T {
         val navigator = if (usesTree()) treeNavigator else graphNavigator
         return navigator.block(this)

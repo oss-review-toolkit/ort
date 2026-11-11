@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 
 data class NpmConfig(
-    /**
-     * If true, ignore any project-specific `.npmrc` files.
-     */
+    /** If true, ignore any project-specific `.npmrc` files. */
     @OrtPluginOption(defaultValue = "false")
     val ignoreProjectNpmrcFiles: Boolean,
 
@@ -48,9 +46,7 @@ data class NpmConfig(
     @OrtPluginOption(defaultValue = "")
     val nodeVersion: String,
 
-    /**
-     * Override OS of native modules to install. See also https://nodejs.org/api/process.html#processplatform.
-     */
+    /** Override OS of native modules to install. See also https://nodejs.org/api/process.html#processplatform. */
     val os: Platform?,
 
     /**
@@ -58,9 +54,7 @@ data class NpmConfig(
      */
     val cpu: ProcessorArchitecture?
 ) {
-    /**
-     * See https://nodejs.org/api/process.html#processarch.
-     */
+    /** See https://nodejs.org/api/process.html#processarch. */
     enum class ProcessorArchitecture {
         ARM,
         ARM64,
@@ -74,9 +68,7 @@ data class NpmConfig(
         X64
     }
 
-    /**
-     * See https://nodejs.org/api/process.html#processplatform.
-     */
+    /** See https://nodejs.org/api/process.html#processplatform. */
     enum class Platform {
         AIX,
         DARWIN,

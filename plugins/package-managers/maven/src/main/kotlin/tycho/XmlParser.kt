@@ -52,15 +52,11 @@ internal class ElementHandler<S : Any>(initialState: S) : DefaultHandler() {
     /** Stores the content of the body of the current XML element. */
     private val bodyContent = StringBuilder()
 
-    /**
-     * Return the resulting state after processing the XML document.
-     */
+    /** Return the resulting state after processing the XML document. */
     val result: S
         get() = currentState
 
-    /**
-     * Register the given [startFunction] for the element with the given [name].
-     */
+    /** Register the given [startFunction] for the element with the given [name]. */
     fun handleElement(name: String, startFunction: ElementFun<S>): ElementHandler<S> {
         elementFunctions[name] = startFunction
         return this
@@ -100,9 +96,7 @@ internal fun <S : Any> parseXml(stream: InputStream, handler: ElementHandler<S>)
     return handler.result
 }
 
-/**
- * Parse the given XML [file] using the given [handler] and return the result produced by the [handler].
- */
+/** Parse the given XML [file] using the given [handler] and return the result produced by the [handler]. */
 internal fun <S : Any> parseXml(file: File, handler: ElementHandler<S>): S =
     file.inputStream().use { stream -> parseXml(stream, handler) }
 

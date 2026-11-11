@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.model.config.snippet
 
-/**
- * A collection of snippet choices for a given provenance.
- */
+/** A collection of snippet choices for a given provenance. */
 data class SnippetChoices(
     /**
      * The provenance in the project source tree the snippet choice applies to. This can be the root provenance or any
@@ -29,8 +27,6 @@ data class SnippetChoices(
      */
     val provenance: SnippetProvenance,
 
-    /**
-     * The snippet choices for this package.
-     */
+    /** The snippet choices for this package. */
     val choices: List<SnippetChoice>
 )

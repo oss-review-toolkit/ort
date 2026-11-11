@@ -26,9 +26,7 @@ import kotlinx.serialization.Serializable
 
 internal val toml = Toml { ignoreUnknownKeys = true }
 
-/**
- * See https://docs.rs/cargo-lock/latest/cargo_lock/struct.Lockfile.html.
- */
+/** See https://docs.rs/cargo-lock/latest/cargo_lock/struct.Lockfile.html. */
 @Serializable
 internal data class CargoLockfile(
     val version: Int? = null,
@@ -38,9 +36,7 @@ internal data class CargoLockfile(
 
     val metadata: Map<String, String> = emptyMap()
 ) {
-    /**
-     * See https://docs.rs/cargo-lock/latest/cargo_lock/package/struct.Package.html.
-     */
+    /** See https://docs.rs/cargo-lock/latest/cargo_lock/package/struct.Package.html. */
     @Serializable
     data class Package(
         val name: String,

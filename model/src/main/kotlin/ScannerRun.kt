@@ -44,39 +44,25 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.common.zipWithSets
 import org.ossreviewtoolkit.utils.ort.Environment
 
-/**
- * The summary of a single run of the scanner.
- */
+/** The summary of a single run of the scanner. */
 data class ScannerRun(
-    /**
-     * The [Instant] the scanner was started.
-     */
+    /** The [Instant] the scanner was started. */
     val startTime: Instant,
 
-    /**
-     * The [Instant] the scanner has finished.
-     */
+    /** The [Instant] the scanner has finished. */
     val endTime: Instant,
 
-    /**
-     * The [Environment] in which the scanner was executed.
-     */
+    /** The [Environment] in which the scanner was executed. */
     val environment: Environment,
 
-    /**
-     * The [ScannerConfiguration] used for this run.
-     */
+    /** The [ScannerConfiguration] used for this run. */
     val config: ScannerConfiguration,
 
-    /**
-     * The results of the provenance resolution for all projects and packages.
-     */
+    /** The results of the provenance resolution for all projects and packages. */
     @JsonSerialize(converter = ProvenanceResolutionResultSortedSetConverter::class)
     val provenances: Set<ProvenanceResolutionResult>,
 
-    /**
-     * The scan results for each resolved provenance.
-     */
+    /** The scan results for each resolved provenance. */
     @JsonSerialize(converter = ScanResultSortedSetConverter::class)
     val scanResults: Set<ScanResult>,
 
@@ -88,22 +74,16 @@ data class ScannerRun(
     @JsonPropertyOrder(alphabetic = true)
     val issues: Map<Identifier, Set<Issue>> = emptyMap(),
 
-    /**
-     * The project / package identifiers that have been scanned, associated with the names of the scanners used.
-     */
+    /** The project / package identifiers that have been scanned, associated with the names of the scanners used. */
     @JsonSerialize(converter = ScannersMapConverter::class)
     val scanners: Map<Identifier, Set<String>>,
 
-    /**
-     * The list of files for each resolved provenance.
-     */
+    /** The list of files for each resolved provenance. */
     @JsonSerialize(converter = FileListSortedSetConverter::class)
     val files: Set<FileList>
 ) {
     companion object {
-        /**
-         * A constant for a [ScannerRun] where all properties are empty.
-         */
+        /** A constant for a [ScannerRun] where all properties are empty. */
         @JvmField
         val EMPTY = ScannerRun(
             startTime = Instant.EPOCH,

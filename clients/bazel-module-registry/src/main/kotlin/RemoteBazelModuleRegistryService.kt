@@ -27,9 +27,7 @@ import org.apache.logging.log4j.kotlin.logger
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-/**
- * The client uses the Bazel Central Registry by default.
- */
+/** The client uses the Bazel Central Registry by default. */
 const val DEFAULT_URL = "https://bcr.bazel.build"
 
 /**

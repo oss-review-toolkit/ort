@@ -300,9 +300,7 @@ class Scanner(
         logger.info { "Resolved nested provenance for ${controller.packages.size} package(s) in $duration." }
     }
 
-    /**
-     * Run package scanners for packages with incomplete scan results.
-     */
+    /** Run package scanners for packages with incomplete scan results. */
     private suspend fun runPackageScanners(controller: ScanController, context: ScanContext) {
         val packagesByProvenance = controller.getPackagesConsolidatedByProvenance()
 
@@ -402,9 +400,7 @@ class Scanner(
         }
     }
 
-    /**
-     * Run provenance scanners for provenances with missing scan results.
-     */
+    /** Run provenance scanners for provenances with missing scan results. */
     private suspend fun runProvenanceScanners(
         controller: ScanController,
         context: ScanContext,
@@ -462,9 +458,7 @@ class Scanner(
         }
     }
 
-    /**
-     * Run path scanners for provenances with missing scan results.
-     */
+    /** Run path scanners for provenances with missing scan results. */
     private suspend fun runPathScanners(
         controller: ScanController,
         context: ScanContext,

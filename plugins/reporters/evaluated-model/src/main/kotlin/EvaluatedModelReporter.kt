@@ -38,17 +38,13 @@ enum class ConfigFileFormat(val format: FileFormat) {
 }
 
 data class EvaluatedModelReporterConfig(
-    /**
-     * Controls whether subtrees occurring multiple times in the dependency tree are stripped.
-     */
+    /** Controls whether subtrees occurring multiple times in the dependency tree are stripped. */
     @OrtPluginOption(
         defaultValue = "false"
     )
     val deduplicateDependencyTree: Boolean,
 
-    /**
-     * The list of file formats to generate, defaults to JSON. Supported formats are JSON and YAML.
-     */
+    /** The list of file formats to generate, defaults to JSON. Supported formats are JSON and YAML. */
     @OrtPluginOption(
         defaultValue = "JSON",
         aliases = ["output.file.formats"]
@@ -56,9 +52,7 @@ data class EvaluatedModelReporterConfig(
     val outputFileFormats: List<ConfigFileFormat>
 )
 
-/**
- * A [Reporter] that generates an [EvaluatedModel].
- */
+/** A [Reporter] that generates an [EvaluatedModel]. */
 @OrtPlugin(
     displayName = "Evaluated Model",
     summary = "Generates an evaluated model of the ORT result.",

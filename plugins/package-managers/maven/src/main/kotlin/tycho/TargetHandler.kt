@@ -75,9 +75,7 @@ internal class TargetHandler(
             return targetFiles.map(::parseTargetFile)
         }
 
-        /**
-         * Parse the given [targetFile] and extract the repository URLs referenced in it.
-         */
+        /** Parse the given [targetFile] and extract the repository URLs referenced in it. */
         private fun parseTargetFile(targetFile: File): ParseTargetFileState {
             val handler = ElementHandler(ParseTargetFileState())
                 .handleElement("repository") { state, attributes, _ ->
@@ -184,9 +182,7 @@ internal class TargetHandler(
     }
 }
 
-/**
- * A data class to store the state during parsing of a target file.
- */
+/** A data class to store the state during parsing of a target file. */
 private data class ParseTargetFileState(
     /** The [Set] with the URLs of repositories that have been found so far. */
     val repositoryUrls: MutableSet<String> = mutableSetOf(),
@@ -208,9 +204,7 @@ private data class ParseTargetFileState(
         return this
     }
 
-    /**
-     * Update this state by adding the [featureId] of a feature that have been found while parsing the target file.
-     */
+    /** Update this state by adding the [featureId] of a feature that have been found while parsing the target file. */
     fun addFeature(featureId: String): ParseTargetFileState {
         featureIds += featureId
         return this

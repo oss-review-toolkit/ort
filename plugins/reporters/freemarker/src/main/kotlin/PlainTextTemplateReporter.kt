@@ -37,9 +37,7 @@ data class PlainTextTemplateReporterConfig(
     @OrtPluginOption(aliases = ["template.id"])
     val templateIds: List<String>?,
 
-    /**
-     * A comma-separated list of paths to template files provided by the user.
-     */
+    /** A comma-separated list of paths to template files provided by the user. */
     @OrtPluginOption(aliases = ["template.path"])
     val templatePaths: List<String>?
 ) {

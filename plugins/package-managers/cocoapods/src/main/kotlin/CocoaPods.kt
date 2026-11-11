@@ -151,9 +151,7 @@ class CocoaPods(
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 }
 
-/**
- * Return a new [Lockfile] instance with all external source paths resolved relative to the given [lockfilePath].
- */
+/** Return a new [Lockfile] instance with all external source paths resolved relative to the given [lockfilePath]. */
 internal fun Lockfile.withResolvedPaths(lockfilePath: File): Lockfile =
     copy(
         externalSources = externalSources.mapValues { entry ->

@@ -30,9 +30,7 @@ import kotlin.io.path.deleteRecursively
 
 import org.ossreviewtoolkit.utils.common.Os.fixupUserHomeProperty
 
-/**
- * A comparator that sorts parent paths before child paths.
- */
+/** A comparator that sorts parent paths before child paths. */
 val PATH_STRING_COMPARATOR = compareBy<String>({ path -> path.count { it == '/' } }, { it })
 
 /**
@@ -78,15 +76,11 @@ fun getCommonParentFile(files: Collection<File>): File =
         File(it)
     }
 
-/**
- * Get the size of this [File] in mebibytes (MiB) with two decimal places as [String].
- */
+/** Get the size of this [File] in mebibytes (MiB) with two decimal places as [String]. */
 val File.formatSizeInMib: String
     get() = "${length().bytesToMib().format()} MiB"
 
-/**
- * Return true if this file is a symbolic link.
- */
+/** Return true if this file is a symbolic link. */
 val File.isSymbolicLink: Boolean
     get() = runCatching {
         // Note that we cannot use exists() to check beforehand whether a symbolic link exists to avoid a
@@ -168,9 +162,7 @@ fun File.searchUpwardFor(dirPath: String? = null, filePath: String? = null): Fil
     }
 }
 
-/**
- * Construct a "file:" URI in a safe way by never using a null authority for wider compatibility.
- */
+/** Construct a "file:" URI in a safe way by never using a null authority for wider compatibility. */
 fun File.toSafeUri(): URI {
     val fileUri = toURI()
     return URI("file", "", fileUri.path, fileUri.query, fileUri.fragment)
@@ -185,12 +177,8 @@ fun String.expandTilde(): String =
         withoutPrefix("~")?.let { suffix -> fixupUserHomeProperty() + suffix }
     } ?: this
 
-/**
- * A convenience operator to resolve [relativePath] against this file.
- */
+/** A convenience operator to resolve [relativePath] against this file. */
 operator fun File.div(relativePath: File): File = resolve(relativePath)
 
-/**
- * A convenience operator to resolve [relativePath] against this file.
- */
+/** A convenience operator to resolve [relativePath] against this file. */
 operator fun File.div(relativePath: String): File = resolve(relativePath)

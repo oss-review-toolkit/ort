@@ -38,9 +38,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.api.PluginOption
 import org.ossreviewtoolkit.plugins.api.PluginOptionType
 
-/**
- * A generator for [PluginSpec] instances.
- */
+/** A generator for [PluginSpec] instances. */
 class PluginSpecFactory {
     /**
      * Create a [PluginSpec] for the given [ortPlugin] using the [pluginClass] and [pluginFactoryClass]. The
@@ -113,9 +111,7 @@ class PluginSpecFactory {
         }
     }
 
-    /**
-     * Get the plugin options from the config class by mapping its properties to [PluginOption] instances.
-     */
+    /** Get the plugin options from the config class by mapping its properties to [PluginOption] instances. */
     @OptIn(KspExperimental::class)
     private fun KSClassDeclaration.getPluginOptions(): List<PluginOption> {
         require(Modifier.DATA in modifiers) {
@@ -223,15 +219,11 @@ class PluginSpecFactory {
 internal fun derivePluginId(pluginClassName: String, pluginBaseClassName: String): String =
     pluginClassName.removeSuffix(pluginBaseClassName.removePrefix("Ort"))
 
-/**
- * Return `true` if the given [type] is an enum type.
- */
+/** Return `true` if the given [type] is an enum type. */
 private fun isEnumType(type: KSType): Boolean =
     type.declaration.let { it is KSClassDeclaration && it.classKind == ClassKind.ENUM_CLASS }
 
-/**
- * Return `true` if the given [type] is a [List] with an enum type as its single type argument.
- */
+/** Return `true` if the given [type] is a [List] with an enum type as its single type argument. */
 private fun isEnumListType(type: KSType): Boolean =
     type.declaration.qualifiedName?.asString() == "kotlin.collections.List" &&
         type.arguments.singleOrNull()?.let { arg ->

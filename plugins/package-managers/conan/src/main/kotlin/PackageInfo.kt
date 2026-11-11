@@ -149,9 +149,7 @@ internal data class PackageV2(
     val packageType: PackageType
 )
 
-/**
- * See https://docs.conan.io/2/reference/conanfile/attributes.html#package-type.
- */
+/** See https://docs.conan.io/2/reference/conanfile/attributes.html#package-type. */
 @Serializable
 internal enum class PackageType {
     @SerialName("application") APPLICATION,
@@ -164,9 +162,7 @@ internal enum class PackageType {
     @SerialName("unknown") UNKNOWN
 }
 
-/**
- * See https://docs.conan.io/2/reference/conanfile/methods/requirements.html#requirement-traits.
- */
+/** See https://docs.conan.io/2/reference/conanfile/methods/requirements.html#requirement-traits. */
 @Serializable
 internal data class DependencyReference(
     val ref: String,

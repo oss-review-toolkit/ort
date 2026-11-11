@@ -88,9 +88,7 @@ class FossIdUrlProvider private constructor(
             return requestPasswordAuthentication(repoUri)
         }
 
-        /**
-         * Handle the variables referencing credentials if they occur in the [replacement string][replaced].
-         */
+        /** Handle the variables referencing credentials if they occur in the [replacement string][replaced]. */
         private fun replaceVariables(replaced: String): String =
             replaced.takeUnless { VAR_USERNAME in it || VAR_PASSWORD in it }
                 ?: insertCredentials(replaced)
@@ -108,9 +106,7 @@ class FossIdUrlProvider private constructor(
                 ?: replacedUrl
         }
 
-        /**
-         * Replace the variables related to credentials with the values in [auth].
-         */
+        /** Replace the variables related to credentials with the values in [auth]. */
         private fun String.insertCredentials(auth: PasswordAuthentication): String =
             replace(VAR_USERNAME, auth.userName.percentEncode())
                 .replace(VAR_PASSWORD, String(auth.password).percentEncode())
@@ -134,9 +130,7 @@ class FossIdUrlProvider private constructor(
         }
     }
 
-    /**
-     * Return the URL to be passed to FossID when creating a scan from the given [repoUrl].
-     */
+    /** Return the URL to be passed to FossID when creating a scan from the given [repoUrl]. */
     fun getUrl(repoUrl: String): String {
         for ((regex, replace) in urlMapping) {
             val replaced = regex.replace(repoUrl, replace)

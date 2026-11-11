@@ -35,9 +35,7 @@ import org.ossreviewtoolkit.utils.common.formatSizeInMib
 
 import retrofit2.HttpException
 
-/**
- * A client implementation on top of the DOS service.
- */
+/** A client implementation on top of the DOS service. */
 class DosClient(private val service: DosService) {
     /**
      * Get the package configuration for the given [purl]. Return a [PackageConfigurationResponseBody] or null on error.
@@ -117,9 +115,7 @@ class DosClient(private val service: DosService) {
         }.isSuccess
     }
 
-    /**
-     * Add a new scan job [zipFileKey] and [packages]. Return a [JobResponseBody] or null on error.
-     */
+    /** Add a new scan job [zipFileKey] and [packages]. Return a [JobResponseBody] or null on error. */
     suspend fun addScanJob(zipFileKey: String, packages: List<PackageInfo>): JobResponseBody? {
         if (zipFileKey.isEmpty() || packages.isEmpty()) {
             logger.error { "The ZIP file key and Package URLs are required to add a scan job." }

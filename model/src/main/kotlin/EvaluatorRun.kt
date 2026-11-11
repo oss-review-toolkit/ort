@@ -23,34 +23,22 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.utils.ort.Environment
 
-/**
- * The summary of a single run of the evaluator.
- */
+/** The summary of a single run of the evaluator. */
 data class EvaluatorRun(
-    /**
-     * The [Instant] the evaluator was started.
-     */
+    /** The [Instant] the evaluator was started. */
     val startTime: Instant,
 
-    /**
-     * The [Instant] the evaluator has finished.
-     */
+    /** The [Instant] the evaluator has finished. */
     val endTime: Instant,
 
-    /**
-     * The [Environment] in which the evaluator was executed.
-     */
+    /** The [Environment] in which the evaluator was executed. */
     val environment: Environment,
 
-    /**
-     * The list of [RuleViolation]s found by the evaluator.
-     */
+    /** The list of [RuleViolation]s found by the evaluator. */
     val violations: List<RuleViolation>
 ) {
     companion object {
-        /**
-         * A constant for an [EvaluatorRun] where all properties are empty.
-         */
+        /** A constant for an [EvaluatorRun] where all properties are empty. */
         @JvmField
         val EMPTY = EvaluatorRun(
             startTime = Instant.EPOCH,

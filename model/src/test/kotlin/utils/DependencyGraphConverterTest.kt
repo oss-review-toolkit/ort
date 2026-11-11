@@ -175,9 +175,7 @@ class DependencyGraphConverterTest : WordSpec({
     }
 })
 
-/**
- * Create a test project with a (small) dependency tree. Use [managerName] and [index] to generate identifiers.
- */
+/** Create a test project with a (small) dependency tree. Use [managerName] and [index] to generate identifiers. */
 private fun createProject(managerName: String, index: Int): Project {
     val mainScope = Scope("main", createDependencies(managerName, index * 100, 4))
     val testScope = Scope("test", createDependencies(managerName, index * 100 + 10, 8))
@@ -209,17 +207,13 @@ private fun createDependencies(managerName: String, startIndex: Int, count: Int)
         PackageReference(createIdentifier(managerName, index, forProject = false), issues = createIssues(index))
     }
 
-/**
- * Create a list with issues for a test dependency based on its [index].
- */
+/** Create a list with issues for a test dependency based on its [index]. */
 private fun createIssues(index: Int): List<Issue> =
     emptyList<Issue>().takeIf { index % 2 == 0 } ?: listOf(
         Issue(source = "test", message = "Test issue $index.")
     )
 
-/**
- * Construct an [AnalyzerResult] from the given sequence of [projectResults].
- */
+/** Construct an [AnalyzerResult] from the given sequence of [projectResults]. */
 private fun createAnalyzerResult(vararg projectResults: ProjectAnalyzerResult): AnalyzerResult {
     val projects = projectResults.mapTo(mutableSetOf()) { it.project }
     val packages = projectResults.flatMapTo(mutableSetOf()) { it.packages }
@@ -227,9 +221,7 @@ private fun createAnalyzerResult(vararg projectResults: ProjectAnalyzerResult): 
     return AnalyzerResult(projects, packages)
 }
 
-/**
- * Create a [ProjectAnalyzerResult] based on this test project.
- */
+/** Create a [ProjectAnalyzerResult] based on this test project. */
 private fun Project.createResult(): ProjectAnalyzerResult {
     val packages = scopes.flatMap { it.dependencies }.mapTo(mutableSetOf()) { ref ->
         Package.EMPTY.copy(id = ref.id)
@@ -238,9 +230,7 @@ private fun Project.createResult(): ProjectAnalyzerResult {
     return ProjectAnalyzerResult(this, packages)
 }
 
-/**
- * Return the project with the given [id] from this result or fail miserably if it cannot be found.
- */
+/** Return the project with the given [id] from this result or fail miserably if it cannot be found. */
 private fun AnalyzerResult.getProject(id: Identifier): Project {
     val project = projects.find { it.id == id }
     return project ?: AssertionErrorBuilder.fail("Could not find project with ID $id.")

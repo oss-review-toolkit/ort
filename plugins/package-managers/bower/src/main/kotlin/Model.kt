@@ -45,9 +45,7 @@ internal data class PackageInfo(
     )
 }
 
-/**
- * See https://github.com/bower/spec/blob/master/json.md.
- */
+/** See https://github.com/bower/spec/blob/master/json.md. */
 @Serializable
 internal data class PackageMeta(
     val name: String? = null,

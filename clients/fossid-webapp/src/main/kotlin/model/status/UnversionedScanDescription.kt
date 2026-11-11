@@ -19,17 +19,11 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.status
 
-/**
- * An interface abstracting a Scan description, regardless of the version of the FossID server.
- */
+/** An interface abstracting a Scan description, regardless of the version of the FossID server. */
 interface UnversionedScanDescription {
-    /**
-     * The current status of the scan.
-     */
+    /** The current status of the scan. */
     val status: ScanStatus
 
-    /**
-     * A comment provideing extra information (set when the scan is in status [ScanStatus.FINISHED]).
-     */
+    /** A comment provideing extra information (set when the scan is in status [ScanStatus.FINISHED]). */
     val comment: String?
 }

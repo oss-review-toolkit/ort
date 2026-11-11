@@ -28,14 +28,10 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
  * See https://spdx.github.io/spdx-spec/v2.3/annotations/.
  */
 data class SpdxAnnotation(
-    /**
-     * The creation date of this annotation.
-     */
+    /** The creation date of this annotation. */
     val annotationDate: Instant,
 
-    /**
-     * The type of this annotation.
-     */
+    /** The type of this annotation. */
     val annotationType: Type,
 
     /**
@@ -48,15 +44,11 @@ data class SpdxAnnotation(
      */
     val annotator: String,
 
-    /**
-     * Comments from the [annotator].
-     */
+    /** Comments from the [annotator]. */
     val comment: String
 ) {
     enum class Type {
-        /**
-         * Type of annotation which does not fit in any of the pre-defined annotation types.
-         */
+        /** Type of annotation which does not fit in any of the pre-defined annotation types. */
         OTHER,
 
         /**

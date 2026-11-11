@@ -58,9 +58,7 @@ internal data class HexPackageInfo(
     )
 }
 
-/**
- * Response model for the Hex.pm release API.
- */
+/** Response model for the Hex.pm release API. */
 @Serializable
 internal data class HexReleaseInfo(
     val version: String,

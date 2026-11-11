@@ -19,32 +19,20 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.rules
 
-/**
- * An "ignore rule" allows specifying FossID which files need to be excluded from scan.
- */
+/** An "ignore rule" allows specifying FossID which files need to be excluded from scan. */
 data class IgnoreRule(
-    /**
-     * The id of the rule.
-     */
+    /** The id of the rule. */
     val id: Int,
 
-    /**
-     * The type of the rule.
-     */
+    /** The type of the rule. */
     val type: RuleType,
 
-    /**
-     * The value of the rule.
-     */
+    /** The value of the rule. */
     val value: String,
 
-    /**
-     * The id of the scan for which the rule is defined.
-     */
+    /** The id of the scan for which the rule is defined. */
     val scanId: Int,
 
-    /**
-     * The date the rule was last updated (e.g. 2022-01-05 14:59:22).
-     */
+    /** The date the rule was last updated (e.g. 2022-01-05 14:59:22). */
     val updated: String
 )

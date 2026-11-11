@@ -33,42 +33,28 @@ import org.ossreviewtoolkit.utils.common.calculateHash
  * alias is the definite name.
  */
 enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val isVerifiable: Boolean = true) {
-    /**
-     * No hash algorithm.
-     */
+    /** No hash algorithm. */
     NONE("", emptyValue = "", isVerifiable = false),
 
-    /**
-     * An unknown hash algorithm.
-     */
+    /** An unknown hash algorithm. */
     UNKNOWN("UNKNOWN", emptyValue = "", isVerifiable = false),
 
-    /**
-     * The Message-Digest 5 hash algorithm, see [MD5](http://en.wikipedia.org/wiki/MD5).
-     */
+    /** The Message-Digest 5 hash algorithm, see [MD5](http://en.wikipedia.org/wiki/MD5). */
     MD5("MD5", emptyValue = "d41d8cd98f00b204e9800998ecf8427e"),
 
-    /**
-     * The Secure Hash Algorithm 1, see [SHA-1](https://en.wikipedia.org/wiki/SHA-1).
-     */
+    /** The Secure Hash Algorithm 1, see [SHA-1](https://en.wikipedia.org/wiki/SHA-1). */
     SHA1("SHA-1", "SHA1", emptyValue = "da39a3ee5e6b4b0d3255bfef95601890afd80709"),
 
-    /**
-     * The Secure Hash Algorithm 2 with 256 bits, see [SHA-256](https://en.wikipedia.org/wiki/SHA-256).
-     */
+    /** The Secure Hash Algorithm 2 with 256 bits, see [SHA-256](https://en.wikipedia.org/wiki/SHA-256). */
     SHA256("SHA-256", "SHA256", emptyValue = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
 
-    /**
-     * The Secure Hash Algorithm 2 with 384 bits, see [SHA-384](https://en.wikipedia.org/wiki/SHA-384).
-     */
+    /** The Secure Hash Algorithm 2 with 384 bits, see [SHA-384](https://en.wikipedia.org/wiki/SHA-384). */
     SHA384(
         "SHA-384", "SHA384",
         emptyValue = "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b"
     ),
 
-    /**
-     * The Secure Hash Algorithm 2 with 512 bits, see [SHA-512](https://en.wikipedia.org/wiki/SHA-512).
-     */
+    /** The Secure Hash Algorithm 2 with 512 bits, see [SHA-512](https://en.wikipedia.org/wiki/SHA-512). */
     SHA512(
         "SHA-512", "SHA512",
         emptyValue = "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce" +
@@ -92,14 +78,10 @@ enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val
     };
 
     companion object {
-        /**
-         * The list of algorithms that can be verified.
-         */
+        /** The list of algorithms that can be verified. */
         val VERIFIABLE = HashAlgorithm.entries.filter { it.isVerifiable }
 
-        /**
-         * Create a hash algorithm from one of its [alias] names.
-         */
+        /** Create a hash algorithm from one of its [alias] names. */
         @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
         fun fromString(alias: String): HashAlgorithm =
@@ -107,48 +89,34 @@ enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val
                 alias.uppercase() in it.aliases
             } ?: UNKNOWN
 
-        /**
-         * Create a hash algorithm from a hash [value].
-         */
+        /** Create a hash algorithm from a hash [value]. */
         fun create(value: String): HashAlgorithm {
             if (value.isBlank()) return NONE
             return HashAlgorithm.entries.find { it.size == value.length } ?: UNKNOWN
         }
     }
 
-    /**
-     * The size of a hexadecimal hash value string for this algorithm.
-     */
+    /** The size of a hexadecimal hash value string for this algorithm. */
     val size = emptyValue.length
 
-    /**
-     * Convert the hash algorithm to a string representation.
-     */
+    /** Convert the hash algorithm to a string representation. */
     @JsonValue
     override fun toString(): String = aliases.first()
 
-    /**
-     * Return the hexadecimal digest of this hash for the given [file].
-     */
+    /** Return the hexadecimal digest of this hash for the given [file]. */
     fun calculate(file: File): String = file.inputStream().use { calculate(it, file.length()) }
 
-    /**
-     * Return the hexadecimal digest of this hash for the given [bytes].
-     */
+    /** Return the hexadecimal digest of this hash for the given [bytes]. */
     fun calculate(bytes: ByteArray): String = bytes.inputStream().use { calculate(it, bytes.size.toLong()) }
 
-    /**
-     * Return the hexadecimal digest of this hash for the given [resourceName].
-     */
+    /** Return the hexadecimal digest of this hash for the given [resourceName]. */
     fun calculate(resourceName: String): String? {
         val resource = javaClass.getResource(resourceName)
         val size = resource?.openConnection()?.contentLengthLong ?: return null
         return resource.openStream().use { calculate(it, size) }
     }
 
-    /**
-     * Return the message digest to use for this [HashAlgorithm], which might depend on the [size].
-     */
+    /** Return the message digest to use for this [HashAlgorithm], which might depend on the [size]. */
     protected open fun getMessageDigest(size: Long): MessageDigest =
         // Disregard the size in the standard case.
         MessageDigest.getInstance(toString())

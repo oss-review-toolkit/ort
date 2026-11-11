@@ -34,9 +34,7 @@ private const val SPDX_ID = "${REF_PREFIX}DOCUMENT"
 
 private val DATA_LICENSE = SpdxLicense.CC0_1_0.id
 
-/**
- * An SPDX document as specified by https://spdx.github.io/spdx-spec/v2.3/.
- */
+/** An SPDX document as specified by https://spdx.github.io/spdx-spec/v2.3/. */
 data class SpdxDocument(
     /**
      * Identifier of this [SpdxDocument] which may be referenced in relationships by other files, packages internally
@@ -47,49 +45,33 @@ data class SpdxDocument(
     @JsonProperty("SPDXID")
     val spdxId: String = SPDX_ID,
 
-    /**
-     * The SPDX version of this document.
-     */
+    /** The SPDX version of this document. */
     val spdxVersion: String = SPDX_VERSION_2_3,
 
-    /**
-     * Information about the creation of this document.
-     */
+    /** Information about the creation of this document. */
     val creationInfo: SpdxCreationInfo,
 
-    /**
-     * The name of this [SpdxDocument] as a single line.
-     */
+    /** The name of this [SpdxDocument] as a single line. */
     val name: String,
 
-    /**
-     * The data license of this document, must equal [DATA_LICENSE].
-     */
+    /** The data license of this document, must equal [DATA_LICENSE]. */
     val dataLicense: String = DATA_LICENSE,
 
-    /**
-     * A comment towards the consumers of this [SpdxDocument] as multi-line text.
-     */
+    /** A comment towards the consumers of this [SpdxDocument] as multi-line text. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = "",
 
-    /**
-     * A listing of any external [SpdxDocument] referenced from within this [SpdxDocument].
-     */
+    /** A listing of any external [SpdxDocument] referenced from within this [SpdxDocument]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = SortedSpdxExternalDocumentRefConverter::class)
     val externalDocumentRefs: List<SpdxExternalDocumentReference> = emptyList(),
 
-    /**
-     * Information about any licenses which are not on the SPDX license list.
-     */
+    /** Information about any licenses which are not on the SPDX license list. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = SortedSpdxExtractedLicenseInfoConverter::class)
     val hasExtractedLicensingInfos: List<SpdxExtractedLicenseInfo> = emptyList(),
 
-    /**
-     * The [SpdxAnnotation]s for the [SpdxDocument].
-     */
+    /** The [SpdxAnnotation]s for the [SpdxDocument]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = SortedSpdxAnnotationConverter::class)
     val annotations: List<SpdxAnnotation> = emptyList(),
@@ -106,37 +88,27 @@ data class SpdxDocument(
      */
     val documentNamespace: String,
 
-    /**
-     * All SPDX identifiers of all packages and files contained in [packages] and [files].
-     */
+    /** All SPDX identifiers of all packages and files contained in [packages] and [files]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = SortedSpdxDocumentDescribesConverter::class)
     val documentDescribes: List<String> = emptyList(),
 
-    /**
-     * All packages described in this [SpdxDocument].
-     */
+    /** All packages described in this [SpdxDocument]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = SortedSpdxPackageConverter::class)
     val packages: List<SpdxPackage> = emptyList(),
 
-    /**
-     * All files described in this [SpdxDocument].
-     */
+    /** All files described in this [SpdxDocument]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = SortedSpdxFileConverter::class)
     val files: List<SpdxFile> = emptyList(),
 
-    /**
-     * All snippets described in this [SpdxDocument].
-     */
+    /** All snippets described in this [SpdxDocument]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = SortedSpdxSnippetConverter::class)
     val snippets: List<SpdxSnippet> = emptyList(),
 
-    /**
-     * All relationships described in this [SpdxDocument].
-     */
+    /** All relationships described in this [SpdxDocument]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = SortedSpdxRelationshipConverter::class)
     val relationships: List<SpdxRelationship> = emptyList()

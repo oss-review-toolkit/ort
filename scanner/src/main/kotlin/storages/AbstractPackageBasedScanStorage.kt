@@ -34,13 +34,9 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.toNestedProvenanceScanResult
 
-/**
- * The abstract class that storage backends for scan results need to implement.
- */
+/** The abstract class that storage backends for scan results need to implement. */
 abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
-    /**
-     * The name to refer to this storage implementation.
-     */
+    /** The name to refer to this storage implementation. */
     open val name: String = javaClass.simpleName
 
     /**
@@ -96,9 +92,7 @@ abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
      */
     abstract suspend fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher? = null): Result<List<ScanResult>>
 
-    /**
-     * Internal version of [add] that skips common sanity checks.
-     */
+    /** Internal version of [add] that skips common sanity checks. */
     protected abstract suspend fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit>
 
     override suspend fun read(

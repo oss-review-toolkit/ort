@@ -40,9 +40,7 @@ private const val PROJECT_TYPE = "NuGet"
 internal const val PACKAGE_TYPE = "NuGet"
 
 data class NuGetConfig(
-    /**
-     * The path to the NuGet configuration file to use.
-     */
+    /** The path to the NuGet configuration file to use. */
     val nugetConfigFile: String?
 )
 

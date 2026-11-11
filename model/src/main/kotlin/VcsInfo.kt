@@ -21,23 +21,15 @@ package org.ossreviewtoolkit.model
 
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
-/**
- * Bundles general Version Control System information.
- */
+/** Bundles general Version Control System information. */
 data class VcsInfo(
-    /**
-     * The type of the VCS, for example Git, GitRepo, Mercurial, etc.
-     */
+    /** The type of the VCS, for example Git, GitRepo, Mercurial, etc. */
     val type: VcsType,
 
-    /**
-     * The URL to the VCS repository.
-     */
+    /** The URL to the VCS repository. */
     val url: String,
 
-    /**
-     * The VCS-specific revision (tag, branch, SHA1) that the version of the package maps to.
-     */
+    /** The VCS-specific revision (tag, branch, SHA1) that the version of the package maps to. */
     val revision: String,
 
     /**
@@ -47,9 +39,7 @@ data class VcsInfo(
     val path: String = ""
 ) {
     companion object {
-        /**
-         * A constant for a [VcsInfo] where all properties are empty strings.
-         */
+        /** A constant for a [VcsInfo] where all properties are empty strings. */
         @JvmField
         val EMPTY = VcsInfo(
             type = VcsType.UNKNOWN,
@@ -74,18 +64,12 @@ data class VcsInfo(
         )
     }
 
-    /**
-     * Return this [VcsInfo] in normalized form by applying [normalizeVcsUrl] to the [url].
-     */
+    /** Return this [VcsInfo] in normalized form by applying [normalizeVcsUrl] to the [url]. */
     fun normalize() = copy(url = normalizeVcsUrl(url))
 
-    /**
-     * Return a [VcsInfoCurationData] with the properties from this [VcsInfo].
-     */
+    /** Return a [VcsInfoCurationData] with the properties from this [VcsInfo]. */
     fun toCuration() = VcsInfoCurationData(type, url, revision, path)
 }
 
-/**
- * Return this [VcsInfo] if not null or else [VcsInfo.EMPTY].
- */
+/** Return this [VcsInfo] if not null or else [VcsInfo.EMPTY]. */
 fun VcsInfo?.orEmpty(): VcsInfo = this ?: VcsInfo.EMPTY

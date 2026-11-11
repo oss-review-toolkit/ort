@@ -56,22 +56,16 @@ import org.ossreviewtoolkit.utils.spdxexpression.toSpdxOrNull
 import retrofit2.HttpException
 
 data class ClearlyDefinedPackageCurationProviderConfig(
-    /**
-     * The URL of the ClearlyDefined server to use.
-     */
+    /** The URL of the ClearlyDefined server to use. */
     @OrtPluginOption(defaultValue = "https://api.clearlydefined.io")
     val serverUrl: String,
 
-    /**
-     * The minimum total score for a curation to be accepted. Must lie within 0 to 100.
-     */
+    /** The minimum total score for a curation to be accepted. Must lie within 0 to 100. */
     @OrtPluginOption(defaultValue = "0")
     val minTotalLicenseScore: Int
 )
 
-/**
- * A provider for curated package metadata from the [ClearlyDefined](https://clearlydefined.io/) service.
- */
+/** A provider for curated package metadata from the [ClearlyDefined](https://clearlydefined.io/) service. */
 @OrtPlugin(
     displayName = "ClearlyDefined",
     summary = "Provides package curation data from the ClearlyDefined service.",
@@ -176,9 +170,7 @@ class ClearlyDefinedPackageCurationProvider(
     }
 }
 
-/**
- * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
- */
+/** Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact]. */
 private fun SourceLocation.toArtifactOrVcs(): Any =
     when (type) {
         ComponentType.GIT -> VcsInfoCurationData(

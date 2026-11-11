@@ -71,9 +71,7 @@ class LicenseInfoResolver(
         licenseFileMatcher = FileMatcher(patterns.allLicenseFilenames.map { "**/$it" }, ignoreCase = true)
     }
 
-    /**
-     * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
-     */
+    /** Get the [ResolvedLicenseInfo] for the project or package identified by [id]. */
     fun resolveLicenseInfo(id: Identifier): ResolvedLicenseInfo =
         resolvedLicenseInfo.getOrPut(id) { createLicenseInfo(id) }
 

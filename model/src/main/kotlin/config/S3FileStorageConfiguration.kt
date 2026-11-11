@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-/**
- * A class to hold the configuration for using an AWS S3 bucket as a storage.
- */
+/** A class to hold the configuration for using an AWS S3 bucket as a storage. */
 data class S3FileStorageConfiguration(
     /** The AWS access key */
     val accessKeyId: String? = null,

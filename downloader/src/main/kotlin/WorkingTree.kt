@@ -51,39 +51,25 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
      */
     open fun getNested() = emptyMap<String, VcsInfo>()
 
-    /**
-     * Return true if the [workingDir] is managed by this VCS, false otherwise.
-     */
+    /** Return true if the [workingDir] is managed by this VCS, false otherwise. */
     abstract fun isValid(): Boolean
 
-    /**
-     * Return whether this is a shallow working tree with truncated history.
-     */
+    /** Return whether this is a shallow working tree with truncated history. */
     abstract fun isShallow(): Boolean
 
-    /**
-     * Return the clone URL of the associated remote repository.
-     */
+    /** Return the clone URL of the associated remote repository. */
     abstract fun getRemoteUrl(): String
 
-    /**
-     * Return the VCS-specific working tree revision.
-     */
+    /** Return the VCS-specific working tree revision. */
     abstract fun getRevision(): String
 
-    /**
-     * Return the root directory of this working tree.
-     */
+    /** Return the root directory of this working tree. */
     abstract fun getRootPath(): File
 
-    /**
-     * Return the list of branches available in the remote repository.
-     */
+    /** Return the list of branches available in the remote repository. */
     abstract fun listRemoteBranches(): List<String>
 
-    /**
-     * Return the list of tags available in the remote repository.
-     */
+    /** Return the list of tags available in the remote repository. */
     abstract fun listRemoteTags(): List<String>
 
     /**
@@ -113,9 +99,7 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
         }
     }
 
-    /**
-     * Return the relative path to [path] with respect to the VCS root.
-     */
+    /** Return the relative path to [path] with respect to the VCS root. */
     fun getPathToRoot(path: File): String {
         val relativePath = path.absoluteFile.relativeTo(getRootPath())
 

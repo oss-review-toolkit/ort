@@ -40,13 +40,9 @@ import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 
-/**
- * The configuration model for all ORT components.
- */
+/** The configuration model for all ORT components. */
 data class OrtConfiguration(
-    /**
-     * A flag to indicate whether authors should be considered as copyright holders.
-     */
+    /** A flag to indicate whether authors should be considered as copyright holders. */
     val addAuthorsToCopyrights: Boolean = false,
 
     /**
@@ -82,9 +78,7 @@ data class OrtConfiguration(
      */
     val enableRiskyLicenseMappings: Boolean = true,
 
-    /**
-     * Force overwriting of any existing output files.
-     */
+    /** Force overwriting of any existing output files. */
     val forceOverwrite: Boolean = false,
 
     /**
@@ -110,9 +104,7 @@ data class OrtConfiguration(
      */
     val simpleLicenseMappingFile: String? = null,
 
-    /**
-     * The license file patterns.
-     */
+    /** The license file patterns. */
     val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT,
 
     /**
@@ -147,34 +139,22 @@ data class OrtConfiguration(
      */
     val severeRuleViolationThreshold: Severity = Severity.WARNING,
 
-    /**
-     * The configuration of the analyzer.
-     */
+    /** The configuration of the analyzer. */
     val analyzer: AnalyzerConfiguration = AnalyzerConfiguration(),
 
-    /**
-     * The configuration of the advisors, using the advisor's name as the key.
-     */
+    /** The configuration of the advisors, using the advisor's name as the key. */
     val advisor: AdvisorConfiguration = AdvisorConfiguration(),
 
-    /**
-     * The configuration of the downloader.
-     */
+    /** The configuration of the downloader. */
     val downloader: DownloaderConfiguration = DownloaderConfiguration(),
 
-    /**
-     * The configuration of the scanner.
-     */
+    /** The configuration of the scanner. */
     val scanner: ScannerConfiguration = ScannerConfiguration(),
 
-    /**
-     * The configuration of the reporter.
-     */
+    /** The configuration of the reporter. */
     val reporter: ReporterConfiguration = ReporterConfiguration(),
 
-    /**
-     * The configuration of the notifier.
-     */
+    /** The configuration of the notifier. */
     val notifier: NotifierConfiguration = NotifierConfiguration()
 ) {
     companion object {

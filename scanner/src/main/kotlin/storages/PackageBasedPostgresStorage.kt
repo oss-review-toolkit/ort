@@ -58,13 +58,9 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private val TABLE_NAME = ScanResults.tableName
 
-/**
- * The Postgres storage back-end.
- */
+/** The Postgres storage back-end. */
 class PackageBasedPostgresStorage(
-    /**
-     * The JDBC data source to obtain database connections.
-     */
+    /** The JDBC data source to obtain database connections. */
     private val dataSource: Lazy<DataSource>
 ) : AbstractPackageBasedScanStorage() {
     companion object {

@@ -40,14 +40,10 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 
 class PostgresNestedProvenanceStorage(
-    /**
-     * The JDBC data source to obtain database connections.
-     */
+    /** The JDBC data source to obtain database connections. */
     private val dataSource: Lazy<DataSource>,
 
-    /**
-     * The name of the table used for storing nested provenances.
-     */
+    /** The name of the table used for storing nested provenances. */
     private val tableName: String = "nested_provenances"
 ) : NestedProvenanceStorage {
     private val table = NestedProvenances(tableName)

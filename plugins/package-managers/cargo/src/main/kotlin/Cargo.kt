@@ -67,9 +67,7 @@ internal object CargoCommand : CommandLineTool {
         output.removePrefix("cargo ").substringBefore(' ')
 }
 
-/**
- * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
- */
+/** The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust. */
 @OrtPlugin(
     displayName = "Cargo",
     summary = "The Cargo package manager for Rust.",

@@ -703,9 +703,7 @@ private const val TEST_VERSION = "50.1.2"
 /** The expected package identifier generated for the test artifact. */
 private val testArtifactIdentifier = Identifier(PACKAGE_TYPE, TEST_GROUP_ID, TEST_ARTIFACT_ID, TEST_VERSION)
 
-/**
- * Create a mock [MavenProject] with default coordinates and the given [name] and optional [definitionFile].
- */
+/** Create a mock [MavenProject] with default coordinates and the given [name] and optional [definitionFile]. */
 private fun TestConfiguration.createMavenProject(name: String, definitionFile: File = tempfile()): MavenProject =
     mockk(relaxed = true) {
         every { groupId } returns "org.ossreviewtoolkit"
@@ -716,9 +714,7 @@ private fun TestConfiguration.createMavenProject(name: String, definitionFile: F
         every { parent } returns null
     }
 
-/**
- * Return a [DependencyTreeMojoNode] with the properties of this [MavenProject].
- */
+/** Return a [DependencyTreeMojoNode] with the properties of this [MavenProject]. */
 private fun MavenProject.toDependencyTreeMojoNode(): DependencyTreeMojoNode =
     DependencyTreeMojoNode(groupId, artifactId, version, "jar", "compile", "")
 
@@ -767,9 +763,7 @@ private fun injectCliMock(
     return cli
 }
 
-/**
- * Return the command line arguments that were passed to this [MavenCli] mock.
- */
+/** Return the command line arguments that were passed to this [MavenCli] mock. */
 private fun MavenCli.args(): Array<String> =
     slot<Array<String>>().also { slot ->
         verify { doMain(capture(slot), any(), any(), any()) }
@@ -778,9 +772,7 @@ private fun MavenCli.args(): Array<String> =
 /** The test artifact used by many tests. */
 private val testArtifact = DefaultArtifact(TEST_GROUP_ID, TEST_ARTIFACT_ID, "jar", TEST_VERSION)
 
-/**
- * Return a mock [DependencyNode] that is configured to return the properties of the test artifact.
- */
+/** Return a mock [DependencyNode] that is configured to return the properties of the test artifact. */
 private fun testDependency(): DependencyNode =
     mockk {
         every { artifact } returns testArtifact
@@ -805,9 +797,7 @@ private fun createResolverFunWithRepositoryHelper(block: LocalRepositoryHelper.(
     return tychoPackageResolverFun(delegateResolverFun, helper, resolver, targetHandler, mockk(relaxed = true))
 }
 
-/**
- * Create a new [Manifest] that contains the given [entries].
- */
+/** Create a new [Manifest] that contains the given [entries]. */
 private fun createManifest(entries: Map<String, String>): Manifest =
     Manifest().apply {
         entries.forEach { (key, value) -> mainAttributes.putValue(key, value) }
@@ -830,9 +820,7 @@ private fun createResolverMock(
     }
 }
 
-/**
- * Create a mock for an [Artifact] that returns coordinates from the given [id].
- */
+/** Create a mock for an [Artifact] that returns coordinates from the given [id]. */
 private fun createArtifactMock(id: Identifier): Artifact =
     mockk {
         every { groupId } returns id.namespace
@@ -840,14 +828,10 @@ private fun createArtifactMock(id: Identifier): Artifact =
         every { version } returns id.version
     }
 
-/**
- * Create a [Tycho] instance for testing with the specified [config].
- */
+/** Create a [Tycho] instance for testing with the specified [config]. */
 private fun createTycho(config: TychoConfig = createTychoConfig()): Tycho = Tycho(config = config)
 
-/**
- * Create a [TychoConfig] instance with the provided parameters.
- */
+/** Create a [TychoConfig] instance with the provided parameters. */
 private fun createTychoConfig(skipTests: Boolean = true, enableDebugLogs: Boolean = false): TychoConfig =
     TychoConfig(
         skipTests = skipTests,

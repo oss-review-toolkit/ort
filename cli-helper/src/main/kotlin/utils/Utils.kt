@@ -42,16 +42,12 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
 const val ORTH_NAME = "orth"
 
-/**
- * Represents a mapping from repository URLs to list of [PathExclude]s for the respective repository.
- */
+/** Represents a mapping from repository URLs to list of [PathExclude]s for the respective repository. */
 internal typealias RepositoryPathExcludes = Map<String, List<PathExclude>>
 
 internal typealias RepositoryLicenseFindingCurations = Map<String, List<LicenseFindingCuration>>
 
-/**
- * Return all files underneath the given [directory].
- */
+/** Return all files underneath the given [directory]. */
 internal fun findFilesRecursive(directory: File): List<String> {
     require(directory.isDirectory)
     return directory.walk()
@@ -90,9 +86,7 @@ internal fun findRepositories(directory: File): Map<String, VcsInfo> {
     }.orEmpty()
 }
 
-/**
- * Build the file for the split curations.
- */
+/** Build the file for the split curations. */
 internal fun getSplitCurationFile(parent: File, packageId: Identifier, fileExtension: String) =
     parent.resolve(packageId.type.encodeOrUnknown())
         .resolve(packageId.namespace.ifBlank { "_" }.fileSystemEncode())
@@ -133,28 +127,18 @@ internal fun <K, V> greedySetCover(
     return result
 }
 
-/**
- * A processed copyright statement.
- */
+/** A processed copyright statement. */
 internal data class ProcessedCopyrightStatement(
-    /**
-     * The package containing the copyright statement.
-     */
+    /** The package containing the copyright statement. */
     val packageId: Identifier,
 
-    /**
-     * The license associated with the copyright statement.
-     */
+    /** The license associated with the copyright statement. */
     val license: SpdxExpression,
 
-    /**
-     * The processed copyright statement.
-     */
+    /** The processed copyright statement. */
     val statement: String,
 
-    /**
-     * The original statement(s) which yield this processed [statement].
-     */
+    /** The original statement(s) which yield this processed [statement]. */
     val rawStatements: Set<String>
 ) {
     init {
@@ -162,9 +146,7 @@ internal data class ProcessedCopyrightStatement(
     }
 }
 
-/**
- * Return all license finding curations from [curations] represented as [RepositoryLicenseFindingCurations].
- */
+/** Return all license finding curations from [curations] represented as [RepositoryLicenseFindingCurations]. */
 internal fun getLicenseFindingCurationsByRepository(
     curations: Collection<LicenseFindingCuration>,
     nestedRepositories: Map<String, VcsInfo>
@@ -183,9 +165,7 @@ internal fun getLicenseFindingCurationsByRepository(
     return result.mapValues { excludes -> excludes.value.sortedBy { it.path } }.toSortedMap()
 }
 
-/**
- * Return all path excludes from [pathExcludes] represented as [RepositoryPathExcludes].
- */
+/** Return all path excludes from [pathExcludes] represented as [RepositoryPathExcludes]. */
 internal fun getPathExcludesByRepository(
     pathExcludes: Collection<PathExclude>,
     nestedRepositories: Map<String, VcsInfo>
@@ -204,9 +184,7 @@ internal fun getPathExcludesByRepository(
     return result.mapValues { excludes -> excludes.value.sortedBy { it.pattern } }.toSortedMap()
 }
 
-/**
- * Read a list of [PackageCuration]s from the given [file].
- */
+/** Read a list of [PackageCuration]s from the given [file]. */
 internal fun readPackageCurations(file: File): List<PackageCuration> =
     if (file.isFile) {
         file.readValue()
@@ -271,7 +249,5 @@ internal fun readOrtResult(ortFile: File, resolveScopes: Boolean = true): OrtRes
     return ortResult.takeUnless { resolveScopes } ?: ortResult.withResolvedScopes()
 }
 
-/**
- * Write the [ortResult] to [file].
- */
+/** Write the [ortResult] to [file]. */
 internal fun writeOrtResult(ortResult: OrtResult, file: File): Unit = file.writeValue(ortResult)

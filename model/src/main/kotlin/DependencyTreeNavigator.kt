@@ -57,7 +57,5 @@ object DependencyTreeNavigator : DependencyNavigator {
  */
 private fun DependencyMatcher.forReference(): (PackageReference) -> Boolean = { invoke(it) }
 
-/**
- * Return the scope of this [Project] with the given [name] or *null* if it does not exist.
- */
+/** Return the scope of this [Project] with the given [name] or *null* if it does not exist. */
 private fun Project.findScope(name: String): Scope? = scopes.find { it.name == name }

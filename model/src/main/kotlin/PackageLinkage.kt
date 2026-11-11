@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
-/**
- * A class to denote the linkage type between two packages.
- */
+/** A class to denote the linkage type between two packages. */
 enum class PackageLinkage {
     /**
      * A dynamically linked package whose source code is not directly defined in the project itself, but which is
@@ -48,9 +46,7 @@ enum class PackageLinkage {
     PROJECT_STATIC;
 
     companion object {
-        /**
-         * A set of linkage types that all refer to a subproject in a multi-project.
-         */
+        /** A set of linkage types that all refer to a subproject in a multi-project. */
         val PROJECT_LINKAGE = setOf(PROJECT_DYNAMIC, PROJECT_STATIC)
     }
 }

@@ -227,15 +227,11 @@ class DependencyGraphTest : WordSpec({
 /** The name of the dependency manager used by tests. */
 private const val MANAGER_NAME = "TestManager"
 
-/**
- * Create an identifier string with the given [group], [artifact] ID and [version].
- */
+/** Create an identifier string with the given [group], [artifact] ID and [version]. */
 private fun id(group: String, artifact: String, version: String): Identifier =
     Identifier("$MANAGER_NAME:$group:$artifact:$version")
 
-/**
- * Output the dependency tree of the given scope as a string.
- */
+/** Output the dependency tree of the given scope as a string. */
 private fun scopeDependencies(scopes: Set<Scope>, name: String): String =
     buildString {
         scopes.find { it.name == name }?.let { scope ->
@@ -243,9 +239,7 @@ private fun scopeDependencies(scopes: Set<Scope>, name: String): String =
         }
     }
 
-/**
- * Transform a dependency tree structure starting at [ref] to a string.
- */
+/** Transform a dependency tree structure starting at [ref] to a string. */
 private fun StringBuilder.dumpDependencies(ref: PackageReference) {
     append(ref.id)
     if (ref.dependencies.isNotEmpty()) {

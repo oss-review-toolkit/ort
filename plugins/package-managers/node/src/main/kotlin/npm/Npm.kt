@@ -58,9 +58,7 @@ import org.semver4j.range.RangeListFactory
 internal class NpmCommand(nodePath: String? = null, nodeVersion: String? = null) :
     NodeVersionManagerCommand(nodePath, nodeVersion) {
     companion object {
-        /**
-         * A default instance of [NpmCommand] that uses the system-installed version of Node.js and NPM.
-         */
+        /** A default instance of [NpmCommand] that uses the system-installed version of Node.js and NPM. */
         val DEFAULT = NpmCommand()
     }
 
@@ -81,9 +79,7 @@ internal class NpmCommand(nodePath: String? = null, nodeVersion: String? = null)
         }
 }
 
-/**
- * The [Node package manager](https://www.npmjs.com/).
- */
+/** The [Node package manager](https://www.npmjs.com/). */
 @OrtPlugin(
     id = "NPM",
     displayName = "NPM",
@@ -96,9 +92,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     private lateinit var fileStash: FileStash
 
-    /**
-     * The command to invoke NPM. This is constructed dynamically based on the configured version of Node.js.
-     */
+    /** The command to invoke NPM. This is constructed dynamically based on the configured version of Node.js. */
     private lateinit var command: NodeVersionManagerCommand
 
     private val moduleInfoResolver = ModuleInfoResolver.create { workingDir, moduleId ->

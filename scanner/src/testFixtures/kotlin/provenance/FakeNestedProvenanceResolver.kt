@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.scanner.provenance
 
 import org.ossreviewtoolkit.model.KnownProvenance
 
-/**
- * An implementation of [NestedProvenanceResolver] that always returns a non-nested provenance.
- */
+/** An implementation of [NestedProvenanceResolver] that always returns a non-nested provenance. */
 class FakeNestedProvenanceResolver : NestedProvenanceResolver {
     override suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance =
         NestedProvenance(root = provenance, subRepositories = emptyMap())

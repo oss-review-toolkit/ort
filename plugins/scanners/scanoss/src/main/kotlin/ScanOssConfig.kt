@@ -44,15 +44,11 @@ data class ScanOssConfig(
     @OrtPluginOption(defaultValue = "false")
     val noProxy: Boolean,
 
-    /**
-     * Whether to write scan results to the storage.
-     */
+    /** Whether to write scan results to the storage. */
     @OrtPluginOption(defaultValue = "true")
     val writeToStorage: Boolean,
 
-    /**
-     * Whether to output chosen snippets as either license and copyright finding, as snippet finding, or both.
-     */
+    /** Whether to output chosen snippets as either license and copyright finding, as snippet finding, or both. */
     @OrtPluginOption(defaultValue = "LICENSE_AND_COPYRIGHT_FINDING")
     val chosenSnippetModel: List<SnippetModel>,
 
@@ -119,9 +115,7 @@ data class ScanOssConfig(
     @OrtPluginOption(defaultValue = "0")
     val skipHeadersLimit: Int,
 
-    /**
-     * A list of PURLs to ignore when matching snippets.
-     */
+    /** A list of PURLs to ignore when matching snippets. */
     @OrtPluginOption(defaultValue = "")
     val ignorePurls: List<String>
 ) {

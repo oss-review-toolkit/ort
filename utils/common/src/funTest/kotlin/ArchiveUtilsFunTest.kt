@@ -242,7 +242,5 @@ class ArchiveUtilsFunTest : WordSpec() {
     }
 }
 
-/**
- * A filter for archive entries that filters only for a file named "a".
- */
+/** A filter for archive entries that filters only for a file named "a". */
 private val A_FILTER: (ArchiveEntry) -> Boolean = { it.name == "a" }

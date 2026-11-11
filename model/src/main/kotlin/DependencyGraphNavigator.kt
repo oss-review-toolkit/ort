@@ -35,9 +35,7 @@ class DependencyGraphNavigator(
         }
     }
 
-    /**
-     * A data structure allowing fast access to a specific [DependencyReference] based on its index and fragment.
-     */
+    /** A data structure allowing fast access to a specific [DependencyReference] based on its index and fragment. */
     private val graphDependencyRefMappings: Map<String, Array<MutableList<DependencyGraphNode>>> by lazy {
         graphs.mapValues { it.value.dependencyRefMapping() }
     }

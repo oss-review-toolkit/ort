@@ -40,9 +40,7 @@ class ReporterConfigurationTest : WordSpec({
     }
 })
 
-/**
- * Load the ORT reference configuration and extract the reporter configuration.
- */
+/** Load the ORT reference configuration and extract the reporter configuration. */
 private fun loadReporterConfig(): ReporterConfiguration =
     OrtConfiguration.load(file = File("src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME")).reporter
 

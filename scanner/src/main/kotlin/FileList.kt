@@ -28,13 +28,9 @@ import org.ossreviewtoolkit.scanner.FileList.FileEntry
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
 
-/**
- * The model to store a file list for a resolved provenance.
- */
+/** The model to store a file list for a resolved provenance. */
 data class FileList(
-    /**
-     * The set of glob expressions which have been used to match directories to be excluded from the file list.
-     */
+    /** The set of glob expressions which have been used to match directories to be excluded from the file list. */
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val ignorePatterns: Set<String>,
 

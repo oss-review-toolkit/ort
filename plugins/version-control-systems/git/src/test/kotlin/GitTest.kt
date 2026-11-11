@@ -172,9 +172,7 @@ class GitTest : WordSpec({
 private val testUri = URIish(URI("https://www.example.org:8080/foo").toURL())
 private val testUriAsUrl = URI.create(testUri.toString()).toURL()
 
-/**
- * Mocks the utility function to query password authentication for the test URI. Return the [result] provided.
- */
+/** Mocks the utility function to query password authentication for the test URI. Return the [result] provided. */
 private fun mockAuthentication(result: PasswordAuthentication?) {
     mockkStatic("org.ossreviewtoolkit.utils.authentication.AuthenticationUtilsKt")
 

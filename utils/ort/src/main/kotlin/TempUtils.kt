@@ -21,17 +21,13 @@ package org.ossreviewtoolkit.utils.ort
 
 import java.io.File
 
-/**
- * Create a temporary directory with a name specific to ORT, and optional [infixes].
- */
+/** Create a temporary directory with a name specific to ORT, and optional [infixes]. */
 fun createOrtTempDir(vararg infixes: String): File {
     val prefix = listOf(ORT_NAME, *infixes).joinToString("-")
     return kotlin.io.path.createTempDirectory(prefix).toFile()
 }
 
-/**
- * Create a temporary directory with a name specific to ORT, the calling class, and optional [infixes].
- */
+/** Create a temporary directory with a name specific to ORT, the calling class, and optional [infixes]. */
 fun Any.createOrtTempDir(vararg infixes: String): File =
     org.ossreviewtoolkit.utils.ort.createOrtTempDir(javaClass.simpleName, *infixes)
 

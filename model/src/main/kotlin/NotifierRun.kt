@@ -21,17 +21,11 @@ package org.ossreviewtoolkit.model
 
 import java.time.Instant
 
-/**
- * The summary of a single run of the notifier.
- */
+/** The summary of a single run of the notifier. */
 data class NotifierRun(
-    /**
-     * The [Instant] the notifier was started.
-     */
+    /** The [Instant] the notifier was started. */
     val startTime: Instant,
 
-    /**
-     * The [Instant] the notifier has finished.
-     */
+    /** The [Instant] the notifier has finished. */
     val endTime: Instant
 )

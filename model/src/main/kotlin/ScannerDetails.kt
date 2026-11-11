@@ -19,18 +19,12 @@
 
 package org.ossreviewtoolkit.model
 
-/**
- * Details about the used source code scanner.
- */
+/** Details about the used source code scanner. */
 data class ScannerDetails(
-    /**
-     * The name of the scanner.
-     */
+    /** The name of the scanner. */
     val name: String,
 
-    /**
-     * The version of the scanner.
-     */
+    /** The version of the scanner. */
     val version: String,
 
     /**
@@ -40,9 +34,7 @@ data class ScannerDetails(
     val configuration: String
 ) {
     companion object {
-        /**
-         * A constant for a [ScannerDetails] where all properties are empty strings.
-         */
+        /** A constant for a [ScannerDetails] where all properties are empty strings. */
         @JvmField
         val EMPTY = ScannerDetails(
             name = "",

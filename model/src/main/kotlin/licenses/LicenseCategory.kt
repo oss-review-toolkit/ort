@@ -26,14 +26,10 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * do not have any specific semantic, but users are free to define their own set of categories.
  */
 data class LicenseCategory(
-    /**
-     * The name of this [LicenseCategory]. The name can be chosen freely, but must be unique over all categories.
-     */
+    /** The name of this [LicenseCategory]. The name can be chosen freely, but must be unique over all categories. */
     val name: String,
 
-    /**
-     * A description for this [LicenseCategory].
-     */
+    /** A description for this [LicenseCategory]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val description: String = ""
 ) {

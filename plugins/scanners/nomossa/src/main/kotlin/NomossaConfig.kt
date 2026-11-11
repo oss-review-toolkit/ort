@@ -22,45 +22,29 @@ package org.ossreviewtoolkit.plugins.scanners.nomossa
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.scanner.ScannerMatcherCriteria
 
-/**
- * Configuration options for the Nomossa scanner.
- */
+/** Configuration options for the Nomossa scanner. */
 data class NomossaConfig(
-    /**
-     * Command line options that affect scan results. These are used when matching stored results.
-     */
+    /** Command line options that affect scan results. These are used when matching stored results. */
     @OrtPluginOption(defaultValue = "-J,-S,-l")
     val additionalOptions: List<String>,
 
-    /**
-     * The scanner name pattern used when looking up scan results from storage.
-     */
+    /** The scanner name pattern used when looking up scan results from storage. */
     override val regScannerName: String?,
 
-    /**
-     * The minimum version of scan results to use from storage.
-     */
+    /** The minimum version of scan results to use from storage. */
     override val minVersion: String?,
 
-    /**
-     * The maximum version of scan results to use from storage.
-     */
+    /** The maximum version of scan results to use from storage. */
     override val maxVersion: String?,
 
-    /**
-     * The configuration string for identifying matching scan results in storage.
-     */
+    /** The configuration string for identifying matching scan results in storage. */
     override val configuration: String?,
 
-    /**
-     * Whether to read scan results from storage.
-     */
+    /** Whether to read scan results from storage. */
     @OrtPluginOption(defaultValue = "false")
     val readFromStorage: Boolean,
 
-    /**
-     * Whether to write scan results to storage.
-     */
+    /** Whether to write scan results to storage. */
     @OrtPluginOption(defaultValue = "false")
     val writeToStorage: Boolean
 ) : ScannerMatcherCriteria

@@ -28,9 +28,7 @@ import org.ossreviewtoolkit.plugins.api.Secret
  * Sonatype Guide personal access token.
  */
 data class OssIndexConfiguration(
-    /**
-     * The base URL of the OSS Index REST API.
-     */
+    /** The base URL of the OSS Index REST API. */
     @OrtPluginOption(defaultValue = OssIndexService.DEFAULT_BASE_URL)
     val serverUrl: String,
 

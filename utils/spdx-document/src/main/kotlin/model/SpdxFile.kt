@@ -34,26 +34,18 @@ import org.ossreviewtoolkit.utils.spdxexpression.isSpdxExpressionOrNotPresent
  */
 @JsonIgnoreProperties("ranges") // TODO: Implement ranges which is broken in the specification examples.
 data class SpdxFile(
-    /**
-     * A unique identifier for this [SpdxFile] within a [SpdxDocument].
-     */
+    /** A unique identifier for this [SpdxFile] within a [SpdxDocument]. */
     @JsonProperty("SPDXID")
     val spdxId: String,
 
-    /**
-     * The [SpdxAnnotation]s for the file.
-     */
+    /** The [SpdxAnnotation]s for the file. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val annotations: List<SpdxAnnotation> = emptyList(),
 
-    /**
-     * Checksums of the file, must contain at least one entry using [SpdxChecksum.Algorithm.SHA1].
-     */
+    /** Checksums of the file, must contain at least one entry using [SpdxChecksum.Algorithm.SHA1]. */
     val checksums: List<SpdxChecksum>,
 
-    /**
-     * A general comment about the file.
-     */
+    /** A general comment about the file. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = "",
 
@@ -70,21 +62,15 @@ data class SpdxFile(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val fileContributors: List<String> = emptyList(),
 
-    /**
-     * This field is deprecated since SPDX 2.0 in favor of [SpdxDocument.relationships].
-     */
+    /** This field is deprecated since SPDX 2.0 in favor of [SpdxDocument.relationships]. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val fileDependencies: List<String> = emptyList(),
 
-    /**
-     * The name of the file.
-     */
+    /** The name of the file. */
     @JsonProperty("fileName")
     val filename: String,
 
-    /**
-     * The types of the file.
-     */
+    /** The types of the file. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val fileTypes: List<Type> = emptyList(),
 
@@ -106,66 +92,42 @@ data class SpdxFile(
      */
     val licenseInfoInFiles: List<String> = listOf(SpdxConstants.NOASSERTION),
 
-    /**
-     * License notices or other such related notices found in the file. This may include copyright statements.
-     */
+    /** License notices or other such related notices found in the file. This may include copyright statements. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val noticeText: String = ""
 ) {
     enum class Type {
-        /**
-         * The file is associated with a specific application type (MIME type of application e.g. .exe).
-         */
+        /** The file is associated with a specific application type (MIME type of application e.g. .exe). */
         APPLICATION,
 
-        /**
-         * Indicates the file is an archive file.
-         */
+        /** Indicates the file is an archive file. */
         ARCHIVE,
 
-        /**
-         * The file is associated with an audio file (MIME type of audio, e.g. .mp3).
-         */
+        /** The file is associated with an audio file (MIME type of audio, e.g. .mp3). */
         AUDIO,
 
-        /**
-         * Indicates the file is not a text file.
-         */
+        /** Indicates the file is not a text file. */
         BINARY,
 
-        /**
-         * The file serves as documentation.
-         */
+        /** The file serves as documentation. */
         DOCUMENTATION,
 
-        /**
-         * The file is associated with a picture image file (MIME type of image, e.g. .jpg, .gif).
-         */
+        /** The file is associated with a picture image file (MIME type of image, e.g. .jpg, .gif). */
         IMAGE,
 
-        /**
-         * Indicates the file is not a source, archive or binary file.
-         */
+        /** Indicates the file is not a source, archive or binary file. */
         OTHER,
 
-        /**
-         * Indicates the file is a source code file.
-         */
+        /** Indicates the file is a source code file. */
         SOURCE,
 
-        /**
-         * The file is an SPDX document.
-         */
+        /** The file is an SPDX document. */
         SPDX,
 
-        /**
-         * The file is a human-readable text file (MIME type of text).
-         */
+        /** The file is a human-readable text file (MIME type of text). */
         TEXT,
 
-        /**
-         * The file is associated with a video file (MIME type of video, e.g. .avi, .mkv, .mp4)
-         */
+        /** The file is associated with a video file (MIME type of video, e.g. .avi, .mkv, .mp4) */
         VIDEO
     }
 

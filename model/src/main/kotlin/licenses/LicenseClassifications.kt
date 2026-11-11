@@ -33,15 +33,11 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
  * instance, it is checked that all the references from the [categorizations] point to existing [categories].
  */
 data class LicenseClassifications(
-    /**
-     * Defines metadata for the license categories.
-     */
+    /** Defines metadata for the license categories. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val categories: List<LicenseCategory> = emptyList(),
 
-    /**
-     * Defines metadata for licenses.
-     */
+    /** Defines metadata for licenses. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val categorizations: List<LicenseCategorization> = emptyList()
 ) {
@@ -107,9 +103,7 @@ data class LicenseClassifications(
     /** A convenience function to check whether there is a categorization for the given license [id]. */
     fun isCategorized(id: SpdxExpression) = id in categoriesByLicense
 
-    /**
-     * Merge [other] into these classifications, overwriting any conflicting existing classifications.
-     */
+    /** Merge [other] into these classifications, overwriting any conflicting existing classifications. */
     fun merge(other: LicenseClassifications): LicenseClassifications {
         val filteredCategoriesByLicense = mutableMapOf<SpdxSingleLicenseExpression, MutableSet<String>>()
 
@@ -136,7 +130,5 @@ data class LicenseClassifications(
     }
 }
 
-/**
- * A convenience extension function to return empty LicenseClassifications for null.
- */
+/** A convenience extension function to return empty LicenseClassifications for null. */
 fun LicenseClassifications?.orEmpty(): LicenseClassifications = this ?: LicenseClassifications()

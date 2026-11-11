@@ -38,19 +38,13 @@ private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream)
     return outputStream.toString()
 }
 
-/**
- * Redirect the standard error stream to a [String] during the execution of [block].
- */
+/** Redirect the standard error stream to a [String] during the execution of [block]. */
 fun redirectStderr(block: () -> Unit) = redirectOutput(System.err, System::setErr, block)
 
-/**
- * Redirect the standard output stream to a [String] during the execution of [block].
- */
+/** Redirect the standard output stream to a [String] during the execution of [block]. */
 fun redirectStdout(block: () -> Unit) = redirectOutput(System.out, System::setOut, block)
 
-/**
- * Suppress any prompts for input by redirecting standard input to the null device.
- */
+/** Suppress any prompts for input by redirecting standard input to the null device. */
 fun <T> suppressInput(block: () -> T): T {
     val originalInput = System.`in`
 

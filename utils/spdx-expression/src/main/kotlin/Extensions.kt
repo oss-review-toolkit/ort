@@ -53,9 +53,7 @@ fun Collection<SpdxExpression>.toExpression(operator: SpdxOperator = SpdxOperato
         }
     }
 
-/**
- * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
- */
+/** Create an [SpdxLicenseIdExpression] from this [SpdxLicense]. */
 fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
     var expressionId = id
 
@@ -71,9 +69,7 @@ fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
     return SpdxLicenseIdExpression(expressionId, orLaterVersion)
 }
 
-/**
- * Return true if this string can be successfully parsed to a [SpdxExpression] of the given [strictness].
- */
+/** Return true if this string can be successfully parsed to a [SpdxExpression] of the given [strictness]. */
 fun String.isSpdxExpression(strictness: Strictness = Strictness.ALLOW_DEPRECATED): Boolean =
     runCatching { SpdxExpression.parse(this, strictness) }.isSuccess
 
@@ -102,9 +98,7 @@ fun String.toSpdxOrNull(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpr
         logger.debug { "Could not parse '$this' as an SPDX license: ${it.collectMessages()}" }
     }.getOrNull()
 
-/**
- * Parse a YAML string which contains a top-level sequence of key-value pairs.
- */
+/** Parse a YAML string which contains a top-level sequence of key-value pairs. */
 private fun String.parseYamlKeyValueLines(): Map<String, String> =
     lineSequence()
         .map { it.trim() }
@@ -124,9 +118,7 @@ internal inline fun <reified T : SpdxExpression> String.parseLicenseMapping(): M
         SpdxExpression.parse(value) as T
     }
 
-/**
- * Read a license mapping from the resource with the given [name].
- */
+/** Read a license mapping from the resource with the given [name]. */
 internal inline fun <reified T : SpdxExpression> readLicenseMappingResource(name: String): Map<String, T> {
     val resource = checkNotNull(object {}.javaClass.getResource(name))
     return resource.readText().parseLicenseMapping()

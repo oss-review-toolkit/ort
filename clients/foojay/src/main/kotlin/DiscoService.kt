@@ -32,9 +32,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-/**
- * A minimalistic service interface for Foojay's Disco API, see https://api.foojay.io/swagger-ui.
- */
+/** A minimalistic service interface for Foojay's Disco API, see https://api.foojay.io/swagger-ui. */
 interface DiscoService {
     companion object {
         const val DEFAULT_SERVER_URL = "https://api.foojay.io/disco/"
@@ -56,9 +54,7 @@ interface DiscoService {
         }
     }
 
-    /**
-     * See https://api.foojay.io/swagger-ui#/default/getPackagesV3.
-     */
+    /** See https://api.foojay.io/swagger-ui#/default/getPackagesV3. */
     @Suppress("LongParameterList")
     @GET("v3.0/packages")
     suspend fun getPackages(

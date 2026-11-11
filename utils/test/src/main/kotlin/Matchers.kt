@@ -49,9 +49,7 @@ fun <T, U> transformingCollectionMatcher(
     transform: (T) -> Collection<U>
 ): Matcher<T?> = neverNullMatcher { value -> matcher(expected).test(transform(value)) }
 
-/**
- * A helper function to create custom matchers that assert that the collection obtained by [transform] is empty.
- */
+/** A helper function to create custom matchers that assert that the collection obtained by [transform] is empty. */
 fun <T, U> transformingCollectionEmptyMatcher(transform: (T) -> Collection<U>): Matcher<T?> =
     neverNullMatcher { value -> beEmpty<U>().test(transform(value)) }
 

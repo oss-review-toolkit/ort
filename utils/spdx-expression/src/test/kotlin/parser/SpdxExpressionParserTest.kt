@@ -247,9 +247,7 @@ class SpdxExpressionParserTest : FunSpec({
     }
 })
 
-/**
- * Verify that the [SpdxExpressionParser] produces the expected [SpdxExpression] for the given input.
- */
+/** Verify that the [SpdxExpressionParser] produces the expected [SpdxExpression] for the given input. */
 private suspend fun FunSpecContainerScope.verifyExpressions(vararg input: Pair<String, SpdxExpression>) {
     withData(
         nameFn = { it.first },
@@ -259,9 +257,7 @@ private suspend fun FunSpecContainerScope.verifyExpressions(vararg input: Pair<S
     }
 }
 
-/**
- * Verify that the [SpdxExpressionParser] produces the expected [SpdxExpressionParserException] for the given input.
- */
+/** Verify that the [SpdxExpressionParser] produces the expected [SpdxExpressionParserException] for the given input. */
 private suspend fun FunSpecContainerScope.verifyExceptions(vararg input: Pair<String, SpdxExpressionParserException>) {
     withData(
         nameFn = { it.first },

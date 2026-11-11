@@ -37,14 +37,10 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
             SpdxExpression.parse(expression) as SpdxSingleLicenseExpression
     }
 
-    /**
-     * Return the string identifier of this license without any license exception.
-     */
+    /** Return the string identifier of this license without any license exception. */
     abstract fun simpleLicense(): String
 
-    /**
-     * Return the license exception identifier if this is an [SpdxLicenseWithExceptionExpression] or null otherwise.
-     */
+    /** Return the license exception identifier if this is an [SpdxLicenseWithExceptionExpression] or null otherwise. */
     abstract fun exception(): String?
 
     /**

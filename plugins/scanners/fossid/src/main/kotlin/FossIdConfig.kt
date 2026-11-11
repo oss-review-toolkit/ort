@@ -147,13 +147,9 @@ data class FossIdConfig(
         }
     }
 
-    /**
-     * Create a [FossIdNamingProvider] helper object based on the configuration stored in this object.
-     */
+    /** Create a [FossIdNamingProvider] helper object based on the configuration stored in this object. */
     fun createNamingProvider() = FossIdNamingProvider(namingScanPattern, projectName)
 
-    /**
-     * Create a [FossIdUrlProvider] helper object based on the configuration stored in this object.
-     */
+    /** Create a [FossIdUrlProvider] helper object based on the configuration stored in this object. */
     fun createUrlProvider() = FossIdUrlProvider.create(urlMappings?.split(',').orEmpty())
 }

@@ -30,9 +30,7 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 
-/**
- * A [CommandLineTool] implementing for the FNM node version manager to be used by [NodeVersionManagerCommand].
- */
+/** A [CommandLineTool] implementing for the FNM node version manager to be used by [NodeVersionManagerCommand]. */
 internal object FnmCommand : CommandLineTool {
     override fun command(workingDir: File?): String = "fnm"
 }

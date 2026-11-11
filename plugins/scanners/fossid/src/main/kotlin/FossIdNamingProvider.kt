@@ -92,9 +92,7 @@ class FossIdNamingProvider(
         return branch.replace(ALLOWED_CHARACTERS_REGEX, "_").take(maxBranchNameLength)
     }
 
-    /**
-     * Replace the naming convention variables with their values. Used for projects and scans.
-     */
+    /** Replace the naming convention variables with their values. Used for projects and scans. */
     private fun replaceNamingConventionVariables(
         namingConventionPattern: String,
         builtins: Map<String, String>

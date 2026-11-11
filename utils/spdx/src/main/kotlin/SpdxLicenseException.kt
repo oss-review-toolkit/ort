@@ -39,19 +39,13 @@ import kotlinx.serialization.encoding.Decoder
 @Serializable(SpdxLicenseExceptionSerializer::class)
 @Suppress("EnumEntryName", "EnumNaming")
 enum class SpdxLicenseException(
-    /**
-     * The SPDX id of the license exception.
-     */
+    /** The SPDX id of the license exception. */
     val id: String,
 
-    /**
-     * The human-readable name of the license exception.
-     */
+    /** The human-readable name of the license exception. */
     val fullName: String,
 
-    /**
-     * Whether the [id] is deprecated or not.
-     */
+    /** Whether the [id] is deprecated or not. */
     val deprecated: Boolean = false
 ) {
     ASTERISK_EXCEPTION("Asterisk-exception", "Asterisk exception"),
@@ -142,24 +136,18 @@ enum class SpdxLicenseException(
     _389_EXCEPTION("389-exception", "389 Directory Server Exception");
 
     companion object {
-        /**
-         * The map which associates SPDX exceptions with their applicable SPDX licenses.
-         */
+        /** The map which associates SPDX exceptions with their applicable SPDX licenses. */
         val association: Map<String, List<SpdxLicense>> by lazy {
             val resource = checkNotNull(SpdxLicenseException::class.java.getResource("/exception-association.yml"))
             resource.openStream().use { Yaml.default.decodeFromStream(it) }
         }
 
-        /**
-         * Return the enum value for the given [id], or null if it is no SPDX license exception id.
-         */
+        /** Return the enum value for the given [id], or null if it is no SPDX license exception id. */
         @JvmStatic
         fun forId(id: String) = ENUM_ENTRY_FOR_LOWERCASE_ID_OR_FULL_NAME[id.lowercase()]
     }
 
-    /**
-     * The full license exception text as a string.
-     */
+    /** The full license exception text as a string. */
     val text by lazy { checkNotNull(javaClass.getResource("/exceptions/$id")).readText() }
 }
 

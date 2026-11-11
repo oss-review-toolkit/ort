@@ -33,21 +33,15 @@ import org.ossreviewtoolkit.utils.spdxexpression.isSpdxExpressionOrNotPresent
  */
 @JsonIgnoreProperties("ranges") // TODO: Implement ranges which is broken in the specification examples.
 data class SpdxSnippet(
-    /**
-     * The unique identifies of this [SpdxSnippet] within an SPDX document.
-     */
+    /** The unique identifies of this [SpdxSnippet] within an SPDX document. */
     @JsonProperty("SPDXID")
     val spdxId: String,
 
-    /**
-     * The [SpdxAnnotation]s for the file.
-     */
+    /** The [SpdxAnnotation]s for the file. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val annotations: List<SpdxAnnotation> = emptyList(),
 
-    /**
-     * A general comment about the snippet.
-     */
+    /** A general comment about the snippet. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = "",
 
@@ -77,21 +71,15 @@ data class SpdxSnippet(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val licenseInfoInSnippets: List<String> = emptyList(),
 
-    /**
-     * A name for the snippet in a human convenient manner.
-     */
+    /** A name for the snippet in a human convenient manner. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val name: String = "",
 
-    /**
-     * The ranges in the original host file that the snippet information applies to.
-     */
+    /** The ranges in the original host file that the snippet information applies to. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val ranges: List<Range> = emptyList(),
 
-    /**
-     * The SPDX reference referencing the document within the SpdxDocument containing the snippet.
-     */
+    /** The SPDX reference referencing the document within the SpdxDocument containing the snippet. */
     val snippetFromFile: String
 ) {
     data class Range(

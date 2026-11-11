@@ -175,9 +175,7 @@ class Conan(
         analyzerConfig: AnalyzerConfiguration
     ) = command.checkVersion()
 
-    /**
-     * Primary method for resolving dependencies from [definitionFile].
-     */
+    /** Primary method for resolving dependencies from [definitionFile]. */
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
@@ -287,9 +285,7 @@ class Conan(
             }
         }
 
-    /**
-     * Return the value `conan inspect` reports for the given [field], or null if the field does not exist.
-     */
+    /** Return the value `conan inspect` reports for the given [field], or null if the field does not exist. */
     internal fun inspectField(pkgName: String, workingDir: File, field: String): String? {
         val results = pkgInspectResults.getOrPut(pkgName) {
             // Note: While Conan 2 supports inspect output to stdout, Conan 1 does not and a temporary file is required,
@@ -308,9 +304,7 @@ class Conan(
         return results[field]?.jsonPrimitive?.contentOrNull
     }
 
-    /**
-     * Return the source artifacts contained in [conanData].
-     */
+    /** Return the source artifacts contained in [conanData]. */
     internal fun parseSourceArtifacts(conanData: ConanData): List<RemoteArtifact> =
         conanData.sources.map { entry ->
             val hashValue = entry.sha256.orEmpty()
@@ -382,9 +376,7 @@ private fun YamlMap.toConanSourceEntry(): ConanSourceEntry {
     return ConanSourceEntry(url, sha256)
 }
 
-/**
- * A single source entry from a `conandata.yml` file.
- */
+/** A single source entry from a `conandata.yml` file. */
 internal data class ConanSourceEntry(
     val url: String?,
     val sha256: String?
@@ -406,9 +398,7 @@ internal data class ConanData(
         val EMPTY = ConanData(sources = emptyList(), scmUrl = null, scmCommit = null, hasPatches = false)
     }
 
-    /**
-     * Return the [VcsInfo] for this [ConanData], or [VcsInfo.EMPTY] if no VCS information is available.
-     */
+    /** Return the [VcsInfo] for this [ConanData], or [VcsInfo.EMPTY] if no VCS information is available. */
     fun toVcsInfo(): VcsInfo {
         val url = scmUrl ?: return VcsInfo.EMPTY
         val vcsInfo = VcsHost.parseUrl(url)
@@ -417,9 +407,7 @@ internal data class ConanData(
     }
 }
 
-/**
- * Return the [VcsInfo] contained in [PackageInfo].
- */
+/** Return the [VcsInfo] contained in [PackageInfo]. */
 internal fun PackageInfo.toVcsInfo(): VcsInfo {
     val vcsInfo = VcsHost.parseUrl(url.orEmpty())
     return if (revision == "0") vcsInfo else vcsInfo.copy(revision = revision.orEmpty())

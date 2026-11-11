@@ -28,43 +28,27 @@ import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.ort.Environment
 
-/**
- * Type alias for a function that allows filtering of [AdvisorResult]s.
- */
+/** Type alias for a function that allows filtering of [AdvisorResult]s. */
 typealias AdvisorResultFilter = (AdvisorResult) -> Boolean
 
-/**
- * The summary of a single run of the advisor.
- */
+/** The summary of a single run of the advisor. */
 data class AdvisorRun(
-    /**
-     * The [Instant] the advisor was started.
-     */
+    /** The [Instant] the advisor was started. */
     val startTime: Instant,
 
-    /**
-     * The [Instant] the advisor has finished.
-     */
+    /** The [Instant] the advisor has finished. */
     val endTime: Instant,
 
-    /**
-     * The [Environment] in which the advisor was executed.
-     */
+    /** The [Environment] in which the advisor was executed. */
     val environment: Environment,
 
-    /**
-     * The [AdvisorConfiguration] used for this run.
-     */
+    /** The [AdvisorConfiguration] used for this run. */
     val config: AdvisorConfiguration,
 
-    /**
-     * The [Issue]s that occurred while preparing and querying advisor providers for this run.
-     */
+    /** The [Issue]s that occurred while preparing and querying advisor providers for this run. */
     val providerIssues: Set<Issue> = emptySet(),
 
-    /**
-     * The [AdvisorResult]s for all [Package]s.
-     */
+    /** The [AdvisorResult]s for all [Package]s. */
     @JsonPropertyOrder(alphabetic = true)
     val results: Map<Identifier, List<AdvisorResult>>
 ) {
@@ -78,9 +62,7 @@ data class AdvisorRun(
             results = emptyMap()
         )
 
-        /**
-         * A filter for [AdvisorResult]s that matches only results that contain vulnerabilities.
-         */
+        /** A filter for [AdvisorResult]s that matches only results that contain vulnerabilities. */
         val RESULTS_WITH_VULNERABILITIES: AdvisorResultFilter = { it.vulnerabilities.isNotEmpty() }
 
         /**
@@ -103,9 +85,7 @@ data class AdvisorRun(
             }
         }
 
-    /**
-     * Return a map of all [Package]s and the associated [Vulnerabilities][Vulnerability].
-     */
+    /** Return a map of all [Package]s and the associated [Vulnerabilities][Vulnerability]. */
     @JsonIgnore
     fun getVulnerabilities(): Map<Identifier, List<Vulnerability>> =
         results.mapValues { (_, results) ->

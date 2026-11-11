@@ -41,14 +41,10 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 
 class PostgresPackageProvenanceStorage(
-    /**
-     * The JDBC data source to obtain database connections.
-     */
+    /** The JDBC data source to obtain database connections. */
     private val dataSource: Lazy<DataSource>,
 
-    /**
-     * The name of the table used for storing package provenances.
-     */
+    /** The name of the table used for storing package provenances. */
     private val tableName: String = "package_provenances"
 ) : PackageProvenanceStorage {
     private val table = PackageProvenances(tableName)

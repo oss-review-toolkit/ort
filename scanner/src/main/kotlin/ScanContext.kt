@@ -31,18 +31,12 @@ import org.ossreviewtoolkit.model.config.snippet.SnippetChoices
 import org.ossreviewtoolkit.model.utils.isPathIncluded
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
-/**
- * Additional context information that can be used by a [ScannerWrapper] to alter its behavior.
- */
+/** Additional context information that can be used by a [ScannerWrapper] to alter its behavior. */
 data class ScanContext(
-    /**
-     * A map of key-value pairs, usually from [OrtResult.labels].
-     */
+    /** A map of key-value pairs, usually from [OrtResult.labels]. */
     val labels: Map<String, String>,
 
-    /**
-     * The [type][PackageType] of the packages to scan.
-     */
+    /** The [type][PackageType] of the packages to scan. */
     val packageType: PackageType,
 
     /**
@@ -53,14 +47,10 @@ data class ScanContext(
      */
     val checkoutPaths: Set<String> = setOf(""),
 
-    /**
-     * The [Excludes] of the project to scan. Only set if [packageType] is [PackageType.PROJECT].
-     */
+    /** The [Excludes] of the project to scan. Only set if [packageType] is [PackageType.PROJECT]. */
     val excludes: Excludes? = null,
 
-    /**
-     * The [Includes] of the project to scan. Only set if [packageType] is [PackageType.PROJECT].
-     */
+    /** The [Includes] of the project to scan. Only set if [packageType] is [PackageType.PROJECT]. */
     val includes: Includes? = null,
 
     /**
@@ -79,9 +69,7 @@ data class ScanContext(
      */
     val coveredPackages: List<Package> = emptyList(),
 
-    /**
-     * The [SnippetChoices] of the project to scan. Only set if [packageType] is [PackageType.PROJECT].
-     */
+    /** The [SnippetChoices] of the project to scan. Only set if [packageType] is [PackageType.PROJECT]. */
     val snippetChoices: List<SnippetChoices> = emptyList()
 ) {
     init {
@@ -95,9 +83,7 @@ data class ScanContext(
         }
     }
 
-    /**
-     * Returns true if the given [pathRelativeToProvenanceRoot] is excluded.
-     */
+    /** Returns true if the given [pathRelativeToProvenanceRoot] is excluded. */
     fun isPathExcluded(pathRelativeToProvenanceRoot: String): Boolean {
         // For package scans, includes and excludes should not be set anyway. But return early to be on the safe side.
         if (packageType != PackageType.PROJECT) return false

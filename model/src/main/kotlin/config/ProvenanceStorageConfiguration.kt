@@ -21,18 +21,12 @@ package org.ossreviewtoolkit.model.config
 
 import org.apache.logging.log4j.kotlin.logger
 
-/**
- * Configuration of the storage to use for provenance information.
- */
+/** Configuration of the storage to use for provenance information. */
 data class ProvenanceStorageConfiguration(
-    /**
-     * Configuration of a file storage.
-     */
+    /** Configuration of a file storage. */
     val fileStorage: FileStorageConfiguration? = null,
 
-    /**
-     * Configuration of a PostgreSQL storage.
-     */
+    /** Configuration of a PostgreSQL storage. */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
     init {

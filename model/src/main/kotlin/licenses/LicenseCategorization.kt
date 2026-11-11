@@ -31,14 +31,10 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
  * which can decide - based on this information - how to handle a specific license.
  */
 data class LicenseCategorization(
-    /**
-     * The [SpdxSingleLicenseExpression] of this [LicenseCategorization].
-     */
+    /** The [SpdxSingleLicenseExpression] of this [LicenseCategorization]. */
     val id: SpdxSingleLicenseExpression,
 
-    /**
-     * The identifiers of the [license categories][LicenseCategory] this license is assigned to.
-     */
+    /** The identifiers of the [license categories][LicenseCategory] this license is assigned to. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val categories: Set<String>
 )

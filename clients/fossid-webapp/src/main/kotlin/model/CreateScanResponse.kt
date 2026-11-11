@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.clients.fossid.model
 
-/**
- * This class is present to handle the high polymorphism of the 'createScan' response.
- */
+/** This class is present to handle the high polymorphism of the 'createScan' response. */
 data class CreateScanResponse(
     // Normal response.
     val scanId: String? = null,

@@ -24,27 +24,21 @@ import io.ks3.java.typealiases.UriAsString
 
 import kotlinx.serialization.Serializable
 
-/**
- * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L48-L61.
- */
+/** See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L48-L61. */
 @Serializable
 data class Meta(
     val schemaVersion: String,
     val updated: String
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L80-L89.
- */
+/** See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L80-L89. */
 @Serializable
 data class FinalScore(
     val effective: Int,
     val tool: Int
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L90-L134.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L90-L134. */
 @Serializable
 data class FileEntry(
     val path: FileAsString,
@@ -56,9 +50,7 @@ data class FileEntry(
     val natures: Set<Nature>? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L135-L144.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L135-L144. */
 @Serializable
 data class Hashes(
     val md5: String? = null,
@@ -67,9 +59,7 @@ data class Hashes(
     val gitSha: String? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L145-L179.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L145-L179. */
 @Serializable
 data class Described(
     val score: DescribedScore? = null,
@@ -85,9 +75,7 @@ data class Described(
     val tools: List<String>? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L180-L190.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L180-L190. */
 @Serializable
 data class DescribedScore(
     val total: Int,
@@ -95,9 +83,7 @@ data class DescribedScore(
     val source: Int
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L191-L204.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L191-L204. */
 @Serializable
 data class LicensedScore(
     val total: Int,
@@ -108,9 +94,7 @@ data class LicensedScore(
     val texts: Int
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L236-L253.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L236-L253. */
 @Serializable
 data class URLs(
     val registry: UriAsString? = null,
@@ -118,9 +102,7 @@ data class URLs(
     val download: UriAsString? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L254-L263.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L254-L263. */
 @Serializable
 data class Licensed(
     val score: LicensedScore? = null,
@@ -129,9 +111,7 @@ data class Licensed(
     val facets: Facets? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L264-L275.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L264-L275. */
 @Serializable
 data class Facets(
     val core: Facet? = null,
@@ -142,9 +122,7 @@ data class Facets(
     val tests: Facet? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L276-L286.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L276-L286. */
 @Serializable
 data class Facet(
     val files: Int? = null,
@@ -152,18 +130,14 @@ data class Facet(
     val discovered: Discovered? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L287-L301.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L287-L301. */
 @Serializable
 data class Attribution(
     val parties: List<String>? = null,
     val unknown: Int? = null
 )
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L305-L319.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L305-L319. */
 @Serializable
 data class Discovered(
     val expressions: List<String>? = null,

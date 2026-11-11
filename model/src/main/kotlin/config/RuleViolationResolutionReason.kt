@@ -20,33 +20,21 @@
 package org.ossreviewtoolkit.model.config
 
 enum class RuleViolationResolutionReason {
-    /**
-     * The rule violation cannot be fixed and is acceptable in this case.
-     */
+    /** The rule violation cannot be fixed and is acceptable in this case. */
     CANT_FIX_EXCEPTION,
 
-    /**
-     * The rule violation is acceptable given the fact that the dependency it relates to is dynamically linked.
-     */
+    /** The rule violation is acceptable given the fact that the dependency it relates to is dynamically linked. */
     DYNAMIC_LINKAGE_EXCEPTION,
 
-    /**
-     * The rule violation is due to an inclusion of example code into a file and is acceptable in this case.
-     */
+    /** The rule violation is due to an inclusion of example code into a file and is acceptable in this case. */
     EXAMPLE_OF_EXCEPTION,
 
-    /**
-     * The rule violation is acceptable because the license for the respective package has been acquired.
-     */
+    /** The rule violation is acceptable because the license for the respective package has been acquired. */
     LICENSE_ACQUIRED_EXCEPTION,
 
-    /**
-     * The rule violation is acceptable given the fact that the code it relates to has not been modified.
-     */
+    /** The rule violation is acceptable given the fact that the code it relates to has not been modified. */
     NOT_MODIFIED_EXCEPTION,
 
-    /**
-     * The implied patent grant is acceptable in this case.
-     */
+    /** The implied patent grant is acceptable in this case. */
     PATENT_GRANT_EXCEPTION
 }

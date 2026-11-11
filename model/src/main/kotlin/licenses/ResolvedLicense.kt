@@ -33,9 +33,7 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
  * contained in.
  */
 data class ResolvedLicense(
-    /**
-     * The license for which original license [sources] are documented.
-     */
+    /** The license for which original license [sources] are documented. */
     val license: SpdxSingleLicenseExpression,
 
     /**
@@ -44,24 +42,16 @@ data class ResolvedLicense(
      */
     val originalDeclaredLicenses: Set<String>,
 
-    /**
-     * The original SPDX expressions that contains the [license].
-     */
+    /** The original SPDX expressions that contains the [license]. */
     val originalExpressions: Set<ResolvedOriginalExpression>,
 
-    /**
-     * All text locations where this license was found.
-     */
+    /** All text locations where this license was found. */
     val locations: Set<ResolvedLicenseLocation>
 ) {
-    /**
-     * The sources where this license was found.
-     */
+    /** The sources where this license was found. */
     val sources: EnumSet<LicenseSource> = originalExpressions.mapTo(enumSetOf()) { it.source }
 
-    /**
-     * True, if this license was [detected][LicenseSource.DETECTED] and all [locations] have matching path excludes.
-     */
+    /** True, if this license was [detected][LicenseSource.DETECTED] and all [locations] have matching path excludes. */
     val isDetectedExcluded by lazy {
         LicenseSource.DETECTED in sources && locations.all { it.matchingPathExcludes.isNotEmpty() }
     }

@@ -44,19 +44,13 @@ data class ScannerConfiguration(
      */
     val skipConcluded: Boolean = false,
 
-    /**
-     * A flag to control whether excluded scopes and paths should be skipped during the scan.
-     */
+    /** A flag to control whether excluded scopes and paths should be skipped during the scan. */
     val skipExcluded: Boolean = false,
 
-    /**
-     * A flag to indicate whether the scanner should add files without license to the scanner results.
-     */
+    /** A flag to indicate whether the scanner should add files without license to the scanner results. */
     val includeFilesWithoutFindings: Boolean = false,
 
-    /**
-     * Configuration of a [FileArchiver] that archives certain scanned files in an external [FileStorage].
-     */
+    /** Configuration of a [FileArchiver] that archives certain scanned files in an external [FileStorage]. */
     val archive: FileArchiverConfiguration? = null,
 
     /**
@@ -87,9 +81,7 @@ data class ScannerConfiguration(
         "LicenseRef-scancode-unknown-spdx" to SpdxConstants.NOASSERTION
     ),
 
-    /**
-     * The storage to store the file lists by provenance.
-     */
+    /** The storage to store the file lists by provenance. */
     val fileListStorage: FileListStorageConfiguration? = null,
 
     /**
@@ -119,9 +111,7 @@ data class ScannerConfiguration(
      */
     val storageWriters: List<String>? = null,
 
-    /**
-     * A list of glob expressions that match file paths which are to be excluded from scan results.
-     */
+    /** A list of glob expressions that match file paths which are to be excluded from scan results. */
     val ignorePatterns: List<String> = listOf(
         "**/*$ORT_REPO_CONFIG_FILENAME",
         "**/*.spdx.yml",
@@ -133,8 +123,6 @@ data class ScannerConfiguration(
         "**/META-INF/*NOTICE*.txt"
     ),
 
-    /**
-     * Configuration of the storage for provenance information.
-     */
+    /** Configuration of the storage for provenance information. */
     val provenanceStorage: ProvenanceStorageConfiguration? = null
 )

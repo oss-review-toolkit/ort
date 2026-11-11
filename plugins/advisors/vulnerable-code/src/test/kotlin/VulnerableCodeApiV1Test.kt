@@ -282,14 +282,10 @@ class VulnerableCodeApiV1Test : WordSpec({
 
 private const val PACKAGES_REQUEST_URL = "/api/packages/bulk_search"
 
-/**
- * The JSON request to query the test packages found in the result.
- */
+/** The JSON request to query the test packages found in the result. */
 private val packagesRequestJson = generatePackagesRequest()
 
-/**
- * Prepare this server to expect an API v1 bulk package [request] and to answer it with the given [responseFile].
- */
+/** Prepare this server to expect an API v1 bulk package [request] and to answer it with the given [responseFile]. */
 private fun WireMockServer.stubPackagesRequest(responseFile: String, request: String = packagesRequestJson) {
     stubFor(
         post(urlPathEqualTo(PACKAGES_REQUEST_URL))

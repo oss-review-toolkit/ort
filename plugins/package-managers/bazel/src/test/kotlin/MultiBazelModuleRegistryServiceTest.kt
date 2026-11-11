@@ -194,25 +194,19 @@ private class MockRegistryServices(
         }
     }
 
-    /**
-     * Prepare the mock registries to return a URL if requested.
-     */
+    /** Prepare the mock registries to return a URL if requested. */
     fun prepareGetUrls() {
         registryServices.forEach { service ->
             every { service.urls } returns listOf("")
         }
     }
 
-    /**
-     * Prepare the mock registries to expect a query for module metadata and to fail with a test exception.
-     */
+    /** Prepare the mock registries to expect a query for module metadata and to fail with a test exception. */
     fun prepareFailedMetadata() {
         prepareFailedMetadata(registryServices)
     }
 
-    /**
-     * Prepare the mock registries to expect a query for module source info and to fail with a test exception.
-     */
+    /** Prepare the mock registries to expect a query for module source info and to fail with a test exception. */
     fun prepareFailedSourceInfo() {
         prepareFailedSourceInfo(registryServices)
     }

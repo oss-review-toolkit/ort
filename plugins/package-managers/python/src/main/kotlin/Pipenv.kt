@@ -40,9 +40,7 @@ import org.semver4j.range.RangeListFactory
 
 private const val PROJECT_TYPE = "Pipenv"
 
-/**
- * The version that introduced the requirements command.
- */
+/** The version that introduced the requirements command. */
 private val REQUIREMENTS_COMMAND_VERSION = Semver("2022.4.8")
 
 internal object PipenvCommand : CommandLineTool {

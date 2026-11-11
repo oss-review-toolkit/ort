@@ -23,9 +23,7 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
-/**
- * An implementation of [ProvenanceScannerWrapper] that creates empty scan results.
- */
+/** An implementation of [ProvenanceScannerWrapper] that creates empty scan results. */
 class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
     override val descriptor = PluginDescriptor(id = "fake", displayName = "fake", summary = "")
     override val version = "1.0.0"

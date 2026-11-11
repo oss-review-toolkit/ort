@@ -62,9 +62,7 @@ fun Identifier.getPurlType(): String =
         else -> purlType
     }
 
-/**
- * Map a PURL type string to the corresponding ORT Identifier type string.
- */
+/** Map a PURL type string to the corresponding ORT Identifier type string. */
 internal fun purlTypeToOrtType(purlType: String): String =
     when (purlType) {
         "cargo" -> "crate"
@@ -118,9 +116,7 @@ fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: Str
         .canonicalize()
 }
 
-/**
- * Create a PURL for this [Identifier] with qualifiers and subpath derived from [provenance].
- */
+/** Create a PURL for this [Identifier] with qualifiers and subpath derived from [provenance]. */
 fun Identifier.toPurl(provenance: Provenance): String =
     when (provenance) {
         is ArtifactProvenance -> {
@@ -151,9 +147,7 @@ fun Identifier.toPurl(provenance: Provenance): String =
         is UnknownProvenance -> toPurl()
     }
 
-/**
- * Convert this [PackageURL] to an ORT [Identifier].
- */
+/** Convert this [PackageURL] to an ORT [Identifier]. */
 fun PackageURL.toIdentifier(): Identifier {
     val ortType = purlTypeToOrtType(type)
     val combinedName = listOfNotNull(namespace, name).joinToString("/")

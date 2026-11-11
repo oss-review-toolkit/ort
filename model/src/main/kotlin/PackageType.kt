@@ -19,17 +19,11 @@
 
 package org.ossreviewtoolkit.model
 
-/**
- * An enum to describe the different types of [Package]s.
- */
+/** An enum to describe the different types of [Package]s. */
 enum class PackageType {
-    /**
-     * A package that represents a dependency of a [Project] and is not a [Project] itself.
-     */
+    /** A package that represents a dependency of a [Project] and is not a [Project] itself. */
     PACKAGE,
 
-    /**
-     * A package that was created from a [Project].
-     */
+    /** A package that was created from a [Project]. */
     PROJECT
 }

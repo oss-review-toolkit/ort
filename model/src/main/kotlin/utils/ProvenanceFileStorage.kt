@@ -22,13 +22,9 @@ import java.io.InputStream
 
 import org.ossreviewtoolkit.model.KnownProvenance
 
-/**
- * A generic storage interface that associates a [KnownProvenance] with a stream of data.
- */
+/** A generic storage interface that associates a [KnownProvenance] with a stream of data. */
 interface ProvenanceFileStorage {
-    /**
-     * Return whether any data is associated by [provenance].
-     */
+    /** Return whether any data is associated by [provenance]. */
     suspend fun hasData(provenance: KnownProvenance): Boolean
 
     /**

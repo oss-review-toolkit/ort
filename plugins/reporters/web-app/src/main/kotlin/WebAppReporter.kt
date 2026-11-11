@@ -41,16 +41,12 @@ import org.ossreviewtoolkit.utils.common.div
 private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
 
 data class WebAppReporterConfig(
-    /**
-     * If true, subtrees occurring multiple times in the dependency tree are stripped.
-     */
+    /** If true, subtrees occurring multiple times in the dependency tree are stripped. */
     @OrtPluginOption(defaultValue = "false")
     val deduplicateDependencyTree: Boolean
 )
 
-/**
- * A [Reporter] that generates a web application that allows browsing an ORT result interactively.
- */
+/** A [Reporter] that generates a web application that allows browsing an ORT result interactively. */
 @OrtPlugin(
     displayName = "WebApp",
     summary = "Generates a web application to browse an ORT result interactively.",

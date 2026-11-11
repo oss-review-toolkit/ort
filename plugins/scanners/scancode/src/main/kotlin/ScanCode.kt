@@ -77,9 +77,7 @@ internal object ScanCodeCommand : CommandLineTool {
         }.orEmpty()
 }
 
-/**
- * A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).
- */
+/** A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit). */
 @OrtPlugin(
     displayName = "ScanCode",
     summary = "A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).",
@@ -159,9 +157,7 @@ open class ScanCode(
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary =
         parseResult(result).toScanSummary(config.preferFileLicense)
 
-    /**
-     * Execute ScanCode with the configured arguments to scan the given [path] and produce [resultFile].
-     */
+    /** Execute ScanCode with the configured arguments to scan the given [path] and produce [resultFile]. */
     internal fun runScanCode(path: File, resultFile: File) =
         ProcessCapture(
             ScanCodeCommand.command(),

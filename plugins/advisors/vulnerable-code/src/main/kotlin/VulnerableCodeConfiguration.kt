@@ -23,17 +23,13 @@ import org.ossreviewtoolkit.clients.vulnerablecode.VULNERABLE_CODE_BASE_URL
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.Secret
 
-/**
- * The supported VulnerableCode API versions.
- */
+/** The supported VulnerableCode API versions. */
 enum class VulnerableCodeApiVersion {
     V1,
     V3
 }
 
-/**
- * The configuration for VulnerableCode as security vulnerability provider.
- */
+/** The configuration for VulnerableCode as security vulnerability provider. */
 data class VulnerableCodeConfiguration(
     /**
      * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used. The
@@ -42,9 +38,7 @@ data class VulnerableCodeConfiguration(
     @OrtPluginOption(defaultValue = VULNERABLE_CODE_BASE_URL)
     val serverUrl: String,
 
-    /**
-     * The optional API key to use.
-     */
+    /** The optional API key to use. */
     val apiKey: Secret?,
 
     /**
@@ -52,9 +46,7 @@ data class VulnerableCodeConfiguration(
      */
     val readTimeout: Long?,
 
-    /**
-     * The VulnerableCode API version to use.
-     */
+    /** The VulnerableCode API version to use. */
     @OrtPluginOption(defaultValue = "V3")
     val apiVersion: VulnerableCodeApiVersion
 )

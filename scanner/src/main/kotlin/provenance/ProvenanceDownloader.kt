@@ -41,9 +41,7 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
-/**
- * An interface that provides functionality to download source code.
- */
+/** An interface that provides functionality to download source code. */
 fun interface ProvenanceDownloader {
     /**
      * Download the source code specified by the provided [provenance] and return the path to the temporary directory

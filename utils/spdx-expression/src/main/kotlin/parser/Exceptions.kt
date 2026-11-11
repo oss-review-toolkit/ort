@@ -23,9 +23,7 @@ import kotlin.reflect.KClass
 
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxException
 
-/**
- * An exception to indicate that an [SpdxExpressionLexer] error occurred.
- */
+/** An exception to indicate that an [SpdxExpressionLexer] error occurred. */
 class SpdxExpressionLexerException(val char: Char, val position: Int) :
     SpdxException("Unexpected character '$char' at position $position.")
 

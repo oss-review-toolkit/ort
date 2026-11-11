@@ -77,9 +77,7 @@ object CopyrightStatementsProcessor {
         @JsonSerialize(contentConverter = StringSortedSetConverter::class)
         val processedStatements: Map<String, Set<String>>,
 
-        /**
-         * The copyright statements that were ignored by the [CopyrightStatementsProcessor].
-         */
+        /** The copyright statements that were ignored by the [CopyrightStatementsProcessor]. */
         @JsonSerialize(converter = StringSortedSetConverter::class)
         val unprocessedStatements: Set<String>
     ) {
@@ -146,9 +144,7 @@ private data class Parts(
         }
 }
 
-/**
- * Split the [copyrightStatement] into its [Parts], or return null if the [Parts] could not be determined.
- */
+/** Split the [copyrightStatement] into its [Parts], or return null if the [Parts] could not be determined. */
 private fun determineParts(copyrightStatement: String): Parts? {
     val prefixStripResult = stripKnownCopyrightPrefix(copyrightStatement)
     if (prefixStripResult.second.isEmpty()) return null
@@ -289,17 +285,13 @@ private fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>>
     return Pair(copyrightStatement, emptySet())
 }
 
-/**
- * Remove all years from the [copyrightStatement] and return the stripped string paired to the set of years.
- */
+/** Remove all years from the [copyrightStatement] and return the stripped string paired to the set of years. */
 private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
     replaceYears(copyrightStatement).let { (statement, years) ->
         statement.replace(YEAR_PLACEHOLDER, "") to years
     }
 
-/**
- * Return a tuple of the copyright prefix and the normalized Copyright owner to group statement parts by.
- */
+/** Return a tuple of the copyright prefix and the normalized Copyright owner to group statement parts by. */
 private val Parts.key: String
     get() {
         val normalizedOwnerKey = owner.filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()

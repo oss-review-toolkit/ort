@@ -39,15 +39,11 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
  * TODO: Add further data.
  */
 data class ResolvedConfiguration(
-    /**
-     * All license choices that may apply to [OrtResult].
-     */
+    /** All license choices that may apply to [OrtResult]. */
     @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = LicenseChoicesFilter::class)
     val licenseChoices: LicenseChoices = LicenseChoices(),
 
-    /**
-     * All [PackageConfiguration]s that correspond to the scan results in this [OrtResult].
-     */
+    /** All [PackageConfiguration]s that correspond to the scan results in this [OrtResult]. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val packageConfigurations: List<PackageConfiguration>? = null,
 
@@ -58,9 +54,7 @@ data class ResolvedConfiguration(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageCurations: List<ResolvedPackageCurations> = emptyList(),
 
-    /**
-     * All resolutions that apply to this [OrtResult].
-     */
+    /** All resolutions that apply to this [OrtResult]. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val resolutions: Resolutions? = null
 ) {
@@ -72,17 +66,13 @@ data class ResolvedConfiguration(
         }
     }
 
-    /**
-     * Return all [PackageCuration]s contained in this [ResolvedConfiguration] in highest-priority-first order.
-     */
+    /** Return all [PackageCuration]s contained in this [ResolvedConfiguration] in highest-priority-first order. */
     @JsonIgnore
     fun getAllPackageCurations(): List<PackageCuration> = packageCurations.flatMap { it.curations }
 }
 
 data class ResolvedPackageCurations(
-    /**
-     * The package curation provider.
-     */
+    /** The package curation provider. */
     val provider: Provider,
 
     /**
@@ -92,18 +82,14 @@ data class ResolvedPackageCurations(
     val curations: List<PackageCuration> = emptyList()
 ) {
     data class Provider(
-        /**
-         * The identifier of the provider.
-         */
+        /** The identifier of the provider. */
         val id: String
 
         // TODO: Add the attributes `type` and `config` from the provider configuration.
     )
 
     companion object {
-        /**
-         * The provider ID to associate with package curations coming from the repository configuration.
-         */
+        /** The provider ID to associate with package curations coming from the repository configuration. */
         const val REPOSITORY_CONFIGURATION_PROVIDER_ID = "RepositoryConfiguration"
     }
 }

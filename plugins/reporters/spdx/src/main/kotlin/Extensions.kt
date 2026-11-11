@@ -61,9 +61,7 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.nullOrBlankToSpdxNoassertionOrNone
 
-/**
- * Convert an ORT [Hash] to an [SpdxChecksum], or return null if a conversion is not possible.
- */
+/** Convert an ORT [Hash] to an [SpdxChecksum], or return null if a conversion is not possible. */
 private fun Hash.toSpdxChecksum(): SpdxChecksum? =
     SpdxChecksum.Algorithm.entries
         // The SPDX checksum algorithm names are simple and assumed to be part of ORT's HashAlgorithm aliases.
@@ -75,9 +73,7 @@ private fun Hash.toSpdxChecksum(): SpdxChecksum? =
             )
         }
 
-/**
- * Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix] and [suffix].
- */
+/** Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix] and [suffix]. */
 internal fun Identifier.toSpdxId(infix: String = "Package", suffix: String = ""): String =
     buildString {
         append(SpdxConstants.REF_PREFIX)
@@ -86,9 +82,7 @@ internal fun Identifier.toSpdxId(infix: String = "Package", suffix: String = "")
         if (suffix.isNotEmpty()) append("-$suffix")
     }.toSpdxId()
 
-/**
- * Convert an [Identifier]'s coordinates to an SPDX reference ID for the specified [type].
- */
+/** Convert an [Identifier]'s coordinates to an SPDX reference ID for the specified [type]. */
 internal fun Identifier.toSpdxId(type: SpdxPackageType): String = toSpdxId(type.infix, type.suffix)
 
 /**
@@ -101,9 +95,7 @@ private fun LicenseInfoResolver.getSpdxCopyrightText(id: Identifier): String {
     return copyrightStatements.joinToString("\n")
 }
 
-/**
- * Return all SPDX external references contained in the metadata of the ORT package.
- */
+/** Return all SPDX external references contained in the metadata of the ORT package. */
 private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
     val externalRefs = mutableListOf<SpdxExternalReference>()
 
@@ -130,9 +122,7 @@ private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
     return externalRefs
 }
 
-/**
- * An enum for the different types of SPDX packages an ORT package can represent.
- */
+/** An enum for the different types of SPDX packages an ORT package can represent. */
 internal enum class SpdxPackageType(val infix: String, val suffix: String = "") {
     PROJECT("Project"),
     BINARY_PACKAGE("Package"),
@@ -239,9 +229,7 @@ private fun OrtResult.getPackageVerificationCode(id: Identifier, type: SpdxPacka
         calculatePackageVerificationCode(fileList.files.map { it.sha1 }.asSequence())
     }
 
-/**
- * Use [licenseFactProvider] to add the license texts for all packages to the [SpdxDocument].
- */
+/** Use [licenseFactProvider] to add the license texts for all packages to the [SpdxDocument]. */
 internal fun SpdxDocument.addExtractedLicenseInfo(licenseFactProvider: LicenseFactProvider): SpdxDocument {
     val allLicenses = buildSet {
         packages.forEach {
@@ -265,9 +253,7 @@ internal fun SpdxDocument.addExtractedLicenseInfo(licenseFactProvider: LicenseFa
     return copy(hasExtractedLicensingInfos = extractedLicenseInfo)
 }
 
-/**
- * Create an SPDX download location string from [VcsInfo] and an optional [resolvedRevision].
- */
+/** Create an SPDX download location string from [VcsInfo] and an optional [resolvedRevision]. */
 internal fun VcsInfo.toSpdxDownloadLocation(resolvedRevision: String?): String {
     val vcsTool = when (type) {
         VcsType.GIT -> "git"
@@ -428,9 +414,7 @@ private fun Findings.getLicensesByFilePath(): Map<String, Set<SpdxExpression>> {
         .mapValues { (_, licenses) -> licenses.toSet() }
 }
 
-/**
- * Return true if this provenance is of the type specified by [sourceCodeOrigin].
- */
+/** Return true if this provenance is of the type specified by [sourceCodeOrigin]. */
 private fun Provenance.matches(sourceCodeOrigin: SourceCodeOrigin): Boolean =
     when (sourceCodeOrigin) {
         SourceCodeOrigin.VCS -> this is RepositoryProvenance

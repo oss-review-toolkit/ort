@@ -55,14 +55,10 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class ProvenanceBasedPostgresStorage(
-    /**
-     * The JDBC data source to obtain database connections.
-     */
+    /** The JDBC data source to obtain database connections. */
     private val dataSource: Lazy<DataSource>,
 
-    /**
-     * The name of the table used for storing scan results.
-     */
+    /** The name of the table used for storing scan results. */
     private val tableName: String = "provenance_scan_results"
 ) : ProvenanceBasedScanStorage {
     private val table = ProvenanceScanResults(tableName)

@@ -36,14 +36,10 @@ import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 data class DirPackageConfigurationProviderConfig(
-    /**
-     * The path of the package configuration directory.
-     */
+    /** The path of the package configuration directory. */
     val path: String,
 
-    /**
-     * A flag to denote whether the path is required to exist.
-     */
+    /** A flag to denote whether the path is required to exist. */
     @OrtPluginOption(defaultValue = "false")
     val mustExist: Boolean
 )

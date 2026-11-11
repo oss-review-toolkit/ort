@@ -29,20 +29,12 @@ import org.ossreviewtoolkit.model.TextLocation
  */
 data class OrtComment(val ort: OrtCommentPayload)
 
-/**
- * The payload of an [OrtComment].
- */
+/** The payload of an [OrtComment]. */
 data class OrtCommentPayload(
-    /**
-     * The license of chosen snippets mapped to their source location.
-     */
+    /** The license of chosen snippets mapped to their source location. */
     val licenses: Map<String, List<TextLocation>>,
-    /**
-     * The amount of chosen snippets for this file.
-     */
+    /** The amount of chosen snippets for this file. */
     val snippetChoicesCount: Int,
-    /**
-     * The amount of not relevant snippets for this file.
-     */
+    /** The amount of not relevant snippets for this file. */
     val notRelevantSnippetsCount: Int
 )

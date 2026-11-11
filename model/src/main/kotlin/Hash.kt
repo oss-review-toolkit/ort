@@ -26,25 +26,17 @@ import java.io.File
 
 import kotlin.io.encoding.Base64
 
-/**
- * A class that bundles a hash algorithm with its hash value.
- */
+/** A class that bundles a hash algorithm with its hash value. */
 data class Hash(
-    /**
-     * The value calculated using the hash algorithm.
-     */
+    /** The value calculated using the hash algorithm. */
     @JsonSerialize(converter = StringLowercaseConverter::class)
     val value: String,
 
-    /**
-     * The algorithm used to calculate the hash value.
-     */
+    /** The algorithm used to calculate the hash value. */
     val algorithm: HashAlgorithm
 ) {
     companion object {
-        /**
-         * A constant to specify that no hash value (and thus also no hash algorithm) is provided.
-         */
+        /** A constant to specify that no hash value (and thus also no hash algorithm) is provided. */
         val NONE = Hash(HashAlgorithm.NONE.toString(), HashAlgorithm.NONE)
 
         /**
@@ -72,19 +64,13 @@ data class Hash(
         }
     }
 
-    /**
-     * Construct a [Hash] instance from hash [value] and [algorithm] strings.
-     */
+    /** Construct a [Hash] instance from hash [value] and [algorithm] strings. */
     constructor(value: String, algorithm: String) : this(value, HashAlgorithm.fromString(algorithm))
 
-    /**
-     * Return the hash in Support Subresource Integrity (SRI) format.
-     */
+    /** Return the hash in Support Subresource Integrity (SRI) format. */
     fun toSri() = algorithm.name.lowercase() + "-" + Base64.encode(value.hexToByteArray())
 
-    /**
-     * Verify that the [file] matches this hash.
-     */
+    /** Verify that the [file] matches this hash. */
     fun verify(file: File): Boolean {
         require(algorithm in HashAlgorithm.VERIFIABLE) {
             "Cannot verify algorithm '$algorithm'. Supported algorithms are ${HashAlgorithm.VERIFIABLE}."
@@ -105,9 +91,7 @@ data class Hash(
         }
 }
 
-/**
- * Return this [Hash] if not null or else [Hash.NONE].
- */
+/** Return this [Hash] if not null or else [Hash.NONE]. */
 fun Hash?.orNone(): Hash = this ?: Hash.NONE
 
 private class StringLowercaseConverter : StdConverter<String, String>() {

@@ -95,14 +95,10 @@ data class AnalyzerConfiguration(
     @JsonAlias("analyzers")
     val packageManagers: Map<String, PackageManagerConfiguration>? = null,
 
-    /**
-     * A flag to control whether excluded scopes and paths should be skipped during the analysis.
-     */
+    /** A flag to control whether excluded scopes and paths should be skipped during the analysis. */
     val skipExcluded: Boolean = false
 ) {
-    /**
-     * A copy of [packageManagers] with case-insensitive keys.
-     */
+    /** A copy of [packageManagers] with case-insensitive keys. */
     private val packageManagersCaseInsensitive = packageManagers?.let {
         sortedMapOf<String, PackageManagerConfiguration>(String.CASE_INSENSITIVE_ORDER).zip(it) { a, b ->
             a.merge(b)
@@ -115,9 +111,7 @@ data class AnalyzerConfiguration(
      */
     fun getPackageManagerConfiguration(packageManager: String) = packageManagersCaseInsensitive?.get(packageManager)
 
-    /**
-     * Merge this [AnalyzerConfiguration] with [override]. Values of [override] take precedence.
-     */
+    /** Merge this [AnalyzerConfiguration] with [override]. Values of [override] take precedence. */
     fun merge(override: RepositoryAnalyzerConfiguration): AnalyzerConfiguration {
         val mergedPackageManagers = when {
             packageManagers == null -> override.packageManagers

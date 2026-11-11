@@ -26,28 +26,18 @@ import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.S3FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
-/**
- * The configuration model for a [FileStorage]. Only one of the storage options can be configured.
- */
+/** The configuration model for a [FileStorage]. Only one of the storage options can be configured. */
 data class FileStorageConfiguration(
-    /**
-     * The configuration of a [HttpFileStorage].
-     */
+    /** The configuration of a [HttpFileStorage]. */
     val httpFileStorage: HttpFileStorageConfiguration? = null,
 
-    /**
-     * The configuration of a [LocalFileStorage].
-     */
+    /** The configuration of a [LocalFileStorage]. */
     val localFileStorage: LocalFileStorageConfiguration? = null,
 
-    /**
-     * The configuration of a [S3FileStorage].
-     */
+    /** The configuration of a [S3FileStorage]. */
     val s3FileStorage: S3FileStorageConfiguration? = null
 ) {
-    /**
-     * Create a [FileStorage] based on this configuration.
-     */
+    /** Create a [FileStorage] based on this configuration. */
     fun createFileStorage(): FileStorage {
         val storage = requireNotNull(listOfNotNull(httpFileStorage, localFileStorage, s3FileStorage).singleOrNull()) {
             "Exactly one implementation must be configured for a FileStorage."

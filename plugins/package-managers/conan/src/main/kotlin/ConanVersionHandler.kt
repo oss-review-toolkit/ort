@@ -31,19 +31,13 @@ import org.ossreviewtoolkit.utils.common.MaskedString
  * version.
  */
 internal interface ConanVersionHandler {
-    /**
-     * Get the Conan home directory.
-     */
+    /** Get the Conan home directory. */
     fun getConanHome(): File
 
-    /**
-     * Get the path to the database file that Conan uses for package metadata caching.
-     */
+    /** Get the path to the database file that Conan uses for package metadata caching. */
     fun getConanCacheDatabasePath(): File = getConanHome().resolve(".conan.db")
 
-    /**
-     * Get the Conan package storage path, i.e. the location where Conan caches downloaded packages.
-     */
+    /** Get the Conan package storage path, i.e. the location where Conan caches downloaded packages. */
     fun getConanPackageStoragePath(): File
 
     /**
@@ -58,25 +52,17 @@ internal interface ConanVersionHandler {
      */
     fun getConanDataFile(name: String, version: String, conanStorageDir: File, recipeFolder: String? = null): File?
 
-    /**
-     * List configured remotes.
-     */
+    /** List configured remotes. */
     fun listRemotes(): List<Pair<String, String>>
 
-    /**
-     * Run the command "conan inspect" for the given [pkgName] and write the output to [jsonFile].
-     */
+    /** Run the command "conan inspect" for the given [pkgName] and write the output to [jsonFile]. */
     fun runInspectCommand(workingDir: File, pkgName: String, jsonFile: File)
 
-    /**
-     * Authenticate against the given [remote] with the provided [username] and [password].
-     */
+    /** Authenticate against the given [remote] with the provided [username] and [password]. */
     fun authenticate(remote: String, username: MaskedString, password: MaskedString)
 }
 
-/**
- * A simple container to return several data structures needed to build a [ProjectAnalyzerResult].
- */
+/** A simple container to return several data structures needed to build a [ProjectAnalyzerResult]. */
 internal data class HandlerResults(
     val packages: Map<String, Package>,
     val projectPackage: Package,

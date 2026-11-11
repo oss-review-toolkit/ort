@@ -80,9 +80,7 @@ internal object StackCommand : CommandLineTool {
     }
 }
 
-/**
- * The [Stack](https://haskellstack.org/) package manager for Haskell.
- */
+/** The [Stack](https://haskellstack.org/) package manager for Haskell. */
 @OrtPlugin(
     displayName = "Stack",
     summary = "The Stack package manager for Haskell.",

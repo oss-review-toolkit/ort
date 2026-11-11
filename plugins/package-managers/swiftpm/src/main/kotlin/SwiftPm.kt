@@ -69,9 +69,7 @@ internal object SwiftCommand : CommandLineTool {
     override fun transformVersion(output: String) = output.substringAfter("version ").substringBefore(" (")
 }
 
-/**
- * The [Swift Package Manager](https://github.com/apple/swift-package-manager).
- */
+/** The [Swift Package Manager](https://github.com/apple/swift-package-manager). */
 @OrtPlugin(
     id = "SwiftPM",
     displayName = "Swift Package Manager",

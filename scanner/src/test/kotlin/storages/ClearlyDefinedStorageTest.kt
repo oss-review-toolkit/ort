@@ -297,9 +297,7 @@ private val TEST_PACKAGE =
         vcs = VcsInfo.EMPTY
     )
 
-/**
- * Return a storage configuration that points to the mock [server].
- */
+/** Return a storage configuration that points to the mock [server]. */
 private fun storageConfiguration(server: WireMockServer): ClearlyDefinedStorageConfiguration {
     val url = "http://localhost:${server.port()}"
     return ClearlyDefinedStorageConfiguration(url)
@@ -329,9 +327,7 @@ private fun stubHarvestTools(server: WireMockServer, coordinates: Coordinates, t
     )
 }
 
-/**
- * Stub a request for the harvested data from ScanCode for the given [coordinates] on the [server] server.
- */
+/** Stub a request for the harvested data from ScanCode for the given [coordinates] on the [server] server. */
 private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordinates) {
     val urlPath = "/harvest/${toolUrl(coordinates, "scancode", SCANCODE_VERSION)}"
     server.stubFor(
@@ -344,9 +340,7 @@ private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordin
     )
 }
 
-/**
- * Stub a request for the definition's endpoint for the given [coordinates] on the [server] server.
- */
+/** Stub a request for the definition's endpoint for the given [coordinates] on the [server] server. */
 private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) =
     server.stubFor(
         get(urlPathEqualTo("/definitions/$coordinates"))
@@ -356,9 +350,7 @@ private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = C
             )
     )
 
-/**
- * Check that this [Result] contains the expected data and return the first scan result from the list on success.
- */
+/** Check that this [Result] contains the expected data and return the first scan result from the list on success. */
 private fun Result<List<ScanResult>>.shouldBeValid(block: (ScanResult.() -> Unit)? = null) {
     shouldBeSuccess {
         it shouldHaveSize 1

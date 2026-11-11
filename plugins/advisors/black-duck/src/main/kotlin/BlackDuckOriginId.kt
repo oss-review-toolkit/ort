@@ -29,14 +29,10 @@ import com.blackduck.integration.bdio.model.externalid.ExternalId
  * favor of `externalNamespace` and `externalId`.
  */
 internal data class BlackDuckOriginId(
-    /**
-     * The namespace such as 'maven', 'pypi' or 'github'.
-     */
+    /** The namespace such as 'maven', 'pypi' or 'github'. */
     val externalNamespace: String,
 
-    /**
-     * The component's identifier within the external namespace.
-     */
+    /** The component's identifier within the external namespace. */
     val externalId: String
 ) {
     fun toExternalId(): ExternalId {

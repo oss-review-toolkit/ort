@@ -35,23 +35,15 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdxexpression.toExpression
 
-/**
- * Resolved license information about a package (or project).
- */
+/** Resolved license information about a package (or project). */
 data class ResolvedLicenseInfo(
-    /**
-     * The identifier of the package (or project).
-     */
+    /** The identifier of the package (or project). */
     val id: Identifier,
 
-    /**
-     * The unresolved license info.
-     */
+    /** The unresolved license info. */
     val licenseInfo: LicenseInfo,
 
-    /**
-     * The list of [ResolvedLicense]s for this package (or project).
-     */
+    /** The list of [ResolvedLicense]s for this package (or project). */
     val licenses: List<ResolvedLicense>,
 
     /**
@@ -114,9 +106,7 @@ data class ResolvedLicenseInfo(
         return mainLicenses.toExpression()
     }
 
-    /**
-     * Convenience function which returns the first coordinate from [effectiveLicenseAndAppliedChoices].
-     */
+    /** Convenience function which returns the first coordinate from [effectiveLicenseAndAppliedChoices]. */
     fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<SpdxLicenseChoice>): SpdxExpression? =
         effectiveLicenseAndAppliedChoices(licenseView, *licenseChoices).first
 
@@ -154,15 +144,11 @@ data class ResolvedLicenseInfo(
             ?: CopyrightStatementsProcessor.process(copyrightStatements).allStatements
     }
 
-    /**
-     * Call [LicenseView.filter] on this [ResolvedLicenseInfo].
-     */
+    /** Call [LicenseView.filter] on this [ResolvedLicenseInfo]. */
     @JvmOverloads
     fun filter(licenseView: LicenseView, filterSources: Boolean = false) = licenseView.filter(this, filterSources)
 
-    /**
-     * Filter all licenses that have a location matching [provenance] and [path].
-     */
+    /** Filter all licenses that have a location matching [provenance] and [path]. */
     fun filter(provenance: Provenance, path: String): List<ResolvedLicense> =
         filter { resolvedLicense ->
             resolvedLicense.locations.any {
@@ -170,9 +156,7 @@ data class ResolvedLicenseInfo(
             }
         }
 
-    /**
-     * Apply [licenseChoices] on the effective license of the [licenseView].
-     */
+    /** Apply [licenseChoices] on the effective license of the [licenseView]. */
     fun applyChoices(
         licenseChoices: List<SpdxLicenseChoice>,
         licenseView: LicenseView = LicenseView.ALL

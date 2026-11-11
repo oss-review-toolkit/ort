@@ -26,33 +26,23 @@ import org.ossreviewtoolkit.utils.common.enumSetOf
 
 @Serializable
 enum class Compatibility {
-    /**
-     * Compatibility is inherent as inbound and outbound licenses are the same.
-     */
+    /** Compatibility is inherent as inbound and outbound licenses are the same. */
     @SerialName("Same")
     INHERENT,
 
-    /**
-     * Inbound and outbound license have been checked to be compatible.
-     */
+    /** Inbound and outbound license have been checked to be compatible. */
     @SerialName("Yes")
     YES,
 
-    /**
-     * Inbound and outbound license have been checked to be incompatible.
-     */
+    /** Inbound and outbound license have been checked to be incompatible. */
     @SerialName("No")
     NO,
 
-    /**
-     * Inbound and outbound license may be compatible or not depending on the context (e.g. the way of integration).
-     */
+    /** Inbound and outbound license may be compatible or not depending on the context (e.g. the way of integration). */
     @SerialName("Check dependency")
     CONTEXTUAL,
 
-    /**
-     * Inbound and outbound license have not been checked for compatibility.
-     */
+    /** Inbound and outbound license have not been checked for compatibility. */
     @SerialName("Unknown")
     UNKNOWN;
 

@@ -25,9 +25,7 @@ import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 
-/**
- * Replace the license choices in [OrtResult.resolvedConfiguration] with the given [licenseChoices].
- */
+/** Replace the license choices in [OrtResult.resolvedConfiguration] with the given [licenseChoices]. */
 fun OrtResult.setLicenseChoices(licenseChoices: LicenseChoices): OrtResult =
     copy(resolvedConfiguration = resolvedConfiguration.copy(licenseChoices = licenseChoices))
 
@@ -56,9 +54,7 @@ fun OrtResult.setPackageCurations(packageCurationProviders: List<Pair<String, Pa
     return copy(resolvedConfiguration = resolvedConfiguration.copy(packageCurations = packageCurations))
 }
 
-/**
- * Replace the resolutions in [OrtResult.resolvedConfiguration] with the ones obtained from [resolutionProvider].
- */
+/** Replace the resolutions in [OrtResult.resolvedConfiguration] with the ones obtained from [resolutionProvider]. */
 fun OrtResult.setResolutions(resolutionProvider: ResolutionProvider): OrtResult {
     val resolutions = ConfigurationResolver.resolveResolutions(
         issues = getIssues().values.flatten(),

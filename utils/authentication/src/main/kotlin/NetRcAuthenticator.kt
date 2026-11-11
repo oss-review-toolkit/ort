@@ -98,9 +98,7 @@ internal fun parseNetrc(contents: String): Map<String, PasswordAuthentication> {
     return credentials
 }
 
-/**
- * Parse the given [netrcFiles] return a [Map] with the found credentials.
- */
+/** Parse the given [netrcFiles] return a [Map] with the found credentials. */
 private fun loadCredentials(netrcFiles: List<File>): Map<String, PasswordAuthentication> =
     netrcFiles.fold(emptyMap()) { credentials, netrcFile ->
         if (netrcFile.isFile) {

@@ -54,235 +54,149 @@ class Statistics(
     private val licenseInfoResolver: LicenseInfoResolver,
     private val ortConfig: OrtConfiguration
 ) {
-    /**
-     * Statistics for the repository configuration.
-     */
+    /** Statistics for the repository configuration. */
     val repositoryConfiguration: RepositoryConfigurationStatistics
         by lazy { StatisticsCalculator.getRepositoryConfigurationStatistics(ortResult) }
 
-    /**
-     * Statistics for the resolved configuration.
-     */
+    /** Statistics for the resolved configuration. */
     val resolvedConfiguration: ResolvedConfigurationStatistics
         by lazy { StatisticsCalculator.getResolvedConfigurationStatistics(ortResult) }
 
-    /**
-     * The number of [Issue]s by severity which are not resolved and not excluded.
-     */
+    /** The number of [Issue]s by severity which are not resolved and not excluded. */
     val openIssues: IssueStatistics by lazy { StatisticsCalculator.getOpenIssues(ortResult, ortConfig) }
 
-    /**
-     * The number of [RuleViolation]s by severity which are not resolved.
-     */
+    /** The number of [RuleViolation]s by severity which are not resolved. */
     val openRuleViolations: IssueStatistics
         by lazy { StatisticsCalculator.getOpenRuleViolations(ortResult, ortConfig) }
 
-    /**
-     * The number of [Vulnerabilities][Vulnerability] which are not resolved and not excluded.
-     */
+    /** The number of [Vulnerabilities][Vulnerability] which are not resolved and not excluded. */
     val openVulnerabilities: Int by lazy { StatisticsCalculator.getOpenVulnerabilities(ortResult) }
 
-    /**
-     * Statistics for the dependency tree.
-     */
+    /** Statistics for the dependency tree. */
     val dependencyTree: DependencyTreeStatistics
         by lazy { StatisticsCalculator.getDependencyTreeStatistics(ortResult) }
 
-    /**
-     * Statistics of used licenses.
-     */
+    /** Statistics of used licenses. */
     val licenses: LicenseStatistics
         by lazy { StatisticsCalculator.getLicenseStatistics(ortResult, licenseInfoResolver) }
 
-    /**
-     * The sum of the execution time of all stages in seconds.
-     */
+    /** The sum of the execution time of all stages in seconds. */
     val executionDurationInSeconds: Long by lazy { StatisticsCalculator.getExecutionDurationInSeconds(ortResult) }
 }
 
-/**
- * A class containing the amount of issues per severity.
- */
+/** A class containing the amount of issues per severity. */
 @JsonPropertyOrder(alphabetic = true)
 data class IssueStatistics(
-    /**
-     * The number of issues with [Severity.ERROR] as severity.
-     */
+    /** The number of issues with [Severity.ERROR] as severity. */
     val errors: Int,
 
-    /**
-     * The number of issues with [Severity.WARNING] as severity.
-     */
+    /** The number of issues with [Severity.WARNING] as severity. */
     val warnings: Int,
 
-    /**
-     * The number of issues with [Severity.HINT] as severity.
-     */
+    /** The number of issues with [Severity.HINT] as severity. */
     val hints: Int,
 
-    /**
-     * The number of severe issues with regard to the configured threshold.
-     */
+    /** The number of severe issues with regard to the configured threshold. */
     val severe: Int
 )
 
-/**
- * A class containing statistics about the dependency trees.
- */
+/** A class containing statistics about the dependency trees. */
 @JsonPropertyOrder(alphabetic = true)
 class DependencyTreeStatistics(
-    /**
-     * The number of included [Project]s.
-     */
+    /** The number of included [Project]s. */
     val includedProjects: Int,
 
-    /**
-     * The number of excluded [Project]s.
-     */
+    /** The number of excluded [Project]s. */
     val excludedProjects: Int,
 
-    /**
-     * The number of included [Package]s.
-     */
+    /** The number of included [Package]s. */
     val includedPackages: Int,
 
-    /**
-     * The number of excluded [Package]s.
-     */
+    /** The number of excluded [Package]s. */
     val excludedPackages: Int,
 
-    /**
-     * The set of scope names which have at least one not excluded corresponding [Scope].
-     */
+    /** The set of scope names which have at least one not excluded corresponding [Scope]. */
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val includedScopes: Set<String>,
 
-    /**
-     * The set of scope names which do not have a single not excluded corresponding [Scope].
-     */
+    /** The set of scope names which do not have a single not excluded corresponding [Scope]. */
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val excludedScopes: Set<String>,
 
     private val ortResult: OrtResult
 ) {
-    /**
-     * The total depth of the deepest tree in the forest.
-     */
+    /** The total depth of the deepest tree in the forest. */
     val totalTreeDepth: Int by lazy { StatisticsCalculator.getTreeDepth(ortResult) }
 
-    /**
-     * The depth of the deepest tree in the forest disregarding excluded tree nodes.
-     */
+    /** The depth of the deepest tree in the forest disregarding excluded tree nodes. */
     val includedTreeDepth: Int by lazy { StatisticsCalculator.getTreeDepth(ortResult, ignoreExcluded = true) }
 }
 
-/**
- * A class containing statistics about licenses.
- */
+/** A class containing statistics about licenses. */
 @JsonPropertyOrder(alphabetic = true)
 data class LicenseStatistics(
-    /**
-     * All declared licenses, mapped to the number of [Project]s and [Package]s they are declared in.
-     */
+    /** All declared licenses, mapped to the number of [Project]s and [Package]s they are declared in. */
     @JsonPropertyOrder(alphabetic = true)
     val declared: Map<String, Int>,
 
-    /**
-     * All detected licenses, mapped to the number of [Project]s and [Package]s they were detected in.
-     */
+    /** All detected licenses, mapped to the number of [Project]s and [Package]s they were detected in. */
     @JsonPropertyOrder(alphabetic = true)
     val detected: Map<String, Int>,
 
-    /**
-     * All effective licenses, mapped to the number of non-excluded [Project]s and [Package]s they apply to.
-     */
+    /** All effective licenses, mapped to the number of non-excluded [Project]s and [Package]s they apply to. */
     @JsonPropertyOrder(alphabetic = true)
     val effective: Map<String, Int>
 )
 
-/**
- * A class containing statistics about the repository configuration
- */
+/** A class containing statistics about the repository configuration */
 @JsonPropertyOrder(alphabetic = true)
 data class RepositoryConfigurationStatistics(
-    /**
-     * The number of [PathExclude]s.
-     */
+    /** The number of [PathExclude]s. */
     val pathExcludes: Int,
 
-    /**
-     * The number of [ScopeExclude]s.
-     */
+    /** The number of [ScopeExclude]s. */
     val scopeExcludes: Int,
 
-    /**
-     * The number of [LicenseChoices].
-     */
+    /** The number of [LicenseChoices]. */
     val licenseChoices: Int,
 
-    /**
-     * The number of [LicenseFindingCuration]s.
-     */
+    /** The number of [LicenseFindingCuration]s. */
     val licenseFindingCurations: Int,
 
-    /**
-     * The number of [PackageConfiguration]s.
-     */
+    /** The number of [PackageConfiguration]s. */
     val packageConfigurations: Int,
 
-    /**
-     * The number of [PackageCuration]s.
-     */
+    /** The number of [PackageCuration]s. */
     val packageCurations: Int,
 
-    /**
-     * The number of [IssueResolution]s.
-     */
+    /** The number of [IssueResolution]s. */
     val issueResolutions: Int,
 
-    /**
-     * The number of [RuleViolationResolution]s.
-     */
+    /** The number of [RuleViolationResolution]s. */
     val ruleViolationResolutions: Int,
 
-    /**
-     * The number of [VulnerabilityResolution]s.
-     */
+    /** The number of [VulnerabilityResolution]s. */
     val vulnerabilityResolutions: Int
 )
 
-/**
- * A class containing statistics about the resolved configuration
- */
+/** A class containing statistics about the resolved configuration */
 @JsonPropertyOrder(alphabetic = true)
 data class ResolvedConfigurationStatistics(
-    /**
-     * The number of [LicenseChoices].
-     */
+    /** The number of [LicenseChoices]. */
     val licenseChoices: Int,
 
-    /**
-     * The number of [PackageConfiguration]s.
-     */
+    /** The number of [PackageConfiguration]s. */
     val packageConfigurations: Int,
 
-    /**
-     * The number of [PackageCuration]s.
-     */
+    /** The number of [PackageCuration]s. */
     val packageCurations: Int,
 
-    /**
-     * The number of [IssueResolution]s.
-     */
+    /** The number of [IssueResolution]s. */
     val issueResolutions: Int,
 
-    /**
-     * The number of [RuleViolationResolution]s.
-     */
+    /** The number of [RuleViolationResolution]s. */
     val ruleViolationResolutions: Int,
 
-    /**
-     * The number of [VulnerabilityResolution]s.
-     */
+    /** The number of [VulnerabilityResolution]s. */
     val vulnerabilityResolutions: Int
 )

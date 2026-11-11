@@ -40,9 +40,7 @@ import org.ossreviewtoolkit.model.config.ScopeInclude
 import org.ossreviewtoolkit.model.config.ScopeIncludeReason
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
-/**
- * Test implementation of CycloneDxPackageManager for testing purposes.
- */
+/** Test implementation of CycloneDxPackageManager for testing purposes. */
 private class TestCycloneDxPackageManager : CycloneDxPackageManager("TestCycloneDX") {
     override val descriptor = PluginDescriptor(
         id = "TestCycloneDX",

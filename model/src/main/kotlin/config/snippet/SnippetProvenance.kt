@@ -21,7 +21,5 @@ package org.ossreviewtoolkit.model.config.snippet
 
 import org.ossreviewtoolkit.model.RepositoryProvenance
 
-/**
- * The URL of the [RepositoryProvenance] the snippet choice applies to.
- */
+/** The URL of the [RepositoryProvenance] the snippet choice applies to. */
 data class SnippetProvenance(val url: String)

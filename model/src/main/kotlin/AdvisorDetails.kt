@@ -21,13 +21,9 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-/**
- * Details about the used provider of vulnerability information.
- */
+/** Details about the used provider of vulnerability information. */
 @JsonIgnoreProperties("capabilities")
 data class AdvisorDetails(
-    /**
-     * The name of the used advisor.
-     */
+    /** The name of the used advisor. */
     val name: String
 )

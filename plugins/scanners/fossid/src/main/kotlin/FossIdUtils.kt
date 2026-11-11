@@ -113,9 +113,7 @@ internal fun List<IgnoreRule>.filterLegacyRules(referenceRules: List<IgnoreRule>
     return legacyRules to issues
 }
 
-/**
- * Return the PURL type string as determined from the given [url], or "generic" if there is no match.
- */
+/** Return the PURL type string as determined from the given [url], or "generic" if there is no match. */
 private fun urlToPackageType(url: String): String =
     when (val provider = PackageProvider.get(url)) {
         PackageProvider.COCOAPODS -> "cocoapods"

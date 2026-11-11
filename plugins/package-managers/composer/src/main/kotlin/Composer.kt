@@ -94,9 +94,7 @@ internal object ComposerCommand : CommandLineTool {
     override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=1.5")
 }
 
-/**
- * The [Composer](https://getcomposer.org/) package manager for PHP.
- */
+/** The [Composer](https://getcomposer.org/) package manager for PHP. */
 @OrtPlugin(
     displayName = "Composer",
     summary = "The Composer package manager for PHP.",

@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.utils.spdx
 
-/**
- * Convert a null or blank [String] to `NONE`.
- */
+/** Convert a null or blank [String] to `NONE`. */
 fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this
 
 /**

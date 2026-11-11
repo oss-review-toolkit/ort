@@ -52,9 +52,7 @@ data class GitPackageConfigurationProviderConfig(
     val path: String
 )
 
-/**
- * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from the configured Git repository.
- */
+/** A [PackageConfigurationProvider] that loads [PackageConfiguration]s from the configured Git repository. */
 @OrtPlugin(
     displayName = "Git Repository",
     summary = "A package configuration provider that loads package configurations from a Git repository.",

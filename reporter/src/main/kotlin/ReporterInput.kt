@@ -30,33 +30,21 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
 
-/**
- * A bundle of input to be used by [Reporter] implementations.
- */
+/** A bundle of input to be used by [Reporter] implementations. */
 data class ReporterInput(
-    /**
-     * The [OrtResult] to generate a report for.
-     */
+    /** The [OrtResult] to generate a report for. */
     val ortResult: OrtResult,
 
-    /**
-     * The [OrtConfiguration], can be used by the reporter to adapt the output based on how ORT is configured.
-     */
+    /** The [OrtConfiguration], can be used by the reporter to adapt the output based on how ORT is configured. */
     val ortConfig: OrtConfiguration = OrtConfiguration(),
 
-    /**
-     * A [LicenseFactProvider], can be used to integrate licenses facts like license texts into reports.
-     */
+    /** A [LicenseFactProvider], can be used to integrate licenses facts like license texts into reports. */
     val licenseFactProvider: LicenseFactProvider = CompositeLicenseFactProvider(emptyList()),
 
-    /**
-     * A [CopyrightGarbage] container, can be used to clean up copyrights used in reports.
-     */
+    /** A [CopyrightGarbage] container, can be used to clean up copyrights used in reports. */
     val copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
 
-    /**
-     * A resolver for license information for the projects and packages contained in [ortResult].
-     */
+    /** A resolver for license information for the projects and packages contained in [ortResult]. */
     val licenseInfoResolver: LicenseInfoResolver = LicenseInfoResolver(
         provider = DefaultLicenseInfoProvider(ortResult),
         copyrightGarbage = copyrightGarbage,
@@ -71,14 +59,10 @@ data class ReporterInput(
      */
     val licenseClassifications: LicenseClassifications = LicenseClassifications(),
 
-    /**
-     * A [HowToFixTextProvider], can be used to integrate how to fix texts for [Issue]s into reports.
-     */
+    /** A [HowToFixTextProvider], can be used to integrate how to fix texts for [Issue]s into reports. */
     val howToFixTextProvider: HowToFixTextProvider = HowToFixTextProvider.NONE
 ) {
-    /**
-     * Statistics for [ortResult].
-     */
+    /** Statistics for [ortResult]. */
     @Suppress("unused") // This can be used from templates.
     val statistics = Statistics(ortResult, licenseInfoResolver, ortConfig)
 }

@@ -60,14 +60,10 @@ interface ClearlyDefinedService {
          */
         const val MAX_REQUEST_CHUNK_SIZE = 500
 
-        /**
-         * The JSON (de-)serialization object used by this service.
-         */
+        /** The JSON (de-)serialization object used by this service. */
         val JSON = Json.Default
 
-        /**
-         * The JSON (de-)serialization object used by this service for errors.
-         */
+        /** The JSON (de-)serialization object used by this service for errors. */
         val JSON_FOR_ERRORS = Json(JSON) { ignoreUnknownKeys = true }
 
         /**
@@ -93,9 +89,7 @@ interface ClearlyDefinedService {
         }
     }
 
-    /**
-     * See https://github.com/clearlydefined/service/blob/661934a/schemas/swagger.yaml#L8-L14.
-     */
+    /** See https://github.com/clearlydefined/service/blob/661934a/schemas/swagger.yaml#L8-L14. */
     enum class Server(val apiUrl: String, val webUrl: String? = null, val projectUrl: String? = null) {
         /**
          * The production server. Endpoints are rate limited (e.g. "/curations" to 250 requests per minute), see
@@ -117,15 +111,11 @@ interface ClearlyDefinedService {
             "https://github.com/clearlydefined/curated-data-dev"
         ),
 
-        /**
-         * The server when running locally.
-         */
+        /** The server when running locally. */
         LOCAL("http://localhost:4000")
     }
 
-    /**
-     * The return type for https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
-     */
+    /** The return type for https://api.clearlydefined.io/api-docs/#/definitions/post_definitions. */
     @Serializable
     data class Defined(
         val coordinates: Coordinates,
@@ -152,30 +142,22 @@ interface ClearlyDefinedService {
             }
     }
 
-    /**
-     * See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L84-L101.
-     */
+    /** See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L84-L101. */
     @Serializable
     data class ContributionPatch(
         val contributionInfo: ContributionInfo,
         val patches: List<Patch>
     )
 
-    /**
-     * See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L87-L97.
-     */
+    /** See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L87-L97. */
     @Serializable
     data class ContributionInfo(
         val type: ContributionType,
 
-        /**
-         * Short (100 char) description. This will also be used as the PR title.
-         */
+        /** Short (100 char) description. This will also be used as the PR title. */
         val summary: String,
 
-        /**
-         * Describe here the problem(s) being addressed.
-         */
+        /** Describe here the problem(s) being addressed. */
         val details: String,
 
         /**
@@ -184,24 +166,18 @@ interface ClearlyDefinedService {
          */
         val resolution: String,
 
-        /**
-         * Remove contributed definitions from the list.
-         */
+        /** Remove contributed definitions from the list. */
         val removedDefinitions: Boolean
     )
 
-    /**
-     * See https://github.com/clearlydefined/service/blob/53acc01/routes/curations.js#L86-L89.
-     */
+    /** See https://github.com/clearlydefined/service/blob/53acc01/routes/curations.js#L86-L89. */
     @Serializable
     data class ContributionSummary(
         val prNumber: Int,
         val url: String
     )
 
-    /**
-     * See https://github.com/clearlydefined/service/blob/4917725/schemas/harvest-1.0.json#L12-L22.
-     */
+    /** See https://github.com/clearlydefined/service/blob/4917725/schemas/harvest-1.0.json#L12-L22. */
     @Serializable
     data class HarvestRequest(
         val tool: String? = null,
@@ -248,9 +224,7 @@ interface ClearlyDefinedService {
     @POST("curations")
     suspend fun getCurations(@Body coordinates: Collection<Coordinates>): Map<Coordinates, ContributedCurations>
 
-    /**
-     * Upload curation [patch] data, see https://api.clearlydefined.io/api-docs/#/curations/patch_curations.
-     */
+    /** Upload curation [patch] data, see https://api.clearlydefined.io/api-docs/#/curations/patch_curations. */
     @PATCH("curations")
     suspend fun putCuration(@Body patch: ContributionPatch): ContributionSummary
 

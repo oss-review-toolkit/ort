@@ -69,9 +69,7 @@ class ProcessCapture(
     private val stdoutFile = tempDir / "$commandName.stdout"
     private val stderrFile = tempDir / "$commandName.stderr"
 
-    /**
-     * Get the standard output of the terminated process as a string.
-     */
+    /** Get the standard output of the terminated process as a string. */
     val stdout
         get() = stdoutFile.readText()
 
@@ -82,9 +80,7 @@ class ProcessCapture(
     val stdoutStream
         get() = stdoutFile.inputStream()
 
-    /**
-     * Get the standard error output of the terminated process as a string.
-     */
+    /** Get the standard error output of the terminated process as a string. */
     val stderr
         get() = stderrFile.readText()
 
@@ -110,27 +106,19 @@ class ProcessCapture(
 
     private val process = builder.start()
 
-    /**
-     * Get the exit value of the terminated process.
-     */
+    /** Get the exit value of the terminated process. */
     val exitValue
         get() = process.exitValue()
 
-    /**
-     * Is true if the process terminated with an error, i.e. the [exitValue] is not 0.
-     */
+    /** Is true if the process terminated with an error, i.e. the [exitValue] is not 0. */
     val isError
         get() = exitValue != 0
 
-    /**
-     * Is true if the process terminated without an error, i.e. the [exitValue] is 0.
-     */
+    /** Is true if the process terminated without an error, i.e. the [exitValue] is 0. */
     val isSuccess
         get() = exitValue == 0
 
-    /**
-     * A generic error message, can be used when [exitValue] is not 0.
-     */
+    /** A generic error message, can be used when [exitValue] is not 0. */
     val errorMessage: String
         get() {
             // Fall back to stdout for the error message if stderr does not provide meaningful information.
@@ -164,8 +152,6 @@ class ProcessCapture(
         }
     }
 
-    /**
-     * Throw an [IOException] in case [exitValue] is not 0.
-     */
+    /** Throw an [IOException] in case [exitValue] is not 0. */
     fun requireSuccess() = also { if (isError) throw IOException(errorMessage) }
 }

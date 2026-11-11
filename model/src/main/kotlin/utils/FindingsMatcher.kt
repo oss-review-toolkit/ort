@@ -108,9 +108,7 @@ class FindingsMatcher(
         return copyrights.filterTo(mutableSetOf()) { it.location.startLine in lineRange }
     }
 
-    /**
-     * Associate copyright findings to license findings within a single file.
-     */
+    /** Associate copyright findings to license findings within a single file. */
     private fun matchFileFindings(
         licenses: List<LicenseFinding>,
         copyrights: List<CopyrightFinding>
@@ -190,18 +188,12 @@ class FindingsMatcher(
     }
 }
 
-/**
- * The result of the [FindingsMatcher].
- */
+/** The result of the [FindingsMatcher]. */
 data class FindingsMatcherResult(
-    /**
-     * A map of [LicenseFinding]s mapped to their matched [CopyrightFinding]s.
-     */
+    /** A map of [LicenseFinding]s mapped to their matched [CopyrightFinding]s. */
     val matchedFindings: Map<LicenseFinding, Set<CopyrightFinding>>,
 
-    /**
-     * All [CopyrightFinding]s that could not be matched to a [LicenseFinding].
-     */
+    /** All [CopyrightFinding]s that could not be matched to a [LicenseFinding]. */
     val unmatchedCopyrights: Set<CopyrightFinding>
 )
 

@@ -35,8 +35,6 @@ interface AdviceProvider : Plugin {
      */
     suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult>
 
-    /**
-     * An object with detail information about this [AdviceProvider].
-     */
+    /** An object with detail information about this [AdviceProvider]. */
     val details: AdvisorDetails
 }

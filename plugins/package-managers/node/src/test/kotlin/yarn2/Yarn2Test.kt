@@ -180,9 +180,7 @@ private fun checkExecutableFromYarnRc(workingDir: File, corepackEnabled: Boolean
     }
 }
 
-/**
- * Write a `package.json` file to [dir] with some default properties and an optional [packageManager] entry.
- */
+/** Write a `package.json` file to [dir] with some default properties and an optional [packageManager] entry. */
 private fun writePackageJson(dir: File, packageManager: String?) {
     val packageManagerProperty = packageManager?.let { """"packageManager": "$it"""" }.orEmpty()
     dir.resolve("package.json").writeText(

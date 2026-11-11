@@ -63,18 +63,14 @@ enum class SchemaVersion(val version: Version) {
 }
 
 data class CycloneDxReporterConfig(
-    /**
-     * The CycloneDX schema version to use. Defaults to "1.6".
-     */
+    /** The CycloneDX schema version to use. Defaults to "1.6". */
     @OrtPluginOption(
         defaultValue = DEFAULT_SCHEMA_VERSION_NAME,
         aliases = ["schema.version"]
     )
     val schemaVersion: SchemaVersion,
 
-    /**
-     * The license for the data contained in the report. Defaults to "CC0-1.0".
-     */
+    /** The license for the data contained in the report. Defaults to "CC0-1.0". */
     @OrtPluginOption(
         defaultValue = "CC0-1.0",
         aliases = ["data.license"]
@@ -99,15 +95,11 @@ data class CycloneDxReporterConfig(
     @OrtPluginOption(defaultValue = "")
     val singleBomComponentName: String,
 
-    /**
-     * Allows specifying the component type in the metadata of the generated report in [singleBom] mode.
-     */
+    /** Allows specifying the component type in the metadata of the generated report in [singleBom] mode. */
     @OrtPluginOption(defaultValue = "APPLICATION")
     val singleBomComponentType: Component.Type,
 
-    /**
-     * A comma-separated list of (case-insensitive) output formats to export to. Supported are XML and JSON.
-     */
+    /** A comma-separated list of (case-insensitive) output formats to export to. Supported are XML and JSON. */
     @OrtPluginOption(
         defaultValue = "JSON",
         aliases = ["output.file.formats"]
@@ -190,9 +182,7 @@ class CycloneDxReporter(
     }
 }
 
-/**
- * Return the string representation for this [Bom], [schemaVersion] and [format].
- */
+/** Return the string representation for this [Bom], [schemaVersion] and [format]. */
 private fun Bom.createFormat(schemaVersion: Version, format: Format): String =
     when (format) {
         Format.XML -> BomGeneratorFactory.createXml(schemaVersion, this).toXmlString()

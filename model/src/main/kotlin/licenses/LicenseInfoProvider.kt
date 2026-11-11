@@ -21,9 +21,7 @@ package org.ossreviewtoolkit.model.licenses
 
 import org.ossreviewtoolkit.model.Identifier
 
-/**
- * A provider for [LicenseInfo]s.
- */
+/** A provider for [LicenseInfo]s. */
 interface LicenseInfoProvider {
     /**
      * Get the [LicenseInfo] for the project or package identified by [id].

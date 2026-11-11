@@ -43,9 +43,7 @@ data class Project(
      */
     val id: Identifier,
 
-    /**
-     * An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
-     */
+    /** An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/). */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val cpe: String? = null,
 
@@ -55,9 +53,7 @@ data class Project(
      */
     val definitionFilePath: String,
 
-    /**
-     * The set of authors declared for this project.
-     */
+    /** The set of authors declared for this project. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val authors: Set<String> = emptySet(),
@@ -75,9 +71,7 @@ data class Project(
      */
     val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
 
-    /**
-     * Original VCS-related information as defined in the [Project]'s metadata.
-     */
+    /** Original VCS-related information as defined in the [Project]'s metadata. */
     val vcs: VcsInfo,
 
     /**
@@ -86,15 +80,11 @@ data class Project(
      */
     val vcsProcessed: VcsInfo = vcs.normalize(),
 
-    /**
-     * The description of project.
-     */
+    /** The description of project. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val description: String = "",
 
-    /**
-     * The URL to the project's homepage.
-     */
+    /** The URL to the project's homepage. */
     val homepageUrl: String,
 
     /**
@@ -117,9 +107,7 @@ data class Project(
     val scopeNames: Set<String>? = null
 ) {
     companion object {
-        /**
-         * A constant for a [Project] where all properties are empty.
-         */
+        /** A constant for a [Project] where all properties are empty. */
         @JvmField
         val EMPTY = Project(
             id = Identifier.EMPTY,
@@ -148,19 +136,13 @@ data class Project(
     @get:JsonIgnore
     val scopes: Set<Scope> by lazy { scopeDependencies.orEmpty() }
 
-    /**
-     * Return whether the package identified by [id] is contained as a (transitive) dependency in this project.
-     */
+    /** Return whether the package identified by [id] is contained as a (transitive) dependency in this project. */
     operator fun contains(id: Identifier) = scopes.any { id in it }
 
-    /**
-     * Return all references to [id] as a dependency in this project.
-     */
+    /** Return all references to [id] as a dependency in this project. */
     fun findReferences(id: Identifier) = scopes.flatMap { it.findReferences(id) }
 
-    /**
-     * Return a [Package] representation of this [Project].
-     */
+    /** Return a [Package] representation of this [Project]. */
     fun toPackage() =
         Package(
             id = id,

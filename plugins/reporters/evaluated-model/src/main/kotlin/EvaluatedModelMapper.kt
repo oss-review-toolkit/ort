@@ -61,9 +61,7 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
-/**
- * Maps the [reporter input][input] to an [EvaluatedModel].
- */
+/** Maps the [reporter input][input] to an [EvaluatedModel]. */
 @Suppress("LargeClass", "TooManyFunctions")
 internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val packages = mutableMapOf<Identifier, EvaluatedPackage>()
@@ -102,9 +100,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     private val packageExcludeInfo = mutableMapOf<Identifier, PackageExcludeInfo>()
 
-    /**
-     * Associates curations in the order they have been applied for the corresponding curated package.
-     */
+    /** Associates curations in the order they have been applied for the corresponding curated package. */
     private val curationsForId: Map<Identifier, List<PackageCuration>> by lazy {
         val allCurations = input.ortResult.resolvedConfiguration.packageCurations.flatMap { it.curations }
 
@@ -423,9 +419,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         return result
     }
 
-    /**
-     * Add issues from scanner that are not part of the scan summaries.
-     */
+    /** Add issues from scanner that are not part of the scan summaries. */
     private fun addScannerIssues(id: Identifier, pkg: EvaluatedPackage): List<EvaluatedIssue> {
         val result = mutableListOf<EvaluatedIssue>()
         input.ortResult.scanner?.issues?.get(id)?.let { scannerIssues ->
@@ -793,9 +787,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
      */
     private fun <T> MutableList<T>.addIfRequired(value: T): T = find { it == value } ?: value.also { add(it) }
 
-    /**
-     * Similar to [addIfRequired], but for multiple input values.
-     */
+    /** Similar to [addIfRequired], but for multiple input values. */
     private fun <T> MutableList<T>.addIfRequired(values: Collection<T>): List<T> =
         values.map { addIfRequired(it) }.distinct()
 

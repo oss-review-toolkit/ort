@@ -26,19 +26,13 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
  * See https://spdx.github.io/spdx-spec/v2.3/document-creation-information/#66-external-document-references-field.
  */
 data class SpdxExternalDocumentReference(
-    /**
-     * The identifier referencing the external [SpdxDocument] in the format: "DocumentRef-${id-string}"
-     */
+    /** The identifier referencing the external [SpdxDocument] in the format: "DocumentRef-${id-string}" */
     val externalDocumentId: String,
 
-    /**
-     * The SPDX Document URI of the external [SpdxDocument] referenced by this [SpdxExternalDocumentReference].
-     */
+    /** The SPDX Document URI of the external [SpdxDocument] referenced by this [SpdxExternalDocumentReference]. */
     val spdxDocument: String,
 
-    /**
-     * The checksum corresponding to the external [SpdxDocument] referenced by this [SpdxExternalDocumentReference].
-     */
+    /** The checksum corresponding to the external [SpdxDocument] referenced by this [SpdxExternalDocumentReference]. */
     val checksum: SpdxChecksum
 ) {
     init {

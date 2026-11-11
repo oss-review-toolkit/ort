@@ -84,9 +84,7 @@ object EnvironmentVariableFilter {
     /** Stores the current allow names used by this filter. */
     private var allowNames = DEFAULT_ALLOW_NAMES
 
-    /**
-     * Reset this filter to use the given [denySubstrings] and [allowNames].
-     */
+    /** Reset this filter to use the given [denySubstrings] and [allowNames]. */
     fun reset(
         denySubstrings: Collection<String> = DEFAULT_DENY_SUBSTRINGS,
         allowNames: Collection<String> = DEFAULT_ALLOW_NAMES
@@ -106,9 +104,7 @@ object EnvironmentVariableFilter {
     fun isAllowed(name: String): Boolean =
         name in allowNames || denySubstrings.none { name.contains(it, ignoreCase = true) }
 
-    /**
-     * Remove all keys from [environment] that do not pass this filter.
-     */
+    /** Remove all keys from [environment] that do not pass this filter. */
     fun filter(environment: MutableMap<String, String>): MutableMap<String, String> {
         val keysToRemove = environment.keys.filterNot(EnvironmentVariableFilter::isAllowed)
 

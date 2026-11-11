@@ -21,14 +21,10 @@ package org.ossreviewtoolkit.utils.common
 
 import java.net.URI
 
-/**
- * True if the string is a valid [URI], false otherwise.
- */
+/** True if the string is a valid [URI], false otherwise. */
 fun String.isValidUri() = runCatching { URI(this) }.isSuccess
 
-/**
- * Return the [percent-encoded](https://en.wikipedia.org/wiki/Percent-encoding) string.
- */
+/** Return the [percent-encoded](https://en.wikipedia.org/wiki/Percent-encoding) string. */
 fun String.percentEncode(): String =
     java.net.URLEncoder.encode(this, Charsets.UTF_8)
         // As "encode" above actually performs encoding for forms, not for query strings, spaces are encoded as
@@ -49,9 +45,7 @@ fun String.replaceCredentialsInUri(userInfo: String? = null) =
         URI(it.scheme, userInfo, it.host, it.port, it.path, it.query, it.fragment).toString()
     }.getOrDefault(this)
 
-/**
- * Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful.
- */
+/** Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful. */
 fun String.toUri() = runCatching { URI(this) }
 
 /**

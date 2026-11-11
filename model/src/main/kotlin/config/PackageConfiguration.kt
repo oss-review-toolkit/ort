@@ -53,33 +53,23 @@ data class PackageConfiguration(
      */
     val id: Identifier,
 
-    /**
-     * The source artifact this configuration applies to.
-     */
+    /** The source artifact this configuration applies to. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val sourceArtifactUrl: String? = null,
 
-    /**
-     * The vcs and revision this configuration applies to.
-     */
+    /** The vcs and revision this configuration applies to. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val vcs: VcsMatcher? = null,
 
-    /**
-     * The source code origin this configuration applies to.
-     */
+    /** The source code origin this configuration applies to. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val sourceCodeOrigin: SourceCodeOrigin? = null,
 
-    /**
-     * Path excludes.
-     */
+    /** Path excludes. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val pathExcludes: List<PathExclude> = emptyList(),
 
-    /**
-     * License finding curations.
-     */
+    /** License finding curations. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val licenseFindingCurations: List<LicenseFindingCuration> = emptyList()
 ) {
@@ -127,18 +117,12 @@ data class PackageConfiguration(
     }
 }
 
-/**
- * A matcher which matches its properties against a [RepositoryProvenance].
- */
+/** A matcher which matches its properties against a [RepositoryProvenance]. */
 data class VcsMatcher(
-    /**
-     * The [type] to match for equality against [VcsInfo.type].
-     */
+    /** The [type] to match for equality against [VcsInfo.type]. */
     val type: VcsType,
 
-    /**
-     * The [url] to match for equality against [VcsInfo.url].
-     */
+    /** The [url] to match for equality against [VcsInfo.url]. */
     val url: String,
 
     /**

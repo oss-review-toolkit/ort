@@ -78,15 +78,11 @@ interface DosService {
         }
     }
 
-    /**
-     * Get the versions of DOS and the scanner used. This endpoint does not require authorization.
-     */
+    /** Get the versions of DOS and the scanner used. This endpoint does not require authorization. */
     @GET("versions")
     suspend fun getVersions(): VersionsResponseBody
 
-    /**
-     * Get the package configuration for specified [purl][PackageConfigurationRequestBody.purl].
-     */
+    /** Get the package configuration for specified [purl][PackageConfigurationRequestBody.purl]. */
     @POST("package-configuration")
     suspend fun getPackageConfiguration(@Body body: PackageConfigurationRequestBody): PackageConfigurationResponseBody
 
@@ -96,9 +92,7 @@ interface DosService {
     @POST("upload-url")
     suspend fun getUploadUrl(@Body body: UploadUrlRequestBody): UploadUrlResponseBody
 
-    /**
-     * Put the [file] into the S3 object storage at [url].
-     */
+    /** Put the [file] into the S3 object storage at [url]. */
     @SkipAuthorization
     @PUT
     suspend fun uploadFile(@Url url: String, @Body file: RequestBody)
@@ -117,9 +111,7 @@ interface DosService {
     @POST("scan-results")
     suspend fun getScanResults(@Body body: ScanResultsRequestBody): ScanResultsResponseBody
 
-    /**
-     * Get the state for scan job with given [id].
-     */
+    /** Get the state for scan job with given [id]. */
     @GET("job-state/{id}")
     suspend fun getScanJobState(@Path("id") id: String): JobStateResponseBody
 }

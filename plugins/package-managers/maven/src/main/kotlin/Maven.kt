@@ -61,9 +61,7 @@ data class MavenConfig(
     val userSettingsFile: String?
 )
 
-/**
- * The [Maven](https://maven.apache.org/) package manager for Java.
- */
+/** The [Maven](https://maven.apache.org/) package manager for Java. */
 @OrtPlugin(
     displayName = "Maven",
     summary = "The Maven package manager for Java.",
@@ -177,8 +175,6 @@ class Maven(
     }
 }
 
-/**
- * Convenience extension property to obtain all the [DependencyNode]s from this [ProjectBuildingResult].
- */
+/** Convenience extension property to obtain all the [DependencyNode]s from this [ProjectBuildingResult]. */
 private val ProjectBuildingResult.dependencies: List<DependencyNode>
     get() = dependencyResolutionResult.dependencyGraph.children

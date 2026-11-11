@@ -23,9 +23,7 @@ import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.plugins.api.PluginFactory
 
-/**
- * A common abstract class for use with [ServiceLoader] that all [AdviceProviderFactory] classes need to implement.
- */
+/** A common abstract class for use with [ServiceLoader] that all [AdviceProviderFactory] classes need to implement. */
 interface AdviceProviderFactory : PluginFactory<AdviceProvider> {
     companion object {
         /**

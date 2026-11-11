@@ -28,9 +28,7 @@ import org.ossreviewtoolkit.model.utils.requireNoDuplicates
  * - Deserialized from "config.yml" as part of [OrtConfiguration] (via Hoplite).
  */
 data class DownloaderConfiguration(
-    /**
-     * Toggle whether to allow downloads using symbolic names that point to moving revisions, like Git branches.
-     */
+    /** Toggle whether to allow downloads using symbolic names that point to moving revisions, like Git branches. */
     val allowMovingRevisions: Boolean = false,
 
     /**
@@ -39,9 +37,7 @@ data class DownloaderConfiguration(
      */
     val includedLicenseCategories: List<String> = emptyList(),
 
-    /**
-     * A flag to control whether excluded scopes and paths should be skipped during the download.
-     */
+    /** A flag to control whether excluded scopes and paths should be skipped during the download. */
     val skipExcluded: Boolean = false,
 
     /**

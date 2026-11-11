@@ -47,9 +47,7 @@ internal fun parsePubspec(pubspec: File) = parsePubspec(pubspec.readText())
 
 internal fun parsePubspec(pubspec: String) = YAML.decodeFromString<Pubspec>(pubspec)
 
-/**
- * See https://dart.dev/tools/pub/pubspec.
- */
+/** See https://dart.dev/tools/pub/pubspec. */
 @Serializable
 internal data class Pubspec(
     val name: String,

@@ -39,9 +39,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
-/**
- * A class providing the framework to run Kotlin scripts.
- */
+/** A class providing the framework to run Kotlin scripts. */
 abstract class ScriptRunner<T> {
     /** The scripting host instance. */
     private val scriptingHost = BasicJvmScriptingHost()
@@ -52,9 +50,7 @@ abstract class ScriptRunner<T> {
     /** The configuration to use to evaluate the script. */
     protected abstract val evalConfig: ScriptEvaluationConfiguration
 
-    /**
-     * Check the syntax of the [script] without evaluating it. Return true if syntax is correct, false otherwise.
-     */
+    /** Check the syntax of the [script] without evaluating it. Return true if syntax is correct, false otherwise. */
     fun checkSyntax(script: SourceCode): Boolean {
         val (result, duration) = measureTimedValue {
             runBlocking { scriptingHost.compiler.invoke(script, compConfig) }
@@ -73,9 +69,7 @@ abstract class ScriptRunner<T> {
 
     fun checkSyntax(script: URL) = checkSyntax(UrlScriptSource(script))
 
-    /**
-     * Run the given [script], returning a value of type [T].
-     */
+    /** Run the given [script], returning a value of type [T]. */
     abstract fun runScript(script: SourceCode): T
 
     fun runScript(script: File) = runScript(FileScriptSource(script))

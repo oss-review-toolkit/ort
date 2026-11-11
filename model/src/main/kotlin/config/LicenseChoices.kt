@@ -26,9 +26,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
-/**
- * The license choices configured for a repository.
- */
+/** The license choices configured for a repository. */
 data class LicenseChoices(
     /**
      * [SpdxLicenseChoice]s that are applied to all packages in the repository. As the [SpdxLicenseChoice] is applied to
@@ -64,9 +62,7 @@ data class LicenseChoices(
     }
 }
 
-/**
- * [SpdxLicenseChoice]s defined for an artifact.
- */
+/** [SpdxLicenseChoice]s defined for an artifact. */
 data class PackageLicenseChoice(
     val packageId: Identifier,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

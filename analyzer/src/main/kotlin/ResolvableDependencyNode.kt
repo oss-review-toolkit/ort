@@ -24,9 +24,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.PackageLinkage
 
-/**
- * A dependency graph node to represent a dependency between different package managers.
- */
+/** A dependency graph node to represent a dependency between different package managers. */
 sealed interface ResolvableDependencyNode : DependencyNode
 
 /**

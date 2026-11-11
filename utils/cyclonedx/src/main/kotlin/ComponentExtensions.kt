@@ -98,9 +98,7 @@ fun Component.toPackage(defaultType: String = DEFAULT_ORT_TYPE): Package =
         vcs = extractVcs()
     )
 
-/**
- * Extract license information for the [Component], preferring a license expression over a list of licenses.
- */
+/** Extract license information for the [Component], preferring a license expression over a list of licenses. */
 internal fun Component.extractLicenseInfo(): Set<String> =
     licenses?.items.orEmpty().mapNotNullTo(mutableSetOf()) { licenseItem ->
         when (licenseItem.type) {
@@ -111,17 +109,13 @@ internal fun Component.extractLicenseInfo(): Set<String> =
         }?.takeUnless { it.isBlank() }
     }
 
-/**
- * Extract authors from the component.
- */
+/** Extract authors from the component. */
 internal fun Component.extractAuthors(): Set<String> =
     authors.orEmpty()
         .mapNotNull { it.name ?: it.email }
         .filterTo(mutableSetOf()) { it.isNotBlank() }
 
-/**
- * Extract VCS information from the component's external references.
- */
+/** Extract VCS information from the component's external references. */
 internal fun Component.extractVcs(): VcsInfo {
     val vcsUrl = findExternalReferenceUrl(
         type = ExternalReference.Type.VCS,
@@ -140,9 +134,7 @@ internal fun Component.extractVcs(): VcsInfo {
     return if (fragment.isNotBlank()) vcs.copy(path = fragment) else vcs
 }
 
-/**
- * Extract source artifact using ExternalReference.Type.DISTRIBUTION.
- */
+/** Extract source artifact using ExternalReference.Type.DISTRIBUTION. */
 internal fun Component.extractSourceArtifact(): RemoteArtifact {
     val ref = externalReferences.orEmpty()
         .find { it.type == ExternalReference.Type.DISTRIBUTION }

@@ -422,9 +422,7 @@ private fun Bom.addDependencies(
     }
 }
 
-/**
- * Add a [ExternalReference] of the given [type] to this [Bom] which points to [url] and has an optional [comment].
- */
+/** Add a [ExternalReference] of the given [type] to this [Bom] which points to [url] and has an optional [comment]. */
 private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
     if (url.isBlank()) return
 
@@ -497,9 +495,7 @@ private fun Bom.addVulnerabilities(advisorVulnerabilities: Map<Identifier, List<
     }
 }
 
-/**
- * Map each name of a license in the collection to a license object with the appropriate license text.
- */
+/** Map each name of a license in the collection to a license object with the appropriate license text. */
 private fun Collection<String>.mapNamesToLicenses(origin: String, input: ReporterInput): List<License> =
     map { licenseName ->
         val spdxId = SpdxLicense.forId(licenseName)?.id
@@ -524,18 +520,14 @@ private fun Collection<String>.mapNamesToLicenses(origin: String, input: Reporte
         }
     }
 
-/**
- * Return the license names of all licenses that have any of the given [sources] disregarding the excluded state.
- */
+/** Return the license names of all licenses that have any of the given [sources] disregarding the excluded state. */
 private fun ResolvedLicenseInfo.getLicenseNames(vararg sources: LicenseSource): SortedSet<String> =
     licenses.filter { license -> sources.any { it in license.sources } }.mapTo(sortedSetOf()) { it.license.toString() }
 
 private fun Collection<ResolvedLicenseInfo>.getLicenseNames(vararg sources: LicenseSource): SortedSet<String> =
     flatMapTo(sortedSetOf()) { it.getLicenseNames(*sources) }
 
-/**
- * Map an ORT hash object to a CycloneDX hash object.
- */
+/** Map an ORT hash object to a CycloneDX hash object. */
 private fun org.ossreviewtoolkit.model.Hash.toCycloneDx(): Hash? =
     Hash.Algorithm.entries.find { it.spec == algorithm.toString() }?.let { Hash(it, value) }
 

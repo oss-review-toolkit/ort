@@ -39,9 +39,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-/**
- * A specialized [DependencyHandler] implementation for Gradle's dependency model.
- */
+/** A specialized [DependencyHandler] implementation for Gradle's dependency model. */
 internal class GradleDependencyHandler(
     /** The type of projects to handle. */
     private val projectType: String,

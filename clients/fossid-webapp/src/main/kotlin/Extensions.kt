@@ -782,8 +782,6 @@ suspend fun FossIdRestService.uploadFile(
     }
 }
 
-/**
- * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
- */
+/** If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue]. */
 fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { null }): String? =
     this?.removePrefix(prefix)?.takeIf { it != this } ?: missingPrefixValue()

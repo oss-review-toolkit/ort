@@ -32,9 +32,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import org.yaml.snakeyaml.LoaderOptions
 
-/**
- * A lambda expression that can be [applied][apply] to all [MapperBuilder]s to build them the same way.
- */
+/** A lambda expression that can be [applied][apply] to all [MapperBuilder]s to build them the same way. */
 val mapperConfig: MapperBuilder<*, *>.() -> Unit = {
     addModule(kotlinModule())
 

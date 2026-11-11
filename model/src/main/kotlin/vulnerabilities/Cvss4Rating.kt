@@ -31,14 +31,10 @@ enum class Cvss4Rating(val upperBound: Float) {
     CRITICAL(10.0f);
 
     companion object {
-        /**
-         * A set of prefixes that refer to the CVSS version 4 scoring system.
-         */
+        /** A set of prefixes that refer to the CVSS version 4 scoring system. */
         val PREFIXES = setOf("CVSS4", "CVSSV4", "CVSS_V4", "CVSS:4")
 
-        /**
-         * Get the [Cvss4Rating] from a [score], or null if the [score] does not map to any [Cvss4Rating].
-         */
+        /** Get the [Cvss4Rating] from a [score], or null if the [score] does not map to any [Cvss4Rating]. */
         fun fromScore(score: Float): Cvss4Rating? =
             when {
                 score < 0.0f || score > CRITICAL.upperBound -> null

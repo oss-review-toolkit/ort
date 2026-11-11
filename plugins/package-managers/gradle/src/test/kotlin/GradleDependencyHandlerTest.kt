@@ -326,9 +326,7 @@ class GradleDependencyHandlerTest : WordSpec({
 /** Remote repositories used by the test. */
 private val remoteRepositories = listOf(mockk<RemoteRepository>())
 
-/**
- * Create a mock dependency with the properties provided.
- */
+/** Create a mock dependency with the properties provided. */
 private fun createDependency(
     group: String,
     artifact: String,
@@ -363,9 +361,7 @@ private fun createGraphBuilder(): DependencyGraphBuilder<LegacyOrtComponent> {
     return DependencyGraphBuilder(dependencyHandler)
 }
 
-/**
- * Create a [MavenSupport] mock object which is prepared to convert arbitrary artifacts to [Package] objects.
- */
+/** Create a [MavenSupport] mock object which is prepared to convert arbitrary artifacts to [Package] objects. */
 private fun createMavenSupport(): MavenSupport {
     val maven = mockk<MavenSupport>()
     val slotArtifact = slot<DefaultArtifact>()
@@ -386,40 +382,28 @@ private fun createMavenSupport(): MavenSupport {
     return maven
 }
 
-/**
- * Returns an [Identifier] for this [LegacyOrtComponent].
- */
+/** Returns an [Identifier] for this [LegacyOrtComponent]. */
 private fun LegacyOrtComponent.toId() =
     with(componentId) {
         Identifier(getIdentifierType(PROJECT_TYPE), groupId, artifactId, version)
     }
 
-/**
- * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
- */
+/** Return the package references from the given [scopes] associated with the scope with the given [scopeName]. */
 private fun scopeDependencies(scopes: Set<Scope>, scopeName: String): Set<PackageReference> =
     scopes.find { it.name == scopeName }?.dependencies.orEmpty()
 
-/**
- * Extract the identifiers from a collection of package references.
- */
+/** Extract the identifiers from a collection of package references. */
 private fun Collection<PackageReference>.identifiers(): List<Identifier> = map { it.id }
 
-/**
- * Find the package corresponding to the given [dependency] in this collection.
- */
+/** Find the package corresponding to the given [dependency] in this collection. */
 private fun Collection<PackageReference>.findDependency(dependency: LegacyOrtComponent): PackageReference =
     findId(dependency.toId())
 
-/**
- * Find a package with the given [id] in this collection.
- */
+/** Find a package with the given [id] in this collection. */
 private fun Collection<PackageReference>.findId(id: Identifier): PackageReference =
     find { it.id == id } ?: throw IllegalArgumentException("Package with id $id is not contained in $this.")
 
-/**
- * Check whether this [PackageReference] contains exactly the given [dependencies][expectedDependencies].
- */
+/** Check whether this [PackageReference] contains exactly the given [dependencies][expectedDependencies]. */
 private fun PackageReference.checkDependencies(vararg expectedDependencies: LegacyOrtComponent): Set<PackageReference> {
     val ids = expectedDependencies.map { it.toId() }
     dependencies.identifiers() should containExactlyInAnyOrder(ids)

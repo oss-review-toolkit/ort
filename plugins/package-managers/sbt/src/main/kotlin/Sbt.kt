@@ -71,9 +71,7 @@ internal object SbtCommand : CommandLineTool {
 }
 
 data class SbtConfig(
-    /**
-     * The version of SBT to use when analyzing projects. Defaults to the version defined in the build properties.
-     */
+    /** The version of SBT to use when analyzing projects. Defaults to the version defined in the build properties. */
     val sbtVersion: String?,
 
     /**
@@ -89,9 +87,7 @@ data class SbtConfig(
     val javaHome: String?
 )
 
-/**
- * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
- */
+/** The [SBT](https://www.scala-sbt.org/) package manager for Scala. */
 @OrtPlugin(
     id = "SBT",
     displayName = "SBT",

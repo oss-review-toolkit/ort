@@ -346,9 +346,7 @@ private const val ARTIFACT_URL = "$REPOSITORY_URL/plugins/${TEST_ARTIFACT_ID}_${
 /** A test hash value. */
 private val TEST_HASH = Hash("ada37fcc95884a4d2cbc64495f5f67556c847e77", HashAlgorithm.SHA1)
 
-/**
- * Create a mock [MavenArtifactRepository] with the given [layout] and [url].
- */
+/** Create a mock [MavenArtifactRepository] with the given [layout] and [url]. */
 @Suppress("DEPRECATION") // ArtifactRepositoryLayout is deprecated.
 private fun createRepository(layout: String, url: String): MavenArtifactRepository {
     val repositoryLayout = mockk<org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout> {
@@ -361,9 +359,7 @@ private fun createRepository(layout: String, url: String): MavenArtifactReposito
     }
 }
 
-/**
- * Create a mock [MavenProject] that returns the given [repositories].
- */
+/** Create a mock [MavenProject] that returns the given [repositories]. */
 private fun createMavenProject(repositories: List<MavenArtifactRepository>): MavenProject =
     mockk {
         every { remoteArtifactRepositories } returns repositories

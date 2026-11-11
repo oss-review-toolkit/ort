@@ -27,9 +27,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.getRepositoryPath
 import org.ossreviewtoolkit.utils.common.FileMatcher
 
-/**
- * An [OrtResultRule] which allows downloading the project's source code if needed.
- */
+/** An [OrtResultRule] which allows downloading the project's source code if needed. */
 open class ProjectSourceRule(
     ruleSet: RuleSet,
     name: String
@@ -75,26 +73,20 @@ open class ProjectSourceRule(
             it.isDirectory && FileMatcher.matches(patterns.asList(), path)
         }
 
-    /**
-     * Return all files from the project's source tree which match any of the provided [glob expressions][patterns].
-     */
+    /** Return all files from the project's source tree which match any of the provided [glob expressions][patterns]. */
     fun projectSourceFindFiles(vararg patterns: String): List<File> =
         projectSourcesDir.walkBottomUp().filterTo(mutableListOf()) {
             val path = it.relativeTo(projectSourcesDir).invariantSeparatorsPath
             it.isFile && FileMatcher.matches(patterns.asList(), path)
         }
 
-    /**
-     * Return the detected licenses for any file matching the given [glob expressions][patterns].
-     */
+    /** Return the detected licenses for any file matching the given [glob expressions][patterns]. */
     fun projectSourceGetDetectedLicensesByFilePath(vararg patterns: String): Map<String, Set<String>> =
         detectedLicensesForFilePath.filter { (filePath, _) ->
             FileMatcher.matches(patterns.asList(), filePath)
         }
 
-    /**
-     * Return the [VcsType] of the project's code repository.
-     */
+    /** Return the [VcsType] of the project's code repository. */
     fun projectSourceGetVcsType(): VcsType = ortResult.repository.vcsProcessed.type
 
     /**

@@ -158,35 +158,25 @@ class FreemarkerTemplateProcessor(
         return reportFileResults
     }
 
-    /**
-     * License information for a single package or project.
-     */
+    /** License information for a single package or project. */
     class PackageModel(
         val id: Identifier,
         private val input: ReporterInput
     ) {
-        /**
-         * True if the package is excluded.
-         */
+        /** True if the package is excluded. */
         val excluded: Boolean by lazy { input.ortResult.isExcluded(id) }
 
-        /**
-         * The labels for the package.
-         */
+        /** The labels for the package. */
         @Suppress("unused") // This function is used in the templates.
         val labels: Map<String, String> by lazy { input.ortResult.getPackage(id)?.metadata?.labels.orEmpty() }
 
-        /**
-         * The resolved license information for the package.
-         */
+        /** The resolved license information for the package. */
         val license: ResolvedLicenseInfo by lazy {
             val resolved = input.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
             resolved.copy(licenses = resolved.licenses.sortedBy { it.license.toString() })
         }
 
-        /**
-         * The license choices that apply to this package.
-         */
+        /** The license choices that apply to this package. */
         val licenseChoices: List<SpdxLicenseChoice> by lazy {
             listOf(
                 input.ortResult.getPackageLicenseChoices(id),
@@ -194,9 +184,7 @@ class FreemarkerTemplateProcessor(
             ).flatten()
         }
 
-        /**
-         * The resolved license file information for the package.
-         */
+        /** The resolved license file information for the package. */
         val licenseFiles: ResolvedLicenseFileInfo by lazy { input.licenseInfoResolver.resolveLicenseFiles(id) }
 
         /**
@@ -223,9 +211,7 @@ class FreemarkerTemplateProcessor(
         }
     }
 
-    /**
-     * A collection of helper functions for the Freemarker templates.
-     */
+    /** A collection of helper functions for the Freemarker templates. */
     @Suppress("TooManyFunctions")
     class TemplateHelper(private val input: ReporterInput) {
         /**
@@ -252,9 +238,7 @@ class FreemarkerTemplateProcessor(
                 input.licenseClassifications[resolvedLicense.license]?.contains(category) != false
             }
 
-        /**
-         * Return only those [licenses] that are classified.
-         */
+        /** Return only those [licenses] that are classified. */
         @Suppress("unused") // This function is used in the templates.
         fun filterForClassified(licenses: Collection<ResolvedLicense>): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
@@ -300,9 +284,7 @@ class FreemarkerTemplateProcessor(
                 .map { (_, resolvedLicenses) -> resolvedLicenses.merge() }
                 .sortedBy { it.license.toString() }
 
-        /**
-         * Return true if the given [license] is not one of the special cases _NONE_ or _NOASSERTION_.
-         */
+        /** Return true if the given [license] is not one of the special cases _NONE_ or _NOASSERTION_. */
         @Suppress("MemberVisibilityCanBePrivate") // This function is used in the templates.
         fun isLicensePresent(license: ResolvedLicense): Boolean = SpdxConstants.isPresent(license.license.toString())
 
@@ -338,23 +320,17 @@ class FreemarkerTemplateProcessor(
                 violation.pkg?.let { input.ortResult.isExcluded(it) } == true
             }
 
-        /**
-         * Return a list of [RuleViolation]s for which no [RuleViolationResolution] is provided.
-         */
+        /** Return a list of [RuleViolation]s for which no [RuleViolationResolution] is provided. */
         @Suppress("unused") // This function is used in the templates.
         fun filterForUnresolvedRuleViolations(ruleViolation: List<RuleViolation>): List<RuleViolation> =
             ruleViolation.filterNot { input.ortResult.isResolved(it) }
 
-        /**
-         * Return a list of [Vulnerability]s for which no [VulnerabilityResolution] is provided.
-         */
+        /** Return a list of [Vulnerability]s for which no [VulnerabilityResolution] is provided. */
         @Suppress("unused") // This function is used in the templates.
         fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
             vulnerabilities.filterNot { input.ortResult.isResolved(it) }
 
-        /**
-         * Return a list of [SnippetFinding]s grouped by the source file being matched by those snippets.
-         */
+        /** Return a list of [SnippetFinding]s grouped by the source file being matched by those snippets. */
         @Suppress("unused") // This function is used in the templates.
         fun groupSnippetsByFile(snippetFindings: Collection<SnippetFinding>): Map<String, List<SnippetFinding>> =
             snippetFindings.groupBy { it.sourceLocation.path }
@@ -367,9 +343,7 @@ class FreemarkerTemplateProcessor(
         fun groupSnippetsBySourceLines(snippetFindings: Collection<SnippetFinding>): Map<TextLocation, SnippetFinding> =
             snippetFindings.associateBy { it.sourceLocation }
 
-        /**
-         * Collect all the licenses present in a collection of [SnippetFinding]s.
-         */
+        /** Collect all the licenses present in a collection of [SnippetFinding]s. */
         @Suppress("unused") // This function is used in the templates.
         fun collectLicenses(snippetsFindings: Collection<SnippetFinding>): Set<String> =
             snippetsFindings.flatMap { findings -> findings.snippets }
@@ -390,9 +364,7 @@ class FreemarkerTemplateProcessor(
         fun advisorResultsWithIssues(severity: Severity): Map<Identifier, List<AdvisorResult>> =
             input.filteredAdvisorResults(AdvisorRun.resultsWithIssues(minSeverity = severity))
 
-        /**
-         * Return the subset of the available advisor results that contain vulnerabilities.
-         */
+        /** Return the subset of the available advisor results that contain vulnerabilities. */
         fun advisorResultsWithVulnerabilities(): Map<Identifier, List<AdvisorResult>> =
             input.filteredAdvisorResults(AdvisorRun.RESULTS_WITH_VULNERABILITIES)
 
@@ -405,9 +377,7 @@ class FreemarkerTemplateProcessor(
             input.ortResult.getPackage(id)?.metadata
                 ?: Package.EMPTY.also { logger.warn { "Could not resolve package '${id.toCoordinates()}'." } }
 
-        /**
-         * Return an [Identifier] constructed from the given [identifier] string.
-         */
+        /** Return an [Identifier] constructed from the given [identifier] string. */
         @Suppress("unused") // This function is used in the templates.
         fun identifierFromString(identifier: String) = Identifier(identifier)
 
@@ -519,9 +489,7 @@ class FreemarkerTemplateProcessor(
             }
         }
 
-        /**
-         * Return result of applying [licenseFindingCurations] to this snippet findings.
-         */
+        /** Return result of applying [licenseFindingCurations] to this snippet findings. */
         private fun Collection<SnippetFinding>.applyLicenseFindingCurations(
             licenseFindingCurations: Collection<LicenseFindingCuration>
         ): List<SnippetFinding> {

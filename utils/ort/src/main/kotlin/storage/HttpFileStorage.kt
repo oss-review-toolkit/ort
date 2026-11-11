@@ -42,13 +42,9 @@ private const val HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS = 30L
 private const val HTTP_CLIENT_KEEP_ALIVE_DURATION_IN_SECONDS = 1 * 60L
 private const val HTTP_CLIENT_MAX_IDLE_CONNECTIONS = 5
 
-/**
- * A [FileStorage] that stores files on an HTTP server.
- */
+/** A [FileStorage] that stores files on an HTTP server. */
 class HttpFileStorage(
-    /**
-     * The URL to store files at.
-     */
+    /** The URL to store files at. */
     val url: String,
 
     /**
@@ -59,9 +55,7 @@ class HttpFileStorage(
      */
     val query: String = "",
 
-    /**
-     * Custom headers that are added to all HTTP requests.
-     */
+    /** Custom headers that are added to all HTTP requests. */
     private val headers: Map<String, String> = emptyMap(),
 
     /**

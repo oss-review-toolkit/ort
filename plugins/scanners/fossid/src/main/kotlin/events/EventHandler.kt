@@ -38,9 +38,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
  */
 interface EventHandler {
     companion object {
-        /**
-         * Return an [EventHandler] based on the given [config], [nestedProvenance] and [service].
-         */
+        /** Return an [EventHandler] based on the given [config], [nestedProvenance] and [service]. */
         fun getHandler(
             config: FossIdConfig,
             nestedProvenance: NestedProvenance?,
@@ -68,9 +66,7 @@ interface EventHandler {
             }
     }
 
-    /**
-     * The true if the given [pkg] is valid for the current event handler, false otherwise.
-     */
+    /** The true if the given [pkg] is valid for the current event handler, false otherwise. */
     fun isPackageValid(pkg: Package): Boolean = getPackageInvalidErrorMessage(pkg) == null
 
     /**
@@ -79,9 +75,7 @@ interface EventHandler {
      */
     fun getPackageInvalidErrorMessage(pkg: Package): String? = null
 
-    /**
-     * Transform the given VCS [url] if required.
-     */
+    /** Transform the given VCS [url] if required. */
     fun transformURL(url: String): String = url
 
     /**
@@ -96,9 +90,7 @@ interface EventHandler {
         comment: OrtScanComment
     ): PolymorphicDataResponseBody<CreateScanResponse>
 
-    /**
-     * Event handler that is called after a scan has been created.
-     */
+    /** Event handler that is called after a scan has been created. */
     @Suppress("RedundantSuspendModifier")
     suspend fun afterScanCreation(
         scanCode: String,
@@ -107,15 +99,11 @@ interface EventHandler {
         context: ScanContext
     ) {}
 
-    /**
-     * Event handler that is called before a scan has been checked.
-     */
+    /** Event handler that is called before a scan has been checked. */
     @Suppress("RedundantSuspendModifier")
     suspend fun beforeCheckScan(scanCode: String) {}
 
-    /**
-     * Event handler that is called after a scan has been checked.
-     */
+    /** Event handler that is called after a scan has been checked. */
     @Suppress("RedundantSuspendModifier")
     suspend fun afterCheckScan(scanCode: String) {}
 }

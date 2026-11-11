@@ -166,9 +166,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
     )
 }
 
-/**
- * Map scan errors for all files using messages that contain the relative file path.
- */
+/** Map scan errors for all files using messages that contain the relative file path. */
 private fun mapScanErrors(result: ScanCodeResult): List<Issue> =
     result.files.flatMap { file ->
         file.scanErrors.map { error ->

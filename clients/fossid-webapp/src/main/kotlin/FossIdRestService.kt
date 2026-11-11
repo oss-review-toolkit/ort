@@ -65,9 +65,7 @@ private const val READ_TIMEOUT_HEADER = "READ_TIMEOUT"
 
 interface FossIdRestService {
     companion object {
-        /**
-         * The mapper for JSON (de-)serialization used by this service.
-         */
+        /** The mapper for JSON (de-)serialization used by this service. */
         val JSON_MAPPER: ObjectMapper = jsonMapper {
             propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             // FossID has a bug in get_results/scan.

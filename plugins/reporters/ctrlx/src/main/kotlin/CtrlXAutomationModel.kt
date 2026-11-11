@@ -25,26 +25,18 @@ import kotlinx.serialization.Serializable
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdxexpression.isSpdxExpression
 
-/**
- * The root element of "fossinfo.json" files, see https://github.com/boschrexroth/json-schema.
- */
+/** The root element of "fossinfo.json" files, see https://github.com/boschrexroth/json-schema. */
 @Serializable
 internal data class FossInfo(
-    /**
-     * The reference to the official JSON schema.
-     */
+    /** The reference to the official JSON schema. */
     @SerialName("\$schema")
     val schema: String = "https://github.com/boschrexroth/json-schema/blob/a84eab6/ctrlx-automation/ctrlx-core/apps/" +
         "fossinfo/fossinfo.v1.schema.json",
 
-    /**
-     * An inlined OSS component, in case of a single component.
-     */
+    /** An inlined OSS component, in case of a single component. */
     val component: Component? = null,
 
-    /**
-     * A list of OSS components, in case of multiple components.
-     */
+    /** A list of OSS components, in case of multiple components. */
     val components: List<Component>? = null
 ) {
     init {
@@ -54,34 +46,22 @@ internal data class FossInfo(
     }
 }
 
-/**
- * An OSS component.
- */
+/** An OSS component. */
 @Serializable
 internal data class Component(
-    /**
-     * The OSS component name.
-     */
+    /** The OSS component name. */
     val name: String,
 
-    /**
-     * The OSS component version. If a version is not available, use the date of the download.
-     */
+    /** The OSS component version. If a version is not available, use the date of the download. */
     val version: String? = null,
 
-    /**
-     * The OSS component homepage.
-     */
+    /** The OSS component homepage. */
     val homepage: String? = null,
 
-    /**
-     * The OSS component copyright information.
-     */
+    /** The OSS component copyright information. */
     val copyright: CopyrightInformation? = null,
 
-    /**
-     * The OSS component licenses. At least one license is required.
-     */
+    /** The OSS component licenses. At least one license is required. */
     val licenses: List<License>,
 
     /**
@@ -90,14 +70,10 @@ internal data class Component(
      */
     val usages: List<Map<String, String>>? = null,
 
-    /**
-     * A single OSS component usage.
-     */
+    /** A single OSS component usage. */
     val usage: Usage? = null,
 
-    /**
-     * A single OSS component integration.
-     */
+    /** A single OSS component integration. */
     @SerialName("integrationMechanism")
     val integrationMechanism: IntegrationMechanism? = null
 ) {
@@ -120,14 +96,10 @@ internal data class Component(
     }
 }
 
-/**
- * An OSS component's copyright information.
- */
+/** An OSS component's copyright information. */
 @Serializable
 internal data class CopyrightInformation(
-    /**
-     * The copyright text.
-     */
+    /** The copyright text. */
     val text: String,
 
     /**
@@ -136,29 +108,19 @@ internal data class CopyrightInformation(
     val notice: String? = null
 )
 
-/**
- * An OSS component's license.
- */
+/** An OSS component's license. */
 @Serializable
 internal data class License(
-    /**
-     * The license name.
-     */
+    /** The license name. */
     val name: String,
 
-    /**
-     * The official identifier of the license, also see https://spdx.org/licenses.
-     */
+    /** The official identifier of the license, also see https://spdx.org/licenses. */
     val spdx: String? = null,
 
-    /**
-     * OSS component license text. Use "\n" as line separator.
-     */
+    /** OSS component license text. Use "\n" as line separator. */
     val text: String,
 
-    /**
-     * The version or date of the license. Hint: Must not contain leading and trailing whitespaces.
-     */
+    /** The version or date of the license. Hint: Must not contain leading and trailing whitespaces. */
     val version: String? = null
 ) {
     init {
@@ -176,9 +138,7 @@ internal data class License(
     }
 }
 
-/**
- * The OSS component usage which may affect the required obligations.
- */
+/** The OSS component usage which may affect the required obligations. */
 internal enum class Usage {
     /** The OSS component is used without modifications. */
     AsIs,
@@ -187,9 +147,7 @@ internal enum class Usage {
     Modified
 }
 
-/**
- * The OSS component integration which may affect the required obligations.
- */
+/** The OSS component integration which may affect the required obligations. */
 internal enum class IntegrationMechanism {
     /** DLL, Assembly. */
     LinkedDynamically,

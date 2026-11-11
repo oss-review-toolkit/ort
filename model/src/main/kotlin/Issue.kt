@@ -33,34 +33,22 @@ import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 
-/**
- * An issue that occurred while executing ORT.
- */
+/** An issue that occurred while executing ORT. */
 data class Issue(
-    /**
-     * The timestamp of the issue.
-     */
+    /** The timestamp of the issue. */
     val timestamp: Instant = Instant.now(),
 
-    /**
-     * A description of the issue source, e.g. the tool that caused the issue.
-     */
+    /** A description of the issue source, e.g. the tool that caused the issue. */
     val source: String,
 
-    /**
-     * The issue's message.
-     */
+    /** The issue's message. */
     @JsonSerialize(using = NormalizeLineBreaksSerializer::class)
     val message: String,
 
-    /**
-     * The issue's severity.
-     */
+    /** The issue's severity. */
     val severity: Severity = Severity.ERROR,
 
-    /**
-     * The affected file or directory the issue is limited to, if any.
-     */
+    /** The affected file or directory the issue is limited to, if any. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val affectedPath: String? = null
 ) {
@@ -76,9 +64,7 @@ class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) 
     }
 }
 
-/**
- * Create an [Issue] and log the message. The log level is aligned with the [severity].
- */
+/** Create an [Issue] and log the message. The log level is aligned with the [severity]. */
 inline fun <reified T : Any> T.createAndLogIssue(
     source: String,
     message: String,

@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-/**
- * Possible reasons for excluding a scope.
- */
+/** Possible reasons for excluding a scope. */
 enum class ScopeExcludeReason {
     /**
      * The scope only contains packages used for building source code which are not included in distributed build
@@ -36,24 +34,16 @@ enum class ScopeExcludeReason {
     )
     BUILD_TOOL_OF,
 
-    /**
-     * The scope only contains packages used for building source code which are not included in distributed build.
-     */
+    /** The scope only contains packages used for building source code which are not included in distributed build. */
     BUILD_DEPENDENCY_OF,
 
-    /**
-     * The scope only contains packages used for development which are not included in distributed build.
-     */
+    /** The scope only contains packages used for development which are not included in distributed build. */
     DEV_DEPENDENCY_OF,
 
-    /**
-     * The scope only contains packages used for building the documentation.
-     */
+    /** The scope only contains packages used for building the documentation. */
     DOCUMENTATION_DEPENDENCY_OF,
 
-    /**
-     * The scope only contains packages that have to be provided by the user of distributed build artifacts.
-     */
+    /** The scope only contains packages that have to be provided by the user of distributed build artifacts. */
     @Deprecated(
         message = "Use SPDX-2.2-style enum value instead.",
         replaceWith = ReplaceWith(
@@ -63,9 +53,7 @@ enum class ScopeExcludeReason {
     )
     PROVIDED_BY,
 
-    /**
-     * The scope only contains packages that have to be provided by the user of distributed build artifacts.
-     */
+    /** The scope only contains packages that have to be provided by the user of distributed build artifacts. */
     PROVIDED_DEPENDENCY_OF,
 
     /**
@@ -81,9 +69,7 @@ enum class ScopeExcludeReason {
     )
     TEST_TOOL_OF,
 
-    /**
-     * The scope only contains packages used for testing which are not included in distributed build.
-     */
+    /** The scope only contains packages used for testing which are not included in distributed build. */
     TEST_DEPENDENCY_OF,
 
     /**

@@ -23,16 +23,12 @@ import okhttp3.Interceptor
 
 import retrofit2.Invocation
 
-/**
- * A custom annotation for skipping the authorization interceptor for certain API calls.
- */
+/** A custom annotation for skipping the authorization interceptor for certain API calls. */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class SkipAuthorization
 
-/**
- * An HTTP interceptor to conditionally skip authorization.
- */
+/** An HTTP interceptor to conditionally skip authorization. */
 internal class AuthorizationInterceptor(private val token: String) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         val original = chain.request()

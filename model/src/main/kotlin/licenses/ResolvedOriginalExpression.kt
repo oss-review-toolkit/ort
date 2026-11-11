@@ -22,18 +22,12 @@ package org.ossreviewtoolkit.model.licenses
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
-/**
- * A resolved original expression.
- */
+/** A resolved original expression. */
 data class ResolvedOriginalExpression(
-    /**
-     * The license expression.
-     */
+    /** The license expression. */
     val expression: SpdxExpression,
 
-    /**
-     * The license source.
-     */
+    /** The license source. */
     val source: LicenseSource,
 
     /**

@@ -55,9 +55,7 @@ object JavaBootstrapper {
         return if (Os.isMac) dir / "Contents" / "Home" else dir
     }
 
-    /**
-     * Return whether ORT is running on a JDK (not JRE) of the specified [version].
-     */
+    /** Return whether ORT is running on a JDK (not JRE) of the specified [version]. */
     fun isRunningOnJdk(version: String): Boolean {
         val requestedVersion = Semver.coerce(version)
         val runningVersion = Semver.coerce(Environment.JAVA_VERSION)

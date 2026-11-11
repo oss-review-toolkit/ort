@@ -20,18 +20,12 @@
 package org.ossreviewtoolkit.model.config
 
 data class JiraConfiguration(
-    /**
-     * The host for the Jira instance.
-     */
+    /** The host for the Jira instance. */
     val host: String = "http://localhost",
 
-    /**
-     * The username used for the authentication.
-     */
+    /** The username used for the authentication. */
     val username: String = "",
 
-    /**
-     * The password used for the authentication.
-     */
+    /** The password used for the authentication. */
     val password: String = ""
 )

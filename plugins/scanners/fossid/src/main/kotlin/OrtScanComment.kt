@@ -29,21 +29,13 @@ data class OrtScanComment(val ort: OrtScanCommentPayload) {
     fun asJsonString(): String = jsonMapper.writeValueAsString(this)
 }
 
-/**
- * The payload of an [OrtComment].
- */
+/** The payload of an [OrtComment]. */
 data class OrtScanCommentPayload(
-    /**
-     * The URL of the repository where the source code is hosted.
-     */
+    /** The URL of the repository where the source code is hosted. */
     val repositoryURL: String,
-    /**
-     * The VCS revision of the source code, resolved by ORT e.g. a git hash.
-     */
+    /** The VCS revision of the source code, resolved by ORT e.g. a git hash. */
     val revision: String,
-    /**
-     * The VCC revision which is a rolling branch name e.g. "release".
-     */
+    /** The VCC revision which is a rolling branch name e.g. "release". */
     val projectRevision: String
 )
 

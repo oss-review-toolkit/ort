@@ -30,14 +30,10 @@ data class Snippet(
      */
     val score: Float,
 
-    /**
-     * The text location in the snippet that has matched.
-     */
+    /** The text location in the snippet that has matched. */
     val location: TextLocation,
 
-    /**
-     * The provenance of the snippet, either an artifact or a repository.
-     */
+    /** The provenance of the snippet, either an artifact or a repository. */
     val provenance: KnownProvenance,
 
     /**
@@ -46,9 +42,7 @@ data class Snippet(
      */
     val purl: String,
 
-    /**
-     * The SPDX license expression of the component the code snippet is coming from.
-     */
+    /** The SPDX license expression of the component the code snippet is coming from. */
     val license: SpdxExpression,
 
     /**

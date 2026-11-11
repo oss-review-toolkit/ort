@@ -23,9 +23,7 @@ import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.plugins.api.PluginFactory
 
-/**
- * A common interface for use with [ServiceLoader] that all [PackageManagerFactory] classes need to implement.
- */
+/** A common interface for use with [ServiceLoader] that all [PackageManagerFactory] classes need to implement. */
 interface PackageManagerFactory : PluginFactory<PackageManager> {
     companion object {
         /**

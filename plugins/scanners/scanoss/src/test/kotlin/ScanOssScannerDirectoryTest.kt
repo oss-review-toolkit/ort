@@ -50,9 +50,7 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxExpression
 
-/**
- * A test for scanning a directory with the [ScanOss] scanner.
- */
+/** A test for scanning a directory with the [ScanOss] scanner. */
 class ScanOssScannerDirectoryTest : StringSpec({
     lateinit var scanner: ScanOss
 

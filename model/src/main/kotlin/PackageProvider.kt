@@ -25,9 +25,7 @@ package org.ossreviewtoolkit.model
  * artifacts under the same [Identifier]. So if in question, the provider must be given in addition to the [Identifier].
  */
 enum class PackageProvider(
-    /**
-     * The regular expression patterns that match all URLs for a specific provider.
-     */
+    /** The regular expression patterns that match all URLs for a specific provider. */
     vararg urlPatterns: String
 ) {
     COCOAPODS(
@@ -111,22 +109,16 @@ enum class PackageProvider(
     private val urlRegexes by lazy { urlPatterns.map { it.toRegex() } }
 
     companion object {
-        /**
-         * Return the [PackageProvider] as determined from the given [url], or null if there is no match.
-         */
+        /** Return the [PackageProvider] as determined from the given [url], or null if there is no match. */
         fun get(url: String): PackageProvider? =
             PackageProvider.entries.find { provider ->
                 provider.urlRegexes.any { it.containsMatchIn(url) }
             }
 
-        /**
-         * Return the [PackageProvider] as determined from the given [artifact]'s URL, or null if there is no match.
-         */
+        /** Return the [PackageProvider] as determined from the given [artifact]'s URL, or null if there is no match. */
         fun get(artifact: RemoteArtifact): PackageProvider? = get(artifact.url)
 
-        /**
-         * Return the [PackageProvider] as determined from the given [vcs] URL, or null if there is no match.
-         */
+        /** Return the [PackageProvider] as determined from the given [vcs] URL, or null if there is no match. */
         fun get(vcs: VcsInfo): PackageProvider? = get(vcs.url)
     }
 }

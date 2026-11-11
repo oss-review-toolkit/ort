@@ -49,9 +49,7 @@ internal object BowerCommand : CommandLineTool {
     override fun getVersionRequirement(): RangeList = RangeListFactory.create(">=1.8.8")
 }
 
-/**
- * The [Bower](https://bower.io/) package manager for JavaScript.
- */
+/** The [Bower](https://bower.io/) package manager for JavaScript. */
 @OrtPlugin(
     displayName = "Bower",
     summary = "The Bower package manager for JavaScript.",

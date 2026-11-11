@@ -26,9 +26,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
 
-/**
- * A node for the dependency trees of the [EvaluatedModel].
- */
+/** A node for the dependency trees of the [EvaluatedModel]. */
 @JsonIdentityInfo(property = "key", generator = ZeroBasedIntSequenceGenerator::class, scope = DependencyTreeNode::class)
 data class DependencyTreeNode(
     @JsonInclude(JsonInclude.Include.NON_NULL)

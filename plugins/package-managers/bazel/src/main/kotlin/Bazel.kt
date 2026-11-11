@@ -97,21 +97,15 @@ data class BazelConfig(
      */
     val bazelVersion: String?,
 
-    /**
-     * The default name of the lockfile for the Conan package manager.
-     */
+    /** The default name of the lockfile for the Conan package manager. */
     @OrtPluginOption(defaultValue = "conan.lock")
     val conanLockfileName: String,
 
-    /**
-     * Use Conan2 when fetching Conan packages, otherwise use Conan 1.
-     */
+    /** Use Conan2 when fetching Conan packages, otherwise use Conan 1. */
     @OrtPluginOption(defaultValue = "false")
     val useConan2: Boolean,
 
-    /**
-     * Only scan Bazel dependencies and skip reporting Conan packages in the dependency tree.
-     */
+    /** Only scan Bazel dependencies and skip reporting Conan packages in the dependency tree. */
     @OrtPluginOption(defaultValue = "false")
     val bazelDependenciesOnly: Boolean
 )
@@ -570,9 +564,7 @@ class Bazel(
         )
     }
 
-    /**
-     * Convert a [BazelModule] to a [PackageReference].
-     */
+    /** Convert a [BazelModule] to a [PackageReference]. */
     private fun BazelModule.toPackageReference(archiveOverrides: Map<String, ArchiveOverride>): PackageReference =
         PackageReference(
             id = Identifier(
@@ -588,9 +580,7 @@ class Bazel(
             dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference(archiveOverrides) }
         )
 
-    /**
-     * Convert a module source info to a [VcsInfo] or return 'null' if the VCS is not relevant for this module.
-     */
+    /** Convert a module source info to a [VcsInfo] or return 'null' if the VCS is not relevant for this module. */
     private fun ModuleSourceInfo.toVcsInfo(): VcsInfo? =
         when (this) {
             is GitRepositorySourceInfo -> VcsInfo(

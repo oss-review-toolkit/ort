@@ -178,9 +178,7 @@ private fun Vulnerability.toOrtVulnerability(purl: String): org.ossreviewtoolkit
     )
 }
 
-/**
- * Extract the first fixed versions from the given [Affected] items that match the given [purl].
- */
+/** Extract the first fixed versions from the given [Affected] items that match the given [purl]. */
 private fun Collection<Affected>.toFirstFixedVersions(purl: PackageURL): Set<String> {
     val namespaceNameList = listOfNotNull(purl.namespace, purl.name)
 

@@ -66,9 +66,7 @@ fun AnalyzerConfiguration.determineEnabledPackageManagers(): Set<PackageManagerF
     return enabled.toSet() - disabled.toSet()
 }
 
-/**
- * Encode this dependency on another package manager into a [PackageReference] with optional [issues].
- */
+/** Encode this dependency on another package manager into a [PackageReference] with optional [issues]. */
 fun PackageManagerDependency.toPackageReference(issues: List<Issue> = emptyList()): PackageReference =
     PackageReference(
         id = Identifier(
@@ -80,9 +78,7 @@ fun PackageManagerDependency.toPackageReference(issues: List<Issue> = emptyList(
         issues = issues
     )
 
-/**
- * Indicate whether this dependency is a package manager dependency.
- */
+/** Indicate whether this dependency is a package manager dependency. */
 internal val DependencyNode.isPackageManagerDependency: Boolean
     get() = id.type == TYPE
 
@@ -102,9 +98,7 @@ internal fun DependencyNode.toPackageManagerDependency(): PackageManagerDependen
         null
     }
 
-/**
- * Resolves the scopes of all [Project]s in this [OrtResult] with [Project.withResolvedScopes].
- */
+/** Resolves the scopes of all [Project]s in this [OrtResult] with [Project.withResolvedScopes]. */
 fun OrtResult.withResolvedScopes(): OrtResult =
     copy(
         analyzer = analyzer?.copy(

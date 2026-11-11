@@ -29,9 +29,7 @@ class SpdxCompoundExpression(
     val operator: SpdxOperator,
     val children: Collection<SpdxExpression>
 ) : SpdxExpression() {
-    /**
-     * Create a compound expression with the provided [operator] and the [left] and [right] child expressions.
-     */
+    /** Create a compound expression with the provided [operator] and the [left] and [right] child expressions. */
     constructor(left: SpdxExpression, operator: SpdxOperator, right: SpdxExpression) :
         this(operator, listOf(left, right))
 

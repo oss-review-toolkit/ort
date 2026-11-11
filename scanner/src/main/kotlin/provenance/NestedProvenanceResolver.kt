@@ -27,9 +27,7 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 
-/**
- * The [NestedProvenanceResolver] provides a function to resolve nested provenances.
- */
+/** The [NestedProvenanceResolver] provides a function to resolve nested provenances. */
 interface NestedProvenanceResolver {
     /**
      * Resolve nested [Provenance]s of the provided [provenance]. For an [ArtifactProvenance] the returned
@@ -39,9 +37,7 @@ interface NestedProvenanceResolver {
     suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance
 }
 
-/**
- * The default implementation of [NestedProvenanceResolver].
- */
+/** The default implementation of [NestedProvenanceResolver]. */
 class DefaultNestedProvenanceResolver(
     private val storage: NestedProvenanceStorage,
     private val workingTreeCache: WorkingTreeCache

@@ -64,9 +64,7 @@ fun Package.toClearlyDefinedProvider(): Provider? =
         }
     }
 
-/**
- * Map an ORT [Package] to ClearlyDefined [Coordinates], or to null if a mapping is not possible.
- */
+/** Map an ORT [Package] to ClearlyDefined [Coordinates], or to null if a mapping is not possible. */
 fun Package.toClearlyDefinedCoordinates(): Coordinates? {
     val type = id.toClearlyDefinedType() ?: return null
     val provider = toClearlyDefinedProvider() ?: type.defaultProvider ?: return null

@@ -68,9 +68,7 @@ internal class CargoDependencyHandler(
         }
 }
 
-/**
- * Return the local path for this Cargo package if applicable, or null if the Cargo package is not local.
- */
+/** Return the local path for this Cargo package if applicable, or null if the Cargo package is not local. */
 private fun CargoMetadata.Package.getLocalPath(): File? =
     // Support both Cargo < 1.77.0 IDs like "lib 0.1.0 (path+file:///home/ort)" and Cargo >= 1.77.0 IDs like
     // "path+file:///home/ort#lib@0.1.0".
@@ -88,9 +86,7 @@ private fun CargoMetadata.Package.isProject(analysisRoot: File): Boolean {
     return source == null && isWithinAnalyzerRoot
 }
 
-/**
- * Map this Cargo package to an ORT [Identifier].
- */
+/** Map this Cargo package to an ORT [Identifier]. */
 private fun CargoMetadata.Package.toIdentifier() =
     Identifier(
         type = PACKAGE_TYPE,
@@ -101,9 +97,7 @@ private fun CargoMetadata.Package.toIdentifier() =
         version = version
     )
 
-/**
- * Map this Cargo package to an ORT [Package]. [hashes] are used to look up the Crate's SHA-256 digest.
- */
+/** Map this Cargo package to an ORT [Package]. [hashes] are used to look up the Crate's SHA-256 digest. */
 internal fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Package {
     val declaredLicenses = parseDeclaredLicenses()
 
@@ -130,9 +124,7 @@ internal fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packa
     )
 }
 
-/**
- * Return the set of licenses declared for this Cargo package.
- */
+/** Return the set of licenses declared for this Cargo package. */
 private fun CargoMetadata.Package.parseDeclaredLicenses(): Set<String> {
     val declaredLicenses = license.orEmpty().split('/')
         .mapNotNullTo(mutableSetOf()) { license ->

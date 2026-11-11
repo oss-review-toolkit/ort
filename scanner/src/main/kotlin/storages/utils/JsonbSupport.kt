@@ -45,7 +45,5 @@ inline fun <reified T : Any> Table.jsonb(name: String): Column<T> =
  */
 fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
 
-/**
- * Unescape the null character "\u0000". For details see [escapeNull].
- */
+/** Unescape the null character "\u0000". For details see [escapeNull]. */
 fun String.unescapeNull() = replace("\\\\u0000", "\\u0000")

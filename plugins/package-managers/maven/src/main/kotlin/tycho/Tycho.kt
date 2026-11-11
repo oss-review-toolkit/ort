@@ -73,9 +73,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.processDeclaredL
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.toOrtProject
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
-/**
- * A data class storing the configuration options supported by the [Tycho] package manager implementation.
- */
+/** A data class storing the configuration options supported by the [Tycho] package manager implementation. */
 data class TychoConfig(
     @OrtPluginOption(defaultValue = "true")
     val skipTests: Boolean,
@@ -277,9 +275,7 @@ class Tycho(
         return MavenSupport(LocalProjectWorkspaceReader(resolveFunc))
     }
 
-    /**
-     * Process the [dependencies] of the given [project] by adding them to the [graphBuilder].
-     */
+    /** Process the [dependencies] of the given [project] by adding them to the [graphBuilder]. */
     private fun processProjectDependencies(
         graphBuilder: DependencyGraphBuilder<DependencyNode>,
         project: MavenProject,
@@ -326,9 +322,7 @@ class Tycho(
         return rootIssues
     }
 
-    /**
-     * Generate the command line options to be passed to the Maven CLI for the given [dependencyTreeFile].
-     */
+    /** Generate the command line options to be passed to the Maven CLI for the given [dependencyTreeFile]. */
     private fun generateMavenOptions(dependencyTreeFile: File): Array<String> =
         buildList {
             // The "package" goal is required; otherwise the Tycho extension is not activated.
@@ -364,9 +358,7 @@ private const val DEPENDENCY_PLUGIN_VERSION = "3.8.1"
 private const val DEPENDENCY_TREE_GOAL =
     "org.apache.maven.plugins:maven-dependency-plugin:$DEPENDENCY_PLUGIN_VERSION:tree"
 
-/**
- * A special exception class to indicate that a Tycho build failed completely.
- */
+/** A special exception class to indicate that a Tycho build failed completely. */
 class TychoBuildException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
 /**
@@ -380,9 +372,7 @@ internal class TychoProjectsCollector : AbstractMavenLifecycleParticipant() {
      */
     private val projects = AtomicReference<Map<String, MavenProject>>(emptyMap())
 
-    /**
-     * Return the projects that have been found during the Maven build.
-     */
+    /** Return the projects that have been found during the Maven build. */
     val mavenProjects: Map<String, MavenProject>
         get() = projects.get()
 
@@ -524,9 +514,7 @@ private fun createPackageFromLocalArtifact(
         createPackageFromManifest(artifact, it, resolver)
     }
 
-/**
- * An enumeration that defines the properties to be extracted from a source reference manifest header.
- */
+/** An enumeration that defines the properties to be extracted from a source reference manifest header. */
 private enum class ScmProperties {
     /** The connection URL. */
     CONNECTION,
@@ -559,9 +547,7 @@ private fun extractScmProperties(scmInfo: String?): Map<ScmProperties, String> =
         }
     }.orEmpty()
 
-/**
- * Convert this [Map] of [ScmProperties] to a [Scm] structure. Return *null* if mandatory properties are missing.
- */
+/** Convert this [Map] of [ScmProperties] to a [Scm] structure. Return *null* if mandatory properties are missing. */
 private fun Map<ScmProperties, String>.toScm(): Scm? =
     get(ScmProperties.CONNECTION)?.let { connection ->
         Scm().apply {

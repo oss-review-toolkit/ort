@@ -37,36 +37,24 @@ import org.ossreviewtoolkit.utils.spdxexpression.SpdxSingleLicenseExpression
  * issues which are added to the [ruleSet].
  */
 abstract class Rule(
-    /**
-     * The [RuleSet] this rule belongs to.
-     */
+    /** The [RuleSet] this rule belongs to. */
     val ruleSet: RuleSet,
 
-    /**
-     * The name of this rule.
-     */
+    /** The name of this rule. */
     val name: String
 ) {
     private val ruleMatcherManager = RuleMatcherManager()
 
-    /**
-     * The list of all matchers that need to match for this rule to apply.
-     */
+    /** The list of all matchers that need to match for this rule to apply. */
     val matchers = mutableListOf<RuleMatcher>()
 
-    /**
-     * The list of all issues created by this rule.
-     */
+    /** The list of all issues created by this rule. */
     val violations = mutableListOf<RuleViolation>()
 
-    /**
-     * Return a human-readable description of this rule.
-     */
+    /** Return a human-readable description of this rule. */
     abstract val description: String
 
-    /**
-     * Return true if all [matchers] match.
-     */
+    /** Return true if all [matchers] match. */
     private fun matches() =
         matchers.all { matcher ->
             matcher.matches().also { matches ->
@@ -95,14 +83,10 @@ abstract class Rule(
         }
     }
 
-    /**
-     * Can be overridden to implement custom behavior, executed if a rule [matches].
-     */
+    /** Can be overridden to implement custom behavior, executed if a rule [matches]. */
     open fun runInternal() {}
 
-    /**
-     * DSL function to configure [RuleMatcher]s using a [RuleMatcherManager].
-     */
+    /** DSL function to configure [RuleMatcher]s using a [RuleMatcherManager]. */
     fun require(block: RuleMatcherManager.() -> Unit) {
         ruleMatcherManager.block()
     }
@@ -119,9 +103,7 @@ abstract class Rule(
             override fun matches() = ruleSet.ortResult.hasLabel(label, value, splitValue)
         }
 
-    /**
-     * Return a string to be used as [source][Issue.source] for issues generated in [hint], [warning], and [error].
-     */
+    /** Return a string to be used as [source][Issue.source] for issues generated in [hint], [warning], and [error]. */
     abstract fun issueSource(): String
 
     /**
@@ -148,9 +130,7 @@ abstract class Rule(
         )
     }
 
-    /**
-     * Add a [hint][Severity.HINT] to the list of [violations].
-     */
+    /** Add a [hint][Severity.HINT] to the list of [violations]. */
     fun hint(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
@@ -159,9 +139,7 @@ abstract class Rule(
         howToFix: String
     ) = issue(Severity.HINT, pkgId, license, licenseSources, message, howToFix)
 
-    /**
-     * Add a [warning][Severity.WARNING] to the list of [violations].
-     */
+    /** Add a [warning][Severity.WARNING] to the list of [violations]. */
     fun warning(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
@@ -170,9 +148,7 @@ abstract class Rule(
         howToFix: String
     ) = issue(Severity.WARNING, pkgId, license, licenseSources, message, howToFix)
 
-    /**
-     * Add an [error][Severity.ERROR] to the list of [violations].
-     */
+    /** Add an [error][Severity.ERROR] to the list of [violations]. */
     fun error(
         pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
@@ -181,29 +157,21 @@ abstract class Rule(
         howToFix: String
     ) = issue(Severity.ERROR, pkgId, license, licenseSources, message, howToFix)
 
-    /**
-     * A DSL helper class, providing convenience functions for adding [RuleMatcher]s to this rule.
-     */
+    /** A DSL helper class, providing convenience functions for adding [RuleMatcher]s to this rule. */
     inner class RuleMatcherManager {
-        /**
-         * Add a [RuleMatcher] to this rule.
-         */
+        /** Add a [RuleMatcher] to this rule. */
         operator fun RuleMatcher.unaryPlus() {
             matchers += this
         }
 
-        /**
-         * Add the negation of a [RuleMatcher] to this rule.
-         */
+        /** Add the negation of a [RuleMatcher] to this rule. */
         operator fun RuleMatcher.unaryMinus() {
             matchers += Not(this)
         }
     }
 }
 
-/**
- * Backward compatibility for [Rule.issue()].
- */
+/** Backward compatibility for [Rule.issue()]. */
 @Suppress("unused") // This is intended to be used by rule implementations.
 fun Rule.issue(
     severity: Severity,
@@ -214,9 +182,7 @@ fun Rule.issue(
     howToFix: String
 ) = issue(severity, pkgId, license, enumSetOfNotNull(licenseSource), message, howToFix)
 
-/**
- * Backward compatibility for [Rule.hint()].
- */
+/** Backward compatibility for [Rule.hint()]. */
 @Suppress("unused") // This is intended to be used by rule implementations.
 fun Rule.hint(
     pkgId: Identifier?,
@@ -226,9 +192,7 @@ fun Rule.hint(
     howToFix: String
 ) = hint(pkgId, license, enumSetOfNotNull(licenseSource), message, howToFix)
 
-/**
- * Backward compatibility for [Rule.warning()].
- */
+/** Backward compatibility for [Rule.warning()]. */
 @Suppress("unused") // This is intended to be used by rule implementations.
 fun Rule.warning(
     pkgId: Identifier?,
@@ -238,9 +202,7 @@ fun Rule.warning(
     howToFix: String
 ) = warning(pkgId, license, enumSetOfNotNull(licenseSource), message, howToFix)
 
-/**
- * Backward compatibility for [Rule.error()].
- */
+/** Backward compatibility for [Rule.error()]. */
 @Suppress("unused") // This is intended to be used by rule implementations.
 fun Rule.error(
     pkgId: Identifier?,

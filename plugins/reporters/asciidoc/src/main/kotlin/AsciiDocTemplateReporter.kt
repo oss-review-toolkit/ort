@@ -42,9 +42,7 @@ data class AsciiDocTemplateReporterConfig(
     @OrtPluginOption(aliases = ["template.id"])
     val templateIds: List<String>?,
 
-    /**
-     * A comma-separated list of paths to template files provided by the user.
-     */
+    /** A comma-separated list of paths to template files provided by the user. */
     @OrtPluginOption(aliases = ["template.path"])
     val templatePaths: List<String>?
 )
@@ -95,9 +93,7 @@ abstract class AsciiDocTemplateReporter(private val config: AsciiDocTemplateRepo
         return reportFileResults
     }
 
-    /**
-     * Generate the AsciiDoc files from the templates defined in [config] in [outputDir].
-     */
+    /** Generate the AsciiDoc files from the templates defined in [config] in [outputDir]. */
     private fun generateAsciiDocFiles(input: ReporterInput, outputDir: File): List<Result<File>> {
         val actualConfig = config.takeIf {
             it.templateIds?.isNotEmpty() == true || it.templatePaths?.isNotEmpty() == true

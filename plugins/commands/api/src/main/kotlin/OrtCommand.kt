@@ -31,9 +31,7 @@ import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 
-/**
- * An interface for [CliktCommand]-based ORT commands that come as [Plugin]s.
- */
+/** An interface for [CliktCommand]-based ORT commands that come as [Plugin]s. */
 abstract class OrtCommand(override val descriptor: PluginDescriptor) : CliktCommand(), Plugin {
     companion object {
         const val OPTION_GROUP_CONFIGURATION = "Configuration Options"
@@ -54,9 +52,7 @@ abstract class OrtCommand(override val descriptor: PluginDescriptor) : CliktComm
 
     protected val ortConfig by requireObject<OrtConfiguration>()
 
-    /**
-     * Checks that the provided [outputFiles] can be used. Throws a [UsageError] otherwise.
-     */
+    /** Checks that the provided [outputFiles] can be used. Throws a [UsageError] otherwise. */
     protected fun checkOutputFiles(outputFiles: Collection<File>) {
         if (ortConfig.forceOverwrite) return
 

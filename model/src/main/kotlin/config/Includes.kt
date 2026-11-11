@@ -21,19 +21,13 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-/**
- * Defines which parts of a (root) repository should be included.
- */
+/** Defines which parts of a (root) repository should be included. */
 data class Includes(
-    /**
-     * Path includes which target file paths relative to the analysis root.
-     */
+    /** Path includes which target file paths relative to the analysis root. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val paths: List<PathInclude> = emptyList(),
 
-    /**
-     * Scopes that will be included from all projects.
-     */
+    /** Scopes that will be included from all projects. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val scopes: List<ScopeInclude> = emptyList()
 ) {
@@ -46,14 +40,10 @@ data class Includes(
         val EMPTY = Includes()
     }
 
-    /**
-     * True if any [path include][paths] matches [path] or if there is no path includes.
-     */
+    /** True if any [path include][paths] matches [path] or if there is no path includes. */
     fun isPathIncluded(path: String) = paths.isEmpty() || paths.any { it.matches(path) }
 
-    /**
-     * True if the scope with the given [scopeName] is included by this [Includes] configuration.
-     */
+    /** True if the scope with the given [scopeName] is included by this [Includes] configuration. */
     fun isScopeIncluded(scopeName: String): Boolean = scopes.isEmpty() || scopes.any { it.matches(scopeName) }
 }
 

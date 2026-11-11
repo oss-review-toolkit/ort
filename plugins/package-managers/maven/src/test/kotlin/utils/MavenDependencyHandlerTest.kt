@@ -281,9 +281,7 @@ class MavenDependencyHandlerTest : WordSpec({
 private const val MANAGER_NAME = "MavenTest"
 private const val PACKAGE_ID_SUFFIX = "org.apache.commons:commons-lang2:3.12"
 
-/**
- * A map simulating local projects. This is required by [MavenSupport] when parsing packages.
- */
+/** A map simulating local projects. This is required by [MavenSupport] when parsing packages. */
 private val LOCAL_PROJECTS = mapOf(
     "namespace:project1:1.0" to createProject(),
     "namespace:project2:2.0" to createProject(),
@@ -319,9 +317,7 @@ private fun createArtifact(id: String): Artifact {
     return artifact
 }
 
-/**
- * Return a mock [DependencyNode] with an [Artifact] that has the given [identifier][id].
- */
+/** Return a mock [DependencyNode] with an [Artifact] that has the given [identifier][id]. */
 private fun createDependency(id: String): DependencyNode {
     val artifact = createArtifact(id)
     val node = mockk<DependencyNode>()
@@ -342,9 +338,7 @@ private fun createHandler(packageResolverFun: PackageResolverFun = unusedPackage
  */
 private fun createProject(): MavenProject = mockk()
 
-/**
- * Create a mock for a [Package] that is prepared to return an [Identifier] based on [mavenId].
- */
+/** Create a mock for a [Package] that is prepared to return an [Identifier] based on [mavenId]. */
 private fun createPackage(mavenId: String): Package =
     mockk<Package>().apply {
         every { id } returns toOrtIdentifier(mavenId)

@@ -44,9 +44,7 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
-/**
- * A holder for [ScanStorage] [readers] and [writers].
- */
+/** A holder for [ScanStorage] [readers] and [writers]. */
 class ScanStorages(
     val readers: List<ScanStorageReader>,
     val writers: List<ScanStorageWriter>,

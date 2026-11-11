@@ -23,9 +23,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.CompositeDecoder
 
-/**
- * See https://github.com/clearlydefined/service/blob/48f2c97/schemas/definition-1.0.json#L32-L48.
- */
+/** See https://github.com/clearlydefined/service/blob/48f2c97/schemas/definition-1.0.json#L32-L48. */
 @Serializable
 enum class ComponentType(val defaultProvider: Provider? = null) {
     @SerialName("npm") NPM(Provider.NPM_JS),
@@ -57,9 +55,7 @@ enum class ComponentType(val defaultProvider: Provider? = null) {
     override fun toString() = serializer().descriptor.getElementName(ordinal)
 }
 
-/**
- * See https://github.com/clearlydefined/service/blob/98f3f47/schemas/definition-1.0.json#L49-L66.
- */
+/** See https://github.com/clearlydefined/service/blob/98f3f47/schemas/definition-1.0.json#L49-L66. */
 @Serializable
 enum class Provider {
     @SerialName("npmjs") NPM_JS,
@@ -92,18 +88,14 @@ enum class Provider {
     override fun toString() = serializer().descriptor.getElementName(ordinal)
 }
 
-/**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L128.
- */
+/** See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L128. */
 @Serializable
 enum class Nature {
     @SerialName("license") LICENSE,
     @SerialName("notice") NOTICE
 }
 
-/**
- * See https://github.com/clearlydefined/website/blob/43ec5e3/src/components/ContributePrompt.js#L78-L82.
- */
+/** See https://github.com/clearlydefined/website/blob/43ec5e3/src/components/ContributePrompt.js#L78-L82. */
 @Serializable
 enum class ContributionType {
     @SerialName("Missing") MISSING,
@@ -113,9 +105,7 @@ enum class ContributionType {
     @SerialName("Other") OTHER
 }
 
-/**
- * The status of metadata harvesting of the various tools.
- */
+/** The status of metadata harvesting of the various tools. */
 enum class HarvestStatus {
     NOT_HARVESTED,
     PARTIALLY_HARVESTED,

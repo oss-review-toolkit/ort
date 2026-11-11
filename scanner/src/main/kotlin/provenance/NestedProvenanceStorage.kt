@@ -26,9 +26,7 @@ import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-/**
- * A storage for resolved [NestedProvenance]s.
- */
+/** A storage for resolved [NestedProvenance]s. */
 interface NestedProvenanceStorage {
     companion object {
         /**
@@ -52,9 +50,7 @@ interface NestedProvenanceStorage {
         }
     }
 
-    /**
-     * Return the [NestedProvenanceResolutionResult] for the [root] provenance, or null if no result was stored.
-     */
+    /** Return the [NestedProvenanceResolutionResult] for the [root] provenance, or null if no result was stored. */
     suspend fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult?
 
     /**
@@ -64,17 +60,11 @@ interface NestedProvenanceStorage {
     suspend fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult)
 }
 
-/**
- * The result of a [NestedProvenance] resolution.
- */
+/** The result of a [NestedProvenance] resolution. */
 data class NestedProvenanceResolutionResult(
-    /**
-     * The resolved [NestedProvenance].
-     */
+    /** The resolved [NestedProvenance]. */
     val nestedProvenance: NestedProvenance,
 
-    /**
-     * True if the revisions of all [RepositoryProvenance.vcsInfo] within [nestedProvenance] are fixed revisions.
-     */
+    /** True if the revisions of all [RepositoryProvenance.vcsInfo] within [nestedProvenance] are fixed revisions. */
     val hasOnlyFixedRevisions: Boolean
 )

@@ -34,15 +34,11 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
  *  See https://spdx.github.io/spdx-spec/v2.3/package-information/#721-external-reference-field.
  */
 data class SpdxExternalReference(
-    /**
-     * Human-readable information about the purpose and target of the reference.
-     */
+    /** Human-readable information about the purpose and target of the reference. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = "",
 
-    /**
-     * The category of this reference which corresponds to the [referenceType].
-     */
+    /** The category of this reference which corresponds to the [referenceType]. */
     val referenceCategory: Category,
 
     /**

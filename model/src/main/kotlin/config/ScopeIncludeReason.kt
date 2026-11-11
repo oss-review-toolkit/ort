@@ -19,13 +19,9 @@
 package org.ossreviewtoolkit.model.config
 
 enum class ScopeIncludeReason {
-    /**
-     * The scope contains packages which are included in distributed build.
-     */
+    /** The scope contains packages which are included in distributed build. */
     SOURCE_OF,
 
-    /**
-     * A fallback reason for the [ScopeIncludeReason] when none of the other reasons apply.
-     */
+    /** A fallback reason for the [ScopeIncludeReason] when none of the other reasons apply. */
     OTHER
 }

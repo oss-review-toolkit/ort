@@ -37,19 +37,13 @@ import kotlinx.serialization.encoding.Decoder
 @Serializable(SpdxLicenseSerializer::class)
 @Suppress("EnumEntryName", "EnumNaming")
 enum class SpdxLicense(
-    /**
-     * The SPDX id of the license.
-     */
+    /** The SPDX id of the license. */
     val id: String,
 
-    /**
-     * The human-readable name of the license.
-     */
+    /** The human-readable name of the license. */
     val fullName: String,
 
-    /**
-     * Whether the [id] is deprecated or not.
-     */
+    /** Whether the [id] is deprecated or not. */
     val deprecated: Boolean = false
 ) {
     AAL("AAL", "Attribution Assurance License"),
@@ -794,21 +788,15 @@ enum class SpdxLicense(
     _3D_SLICER_1_0("3D-Slicer-1.0", "3D Slicer License v1.0");
 
     companion object {
-        /**
-         * The version of the license list.
-         */
+        /** The version of the license list. */
         const val LICENSE_LIST_VERSION = "3.29.0"
 
-        /**
-         * Return the enum value for the given [id], or null if it is no SPDX license id.
-         */
+        /** Return the enum value for the given [id], or null if it is no SPDX license id. */
         @JvmStatic
         fun forId(id: String) = ENUM_ENTRY_FOR_LOWERCASE_ID_OR_FULL_NAME[id.lowercase()]
     }
 
-    /**
-     * The full license text as a string.
-     */
+    /** The full license text as a string. */
     val text by lazy { checkNotNull(javaClass.getResource("/licenses/$id")).readText() }
 }
 

@@ -21,13 +21,9 @@ package org.ossreviewtoolkit.utils.ort.storage
 
 import java.io.InputStream
 
-/**
- * A storage for files, like a local directory or a remote server.
- */
+/** A storage for files, like a local directory or a remote server. */
 interface FileStorage {
-    /**
-     * Return whether the given [path] exists or not.
-     */
+    /** Return whether the given [path] exists or not. */
     suspend fun exists(path: String): Boolean
 
     /**
@@ -42,8 +38,6 @@ interface FileStorage {
      */
     suspend fun write(path: String, inputStream: InputStream)
 
-    /**
-     * Delete the file at the given [path] and return whether the operation was successful.
-     */
+    /** Delete the file at the given [path] and return whether the operation was successful. */
     suspend fun delete(path: String): Boolean
 }

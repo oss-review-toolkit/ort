@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.rules
 
-/**
- * An enum specifying the type of "ignore rule".
- */
+/** An enum specifying the type of "ignore rule". */
 enum class RuleType {
     /**
      * A rule that allows to ignore all directories with a specific name during scan.
@@ -29,13 +27,9 @@ enum class RuleType {
      */
     DIRECTORY,
 
-    /**
-     * A rule that allows to ignore all files with a given extension during scan.
-     */
+    /** A rule that allows to ignore all files with a given extension during scan. */
     EXTENSION,
 
-    /**
-     * A rule that allows to ignore all files with a specific name during scan.
-     */
+    /** A rule that allows to ignore all files with a specific name during scan. */
     FILE
 }

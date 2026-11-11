@@ -26,24 +26,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties("parallel_transactions")
 data class PostgresConnection(
-    /**
-     * The database URL in JDBC format.
-     */
+    /** The database URL in JDBC format. */
     val url: String,
 
-    /**
-     * The name of the database to use.
-     */
+    /** The name of the database to use. */
     val schema: String = "public",
 
-    /**
-     * The username to use for authentication.
-     */
+    /** The username to use for authentication. */
     val username: String,
 
-    /**
-     * The password to use for authentication.
-     */
+    /** The password to use for authentication. */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String = "",
 

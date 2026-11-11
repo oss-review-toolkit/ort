@@ -29,14 +29,10 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 
-/**
- * A reader that reads [ScanResult]s from a storage.
- */
+/** A reader that reads [ScanResult]s from a storage. */
 sealed interface ScanStorageReader
 
-/**
- * A [ScanStorageReader]s that reads [ScanResult]s from a storage that stores results associated to [Package]s.
- */
+/** A [ScanStorageReader]s that reads [ScanResult]s from a storage that stores results associated to [Package]s. */
 interface PackageBasedScanStorageReader : ScanStorageReader {
     /**
      * Read all [ScanResult]s for the provided [package][pkg]. The results have to match the
@@ -53,9 +49,7 @@ interface PackageBasedScanStorageReader : ScanStorageReader {
     ): List<NestedProvenanceScanResult>
 }
 
-/**
- * A [ScanStorageReader] that reads [ScanResult]s from a storage that stores results associated to [Provenance]s.
- */
+/** A [ScanStorageReader] that reads [ScanResult]s from a storage that stores results associated to [Provenance]s. */
 interface ProvenanceBasedScanStorageReader : ScanStorageReader {
     /**
      * Read all [ScanResult]s for the provided [provenance]. If the [provenance] is an [ArtifactProvenance], the URL and
@@ -70,14 +64,10 @@ interface ProvenanceBasedScanStorageReader : ScanStorageReader {
     suspend fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher? = null): List<ScanResult>
 }
 
-/**
- * A writer that writes [ScanResult]s to a storage.
- */
+/** A writer that writes [ScanResult]s to a storage. */
 sealed interface ScanStorageWriter
 
-/**
- * A [ScanStorageWriter] that writes [ScanResult]s to a storage that stores results associated to [Package]s.
- */
+/** A [ScanStorageWriter] that writes [ScanResult]s to a storage that stores results associated to [Package]s. */
 interface PackageBasedScanStorageWriter : ScanStorageWriter {
     /**
      * Write the provided [nestedProvenanceScanResult] to the storage, associated to the provided [package][pkg].
@@ -90,9 +80,7 @@ interface PackageBasedScanStorageWriter : ScanStorageWriter {
     suspend fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult)
 }
 
-/**
- * A [ScanStorageWriter] that writer [ScanResult]s to a storage that stores results by their [Provenance].
- */
+/** A [ScanStorageWriter] that writer [ScanResult]s to a storage that stores results by their [Provenance]. */
 interface ProvenanceBasedScanStorageWriter : ScanStorageWriter {
     /**
      * Write the provided [scanResult] to the storage. The [scanResult] must have a [KnownProvenance], and if it has a

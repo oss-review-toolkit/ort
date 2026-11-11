@@ -30,9 +30,7 @@ import okhttp3.OkHttpClient
 
 import retrofit2.HttpException
 
-/**
- * This class wraps the OSV service to make its use simpler and less error-prone.
- */
+/** This class wraps the OSV service to make its use simpler and less error-prone. */
 class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = null) {
     private val service = OsvService.create(serverUrl, httpClient)
 
