@@ -19,6 +19,7 @@ The most important tasks for this project are:
 | installDist | Build all projects and install the start scripts for distribution |
 
 All contributions need to pass the `detekt`, `test` and `funTest` checks before they can be merged.
+When running these tasks for all projects, pass `--continue` to Gradle to not stop at the first failing project, but to get all issues reported in one go.
 
 For IDE development, we recommend the [IntelliJ IDEA Community Edition](https://www.jetbrains.com/idea/download/) which can directly import the Gradle build files.
 After cloning the project's source code recursively, run IDEA and use the following steps to import the project.
@@ -86,20 +87,20 @@ npx commitlint --from=HEAD~2
 It can be executed locally using the Gradle tasks for each source set:
 
 ```shell
-./gradlew detektMain detektTestFixtures detektTest detektFunTest
+./gradlew --continue detektMain detektTestFixtures detektTest detektFunTest
 ```
 
 The above tasks can be slow because they use [type resolution](https://detekt.dev/docs/gettingstarted/type-resolution/).
 To run only the subset of rules that do not require type resolution, use:
 
 ```shell
-./gradlew detekt
+./gradlew --continue detekt
 ```
 
 To automatically fix some common style issues like the import order or the spacing around operators, use:
 
 ```shell
-./gradlew detekt --auto-correct
+./gradlew --continue detekt --auto-correct
 ```
 
 ### Markdownlint
