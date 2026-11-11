@@ -110,3 +110,6 @@ ORT:
     autoCorrect: true
   OrtPackageNaming:
     active: true
+  OrtSingleLineKDoc:
+    active: true
+    autoCorrect: true
