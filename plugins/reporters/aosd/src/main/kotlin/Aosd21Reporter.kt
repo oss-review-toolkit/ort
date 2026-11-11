@@ -45,22 +45,10 @@ import org.ossreviewtoolkit.utils.spdxexpression.nullOrBlankToSpdxNoassertionOrN
 class Aosd21Reporter(override val descriptor: PluginDescriptor = Aosd21ReporterFactory.descriptor) : Reporter {
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val reportFiles = input.ortResult.getProjects(omitExcluded = true).map { project ->
-            val indexedPackages = input.ortResult.getPackages(omitExcluded = true).withIndex().associateBy {
-                it.value.metadata.id
-            }
-
-            val directDependencies = input.ortResult.getDependencies(project.id, maxLevel = 1, omitExcluded = true)
-
             runCatching {
                 // Do not validate the AOSD21 object here as it has the impracticable requirement to contain at least
                 // one direct dependency / component.
-                val model = AOSD21(
-                    externalId = project.id.toCoordinates(),
-                    directDependencies = directDependencies.mapNotNullTo(mutableSetOf()) {
-                        indexedPackages[it]?.index?.toLong()
-                    },
-                    components = indexedPackages.toComponents(input, project)
-                )
+                val model = createAosdModel(input, project)
 
                 val projectName = project.id.toPath("-")
 
@@ -70,6 +58,22 @@ class Aosd21Reporter(override val descriptor: PluginDescriptor = Aosd21ReporterF
 
         return reportFiles
     }
+}
+
+private fun createAosdModel(input: ReporterInput, project: Project): AOSD21 {
+    val indexedPackages = input.ortResult.getPackages(omitExcluded = true).withIndex().associateBy {
+        it.value.metadata.id
+    }
+
+    val directDependencies = input.ortResult.getDependencies(project.id, maxLevel = 1, omitExcluded = true)
+
+    return AOSD21(
+        externalId = project.id.toCoordinates(),
+        directDependencies = directDependencies.mapNotNullTo(mutableSetOf()) {
+            indexedPackages[it]?.index?.toLong()
+        },
+        components = indexedPackages.toComponents(input, project)
+    )
 }
 
 private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
