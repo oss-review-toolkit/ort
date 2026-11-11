@@ -130,7 +130,17 @@ private fun findLicenseDataInstallationDir(): File? {
     }
 
     val pythonBinDir = listOf("bin", "Scripts")
-    val scanCodeBaseDir = scanCodeExeDir?.takeUnless { it.name in pythonBinDir } ?: scanCodeExeDir?.parentFile
+    val scanCodeBaseDir = scanCodeExeDir?.let {
+        when {
+            // If ScanCode has been installed from source, the bin dir is within the virtual environment, see
+            // https://scancode-toolkit.readthedocs.io/en/latest/getting-started/installation/install-scancode-from-source.html.
+            it.invariantSeparatorsPath.endsWith("/venv/bin") -> it.parentFile.parentFile
+
+            it.name in pythonBinDir -> it.parentFile
+
+            else -> it
+        }
+    }
 
     if (scanCodeBaseDir == null) {
         logger.debug { "Could not locate the ScanCode base directory." }
