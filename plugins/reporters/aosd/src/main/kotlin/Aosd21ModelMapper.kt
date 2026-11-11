@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.reporters.aosd
 
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyNavigator
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.licenses.LicenseView
@@ -31,9 +31,10 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdxexpression.nullOrBlankToSpdxNoassertionOrNone
 
 internal fun createAosdModel(input: ReporterInput, project: Project): AOSD21 {
-    val indexedPackages = input.ortResult.getPackages(omitExcluded = true).withIndex().associateBy {
-        it.value.metadata.id
-    }
+    val indexedPackages = input.ortResult.getPackages(omitExcluded = true)
+        .map { it.metadata }
+        .withIndex()
+        .associateBy { it.value.id }
 
     val directDependencies = input.ortResult.getDependencies(project.id, maxLevel = 1, omitExcluded = true)
 
@@ -46,18 +47,18 @@ internal fun createAosdModel(input: ReporterInput, project: Project): AOSD21 {
     )
 }
 
-private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
+private fun Map<Identifier, IndexedValue<Package>>.toComponents(
     input: ReporterInput,
     project: Project
 ): Set<Component> =
     values.mapTo(mutableSetOf()) { (index, pkg) ->
-        val dependencies = input.ortResult.getDependencies(pkg.metadata.id, maxLevel = 1, omitExcluded = true)
-        val node = input.ortResult.dependencyNavigator.findBreadthFirst(project, pkg.metadata.id)
+        val dependencies = input.ortResult.getDependencies(pkg.id, maxLevel = 1, omitExcluded = true)
+        val node = input.ortResult.dependencyNavigator.findBreadthFirst(project, pkg.id)
 
-        val licenseChoices = input.ortResult.getLicenseChoicesForId(pkg.metadata.id)
+        val licenseChoices = input.ortResult.getLicenseChoicesForId(pkg.id)
         val licenseView = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
 
-        val effectiveLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.metadata.id)
+        val effectiveLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
             .filterExcluded()
             .applyChoices(licenseChoices, licenseView)
 
@@ -69,7 +70,7 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
             input.licenseFactProvider.getLicenseText(license)?.text
         }.joinToString("\n--\n") { it.trimEnd() }
 
-        with(pkg.metadata) {
+        with(pkg) {
             Component(
                 id = index.toLong(),
                 componentName = id.name,
