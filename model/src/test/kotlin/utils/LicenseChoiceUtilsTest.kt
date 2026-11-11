@@ -122,6 +122,48 @@ class LicenseChoiceUtilsTest : WordSpec({
                 "Apache-2.0 OR BSD-3-Clause" to "Apache-2.0"
             )
         }
+
+        "keep a choice for a single or-later expression" {
+            val provider = SimpleLicenseInfoProviderBuilder().set(
+                identifier = "Maven:a:b:1.0.0",
+                declared = "GPL-2.0-or-later"
+            ).build()
+
+            val choices = listOf(
+                SpdxLicenseChoice(
+                    given = "GPL-2.0-or-later".toSpdx(),
+                    choice = "GPL-3.0-only".toSpdx()
+                )
+            )
+
+            choices.filterRepositoryLicenseChoices(
+                provider.getIdentifiers(),
+                provider.createResolver()
+            ).map { it.given.toString() to it.choice.toString() } should containExactlyInAnyOrder(
+                "GPL-2.0-or-later" to "GPL-3.0-only"
+            )
+        }
+
+        "keep a choice for a compound or-later expression without an OR" {
+            val provider = SimpleLicenseInfoProviderBuilder().set(
+                identifier = "Maven:a:b:1.0.0",
+                declared = "GPL-2.0-or-later AND MTI"
+            ).build()
+
+            val choices = listOf(
+                SpdxLicenseChoice(
+                    given = "GPL-2.0-or-later".toSpdx(),
+                    choice = "GPL-3.0-only".toSpdx()
+                )
+            )
+
+            choices.filterRepositoryLicenseChoices(
+                provider.getIdentifiers(),
+                provider.createResolver()
+            ).map { it.given.toString() to it.choice.toString() } should containExactlyInAnyOrder(
+                "GPL-2.0-or-later" to "GPL-3.0-only"
+            )
+        }
     }
 })
 
