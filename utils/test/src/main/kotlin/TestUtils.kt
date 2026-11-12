@@ -61,8 +61,11 @@ fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>): Advisor
         results = results.toMap()
     )
 
-/** Return the absolute file for the functional test assets at the given [path]. */
-fun getAssetFile(path: String): File = File("src/funTest/assets", path).absoluteFile
+/** Return the absolute file for the (functional) test assets at the given [path]. Throws if multiple files exists. */
+fun getAssetFile(path: String): File =
+    File(path).takeIf { it.isAbsolute } ?: listOf("funTest", "test")
+        .map { File("src/$it/assets/$path").absoluteFile }
+        .single { it.exists() }
 
 /**
  * Return a string representation of the [expectedResult] contents that has placeholders replaced. If a [definitionFile]
