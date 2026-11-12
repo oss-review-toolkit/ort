@@ -23,7 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-import java.io.File
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class ScanCodeLicenseDataDirReaderTest : WordSpec({
     val reader = ScanCodeLicenseDataDirReader(getAssetFile("license-data"))
@@ -70,5 +70,3 @@ class ScanCodeLicenseDataDirReaderTest : WordSpec({
         }
     }
 })
-
-private fun getAssetFile(path: String) = File("src/test/assets", path).absoluteFile
