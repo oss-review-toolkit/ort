@@ -44,7 +44,7 @@ internal class ScanCodeLicenseDataDirReader(
         buildMap<String, MutableSet<File>> {
             // Process the files in sorted order to get a deterministic effect also in case multiple files define
             // the same license identifier.
-            licenseDataDir.listFiles().filter { it.extension == "LICENSE" }.sortedBy { it.name }.forEach { file ->
+            licenseDataDir.walk().filter { it.extension == "LICENSE" }.sortedBy { it.name }.forEach { file ->
                 val licenseData = runCatching {
                     parseScanCodeLicenseDataFile(file)
                 }.getOrElse { e ->
