@@ -107,3 +107,11 @@ dependencyResolutionManagement {
         }
     }
 }
+
+kover {
+    instrumentation {
+        // Avoid a failure in TychoFunTest due to the Felix OSGi bundle failing to start because its class loader cannot
+        // find `com.intellij.rt.coverage.instrumentation.CoverageRuntime`.
+        excludedClasses.add("org.apache.felix.scr.*")
+    }
+}
