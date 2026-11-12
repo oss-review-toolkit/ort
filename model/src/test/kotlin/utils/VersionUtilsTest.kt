@@ -83,7 +83,7 @@ class VersionUtilsTest : WordSpec({
             }
         }
 
-        "handle exclusive braces" {
+        "handle exclusive braces with three segments" {
             with("]1.2.3,4.5.6[") {
                 isApplicableIvyVersion("1.2.3") shouldBe false
                 isApplicableIvyVersion("1.2.4") shouldBe true
@@ -94,10 +94,15 @@ class VersionUtilsTest : WordSpec({
                 isApplicableIvyVersion("1.3") shouldBe true
                 isApplicableIvyVersion("4.5") shouldBe true
                 isApplicableIvyVersion("4.6") shouldBe false
+
+                isApplicableIvyVersion("1.2.2.999") shouldBe false
+                isApplicableIvyVersion("1.2.3.1") shouldBe true
+                isApplicableIvyVersion("4.5.5.999") shouldBe true
+                isApplicableIvyVersion("4.5.6.0") shouldBe false
             }
         }
 
-        "handle inclusive braces" {
+        "handle inclusive braces with three segments" {
             with("[1.2.3,4.5.6]") {
                 isApplicableIvyVersion("1.2.2") shouldBe false
                 isApplicableIvyVersion("1.2.3") shouldBe true
@@ -108,6 +113,39 @@ class VersionUtilsTest : WordSpec({
                 isApplicableIvyVersion("1.3") shouldBe true
                 isApplicableIvyVersion("4.5") shouldBe true
                 isApplicableIvyVersion("4.6") shouldBe false
+
+                isApplicableIvyVersion("1.2.2.999") shouldBe false
+                isApplicableIvyVersion("1.2.3.0") shouldBe true
+                isApplicableIvyVersion("4.5.6.0") shouldBe true
+                isApplicableIvyVersion("4.5.6.1") shouldBe false
+            }
+        }
+
+        "handle exclusive braces with four segments" {
+            with("]1.2.3.4,5.6.7.8[") {
+                isApplicableIvyVersion("1.2.3.4") shouldBe false
+                isApplicableIvyVersion("1.2.4.5") shouldBe true
+                isApplicableIvyVersion("5.6.7.7") shouldBe true
+                isApplicableIvyVersion("5.6.7.8") shouldBe false
+
+                isApplicableIvyVersion("1.2.3") shouldBe false
+                isApplicableIvyVersion("1.2.4") shouldBe true
+                isApplicableIvyVersion("5.6.7") shouldBe true
+                isApplicableIvyVersion("5.6.8") shouldBe false
+            }
+        }
+
+        "handle inclusive braces with four segments" {
+            with("[1.2.3.4,5.6.7.8]") {
+                isApplicableIvyVersion("1.2.3.3") shouldBe false
+                isApplicableIvyVersion("1.2.3.4") shouldBe true
+                isApplicableIvyVersion("5.6.7.8") shouldBe true
+                isApplicableIvyVersion("5.6.7.9") shouldBe false
+
+                isApplicableIvyVersion("1.2.3") shouldBe false
+                isApplicableIvyVersion("1.2.4") shouldBe true
+                isApplicableIvyVersion("5.6.7") shouldBe true
+                isApplicableIvyVersion("5.6.8") shouldBe false
             }
         }
     }
