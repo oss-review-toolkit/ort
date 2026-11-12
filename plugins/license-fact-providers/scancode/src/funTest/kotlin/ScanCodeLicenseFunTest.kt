@@ -33,7 +33,7 @@ class ScanCodeLicenseFunTest : WordSpec({
     "parseScanCodeLicenseDataFile()" should {
         "be able to parse all .LICENSE files in the detected ScanCode license data dir" {
             val licenseDataDir = findLicenseDataDir().shouldNotBeNull()
-            val licenseDataFiles = licenseDataDir.listFiles { it.extension == "LICENSE" }
+            val licenseDataFiles = licenseDataDir.walk().filterTo(mutableListOf()) { it.extension == "LICENSE" }
 
             licenseDataFiles.size should beGreaterThan(10)
             licenseDataFiles.forAll { file ->
