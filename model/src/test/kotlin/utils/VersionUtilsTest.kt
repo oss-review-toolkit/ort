@@ -82,6 +82,34 @@ class VersionUtilsTest : WordSpec({
                 isApplicableIvyVersion("1.10") shouldBe true
             }
         }
+
+        "handle exclusive braces" {
+            with("]1.2.3,4.5.6[") {
+                isApplicableIvyVersion("1.2.3") shouldBe false
+                isApplicableIvyVersion("1.2.4") shouldBe true
+                isApplicableIvyVersion("4.5.5") shouldBe true
+                isApplicableIvyVersion("4.5.6") shouldBe false
+
+                isApplicableIvyVersion("1.2") shouldBe false
+                isApplicableIvyVersion("1.3") shouldBe true
+                isApplicableIvyVersion("4.5") shouldBe true
+                isApplicableIvyVersion("4.6") shouldBe false
+            }
+        }
+
+        "handle inclusive braces" {
+            with("[1.2.3,4.5.6]") {
+                isApplicableIvyVersion("1.2.2") shouldBe false
+                isApplicableIvyVersion("1.2.3") shouldBe true
+                isApplicableIvyVersion("4.5.6") shouldBe true
+                isApplicableIvyVersion("4.5.7") shouldBe false
+
+                isApplicableIvyVersion("1.2") shouldBe false
+                isApplicableIvyVersion("1.3") shouldBe true
+                isApplicableIvyVersion("4.5") shouldBe true
+                isApplicableIvyVersion("4.6") shouldBe false
+            }
+        }
     }
 })
 
