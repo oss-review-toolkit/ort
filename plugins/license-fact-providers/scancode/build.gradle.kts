@@ -33,5 +33,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.yaml)
 
+    testImplementation(projects.utils.testUtils)
+
     ksp(projects.plugins.licenseFactProviders.licenseFactProviderApi)
 }

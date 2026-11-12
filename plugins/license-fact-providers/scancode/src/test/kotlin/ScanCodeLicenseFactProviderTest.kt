@@ -24,11 +24,11 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class ScanCodeLicenseFactProviderTest : WordSpec({
     val provider = ScanCodeLicenseFactProviderFactory.create(
-        licenseDataDir = getAssetFile("license-data").absolutePath
+        licenseDataDir = getAssetFile("license-data").path
     )
 
     "getLicenseText()" should {
@@ -61,5 +61,3 @@ class ScanCodeLicenseFactProviderTest : WordSpec({
         }
     }
 })
-
-private fun getAssetFile(path: String) = File("src/test/assets", path).absoluteFile
