@@ -31,7 +31,12 @@ import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
 /** Return true if the version of this [Identifier] is an Ivy version range. */
-fun Identifier.hasIvyVersionRange(): Boolean = version.getIvyVersionRanges().get().isNotEmpty()
+fun Identifier.hasIvyVersionRange(): Boolean =
+    if (shouldEncode(null, version)) {
+        version.encodeFourIntoThreeSegments()
+    } else {
+        version
+    }.getIvyVersionRanges().get().isNotEmpty()
 
 /**
  * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
@@ -60,12 +65,79 @@ private fun matchesIvyVersionRange(version: String, versionRange: String): Boole
     // Support "Sub Revision Matcher" syntax.
     if (versionRange.withoutSuffix("+")?.let { prefix -> version.startsWith(prefix) } == true) return true
 
+    val (encodedVersion, encodedVersionRange) = encodeVersionAndRange(version, versionRange)
+
     // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
     // https://github.com/semver4j/semver4j/issues/132.
-    val ranges = versionRange.getIvyVersionRanges()
+    val ranges = encodedVersionRange.getIvyVersionRanges()
 
-    return Semver.coerce(version)?.satisfies(ranges) == true
+    return Semver.coerce(encodedVersion)?.satisfies(ranges) == true
 }
+
+/**
+ * Return an encoded version and version range if [shouldEncode] returns true for the given [version] and
+ * [versionRange]. Otherwise, the given [version] and [versionRange] are returned as-is. The encoding works as follows:
+ *
+ * 1. Enhance all version strings to have four segments, by adding segments with 0 as value to the end if needed.
+ * 2. Merge the third and the forth segment into one, by shifting the digits of the third segments 4 to the left.
+ *
+ * This ensures the encoded version strings have exactly three segments and are supposed to work with Semver4j
+ * seamlessly. For example, "1.2.3456.7890" becomes "1.2.3456789", which is a valid semver string.
+ */
+internal fun encodeVersionAndRange(version: String, versionRange: String): Pair<String, String> =
+    if (shouldEncode(version, versionRange)) {
+        version.encodeFourIntoThreeSegments() to versionRange.encodeFourIntoThreeSegments()
+    } else {
+        version to versionRange
+    }
+
+// Capture groups:
+// 1: Optional 'v' prefix
+// 2: Major segment
+// 3: Minor segment (optional)
+// 4: Patch segment (optional)
+// 5: Fourth segment (optional)
+// 6: Overflow segments, i.e., 5th+ segments (optional)
+private val VERSION_SEGMENTS_REGEX = Regex(
+    """(?<![\w.+-])([vV]?)([0-9]+)(?:\.([0-9]+))?(?:\.([0-9]+))?(?:\.([0-9]+))?((?:\.[0-9]+)+)?(?=$|[^\w.])"""
+)
+
+/**
+ * Returns true if at least one version string with four segments is contained in
+ * [version] or [versionRange], but none with more than four segments is contained, and all segments are less than
+ * 10000.
+ */
+private fun shouldEncode(version: String?, versionRange: String): Boolean {
+    val matches = listOfNotNull(versionRange, version).map {
+        VERSION_SEGMENTS_REGEX.findAll(it).toList()
+    }.flatten()
+
+    val hasUnencodableSegments = matches.any { match ->
+        match.groupValues[6].isNotEmpty() || (2..5).any { match.groupValues[it].length > 4 }
+    }
+
+    if (hasUnencodableSegments) return false
+
+    return matches.any { it.groupValues[5].isNotEmpty() }
+}
+
+/**
+ * Replace any 4 segment version string contained in [this] by a 3 segment version string, which has the most minor
+ * segments combined.
+ */
+internal fun String.encodeFourIntoThreeSegments(): String =
+    VERSION_SEGMENTS_REGEX.replace(this) { match ->
+        fun getSegment(groupIndex: Int): Int = match.groupValues[groupIndex].toIntOrNull() ?: 0
+
+        // Normalize the prefix to lowercase, so that Semver4J's coerce does not drop any pre-release suffix.
+        val prefix = match.groupValues[1].lowercase()
+        val major = getSegment(2)
+        val minor = getSegment(3)
+        // The regex matches only segments with maximum four digits, so use 10000 as multiplier.
+        val patch = (getSegment(4) * 10000) + getSegment(5)
+
+        "$prefix$major.$minor.$patch"
+    }
 
 /**
  * Get the version ranges contained in this string. Return an empty list if no (non-pathological) ranges are contained.

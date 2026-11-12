@@ -145,6 +145,15 @@ class PackageConfigurationTest : WordSpec({
             config.matches(config.id.copy(version = "55"), ARTIFACT_PROVENANCE) shouldBe true
         }
 
+        "return true if source code origin is equal and identifier matches with four segment version is in range" {
+            val config = PackageConfiguration(
+                id = Identifier.EMPTY.copy(name = "some-name", version = "]55.0.0.10,55.0.0.20["),
+                sourceCodeOrigin = SourceCodeOrigin.ARTIFACT
+            )
+
+            config.matches(config.id.copy(version = "55.0.0.15"), ARTIFACT_PROVENANCE) shouldBe true
+        }
+
         "return false if only source code origin is not equal" {
             val config = PackageConfiguration(
                 id = Identifier.EMPTY.copy(name = "some-name"),

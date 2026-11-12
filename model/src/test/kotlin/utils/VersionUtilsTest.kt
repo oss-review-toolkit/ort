@@ -83,7 +83,7 @@ class VersionUtilsTest : WordSpec({
             }
         }
 
-        "handle exclusive braces" {
+        "handle exclusive braces with three segments" {
             with("]1.2.3,4.5.6[") {
                 isApplicableIvyVersion("1.2") shouldBe false
                 isApplicableIvyVersion("1.3") shouldBe true
@@ -94,10 +94,15 @@ class VersionUtilsTest : WordSpec({
                 isApplicableIvyVersion("1.2.4") shouldBe true
                 isApplicableIvyVersion("4.5.5") shouldBe true
                 isApplicableIvyVersion("4.5.6") shouldBe false
+
+                isApplicableIvyVersion("1.2.2.999") shouldBe false
+                isApplicableIvyVersion("1.2.3.1") shouldBe true
+                isApplicableIvyVersion("4.5.5.999") shouldBe true
+                isApplicableIvyVersion("4.5.6.0") shouldBe false
             }
         }
 
-        "handle inclusive braces" {
+        "handle inclusive braces with three segments" {
             with("[1.2.3,4.5.6]") {
                 isApplicableIvyVersion("1.2") shouldBe false
                 isApplicableIvyVersion("1.3") shouldBe true
@@ -108,10 +113,113 @@ class VersionUtilsTest : WordSpec({
                 isApplicableIvyVersion("1.2.3") shouldBe true
                 isApplicableIvyVersion("4.5.6") shouldBe true
                 isApplicableIvyVersion("4.5.7") shouldBe false
+
+                isApplicableIvyVersion("1.2.2.999") shouldBe false
+                isApplicableIvyVersion("1.2.3.0") shouldBe true
+                isApplicableIvyVersion("4.5.6.0") shouldBe true
+                isApplicableIvyVersion("4.5.6.1") shouldBe false
+            }
+        }
+
+        "handle exclusive braces with four segments" {
+            with("]1.2.3.4,5.6.7.8[") {
+                isApplicableIvyVersion("1.2.3") shouldBe false
+                isApplicableIvyVersion("1.2.4") shouldBe true
+                isApplicableIvyVersion("5.6.7") shouldBe true
+                isApplicableIvyVersion("5.6.8") shouldBe false
+
+                isApplicableIvyVersion("1.2.3.4") shouldBe false
+                isApplicableIvyVersion("1.2.4.5") shouldBe true
+                isApplicableIvyVersion("5.6.7.7") shouldBe true
+                isApplicableIvyVersion("5.6.7.8") shouldBe false
+            }
+        }
+
+        "handle inclusive braces with four segments" {
+            with("[1.2.3.4,5.6.7.8]") {
+                isApplicableIvyVersion("1.2.3") shouldBe false
+                isApplicableIvyVersion("1.2.4") shouldBe true
+                isApplicableIvyVersion("5.6.7") shouldBe true
+                isApplicableIvyVersion("5.6.8") shouldBe false
+
+                isApplicableIvyVersion("1.2.3.3") shouldBe false
+                isApplicableIvyVersion("1.2.3.4") shouldBe true
+                isApplicableIvyVersion("5.6.7.8") shouldBe true
+                isApplicableIvyVersion("5.6.7.9") shouldBe false
+            }
+        }
+
+        "handle more complex versions at inclusive lower bound" {
+            with("[1.2.3.4,5.7.6.8]") {
+                isApplicableIvyVersion("v1.2.3.4-beta.1+exp.sha.5114f85") shouldBe false
+                isApplicableIvyVersion("v1.2.3.4-SNAPSHOT") shouldBe false
+
+                isApplicableIvyVersion("1.2.3.3+20261116") shouldBe false
+                isApplicableIvyVersion("1.2.3.4+20261116") shouldBe true
+
+                isApplicableIvyVersion("1.2.3.3+build.45") shouldBe false
+                isApplicableIvyVersion("1.2.3.4+build.45") shouldBe true
+            }
+        }
+
+        "handle lowercase and uppercase v-prefixes" {
+            with("[1.2.3.4,1.2.5.0]") {
+                isApplicableIvyVersion("v1.2.4") shouldBe true
+                isApplicableIvyVersion("V1.2.4") shouldBe true
+
+                isApplicableIvyVersion("v1.2.3.4-beta.1") shouldBe false
+                isApplicableIvyVersion("V1.2.3.4-beta.1") shouldBe false
+
+                isApplicableIvyVersion("v1.2.3-beta.1") shouldBe false
+                isApplicableIvyVersion("V1.2.3-beta.1") shouldBe false
             }
         }
     }
+
+    "hasIvyVersionRanges()" should {
+        "work for up to four segments with less than 4 digits" {
+            "[1.2.3.4,5.0]".hasIvyVersionRange() shouldBe true
+            "[1.2.3.4.5,6.0]".hasIvyVersionRange() shouldBe false
+        }
+    }
+
+    "encodeFourIntoThreeSegments()" should {
+        "encode a version string" {
+            "1".encodeFourIntoThreeSegments() shouldBe "1.0.0"
+            "1.2".encodeFourIntoThreeSegments() shouldBe "1.2.0"
+            "1.2.3".encodeFourIntoThreeSegments() shouldBe "1.2.30000"
+            "1.2.3.4".encodeFourIntoThreeSegments() shouldBe "1.2.30004"
+        }
+
+        "encode a version string with v-prefix" {
+            "v1.2".encodeFourIntoThreeSegments() shouldBe "v1.2.0"
+            "v1.2.3.4".encodeFourIntoThreeSegments() shouldBe "v1.2.30004"
+        }
+
+        "encode a version string with pre-release" {
+            "1.2-rc.12".encodeFourIntoThreeSegments() shouldBe "1.2.0-rc.12"
+            "1.2.3.4-rc.12".encodeFourIntoThreeSegments() shouldBe "1.2.30004-rc.12"
+        }
+
+        "encode a version string with build metadata" {
+            "1.2+20261116".encodeFourIntoThreeSegments() shouldBe "1.2.0+20261116"
+            "1.2.3.4+20261116".encodeFourIntoThreeSegments() shouldBe "1.2.30004+20261116"
+
+            "1.2+build.45".encodeFourIntoThreeSegments() shouldBe "1.2.0+build.45"
+            "1.2.3.4+build.45".encodeFourIntoThreeSegments() shouldBe "1.2.30004+build.45"
+        }
+
+        "encode a version string with combined cases" {
+            "1.2-beta.1+exp.sha.5114f85".encodeFourIntoThreeSegments() shouldBe "1.2.0-beta.1+exp.sha.5114f85"
+            "1.2.3.4-beta.1+exp.sha.5114f85".encodeFourIntoThreeSegments() shouldBe "1.2.30004-beta.1+exp.sha.5114f85"
+
+            "v1.2-beta.1+exp.sha.5114f85".encodeFourIntoThreeSegments() shouldBe "v1.2.0-beta.1+exp.sha.5114f85"
+            "v1.2.3.4-beta.1+exp.sha.5114f85".encodeFourIntoThreeSegments() shouldBe "v1.2.30004-beta.1+exp.sha.5114f85"
+        }
+    }
 })
+
+private fun String.hasIvyVersionRange() = Identifier(":::$this").hasIvyVersionRange()
 
 private fun String.isApplicableIvyVersion(version: String) =
     Identifier(":::$this").isApplicableIvyVersion(Identifier(":::$version"))
