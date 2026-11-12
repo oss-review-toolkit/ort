@@ -109,6 +109,9 @@ dependencyResolutionManagement {
 }
 
 kover {
+    // This project has no JVM tests but only Vitest tests.
+    skipProjects(":plugins:reporters:web-app-template")
+
     instrumentation {
         // Avoid a failure in TychoFunTest due to the Felix OSGi bundle failing to start because its class loader cannot
         // find `com.intellij.rt.coverage.instrumentation.CoverageRuntime`.
