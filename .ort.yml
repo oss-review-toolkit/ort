@@ -55,74 +55,11 @@ resolutions:
     comment: >-
       This file contains test data. Contained licenses do not apply to the OSS Review Toolkit.
   vulnerabilities:
-  - id: "CVE-2022-22965"
+  - id: "CVE-2024-6763"
     reason: "INEFFECTIVE_VULNERABILITY"
     comment: >-
-      This vulnerability is triggered by the org.springframework:spring-beans package which comes as a transitive
-      dependency of the Jira REST client used by the notifier. The vulnerability applies only to Spring MVC or Spring
-      WebFlux applications; so it is ineffective for the current usage scenario.
-  - id: "CVE-2016-7954"
-    reason: "INEFFECTIVE_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. The CVE is
-      actually assigned to Bundler which is shipped with JRuby. It is about a possibility to inject malicious code for
-      gems hosted on GitHub by deploying packages with same names on RubyGems.org. For the usage in the Reporter, this
-      is completely irrelevant. For the Analyzer, the issue does not affect ORT itself, but applications analyzed by
-      ORT that use Bundler as package manager.
-  - id: "CVE-2021-41819"
-    reason: "INEFFECTIVE_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
-      related to the CGI gem. The version of the gem bundled with JRuby is greater than 0.3.1 and is therefore not
-      affected. Since ORT does not use Ruby gems to implement server functionality, this vulnerability is ineffective
-      anyway.
-  - id: "CVE-2022-40149"
-    reason: "INEFFECTIVE_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
-      by the notifier. The component is vulnerable to Denial of Service attacks causing stack overflow for specially
-      crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not an issue.
-  - id: "CVE-2022-40150"
-    reason: "INEFFECTIVE_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
-      by the notifier. The component is vulnerable to Denial of Service attacks causing out of memory errors for
-      specially crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not
-      an issue.
-  - id: "CVE-2022-45685"
-    reason: "INEFFECTIVE_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
-      by the notifier. The component is vulnerable to Denial of Service attacks due to Uncontrolled Recursion for
-      specially crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not
-      an issue.
-  - id: "CVE-2022-45693"
-    reason: "INEFFECTIVE_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
-      by the notifier. The component is vulnerable to Denial of Service attacks causing stack overflow for specially
-      crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not an issue.
-  - id: "CVE-2021-28965"
-    reason: "INVALID_MATCH_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
-      related to the RXML gem in versions prior to 3.2.5. According to
-      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles version
-      3.2.5 of this gem.
-  - id: "CVE-2021-31799"
-    reason: "INVALID_MATCH_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
-      related to the RDoc gem in versions prior to 6.3.0. According to
-      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles a higher
-      version of this gem.
-  - id: "CVE-2021-43809"
-    reason: "INVALID_MATCH_VULNERABILITY"
-    comment: >-
-      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
-      related to the Bundler component in versions prior to 2.2.23. According to
-      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles a higher
-      version of this component.
+      The vulnerable package 'Maven:org.eclipse.jetty:jetty-http:11.0.26' is introduced as a transitive dependency of 'Maven:org.wiremock:wiremock:3.13.2'
+      which is a package exclusively used for testing and thus is neither distributed nor exploitable in a deployment.
 curations:
   license_findings:
   - path: "README.md"
