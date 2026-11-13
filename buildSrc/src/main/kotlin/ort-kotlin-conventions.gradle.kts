@@ -58,6 +58,8 @@ tapmoc {
 
 testing {
     suites {
+        register<JvmTestSuite>("funTest")
+
         withType<JvmTestSuite>().configureEach {
             useJUnitJupiter()
 
@@ -68,9 +70,15 @@ testing {
                 implementation(libsCatalog.findLibrary("kotest-assertions-core").get())
                 implementation(libsCatalog.findLibrary("kotest-property").get())
             }
-        }
 
-        register<JvmTestSuite>("funTest")
+            targets.all {
+                testTask.configure {
+                    inputs.files("src/${this@configureEach.name}/assets")
+                        .withPropertyName("assets")
+                        .withPathSensitivity(PathSensitivity.RELATIVE)
+                }
+            }
+        }
     }
 }
 
