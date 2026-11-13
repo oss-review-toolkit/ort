@@ -519,7 +519,6 @@ class MavenSupport(
         }
 
         val declaredLicenses = parseLicenses(mavenProject)
-        val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
 
         val binaryRemoteArtifact = localProject?.let {
             RemoteArtifact.EMPTY
@@ -571,7 +570,7 @@ class MavenSupport(
             ),
             authors = parseAuthors(mavenProject),
             declaredLicenses = declaredLicenses,
-            declaredLicensesProcessed = declaredLicensesProcessed,
+            declaredLicensesOperator = MAVEN_DECLARED_LICENSES_OPERATOR,
             description = mavenProject.description.orEmpty(),
             homepageUrl = homepageUrl.orEmpty(),
             binaryArtifact = binaryRemoteArtifact,
