@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 @Tags("RequiresExternalTool")
 class GradleFunTest : StringSpec({
     "Root project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gradle/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-root.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -45,7 +45,7 @@ class GradleFunTest : StringSpec({
         // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
         enabled = false
     ) {
-        val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -58,7 +58,7 @@ class GradleFunTest : StringSpec({
         // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
         enabled = false
     ) {
-        val definitionFile = getAssetFile("projects/synthetic/gradle/lib/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle/lib/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -68,7 +68,7 @@ class GradleFunTest : StringSpec({
     }
 
     "Unresolved dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gradle/lib-without-repo/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle/lib-without-repo/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib-without-repo.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -81,7 +81,7 @@ class GradleFunTest : StringSpec({
         // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
         enabled = false
     ) {
-        val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-scopes-excludes.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -93,7 +93,7 @@ class GradleFunTest : StringSpec({
     "A project does not depend on itself" {
         // This is a test project which declares a dependency on itself. Gradle allows this, but such a
         // self-dependency should not show up in the result, since it makes no sense from a logical point of view.
-        val definitionFile = getAssetFile("projects/synthetic/gradle-self-dependency/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-self-dependency/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-self-dependency-expected-output-root.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")

@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GradleBomFunTest : StringSpec({
     "Gradle BOM dependencies are recognized as metadata-only" {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-bom/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-bom/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-bom-expected-output.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
