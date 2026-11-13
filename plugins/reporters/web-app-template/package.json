@@ -22,7 +22,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "lint": "biome check .",
-        "lint:fix": "biome lint --write --unsafe --only=nursery/useSortedClasses . && biome check --write .",
+        "lint:fix": "biome lint --write --unsafe --only=nursery/useTailwindSortedClasses . && biome check --write .",
         "format": "biome format --write .",
         "import-ort-file": "node scripts/import-ort-file.mjs"
     },
@@ -47,7 +47,7 @@
         "yaml": "^2.9.1"
     },
     "devDependencies": {
-        "@biomejs/biome": "^2.5.13",
+        "@biomejs/biome": "^2.6.7",
         "@tailwindcss/typography": "^0.5.20",
         "@tailwindcss/vite": "^4.3.3",
         "@testing-library/dom": "^10.4.2",

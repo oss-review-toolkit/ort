@@ -144,8 +144,8 @@ function UnmappedLicensesTable({ onSelectPackage, packages }: UnmappedLicensesTa
                     return (
                         <span
                             className={cn(
-                                "break-all font-mono text-xs",
-                                "text-muted-foreground line-through decoration-muted-foreground",
+                                "font-mono text-xs break-all",
+                                "text-muted-foreground decoration-muted-foreground line-through",
                             )}
                             title={excludeReasons.length > 0 ? `Excluded: ${excludeReasons.join(", ")}` : "Excluded"}
                         >

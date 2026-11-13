@@ -115,7 +115,7 @@ function PackageScanResultsDetails({ pkg }: PackageScanResultsDetailsProps): JSX
                     <dl className="space-y-2.5 rounded-md border p-4 text-sm">
                         {rows.map((row) => (
                             <div className="flex flex-col gap-0.5" key={row.label}>
-                                <dt className="font-medium text-muted-foreground text-xs">{row.label}</dt>
+                                <dt className="text-muted-foreground text-xs font-medium">{row.label}</dt>
                                 <dd className="break-all">{row.content}</dd>
                             </div>
                         ))}

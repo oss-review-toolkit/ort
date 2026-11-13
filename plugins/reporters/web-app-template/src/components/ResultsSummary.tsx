@@ -89,7 +89,7 @@ function SeverityBadge({ colorClass, count, label, text }: SeverityBucket): JSX.
     return (
         <span
             className={cn(
-                "inline-flex items-baseline gap-1 whitespace-nowrap rounded-md border px-1.5 py-0 text-[11px] tabular-nums",
+                "inline-flex items-baseline gap-1 rounded-md border px-1.5 py-0 text-[11px] whitespace-nowrap tabular-nums",
                 colorClass,
             )}
             title={label}
@@ -161,7 +161,7 @@ const VULNERABILITY_RATINGS = [
 // An inline link that navigates to another tab, used in the status banner call to action.
 function TabLink({ children, onClick }: { onClick?: () => void; children: ReactNode }): JSX.Element {
     return (
-        <button className="font-medium text-primary underline-offset-4 hover:underline" onClick={onClick} type="button">
+        <button className="text-primary font-medium underline-offset-4 hover:underline" onClick={onClick} type="button">
             {children}
         </button>
     );
@@ -203,27 +203,27 @@ function DetectorRow({
             className={cn(
                 // flex-1 makes every row take an equal share of the card's height so the four rows fill it.
                 "flex w-full flex-1 items-center gap-4 border-t p-4 text-left transition-colors first:border-t-0",
-                "hover:bg-muted/60 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
+                "hover:bg-muted/60 focus-visible:ring-ring focus-visible:z-10 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset",
             )}
             onClick={onClick}
             type="button"
         >
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+            <span className="bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-lg">
                 <Icon aria-hidden="true" className="size-4.5" />
             </span>
             <span className="min-w-0 flex-1">
-                <span className="block font-medium text-sm">{name}</span>
-                <span className="mt-0.5 block text-muted-foreground text-xs">{description}</span>
+                <span className="block text-sm font-medium">{name}</span>
+                <span className="text-muted-foreground mt-0.5 block text-xs">{description}</span>
             </span>
             {severities ? <SeverityBreakdown severities={severities} /> : null}
-            <span className="min-w-16 shrink-0 whitespace-nowrap text-right">
-                <span className="block font-semibold text-sm tabular-nums">
+            <span className="min-w-16 shrink-0 text-right whitespace-nowrap">
+                <span className="block text-sm font-semibold tabular-nums">
                     <span className={cn(gate && main > 0 && "text-destructive")}>{main}</span>
-                    {total !== undefined ? <span className="font-normal text-muted-foreground"> / {total}</span> : null}
+                    {total !== undefined ? <span className="text-muted-foreground font-normal"> / {total}</span> : null}
                 </span>
-                <span className="mt-0.5 block text-[11px] text-muted-foreground">{subLabel}</span>
+                <span className="text-muted-foreground mt-0.5 block text-[11px]">{subLabel}</span>
             </span>
-            <ChevronRight aria-hidden="true" className="size-4 shrink-0 text-muted-foreground/50" />
+            <ChevronRight aria-hidden="true" className="text-muted-foreground/50 size-4 shrink-0" />
         </button>
     );
 }
@@ -245,12 +245,12 @@ function SidebarStat({
 }): JSX.Element {
     return (
         <button
-            className="group -mx-1 flex w-[calc(100%+0.5rem)] items-center justify-between gap-2 rounded border-t px-1 py-2 text-left text-sm first:border-t-0 first:pt-0 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="group hover:text-foreground focus-visible:ring-ring -mx-1 flex w-[calc(100%+0.5rem)] items-center justify-between gap-2 rounded border-t px-1 py-2 text-left text-sm first:border-t-0 first:pt-0 focus-visible:ring-2 focus-visible:outline-none"
             onClick={onClick}
             title={hint}
             type="button"
         >
-            <span className="flex items-center gap-2 text-muted-foreground">
+            <span className="text-muted-foreground flex items-center gap-2">
                 <Icon aria-hidden="true" className="size-4 shrink-0" />
                 <span
                     className={cn(
@@ -281,12 +281,12 @@ function ConfigTag({
 }): JSX.Element {
     return (
         <button
-            className="group inline-flex items-center gap-1.5 rounded-md border bg-muted/40 px-2 py-1 text-muted-foreground text-xs transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="group bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs transition-colors focus-visible:ring-2 focus-visible:outline-none"
             onClick={onClick}
             title={title}
             type="button"
         >
-            <span className="font-semibold text-foreground tabular-nums">{count}</span>
+            <span className="text-foreground font-semibold tabular-nums">{count}</span>
             <span
                 className={cn(EXPLAINED_TERM, "group-hover:decoration-current group-focus-visible:decoration-current")}
             >
@@ -303,7 +303,7 @@ function resolvedAndExcludedLabel(resolved: number, excluded: number): string {
 }
 
 function SidebarHeading({ children }: { children: ReactNode }): JSX.Element {
-    return <h3 className="mb-3 font-semibold text-foreground text-xs uppercase tracking-wide">{children}</h3>;
+    return <h3 className="text-foreground mb-3 text-xs font-semibold tracking-wide uppercase">{children}</h3>;
 }
 
 // The Summary dashboard, laid out as a security-overview: a run-verdict banner, a findings list (one row
@@ -432,7 +432,7 @@ function ResultsSummary({
                 <div className="min-w-0 flex-1">
                     <p
                         className={cn(
-                            "font-semibold text-sm",
+                            "text-sm font-semibold",
                             passed ? "text-emerald-700 dark:text-emerald-400" : "text-destructive",
                         )}
                     >
@@ -464,12 +464,12 @@ function ResultsSummary({
                 {/* At-a-glance tallies, kept out of the way on narrow screens. */}
                 <dl className="flex shrink-0 gap-5 text-sm sm:pl-4">
                     <div className="flex flex-col items-end">
-                        <dt className="order-2 text-[11px] text-muted-foreground uppercase tracking-wide">
+                        <dt className="text-muted-foreground order-2 text-[11px] tracking-wide uppercase">
                             <DefinedTerm definition={FINDING_TALLY_DEFINITIONS.unresolved} term="Unresolved" />
                         </dt>
                         <dd
                             className={cn(
-                                "order-1 font-semibold text-lg tabular-nums",
+                                "order-1 text-lg font-semibold tabular-nums",
                                 severeFindings > 0 ? "text-destructive" : "text-foreground",
                             )}
                         >
@@ -477,10 +477,10 @@ function ResultsSummary({
                         </dd>
                     </div>
                     <div className="flex flex-col items-end">
-                        <dt className="order-2 text-[11px] text-muted-foreground uppercase tracking-wide">
+                        <dt className="text-muted-foreground order-2 text-[11px] tracking-wide uppercase">
                             <DefinedTerm definition={FINDING_TALLY_DEFINITIONS.resolved} term="Resolved" />
                         </dt>
-                        <dd className="order-1 font-semibold text-lg tabular-nums">{resolvedFindings}</dd>
+                        <dd className="order-1 text-lg font-semibold tabular-nums">{resolvedFindings}</dd>
                     </div>
                 </dl>
             </div>

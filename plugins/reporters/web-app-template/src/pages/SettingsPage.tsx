@@ -115,7 +115,7 @@ function SettingsPage({ webAppEvaluatedModel }: SettingsPageProps): JSX.Element 
                 <CardContent>
                     <fieldset
                         aria-label="Theme"
-                        className="m-0 inline-flex min-w-0 gap-1 rounded-lg border bg-muted p-1"
+                        className="bg-muted m-0 inline-flex min-w-0 gap-1 rounded-lg border p-1"
                     >
                         {THEME_OPTIONS.map(({ icon: Icon, label, value }) => {
                             const active = currentTheme === value;
@@ -125,7 +125,7 @@ function SettingsPage({ webAppEvaluatedModel }: SettingsPageProps): JSX.Element 
                                     className={cn(
                                         "inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors",
                                         active
-                                            ? "bg-card font-medium text-foreground shadow-sm"
+                                            ? "bg-card text-foreground font-medium shadow-sm"
                                             : "text-muted-foreground hover:text-foreground",
                                     )}
                                     key={value}
@@ -162,7 +162,7 @@ function SettingsPage({ webAppEvaluatedModel }: SettingsPageProps): JSX.Element 
                             onCheckedChange={(value) => updateSettings({ useBrowserDateFormat: value })}
                         />
                     </div>
-                    <p className="mt-3 text-muted-foreground text-xs">Example: {example}</p>
+                    <p className="text-muted-foreground mt-3 text-xs">Example: {example}</p>
                 </CardContent>
             </Card>
 
@@ -210,7 +210,7 @@ function SettingsPage({ webAppEvaluatedModel }: SettingsPageProps): JSX.Element 
                                     className={cn(
                                         "flex-1",
                                         column.alwaysVisible
-                                            ? "cursor-default text-muted-foreground"
+                                            ? "text-muted-foreground cursor-default"
                                             : "cursor-pointer",
                                     )}
                                     htmlFor={`column-${column.id}`}
@@ -218,7 +218,7 @@ function SettingsPage({ webAppEvaluatedModel }: SettingsPageProps): JSX.Element 
                                     {column.label}
                                 </label>
                                 {column.alwaysVisible ? (
-                                    <span className="rounded border px-1.5 text-muted-foreground text-xs">always</span>
+                                    <span className="text-muted-foreground rounded border px-1.5 text-xs">always</span>
                                 ) : null}
                             </div>
                         ))}
@@ -226,7 +226,7 @@ function SettingsPage({ webAppEvaluatedModel }: SettingsPageProps): JSX.Element 
                 </CardContent>
             </Card>
 
-            <p className="text-center text-muted-foreground text-xs">
+            <p className="text-muted-foreground text-center text-xs">
                 Settings are saved in your browser and re-applied the next time you open a report.
             </p>
         </div>

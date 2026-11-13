@@ -89,15 +89,15 @@ function PackagePaths({ paths }: PackagePathsProps): JSX.Element {
                             return (
                                 <li className="flex gap-3" key={step.key}>
                                     <div className="flex flex-col items-center">
-                                        <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted-foreground font-semibold text-background text-xs">
+                                        <span className="bg-muted-foreground text-background flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
                                             {stepIndex + 1}
                                         </span>
-                                        {isLast ? null : <span className="w-0.5 flex-1 bg-border" />}
+                                        {isLast ? null : <span className="bg-border w-0.5 flex-1" />}
                                     </div>
                                     <div className={cn("flex-1", isLast ? "pb-0" : "pb-4")}>
-                                        <p className="break-all font-medium text-sm">{step.title}</p>
+                                        <p className="text-sm font-medium break-all">{step.title}</p>
                                         {step.description ? (
-                                            <dl className="mt-1 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-0.5 text-muted-foreground text-xs">
+                                            <dl className="text-muted-foreground mt-1 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-0.5 text-xs">
                                                 {step.description.definitionFilePath ? (
                                                     <div className="contents">
                                                         <dt>Defined in</dt>

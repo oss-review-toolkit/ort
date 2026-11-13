@@ -38,51 +38,51 @@ import { Card } from "@/components/ui/Card";
  */
 function TemplatePage(): JSX.Element {
     return (
-        <main className="flex min-h-screen items-center justify-center bg-background p-6">
+        <main className="bg-background flex min-h-screen items-center justify-center p-6">
             <Card className="w-full max-w-3xl gap-0 overflow-hidden p-0">
                 <div className="grid md:grid-cols-[1fr_1.25fr]">
-                    <div className="border-b bg-muted p-7 md:border-r md:border-b-0">
+                    <div className="bg-muted border-b p-7 md:border-r md:border-b-0">
                         <OrtLogo className="mb-4 h-10" />
-                        <h1 className="mb-2 font-semibold text-base tracking-tight">An empty report</h1>
+                        <h1 className="mb-2 text-base font-semibold tracking-tight">An empty report</h1>
                         <p className="text-muted-foreground text-sm">
                             Nothing has gone wrong. This is the template ORT fills in with your scan results, and it has
                             none yet.
                         </p>
                     </div>
                     <div className="p-7">
-                        <p className="mb-4 text-muted-foreground text-xs uppercase tracking-wider">Produce a report</p>
+                        <p className="text-muted-foreground mb-4 text-xs tracking-wider uppercase">Produce a report</p>
                         <ol className="grid gap-4">
                             <li className="grid grid-cols-[auto_1fr] items-start gap-3">
-                                <span className="mt-0.5 flex size-5.5 items-center justify-center rounded-full bg-primary font-medium font-mono text-[0.7rem] text-primary-foreground">
+                                <span className="bg-primary text-primary-foreground mt-0.5 flex size-5.5 items-center justify-center rounded-full font-mono text-[0.7rem] font-medium">
                                     1
                                 </span>
                                 <div>
-                                    <p className="mb-1 text-muted-foreground text-sm">Resolve the dependencies</p>
-                                    <code className="block overflow-x-auto whitespace-nowrap rounded-md border bg-muted px-2.5 py-1.5 font-mono text-xs">
+                                    <p className="text-muted-foreground mb-1 text-sm">Resolve the dependencies</p>
+                                    <code className="bg-muted block overflow-x-auto rounded-md border px-2.5 py-1.5 font-mono text-xs whitespace-nowrap">
                                         ort analyze -i . -o ort-results
                                     </code>
                                 </div>
                             </li>
                             <li className="grid grid-cols-[auto_1fr] items-start gap-3">
-                                <span className="mt-0.5 flex size-5.5 items-center justify-center rounded-full bg-primary font-medium font-mono text-[0.7rem] text-primary-foreground">
+                                <span className="bg-primary text-primary-foreground mt-0.5 flex size-5.5 items-center justify-center rounded-full font-mono text-[0.7rem] font-medium">
                                     2
                                 </span>
                                 <div>
-                                    <p className="mb-1 text-muted-foreground text-sm">
+                                    <p className="text-muted-foreground mb-1 text-sm">
                                         Scan for licenses and copyrights
                                     </p>
-                                    <code className="block overflow-x-auto whitespace-nowrap rounded-md border bg-muted px-2.5 py-1.5 font-mono text-xs">
+                                    <code className="bg-muted block overflow-x-auto rounded-md border px-2.5 py-1.5 font-mono text-xs whitespace-nowrap">
                                         ort scan -i ort-results/analyzer-result.yml -o ort-results
                                     </code>
                                 </div>
                             </li>
                             <li className="grid grid-cols-[auto_1fr] items-start gap-3">
-                                <span className="mt-0.5 flex size-5.5 items-center justify-center rounded-full bg-primary font-medium font-mono text-[0.7rem] text-primary-foreground">
+                                <span className="bg-primary text-primary-foreground mt-0.5 flex size-5.5 items-center justify-center rounded-full font-mono text-[0.7rem] font-medium">
                                     3
                                 </span>
                                 <div>
-                                    <p className="mb-1 text-muted-foreground text-sm">Generate this report</p>
-                                    <code className="block overflow-x-auto whitespace-nowrap rounded-md border bg-muted px-2.5 py-1.5 font-mono text-xs">
+                                    <p className="text-muted-foreground mb-1 text-sm">Generate this report</p>
+                                    <code className="bg-muted block overflow-x-auto rounded-md border px-2.5 py-1.5 font-mono text-xs whitespace-nowrap">
                                         ort report -f WebApp -i ort-results/scan-result.yml -o ort-results
                                     </code>
                                 </div>
@@ -92,7 +92,7 @@ function TemplatePage(): JSX.Element {
                 </div>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-t px-7 py-3 text-xs">
                     <a
-                        className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                        className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors"
                         href="https://oss-review-toolkit.org/"
                         rel="noopener noreferrer"
                         target="_blank"
@@ -101,7 +101,7 @@ function TemplatePage(): JSX.Element {
                         <ExternalLink aria-hidden="true" className="size-3" />
                     </a>
                     <a
-                        className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                        className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors"
                         href="https://github.com/oss-review-toolkit/ort"
                         rel="noopener noreferrer"
                         target="_blank"

@@ -33,7 +33,7 @@ function LoadingPage({ percent, text = "Loading report data..." }: LoadingPagePr
     const isIndeterminate = value === undefined;
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background p-6">
+        <main className="bg-background flex min-h-screen flex-col items-center justify-center gap-6 p-6">
             <OrtLogo />
             <Card className="w-full max-w-md border-0 bg-transparent shadow-none">
                 <CardContent className="space-y-4 px-0 pt-6">

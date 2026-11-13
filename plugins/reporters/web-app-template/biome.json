@@ -1,5 +1,5 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.6.7/schema.json",
     "vcs": {
         "enabled": true,
         "clientKind": "git",
@@ -68,13 +68,11 @@
                 "noBannedTypes": "error"
             },
             "nursery": {
-                "useSortedClasses": {
-                    "level": "error",
-                    "options": {
-                        "functions": ["cn"]
-                    }
+                "useTailwindSortedClasses": {
+                    "level": "error"
                 }
             }
         }
-    }
+    },
+    "tailwind": { "mergeFunctions": ["cn"] }
 }

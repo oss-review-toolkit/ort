@@ -334,22 +334,22 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
     const menuItemInactive = "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground";
 
     return (
-        <div className="flex h-dvh bg-sidebar text-foreground">
+        <div className="bg-sidebar text-foreground flex h-dvh">
             <aside
                 className={cn(
-                    "flex h-full shrink-0 flex-col text-sidebar-foreground transition-[width] duration-200",
+                    "text-sidebar-foreground flex h-full shrink-0 flex-col transition-[width] duration-200",
                     collapsed ? "w-16" : "w-60",
                 )}
             >
                 <div
                     className={cn(
-                        "flex h-16 shrink-0 items-center border-sidebar-border border-b",
+                        "border-sidebar-border flex h-16 shrink-0 items-center border-b",
                         collapsed ? "justify-center px-2" : "px-4",
                     )}
                 >
                     <a
                         aria-label="OSS Review Toolkit website"
-                        className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+                        className="focus-visible:ring-sidebar-ring rounded focus-visible:ring-2 focus-visible:outline-none"
                         href="https://oss-review-toolkit.org"
                         rel="noopener noreferrer"
                         target="_blank"
@@ -370,7 +370,7 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
                                             menuItemBase,
                                             collapsed && "justify-center",
                                             active
-                                                ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                                                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                                                 : menuItemInactive,
                                         )}
                                         onClick={() => handleTabChange(item.id)}
@@ -382,7 +382,7 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
                                             <>
                                                 <span className="flex-1 truncate text-left">{item.label}</span>
                                                 {item.count !== undefined ? (
-                                                    <span className="ml-auto text-muted-foreground text-xs tabular-nums">
+                                                    <span className="text-muted-foreground ml-auto text-xs tabular-nums">
                                                         {item.count}
                                                     </span>
                                                 ) : null}
@@ -394,7 +394,7 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
                         })}
                     </ul>
                 </nav>
-                <div className="flex shrink-0 flex-col gap-1 border-sidebar-border border-t p-2">
+                <div className="border-sidebar-border flex shrink-0 flex-col gap-1 border-t p-2">
                     <button
                         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                         className={cn(menuItemBase, collapsed && "justify-center", menuItemInactive)}
@@ -415,7 +415,7 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
                             menuItemBase,
                             collapsed && "justify-center",
                             activeTab === "settings"
-                                ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                                 : menuItemInactive,
                         )}
                         onClick={() => handleTabChange("settings")}
@@ -441,7 +441,7 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
                             menuItemBase,
                             collapsed && "justify-center",
                             activeTab === "about"
-                                ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                                 : menuItemInactive,
                         )}
                         onClick={() => handleTabChange("about")}
@@ -454,11 +454,11 @@ function AppPage({ webAppEvaluatedModel }: AppPageProps): JSX.Element {
                 </div>
             </aside>
 
-            <div className="m-2 flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border bg-background shadow-sm">
+            <div className="bg-background m-2 flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border shadow-sm">
                 <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b px-4 sm:px-6">
                     <div className="flex min-w-0 items-center gap-2">
                         <HeaderIcon aria-hidden="true" className={cn("size-5 shrink-0", headerIconColor)} />
-                        <h1 className="truncate font-semibold text-base tracking-tight sm:text-lg">{activeLabel}</h1>
+                        <h1 className="truncate text-base font-semibold tracking-tight sm:text-lg">{activeLabel}</h1>
                     </div>
                 </header>
 
