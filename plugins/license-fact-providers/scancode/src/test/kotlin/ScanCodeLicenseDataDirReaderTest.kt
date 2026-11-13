@@ -52,6 +52,7 @@ class ScanCodeLicenseDataDirReaderTest : WordSpec({
         }
 
         "look-up a particular license for multiple SPDX license IDs defined in the same license data file" {
+            // Note: The text below deliberately contains a line with trailing whitespace.
             val expectedText = """
                 In addition to the permissions in the GNU Lesser General Public License, the
                 Free Software Foundation gives you unlimited permission to link the compiled
