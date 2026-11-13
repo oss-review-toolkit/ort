@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
+import dev.eav.tomlkt.Toml
+
 import java.lang.invoke.MethodHandles
 
 import org.apache.logging.log4j.kotlin.loggerOf
@@ -29,6 +31,12 @@ import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseIdExpression
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
+/** The TOML mapper shared by all TOML parsers of this package, which ignores keys that are not modeled. */
+internal val toml = Toml { ignoreUnknownKeys = true }
+
+/** The name of the build system requirements and information file used by modern Python packages. */
+internal const val PYPROJECT_FILENAME = "pyproject.toml"
 
 private const val GENERIC_BSD_LICENSE = "BSD License"
 private const val SHORT_STRING_MAX_CHARS = 200

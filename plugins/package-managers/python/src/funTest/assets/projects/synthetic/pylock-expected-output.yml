@@ -1,0 +1,123 @@
+---
+project:
+  id: "Pylock::pylock-example:1.0.0"
+  definition_file_path: "plugins/package-managers/python/src/funTest/assets/projects/synthetic/pylock/pylock.toml"
+  authors:
+  - "Example Author <author@example.org>"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  description: "An example project locked with a PEP 751 lockfile."
+  homepage_url: "https://example.org/pylock-example"
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::attrs:26.1.0"
+    - id: "PyPI::cattrs:24.1.2"
+    - id: "PyPI::colorama:0.4.6"
+packages:
+- id: "PyPI::attrs:26.1.0"
+  purl: "pkg:pypi/attrs@26.1.0"
+  authors:
+  - "Hynek Schlawack <hs@ox.cx>"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Classes Without Boilerplate"
+  homepage_url: ""
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl"
+    hash:
+      value: "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/9a/8e/82a0fe20a541c03148528be8cac2408564a6c9a0cc7e9171802bc1d26985/attrs-26.1.0.tar.gz"
+    hash:
+      value: "d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/python-attrs/attrs.git"
+    revision: ""
+    path: ""
+- id: "PyPI::cattrs:24.1.2"
+  purl: "pkg:pypi/cattrs@24.1.2"
+  authors:
+  - "Tin Tvrtkovic <tinchester@gmail.com>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Composable complex class support for attrs and dataclasses."
+  homepage_url: "https://catt.rs"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/c8/d5/867e75361fc45f6de75fe277dd085627a9db5ebb511a87f27dc1396b5351/cattrs-24.1.2-py3-none-any.whl"
+    hash:
+      value: "67c7495b760168d931a10233f979b28dc04daf853b30752246f4f8471c6d68d0"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/64/65/af6d57da2cb32c076319b7489ae0958f746949d407109e3ccf4d115f147c/cattrs-24.1.2.tar.gz"
+    hash:
+      value: "8028cfe1ff5382df59dd36474a86e02d817b06eaf8af84555441bac915d2ef85"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/python-attrs/cattrs.git"
+    revision: ""
+    path: ""
+- id: "PyPI::colorama:0.4.6"
+  purl: "pkg:pypi/colorama@0.4.6"
+  authors:
+  - "Jonathan Hartley <tartley@tartley.com>"
+  declared_licenses:
+  - "BSD License"
+  declared_licenses_processed:
+    unmapped:
+    - "BSD License"
+  description: "Cross-platform colored terminal text."
+  homepage_url: "https://github.com/tartley/colorama"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl"
+    hash:
+      value: "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz"
+    hash:
+      value: "08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/tartley/colorama.git"
+    revision: ""
+    path: ""

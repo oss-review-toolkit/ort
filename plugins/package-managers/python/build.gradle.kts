@@ -32,6 +32,7 @@ dependencies {
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.toml)
@@ -39,6 +40,9 @@ dependencies {
 
     funTestImplementation(testFixtures(projects.analyzer))
     funTestImplementation(projects.utils.testUtils)
+
+    testImplementation(testFixtures(projects.analyzer))
+    testImplementation(libs.wiremock)
 
     ksp(projects.analyzer)
 }
