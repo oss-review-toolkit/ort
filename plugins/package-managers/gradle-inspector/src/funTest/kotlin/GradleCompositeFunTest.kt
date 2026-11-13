@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GradleCompositeFunTest : StringSpec({
     "Dependencies from included build are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-composite/project1/build.gradle.kts").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-composite/project1/build.gradle.kts".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-composite-expected-output.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")

@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 @Tags("RequiresExternalTool")
 class GradleAndroidFunTest : StringSpec({
     "Root project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-root.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -44,7 +44,7 @@ class GradleAndroidFunTest : StringSpec({
     }
 
     "Project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-android/app/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-android/app/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-app.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -54,7 +54,7 @@ class GradleAndroidFunTest : StringSpec({
     }
 
     "External dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-android/lib/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-android/lib/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-lib.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -67,7 +67,7 @@ class GradleAndroidFunTest : StringSpec({
         // This requires some work to make results comparable to the serialized PackageManagerResult.
         enabled = false
     ) {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17").resolveDependencies(

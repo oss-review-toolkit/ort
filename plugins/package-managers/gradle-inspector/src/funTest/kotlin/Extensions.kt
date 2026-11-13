@@ -21,4 +21,4 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleinspector
 
 import java.io.File
 
-fun File.toGradle() = File(invariantSeparatorsPath.replace("/gradle-inspector/", "/gradle/"))
+fun String.toGradle(): String = File("").absoluteFile.parentFile.resolve("gradle/src/funTest/assets/$this").path

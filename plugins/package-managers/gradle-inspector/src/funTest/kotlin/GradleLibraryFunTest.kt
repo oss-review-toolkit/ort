@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GradleLibraryFunTest : StringSpec({
     "Root project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-library/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-library/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-root.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -42,7 +42,7 @@ class GradleLibraryFunTest : StringSpec({
         // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
         enabled = false
     ) {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-library/app/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-library/app/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-app.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -55,7 +55,7 @@ class GradleLibraryFunTest : StringSpec({
         // This does not get the "struts2-assembly-2.5.14.1-min-lib.zip" binary artifact right.
         enabled = false
     ) {
-        val definitionFile = getAssetFile("projects/synthetic/gradle-library/lib/build.gradle").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-library/lib/build.gradle".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-lib.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")

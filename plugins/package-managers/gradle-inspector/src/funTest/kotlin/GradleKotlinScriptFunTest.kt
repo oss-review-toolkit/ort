@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GradleKotlinScriptFunTest : StringSpec({
     "root project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/build.gradle.kts").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/build.gradle.kts".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-root.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -39,7 +39,7 @@ class GradleKotlinScriptFunTest : StringSpec({
     }
 
     "core project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/core/build.gradle.kts").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/core/build.gradle.kts".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-core.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
@@ -49,7 +49,7 @@ class GradleKotlinScriptFunTest : StringSpec({
     }
 
     "cli project dependencies are detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/cli/build.gradle.kts").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/cli/build.gradle.kts".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-cli.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")

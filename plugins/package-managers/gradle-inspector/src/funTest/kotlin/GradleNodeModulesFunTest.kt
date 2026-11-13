@@ -39,7 +39,7 @@ class GradleNodeModulesFunTest : StringSpec({
         // a project dependency pointing into "node_modules", which is not part of the analyzed Gradle build.
         // GradleInspector adds a synthetic project for such dependencies to keep the dependency graph consistent.
         // See https://github.com/react-native-community/cli/blob/main/docs/autolinking.md
-        val definitionFile = getAssetFile("projects/synthetic/gradle-node-modules/build.gradle.kts").toGradle()
+        val definitionFile = getAssetFile("projects/synthetic/gradle-node-modules/build.gradle.kts".toGradle())
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-node-modules-expected-output.yml")
 
         val managerResult = GradleInspectorFactory.create(javaVersion = "17").resolveDependencies(
