@@ -447,9 +447,7 @@ class PackageCurationTest : WordSpec({
                 packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("2.0.0.0")) shouldBe true
 
                 packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("0.9.0.0")) shouldBe false
-                // TODO: This should not be applicable, but currently is due the usage of Semver.coerce() which coerces
-                //       2.0.0.1 to 2.0.0.
-                packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("2.0.0.1")) shouldBe true
+                packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("2.0.0.1")) shouldBe false
                 packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("2.0.1.0")) shouldBe false
             }
         }
