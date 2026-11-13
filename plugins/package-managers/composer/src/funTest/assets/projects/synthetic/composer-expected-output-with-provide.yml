@@ -19,6 +19,8 @@ project:
     path: "<REPLACE_VCS_PATH>"
   homepage_url: "https://github.com/oss-review-toolkit/ort"
   scopes:
+  - name: "platform"
+    dependencies: []
   - name: "require"
     dependencies:
     - id: "Composer:ort:child:1.0.0"
