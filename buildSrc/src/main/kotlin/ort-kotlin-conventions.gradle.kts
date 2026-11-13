@@ -70,6 +70,14 @@ testing {
                 implementation(libsCatalog.findLibrary("kotest-assertions-core").get())
                 implementation(libsCatalog.findLibrary("kotest-property").get())
             }
+
+            targets.all {
+                testTask.configure {
+                    inputs.files("src/${this@configureEach.name}/assets")
+                        .withPropertyName("assets")
+                        .withPathSensitivity(PathSensitivity.RELATIVE)
+                }
+            }
         }
     }
 }
