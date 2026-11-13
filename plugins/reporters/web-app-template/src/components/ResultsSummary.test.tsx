@@ -71,6 +71,7 @@ function fakeModel(options: FakeOptions = {}): WebAppEvaluatedModel {
             ...fakeIssues(options.resolvedIssues ?? 0, { isExcluded: false, isResolved: true }),
             ...fakeIssues(options.excludedIssues ?? 0, { isExcluded: true, isResolved: false }),
         ],
+        levels: [],
         packages: [],
         projects: [],
         repository: { vcsProcessed: { revision: "abcdef1", type: "Git", url: "https://example.com/acme/repo.git" } },
@@ -229,9 +230,18 @@ describe("ResultsSummary", () => {
             render(<ResultsSummary webAppEvaluatedModel={model} />);
 
             const dependencies = model.packages.filter((pkg) => !pkg.isProject).length;
-            const row = screen.getByRole("button", { name: /^Dependen/ });
+            const row = screen.getByRole("button", { name: /^Dependenc(y|ies)\d/ });
             expect(row.textContent).toContain(String(dependencies));
             expect(dependencies).toBe(model.packages.length - model.projects.length);
+        });
+
+        it("shows the maximum dependency level as the depth of the deepest dependency tree", () => {
+            render(<ResultsSummary webAppEvaluatedModel={model} />);
+
+            const row = screen.getByRole("button", { name: /^Dependency levels?\d/ });
+            expect(model.levels.length).toBeGreaterThan(0);
+            expect(model.levels.length).toBe(model.statistics.dependencyTree.totalTreeDepth);
+            expect(row.textContent).toContain(String(model.levels.length));
         });
 
         it("renders the repository and composition sidebar sections", () => {
@@ -276,8 +286,9 @@ describe("ResultsSummary", () => {
             // The button's accessible name glues the label to its value (e.g. "Projects4"), so match on the
             // label prefix only.
             ["Projects", /^Projects?/, ["project"]],
-            ["Dependencies", /^Dependenc/, ["direct", "transitive"]],
+            ["Dependencies", /^Dependenc(y|ies)\d/, ["direct", "transitive"]],
             ["Direct / transitive dependencies", /^Direct/, ["direct", "transitive"]],
+            ["Dependency levels", /^Dependency levels?\d/, ["direct", "transitive"]],
             ["Scopes", /^Scopes?/, null],
         ])("filters the table on %s when its composition stat is clicked", async (_label, name, expected) => {
             const onFilterByLevel = vi.fn();

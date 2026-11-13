@@ -25,6 +25,7 @@ import {
     FileText,
     Folder,
     Layers,
+    ListTree,
     type LucideIcon,
     Network,
     OctagonAlert,
@@ -321,6 +322,7 @@ function ResultsSummary({
         detectedLicensesProcessed,
         effectiveLicenses,
         issues,
+        levels,
         packages,
         projects,
         ruleViolations,
@@ -600,6 +602,13 @@ function ResultsSummary({
                             label="Direct / transitive dependencies"
                             onClick={() => onFilterByLevel?.(["direct", "transitive"])}
                             value={`${directDependencies} / ${transitiveDependencies}`}
+                        />
+                        <SidebarStat
+                            hint="The maximum dependency level, i.e. the depth of the deepest dependency tree. Direct dependencies form the first level, and each dependency they pull in adds another."
+                            icon={ListTree}
+                            label={plural(levels.length, "Dependency level")}
+                            onClick={() => onFilterByLevel?.(["direct", "transitive"])}
+                            value={levels.length}
                         />
                         <SidebarStat
                             hint="Dependency scopes declared by the projects (e.g. compile or test) that group how each dependency is used."
