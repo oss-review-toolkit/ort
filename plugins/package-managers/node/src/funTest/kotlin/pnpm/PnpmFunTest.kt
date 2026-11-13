@@ -64,7 +64,7 @@ class PnpmFunTest : StringSpec({
     }
 
     "Resolve dependencies correctly in a workspaces project" {
-        val definitionFile = getAssetFile("projects/synthetic/pnpm/workspaces/packages.json")
+        val definitionFile = getAssetFile("projects/synthetic/pnpm/workspaces/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/pnpm/workspaces-expected-output.yml")
 
         val result = analyze(definitionFile.parentFile, packageManagers = setOf(PnpmFactory())).getAnalyzerResult()
