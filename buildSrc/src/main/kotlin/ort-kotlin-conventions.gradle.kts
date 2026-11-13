@@ -58,6 +58,8 @@ tapmoc {
 
 testing {
     suites {
+        register<JvmTestSuite>("funTest")
+
         withType<JvmTestSuite>().configureEach {
             useJUnitJupiter()
 
@@ -69,8 +71,6 @@ testing {
                 implementation(libsCatalog.findLibrary("kotest-property").get())
             }
         }
-
-        register<JvmTestSuite>("funTest")
     }
 }
 
