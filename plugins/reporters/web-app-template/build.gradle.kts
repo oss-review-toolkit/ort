@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsSetupTask
 NodeJsRootPlugin.apply(rootProject)
 
 rootProject.plugins.withType<NodeJsPlugin>().configureEach {
-    rootProject.the<NodeJsEnvSpec>().version = "22.13.0"
+    rootProject.the<NodeJsEnvSpec>().version = "26.13.1"
 }
 
 val kotlinNodeJsSetup = rootProject.tasks.withType(NodeJsSetupTask::class).single()
