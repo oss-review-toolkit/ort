@@ -90,12 +90,12 @@ function ToolsMetadataCards({ metadata }: ToolsMetadataCardsProps): JSX.Element 
     return (
         <div className="space-y-4">
             {tools.map(({ key, run, title }) => (
-                <div className="rounded-md border bg-muted/30 p-4" key={key}>
-                    <h3 className="mb-2 font-semibold text-sm">{title}</h3>
+                <div className="bg-muted/30 rounded-md border p-4" key={key}>
+                    <h3 className="mb-2 text-sm font-semibold">{title}</h3>
                     <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
                         {buildRows(run, dateFormat).map((row) => (
                             <div className="contents" key={row.label}>
-                                <dt className="font-medium text-muted-foreground">{row.label}</dt>
+                                <dt className="text-muted-foreground font-medium">{row.label}</dt>
                                 <dd className="break-all">{row.value}</dd>
                             </div>
                         ))}

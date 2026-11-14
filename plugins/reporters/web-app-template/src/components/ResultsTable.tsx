@@ -299,7 +299,7 @@ function PublishedCell({
     // The time of day would only add noise to a release date, so the cell shows the date alone; the exact
     // timestamp, with the time and zone, stays available on hover.
     return (
-        <span className="whitespace-nowrap text-xs" title={convertIso8601Date2Sentence(publishedAt, dateFormat)}>
+        <span className="text-xs whitespace-nowrap" title={convertIso8601Date2Sentence(publishedAt, dateFormat)}>
             {convertIso8601Date2LongDate(publishedAt, dateFormat)}
         </span>
     );
@@ -318,7 +318,7 @@ function BooleanIcon({
     const text = value ? trueText : falseText;
     return (
         <span className="inline-flex items-center justify-center" title={text}>
-            <Icon aria-hidden="true" className="size-4 text-muted-foreground" />
+            <Icon aria-hidden="true" className="text-muted-foreground size-4" />
             <span className="sr-only">{text}</span>
         </span>
     );
@@ -348,13 +348,13 @@ function PackageDetailPanel({
         <div className="grid gap-6 lg:grid-cols-2">
             <section className="space-y-4">
                 <div>
-                    <h3 className="mb-2 font-semibold text-muted-foreground text-sm">Details</h3>
+                    <h3 className="text-muted-foreground mb-2 text-sm font-semibold">Details</h3>
                     <PackageDetails pkg={pkg} />
                 </div>
             </section>
             {pkg.hasLicenses() ? (
                 <section>
-                    <h3 className="mb-2 font-semibold text-muted-foreground text-sm">Licenses</h3>
+                    <h3 className="text-muted-foreground mb-2 text-sm font-semibold">Licenses</h3>
                     <PackageLicenses pkg={pkg} />
                 </section>
             ) : null}
@@ -378,7 +378,7 @@ function PackageDetailPanel({
                 />
                 {pkg.scanResults.length > 0 ? (
                     <Collapsible>
-                        <CollapsibleTrigger className="group font-medium text-muted-foreground text-sm underline-offset-4 hover:text-foreground hover:underline">
+                        <CollapsibleTrigger className="group text-muted-foreground hover:text-foreground text-sm font-medium underline-offset-4 hover:underline">
                             <span className="group-data-[state=open]:hidden">Show scanner details</span>
                             <span className="group-data-[state=closed]:hidden">Hide scanner details</span>
                         </CollapsibleTrigger>
@@ -541,8 +541,8 @@ function ResultsTable({
                     const label = (
                         <span
                             className={cn(
-                                "break-all font-mono text-xs",
-                                isExcluded && "text-muted-foreground line-through decoration-muted-foreground",
+                                "font-mono text-xs break-all",
+                                isExcluded && "text-muted-foreground decoration-muted-foreground line-through",
                             )}
                         >
                             {id}
@@ -572,7 +572,7 @@ function ResultsTable({
                     const scopes = row.original.scopes;
                     if (scopes.length === 0) return null;
                     return (
-                        <div className="flex flex-col gap-0.5 break-all font-mono text-xs">
+                        <div className="flex flex-col gap-0.5 font-mono text-xs break-all">
                             {scopes.map((scope) => (
                                 <span
                                     className={cn(
@@ -735,7 +735,7 @@ function ResultsTable({
                     const values = row.original.unmappedDeclaredLicenses;
                     if (values.length === 0) return null;
                     return (
-                        <div className="flex flex-col gap-0.5 break-all font-mono text-xs">
+                        <div className="flex flex-col gap-0.5 font-mono text-xs break-all">
                             {values.map((value) => (
                                 <span key={value}>{value}</span>
                             ))}

@@ -25,7 +25,7 @@ function TooltipContent({
         <TooltipPrimitive.Portal>
             <TooltipPrimitive.Content
                 className={cn(
-                    "fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 z-50 w-fit origin-(--radix-tooltip-content-transform-origin) animate-in text-balance rounded-md bg-muted-foreground px-3 py-1.5 text-background text-xs data-[state=closed]:animate-out",
+                    "fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 animate-in bg-muted-foreground text-background data-[state=closed]:animate-out z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance",
                     className,
                 )}
                 data-slot="tooltip-content"
@@ -33,7 +33,7 @@ function TooltipContent({
                 {...props}
             >
                 {children}
-                <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-muted-foreground fill-muted-foreground" />
+                <TooltipPrimitive.Arrow className="bg-muted-foreground fill-muted-foreground z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
             </TooltipPrimitive.Content>
         </TooltipPrimitive.Portal>
     );

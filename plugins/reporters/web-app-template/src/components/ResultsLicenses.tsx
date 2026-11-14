@@ -45,7 +45,7 @@ const MUTED_LINK = "text-muted-foreground underline hover:text-foreground";
 // would pull the eye to a footnote ahead of the definition itself; the underline marks it as a link.
 function LicenseTypeDescription({ definition }: { definition: string }): JSX.Element {
     return (
-        <p className="mb-4 max-w-prose text-muted-foreground text-sm">
+        <p className="text-muted-foreground mb-4 max-w-prose text-sm">
             {definition}{" "}
             <Url className={MUTED_LINK} href={LICENSE_HANDLING_GUIDE}>
                 Learn more
@@ -157,8 +157,8 @@ function ResultsLicenses({
                     </div>
                     {unmappedRows.length > 0 ? (
                         <section className="mt-6">
-                            <h3 className="font-semibold text-sm">Not mapped to an SPDX identifier</h3>
-                            <p className="mt-1 mb-3 max-w-prose text-muted-foreground text-sm">
+                            <h3 className="text-sm font-semibold">Not mapped to an SPDX identifier</h3>
+                            <p className="text-muted-foreground mt-1 mb-3 max-w-prose text-sm">
                                 {unmappedLicenseCount === 1 ? "One license" : `${unmappedLicenseCount} licenses`}{" "}
                                 declared by{" "}
                                 {unmappedRows.length === 1 ? "one package" : `${unmappedRows.length} packages`} could

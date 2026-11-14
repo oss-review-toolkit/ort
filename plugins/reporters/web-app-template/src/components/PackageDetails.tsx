@@ -135,7 +135,7 @@ function PackageDetails({ pkg }: PackageDetailsProps): JSX.Element {
                         <dl className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-[max-content_minmax(0,1fr)]">
                             {section.rows.map((row) => (
                                 <div className="contents" key={row.label}>
-                                    <dt className="font-medium text-muted-foreground">{row.label}</dt>
+                                    <dt className="text-muted-foreground font-medium">{row.label}</dt>
                                     <dd className="min-w-0 break-words">{row.content}</dd>
                                 </div>
                             ))}
