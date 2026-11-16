@@ -73,7 +73,16 @@ testing {
 
             targets.all {
                 testTask.configure {
-                    inputs.files("src/${this@configureEach.name}/assets")
+                    val assetsDir = projectDir.resolve("src/${this@configureEach.name}/assets")
+                    val ignoredFilesProvider = providers.of(GitIgnoredFilesValueSource::class) {
+                        parameters { workingDir = assetsDir }
+                    }
+
+                    val fileTree = fileTree(assetsDir) {
+                        exclude(ignoredFilesProvider.get().map { it.toRelativeString(assetsDir) })
+                    }
+
+                    inputs.files(fileTree)
                         .withPropertyName("assets")
                         .withPathSensitivity(PathSensitivity.RELATIVE)
                 }

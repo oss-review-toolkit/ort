@@ -22,6 +22,7 @@ import java.io.File
 import org.eclipse.jgit.api.Git as JGit
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.revwalk.RevWalk
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.treewalk.TreeWalk
 
 import org.gradle.api.file.DirectoryProperty
@@ -57,5 +58,25 @@ abstract class GitFilesValueSource : ValueSource<List<File>, GitParameters> {
         }
 
         return filePaths
+    }
+}
+
+/**
+ * A [ValueSource] that lists the files and directories in the working tree at [GitParameters.workingDir] which are
+ * ignored according to Git's ignore rules.
+ */
+abstract class GitIgnoredFilesValueSource : ValueSource<List<File>, GitParameters> {
+    override fun obtain(): List<File> {
+        val workingDir = parameters.workingDir.get().asFile
+
+        return FileRepositoryBuilder().setMustExist(true).findGitDir(workingDir).build().use { repo ->
+            val relativePath = workingDir.relativeTo(repo.workTree).invariantSeparatorsPath
+
+            val status = JGit(repo).status().apply {
+                addPath(relativePath)
+            }.call()
+
+            status.ignoredNotInIndex.map { repo.workTree.resolve(it) }
+        }
     }
 }
