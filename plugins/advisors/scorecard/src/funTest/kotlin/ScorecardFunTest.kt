@@ -26,6 +26,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -37,7 +38,7 @@ class ScorecardFunTest : StringSpec({
 
     "retrievePackageFindings for a valid package should return findings" {
         val pkg = Package(
-            id = Identifier("VCS:oss-review-toolkit:ort:2.5.0"),
+            id = Identifier("Maven:org.ossreviewtoolkit:cli:99.0.0"),
             declaredLicenses = emptySet(),
             description = "",
             homepageUrl = "",
@@ -46,12 +47,12 @@ class ScorecardFunTest : StringSpec({
             vcs = VcsInfo(
                 type = VcsType.GIT,
                 url = "https://github.com/oss-review-toolkit/ort.git",
-                revision = "ddde192"
+                revision = "dbd50cd755093305319ca85f9aa2a3f5d20320fe"
             ),
             vcsProcessed = VcsInfo(
                 type = VcsType.GIT,
                 url = "https://github.com/oss-review-toolkit/ort.git",
-                revision = "ddde192"
+                revision = "dbd50cd755093305319ca85f9aa2a3f5d20320fe"
             )
         )
 
@@ -67,7 +68,7 @@ class ScorecardFunTest : StringSpec({
 
     "retrievePackageFindings for a package not known by scorecard should return empty health data" {
         val pkg = Package(
-            id = Identifier("VCS:oss-review-toolkit:ort:2.5.0"),
+            id = Identifier("Maven:org.ossreviewtoolkit:cli:99.0.0"),
             declaredLicenses = emptySet(),
             description = "",
             homepageUrl = "",
@@ -79,7 +80,7 @@ class ScorecardFunTest : StringSpec({
                 // This repository doesn't exist, and it never will because
                 // these characters aren't allowed in a GitHub username
                 url = "https://github.com/täßt/this-will-never-exist.git",
-                revision = "ddde192"
+                revision = "dbd50cd755093305319ca85f9aa2a3f5d20320fe"
             )
         )
 
@@ -127,7 +128,7 @@ class ScorecardFunTest : StringSpec({
             vcsProcessed = VcsInfo(
                 type = VcsType.GIT,
                 url = "https://invalid-url",
-                revision = "ddde192"
+                revision = HashAlgorithm.SHA1.emptyValue
             )
         )
 
