@@ -21,10 +21,17 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -55,5 +62,28 @@ class CargoSubcrateFunTest : StringSpec({
         val result = CargoFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Independent sub-projects are resolved using their own metadata" {
+        val definitionFiles = listOf(
+            getAssetFile("projects/synthetic/cargo-subcrate/integration/Cargo.toml"),
+            getAssetFile("projects/synthetic/cargo-subcrate/client/Cargo.toml")
+        )
+        val analysisRoot = getCommonParentFile(definitionFiles)
+
+        val result = CargoFactory.create().resolveDependencies(
+            analysisRoot,
+            definitionFiles,
+            Excludes.EMPTY,
+            Includes.EMPTY,
+            AnalyzerConfiguration(),
+            emptyMap()
+        )
+
+        result.projectResults.values.flatten().flatMap { it.issues } should beEmpty()
+        result.sharedPackages.map { it.id } should containExactlyInAnyOrder(
+            Identifier("Crate::cfg-if:0.1.9"),
+            Identifier("Crate::spin:0.4.10")
+        )
     }
 })

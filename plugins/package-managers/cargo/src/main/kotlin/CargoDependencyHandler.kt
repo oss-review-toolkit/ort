@@ -36,12 +36,28 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
-internal class CargoDependencyHandler(
-    private val analysisRoot: File,
-    private val packageById: Map<String, CargoMetadata.Package>,
-    private val nodeById: Map<String, CargoMetadata.Node>,
-    private val hashes: Map<String, String>
-) : DependencyHandler<CargoMetadata.Node> {
+internal class CargoDependencyHandler : DependencyHandler<CargoMetadata.Node> {
+    private lateinit var analysisRoot: File
+    private lateinit var packageById: Map<String, CargoMetadata.Package>
+    private lateinit var nodeById: Map<String, CargoMetadata.Node>
+    private lateinit var hashes: Map<String, String>
+
+    /**
+     * Set the context for the project currently being resolved. This is required as the handler is shared across all
+     * definition files, but each Cargo project comes with its own metadata.
+     */
+    fun setContext(
+        analysisRoot: File,
+        packageById: Map<String, CargoMetadata.Package>,
+        nodeById: Map<String, CargoMetadata.Node>,
+        hashes: Map<String, String>
+    ) {
+        this.analysisRoot = analysisRoot
+        this.packageById = packageById
+        this.nodeById = nodeById
+        this.hashes = hashes
+    }
+
     override fun identifierFor(dependency: CargoMetadata.Node): Identifier =
         packageById.getValue(dependency.id).toIdentifier()
 
