@@ -51,7 +51,7 @@ class ScorecardFunTest : StringSpec({
     val scorecard by lazy { ScorecardFactory.create() }
     val checksUrl = "https://github.com/ossf/scorecard/blob/61e84743356275f6ffca23b1b2f2cb945e19eb96/docs/checks.md"
 
-    "retrievePackageFindings for a valid package should return findings" {
+    "Return findings for a valid package" {
         val vcs = VcsInfo(
             type = VcsType.GIT,
             url = "https://github.com/oss-review-toolkit/ort.git",
@@ -296,7 +296,7 @@ class ScorecardFunTest : StringSpec({
         )
     }
 
-    "retrievePackageFindings for a package not known by scorecard should return empty health data" {
+    "Return empty health metrics for a package with a non-existing VCS URL" {
         val nonExistingVcs = VcsInfo(
             type = VcsType.GIT,
             // This repository does not exist and never will, because its URL contains disallowed characters.
@@ -319,7 +319,7 @@ class ScorecardFunTest : StringSpec({
         )
     }
 
-    "retrievePackageFindings for a package with no vcs should return empty health data" {
+    "Return empty health metrics for a package with empty VCS info" {
         val pkg = Package.EMPTY.copy(
             id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1")
         )
@@ -334,7 +334,7 @@ class ScorecardFunTest : StringSpec({
         )
     }
 
-    "retrievePackageFindings for a malformed vcs url should return empty health data" {
+    "Return empty health metrics for a package with a malformed VCS URL" {
         val invalidVcs = VcsInfo(
             type = VcsType.GIT,
             url = "https://invalid-url",
