@@ -29,7 +29,6 @@ import io.kotest.matchers.shouldNot
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -37,23 +36,15 @@ class ScorecardFunTest : StringSpec({
     val scorecard by lazy { ScorecardFactory.create() }
 
     "retrievePackageFindings for a valid package should return findings" {
-        val pkg = Package(
+        val vcs = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/oss-review-toolkit/ort.git",
+            revision = "dbd50cd755093305319ca85f9aa2a3f5d20320fe"
+        )
+        val pkg = Package.EMPTY.copy(
             id = Identifier("Maven:org.ossreviewtoolkit:cli:99.0.0"),
-            declaredLicenses = emptySet(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://github.com/oss-review-toolkit/ort.git",
-                revision = "dbd50cd755093305319ca85f9aa2a3f5d20320fe"
-            ),
-            vcsProcessed = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://github.com/oss-review-toolkit/ort.git",
-                revision = "dbd50cd755093305319ca85f9aa2a3f5d20320fe"
-            )
+            vcs = vcs,
+            vcsProcessed = vcs
         )
 
         val result = scorecard.retrievePackageFindings(setOf(pkg))
@@ -67,21 +58,16 @@ class ScorecardFunTest : StringSpec({
     }
 
     "retrievePackageFindings for a package not known by scorecard should return empty health data" {
-        val pkg = Package(
+        val nonExistingVcs = VcsInfo(
+            type = VcsType.GIT,
+            // This repository does not exist and never will, because its URL contains disallowed characters.
+            url = "https://github.com/täßt/this-will-never-exist.git",
+            revision = "dbd50cd755093305319ca85f9aa2a3f5d20320fe"
+        )
+        val pkg = Package.EMPTY.copy(
             id = Identifier("Maven:org.ossreviewtoolkit:cli:99.0.0"),
-            declaredLicenses = emptySet(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo(
-                type = VcsType.GIT,
-                // This repository doesn't exist, and it never will because
-                // these characters aren't allowed in a GitHub username
-                url = "https://github.com/täßt/this-will-never-exist.git",
-                revision = "dbd50cd755093305319ca85f9aa2a3f5d20320fe"
-            )
+            vcs = nonExistingVcs,
+            vcsProcessed = nonExistingVcs
         )
 
         val result = scorecard.retrievePackageFindings(setOf(pkg))
@@ -95,15 +81,8 @@ class ScorecardFunTest : StringSpec({
     }
 
     "retrievePackageFindings for a package with no vcs should return empty health data" {
-        val pkg = Package(
-            id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1"),
-            declaredLicenses = emptySet(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo.EMPTY
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1")
         )
 
         val result = scorecard.retrievePackageFindings(setOf(pkg))
@@ -117,19 +96,15 @@ class ScorecardFunTest : StringSpec({
     }
 
     "retrievePackageFindings for a malformed vcs url should return empty health data" {
-        val pkg = Package(
+        val invalidVcs = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://invalid-url",
+            revision = HashAlgorithm.SHA1.emptyValue
+        )
+        val pkg = Package.EMPTY.copy(
             id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1"),
-            declaredLicenses = emptySet(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://invalid-url",
-                revision = HashAlgorithm.SHA1.emptyValue
-            )
+            vcs = invalidVcs,
+            vcsProcessed = invalidVcs
         )
 
         val result = scorecard.retrievePackageFindings(setOf(pkg))
