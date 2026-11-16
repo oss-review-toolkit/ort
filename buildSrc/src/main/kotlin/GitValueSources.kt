@@ -32,6 +32,7 @@ interface GitParameters : ValueSourceParameters {
     val workingDir: DirectoryProperty
 }
 
+/** A [ValueSource] that lists the committed files in the Git repository at [GitParameters.workingDir]. */
 abstract class GitFilesValueSource : ValueSource<List<File>, GitParameters> {
     override fun obtain(): List<File> {
         val filePaths = mutableListOf<File>()
