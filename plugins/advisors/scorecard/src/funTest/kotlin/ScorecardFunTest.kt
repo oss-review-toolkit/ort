@@ -47,12 +47,12 @@ class ScorecardFunTest : StringSpec({
             vcsProcessed = vcs
         )
 
-        val result = scorecard.retrievePackageFindings(setOf(pkg))
+        val findings = scorecard.retrievePackageFindings(setOf(pkg))
 
-        result should matchExactly(
-            pkg to {
-                it.advisor shouldBe scorecard.details
-                it.healthMetrics shouldNot beEmpty()
+        findings should matchExactly(
+            pkg to { result ->
+                result.advisor shouldBe scorecard.details
+                result.healthMetrics shouldNot beEmpty()
             }
         )
     }
@@ -70,12 +70,12 @@ class ScorecardFunTest : StringSpec({
             vcsProcessed = nonExistingVcs
         )
 
-        val result = scorecard.retrievePackageFindings(setOf(pkg))
+        val findings = scorecard.retrievePackageFindings(setOf(pkg))
 
-        result should matchExactly(
-            pkg to {
-                it.advisor shouldBe scorecard.details
-                it.healthMetrics should beEmpty()
+        findings should matchExactly(
+            pkg to { result ->
+                result.advisor shouldBe scorecard.details
+                result.healthMetrics should beEmpty()
             }
         )
     }
@@ -85,12 +85,12 @@ class ScorecardFunTest : StringSpec({
             id = Identifier("Maven:org.apache.logging.log4j:log4j-api:2.14.1")
         )
 
-        val result = scorecard.retrievePackageFindings(setOf(pkg))
+        val findings = scorecard.retrievePackageFindings(setOf(pkg))
 
-        result should matchExactly(
-            pkg to {
-                it.advisor shouldBe scorecard.details
-                it.healthMetrics should beEmpty()
+        findings should matchExactly(
+            pkg to { result ->
+                result.advisor shouldBe scorecard.details
+                result.healthMetrics should beEmpty()
             }
         )
     }
@@ -107,12 +107,12 @@ class ScorecardFunTest : StringSpec({
             vcsProcessed = invalidVcs
         )
 
-        val result = scorecard.retrievePackageFindings(setOf(pkg))
+        val findings = scorecard.retrievePackageFindings(setOf(pkg))
 
-        result should matchExactly(
-            pkg to {
-                it.advisor shouldBe scorecard.details
-                it.healthMetrics should beEmpty()
+        findings should matchExactly(
+            pkg to { result ->
+                result.advisor shouldBe scorecard.details
+                result.healthMetrics should beEmpty()
             }
         )
     }
