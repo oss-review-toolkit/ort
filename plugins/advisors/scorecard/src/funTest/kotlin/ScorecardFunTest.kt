@@ -20,12 +20,27 @@
 package org.ossreviewtoolkit.plugins.advisors.scorecard
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.and
+import io.kotest.matchers.collections.atLeastSize
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.containOnly
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.maps.matchExactly
+import io.kotest.matchers.or
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
+import io.kotest.matchers.shouldHave
+import io.kotest.matchers.string.contain
+import io.kotest.matchers.string.endWith
+import io.kotest.matchers.string.match
+import io.kotest.matchers.string.startWith
 
+import java.net.URI
+
+import org.ossreviewtoolkit.model.Criticality
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -34,6 +49,7 @@ import org.ossreviewtoolkit.model.VcsType
 
 class ScorecardFunTest : StringSpec({
     val scorecard by lazy { ScorecardFactory.create() }
+    val checksUrl = "https://github.com/ossf/scorecard/blob/61e84743356275f6ffca23b1b2f2cb945e19eb96/docs/checks.md"
 
     "retrievePackageFindings for a valid package should return findings" {
         val vcs = VcsInfo(
@@ -52,7 +68,230 @@ class ScorecardFunTest : StringSpec({
         findings should matchExactly(
             pkg to { result ->
                 result.advisor shouldBe scorecard.details
-                result.healthMetrics shouldNot beEmpty()
+                result.healthMetrics should haveSize(18)
+
+                with(result.healthMetrics.single { it.name == "Binary-Artifacts" }) {
+                    value shouldBe 0.0
+                    criticality shouldBe Criticality.CRITICAL
+                    reason shouldBe "binaries present in source code"
+
+                    details.forAll {
+                        it should (
+                            startWith("Warn: binary detected: ") and (
+                                endWith("gradle/wrapper/gradle-wrapper.jar:1") or
+                                    endWith("utils/common/src/funTest/resources/testpkg.deb:1")
+                                )
+                            )
+                    }
+
+                    documentation shouldBe "Determines if the project has generated executable (binary) artifacts in " +
+                        "the source repository."
+                    documentationLink shouldBe URI("$checksUrl#binary-artifacts")
+                }
+
+                with(result.healthMetrics.single { it.name == "Branch-Protection" }) {
+                    value shouldBe 8.0
+                    criticality shouldBe Criticality.LOW
+                    reason shouldBe "branch protection is not maximal on development and all release branches"
+                    details should containExactlyInAnyOrder(
+                        "Info: 'allow deletion' disabled on branch 'main'",
+                        "Info: 'force pushes' disabled on branch 'main'",
+                        "Warn: required approving review count is 1 on branch 'main'",
+                        "Warn: codeowners review is not required on branch 'main'",
+                        "Info: status check found to merge onto on branch 'main'",
+                        "Info: PRs are required in order to make changes on branch 'main'"
+                    )
+                    documentation shouldBe "Determines if the default and release branches are protected with " +
+                        "GitHub's branch protection settings."
+                    documentationLink shouldBe URI("$checksUrl#branch-protection")
+                }
+
+                with(result.healthMetrics.single { it.name == "CI-Tests" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason should match("\\d+ out of \\d+ merged PRs checked by a CI test -- score normalized to 10")
+                    details should beEmpty()
+                    documentation shouldBe "Determines if the project runs tests before pull requests are merged."
+                    documentationLink shouldBe URI("$checksUrl#ci-tests")
+                }
+
+                with(result.healthMetrics.single { it.name == "CII-Best-Practices" }) {
+                    value shouldBe 5.0
+                    criticality shouldBe Criticality.MEDIUM
+                    reason shouldBe "badge detected: Passing"
+                    details should beEmpty()
+                    documentation shouldBe "Determines if the project has an OpenSSF (formerly CII) Best Practices " +
+                        "Badge."
+                    documentationLink shouldBe URI("$checksUrl#cii-best-practices")
+                }
+
+                with(result.healthMetrics.single { it.name == "Code-Review" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason shouldBe "all changesets reviewed"
+                    details should beEmpty()
+                    documentation shouldBe "Determines if the project requires human code review before pull " +
+                        "requests (aka merge requests) are merged."
+                    documentationLink shouldBe URI("$checksUrl#code-review")
+                }
+
+                with(result.healthMetrics.single { it.name == "Contributors" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason should match("project has \\d+ contributing companies or organizations")
+                    details.shouldBeSingle() should startWith("Info: found contributions from: ")
+                    documentation shouldBe "Determines if the project has a set of contributors from multiple " +
+                        "organizations (e.g., companies)."
+                    documentationLink shouldBe URI("$checksUrl#contributors")
+                }
+
+                with(result.healthMetrics.single { it.name == "Dangerous-Workflow" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason shouldBe "no dangerous workflow patterns detected"
+                    details should beEmpty()
+                    documentation shouldBe "Determines if the project's GitHub Action workflows avoid dangerous " +
+                        "patterns."
+                    documentationLink shouldBe URI("$checksUrl#dangerous-workflow")
+                }
+
+                with(result.healthMetrics.single { it.name == "Dependency-Update-Tool" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason shouldBe "update tool detected"
+                    details should containOnly("Info: detected update tool: RenovateBot: renovate.json:1")
+                    documentation shouldBe "Determines if the project uses a dependency update tool."
+                    documentationLink shouldBe URI("$checksUrl#dependency-update-tool")
+                }
+
+                with(result.healthMetrics.single { it.name == "Fuzzing" }) {
+                    value shouldBe 0.0
+                    criticality shouldBe Criticality.CRITICAL
+                    reason shouldBe "project is not fuzzed"
+                    details should containOnly("Warn: no fuzzer integrations found")
+                    documentation shouldBe "Determines if the project uses fuzzing."
+                    documentationLink shouldBe URI("$checksUrl#fuzzing")
+                }
+
+                with(result.healthMetrics.single { it.name == "License" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason shouldBe "license file detected"
+                    details should containOnly(
+                        "Info: project has a license file: LICENSE:0",
+                        "Info: FSF or OSI recognized license: Apache License 2.0: LICENSE:0"
+                    )
+                    documentation shouldBe "Determines if the project has defined a license."
+                    documentationLink shouldBe URI("$checksUrl#license")
+                }
+
+                with(result.healthMetrics.single { it.name == "Maintained" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason should match(
+                        "\\d+ commit\\(s\\) and \\d+ issue activity found in the last 90 days -- score normalized to 10"
+                    )
+                    details should beEmpty()
+                    documentation shouldBe "Determines if the project is \"actively maintained\"."
+                    documentationLink shouldBe URI("$checksUrl#maintained")
+                }
+
+                with(result.healthMetrics.single { it.name == "Packaging" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason shouldBe "packaging workflow detected"
+                    details should containOnly(
+                        "Info: Project packages its releases by way of GitHub Actions.: " +
+                            ".github/workflows/build-and-test.yml:117"
+                    )
+                    documentation shouldBe "Determines if the project is published as a package that others can " +
+                        "easily download, install, easily update, and uninstall."
+                    documentationLink shouldBe URI("$checksUrl#packaging")
+                }
+
+                with(result.healthMetrics.single { it.name == "Pinned-Dependencies" }) {
+                    value shouldBe 5.0
+                    criticality shouldBe Criticality.MEDIUM
+                    reason shouldBe "dependency not pinned by hash detected -- score normalized to 5"
+                    // Do not explicitly assert all reported findings as there are currently tens of them.
+                    details shouldHave atLeastSize(40)
+                    documentation shouldBe "Determines if the project has declared and pinned the dependencies of " +
+                        "its build process."
+                    documentationLink shouldBe URI("$checksUrl#pinned-dependencies")
+                }
+
+                with(result.healthMetrics.single { it.name == "SAST" }) {
+                    value shouldBe 10.0
+                    criticality shouldBe Criticality.LOW
+                    reason shouldBe "SAST tool is run on all commits"
+                    details should containOnly(
+                        "Info: SAST configuration detected: CodeQL",
+                        "Info: all commits (30) are checked with a SAST tool"
+                    )
+                    documentation shouldBe "Determines if the project uses static code analysis."
+                    documentationLink shouldBe URI("$checksUrl#sast")
+                }
+
+                with(result.healthMetrics.single { it.name == "Security-Policy" }) {
+                    value shouldBe 0.0
+                    criticality shouldBe Criticality.CRITICAL
+                    reason shouldBe "security policy file not detected"
+                    details should containOnly(
+                        "Warn: no security policy file detected",
+                        "Warn: no security file to analyze"
+                    )
+                    documentation shouldBe "Determines if the project has published a security policy."
+                    documentationLink shouldBe URI("$checksUrl#security-policy")
+                }
+
+                with(result.healthMetrics.single { it.name == "Signed-Releases" }) {
+                    value shouldBe 8.0
+                    criticality shouldBe Criticality.LOW
+                    reason should match("\\d+ out of the last \\d+ releases have a total of \\d+ signed artifacts.")
+
+                    details.forAll {
+                        it should (
+                            startWith("Info: signed release artifact: ") or (
+                                startWith("Warn: release artifact ") and contain(" does not have provenance: ")
+                                )
+                            )
+                    }
+
+                    documentation shouldBe "Determines if the project cryptographically signs release artifacts."
+                    documentationLink shouldBe URI("$checksUrl#signed-releases")
+                }
+
+                with(result.healthMetrics.single { it.name == "Token-Permissions" }) {
+                    value shouldBe 0.0
+                    criticality shouldBe Criticality.CRITICAL
+                    reason shouldBe "detected GitHub workflow tokens with excessive permissions"
+                    details should containOnly(
+                        "Warn: jobLevel 'contents' permission set to 'write': .github/workflows/release.yml:23",
+                        "Warn: jobLevel 'checks' permission set to 'write': .github/workflows/static-analysis.yml:95",
+                        "Info: jobLevel 'contents' permission set to 'read': .github/workflows/static-analysis.yml:96",
+                        "Warn: no topLevel permission defined: .github/workflows/build-and-test.yml:1",
+                        "Warn: no topLevel permission defined: .github/workflows/docker-build.yml:1",
+                        "Info: topLevel permissions set to 'read-all': .github/workflows/native-build.yml:9",
+                        "Warn: no topLevel permission defined: .github/workflows/release.yml:1",
+                        "Info: topLevel permissions set to 'read-all': .github/workflows/scorecard-analysis.yml:11",
+                        "Warn: no topLevel permission defined: .github/workflows/static-analysis.yml:1",
+                        "Warn: no topLevel permission defined: .github/workflows/website-deploy.yml:1",
+                        "Warn: no topLevel permission defined: .github/workflows/website-test.yml:1"
+                    )
+                    documentation shouldBe "Determines if the project's workflows follow the principle of least " +
+                        "privilege."
+                    documentationLink shouldBe URI("$checksUrl#token-permissions")
+                }
+
+                with(result.healthMetrics.single { it.name == "Vulnerabilities" }) {
+                    value shouldBe 0.0
+                    criticality shouldBe Criticality.CRITICAL
+                    reason should match("\\d+ existing vulnerabilities detected")
+                    // Do not explicitly assert all reported findings as there are currently hundrets of them.
+                    details shouldHave atLeastSize(100)
+                    documentation shouldBe "Determines if the project has open, known unfixed vulnerabilities."
+                    documentationLink shouldBe URI("$checksUrl#vulnerabilities")
+                }
             }
         )
     }
