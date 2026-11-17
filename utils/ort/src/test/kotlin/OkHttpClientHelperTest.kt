@@ -50,6 +50,7 @@ import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.Route
 
 import okio.BufferedSource
@@ -117,6 +118,53 @@ class OkHttpClientHelperTest : WordSpec({
             every { client.download(any(), any()) } returns Result.success(response to body)
 
             val result = client.downloadFile(invalidUrl, outputDirectory)
+            result shouldBeFailure {
+                it should beInstanceOf<IOException>()
+            }
+        }
+
+        "not write outside the output directory when the Content-Disposition file name contains '../'" {
+            val root = tempdir()
+            val outputDirectory = root.resolve("output").apply { mkdirs() }
+            val url = "https://example.org/download"
+
+            mockkStatic(OkHttpClient::download)
+            val response = mockk<Response>(relaxed = true)
+            val request = mockk<Request>(relaxed = true)
+            val body = "pwned".toResponseBody()
+
+            every { request.url } returns url.toHttpUrl()
+            every { response.headers(any()) } returns listOf("attachment; filename=\"../escaped.txt\"")
+            every { response.request } returns request
+
+            val client = OkHttpClientHelper.buildClient()
+            every { client.download(any(), any()) } returns Result.success(response to body)
+
+            client.downloadFile(url, outputDirectory)
+
+            root.resolve("escaped.txt").exists() shouldBe false
+            outputDirectory.resolve("escaped.txt").exists() shouldBe true
+        }
+
+        "reject a Content-Disposition file name that resolves outside the output directory" {
+            val root = tempdir()
+            val outputDirectory = root.resolve("output").apply { mkdirs() }
+            val url = "https://example.org/download"
+
+            mockkStatic(OkHttpClient::download)
+            val response = mockk<Response>(relaxed = true)
+            val request = mockk<Request>(relaxed = true)
+            val body = "pwned".toResponseBody()
+
+            every { request.url } returns url.toHttpUrl()
+            every { response.headers(any()) } returns listOf("attachment; filename=\"..\"")
+            every { response.request } returns request
+
+            val client = OkHttpClientHelper.buildClient()
+            every { client.download(any(), any()) } returns Result.success(response to body)
+
+            val result = client.downloadFile(url, outputDirectory)
+
             result shouldBeFailure {
                 it should beInstanceOf<IOException>()
             }

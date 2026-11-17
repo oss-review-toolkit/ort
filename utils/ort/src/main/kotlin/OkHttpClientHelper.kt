@@ -209,11 +209,18 @@ fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
 
         check(candidateNames.isNotEmpty())
 
-        val filename = candidateNames.find {
+        val chosenFile = candidateNames.find {
             ArchiveType.getType(it) != ArchiveType.NONE
         } ?: candidateNames.first()
 
+        val filename = File(chosenFile).name
+
         val file = directory / filename
+
+        if (file.canonicalFile.parentFile != directory.canonicalFile) {
+            body.close()
+            throw IOException("Resolved path for '$filename' is outside the target directory '$directory'.")
+        }
 
         file.sink().buffer().use { target ->
             body.use { target.writeAll(it.source()) }
