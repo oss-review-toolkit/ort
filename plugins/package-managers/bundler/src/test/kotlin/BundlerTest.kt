@@ -69,6 +69,7 @@ class BundlerTest : WordSpec({
             gemInfo shouldBe GemInfo(
                 name = "rspec",
                 version = "3.7.0",
+                platform = "ruby",
                 homepageUrl = "http://github.com/rspec",
                 authors = setOf("Steven Baker", "David Chelimsky", "Myron Marston"),
                 declaredLicenses = setOf("MIT"),

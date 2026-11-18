@@ -273,7 +273,7 @@ class Bundler(
                     parseDependency(workingDir, projectId, it, gemsInfo, scopeDependencies, issues)
                 }
             } else {
-                queryRubyGems(gemId.name, gemId.version)?.apply {
+                queryRubyGems(gemId.name, gemId.version, gemInfo.platform)?.apply {
                     gemsInfo[gemName] = merge(gemInfo)
                 }
 
@@ -329,6 +329,7 @@ class Bundler(
         } ?: GemInfo(
             name = getFallbackProjectName(analysisRoot, definitionFile),
             version = "",
+            platform = "ruby",
             homepageUrl = "",
             authors = emptySet(),
             declaredLicenses = emptySet(),
@@ -357,12 +358,11 @@ class Bundler(
     private fun getGemspecFile(workingDir: File) =
         workingDir.walk().maxDepth(1).firstOrNull { it.isFile && it.extension == "gemspec" }
 
-    private fun queryRubyGems(name: String, version: String, retryCount: Int = 3): GemInfo? {
-        // NOTE: Explicitly use platform=ruby here to enforce the same behavior here that is also used in the Bundler
-        //       resolving logic.
-        // See plugins/package-managers/bundler/src/main/resources/resolve_dependencies.rb
+    private fun queryRubyGems(name: String, version: String, platform: String, retryCount: Int = 3): GemInfo? {
+        // Query the metadata for the platform of the resolved Gem, as e.g. the dependencies and the artifact of Gems
+        // with native extensions differ per platform.
         // See <http://guides.rubygems.org/rubygems-org-api-v2/>.
-        val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml?platform=ruby"
+        val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml?platform=$platform"
 
         return okHttpClient.downloadText(url).mapCatching {
             val details = YAML.decodeFromString<VersionDetails>(it)
@@ -387,7 +387,7 @@ class Bundler(
                     if (retryCount > 0) {
                         // We see a lot of sporadic "bad gateway" responses that disappear when trying again.
                         Thread.sleep(100)
-                        return queryRubyGems(name, version, retryCount - 1)
+                        return queryRubyGems(name, version, platform, retryCount - 1)
                     }
 
                     throw IOException(

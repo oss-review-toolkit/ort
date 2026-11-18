@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.orEmpty
 internal data class GemInfo(
     val name: String,
     val version: String,
+    val platform: String,
     val homepageUrl: String,
     val authors: Set<String>,
     val declaredLicenses: Set<String>,
@@ -48,6 +49,8 @@ internal data class GemInfo(
             return GemInfo(
                 spec.name,
                 spec.version.version,
+                // Bundler's specs from the remote index serialize the "ruby" platform as an empty string.
+                spec.platform.ifEmpty { "ruby" },
                 homepage,
                 spec.authors.mapToSetOfNotEmptyStrings(),
                 spec.licenses.mapToSetOfNotEmptyStrings(),
@@ -78,6 +81,7 @@ internal data class GemInfo(
             return GemInfo(
                 details.name,
                 details.version,
+                details.platform,
                 details.homepageUri.orEmpty(),
                 details.authors?.split(',').mapToSetOfNotEmptyStrings(),
                 details.licenses.mapToSetOfNotEmptyStrings(),
@@ -93,13 +97,14 @@ internal data class GemInfo(
     }
 
     fun merge(other: GemInfo): GemInfo {
-        require(name == other.name && version == other.version) {
+        require(name == other.name && version == other.version && platform == other.platform) {
             "Cannot merge specs for different gems."
         }
 
         return GemInfo(
             name,
             version,
+            platform,
             homepageUrl.ifEmpty { other.homepageUrl },
             authors.ifEmpty { other.authors },
             declaredLicenses.ifEmpty { other.declaredLicenses },
