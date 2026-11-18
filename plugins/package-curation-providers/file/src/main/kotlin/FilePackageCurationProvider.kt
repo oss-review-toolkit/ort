@@ -108,7 +108,7 @@ private fun readCurationFiles(paths: Collection<File>): List<PackageCuration> {
         if (it.isDirectory) FileFormat.findFilesWithKnownExtensions(it) else listOf(it)
     }.filterNot { it.length() == 0L }
 
-    curationFiles.map { curationFile ->
+    curationFiles.forEach { curationFile ->
         val curations = runCatching {
             curationFile.readValue<List<PackageCuration>>()
         }.getOrElse {
