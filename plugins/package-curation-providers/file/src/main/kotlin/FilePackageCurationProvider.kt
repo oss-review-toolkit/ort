@@ -45,9 +45,13 @@ data class FilePackageCurationProviderConfig(
     val mustExist: Boolean
 )
 
+/**
+ * A [PackageCurationProvider] that loads a list of [PackageCuration]s from the [ORT_PACKAGE_CURATIONS_FILENAME] file
+ * located in ORT's config directory, which defaults to `~/.ort/config/curations.yml`.
+ */
 @OrtPlugin(
     displayName = "Default File",
-    summary = "A package curation provider that loads package curations from the default file.",
+    summary = "Provides package curation data from the default curations file.",
     factory = PackageCurationProviderFactory::class
 )
 class DefaultFilePackageCurationProvider(descriptor: PluginDescriptor) : FilePackageCurationProvider(
@@ -58,9 +62,14 @@ class DefaultFilePackageCurationProvider(descriptor: PluginDescriptor) : FilePac
     )
 )
 
+/**
+ * A [PackageCurationProvider] that loads [PackageCuration]s from the [ORT_PACKAGE_CURATIONS_DIRNAME] directory located
+ * in ORT's config directory, which defaults to `~/.ort/config/curations`. The directory is searched recursively for
+ * curation files in any supported [FileFormat], and each file is expected to contain a list of curations.
+ */
 @OrtPlugin(
     displayName = "Default Directory",
-    summary = "A package curation provider that loads package curations from the default directory.",
+    summary = "Provides package curation data from the default curations directory.",
     factory = PackageCurationProviderFactory::class
 )
 class DefaultDirPackageCurationProvider(descriptor: PluginDescriptor) : FilePackageCurationProvider(
@@ -72,12 +81,13 @@ class DefaultDirPackageCurationProvider(descriptor: PluginDescriptor) : FilePack
 )
 
 /**
- * A [PackageCurationProvider] that loads [PackageCuration]s from all given curation files. Supports all file formats
- * specified in [FileFormat].
+ * A [PackageCurationProvider] that loads [PackageCuration]s from all given curation paths. A path can either be a file
+ * or a directory. In the latter case, the directory is searched recursively for curation files. In any case, all
+ * [FileFormat]s are supported, and each file is expected to contain a list of curations.
  */
 @OrtPlugin(
     displayName = "File",
-    summary = "A package curation provider that loads package curations from files.",
+    summary = "Provides package curation data from all given paths.",
     factory = PackageCurationProviderFactory::class
 )
 open class FilePackageCurationProvider(descriptor: PluginDescriptor, vararg paths: File?) :
