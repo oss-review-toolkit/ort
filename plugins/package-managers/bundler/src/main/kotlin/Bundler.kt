@@ -73,6 +73,13 @@ private const val BUNDLER_GEM_NAME = "bundler"
 /** The name of the file where Bundler stores locked down dependency information. */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
+internal fun GemInfo.toIdentifier() = Identifier(
+    PACKAGE_TYPE,
+    platform.takeUnless { it == "ruby" }.orEmpty(),
+    name,
+    version
+)
+
 /**
  * Run the given Ruby [script] in the given [workingDir] and with the given [environment] (which gets merged with the
  * default environment). If no [pathType] is given, the [script] is assumed to contain the code directly. Otherwise, the
@@ -270,7 +277,7 @@ class Bundler(
 
         runCatching {
             val gemInfo = gemsInfo.getValue(gemName)
-            val gemId = Identifier(PACKAGE_TYPE, "", gemInfo.name, gemInfo.version)
+            val gemId = gemInfo.toIdentifier()
 
             // The project itself can be listed as a dependency if the project is a gem (i.e. there is a .gemspec file
             // for it, and the Gemfile refers to it). In that case, skip querying RubyGems and adding Package and
@@ -354,7 +361,7 @@ class Bundler(
         )
 
     private fun getPackageFromGemInfo(gemInfo: GemInfo): Package {
-        val gemId = Identifier(PACKAGE_TYPE, "", gemInfo.name, gemInfo.version)
+        val gemId = gemInfo.toIdentifier()
 
         return Package(
             id = gemId,

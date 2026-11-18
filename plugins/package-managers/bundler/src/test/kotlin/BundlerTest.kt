@@ -29,11 +29,48 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class BundlerTest : WordSpec({
+    "GemInfo.toIdentifier()" should {
+        "distinguish platform-specific Gems" {
+            val gemInfo = GemInfo(
+                name = "nokogiri",
+                version = "1.16.8",
+                platform = "x86_64-linux",
+                homepageUrl = "",
+                authors = emptySet(),
+                declaredLicenses = emptySet(),
+                description = "",
+                runtimeDependencies = emptySet(),
+                vcs = VcsInfo.EMPTY,
+                artifact = RemoteArtifact.EMPTY
+            )
+
+            gemInfo.toIdentifier() shouldBe Identifier("Gem:x86_64-linux:nokogiri:1.16.8")
+        }
+
+        "keep the generic Ruby identifier unchanged" {
+            val gemInfo = GemInfo(
+                name = "nokogiri",
+                version = "1.16.8",
+                platform = "ruby",
+                homepageUrl = "",
+                authors = emptySet(),
+                declaredLicenses = emptySet(),
+                description = "",
+                runtimeDependencies = emptySet(),
+                vcs = VcsInfo.EMPTY,
+                artifact = RemoteArtifact.EMPTY
+            )
+
+            gemInfo.toIdentifier() shouldBe Identifier("Gem::nokogiri:1.16.8")
+        }
+    }
+
     "parseBundlerVersionFromLockfile()" should {
         "correctly parse the Bundler version" {
             val lockfile = tempdir().resolve(BUNDLER_LOCKFILE_NAME).apply {
