@@ -43,6 +43,9 @@ internal data class GemSpec(
     /** The Gem’s specified version. */
     val version: Version,
 
+    /** The platform the Gem is built for, like "ruby" for pure Ruby Gems or "java" for JRuby-specific Gems. */
+    val platform: String,
+
     /** A long description of this Gem. */
     val description: String? = null,
 
@@ -89,6 +92,9 @@ internal data class VersionDetails(
 
     /** The version string, containing numbers and periods, such as "1.0.0.pre" for a prerelease. */
     val version: String,
+
+    /** The platform the Gem is built for, like "ruby" for pure Ruby Gems or "java" for JRuby-specific Gems. */
+    val platform: String,
 
     /** A comma-separated list of authors for this Gem. */
     val authors: String? = null,
