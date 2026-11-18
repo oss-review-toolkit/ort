@@ -45,11 +45,10 @@ Bundler.ui.silence do
     unless custom_platform.to_s.empty?
       platform = Gem::Platform.new(custom_platform)
 
-      # Replace the platforms from the lockfile. Also add the generic platform as Gemfile platforms like ":mri" or
-      # ":jruby" only map to generic platforms like "ruby" or "java". Adding a platform not in the lockfile triggers a
-      # re-resolution which keeps the locked versions where possible.
+      # Replace the platforms from the lockfile. Adding a platform not in the lockfile triggers a re-resolution
+      # which keeps the locked versions where possible.
       definition.platforms.clear
-      [platform, Bundler::GemHelpers.generic(platform)].uniq.each { |p| definition.add_platform(p) }
+      definition.add_platform(platform)
 
       # By default, Bundler only materializes Gemfile dependencies whose platforms match the Ruby interpreter (JRuby),
       # so make the dependencies match the custom platform instead.
