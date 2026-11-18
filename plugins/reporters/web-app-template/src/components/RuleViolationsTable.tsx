@@ -131,32 +131,32 @@ function renderSubRow(row: Row<RuleViolationRow>): JSX.Element {
                     <div className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
                         {licenseSource ? (
                             <>
-                                <span className="font-medium text-muted-foreground">License Source</span>
+                                <span className="text-muted-foreground font-medium">License Source</span>
                                 <span className="font-mono">{licenseSource}</span>
                             </>
                         ) : null}
                         {isResolved && resolutions.length > 0 ? (
                             <>
-                                <span className="font-medium text-muted-foreground">Resolution</span>
+                                <span className="text-muted-foreground font-medium">Resolution</span>
                                 <ResolutionDetails resolutions={resolutions} />
                             </>
                         ) : null}
                         {isExcluded ? (
                             <>
-                                <span className="font-medium text-muted-foreground">Excluded</span>
+                                <span className="text-muted-foreground font-medium">Excluded</span>
                                 <span>{excludeReason || "Yes"}</span>
                             </>
                         ) : null}
                     </div>
                     {message ? (
                         <div>
-                            <h4 className="mb-1 font-semibold text-muted-foreground text-xs uppercase">Message</h4>
+                            <h4 className="text-muted-foreground mb-1 text-xs font-semibold uppercase">Message</h4>
                             <MarkdownText>{message}</MarkdownText>
                         </div>
                     ) : null}
                     {hasHowToFix ? (
                         <div>
-                            <h4 className="mb-1 font-semibold text-muted-foreground text-xs uppercase">How to fix</h4>
+                            <h4 className="text-muted-foreground mb-1 text-xs font-semibold uppercase">How to fix</h4>
                             <MarkdownText>{howToFix}</MarkdownText>
                         </div>
                     ) : null}
@@ -173,13 +173,13 @@ function renderSubRow(row: Row<RuleViolationRow>): JSX.Element {
                 <div className="grid gap-6 lg:grid-cols-2">
                     <section className="space-y-4">
                         <div>
-                            <h3 className="mb-2 font-semibold text-muted-foreground text-sm">Details</h3>
+                            <h3 className="text-muted-foreground mb-2 text-sm font-semibold">Details</h3>
                             <PackageDetails pkg={pkg} />
                         </div>
                     </section>
                     {pkg.hasLicenses() ? (
                         <section>
-                            <h3 className="mb-2 font-semibold text-muted-foreground text-sm">Licenses</h3>
+                            <h3 className="text-muted-foreground mb-2 text-sm font-semibold">Licenses</h3>
                             <PackageLicenses pkg={pkg} />
                         </section>
                     ) : null}
@@ -198,7 +198,7 @@ function renderSubRow(row: Row<RuleViolationRow>): JSX.Element {
                     />
                     {pkg.scanResults.length > 0 ? (
                         <Collapsible>
-                            <CollapsibleTrigger className="group font-medium text-muted-foreground text-sm underline-offset-4 hover:text-foreground hover:underline">
+                            <CollapsibleTrigger className="group text-muted-foreground hover:text-foreground text-sm font-medium underline-offset-4 hover:underline">
                                 <span className="group-data-[state=open]:hidden">Show scanner details</span>
                                 <span className="group-data-[state=closed]:hidden">Hide scanner details</span>
                             </CollapsibleTrigger>
@@ -406,7 +406,7 @@ function RuleViolationsTable({
                     </div>
                 ),
                 cell: ({ row }) => (
-                    <span className="line-clamp-3 whitespace-pre-wrap text-xs leading-relaxed">
+                    <span className="line-clamp-3 text-xs leading-relaxed whitespace-pre-wrap">
                         {row.original.message}
                     </span>
                 ),

@@ -173,7 +173,7 @@ function CvssVectorChart({ className, vectors }: CvssVectorChartProps): JSX.Elem
         // Fixed width/height instead of ResponsiveContainer: a radar has no natural aspect ratio to
         // fill, and a fixed size renders identically regardless of how the surrounding column is sized.
         <div className={cn("flex flex-col items-center", className)}>
-            <h4 className="mb-1 text-center font-semibold text-muted-foreground text-xs uppercase">{TITLE}</h4>
+            <h4 className="text-muted-foreground mb-1 text-center text-xs font-semibold uppercase">{TITLE}</h4>
             <RadarChart
                 data={data}
                 desc={`CVSS sub-scores for ${described}`}
@@ -230,7 +230,7 @@ function CvssVectorChart({ className, vectors }: CvssVectorChartProps): JSX.Elem
                             aria-pressed={isShown}
                             className={cn(
                                 "flex items-center gap-1.5 rounded-md border border-transparent px-2 py-0.5 text-xs",
-                                "transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50",
+                                "hover:text-foreground focus-visible:ring-ring/50 transition-colors focus-visible:ring-[3px]",
                                 isShown ? "text-foreground" : "text-muted-foreground line-through",
                                 isLastShown ? "cursor-default" : "cursor-pointer",
                             )}

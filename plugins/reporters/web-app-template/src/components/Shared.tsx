@@ -114,7 +114,7 @@ function ExcludeStatusIcon({ excluded, reason }: { excluded: boolean; reason?: s
     const Icon = excluded ? FileX : FileCheck;
     return (
         <span className="inline-flex items-center justify-center" title={text}>
-            <Icon aria-hidden="true" className="size-4 text-muted-foreground" />
+            <Icon aria-hidden="true" className="text-muted-foreground size-4" />
             <span className="sr-only">{text}</span>
         </span>
     );
@@ -139,7 +139,7 @@ function ExpandRowIcon({ className, expanded }: ExpandRowIconProps): JSX.Element
 function IconHeader({ Icon, label }: { Icon: LucideIcon; label: string }): JSX.Element {
     return (
         <span className="inline-flex items-center justify-center" title={label}>
-            <Icon aria-hidden="true" className="size-4 text-muted-foreground" />
+            <Icon aria-hidden="true" className="text-muted-foreground size-4" />
             <span className="sr-only">{label}</span>
         </span>
     );
@@ -247,7 +247,7 @@ function LicenseExpression({ className, expression }: LicenseExpressionProps): J
                         return <LicenseBadge key={key} name={token.value} />;
                     case "operator":
                         return (
-                            <span className="font-semibold text-muted-foreground text-xs" key={key}>
+                            <span className="text-muted-foreground text-xs font-semibold" key={key}>
                                 {token.value}
                             </span>
                         );
@@ -315,7 +315,7 @@ function MarkdownText({ children, className }: MarkdownTextProps): JSX.Element {
     return (
         // Links render through Url and are marked not-prose so the typography plugin leaves them alone and
         // they match every other link in the app; fenced code blocks render like the .ort.yml view.
-        <div className={cn("prose prose-sm dark:prose-invert min-w-0 max-w-none prose-p:leading-relaxed", className)}>
+        <div className={cn("prose prose-sm dark:prose-invert prose-p:leading-relaxed max-w-none min-w-0", className)}>
             <Markdown
                 options={{
                     overrides: {
@@ -391,7 +391,7 @@ function PackageLink({ excludeReason, id, isExcluded = false, onClick }: Package
     const link = onClick ? (
         <button
             className={cn(
-                "break-all text-left font-mono text-primary text-xs underline-offset-4 hover:underline",
+                "text-primary text-left font-mono text-xs break-all underline-offset-4 hover:underline",
                 excludedClassName,
             )}
             onClick={(event) => {
@@ -403,7 +403,7 @@ function PackageLink({ excludeReason, id, isExcluded = false, onClick }: Package
             {id}
         </button>
     ) : (
-        <span className={cn("break-all font-mono text-xs", excludedClassName)}>{id}</span>
+        <span className={cn("font-mono text-xs break-all", excludedClassName)}>{id}</span>
     );
     if (!isExcluded) return link;
     return <span title={excludeReason ? `Excluded: ${excludeReason}` : "Excluded"}>{link}</span>;
@@ -431,7 +431,7 @@ function ResolutionDetails({ resolutions }: ResolutionDetailsProps): JSX.Element
             {resolutions.map(({ comment, key, reason }) => (
                 <div key={key}>
                     <div>{reason ? `Resolved with ${reason} resolution` : "Resolved"}</div>
-                    {comment ? <div className="whitespace-pre-wrap text-muted-foreground">{comment}</div> : null}
+                    {comment ? <div className="text-muted-foreground whitespace-pre-wrap">{comment}</div> : null}
                 </div>
             ))}
         </div>
@@ -480,7 +480,7 @@ function SyntaxHighlight({
     showLineNumbers = true,
 }: SyntaxHighlightProps): JSX.Element {
     return (
-        <div className={cn("overflow-auto rounded-md border bg-muted/30 text-xs", className)}>
+        <div className={cn("bg-muted/30 overflow-auto rounded-md border text-xs", className)}>
             <SyntaxHighlighter
                 codeTagProps={{ style: { background: "transparent" } }}
                 customStyle={{ background: "transparent", margin: 0 }}
@@ -528,7 +528,7 @@ function Url({ children, className, href, showIcon = true, truncate = false }: U
         // it can never push adjacent content aside; the icon stays pinned and the full URL is on hover.
         return (
             <a
-                className={cn("flex min-w-0 items-center text-primary underline-offset-4 hover:underline", className)}
+                className={cn("text-primary flex min-w-0 items-center underline-offset-4 hover:underline", className)}
                 href={href}
                 rel="noopener noreferrer"
                 target="_blank"

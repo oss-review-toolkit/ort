@@ -135,13 +135,13 @@ function renderSubRow(row: Row<ScannerFindingRow>): JSX.Element {
     return (
         <div className="space-y-2 p-4 text-sm">
             <div className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
-                <span className="font-medium text-muted-foreground">Type</span>
+                <span className="text-muted-foreground font-medium">Type</span>
                 <span className="font-mono">{type}</span>
-                <span className="font-medium text-muted-foreground">Path</span>
-                <span className="break-all font-mono">{path}</span>
+                <span className="text-muted-foreground font-medium">Path</span>
+                <span className="font-mono break-all">{path}</span>
                 {startLine !== undefined && (
                     <>
-                        <span className="font-medium text-muted-foreground">{isLineRange ? "Lines" : "Line"}</span>
+                        <span className="text-muted-foreground font-medium">{isLineRange ? "Lines" : "Line"}</span>
                         <span className="font-mono">
                             {startLine}
                             {isLineRange ? ` – ${endLine}` : ""}
@@ -150,7 +150,7 @@ function renderSubRow(row: Row<ScannerFindingRow>): JSX.Element {
                 )}
                 {scannerFinding.scanResult ? (
                     <>
-                        <span className="font-medium text-muted-foreground">Scanner</span>
+                        <span className="text-muted-foreground font-medium">Scanner</span>
                         <span className="font-mono">
                             {scannerFinding.scanResult.scanner?.name ?? ""}
                             {scannerFinding.scanResult.scanner?.version
@@ -161,7 +161,7 @@ function renderSubRow(row: Row<ScannerFindingRow>): JSX.Element {
                 ) : null}
                 {isExcluded && pathExcludeReasons ? (
                     <>
-                        <span className="font-medium text-muted-foreground">Excluded</span>
+                        <span className="text-muted-foreground font-medium">Excluded</span>
                         <span>{pathExcludeReasons}</span>
                     </>
                 ) : null}
@@ -208,10 +208,10 @@ function PackageScannerFindingsTable({
                 cell: ({ row }) => {
                     const value = row.original.type;
                     if (value === "LICENSE") {
-                        return <FileText aria-label="License" className="size-4 text-muted-foreground" />;
+                        return <FileText aria-label="License" className="text-muted-foreground size-4" />;
                     }
                     if (value === "COPYRIGHT") {
-                        return <Copyright aria-label="Copyright" className="size-4 text-muted-foreground" />;
+                        return <Copyright aria-label="Copyright" className="text-muted-foreground size-4" />;
                     }
                     return null;
                 },
@@ -286,8 +286,8 @@ function PackageScannerFindingsTable({
                     const path = (
                         <span
                             className={cn(
-                                "break-all font-mono text-xs",
-                                isExcluded && "text-muted-foreground line-through decoration-muted-foreground",
+                                "font-mono text-xs break-all",
+                                isExcluded && "text-muted-foreground decoration-muted-foreground line-through",
                             )}
                         >
                             {value}

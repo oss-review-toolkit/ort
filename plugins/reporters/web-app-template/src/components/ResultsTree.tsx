@@ -96,7 +96,7 @@ function highlight(title: string, searchValue: string): ReactNode {
     return (
         <>
             {before}
-            <mark className="bg-transparent font-semibold text-foreground">{match}</mark>
+            <mark className="text-foreground bg-transparent font-semibold">{match}</mark>
             {after}
         </>
     );
@@ -138,7 +138,7 @@ const TreeRowItem = memo(function TreeRowItem({
                 isProject && "font-semibold",
                 (isScope || isSelected) && "italic",
                 isExcludedPackage && "line-through",
-                "rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                "focus-visible:ring-ring rounded focus-visible:ring-2 focus-visible:outline-none",
             )}
             onClick={() => onSelect(rowKey, node)}
             type="button"
@@ -152,8 +152,8 @@ const TreeRowItem = memo(function TreeRowItem({
         <div
             className={cn(
                 "group absolute top-0 left-0 flex w-full items-center gap-1 rounded-md py-1 pr-2 text-sm",
-                "transition-colors hover:bg-accent/60",
-                isSelected && "font-semibold text-foreground",
+                "hover:bg-accent/60 transition-colors",
+                isSelected && "text-foreground font-semibold",
                 isExcluded && "text-muted-foreground",
             )}
             data-index={index}
@@ -165,7 +165,7 @@ const TreeRowItem = memo(function TreeRowItem({
                 <button
                     aria-expanded={isOpen}
                     aria-label={isOpen ? "Collapse node" : "Expand node"}
-                    className="flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-accent"
+                    className="text-muted-foreground hover:bg-accent flex size-5 items-center justify-center rounded"
                     onClick={() => onToggle(rowKey, !isOpen)}
                     type="button"
                 >
@@ -177,7 +177,7 @@ const TreeRowItem = memo(function TreeRowItem({
             ) : (
                 <span aria-hidden="true" className="inline-block size-5" />
             )}
-            <Icon aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
+            <Icon aria-hidden="true" className="text-muted-foreground size-4 shrink-0" />
             {isExcludedPackage ? (
                 <span title={excludeReason ? `Excluded: ${excludeReason}` : "Excluded"}>{titleButton}</span>
             ) : (
@@ -267,7 +267,7 @@ function VirtualTree({
 
     return (
         <div
-            className="min-h-0 flex-1 overflow-auto rounded-md border bg-card px-2 text-sm"
+            className="bg-card min-h-0 flex-1 overflow-auto rounded-md border px-2 text-sm"
             data-tree-scroll=""
             ref={scrollRef}
         >
@@ -448,7 +448,7 @@ function ResultsTreeView({
     return (
         <div
             className={cn(
-                "grid min-h-0 gap-4 [grid-template-rows:minmax(0,1fr)_minmax(0,1fr)]",
+                "grid min-h-0 [grid-template-rows:minmax(0,1fr)_minmax(0,1fr)] gap-4",
                 "lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:[grid-template-rows:minmax(0,1fr)]",
                 className,
             )}
@@ -458,7 +458,7 @@ function ResultsTreeView({
                     <div className="relative flex-1">
                         <Search
                             aria-hidden="true"
-                            className="absolute top-1/2 left-2 size-4 -translate-y-1/2 text-muted-foreground"
+                            className="text-muted-foreground absolute top-1/2 left-2 size-4 -translate-y-1/2"
                         />
                         <Input
                             aria-label="Search the dependency tree"
@@ -469,7 +469,7 @@ function ResultsTreeView({
                         />
                     </div>
                     {searchInput.trim() ? (
-                        <div className="flex shrink-0 items-center gap-1 text-muted-foreground text-xs">
+                        <div className="text-muted-foreground flex shrink-0 items-center gap-1 text-xs">
                             <span aria-live="polite" className="tabular-nums">
                                 {isSearching
                                     ? "Searching…"
@@ -499,8 +499,8 @@ function ResultsTreeView({
                     ) : null}
                 </div>
                 {roots.length === 0 || rows.length === 0 ? (
-                    <div className="min-h-0 flex-1 rounded-md border bg-card p-2 text-sm">
-                        <p className="px-2 py-4 text-muted-foreground">
+                    <div className="bg-card min-h-0 flex-1 rounded-md border p-2 text-sm">
+                        <p className="text-muted-foreground px-2 py-4">
                             {roots.length === 0 ? "No dependency tree available." : "No matching packages."}
                         </p>
                     </div>
@@ -515,7 +515,7 @@ function ResultsTreeView({
                     />
                 )}
             </div>
-            <div className="h-full min-h-0 overflow-auto rounded-md border bg-card">
+            <div className="bg-card h-full min-h-0 overflow-auto rounded-md border">
                 {selectedPackage ? (
                     <PackageDetailPanel
                         key={selectedPackage.id ?? ""}
@@ -527,7 +527,7 @@ function ResultsTreeView({
                         {...(onFocusPackageTabChange ? { onTabChange: onFocusPackageTabChange } : {})}
                     />
                 ) : (
-                    <p className="p-4 text-muted-foreground text-sm">
+                    <p className="text-muted-foreground p-4 text-sm">
                         Select a package in the tree to view its details.
                     </p>
                 )}
@@ -561,8 +561,8 @@ function ResultsTree(props: ResultsTreeProps): JSX.Element {
 
     if (!ready) {
         return (
-            <div className={cn("rounded-md border bg-card p-2 text-sm", className)}>
-                <p className="px-2 py-4 text-muted-foreground">Building dependency tree…</p>
+            <div className={cn("bg-card rounded-md border p-2 text-sm", className)}>
+                <p className="text-muted-foreground px-2 py-4">Building dependency tree…</p>
             </div>
         );
     }

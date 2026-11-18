@@ -350,7 +350,7 @@ function DataTable<TData>({
                                                     default whitespace-nowrap/align-middle - otherwise the content cannot
                                                     wrap and blows the table wider than its container. */}
                                                 <TableCell
-                                                    className="whitespace-normal bg-muted/30 align-top"
+                                                    className="bg-muted/30 align-top whitespace-normal"
                                                     colSpan={visibleColumnCount}
                                                 >
                                                     {renderSubComponent(row)}

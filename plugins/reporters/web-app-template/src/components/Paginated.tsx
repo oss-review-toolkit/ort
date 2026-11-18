@@ -57,7 +57,7 @@ export function Paginated<T>({
                 ))}
             </div>
             {pageCount > 1 ? (
-                <div className="flex flex-wrap items-center justify-between gap-2 text-muted-foreground text-sm">
+                <div className="text-muted-foreground flex flex-wrap items-center justify-between gap-2 text-sm">
                     <span>
                         {start + 1}–{start + pageItems.length} of {items.length}
                         {itemLabel ? ` ${itemLabel}` : ""}

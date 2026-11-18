@@ -64,7 +64,7 @@ function RunDetails({ focusTab, onSelectPackage, webAppEvaluatedModel }: RunDeta
                 content: (
                     <div className="relative">
                         <CopyToClipboard
-                            className="absolute top-2 right-2 z-10 border bg-background shadow-sm"
+                            className="bg-background absolute top-2 right-2 z-10 border shadow-sm"
                             label="Copy the .ort.yml file contents"
                             value={webAppEvaluatedModel.repositoryConfiguration ?? ""}
                         />
@@ -83,10 +83,10 @@ function RunDetails({ focusTab, onSelectPackage, webAppEvaluatedModel }: RunDeta
                 label: "Labels",
                 icon: Tags,
                 content: (
-                    <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 rounded-md border bg-muted/30 p-4 text-sm">
+                    <dl className="bg-muted/30 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 rounded-md border p-4 text-sm">
                         {Object.entries(labels).map(([key, value]) => (
                             <div className="contents" key={key}>
-                                <dt className="font-medium text-muted-foreground">{key}</dt>
+                                <dt className="text-muted-foreground font-medium">{key}</dt>
                                 <dd className="break-all">{value.startsWith("http") ? <Url href={value} /> : value}</dd>
                             </div>
                         ))}
@@ -126,7 +126,7 @@ function RunDetails({ focusTab, onSelectPackage, webAppEvaluatedModel }: RunDeta
                 content: (
                     <div className="relative">
                         <CopyToClipboard
-                            className="absolute top-2 right-2 z-10 border bg-background shadow-sm"
+                            className="bg-background absolute top-2 right-2 z-10 border shadow-sm"
                             label="Copy the package configurations"
                             value={configurationsYaml}
                         />
@@ -147,7 +147,7 @@ function RunDetails({ focusTab, onSelectPackage, webAppEvaluatedModel }: RunDeta
                 content: (
                     <div className="relative">
                         <CopyToClipboard
-                            className="absolute top-2 right-2 z-10 border bg-background shadow-sm"
+                            className="bg-background absolute top-2 right-2 z-10 border shadow-sm"
                             label="Copy the package curations"
                             value={curationsYaml}
                         />
@@ -168,7 +168,7 @@ function RunDetails({ focusTab, onSelectPackage, webAppEvaluatedModel }: RunDeta
                 content: (
                     <div className="relative">
                         <CopyToClipboard
-                            className="absolute top-2 right-2 z-10 border bg-background shadow-sm"
+                            className="bg-background absolute top-2 right-2 z-10 border shadow-sm"
                             label="Copy the resolutions"
                             value={resolutionsYaml}
                         />
