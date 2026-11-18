@@ -31,8 +31,7 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.hasIvyVersionRange
-import org.ossreviewtoolkit.model.utils.isApplicableIvyVersion
-import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
+import org.ossreviewtoolkit.model.utils.isVersionMatchedBy
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
@@ -93,7 +92,7 @@ data class PackageConfiguration(
         if (!id.type.equals(otherId.type, ignoreCase = true) ||
             id.namespace != otherId.namespace ||
             id.name != otherId.name ||
-            !(id.version.equalsOrIsBlank(otherId.version) || id.isApplicableIvyVersion(otherId))
+            !otherId.isVersionMatchedBy(id)
         ) {
             return false
         }
