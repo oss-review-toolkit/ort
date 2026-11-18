@@ -36,6 +36,15 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 // Requires Git to be able to use Gems from Git repositories.
 @Tags("RequiresExternalTool")
 class BundlerFunTest : StringSpec({
+    "Resolve dependencies correctly if the project is a Gem" {
+        val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
+        val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
+
+        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
+
+        actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Resolve dependencies correctly" {
         val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
         val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
@@ -56,14 +65,5 @@ class BundlerFunTest : StringSpec({
             packages should beEmpty()
             issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found")
         }
-    }
-
-    "Resolve dependencies correctly if the project is a Gem" {
-        val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
-        val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
-
-        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
-
-        actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })
