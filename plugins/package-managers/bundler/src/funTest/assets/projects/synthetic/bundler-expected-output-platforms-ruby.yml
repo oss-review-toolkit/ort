@@ -1,0 +1,95 @@
+---
+project:
+  id: "Bundler::Gemfile:"
+  definition_file_path: "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/platforms/Gemfile"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "default"
+    dependencies:
+    - id: "Gem::rack:2.2.23"
+    - id: "Gem::rake:13.4.2"
+packages:
+- id: "Gem::rack:2.2.23"
+  purl: "pkg:gem/rack@2.2.23"
+  authors:
+  - "Leah Neukirchen"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Rack provides a minimal, modular and adaptable interface for developing\n\
+    web applications in Ruby. By wrapping HTTP requests and responses in\nthe simplest\
+    \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
+    \ and software in between (the so-called\nmiddleware) into a single method call.\n"
+  homepage_url: "https://github.com/rack/rack"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rack-2.2.23.gem"
+    hash:
+      value: "a8fe9d7e07064770b8ec123663fded8a59ef7e2b6db5cda7173d45a5718ab69c"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/rack/rack.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rack/rack.git"
+    revision: ""
+    path: ""
+- id: "Gem::rake:13.4.2"
+  purl: "pkg:gem/rake@13.4.2"
+  authors:
+  - "Eric Hodel"
+  - "Hiroshi SHIBATA"
+  - "Jim Weirich"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Rake is a Make-like program implemented in Ruby. Tasks and dependencies\
+    \ are\nspecified in standard Ruby syntax.\nRake has the following features:\n\
+    \  * Rakefiles (rake's version of Makefiles) are completely defined in standard\
+    \ Ruby syntax.\n    No XML files to edit. No quirky Makefile syntax to worry about\
+    \ (is that a tab or a space?)\n  * Users can specify tasks with prerequisites.\n\
+    \  * Rake supports rule patterns to synthesize implicit tasks.\n  * Flexible FileLists\
+    \ that act like arrays but know about manipulating file names and paths.\n  *\
+    \ Supports parallel execution of tasks.\n"
+  homepage_url: "https://github.com/ruby/rake"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rake-13.4.2.gem"
+    hash:
+      value: "cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/ruby/rake.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ruby/rake.git"
+    revision: ""
+    path: ""

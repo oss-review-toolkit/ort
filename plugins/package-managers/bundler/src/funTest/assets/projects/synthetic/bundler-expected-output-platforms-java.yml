@@ -1,0 +1,94 @@
+---
+project:
+  id: "Bundler::Gemfile:"
+  definition_file_path: "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/platforms/Gemfile"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "default"
+    dependencies:
+    - id: "Gem::jruby-openssl:0.19.5"
+    - id: "Gem::rack:2.2.23"
+packages:
+- id: "Gem::jruby-openssl:0.19.5"
+  purl: "pkg:gem/jruby-openssl@0.19.5"
+  authors:
+  - "JRuby contributors"
+  - "Karol Bucek"
+  - "Ola Bini"
+  declared_licenses:
+  - "EPL-1.0"
+  - "GPL-2.0"
+  - "LGPL-2.1"
+  declared_licenses_processed:
+    spdx_expression: "EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only"
+    mapped:
+      GPL-2.0: "GPL-2.0-only"
+      LGPL-2.1: "LGPL-2.1-only"
+  description: "Ruby OpenSSL compatibility for JRuby, based on Java JCA/JCE and Bouncy\
+    \ Castle libraries (does not depend on native OpenSSL)."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/jruby-openssl-0.19.5-java.gem"
+    hash:
+      value: "1125c602cad61b2305725130ef5eecc580c3d34b9c4b3a4af5d3336842634ecc"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jruby/jruby-openssl.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jruby/jruby-openssl.git"
+    revision: ""
+    path: ""
+- id: "Gem::rack:2.2.23"
+  purl: "pkg:gem/rack@2.2.23"
+  authors:
+  - "Leah Neukirchen"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Rack provides a minimal, modular and adaptable interface for developing\n\
+    web applications in Ruby. By wrapping HTTP requests and responses in\nthe simplest\
+    \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
+    \ and software in between (the so-called\nmiddleware) into a single method call.\n"
+  homepage_url: "https://github.com/rack/rack"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rack-2.2.23.gem"
+    hash:
+      value: "a8fe9d7e07064770b8ec123663fded8a59ef7e2b6db5cda7173d45a5718ab69c"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/rack/rack.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rack/rack.git"
+    revision: ""
+    path: ""

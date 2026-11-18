@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rack (2.2.23)
+    rake (13.4.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  jruby-openssl (= 0.19.5)
+  rack (= 2.2.23)
+  rake (= 13.4.2)
+
+BUNDLED WITH
+   2.6.3

@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gem 'rack', '2.2.23'
+
+# Gems that are only relevant for some platforms.
+gem 'rake', '13.4.2', platforms: :mri
+gem 'jruby-openssl', '0.19.5', platforms: :jruby
