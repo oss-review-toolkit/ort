@@ -112,8 +112,8 @@ class EvaluatorTest : WordSpec({
         }
     }
 
-    "OSADL compliance rules" should {
-        val script = getResource("/rules/osadl.rules.kts")
+    "OSADL project-license rules" should {
+        val script = getResource("/rules/project-license.rules.kts")
 
         "return no violation for compatible licenses" {
             val compatibleOrtResult = ortResult {
@@ -130,14 +130,14 @@ class EvaluatorTest : WordSpec({
                 }
 
                 project("Maven:group:project-bar:1") {
-                    license = "AGPL-3.0-only"
+                    license = "GPL-3.0-only"
 
                     pkg("Maven:group:package-bar-direct:1") {
-                        license = "AGPL-3.0-only"
+                        license = "Apache-2.0"
                     }
 
                     pkg("Maven:group:package-bar-direct:2") {
-                        license = "AGPL-3.0-or-later"
+                        license = "MIT"
                     }
                 }
             }
@@ -162,14 +162,14 @@ class EvaluatorTest : WordSpec({
                 }
 
                 project("Maven:group:project-bar:1") {
-                    license = "AGPL-3.0-or-later"
+                    license = "Apache-2.0"
 
                     pkg("Maven:group:package-bar-direct:1") {
-                        license = "AGPL-3.0-only"
+                        license = "GPL-3.0-only"
                     }
 
                     pkg("Maven:group:package-bar-direct:2") {
-                        license = "AGPL-3.0-only"
+                        license = "MIT"
                     }
                 }
             }
@@ -182,16 +182,11 @@ class EvaluatorTest : WordSpec({
                     "'Maven:group:package-foo-transitive:1'. Software under a copyleft license such as the " +
                     "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
                     "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses.",
-                "The outbound license AGPL-3.0-or-later of project 'Maven:group:project-bar:1' is incompatible " +
-                    "with the inbound license AGPL-3.0-only of its dependency " +
-                    "'Maven:group:package-bar-direct:1'. Software under a copyleft license such as the " +
-                    "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
-                    "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses.",
-                "The outbound license AGPL-3.0-or-later of project 'Maven:group:project-bar:1' is incompatible " +
-                    "with the inbound license AGPL-3.0-only of its dependency " +
-                    "'Maven:group:package-bar-direct:2'. Software under a copyleft license such as the " +
-                    "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
-                    "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses."
+                "The outbound license Apache-2.0 of project 'Maven:group:project-bar:1' is incompatible with the " +
+                    "inbound license GPL-3.0-only of its dependency 'Maven:group:package-bar-direct:1'. Software " +
+                    "under a copyleft license such as the GPL-3.0-only license normally cannot be redistributed " +
+                    "under a non-copyleft license such as the Apache-2.0 license, except if it were explicitly " +
+                    "permitted in the licenses."
             )
         }
 

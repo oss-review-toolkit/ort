@@ -49,7 +49,7 @@ class EvaluateCommandTest : StringSpec({
     }
 
     "If a rules resource is specified, the default rules file should not be required" {
-        val args = "--check-syntax --rules-resource /rules/osadl.rules.kts".split(' ')
+        val args = "--check-syntax --rules-resource /rules/project-license.rules.kts".split(' ')
 
         ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME) shouldNot exist()
         shouldNotThrow<FileNotFoundException> {
