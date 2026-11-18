@@ -1,0 +1,11 @@
+{
+  "name": "fmt",
+  "version": "10.2.1",
+  "description": "A modern formatting library",
+  "homepage": "https://fmt.dev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fmtlib/fmt.git"
+  }
+}
