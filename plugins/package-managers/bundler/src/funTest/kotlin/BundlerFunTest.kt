@@ -54,6 +54,15 @@ class BundlerFunTest : StringSpec({
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Resolve platform-specific dependencies correctly for the 'java' platform" {
+        val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
+        val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile-java.yml")
+
+        val actualResult = BundlerFactory.create(platform = "java").resolveSingleProject(definitionFile)
+
+        actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Show an error if no lockfile is present" {
         val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
         val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
