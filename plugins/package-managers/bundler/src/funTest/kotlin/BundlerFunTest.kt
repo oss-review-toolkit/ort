@@ -45,11 +45,20 @@ class BundlerFunTest : StringSpec({
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Resolve dependencies correctly" {
+    "Resolve dependencies correctly for the default 'ruby' platform" {
         val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
         val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 
         val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
+
+        actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Resolve platform-specific dependencies correctly for the 'java' platform" {
+        val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
+        val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile-java.yml")
+
+        val actualResult = BundlerFactory.create(platform = "java").resolveSingleProject(definitionFile)
 
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
