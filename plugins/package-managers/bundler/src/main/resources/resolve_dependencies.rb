@@ -37,10 +37,33 @@ Bundler.ui.silence do
 
   # Resolve all groups including optional ones.
   Bundler.settings.temporary(with: all_groups) do
+    definition = Bundler.definition
+
+    # Optionally resolve dependencies for a custom platform like "java" or "x86_64-linux" instead of for the platforms
+    # of the Ruby interpreter or from the lockfile. This needs to match the logic in "root_dependencies.rb".
+    custom_platform = ENV['ORT_BUNDLER_PLATFORM']
+    unless custom_platform.to_s.empty?
+      platform = Gem::Platform.new(custom_platform)
+
+      # Replace the platforms from the lockfile. Also add the generic platform as Gemfile platforms like ":mri" or
+      # ":jruby" only map to generic platforms like "ruby" or "java". Adding a platform not in the lockfile triggers a
+      # re-resolution which keeps the locked versions where possible.
+      definition.platforms.clear
+      [platform, Bundler::GemHelpers.generic(platform)].uniq.each { |p| definition.add_platform(p) }
+
+      # By default, Bundler only materializes Gemfile dependencies whose platforms match the Ruby interpreter (JRuby),
+      # so make the dependencies match the custom platform instead.
+      definition.dependencies.each do |dep|
+        dep.define_singleton_method(:current_platform?) do
+          platforms.empty? || gem_platforms(definition.platforms).any?
+        end
+      end
+    end
+
     # This command resolves dependencies that are specified in the Gemfile of the current working directory.
-    Bundler.definition.resolve_remotely!
+    definition.resolve_remotely!
 
     # Resolving is triggered lazily, so the below "to_yaml" might create progress output.
-    Bundler.definition.specs.map(&:to_yaml).join("\0")
+    definition.specs.map(&:to_yaml).join("\0")
   end
 end

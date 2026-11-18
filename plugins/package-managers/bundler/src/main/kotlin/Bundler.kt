@@ -111,7 +111,14 @@ data class BundlerConfig(
      * lockfile, or the version that ships with JRuby if no lockfiles are present. In any case, the value can currently
      * only be set to a higher version than the version that ships with JRuby.
      */
-    val bundlerVersion: String?
+    val bundlerVersion: String?,
+
+    /**
+     * The platform to resolve dependencies for, like "java" or "x86_64-linux". This overrides the platforms declared in
+     * any present lockfile. By default, dependencies are resolved for the lockfile's platforms, and dependencies are
+     * filtered by the platform of the Ruby interpreter, which is always "java" as JRuby is used.
+     */
+    val platform: String?
 )
 
 /**
@@ -295,19 +302,26 @@ class Bundler(
         }
     }
 
+    private fun getDependenciesScriptEnvironment(gemfile: File): Map<String, String> =
+        buildMap {
+            putAll(scriptEnvironment)
+            put("BUNDLE_GEMFILE", gemfile.absolutePath)
+            config.platform?.also { put("ORT_BUNDLER_PLATFORM", it) }
+        }
+
     @Suppress("UNCHECKED_CAST")
     private fun getDependencyGroups(gemfile: File): Map<String, List<String>> =
         runScript(
             ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME,
             PathType.CLASSPATH,
-            environment = scriptEnvironment + mapOf("BUNDLE_GEMFILE" to gemfile.absolutePath)
+            environment = getDependenciesScriptEnvironment(gemfile)
         ) as Map<String, List<String>>
 
     private fun resolveGemsInfo(gemfile: File): MutableMap<String, GemInfo> {
         val specs = runScript(
             RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME,
             PathType.CLASSPATH,
-            environment = scriptEnvironment + mapOf("BUNDLE_GEMFILE" to gemfile.absolutePath)
+            environment = getDependenciesScriptEnvironment(gemfile)
         ).toString()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"

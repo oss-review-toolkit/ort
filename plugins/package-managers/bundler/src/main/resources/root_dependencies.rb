@@ -26,6 +26,22 @@ require 'yaml'
 
 groups = {}
 
+# Optionally determine dependencies for a custom platform like "java" or "x86_64-linux" instead of for the platform of
+# the Ruby interpreter. This needs to match the logic in "resolve_dependencies.rb".
+custom_platform = ENV['ORT_BUNDLER_PLATFORM']
+unless custom_platform.to_s.empty?
+    platform = Gem::Platform.new(custom_platform)
+
+    # Gemfile platforms like ":mri" or ":jruby" only map to generic platforms like "ruby" or "java".
+    target_platforms = [platform, Bundler::GemHelpers.generic(platform)].uniq
+
+    Bundler.definition.dependencies.each { |dep|
+        dep.define_singleton_method(:current_platform?) {
+            platforms.empty? || gem_platforms(target_platforms).any?
+        }
+    }
+end
+
 Bundler.load.current_dependencies.each { |dep|
     dep.groups.each { |group|
         (groups[group.to_s] ||= []) << dep.name
