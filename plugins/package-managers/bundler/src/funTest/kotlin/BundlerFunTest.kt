@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
 import io.kotest.core.annotation.Tags
-import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.should
@@ -35,37 +35,35 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 // Requires Git to be able to use Gems from Git repositories.
 @Tags("RequiresExternalTool")
-class BundlerFunTest : WordSpec({
-    "Bundler" should {
-        "resolve dependencies correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
-            val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
+class BundlerFunTest : StringSpec({
+    "Resolve dependencies correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
+        val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 
-            val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
+        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
 
-            actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Show an error if no lockfile is present" {
+        val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
+        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
+
+        with(actualResult) {
+            project.id shouldBe Identifier("Bundler::Gemfile:")
+            project.definitionFilePath shouldBe
+                "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
+            packages should beEmpty()
+            issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found")
         }
+    }
 
-        "show error if no lockfile is present" {
-            val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
-            val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
+    "Resolve dependencies correctly if the project is a Gem" {
+        val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
+        val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
 
-            with(actualResult) {
-                project.id shouldBe Identifier("Bundler::Gemfile:")
-                project.definitionFilePath shouldBe
-                    "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
-                packages should beEmpty()
-                issues.shouldBeSingle().message should haveSubstring("IllegalArgumentException: No lockfile found")
-            }
-        }
+        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
 
-        "resolve dependencies correctly when the project is a Gem" {
-            val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
-            val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
-
-            val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
-
-            actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
+        actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })
