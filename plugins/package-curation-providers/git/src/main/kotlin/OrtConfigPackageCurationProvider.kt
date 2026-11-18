@@ -30,7 +30,8 @@ internal const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-to
 
 /**
  * A [PackageCurationProvider] that provides [PackageCuration]s loaded from the
- * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
+ * [ort-config repository](https://github.com/oss-review-toolkit/ort-config). Note that the repository uses the layout
+ * described for [GitPackageCurationProvider] for fast lookup of curations for specific packages.
  */
 @OrtPlugin(
     id = "ORTConfig",
