@@ -26,7 +26,8 @@ import org.ossreviewtoolkit.plugins.api.Plugin
 /** A provider for [PackageCuration]s. */
 interface PackageCurationProvider : Plugin {
     /**
-     * Return all available [PackageCuration]s which are applicable to any of the given [packages].
+     * Return all available [PackageCuration]s, ordered highest priority first, which are applicable to any of the
+     * given [packages].
      *
      * TODO: Maybe make this a suspend function, then all implementing classes could deal with coroutines more easily.
      */
