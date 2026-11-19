@@ -48,7 +48,9 @@ application {
     // As the Java version used at runtime is not generally known, only hard-code some uncritical options.
     applicationDefaultJvmArgs = listOf(
         "--add-opens", "java.base/java.io=ALL-UNNAMED",
-        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
+        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
+        // Work around the Java2Shell vulnerability, see https://calif.io/java4shell.
+        "-XX:-UseBASE64Intrinsics"
     )
 }
 
