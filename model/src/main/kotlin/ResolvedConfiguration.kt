@@ -48,7 +48,7 @@ data class ResolvedConfiguration(
     val packageConfigurations: List<PackageConfiguration>? = null,
 
     /**
-     * The curations for all enabled providers ordered highest-priority-first. The list contains exactly one entry for
+     * The curations for all enabled providers ordered highest priority first. The list contains exactly one entry for
      * each enabled provider.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -66,7 +66,7 @@ data class ResolvedConfiguration(
         }
     }
 
-    /** Return all [PackageCuration]s contained in this [ResolvedConfiguration] in highest-priority-first order. */
+    /** Return all [PackageCuration]s contained in this [ResolvedConfiguration] in highest priority first order. */
     @JsonIgnore
     fun getAllPackageCurations(): List<PackageCuration> = packageCurations.flatMap { it.curations }
 }

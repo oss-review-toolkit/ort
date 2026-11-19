@@ -680,7 +680,7 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
  * Return a set containing exactly one [CuratedPackage] for each given [Package], derived from applying all
- * given [curations] to the packages they apply to. The given [curations] must be ordered highest-priority-first, which
+ * given [curations] to the packages they apply to. The given [curations] must be ordered highest priority first, which
  * is the inverse order of their application.
  */
 internal fun applyPackageCurations(
