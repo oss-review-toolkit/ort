@@ -77,7 +77,7 @@ data class ResolvedPackageCurations(
 
     /**
      * All package curations applicable to the packages contained in the enclosing [OrtResult] in the order as they
-     * were provided by the package curation provider.
+     * were provided by the package curation provider, which is highest priority first.
      */
     val curations: List<PackageCuration> = emptyList()
 ) {
