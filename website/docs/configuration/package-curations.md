@@ -48,6 +48,8 @@ Because it is not always possible to fix this information in upstream packages, 
 These curations can be configured in a YAML file passed to the *analyzer*.
 The data from the curations file amends the metadata provided by the packages themselves.
 This way, it is possible to fix broken VCS URLs or provide the location of source artifacts.
+The curations are applied lowest priority first, so that higher-priority curations may overwrite the effect of lower-priority ones.
+The curations within the files are always ordered highest priority first.
 
 Hint:
 If the `concluded_license` *and* the `authors` are curated, this package will be skipped during the `scan` step, as no more information from the scanner is required.
