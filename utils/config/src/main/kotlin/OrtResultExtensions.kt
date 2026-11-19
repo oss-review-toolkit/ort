@@ -45,7 +45,7 @@ fun OrtResult.setPackageConfigurations(packageConfigurationProvider: PackageConf
 
 /**
  * Replace the package curations in [OrtResult.resolvedConfiguration] with the ones obtained from
- * [packageCurationProviders]. The [packageCurationProviders] must be ordered highest-priority-first.
+ * [packageCurationProviders]. The [packageCurationProviders] must be ordered highest priority first.
  */
 fun OrtResult.setPackageCurations(packageCurationProviders: List<Pair<String, PackageCurationProvider>>): OrtResult {
     val packageCurations =

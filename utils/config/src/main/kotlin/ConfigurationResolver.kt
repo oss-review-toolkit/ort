@@ -55,7 +55,7 @@ object ConfigurationResolver {
 
     /**
      * Return the resolved [PackageCuration]s for the given [packages]. The [curationProviders] must be ordered
-     * highest-priority-first.
+     * highest priority first.
      */
     fun resolvePackageCurations(
         packages: Collection<Package>,

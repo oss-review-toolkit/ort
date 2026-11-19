@@ -130,7 +130,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
     /**
      * Return the result of analyzing the given [managed file][info]. The given [packageCurationProviders] must be
-     * ordered highest-priority-first.
+     * ordered highest priority first.
      */
     @JvmOverloads
     fun analyze(
