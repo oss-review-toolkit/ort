@@ -38,8 +38,6 @@ import io.kotest.matchers.string.endWith
 import io.kotest.matchers.string.match
 import io.kotest.matchers.string.startWith
 
-import java.net.URI
-
 import org.ossreviewtoolkit.model.Criticality
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -49,7 +47,8 @@ import org.ossreviewtoolkit.model.VcsType
 
 class ScorecardFunTest : StringSpec({
     val scorecard by lazy { ScorecardFactory.create() }
-    val checksUrl = "https://github.com/ossf/scorecard/blob/61e84743356275f6ffca23b1b2f2cb945e19eb96/docs/checks.md"
+    val checksUrlPrefix = "https://github.com/ossf/scorecard/blob"
+    val checksUrlSuffix = "docs/checks.md"
 
     "Return findings for a valid package" {
         val vcs = VcsInfo(
@@ -86,7 +85,8 @@ class ScorecardFunTest : StringSpec({
 
                     documentation shouldBe "Determines if the project has generated executable (binary) artifacts in " +
                         "the source repository."
-                    documentationLink shouldBe URI("$checksUrl#binary-artifacts")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Branch-Protection" }) {
@@ -103,7 +103,8 @@ class ScorecardFunTest : StringSpec({
                     )
                     documentation shouldBe "Determines if the default and release branches are protected with " +
                         "GitHub's branch protection settings."
-                    documentationLink shouldBe URI("$checksUrl#branch-protection")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "CI-Tests" }) {
@@ -112,7 +113,8 @@ class ScorecardFunTest : StringSpec({
                     reason should match("\\d+ out of \\d+ merged PRs checked by a CI test -- score normalized to 10")
                     details should beEmpty()
                     documentation shouldBe "Determines if the project runs tests before pull requests are merged."
-                    documentationLink shouldBe URI("$checksUrl#ci-tests")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "CII-Best-Practices" }) {
@@ -122,7 +124,8 @@ class ScorecardFunTest : StringSpec({
                     details should beEmpty()
                     documentation shouldBe "Determines if the project has an OpenSSF (formerly CII) Best Practices " +
                         "Badge."
-                    documentationLink shouldBe URI("$checksUrl#cii-best-practices")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Code-Review" }) {
@@ -132,7 +135,8 @@ class ScorecardFunTest : StringSpec({
                     details should beEmpty()
                     documentation shouldBe "Determines if the project requires human code review before pull " +
                         "requests (aka merge requests) are merged."
-                    documentationLink shouldBe URI("$checksUrl#code-review")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Contributors" }) {
@@ -142,7 +146,8 @@ class ScorecardFunTest : StringSpec({
                     details.shouldBeSingle() should startWith("Info: found contributions from: ")
                     documentation shouldBe "Determines if the project has a set of contributors from multiple " +
                         "organizations (e.g., companies)."
-                    documentationLink shouldBe URI("$checksUrl#contributors")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Dangerous-Workflow" }) {
@@ -152,7 +157,8 @@ class ScorecardFunTest : StringSpec({
                     details should beEmpty()
                     documentation shouldBe "Determines if the project's GitHub Action workflows avoid dangerous " +
                         "patterns."
-                    documentationLink shouldBe URI("$checksUrl#dangerous-workflow")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Dependency-Update-Tool" }) {
@@ -161,7 +167,8 @@ class ScorecardFunTest : StringSpec({
                     reason shouldBe "update tool detected"
                     details should containOnly("Info: detected update tool: RenovateBot: renovate.json:1")
                     documentation shouldBe "Determines if the project uses a dependency update tool."
-                    documentationLink shouldBe URI("$checksUrl#dependency-update-tool")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Fuzzing" }) {
@@ -170,7 +177,8 @@ class ScorecardFunTest : StringSpec({
                     reason shouldBe "project is not fuzzed"
                     details should containOnly("Warn: no fuzzer integrations found")
                     documentation shouldBe "Determines if the project uses fuzzing."
-                    documentationLink shouldBe URI("$checksUrl#fuzzing")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "License" }) {
@@ -182,7 +190,8 @@ class ScorecardFunTest : StringSpec({
                         "Info: FSF or OSI recognized license: Apache License 2.0: LICENSE:0"
                     )
                     documentation shouldBe "Determines if the project has defined a license."
-                    documentationLink shouldBe URI("$checksUrl#license")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Maintained" }) {
@@ -193,7 +202,8 @@ class ScorecardFunTest : StringSpec({
                     )
                     details should beEmpty()
                     documentation shouldBe "Determines if the project is \"actively maintained\"."
-                    documentationLink shouldBe URI("$checksUrl#maintained")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Packaging" }) {
@@ -206,7 +216,8 @@ class ScorecardFunTest : StringSpec({
                     )
                     documentation shouldBe "Determines if the project is published as a package that others can " +
                         "easily download, install, easily update, and uninstall."
-                    documentationLink shouldBe URI("$checksUrl#packaging")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Pinned-Dependencies" }) {
@@ -217,7 +228,8 @@ class ScorecardFunTest : StringSpec({
                     details shouldHave atLeastSize(40)
                     documentation shouldBe "Determines if the project has declared and pinned the dependencies of " +
                         "its build process."
-                    documentationLink shouldBe URI("$checksUrl#pinned-dependencies")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "SAST" }) {
@@ -229,7 +241,8 @@ class ScorecardFunTest : StringSpec({
                         "Info: all commits (30) are checked with a SAST tool"
                     )
                     documentation shouldBe "Determines if the project uses static code analysis."
-                    documentationLink shouldBe URI("$checksUrl#sast")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Security-Policy" }) {
@@ -241,7 +254,8 @@ class ScorecardFunTest : StringSpec({
                         "Warn: no security file to analyze"
                     )
                     documentation shouldBe "Determines if the project has published a security policy."
-                    documentationLink shouldBe URI("$checksUrl#security-policy")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Signed-Releases" }) {
@@ -258,7 +272,8 @@ class ScorecardFunTest : StringSpec({
                     }
 
                     documentation shouldBe "Determines if the project cryptographically signs release artifacts."
-                    documentationLink shouldBe URI("$checksUrl#signed-releases")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Token-Permissions" }) {
@@ -280,7 +295,8 @@ class ScorecardFunTest : StringSpec({
                     )
                     documentation shouldBe "Determines if the project's workflows follow the principle of least " +
                         "privilege."
-                    documentationLink shouldBe URI("$checksUrl#token-permissions")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
 
                 with(result.healthMetrics.single { it.name == "Vulnerabilities" }) {
@@ -290,7 +306,8 @@ class ScorecardFunTest : StringSpec({
                     // Do not explicitly assert all reported findings as there are currently hundrets of them.
                     details shouldHave atLeastSize(100)
                     documentation shouldBe "Determines if the project has open, known unfixed vulnerabilities."
-                    documentationLink shouldBe URI("$checksUrl#vulnerabilities")
+                    documentationLink.toString() should
+                        match("$checksUrlPrefix/[0-9a-f]{40}/$checksUrlSuffix#${name.lowercase()}")
                 }
             }
         )
