@@ -20,27 +20,21 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
 
 import kotlinx.serialization.decodeFromString
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.jruby.embed.LocalContextScope
 import org.jruby.embed.PathType
-import org.jruby.embed.ScriptingContainer
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -51,16 +45,11 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.HttpDownloadError
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.downloadText
-import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private const val PROJECT_TYPE = "Bundler"
-private const val PACKAGE_TYPE = "Gem"
+internal const val PACKAGE_TYPE = "Gem"
 
 /** The name of the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information. */
 private const val ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "root_dependencies.rb"
@@ -73,38 +62,6 @@ private const val BUNDLER_GEM_NAME = "bundler"
 
 /** The name of the file where Bundler stores locked down dependency information. */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
-
-/**
- * Run the given Ruby [script] in the given [workingDir] and with the given [environment] (which gets merged with the
- * default environment). If no [pathType] is given, the [script] is assumed to contain the code directly. Otherwise, the
- * meaning of the [script] parameter is determined by the [pathType].
- */
-private fun runScript(
-    script: String,
-    pathType: PathType? = null,
-    workingDir: File? = null,
-    environment: Map<String, String> = emptyMap()
-): Any? {
-    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        if (workingDir != null) currentDirectory = workingDir.path
-
-        this.environment.putAll(environment)
-
-        if (pathType != null) {
-            runScriptlet(pathType, script)
-        } else {
-            runScriptlet(script)
-        }
-    }
-
-    return output
-}
-
-internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
-    val bundledWithLines = lockfile.readLines().dropWhile { it != "BUNDLED WITH" }
-    if (bundledWithLines.size < 2) return null
-    return bundledWithLines[1].trim()
-}
 
 data class BundlerConfig(
     /**
@@ -137,8 +94,6 @@ class Bundler(
     override val descriptor: PluginDescriptor = BundlerFactory.descriptor,
     private val config: BundlerConfig
 ) : PackageManager(PROJECT_TYPE) {
-    private val scriptEnvironment = mapOf("BUNDLE_PATH" to "${Os.userHomeDirectory}/.bundle")
-
     override val globsForDefinitionFiles = listOf("Gemfile")
 
     override fun beforeResolution(
@@ -170,7 +125,7 @@ class Bundler(
                     cmd.handle_options ["--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"]
                     cmd.execute
                 """.trimIndent()
-                val result = runScript(code, environment = scriptEnvironment) as Long
+                val result = runScript(code, environment = SCRIPT_ENVIRONMENT) as Long
                 check(result == 0L) { "Error code $result." }
             }.onSuccess {
                 logger.info { "Installing '$BUNDLER_GEM_NAME' version $bundlerVersion succeeded." }
@@ -181,7 +136,7 @@ class Bundler(
 
         runCatching {
             val code = "Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version.to_s"
-            runScript(code, environment = scriptEnvironment) as String
+            runScript(code, environment = SCRIPT_ENVIRONMENT) as String
         }.onSuccess { installedBundlerVersion ->
             logger.info { "Using '$BUNDLER_GEM_NAME' in version $installedBundlerVersion." }
         }.onFailure {
@@ -307,7 +262,7 @@ class Bundler(
 
     private fun getScriptEnvironment(gemfile: File): Map<String, String> =
         buildMap {
-            putAll(scriptEnvironment)
+            putAll(SCRIPT_ENVIRONMENT)
             put("BUNDLE_GEMFILE", gemfile.absolutePath)
             put("ORT_BUNDLER_PLATFORM", config.platform)
         }
@@ -340,84 +295,5 @@ class Bundler(
         }
 
         return gemsInfo
-    }
-
-    private fun parseProject(analysisRoot: File, definitionFile: File, gemsInfo: MutableMap<String, GemInfo>) =
-        getGemspecFile(definitionFile.parentFile)?.let { gemspecFile ->
-            // Project is a Gem, i.e. a library.
-            gemsInfo[gemspecFile.nameWithoutExtension]
-        } ?: GemInfo(
-            name = getFallbackProjectName(analysisRoot, definitionFile),
-            version = "",
-            platform = "ruby",
-            homepageUrl = "",
-            authors = emptySet(),
-            declaredLicenses = emptySet(),
-            description = "",
-            runtimeDependencies = emptySet(),
-            vcs = VcsInfo.EMPTY,
-            artifact = RemoteArtifact.EMPTY
-        )
-
-    private fun GemInfo.toPackage() =
-        Package(
-            id = Identifier(PACKAGE_TYPE, "", name, version),
-            authors = authors,
-            declaredLicenses = declaredLicenses,
-            description = description,
-            homepageUrl = homepageUrl,
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = artifact,
-            vcs = vcs,
-            vcsProcessed = processPackageVcs(vcs, homepageUrl)
-        )
-
-    private fun getGemspecFile(workingDir: File) =
-        workingDir.walk().maxDepth(1).firstOrNull { it.isFile && it.extension == "gemspec" }
-
-    private fun queryRubyGems(name: String, version: String, platform: String, retryCount: Int = 3): GemInfo? {
-        // Query the metadata for the platform of the resolved Gem, as e.g. the dependencies and the artifact of Gems
-        // with native extensions differ per platform.
-        // See <http://guides.rubygems.org/rubygems-org-api-v2/>.
-        val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml?platform=$platform"
-
-        return okHttpClient.downloadText(url).mapCatching {
-            val details = YAML.decodeFromString<VersionDetails>(it)
-            GemInfo.createFromGem(details)
-        }.onFailure {
-            val error = (it as? HttpDownloadError) ?: run {
-                logger.warn { "Unable to retrieve metadata for gem '$name' from RubyGems: ${it.message}" }
-                return null
-            }
-
-            when (error.code) {
-                HttpURLConnection.HTTP_NOT_FOUND -> logger.info { "Gem '$name' was not found on RubyGems." }
-
-                OkHttpClientHelper.HTTP_TOO_MANY_REQUESTS -> {
-                    throw IOException(
-                        "RubyGems reported too many requests when requesting metadata for gem '$name', see " +
-                            "https://guides.rubygems.org/rubygems-org-api/#rate-limits."
-                    )
-                }
-
-                HttpURLConnection.HTTP_BAD_GATEWAY -> {
-                    if (retryCount > 0) {
-                        // We see a lot of sporadic "bad gateway" responses that disappear when trying again.
-                        Thread.sleep(100)
-                        return queryRubyGems(name, version, platform, retryCount - 1)
-                    }
-
-                    throw IOException(
-                        "RubyGems reported too many bad gateway errors when requesting metadata for gem '$name'."
-                    )
-                }
-
-                else -> {
-                    throw IOException(
-                        "RubyGems reported unhandled HTTP code ${error.code} when requesting metadata for gem '$name'."
-                    )
-                }
-            }
-        }.getOrNull()
     }
 }
