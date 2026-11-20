@@ -230,7 +230,7 @@ class Bundler(
             val hasBundlerDep = BUNDLER_GEM_NAME in allProjectDeps
 
             val packages = gemsInfo.values.mapNotNullTo(mutableSetOf()) { gemInfo ->
-                getPackageFromGemInfo(gemInfo).takeUnless { gemInfo.name == BUNDLER_GEM_NAME && !hasBundlerDep }
+                gemInfo.toPackage().takeUnless { gemInfo.name == BUNDLER_GEM_NAME && !hasBundlerDep }
             }
 
             listOf(ProjectAnalyzerResult(project, packages, issues))
@@ -358,21 +358,18 @@ class Bundler(
             artifact = RemoteArtifact.EMPTY
         )
 
-    private fun getPackageFromGemInfo(gemInfo: GemInfo): Package {
-        val gemId = Identifier(PACKAGE_TYPE, "", gemInfo.name, gemInfo.version)
-
-        return Package(
-            id = gemId,
-            authors = gemInfo.authors,
-            declaredLicenses = gemInfo.declaredLicenses,
-            description = gemInfo.description,
-            homepageUrl = gemInfo.homepageUrl,
+    private fun GemInfo.toPackage() =
+        Package(
+            id = Identifier(PACKAGE_TYPE, "", name, version),
+            authors = authors,
+            declaredLicenses = declaredLicenses,
+            description = description,
+            homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = gemInfo.artifact,
-            vcs = gemInfo.vcs,
-            vcsProcessed = processPackageVcs(gemInfo.vcs, gemInfo.homepageUrl)
+            sourceArtifact = artifact,
+            vcs = vcs,
+            vcsProcessed = processPackageVcs(vcs, homepageUrl)
         )
-    }
 
     private fun getGemspecFile(workingDir: File) =
         workingDir.walk().maxDepth(1).firstOrNull { it.isFile && it.extension == "gemspec" }
