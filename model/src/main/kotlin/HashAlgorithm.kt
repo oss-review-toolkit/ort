@@ -34,19 +34,36 @@ import org.ossreviewtoolkit.utils.common.calculateHash
  */
 enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val isVerifiable: Boolean = true) {
     /** No hash algorithm. */
-    NONE("", emptyValue = "", isVerifiable = false),
+    NONE(
+        "",
+        emptyValue = "",
+        isVerifiable = false
+    ),
 
     /** An unknown hash algorithm. */
-    UNKNOWN("UNKNOWN", emptyValue = "", isVerifiable = false),
+    UNKNOWN(
+        "UNKNOWN",
+        emptyValue = "",
+        isVerifiable = false
+    ),
 
     /** The Message-Digest 5 hash algorithm, see [MD5](https://en.wikipedia.org/wiki/MD5). */
-    MD5("MD5", emptyValue = "d41d8cd98f00b204e9800998ecf8427e"),
+    MD5(
+        "MD5",
+        emptyValue = "d41d8cd98f00b204e9800998ecf8427e"
+    ),
 
     /** The Secure Hash Algorithm 1, see [SHA-1](https://en.wikipedia.org/wiki/SHA-1). */
-    SHA1("SHA-1", "SHA1", emptyValue = "da39a3ee5e6b4b0d3255bfef95601890afd80709"),
+    SHA1(
+        "SHA-1", "SHA1",
+        emptyValue = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+    ),
 
     /** The Secure Hash Algorithm 2 with 256 bits, see [SHA-256](https://en.wikipedia.org/wiki/SHA-256). */
-    SHA256("SHA-256", "SHA256", emptyValue = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
+    SHA256(
+        "SHA-256", "SHA256",
+        emptyValue = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ),
 
     /** The Secure Hash Algorithm 2 with 384 bits, see [SHA-384](https://en.wikipedia.org/wiki/SHA-384). */
     SHA384(
