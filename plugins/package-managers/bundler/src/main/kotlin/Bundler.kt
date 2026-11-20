@@ -295,19 +295,25 @@ class Bundler(
         }
     }
 
+    private fun getScriptEnvironment(gemfile: File): Map<String, String> =
+        buildMap {
+            putAll(scriptEnvironment)
+            put("BUNDLE_GEMFILE", gemfile.absolutePath)
+        }
+
     @Suppress("UNCHECKED_CAST")
     private fun getDependencyGroups(gemfile: File): Map<String, List<String>> =
         runScript(
             ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME,
             PathType.CLASSPATH,
-            environment = scriptEnvironment + mapOf("BUNDLE_GEMFILE" to gemfile.absolutePath)
+            environment = getScriptEnvironment(gemfile)
         ) as Map<String, List<String>>
 
     private fun resolveGemsInfo(gemfile: File): MutableMap<String, GemInfo> {
         val specs = runScript(
             RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME,
             PathType.CLASSPATH,
-            environment = scriptEnvironment + mapOf("BUNDLE_GEMFILE" to gemfile.absolutePath)
+            environment = getScriptEnvironment(gemfile)
         ).toString()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
