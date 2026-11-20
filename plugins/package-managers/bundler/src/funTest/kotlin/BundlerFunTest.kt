@@ -45,7 +45,7 @@ class BundlerFunTest : StringSpec({
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Resolve dependencies correctly" {
+    "Resolve dependencies correctly for the default 'ruby' platform" {
         val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
         val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 

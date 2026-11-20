@@ -24,6 +24,9 @@
 require 'bundler'
 require 'yaml'
 
+# Resolve dependencies for the platform given by the "ORT_BUNDLER_PLATFORM" environment variable.
+require 'override_platform'
+
 groups = {}
 
 Bundler.load.current_dependencies.each { |dep|
