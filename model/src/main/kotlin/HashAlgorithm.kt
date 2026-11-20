@@ -39,7 +39,7 @@ enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val
     /** An unknown hash algorithm. */
     UNKNOWN("UNKNOWN", emptyValue = "", isVerifiable = false),
 
-    /** The Message-Digest 5 hash algorithm, see [MD5](http://en.wikipedia.org/wiki/MD5). */
+    /** The Message-Digest 5 hash algorithm, see [MD5](https://en.wikipedia.org/wiki/MD5). */
     MD5("MD5", emptyValue = "d41d8cd98f00b204e9800998ecf8427e"),
 
     /** The Secure Hash Algorithm 1, see [SHA-1](https://en.wikipedia.org/wiki/SHA-1). */
