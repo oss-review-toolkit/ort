@@ -30,52 +30,58 @@ import org.ossreviewtoolkit.utils.common.calculateHash
 
 /**
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
- * alias is the definite name.
+ * alias is the canonical name. Algorithms that can be verified have an [emptyValue] and a [validationRegex] that can be
+ * used to check whether a hash value is valid.
  */
-enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val isVerifiable: Boolean = true) {
+enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val validationRegex: Regex?) {
     /** No hash algorithm. */
     NONE(
         "",
         emptyValue = "",
-        isVerifiable = false
+        validationRegex = null
     ),
 
     /** An unknown hash algorithm. */
     UNKNOWN(
         "UNKNOWN",
         emptyValue = "",
-        isVerifiable = false
+        validationRegex = null
     ),
 
     /** The Message-Digest 5 hash algorithm, see [MD5](https://en.wikipedia.org/wiki/MD5). */
     MD5(
         "MD5",
-        emptyValue = "d41d8cd98f00b204e9800998ecf8427e"
+        emptyValue = "d41d8cd98f00b204e9800998ecf8427e",
+        validationRegex = Regex("[0-9a-fA-F]{32}")
     ),
 
     /** The Secure Hash Algorithm 1, see [SHA-1](https://en.wikipedia.org/wiki/SHA-1). */
     SHA1(
         "SHA-1", "SHA1",
-        emptyValue = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+        emptyValue = "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        validationRegex = Regex("[0-9a-fA-F]{40}")
     ),
 
     /** The Secure Hash Algorithm 2 with 256 bits, see [SHA-256](https://en.wikipedia.org/wiki/SHA-256). */
     SHA256(
         "SHA-256", "SHA256",
-        emptyValue = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        emptyValue = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        validationRegex = Regex("[0-9a-fA-F]{64}")
     ),
 
     /** The Secure Hash Algorithm 2 with 384 bits, see [SHA-384](https://en.wikipedia.org/wiki/SHA-384). */
     SHA384(
         "SHA-384", "SHA384",
-        emptyValue = "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b"
+        emptyValue = "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b",
+        validationRegex = Regex("[0-9a-fA-F]{96}")
     ),
 
     /** The Secure Hash Algorithm 2 with 512 bits, see [SHA-512](https://en.wikipedia.org/wiki/SHA-512). */
     SHA512(
         "SHA-512", "SHA512",
         emptyValue = "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce" +
-            "47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e"
+            "47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e",
+        validationRegex = Regex("[0-9a-fA-F]{128}")
     ),
 
     /**
@@ -85,7 +91,8 @@ enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val
      */
     SHA1GIT(
         "SHA-1-GIT", "SHA1-GIT", "SHA1GIT", "SWHID",
-        emptyValue = "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+        emptyValue = "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        validationRegex = Regex("[0-9a-fA-F]{40}")
     ) {
         override fun getMessageDigest(size: Long): MessageDigest =
             MessageDigest.getInstance(SHA1.toString()).apply {
@@ -93,6 +100,12 @@ enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val
                 update(header.toByteArray())
             }
     };
+
+    init {
+        check(emptyValue.isEmpty() || isValid(emptyValue)) {
+            "Invalid empty value '$emptyValue' for hash algorithm '$name'."
+        }
+    }
 
     companion object {
         /** The list of algorithms that can be verified. */
@@ -116,9 +129,15 @@ enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val
     /** The size of a hexadecimal hash value string for this algorithm. */
     val size = emptyValue.length
 
+    /** Indicate whether this algorithm can be verified. */
+    val isVerifiable = validationRegex != null
+
     /** Convert the hash algorithm to a string representation. */
     @JsonValue
     override fun toString(): String = aliases.first()
+
+    /** Check whether the given [value] is a valid hash value for this algorithm. */
+    fun isValid(value: String) = validationRegex?.matchEntire(value) != null
 
     /** Return the hexadecimal digest of this hash for the given [file]. */
     fun calculate(file: File): String = file.inputStream().use { calculate(it, file.length()) }
