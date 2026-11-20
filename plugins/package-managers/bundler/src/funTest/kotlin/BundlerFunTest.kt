@@ -63,6 +63,15 @@ class BundlerFunTest : StringSpec({
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Resolve native Gem variants correctly for the 'x86_64-linux' platform" {
+        val definitionFile = getAssetFile("projects/synthetic/native/Gemfile")
+        val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-native-x86_64-linux.yml")
+
+        val actualResult = BundlerFactory.create(platform = "x86_64-linux").resolveSingleProject(definitionFile)
+
+        actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Show an error if no lockfile is present" {
         val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
         val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
