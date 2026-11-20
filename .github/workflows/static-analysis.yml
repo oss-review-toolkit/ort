@@ -85,7 +85,7 @@ jobs:
       run: ./gradlew mergeDetektReports
       if: always() # Merge even if previous steps failed.
     - name: Upload SARIF File
-      uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+      uses: github/codeql-action/upload-sarif@1bd86f2fdb4b86187fa4059f16f31a3202acc9ea # v4.39.4
       if: always() # Upload even if previous steps failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
