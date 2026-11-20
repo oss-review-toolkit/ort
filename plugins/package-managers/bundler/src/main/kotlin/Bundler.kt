@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
@@ -182,11 +183,12 @@ class Bundler(
                 scopeDependencies = scopes
             )
 
-            val allProjectDeps = groupedDeps.values.flatten().toSet()
-            val hasBundlerDep = BUNDLER_GEM_NAME in allProjectDeps
+            // Only report packages that are part of the dependency tree, as Bundler also returns e.g. itself, or the
+            // dependencies of the locked "ruby" variant of a Gem although a platform-specific variant was resolved.
+            val treeIds = scopes.collectDependencies()
 
             val packages = gemsInfo.values.mapNotNullTo(mutableSetOf()) { gemInfo ->
-                gemInfo.toPackage().takeUnless { gemInfo.name == BUNDLER_GEM_NAME && !hasBundlerDep }
+                gemInfo.toPackage().takeIf { it.id in treeIds || gemInfo.name == name }
             }
 
             listOf(ProjectAnalyzerResult(project, packages, issues))
