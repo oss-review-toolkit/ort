@@ -45,6 +45,7 @@ import org.eclipse.jgit.transport.sshd.SshdSessionFactory
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -75,8 +76,6 @@ internal object GitCommand : CommandLineTool {
             match.groups["version"]!!.value
         }.orEmpty()
 }
-
-private val SHA1_REGEX = Regex("^[0-9a-fA-F]{40}$")
 
 /**
  * This class provides functionality for interacting with Git repositories, utilizing either
@@ -230,7 +229,7 @@ class Git(
 
             // See https://git-scm.com/docs/gitrevisions#_specifying_revisions for how Git resolves ambiguous
             // names. In particular, tag names have higher precedence than branch names.
-            val refSpec = if (SHA1_REGEX.matches(revision)) {
+            val refSpec = if (HashAlgorithm.SHA1.isValid(revision)) {
                 revision
             } else {
                 val refs = git.lsRemote().call()

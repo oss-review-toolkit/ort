@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.clients.osv.Vulnerability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -238,19 +239,17 @@ private fun createRequestForPurl(purl: PackageURL): VulnerabilitiesForPackageReq
             name = "https://github.com/${purl.namespace}/${purl.name}.git"
         )
 
+        val version = purl.version
+
         when {
             // The version may be missing for packages without a resolved version. In that case, fall back to a
             // package-only query, which lets OSV return all vulnerabilities for the package regardless of the version.
-            purl.version.isNullOrEmpty() -> VulnerabilitiesForPackageRequest(pkg = pkg)
+            version.isNullOrEmpty() -> VulnerabilitiesForPackageRequest(pkg = pkg)
 
-            purl.version.isSha1() -> VulnerabilitiesForPackageRequest(pkg = pkg, commit = purl.version)
+            HashAlgorithm.SHA1.isValid(version) -> VulnerabilitiesForPackageRequest(pkg = pkg, commit = version)
 
-            else -> VulnerabilitiesForPackageRequest(pkg = pkg, version = purl.version)
+            else -> VulnerabilitiesForPackageRequest(pkg = pkg, version = version)
         }
     } else {
         VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = purl.toString()))
     }
-
-private val SHA1_REGEX = Regex("^[0-9a-fA-F]{40}$")
-
-private fun String.isSha1(): Boolean = SHA1_REGEX.matches(this)
