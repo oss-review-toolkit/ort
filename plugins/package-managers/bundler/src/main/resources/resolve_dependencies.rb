@@ -29,13 +29,13 @@
 require 'bundler'
 require 'yaml'
 
-Bundler.ui.silence do
-  # Get dependencies independently of the Ruby interpreter.
-  all_groups = Bundler.settings.temporary(force_ruby_platform: true) do
-    Bundler.definition.dependencies.flat_map(&:groups)
-  end
+# Resolve dependencies for the platform given by the "ORT_BUNDLER_PLATFORM" environment variable.
+require 'override_platform'
 
+Bundler.ui.silence do
   # Resolve all groups including optional ones.
+  all_groups = Bundler.definition.dependencies.flat_map(&:groups)
+
   Bundler.settings.temporary(with: all_groups) do
     # This command resolves dependencies that are specified in the Gemfile of the current working directory.
     Bundler.definition.resolve_remotely!

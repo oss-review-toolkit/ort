@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.Os
@@ -111,7 +112,16 @@ data class BundlerConfig(
      * lockfile, or the version that ships with JRuby if no lockfiles are present. In any case, the value can currently
      * only be set to a higher version than the version that ships with JRuby.
      */
-    val bundlerVersion: String?
+    val bundlerVersion: String?,
+
+    /**
+     * The platform to resolve dependencies for, like "ruby", "java" or "x86_64-linux". This also determines which
+     * `platforms` restrictions in a Gemfile match: "java" matches `:jruby`, "ruby" and native Unix platforms match
+     * `:mri`, and Windows platforms match `:windows`. Dependencies get re-resolved if the lockfile does not cover the
+     * platform.
+     */
+    @OrtPluginOption(defaultValue = "ruby")
+    val platform: String
 )
 
 /**
@@ -299,6 +309,7 @@ class Bundler(
         buildMap {
             putAll(scriptEnvironment)
             put("BUNDLE_GEMFILE", gemfile.absolutePath)
+            put("ORT_BUNDLER_PLATFORM", config.platform)
         }
 
     @Suppress("UNCHECKED_CAST")
@@ -315,6 +326,9 @@ class Bundler(
             PathType.CLASSPATH,
             environment = getScriptEnvironment(gemfile)
         ).toString()
+
+        // Guard against the case when a custom platform excludes all dependencies.
+        if (specs.isBlank()) return mutableMapOf()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
