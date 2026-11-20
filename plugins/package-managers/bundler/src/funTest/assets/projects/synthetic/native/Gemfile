@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# A Gem that ships precompiled variants with different dependencies than the generic "ruby" variant.
+gem 'nokogiri', '1.16.8'
