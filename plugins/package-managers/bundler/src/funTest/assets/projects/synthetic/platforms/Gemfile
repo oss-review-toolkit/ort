@@ -1,0 +1,7 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gem "nokogiri", platforms: :mri
+gem "rack", "~> 2.1", platforms: :jruby
+gem "rspec", platforms: :windows
