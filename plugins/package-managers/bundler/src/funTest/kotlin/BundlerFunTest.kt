@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.datatest.withData
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.should
@@ -43,6 +44,30 @@ class BundlerFunTest : StringSpec({
         val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
 
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    withData(
+        mapOf(
+            "Resolve dependencies restricted to MRI for the 'x86_64-linux' platform" to
+                PlatformTestCase("platforms", "x86_64-linux", setOf("nokogiri")),
+            "Resolve dependencies restricted to JRuby for the 'java' platform" to
+                PlatformTestCase("platforms", "java", setOf("rack")),
+            "Resolve dependencies restricted to Windows for the 'x64-mingw32' platform" to
+                PlatformTestCase("platforms", "x64-mingw32", setOf("rspec")),
+            "Return an empty dependency graph if all dependencies are excluded" to
+                PlatformTestCase("only-mri", "java", emptySet())
+        )
+    ) { (project, platform, expectedDependencies) ->
+        val definitionFile = getAssetFile("projects/synthetic/$project/Gemfile")
+        val result = BundlerFactory.create(platform = platform).resolveSingleProject(definitionFile)
+        val rootDependencies = result.project.scopes.flatMap { it.dependencies }
+            .mapTo(mutableSetOf()) { it.id.name }
+        val resolvedDependencies = result.packages.mapTo(mutableSetOf()) { it.id.name }
+            .intersect(setOf("nokogiri", "rack", "rspec"))
+
+        result.issues should beEmpty()
+        rootDependencies shouldBe expectedDependencies
+        resolvedDependencies shouldBe expectedDependencies
     }
 
     "Resolve dependencies correctly for the default 'ruby' platform" {
@@ -85,3 +110,5 @@ class BundlerFunTest : StringSpec({
         }
     }
 })
+
+private data class PlatformTestCase(val project: String, val platform: String, val expectedDependencies: Set<String>)
