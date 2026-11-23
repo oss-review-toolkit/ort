@@ -37,16 +37,6 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://repo.eclipse.org/content/repositories/releases")
-        }
-
-        filter {
-            includeGroup("org.eclipse.jgit")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
             maven("https://repo.gradle.org/gradle/libs-releases")
         }
 
