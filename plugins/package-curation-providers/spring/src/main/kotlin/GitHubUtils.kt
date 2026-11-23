@@ -28,8 +28,6 @@ import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
-import org.semver4j.Semver
-
 internal fun getGitHubTree(owner: String, repo: String, revision: String): List<String> {
     val json = okHttpClient
         .downloadText("https://api.github.com/repos/$owner/$repo/git/trees/$revision?recursive=1")
@@ -40,10 +38,7 @@ internal fun getGitHubTree(owner: String, repo: String, revision: String): List<
     }
 }
 
-internal fun getSpringProjectPaths(projectName: String, projectVersion: String): Map<String, String> {
-    // Use a simple way to get the first valid version out of a range.
-    val coercedVersion = Semver.coerce(projectVersion)
-
+internal fun getSpringProjectPaths(projectName: String, coercedVersion: String): Map<String, String> {
     val paths = getGitHubTree("spring-projects", projectName, "v$coercedVersion")
 
     val projectPaths = paths.mapNotNull { path ->
