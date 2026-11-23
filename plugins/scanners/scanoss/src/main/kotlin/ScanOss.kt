@@ -34,6 +34,7 @@ import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
@@ -117,8 +118,17 @@ class ScanOss(
             else -> scanoss.scanFolder(path.toString())
         }
 
-        val results = JsonUtils.toScanFileResults(rawResults)
         val endTime = Instant.now()
+
+        if (rawResults.isEmpty() || rawResults.any { it.isEmpty() }) {
+            val issue = Issue(
+                source = descriptor.displayName,
+                message = "Cannot deserialize JSON from empty raw results"
+            )
+            return ScanSummary(startTime, endTime, issues = listOf(issue))
+        }
+
+        val results = JsonUtils.toScanFileResults(rawResults)
         return generateSummary(startTime, endTime, results, config.chosenSnippetModel.toSet())
     }
 
