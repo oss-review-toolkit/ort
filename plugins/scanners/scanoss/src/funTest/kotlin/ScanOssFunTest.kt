@@ -34,6 +34,8 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 
 import kotlin.reflect.KClass
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -60,10 +62,15 @@ class ScanOssFunTest : StringSpec({
     val flags = listOf(ScanFlag.ENABLE_DOWNLOAD_URL, ScanFlag.ENABLE_GITHUB_FULL_PATH)
 
     val scanner = CloudCheck.getScanOssApiKey()?.let {
+        logger.info { "Using SCANOSS_API_KEY." }
         ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL2, Secret(it), flags = flags, ignorePurls = ORT_PURLS_TO_IGNORE)
     } ?: CloudCheck.getOsskbApiKey()?.let {
+        logger.info { "Using OSSKB_API_KEY." }
         ScanOssFactory.create(ScanApi.DEFAULT_BASE_URL, Secret(it), flags = flags, ignorePurls = ORT_PURLS_TO_IGNORE)
-    } ?: ScanOssFactory.create(flags = flags, ignorePurls = ORT_PURLS_TO_IGNORE)
+    } ?: run {
+        logger.info { "Using no API key." }
+        ScanOssFactory.create(flags = flags, ignorePurls = ORT_PURLS_TO_IGNORE)
+    }
 
     val scanContext = ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
 
