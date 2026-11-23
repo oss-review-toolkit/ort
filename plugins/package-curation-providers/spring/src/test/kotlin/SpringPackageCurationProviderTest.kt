@@ -45,6 +45,24 @@ class SpringPackageCurationProviderTest : StringSpec({
         )
     }
 
+    "Get the correct VCS path for spring-boot-configuration-metadata with a fixed version" {
+        val id = Identifier("Maven:org.springframework.boot:spring-boot-configuration-metadata:4.1.1")
+        val pkg = Package.EMPTY.copy(
+            id = id,
+            vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
+        )
+
+        provider.getCurationsFor(setOf(pkg)) should containExactly(
+            PackageCuration(
+                id = id,
+                data = PackageCurationData(
+                    vcs = VcsInfoCurationData(path = "configuration-metadata/spring-boot-configuration-metadata"),
+                    isMetadataOnly = true
+                )
+            )
+        )
+    }
+
     "Get the correct VCS path for spring-boot-antlib with a fixed version" {
         val id = Identifier("Maven:org.springframework.boot:spring-boot-antlib:3.5.4")
         val pkg = Package.EMPTY.copy(
