@@ -72,6 +72,7 @@ class ScanOssFunTest : StringSpec({
 
         val summary = scanner.scanPath(unoconv, scanContext)
 
+        summary.issues should beEmpty()
         summary.licenseFindings should beEmpty()
         summary.copyrightFindings should beEmpty()
 
@@ -114,6 +115,7 @@ class ScanOssFunTest : StringSpec({
 
         val summary = scanner.scanPath(unoconv, scanContext)
 
+        summary.issues should beEmpty()
         summary.licenseFindings should beEmpty()
         summary.copyrightFindings should beEmpty()
 
