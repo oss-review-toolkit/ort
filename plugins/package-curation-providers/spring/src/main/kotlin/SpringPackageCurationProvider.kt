@@ -68,7 +68,7 @@ open class SpringPackageCurationProvider(
             }
 
             if (isMetadataOnly) {
-                data = data.copy(isMetadataOnly = isMetadataOnly)
+                data = data.copy(isMetadataOnly = true)
             }
 
             if (pkg.vcsProcessed.url == "https://github.com/spring-projects/spring-boot.git") {
