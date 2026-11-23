@@ -101,7 +101,6 @@ internal class HelperMain : CliktCommand(ORTH_NAME) {
             RepositoryConfigurationCommand(),
             SetDependencyRepresentationCommand(),
             SetLabelsCommand(),
-            TransformResultCommand(),
             VerifySourceArtifactCurationsCommand()
         )
     }

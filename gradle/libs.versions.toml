@@ -36,7 +36,6 @@ jerseyCommon = "4.0.3"
 jgit = "7.8.1.202611041320-r"
 jiraRestClient = "8.0.1"
 jruby = "9.4.16.0"
-jslt = "0.1.15"
 jsonSchemaValidator = "3.0.9"
 kaml = "0.104.0"
 kotest = "6.2.7"
@@ -134,7 +133,6 @@ jgit-ssh-apache-agent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache
 jiraRestClient-api = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
 jiraRestClient-app = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
 jruby = { module = "org.jruby:jruby", version.ref = "jruby" }
-jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
