@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packagecurationproviders.spring
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
@@ -27,6 +29,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
+import org.ossreviewtoolkit.utils.common.collectMessages
 
 /** A [PackageCurationProvider] that provides [PackageCuration]s for [Spring](https://spring.io/) packages. */
 @OrtPlugin(
@@ -76,6 +79,11 @@ open class SpringPackageCurationProvider(
                     getSpringBootProjectPath(pkg.id.name, pkg.id.version)
                 }.onSuccess { path ->
                     data = data.copy(vcs = VcsInfoCurationData(path = path))
+                }.onFailure {
+                    logger.warn {
+                        "Failed to get Spring Boot project path for package '${pkg.id.toCoordinates()}': " +
+                            it.collectMessages()
+                    }
                 }
             }
 
