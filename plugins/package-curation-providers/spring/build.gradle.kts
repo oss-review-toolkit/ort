@@ -31,5 +31,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.semver4j)
 
+    testRuntimeOnly(libs.logbackClassic)
+
     ksp(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 }
