@@ -61,7 +61,7 @@ open class SpringPackageCurationProvider(
             var data = PackageCurationData()
 
             val isMetadataOnly = with(pkg.id) {
-                metadataOnlyNames.any {
+                name.endsWith("-metadata") || metadataOnlyNames.any {
                     namespace == "org.springframework.$it"
                         && (name.startsWith("spring-$it-starter") || name.startsWith("spring-$it-contract-spec"))
                 }
