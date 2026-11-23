@@ -47,7 +47,7 @@ internal fun getSpringProjectPaths(projectName: String, projectVersion: String):
     val paths = getGitHubTree("spring-projects", projectName, "v$coercedVersion")
 
     val projectPaths = paths.mapNotNull { path ->
-        path.withoutSuffix("/build.gradle")?.takeIf { it.startsWith(projectName) }
+        path.withoutSuffix("/build.gradle")?.takeIf { projectName in it }
     }
 
     val projectPathsByName = projectPaths.associateBy { it.substringAfterLast('/') }
