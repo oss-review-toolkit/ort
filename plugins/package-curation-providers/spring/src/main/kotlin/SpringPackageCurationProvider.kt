@@ -31,6 +31,8 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCuration
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.utils.common.collectMessages
 
+import org.semver4j.Semver
+
 /** A [PackageCurationProvider] that provides [PackageCuration]s for [Spring](https://spring.io/) packages. */
 @OrtPlugin(
     displayName = "Spring",
@@ -43,8 +45,11 @@ open class SpringPackageCurationProvider(
     val springBootProjectPaths = mutableMapOf<String, Map<String, String>>()
 
     fun getSpringBootProjectPath(subProjectName: String, projectVersion: String): String {
-        val paths = springBootProjectPaths.getOrPut(projectVersion) {
-            getSpringProjectPaths("spring-boot", projectVersion)
+        // Use a simple way to get the first valid version out of a range.
+        val coercedVersion = Semver.coerce(projectVersion).toString()
+
+        val paths = springBootProjectPaths.getOrPut(coercedVersion) {
+            getSpringProjectPaths("spring-boot", coercedVersion)
         }
 
         return paths.getValue(subProjectName)
