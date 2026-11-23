@@ -99,8 +99,8 @@ class ScanOssFunTest : WordSpec({
                 } shouldNotBeNull {
                     scoringSystem shouldBe "EPSS"
                     severity should beNull()
-                    score shouldBe 6.5E-4f
-                    vector shouldBe "0.20002"
+                    score shouldBe 0.00248f
+                    vector shouldBe "0.16186"
                 }
             }
         }
@@ -126,8 +126,8 @@ class ScanOssFunTest : WordSpec({
                 } shouldNotBeNull {
                     scoringSystem shouldBe "EPSS"
                     severity should beNull()
-                    score shouldBe 0.00162f
-                    vector shouldBe "0.3665"
+                    score shouldBe 0.00553f
+                    vector shouldBe "0.47064"
                 }
             }
         }
