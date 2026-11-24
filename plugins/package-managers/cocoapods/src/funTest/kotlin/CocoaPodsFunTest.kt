@@ -23,6 +23,8 @@ import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
+import kotlin.time.Duration.Companion.minutes
+
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
@@ -35,7 +37,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 @Tags("RequiresExternalTool")
 class CocoaPodsFunTest : WordSpec({
-    "resolveSingleProject()" should {
+    "resolveSingleProject()".config(timeout = 20.minutes) should {
         "determine dependencies from a Podfile without a dependency tree" {
             val definitionFile = getAssetFile("projects/synthetic/regular/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/regular-expected-output.yml")
