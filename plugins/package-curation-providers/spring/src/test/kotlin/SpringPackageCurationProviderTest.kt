@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagecurationproviders.spring
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
@@ -101,6 +102,110 @@ class SpringPackageCurationProviderTest : WordSpec({
                     id = id,
                     data = PackageCurationData(
                         vcs = VcsInfoCurationData(path = "spring-boot-project/spring-boot-test-autoconfigure")
+                    )
+                )
+            )
+        }
+    }
+
+    "spring-data curations" should {
+        "get the correct VCS path for spring-data-commons with a fixed version" {
+            val id = Identifier("Maven:org.springframework.data:spring-data-commons:4.1.1")
+            val pkg = Package.EMPTY.copy(
+                id = id,
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-data-commons.git")
+            )
+
+            // This project is the only one contained in (the root of) the repository.
+            provider.getCurationsFor(setOf(pkg)) should beEmpty()
+        }
+    }
+
+    "spring-doc curations" should {
+        "get the correct VCS path for springdoc-openapi-starter-common with a fixed version" {
+            val id = Identifier("Maven:org.springdoc:springdoc-openapi-starter-common:3.0.3")
+            val pkg = Package.EMPTY.copy(
+                id = id,
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/springdoc/springdoc-openapi.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(path = "springdoc-openapi-starter-common")
+                    )
+                )
+            )
+        }
+    }
+
+    "spring-framework curations" should {
+        "get the correct VCS path for spring-aspects with a fixed version" {
+            val id = Identifier("Maven:org.springframework:spring-aspects:7.0.9")
+            val pkg = Package.EMPTY.copy(
+                id = id,
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-framework.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(path = "spring-aspects")
+                    )
+                )
+            )
+        }
+
+        "get the correct VCS path for spring-jdbc with a fixed version" {
+            val id = Identifier("Maven:org.springframework:spring-jdbc:7.0.9")
+            val pkg = Package.EMPTY.copy(
+                id = id,
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-framework.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(path = "spring-jdbc")
+                    )
+                )
+            )
+        }
+
+        "get the correct VCS path for spring-orm with a fixed version" {
+            val id = Identifier("Maven:org.springframework:spring-orm:7.0.9")
+            val pkg = Package.EMPTY.copy(
+                id = id,
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-framework.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(path = "spring-orm")
+                    )
+                )
+            )
+        }
+    }
+
+    "spring-security curations" should {
+        "get the correct VCS path for spring-security-config with a fixed version" {
+            val id = Identifier("Maven:org.springframework.security:spring-security-config:7.1.1")
+            val pkg = Package.EMPTY.copy(
+                id = id,
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-security.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(path = "config")
                     )
                 )
             )
