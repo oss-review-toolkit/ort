@@ -153,26 +153,11 @@ val ORT_RESULT = OrtResult(
                         comment = "Packages for testing only."
                     )
                 )
-            ),
-            licenseChoices = LicenseChoices(
-                packageLicenseChoices = listOf(
-                    PackageLicenseChoice(
-                        packageId = Identifier("Maven:pkg7-grp:pkg7:0.0.1"),
-                        licenseChoices = listOf(
-                            SpdxLicenseChoice(
-                                given = "BSD-3-Clause OR MIT".toSpdx(),
-                                choice = "BSD-3-Clause".toSpdx()
-                            )
-                        )
-                    )
-                )
             )
         ),
         vcs = ANALYZED_VCS,
         vcsProcessed = ANALYZED_VCS
     ),
-    // Mirror the production flow where the (resolved) license choices are stored in the resolved configuration, which
-    // is where `getRepositoryLicenseChoices()` and `getPackageLicenseChoices()` read them from.
     resolvedConfiguration = ResolvedConfiguration(
         licenseChoices = LicenseChoices(
             packageLicenseChoices = listOf(
