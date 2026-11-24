@@ -39,6 +39,7 @@ val CROSSD_METRICS: Array<CrossdMetric> = arrayOf(
             "by the community across the companies the contributors belong to.",
         documentationUrl = URI("https://health.crossd.tech/doc#elephant-factor"),
         higherIsBetter = true,
+        minValue = 0.0,
         averageValue = 5.04
     ),
     CrossdMetric(
@@ -48,6 +49,8 @@ val CROSSD_METRICS: Array<CrossdMetric> = arrayOf(
             "a repositories age, issues and releases.",
         documentationUrl = URI("https://health.crossd.tech/doc#maturity-level"),
         higherIsBetter = true,
+        minValue = 20.0,
+        maxValue = 100.0,
         averageValue = 73.82
     ),
     CrossdMetric(
@@ -57,6 +60,8 @@ val CROSSD_METRICS: Array<CrossdMetric> = arrayOf(
             "Projects WG4 and aims to detect critical projects, the open-source community depends on.",
         documentationUrl = URI("https://health.crossd.tech/doc#criticality-score"),
         higherIsBetter = true,
+        minValue = 0.0,
+        maxValue = 100.0,
         averageValue = 40.42
     ),
     CrossdMetric(
@@ -66,6 +71,8 @@ val CROSSD_METRICS: Array<CrossdMetric> = arrayOf(
             "received a response during the last 90 days.",
         documentationUrl = URI("https://health.crossd.tech/doc#support-rate"),
         higherIsBetter = true,
+        minValue = 0.0,
+        maxValue = 100.0,
         averageValue = 34.1
     ),
     CrossdMetric(
@@ -75,6 +82,8 @@ val CROSSD_METRICS: Array<CrossdMetric> = arrayOf(
             "files such as the readme or the contributing file.",
         documentationUrl = URI("https://health.crossd.tech/doc#github-community-health-percentage-7"),
         higherIsBetter = true,
+        minValue = 0.0,
+        maxValue = 100.0,
         averageValue = 56.29,
         valueGetter = {
             it["github_community_health_percentage"]?.jsonObject["custom_health_score"]?.jsonPrimitive?.double

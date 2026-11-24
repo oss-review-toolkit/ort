@@ -20,11 +20,18 @@
 package org.ossreviewtoolkit.plugins.advisors.crossd
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.net.URI
 
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+
 import org.ossreviewtoolkit.model.Criticality
+import org.ossreviewtoolkit.model.HealthMetric
 
 class CrossdTest : StringSpec({
     val testThresholds = mapOf(
@@ -75,5 +82,43 @@ class CrossdTest : StringSpec({
         metric.getCriticality(12.5, testThresholds) shouldBe Criticality.MEDIUM
         metric.getCriticality(13.0, testThresholds) shouldBe Criticality.HIGH
         metric.getCriticality(100.0, testThresholds) shouldBe Criticality.CRITICAL
+    }
+
+    "toHealthMetric should describe the scale, direction and reference value" {
+        val metric = CrossdMetric(
+            name = "test",
+            displayName = "Test Metric",
+            descriptionShort = "This metric is nice.",
+            documentationUrl = URI("https://example.org/documentation#test"),
+            higherIsBetter = true,
+            minValue = 0.0,
+            maxValue = 100.0,
+            averageValue = 10.0
+        )
+
+        metric.toHealthMetric(buildJsonObject { put("test", 7.0) }, testThresholds) shouldBe HealthMetric(
+            name = "Test Metric",
+            documentation = "This metric is nice.",
+            documentationLink = URI("https://example.org/documentation#test"),
+            minValue = 0.0,
+            maxValue = 100.0,
+            higherIsBetter = true,
+            value = 7.0,
+            referenceValue = 10.0,
+            criticality = Criticality.HIGH
+        )
+    }
+
+    "toHealthMetric should return null if the metrics do not contain a value" {
+        val metric = CrossdMetric(
+            name = "test",
+            displayName = "Test Metric",
+            descriptionShort = "This metric is nice.",
+            documentationUrl = URI("https://example.org/documentation#test"),
+            higherIsBetter = true,
+            averageValue = 10.0
+        )
+
+        metric.toHealthMetric(JsonObject(emptyMap()), testThresholds) should beNull()
     }
 })
