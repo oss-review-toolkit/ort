@@ -39,5 +39,8 @@ data class AdvisorResult(
 
     /** The health metrics. */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val healthMetrics: List<HealthMetric> = emptyList()
+    val healthMetrics: List<HealthMetric> = emptyList(),
+
+    /** A summary of the health of the package as a whole, if the advisor provides one. */
+    val healthSummary: HealthSummary? = null
 )
