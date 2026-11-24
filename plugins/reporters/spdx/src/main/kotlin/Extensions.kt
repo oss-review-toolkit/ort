@@ -151,7 +151,7 @@ internal fun Package.toSpdxPackage(
     val effectiveLicense = resolvedLicenseInfo.effectiveLicense(
         LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
         licenseChoices
-    )
+    )?.simplify()?.sorted()
 
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
