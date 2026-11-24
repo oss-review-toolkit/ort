@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.plugins.advisors.scorecard
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.net.URI
@@ -63,5 +65,23 @@ class ScorecardTest : StringSpec({
             criticality = Criticality.MEDIUM,
             reason = "15 commit(s) and 3 issue activity found in the last 90 days -- score normalized to 7"
         )
+    }
+
+    "toHealthMetric should keep a check that Scorecard could not compute" {
+        val check = ScorecardCheck(name = "Signed-Releases", score = -1, reason = "no releases found")
+
+        check.toHealthMetric() shouldBe HealthMetric(
+            name = "Signed-Releases",
+            minValue = 0.0,
+            maxValue = 10.0,
+            higherIsBetter = true,
+            value = null,
+            criticality = null,
+            reason = "no releases found"
+        )
+    }
+
+    "toHealthMetric should return null for a check without a name" {
+        ScorecardCheck(score = 7).toHealthMetric() should beNull()
     }
 })

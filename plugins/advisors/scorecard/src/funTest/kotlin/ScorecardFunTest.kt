@@ -302,6 +302,34 @@ class ScorecardFunTest : StringSpec({
         )
     }
 
+    "Return findings without a value for checks that could not be computed" {
+        val vcs = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/jonschlinkert/is-number.git",
+            revision = ""
+        )
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("NPM::is-number:7.0.0"),
+            vcs = vcs,
+            vcsProcessed = vcs
+        )
+
+        val findings = scorecard.retrievePackageFindings(setOf(pkg))
+
+        findings should matchExactly(
+            pkg to { result ->
+                result.advisor shouldBe scorecard.details
+
+                // The repository has no GitHub releases, so Scorecard cannot check whether they are signed.
+                with(result.healthMetrics.single { it.name == "Signed-Releases" }) {
+                    value should beNull()
+                    criticality should beNull()
+                    reason shouldBe "no releases found"
+                }
+            }
+        )
+    }
+
     "Return empty health metrics for a package with a non-existing VCS URL" {
         val nonExistingVcs = VcsInfo(
             type = VcsType.GIT,

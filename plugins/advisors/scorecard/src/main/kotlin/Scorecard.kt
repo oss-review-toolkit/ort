@@ -137,19 +137,23 @@ class Scorecard(
     }
 }
 
-internal fun ScorecardCheck.toHealthMetric(): HealthMetric? =
-    HealthMetric(
+internal fun ScorecardCheck.toHealthMetric(): HealthMetric? {
+    // Scorecard reports a score of -1 for a check it could not compute, and gives the reason.
+    val computedScore = score?.takeIf { it >= 0 }
+
+    return HealthMetric(
         name = name ?: return null,
         documentation = documentation?.short,
         documentationLink = documentation?.url?.let { URI(it) },
         minValue = MIN_SCORE,
         maxValue = MAX_SCORE,
         higherIsBetter = true,
-        value = score?.toDouble()?.takeIf { it != -1.0 } ?: return null,
-        criticality = score?.let { determineValueCriticality(it) },
+        value = computedScore?.toDouble(),
+        criticality = computedScore?.let { determineValueCriticality(it) },
         reason = reason,
         details = details
     )
+}
 
 internal fun determineValueCriticality(value: Int): Criticality =
     when {
