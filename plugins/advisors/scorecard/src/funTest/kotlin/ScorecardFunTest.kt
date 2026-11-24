@@ -29,6 +29,7 @@ import io.kotest.matchers.collections.containOnly
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldBeSingle
 import io.kotest.matchers.maps.matchExactly
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.or
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -67,6 +68,13 @@ class ScorecardFunTest : StringSpec({
             pkg to { result ->
                 result.advisor shouldBe scorecard.details
                 result.healthMetrics should haveSize(18)
+
+                result.healthMetrics.forAll {
+                    it.minValue shouldBe 0.0
+                    it.maxValue shouldBe 10.0
+                    it.higherIsBetter shouldBe true
+                    it.referenceValue should beNull()
+                }
 
                 with(result.healthMetrics.single { it.name == "Binary-Artifacts" }) {
                     value shouldBe 0.0
