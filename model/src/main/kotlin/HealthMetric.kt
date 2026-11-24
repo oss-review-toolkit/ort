@@ -38,8 +38,20 @@ data class HealthMetric(
     /** Link to the documentation about the metric. */
     val documentationLink: URI? = null,
 
+    /** The lowest value the metric can take, or null if it is unbounded or unknown. */
+    val minValue: Double? = null,
+
+    /** The highest value the metric can take, or null if it is unbounded or unknown. */
+    val maxValue: Double? = null,
+
+    /** Whether a higher value is better, or null if unknown. */
+    val higherIsBetter: Boolean? = null,
+
     /** The raw metric score as returned by the provider. */
     val value: Double,
+
+    /** The value that [criticality] was rated against, or null if the rating does not use one. */
+    val referenceValue: Double? = null,
 
     /** A rating how critical the value is. */
     val criticality: Criticality? = null,
