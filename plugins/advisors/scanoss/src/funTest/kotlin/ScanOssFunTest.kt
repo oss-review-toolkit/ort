@@ -27,6 +27,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.floats.plusOrMinus
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -100,7 +101,8 @@ class ScanOssFunTest : WordSpec({
                     scoringSystem shouldBe "EPSS"
                     severity should beNull()
                     score shouldBe 0.00248f
-                    vector shouldBe "0.16186"
+                    // Compare EPSS with tolerance as values may change over time.
+                    vector?.toFloatOrNull().shouldNotBeNull() shouldBe (0.16f plusOrMinus 0.05f)
                 }
             }
         }
@@ -127,7 +129,8 @@ class ScanOssFunTest : WordSpec({
                     scoringSystem shouldBe "EPSS"
                     severity should beNull()
                     score shouldBe 0.00553f
-                    vector shouldBe "0.47064"
+                    // Compare EPSS with tolerance as values may change over time.
+                    vector?.toFloatOrNull().shouldNotBeNull() shouldBe (0.47f plusOrMinus 0.05f)
                 }
             }
         }
