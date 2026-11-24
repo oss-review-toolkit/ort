@@ -28,6 +28,9 @@ import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
+internal typealias SpringSubProjectPaths = Map<String, String>
+
+/** Return a list of paths for the given GitHub [owner], [repo], and [revision], wrapped in a [Result]. */
 internal fun getGitHubTree(owner: String, repo: String, revision: String): Result<List<String>> =
     okHttpClient
         .downloadText("https://api.github.com/repos/$owner/$repo/git/trees/$revision?recursive=1")
@@ -37,15 +40,38 @@ internal fun getGitHubTree(owner: String, repo: String, revision: String): Resul
             }
         }
 
-internal fun getSpringProjectPaths(projectName: String, coercedVersion: String): Map<String, String> {
-    val paths = getGitHubTree("spring-projects", projectName, coercedVersion)
-        .getOrElse { getGitHubTree("spring-projects", projectName, "v$coercedVersion").getOrThrow() }
+/**
+ * Return the paths to the (Gradle, Maven) subprojects of the Spring project identified by the [orgName] and
+ * [projectName], in the [version]. The paths are keyed by the subproject name.
+ */
+internal fun getSpringSubProjectPaths(orgName: String, projectName: String, version: String): SpringSubProjectPaths {
+    val paths = getGitHubTree(orgName, projectName, version)
+        .getOrElse { getGitHubTree(orgName, projectName, "v$version").getOrThrow() }
 
-    val projectPaths = paths.mapNotNull { path ->
-        path.withoutSuffix("/build.gradle")?.takeIf { projectName in it }
+    val projectPaths = when (projectName) {
+        "spring-framework", "spring-security" -> {
+            paths.mapNotNull { path ->
+                val gradleFileBasePath = path.withoutSuffix(".gradle")?.takeIf { "spring-" in it }
+                gradleFileBasePath?.let { it.substringAfterLast('/') to it.substringBeforeLast('/') }
+            }
+        }
+
+        "springdoc-openapi" -> {
+            paths.mapNotNull { path ->
+                val mavenProjectPath = path.withoutSuffix("/pom.xml")?.takeIf { projectName in it }
+                mavenProjectPath?.let { it.substringAfterLast('/') to it }
+            }
+        }
+
+        else -> {
+            paths.mapNotNull { path ->
+                val gradleProjectPath = path.withoutSuffix("/build.gradle")?.takeIf { projectName in it }
+                gradleProjectPath?.let { it.substringAfterLast('/') to it }
+            }
+        }
     }
 
-    val projectPathsByName = projectPaths.associateBy { it.substringAfterLast('/') }
+    val projectPathsByName = projectPaths.toMap()
 
     check(projectPathsByName.size == projectPaths.size) {
         "Ambiguous mapping of project names to project paths."

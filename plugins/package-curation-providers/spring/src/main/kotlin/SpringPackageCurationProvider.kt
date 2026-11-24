@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.spring
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
@@ -43,22 +44,35 @@ import org.semver4j.Semver
 open class SpringPackageCurationProvider(
     override val descriptor: PluginDescriptor = SpringPackageCurationProviderFactory.descriptor
 ) : PackageCurationProvider {
-    val springBootProjectPaths = mutableMapOf<String, Map<String, String>>()
+    private typealias SpringProjectVersionPaths = MutableMap<String, SpringSubProjectPaths>
 
-    fun getSpringBootProjectPath(subProjectName: String, projectVersion: String): String {
+    // Lookup subproject paths by first "projectName", and then "coercedVersion", returning the map of paths.
+    private val springProjectPaths = mutableMapOf<String, SpringProjectVersionPaths>()
+
+    /**
+     * Return the path of the subproject identified by [pkgId] for the Spring project identified by [orgName] and
+     * [projectName].
+     */
+    private fun getSpringSubProjectPath(orgName: String, projectName: String, pkgId: Identifier): String {
         // Use a simple way to get the first valid version out of a range.
-        val coercedVersion = Semver.coerce(projectVersion).toString()
+        val coercedVersion = Semver.coerce(pkgId.version).toString()
 
-        val paths = springBootProjectPaths.getOrPut(coercedVersion) {
-            getSpringProjectPaths("spring-boot", coercedVersion)
+        val projectVersions = springProjectPaths.getOrPut("$orgName/$projectName") {
+            mutableMapOf()
         }
 
-        return paths.getValue(subProjectName)
+        val subProjectPaths = projectVersions.getOrPut(coercedVersion) {
+            getSpringSubProjectPaths(orgName, projectName, coercedVersion)
+        }
+
+        return subProjectPaths.getValue(pkgId.name)
     }
 
     override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> {
         val springPackages = packages.filter {
-            it.id.type == "Maven" && it.id.namespace.startsWith("org.springframework")
+            it.id.type == "Maven" && with(it.id.namespace) {
+                startsWith("org.springdoc") || startsWith("org.springframework")
+            }
         }
 
         if (springPackages.isEmpty()) return emptySet()
@@ -67,8 +81,8 @@ open class SpringPackageCurationProvider(
         val metadataOnlyNames = setOf("boot", "cloud")
 
         springPackages.mapNotNullTo(springCurations) { pkg ->
+            val orgName = VcsHost.GITHUB.getUserOrOrganization(pkg.vcsProcessed.url) ?: return@mapNotNullTo null
             val projectName = VcsHost.GITHUB.getProject(pkg.vcsProcessed.url) ?: return@mapNotNullTo null
-            if (projectName != "spring-boot") return@mapNotNullTo null
 
             var data = PackageCurationData()
 
@@ -84,12 +98,12 @@ open class SpringPackageCurationProvider(
             }
 
             runCatching {
-                getSpringBootProjectPath(pkg.id.name, pkg.id.version)
+                getSpringSubProjectPath(orgName, projectName, pkg.id)
             }.onSuccess { path ->
                 data = data.copy(vcs = VcsInfoCurationData(path = path))
             }.onFailure {
                 logger.warn {
-                    "Failed to get Spring Boot project path for package '${pkg.id.toCoordinates()}': " +
+                    "Failed to get Spring project path for package '${pkg.id.toCoordinates()}': " +
                         it.collectMessages()
                 }
             }
