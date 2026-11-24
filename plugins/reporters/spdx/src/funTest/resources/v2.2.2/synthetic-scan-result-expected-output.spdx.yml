@@ -203,8 +203,8 @@ packages:
     referenceLocator: "pkg:maven/pkg7-grp/pkg7@0.0.1"
   filesAnalyzed: false
   homepage: "NONE"
-  licenseComments: "effectiveLicense: Apache-2.0 AND GPL-2.0-only WITH NOASSERTION\
-    \ AND BSD-3-Clause"
+  licenseComments: "effectiveLicense: Apache-2.0 AND BSD-3-Clause AND GPL-2.0-only\
+    \ WITH NOASSERTION"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND GPL-2.0-only WITH NOASSERTION"
   name: "pkg7"
@@ -225,8 +225,8 @@ packages:
   - "SPDXRef-File-5"
   - "SPDXRef-File-6"
   homepage: "NONE"
-  licenseComments: "effectiveLicense: Apache-2.0 AND GPL-2.0-only WITH NOASSERTION\
-    \ AND BSD-3-Clause"
+  licenseComments: "effectiveLicense: Apache-2.0 AND BSD-3-Clause AND GPL-2.0-only\
+    \ WITH NOASSERTION"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND GPL-2.0-only WITH NOASSERTION"
   licenseInfoFromFiles:
@@ -245,8 +245,7 @@ packages:
     referenceLocator: "pkg:maven/pkg8-grp/pkg8@0.0.1"
   filesAnalyzed: false
   homepage: "NONE"
-  licenseComments: "effectiveLicense: Apache-2.0 AND LGPL-2.0-or-later AND Apache-2.0\
-    \ AND LGPL-2.0-or-later"
+  licenseComments: "effectiveLicense: Apache-2.0 AND LGPL-2.0-or-later"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND LGPL-2.0-or-later"
   name: "pkg8"
@@ -266,8 +265,7 @@ packages:
   - "SPDXRef-File-7"
   - "SPDXRef-File-8"
   homepage: "NONE"
-  licenseComments: "effectiveLicense: Apache-2.0 AND LGPL-2.0-or-later AND Apache-2.0\
-    \ AND LGPL-2.0-or-later"
+  licenseComments: "effectiveLicense: Apache-2.0 AND LGPL-2.0-or-later"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND LGPL-2.0-or-later"
   licenseInfoFromFiles:
