@@ -52,6 +52,12 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
+/** The lowest score Scorecard assigns to a check, see https://github.com/ossf/scorecard#aggregate-score. */
+private const val MIN_SCORE = 0.0
+
+/** The highest score Scorecard assigns to a check, see https://github.com/ossf/scorecard#aggregate-score. */
+private const val MAX_SCORE = 10.0
+
 /**
  * An [AdviceProvider] implementation that obtains health metrics from a [Scorecard][https://github.com/ossf/scorecard]
  * instance.
@@ -131,11 +137,14 @@ class Scorecard(
     }
 }
 
-private fun ScorecardCheck.toHealthMetric(): HealthMetric? =
+internal fun ScorecardCheck.toHealthMetric(): HealthMetric? =
     HealthMetric(
         name = name ?: return null,
         documentation = documentation?.short,
         documentationLink = documentation?.url?.let { URI(it) },
+        minValue = MIN_SCORE,
+        maxValue = MAX_SCORE,
+        higherIsBetter = true,
         value = score?.toDouble()?.takeIf { it != -1.0 } ?: return null,
         criticality = score?.let { determineValueCriticality(it) },
         reason = reason,

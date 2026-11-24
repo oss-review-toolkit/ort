@@ -22,7 +22,12 @@ package org.ossreviewtoolkit.plugins.advisors.scorecard
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import java.net.URI
+
+import org.ossreviewtoolkit.clients.scorecard.ScorecardCheck
+import org.ossreviewtoolkit.clients.scorecard.ScorecardCheckDocumentation
 import org.ossreviewtoolkit.model.Criticality
+import org.ossreviewtoolkit.model.HealthMetric
 
 class ScorecardTest : StringSpec({
     "determineValueCriticality should return the correct criticality" {
@@ -34,5 +39,29 @@ class ScorecardTest : StringSpec({
         determineValueCriticality(7) shouldBe Criticality.MEDIUM
         determineValueCriticality(8) shouldBe Criticality.LOW
         determineValueCriticality(10) shouldBe Criticality.LOW
+    }
+
+    "toHealthMetric should describe the scale and direction of the score" {
+        val check = ScorecardCheck(
+            name = "Maintained",
+            score = 7,
+            reason = "15 commit(s) and 3 issue activity found in the last 90 days -- score normalized to 7",
+            documentation = ScorecardCheckDocumentation(
+                short = "Determines if the project is \"actively maintained\".",
+                url = "https://example.org/checks.md#maintained"
+            )
+        )
+
+        check.toHealthMetric() shouldBe HealthMetric(
+            name = "Maintained",
+            documentation = "Determines if the project is \"actively maintained\".",
+            documentationLink = URI("https://example.org/checks.md#maintained"),
+            minValue = 0.0,
+            maxValue = 10.0,
+            higherIsBetter = true,
+            value = 7.0,
+            criticality = Criticality.MEDIUM,
+            reason = "15 commit(s) and 3 issue activity found in the last 90 days -- score normalized to 7"
+        )
     }
 })
