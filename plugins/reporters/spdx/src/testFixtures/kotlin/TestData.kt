@@ -227,6 +227,10 @@ val ORT_RESULT = OrtResult(
                                 ),
                                 PackageReference(
                                     id = Identifier("Go::gopkg.in/yaml.v3:3.0.1")
+                                ),
+                                PackageReference(
+                                    id = Identifier("Maven:pkg8-grp:pkg8:0.0.1"),
+                                    linkage = PackageLinkage.DYNAMIC
                                 )
                             )
                         ),
@@ -369,6 +373,20 @@ val ORT_RESULT = OrtResult(
                     ),
                     vcs = VcsInfo.EMPTY
                 ),
+                // A package with a source artifact scan result wich offers a license version choice.
+                Package(
+                    id = Identifier("Maven:pkg8-grp:pkg8:0.0.1"),
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    declaredLicenses = setOf("Apache-2.0 AND LGPL-2.0-or-later"),
+                    description = "",
+                    homepageUrl = "",
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/pkg8-sources.jar",
+                        hash = Hash.create("0000000000000000000000000000000000000000")
+                    ),
+                    vcs = VcsInfo.EMPTY
+                ),
+
                 // A package without a declared license, but with license findings in file matching the license file
                 // patterns, which targets testing the inclusion of the main license in the output. This covers
                 // the standard use case in the Go ecosystem where packages do not have a declared license.
@@ -472,6 +490,29 @@ val ORT_RESULT = OrtResult(
                         CopyrightFinding(
                             statement = "Copyright 2020 Some copyright holder in source artifact",
                             location = TextLocation("some/file", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("Maven:pkg8-grp:pkg8:0.0.1") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/pkg8-sources.jar",
+                        hash = Hash.create("0000000000000000000000000000000000000000")
+                    )
+                ),
+                scanner = ScannerDetails.EMPTY,
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "LGPL-2.0-or-later",
+                            location = TextLocation("LICENSE", 1)
+                        ),
+                        LicenseFinding(
+                            license = "Apache-2.0",
+                            location = TextLocation("some/other/file", 1)
                         )
                     )
                 )

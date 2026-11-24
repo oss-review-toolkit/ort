@@ -227,6 +227,47 @@
     },
     "versionInfo" : "0.0.1"
   }, {
+    "SPDXID" : "SPDXRef-Package-Maven-pkg8-grp-pkg8-0.0.1",
+    "copyrightText" : "NONE",
+    "downloadLocation" : "NONE",
+    "externalRefs" : [ {
+      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceType" : "purl",
+      "referenceLocator" : "pkg:maven/pkg8-grp/pkg8@0.0.1"
+    } ],
+    "filesAnalyzed" : false,
+    "homepage" : "NONE",
+    "licenseComments" : "effectiveLicense: Apache-2.0 AND LGPL-2.0-or-later AND Apache-2.0 AND LGPL-2.0-or-later",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0 AND LGPL-2.0-or-later",
+    "name" : "pkg8",
+    "versionInfo" : "0.0.1"
+  }, {
+    "SPDXID" : "SPDXRef-Package-Maven-pkg8-grp-pkg8-0.0.1-source-artifact",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0000000000000000000000000000000000000000"
+    } ],
+    "copyrightText" : "NONE",
+    "downloadLocation" : "https://example.com/pkg8-sources.jar",
+    "externalRefs" : [ {
+      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceType" : "purl",
+      "referenceLocator" : "pkg:maven/pkg8-grp/pkg8@0.0.1"
+    } ],
+    "filesAnalyzed" : true,
+    "hasFiles" : [ "SPDXRef-File-7", "SPDXRef-File-8" ],
+    "homepage" : "NONE",
+    "licenseComments" : "effectiveLicense: Apache-2.0 AND LGPL-2.0-or-later AND Apache-2.0 AND LGPL-2.0-or-later",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0 AND LGPL-2.0-or-later",
+    "licenseInfoFromFiles" : [ "Apache-2.0", "LGPL-2.0-or-later" ],
+    "name" : "pkg8",
+    "packageVerificationCode" : {
+      "packageVerificationCodeValue" : "2fa7ad6ee0f216452d342323d55f83d7935856a1"
+    },
+    "versionInfo" : "0.0.1"
+  }, {
     "SPDXID" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
     "copyrightText" : "NONE",
     "downloadLocation" : "https://github.com/path/proj1-repo.git",
@@ -320,6 +361,26 @@
     "fileName" : "some/other/file",
     "licenseConcluded" : "NOASSERTION",
     "licenseInfoInFiles" : [ "BSD-3-Clause OR MIT" ]
+  }, {
+    "SPDXID" : "SPDXRef-File-7",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0398ccd0f49298b10a3d76a47800d2ebecd49859"
+    } ],
+    "copyrightText" : "NONE",
+    "fileName" : "LICENSE",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseInfoInFiles" : [ "LGPL-2.0-or-later" ]
+  }, {
+    "SPDXID" : "SPDXRef-File-8",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "c927b088c3dd41fad44ef8397b3263c04aed87a0"
+    } ],
+    "copyrightText" : "NONE",
+    "fileName" : "some/other/file",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseInfoInFiles" : [ "Apache-2.0" ]
   } ],
   "relationships" : [ {
     "spdxElementId" : "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1",
@@ -370,6 +431,10 @@
     "relationshipType" : "GENERATED_FROM",
     "relatedSpdxElement" : "SPDXRef-Package-Maven-pkg7-grp-pkg7-0.0.1-source-artifact"
   }, {
+    "spdxElementId" : "SPDXRef-Package-Maven-pkg8-grp-pkg8-0.0.1",
+    "relationshipType" : "GENERATED_FROM",
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-pkg8-grp-pkg8-0.0.1-source-artifact"
+  }, {
     "spdxElementId" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
     "relationshipType" : "DEPENDS_ON",
     "relatedSpdxElement" : "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1"
@@ -393,6 +458,14 @@
     "spdxElementId" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
     "relationshipType" : "DYNAMIC_LINK",
     "relatedSpdxElement" : "SPDXRef-Package-Maven-pkg4-grp-pkg4-0.0.1"
+  }, {
+    "spdxElementId" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
+    "relationshipType" : "DEPENDS_ON",
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-pkg8-grp-pkg8-0.0.1"
+  }, {
+    "spdxElementId" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-pkg8-grp-pkg8-0.0.1"
   }, {
     "spdxElementId" : "SPDXRef-Project-Maven-proj2-grp-proj2-0.0.1",
     "relationshipType" : "DEPENDS_ON",
