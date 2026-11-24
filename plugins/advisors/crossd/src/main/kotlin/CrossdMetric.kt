@@ -46,6 +46,12 @@ data class CrossdMetric(
     /** Whether a higher value means that the value is better. */
     val higherIsBetter: Boolean,
 
+    /** The lowest value of the metric as documented by CrOSSD, or null if it is unbounded. */
+    val minValue: Double? = null,
+
+    /** The highest value of the metric as documented by CrOSSD, or null if it is unbounded. */
+    val maxValue: Double? = null,
+
     /**
      * The average value as returned by
      * [the CrOSSD API](https://fh-crossd.github.io/components/api/api.html#apimetricsavg) as of *2026-05-23*.
@@ -92,7 +98,11 @@ data class CrossdMetric(
             name = displayName,
             documentation = descriptionShort,
             documentationLink = documentationUrl,
+            minValue = minValue,
+            maxValue = maxValue,
+            higherIsBetter = higherIsBetter,
             value = value,
+            referenceValue = averageValue,
             criticality = getCriticality(value, thresholds),
             details = emptyList()
         )
