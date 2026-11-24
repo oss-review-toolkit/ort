@@ -35,7 +35,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -45,7 +44,6 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
-import org.ossreviewtoolkit.model.HealthMetric
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -130,7 +128,7 @@ class Crossd(
                 async {
                     pkg to runCatching {
                         val metrics = client.getMetrics(slug)
-                        CROSSD_METRICS.mapNotNull { it.toHealthMetric(metrics) }
+                        CROSSD_METRICS.mapNotNull { it.toHealthMetric(metrics, thresholds) }
                     }
                 }
             }.awaitAll().toMap()
@@ -156,19 +154,5 @@ class Crossd(
 
             pkg to AdvisorResult(details, summary, healthMetrics = healthMetrics)
         }.toMap()
-    }
-
-    private fun CrossdMetric.toHealthMetric(metrics: JsonObject): HealthMetric? {
-        val value = valueGetter(metrics)
-        return value?.let {
-            HealthMetric(
-                name = displayName,
-                documentation = descriptionShort,
-                documentationLink = documentationUrl,
-                value = value,
-                criticality = getCriticality(value, thresholds),
-                details = emptyList()
-            )
-        }
     }
 }
