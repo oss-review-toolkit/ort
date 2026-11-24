@@ -28,6 +28,7 @@ import kotlinx.serialization.json.double
 import kotlinx.serialization.json.jsonPrimitive
 
 import org.ossreviewtoolkit.model.Criticality
+import org.ossreviewtoolkit.model.HealthMetric
 
 data class CrossdMetric(
     /** The name of the metric. */
@@ -78,5 +79,22 @@ data class CrossdMetric(
         }
 
         return Criticality.CRITICAL
+    }
+
+    /**
+     * Create a [HealthMetric] from the value of this metric in the given [metrics], rated according to the given
+     * [thresholds]. Return null if the [metrics] do not contain a value for this metric.
+     */
+    fun toHealthMetric(metrics: JsonObject, thresholds: Map<Criticality, Int>): HealthMetric? {
+        val value = valueGetter(metrics) ?: return null
+
+        return HealthMetric(
+            name = displayName,
+            documentation = descriptionShort,
+            documentationLink = documentationUrl,
+            value = value,
+            criticality = getCriticality(value, thresholds),
+            details = emptyList()
+        )
     }
 }
