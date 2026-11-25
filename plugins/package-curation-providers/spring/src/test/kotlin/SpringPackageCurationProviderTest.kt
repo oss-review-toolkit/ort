@@ -35,12 +35,20 @@ class SpringPackageCurationProviderTest : StringSpec({
 
     "Recognize metadata only projects" {
         val id = Identifier("Maven:org.springframework.boot:spring-boot-starter-parent:2.7.4")
-        val pkg = Package.EMPTY.copy(id = id)
+        val pkg = Package.EMPTY.copy(
+            id = id,
+            vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
+        )
 
         provider.getCurationsFor(setOf(pkg)) should containExactly(
             PackageCuration(
                 id = id,
-                data = PackageCurationData(isMetadataOnly = true)
+                data = PackageCurationData(
+                    vcs = VcsInfoCurationData(
+                        path = "spring-boot-project/spring-boot-starters/spring-boot-starter-parent"
+                    ),
+                    isMetadataOnly = true
+                )
             )
         )
     }
