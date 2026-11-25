@@ -101,6 +101,15 @@ val ORT_RESULT = OrtResult(
                             choice = "BSD-3-Clause".toSpdx()
                         )
                     )
+                ),
+                PackageLicenseChoice(
+                    packageId = Identifier("NPM:@ort:declared-license-only-with-choice:1.0"),
+                    licenseChoices = listOf(
+                        SpdxLicenseChoice(
+                            given = "Apache-2.0 OR MIT".toSpdx(),
+                            choice = "MIT".toSpdx()
+                        )
+                    )
                 )
             )
         )
@@ -136,6 +145,9 @@ val ORT_RESULT = OrtResult(
                                 ),
                                 PackageReference(
                                     id = Identifier("NPM:@ort:declared-license:1.0")
+                                ),
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:declared-license-only-with-choice:1.0")
                                 )
                             )
                         ),
@@ -253,6 +265,15 @@ val ORT_RESULT = OrtResult(
                     ),
                     vcs = VcsInfo.EMPTY,
                     isModified = true
+                ),
+                Package(
+                    id = Identifier("NPM:@ort:declared-license-only-with-choice:1.0"),
+                    declaredLicenses = setOf("Apache-2.0 OR MIT"),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
                 ),
                 Package(
                     id = Identifier("NPM:@ort:test:0.1.0"),
