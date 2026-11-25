@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.CompositeLicenseFactProvider
 import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseFactProvider
+import org.ossreviewtoolkit.plugins.licensefactproviders.api.LicenseText
 import org.ossreviewtoolkit.plugins.licensefactproviders.spdx.SpdxLicenseFactProviderFactory
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -61,7 +62,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.XML,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = DummySpdxLicenseFactProvider()
             )
 
             bom should matchCycloneDxXmlSchema(DEFAULT_SCHEMA_VERSION_NAME)
@@ -83,7 +84,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = DummySpdxLicenseFactProvider()
             )
 
             bom should matchJsonSchema(schemaJson)
@@ -110,7 +111,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = createResultWithAdditionalProject(otherProject),
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = DummySpdxLicenseFactProvider()
             )
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
@@ -136,7 +137,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = createResultWithAdditionalProject(otherProject),
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = DummySpdxLicenseFactProvider()
             )
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
@@ -149,7 +150,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
                 singleBomComponentType = Component.Type.LIBRARY,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = DummySpdxLicenseFactProvider()
             )
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
@@ -176,7 +177,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 ortResult = createResultWithAdditionalProject(topLevelProject),
                 format = Format.JSON,
                 singleBomComponentName = "eric",
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = DummySpdxLicenseFactProvider()
             )
 
             bom.patchCycloneDxResult() shouldEqualJson expectedBom
@@ -188,7 +189,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = ORT_RESULT,
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = DummySpdxLicenseFactProvider()
             )
 
             bom should matchJsonSchema(schemaJson)
@@ -201,7 +202,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val bom = generateSingleBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create(),
+                licenseFactProvider = DummySpdxLicenseFactProvider(),
                 supplierName = "Test Supplier",
                 supplierUrl = "https://example.com/supplier"
             )
@@ -227,7 +228,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val (bomWithFindings, bomWithoutFindings) = generateMultiBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create()
+                licenseFactProvider = DummySpdxLicenseFactProvider()
             ).also {
                 it shouldHaveSize 2
                 it.forAll { bom ->
@@ -248,7 +249,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val boms = generateMultiBomReport(
                 ortResult = ORT_RESULT_WITH_VULNERABILITIES,
                 format = Format.JSON,
-                licenseFactProvider = SpdxLicenseFactProviderFactory.create(),
+                licenseFactProvider = DummySpdxLicenseFactProvider(),
                 supplierName = "Test Supplier",
                 supplierUrl = "https://example.com/supplier"
             )
@@ -341,4 +342,19 @@ private fun TestConfiguration.generateMultiBomReport(
         input = ReporterInput(ortResult, licenseFactProvider = licenseFactProvider),
         outputDir = tempdir()
     ).map { it.shouldBeSuccess().readText().normalizeLineBreaks() }
+}
+
+private class DummySpdxLicenseFactProvider : LicenseFactProvider() {
+    private val provider = SpdxLicenseFactProviderFactory.create()
+
+    override val descriptor = provider.descriptor.copy(id = "DummySpdx")
+
+    override fun hasLicenseText(licenseOrExceptionId: String): Boolean = provider.hasLicenseText(licenseOrExceptionId)
+
+    override fun getLicenseText(licenseOrExceptionId: String): LicenseText? =
+        if (provider.hasLicenseText(licenseOrExceptionId)) {
+            return LicenseText("$licenseOrExceptionId license text.")
+        } else {
+            null
+        }
 }
