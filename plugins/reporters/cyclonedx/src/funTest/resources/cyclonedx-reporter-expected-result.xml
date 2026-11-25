@@ -170,6 +170,31 @@
         <property name="ort:dependencyType">direct</property>
       </properties>
     </component>
+    <component type="library" bom-ref="NPM:@ort:declared-license-only-with-choice:1.0">
+      <group>@ort</group>
+      <name>declared-license-only-with-choice</name>
+      <version>1.0</version>
+      <scope>required</scope>
+      <licenses>
+        <license>
+          <id>MIT</id>
+          <text content-type="plain/text">MIT license text.</text>
+          <properties>
+            <property name="ort:origin">declared license</property>
+          </properties>
+        </license>
+      </licenses>
+      <purl>pkg:npm/%40ort/declared-license-only-with-choice@1.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://github.com/oss-review-toolkit/ort</url>
+        </reference>
+      </externalReferences>
+      <properties>
+        <property name="ort:effectiveLicense">MIT</property>
+        <property name="ort:dependencyType">direct</property>
+      </properties>
+    </component>
     <component type="library" bom-ref="NPM:@ort:license-file:1.0">
       <group>@ort</group>
       <name>license-file</name>
@@ -287,6 +312,7 @@
       <dependency ref="NPM:@ort:license-file-and-additional-licenses:1.0"/>
       <dependency ref="NPM:@ort:concluded-license:1.0"/>
       <dependency ref="NPM:@ort:declared-license:1.0"/>
+      <dependency ref="NPM:@ort:declared-license-only-with-choice:1.0"/>
     </dependency>
   </dependencies>
   <vulnerabilities>
