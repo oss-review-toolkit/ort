@@ -28,8 +28,10 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.containOnly
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldBeSingle
+import io.kotest.matchers.doubles.between
 import io.kotest.matchers.maps.matchExactly
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.or
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -68,6 +70,13 @@ class ScorecardFunTest : StringSpec({
             pkg to { result ->
                 result.advisor shouldBe scorecard.details
                 result.healthMetrics should haveSize(18)
+
+                result.healthSummary shouldNotBeNull {
+                    overallScore?.value shouldNotBeNull { this should between(0.0, 10.0, 0.0) }
+                    analyzedAt.shouldNotBeNull()
+                    analyzedRevision shouldNotBeNull { this should match("[0-9a-f]{40}") }
+                    toolVersion shouldNotBeNull { this should startWith("v") }
+                }
 
                 result.healthMetrics.forAll {
                     it.minValue shouldBe 0.0
@@ -349,6 +358,7 @@ class ScorecardFunTest : StringSpec({
             pkg to { result ->
                 result.advisor shouldBe scorecard.details
                 result.healthMetrics should beEmpty()
+                result.healthSummary should beNull()
             }
         )
     }
@@ -364,6 +374,7 @@ class ScorecardFunTest : StringSpec({
             pkg to { result ->
                 result.advisor shouldBe scorecard.details
                 result.healthMetrics should beEmpty()
+                result.healthSummary should beNull()
             }
         )
     }
@@ -386,6 +397,7 @@ class ScorecardFunTest : StringSpec({
             pkg to { result ->
                 result.advisor shouldBe scorecard.details
                 result.healthMetrics should beEmpty()
+                result.healthSummary should beNull()
             }
         )
     }

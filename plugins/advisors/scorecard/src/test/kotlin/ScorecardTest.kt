@@ -21,26 +21,33 @@ package org.ossreviewtoolkit.plugins.advisors.scorecard
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.net.URI
+import java.time.Instant
 
+import org.ossreviewtoolkit.clients.scorecard.Repo
 import org.ossreviewtoolkit.clients.scorecard.ScorecardCheck
 import org.ossreviewtoolkit.clients.scorecard.ScorecardCheckDocumentation
+import org.ossreviewtoolkit.clients.scorecard.ScorecardResult
+import org.ossreviewtoolkit.clients.scorecard.ScorecardVersion
 import org.ossreviewtoolkit.model.Criticality
 import org.ossreviewtoolkit.model.HealthMetric
+import org.ossreviewtoolkit.model.HealthSummary
 
 class ScorecardTest : StringSpec({
     "determineValueCriticality should return the correct criticality" {
-        determineValueCriticality(1) shouldBe Criticality.CRITICAL
-        determineValueCriticality(2) shouldBe Criticality.CRITICAL
-        determineValueCriticality(3) shouldBe Criticality.HIGH
-        determineValueCriticality(4) shouldBe Criticality.HIGH
-        determineValueCriticality(5) shouldBe Criticality.MEDIUM
-        determineValueCriticality(7) shouldBe Criticality.MEDIUM
-        determineValueCriticality(8) shouldBe Criticality.LOW
-        determineValueCriticality(10) shouldBe Criticality.LOW
+        determineValueCriticality(1.0) shouldBe Criticality.CRITICAL
+        determineValueCriticality(2.0) shouldBe Criticality.CRITICAL
+        determineValueCriticality(3.0) shouldBe Criticality.HIGH
+        determineValueCriticality(4.0) shouldBe Criticality.HIGH
+        determineValueCriticality(5.0) shouldBe Criticality.MEDIUM
+        determineValueCriticality(7.0) shouldBe Criticality.MEDIUM
+        determineValueCriticality(7.9) shouldBe Criticality.MEDIUM
+        determineValueCriticality(8.0) shouldBe Criticality.LOW
+        determineValueCriticality(10.0) shouldBe Criticality.LOW
     }
 
     "toHealthMetric should describe the scale and direction of the score" {
@@ -83,5 +90,47 @@ class ScorecardTest : StringSpec({
 
     "toHealthMetric should return null for a check without a name" {
         ScorecardCheck(score = 7).toHealthMetric() should beNull()
+    }
+
+    "toHealthSummary should keep the overall result of the analysis" {
+        val result = ScorecardResult(
+            date = "2026-11-17T05:21:44Z",
+            repo = Repo(name = "github.com/example/project", commit = "cdff97e798bbcb3f687f4399ac5e4232b498c846"),
+            score = 6.4,
+            scorecard = ScorecardVersion(version = "v5.7.0")
+        )
+
+        result.toHealthSummary() shouldBe HealthSummary(
+            overallScore = HealthMetric(
+                name = "Aggregate-Score",
+                documentation = "The average of the check scores, weighted by the risk of each check.",
+                documentationLink = URI("https://github.com/ossf/scorecard#aggregate-score"),
+                minValue = 0.0,
+                maxValue = 10.0,
+                higherIsBetter = true,
+                value = 6.4,
+                criticality = Criticality.MEDIUM
+            ),
+            analyzedAt = Instant.parse("2026-11-17T05:21:44Z"),
+            analyzedRevision = "cdff97e798bbcb3f687f4399ac5e4232b498c846",
+            toolVersion = "v5.7.0"
+        )
+    }
+
+    "toHealthSummary should take a date without a time as the start of that day in UTC" {
+        val result = ScorecardResult(date = "2026-11-09")
+
+        result.toHealthSummary() shouldBe HealthSummary(analyzedAt = Instant.parse("2026-11-09T00:00:00Z"))
+    }
+
+    "toHealthSummary should keep a negative overall score without a value" {
+        ScorecardResult(score = -1.0).toHealthSummary()?.overallScore shouldNotBeNull {
+            value should beNull()
+            criticality should beNull()
+        }
+    }
+
+    "toHealthSummary should return null for an empty result" {
+        ScorecardResult().toHealthSummary() should beNull()
     }
 })
