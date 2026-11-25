@@ -17,30 +17,27 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles
+package org.ossreviewtoolkit.clients.fossid.model.identification.mark
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 
+import org.ossreviewtoolkit.clients.fossid.PolymorphicData
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.Component
 import org.ossreviewtoolkit.clients.fossid.model.summary.License
 import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
 import org.ossreviewtoolkit.clients.fossid.model.summary.SummaryIdentifiedFile
 
-data class IdentifiedFile(
+data class MarkedAsIdentifiedFile(
     val comment: String?,
+    val comments: PolymorphicData<Map<Int, Comment>> = PolymorphicData(emptyMap()),
 
-    val identificationId: Int?,
-    val identificationCopyright: String,
+    val identificationId: Int,
+
+    val identificationCopyright: String?,
 
     val isDistributed: Int,
 
-    val rowId: Int,
-
-    val userName: String?,
-
-    val userSurname: String?,
-
-    val userUsername: String?
+    val rowId: Int
 ) : Summarizable {
     @JsonUnwrapped(prefix = "component_")
     lateinit var component: Component // TODO: How to get the additional components? Only one is returned
@@ -49,12 +46,12 @@ data class IdentifiedFile(
     lateinit var file: File
 
     override fun toSummary(): SummaryIdentifiedFile {
-        val licenses = file.licenses?.let { licenses ->
+        val licenses = file.licenses?.value?.let { licenses ->
             licenses.values.map {
                 License(
-                    identifier = it.identifier,
-                    name = it.name,
-                    origin = it.fileLicenseMatchType
+                    identifier = checkNotNull(it.file.licenseIdentifier),
+                    name = it.file.licenseName,
+                    origin = it.type
                 )
             }
         }.orEmpty()
@@ -68,5 +65,5 @@ data class IdentifiedFile(
 
     override fun getFileName(): String = checkNotNull(file.path)
 
-    override fun getCopyright(): String = identificationCopyright
+    override fun getCopyright(): String = identificationCopyright.orEmpty()
 }

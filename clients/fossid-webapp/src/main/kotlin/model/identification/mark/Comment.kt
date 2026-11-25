@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
+ * Copyright (C) 2023 The ORT Project Copyright Holders <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,6 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified
+package org.ossreviewtoolkit.clients.fossid.model.identification.mark
 
-import org.ossreviewtoolkit.clients.fossid.PolymorphicData
-
-data class File(
-    val id: String?,
-
-    val md5: String?,
-    val path: String?,
-    val sha1: String?,
-    val sha256: String?,
-
-    val size: Int?,
-
-    val licenses: PolymorphicData<MutableMap<Int, License>>?
-)
+data class Comment(val id: Int, val identificationId: Int, val comment: String)

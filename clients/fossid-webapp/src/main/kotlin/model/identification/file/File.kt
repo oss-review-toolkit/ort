@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles
+package org.ossreviewtoolkit.clients.fossid.model.identification.file
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 

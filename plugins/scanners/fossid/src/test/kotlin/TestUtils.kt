@@ -53,13 +53,13 @@ import org.ossreviewtoolkit.clients.fossid.listSnippets
 import org.ossreviewtoolkit.clients.fossid.model.CreateScanResponse
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
-import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.file.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
-import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.Comment
-import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.File
-import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.License
-import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.LicenseFile
-import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.mark.Comment
+import org.ossreviewtoolkit.clients.fossid.model.identification.mark.File
+import org.ossreviewtoolkit.clients.fossid.model.identification.mark.License
+import org.ossreviewtoolkit.clients.fossid.model.identification.mark.LicenseFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.mark.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
@@ -298,7 +298,7 @@ private fun createIdentifiedFile(index: Int): IdentifiedFile {
         userUsername = null
     )
 
-    val license = org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.License(
+    val license = org.ossreviewtoolkit.clients.fossid.model.identification.file.License(
         fileLicenseMatchType = LicenseMatchType.SNIPPET,
         id = index,
         identifier = "lic$index",
@@ -308,7 +308,7 @@ private fun createIdentifiedFile(index: Int): IdentifiedFile {
         name = "name$index"
     )
 
-    file.file = org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.File(
+    file.file = org.ossreviewtoolkit.clients.fossid.model.identification.file.File(
         id = "identified$index",
         licenseIdentifier = "licenseIdentifier1",
         licenseIncludeInReport = false,
