@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.VcsInfoCurationData
+import org.ossreviewtoolkit.model.utils.hasIvyVersionRange
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
@@ -54,15 +55,19 @@ open class SpringPackageCurationProvider(
      * [projectName].
      */
     private fun getSpringSubProjectPath(orgName: String, projectName: String, pkgId: Identifier): String {
-        // Use a simple way to get the first valid version out of a range.
-        val coercedVersion = Semver.coerce(pkgId.version).toString()
+        val plainVersion = if (pkgId.hasIvyVersionRange()) {
+            // Use a simple way to get the first valid version out of a range.
+            Semver.coerce(pkgId.version).toString()
+        } else {
+            pkgId.version
+        }
 
         val projectVersions = springProjectPaths.getOrPut("$orgName/$projectName") {
             mutableMapOf()
         }
 
-        val subProjectPaths = projectVersions.getOrPut(coercedVersion) {
-            getSpringSubProjectPaths(orgName, projectName, coercedVersion)
+        val subProjectPaths = projectVersions.getOrPut(plainVersion) {
+            getSpringSubProjectPaths(orgName, projectName, plainVersion)
         }
 
         return subProjectPaths.getValue(pkgId.name)
