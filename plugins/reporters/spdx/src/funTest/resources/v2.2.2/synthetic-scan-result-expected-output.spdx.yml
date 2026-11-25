@@ -137,6 +137,43 @@ packages:
   packageVerificationCode:
     packageVerificationCodeValue: "3700a1e8575c082653af662ac024337faf78990f"
   versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg10-grp-pkg10-0.0.1"
+  copyrightText: "NONE"
+  downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE_MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg10-grp/pkg10@0.0.1"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseComments: "effectiveLicense: MIT"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "NONE"
+  name: "pkg10"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-pkg10-grp-pkg10-0.0.1-source-artifact"
+  checksums:
+  - algorithm: "SHA1"
+    checksumValue: "0000000000000000000000000000000000000000"
+  copyrightText: "NONE"
+  downloadLocation: "https://example.com/pkg10-sources.jar"
+  externalRefs:
+  - referenceCategory: "PACKAGE_MANAGER"
+    referenceType: "purl"
+    referenceLocator: "pkg:maven/pkg10-grp/pkg10@0.0.1"
+  filesAnalyzed: true
+  hasFiles:
+  - "SPDXRef-File-4"
+  homepage: "NONE"
+  licenseComments: "effectiveLicense: MIT"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "NONE"
+  licenseInfoFromFiles:
+  - "MIT"
+  name: "pkg10"
+  packageVerificationCode:
+    packageVerificationCodeValue: "824efb38b3eb89b20aed67ba27b6920747055b8e"
+  versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-pkg2-grp-pkg2-0.0.1"
   copyrightText: "NONE"
   downloadLocation: "NONE"
@@ -221,9 +258,9 @@ packages:
     referenceLocator: "pkg:maven/pkg7-grp/pkg7@0.0.1"
   filesAnalyzed: true
   hasFiles:
-  - "SPDXRef-File-4"
   - "SPDXRef-File-5"
   - "SPDXRef-File-6"
+  - "SPDXRef-File-7"
   homepage: "NONE"
   licenseComments: "effectiveLicense: Apache-2.0 AND BSD-3-Clause AND GPL-2.0-only\
     \ WITH NOASSERTION"
@@ -262,8 +299,8 @@ packages:
     referenceLocator: "pkg:maven/pkg8-grp/pkg8@0.0.1"
   filesAnalyzed: true
   hasFiles:
-  - "SPDXRef-File-7"
   - "SPDXRef-File-8"
+  - "SPDXRef-File-9"
   homepage: "NONE"
   licenseComments: "effectiveLicense: Apache-2.0 AND LGPL-2.0-or-later"
   licenseConcluded: "NOASSERTION"
@@ -353,13 +390,22 @@ files:
 - SPDXID: "SPDXRef-File-4"
   checksums:
   - algorithm: "SHA1"
+    checksumValue: "4552f707bdf537911c9943cec56a0bf11bd8468d"
+  copyrightText: "NONE"
+  fileName: "some/file"
+  licenseConcluded: "NOASSERTION"
+  licenseInfoInFiles:
+  - "Apache-2.0 OR MIT"
+- SPDXID: "SPDXRef-File-5"
+  checksums:
+  - algorithm: "SHA1"
     checksumValue: "0398ccd0f49298b10a3d76a47800d2ebecd49859"
   copyrightText: "NONE"
   fileName: "LICENSE"
   licenseConcluded: "NOASSERTION"
   licenseInfoInFiles:
   - "GPL-2.0-only WITH NOASSERTION"
-- SPDXID: "SPDXRef-File-5"
+- SPDXID: "SPDXRef-File-6"
   checksums:
   - algorithm: "SHA1"
     checksumValue: "4552f707bdf537911c9943cec56a0bf11bd8468d"
@@ -368,7 +414,7 @@ files:
   licenseConcluded: "NOASSERTION"
   licenseInfoInFiles:
   - "NONE"
-- SPDXID: "SPDXRef-File-6"
+- SPDXID: "SPDXRef-File-7"
   checksums:
   - algorithm: "SHA1"
     checksumValue: "c927b088c3dd41fad44ef8397b3263c04aed87a0"
@@ -377,7 +423,7 @@ files:
   licenseConcluded: "NOASSERTION"
   licenseInfoInFiles:
   - "BSD-3-Clause OR MIT"
-- SPDXID: "SPDXRef-File-7"
+- SPDXID: "SPDXRef-File-8"
   checksums:
   - algorithm: "SHA1"
     checksumValue: "0398ccd0f49298b10a3d76a47800d2ebecd49859"
@@ -386,7 +432,7 @@ files:
   licenseConcluded: "NOASSERTION"
   licenseInfoInFiles:
   - "LGPL-2.0-or-later"
-- SPDXID: "SPDXRef-File-8"
+- SPDXID: "SPDXRef-File-9"
   checksums:
   - algorithm: "SHA1"
     checksumValue: "c927b088c3dd41fad44ef8397b3263c04aed87a0"
@@ -417,6 +463,9 @@ relationships:
 - spdxElementId: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
   relationshipType: "DYNAMIC_LINK"
   relatedSpdxElement: "SPDXRef-Package-Maven-pkg3-grp-pkg3-0.0.1"
+- spdxElementId: "SPDXRef-Package-Maven-pkg10-grp-pkg10-0.0.1"
+  relationshipType: "GENERATED_FROM"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg10-grp-pkg10-0.0.1-source-artifact"
 - spdxElementId: "SPDXRef-Package-Maven-pkg3-grp-pkg3-0.0.1"
   relationshipType: "DEPENDS_ON"
   relatedSpdxElement: "SPDXRef-Package-Maven-pkg6-grp-pkg6-0.0.1"
@@ -447,6 +496,12 @@ relationships:
 - spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
   relationshipType: "DYNAMIC_LINK"
   relatedSpdxElement: "SPDXRef-Package-Maven-pkg1-grp-pkg1-0.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg10-grp-pkg10-0.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
+  relationshipType: "DYNAMIC_LINK"
+  relatedSpdxElement: "SPDXRef-Package-Maven-pkg10-grp-pkg10-0.0.1"
 - spdxElementId: "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1"
   relationshipType: "DEPENDS_ON"
   relatedSpdxElement: "SPDXRef-Package-Maven-pkg4-grp-pkg4-0.0.1"
