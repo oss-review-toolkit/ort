@@ -110,6 +110,15 @@ val ORT_RESULT = OrtResult(
                             choice = "MIT".toSpdx()
                         )
                     )
+                ),
+                PackageLicenseChoice(
+                    packageId = Identifier("NPM:@ort:detected-license-only-with-choice:1.0"),
+                    licenseChoices = listOf(
+                        SpdxLicenseChoice(
+                            given = "Apache-2.0 OR MIT".toSpdx(),
+                            choice = "MIT".toSpdx()
+                        )
+                    )
                 )
             )
         )
@@ -148,6 +157,9 @@ val ORT_RESULT = OrtResult(
                                 ),
                                 PackageReference(
                                     id = Identifier("NPM:@ort:declared-license-only-with-choice:1.0")
+                                ),
+                                PackageReference(
+                                    id = Identifier("NPM:@ort:detected-license-only-with-choice:1.0")
                                 )
                             )
                         ),
@@ -273,6 +285,21 @@ val ORT_RESULT = OrtResult(
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
+                ),
+                Package(
+                    id = Identifier("NPM:@ort:detected-license-only-with-choice:1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/detected-license-only-with-choice-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
                     vcs = VcsInfo.EMPTY
                 ),
                 Package(
@@ -470,6 +497,28 @@ val ORT_RESULT = OrtResult(
                         CopyrightFinding(
                             statement = "Copyright 1",
                             location = TextLocation("LICENSE", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("NPM:@ort:detected-license-only-with-choice:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/detected-license-only-with-choice-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "Apache-2.0 OR MIT",
+                            location = TextLocation("some/file", 1)
                         )
                     )
                 )
