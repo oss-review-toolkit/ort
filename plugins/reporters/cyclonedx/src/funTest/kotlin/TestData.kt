@@ -98,7 +98,6 @@ val ORT_RESULT = OrtResult(
                                 choice = "BSD-3-Clause".toSpdx()
                             )
                         )
-
                     )
                 )
             )
