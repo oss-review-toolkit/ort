@@ -169,6 +169,7 @@ packages:
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NONE"
   licenseInfoFromFiles:
+  - "Apache-2.0"
   - "MIT"
   name: "pkg10"
   packageVerificationCode:
@@ -269,6 +270,7 @@ packages:
   licenseInfoFromFiles:
   - "BSD-3-Clause"
   - "GPL-2.0-only WITH NOASSERTION"
+  - "MIT"
   name: "pkg7"
   packageVerificationCode:
     packageVerificationCodeValue: "b3ed5c0c343054d728700820f564a62fad4469ba"

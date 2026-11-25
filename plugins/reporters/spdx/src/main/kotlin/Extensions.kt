@@ -146,7 +146,7 @@ internal fun Package.toSpdxPackage(
 
     val licenseChoices = ortResult.getLicenseChoicesForId(id)
 
-    val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id).filterExcluded().applyChoices(licenseChoices)
+    val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
 
     val effectiveLicense = resolvedLicenseInfo.effectiveLicense(
         LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
