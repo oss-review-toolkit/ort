@@ -47,13 +47,16 @@ data class HealthMetric(
     /** Whether a higher value is better, or null if unknown. */
     val higherIsBetter: Boolean? = null,
 
-    /** The raw metric score as returned by the provider. */
-    val value: Double,
+    /**
+     * The raw metric score as returned by the provider, or null if the provider could not compute it. In that case,
+     * [reason] says why.
+     */
+    val value: Double?,
 
     /** The value that [criticality] was rated against, or null if the rating does not use one. */
     val referenceValue: Double? = null,
 
-    /** A rating how critical the value is. */
+    /** A rating how critical the value is, or null if there is no [value]. */
     val criticality: Criticality? = null,
 
     /** The reason for the score. */
