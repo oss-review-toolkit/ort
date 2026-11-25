@@ -28,18 +28,17 @@ import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
-internal fun getGitHubTree(owner: String, repo: String, revision: String): List<String> {
-    val json = okHttpClient
+internal fun getGitHubTree(owner: String, repo: String, revision: String): Result<List<String>> =
+    okHttpClient
         .downloadText("https://api.github.com/repos/$owner/$repo/git/trees/$revision?recursive=1")
-        .getOrThrow()
-
-    return Json.parseToJsonElement(json).jsonObject.getValue("tree").jsonArray.map {
-        it.jsonObject.getValue("path").jsonPrimitive.content
-    }
-}
+        .mapCatching { json ->
+            Json.parseToJsonElement(json).jsonObject.getValue("tree").jsonArray.map {
+                it.jsonObject.getValue("path").jsonPrimitive.content
+            }
+        }
 
 internal fun getSpringProjectPaths(projectName: String, coercedVersion: String): Map<String, String> {
-    val paths = getGitHubTree("spring-projects", projectName, "v$coercedVersion")
+    val paths = getGitHubTree("spring-projects", projectName, "v$coercedVersion").getOrThrow()
 
     val projectPaths = paths.mapNotNull { path ->
         path.withoutSuffix("/build.gradle")?.takeIf { projectName in it }
