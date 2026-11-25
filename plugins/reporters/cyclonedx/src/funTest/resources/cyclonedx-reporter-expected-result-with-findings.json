@@ -272,6 +272,55 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "NPM:@ort:detected-license-only-with-choice:1.0",
+      "group" : "@ort",
+      "name" : "detected-license-only-with-choice",
+      "version" : "1.0",
+      "description" : "",
+      "scope" : "required",
+      "hashes" : [
+        {
+          "alg" : "SHA-1",
+          "content" : "0000000000000000000000000000000000000000"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "MIT",
+            "text" : {
+              "contentType" : "plain/text",
+              "content" : "MIT license text."
+            },
+            "properties" : [
+              {
+                "name" : "ort:origin",
+                "value" : "detected license"
+              }
+            ]
+          }
+        }
+      ],
+      "purl" : "pkg:npm/%40ort/detected-license-only-with-choice@1.0?classifier=sources",
+      "externalReferences" : [
+        {
+          "type" : "website",
+          "url" : "https://github.com/oss-review-toolkit/ort"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "ort:effectiveLicense",
+          "value" : "MIT"
+        },
+        {
+          "name" : "ort:dependencyType",
+          "value" : "direct"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "NPM:@ort:license-file:1.0",
       "group" : "@ort",
       "name" : "license-file",
@@ -482,6 +531,7 @@
         "NPM:@ort:concluded-license:1.0",
         "NPM:@ort:declared-license:1.0",
         "NPM:@ort:declared-license-only-with-choice:1.0",
+        "NPM:@ort:detected-license-only-with-choice:1.0",
         "NPM:@ort:test:0.1.0"
       ]
     }
