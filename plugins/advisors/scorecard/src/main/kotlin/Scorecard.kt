@@ -30,6 +30,8 @@ import io.ktor.serialization.kotlinx.json.json
 
 import java.net.URI
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -37,6 +39,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 import org.ossreviewtoolkit.clients.scorecard.ScorecardCheck
+import org.ossreviewtoolkit.clients.scorecard.ScorecardResult
 import org.ossreviewtoolkit.clients.scorecard.client.getResult
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -44,6 +47,7 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Criticality
 import org.ossreviewtoolkit.model.HealthMetric
+import org.ossreviewtoolkit.model.HealthSummary
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.plugins.advisors.api.AdviceProvider
@@ -52,10 +56,13 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
-/** The lowest score Scorecard assigns to a check, see https://github.com/ossf/scorecard#aggregate-score. */
+/** The documentation about how Scorecard calculates its scores. */
+private const val SCORING_URL = "https://github.com/ossf/scorecard#aggregate-score"
+
+/** The lowest score Scorecard assigns to a check or a repository, see [SCORING_URL]. */
 private const val MIN_SCORE = 0.0
 
-/** The highest score Scorecard assigns to a check, see https://github.com/ossf/scorecard#aggregate-score. */
+/** The highest score Scorecard assigns to a check or a repository, see [SCORING_URL]. */
 private const val MAX_SCORE = 10.0
 
 /**
@@ -124,15 +131,15 @@ class Scorecard(
             }
         }.mapValues { it.value.await() }
 
-        val healthMetricList = responses.map { (pkg, scorecardResult) ->
-            val healthData = scorecardResult?.checks?.mapNotNull { it.toHealthMetric() }.orEmpty()
-            pkg to healthData
-        }
-
         val endTime = Instant.now()
 
-        return healthMetricList.associate { (pkg, healthData) ->
-            pkg to AdvisorResult(details, AdvisorSummary(startTime, endTime, issues), emptyList(), healthData)
+        return responses.mapValues { (_, scorecardResult) ->
+            AdvisorResult(
+                advisor = details,
+                summary = AdvisorSummary(startTime, endTime, issues),
+                healthMetrics = scorecardResult?.checks?.mapNotNull { it.toHealthMetric() }.orEmpty(),
+                healthSummary = scorecardResult?.toHealthSummary()
+            )
         }
     }
 }
@@ -149,13 +156,49 @@ internal fun ScorecardCheck.toHealthMetric(): HealthMetric? {
         maxValue = MAX_SCORE,
         higherIsBetter = true,
         value = computedScore?.toDouble(),
-        criticality = computedScore?.let { determineValueCriticality(it) },
+        criticality = computedScore?.let { determineValueCriticality(it.toDouble()) },
         reason = reason,
         details = details
     )
 }
 
-internal fun determineValueCriticality(value: Int): Criticality =
+internal fun ScorecardResult.toHealthSummary(): HealthSummary? {
+    val summary = HealthSummary(
+        overallScore = score?.let { toOverallScore(it) },
+        analyzedAt = date?.let { parseDate(it) },
+        analyzedRevision = repo?.commit,
+        toolVersion = scorecard?.version
+    )
+
+    return summary.takeUnless { it == HealthSummary() }
+}
+
+private fun toOverallScore(score: Double): HealthMetric {
+    // Treat a negative score like the score of a check that Scorecard could not compute.
+    val value = score.takeIf { it >= 0 }
+
+    return HealthMetric(
+        name = "Aggregate-Score",
+        documentation = "The average of the check scores, weighted by the risk of each check.",
+        documentationLink = URI(SCORING_URL),
+        minValue = MIN_SCORE,
+        maxValue = MAX_SCORE,
+        higherIsBetter = true,
+        value = value,
+        criticality = value?.let { determineValueCriticality(it) }
+    )
+}
+
+/**
+ * Parse the [date] of a Scorecard analysis. Scorecard reports it either as a full timestamp or only as a date formatted
+ * as YYYY-MM-DD, which is taken as the start of that day in UTC. Return null if the [date] cannot be parsed.
+ */
+private fun parseDate(date: String): Instant? =
+    runCatching { Instant.parse(date) }
+        .recoverCatching { LocalDate.parse(date).atStartOfDay(ZoneOffset.UTC).toInstant() }
+        .getOrNull()
+
+internal fun determineValueCriticality(value: Double): Criticality =
     when {
         value < 3 -> Criticality.CRITICAL
         value < 5 -> Criticality.HIGH
