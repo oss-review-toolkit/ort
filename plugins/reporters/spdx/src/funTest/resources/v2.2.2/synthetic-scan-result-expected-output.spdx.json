@@ -268,6 +268,22 @@
     },
     "versionInfo" : "0.0.1"
   }, {
+    "SPDXID" : "SPDXRef-Package-Maven-pkg9-grp-pkg9-0.0.1",
+    "copyrightText" : "NONE",
+    "downloadLocation" : "NONE",
+    "externalRefs" : [ {
+      "referenceCategory" : "PACKAGE_MANAGER",
+      "referenceType" : "purl",
+      "referenceLocator" : "pkg:maven/pkg9-grp/pkg9@0.0.1"
+    } ],
+    "filesAnalyzed" : false,
+    "homepage" : "NONE",
+    "licenseComments" : "effectiveLicense: MIT",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0 OR MIT",
+    "name" : "pkg9",
+    "versionInfo" : "0.0.1"
+  }, {
     "SPDXID" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
     "copyrightText" : "NONE",
     "downloadLocation" : "https://github.com/path/proj1-repo.git",
@@ -466,6 +482,14 @@
     "spdxElementId" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
     "relationshipType" : "DYNAMIC_LINK",
     "relatedSpdxElement" : "SPDXRef-Package-Maven-pkg8-grp-pkg8-0.0.1"
+  }, {
+    "spdxElementId" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
+    "relationshipType" : "DEPENDS_ON",
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-pkg9-grp-pkg9-0.0.1"
+  }, {
+    "spdxElementId" : "SPDXRef-Project-Maven-proj1-grp-proj1-0.0.1",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-pkg9-grp-pkg9-0.0.1"
   }, {
     "spdxElementId" : "SPDXRef-Project-Maven-proj2-grp-proj2-0.0.1",
     "relationshipType" : "DEPENDS_ON",
