@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.spring
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
@@ -66,6 +67,9 @@ open class SpringPackageCurationProvider(
         val metadataOnlyNames = setOf("boot", "cloud")
 
         springPackages.mapNotNullTo(springCurations) { pkg ->
+            val projectName = VcsHost.GITHUB.getProject(pkg.vcsProcessed.url) ?: return@mapNotNullTo null
+            if (projectName != "spring-boot") return@mapNotNullTo null
+
             var data = PackageCurationData()
 
             val isMetadataOnly = with(pkg.id) {
@@ -79,16 +83,14 @@ open class SpringPackageCurationProvider(
                 data = data.copy(isMetadataOnly = true)
             }
 
-            if (pkg.vcsProcessed.url == "https://github.com/spring-projects/spring-boot.git") {
-                runCatching {
-                    getSpringBootProjectPath(pkg.id.name, pkg.id.version)
-                }.onSuccess { path ->
-                    data = data.copy(vcs = VcsInfoCurationData(path = path))
-                }.onFailure {
-                    logger.warn {
-                        "Failed to get Spring Boot project path for package '${pkg.id.toCoordinates()}': " +
-                            it.collectMessages()
-                    }
+            runCatching {
+                getSpringBootProjectPath(pkg.id.name, pkg.id.version)
+            }.onSuccess { path ->
+                data = data.copy(vcs = VcsInfoCurationData(path = path))
+            }.onFailure {
+                logger.warn {
+                    "Failed to get Spring Boot project path for package '${pkg.id.toCoordinates()}': " +
+                        it.collectMessages()
                 }
             }
 
