@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagecurationproviders.spring
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
@@ -30,78 +30,80 @@ import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 
-class SpringPackageCurationProviderTest : StringSpec({
+class SpringPackageCurationProviderTest : WordSpec({
     val provider = SpringPackageCurationProvider()
 
-    "Recognize metadata only projects" {
-        val id = Identifier("Maven:org.springframework.boot:spring-boot-starter-parent:2.7.4")
-        val pkg = Package.EMPTY.copy(
-            id = id,
-            vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
-        )
-
-        provider.getCurationsFor(setOf(pkg)) should containExactly(
-            PackageCuration(
+    "spring-boot curations" should {
+        "recognize metadata only projects" {
+            val id = Identifier("Maven:org.springframework.boot:spring-boot-starter-parent:2.7.4")
+            val pkg = Package.EMPTY.copy(
                 id = id,
-                data = PackageCurationData(
-                    vcs = VcsInfoCurationData(
-                        path = "spring-boot-project/spring-boot-starters/spring-boot-starter-parent"
-                    ),
-                    isMetadataOnly = true
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(
+                            path = "spring-boot-project/spring-boot-starters/spring-boot-starter-parent"
+                        ),
+                        isMetadataOnly = true
+                    )
                 )
             )
-        )
-    }
+        }
 
-    "Get the correct VCS path for spring-boot-configuration-metadata with a fixed version" {
-        val id = Identifier("Maven:org.springframework.boot:spring-boot-configuration-metadata:4.1.1")
-        val pkg = Package.EMPTY.copy(
-            id = id,
-            vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
-        )
-
-        provider.getCurationsFor(setOf(pkg)) should containExactly(
-            PackageCuration(
+        "get the correct VCS path for spring-boot-configuration-metadata with a fixed version" {
+            val id = Identifier("Maven:org.springframework.boot:spring-boot-configuration-metadata:4.1.1")
+            val pkg = Package.EMPTY.copy(
                 id = id,
-                data = PackageCurationData(
-                    vcs = VcsInfoCurationData(path = "configuration-metadata/spring-boot-configuration-metadata"),
-                    isMetadataOnly = true
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(path = "configuration-metadata/spring-boot-configuration-metadata"),
+                        isMetadataOnly = true
+                    )
                 )
             )
-        )
-    }
+        }
 
-    "Get the correct VCS path for spring-boot-antlib with a fixed version" {
-        val id = Identifier("Maven:org.springframework.boot:spring-boot-antlib:3.5.4")
-        val pkg = Package.EMPTY.copy(
-            id = id,
-            vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
-        )
-
-        provider.getCurationsFor(setOf(pkg)) should containExactly(
-            PackageCuration(
+        "get the correct VCS path for spring-boot-antlib with a fixed version" {
+            val id = Identifier("Maven:org.springframework.boot:spring-boot-antlib:3.5.4")
+            val pkg = Package.EMPTY.copy(
                 id = id,
-                data = PackageCurationData(
-                    vcs = VcsInfoCurationData(path = "spring-boot-project/spring-boot-tools/spring-boot-antlib")
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(path = "spring-boot-project/spring-boot-tools/spring-boot-antlib")
+                    )
                 )
             )
-        )
-    }
+        }
 
-    "Get the correct VCS path for spring-boot-test-autoconfigure with a version range" {
-        val id = Identifier("Maven:org.springframework.boot:spring-boot-test-autoconfigure:[3.3.0,)")
-        val pkg = Package.EMPTY.copy(
-            id = id,
-            vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
-        )
-
-        provider.getCurationsFor(setOf(pkg)) should containExactly(
-            PackageCuration(
+        "get the correct VCS path for spring-boot-test-autoconfigure with a version range" {
+            val id = Identifier("Maven:org.springframework.boot:spring-boot-test-autoconfigure:[3.3.0,)")
+            val pkg = Package.EMPTY.copy(
                 id = id,
-                data = PackageCurationData(
-                    vcs = VcsInfoCurationData(path = "spring-boot-project/spring-boot-test-autoconfigure")
+                vcsProcessed = VcsInfo.EMPTY.copy(url = "https://github.com/spring-projects/spring-boot.git")
+            )
+
+            provider.getCurationsFor(setOf(pkg)) should containExactly(
+                PackageCuration(
+                    id = id,
+                    data = PackageCurationData(
+                        vcs = VcsInfoCurationData(path = "spring-boot-project/spring-boot-test-autoconfigure")
+                    )
                 )
             )
-        )
+        }
     }
 })
