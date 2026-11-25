@@ -108,9 +108,9 @@ private val VERSION_SEGMENTS_REGEX = Regex(
  * 10000.
  */
 private fun shouldEncode(version: String?, versionRange: String): Boolean {
-    val matches = listOfNotNull(versionRange, version).map {
+    val matches = listOfNotNull(versionRange, version).flatMap {
         VERSION_SEGMENTS_REGEX.findAll(it).toList()
-    }.flatten()
+    }
 
     val hasUnencodableSegments = matches.any { match ->
         match.groupValues[6].isNotEmpty() || (2..5).any { match.groupValues[it].length > 4 }
