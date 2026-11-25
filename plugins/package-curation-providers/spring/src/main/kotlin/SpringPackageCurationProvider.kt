@@ -86,9 +86,6 @@ open class SpringPackageCurationProvider(
         val metadataOnlyNames = setOf("boot", "cloud")
 
         springPackages.mapNotNullTo(springCurations) { pkg ->
-            val orgName = VcsHost.GITHUB.getUserOrOrganization(pkg.vcsProcessed.url) ?: return@mapNotNullTo null
-            val projectName = VcsHost.GITHUB.getProject(pkg.vcsProcessed.url) ?: return@mapNotNullTo null
-
             var data = PackageCurationData()
 
             val isMetadataOnly = with(pkg.id) {
@@ -102,14 +99,19 @@ open class SpringPackageCurationProvider(
                 data = data.copy(isMetadataOnly = true)
             }
 
-            runCatching {
-                getSpringSubProjectPath(orgName, projectName, pkg.id)
-            }.onSuccess { path ->
-                data = data.copy(vcs = VcsInfoCurationData(path = path))
-            }.onFailure {
-                logger.warn {
-                    "Failed to get Spring project path for package '${pkg.id.toCoordinates()}': " +
-                        it.collectMessages()
+            val orgName = VcsHost.GITHUB.getUserOrOrganization(pkg.vcsProcessed.url)
+            val projectName = VcsHost.GITHUB.getProject(pkg.vcsProcessed.url)
+
+            if (orgName != null && projectName != null) {
+                runCatching {
+                    getSpringSubProjectPath(orgName, projectName, pkg.id)
+                }.onSuccess { path ->
+                    data = data.copy(vcs = VcsInfoCurationData(path = path))
+                }.onFailure {
+                    logger.warn {
+                        "Failed to get Spring project path for package '${pkg.id.toCoordinates()}': " +
+                            it.collectMessages()
+                    }
                 }
             }
 
