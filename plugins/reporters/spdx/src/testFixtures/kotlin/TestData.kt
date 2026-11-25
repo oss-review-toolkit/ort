@@ -178,6 +178,15 @@ val ORT_RESULT = OrtResult(
                             choice = "MIT".toSpdx()
                         )
                     )
+                ),
+                PackageLicenseChoice(
+                    packageId = Identifier("Maven:pkg10-grp:pkg10:0.0.1"),
+                    licenseChoices = listOf(
+                        SpdxLicenseChoice(
+                            given = "Apache-2.0 OR MIT".toSpdx(),
+                            choice = "MIT".toSpdx()
+                        )
+                    )
                 )
             )
         )
@@ -228,6 +237,10 @@ val ORT_RESULT = OrtResult(
                                 ),
                                 PackageReference(
                                     id = Identifier("Maven:pkg9-grp:pkg9:0.0.1"),
+                                    linkage = PackageLinkage.DYNAMIC
+                                ),
+                                PackageReference(
+                                    id = Identifier("Maven:pkg10-grp:pkg10:0.0.1"),
                                     linkage = PackageLinkage.DYNAMIC
                                 )
                             )
@@ -394,6 +407,20 @@ val ORT_RESULT = OrtResult(
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
                 ),
+                // A package with only a detected license which offers an OR-based choice which is matched by a choice.
+                Package(
+                    id = Identifier("Maven:pkg10-grp:pkg10:0.0.1"),
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "",
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/pkg10-sources.jar",
+                        hash = Hash.create("0000000000000000000000000000000000000000")
+                    ),
+                    vcs = VcsInfo.EMPTY
+                ),
+
                 // A package without a declared license, but with license findings in file matching the license file
                 // patterns, which targets testing the inclusion of the main license in the output. This covers
                 // the standard use case in the Go ecosystem where packages do not have a declared license.
@@ -520,6 +547,25 @@ val ORT_RESULT = OrtResult(
                         LicenseFinding(
                             license = "Apache-2.0",
                             location = TextLocation("some/other/file", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("Maven:pkg10-grp:pkg10:0.0.1") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/pkg10-sources.jar",
+                        hash = Hash.create("0000000000000000000000000000000000000000")
+                    )
+                ),
+                scanner = ScannerDetails.EMPTY,
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "Apache-2.0 OR MIT",
+                            location = TextLocation("some/file", 1)
                         )
                     )
                 )
