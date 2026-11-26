@@ -91,7 +91,7 @@ internal fun GemInfo.toPackage() =
 internal fun queryRubyGems(name: String, version: String, platform: String, retryCount: Int = 3): GemInfo? {
     // Query the metadata for the platform of the resolved Gem, as e.g. the dependencies and the artifact of Gems
     // with native extensions differ per platform.
-    // See <http://guides.rubygems.org/rubygems-org-api-v2/>.
+    // See <https://guides.rubygems.org/rubygems-org-api-v2/>.
     val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml?platform=$platform"
 
     return okHttpClient.downloadText(url).mapCatching {
