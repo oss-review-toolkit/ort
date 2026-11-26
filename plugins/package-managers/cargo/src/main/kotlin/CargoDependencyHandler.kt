@@ -31,58 +31,54 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxOperator
 
-internal class CargoDependencyHandler : DependencyHandler<CargoMetadata.Node> {
-    private lateinit var analysisRoot: File
-    private lateinit var packageById: Map<String, CargoMetadata.Package>
-    private lateinit var nodeById: Map<String, CargoMetadata.Node>
-    private lateinit var hashes: Map<String, String>
+/** The metadata of a Cargo project that is required to resolve its dependencies. */
+internal class CargoProjectContext(
+    val analysisRoot: File,
+    val packageById: Map<String, CargoMetadata.Package>,
+    val nodeById: Map<String, CargoMetadata.Node>,
+    val hashes: Map<String, String>
+)
 
-    /**
-     * Set the context for the project currently being resolved. This is required as the handler is shared across all
-     * definition files, but each Cargo project comes with its own metadata.
-     */
-    fun setContext(
-        analysisRoot: File,
-        packageById: Map<String, CargoMetadata.Package>,
-        nodeById: Map<String, CargoMetadata.Node>,
-        hashes: Map<String, String>
-    ) {
-        this.analysisRoot = analysisRoot
-        this.packageById = packageById
-        this.nodeById = nodeById
-        this.hashes = hashes
-    }
+/**
+ * A [node] in the dependency graph of the Cargo project described by [context]. Each dependency carries the context of
+ * its project, as the [DependencyGraphBuilder] also compares against dependencies of previously added projects, whose
+ * nodes might refer to package versions not known to the current project.
+ */
+internal data class CargoDependency(val node: CargoMetadata.Node, val context: CargoProjectContext)
 
-    override fun identifierFor(dependency: CargoMetadata.Node): Identifier =
-        packageById.getValue(dependency.id).toIdentifier()
+internal object CargoDependencyHandler : DependencyHandler<CargoDependency> {
+    override fun identifierFor(dependency: CargoDependency): Identifier = dependency.cargoPackage.toIdentifier()
 
-    override fun dependenciesFor(dependency: CargoMetadata.Node): List<CargoMetadata.Node> =
+    override fun dependenciesFor(dependency: CargoDependency): List<CargoDependency> =
         // TODO: Handle renamed dependencies here, see:
         //       https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#renaming-dependencies-in-cargotoml
-        dependency.deps.mapNotNull { dep ->
+        dependency.node.deps.mapNotNull { dep ->
             // Only normal dependencies are transitive.
             dep.takeIf {
                 it.depKinds.any { depKind -> depKind.kind == null }
             }?.let {
-                nodeById.getValue(it.pkg)
+                CargoDependency(dependency.context.nodeById.getValue(it.pkg), dependency.context)
             }
         }
 
-    override fun linkageFor(dependency: CargoMetadata.Node): PackageLinkage =
-        with(packageById.getValue(dependency.id)) {
-            if (isProject(analysisRoot)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC
-        }
+    override fun linkageFor(dependency: CargoDependency): PackageLinkage =
+        if (dependency.isProject) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC
 
-    override fun createPackage(dependency: CargoMetadata.Node, issues: MutableCollection<Issue>): Package? =
-        with(packageById.getValue(dependency.id)) {
-            if (isProject(analysisRoot)) null else toPackage(hashes)
-        }
+    override fun createPackage(dependency: CargoDependency, issues: MutableCollection<Issue>): Package? =
+        if (dependency.isProject) null else dependency.cargoPackage.toPackage(dependency.context.hashes)
 }
+
+private val CargoDependency.cargoPackage: CargoMetadata.Package
+    get() = context.packageById.getValue(node.id)
+
+private val CargoDependency.isProject: Boolean
+    get() = cargoPackage.isProject(context.analysisRoot)
 
 /** Return the local path for this Cargo package if applicable, or null if the Cargo package is not local. */
 private fun CargoMetadata.Package.getLocalPath(): File? =

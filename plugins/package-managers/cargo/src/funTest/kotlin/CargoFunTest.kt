@@ -21,10 +21,19 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
+import org.ossreviewtoolkit.analyzer.resolveScopes
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.collectDependencies
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -46,5 +55,32 @@ class CargoFunTest : StringSpec({
         val result = CargoFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Shared dependencies keep the transitive versions locked by each project" {
+        // Both projects depend on the same version of "aho-corasick", but lock different versions of its "memchr"
+        // dependency.
+        val definitionFiles = listOf(
+            getAssetFile("projects/synthetic/cargo-separate-lockfiles/first/Cargo.toml"),
+            getAssetFile("projects/synthetic/cargo-separate-lockfiles/second/Cargo.toml")
+        )
+        val analysisRoot = getCommonParentFile(definitionFiles)
+
+        val result = CargoFactory.create().resolveDependencies(
+            analysisRoot,
+            definitionFiles,
+            Excludes.EMPTY,
+            Includes.EMPTY,
+            AnalyzerConfiguration(),
+            emptyMap()
+        )
+
+        val projectResults = definitionFiles.map { result.resolveScopes(result.projectResults.getValue(it).single()) }
+
+        projectResults.flatMap { it.issues } should beEmpty()
+        projectResults.map { it.project.scopes.collectDependencies() } should containExactlyInAnyOrder(
+            setOf(Identifier("Crate::aho-corasick:0.7.20"), Identifier("Crate::memchr:2.4.1")),
+            setOf(Identifier("Crate::aho-corasick:0.7.20"), Identifier("Crate::memchr:2.5.0"))
+        )
     }
 })

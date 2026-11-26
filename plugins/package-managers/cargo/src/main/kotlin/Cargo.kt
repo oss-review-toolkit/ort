@@ -74,9 +74,8 @@ internal object CargoCommand : CommandLineTool {
     factory = PackageManagerFactory::class
 )
 class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager(PROJECT_TYPE) {
-    private val handler = CargoDependencyHandler()
-    private val graphBuilderDelegate = lazy { DependencyGraphBuilder(handler) }
-    private val graphBuilder by graphBuilderDelegate
+    private val graphBuilder = DependencyGraphBuilder(CargoDependencyHandler)
+    private val contextForWorkspaceRoot = mutableMapOf<String, CargoProjectContext>()
 
     override val globsForDefinitionFiles = listOf("Cargo.toml")
 
@@ -122,33 +121,40 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
 
         logger.debug { "Metadata has ${metadata.packages.size} packages and / or projects." }
 
-        val packageById = metadata.packages.associateBy { it.id }
-        val nodeById = metadata.resolve.nodes.associateBy { it.id }
-
         val lockfile = resolveLockfile(metadata)
 
         requireLockfileForStableVersions(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions) {
             lockfile.isFile
         }
 
-        val hashes = readHashes(lockfile)
+        // All members of a workspace share the same metadata, so only create a single context for them.
+        val context = contextForWorkspaceRoot.getOrPut(metadata.workspaceRoot) {
+            CargoProjectContext(
+                analysisRoot,
+                packageById = metadata.packages.associateBy { it.id },
+                nodeById = metadata.resolve.nodes.associateBy { it.id },
+                hashes = readHashes(lockfile)
+            )
+        }
 
-        handler.setContext(analysisRoot, packageById, nodeById, hashes)
+        val packageById = context.packageById
+        val nodeById = context.nodeById
 
         // Virtual workspaces have been filtered out in "mapDefinitionFiles".
         val projectId = checkNotNull(metadata.resolve.root)
 
-        val dependenciesByScopeName = mutableMapOf<String, MutableSet<CargoMetadata.Node>>()
+        val dependenciesByScopeName = mutableMapOf<String, MutableSet<CargoDependency>>()
         nodeById.getValue(projectId).deps.forEach { dep ->
             dep.depKinds.forEach { depKind ->
                 SCOPE_NAME_FOR_KIND[depKind.kind]?.also { scopeName ->
-                    dependenciesByScopeName.getOrPut(scopeName) { mutableSetOf() } += nodeById.getValue(dep.pkg)
+                    dependenciesByScopeName.getOrPut(scopeName) { mutableSetOf() } +=
+                        CargoDependency(nodeById.getValue(dep.pkg), context)
                 }
             }
         }
 
         val projectPkg = packageById.getValue(projectId).let { cargoPkg ->
-            cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = projectType)) }
+            cargoPkg.toPackage(context.hashes).let { it.copy(id = it.id.copy(type = projectType)) }
         }
 
         dependenciesByScopeName.forEach { (scopeName, dependencies) ->
@@ -171,11 +177,7 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
-        if (graphBuilderDelegate.isInitialized()) {
-            PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
-        } else {
-            PackageManagerResult(projectResults)
-        }
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
