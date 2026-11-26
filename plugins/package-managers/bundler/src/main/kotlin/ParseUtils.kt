@@ -53,7 +53,7 @@ internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
 }
 
 /** Parse the project information from the given [definitionFile] and [gemsInfo]. */
-internal fun parseProject(analysisRoot: File, definitionFile: File, gemsInfo: MutableMap<String, GemInfo>) =
+internal fun parseProject(analysisRoot: File, definitionFile: File, gemsInfo: Map<String, GemInfo>) =
     getGemspecFile(definitionFile.parentFile)?.let { gemspecFile ->
         // Project is a Gem, i.e. a library.
         gemsInfo[gemspecFile.nameWithoutExtension]

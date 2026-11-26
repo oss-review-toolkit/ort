@@ -24,13 +24,20 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldBeSingle
+import io.kotest.matchers.maps.shouldContain
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
+import org.ossreviewtoolkit.analyzer.resolveScopes
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -41,7 +48,7 @@ class BundlerFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
         val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
 
-        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
+        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -59,7 +66,8 @@ class BundlerFunTest : StringSpec({
         )
     ) { (project, platform, expectedDependencies) ->
         val definitionFile = getAssetFile("projects/synthetic/$project/Gemfile")
-        val result = BundlerFactory.create(platform = platform).resolveSingleProject(definitionFile)
+        val result = BundlerFactory.create(platform = platform)
+            .resolveSingleProject(definitionFile, resolveScopes = true)
         val rootDependencies = result.project.scopes.flatMap { it.dependencies }
             .mapTo(mutableSetOf()) { it.id.name }
         val resolvedDependencies = result.packages.mapTo(mutableSetOf()) { it.id.name }
@@ -74,7 +82,7 @@ class BundlerFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
         val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 
-        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
+        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -83,7 +91,8 @@ class BundlerFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
         val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile-java.yml")
 
-        val actualResult = BundlerFactory.create(platform = "java").resolveSingleProject(definitionFile)
+        val actualResult = BundlerFactory.create(platform = "java")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -92,14 +101,51 @@ class BundlerFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/native/Gemfile")
         val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-native-x86_64-linux.yml")
 
-        val actualResult = BundlerFactory.create(platform = "x86_64-linux").resolveSingleProject(definitionFile)
+        val actualResult = BundlerFactory.create(platform = "x86_64-linux")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Shared dependencies keep the transitive versions locked by each project" {
+        // Both projects depend on the same versions of "rack-test" and "rspec-mocks", but only lock different versions
+        // of the "rack" dependency of "rack-test".
+        val definitionFiles = listOf(
+            getAssetFile("projects/synthetic/separate-lockfiles/first/Gemfile"),
+            getAssetFile("projects/synthetic/separate-lockfiles/second/Gemfile")
+        )
+        val analysisRoot = getCommonParentFile(definitionFiles)
+
+        val result = BundlerFactory.create().resolveDependencies(
+            analysisRoot,
+            definitionFiles,
+            Excludes.EMPTY,
+            Includes.EMPTY,
+            AnalyzerConfiguration(),
+            emptyMap()
+        )
+
+        val projectResults = definitionFiles.map { result.resolveScopes(result.projectResults.getValue(it).single()) }
+
+        projectResults.flatMap { it.issues } should beEmpty()
+        projectResults.map { projectResult ->
+            projectResult.project.scopes.flatMap { it.dependencies }.single { it.id.name == "rack-test" }
+                .dependencies.map { it.id }
+        } shouldBe listOf(listOf(Identifier("Gem::rack:2.2.8")), listOf(Identifier("Gem::rack:3.0.8")))
+
+        // Only "rack-test" needs to be stored once per project, as the subgraph of "rspec-mocks" is identical.
+        val graph = result.dependencyGraph.shouldNotBeNull()
+        val nodeCountForName = graph.nodes.groupingBy { graph.packages[it.pkg].name }.eachCount()
+
+        nodeCountForName shouldContain ("rack-test" to 2)
+        nodeCountForName shouldContain ("rspec-mocks" to 1)
+        nodeCountForName shouldContain ("diff-lcs" to 1)
+        nodeCountForName shouldContain ("rspec-support" to 1)
+    }
+
     "Show an error if no lockfile is present" {
         val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
-        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
+        val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         with(actualResult) {
             project.id shouldBe Identifier("Bundler::Gemfile:")
