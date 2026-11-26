@@ -100,7 +100,7 @@ class ScanOssFunTest : WordSpec({
                 } shouldNotBeNull {
                     scoringSystem shouldBe "EPSS"
                     severity should beNull()
-                    score shouldBe 0.00248f
+                    score.shouldNotBeNull() shouldBe (0.002f plusOrMinus 0.001f)
                     // Compare EPSS with tolerance as values may change over time.
                     vector?.toFloatOrNull().shouldNotBeNull() shouldBe (0.06f plusOrMinus 0.03f)
                 }
@@ -128,7 +128,7 @@ class ScanOssFunTest : WordSpec({
                 } shouldNotBeNull {
                     scoringSystem shouldBe "EPSS"
                     severity should beNull()
-                    score shouldBe 0.00553f
+                    score.shouldNotBeNull() shouldBe (0.007f plusOrMinus 0.003f)
                     // Compare EPSS with tolerance as values may change over time.
                     vector?.toFloatOrNull().shouldNotBeNull() shouldBe (0.49f plusOrMinus 0.25f)
                 }
