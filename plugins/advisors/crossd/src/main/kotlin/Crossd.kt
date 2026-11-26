@@ -163,10 +163,10 @@ class Crossd(
         return value?.let {
             HealthMetric(
                 name = displayName,
-                value = value,
-                criticality = getCriticality(value, thresholds),
                 documentation = descriptionShort,
                 documentationLink = documentationUrl,
+                value = value,
+                criticality = getCriticality(value, thresholds),
                 details = emptyList()
             )
         }

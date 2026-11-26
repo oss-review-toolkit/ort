@@ -134,12 +134,12 @@ class Scorecard(
 private fun ScorecardCheck.toHealthMetric(): HealthMetric? =
     HealthMetric(
         name = name ?: return null,
+        documentation = documentation?.short,
+        documentationLink = documentation?.url?.let { URI(it) },
         value = score?.toDouble()?.takeIf { it != -1.0 } ?: return null,
         criticality = score?.let { determineValueCriticality(it) },
         reason = reason,
-        details = details,
-        documentation = documentation?.short,
-        documentationLink = documentation?.url?.let { URI(it) }
+        details = details
     )
 
 internal fun determineValueCriticality(value: Int): Criticality =
