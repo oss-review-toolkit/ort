@@ -84,7 +84,7 @@ data class BundlerConfig(
 
 /**
  * The [Bundler](https://bundler.io/) package manager for Ruby. Also see [Clarifying the Roles of the .gemspec and
- * Gemfile](http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/).
+ * Gemfile](https://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/).
  */
 @OrtPlugin(
     displayName = "Bundler",
