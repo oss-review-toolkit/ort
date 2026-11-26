@@ -29,27 +29,25 @@ import org.jruby.embed.PathType
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-private const val PROJECT_TYPE = "Bundler"
+internal const val PROJECT_TYPE = "Bundler"
 internal const val PACKAGE_TYPE = "Gem"
 
 /** The name of the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information. */
@@ -95,6 +93,8 @@ class Bundler(
     override val descriptor: PluginDescriptor = BundlerFactory.descriptor,
     private val config: BundlerConfig
 ) : PackageManager(PROJECT_TYPE) {
+    private val graphBuilder = DependencyGraphBuilder(BundlerDependencyHandler)
+
     override val globsForDefinitionFiles = listOf("Gemfile")
 
     override fun beforeResolution(
@@ -159,17 +159,27 @@ class Bundler(
             workingDir.resolve(BUNDLER_LOCKFILE_NAME).isFile
         }
 
-        val scopes = mutableSetOf<Scope>()
-        val issues = mutableListOf<Issue>()
-
         val gemsInfo = resolveGemsInfo(definitionFile)
+        val context = BundlerProjectContext(gemsInfo)
+
+        val issues = mutableListOf<Issue>()
 
         return with(parseProject(analysisRoot, definitionFile, gemsInfo)) {
             val projectId = Identifier(projectType, "", name, version)
-            val groupedDeps = getDependencyGroups(definitionFile)
 
-            groupedDeps.forEach { (groupName, dependencyList) ->
-                parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemsInfo, issues)
+            getDependencyGroups(definitionFile).forEach { (groupName, gemNames) ->
+                val dependencies = gemNames.mapNotNull { gemName ->
+                    gemsInfo[gemName]?.let { BundlerDependency(it, context) } ?: run {
+                        issues += createAndLogIssue(
+                            "The dependency '$gemName' of project '${projectId.toCoordinates()}' in '$workingDir' " +
+                                "was not resolved."
+                        )
+
+                        null
+                    }
+                }
+
+                graphBuilder.addDependencies(projectId, groupName, dependencies)
             }
 
             val project = Project(
@@ -180,87 +190,15 @@ class Bundler(
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
                 homepageUrl = homepageUrl,
-                scopeDependencies = scopes
+                scopeNames = graphBuilder.scopesFor(projectId)
             )
 
-            // Only report packages that are part of the dependency tree, as Bundler also returns e.g. itself, or the
-            // dependencies of the locked "ruby" variant of a Gem although a platform-specific variant was resolved.
-            val treeIds = scopes.collectDependencies()
-
-            val packages = gemsInfo.values.mapNotNullTo(mutableSetOf()) { gemInfo ->
-                gemInfo.toPackage().takeIf { it.id in treeIds || gemInfo.name == name }
-            }
-
-            listOf(ProjectAnalyzerResult(project, packages, issues))
+            listOf(ProjectAnalyzerResult(project, packages = emptySet(), issues))
         }
     }
 
-    private fun parseScope(
-        workingDir: File,
-        projectId: Identifier,
-        groupName: String,
-        dependencyList: List<String>,
-        scopes: MutableSet<Scope>,
-        gemsInfo: MutableMap<String, GemInfo>,
-        issues: MutableList<Issue>
-    ) {
-        logger.debug {
-            "Parsing scope '$groupName' with top-level dependencies $dependencyList for project " +
-                "'${projectId.toCoordinates()}' in '$workingDir'."
-        }
-
-        val scopeDependencies = mutableSetOf<PackageReference>()
-
-        dependencyList.forEach {
-            parseDependency(workingDir, projectId, it, gemsInfo, scopeDependencies, issues)
-        }
-
-        scopes += Scope(groupName, scopeDependencies)
-    }
-
-    private fun parseDependency(
-        workingDir: File,
-        projectId: Identifier,
-        gemName: String,
-        gemsInfo: MutableMap<String, GemInfo>,
-        scopeDependencies: MutableSet<PackageReference>,
-        issues: MutableList<Issue>
-    ) {
-        logger.debug { "Parsing dependency '$gemName'." }
-
-        runCatching {
-            val gemInfo = gemsInfo.getValue(gemName)
-            val gemId = Identifier(PACKAGE_TYPE, "", gemInfo.name, gemInfo.version)
-
-            // The project itself can be listed as a dependency if the project is a gem (i.e. there is a .gemspec file
-            // for it, and the Gemfile refers to it). In that case, skip querying RubyGems and adding Package and
-            // PackageReference objects and continue with the projects dependencies.
-            if (gemId == projectId) {
-                gemInfo.runtimeDependencies.forEach {
-                    parseDependency(workingDir, projectId, it, gemsInfo, scopeDependencies, issues)
-                }
-            } else {
-                queryRubyGems(gemId.name, gemId.version, gemInfo.platform)?.apply {
-                    gemsInfo[gemName] = merge(gemInfo)
-                }
-
-                val transitiveDependencies = mutableSetOf<PackageReference>()
-
-                gemInfo.runtimeDependencies.forEach {
-                    parseDependency(workingDir, projectId, it, gemsInfo, transitiveDependencies, issues)
-                }
-
-                scopeDependencies += PackageReference(gemId, dependencies = transitiveDependencies)
-            }
-        }.onFailure {
-            it.showStackTrace()
-
-            issues += createAndLogIssue(
-                "Failed to parse dependency '$gemName' of project '${projectId.toCoordinates()}' in '$workingDir': " +
-                    it.collectMessages()
-            )
-        }
-    }
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     private fun getScriptEnvironment(gemfile: File): Map<String, String> =
         buildMap {
@@ -279,7 +217,7 @@ class Bundler(
         return YAML.decodeFromString(groups)
     }
 
-    private fun resolveGemsInfo(gemfile: File): MutableMap<String, GemInfo> {
+    private fun resolveGemsInfo(gemfile: File): Map<String, GemInfo> {
         val specs = runScript(
             RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME,
             PathType.CLASSPATH,
@@ -287,17 +225,15 @@ class Bundler(
         ).toString()
 
         // Guard against the case when a custom platform excludes all dependencies.
-        if (specs.isBlank()) return mutableMapOf()
+        if (specs.isBlank()) return emptyMap()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
-        val gemsInfo = specs.split('\u0000').map {
+        return specs.split('\u0000').map {
             val spec = YAML.decodeFromString<GemSpec>(it)
             GemInfo.createFromMetadata(spec)
-        }.associateByTo(mutableMapOf()) {
+        }.associateBy {
             it.name
         }
-
-        return gemsInfo
     }
 }
