@@ -32,6 +32,12 @@ data class HealthMetric(
     /** The unique, human-readable name of the health metric. */
     val name: String,
 
+    /** Summary of documentation about the metric. */
+    val documentation: String? = null,
+
+    /** Link to the documentation about the metric. */
+    val documentationLink: URI? = null,
+
     /** The raw metric score as returned by the provider. */
     val value: Double,
 
@@ -42,11 +48,5 @@ data class HealthMetric(
     val reason: String? = null,
 
     /** Details about the findings. */
-    val details: List<String> = emptyList(),
-
-    /** Summary of documentation about the metric. */
-    val documentation: String? = null,
-
-    /** Link to the documentation about the metric. */
-    val documentationLink: URI? = null
+    val details: List<String> = emptyList()
 )
