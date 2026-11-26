@@ -24,6 +24,8 @@ import java.io.File
 import org.jruby.embed.LocalContextScope
 import org.jruby.embed.PathType
 import org.jruby.embed.ScriptingContainer
+import org.jruby.util.cli.Options
+import org.jruby.util.collections.ClassValue
 
 import org.ossreviewtoolkit.utils.common.Os
 
@@ -32,7 +34,8 @@ internal val SCRIPT_ENVIRONMENT = mapOf("BUNDLE_PATH" to "${Os.userHomeDirectory
 /**
  * Run the given Ruby [script] in the given [workingDir] and with the given [environment] (which gets merged with the
  * default environment). If no [pathType] is given, the [script] is assumed to contain the code directly. Otherwise, the
- * meaning of the [script] parameter is determined by the [pathType].
+ * meaning of the [script] parameter is determined by the [pathType]. As the Ruby runtime is terminated afterwards, the
+ * [script] should only return primitive values like numbers or strings.
  */
 internal fun runScript(
     script: String,
@@ -40,17 +43,24 @@ internal fun runScript(
     workingDir: File? = null,
     environment: Map<String, String> = emptyMap()
 ): Any? {
-    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        if (workingDir != null) currentDirectory = workingDir.path
+    // By default, JRuby stores Java integration data in a way that keeps every runtime that was ever created reachable,
+    // which leaks memory as each script runs in its own runtime. Force a storage type that is owned by the runtime.
+    Options.JI_CLASS_VALUES.force(ClassValue.Type.HARD_MAP.name)
 
-        this.environment.putAll(environment)
+    val container = ScriptingContainer(LocalContextScope.THREADSAFE)
+
+    return try {
+        if (workingDir != null) container.currentDirectory = workingDir.path
+
+        container.environment.putAll(environment)
 
         if (pathType != null) {
-            runScriptlet(pathType, script)
+            container.runScriptlet(pathType, script)
         } else {
-            runScriptlet(script)
+            container.runScriptlet(script)
         }
+    } finally {
+        // Terminate the runtime to also stop any threads it started, as these would otherwise keep the runtime alive.
+        container.terminate()
     }
-
-    return output
 }
