@@ -1,0 +1,8 @@
+[package]
+name = "second"
+version = "0.1.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+aho-corasick = "=0.7.20"
