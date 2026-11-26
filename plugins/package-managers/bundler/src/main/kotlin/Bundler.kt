@@ -269,13 +269,15 @@ class Bundler(
             put("ORT_BUNDLER_PLATFORM", config.platform)
         }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun getDependencyGroups(gemfile: File): Map<String, List<String>> =
-        runScript(
+    private fun getDependencyGroups(gemfile: File): Map<String, List<String>> {
+        val groups = runScript(
             ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME,
             PathType.CLASSPATH,
             environment = getScriptEnvironment(gemfile)
-        ) as Map<String, List<String>>
+        ).toString()
+
+        return YAML.decodeFromString(groups)
+    }
 
     private fun resolveGemsInfo(gemfile: File): MutableMap<String, GemInfo> {
         val specs = runScript(

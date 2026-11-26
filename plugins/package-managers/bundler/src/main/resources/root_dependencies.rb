@@ -19,7 +19,8 @@
 
 # This script produces a list of top-level dependencies with group information. No bundle
 # command except for 'bundle viz' seem to produce a dependency list with corresponding groups.
-# But parsing the dot / svg output of 'bundle viz' seems to be overhead.
+# But parsing the dot / svg output of 'bundle viz' seems to be overhead. The result is serialized as YAML to not
+# depend on Ruby objects after the runtime has been terminated.
 
 require 'bundler'
 require 'yaml'
@@ -35,4 +36,4 @@ Bundler.load.current_dependencies.each { |dep|
     }
 }
 
-groups
+groups.to_yaml
