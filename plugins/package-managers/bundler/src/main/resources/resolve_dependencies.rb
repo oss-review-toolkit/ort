@@ -21,8 +21,8 @@
 # and writes them along with the respective versions to a lockfile [1]. Internally, Bundler tries to find the
 # dependencies' `gemspec` files both locally and remotely, and retrieves the respective metadata. However, except for
 # the name, version, and transitive dependencies, the Bundler call discards any other metadata. To maintain all
-# metadata, this script basically follows the same steps, but then serializes all metadata as YAML for further
-# processing by other tools.
+# metadata, this script basically follows the same steps, but then serializes all metadata as YAML to not depend on Ruby
+# objects after the runtime has been terminated, and to ease further processing by other tools.
 #
 # [1] https://github.com/rubygems/bundler/blob/35be6d9a603084f719fec4f4028c18860def07f6/lib/bundler/cli/lock.rb#L49-L58
 
