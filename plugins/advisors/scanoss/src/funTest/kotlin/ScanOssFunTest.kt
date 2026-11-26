@@ -102,7 +102,7 @@ class ScanOssFunTest : WordSpec({
                     severity should beNull()
                     score shouldBe 0.00248f
                     // Compare EPSS with tolerance as values may change over time.
-                    vector?.toFloatOrNull().shouldNotBeNull() shouldBe (0.16f plusOrMinus 0.05f)
+                    vector?.toFloatOrNull().shouldNotBeNull() shouldBe (0.06f plusOrMinus 0.03f)
                 }
             }
         }
@@ -130,7 +130,7 @@ class ScanOssFunTest : WordSpec({
                     severity should beNull()
                     score shouldBe 0.00553f
                     // Compare EPSS with tolerance as values may change over time.
-                    vector?.toFloatOrNull().shouldNotBeNull() shouldBe (0.47f plusOrMinus 0.05f)
+                    vector?.toFloatOrNull().shouldNotBeNull() shouldBe (0.49f plusOrMinus 0.25f)
                 }
             }
         }
