@@ -49,7 +49,10 @@ private fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
  * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
  */
 internal fun Identifier.isMatchedBy(matcher: Identifier): Boolean =
-    matchesDisregardingVersion(matcher) && isVersionMatchedBy(matcher)
+    type.equals(matcher.type, ignoreCase = true)
+        && namespace == matcher.namespace
+        && name.equalsOrIsBlank(matcher.name)
+        && isVersionMatchedBy(matcher)
 
 /**
  * Return true if this [Identifier] is matched by the [matcher]'s version. The [matcher]s version may be an
@@ -57,9 +60,3 @@ internal fun Identifier.isMatchedBy(matcher: Identifier): Boolean =
  */
 internal fun Identifier.isVersionMatchedBy(matcher: Identifier): Boolean =
     matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this)
-
-/** Return true if this [Identifier] matches the given [other] identifier, disregarding the version. */
-private fun Identifier.matchesDisregardingVersion(other: Identifier) =
-    type.equals(other.type, ignoreCase = true)
-        && namespace == other.namespace
-        && name.equalsOrIsBlank(other.name)
