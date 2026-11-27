@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.commands.compare
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -130,62 +131,65 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
         val resultB = mapper.readValue<OrtResult>(fileB)
 
         when (method) {
-            CompareMethod.SEMANTIC_DIFF -> {
-                echo(
-                    Theme.Default.warning(
-                        "The '${CompareMethod.SEMANTIC_DIFF}' compare method is not fully implemented. Some " +
-                            "properties may not be taken into account in the comparison."
-                    )
-                )
+            CompareMethod.SEMANTIC_DIFF -> compareSemantically(resultA, resultB)
+            CompareMethod.TEXT_DIFF -> compareTextually(resultA, resultB, mapper)
+        }
+    }
 
-                if (resultA == resultB) {
-                    echo(Theme.Default.success("The ORT results are the same."))
-                    throw ProgramResult(STATUS_CODE_SUCCESS)
-                }
+    private fun compareSemantically(resultA: OrtResult, resultB: OrtResult) {
+        echo(
+            Theme.Default.warning(
+                "The '${CompareMethod.SEMANTIC_DIFF}' compare method is not fully implemented. Some " +
+                    "properties may not be taken into account in the comparison."
+            )
+        )
 
-                throw ProgramResult(STATUS_CODE_FAILURE)
-            }
+        if (resultA == resultB) {
+            echo(Theme.Default.success("The ORT results are the same."))
+            throw ProgramResult(STATUS_CODE_SUCCESS)
+        }
 
-            CompareMethod.TEXT_DIFF -> {
-                val textA = mapper.writeValueAsString(resultA)
-                val textB = mapper.writeValueAsString(resultB)
+        throw ProgramResult(STATUS_CODE_FAILURE)
+    }
 
-                // Apply data type independent replacements in the texts.
-                val replacements = buildMap {
-                    if (ignoreTmpDir) {
-                        put("""([/\\][Tt]e?mp[/\\]ort)[/\\-][\w./\\-]+""", "$1")
-                    }
-                }
+    private fun compareTextually(resultA: OrtResult, resultB: OrtResult, mapper: ObjectMapper) {
+        val textA = mapper.writeValueAsString(resultA)
+        val textB = mapper.writeValueAsString(resultB)
 
-                val replacementRegexes = replacements.mapKeys { (pattern, _) -> Regex(pattern, RegexOption.MULTILINE) }
-
-                val linesA = replacementRegexes.replaceIn(textA).lines()
-                val linesB = replacementRegexes.replaceIn(textB).lines()
-
-                // Create unified diff output.
-                val commonParent = getCommonParentFile(setOf(fileA, fileB))
-                val diff = UnifiedDiffUtils.generateUnifiedDiff(
-                    "a/${fileA.relativeTo(commonParent).invariantSeparatorsPath}",
-                    "b/${fileB.relativeTo(commonParent).invariantSeparatorsPath}",
-                    linesA,
-                    DiffUtils.diff(linesA, linesB),
-                    contextSize
-                )
-
-                if (diff.isEmpty()) {
-                    echo(Theme.Default.success("The ORT results are the same."))
-                    throw ProgramResult(STATUS_CODE_SUCCESS)
-                }
-
-                echo("The ORT results differ:")
-
-                diff.forEach {
-                    echo(it)
-                }
-
-                throw ProgramResult(STATUS_CODE_FAILURE)
+        // Apply data type independent replacements in the texts.
+        val replacements = buildMap {
+            if (ignoreTmpDir) {
+                put("""([/\\][Tt]e?mp[/\\]ort)[/\\-][\w./\\-]+""", "$1")
             }
         }
+
+        val replacementRegexes = replacements.mapKeys { (pattern, _) -> Regex(pattern, RegexOption.MULTILINE) }
+
+        val linesA = replacementRegexes.replaceIn(textA).lines()
+        val linesB = replacementRegexes.replaceIn(textB).lines()
+
+        // Create unified diff output.
+        val commonParent = getCommonParentFile(setOf(fileA, fileB))
+        val diff = UnifiedDiffUtils.generateUnifiedDiff(
+            "a/${fileA.relativeTo(commonParent).invariantSeparatorsPath}",
+            "b/${fileB.relativeTo(commonParent).invariantSeparatorsPath}",
+            linesA,
+            DiffUtils.diff(linesA, linesB),
+            contextSize
+        )
+
+        if (diff.isEmpty()) {
+            echo(Theme.Default.success("The ORT results are the same."))
+            throw ProgramResult(STATUS_CODE_SUCCESS)
+        }
+
+        echo("The ORT results differ:")
+
+        diff.forEach {
+            echo(it)
+        }
+
+        throw ProgramResult(STATUS_CODE_FAILURE)
     }
 }
 
