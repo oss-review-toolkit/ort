@@ -31,11 +31,13 @@ import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
 /** Return true if the version of this [Identifier] is an Ivy version range. */
-fun Identifier.hasIvyVersionRange(): Boolean =
-    if (shouldEncode(null, version)) {
-        version.encodeFourIntoThreeSegments()
+fun Identifier.hasIvyVersionRange(): Boolean = version.hasIvyVersionRange()
+
+internal fun String.hasIvyVersionRange(): Boolean =
+    if (shouldEncode(null, this)) {
+        encodeFourIntoThreeSegments()
     } else {
-        version
+        this
     }.getIvyVersionRanges().get().isNotEmpty()
 
 /**

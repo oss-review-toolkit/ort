@@ -219,7 +219,5 @@ class VersionMatcherTest : WordSpec({
     }
 })
 
-private fun String.hasIvyVersionRange() = Identifier(":::$this").hasIvyVersionRange()
-
 private fun String.isApplicableIvyVersion(version: String) =
     Identifier(":::$this").isApplicableIvyVersion(Identifier(":::$version"))
