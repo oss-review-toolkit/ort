@@ -70,7 +70,7 @@ class OrtResultRuleTest : WordSpec({
             )
         }
 
-        "return only non-applicable SPDX license choices for packageId if the package id does exist" {
+        "return only the non-applicable SPDX license choices of the package licenses choices applicable to the pkg" {
             val rule = createAnalyzerResult(
                 "NPM::some-package:1.0.0" to "MIT OR Apache-2.0"
             ).setPackageLicenseChoices(
@@ -89,6 +89,11 @@ class OrtResultRuleTest : WordSpec({
                         given = "A OR B".toSpdx(),
                         choice = "B".toSpdx()
                     )
+                ),
+                "NPM::some-package:[0.0.8,1.1.0]" to listOf(
+                    SpdxLicenseChoice(
+                        choice = "GPL-2.0-only".toSpdx()
+                    )
                 )
             ).createOrtResultRule()
 
@@ -106,6 +111,11 @@ class OrtResultRuleTest : WordSpec({
                     SpdxLicenseChoice(
                         given = "A OR B".toSpdx(),
                         choice = "B".toSpdx()
+                    )
+                ),
+                "NPM::some-package:[0.0.8,1.1.0]" to listOf(
+                    SpdxLicenseChoice(
+                        choice = "GPL-2.0-only".toSpdx()
                     )
                 )
             )

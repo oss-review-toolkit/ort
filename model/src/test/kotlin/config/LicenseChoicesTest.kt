@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
@@ -75,6 +76,15 @@ class LicenseChoicesTest : WordSpec({
                 PackageLicenseChoice(id, listOf(SpdxLicenseChoice("E OR F".toSpdx(), "E".toSpdx()))),
                 PackageLicenseChoice(otherId, listOf(SpdxLicenseChoice("G OR H".toSpdx(), "G".toSpdx())))
             )
+        }
+    }
+
+    "PackageLicenseChoice.isApplicable()" should {
+        "return true if given id equals the packageId" {
+            val choice = PackageLicenseChoice(Identifier("Maven:com.example:lib:0.0.1"))
+
+            choice.isApplicable(Identifier("Maven:com.example:lib:0.0.1")) shouldBe true
+            choice.isApplicable(Identifier("Maven:com.example:lib:0.0.2")) shouldBe false
         }
     }
 })

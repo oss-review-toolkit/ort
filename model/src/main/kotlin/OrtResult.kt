@@ -433,7 +433,7 @@ data class OrtResult(
     /** Return all [SpdxLicenseChoice]s for the [Package] with [id]. */
     fun getPackageLicenseChoices(id: Identifier): List<SpdxLicenseChoice> =
         resolvedConfiguration.licenseChoices.packageLicenseChoices
-            .filter { it.packageId == id }
+            .filter { it.isApplicable(id) }
             .flatMap { it.licenseChoices }
 
     /**

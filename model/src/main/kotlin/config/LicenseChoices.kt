@@ -67,7 +67,10 @@ data class PackageLicenseChoice(
     val packageId: Identifier,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val licenseChoices: List<SpdxLicenseChoice> = emptyList()
-)
+) {
+    /** Return true if this package license choices is applicable to the given [package id][id]. */
+    fun isApplicable(id: Identifier) = packageId == id
+}
 
 fun LicenseChoices?.orEmpty() = this ?: LicenseChoices()
 
