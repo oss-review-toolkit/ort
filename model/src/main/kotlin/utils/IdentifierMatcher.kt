@@ -32,7 +32,7 @@ fun Identifier.hasIvyVersionRange(): Boolean = version.isIvyVersionRange()
  * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
  * package with the given [identifier][pkgId].
  */
-internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
+private fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
     runCatching {
         version.containsIvyVersion(pkgId.version)
     }.onFailure {
@@ -59,7 +59,7 @@ internal fun Identifier.isVersionMatchedBy(matcher: Identifier): Boolean =
     matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this)
 
 /** Return true if this [Identifier] matches the given [other] identifier, disregarding the version. */
-internal fun Identifier.matchesDisregardingVersion(other: Identifier) =
+private fun Identifier.matchesDisregardingVersion(other: Identifier) =
     type.equals(other.type, ignoreCase = true)
         && namespace == other.namespace
         && name.equalsOrIsBlank(other.name)
