@@ -16,3 +16,6 @@
 # Owners of legal documents.
 # This should match the members of the @oss-review-toolkit/tsc team.
 /LICENSE @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
+/LICENSES/ @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
+/NOTICE @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
+/REUSE.toml @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
