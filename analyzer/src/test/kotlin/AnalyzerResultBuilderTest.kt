@@ -41,7 +41,7 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
-import org.ossreviewtoolkit.model.DependencyReference
+import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -106,9 +106,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
     private val dependencies1 = listOf(package1.id, package2.id)
     private val dependencies2 = listOf(package3.id)
 
-    private val depRef1 = DependencyReference(0)
-    private val depRef2 = DependencyReference(1)
-    private val depRef3 = DependencyReference(0, issues = listOf(issue5))
+    private val node1 = DependencyGraphNode(0)
+    private val node2 = DependencyGraphNode(1)
+    private val node3 = DependencyGraphNode(0, issues = listOf(issue5))
 
     private val scopeMapping1 = mapOf(
         DependencyGraph.qualifyScope(project1.id, "scope-1") to listOf(RootDependencyIndex(0)),
@@ -121,14 +121,14 @@ class AnalyzerResultBuilderTest : WordSpec() {
     private val graph1 =
         DependencyGraph(
             dependencies1,
-            sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef1, depRef2),
-            scopeMapping1
+            scopeMapping1,
+            listOf(node1, node2)
         )
     private val graph2 =
         DependencyGraph(
             dependencies2,
-            sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef3),
-            scopeMapping2
+            scopeMapping2,
+            listOf(node3)
         )
 
     private val analyzerResult1 = ProjectAnalyzerResult(

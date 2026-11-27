@@ -58,7 +58,6 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope2, dep1)
                 .build()
 
-            graph.scopeRoots should beEmpty()
             graph.nodes shouldHaveSize 3
             graph.edges should beEmpty()
 

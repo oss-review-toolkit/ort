@@ -37,7 +37,7 @@ import kotlinx.serialization.json.decodeFromStream
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.DependencyGraph
-import org.ossreviewtoolkit.model.DependencyReference
+import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -172,13 +172,11 @@ private fun createReporterInput(): ReporterInput {
                     packages = setOf(package1, package2),
                     dependencyGraphs = mapOf(
                         "test" to DependencyGraph(
-                            listOf(package1.id, package2.id),
-                            sortedSetOf(
-                                DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR,
-                                DependencyReference(0),
-                                DependencyReference(1)
+                            packages = listOf(package1.id, package2.id),
+                            scopes = mapOf(
+                                DependencyGraph.qualifyScope(project.id, "scope-1") to listOf(RootDependencyIndex(0))
                             ),
-                            mapOf(DependencyGraph.qualifyScope(project.id, "scope-1") to listOf(RootDependencyIndex(0)))
+                            nodes = listOf(DependencyGraphNode(0), DependencyGraphNode(1))
                         )
                     )
                 )

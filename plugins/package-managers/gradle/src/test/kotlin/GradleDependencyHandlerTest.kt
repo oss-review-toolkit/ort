@@ -169,7 +169,6 @@ class GradleDependencyHandlerTest : WordSpec({
                 .addDependency(scope2, dep4)
                 .build()
 
-            graph.scopeRoots should beEmpty()
             graph.nodes shouldHaveSize 5
             graph.nodes.all { it.fragment == 0 } shouldBe true
 

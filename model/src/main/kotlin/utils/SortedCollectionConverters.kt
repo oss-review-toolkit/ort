@@ -28,7 +28,6 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.DependencyGraphEdge
-import org.ossreviewtoolkit.model.DependencyReference
 import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -53,11 +52,6 @@ class CopyrightFindingSortedSetConverter : StdConverter<Set<CopyrightFinding>, S
 
 class DependencyGraphEdgeSortedSetConverter : StdConverter<Set<DependencyGraphEdge>, SortedSet<DependencyGraphEdge>>() {
     override fun convert(value: Set<DependencyGraphEdge>) = value.toSortedSet(compareBy({ it.from }, { it.to }))
-}
-
-class DependencyReferenceSortedSetConverter : StdConverter<Set<DependencyReference>, SortedSet<DependencyReference>>() {
-    override fun convert(value: Set<DependencyReference>) =
-        value.toSortedSet(compareBy({ it.pkg.toString() }, { it.fragment }))
 }
 
 class FileListSortedSetConverter : StdConverter<Set<FileList>, Set<FileList>>() {

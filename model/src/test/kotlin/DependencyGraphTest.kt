@@ -34,18 +34,13 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-collections4", "4.4"),
                 id(group = "org.junit", artifact = "junit", version = "5")
             )
-            val fragments =
-                sortedSetOf(
-                    DependencyReference(0),
-                    DependencyReference(1),
-                    DependencyReference(2)
-                )
+            val nodes = listOf(DependencyGraphNode(0), DependencyGraphNode(1), DependencyGraphNode(2))
             val scopeMap = mapOf(
                 "p1:scope1" to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
                 "p2:scope2" to listOf(RootDependencyIndex(1), RootDependencyIndex(2))
             )
 
-            val graph = DependencyGraph(ids, fragments, scopeMap)
+            val graph = DependencyGraph(ids, scopeMap, nodes)
             val scopes = graph.createScopes()
 
             scopes.map { it.name } should containExactlyInAnyOrder("p1:scope1", "p2:scope2")
@@ -62,12 +57,7 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-collections4", "4.4"),
                 id("org.junit", "junit", "5")
             )
-            val fragments =
-                sortedSetOf(
-                    DependencyReference(0),
-                    DependencyReference(1),
-                    DependencyReference(2)
-                )
+            val nodes = listOf(DependencyGraphNode(0), DependencyGraphNode(1), DependencyGraphNode(2))
             val scopeMap = mapOf(
                 qualifiedScopeName to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
                 DependencyGraph.qualifyScope(qualifier, "scope2") to listOf(
@@ -76,7 +66,7 @@ class DependencyGraphTest : WordSpec({
                 )
             )
 
-            val graph = DependencyGraph(ids, fragments, scopeMap)
+            val graph = DependencyGraph(ids, scopeMap, nodes)
             val scopes = graph.createScopes(setOf(qualifiedScopeName))
 
             scopes.map { it.name } should containExactly(DependencyGraph.unqualifyScope(scopeName))
@@ -90,46 +80,26 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-configuration2", "2.8"),
                 id("org.apache.commons", "commons-csv", "1.5")
             )
-            val refLang = DependencyReference(0)
-            val refCollections = DependencyReference(1)
-            val refConfig = DependencyReference(2, dependencies = setOf(refLang, refCollections))
-            val refCsv = DependencyReference(3, dependencies = setOf(refConfig))
-            val fragments = sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, refCsv)
+            val nodes = listOf(
+                DependencyGraphNode(0),
+                DependencyGraphNode(1),
+                DependencyGraphNode(2),
+                DependencyGraphNode(3)
+            )
+            val edges = setOf(
+                DependencyGraphEdge(2, 0),
+                DependencyGraphEdge(2, 1),
+                DependencyGraphEdge(3, 2)
+            )
             val scopeMap = mapOf("s" to listOf(RootDependencyIndex(3)))
-            val graph = DependencyGraph(ids, fragments, scopeMap)
+
+            val graph = DependencyGraph(ids, scopeMap, nodes, edges)
             val scopes = graph.createScopes()
 
             scopeDependencies(scopes, "s") shouldBe "${ids[3]}<${ids[2]}<${ids[1]}${ids[0]}>>"
         }
 
         "construct scopes from different fragments" {
-            val ids = listOf(
-                id("org.apache.commons", "commons-lang3", "3.11"),
-                id("org.apache.commons", "commons-collections4", "4.4"),
-                id("org.apache.commons", "commons-configuration2", "2.8"),
-                id("org.apache.commons", "commons-logging", "1.3")
-            )
-            val refLogging = DependencyReference(3)
-            val refLang = DependencyReference(0)
-            val refCollections1 = DependencyReference(1)
-            val refCollections2 = DependencyReference(1, fragment = 1, dependencies = setOf(refLogging))
-            val refConfig1 = DependencyReference(2, dependencies = setOf(refLang, refCollections1))
-            val refConfig2 =
-                DependencyReference(2, fragment = 1, dependencies = setOf(refLang, refCollections2))
-            val fragments = sortedSetOf(refConfig1, refConfig2)
-            val scopeMap = mapOf(
-                "s1" to listOf(RootDependencyIndex(2)),
-                "s2" to listOf(RootDependencyIndex(2, fragment = 1))
-            )
-
-            val graph = DependencyGraph(ids, fragments, scopeMap)
-            val scopes = graph.createScopes()
-
-            scopeDependencies(scopes, "s1") shouldBe "${ids[2]}<${ids[1]}${ids[0]}>"
-            scopeDependencies(scopes, "s2") shouldBe "${ids[2]}<${ids[1]}<${ids[3]}>${ids[0]}>"
-        }
-
-        "construct scopes from graph nodes and edges" {
             val ids = listOf(
                 id("org.apache.commons", "commons-lang3", "3.11"),
                 id("org.apache.commons", "commons-collections4", "4.4"),
@@ -155,7 +125,7 @@ class DependencyGraphTest : WordSpec({
                 "s2" to listOf(RootDependencyIndex(2, fragment = 1))
             )
 
-            val graph = DependencyGraph(ids, sortedSetOf(), scopeMap, nodes, edges)
+            val graph = DependencyGraph(ids, scopeMap, nodes, edges)
             val scopes = graph.createScopes()
 
             scopeDependencies(scopes, "s1") shouldBe "${ids[2]}<${ids[1]}${ids[0]}>"
@@ -168,12 +138,14 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-collections4", "4.4")
             )
             val issue = Issue(source = "analyzer", message = "Could not analyze :-(")
-            val refLang = DependencyReference(0, linkage = PackageLinkage.PROJECT_DYNAMIC)
-            val refCol = DependencyReference(1, issues = listOf(issue), dependencies = setOf(refLang))
-            val trees = sortedSetOf(refCol)
+            val nodes = listOf(
+                DependencyGraphNode(0, linkage = PackageLinkage.PROJECT_DYNAMIC),
+                DependencyGraphNode(1, issues = listOf(issue))
+            )
+            val edges = setOf(DependencyGraphEdge(1, 0))
             val scopeMap = mapOf("s" to listOf(RootDependencyIndex(1)))
 
-            val graph = DependencyGraph(ids, trees, scopeMap)
+            val graph = DependencyGraph(ids, scopeMap, nodes, edges)
             val scopes = graph.createScopes()
             val scope = scopes.shouldBeSingle()
 
