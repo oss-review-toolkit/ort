@@ -19,19 +19,12 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import org.apache.logging.log4j.kotlin.logger
-
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.common.withoutSuffix
-import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.Semver
 import org.semver4j.processor.IvyProcessor
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
-
-/** Return true if the version of this [Identifier] is an Ivy version range. */
-fun Identifier.hasIvyVersionRange(): Boolean = version.isIvyVersionRange()
 
 internal fun String.isIvyVersionRange(): Boolean =
     if (shouldEncode(null, this)) {
@@ -39,22 +32,6 @@ internal fun String.isIvyVersionRange(): Boolean =
     } else {
         this
     }.getIvyVersionRanges().get().isNotEmpty()
-
-/**
- * Return true if the version of this [Identifier] interpreted as an Ivy version matcher is applicable to the
- * package with the given [identifier][pkgId].
- */
-internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
-    runCatching {
-        version.containsIvyVersion(pkgId.version)
-    }.onFailure {
-        logger.warn {
-            "Failed to check if identifier version '$version' is applicable to package version " +
-                "'${pkgId.version}' of package '${pkgId.toCoordinates()}'."
-        }
-
-        it.showStackTrace()
-    }.getOrDefault(false)
 
 /**
  * Return true if this [Ivy version range][this] contains the given [version]. Throws if [this] string cannot be parsed.
