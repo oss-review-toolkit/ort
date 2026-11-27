@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.Identifier
 
 import org.semver4j.range.Range
 
-class VersionUtilsTest : WordSpec({
+class VersionMatcherTest : WordSpec({
     "getIvyVersionRanges()" should {
         "return an empty range list for pathological cases" {
             "".getIvyVersionRanges().get() should beEmpty()
