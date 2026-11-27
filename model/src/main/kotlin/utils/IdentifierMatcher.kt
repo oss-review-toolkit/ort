@@ -51,7 +51,7 @@ private fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
 internal fun Identifier.isMatchedBy(matcher: Identifier): Boolean =
     type.equals(matcher.type, ignoreCase = true)
         && namespace == matcher.namespace
-        && name.equalsOrIsBlank(matcher.name)
+        && (matcher.name.isBlank() || name == matcher.name)
         && isVersionMatchedBy(matcher)
 
 /**
