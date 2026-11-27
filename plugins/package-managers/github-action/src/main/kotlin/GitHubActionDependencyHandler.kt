@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.githubaction
 
+import com.github.packageurl.PackageURL
+import com.github.packageurl.PackageURLBuilder
+
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -43,9 +46,14 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
     override fun linkageFor(dependency: ABom.Action) = PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: ABom.Action, issues: MutableCollection<Issue>) =
-        with(dependency) {
-            val normalizedPath = path?.let { normalizeActionPath(it) }.orEmpty()
+        if (dependency.type == ABom.ActionType.DOCKER) {
+            createDockerPackage(dependency.dockerImage)
+        } else {
+            createActionPackage(dependency)
+        }
 
+    private fun createActionPackage(action: ABom.Action) =
+        with(action) {
             val vcsInfo = if (type == ABom.ActionType.LOCAL) {
                 projectVcs.copy(path = normalizedPath)
             } else {
@@ -67,12 +75,11 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
 
                 owner != null && repo != null -> createGitHubPurl(owner, repo, ref.orEmpty(), vcsInfo.path)
 
-                // Actions without an owner and a repository, like Docker actions, are not hosted on GitHub.
-                else -> "pkg:github/$uses"
+                else -> ""
             }
 
             Package(
-                id = dependency.toIdentifier(),
+                id = action.toIdentifier(),
                 purl = purl,
                 declaredLicenses = emptySet(),
                 description = "",
@@ -97,10 +104,9 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
     }
 
     private fun ABom.Action.toIdentifier(): Identifier {
-        // Include the path to the action in the name, as there can be multiple actions in the same repository. For
-        // Docker actions, the path is the image reference instead.
-        val normalizedPath = path?.takeUnless { type == ABom.ActionType.DOCKER }
-            ?.let { normalizeActionPath(it) }.orEmpty()
+        if (type == ABom.ActionType.DOCKER) return dockerImage.toIdentifier()
+
+        // Include the path to the action in the name, as there can be multiple actions in the same repository.
         val pathSuffix = normalizedPath.ensurePrefix("/")
 
         return if (type == ABom.ActionType.LOCAL) {
@@ -120,6 +126,52 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
         }
     }
 }
+
+/** The normalized path to the action within its repository, see [normalizeActionPath]. */
+private val ABom.Action.normalizedPath: String
+    get() = path?.let { normalizeActionPath(it) }.orEmpty()
+
+/** The Docker image used by an action of the form "docker://image". */
+private val ABom.Action.dockerImage: DockerImageReference
+    get() = DockerImageReference.parse(path ?: uses.removePrefix("docker://"))
+
+// Include the registry to distinguish images with the same name from different registries. Encode the colons of a
+// port or a digest, as colons separate the components of an identifier.
+private fun DockerImageReference.toIdentifier() =
+    Identifier(
+        type = DOCKER_PACKAGE_TYPE,
+        namespace = listOf(registry, namespace).filter { it.isNotEmpty() }.joinToString("/").encodeColons(),
+        name = name,
+        version = version.encodeColons()
+    )
+
+private fun String.encodeColons() = replace(":", "%3A")
+
+private fun createDockerPackage(image: DockerImageReference) =
+    Package(
+        id = image.toIdentifier(),
+        purl = image.toPurl(),
+        declaredLicenses = emptySet(),
+        description = "",
+        homepageUrl = "",
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        vcs = VcsInfo.EMPTY
+    )
+
+/**
+ * Create a purl of type "docker" for this image. According to the purl specification, the registry is specified as the
+ * "repository_url" qualifier.
+ */
+private fun DockerImageReference.toPurl(): String =
+    PackageURLBuilder.aPackageURL()
+        .withType(PackageURL.StandardTypes.DOCKER)
+        .withNamespace(namespace.ifEmpty { null })
+        .withName(name)
+        .withVersion(version)
+        .apply { if (registry.isNotEmpty()) withQualifier("repository_url", registry) }
+        .build()
+        .canonicalize()
 
 internal fun vcsToHomepageUrl(vcsUrl: String) =
     normalizeVcsUrl(vcsUrl).removeSuffix(".git").replace("ssh://git@", "https://")

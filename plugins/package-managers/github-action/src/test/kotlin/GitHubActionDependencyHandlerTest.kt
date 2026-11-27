@@ -110,6 +110,26 @@ class GitHubActionDependencyHandlerTest : WordSpec({
             )
         }
 
+        "create distinct packages for different Docker images" {
+            val packages = resolvePackages(
+                dockerAction("alpine:3.20"),
+                dockerAction("ghcr.io/owner/image@sha256:0123abcd"),
+                dockerAction("localhost:5000/image:1.0")
+            )
+
+            packages.map { it.id } should containExactlyInAnyOrder(
+                Identifier("Docker", "", "alpine", "3.20"),
+                Identifier("Docker", "ghcr.io/owner", "image", "sha256%3A0123abcd"),
+                Identifier("Docker", "localhost%3A5000", "image", "1.0")
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder(
+                "pkg:docker/alpine@3.20",
+                "pkg:docker/owner/image@sha256%3A0123abcd?repository_url=ghcr.io",
+                "pkg:docker/image@1.0?repository_url=localhost%3A5000"
+            )
+        }
+
         "create purls with encoded versions" {
             val packages = resolvePackages(standardAction("actions", "checkout", "releases/v6"))
 
@@ -221,6 +241,14 @@ private fun subdirectoryAction(owner: String, repo: String, path: String, ref: S
         ref = ref,
         refType = ABom.RefType.TAG,
         type = ABom.ActionType.SUBDIRECTORY,
+        pinned = false
+    )
+
+private fun dockerAction(image: String) =
+    ABom.Action(
+        uses = "docker://$image",
+        path = image,
+        type = ABom.ActionType.DOCKER,
         pinned = false
     )
 

@@ -44,6 +44,7 @@ import org.semver4j.range.RangeListFactory
 
 private const val PROJECT_TYPE = "GitHubAction"
 internal const val PACKAGE_TYPE = "GitHubAction"
+internal const val DOCKER_PACKAGE_TYPE = "Docker"
 
 private const val GITHUB_WORKFLOWS_DIR = ".github/workflows"
 
