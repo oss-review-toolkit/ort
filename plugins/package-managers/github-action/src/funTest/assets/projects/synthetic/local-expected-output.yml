@@ -20,7 +20,7 @@ project:
     dependencies:
     - id: "GitHubAction:actions:checkout:3d3c42e5aac5ba805825da76410c181273ba90b1"
     - id: "GitHubAction:docker:setup-buildx-action:bb05f3f5519dd87d3ba754cc423b652a5edd6d2c"
-    - id: "GitHubAction:oss-review-toolkit:ort:<REPLACE_VCS_REVISION>"
+    - id: "GitHubAction:oss-review-toolkit:ort/.github/actions/free-disk-space:<REPLACE_VCS_REVISION>"
 packages:
 - id: "GitHubAction:actions:checkout:3d3c42e5aac5ba805825da76410c181273ba90b1"
   purl: "pkg:github/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
@@ -78,7 +78,7 @@ packages:
     path: ""
   source_code_origins:
   - "VCS"
-- id: "GitHubAction:oss-review-toolkit:ort:<REPLACE_VCS_REVISION>"
+- id: "GitHubAction:oss-review-toolkit:ort/.github/actions/free-disk-space:<REPLACE_VCS_REVISION>"
   purl: "pkg:github/oss-review-toolkit/ort#.github/actions/free-disk-space"
   declared_licenses: []
   declared_licenses_processed: {}

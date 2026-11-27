@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.utils.common.ensurePrefix
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : DependencyHandler<ABom.Action> {
@@ -76,22 +77,29 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
             uses
         }
 
-    private fun ABom.Action.toIdentifier() =
-        if (type == ABom.ActionType.LOCAL) {
+    private fun ABom.Action.toIdentifier(): Identifier {
+        // Include the path to the action in the name, as there can be multiple actions in the same repository. For
+        // Docker actions, the path is the image reference instead.
+        val normalizedPath = path?.takeUnless { type == ABom.ActionType.DOCKER }
+            ?.removePrefix("./")?.removeSuffix("/").orEmpty()
+        val pathSuffix = normalizedPath.ensurePrefix("/")
+
+        return if (type == ABom.ActionType.LOCAL) {
             Identifier(
                 type = PACKAGE_TYPE,
                 namespace = slug.substringBefore("/"),
-                name = slug.substringAfter("/"),
+                name = slug.substringAfter("/") + pathSuffix,
                 version = projectVcs.revision
             )
         } else {
             Identifier(
                 type = PACKAGE_TYPE,
                 namespace = owner.orEmpty(),
-                name = repo.orEmpty(),
+                name = repo.orEmpty() + pathSuffix,
                 version = ref.orEmpty()
             )
         }
+    }
 }
 
 internal fun vcsToHomepageUrl(vcsUrl: String) =
