@@ -236,15 +236,15 @@ data class RootDependencyIndex(
 /**
  * A class to model a tree-like structure to represent the dependencies of a project.
  *
- * Instances of this class are used to store the relations between dependencies in fragments of dependency trees in an
- * Analyzer result. The main purpose of this class is to define an efficient serialization format, which avoids
- * redundancy as far as possible. Therefore, dependencies are represented by numeric indices into an external table.
- * As a dependency can occur multiple times in the dependency graph with different transitive dependencies, the class
- * defines another index to distinguish these cases.
+ * Instances of this class are used by [DependencyGraphBuilder][org.ossreviewtoolkit.model.utils.DependencyGraphBuilder]
+ * as an in-memory representation of the relations between dependencies while a [DependencyGraph] is constructed. They
+ * are not serialized; the final graph is stored as [DependencyGraphNode]s and [DependencyGraphEdge]s instead.
+ * Dependencies are represented by numeric indices into an external table. As a dependency can occur multiple times in
+ * the dependency graph with different transitive dependencies, the class defines another index to distinguish these
+ * cases.
  *
  * Note: This is by intention no data class. Equality is tested via references and not via the values contained.
  */
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 class DependencyReference(
     /**
      * Stores the numeric index of the package dependency referenced by this object. The package behind this index can
@@ -266,24 +266,13 @@ class DependencyReference(
     /**
      * The type of linkage used for the referred package from its dependent package. As most of ORT's supported
      * package managers / languages only support dynamic linking or at least default to it, also use that as the
-     * default value here to not blow up ORT result files.
+     * default value here.
      */
-    @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
     val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
     /** A list of [Issue]s that occurred handling this dependency. */
     val issues: List<Issue> = emptyList()
-) : Comparable<DependencyReference> {
-    /**
-     * Define an order on [DependencyReference] instances. Instances are ordered by their indices and fragment indices.
-     */
-    override fun compareTo(other: DependencyReference): Int =
-        if (pkg != other.pkg) {
-            pkg - other.pkg
-        } else {
-            fragment - other.fragment
-        }
-}
+)
 
 /**
  * A data class representing a node in the dependency graph.
