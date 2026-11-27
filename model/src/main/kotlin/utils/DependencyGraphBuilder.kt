@@ -187,7 +187,6 @@ class DependencyGraphBuilder<D>(
 
         return DependencyGraph(
             sortedDependencyIds,
-            sortedSetOf(),
             constructSortedScopeMappings(scopeMapping, indexMapping),
             nodes,
             edges
