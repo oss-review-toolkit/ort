@@ -42,6 +42,7 @@ import com.github.difflib.UnifiedDiffUtils
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.mapper
@@ -59,7 +60,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
     factory = OrtCommandFactory::class
 )
 class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descriptor) : OrtCommand(descriptor) {
-    private enum class CompareMethod { SEMANTIC_DIFF, TEXT_DIFF }
+    private enum class CompareMethod { DEPENDENCY_DIFF, SEMANTIC_DIFF, TEXT_DIFF }
 
     private val fileA by argument(help = "The first ORT result file to compare.")
         .convert { it.expandTilde() }
@@ -131,6 +132,7 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
         val resultB = mapper.readValue<OrtResult>(fileB)
 
         when (method) {
+            CompareMethod.DEPENDENCY_DIFF -> compareDependencies(resultA, resultB)
             CompareMethod.SEMANTIC_DIFF -> compareSemantically(resultA, resultB)
             CompareMethod.TEXT_DIFF -> compareTextually(resultA, resultB, mapper)
         }
@@ -191,6 +193,60 @@ class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descri
 
         throw ProgramResult(STATUS_CODE_FAILURE)
     }
+
+    private fun compareDependencies(resultA: OrtResult, resultB: OrtResult): Nothing {
+        val versionsA = resultA.getPackageVersionsByName()
+        val versionsB = resultB.getPackageVersionsByName()
+
+        val added = mutableListOf<Identifier>()
+        val removed = mutableListOf<Identifier>()
+        val updated = mutableListOf<Triple<Identifier, Set<String>, Set<String>>>()
+
+        (versionsA.keys + versionsB.keys).forEach { id ->
+            val idVersionsA = versionsA[id].orEmpty()
+            val idVersionsB = versionsB[id].orEmpty()
+
+            val removedVersions = idVersionsA - idVersionsB
+            val addedVersions = idVersionsB - idVersionsA
+
+            when {
+                removedVersions.isEmpty() -> addedVersions.mapTo(added) { id.copy(version = it) }
+                addedVersions.isEmpty() -> removedVersions.mapTo(removed) { id.copy(version = it) }
+                else -> updated += Triple(id, removedVersions, addedVersions)
+            }
+        }
+
+        if (added.isEmpty() && removed.isEmpty() && updated.isEmpty()) {
+            echo(Theme.Default.success("The dependencies of the ORT results are the same."))
+            throw ProgramResult(STATUS_CODE_SUCCESS)
+        }
+
+        echo("The dependencies of the ORT results differ:")
+
+        if (added.isNotEmpty()) {
+            echo()
+            echo("Added dependencies (${added.size}):")
+            added.sorted().forEach { echo(Theme.Default.success("  + ${it.toCoordinates()}")) }
+        }
+
+        if (removed.isNotEmpty()) {
+            echo()
+            echo("Removed dependencies (${removed.size}):")
+            removed.sorted().forEach { echo(Theme.Default.danger("  - ${it.toCoordinates()}")) }
+        }
+
+        if (updated.isNotEmpty()) {
+            echo()
+            echo("Updated dependencies (${updated.size}):")
+            updated.sortedBy { (id, _, _) -> id }.forEach { (id, versionsA, versionsB) ->
+                val from = versionsA.sorted().joinToString()
+                val to = versionsB.sorted().joinToString()
+                echo(Theme.Default.info("  ~ ${id.toCoordinates().removeSuffix(":")}: $from -> $to"))
+            }
+        }
+
+        throw ProgramResult(STATUS_CODE_FAILURE)
+    }
 }
 
 private class EpochInstantDeserializer : StdDeserializer<Instant>(Instant::class.java) {
@@ -215,6 +271,11 @@ private class EmptyScannerVersionDeserializer : StdDeserializer<ScannerDetails>(
         return ScannerDetails(node["name"].textValue(), "", node["configuration"].textValue())
     }
 }
+
+/** Return the versions of all packages in this [OrtResult], grouped by their [Identifier] with an empty version. */
+private fun OrtResult.getPackageVersionsByName(): Map<Identifier, Set<String>> =
+    getPackages().groupBy({ it.metadata.id.copy(version = "") }, { it.metadata.id.version })
+        .mapValues { (_, versions) -> versions.toSet() }
 
 private fun Map<Regex, String>.replaceIn(text: String) =
     entries.fold(text) { currentText, (from, to) ->

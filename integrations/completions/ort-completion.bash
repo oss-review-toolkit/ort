@@ -469,7 +469,7 @@ _ort_compare() {
 
   case "${in_param}" in
     "--method")
-      COMPREPLY=($(compgen -W 'SEMANTIC_DIFF TEXT_DIFF' -- "${word}"))
+      COMPREPLY=($(compgen -W 'DEPENDENCY_DIFF SEMANTIC_DIFF TEXT_DIFF' -- "${word}"))
       ;;
     "--context-size")
       ;;
