@@ -60,7 +60,29 @@ import org.ossreviewtoolkit.utils.ort.Environment
     factory = OrtCommandFactory::class
 )
 class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descriptor) : OrtCommand(descriptor) {
-    private enum class CompareMethod { DEPENDENCY_DIFF, SEMANTIC_DIFF, TEXT_DIFF }
+    private enum class CompareMethod {
+        /**
+         * Compare the packages of the analyzer results and report those that were added, removed or updated. Packages
+         * are matched by their [Identifier] without the version, so a package is considered to be updated if its
+         * versions differ between the ORT results. Note that this method only operates on the [Identifier]s of the
+         * packages; differences in any other package metadata (like declared licenses or VCS information), and
+         * differences in provenances, scan results, advisor results, evaluator results etc. are not taken into
+         * account. Also, projects are not compared at all.
+         */
+        DEPENDENCY_DIFF,
+
+        /**
+         * Deserialize both ORT results and compare them for equality. This only reports whether the ORT results are
+         * the same, but not how they differ. Some properties may not be taken into account in the comparison.
+         */
+        SEMANTIC_DIFF,
+
+        /**
+         * Deserialize and re-serialize both ORT results, and create a unified diff of the resulting texts. This is the
+         * only method that supports ignoring temporary directory differences.
+         */
+        TEXT_DIFF
+    }
 
     private val fileA by argument(help = "The first ORT result file to compare.")
         .convert { it.expandTilde() }
