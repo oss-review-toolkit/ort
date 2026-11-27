@@ -277,6 +277,7 @@ private fun OrtResult.getPackageVersionsByName(): Map<Identifier, Set<String>> =
     getPackages().groupBy({ it.metadata.id.copy(version = "") }, { it.metadata.id.version })
         .mapValues { (_, versions) -> versions.toSet() }
 
+/** Use this map of [Regex]es and replacement [String]s to perform replacements in the given [text]. */
 private fun Map<Regex, String>.replaceIn(text: String) =
     entries.fold(text) { currentText, (from, to) ->
         currentText.replace(from, to)
