@@ -59,7 +59,7 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
 /**
  * Return true if this [Ivy version range][this] contains the given [version]. Throws if [this] string cannot be parsed.
  */
-private fun String.containsIvyVersion(version: String): Boolean {
+internal fun String.containsIvyVersion(version: String): Boolean {
     // Support "Exact Revision Matcher" syntax.
     if (this == version) return true
 
