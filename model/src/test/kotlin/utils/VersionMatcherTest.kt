@@ -176,10 +176,10 @@ class VersionMatcherTest : WordSpec({
         }
     }
 
-    "hasIvyVersionRanges()" should {
+    "isIvyVersionRange()" should {
         "work for up to four segments with less than 4 digits" {
-            "[1.2.3.4,5.0]".hasIvyVersionRange() shouldBe true
-            "[1.2.3.4.5,6.0]".hasIvyVersionRange() shouldBe false
+            "[1.2.3.4,5.0]".isIvyVersionRange() shouldBe true
+            "[1.2.3.4.5,6.0]".isIvyVersionRange() shouldBe false
         }
     }
 
