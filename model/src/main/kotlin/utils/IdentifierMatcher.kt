@@ -53,11 +53,4 @@ internal fun Identifier.isMatchedBy(matcher: Identifier, blankNameMatchAny: Bool
     type.equals(matcher.type, ignoreCase = true)
         && namespace == matcher.namespace
         && ((blankNameMatchAny && matcher.name.isBlank()) || name == matcher.name)
-        && isVersionMatchedBy(matcher)
-
-/**
- * Return true if this [Identifier] is matched by the [matcher]'s version. The [matcher]s version may be an
- * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
- */
-private fun Identifier.isVersionMatchedBy(matcher: Identifier): Boolean =
-    matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this)
+        && (matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this))
