@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model.utils
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /** Return true if the version of this [org.ossreviewtoolkit.model.Identifier] is an Ivy version range. */
@@ -53,4 +52,4 @@ internal fun Identifier.isMatchedBy(matcher: Identifier, blankNameMatchAny: Bool
     type.equals(matcher.type, ignoreCase = true)
         && namespace == matcher.namespace
         && ((blankNameMatchAny && matcher.name.isBlank()) || name == matcher.name)
-        && (matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this))
+        && (matcher.version.isBlank() || matcher.isApplicableIvyVersion(this))
