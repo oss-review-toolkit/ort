@@ -48,7 +48,7 @@ complete -c ort -n "__fish_seen_subcommand_from analyze" -s h -l help -d 'Show t
 complete -c ort -f -n __fish_use_subcommand -a compare -d 'Compare two ORT results with various methods.'
 
 ## Options for compare
-complete -c ort -n "__fish_seen_subcommand_from compare" -l method -s m -r -fa "SEMANTIC_DIFF TEXT_DIFF" -d 'The method to use when comparing ORT results. Must be one of [SEMANTIC_DIFF, TEXT_DIFF].'
+complete -c ort -n "__fish_seen_subcommand_from compare" -l method -s m -r -fa "DEPENDENCY_DIFF SEMANTIC_DIFF TEXT_DIFF" -d 'The method to use when comparing ORT results. Must be one of [DEPENDENCY_DIFF, SEMANTIC_DIFF, TEXT_DIFF].'
 complete -c ort -n "__fish_seen_subcommand_from compare" -l context-size -s C -r -d 'The number of unmodified lines to display in the context of a modified line. Only applies to unified diff output.'
 complete -c ort -n "__fish_seen_subcommand_from compare" -l ignore-time -s t -d 'Ignore time differences.'
 complete -c ort -n "__fish_seen_subcommand_from compare" -l ignore-environment -s e -d 'Ignore environment differences.'
