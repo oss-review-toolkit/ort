@@ -35,7 +35,7 @@ class DependencyGraphNavigator(
         }
     }
 
-    /** A data structure allowing fast access to a specific [DependencyReference] based on its index and fragment. */
+    /** A data structure allowing fast access to a specific [DependencyGraphNode] based on its index and fragment. */
     private val graphDependencyRefMappings: Map<String, Array<MutableList<DependencyGraphNode>>> by lazy {
         graphs.mapValues { it.value.dependencyRefMapping() }
     }
@@ -124,7 +124,7 @@ class DependencyGraphNavigator(
     private fun referenceFor(manager: String, rootIndex: RootDependencyIndex): DependencyGraphNode =
         requireNotNull(graphDependencyRefMappings[manager])[rootIndex.root].find { it.fragment == rootIndex.fragment }
             ?: throw IllegalArgumentException(
-                "Could not resolve a DependencyReference for index = ${rootIndex.root} and fragment " +
+                "Could not resolve a DependencyGraphNode for index = ${rootIndex.root} and fragment " +
                     "${rootIndex.fragment}."
             )
 }
@@ -174,7 +174,7 @@ private class DependencyRefCursor(
 
     /**
      * Return a sequence of [DependencyNode]s that is implemented based on this instance. This sequence allows access
-     * to the properties of the [DependencyReference]s passed to this instance, although each sequence element is a
+     * to the properties of the [DependencyGraphNode]s passed to this instance, although each sequence element is a
      * reference to *this*.
      */
     fun asSequence(): Sequence<DependencyNode> =
