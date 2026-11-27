@@ -2,7 +2,17 @@
 # last matching pattern is used, see
 # https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners#codeowners-syntax
 
-* @oss-review-toolkit/kotlin-devs
-*.md @oss-review-toolkit/core-devs
+# General owners of the Kotlin code base.
+# This should match the members of the @oss-review-toolkit/kotlin-devs team.
+* @fviernau @lamppu @MarcelBochtler @mnonnenmacher @nnobelis @oheger-bosch @sschuberth
+
+# General owners of the documentation.
+# This should match the members of the @oss-review-toolkit/core-devs team.
+*.md @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
+
+# Owners of the TypeScript part of the web app report.
 /plugins/reporters/web-app-template/ @tsteenbe
-/LICENSE @oss-review-toolkit/tsc
+
+# Owners of legal documents.
+# This should match the members of the @oss-review-toolkit/tsc team.
+/LICENSE @fviernau @MarcelBochtler @mnonnenmacher @sschuberth @tsteenbe
