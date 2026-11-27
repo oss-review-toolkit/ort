@@ -86,5 +86,19 @@ class LicenseChoicesTest : WordSpec({
             choice.isApplicable(Identifier("Maven:com.example:lib:0.0.1")) shouldBe true
             choice.isApplicable(Identifier("Maven:com.example:lib:0.0.2")) shouldBe false
         }
+
+        "return true if given id equals the Ivy version range in packageId" {
+            val choice = PackageLicenseChoice(Identifier("Maven:com.example:lib:[0.9.0,1.1.0]"))
+
+            choice.isApplicable(Identifier("Maven:com.example:lib:1.0.0")) shouldBe true
+            choice.isApplicable(Identifier("Maven:com.example:lib:1.2.0")) shouldBe false
+        }
+
+        "return true packageId does not specify a version and the rest matches with the given id" {
+            val choice = PackageLicenseChoice(Identifier("Maven:com.example:lib:"))
+
+            choice.isApplicable(Identifier("Maven:com.example:lib:1.0.0")) shouldBe true
+            choice.isApplicable(Identifier("Maven:com.example:other-lib:1.0.0")) shouldBe false
+        }
     }
 })
