@@ -5,5 +5,4 @@
 * @oss-review-toolkit/kotlin-devs
 *.md @oss-review-toolkit/core-devs
 /plugins/reporters/web-app-template/ @tsteenbe
-/spdx-utils/src/main/ @oss-review-toolkit/core-devs
 /LICENSE @oss-review-toolkit/core-devs
