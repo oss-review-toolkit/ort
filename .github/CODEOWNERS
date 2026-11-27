@@ -4,8 +4,6 @@
 
 * @oss-review-toolkit/kotlin-devs
 *.md @oss-review-toolkit/core-devs
-/advisor/ @oss-review-toolkit/kotlin-devs @MarcelBochtler @oheger-bosch
-/clients/fossid-webapp/ @oss-review-toolkit/kotlin-devs @nnobelis
 /plugins/reporters/web-app-template/ @tsteenbe
 /spdx-utils/src/main/ @oss-review-toolkit/core-devs
 /LICENSE @oss-review-toolkit/core-devs
