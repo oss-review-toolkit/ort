@@ -245,7 +245,7 @@ data class RootDependencyIndex(
  *
  * Note: This is by intention no data class. Equality is tested via references and not via the values contained.
  */
-class DependencyReference(
+internal class DependencyReference(
     /**
      * Stores the numeric index of the package dependency referenced by this object. The package behind this index can
      * be resolved by evaluating the list of identifiers stored in [DependencyGraph] at this index.
