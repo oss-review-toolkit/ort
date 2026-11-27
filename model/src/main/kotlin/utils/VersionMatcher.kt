@@ -46,7 +46,7 @@ internal fun String.isIvyVersionRange(): Boolean =
  */
 internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
     runCatching {
-        matchesIvyVersionRange(pkgId.version, version)
+        version.containsIvyVersion(pkgId.version)
     }.onFailure {
         logger.warn {
             "Failed to check if identifier version '$version' is applicable to package version " +
@@ -57,17 +57,16 @@ internal fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
     }.getOrDefault(false)
 
 /**
- * Return true if [version] is matched by the given [Ivy version matcher][version range]. Throws if the parameters
- * cannot be parsed.
+ * Return true if this [Ivy version range][this] contains the given [version]. Throws if [this] string cannot be parsed.
  */
-private fun matchesIvyVersionRange(version: String, versionRange: String): Boolean {
+private fun String.containsIvyVersion(version: String): Boolean {
     // Support "Exact Revision Matcher" syntax.
-    if (versionRange == version) return true
+    if (this == version) return true
 
     // Support "Sub Revision Matcher" syntax.
-    if (versionRange.withoutSuffix("+")?.let { prefix -> version.startsWith(prefix) } == true) return true
+    if (withoutSuffix("+")?.let { prefix -> version.startsWith(prefix) } == true) return true
 
-    val (encodedVersion, encodedVersionRange) = encodeVersionAndRange(version, versionRange)
+    val (encodedVersion, encodedVersionRange) = encodeVersionAndRange(version, this)
 
     // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
     // https://github.com/semver4j/semver4j/issues/132.
