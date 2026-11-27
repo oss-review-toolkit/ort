@@ -26,6 +26,7 @@ import org.semver4j.processor.IvyProcessor
 import org.semver4j.range.RangeList
 import org.semver4j.range.RangeListFactory
 
+/** Return true if this string is an Ivy version range. */
 internal fun String.isIvyVersionRange(): Boolean =
     if (shouldEncode(null, this)) {
         encodeFourIntoThreeSegments()
