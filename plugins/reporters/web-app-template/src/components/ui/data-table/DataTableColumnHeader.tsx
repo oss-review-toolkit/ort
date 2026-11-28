@@ -71,7 +71,7 @@ export function DataTableColumnHeader<TData, TValue>({
             <SortIcon aria-hidden="true" className="ml-2 size-4" />
         </Button>
     ) : (
-        <span className={cn("inline-flex items-center font-medium text-sm", className)}>{content}</span>
+        <span className={cn("inline-flex items-center text-sm font-medium", className)}>{content}</span>
     );
 
     if (!HeaderIcon) {

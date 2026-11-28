@@ -100,7 +100,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                             : `Filter by ${titleLowerCase}`
                     }
                     className={cn(
-                        "h-7 gap-1 px-1.5 text-muted-foreground data-[state=open]:bg-accent",
+                        "text-muted-foreground data-[state=open]:bg-accent h-7 gap-1 px-1.5",
                         hasFilter && "text-primary",
                     )}
                     size="sm"
@@ -114,7 +114,7 @@ export function DataTableFacetedFilter<TData, TValue>({
             {/* Sized to its options rather than fixed: rule names and license expressions run well past the
                 old 220px. The minimum keeps narrow filters from looking ragged, the maximum keeps a long
                 option from pushing the popover off a small screen. */}
-            <PopoverContent align="start" className="w-auto min-w-[220px] max-w-[min(32rem,calc(100vw-2rem))] p-0">
+            <PopoverContent align="start" className="w-auto max-w-[min(32rem,calc(100vw-2rem))] min-w-[220px] p-0">
                 <Command>
                     {/* Keep a clear control in the always-visible search row so a single column's filter can
                         be reset without scrolling past the options or reaching for the toolbar's global Reset. */}
@@ -144,13 +144,13 @@ export function DataTableFacetedFilter<TData, TValue>({
                                     <CommandItem key={option.value} onSelect={() => toggleValue(option.value)}>
                                         <div
                                             className={cn(
-                                                "mr-2 flex size-4 items-center justify-center rounded-sm border border-primary",
+                                                "border-primary mr-2 flex size-4 items-center justify-center rounded-sm border",
                                                 isSelected ? "bg-background text-foreground" : "[&_svg]:invisible",
                                             )}
                                         >
-                                            <Check aria-hidden="true" className="size-3 text-foreground" />
+                                            <Check aria-hidden="true" className="text-foreground size-3" />
                                         </div>
-                                        {option.icon && <option.icon className="mr-2 size-4 text-muted-foreground" />}
+                                        {option.icon && <option.icon className="text-muted-foreground mr-2 size-4" />}
                                         <span
                                             className={cn(
                                                 (isInactive || option.muted) && "text-muted-foreground",

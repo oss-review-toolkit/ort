@@ -69,7 +69,7 @@ export function DataTableColumnSearch<TData, TValue>({ column, title }: DataTabl
                 <Button
                     aria-label={hasFilter ? `Search ${title} (filtered by "${applied}")` : `Search ${title}`}
                     className={cn(
-                        "h-7 gap-1 px-1.5 text-muted-foreground data-[state=open]:bg-accent",
+                        "text-muted-foreground data-[state=open]:bg-accent h-7 gap-1 px-1.5",
                         hasFilter && "text-primary",
                     )}
                     size="sm"

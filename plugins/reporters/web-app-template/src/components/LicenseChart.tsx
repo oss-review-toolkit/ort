@@ -120,7 +120,7 @@ function LicenseChart({ dataKey = "value", height = 500, licenses, title }: Lice
 
     return (
         <div className="w-full">
-            {title ? <h3 className="mb-2 font-semibold text-sm">{title}</h3> : null}
+            {title ? <h3 className="mb-2 text-sm font-semibold">{title}</h3> : null}
             <ResponsiveContainer height={height} width="100%">
                 <PieChart>
                     <Pie

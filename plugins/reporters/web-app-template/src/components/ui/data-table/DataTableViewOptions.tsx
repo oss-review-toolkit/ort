@@ -62,7 +62,7 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[180px]">
                 {hideableColumns.length === 0 ? (
-                    <div className="px-2 py-1.5 text-muted-foreground text-sm">No toggleable columns.</div>
+                    <div className="text-muted-foreground px-2 py-1.5 text-sm">No toggleable columns.</div>
                 ) : (
                     hideableColumns.map((column) => (
                         <DropdownMenuCheckboxItem

@@ -81,7 +81,7 @@ function ErrorPage({ detail, kind }: ErrorPageProps): JSX.Element {
     const { Icon, fault, summary, title } = PRESENTATIONS[kind];
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-background p-6">
+        <main className="bg-background flex min-h-screen items-center justify-center p-6">
             {/* The page mounts only once the load has failed, so it needs to announce itself; the Alert
                 this replaced carried the role implicitly. */}
             <Card
@@ -97,15 +97,15 @@ function ErrorPage({ detail, kind }: ErrorPageProps): JSX.Element {
                 >
                     <Icon aria-hidden="true" className="size-5.5" />
                 </span>
-                <h1 className="mb-2 font-semibold text-lg tracking-tight">{title}</h1>
-                <p className="mb-5 text-muted-foreground text-sm">{summary}</p>
+                <h1 className="mb-2 text-lg font-semibold tracking-tight">{title}</h1>
+                <p className="text-muted-foreground mb-5 text-sm">{summary}</p>
                 <div className="relative mb-5 w-full">
                     <CopyToClipboard
-                        className="absolute top-2 right-2 z-10 border bg-background shadow-sm"
+                        className="bg-background absolute top-2 right-2 z-10 border shadow-sm"
                         label="Copy the error details"
                         value={detail}
                     />
-                    <p className="overflow-x-auto rounded-md border bg-muted py-2 pr-11 pl-3 text-left font-mono text-xs">
+                    <p className="bg-muted overflow-x-auto rounded-md border py-2 pr-11 pl-3 text-left font-mono text-xs">
                         {detail}
                     </p>
                 </div>

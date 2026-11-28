@@ -79,7 +79,7 @@ function PackageLicenses({ pkg }: PackageLicensesProps): JSX.Element {
                                     <LicenseBadge name={licenseChoice.choice ?? ""} />
                                 </div>
                                 {licenseChoice.comment ? (
-                                    <p className="mt-0.5 whitespace-pre-wrap text-muted-foreground text-xs">
+                                    <p className="text-muted-foreground mt-0.5 text-xs whitespace-pre-wrap">
                                         {licenseChoice.comment}
                                     </p>
                                 ) : null}
@@ -150,14 +150,14 @@ function PackageLicenses({ pkg }: PackageLicensesProps): JSX.Element {
         <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
             {rows.map((row) => (
                 <div className="contents" key={row.label}>
-                    <dt className="font-medium text-muted-foreground">
+                    <dt className="text-muted-foreground font-medium">
                         {row.definition ? <DefinedTerm definition={row.definition} term={row.label} /> : row.label}
                     </dt>
                     <dd className="flex items-start gap-1">
                         <span className="min-w-0 flex-1">{row.content}</span>
                         {row.copyValue ? (
                             <CopyToClipboard
-                                className="-my-1 size-6 shrink-0 text-muted-foreground"
+                                className="text-muted-foreground -my-1 size-6 shrink-0"
                                 label={`Copy ${row.label.toLowerCase().replace("(spdx)", "(SPDX)")} license`}
                                 value={row.copyValue}
                             />

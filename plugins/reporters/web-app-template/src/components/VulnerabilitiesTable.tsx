@@ -157,37 +157,37 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
                             <div className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
                                 {id ? (
                                     <>
-                                        <span className="font-medium text-muted-foreground">Id</span>
-                                        <span className="break-all font-mono">{id}</span>
+                                        <span className="text-muted-foreground font-medium">Id</span>
+                                        <span className="font-mono break-all">{id}</span>
                                     </>
                                 ) : null}
                                 {packageName ? (
                                     <>
-                                        <span className="font-medium text-muted-foreground">Package</span>
-                                        <span className="break-all font-mono">{packageName}</span>
+                                        <span className="text-muted-foreground font-medium">Package</span>
+                                        <span className="font-mono break-all">{packageName}</span>
                                     </>
                                 ) : null}
                                 {isExcluded ? (
                                     <>
-                                        <span className="font-medium text-muted-foreground">Excluded</span>
+                                        <span className="text-muted-foreground font-medium">Excluded</span>
                                         <span>{excludeReason || "Yes"}</span>
                                     </>
                                 ) : null}
                                 {vulnerability.ratings.length > 0 ? (
                                     <>
-                                        <span className="font-medium text-muted-foreground">Rating</span>
+                                        <span className="text-muted-foreground font-medium">Rating</span>
                                         <span>{vulnerability.ratings.map(titleCaseRating).join(", ")}</span>
                                     </>
                                 ) : null}
                                 {showHighestCvss && vulnerability.highestCvss ? (
                                     <>
-                                        <span className="font-medium text-muted-foreground">Highest CVSS</span>
+                                        <span className="text-muted-foreground font-medium">Highest CVSS</span>
                                         <span>{`${vulnerability.highestCvss.score} (CVSS ${vulnerability.highestCvss.label})`}</span>
                                     </>
                                 ) : null}
                                 {vulnerability.epss ? (
                                     <>
-                                        <span className="font-medium text-muted-foreground">EPSS</span>
+                                        <span className="text-muted-foreground font-medium">EPSS</span>
                                         <span>
                                             {`${(vulnerability.epss.score * 100).toFixed(2)}% (percentile ${vulnerability.epss.percentile})`}
                                         </span>
@@ -199,14 +199,14 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
                                         <Fragment key={cvss.label}>
                                             {score ? (
                                                 <>
-                                                    <span className="font-medium text-muted-foreground">{`CVSS ${cvss.label} Score`}</span>
+                                                    <span className="text-muted-foreground font-medium">{`CVSS ${cvss.label} Score`}</span>
                                                     <span>{score}</span>
                                                 </>
                                             ) : null}
                                             {cvss.vectors.length > 0 ? (
                                                 <>
-                                                    <span className="font-medium text-muted-foreground">{`CVSS ${cvss.label} Vector`}</span>
-                                                    <span className="break-all font-mono">
+                                                    <span className="text-muted-foreground font-medium">{`CVSS ${cvss.label} Vector`}</span>
+                                                    <span className="font-mono break-all">
                                                         {cvss.vectors.join(", ")}
                                                     </span>
                                                 </>
@@ -217,7 +217,7 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
                             </div>
                             {summary ? (
                                 <div>
-                                    <h4 className="mb-1 font-semibold text-muted-foreground text-xs uppercase">
+                                    <h4 className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
                                         Summary
                                     </h4>
                                     <p className="leading-relaxed">{summary}</p>
@@ -225,13 +225,13 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
                             ) : null}
                             {normalizedDescription?.content ? (
                                 <div>
-                                    <h4 className="mb-1 font-semibold text-muted-foreground text-xs uppercase">
+                                    <h4 className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
                                         Description
                                     </h4>
                                     {normalizedDescription.isMarkdown ? (
                                         <MarkdownText>{normalizedDescription.content}</MarkdownText>
                                     ) : (
-                                        <p className="whitespace-pre-wrap leading-relaxed">
+                                        <p className="leading-relaxed whitespace-pre-wrap">
                                             {normalizedDescription.content}
                                         </p>
                                     )}
@@ -239,7 +239,7 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
                             ) : null}
                             {isResolved && resolutions.length > 0 ? (
                                 <div>
-                                    <h4 className="mb-1 font-semibold text-muted-foreground text-xs uppercase">
+                                    <h4 className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
                                         Resolution
                                     </h4>
                                     <ResolutionDetails resolutions={resolutions} />
@@ -254,7 +254,7 @@ function renderSubRow(row: Row<VulnerabilityRow>): JSX.Element {
                         ) : null}
                     </div>
                     <div className="min-w-0">
-                        <h4 className="mb-1 font-semibold text-muted-foreground text-xs uppercase">References</h4>
+                        <h4 className="text-muted-foreground mb-1 text-xs font-semibold uppercase">References</h4>
                         {vulnerability.referenceUrls.length > 0 ? (
                             <ul className="space-y-1">
                                 {vulnerability.referenceUrls.map((url) => (
@@ -395,7 +395,7 @@ function VulnerabilitiesTable({
                     return highest ? (
                         <span className="whitespace-nowrap tabular-nums">
                             {highest.score}
-                            <span className="ml-1 text-muted-foreground text-xs">{`(CVSS ${highest.label})`}</span>
+                            <span className="text-muted-foreground ml-1 text-xs">{`(CVSS ${highest.label})`}</span>
                         </span>
                     ) : (
                         <span className="text-muted-foreground">—</span>
