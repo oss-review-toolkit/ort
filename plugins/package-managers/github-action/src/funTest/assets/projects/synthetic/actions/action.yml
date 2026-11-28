@@ -1,0 +1,25 @@
+name: Root Action
+description: A composite action in the root of the repository.
+author: The ORT Project Authors
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Restore Cache
+      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+
+    - name: Save Cache
+      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+
+    - name: Run Local Action
+      uses: ./.github/actions/node
+
+    - name: Print Message
+      shell: bash
+      run: echo "Hello from the root action."

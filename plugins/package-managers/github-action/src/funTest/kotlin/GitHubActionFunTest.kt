@@ -25,9 +25,13 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.withInvariantIssues
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.common.div
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -85,5 +89,16 @@ class GitHubActionFunTest : StringSpec({
 
         result.issues should beEmpty()
         result.project.id shouldBe Identifier("GitHubAction", "colon", "CI%3A Colon", "")
+    }
+
+    "dependencies of actions are detected correctly" {
+        val projectDir = getAssetFile("projects/synthetic/actions")
+        val definitionFile = projectDir / "action.yml"
+        val expectedResultFile = getAssetFile("projects/synthetic/actions-expected-output.yml")
+
+        val result = analyze(projectDir, packageManagers = listOf(GitHubActionFactory())).getAnalyzerResult()
+            .withInvariantIssues()
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })

@@ -1,0 +1,299 @@
+---
+projects:
+- id: "GitHubAction:.github/actions/composite/action.yml:Composite%3A No Dependencies:"
+  definition_file_path: "<REPLACE_VCS_PATH>/.github/actions/composite/action.yml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/.github/actions/composite"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/.github/actions/composite"
+  description: "A composite action without any dependencies on other actions."
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes: []
+- id: "GitHubAction:.github/actions/docker/action.yml:Shared Name:"
+  definition_file_path: "<REPLACE_VCS_PATH>/.github/actions/docker/action.yml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/.github/actions/docker"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/.github/actions/docker"
+  description: "A Docker container action that has the same name as another action."
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes: []
+- id: "GitHubAction:.github/actions/node/action.yaml:Shared Name:"
+  definition_file_path: "<REPLACE_VCS_PATH>/.github/actions/node/action.yaml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/.github/actions/node"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/.github/actions/node"
+  description: "A JavaScript action that has the same name as another action."
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes: []
+- id: "GitHubAction:action.yml:Root Action:"
+  definition_file_path: "<REPLACE_VCS_PATH>/action.yml"
+  authors:
+  - "The ORT Project Authors"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>"
+  description: "A composite action in the root of the repository."
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes:
+  - name: "runs"
+    dependencies:
+    - id: "GitHubAction:actions:cache/restore:0057852bfaa89a56745cba8c7296529d2fc39830"
+    - id: "GitHubAction:actions:cache/save:0057852bfaa89a56745cba8c7296529d2fc39830"
+    - id: "GitHubAction:actions:checkout:3d3c42e5aac5ba805825da76410c181273ba90b1"
+    - id: "GitHubAction:actions:upload-pages-artifact:56afc609e74202658d3ffba0e8f6dda462b719fa"
+      dependencies:
+      - id: "GitHubAction:actions:upload-artifact:v4"
+- id: "GitHubAction:release:Release:"
+  definition_file_path: ".github/workflows/release.yml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/.github/workflows"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/.github/workflows"
+  description: "Release"
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes:
+  - name: "release"
+    dependencies:
+    - id: "GitHubAction:oss-review-toolkit:ort/release:<REPLACE_VCS_REVISION>"
+      dependencies:
+      - id: "GitHubAction:actions:checkout:3d3c42e5aac5ba805825da76410c181273ba90b1"
+- id: "GitHubAction:release/action.yml:Release:"
+  definition_file_path: "<REPLACE_VCS_PATH>/release/action.yml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/release"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "<REPLACE_VCS_PATH>/release"
+  description: "A composite action that has the same name as a workflow."
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  scopes:
+  - name: "runs"
+    dependencies:
+    - id: "GitHubAction:actions:checkout:3d3c42e5aac5ba805825da76410c181273ba90b1"
+packages:
+- id: "GitHubAction:actions:cache/restore:0057852bfaa89a56745cba8c7296529d2fc39830"
+  purl: "pkg:github/actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830#restore"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/cache"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/cache.git"
+    revision: "0057852bfaa89a56745cba8c7296529d2fc39830"
+    path: "restore"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/cache.git"
+    revision: "0057852bfaa89a56745cba8c7296529d2fc39830"
+    path: "restore"
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:cache/save:0057852bfaa89a56745cba8c7296529d2fc39830"
+  purl: "pkg:github/actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830#save"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/cache"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/cache.git"
+    revision: "0057852bfaa89a56745cba8c7296529d2fc39830"
+    path: "save"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/cache.git"
+    revision: "0057852bfaa89a56745cba8c7296529d2fc39830"
+    path: "save"
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:checkout:3d3c42e5aac5ba805825da76410c181273ba90b1"
+  purl: "pkg:github/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/checkout"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/checkout.git"
+    revision: "3d3c42e5aac5ba805825da76410c181273ba90b1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/checkout.git"
+    revision: "3d3c42e5aac5ba805825da76410c181273ba90b1"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:upload-artifact:v4"
+  purl: "pkg:github/actions/upload-artifact@v4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/upload-artifact"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/upload-artifact.git"
+    revision: "v4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/upload-artifact.git"
+    revision: "v4"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:actions:upload-pages-artifact:56afc609e74202658d3ffba0e8f6dda462b719fa"
+  purl: "pkg:github/actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/actions/upload-pages-artifact"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/actions/upload-pages-artifact.git"
+    revision: "56afc609e74202658d3ffba0e8f6dda462b719fa"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/actions/upload-pages-artifact.git"
+    revision: "56afc609e74202658d3ffba0e8f6dda462b719fa"
+    path: ""
+  source_code_origins:
+  - "VCS"
+- id: "GitHubAction:oss-review-toolkit:ort/release:<REPLACE_VCS_REVISION>"
+  purl: "pkg:github/oss-review-toolkit/ort@<REPLACE_VCS_REVISION>#release"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "release"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_VCS_PROCESSED_URL>"
+    revision: "<REPLACE_VCS_REVISION>"
+    path: "release"
+  source_code_origins:
+  - "VCS"
+issues:
+  'GitHubAction:action.yml:Root Action:':
+  - timestamp: "1970-01-01T00:00:00Z"
+    source: "GitHub Action"
+    message: "The composite action '<REPLACE_VCS_PATH>/action.yml'\
+      \ uses the local action './.github/actions/node'. As this is resolved relative\
+      \ to the workspace of the calling workflow, it cannot be analyzed."
+    severity: "WARNING"

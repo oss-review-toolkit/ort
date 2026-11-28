@@ -1,0 +1,8 @@
+name: Release
+description: A composite action that has the same name as a workflow.
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

@@ -1,0 +1,6 @@
+name: Shared Name
+description: A JavaScript action that has the same name as another action.
+
+runs:
+  using: node24
+  main: index.js
