@@ -102,20 +102,9 @@ class GitHubAction(
         projectVcs = processProjectVcs(definitionFile.parentFile)
 
         val workflow = aBomCache.getOrElse(definitionFile) {
+            // The command must be run on the directory that contains the ".github/workflows" subdirectory.
             val projectRoot = definitionFile.parentFile.parentFile.parentFile
-
-            val scanProcess = ABomCommand.run(
-                // The command must be run on the directory that contains the ".github/workflows" subdirectory.
-                "scan", projectRoot.absolutePath,
-                // The default depth of 10 is a bit low; use a higher value that is effectively unlimited.
-                "--depth", "1000",
-                "--output", "json"
-            ).requireSuccess()
-
-            val aBom = JSON.decodeFromString<ABom>(scanProcess.stdout)
-
-            logger.info { aBom.abom }
-            logger.info { aBom.summary }
+            val aBom = runABom(projectRoot)
 
             // The abom tool always scans all workflows in a directory, while ORT iterates over workflow / definition
             // files one by one.
@@ -155,4 +144,21 @@ class GitHubAction(
         } else {
             PackageManagerResult(projectResults)
         }
+}
+
+/** Run abom on the [projectRoot] directory that contains the ".github/workflows" subdirectory. */
+private fun runABom(projectRoot: File): ABom {
+    val scanProcess = ABomCommand.run(
+        "scan", projectRoot.absolutePath,
+        // The default depth of 10 is a bit low; use a higher value that is effectively unlimited.
+        "--depth", "1000",
+        "--output", "json"
+    ).requireSuccess()
+
+    val aBom = JSON.decodeFromString<ABom>(scanProcess.stdout)
+
+    ABomCommand.logger.info { aBom.abom }
+    ABomCommand.logger.info { aBom.summary }
+
+    return aBom
 }
